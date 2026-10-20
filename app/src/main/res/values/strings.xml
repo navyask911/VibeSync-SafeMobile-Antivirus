@@ -26,4 +26,10 @@
 <string name="update_available">An app update is available in Google Play.</string><string name="update_downloaded">Update downloaded. Restart the app to finish updating.</string><string name="close">Close</string>
 <string name="file_hash_label">SHA-256: %1$s…</string>
 <string name="service_channel_name">SafeMobile file monitoring</string><string name="service_channel_description">Notifications for user-enabled local APK checks.</string><string name="service_notification_title">SafeMobile monitoring is active</string><string name="service_notification_body">Watching Downloads for newly written APK files.</string>
+
+<string name="unknown_file">selected file</string>
+<string name="import_definitions">Import offline threat definitions (JSON)</string>
+<string name="import_success">Imported %1$d valid signature definitions into local storage.</string>
+<string name="import_failed">Definition file could not be imported. Check the JSON format and SHA-256 values.</string>
+<string name="monitor_stop">Stop Downloads monitoring</string>
 </resources>
