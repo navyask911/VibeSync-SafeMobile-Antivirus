@@ -44,4 +44,6 @@
 <string name="risk_sms_accessibility">SMS 権限とユーザー補助サービスの宣言を組み合わせています。確認すべき兆候であり、OTP の傍受やマルウェアの証明ではありません。</string>
 <string name="language_label">言語: %1$s</string>
 <string name="language_system_default">システムの既定</string>
+<string name="limited_protection">保護は限定的 — EICAR テスト定義のみ</string>
+<string name="review_recommended">確認をおすすめします</string>
 </resources>
