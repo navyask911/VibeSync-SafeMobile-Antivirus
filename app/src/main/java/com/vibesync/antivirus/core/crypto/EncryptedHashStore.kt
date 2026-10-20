@@ -2,7 +2,8 @@ package com.vibesync.antivirus.core.crypto
 import android.content.Context
 import android.util.Base64
 import com.google.crypto.tink.DeterministicAead
-import com.google.crypto.tink.aead.AesSivKeyManager
+import com.google.crypto.tink.KeyTemplates
+import com.google.crypto.tink.daead.DeterministicAeadConfig
 import com.google.crypto.tink.integration.android.AndroidKeysetManager
 import java.nio.charset.StandardCharsets
 
@@ -10,12 +11,13 @@ import java.nio.charset.StandardCharsets
 class EncryptedHashStore(context: Context) {
  private val primitive: DeterministicAead
  init {
-  AesSivKeyManager.register(true)
+  DeterministicAeadConfig.register()
   val handle = AndroidKeysetManager.Builder()
+   .withKeyTemplate(KeyTemplates.get("AES256_SIV"))
    .withSharedPref(context.applicationContext, "safe_mobile_tink_keyset", "safe_mobile_crypto")
-   .withKeyTemplate(AesSivKeyManager.aes256SivTemplate())
    .withMasterKeyUri("android-keystore://vibesync_safe_mobile_master_key")
-   .build().keysetHandle
+   .build()
+   .keysetHandle
   primitive = handle.getPrimitive(DeterministicAead::class.java)
  }
  fun protectHash(hash: String): String {
