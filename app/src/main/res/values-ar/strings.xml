@@ -44,4 +44,6 @@
 <string name="risk_sms_accessibility">يجمع بين أذونات الرسائل القصيرة والتصريح بخدمة إمكانية الوصول؛ وهذا يستدعي المراجعة وليس دليلًا على اعتراض رموز OTP أو وجود برمجية خبيثة.</string>
 <string name="language_label">اللغة: %1$s</string>
 <string name="language_system_default">إعداد النظام الافتراضي</string>
+<string name="limited_protection">حماية محدودة — تعريف اختبار EICAR فقط</string>
+<string name="review_recommended">يُنصح بالمراجعة</string>
 </resources>
