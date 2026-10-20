@@ -28,5 +28,25 @@ class EncryptedHashStore(context: Context) {
  fun revealHash(value: String): String = String(
   primitive.decryptDeterministically(Base64.decode(value, Base64.NO_WRAP), AAD), StandardCharsets.UTF_8
  )
+
+ /** Encrypt definition metadata with field-specific associated data. */
+ fun protectMetadata(value: String, purpose: String): String {
+  require(purpose == "family" || purpose == "level") { "Unsupported definition metadata field." }
+  require(value.length <= 512) { "Definition metadata is too long." }
+  val encrypted=primitive.encryptDeterministically(value.toByteArray(StandardCharsets.UTF_8), metadataAad(purpose))
+  return Base64.encodeToString(encrypted, Base64.NO_WRAP)
+ }
+
+ fun revealMetadata(value: String, purpose: String): String {
+  require(purpose == "family" || purpose == "level") { "Unsupported definition metadata field." }
+  return String(
+   primitive.decryptDeterministically(Base64.decode(value, Base64.NO_WRAP), metadataAad(purpose)),
+   StandardCharsets.UTF_8
+  )
+ }
+
+ private fun metadataAad(purpose: String) =
+  ("vibesync.safe.mobile.metadata." + purpose + ".v1").toByteArray(StandardCharsets.UTF_8)
+
  companion object { private val AAD = "vibesync.safe.mobile.hash.v1".toByteArray(StandardCharsets.UTF_8) }
 }

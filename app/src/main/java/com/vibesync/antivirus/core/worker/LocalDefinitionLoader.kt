@@ -55,8 +55,8 @@ class LocalDefinitionLoader(private val context: Context, private val dao: Threa
    val row = definitions.optJSONObject(index) ?: continue
    val hash = row.optString("sha256").lowercase()
    if (!hash.matches(Regex("^[a-f0-9]{64}$"))) continue
-   rows += ThreatSignature(hash=hashStore.protectHash(hash), malwareFamily=row.optString("malware_family","Unknown").take(120),
-    threatLevel=row.optString("threat_level","unknown").take(32), dateAdded=row.optLong("date_added",System.currentTimeMillis()))
+   rows += ThreatSignature(hash=hashStore.protectHash(hash), malwareFamily=hashStore.protectMetadata(row.optString("malware_family","Unknown").take(120), "family"),
+    threatLevel=hashStore.protectMetadata(row.optString("threat_level","unknown").take(32), "level"), dateAdded=row.optLong("date_added",System.currentTimeMillis()))
   }
   rows.chunked(BATCH_SIZE).forEach { dao.upsertSignatures(it) }
   return rows.size

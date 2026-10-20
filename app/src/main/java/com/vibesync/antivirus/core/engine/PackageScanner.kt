@@ -84,7 +84,11 @@ class PackageScanner(
   val encrypted = hashStore.protectHash(sha)
   if (dao.isHashWhitelisted(encrypted)) return ScanResult(key, label, sha, md5, ScanVerdict.NO_MATCH, listOf(context.getString(R.string.hash_allowlisted)), 0)
   val threat = dao.findThreatByEncryptedHash(encrypted)
-  if (threat != null) return ScanResult(key, label, sha, md5, ScanVerdict.THREAT, listOf(context.getString(R.string.hash_match, threat.malwareFamily, threat.threatLevel)), 0)
+  if (threat != null) {
+   val family = revealMetadataOrPlaintext(threat.malwareFamily, "family")
+   val level = revealMetadataOrPlaintext(threat.threatLevel, "level")
+   return ScanResult(key, label, sha, md5, ScanVerdict.THREAT, listOf(context.getString(R.string.hash_match, family, level)), 0)
+  }
   val verdict = if (score >= 45 || debug) ScanVerdict.SUSPICIOUS else ScanVerdict.NO_MATCH
   val notes = if (heuristic.isEmpty()) listOf(context.getString(R.string.no_match_detail)) else heuristic + context.getString(R.string.risk_review)
   return ScanResult(key, label, sha, md5, verdict, notes, 0)
@@ -98,6 +102,9 @@ class PackageScanner(
    scanDuration=elapsed(start)
   ))
  }
+ private fun revealMetadataOrPlaintext(value: String, purpose: String): String =
+  runCatching { hashStore.revealMetadata(value, purpose) }.getOrDefault(value)
+
  private fun isDebugSigned(info: PackageInfo): Boolean = runCatching {
   val signatureBytes = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
    info.signingInfo?.apkContentsSigners?.firstOrNull()?.toByteArray()
