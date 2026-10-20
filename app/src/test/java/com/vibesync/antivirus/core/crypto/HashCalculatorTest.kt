@@ -15,4 +15,11 @@ class HashCalculatorTest {
   assertEquals("d41d8cd98f00b204e9800998ecf8427e",result.md5)
   assertEquals(0L,result.bytesRead)
  }
+ @Test fun standardEicarTestVectorHashesCorrectly() {
+  val marker = "X5O!P%@AP[4\\\\PZX54(P^)7CC)7}\\$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!\\$H+H*"
+  val result = HashCalculator().calculate(ByteArrayInputStream(marker.toByteArray(Charsets.US_ASCII)))
+  assertEquals("275a021bbfb6489e54d471899f7db9d1663fc695ec2fe2a2c4538aabf651fd0f", result.sha256)
+  assertEquals("44d88612fea8a8f36de82e1278abb02f", result.md5)
+  assertEquals(68L, result.bytesRead)
+ }
 }

@@ -1,4 +1,11 @@
 {
   "schema_version": 1,
-  "definitions": []
+  "definitions": [
+    {
+      "sha256": "275a021bbfb6489e54d471899f7db9d1663fc695ec2fe2a2c4538aabf651fd0f",
+      "malware_family": "EICAR test file",
+      "threat_level": "test",
+      "date_added": 1792454400000
+    }
+  ]
 }

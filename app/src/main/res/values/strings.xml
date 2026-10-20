@@ -22,7 +22,7 @@
 <string name="scan_complete">Scan completed. A local no-match result is not a guarantee that a file is safe.</string><string name="scan_failed">Scan failed. Please try again.</string>
 <string name="ads_label">ADVERTISEMENT</string><string name="privacy_options">Privacy / advertising options</string>
 <string name="ad_offline_title">Local first. Works offline.</string><string name="ad_offline_body">Core scanning stays on this device. When connected, you can optionally support independent app development with a coffee contribution.</string><string name="coffee_support">Support development</string><string name="offline_label">Offline mode · scanning remains local</string>
-<string name="not_configured">No threat signature database is bundled yet. A curated offline signature set must be installed before this can provide meaningful signature detection.</string>
+<string name="not_configured">Offline definitions currently contain only the EICAR antivirus test signature; this does not protect against real-world malware. Import a curated, licensed local signature database.</string>
 <string name="update_available">An app update is available in Google Play.</string><string name="update_downloaded">Update downloaded. Restart the app to finish updating.</string><string name="close">Close</string>
 <string name="file_hash_label">SHA-256: %1$s…</string>
 <string name="service_channel_name">SafeMobile file monitoring</string><string name="service_channel_description">Notifications for user-enabled local APK checks.</string><string name="service_notification_title">SafeMobile monitoring is active</string><string name="service_notification_body">Watching Downloads for newly written APK files.</string>
