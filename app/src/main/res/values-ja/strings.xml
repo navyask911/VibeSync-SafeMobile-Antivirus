@@ -42,4 +42,6 @@
 <string name="quarantine_delete_failed">隔離ファイルを削除できませんでした。</string>
 <string name="risk_sms_internet">SMS 権限とネットワークアクセスの組み合わせです。リスクの兆候であり、悪意ある動作の証明ではありません。</string>
 <string name="risk_sms_accessibility">SMS 権限とユーザー補助サービスの宣言を組み合わせています。確認すべき兆候であり、OTP の傍受やマルウェアの証明ではありません。</string>
+<string name="language_label">言語: %1$s</string>
+<string name="language_system_default">システムの既定</string>
 </resources>
