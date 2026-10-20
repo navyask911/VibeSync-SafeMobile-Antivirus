@@ -78,4 +78,6 @@
 <string name="locale_french" translatable="false">Français</string>
 <string name="locale_hindi" translatable="false">हिन्दी</string>
 <string name="locale_japanese" translatable="false">日本語</string>
+<string name="limited_protection">Limited protection — EICAR test definition only</string>
+<string name="review_recommended">Review recommended</string>
 </resources>
