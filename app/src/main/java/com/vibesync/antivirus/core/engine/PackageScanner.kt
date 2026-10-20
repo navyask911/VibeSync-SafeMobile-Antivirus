@@ -13,6 +13,9 @@ import java.io.ByteArrayInputStream
 import java.io.File
 import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 
 class PackageScanner(
  private val context: Context,
@@ -22,12 +25,22 @@ class PackageScanner(
  private val riskAnalyzer: PermissionRiskAnalyzer = PermissionRiskAnalyzer()
 ) {
  private val pm = context.packageManager
- suspend fun scanInstalledApps(): List<ScanResult> {
+ suspend fun scanInstalledApps(progress: suspend (processed: Int, total: Int) -> Unit = { _, _ -> }): List<ScanResult> {
   val flags = PackageManager.GET_PERMISSIONS or PackageManager.GET_SERVICES or signingFlags()
+  val packages = pm.getInstalledPackages(flags)
   val results = mutableListOf<ScanResult>()
-  for (info in pm.getInstalledPackages(flags)) {
-   val scanned = runCatching { scanPackage(info) }.getOrNull()
+  progress(0, packages.size)
+  for ((index, info) in packages.withIndex()) {
+   currentCoroutineContext().ensureActive()
+   val scanned = try {
+    scanPackage(info)
+   } catch (cancelled: CancellationException) {
+    throw cancelled
+   } catch (_: Exception) {
+    null
+   }
    if (scanned != null) results += scanned
+   progress(index + 1, packages.size)
   }
   return results.sortedBy { when (it.verdict) {
    ScanVerdict.THREAT -> 0
@@ -43,21 +56,29 @@ class PackageScanner(
  suspend fun scanFile(file: File): ScanResult {
   val start = System.nanoTime()
   if (!file.isFile || !file.canRead()) return result(file.name, file.name, null, null, ScanVerdict.NOT_SCANNED, listOf(context.getString(R.string.file_not_readable)), start).copy(sourceLocalPath = file.absolutePath)
-  return runCatching {
+  return try {
    val hash = calculator.calculate(file)
    val output = evaluate(file.name, file.name, hash.sha256, hash.md5, emptyList(), 0, false)
    audit(output, start)
    output.copy(durationMs = elapsed(start), sourceLocalPath = file.absolutePath)
-  }.getOrElse { result(file.name, file.name, null, null, ScanVerdict.NOT_SCANNED, listOf(context.getString(R.string.file_could_not_read)), start).copy(sourceLocalPath = file.absolutePath) }
+  } catch (cancelled: CancellationException) {
+   throw cancelled
+  } catch (_: Exception) {
+   result(file.name, file.name, null, null, ScanVerdict.NOT_SCANNED, listOf(context.getString(R.string.file_could_not_read)), start).copy(sourceLocalPath = file.absolutePath)
+  }
  }
  suspend fun scanStream(label: String, stream: java.io.InputStream): ScanResult {
   val start = System.nanoTime()
-  return runCatching {
+  return try {
    val hash = stream.use { calculator.calculate(it) }
    val output = evaluate(label, label, hash.sha256, hash.md5, emptyList(), 0, false)
    audit(output, start)
    output.copy(durationMs = elapsed(start))
-  }.getOrElse { result(label, label, null, null, ScanVerdict.NOT_SCANNED, listOf(context.getString(R.string.file_stream_failed)), start) }
+  } catch (cancelled: CancellationException) {
+   throw cancelled
+  } catch (_: Exception) {
+   result(label, label, null, null, ScanVerdict.NOT_SCANNED, listOf(context.getString(R.string.file_stream_failed)), start)
+  }
  }
  private suspend fun scanPackage(info: PackageInfo): ScanResult {
   val start = System.nanoTime()
