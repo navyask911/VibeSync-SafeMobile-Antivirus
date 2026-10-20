@@ -4,4 +4,14 @@
 <string name="import_success">%1$d gültige Signaturen wurden lokal importiert.</string>
 <string name="import_failed">Die Definitionsdatei konnte nicht importiert werden. JSON-Format und SHA-256-Hashes prüfen.</string>
 <string name="monitor_stop">Downloads-Überwachung beenden</string>
+
+<string name="local_files_only">Aus Datenschutzgründen öffnet der Scanner nur Dateien von erkannten lokalen Speicheranbietern. Cloud- und Drittanbieter werden nicht geöffnet.</string>
+<string name="quarantine_confirm_title">Diese markierte Datei unter Quarantäne stellen?</string>
+<string name="quarantine_confirm_body">Eine private Kopie wird innerhalb der App gespeichert. Nach Prüfung des Hashes versucht SafeMobile, das ausgewählte Original zu entfernen. Das hängt von Android-Berechtigungen und dem Anbieter ab; das Original kann erhalten bleiben.</string>
+<string name="quarantine_confirm_action">In Quarantäne verschieben</string>
+<string name="quarantine_file">Private Quarantänekopie erstellen</string>
+<string name="quarantine_success_removed">Private Kopie gespeichert (%1$s); Android meldete, dass das Original entfernt wurde.</string>
+<string name="quarantine_success_copy_only">Private Kopie gespeichert (%1$s), aber Android konnte das Original nicht entfernen. Falls nötig, löschen Sie es manuell.</string>
+<string name="quarantine_failed">Quarantäne fehlgeschlagen. Das Original wurde nicht absichtlich entfernt.</string>
+<string name="uninstall_app">App deinstallieren…</string>
 </resources>

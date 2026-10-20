@@ -4,4 +4,14 @@
 <string name="import_success">%1$d मान्य हस्ताक्षर स्थानीय संग्रह में आयात हुए।</string>
 <string name="import_failed">परिभाषा फ़ाइल आयात नहीं हो सकी। JSON प्रारूप और SHA-256 हैश जाँचें।</string>
 <string name="monitor_stop">डाउनलोड निगरानी रोकें</string>
+
+<string name="local_files_only">गोपनीयता के लिए स्कैनर केवल पहचाने गए स्थानीय स्टोरेज प्रदाताओं की फ़ाइलें खोलता है। क्लाउड या तीसरे पक्ष के प्रदाता नहीं खोले जाते।</string>
+<string name="quarantine_confirm_title">क्या इस चिह्नित फ़ाइल को क्वारंटीन करें?</string>
+<string name="quarantine_confirm_body">ऐप के निजी स्टोरेज में एक निजी कॉपी रखी जाएगी। हैश की पुष्टि के बाद SafeMobile चुनी गई मूल फ़ाइल हटाने की कोशिश करेगा। हटाना Android अनुमतियों और प्रदाता पर निर्भर है; मूल फ़ाइल बनी रह सकती है।</string>
+<string name="quarantine_confirm_action">क्वारंटीन करें</string>
+<string name="quarantine_file">निजी क्वारंटीन कॉपी रखें</string>
+<string name="quarantine_success_removed">निजी कॉपी सहेजी गई (%1$s); Android ने बताया कि मूल फ़ाइल हटा दी गई।</string>
+<string name="quarantine_success_copy_only">निजी कॉपी सहेजी गई (%1$s), लेकिन Android मूल फ़ाइल नहीं हटा सका। ज़रूरत हो तो इसे मैन्युअल रूप से हटाएँ।</string>
+<string name="quarantine_failed">क्वारंटीन विफल हुआ। मूल फ़ाइल हटाने की जानबूझकर कोशिश नहीं की गई।</string>
+<string name="uninstall_app">ऐप अनइंस्टॉल करें…</string>
 </resources>

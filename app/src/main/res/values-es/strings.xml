@@ -4,4 +4,14 @@
 <string name="import_success">Se importaron %1$d firmas válidas al almacenamiento local.</string>
 <string name="import_failed">No se pudo importar el archivo. Comprueba el formato JSON y los hashes SHA-256.</string>
 <string name="monitor_stop">Detener la vigilancia de Descargas</string>
+
+<string name="local_files_only">Por privacidad, el escáner solo abre archivos de proveedores de almacenamiento local reconocidos. No abre proveedores en la nube ni de terceros.</string>
+<string name="quarantine_confirm_title">¿Poner este archivo marcado en cuarentena?</string>
+<string name="quarantine_confirm_body">Se guardará una copia privada dentro de la aplicación. Tras verificar su hash, SafeMobile intentará eliminar el original seleccionado. La eliminación depende de los permisos de Android y del proveedor; el original podría permanecer.</string>
+<string name="quarantine_confirm_action">Poner en cuarentena</string>
+<string name="quarantine_file">Guardar copia privada en cuarentena</string>
+<string name="quarantine_success_removed">Copia privada guardada (%1$s); Android indicó que se eliminó el original.</string>
+<string name="quarantine_success_copy_only">Copia privada guardada (%1$s), pero Android no permitió eliminar el original. Elimínalo manualmente si es necesario.</string>
+<string name="quarantine_failed">No se pudo completar la cuarentena. No se intentó eliminar intencionadamente el archivo original.</string>
+<string name="uninstall_app">Desinstalar aplicación…</string>
 </resources>

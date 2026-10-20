@@ -4,4 +4,14 @@
 <string name="import_success">%1$d signatures valides ont été importées dans le stockage local.</string>
 <string name="import_failed">Impossible d’importer le fichier. Vérifiez le format JSON et les empreintes SHA-256.</string>
 <string name="monitor_stop">Arrêter la surveillance des téléchargements</string>
+
+<string name="local_files_only">Pour protéger votre vie privée, le scanner ouvre uniquement les fichiers provenant de fournisseurs de stockage local reconnus. Les fournisseurs cloud ou tiers ne sont pas ouverts.</string>
+<string name="quarantine_confirm_title">Mettre ce fichier signalé en quarantaine ?</string>
+<string name="quarantine_confirm_body">Une copie privée sera enregistrée dans l’application. Après vérification de son empreinte, SafeMobile tentera de supprimer l’original sélectionné. La suppression dépend des autorisations Android et du fournisseur ; l’original peut rester.</string>
+<string name="quarantine_confirm_action">Mettre en quarantaine</string>
+<string name="quarantine_file">Conserver une copie privée en quarantaine</string>
+<string name="quarantine_success_removed">Copie privée enregistrée (%1$s) ; Android indique que l’original a été supprimé.</string>
+<string name="quarantine_success_copy_only">Copie privée enregistrée (%1$s), mais Android n’a pas supprimé l’original. Supprimez-le manuellement si nécessaire.</string>
+<string name="quarantine_failed">Échec de la mise en quarantaine. La suppression de l’original n’a pas été volontairement tentée.</string>
+<string name="uninstall_app">Désinstaller l’application…</string>
 </resources>
