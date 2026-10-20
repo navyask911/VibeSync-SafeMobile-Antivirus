@@ -72,7 +72,7 @@ for path in (ROOT / "app" / "src" / "main").rglob("*.kt"):
 # Localization resource coverage and placeholder parity. This is a structural check, not a
 # certification of translation quality or native-speaker review.
 RESOURCES = ROOT / "app" / "src" / "main" / "res"
-PLACEHOLDER = re.compile(r"%(?:\\d+\\$)?[sdif]")
+PLACEHOLDER = re.compile(r"%(?:\d+\$)?[sdif]")
 
 def read_string_resources(path: Path):
     try:
