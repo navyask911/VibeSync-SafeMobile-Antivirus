@@ -44,4 +44,6 @@
 <string name="risk_sms_accessibility">Kombiniert SMS-Berechtigungen mit einem deklarierten Bedienungshilfedienst; dies ist ein Prüfsignal, kein Beweis für OTP-Abfangen oder Malware.</string>
 <string name="language_label">Sprache: %1$s</string>
 <string name="language_system_default">Systemstandard</string>
+<string name="limited_protection">Eingeschränkter Schutz — nur EICAR-Testdefinition</string>
+<string name="review_recommended">Überprüfung empfohlen</string>
 </resources>
