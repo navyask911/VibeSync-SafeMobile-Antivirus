@@ -153,7 +153,7 @@ private val Red=Color(0xFFDA3855)
      }
     }
     Spacer(Modifier.height(8.dp))
-    if(privacyOptionsRequired) TextButton(onClick={ activity?.let { ConsentManager.requestConsent(it) { } } }) { Text(stringResource(R.string.privacy_options)) }
+    if(privacyOptionsRequired) TextButton(onClick={ activity?.let { ConsentManager.showPrivacyOptions(it) { } } }) { Text(stringResource(R.string.privacy_options)) }
     Text(stringResource(R.string.scan_clean_warning),style=MaterialTheme.typography.labelSmall,color=Color(0xFF8CA9BC))
    }
    if(adsEnabled) Column(Modifier.fillMaxWidth().background(Color(0xFF071522)).padding(top=4.dp),horizontalAlignment=Alignment.CenterHorizontally) {
