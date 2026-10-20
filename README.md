@@ -19,6 +19,11 @@ Android sandboxing prevents third-party apps from scanning arbitrary system part
 
 QUERY_ALL_PACKAGES and MANAGE_EXTERNAL_STORAGE are restricted Google Play permissions. Declaration does not guarantee approval. Complete Play Console declarations and confirm eligibility for the core security use case. The privacy dialog is an acknowledgement; it does not grant Android special permissions or guarantee Play approval.
 
+## Flagged-result actions
+- Flagged installed apps show an Uninstall action that launches Android's own confirmation UI; the app cannot silently remove an app or block installation.
+- The selected-file scanner refuses cloud and third-party document providers before opening their content. Supported local document providers can be copied to app-private, no-backup quarantine storage.
+- After the private copy's SHA-256 is verified against the scan result, SafeMobile makes a best-effort request to delete the selected original. Android or the provider may deny that request; the UI distinguishes this outcome. Quarantine copies remain in the app's private storage.
+
 ## Ads
 The app-ads.txt publisher ID alone does not identify an AdMob app or its ad units. To avoid embedding unverified production IDs, release builds keep ads disabled unless all three GitHub Actions repository variables are configured: ADMOB_APP_ID, ADMOB_BANNER_UNIT_ID, and ADMOB_INTERSTITIAL_UNIT_ID. Set those values from the actual AdMob dashboard. Debug builds always use Google's official test app/ad IDs. When production IDs are configured, UMP consent gates SDK initialization/ad requests. When they are absent, the release does not initialize Mobile Ads and makes no ad requests. The adaptive banner is anchored in the dashboard footer. Interstitials are only considered after every third completed scan, not on app launch or mid-scan. Configure privacy messages in AdMob and do not click production ads during testing.
 
