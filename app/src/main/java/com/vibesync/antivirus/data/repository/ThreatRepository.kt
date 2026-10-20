@@ -43,6 +43,22 @@ class ThreatRepository(private val context: Context, private val database: Threa
   if (outcome.originalRemoved) context.getString(R.string.quarantine_success_removed, outcome.privateCopy.name)
   else context.getString(R.string.quarantine_success_copy_only, outcome.privateCopy.name)
  }
+
+ suspend fun listQuarantinedFiles(): List<File> = withContext(Dispatchers.IO) {
+  LocalQuarantineManager(context).listQuarantinedFiles()
+ }
+ suspend fun restoreQuarantinedFile(file: File, destinationUri: Uri): String = withContext(Dispatchers.IO) {
+  val manager = LocalQuarantineManager(context)
+  val label = manager.displayName(file)
+  val bytes = manager.restoreToUri(file, destinationUri)
+  context.getString(R.string.quarantine_restore_success, label, bytes)
+ }
+ suspend fun deleteQuarantinedFile(file: File): String = withContext(Dispatchers.IO) {
+  val manager = LocalQuarantineManager(context)
+  val label = manager.displayName(file)
+  if (!manager.deleteQuarantinedFile(file)) throw IOException("Could not permanently delete quarantined file.")
+  context.getString(R.string.quarantine_delete_success, label)
+ }
  suspend fun importOfflineDefinitions(uri: Uri): String = withContext(Dispatchers.IO) {
   val stream=context.contentResolver.openInputStream(uri) ?: throw IOException(context.getString(R.string.file_stream_failed))
   context.getString(R.string.import_success,definitionLoader.importFromStream(stream))
