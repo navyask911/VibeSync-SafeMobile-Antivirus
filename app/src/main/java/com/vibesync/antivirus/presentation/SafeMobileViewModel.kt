@@ -8,6 +8,7 @@ import com.vibesync.antivirus.R
 import com.vibesync.antivirus.core.engine.ScanResult
 import com.vibesync.antivirus.core.engine.ScanVerdict
 import com.vibesync.antivirus.data.repository.ThreatRepository
+import java.io.File
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,7 +25,8 @@ data class SafeMobileUiState(
     val messageText: String? = null,
     val signatureCount: Int = 0,
     val processedItems: Int = 0,
-    val totalItems: Int = 0
+    val totalItems: Int = 0,
+    val quarantinedFiles: List<File> = emptyList()
 ) {
     val threatCount get() = results.count { it.verdict == ScanVerdict.THREAT }
     val suspiciousCount get() = results.count { it.verdict == ScanVerdict.SUSPICIOUS }
@@ -35,7 +37,7 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
     val state = mutableState.asStateFlow()
     private var scanJob: Job? = null
 
-    init { refreshSignatureCount() }
+    init { refreshSignatureCount(); refreshQuarantine() }
 
     fun scanInstalled() = runScan { onProgress ->
         repository.scanInstalledApps(onProgress)
@@ -49,12 +51,43 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
         scanJob?.cancel()
     }
 
+    fun refreshQuarantine() {
+        viewModelScope.launch {
+            runCatching { repository.listQuarantinedFiles() }
+                .onSuccess { files -> mutableState.update { it.copy(quarantinedFiles = files) } }
+        }
+    }
+
     fun quarantineSelectedFile(uri: Uri, expectedSha256: String?) {
         viewModelScope.launch {
             mutableState.update { it.copy(messageResource = null, messageText = null) }
             runCatching { repository.quarantineSelectedFile(uri, expectedSha256) }
-                .onSuccess { message -> mutableState.update { it.copy(messageText = message, messageResource = null) } }
+                .onSuccess { message ->
+                    mutableState.update { it.copy(messageText = message, messageResource = null) }
+                    refreshQuarantine()
+                }
                 .onFailure { mutableState.update { it.copy(messageText = null, messageResource = R.string.quarantine_failed) } }
+        }
+    }
+
+    fun restoreQuarantinedFile(file: File, destinationUri: Uri) {
+        viewModelScope.launch {
+            mutableState.update { it.copy(messageResource = null, messageText = null) }
+            runCatching { repository.restoreQuarantinedFile(file, destinationUri) }
+                .onSuccess { message -> mutableState.update { it.copy(messageText = message, messageResource = null) } }
+                .onFailure { mutableState.update { it.copy(messageText = null, messageResource = R.string.quarantine_restore_failed) } }
+        }
+    }
+
+    fun deleteQuarantinedFile(file: File) {
+        viewModelScope.launch {
+            mutableState.update { it.copy(messageResource = null, messageText = null) }
+            runCatching { repository.deleteQuarantinedFile(file) }
+                .onSuccess { message ->
+                    mutableState.update { it.copy(messageText = message, messageResource = null) }
+                    refreshQuarantine()
+                }
+                .onFailure { mutableState.update { it.copy(messageText = null, messageResource = R.string.quarantine_delete_failed) } }
         }
     }
 
