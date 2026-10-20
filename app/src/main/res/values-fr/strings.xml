@@ -44,4 +44,6 @@
 <string name="risk_sms_accessibility">Associe des autorisations SMS à la déclaration d’un service d’accessibilité ; c’est un signal à examiner, pas une preuve d’interception d’OTP ou de logiciel malveillant.</string>
 <string name="language_label">Langue : %1$s</string>
 <string name="language_system_default">Valeur système par défaut</string>
+<string name="limited_protection">Protection limitée — définition de test EICAR uniquement</string>
+<string name="review_recommended">Vérification recommandée</string>
 </resources>
