@@ -52,7 +52,7 @@ The repository was publicly visible and had no root `LICENSE` file at the review
 
 ### Localization status
 
-The current translated resource folders cover Arabic, German, Spanish, French, Hindi, and Japanese, in addition to default English resources. The updated scan/quarantine/risk strings are translated for those existing locales, and the app now offers a saved in-app override for English, Arabic, German, Spanish, French, Hindi, Japanese, plus a System default choice. The full additional language coverage requested for a global launch (including Portuguese, Russian, Simplified Chinese, Korean, Turkish, Indonesian, Vietnamese, Italian, Kannada, Tamil, Telugu, Bengali, Marathi, Urdu and Hebrew) is not yet implemented and needs native-speaker review. Do not claim complete global localization until those translations and locale behavior are verified.
+The app now has full application-string resource files and an in-app locale override for English, Arabic, German, Spanish, French, Hindi, Japanese, Portuguese, Russian, Simplified Chinese, Korean, Turkish, Indonesian, Vietnamese, Italian, Kannada, Tamil, Telugu, Bengali, Marathi, Urdu, and Hebrew. The added translations are first-pass drafts and need native-speaker review, particularly security/privacy wording and RTL layouts, before production. Locale-resource checks verify key coverage and formatted-placeholder parity; that does not certify translation quality or on-device layout. The current selector includes these locales plus System default.
 
 ### Release caveats
 
