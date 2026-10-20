@@ -40,4 +40,6 @@
 <string name="quarantine_delete_success">Le fichier en quarantaine %1$s a été supprimé.</string>
 <string name="quarantine_restore_failed">Impossible de restaurer le fichier en quarantaine. Vérifiez la destination et l’espace disponible, puis réessayez.</string>
 <string name="quarantine_delete_failed">Impossible de supprimer le fichier en quarantaine.</string>
+<string name="risk_sms_internet">Associe des autorisations SMS à l’accès réseau ; il s’agit d’un indicateur de risque, pas d’une preuve de comportement malveillant.</string>
+<string name="risk_sms_accessibility">Associe des autorisations SMS à la déclaration d’un service d’accessibilité ; c’est un signal à examiner, pas une preuve d’interception d’OTP ou de logiciel malveillant.</string>
 </resources>
