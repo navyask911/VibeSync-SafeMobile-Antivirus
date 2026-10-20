@@ -6,6 +6,17 @@ plugins {
  id("org.jetbrains.kotlin.plugin.compose")
 }
 fun cfg(value: String): String = "\"" + value.replace("\\", "\\\\").replace("\"", "\\\"") + "\""
+
+val releaseStoreBase64 = providers.environmentVariable("KEYSTORE_BASE64").orNull
+val releaseStorePassword = providers.environmentVariable("KEYSTORE_PASSWORD").orNull
+val releaseKeyAlias = providers.environmentVariable("KEY_ALIAS").orNull
+val releaseKeyPassword = providers.environmentVariable("KEY_PASSWORD").orNull
+val signingValues = listOf(releaseStoreBase64, releaseStorePassword, releaseKeyAlias, releaseKeyPassword)
+val releaseSigningEnabled = signingValues.all { !it.isNullOrBlank() }
+if (signingValues.any { !it.isNullOrBlank() } && !releaseSigningEnabled) {
+    throw GradleException("Release signing is partially configured. Set all four KEYSTORE_BASE64, KEYSTORE_PASSWORD, KEY_ALIAS and KEY_PASSWORD variables, or leave all empty.")
+}
+
 android {
  namespace = "com.vibesync.antivirus"
  compileSdk = 35
@@ -21,6 +32,21 @@ android {
   buildConfigField("String", "INTERSTITIAL_AD_UNIT_ID", cfg("ca-app-pub-4783826505860771/9523651625"))
   buildConfigField("String", "COFFEE_SUPPORT_URL", cfg("https://github.com/sponsors/navyask911"))
  }
+ signingConfigs {
+  if (releaseSigningEnabled) {
+   create("release") {
+    val keystoreFile = layout.buildDirectory.file("signing/safemobile-release.jks").get().asFile
+    if (!keystoreFile.isFile) {
+     keystoreFile.parentFile.mkdirs()
+     keystoreFile.writeBytes(java.util.Base64.getDecoder().decode(releaseStoreBase64))
+    }
+    storeFile = keystoreFile
+    storePassword = releaseStorePassword
+    keyAlias = releaseKeyAlias
+    keyPassword = releaseKeyPassword
+   }
+  }
+ }
  buildTypes {
   debug {
    applicationIdSuffix = ".debug"
@@ -33,6 +59,7 @@ android {
    isMinifyEnabled = true
    isShrinkResources = true
    ndk { debugSymbolLevel = "FULL" }
+   if (releaseSigningEnabled) signingConfig = signingConfigs.getByName("release")
    proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
   }
  }

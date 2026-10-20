@@ -25,8 +25,26 @@ jobs:
         run: ./gradlew --no-daemon testDebugUnitTest
       - name: Android lint
         run: ./gradlew --no-daemon lintDebug
-      - name: Assemble debug APK and release AAB
-        run: ./gradlew --no-daemon assembleDebug bundleRelease
+      - name: Build APKs and release AAB
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: ./gradlew --no-daemon assembleDebug assembleRelease bundleRelease
+      - name: Report release signing configuration
+        if: always()
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          if [ -n "$KEYSTORE_BASE64" ] && [ -n "$KEYSTORE_PASSWORD" ] && [ -n "$KEY_ALIAS" ] && [ -n "$KEY_PASSWORD" ]; then
+            echo "Release signing: configured (secret values are not printed)."
+          else
+            echo "Release signing: not configured; release outputs are unsigned and cannot be uploaded to Play."
+          fi
       - name: Upload Android artifacts
         if: success()
         uses: actions/upload-artifact@v4
@@ -34,6 +52,7 @@ jobs:
           name: safe-mobile-android-artifacts
           path: |
             app/build/outputs/apk/debug/*.apk
+            app/build/outputs/apk/release/*.apk
             app/build/outputs/bundle/release/*.aab
           if-no-files-found: warn
           retention-days: 14

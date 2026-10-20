@@ -7,7 +7,7 @@ Native Android Kotlin app using Jetpack Compose Material 3, Room, WorkManager, G
 - Min SDK 26; compile and target SDK 35
 - JDK 17, Gradle Kotlin DSL
 - Version name 1.0.0; version code 20261020. Increase versionCode for each subsequent Play release.
-- CI runs tests, lint, debug APK build and release AAB build.
+- CI runs tests and lint, then builds debug and release APKs plus a release AAB. If the four standard KEYSTORE_* / KEY_* GitHub Actions secrets are configured, release APK/AAB outputs are signed; otherwise they remain unsigned.
 
 ## Privacy boundary
 Hashing, local signature matching, permission heuristics, scan audit storage and scheduled scans are on-device. The scanner does not send files or hashes to a server. There is no telemetry, analytics, crash reporting, remote threat feed, Supabase or VirusTotal client. Google Mobile Ads and UMP are included because ad units were explicitly requested; these SDKs may communicate with Google when connectivity and the user's consent state permit. Google Play In-App Updates also contacts Google Play. The app’s core scan functions do not depend on those network features and continue to run without connectivity.
@@ -35,6 +35,6 @@ The exact authorized seller line exists at the repository root. This does not ho
 ## Build commands
 ./gradlew testDebugUnitTest
 ./gradlew lintDebug
-./gradlew assembleDebug bundleRelease
+./gradlew assembleDebug assembleRelease bundleRelease
 
-The CI release AAB is not signed for Play unless release signing is configured separately. Before production release, add a real offline definition set, test on physical Android versions, evaluate Play restricted-permission requirements, and verify consent/localization and update flows.
+Release APK and AAB outputs are signed only when all four repository Actions secrets are set: KEYSTORE_BASE64 (base64-encoded keystore), KEYSTORE_PASSWORD, KEY_ALIAS, KEY_PASSWORD. Never commit the keystore or passwords. If the secrets are absent, CI creates unsigned artifacts that are not Play-upload-ready. Before production release, add a real offline definition set, test on physical Android versions, evaluate Play restricted-permission requirements, and verify consent/localization and update flows.
