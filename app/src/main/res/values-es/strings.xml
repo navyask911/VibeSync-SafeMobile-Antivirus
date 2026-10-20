@@ -40,4 +40,6 @@
 <string name="quarantine_delete_success">Se eliminó el archivo en cuarentena %1$s.</string>
 <string name="quarantine_restore_failed">No se pudo restaurar el archivo en cuarentena. Comprueba el destino y el espacio disponible e inténtalo de nuevo.</string>
 <string name="quarantine_delete_failed">No se pudo eliminar el archivo en cuarentena.</string>
+<string name="risk_sms_internet">Combina permisos de SMS con acceso a la red; es un indicador de riesgo, no una prueba de comportamiento malicioso.</string>
+<string name="risk_sms_accessibility">Combina permisos de SMS con la declaración de un servicio de accesibilidad; es una señal para revisar, no una prueba de interceptación de OTP ni de malware.</string>
 </resources>
