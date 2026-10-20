@@ -80,4 +80,19 @@
 <string name="locale_japanese" translatable="false">日本語</string>
 <string name="limited_protection">Limited protection — EICAR test definition only</string>
 <string name="review_recommended">Review recommended</string>
+<string name="locale_portuguese" translatable="false">Português</string>
+<string name="locale_russian" translatable="false">Русский</string>
+<string name="locale_chinese" translatable="false">简体中文</string>
+<string name="locale_korean" translatable="false">한국어</string>
+<string name="locale_turkish" translatable="false">Türkçe</string>
+<string name="locale_indonesian" translatable="false">Bahasa Indonesia</string>
+<string name="locale_vietnamese" translatable="false">Tiếng Việt</string>
+<string name="locale_italian" translatable="false">Italiano</string>
+<string name="locale_kannada" translatable="false">ಕನ್ನಡ</string>
+<string name="locale_tamil" translatable="false">தமிழ்</string>
+<string name="locale_telugu" translatable="false">తెలుగు</string>
+<string name="locale_bengali" translatable="false">বাংলা</string>
+<string name="locale_marathi" translatable="false">मराठी</string>
+<string name="locale_urdu" translatable="false">اردو</string>
+<string name="locale_hebrew" translatable="false">עברית</string>
 </resources>
