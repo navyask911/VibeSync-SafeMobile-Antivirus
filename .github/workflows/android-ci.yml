@@ -21,6 +21,12 @@ jobs:
           java-version: "17"
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
+      - name: Proprietary safety policy guard
+        run: python3 scripts/check_proprietary_safety.py
+      - name: Capture dependency graph for licence review
+        run: |
+          mkdir -p build
+          ./gradlew --no-daemon :app:dependencies --configuration releaseRuntimeClasspath > build/release-runtime-dependency-tree.txt
       - name: Unit tests
         run: ./gradlew --no-daemon testDebugUnitTest
       - name: Android lint
@@ -69,5 +75,6 @@ jobs:
             app/build/outputs/apk/debug/*.apk
             app/build/outputs/apk/release/*.apk
             app/build/outputs/bundle/release/*.aab
+            build/release-runtime-dependency-tree.txt
           if-no-files-found: warn
           retention-days: 14
