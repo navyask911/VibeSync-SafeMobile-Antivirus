@@ -15,7 +15,7 @@
     <string name="scan_installed">Yüklü uygulamaları tara</string>
     <string name="scan_selected">Seçili APK veya dosyayı tara</string>
     <string name="monitor_title">İndirme izleyicisi</string>
-    <string name="monitor_explanation">Genel İndirilenler klasörünün isteğe bağlı izlenmesi. Android 11 ve üzeri sürümlerde kullanıcı Ayarlar'dan tüm dosyalara erişim izni vermelidir; Google Play onayı garanti edilmez.</string>
+    <string name="monitor_explanation">Genel İndirilenler klasörünün isteğe bağlı izlenmesi. Android 11 ve üzeri sürümlerde kullanıcı Ayarlar\'dan tüm dosyalara erişim izni vermelidir; Google Play onayı garanti edilmez.</string>
     <string name="monitor_button">İndirme izlemeyi etkinleştir</string>
     <string name="monitor_note">İzleme isteğe bağlıdır ve kullanıcı tarafından durdurulabilir.</string>
     <string name="latest_results">Son tarama sonuçları</string>
@@ -49,7 +49,7 @@
     <string name="coffee_support">Geliştirmeyi destekle</string>
     <string name="offline_label">Çevrimdışı mod · tarama yerel kalır</string>
     <string name="not_configured">Çevrimdışı tanımlar yalnızca EICAR test imzasını içerir; gerçek dünyadaki kötü amaçlı yazılımlara karşı koruma sağlamaz. Seçilmiş ve lisanslı bir yerel imza veritabanı içe aktarın.</string>
-    <string name="update_available">Google Play'de uygulama güncellemesi var.</string>
+    <string name="update_available">Google Play\'de uygulama güncellemesi var.</string>
     <string name="update_downloaded">Güncelleme indirildi. Tamamlamak için uygulamayı yeniden başlatın.</string>
     <string name="close">Kapat</string>
     <string name="file_hash_label">SHA-256: %1$s…</string>
