@@ -118,7 +118,7 @@ private val Red=Color(0xFFDA3855)
        }
       }
       Text(stringResource(R.string.scan_explanation),style=MaterialTheme.typography.bodyMedium,color=Color(0xFFD4E0E9))
-      if(state.signatureCount==0) Text(stringResource(R.string.not_configured),style=MaterialTheme.typography.bodySmall,color=Color(0xFFFFCF8D))
+      if(state.signatureCount<=1) Text(stringResource(R.string.not_configured),style=MaterialTheme.typography.bodySmall,color=Color(0xFFFFCF8D))
       Button(onClick=vm::scanInstalled,enabled=!state.isScanning && privacyAccepted,modifier=Modifier.fillMaxWidth()) {
        if(state.isScanning) CircularProgressIndicator(Modifier.size(18.dp),strokeWidth=2.dp,color=Navy) else androidx.compose.material3.Icon(Icons.Default.Security,contentDescription=null)
        Text(stringResource(if(state.isScanning) R.string.scan_running else R.string.scan_installed),modifier=Modifier.padding(start=8.dp))
