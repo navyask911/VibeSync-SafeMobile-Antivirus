@@ -5,6 +5,7 @@ import android.net.Uri
 import android.provider.DocumentsContract
 import com.vibesync.antivirus.core.crypto.HashCalculator
 import java.io.File
+import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
 import java.util.UUID
@@ -58,6 +59,58 @@ class LocalQuarantineManager(context: Context, private val hashCalculator: HashC
   }
  }
 
+ /** Returns only regular files canonically contained directly in the private quarantine directory. */
+ fun listQuarantinedFiles(): List<File> {
+  val root = File(app.noBackupFilesDir, "quarantine").canonicalFile
+  return root.listFiles().orEmpty()
+   .filter { file ->
+    runCatching {
+     val canonical = file.canonicalFile
+     canonical.isFile && canonical.parentFile == root
+    }.getOrDefault(false)
+   }
+   .sortedByDescending { it.lastModified() }
+ }
+
+ /** Converts the opaque storage filename into the user-supplied filename when possible. */
+ fun displayName(file: File): String {
+  val safe = checkedQuarantineFile(file)
+  return safe.name.replaceFirst(QUARANTINE_PREFIX, "").ifBlank { safe.name }
+ }
+
+ /**
+  * Restores a copy selected by the user to a system document URI. The quarantined original
+  * is deliberately retained; users can review it and delete it separately after restoration.
+  */
+ fun restoreToUri(file: File, destinationUri: Uri): Long {
+  val source = checkedQuarantineFile(file)
+  val expectedBytes = source.length()
+  val bytesCopied = FileInputStream(source).use { input ->
+   val output = app.contentResolver.openOutputStream(destinationUri, "wt")
+    ?: throw IOException("Android could not open the chosen restore destination.")
+   output.use { target -> input.copyTo(target, 64 * 1024) }
+  }
+  if (bytesCopied != expectedBytes) {
+   throw IOException("Restored copy length did not match the quarantined file.")
+  }
+  return bytesCopied
+ }
+
+ fun deleteQuarantinedFile(file: File): Boolean {
+  val safe = checkedQuarantineFile(file)
+  return safe.delete()
+ }
+
+ private fun checkedQuarantineFile(file: File): File {
+  val root = File(app.noBackupFilesDir, "quarantine").canonicalFile
+  val safe = file.canonicalFile
+  require(safe.path.startsWith(root.path + File.separator) && safe.isFile) {
+   "Selected item is not a regular file inside SafeMobile quarantine."
+  }
+  require(safe.parentFile == root) { "Nested quarantine paths are not supported." }
+  return safe
+ }
+
  private fun isKnownLocalUri(uri: Uri): Boolean {
   if (!uri.scheme.equals("content", ignoreCase = true)) return false
   return when (uri.authority) {
@@ -72,5 +125,9 @@ class LocalQuarantineManager(context: Context, private val hashCalculator: HashC
    "media" -> uri.path.orEmpty().startsWith("/external/")
    else -> false
   }
+ }
+
+ companion object {
+  private val QUARANTINE_PREFIX = Regex("^\\d+-[0-9a-fA-F-]{36}-")
  }
 }
