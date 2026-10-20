@@ -36,8 +36,8 @@ android {
   applicationId = "com.vibesync.antivirus"
   minSdk = 26
   targetSdk = 35
-  versionCode = 20261020
-  versionName = "1.0.0"
+  versionCode = 20261021
+  versionName = "1.0.1"
   testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   manifestPlaceholders["admobAppId"] = releaseAdMobAppId?.takeIf { it.isNotBlank() } ?: testAdMobAppId
   buildConfigField("String", "BANNER_AD_UNIT_ID", cfg(releaseBannerUnitId?.takeIf { it.isNotBlank() } ?: ""))
