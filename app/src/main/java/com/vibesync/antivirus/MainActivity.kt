@@ -24,6 +24,7 @@ import com.vibesync.antivirus.presentation.SafeMobileTheme
 
 class MainActivity : ComponentActivity() {
  private var adsReady by mutableStateOf(false)
+ private var privacyOptionsAvailable by mutableStateOf(false)
  private lateinit var updateManager: AppUpdateManager
  private var checkingUpdate = false
  private val updateLauncher = registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result: ActivityResult ->
@@ -39,10 +40,11 @@ class MainActivity : ComponentActivity() {
   updateManager.registerListener(installListener)
   setContent {
    SafeMobileTheme {
-    SafeMobileScreen(repository = (application as SafeMobileApp).repository, adsEnabled = adsReady)
+    SafeMobileScreen(repository = (application as SafeMobileApp).repository, adsEnabled = adsReady, privacyOptionsRequired = privacyOptionsAvailable)
    }
   }
   ConsentManager.requestConsent(this) { canRequestAds ->
+   privacyOptionsAvailable = ConsentManager.privacyOptionsRequired(this@MainActivity)
    if (canRequestAds) {
     MobileAds.initialize(this) { adsReady = true }
    }

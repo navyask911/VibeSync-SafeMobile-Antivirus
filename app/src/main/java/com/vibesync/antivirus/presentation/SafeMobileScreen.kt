@@ -70,7 +70,7 @@ private val Red=Color(0xFFDA3855)
 @Composable fun SafeMobileTheme(content:@Composable()->Unit) {
  MaterialTheme(colorScheme=androidx.compose.material3.darkColorScheme(primary=Cyan,secondary=Blue,background=Navy,surface=Color(0xFF0D263C),onPrimary=Navy,onBackground=Light,onSurface=Light,error=Red),content=content)
 }
-@Composable fun SafeMobileScreen(repository:ThreatRepository,adsEnabled:Boolean) {
+@Composable fun SafeMobileScreen(repository:ThreatRepository,adsEnabled:Boolean,privacyOptionsRequired:Boolean) {
  val context=LocalContext.current
  val activity=context as? Activity
  val vm:SafeMobileViewModel=viewModel(factory=SafeMobileViewModel.Factory(repository))
@@ -78,14 +78,14 @@ private val Red=Color(0xFFDA3855)
  val connectivity=remember { ConnectivityMonitor(context) }
  val online by connectivity.online.collectAsStateWithLifecycle()
  var privacyAccepted by remember { mutableStateOf(context.getSharedPreferences("safe_mobile_privacy",0).getBoolean("acknowledged",false)) }
- var privacyOptionsRequired by remember { mutableStateOf(false) }
+ var privacyOptionsVisible by remember { mutableStateOf(privacyOptionsRequired) }
  val apkPicker=rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri:Uri? -> uri?.let(vm::scanSelected) }
  val definitionsPicker=rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri:Uri? -> uri?.let(vm::importOfflineDefinitions) }
- val interstitial=remember(activity,adsEnabled) { activity?.let { InterstitialAdController(it,adsEnabled) } }
+ val interstitial=remember(activity,adsEnabled,online) { activity?.let { InterstitialAdController(it,adsEnabled && online) } }
  DisposableEffect(connectivity) { connectivity.start(); onDispose { connectivity.stop() } }
- LaunchedEffect(adsEnabled,interstitial) { if(adsEnabled) interstitial?.load() }
- LaunchedEffect(state.completedScans) { if(state.completedScans>0) interstitial?.showAfterScan(state.completedScans) }
- LaunchedEffect(Unit) { privacyOptionsRequired=activity?.let { ConsentManager.privacyOptionsRequired(it) } ?: false }
+ LaunchedEffect(adsEnabled,online,interstitial) { if(adsEnabled && online) interstitial?.load() }
+ LaunchedEffect(state.completedScans,interstitial,online) { if(state.completedScans>0 && online) interstitial?.showAfterScan(state.completedScans) }
+ LaunchedEffect(privacyOptionsRequired) { privacyOptionsVisible = privacyOptionsRequired }
  Surface(Modifier.fillMaxSize(),color=Navy) {
   Column(Modifier.fillMaxSize()) {
    Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(horizontal=18.dp,vertical=14.dp),verticalArrangement=Arrangement.spacedBy(14.dp)) {
@@ -104,7 +104,7 @@ private val Red=Color(0xFFDA3855)
        Text(stringResource(R.string.ad_offline_title),fontWeight=FontWeight.Bold,color=Cyan)
        Text(stringResource(R.string.ad_offline_body),style=MaterialTheme.typography.bodySmall,color=Light)
        Text(stringResource(R.string.offline_label),style=MaterialTheme.typography.labelSmall,color=Color(0xFFB6CBD9))
-       OutlinedButton(onClick={ openSponsor(context) },enabled=false) { Text(stringResource(R.string.coffee_support)) }
+       OutlinedButton(onClick={ openSponsor(context) }) { Text(stringResource(R.string.coffee_support)) }
       }
      }
     } else TextButton(onClick={ openSponsor(context) }) { Text(stringResource(R.string.coffee_support)) }
@@ -153,10 +153,10 @@ private val Red=Color(0xFFDA3855)
      }
     }
     Spacer(Modifier.height(8.dp))
-    if(privacyOptionsRequired) TextButton(onClick={ activity?.let { ConsentManager.showPrivacyOptions(it) { } } }) { Text(stringResource(R.string.privacy_options)) }
+    if(privacyOptionsVisible) TextButton(onClick={ activity?.let { host -> ConsentManager.showPrivacyOptions(host) { privacyOptionsVisible = ConsentManager.privacyOptionsRequired(host) } } }) { Text(stringResource(R.string.privacy_options)) }
     Text(stringResource(R.string.scan_clean_warning),style=MaterialTheme.typography.labelSmall,color=Color(0xFF8CA9BC))
    }
-   if(adsEnabled) Column(Modifier.fillMaxWidth().background(Color(0xFF071522)).padding(top=4.dp),horizontalAlignment=Alignment.CenterHorizontally) {
+   if(adsEnabled && online) Column(Modifier.fillMaxWidth().background(Color(0xFF071522)).padding(top=4.dp),horizontalAlignment=Alignment.CenterHorizontally) {
     Text(stringResource(R.string.ads_label),style=MaterialTheme.typography.labelSmall,color=Color(0xFF8CA9BC))
     BannerAd()
    }
