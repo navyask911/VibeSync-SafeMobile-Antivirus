@@ -1,0 +1,3 @@
+-keep class com.vibesync.antivirus.data.local.** { *; }
+-keep class com.google.crypto.tink.** { *; }
+-keepattributes *Annotation*

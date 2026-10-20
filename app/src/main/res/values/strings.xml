@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="app_name">VibeSync SafeMobile Antivirus</string>
+<string name="privacy_title">Privacy and scan-access disclosure</string>
+<string name="privacy_body">SafeMobile calculates SHA-256 and MD5 hashes on this device and checks them against definitions stored locally. Local scans do not upload files or hashes. Ads use Google Mobile Ads network services only when permitted by your privacy choices and connectivity. Core scan functions work without a network. Installed-app visibility and all-files access are sensitive Android permissions and may require Google Play review.</string>
+<string name="privacy_accept">I understand</string><string name="exit_app">Exit app</string>
+<string name="brand_title">VIBESYNC</string><string name="brand_subtitle">SAFEMOBILE ANTIVIRUS</string>
+<string name="scan_status">Local protection dashboard</string><string name="scan_running">Scanning device…</string><string name="threat_found">Threat match detected</string>
+<string name="signature_count">Local signatures: %1$d · Scan sessions: %2$d</string>
+<string name="scan_explanation">Checks readable installed APKs against locally stored definitions and reviews files you select. Detection is limited by operating-system access and the definitions installed on this device.</string>
+<string name="scan_installed">Scan installed apps</string><string name="scan_selected">Scan a selected APK or file</string>
+<string name="monitor_title">Downloads sentinel</string>
+<string name="monitor_explanation">Optional monitoring of the public Downloads folder. Android 11+ requires the user to grant all-files access in Settings; Google Play approval is not guaranteed.</string>
+<string name="monitor_button">Enable Downloads monitoring</string><string name="monitor_note">Monitoring is opt-in and can be stopped by the user.</string>
+<string name="latest_results">Latest scan results</string><string name="results_summary">%1$d threat matches · %2$d flagged for review · %3$d with no local match</string>
+<string name="scan_clean_warning">A clean result means there was no match in the local definitions currently installed. This is not a guarantee that a file is safe.</string>
+<string name="verdict_threat">Threat match</string><string name="verdict_suspicious">Needs review</string><string name="verdict_no_match">No local match</string><string name="verdict_not_scanned">Could not scan</string>
+<string name="no_match_detail">No match was found in the local threat definitions.</string>
+<string name="risk_boot">Can request startup after boot</string><string name="risk_overlay">Requests overlay capability</string><string name="risk_install">Requests APK installation capability</string><string name="risk_accessibility">Declares an accessibility service</string><string name="risk_cluster">Combines multiple high-impact capabilities</string><string name="risk_review">No known hash match was found; review these capabilities manually.</string>
+<string name="hash_match">Matches a local threat definition: %1$s (%2$s).</string><string name="hash_allowlisted">Hash is present in the local allowlist.</string>
+<string name="apk_unreadable">APK path is not readable; no hash verdict is available.</string><string name="file_not_readable">The file is not readable by this app.</string><string name="file_could_not_read">The file could not be read.</string><string name="package_metadata_missing">Package metadata is unavailable.</string><string name="file_stream_failed">Android could not open the selected file.</string><string name="debug_certificate">Certificate subject resembles the Android debug certificate.</string>
+<string name="scan_complete">Scan completed. A local no-match result is not a guarantee that a file is safe.</string><string name="scan_failed">Scan failed. Please try again.</string>
+<string name="ads_label">ADVERTISEMENT</string><string name="privacy_options">Privacy / advertising options</string>
+<string name="ad_offline_title">Local first. Works offline.</string><string name="ad_offline_body">Core scanning stays on this device. When connected, you can optionally support independent app development with a coffee contribution.</string><string name="coffee_support">Support development</string><string name="offline_label">Offline mode · scanning remains local</string>
+<string name="not_configured">No threat signature database is bundled yet. A curated offline signature set must be installed before this can provide meaningful signature detection.</string>
+<string name="update_available">An app update is available in Google Play.</string><string name="update_downloaded">Update downloaded. Restart the app to finish updating.</string><string name="close">Close</string>
+<string name="file_hash_label">SHA-256: %1$s…</string>
+<string name="service_channel_name">SafeMobile file monitoring</string><string name="service_channel_description">Notifications for user-enabled local APK checks.</string><string name="service_notification_title">SafeMobile monitoring is active</string><string name="service_notification_body">Watching Downloads for newly written APK files.</string>
+</resources>
