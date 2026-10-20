@@ -42,13 +42,13 @@ class PackageScanner(
  }
  suspend fun scanFile(file: File): ScanResult {
   val start = System.nanoTime()
-  if (!file.isFile || !file.canRead()) return result(file.name, file.name, null, null, ScanVerdict.NOT_SCANNED, listOf(context.getString(R.string.file_not_readable)), start)
+  if (!file.isFile || !file.canRead()) return result(file.name, file.name, null, null, ScanVerdict.NOT_SCANNED, listOf(context.getString(R.string.file_not_readable)), start).copy(sourceLocalPath = file.absolutePath)
   return runCatching {
    val hash = calculator.calculate(file)
    val output = evaluate(file.name, file.name, hash.sha256, hash.md5, emptyList(), 0, false)
    audit(output, start)
-   output.copy(durationMs = elapsed(start))
-  }.getOrElse { result(file.name, file.name, null, null, ScanVerdict.NOT_SCANNED, listOf(context.getString(R.string.file_could_not_read)), start) }
+   output.copy(durationMs = elapsed(start), sourceLocalPath = file.absolutePath)
+  }.getOrElse { result(file.name, file.name, null, null, ScanVerdict.NOT_SCANNED, listOf(context.getString(R.string.file_could_not_read)), start).copy(sourceLocalPath = file.absolutePath) }
  }
  suspend fun scanStream(label: String, stream: java.io.InputStream): ScanResult {
   val start = System.nanoTime()
@@ -61,7 +61,7 @@ class PackageScanner(
  }
  private suspend fun scanPackage(info: PackageInfo): ScanResult {
   val start = System.nanoTime()
-  val appInfo = info.applicationInfo ?: return result(info.packageName, info.packageName, null, null, ScanVerdict.NOT_SCANNED, listOf(context.getString(R.string.package_metadata_missing)), start)
+  val appInfo = info.applicationInfo ?: return result(info.packageName, info.packageName, null, null, ScanVerdict.NOT_SCANNED, listOf(context.getString(R.string.package_metadata_missing)), start).copy(packageName = info.packageName)
   val label = appInfo.loadLabel(pm).toString()
   val permissions = info.requestedPermissions?.toSet().orEmpty()
   val accessibility = info.services.orEmpty().any { it.permission == PermissionRiskAnalyzer.BIND_ACCESSIBILITY }
@@ -72,13 +72,13 @@ class PackageScanner(
   val apk = appInfo.sourceDir?.let(::File)
   if (apk == null || !apk.isFile || !apk.canRead()) {
    reasons += context.getString(R.string.apk_unreadable)
-   return result(info.packageName, label, null, null, if (risk.isSuspicious || debugSigned) ScanVerdict.SUSPICIOUS else ScanVerdict.NOT_SCANNED, reasons, start)
+   return result(info.packageName, label, null, null, if (risk.isSuspicious || debugSigned) ScanVerdict.SUSPICIOUS else ScanVerdict.NOT_SCANNED, reasons, start).copy(packageName = info.packageName)
   }
   val hashes = runCatching { calculator.calculate(apk) }.getOrNull()
-   ?: return result(info.packageName, label, null, null, ScanVerdict.NOT_SCANNED, reasons + context.getString(R.string.file_could_not_read), start)
+   ?: return result(info.packageName, label, null, null, ScanVerdict.NOT_SCANNED, reasons + context.getString(R.string.file_could_not_read), start).copy(packageName = info.packageName)
   val output = evaluate(info.packageName, label, hashes.sha256, hashes.md5, reasons, risk.score, debugSigned)
   audit(output, start)
-  return output.copy(durationMs = elapsed(start))
+  return output.copy(durationMs = elapsed(start), packageName = info.packageName)
  }
  private suspend fun evaluate(key: String, label: String, sha: String, md5: String, heuristic: List<String>, score: Int, debug: Boolean): ScanResult {
   val encrypted = hashStore.protectHash(sha)

@@ -7,5 +7,8 @@ data class ScanResult(
  val md5: String?,
  val verdict: ScanVerdict,
  val reasons: List<String>,
- val durationMs: Long
+ val durationMs: Long,
+ val packageName: String? = null,
+ val sourceUri: String? = null,
+ val sourceLocalPath: String? = null
 )

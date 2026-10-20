@@ -60,6 +60,7 @@ import com.vibesync.antivirus.ads.ConsentManager
 import com.vibesync.antivirus.ads.InterstitialAdController
 import com.vibesync.antivirus.core.connectivity.ConnectivityMonitor
 import com.vibesync.antivirus.core.engine.ScanResult
+import com.vibesync.antivirus.core.quarantine.LocalQuarantineManager
 import com.vibesync.antivirus.core.engine.ScanVerdict
 import com.vibesync.antivirus.data.repository.ThreatRepository
 private val Navy=Color(0xFF071A2C)
@@ -81,6 +82,7 @@ private val Red=Color(0xFFDA3855)
  val online by connectivity.online.collectAsStateWithLifecycle()
  var privacyAccepted by remember { mutableStateOf(context.getSharedPreferences("safe_mobile_privacy",0).getBoolean("acknowledged",false)) }
  var privacyOptionsVisible by remember { mutableStateOf(privacyOptionsRequired) }
+ var pendingQuarantine by remember { mutableStateOf<ScanResult?>(null) }
  val apkPicker=rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri:Uri? -> uri?.let(vm::scanSelected) }
  val definitionsPicker=rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri:Uri? -> uri?.let(vm::importOfflineDefinitions) }
  val interstitial=remember(activity,adsEnabled,online) { activity?.let { InterstitialAdController(it,adsEnabled && online) } }
@@ -151,7 +153,15 @@ private val Red=Color(0xFFDA3855)
      Column(verticalArrangement=Arrangement.spacedBy(10.dp)) {
       Text(stringResource(R.string.latest_results),style=MaterialTheme.typography.titleLarge,fontWeight=FontWeight.Bold)
       Text(stringResource(R.string.results_summary,state.results.count{it.verdict==ScanVerdict.THREAT},state.results.count{it.verdict==ScanVerdict.SUSPICIOUS},state.results.count{it.verdict==ScanVerdict.NO_MATCH}),color=Color(0xFFB6CBD9),style=MaterialTheme.typography.bodySmall)
-      state.results.take(80).forEach { ScanResultCard(it) }
+      state.results.take(80).forEach { result ->
+       ScanResultCard(
+        result,
+        showUninstall = result.packageName != null && result.verdict in listOf(ScanVerdict.THREAT, ScanVerdict.SUSPICIOUS),
+        showQuarantine = result.sourceUri != null && result.verdict in listOf(ScanVerdict.THREAT, ScanVerdict.SUSPICIOUS),
+        onUninstall = { packageName -> runCatching { activity?.startActivity(Intent(Intent.ACTION_DELETE, Uri.parse("package:$packageName"))) } },
+        onQuarantine = { pendingQuarantine = result }
+       )
+      }
      }
     }
     Spacer(Modifier.height(8.dp))
@@ -164,6 +174,19 @@ private val Red=Color(0xFFDA3855)
    }
   }
  }
+ pendingQuarantine?.let { flagged ->
+  AlertDialog(
+   onDismissRequest={ pendingQuarantine = null },
+   title={ Text(stringResource(R.string.quarantine_confirm_title)) },
+   text={ Text(stringResource(R.string.quarantine_confirm_body)) },
+   confirmButton={ TextButton(onClick={
+    val uri = runCatching { Uri.parse(flagged.sourceUri) }.getOrNull()
+    if (uri != null) vm.quarantineSelectedFile(uri, flagged.sha256)
+    pendingQuarantine = null
+   }) { Text(stringResource(R.string.quarantine_confirm_action)) } },
+   dismissButton={ TextButton(onClick={ pendingQuarantine = null }) { Text(stringResource(R.string.close)) } }
+  )
+ }
  if(!privacyAccepted) AlertDialog(onDismissRequest={},title={ Text(stringResource(R.string.privacy_title)) },text={ Text(stringResource(R.string.privacy_body)) },
   confirmButton={ TextButton(onClick={
    context.getSharedPreferences(SafeMobileApp.PRIVACY_PREFS,0).edit().putBoolean(SafeMobileApp.PRIVACY_ACKNOWLEDGED,true).apply()
@@ -173,7 +196,13 @@ private val Red=Color(0xFFDA3855)
   dismissButton={ TextButton(onClick={ activity?.finish() }) { Text(stringResource(R.string.exit_app)) } })
 }
 private fun openSponsor(context:android.content.Context) { runCatching { context.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse(BuildConfig.COFFEE_SUPPORT_URL))) } }
-@Composable private fun ScanResultCard(result:ScanResult) {
+@Composable private fun ScanResultCard(
+ result:ScanResult,
+ showUninstall:Boolean,
+ showQuarantine:Boolean,
+ onUninstall:(String)->Unit,
+ onQuarantine:()->Unit
+) {
  val color=when(result.verdict) { ScanVerdict.THREAT->Red; ScanVerdict.SUSPICIOUS->Color(0xFFFFB74D); ScanVerdict.NO_MATCH->Cyan; ScanVerdict.NOT_SCANNED->Color(0xFF9CB0BF) }
  val verdictResource=when(result.verdict) { ScanVerdict.THREAT->R.string.verdict_threat; ScanVerdict.SUSPICIOUS->R.string.verdict_suspicious; ScanVerdict.NO_MATCH->R.string.verdict_no_match; ScanVerdict.NOT_SCANNED->R.string.verdict_not_scanned }
  Card(colors=CardDefaults.cardColors(containerColor=Color(0xFF0D263C)),shape=RoundedCornerShape(14.dp),modifier=Modifier.fillMaxWidth()) {
@@ -182,6 +211,12 @@ private fun openSponsor(context:android.content.Context) { runCatching { context
    Text(stringResource(verdictResource),color=color,style=MaterialTheme.typography.labelLarge)
    result.sha256?.let { Text(stringResource(R.string.file_hash_label,it.take(24)),style=MaterialTheme.typography.labelSmall,color=Color(0xFFB6CBD9)) }
    result.reasons.take(3).forEach { Text("• "+it,style=MaterialTheme.typography.bodySmall,color=Color(0xFFD4E0E9)) }
+   if (showUninstall && result.packageName != null) {
+    TextButton(onClick={ onUninstall(result.packageName) }) { Text(stringResource(R.string.uninstall_app)) }
+   }
+   if (showQuarantine) {
+    TextButton(onClick=onQuarantine) { Text(stringResource(R.string.quarantine_file)) }
+   }
   }
  }
 }

@@ -28,6 +28,14 @@
 <string name="service_channel_name">SafeMobile file monitoring</string><string name="service_channel_description">Notifications for user-enabled local APK checks.</string><string name="service_notification_title">SafeMobile monitoring is active</string><string name="service_notification_body">Watching Downloads for newly written APK files.</string>
 
 <string name="unknown_file">selected file</string>
+<string name="local_files_only">For privacy, this scanner only opens files from recognized on-device storage providers. Cloud or third-party document providers are not opened.</string>
+<string name="quarantine_confirm_title">Quarantine this flagged file?</string>
+<string name="quarantine_confirm_body">A private copy will be saved inside this app. After verifying its hash, SafeMobile will try to remove the selected original. Removal depends on Android storage permissions and the provider; the original may remain.</string>
+<string name="quarantine_confirm_action">Quarantine file</string>
+<string name="quarantine_file">Quarantine private copy</string>
+<string name="quarantine_success_removed">Quarantine copy saved privately (%1$s); Android reported that the original was removed.</string>
+<string name="quarantine_success_copy_only">Quarantine copy saved privately (%1$s), but Android would not remove the original. Delete it manually if needed.</string>
+<string name="uninstall_app">Uninstall app…</string>
 <string name="import_definitions">Import offline threat definitions (JSON)</string>
 <string name="import_success">Imported %1$d valid signature definitions into local storage.</string>
 <string name="import_failed">Definition file could not be imported. Check the JSON format and SHA-256 values.</string>
