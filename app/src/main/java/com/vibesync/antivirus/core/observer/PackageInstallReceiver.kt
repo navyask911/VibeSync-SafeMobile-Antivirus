@@ -11,6 +11,8 @@ import kotlinx.coroutines.launch
 
 class PackageInstallReceiver : BroadcastReceiver() {
  override fun onReceive(context: Context, intent: Intent) {
+  val preferences = context.applicationContext.getSharedPreferences(SafeMobileApp.PRIVACY_PREFS, Context.MODE_PRIVATE)
+  if (!preferences.getBoolean(SafeMobileApp.PRIVACY_ACKNOWLEDGED, false)) return
   val packageName = intent.data?.schemeSpecificPart ?: return
   val pendingResult = goAsync()
   val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)

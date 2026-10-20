@@ -7,16 +7,34 @@ import org.json.JSONObject
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.InputStream
+import kotlinx.coroutines.sync.Mutex
 
 /** Imports local JSON signatures; the starter asset has no fabricated malware hashes. */
 class LocalDefinitionLoader(private val context: Context, private val dao: ThreatDao, private val hashStore: EncryptedHashStore) {
+ private val importMutex = Mutex()
+
  suspend fun importBundledIfEmpty(): Int {
-  if (dao.countSignatures() > 0) return 0
-  val stream = try { context.assets.open("offline-threat-definitions.json") } catch (_: IOException) { return 0 }
-  return importFromStream(stream)
+  importMutex.lock()
+  try {
+   if (dao.countSignatures() > 0) return 0
+   val stream = try { context.assets.open("offline-threat-definitions.json") } catch (_: IOException) { return 0 }
+   return parseAndImport(stream)
+  } finally {
+   importMutex.unlock()
+  }
  }
+
  /** Schema: {"schema_version":1,"definitions":[{"sha256":"64 hex chars","malware_family":"family","threat_level":"high","date_added":123}]}. */
  suspend fun importFromStream(stream: InputStream): Int {
+  importMutex.lock()
+  try {
+   return parseAndImport(stream)
+  } finally {
+   importMutex.unlock()
+  }
+ }
+
+ private suspend fun parseAndImport(stream: InputStream): Int {
   val payload = stream.use { input ->
    val output = ByteArrayOutputStream()
    val buffer = ByteArray(8192)

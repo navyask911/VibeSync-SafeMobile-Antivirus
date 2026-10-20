@@ -53,6 +53,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vibesync.antivirus.BuildConfig
+import com.vibesync.antivirus.SafeMobileApp
 import com.vibesync.antivirus.R
 import com.vibesync.antivirus.ads.BannerAd
 import com.vibesync.antivirus.ads.ConsentManager
@@ -72,6 +73,7 @@ private val Red=Color(0xFFDA3855)
 }
 @Composable fun SafeMobileScreen(repository:ThreatRepository,adsEnabled:Boolean,privacyOptionsRequired:Boolean) {
  val context=LocalContext.current
+ val safeMobileApp=context.applicationContext as SafeMobileApp
  val activity=context as? Activity
  val vm:SafeMobileViewModel=viewModel(factory=SafeMobileViewModel.Factory(repository))
  val state by vm.state.collectAsStateWithLifecycle()
@@ -163,7 +165,11 @@ private val Red=Color(0xFFDA3855)
   }
  }
  if(!privacyAccepted) AlertDialog(onDismissRequest={},title={ Text(stringResource(R.string.privacy_title)) },text={ Text(stringResource(R.string.privacy_body)) },
-  confirmButton={ TextButton(onClick={ context.getSharedPreferences("safe_mobile_privacy",0).edit().putBoolean("acknowledged",true).apply(); privacyAccepted=true }) { Text(stringResource(R.string.privacy_accept)) } },
+  confirmButton={ TextButton(onClick={
+   context.getSharedPreferences(SafeMobileApp.PRIVACY_PREFS,0).edit().putBoolean(SafeMobileApp.PRIVACY_ACKNOWLEDGED,true).apply()
+   privacyAccepted=true
+   safeMobileApp.scheduleMaintenanceSweep()
+  }) { Text(stringResource(R.string.privacy_accept)) } },
   dismissButton={ TextButton(onClick={ activity?.finish() }) { Text(stringResource(R.string.exit_app)) } })
 }
 private fun openSponsor(context:android.content.Context) { runCatching { context.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse(BuildConfig.COFFEE_SUPPORT_URL))) } }

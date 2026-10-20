@@ -32,8 +32,20 @@ class SafeMobileApp : Application() {
   val scanner=PackageScanner(this,database.threatDao(),hashStore,HashCalculator())
   repository=ThreatRepository(this,database,scanner,loader)
   appScope.launch { runCatching { loader.importBundledIfEmpty() } }
-  val request=PeriodicWorkRequestBuilder<DeepScanWorker>(12,TimeUnit.HOURS).setConstraints(Constraints.Builder().setRequiresBatteryNotLow(true).build()).build()
-  WorkManager.getInstance(this).enqueueUniquePeriodicWork(DeepScanWorker.UNIQUE_NAME,ExistingPeriodicWorkPolicy.KEEP,request)
+  if (getSharedPreferences(PRIVACY_PREFS, MODE_PRIVATE).getBoolean(PRIVACY_ACKNOWLEDGED, false)) {
+   scheduleMaintenanceSweep()
+  }
+ }
+ fun scheduleMaintenanceSweep() {
+  val request=PeriodicWorkRequestBuilder<DeepScanWorker>(12,TimeUnit.HOURS)
+   .setConstraints(Constraints.Builder().setRequiresBatteryNotLow(true).build()).build()
+  WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+   DeepScanWorker.UNIQUE_NAME,ExistingPeriodicWorkPolicy.KEEP,request
+  )
  }
  override fun onTerminate() { appScope.cancel(); super.onTerminate() }
+ companion object {
+  const val PRIVACY_PREFS = "safe_mobile_privacy"
+  const val PRIVACY_ACKNOWLEDGED = "acknowledged"
+ }
 }
