@@ -40,4 +40,6 @@
 <string name="quarantine_delete_success">تم حذف الملف المعزول %1$s.</string>
 <string name="quarantine_restore_failed">تعذرت استعادة الملف المعزول. تحقق من الوجهة والمساحة المتاحة ثم حاول مجددًا.</string>
 <string name="quarantine_delete_failed">تعذر حذف الملف المعزول.</string>
+<string name="risk_sms_internet">يجمع بين أذونات الرسائل القصيرة والوصول إلى الشبكة؛ وهذا مؤشر للمراجعة وليس دليلًا على السلوك الضار.</string>
+<string name="risk_sms_accessibility">يجمع بين أذونات الرسائل القصيرة والتصريح بخدمة إمكانية الوصول؛ وهذا يستدعي المراجعة وليس دليلًا على اعتراض رموز OTP أو وجود برمجية خبيثة.</string>
 </resources>
