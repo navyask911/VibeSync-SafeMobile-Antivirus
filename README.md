@@ -1,135 +1,40 @@
-# VibeSync-SafeMobile-Antivirus
-High-performance native Android endpoint security engine featuring real-time heuristic threat detection, cryptographic APK signature indexing, and zero-egress cloud threat intelligence.
-Act as a Principal Android Security Engineer. Scaffold and implement the production-grade native Android codebase for "VibeSync SafeMobile Antivirus" in Kotlin, adhering to MVVM + Clean Architecture, Jetpack Compose (Material 3), and strict Google Play security policies.
-
-### 1. Project Specifications & Toolchain
-- Application ID: com.vibesync.antivirus
-- Min SDK: 26 (Android 8.0 Oreo)
-- Target/Compile SDK: 35 (Android 15)
-- Language & Build System: Kotlin with Gradle Kotlin DSL (`build.gradle.kts`)
-- Concurrency: Kotlin Coroutines & StateFlow/SharedFlow
-- Dependency Injection: Hilt (or clean manual DI factories if lightweight)
-- Local Persistence & Security: Room Database, EncryptedSharedPreferences / Google Tink
-
----
-
-### 2. Core Architectural Components to Implement
-
-#### A. Cryptographic & Signature Engine (`core/crypto`, `core/engine`)
-- Implement a thread-safe `HashCalculator` that streams file bytes to compute SHA-256 and MD5 checksums of APKs and binaries without loading large files into memory.
-- Implement encrypted local definition storage using Google Tink to mask signature definitions at rest.
-- Set up a Room database (`ThreatDatabase`) with indexed entity models for:
-  - `ThreatSignature` (id, hash, malware_family, threat_level, date_added)
-  - `ScanAudit` (id, package_or_path, hash, scan_timestamp, verdict, scan_duration)
-  - `WhiteListEntry` (hash, package_name, certified_by)
-
-#### B. Real-Time Sentinel & Background Sweeps (`core/observer`, `core/worker`)
-- Implement a `StorageSentinelService` using Android's `FileObserver` to actively monitor high-risk system paths (e.g., `Environment.DIRECTORY_DOWNLOADS`) for new `.apk` or suspicious binary drop-ins.
-- Implement a `PackageInstallReceiver` (`BroadcastReceiver`) listening to `ACTION_PACKAGE_ADDED` and `ACTION_PACKAGE_REPLACED` to automatically verify new installations against local threat hashes.
-- Implement a battery-conscious `DeepScanWorker` using AndroidX `WorkManager` with `BatteryNotLow` and `DeviceIdle` constraints to run scheduled recursive partition scans.
-
-#### C. Heuristic & Permission Risk Analyzer (`core/heuristics`)
-- Create a `PermissionRiskAnalyzer` that inspects manifest capability clusters of installed packages (`QUERY_ALL_PACKAGES`), scoring threats when high-risk combinations appear together (e.g., `RECEIVE_BOOT_COMPLETED` + `SYSTEM_ALERT_WINDOW` + `BIND_ACCESSIBILITY_SERVICE` + `REQUEST_INSTALL_PACKAGES`).
-- Check APK certificates to flag unverified self-signed or debug-signed packages.
-
-#### D. Zero-Egress Cloud Threat Feeds (`data/remote`, `data/repository`)
-- Implement a repository layer designed to fetch delta virus definition feeds from Cloudflare R2 (zero-egress distribution) and configuration signals from Supabase.
-- Add an edge-case hash verification client for VirusTotal API lookups for unknown package hashes.
-
-#### E. Presentation & Compliance UI (`presentation/`)
-- Build a Jetpack Compose Material 3 interface:
-  - **Dashboard:** System threat status, last scan timestamp, "Scan Now" button with progress radar.
-  - **Scan Results:** Card list showing clean vs. flagged packages with quarantine/uninstall action intents.
-  - **Prominent Privacy Disclosure Dialog:** A non-skippable, clear disclosure informing the user why file hashes are inspected on-device before requesting `MANAGE_EXTERNAL_STORAGE` or `QUERY_ALL_PACKAGES`.
-
----
-
-### 3. Permissions & Manifest Setup (`AndroidManifest.xml`)
-- Declare standard and special storage/package permissions:
-  - `android.permission.MANAGE_EXTERNAL_STORAGE`
-  - `android.permission.QUERY_ALL_PACKAGES`
-  - `android.permission.FOREGROUND_SERVICE` & `android.permission.FOREGROUND_SERVICE_DATA_SYNC`
-  - `android.permission.RECEIVE_BOOT_COMPLETED`
-- Provide proper intent-filters for package installations and runtime storage listeners.
-
----
-
-### 4. CI/CD & Testing
-- Configure `.github/workflows/android-ci.yml` that runs on `push` and `pull_request` targeting `main`:
-  - JDK 17 setup
-  - Cache Gradle dependencies
-  - Execute `./gradlew testDebugUnitTest` and `./gradlew lintDebug`
-  - Assemble release and debug artifacts (`assembleDebug`)
-
-Generate the full project directory layout, complete implementation code for all critical classes, and build files. Do not use placeholders or pseudo-code for the hashing pipeline, Tink integration, or Room database entities.
-
 # VibeSync SafeMobile Antivirus
 
-<p align="center">
-  <img src="playstore.png" alt="VibeSync Logo" width="160"/>
-  <br>
-  <em>Cybersecurity • Protecting the Mobile Endpoint</em>
-</p>
+Native Android Kotlin app using Jetpack Compose Material 3, Room, WorkManager, Google Tink and StateFlow-based MVVM.
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Platform-Android-green.svg" alt="Platform"/>
-  <img src="https://img.shields.io/badge/Min_SDK-26_(Android_8.0)-blue.svg" alt="Min SDK"/>
-  <img src="https://img.shields.io/badge/Language-Kotlin-purple.svg" alt="Language"/>
-  <img src="https://img.shields.io/badge/Architecture-MVVM_%2B_Clean-orange.svg" alt="Architecture"/>
-  <img src="https://img.shields.io/badge/License-Apache_2.0-lightgrey.svg" alt="License"/>
-</p>
+## Build settings
+- Application ID: com.vibesync.antivirus
+- Min SDK 26; compile and target SDK 35
+- JDK 17, Gradle Kotlin DSL
+- Version name 1.0.0; version code 2026102001. Increase versionCode for each subsequent Play release.
+- CI runs tests, lint, debug APK build and release AAB build.
 
----
+## Privacy boundary
+Hashing, local signature matching, permission heuristics, scan audit storage and scheduled scans are on-device. The scanner does not send files or hashes to a server. There is no telemetry, analytics, crash reporting, remote threat feed, Supabase or VirusTotal client. Google Mobile Ads and UMP are included because ad units were explicitly requested; these SDKs may communicate with Google when connectivity and the user's consent state permit. Google Play In-App Updates also contacts Google Play. The app’s core scan functions do not depend on those network features and continue to run without connectivity.
 
-## Overview
+## Important antivirus limitation
+The bundled offline-threat-definitions.json is intentionally empty: no fabricated malware signatures are included. Until a curated, legally distributable local hash dataset is bundled or installed, the app cannot provide meaningful signature-based threat matches. The UI warns about this. Do not advertise the starter as comprehensive protection or publish as a finished commercial antivirus until the offline definitions, licensing/provenance, update mechanism, false-positive analysis and physical-device test matrix are completed.
 
-**VibeSync SafeMobile Antivirus** is a lightweight, zero-compromise native Android security utility engineered to protect users from malicious APK installations, suspicious background runtime activity, and rogue file system tampering. Built on modern Android architecture components with Jetpack Compose, it pairs local cryptographic hashing and behavioral heuristics with zero-egress cloud threat feeds to ensure continuous endpoint defense without degrading battery longevity.
+Android sandboxing prevents third-party apps from scanning arbitrary system partitions. This app scans readable installed APK paths, user-selected files, and (with explicit all-files access) a bounded set of APKs under Downloads. The install receiver can only perform a best-effort post-install check; it cannot intercept/block installation before Android installs the package. WorkManager offers a battery-not-low constraint, not a general device-idle constraint.
 
----
+QUERY_ALL_PACKAGES and MANAGE_EXTERNAL_STORAGE are restricted Google Play permissions. Declaration does not guarantee approval. Complete Play Console declarations and confirm eligibility for the core security use case. The privacy dialog is an acknowledgement; it does not grant Android special permissions or guarantee Play approval.
 
-## Architectural Pillars
+## Ads
+AdMob App ID: ca-app-pub-4783826505860771~8485727119
+Banner unit: ca-app-pub-4783826505860771/4710308648
+Interstitial unit: ca-app-pub-4783826505860771/9523651625
 
-### 1. Signature-Based Threat Engine
-- **Cryptographic Hashing:** Computes real-time MD5 and SHA-256 package checksums during APK inspection.
-- **Hardware-Accelerated Indexing:** Offline signature matching accelerated via indexed local SQLite tables powered by Room.
-- **Encrypted Local Storage:** Database signature records and threat definitions are protected at rest using Google Tink encryption.
+Debug builds substitute Google's official test app/ad IDs; release builds use the supplied live IDs. UMP consent gates SDK initialization/ad requests. The adaptive banner is anchored in the dashboard footer. Interstitials are only considered after every third completed scan, not on app launch or mid-scan. Configure privacy messages in AdMob and do not click production ads during testing.
 
-### 2. Real-Time Storage & Package Sentinel
-- **File System Observer:** Monitors public download paths and package directories dynamically via the `FileObserver` API to intercept infected files prior to execution.
-- **Dynamic Install Interceptor:** Evaluates package payloads immediately upon broadcast of system installation events.
-- **Battery-Conservative Sweeps:** Leverages AndroidX `WorkManager` to schedule battery-conscious background maintenance sweeps during device idle windows.
+## In-app updates and coffee support
+The app checks Google Play in-app updates on launch and foreground return. Priority 4+ or updates stale by at least seven days prefer the immediate flow when allowed; otherwise flexible flow is used. This API depends on Google Play installation/update availability. The coffee sponsorship action opens a secure external browser link when the user is online; it is not part of scanning.
 
-### 3. Heuristic & Static Risk Analysis
-- **Manifest Permission Scoring:** Evaluates apps requesting high-risk capability clusters (e.g., `RECEIVE_BOOT_COMPLETED`, `SYSTEM_ALERT_WINDOW`, `BIND_ACCESSIBILITY_SERVICE`).
-- **Certificate Verification:** Flags debug-signed production artifacts and tampered package signatures.
+## app-ads.txt
+The exact authorized seller line exists at the repository root. This does not host it on your public website by itself. Copy app-ads.txt to the root of the website domain entered in AdMob, then verify that https://YOUR-DOMAIN/app-ads.txt returns HTTP 200, Content-Type text/plain, without redirects or authentication. No public website domain was provided, so live URL/status verification is still outstanding.
 
-### 4. Zero-Egress Cloud Threat Distribution
-- **Cloudflare R2 Storage:** Fetches daily malware database definition deltas hosted with zero egress overhead.
-- **Supabase Backend:** Delivers real-time configuration signals, instant threat hashes, and emergency rule updates.
-- **VirusTotal Hash Verification:** Handles secondary evaluation of unknown hash signatures via external API lookup.
+## Build commands
+./gradlew testDebugUnitTest
+./gradlew lintDebug
+./gradlew assembleDebug bundleRelease
 
----
-
-## Project Structure
-
-```text
-VibeSync-SafeMobile-Antivirus/
-├── app/
-│   ├── src/
-│   │   ├── main/
-│   │   │   ├── java/com/vibesync/antivirus/
-│   │   │   │   ├── core/
-│   │   │   │   │   ├── crypto/       # Tink encryption wrappers & hash calculators
-│   │   │   │   │   ├── engine/       # Heuristic engines & file observers
-│   │   │   │   │   └── worker/       # WorkManager periodic sweep tasks
-│   │   │   │   ├── data/
-│   │   │   │   │   ├── local/        # Room Database, DAOs, and entities
-│   │   │   │   │   ├── remote/       # Supabase and Cloudflare R2 API clients
-│   │   │   │   │   └── repository/   # Unified threat definition repository
-│   │   │   │   ├── di/               # Hilt / Koin dependency injection modules
-│   │   │   │   └── presentation/     # Jetpack Compose UI screens, ViewModels & themes
-│   │   │   └── AndroidManifest.xml
-│   │   └── res/
-│   └── build.gradle.kts
-├── gradle/
-└── README.md
+The CI release AAB is not signed for Play unless release signing is configured separately. Before production release, add a real offline definition set, test on physical Android versions, evaluate Play restricted-permission requirements, and verify consent/localization and update flows.

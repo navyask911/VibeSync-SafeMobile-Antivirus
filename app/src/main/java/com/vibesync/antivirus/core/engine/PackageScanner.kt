@@ -24,12 +24,21 @@ class PackageScanner(
  private val pm = context.packageManager
  suspend fun scanInstalledApps(): List<ScanResult> {
   val flags = PackageManager.GET_PERMISSIONS or PackageManager.GET_SERVICES or signingFlags()
-  return pm.getInstalledPackages(flags).mapNotNull { runCatching { scanPackage(it) }.getOrNull() }
-   .sortedBy { when (it.verdict) { ScanVerdict.THREAT -> 0; ScanVerdict.SUSPICIOUS -> 1; ScanVerdict.NOT_SCANNED -> 2; ScanVerdict.NO_MATCH -> 3 } }
+  val results = mutableListOf<ScanResult>()
+  for (info in pm.getInstalledPackages(flags)) {
+   val scanned = runCatching { scanPackage(info) }.getOrNull()
+   if (scanned != null) results += scanned
+  }
+  return results.sortedBy { when (it.verdict) {
+   ScanVerdict.THREAT -> 0
+   ScanVerdict.SUSPICIOUS -> 1
+   ScanVerdict.NOT_SCANNED -> 2
+   ScanVerdict.NO_MATCH -> 3
+  } }
  }
  suspend fun scanInstalledPackage(name: String): ScanResult? {
   val info = runCatching { pm.getPackageInfo(name, PackageManager.GET_PERMISSIONS or PackageManager.GET_SERVICES or signingFlags()) }.getOrNull()
-  return info?.let { scanPackage(it) }
+  return if (info == null) null else scanPackage(info)
  }
  suspend fun scanFile(file: File): ScanResult {
   val start = System.nanoTime()
@@ -81,20 +90,28 @@ class PackageScanner(
   return ScanResult(key, label, sha, md5, verdict, notes, 0)
  }
  private suspend fun audit(result: ScanResult, start: Long) {
-  dao.insertAudit(ScanAudit(packageOrPath=result.packageOrPath.take(250), hash=result.sha256?.let(hashStore::protectHash).orEmpty(), scanTimestamp=System.currentTimeMillis(), verdict=result.verdict.name, scanDuration=elapsed(start)))
+  dao.insertAudit(ScanAudit(
+   packageOrPath=result.packageOrPath.take(250),
+   hash=result.sha256?.let(hashStore::protectHash).orEmpty(),
+   scanTimestamp=System.currentTimeMillis(),
+   verdict=result.verdict.name,
+   scanDuration=elapsed(start)
+  ))
  }
  private fun isDebugSigned(info: PackageInfo): Boolean = runCatching {
   val signatureBytes = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
    info.signingInfo?.apkContentsSigners?.firstOrNull()?.toByteArray()
   } else {
-   @Suppress("DEPRECATION") info.signatures?.firstOrNull()?.toByteArray()
+   @Suppress("DEPRECATION")
+   info.signatures?.firstOrNull()?.toByteArray()
   } ?: return false
-  val certificate = CertificateFactory.getInstance("X.509").generateCertificate(ByteArrayInputStream(signatureBytes)) as X509Certificate
-  val subject = certificate.subjectX500Principal.name
+  val cert = CertificateFactory.getInstance("X.509").generateCertificate(ByteArrayInputStream(signatureBytes)) as X509Certificate
+  val subject = cert.subjectX500Principal.name
   subject.contains("CN=Android Debug", true) || subject.contains("CN=AndroidDebug", true)
  }.getOrDefault(false)
  private fun signingFlags(): Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) PackageManager.GET_SIGNING_CERTIFICATES else {
-  @Suppress("DEPRECATION") PackageManager.GET_SIGNATURES
+  @Suppress("DEPRECATION")
+  PackageManager.GET_SIGNATURES
  }
  private fun result(key: String, label: String, sha: String?, md5: String?, verdict: ScanVerdict, reasons: List<String>, start: Long) =
   ScanResult(key, label, sha, md5, verdict, reasons, elapsed(start))
