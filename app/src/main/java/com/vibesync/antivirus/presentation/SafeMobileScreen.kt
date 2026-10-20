@@ -1,9 +1,13 @@
 package com.vibesync.antivirus.presentation
 import android.app.Activity
+import android.app.ActivityManager
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -31,6 +35,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
@@ -50,6 +55,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import android.widget.Toast
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vibesync.antivirus.BuildConfig
@@ -78,15 +87,25 @@ private val Red=Color(0xFFDA3855)
  val activity=context as? Activity
  val vm:SafeMobileViewModel=viewModel(factory=SafeMobileViewModel.Factory(repository))
  val state by vm.state.collectAsStateWithLifecycle()
+ val lifecycleOwner = LocalLifecycleOwner.current
  val connectivity=remember { ConnectivityMonitor(context) }
  val online by connectivity.online.collectAsStateWithLifecycle()
  var privacyAccepted by remember { mutableStateOf(context.getSharedPreferences("safe_mobile_privacy",0).getBoolean("acknowledged",false)) }
+ var monitoringRunning by remember(context) { mutableStateOf(isStorageSentinelRunning(context)) }
+ var showDefinitionImportWarning by remember { mutableStateOf(false) }
  var privacyOptionsVisible by remember { mutableStateOf(privacyOptionsRequired) }
  var pendingQuarantine by remember { mutableStateOf<ScanResult?>(null) }
  val apkPicker=rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri:Uri? -> uri?.let(vm::scanSelected) }
  val definitionsPicker=rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri:Uri? -> uri?.let(vm::importOfflineDefinitions) }
  val interstitial=remember(activity,adsEnabled,online) { activity?.let { InterstitialAdController(it,adsEnabled && online) } }
  DisposableEffect(connectivity) { connectivity.start(); onDispose { connectivity.stop() } }
+ DisposableEffect(lifecycleOwner, context) {
+  val observer = LifecycleEventObserver { _, event ->
+   if (event == Lifecycle.Event.ON_RESUME) monitoringRunning = isStorageSentinelRunning(context)
+  }
+  lifecycleOwner.lifecycle.addObserver(observer)
+  onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+ }
  LaunchedEffect(adsEnabled,online,interstitial) { if(adsEnabled && online) interstitial?.load() }
  LaunchedEffect(state.completedScans,interstitial,online) { if(state.completedScans>0 && online) interstitial?.showAfterScan(state.completedScans) }
  LaunchedEffect(privacyOptionsRequired) { privacyOptionsVisible = privacyOptionsRequired }
@@ -122,6 +141,25 @@ private val Red=Color(0xFFDA3855)
        }
       }
       Text(stringResource(R.string.scan_explanation),style=MaterialTheme.typography.bodyMedium,color=Color(0xFFD4E0E9))
+      if (state.isScanning) {
+       if (state.totalItems > 0) {
+        LinearProgressIndicator(
+         progress = (state.processedItems.toFloat() / state.totalItems.toFloat()).coerceIn(0f, 1f),
+         modifier = Modifier.fillMaxWidth()
+        )
+        Text(
+         stringResource(R.string.scan_progress, state.processedItems, state.totalItems),
+         style = MaterialTheme.typography.bodySmall,
+         color = Color(0xFFB6CBD9)
+        )
+       } else {
+        LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+        Text(stringResource(R.string.scan_preparing), style = MaterialTheme.typography.bodySmall, color = Color(0xFFB6CBD9))
+       }
+       TextButton(onClick = vm::cancelScan, modifier = Modifier.fillMaxWidth()) {
+        Text(stringResource(R.string.scan_cancel))
+       }
+      }
       if(state.signatureCount<=1) Text(stringResource(R.string.not_configured),style=MaterialTheme.typography.bodySmall,color=Color(0xFFFFCF8D))
       Button(onClick=vm::scanInstalled,enabled=!state.isScanning && privacyAccepted,modifier=Modifier.fillMaxWidth()) {
        if(state.isScanning) CircularProgressIndicator(Modifier.size(18.dp),strokeWidth=2.dp,color=Navy) else androidx.compose.material3.Icon(Icons.Default.Security,contentDescription=null)
@@ -131,19 +169,43 @@ private val Red=Color(0xFFDA3855)
        androidx.compose.material3.Icon(Icons.Default.FolderOpen,contentDescription=null)
        Text(stringResource(R.string.scan_selected),modifier=Modifier.padding(start=8.dp))
       }
-      OutlinedButton(onClick={ definitionsPicker.launch(arrayOf("application/json","text/json","text/plain")) },enabled=!state.isScanning && privacyAccepted,modifier=Modifier.fillMaxWidth()) { Text(stringResource(R.string.import_definitions)) }
+      OutlinedButton(onClick={ showDefinitionImportWarning = true },enabled=!state.isScanning && privacyAccepted,modifier=Modifier.fillMaxWidth()) { Text(stringResource(R.string.import_definitions)) }
      }
     }
     Card(colors=CardDefaults.cardColors(containerColor=Color(0xFF102D45)),shape=RoundedCornerShape(18.dp),modifier=Modifier.fillMaxWidth()) {
      Column(Modifier.padding(16.dp),verticalArrangement=Arrangement.spacedBy(8.dp)) {
       Text(stringResource(R.string.monitor_title),style=MaterialTheme.typography.titleMedium,fontWeight=FontWeight.Bold)
       Text(stringResource(R.string.monitor_explanation),style=MaterialTheme.typography.bodySmall,color=Color(0xFFB6CBD9))
-      OutlinedButton(onClick={
-       if(!privacyAccepted) return@OutlinedButton
-       if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.R && !Environment.isExternalStorageManager()) context.startActivity(Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,Uri.parse("package:"+context.packageName)))
-       else context.startForegroundService(Intent(context,com.vibesync.antivirus.core.observer.StorageSentinelService::class.java))
-      },enabled=!state.isScanning && privacyAccepted,modifier=Modifier.fillMaxWidth()) { Text(stringResource(R.string.monitor_button)) }
-      OutlinedButton(onClick={ context.stopService(Intent(context,com.vibesync.antivirus.core.observer.StorageSentinelService::class.java)) },enabled=privacyAccepted,modifier=Modifier.fillMaxWidth()) { Text(stringResource(R.string.monitor_stop)) }
+      Text(
+       stringResource(if (monitoringRunning) R.string.monitor_active else R.string.monitor_inactive),
+       style = MaterialTheme.typography.labelLarge,
+       color = if (monitoringRunning) Cyan else Color(0xFFFFCF8D)
+      )
+      if (!monitoringRunning) {
+       OutlinedButton(onClick={
+        if (!privacyAccepted) return@OutlinedButton
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !Environment.isExternalStorageManager()) {
+         context.startActivity(Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,Uri.parse("package:"+context.packageName)))
+        } else {
+         runCatching {
+          context.startForegroundService(Intent(context,com.vibesync.antivirus.core.observer.StorageSentinelService::class.java))
+         }.onSuccess {
+          monitoringRunning = true
+          Handler(Looper.getMainLooper()).postDelayed({
+           monitoringRunning = isStorageSentinelRunning(context)
+          }, 800L)
+         }.onFailure {
+          monitoringRunning = false
+          Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show()
+         }
+        }
+       },enabled=!state.isScanning && privacyAccepted,modifier=Modifier.fillMaxWidth()) { Text(stringResource(R.string.monitor_button)) }
+      } else {
+       OutlinedButton(onClick={
+        context.stopService(Intent(context,com.vibesync.antivirus.core.observer.StorageSentinelService::class.java))
+        monitoringRunning = false
+       },enabled=privacyAccepted,modifier=Modifier.fillMaxWidth()) { Text(stringResource(R.string.monitor_stop)) }
+      }
       Text(stringResource(R.string.monitor_note),style=MaterialTheme.typography.labelSmall,color=Color(0xFFB6CBD9))
      }
     }
@@ -174,6 +236,20 @@ private val Red=Color(0xFFDA3855)
    }
   }
  }
+ if (showDefinitionImportWarning) AlertDialog(
+  onDismissRequest = { showDefinitionImportWarning = false },
+  title = { Text(stringResource(R.string.import_unverified_title)) },
+  text = { Text(stringResource(R.string.import_unverified_body)) },
+  confirmButton = {
+   TextButton(onClick = {
+    showDefinitionImportWarning = false
+    definitionsPicker.launch(arrayOf("application/json","text/json","text/plain"))
+   }) { Text(stringResource(R.string.continue_import)) }
+  },
+  dismissButton = {
+   TextButton(onClick = { showDefinitionImportWarning = false }) { Text(stringResource(R.string.close)) }
+  }
+ )
  pendingQuarantine?.let { flagged ->
   AlertDialog(
    onDismissRequest={ pendingQuarantine = null },
@@ -195,7 +271,17 @@ private val Red=Color(0xFFDA3855)
   }) { Text(stringResource(R.string.privacy_accept)) } },
   dismissButton={ TextButton(onClick={ activity?.finish() }) { Text(stringResource(R.string.exit_app)) } })
 }
-private fun openSponsor(context:android.content.Context) { runCatching { context.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse(BuildConfig.COFFEE_SUPPORT_URL))) } }
+private fun openSponsor(context: Context) {
+ runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.COFFEE_SUPPORT_URL))) }
+  .onFailure { Toast.makeText(context, R.string.sponsor_link_failed, Toast.LENGTH_LONG).show() }
+}
+@Suppress("DEPRECATION")
+private fun isStorageSentinelRunning(context: Context): Boolean {
+ val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as? ActivityManager ?: return false
+ return manager.getRunningServices(Int.MAX_VALUE).any {
+  it.service.className == "com.vibesync.antivirus.core.observer.StorageSentinelService" && it.foreground
+ }
+}
 @Composable private fun ScanResultCard(
  result:ScanResult,
  showUninstall:Boolean,
