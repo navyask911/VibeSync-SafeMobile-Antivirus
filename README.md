@@ -62,3 +62,74 @@ Act as a Principal Android Security Engineer. Scaffold and implement the product
   - Assemble release and debug artifacts (`assembleDebug`)
 
 Generate the full project directory layout, complete implementation code for all critical classes, and build files. Do not use placeholders or pseudo-code for the hashing pipeline, Tink integration, or Room database entities.
+
+# VibeSync SafeMobile Antivirus
+
+<p align="center">
+  <img src="playstore.png" alt="VibeSync Logo" width="160"/>
+  <br>
+  <em>Cybersecurity • Protecting the Mobile Endpoint</em>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Platform-Android-green.svg" alt="Platform"/>
+  <img src="https://img.shields.io/badge/Min_SDK-26_(Android_8.0)-blue.svg" alt="Min SDK"/>
+  <img src="https://img.shields.io/badge/Language-Kotlin-purple.svg" alt="Language"/>
+  <img src="https://img.shields.io/badge/Architecture-MVVM_%2B_Clean-orange.svg" alt="Architecture"/>
+  <img src="https://img.shields.io/badge/License-Apache_2.0-lightgrey.svg" alt="License"/>
+</p>
+
+---
+
+## Overview
+
+**VibeSync SafeMobile Antivirus** is a lightweight, zero-compromise native Android security utility engineered to protect users from malicious APK installations, suspicious background runtime activity, and rogue file system tampering. Built on modern Android architecture components with Jetpack Compose, it pairs local cryptographic hashing and behavioral heuristics with zero-egress cloud threat feeds to ensure continuous endpoint defense without degrading battery longevity.
+
+---
+
+## Architectural Pillars
+
+### 1. Signature-Based Threat Engine
+- **Cryptographic Hashing:** Computes real-time MD5 and SHA-256 package checksums during APK inspection.
+- **Hardware-Accelerated Indexing:** Offline signature matching accelerated via indexed local SQLite tables powered by Room.
+- **Encrypted Local Storage:** Database signature records and threat definitions are protected at rest using Google Tink encryption.
+
+### 2. Real-Time Storage & Package Sentinel
+- **File System Observer:** Monitors public download paths and package directories dynamically via the `FileObserver` API to intercept infected files prior to execution.
+- **Dynamic Install Interceptor:** Evaluates package payloads immediately upon broadcast of system installation events.
+- **Battery-Conservative Sweeps:** Leverages AndroidX `WorkManager` to schedule battery-conscious background maintenance sweeps during device idle windows.
+
+### 3. Heuristic & Static Risk Analysis
+- **Manifest Permission Scoring:** Evaluates apps requesting high-risk capability clusters (e.g., `RECEIVE_BOOT_COMPLETED`, `SYSTEM_ALERT_WINDOW`, `BIND_ACCESSIBILITY_SERVICE`).
+- **Certificate Verification:** Flags debug-signed production artifacts and tampered package signatures.
+
+### 4. Zero-Egress Cloud Threat Distribution
+- **Cloudflare R2 Storage:** Fetches daily malware database definition deltas hosted with zero egress overhead.
+- **Supabase Backend:** Delivers real-time configuration signals, instant threat hashes, and emergency rule updates.
+- **VirusTotal Hash Verification:** Handles secondary evaluation of unknown hash signatures via external API lookup.
+
+---
+
+## Project Structure
+
+```text
+VibeSync-SafeMobile-Antivirus/
+├── app/
+│   ├── src/
+│   │   ├── main/
+│   │   │   ├── java/com/vibesync/antivirus/
+│   │   │   │   ├── core/
+│   │   │   │   │   ├── crypto/       # Tink encryption wrappers & hash calculators
+│   │   │   │   │   ├── engine/       # Heuristic engines & file observers
+│   │   │   │   │   └── worker/       # WorkManager periodic sweep tasks
+│   │   │   │   ├── data/
+│   │   │   │   │   ├── local/        # Room Database, DAOs, and entities
+│   │   │   │   │   ├── remote/       # Supabase and Cloudflare R2 API clients
+│   │   │   │   │   └── repository/   # Unified threat definition repository
+│   │   │   │   ├── di/               # Hilt / Koin dependency injection modules
+│   │   │   │   └── presentation/     # Jetpack Compose UI screens, ViewModels & themes
+│   │   │   └── AndroidManifest.xml
+│   │   └── res/
+│   └── build.gradle.kts
+├── gradle/
+└── README.md
