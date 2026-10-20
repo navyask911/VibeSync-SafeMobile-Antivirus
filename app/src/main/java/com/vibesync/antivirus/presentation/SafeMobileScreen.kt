@@ -35,6 +35,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -68,6 +70,7 @@ import com.vibesync.antivirus.ads.BannerAd
 import com.vibesync.antivirus.ads.ConsentManager
 import com.vibesync.antivirus.ads.InterstitialAdController
 import com.vibesync.antivirus.core.connectivity.ConnectivityMonitor
+import com.vibesync.antivirus.core.locale.LocalePreferences
 import com.vibesync.antivirus.core.engine.ScanResult
 import com.vibesync.antivirus.core.quarantine.LocalQuarantineManager
 import com.vibesync.antivirus.core.engine.ScanVerdict
@@ -92,6 +95,8 @@ private val Red=Color(0xFFDA3855)
  val connectivity=remember { ConnectivityMonitor(context) }
  val online by connectivity.online.collectAsStateWithLifecycle()
  var privacyAccepted by remember { mutableStateOf(context.getSharedPreferences("safe_mobile_privacy",0).getBoolean("acknowledged",false)) }
+ var languageMenuExpanded by remember { mutableStateOf(false) }
+ var languageOverrideTag by remember { mutableStateOf(LocalePreferences.overrideTag(context)) }
  var monitoringRunning by remember(context) { mutableStateOf(isStorageSentinelRunning(context)) }
  var showDefinitionImportWarning by remember { mutableStateOf(false) }
  var privacyOptionsVisible by remember { mutableStateOf(privacyOptionsRequired) }
@@ -129,6 +134,33 @@ private val Red=Color(0xFFDA3855)
      Column(Modifier.padding(start=12.dp).weight(1f)) {
       Text(stringResource(R.string.brand_title),style=MaterialTheme.typography.titleLarge,fontWeight=FontWeight.Black,color=Light)
       Text(stringResource(R.string.brand_subtitle),style=MaterialTheme.typography.labelMedium,color=Cyan)
+     }
+     Box {
+      TextButton(onClick = { languageMenuExpanded = true }) {
+       Text(stringResource(R.string.language_label, stringResource(LocalePreferences.labelResource(languageOverrideTag))))
+      }
+      DropdownMenu(expanded = languageMenuExpanded, onDismissRequest = { languageMenuExpanded = false }) {
+       DropdownMenuItem(
+        text = { Text(stringResource(R.string.language_system_default)) },
+        onClick = {
+         LocalePreferences.saveOverride(context, "")
+         languageOverrideTag = ""
+         languageMenuExpanded = false
+         activity?.recreate()
+        }
+       )
+       LocalePreferences.choices.forEach { choice ->
+        DropdownMenuItem(
+         text = { Text(stringResource(choice.labelResource)) },
+         onClick = {
+          LocalePreferences.saveOverride(context, choice.tag)
+          languageOverrideTag = choice.tag
+          languageMenuExpanded = false
+          activity?.recreate()
+         }
+        )
+       }
+      }
      }
     }
     if(!online) {
