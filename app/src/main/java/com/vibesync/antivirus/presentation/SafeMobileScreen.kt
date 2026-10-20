@@ -67,7 +67,7 @@ private val Cyan=Color(0xFF38C8F4)
 private val Light=Color(0xFFF3F8FC)
 private val Red=Color(0xFFDA3855)
 
-@Composable fun SafeMobileTheme(content:@Composable()->Unit) {
+@Composable fun SafeMobileTheme(content: @Composable () -> Unit) {
  MaterialTheme(colorScheme=androidx.compose.material3.darkColorScheme(primary=Cyan,secondary=Blue,background=Navy,surface=Color(0xFF0D263C),onPrimary=Navy,onBackground=Light,onSurface=Light,error=Red),content=content)
 }
 @Composable fun SafeMobileScreen(repository:ThreatRepository,adsEnabled:Boolean,privacyOptionsRequired:Boolean) {
