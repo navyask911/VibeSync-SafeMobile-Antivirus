@@ -13,7 +13,7 @@ android {
   applicationId = "com.vibesync.antivirus"
   minSdk = 26
   targetSdk = 35
-  versionCode = 2026102001
+  versionCode = 20261020
   versionName = "1.0.0"
   testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   manifestPlaceholders["admobAppId"] = "ca-app-pub-4783826505860771~8485727119"
