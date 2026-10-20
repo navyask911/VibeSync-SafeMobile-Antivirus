@@ -44,4 +44,6 @@
 <string name="risk_sms_accessibility">SMS अनुमतियों को एक्सेसिबिलिटी सेवा घोषणा के साथ जोड़ता है; यह समीक्षा का संकेत है, OTP रोकने या मैलवेयर का प्रमाण नहीं।</string>
 <string name="language_label">भाषा: %1$s</string>
 <string name="language_system_default">सिस्टम डिफ़ॉल्ट</string>
+<string name="limited_protection">सीमित सुरक्षा — केवल EICAR परीक्षण परिभाषा</string>
+<string name="review_recommended">समीक्षा की सलाह दी जाती है</string>
 </resources>
