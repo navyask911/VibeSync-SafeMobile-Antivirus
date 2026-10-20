@@ -40,4 +40,6 @@
 <string name="quarantine_delete_success">Quarantänedatei %1$s wurde gelöscht.</string>
 <string name="quarantine_restore_failed">Die Quarantänedatei konnte nicht wiederhergestellt werden. Ziel und verfügbaren Speicher prüfen und erneut versuchen.</string>
 <string name="quarantine_delete_failed">Die Quarantänedatei konnte nicht gelöscht werden.</string>
+<string name="risk_sms_internet">Kombiniert SMS-Berechtigungen mit Netzwerkzugriff; dies ist ein Risikohinweis, kein Beweis für bösartiges Verhalten.</string>
+<string name="risk_sms_accessibility">Kombiniert SMS-Berechtigungen mit einem deklarierten Bedienungshilfedienst; dies ist ein Prüfsignal, kein Beweis für OTP-Abfangen oder Malware.</string>
 </resources>
