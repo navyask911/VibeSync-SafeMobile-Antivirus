@@ -44,4 +44,6 @@
 <string name="risk_sms_accessibility">Combina permisos de SMS con la declaración de un servicio de accesibilidad; es una señal para revisar, no una prueba de interceptación de OTP ni de malware.</string>
 <string name="language_label">Idioma: %1$s</string>
 <string name="language_system_default">Predeterminado del sistema</string>
+<string name="limited_protection">Protección limitada: solo definición de prueba EICAR</string>
+<string name="review_recommended">Se recomienda revisar</string>
 </resources>
