@@ -69,4 +69,13 @@
 <string name="quarantine_delete_failed">The quarantined file could not be deleted.</string>
 <string name="risk_sms_internet">Combines SMS permissions with network access; this is a risk indicator, not proof of malicious behavior.</string>
 <string name="risk_sms_accessibility">Combines SMS permissions with an accessibility service declaration; this is a review signal, not proof of OTP interception or malware.</string>
+<string name="language_label">Language: %1$s</string>
+<string name="language_system_default">System default</string>
+<string name="locale_english" translatable="false">English</string>
+<string name="locale_arabic" translatable="false">العربية</string>
+<string name="locale_german" translatable="false">Deutsch</string>
+<string name="locale_spanish" translatable="false">Español</string>
+<string name="locale_french" translatable="false">Français</string>
+<string name="locale_hindi" translatable="false">हिन्दी</string>
+<string name="locale_japanese" translatable="false">日本語</string>
 </resources>
