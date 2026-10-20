@@ -72,6 +72,7 @@ import com.vibesync.antivirus.core.engine.ScanResult
 import com.vibesync.antivirus.core.quarantine.LocalQuarantineManager
 import com.vibesync.antivirus.core.engine.ScanVerdict
 import com.vibesync.antivirus.data.repository.ThreatRepository
+import java.io.File
 private val Navy=Color(0xFF071A2C)
 private val Blue=Color(0xFF123E61)
 private val Cyan=Color(0xFF38C8F4)
@@ -95,13 +96,22 @@ private val Red=Color(0xFFDA3855)
  var showDefinitionImportWarning by remember { mutableStateOf(false) }
  var privacyOptionsVisible by remember { mutableStateOf(privacyOptionsRequired) }
  var pendingQuarantine by remember { mutableStateOf<ScanResult?>(null) }
+ var pendingRestoreFile by remember { mutableStateOf<File?>(null) }
+ var pendingDeleteFile by remember { mutableStateOf<File?>(null) }
+ var showRestoreWarning by remember { mutableStateOf(false) }
+ val quarantineManager = remember(context) { LocalQuarantineManager(context) }
  val apkPicker=rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri:Uri? -> uri?.let(vm::scanSelected) }
  val definitionsPicker=rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri:Uri? -> uri?.let(vm::importOfflineDefinitions) }
+ val restorePicker=rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/octet-stream")) { uri:Uri? ->
+  val file = pendingRestoreFile
+  if (uri != null && file != null) vm.restoreQuarantinedFile(file, uri)
+  pendingRestoreFile = null
+ }
  val interstitial=remember(activity,adsEnabled,online) { activity?.let { InterstitialAdController(it,adsEnabled && online) } }
  DisposableEffect(connectivity) { connectivity.start(); onDispose { connectivity.stop() } }
  DisposableEffect(lifecycleOwner, context) {
   val observer = LifecycleEventObserver { _, event ->
-   if (event == Lifecycle.Event.ON_RESUME) monitoringRunning = isStorageSentinelRunning(context)
+   if (event == Lifecycle.Event.ON_RESUME) { monitoringRunning = isStorageSentinelRunning(context); vm.refreshQuarantine() }
   }
   lifecycleOwner.lifecycle.addObserver(observer)
   onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
@@ -226,6 +236,39 @@ private val Red=Color(0xFFDA3855)
       }
      }
     }
+    Card(colors=CardDefaults.cardColors(containerColor=Color(0xFF102D45)),shape=RoundedCornerShape(18.dp),modifier=Modifier.fillMaxWidth()) {
+     Column(Modifier.padding(16.dp),verticalArrangement=Arrangement.spacedBy(10.dp)) {
+      Text(stringResource(R.string.quarantine_vault_title),style=MaterialTheme.typography.titleMedium,fontWeight=FontWeight.Bold)
+      Text(stringResource(R.string.quarantine_vault_description),style=MaterialTheme.typography.bodySmall,color=Color(0xFFB6CBD9))
+      if (state.quarantinedFiles.isEmpty()) {
+       Text(stringResource(R.string.quarantine_vault_empty),style=MaterialTheme.typography.bodyMedium,color=Color(0xFFB6CBD9))
+      } else {
+       state.quarantinedFiles.take(30).forEach { file ->
+        Column(
+         modifier=Modifier.fillMaxWidth().background(Color(0xFF0D263C),RoundedCornerShape(12.dp)).padding(12.dp),
+         verticalArrangement=Arrangement.spacedBy(5.dp)
+        ) {
+         Text(
+          text=runCatching { quarantineManager.displayName(file) }.getOrDefault(file.name),
+          style=MaterialTheme.typography.titleSmall,fontWeight=FontWeight.SemiBold,color=Light
+         )
+         Text(stringResource(R.string.quarantine_item_size,file.length()),style=MaterialTheme.typography.labelSmall,color=Color(0xFFB6CBD9))
+         OutlinedButton(
+          onClick={ pendingRestoreFile=file; showRestoreWarning=true },
+          modifier=Modifier.fillMaxWidth()
+         ) { Text(stringResource(R.string.quarantine_restore)) }
+         TextButton(
+          onClick={ pendingDeleteFile=file },
+          modifier=Modifier.fillMaxWidth()
+         ) { Text(stringResource(R.string.quarantine_delete),color=Red) }
+        }
+       }
+       if (state.quarantinedFiles.size > 30) {
+        Text(stringResource(R.string.quarantine_vault_limit),style=MaterialTheme.typography.labelSmall,color=Color(0xFFB6CBD9))
+       }
+      }
+     }
+    }
     Spacer(Modifier.height(8.dp))
     if(privacyOptionsVisible) TextButton(onClick={ activity?.let { host -> ConsentManager.showPrivacyOptions(host) { privacyOptionsVisible = ConsentManager.privacyOptionsRequired(host) } } }) { Text(stringResource(R.string.privacy_options)) }
     Text(stringResource(R.string.scan_clean_warning),style=MaterialTheme.typography.labelSmall,color=Color(0xFF8CA9BC))
@@ -250,6 +293,41 @@ private val Red=Color(0xFFDA3855)
    TextButton(onClick = { showDefinitionImportWarning = false }) { Text(stringResource(R.string.close)) }
   }
  )
+ if (showRestoreWarning) AlertDialog(
+  onDismissRequest = { showRestoreWarning = false; pendingRestoreFile = null },
+  title = { Text(stringResource(R.string.quarantine_restore_confirm_title)) },
+  text = { Text(stringResource(R.string.quarantine_restore_confirm_body)) },
+  confirmButton = {
+   TextButton(onClick = {
+    val file = pendingRestoreFile
+    showRestoreWarning = false
+    if (file != null) {
+     runCatching { quarantineManager.displayName(file) }
+      .onSuccess { restorePicker.launch(it) }
+      .onFailure { Toast.makeText(context, R.string.quarantine_restore_failed, Toast.LENGTH_LONG).show(); pendingRestoreFile = null }
+    }
+   }) { Text(stringResource(R.string.quarantine_restore)) }
+  },
+  dismissButton = {
+   TextButton(onClick = { showRestoreWarning = false; pendingRestoreFile = null }) { Text(stringResource(R.string.close)) }
+  }
+ )
+ pendingDeleteFile?.let { file ->
+  AlertDialog(
+   onDismissRequest = { pendingDeleteFile = null },
+   title = { Text(stringResource(R.string.quarantine_delete_confirm_title)) },
+   text = { Text(stringResource(R.string.quarantine_delete_confirm_body)) },
+   confirmButton = {
+    TextButton(onClick = {
+     vm.deleteQuarantinedFile(file)
+     pendingDeleteFile = null
+    }) { Text(stringResource(R.string.quarantine_delete), color = Red) }
+   },
+   dismissButton = {
+    TextButton(onClick = { pendingDeleteFile = null }) { Text(stringResource(R.string.close)) }
+   }
+  )
+ }
  pendingQuarantine?.let { flagged ->
   AlertDialog(
    onDismissRequest={ pendingQuarantine = null },
