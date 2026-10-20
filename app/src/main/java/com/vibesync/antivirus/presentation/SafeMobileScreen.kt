@@ -91,6 +91,23 @@ private val Red=Color(0xFFDA3855)
  val activity=context as? Activity
  val vm:SafeMobileViewModel=viewModel(factory=SafeMobileViewModel.Factory(repository))
  val state by vm.state.collectAsStateWithLifecycle()
+ val statusResource = when {
+  state.isScanning -> R.string.scan_running
+  state.threatCount > 0 -> R.string.threat_found
+  state.suspiciousCount > 0 -> R.string.review_recommended
+  state.signatureCount <= 1 -> R.string.limited_protection
+  else -> R.string.scan_status
+ }
+ val statusTint = when {
+  state.threatCount > 0 -> Red
+  state.suspiciousCount > 0 || state.signatureCount <= 1 -> Color(0xFFFFB74D)
+  else -> Cyan
+ }
+ val statusIcon = when {
+  state.isScanning -> Icons.Default.Security
+  state.threatCount > 0 || state.suspiciousCount > 0 || state.signatureCount <= 1 -> Icons.Default.Warning
+  else -> Icons.Default.CheckCircle
+ }
  val lifecycleOwner = LocalLifecycleOwner.current
  val connectivity=remember { ConnectivityMonitor(context) }
  val online by connectivity.online.collectAsStateWithLifecycle()
@@ -176,9 +193,9 @@ private val Red=Color(0xFFDA3855)
     Card(colors=CardDefaults.cardColors(containerColor=Color(0xFF0D263C)),shape=RoundedCornerShape(22.dp),modifier=Modifier.fillMaxWidth()) {
      Column(Modifier.padding(18.dp),verticalArrangement=Arrangement.spacedBy(10.dp)) {
       Row(verticalAlignment=Alignment.CenterVertically) {
-       androidx.compose.material3.Icon(if(state.threatCount>0) Icons.Default.Warning else Icons.Default.CheckCircle,contentDescription=null,tint=if(state.threatCount>0) Red else Cyan,modifier=Modifier.size(30.dp))
+       androidx.compose.material3.Icon(statusIcon,contentDescription=null,tint=statusTint,modifier=Modifier.size(30.dp))
        Column(Modifier.padding(start=10.dp).weight(1f)) {
-        Text(stringResource(if(state.isScanning) R.string.scan_running else if(state.threatCount>0) R.string.threat_found else R.string.scan_status),style=MaterialTheme.typography.titleMedium,fontWeight=FontWeight.Bold)
+        Text(stringResource(statusResource),style=MaterialTheme.typography.titleMedium,fontWeight=FontWeight.Bold,color=statusTint)
         Text(stringResource(R.string.signature_count,state.signatureCount,state.completedScans),style=MaterialTheme.typography.bodySmall,color=Color(0xFFB6CBD9))
        }
       }
