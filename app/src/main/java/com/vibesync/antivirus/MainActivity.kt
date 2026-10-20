@@ -1,5 +1,6 @@
 package com.vibesync.antivirus
 import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -19,10 +20,14 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.vibesync.antivirus.ads.ConsentManager
+import com.vibesync.antivirus.core.locale.LocalePreferences
 import com.vibesync.antivirus.presentation.SafeMobileScreen
 import com.vibesync.antivirus.presentation.SafeMobileTheme
 
 class MainActivity : ComponentActivity() {
+ override fun attachBaseContext(newBase: Context) {
+  super.attachBaseContext(LocalePreferences.wrap(newBase))
+ }
  private var adsReady by mutableStateOf(false)
  private var privacyOptionsAvailable by mutableStateOf(false)
  private lateinit var updateManager: AppUpdateManager
