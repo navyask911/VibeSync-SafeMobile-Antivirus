@@ -15,9 +15,9 @@ import java.io.File
 import java.io.IOException
 
 class ThreatRepository(private val context: Context, private val database: ThreatDatabase, private val scanner: PackageScanner, private val definitionLoader: LocalDefinitionLoader) {
- suspend fun scanInstalledApps(): List<ScanResult> = withContext(Dispatchers.IO) {
+ suspend fun scanInstalledApps(progress: suspend (Int, Int) -> Unit = { _, _ -> }): List<ScanResult> = withContext(Dispatchers.IO) {
   definitionLoader.importBundledIfEmpty()
-  scanner.scanInstalledApps()
+  scanner.scanInstalledApps(progress)
  }
  suspend fun scanInstalledPackage(name: String): ScanResult? = withContext(Dispatchers.IO) {
   definitionLoader.importBundledIfEmpty()
