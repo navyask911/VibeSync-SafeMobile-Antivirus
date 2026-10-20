@@ -6,6 +6,9 @@ on:
     branches: [main]
 permissions:
   contents: read
+concurrency:
+  group: safemobile-android-ci-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   test-lint-build:
     name: Test, lint, and build Android artifacts
