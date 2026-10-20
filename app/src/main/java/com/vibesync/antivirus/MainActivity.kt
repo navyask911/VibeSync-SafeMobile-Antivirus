@@ -43,11 +43,16 @@ class MainActivity : ComponentActivity() {
     SafeMobileScreen(repository = (application as SafeMobileApp).repository, adsEnabled = adsReady, privacyOptionsRequired = privacyOptionsAvailable)
    }
   }
-  ConsentManager.requestConsent(this) { canRequestAds ->
-   privacyOptionsAvailable = ConsentManager.privacyOptionsRequired(this@MainActivity)
-   if (canRequestAds) {
-    MobileAds.initialize(this) { adsReady = true }
+  if (BuildConfig.ADS_CONFIGURED) {
+   ConsentManager.requestConsent(this) { canRequestAds ->
+    privacyOptionsAvailable = ConsentManager.privacyOptionsRequired(this@MainActivity)
+    if (canRequestAds && BuildConfig.ADS_CONFIGURED) {
+     MobileAds.initialize(this) { adsReady = true }
+    }
    }
+  } else {
+   adsReady = false
+   privacyOptionsAvailable = false
   }
   checkForUpdate()
  }

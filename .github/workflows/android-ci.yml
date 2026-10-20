@@ -31,7 +31,22 @@ jobs:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          ADMOB_APP_ID: ${{ vars.ADMOB_APP_ID }}
+          ADMOB_BANNER_UNIT_ID: ${{ vars.ADMOB_BANNER_UNIT_ID }}
+          ADMOB_INTERSTITIAL_UNIT_ID: ${{ vars.ADMOB_INTERSTITIAL_UNIT_ID }}
         run: ./gradlew --no-daemon assembleDebug assembleRelease bundleRelease
+      - name: Report release configuration
+        if: always()
+        env:
+          ADMOB_APP_ID: ${{ vars.ADMOB_APP_ID }}
+          ADMOB_BANNER_UNIT_ID: ${{ vars.ADMOB_BANNER_UNIT_ID }}
+          ADMOB_INTERSTITIAL_UNIT_ID: ${{ vars.ADMOB_INTERSTITIAL_UNIT_ID }}
+        run: |
+          if [ -n "$ADMOB_APP_ID" ] && [ -n "$ADMOB_BANNER_UNIT_ID" ] && [ -n "$ADMOB_INTERSTITIAL_UNIT_ID" ]; then
+            echo "Release AdMob configuration: present (IDs not printed)."
+          else
+            echo "Release AdMob configuration: incomplete; release ads remain disabled until all three repository variables are set."
+          fi
       - name: Report release signing configuration
         if: always()
         env:

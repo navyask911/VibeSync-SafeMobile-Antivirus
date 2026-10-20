@@ -20,11 +20,7 @@ Android sandboxing prevents third-party apps from scanning arbitrary system part
 QUERY_ALL_PACKAGES and MANAGE_EXTERNAL_STORAGE are restricted Google Play permissions. Declaration does not guarantee approval. Complete Play Console declarations and confirm eligibility for the core security use case. The privacy dialog is an acknowledgement; it does not grant Android special permissions or guarantee Play approval.
 
 ## Ads
-AdMob App ID: ca-app-pub-4783826505860771~8485727119
-Banner unit: ca-app-pub-4783826505860771/4710308648
-Interstitial unit: ca-app-pub-4783826505860771/9523651625
-
-Debug builds substitute Google's official test app/ad IDs; release builds use the supplied live IDs. UMP consent gates SDK initialization/ad requests. The adaptive banner is anchored in the dashboard footer. Interstitials are only considered after every third completed scan, not on app launch or mid-scan. Configure privacy messages in AdMob and do not click production ads during testing.
+The app-ads.txt publisher ID alone does not identify an AdMob app or its ad units. To avoid embedding unverified production IDs, release builds keep ads disabled unless all three GitHub Actions repository variables are configured: ADMOB_APP_ID, ADMOB_BANNER_UNIT_ID, and ADMOB_INTERSTITIAL_UNIT_ID. Set those values from the actual AdMob dashboard. Debug builds always use Google's official test app/ad IDs. When production IDs are configured, UMP consent gates SDK initialization/ad requests. When they are absent, the release does not initialize Mobile Ads and makes no ad requests. The adaptive banner is anchored in the dashboard footer. Interstitials are only considered after every third completed scan, not on app launch or mid-scan. Configure privacy messages in AdMob and do not click production ads during testing.
 
 ## In-app updates and coffee support
 The app checks Google Play in-app updates on launch and foreground return. Priority 4+ or updates stale by at least seven days prefer the immediate flow when allowed; otherwise flexible flow is used. This API depends on Google Play installation/update availability. The coffee sponsorship action opens a secure external browser link when the user is online; it is not part of scanning.

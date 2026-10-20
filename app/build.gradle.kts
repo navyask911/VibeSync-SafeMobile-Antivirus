@@ -12,6 +12,17 @@ val releaseStoreBase64 = providers.environmentVariable("KEYSTORE_BASE64").orNull
 val releaseStorePassword = providers.environmentVariable("KEYSTORE_PASSWORD").orNull
 val releaseKeyAlias = providers.environmentVariable("KEY_ALIAS").orNull
 val releaseKeyPassword = providers.environmentVariable("KEY_PASSWORD").orNull
+val releaseAdMobAppId = providers.environmentVariable("ADMOB_APP_ID").orNull
+val releaseBannerUnitId = providers.environmentVariable("ADMOB_BANNER_UNIT_ID").orNull
+val releaseInterstitialUnitId = providers.environmentVariable("ADMOB_INTERSTITIAL_UNIT_ID").orNull
+val releaseAdValues = listOf(releaseAdMobAppId, releaseBannerUnitId, releaseInterstitialUnitId)
+val releaseAdsConfigured = releaseAdValues.all { !it.isNullOrBlank() }
+if (releaseAdValues.any { !it.isNullOrBlank() } && !releaseAdsConfigured) {
+    throw GradleException("AdMob release configuration is partial. Set ADMOB_APP_ID, ADMOB_BANNER_UNIT_ID and ADMOB_INTERSTITIAL_UNIT_ID, or leave all empty.")
+}
+val testAdMobAppId = "ca-app-pub-3940256099942544~3347511713"
+val testBannerUnitId = "ca-app-pub-3940256099942544/9214589741"
+val testInterstitialUnitId = "ca-app-pub-3940256099942544/1033173712"
 val signingValues = listOf(releaseStoreBase64, releaseStorePassword, releaseKeyAlias, releaseKeyPassword)
 val releaseSigningEnabled = signingValues.all { !it.isNullOrBlank() }
 if (signingValues.any { !it.isNullOrBlank() } && !releaseSigningEnabled) {
@@ -28,9 +39,10 @@ android {
   versionCode = 20261020
   versionName = "1.0.0"
   testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-  manifestPlaceholders["admobAppId"] = "ca-app-pub-4783826505860771~8485727119"
-  buildConfigField("String", "BANNER_AD_UNIT_ID", cfg("ca-app-pub-4783826505860771/4710308648"))
-  buildConfigField("String", "INTERSTITIAL_AD_UNIT_ID", cfg("ca-app-pub-4783826505860771/9523651625"))
+  manifestPlaceholders["admobAppId"] = releaseAdMobAppId?.takeIf { it.isNotBlank() } ?: testAdMobAppId
+  buildConfigField("String", "BANNER_AD_UNIT_ID", cfg(releaseBannerUnitId?.takeIf { it.isNotBlank() } ?: ""))
+  buildConfigField("String", "INTERSTITIAL_AD_UNIT_ID", cfg(releaseInterstitialUnitId?.takeIf { it.isNotBlank() } ?: ""))
+  buildConfigField("Boolean", "ADS_CONFIGURED", releaseAdsConfigured.toString())
   buildConfigField("String", "COFFEE_SUPPORT_URL", cfg("https://github.com/sponsors/navyask911"))
  }
  signingConfigs {
@@ -52,9 +64,10 @@ android {
   debug {
    applicationIdSuffix = ".debug"
    versionNameSuffix = "-debug"
-   manifestPlaceholders["admobAppId"] = "ca-app-pub-3940256099942544~3347511713"
-   buildConfigField("String", "BANNER_AD_UNIT_ID", cfg("ca-app-pub-3940256099942544/9214589741"))
-   buildConfigField("String", "INTERSTITIAL_AD_UNIT_ID", cfg("ca-app-pub-3940256099942544/1033173712"))
+   manifestPlaceholders["admobAppId"] = testAdMobAppId
+   buildConfigField("String", "BANNER_AD_UNIT_ID", cfg(testBannerUnitId))
+   buildConfigField("String", "INTERSTITIAL_AD_UNIT_ID", cfg(testInterstitialUnitId))
+   buildConfigField("Boolean", "ADS_CONFIGURED", "true")
   }
   release {
    isMinifyEnabled = true
