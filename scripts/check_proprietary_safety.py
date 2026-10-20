@@ -6,6 +6,7 @@ This is a narrow CI guard, not a replacement for a full SBOM, licence audit, or 
 from pathlib import Path
 import re
 import sys
+import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
 GRADLE = ROOT / "app" / "build.gradle.kts"
@@ -66,6 +67,62 @@ for path in (ROOT / "app" / "src" / "main").rglob("*.kt"):
             f"AccessibilityService implementation found in {path.relative_to(ROOT)}; "
             "this policy prohibits app-screen/credential/OTP surveillance."
         )
+
+
+# Localization resource coverage and placeholder parity. This is a structural check, not a
+# certification of translation quality or native-speaker review.
+RESOURCES = ROOT / "app" / "src" / "main" / "res"
+PLACEHOLDER = re.compile(r"%(?:\\d+\\$)?[sdif]")
+
+def read_string_resources(path: Path):
+    try:
+        root = ET.parse(path).getroot()
+    except (ET.ParseError, OSError) as exc:
+        errors.append(
+            f"Invalid Android string-resource XML at {path.relative_to(ROOT)}: {type(exc).__name__}."
+        )
+        return {}
+    values = {}
+    for element in root.findall("string"):
+        name = element.attrib.get("name")
+        if not name:
+            errors.append(f"Unnamed <string> in {path.relative_to(ROOT)}.")
+            continue
+        if name in values:
+            errors.append(f"Duplicate string resource '{name}' in {path.relative_to(ROOT)}.")
+            continue
+        values[name] = {
+            "translatable": element.attrib.get("translatable", "true").lower() != "false",
+            "text": "".join(element.itertext()),
+        }
+    return values
+
+base_strings = read_string_resources(RESOURCES / "values" / "strings.xml")
+for locale_file in RESOURCES.glob("values*/strings.xml"):
+    if locale_file.parent.name == "values" or not locale_file.is_file():
+        continue
+    locale_strings = read_string_resources(locale_file)
+    if not locale_strings:
+        continue
+    missing = [
+        key for key, entry in base_strings.items()
+        if entry["translatable"] and key not in locale_strings
+    ]
+    if missing:
+        errors.append(
+            f"Localization resource coverage incomplete in {locale_file.relative_to(ROOT)}: "
+            f"{len(missing)} translated string(s) missing."
+        )
+    for key, entry in base_strings.items():
+        translated = locale_strings.get(key)
+        if not translated:
+            continue
+        expected = sorted(PLACEHOLDER.findall(entry["text"]))
+        actual = sorted(PLACEHOLDER.findall(translated["text"]))
+        if expected != actual:
+            errors.append(
+                f"Format placeholder mismatch for '{key}' in {locale_file.relative_to(ROOT)}."
+            )
 
 if errors:
     print("Proprietary safety policy check FAILED:")
