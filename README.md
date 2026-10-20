@@ -6,7 +6,7 @@ Native Android Kotlin app using Jetpack Compose Material 3, Room, WorkManager, G
 - Application ID: com.vibesync.antivirus
 - Min SDK 26; compile and target SDK 35
 - JDK 17, Gradle Kotlin DSL
-- Version name 1.0.0; version code 2026102001. Increase versionCode for each subsequent Play release.
+- Version name 1.0.0; version code 20261020. Increase versionCode for each subsequent Play release.
 - CI runs tests, lint, debug APK build and release AAB build.
 
 ## Privacy boundary
