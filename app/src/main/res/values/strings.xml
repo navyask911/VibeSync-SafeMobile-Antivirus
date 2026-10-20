@@ -35,6 +35,7 @@
 <string name="quarantine_file">Quarantine private copy</string>
 <string name="quarantine_success_removed">Quarantine copy saved privately (%1$s); Android reported that the original was removed.</string>
 <string name="quarantine_success_copy_only">Quarantine copy saved privately (%1$s), but Android would not remove the original. Delete it manually if needed.</string>
+<string name="quarantine_failed">Quarantine failed. The original file was not intentionally removed.</string>
 <string name="uninstall_app">Uninstall app…</string>
 <string name="import_definitions">Import offline threat definitions (JSON)</string>
 <string name="import_success">Imported %1$d valid signature definitions into local storage.</string>

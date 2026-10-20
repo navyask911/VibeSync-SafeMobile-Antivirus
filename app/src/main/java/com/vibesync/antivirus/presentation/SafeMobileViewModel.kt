@@ -25,6 +25,14 @@ class SafeMobileViewModel(private val repository:ThreatRepository):ViewModel() {
  init { refreshSignatureCount() }
  fun scanInstalled()=runScan { repository.scanInstalledApps() }
  fun scanSelected(uri:Uri)=runScan { listOf(repository.scanUri(uri)) }
+ fun quarantineSelectedFile(uri: Uri, expectedSha256: String?) {
+  viewModelScope.launch {
+   mutableState.update { it.copy(messageResource=null,messageText=null) }
+   runCatching { repository.quarantineSelectedFile(uri, expectedSha256) }
+    .onSuccess { message -> mutableState.update { it.copy(messageText=message,messageResource=null) } }
+    .onFailure { mutableState.update { it.copy(messageText=null,messageResource=R.string.quarantine_failed) } }
+  }
+ }
  fun importOfflineDefinitions(uri:Uri) {
   if(mutableState.value.isScanning) return
   viewModelScope.launch {
