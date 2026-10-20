@@ -30,7 +30,14 @@ object LocalePreferences {
         Choice("tr", R.string.locale_turkish),
         Choice("id", R.string.locale_indonesian),
         Choice("vi", R.string.locale_vietnamese),
-        Choice("it", R.string.locale_italian)
+        Choice("it", R.string.locale_italian),
+        Choice("kn", R.string.locale_kannada),
+        Choice("ta", R.string.locale_tamil),
+        Choice("te", R.string.locale_telugu),
+        Choice("bn", R.string.locale_bengali),
+        Choice("mr", R.string.locale_marathi),
+        Choice("ur", R.string.locale_urdu),
+        Choice("he", R.string.locale_hebrew)
     )
 
     fun overrideTag(context: Context): String =
