@@ -52,4 +52,19 @@
 <string name="import_unverified_body">SafeMobile validates the JSON structure and hash format, but this local file is not cryptographically authenticated by SafeMobile. Untrusted definitions may create false positives. Import only from a source you trust and are permitted to use. The file and hashes are not uploaded.</string>
 <string name="continue_import">Choose file</string>
 <string name="sponsor_link_failed">The support page could not be opened. Check your connection or try again later.</string>
+<string name="quarantine_vault_title">Quarantine vault</string>
+<string name="quarantine_vault_description">Review isolated private copies here. Restoring writes a copy to a destination you choose and keeps the quarantined original until you delete it.</string>
+<string name="quarantine_vault_empty">No files are currently quarantined.</string>
+<string name="quarantine_vault_limit">Showing the 30 most recent quarantined files.</string>
+<string name="quarantine_item_size">%1$d bytes</string>
+<string name="quarantine_restore">Restore copy…</string>
+<string name="quarantine_delete">Delete permanently</string>
+<string name="quarantine_restore_confirm_title">Restore this quarantined file?</string>
+<string name="quarantine_restore_confirm_body">Restoring writes the file to a location you select. The restored file may be dangerous. Continue only if you trust the file or need it for controlled analysis. The quarantined copy will remain here.</string>
+<string name="quarantine_delete_confirm_title">Permanently delete this quarantined copy?</string>
+<string name="quarantine_delete_confirm_body">This action permanently deletes the private quarantined copy from SafeMobile. It cannot be undone.</string>
+<string name="quarantine_restore_success">A copy of %1$s was written to the selected destination (%2$d bytes). The quarantined original remains stored.</string>
+<string name="quarantine_delete_success">Deleted quarantined file %1$s.</string>
+<string name="quarantine_restore_failed">The quarantined file could not be restored. Check the destination and available storage, then try again.</string>
+<string name="quarantine_delete_failed">The quarantined file could not be deleted.</string>
 </resources>
