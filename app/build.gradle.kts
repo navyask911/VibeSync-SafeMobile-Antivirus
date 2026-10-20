@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.util.Base64
 plugins {
  id("com.android.application")
  id("org.jetbrains.kotlin.android")
@@ -38,7 +39,7 @@ android {
     val keystoreFile = layout.buildDirectory.file("signing/safemobile-release.jks").get().asFile
     if (!keystoreFile.isFile) {
      keystoreFile.parentFile.mkdirs()
-     keystoreFile.writeBytes(java.util.Base64.getDecoder().decode(releaseStoreBase64))
+     keystoreFile.writeBytes(Base64.getDecoder().decode(releaseStoreBase64))
     }
     storeFile = keystoreFile
     storePassword = releaseStorePassword
