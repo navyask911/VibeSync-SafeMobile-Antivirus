@@ -42,4 +42,6 @@
 <string name="quarantine_delete_failed">Die Quarantänedatei konnte nicht gelöscht werden.</string>
 <string name="risk_sms_internet">Kombiniert SMS-Berechtigungen mit Netzwerkzugriff; dies ist ein Risikohinweis, kein Beweis für bösartiges Verhalten.</string>
 <string name="risk_sms_accessibility">Kombiniert SMS-Berechtigungen mit einem deklarierten Bedienungshilfedienst; dies ist ein Prüfsignal, kein Beweis für OTP-Abfangen oder Malware.</string>
+<string name="language_label">Sprache: %1$s</string>
+<string name="language_system_default">Systemstandard</string>
 </resources>
