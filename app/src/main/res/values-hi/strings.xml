@@ -42,4 +42,6 @@
 <string name="quarantine_delete_failed">क्वारंटीन फ़ाइल हटाई नहीं जा सकी।</string>
 <string name="risk_sms_internet">SMS अनुमतियों को नेटवर्क एक्सेस के साथ जोड़ता है; यह जोखिम का संकेत है, दुर्भावनापूर्ण व्यवहार का प्रमाण नहीं।</string>
 <string name="risk_sms_accessibility">SMS अनुमतियों को एक्सेसिबिलिटी सेवा घोषणा के साथ जोड़ता है; यह समीक्षा का संकेत है, OTP रोकने या मैलवेयर का प्रमाण नहीं।</string>
+<string name="language_label">भाषा: %1$s</string>
+<string name="language_system_default">सिस्टम डिफ़ॉल्ट</string>
 </resources>
