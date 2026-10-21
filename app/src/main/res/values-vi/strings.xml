@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">VibeSync SafeMobile Antivirus</string>
+    <string name="app_name">SafeMobile Antivirus</string>
     <string name="privacy_title">Thông báo quyền riêng tư và quyền quét</string>
     <string name="privacy_body">SafeMobile tính toán mã băm SHA-256 và MD5 trên thiết bị này rồi so sánh với các định nghĩa lưu cục bộ. Quét cục bộ không tải tệp hoặc mã băm lên mạng. Quảng cáo chỉ dùng dịch vụ mạng Google Mobile Ads khi lựa chọn quyền riêng tư và kết nối của bạn cho phép. Các chức năng quét chính vẫn hoạt động ngoại tuyến. Quyền xem ứng dụng đã cài đặt và quyền truy cập mọi tệp là các quyền nhạy cảm của Android và có thể cần Google Play xét duyệt.</string>
     <string name="privacy_accept">Tôi đã hiểu</string>
     <string name="exit_app">Thoát ứng dụng</string>
-    <string name="brand_title">VIBESYNC</string>
-    <string name="brand_subtitle">SAFEMOBILE ANTIVIRUS</string>
+    <string name="brand_title">SafeMobile Antivirus</string>
+    <string name="brand_subtitle">VibeSync</string>
     <string name="scan_status">Bảng điều khiển bảo vệ cục bộ</string>
     <string name="scan_running">Đang quét thiết bị…</string>
     <string name="threat_found">Phát hiện khớp với mối đe dọa</string>
@@ -103,4 +103,24 @@
     <string name="language_system_default">Mặc định hệ thống</string>
     <string name="limited_protection">Bảo vệ hạn chế — chỉ có định nghĩa kiểm tra EICAR</string>
     <string name="review_recommended">Nên xem xét</string>
+<string name="nav_home">Trang chủ</string>
+<string name="nav_scan">Quét</string>
+<string name="nav_quarantine">Cách ly</string>
+<string name="nav_history">Lịch sử</string>
+<string name="nav_settings">Cài đặt</string>
+<string name="settings_title">Cài đặt</string>
+<string name="appearance_title">Giao diện</string>
+<string name="theme_system">Hệ thống</string>
+<string name="theme_light">Sáng</string>
+<string name="theme_dark">Tối</string>
+<string name="language_settings">Ngôn ngữ</string>
+<string name="about_legal">Giới thiệu và pháp lý</string>
+<string name="ray_id">Ray ID SafeMobile</string>
+<string name="ray_id_copy">Sao chép ID</string>
+<string name="ray_id_copied">Đã sao chép Ray ID</string>
+<string name="history_title">Lịch sử quét</string>
+<string name="history_empty">Chưa có lịch sử quét cục bộ.</string>
+<string name="history_session">ID phiên</string>
+<string name="definitions_limited_compact">Định nghĩa: chỉ có chữ ký kiểm tra EICAR; phạm vi còn hạn chế.</string>
+<string name="settings_privacy">Quyền riêng tư và quyền truy cập</string>
 </resources>
