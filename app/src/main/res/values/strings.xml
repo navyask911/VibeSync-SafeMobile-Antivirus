@@ -116,4 +116,21 @@
 <string name="definitions_limited_compact">Definitions: EICAR test signature only; coverage is limited.</string>
 <string name="settings_privacy">Privacy and permissions</string>
 <string name="quarantine_legacy_warning">Legacy quarantine item: stored without encryption by an earlier build.</string>
+<string name="overlay_review_title">Overlay-risk review</string>
+<string name="overlay_review_description">Optional best-effort review of apps that declare overlay capability and accessibility services. Declarations and enabled accessibility services are only risk indicators; SafeMobile cannot prove that another app is currently displaying an overlay or inspect another app's live overlay permission grant.</string>
+<string name="overlay_review_last_attempt">Last attempt: %1$s</string>
+<string name="overlay_review_last_success">Last successful check: %1$s</string>
+<string name="overlay_review_summary">Apps declaring overlay capability: %1$d · Apps declaring accessibility services: %2$d · Enabled accessibility services on this device: %3$d</string>
+<string name="overlay_review_not_checked">No successful overlay-risk review yet.</string>
+<string name="overlay_review_failed">The last review attempt failed. Android may have deferred the job or denied the required package visibility.</string>
+<string name="overlay_review_permission_required">Android did not permit this review. Check installed-app visibility and retry.</string>
+<string name="overlay_review_reminder_interval">Reminder interval</string>
+<string name="overlay_review_reminder_12h">Every 12 hours</string>
+<string name="overlay_review_reminder_24h">Every 24 hours</string>
+<string name="overlay_review_reminder_48h">Every 48 hours</string>
+<string name="overlay_review_notifications_off">Notifications are disabled. The review can still run, but reminders will not be shown.</string>
+<string name="overlay_review_notification_channel">SafeMobile privacy review</string>
+<string name="overlay_review_notification_channel_description">Low-priority reminders for the optional overlay-risk review.</string>
+<string name="overlay_review_notification_title">Overlay-risk review completed</string>
+<string name="overlay_review_notification_body">%1$d apps declare overlay capability and %2$d declare accessibility services. These are review indicators, not proof of malware.</string>
 </resources>
