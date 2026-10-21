@@ -88,9 +88,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vibesync.antivirus.BuildConfig
 import com.vibesync.antivirus.SafeMobileApp
 import com.vibesync.antivirus.R
-import com.vibesync.antivirus.ads.BannerAd
-import com.vibesync.antivirus.ads.ConsentManager
-import com.vibesync.antivirus.ads.InterstitialAdController
 import com.vibesync.antivirus.core.connectivity.ConnectivityMonitor
 import com.vibesync.antivirus.core.observer.StorageSentinelService
 import com.vibesync.antivirus.core.worker.OverlayRiskReviewManager
@@ -128,7 +125,7 @@ import kotlinx.coroutines.launch
   content = content
  )
 }
-@Composable fun SafeMobileScreen(repository:ThreatRepository,adsEnabled:Boolean,privacyOptionsRequired:Boolean, sharedText:String? = null, onSharedTextConsumed:() -> Unit = {}) {
+@Composable fun SafeMobileScreen(repository:ThreatRepository, sharedText:String? = null, onSharedTextConsumed:() -> Unit = {}) {
  val context=LocalContext.current
  val safeMobileApp=context.applicationContext as SafeMobileApp
  val activity=context as? Activity
@@ -176,7 +173,8 @@ import kotlinx.coroutines.launch
  }
  val lifecycleOwner = LocalLifecycleOwner.current
  val connectivity=remember { ConnectivityMonitor(context) }
- val online by connectivity.online.collectAsStateWithLifecycle()
+ val connected by connectivity.online.collectAsStateWithLifecycle()
+ val online = BuildConfig.OPTIONAL_FEED_ENABLED && connected
  var privacyAccepted by remember { mutableStateOf(context.getSharedPreferences(SafeMobileApp.PRIVACY_PREFS,0).getBoolean(SafeMobileApp.PRIVACY_ACKNOWLEDGED,false)) }
  var showPrivacyDisclosure by remember { mutableStateOf(false) }
  var pendingSensitiveAction by remember { mutableStateOf<(() -> Unit)?>(null) }
@@ -213,7 +211,6 @@ import kotlinx.coroutines.launch
   showUninstallSnackbar(context.getString(message), null)
  }
  var showDefinitionImportWarning by remember { mutableStateOf(false) }
- var privacyOptionsVisible by remember { mutableStateOf(privacyOptionsRequired) }
  var pendingQuarantine by remember { mutableStateOf<ScanResult?>(null) }
  var pendingRestoreFile by remember { mutableStateOf<File?>(null) }
  var pendingDeleteFile by remember { mutableStateOf<File?>(null) }
@@ -226,7 +223,6 @@ import kotlinx.coroutines.launch
   if (uri != null && file != null) vm.restoreQuarantinedFile(file, uri)
   pendingRestoreFile = null
  }
- val interstitial=remember(activity,adsEnabled,online) { activity?.let { InterstitialAdController(it,adsEnabled && online) } }
  val notificationLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
   notificationsGranted = hasNotificationAccess(context)
   if (notificationsGranted && onboardingStep == 2) setOnboardingStep(3)
@@ -313,9 +309,6 @@ import kotlinx.coroutines.launch
   lifecycleOwner.lifecycle.addObserver(observer)
   onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
  }
- LaunchedEffect(adsEnabled,online,interstitial) { if(adsEnabled && online) interstitial?.load() }
- LaunchedEffect(state.completedScans,interstitial,online) { if(state.completedScans>0 && online) interstitial?.showAfterScan(state.completedScans) }
- LaunchedEffect(privacyOptionsRequired) { privacyOptionsVisible = privacyOptionsRequired }
  LaunchedEffect(onboardingComplete, privacyAccepted) {
   if (onboardingComplete && privacyAccepted &&
       !onboardingPrefs.getBoolean(OnboardingPrefs.FIRST_SCAN_REQUESTED, false)) {
@@ -448,16 +441,6 @@ import kotlinx.coroutines.launch
       }
      }
     }
-    if (selectedDestination == "home" && !online) {
-     Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant),modifier=Modifier.fillMaxWidth()) {
-      Column(Modifier.padding(14.dp),verticalArrangement=Arrangement.spacedBy(6.dp)) {
-       Text(stringResource(R.string.ad_offline_title),fontWeight=FontWeight.Bold,color=MaterialTheme.colorScheme.primary)
-       Text(stringResource(R.string.ad_offline_body),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurface)
-       Text(stringResource(R.string.offline_label),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
-       OutlinedButton(onClick={ openSponsor(context) }) { Text(stringResource(R.string.coffee_support)) }
-      }
-     }
-    } else if (selectedDestination == "home") TextButton(onClick={ openSponsor(context) }) { Text(stringResource(R.string.coffee_support)) }
     if (selectedDestination == "sources") {
      InstallSourceAuditPanel(
       incidents = securityIncidents,
@@ -714,8 +697,7 @@ import kotlinx.coroutines.launch
     if (selectedDestination == "settings") {
      EnterpriseProtectionCard(manager = ownerManager)
      SafeMobileSettingsPanel(
-      privacyOptionsVisible, monitoringRunning, enableSentinel, disableSentinel,
-      { activity?.let { host -> ConsentManager.showPrivacyOptions(host) { privacyOptionsVisible = ConsentManager.privacyOptionsRequired(host) } } },
+      monitoringRunning, enableSentinel, disableSentinel,
       strictMode = strictMode,
       onToggleProtection = toggleProtection, onStrictModeChanged = updateStrictMode
      )
@@ -739,10 +721,6 @@ import kotlinx.coroutines.launch
       label = { Text(stringResource(destination.second)) }
      )
     }
-   }
-   if(adsEnabled && online) Column(Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surface).padding(top=4.dp),horizontalAlignment=Alignment.CenterHorizontally) {
-    Text(stringResource(R.string.ads_label),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
-    BannerAd()
    }
   }
   }
@@ -824,10 +802,6 @@ import kotlinx.coroutines.launch
   }) { Text(stringResource(R.string.privacy_accept)) } },
   dismissButton={ TextButton(onClick={ showPrivacyDisclosure=false; pendingSensitiveAction=null }) { Text(stringResource(R.string.close)) } }
  )
-}
-private fun openSponsor(context: Context) {
- runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.COFFEE_SUPPORT_URL))) }
-  .onFailure { Toast.makeText(context, R.string.sponsor_link_failed, Toast.LENGTH_LONG).show() }
 }
 @Suppress("DEPRECATION")
 private fun isStorageSentinelRunning(context: Context): Boolean {

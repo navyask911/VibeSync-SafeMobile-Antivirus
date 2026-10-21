@@ -1,112 +1,43 @@
 package com.vibesync.antivirus
-import android.app.Activity
+
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.compose.setContent
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.lifecycleScope
-import com.google.android.gms.ads.MobileAds
-import com.google.android.play.core.appupdate.AppUpdateManager
-import com.google.android.play.core.appupdate.AppUpdateManagerFactory
-import com.google.android.play.core.appupdate.AppUpdateOptions
-import com.google.android.play.core.install.InstallState
-import com.google.android.play.core.install.InstallStateUpdatedListener
-import com.google.android.play.core.install.model.AppUpdateType
-import com.google.android.play.core.install.model.InstallStatus
-import com.google.android.play.core.install.model.UpdateAvailability
-import com.vibesync.antivirus.ads.ConsentManager
 import com.vibesync.antivirus.core.locale.LocalePreferences
 import com.vibesync.antivirus.presentation.SafeMobileScreen
 import com.vibesync.antivirus.presentation.SafeMobileTheme
 
+/** Offline-first entry point without ad, analytics, crash-reporting or Play update SDKs. */
 class MainActivity : ComponentActivity() {
- override fun attachBaseContext(newBase: Context) {
-  super.attachBaseContext(LocalePreferences.wrap(newBase))
- }
- private var sharedText by mutableStateOf<String?>(null)
- private var adsReady by mutableStateOf(false)
- private var privacyOptionsAvailable by mutableStateOf(false)
- private lateinit var updateManager: AppUpdateManager
- private var checkingUpdate = false
- private val updateLauncher = registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result: ActivityResult ->
-  if (result.resultCode == Activity.RESULT_OK) checkForUpdate()
-  else checkingUpdate = false
- }
- private val installListener = InstallStateUpdatedListener { state: InstallState ->
-  if (state.installStatus() == InstallStatus.DOWNLOADED) updateManager.completeUpdate()
- }
- override fun onCreate(savedInstanceState: Bundle?) {
-  super.onCreate(savedInstanceState)
-  enableEdgeToEdge()
-  updateManager = AppUpdateManagerFactory.create(this)
-  updateManager.registerListener(installListener)
-  sharedText = incomingSharedText(intent)
-  setContent {
-   SafeMobileTheme {
-    SafeMobileScreen(repository = (application as SafeMobileApp).repository, adsEnabled = adsReady, privacyOptionsRequired = privacyOptionsAvailable, sharedText = sharedText, onSharedTextConsumed = { sharedText = null })
-   }
-  }
-  if (BuildConfig.ADS_CONFIGURED) {
-   ConsentManager.requestConsent(this) { canRequestAds ->
-    privacyOptionsAvailable = ConsentManager.privacyOptionsRequired(this@MainActivity)
-    if (canRequestAds && BuildConfig.ADS_CONFIGURED) {
-     MobileAds.initialize(this) { adsReady = true }
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(LocalePreferences.wrap(newBase))
     }
-   }
-  } else {
-   adsReady = false
-   privacyOptionsAvailable = false
-  }
-  checkForUpdate()
- }
- override fun onNewIntent(intent: Intent) {
-  super.onNewIntent(intent)
-  setIntent(intent)
-  incomingSharedText(intent)?.let { sharedText = it }
- }
- private fun incomingSharedText(intent: Intent?): String? =
-  if (intent?.action == Intent.ACTION_SEND) intent.getCharSequenceExtra(Intent.EXTRA_TEXT)?.toString() else null
- override fun onResume() {
-  super.onResume()
-  if (!::updateManager.isInitialized) return
-  updateManager.appUpdateInfo.addOnSuccessListener { info ->
-   if (info.installStatus() == InstallStatus.DOWNLOADED) {
-    updateManager.completeUpdate()
-   } else if (info.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
-    runCatching {
-     updateManager.startUpdateFlowForResult(info, updateLauncher,
-      AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build())
+    private var sharedText by mutableStateOf<String?>(null)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        sharedText = incomingSharedText(intent)
+        setContent {
+            SafeMobileTheme {
+                SafeMobileScreen(
+                    repository = (application as SafeMobileApp).repository,
+                    sharedText = sharedText,
+                    onSharedTextConsumed = { sharedText = null }
+                )
+            }
+        }
     }
-   } else {
-    checkForUpdate()
-   }
-  }
- }
- private fun checkForUpdate() {
-  if (!::updateManager.isInitialized || checkingUpdate || isFinishing) return
-  checkingUpdate = true
-  updateManager.appUpdateInfo.addOnCompleteListener { task ->
-   checkingUpdate = false
-   if (!task.isSuccessful) return@addOnCompleteListener
-   val info = task.result
-   if (info.updateAvailability() != UpdateAvailability.UPDATE_AVAILABLE) return@addOnCompleteListener
-   val staleDays = info.clientVersionStalenessDays() ?: 0
-   val preferImmediate = info.updatePriority() >= 4 || staleDays >= 7
-   val type = if (preferImmediate && info.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) AppUpdateType.IMMEDIATE else AppUpdateType.FLEXIBLE
-   if (info.isUpdateTypeAllowed(type)) {
-    updateManager.startUpdateFlowForResult(info, updateLauncher, AppUpdateOptions.newBuilder(type).build())
-   }
-  }
- }
- override fun onDestroy() {
-  if (::updateManager.isInitialized) updateManager.unregisterListener(installListener)
-  super.onDestroy()
- }
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        incomingSharedText(intent)?.let { sharedText = it }
+    }
+    private fun incomingSharedText(intent: Intent?): String? =
+        if (intent?.action == Intent.ACTION_SEND) intent.getCharSequenceExtra(Intent.EXTRA_TEXT)?.toString() else null
 }

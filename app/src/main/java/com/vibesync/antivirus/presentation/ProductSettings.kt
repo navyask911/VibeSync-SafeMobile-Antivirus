@@ -261,11 +261,9 @@ internal fun OverlayRiskReviewPanel() {
 
 @Composable
 internal fun SafeMobileSettingsPanel(
-    privacyOptionsVisible: Boolean,
     sentinelEnabled: Boolean,
     onEnableSentinel: () -> Unit,
     onDisableSentinel: () -> Unit,
-    onPrivacyOptionsClick: () -> Unit,
     strictMode: Boolean = false,
     onToggleProtection: ((Boolean) -> Unit)? = null,
     onStrictModeChanged: ((Boolean) -> Unit)? = null
@@ -391,7 +389,6 @@ internal fun SafeMobileSettingsPanel(
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(stringResource(R.string.settings_privacy), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
                 Text(stringResource(R.string.privacy_body), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                if (privacyOptionsVisible) TextButton(onClick = onPrivacyOptionsClick) { Text(stringResource(R.string.privacy_options)) }
             }
         }
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
