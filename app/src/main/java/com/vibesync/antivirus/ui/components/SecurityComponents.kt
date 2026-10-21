@@ -174,7 +174,7 @@ fun SecurityStatusCard(status: String, description: String, lastScanLabel: Strin
 
 @Composable
 fun ThreatListItem(result: ScanResult, isProtectedSystemApp: Boolean, showUninstall: Boolean, showQuarantine: Boolean,
-    onUninstall: (String) -> Unit, onQuarantine: () -> Unit, modifier: Modifier = Modifier) {
+    showAppInfo: Boolean, onUninstall: (String) -> Unit, onAppInfo: (String) -> Unit, onQuarantine: () -> Unit, modifier: Modifier = Modifier) {
     val kind = when (result.verdict) {
         ScanVerdict.THREAT -> StatusKind.DANGER
         ScanVerdict.SUSPICIOUS -> StatusKind.WARNING
@@ -211,11 +211,17 @@ fun ThreatListItem(result: ScanResult, isProtectedSystemApp: Boolean, showUninst
             }
             StatusChip(verdictLabel, kind)
             result.reasons.take(3).forEach { Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }
-            if (isProtectedSystemApp) Text("Protected system application — informational review only.",
+            if (isProtectedSystemApp) Text(stringResource(R.string.uninstall_protected),
                 style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
-                if (showUninstall && !isProtectedSystemApp && result.packageName != null) {
-                    OutlinedButton(onClick = { onUninstall(result.packageName) }, modifier = Modifier.weight(1f)) { Text("Uninstall") }
+                if (showAppInfo && isProtectedSystemApp && result.packageName != null) {
+                    OutlinedButton(onClick = { onAppInfo(result.packageName) }, modifier = Modifier.weight(1f)) {
+                        Text(stringResource(R.string.app_info_label))
+                    }
+                } else if (showUninstall && !isProtectedSystemApp && result.packageName != null) {
+                    OutlinedButton(onClick = { onUninstall(result.packageName) }, modifier = Modifier.weight(1f)) {
+                        Text(stringResource(R.string.uninstall_label))
+                    }
                 }
                 if (showQuarantine) {
                     OutlinedButton(onClick = onQuarantine, modifier = Modifier.weight(1f)) { Text("Review / quarantine") }

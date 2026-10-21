@@ -4,6 +4,8 @@ import android.Manifest
 import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
+import android.content.ComponentName
+import android.content.ActivityNotFoundException
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -54,6 +56,9 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -62,6 +67,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -87,6 +93,8 @@ import com.vibesync.antivirus.ads.BannerAd
 import com.vibesync.antivirus.ads.ConsentManager
 import com.vibesync.antivirus.ads.InterstitialAdController
 import com.vibesync.antivirus.core.connectivity.ConnectivityMonitor
+import com.vibesync.antivirus.core.observer.AccessibilityGuardStatus
+import com.vibesync.antivirus.core.observer.StorageSentinelService
 import com.vibesync.antivirus.core.worker.OverlayRiskReviewManager
 import com.vibesync.antivirus.core.locale.LocalePreferences
 import com.vibesync.antivirus.core.engine.ScanResult
@@ -101,6 +109,7 @@ import com.vibesync.antivirus.ui.components.StatusKind
 import java.io.File
 import java.text.DateFormat
 import java.util.Date
+import kotlinx.coroutines.launch
 @Composable fun SafeMobileTheme(content: @Composable () -> Unit) {
  val context = LocalContext.current
  val prefs = remember(context) { context.getSharedPreferences(AppearancePreferences.PREFS_NAME, Context.MODE_PRIVATE) }
@@ -129,6 +138,33 @@ import java.util.Date
  val auditEntries by repository.observeRecentAudits().collectAsStateWithLifecycle(initialValue = emptyList())
  var selectedDestination by remember { mutableStateOf("home") }
  val onboardingPrefs = remember(context) { context.getSharedPreferences(OnboardingPrefs.NAME, Context.MODE_PRIVATE) }
+ val securityPrefs = remember(context) { context.getSharedPreferences(SafeMobileApp.SECURITY_PREFS, Context.MODE_PRIVATE) }
+ var accessibilityGuardEnabled by remember(context) { mutableStateOf(AccessibilityGuardStatus.isGuardActive(context)) }
+ var sentinelDesired by remember(context) { mutableStateOf(securityPrefs.getBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, false)) }
+ var strictMode by remember(context) { mutableStateOf(securityPrefs.getBoolean(SafeMobileApp.KEY_STRICT_MODE, false)) }
+ val snackbarHostState = remember { SnackbarHostState() }
+ val uiScope = rememberCoroutineScope()
+ var lastUninstallPackage by remember { mutableStateOf<String?>(null) }
+ val showUninstallSnackbar: (String, String?) -> Unit = { message, appInfoPackage ->
+  uiScope.launch {
+   val result = snackbarHostState.showSnackbar(
+    message = message,
+    actionLabel = if (appInfoPackage != null) context.getString(R.string.activity_not_found_action) else null
+   )
+   if (result == SnackbarResult.ActionPerformed && appInfoPackage != null) {
+    try { context.startActivity(UninstallHandler.buildAppInfoIntent(appInfoPackage)) }
+    catch (e: ActivityNotFoundException) { Toast.makeText(context, R.string.uninstall_no_settings, Toast.LENGTH_LONG).show() }
+    catch (e: SecurityException) { Toast.makeText(context, R.string.uninstall_no_settings, Toast.LENGTH_LONG).show() }
+   }
+  }
+ }
+ val deleteLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+  lastUninstallPackage?.let { vm.refreshInstalledPackage(it) }
+  lastUninstallPackage = null
+  pendingUninstallPackage = null
+  showUninstallSnackbar(context.getString(R.string.uninstall_cancelled), null)
+ }
+
  var onboardingComplete by remember(context) { mutableStateOf(onboardingPrefs.getBoolean(
   OnboardingPrefs.COMPLETED,
   context.getSharedPreferences(SafeMobileApp.PRIVACY_PREFS, Context.MODE_PRIVATE)
@@ -207,23 +243,52 @@ import java.util.Date
   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) notificationLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
   else { notificationsGranted = true; if (onboardingStep == 2) setOnboardingStep(3) }
  }
+ val openAccessibilitySettings: () -> Unit = {
+  securityPrefs.edit().putBoolean(SafeMobileApp.KEY_ACCESSIBILITY_GUARD_OPT_IN, true)
+   .putBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, true).apply()
+  sentinelDesired = true
+  sentinelOptIn = true
+  runCatching {
+   val target = ComponentName(context, com.vibesync.antivirus.service.SecurityAccessibilityService::class.java).flattenToString()
+   context.startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+    .putExtra(":settings:fragment_args_key", target).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+  }.onFailure { Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show() }
+ }
  val enableSentinel: () -> Unit = {
+  securityPrefs.edit().putBoolean(SafeMobileApp.KEY_ACCESSIBILITY_GUARD_OPT_IN, true)
+   .putBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, true).apply()
+  sentinelDesired = true
+  sentinelOptIn = true
   if (!hasSharedStorageAccess(context)) requestStorage()
-  else runCatching { context.startForegroundService(Intent(context, com.vibesync.antivirus.core.observer.StorageSentinelService::class.java)) }
-   .onFailure { sentinelOptIn = false; Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show() }
-   .onSuccess {
-    Handler(Looper.getMainLooper()).postDelayed({
-     monitoringRunning = isStorageSentinelRunning(context) && hasSharedStorageAccess(context)
-     sentinelOptIn = monitoringRunning
-     onboardingPrefs.edit().putBoolean(OnboardingPrefs.SENTINEL_OPT_IN, monitoringRunning).apply()
-     if (!monitoringRunning) Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show()
-    }, 900L)
-   }
+  else if (!AccessibilityGuardStatus.isEnabledInSystemSettings(context)) openAccessibilitySettings()
+  else runCatching { context.startForegroundService(Intent(context, StorageSentinelService::class.java)) }
+   .onFailure { Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show() }
+   .onSuccess { Handler(Looper.getMainLooper()).postDelayed({
+    accessibilityGuardEnabled = AccessibilityGuardStatus.isGuardActive(context)
+    monitoringRunning = isStorageSentinelRunning(context) && hasSharedStorageAccess(context)
+    if (!monitoringRunning) Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show()
+   }, 900L) }
  }
  val disableSentinel: () -> Unit = {
-  context.stopService(Intent(context, com.vibesync.antivirus.core.observer.StorageSentinelService::class.java))
-  monitoringRunning = false; sentinelOptIn = false
+  securityPrefs.edit().putBoolean(SafeMobileApp.KEY_ACCESSIBILITY_GUARD_OPT_IN, false)
+   .putBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, false).apply()
+  context.stopService(Intent(context, StorageSentinelService::class.java))
+  monitoringRunning = false; sentinelOptIn = false; sentinelDesired = false; accessibilityGuardEnabled = false
   onboardingPrefs.edit().putBoolean(OnboardingPrefs.SENTINEL_OPT_IN, false).apply()
+ }
+ val toggleProtection: (Boolean) -> Unit = { enabled ->
+  if (enabled) {
+   securityPrefs.edit().putBoolean(SafeMobileApp.KEY_ACCESSIBILITY_GUARD_OPT_IN, true)
+    .putBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, true).apply()
+   sentinelDesired = true
+   if (!hasSharedStorageAccess(context)) requestStorage()
+   else if (!AccessibilityGuardStatus.isEnabledInSystemSettings(context)) openAccessibilitySettings()
+   else enableSentinel()
+  } else disableSentinel()
+ }
+ val updateStrictMode: (Boolean) -> Unit = { enabled ->
+  strictMode = enabled
+  securityPrefs.edit().putBoolean(SafeMobileApp.KEY_STRICT_MODE, enabled).apply()
  }
  val finishOnboarding: () -> Unit = {
   onboardingPrefs.edit().putBoolean(OnboardingPrefs.COMPLETED, true).putInt(OnboardingPrefs.STEP, 4).apply()
@@ -242,16 +307,27 @@ import java.util.Date
   val observer = LifecycleEventObserver { _, event ->
    if (event == Lifecycle.Event.ON_RESUME) {
     storageAccessGranted = hasSharedStorageAccess(context)
-    monitoringRunning = isStorageSentinelRunning(context) && storageAccessGranted
+    accessibilityGuardEnabled = AccessibilityGuardStatus.isGuardActive(context)
+    sentinelDesired = securityPrefs.getBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, false)
+    sentinelOptIn = sentinelDesired
+    strictMode = securityPrefs.getBoolean(SafeMobileApp.KEY_STRICT_MODE, false)
+    monitoringRunning = isStorageSentinelRunning(context) && storageAccessGranted && accessibilityGuardEnabled
+    if (!accessibilityGuardEnabled && isStorageSentinelRunning(context)) {
+     context.stopService(Intent(context, StorageSentinelService::class.java))
+     monitoringRunning = false
+    } else if (sentinelDesired && accessibilityGuardEnabled && storageAccessGranted && !monitoringRunning) {
+     runCatching { context.startForegroundService(Intent(context, StorageSentinelService::class.java)) }
+      .onFailure { Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show() }
+     Handler(Looper.getMainLooper()).postDelayed({
+      monitoringRunning = isStorageSentinelRunning(context) && hasSharedStorageAccess(context) && AccessibilityGuardStatus.isGuardActive(context)
+     }, 700L)
+    }
     notificationsGranted = hasNotificationAccess(context)
     if (!onboardingComplete && onboardingStep == 0 && storageAccessGranted) setOnboardingStep(1)
     if (!onboardingComplete && onboardingStep == 2 && notificationsGranted) setOnboardingStep(3)
     vm.refreshQuarantine()
     OverlayRiskReviewManager.requestForegroundReview(context)
-    pendingUninstallPackage?.let { packageName ->
-     vm.refreshInstalledPackage(packageName)
-     pendingUninstallPackage = null
-    }
+    pendingUninstallPackage?.let { packageName -> vm.refreshInstalledPackage(packageName); pendingUninstallPackage = null }
    }
   }
   lifecycleOwner.lifecycle.addObserver(observer)
@@ -353,6 +429,21 @@ import java.util.Date
        state.results.none { it.verdict in listOf(ScanVerdict.THREAT, ScanVerdict.SUSPICIOUS, ScanVerdict.NOT_SCANNED) },
       onScan={ requestPrivacyAcknowledgement { vm.scanFull() } }
      )
+     Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant), shape = RoundedCornerShape(16.dp), modifier = Modifier.fillMaxWidth()) {
+      Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+       Text(stringResource(R.string.download_interceptor_label), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+       Text(stringResource(R.string.download_interceptor_description), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+       Text(stringResource(if (monitoringRunning && accessibilityGuardEnabled) R.string.download_interceptor_status_enabled else R.string.download_interceptor_status_setup),
+        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+       Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        OutlinedButton(onClick = { selectedDestination = "settings" }, modifier = Modifier.weight(1f)) { Text(stringResource(R.string.nav_settings)) }
+        Button(onClick = { if (!accessibilityGuardEnabled) openAccessibilitySettings() else if (!monitoringRunning) toggleProtection(true) else toggleProtection(false) },
+         modifier = Modifier.weight(1f)) {
+         Text(stringResource(if (!accessibilityGuardEnabled) R.string.open_accessibility_settings else if (monitoringRunning) R.string.monitor_stop else R.string.monitor_button))
+        }
+       }
+      }
+     }
      Row(Modifier.fillMaxWidth(), horizontalArrangement=Arrangement.spacedBy(8.dp)) {
       OutlinedButton(onClick={ selectedDestination="apps" }, modifier=Modifier.weight(1f)) { Text(stringResource(R.string.nav_apps)) }
       OutlinedButton(onClick={ selectedDestination="sentinel" }, modifier=Modifier.weight(1f)) { Text(stringResource(R.string.nav_sentinel)) }
@@ -498,7 +589,9 @@ import java.util.Date
      Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant),shape=RoundedCornerShape(16.dp),modifier=Modifier.fillMaxWidth()) {
       Column(Modifier.padding(16.dp),verticalArrangement=Arrangement.spacedBy(8.dp)) {
        Text(stringResource(R.string.sentinel_scope_title),style=MaterialTheme.typography.titleMedium,fontWeight=FontWeight.SemiBold)
-       Text(stringResource(R.string.sentinel_scope_body),style=MaterialTheme.typography.bodyMedium,color=MaterialTheme.colorScheme.onSurfaceVariant)
+       Text(stringResource(R.string.download_interceptor_description),style=MaterialTheme.typography.bodyMedium,color=MaterialTheme.colorScheme.onSurfaceVariant)
+       Text(stringResource(if(accessibilityGuardEnabled) R.string.accessibility_guard_system_on else R.string.accessibility_guard_system_off),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+       if (!accessibilityGuardEnabled) OutlinedButton(onClick=openAccessibilitySettings,modifier=Modifier.fillMaxWidth()){Text(stringResource(R.string.open_accessibility_settings))}
        StatusChip(stringResource(if(monitoringRunning) R.string.analytics_sentinel_running else R.string.analytics_sentinel_stopped),
         kind=if(monitoringRunning) StatusKind.ACTIVE else StatusKind.WARNING)
       }
@@ -522,15 +615,28 @@ import java.util.Date
          result.verdict in listOf(ScanVerdict.THREAT, ScanVerdict.SUSPICIOUS),
         showQuarantine = result.sourceUri != null && result.verdict in listOf(ScanVerdict.THREAT, ScanVerdict.SUSPICIOUS),
         onUninstall = { packageName ->
-         val host = activity
-         if (host == null) Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show()
-         else runCatching {
-          pendingUninstallPackage = packageName
-          host.startActivity(Intent(Intent.ACTION_DELETE, Uri.parse("package:$packageName")))
-         }.onFailure {
-          pendingUninstallPackage = null
-          Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show()
+         lastUninstallPackage = packageName
+         pendingUninstallPackage = packageName
+         when (vm.requestUninstall(context, packageName,
+          launchDelete = { intent -> deleteLauncher.launch(intent) },
+          openAppInfo = { intent -> context.startActivity(intent) })) {
+          UninstallResult.Success, UninstallResult.RequiresUserAction -> Unit
+          is UninstallResult.BlockedSystemApp -> {
+           showUninstallSnackbar(context.getString(R.string.uninstall_protected), null)
+           try { context.startActivity(UninstallHandler.buildAppInfoIntent(packageName)) }
+           catch (e: ActivityNotFoundException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
+           catch (e: SecurityException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
+          }
+          UninstallResult.NotFound -> { pendingUninstallPackage = null; lastUninstallPackage = null; showUninstallSnackbar(context.getString(R.string.uninstall_not_found), null) }
+          UninstallResult.OpenedAppInfo -> showUninstallSnackbar(context.getString(R.string.uninstall_opened_app_info), null)
+          UninstallResult.HandlerUnavailable -> { pendingUninstallPackage = null; showUninstallSnackbar(context.getString(R.string.uninstall_launch_failed), packageName) }
          }
+        },
+        showAppInfo = true,
+        onAppInfo = { packageName ->
+         try { context.startActivity(UninstallHandler.buildAppInfoIntent(packageName)) }
+         catch (e: ActivityNotFoundException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
+         catch (e: SecurityException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
         },
         onQuarantine = { pendingQuarantine = result }
        )
@@ -575,12 +681,17 @@ import java.util.Date
     }
     if (selectedDestination == "history") ScanHistoryPanel(auditEntries)
     if (selectedDestination == "settings") {
-     SafeMobileSettingsPanel(privacyOptionsVisible, monitoringRunning, enableSentinel, disableSentinel) {
-      activity?.let { host -> ConsentManager.showPrivacyOptions(host) { privacyOptionsVisible = ConsentManager.privacyOptionsRequired(host) } }
-     }
+     SafeMobileSettingsPanel(
+      privacyOptionsVisible, monitoringRunning, enableSentinel, disableSentinel,
+      { activity?.let { host -> ConsentManager.showPrivacyOptions(host) { privacyOptionsVisible = ConsentManager.privacyOptionsRequired(host) } } },
+      accessibilityGuardEnabled = accessibilityGuardEnabled, strictMode = strictMode,
+      onToggleProtection = toggleProtection, onOpenAccessibilitySettings = openAccessibilitySettings,
+      onStrictModeChanged = updateStrictMode
+     )
     }
     Spacer(Modifier.height(8.dp))
    }
+   SnackbarHost(hostState = snackbarHostState)
    NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
     val destinations = listOf(
      Triple("home", R.string.nav_home, Icons.Default.Home),
@@ -712,14 +823,20 @@ private fun canOfferUninstall(context: Context, packageName: String): Boolean {
  val flags=appInfoForUninstall(context,packageName)?.flags ?: return false
  return flags and (android.content.pm.ApplicationInfo.FLAG_SYSTEM or android.content.pm.ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) == 0
 }
-@Composable private fun ScanResultCard(result:ScanResult,showUninstall:Boolean,showQuarantine:Boolean,onUninstall:(String)->Unit,onQuarantine:()->Unit) {
+@Composable private fun ScanResultCard(
+ result:ScanResult, showUninstall:Boolean, showQuarantine:Boolean, showAppInfo:Boolean,
+ onUninstall:(String)->Unit, onAppInfo:(String)->Unit, onQuarantine:()->Unit
+) {
  val context=LocalContext.current
- val protectedSystem=result.packageName?.let { isProtectedSystemPackage(context,it) } == true
+ val packageName=result.packageName
+ val guard=packageName?.let { SystemPackageGuard.evaluate(context,it) }
+ val protectedSystem=guard is PackageGuardResult.BlockedSystemApp
  Column(verticalArrangement=Arrangement.spacedBy(6.dp),modifier=Modifier.fillMaxWidth()) {
   com.vibesync.antivirus.ui.components.ThreatListItem(
    result=result,isProtectedSystemApp=protectedSystem,
-   showUninstall=showUninstall && result.packageName?.let { canOfferUninstall(context,it) } == true,
-   showQuarantine=showQuarantine,onUninstall=onUninstall,onQuarantine=onQuarantine
+   showUninstall=showUninstall && guard is PackageGuardResult.Allowed,
+   showQuarantine=showQuarantine,showAppInfo=showAppInfo && protectedSystem,
+   onUninstall=onUninstall,onAppInfo=onAppInfo,onQuarantine=onQuarantine
   )
   result.scanSessionId?.takeIf { it.isNotBlank() }?.let {
    Text(stringResource(R.string.history_session)+": "+it,modifier=Modifier.padding(horizontal=8.dp),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant)

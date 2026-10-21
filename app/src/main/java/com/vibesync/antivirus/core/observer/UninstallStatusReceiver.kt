@@ -1,5 +1,5 @@
 package com.vibesync.antivirus.core.observer
-import android.app.BroadcastReceiver
+import android.content.BroadcastReceiver
 import android.app.PendingIntent
 import android.content.ActivityNotFoundException
 import android.content.Context
