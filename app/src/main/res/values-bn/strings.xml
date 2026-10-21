@@ -60,11 +60,11 @@
     <string name="unknown_file">নির্বাচিত ফাইল</string>
     <string name="local_files_only">গোপনীয়তার জন্য স্ক্যানার শুধু চেনা স্থানীয় স্টোরেজ প্রদানকারীর ফাইল খোলে। ক্লাউড বা তৃতীয় পক্ষের নথি প্রদানকারী খোলা হয় না।</string>
     <string name="quarantine_confirm_title">চিহ্নিত ফাইলটি কোয়ারেন্টাইনে রাখবেন?</string>
-    <string name="quarantine_confirm_body">অ্যাপের ব্যক্তিগত স্টোরেজে একটি কপি রাখা হবে। হ্যাশ যাচাইয়ের পর SafeMobile নির্বাচিত মূল ফাইল মুছতে চেষ্টা করবে। মুছে ফেলা Android-এর অনুমতি ও প্রদানকারীর ওপর নির্ভর করে; মূল ফাইল থেকে যেতে পারে।</string>
+    <string name="quarantine_confirm_body">SafeMobile একটি এনক্রিপ্ট করা ব্যক্তিগত কপি তৈরি করে যাচাই করবে। মূল ফাইলটি রাখা হবে, মুছে ফেলা হবে না।</string>
     <string name="quarantine_confirm_action">ফাইল কোয়ারেন্টাইনে রাখুন</string>
     <string name="quarantine_file">ব্যক্তিগত কোয়ারেন্টাইন কপি</string>
     <string name="quarantine_success_removed">ব্যক্তিগত কোয়ারেন্টাইন কপি সংরক্ষিত (%1$s); Android জানিয়েছে মূল ফাইল মুছে গেছে।</string>
-    <string name="quarantine_success_copy_only">ব্যক্তিগত কোয়ারেন্টাইন কপি সংরক্ষিত (%1$s), কিন্তু Android মূল ফাইল মুছতে পারেনি। প্রয়োজন হলে হাতে মুছুন।</string>
+    <string name="quarantine_success_copy_only">এনক্রিপ্ট করা কোয়ারেন্টাইন কপি সংরক্ষিত হয়েছে (%1$s)। মূল ফাইলটি রাখা হয়েছে, মুছে ফেলা হয়নি।</string>
     <string name="quarantine_failed">কোয়ারেন্টাইন ব্যর্থ হয়েছে। মূল ফাইল ইচ্ছাকৃতভাবে মুছে ফেলা হয়নি।</string>
     <string name="uninstall_app">অ্যাপ আনইনস্টল করুন…</string>
     <string name="import_definitions">অফলাইন হুমকি সংজ্ঞা আমদানি করুন (JSON)</string>
@@ -123,4 +123,5 @@
 <string name="history_session">সেশন আইডি</string>
 <string name="definitions_limited_compact">ডেফিনিশন: শুধু EICAR পরীক্ষার স্বাক্ষর; সুরক্ষার পরিসর সীমিত।</string>
 <string name="settings_privacy">গোপনীয়তা ও অনুমতি</string>
+<string name="quarantine_legacy_warning">পুরোনো কোয়ারেন্টাইন আইটেম: আগের সংস্করণে এনক্রিপশন ছাড়া সংরক্ষিত।</string>
 </resources>
