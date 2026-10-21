@@ -19,4 +19,7 @@ interface SecurityIncidentDao {
 
     @Query("SELECT * FROM security_incidents ORDER BY occurred_at DESC LIMIT :limit")
     suspend fun listRecent(limit: Int = 100): List<SecurityIncidentEntity>
+
+    @Query("UPDATE security_incidents SET sha256_hash = :sha256Hash, reason = :reason, action_taken = :actionTaken, status = :status WHERE event_id = :eventId")
+    suspend fun updateAssessment(eventId: String, sha256Hash: String?, reason: String, actionTaken: String, status: String): Int
 }
