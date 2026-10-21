@@ -72,6 +72,18 @@ for apk in offline_apks:
         fail("aapt could not read " + apk.name + ": " + result.stderr.strip())
     if "android.permission.INTERNET" in result.stdout:
         fail(apk.name + " declares INTERNET; offline release must not request it.")
+    manifest_dump = subprocess.run([aapt, "dump", "xmltree", str(apk), "AndroidManifest.xml"],
+                                   text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
+    if manifest_dump.returncode:
+        fail("aapt could not inspect the manifest for " + apk.name)
+    if "android:allowBackup" not in manifest_dump.stdout or "android:allowBackup(0x01010280)=false" not in manifest_dump.stdout:
+        fail(apk.name + " must have android:allowBackup=false.")
+    if "android:fullBackupContent" not in manifest_dump.stdout or "android:fullBackupContent(0x010102" not in manifest_dump.stdout:
+        fail(apk.name + " must explicitly disable fullBackupContent.")
+    if "android:hasFragileUserData" not in manifest_dump.stdout:
+        fail(apk.name + " must set hasFragileUserData=false.")
+    if "android.permission.MANAGE_EXTERNAL_STORAGE" in manifest_dump.stdout or "android.permission.READ_EXTERNAL_STORAGE" in manifest_dump.stdout:
+        fail(apk.name + " declares broad/legacy storage access; use the SAF.")
     check_no_tracking_classes(apk)
 
 for apk in feed_apks:

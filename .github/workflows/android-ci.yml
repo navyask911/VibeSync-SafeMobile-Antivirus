@@ -15,8 +15,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 40
     steps:
-      - name: Checkout
+      - name: Checkout full history for version-code guard
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -24,10 +26,17 @@ jobs:
           java-version: "17"
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
+      - name: Version-code monotonicity guard
+        run: python3 scripts/check_version_code.py
       - name: Dataset acquisition tooling unit tests (offline fixtures only)
         run: python3 -m unittest discover -s scripts -p 'test_*.py' -v
       - name: Proprietary safety policy guard
         run: python3 scripts/check_proprietary_safety.py
+      - name: Generate CycloneDX dependency SBOM
+        run: |
+          ./gradlew --no-daemon cyclonedxBom
+          test -s build/reports/cyclonedx/bom.json
+          python3 scripts/render_third_party_notices.py --input build/reports/cyclonedx/bom.json --output build/generated-third-party-notices.md
       - name: Capture dependency graph for licence review
         run: |
           mkdir -p build
@@ -73,5 +82,7 @@ jobs:
             app/build/outputs/bundle/feedRelease/*.aab
             build/offline-release-dependency-tree.txt
             build/feed-release-dependency-tree.txt
+            build/reports/cyclonedx/bom.json
+            build/generated-third-party-notices.md
           if-no-files-found: warn
           retention-days: 14
