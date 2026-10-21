@@ -31,33 +31,21 @@ jobs:
       - name: Capture dependency graph for licence review
         run: |
           mkdir -p build
-          ./gradlew --no-daemon :app:dependencies --configuration releaseRuntimeClasspath > build/release-runtime-dependency-tree.txt
+          ./gradlew --no-daemon :app:dependencies --configuration offlineReleaseRuntimeClasspath > build/offline-release-dependency-tree.txt
+          ./gradlew --no-daemon :app:dependencies --configuration feedReleaseRuntimeClasspath > build/feed-release-dependency-tree.txt
       - name: Unit tests
-        run: ./gradlew --no-daemon testDebugUnitTest
+        run: ./gradlew --no-daemon testOfflineDebugUnitTest
       - name: Android lint
-        run: ./gradlew --no-daemon lintDebug
-      - name: Build APKs and release AAB
+        run: ./gradlew --no-daemon lintOfflineDebug lintFeedDebug
+      - name: Build offline and optional feed variants
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-          ADMOB_APP_ID: ${{ vars.ADMOB_APP_ID }}
-          ADMOB_BANNER_UNIT_ID: ${{ vars.ADMOB_BANNER_UNIT_ID }}
-          ADMOB_INTERSTITIAL_UNIT_ID: ${{ vars.ADMOB_INTERSTITIAL_UNIT_ID }}
-        run: ./gradlew --no-daemon assembleDebug assembleRelease bundleRelease
-      - name: Report release configuration
-        if: always()
-        env:
-          ADMOB_APP_ID: ${{ vars.ADMOB_APP_ID }}
-          ADMOB_BANNER_UNIT_ID: ${{ vars.ADMOB_BANNER_UNIT_ID }}
-          ADMOB_INTERSTITIAL_UNIT_ID: ${{ vars.ADMOB_INTERSTITIAL_UNIT_ID }}
-        run: |
-          if [ -n "$ADMOB_APP_ID" ] && [ -n "$ADMOB_BANNER_UNIT_ID" ] && [ -n "$ADMOB_INTERSTITIAL_UNIT_ID" ]; then
-            echo "Release AdMob configuration: present (IDs not printed)."
-          else
-            echo "Release AdMob configuration: incomplete; release ads remain disabled until all three repository variables are set."
-          fi
+        run: ./gradlew --no-daemon assembleOfflineDebug assembleOfflineRelease assembleFeedRelease bundleOfflineRelease bundleFeedRelease
+      - name: Verify release artifact privacy boundary
+        run: python3 scripts/check_release_artifact_privacy.py
       - name: Report release signing configuration
         if: always()
         env:
@@ -77,9 +65,12 @@ jobs:
         with:
           name: safe-mobile-android-artifacts
           path: |
-            app/build/outputs/apk/debug/*.apk
-            app/build/outputs/apk/release/*.apk
-            app/build/outputs/bundle/release/*.aab
-            build/release-runtime-dependency-tree.txt
+            app/build/outputs/apk/offline/debug/*.apk
+            app/build/outputs/apk/offline/release/*.apk
+            app/build/outputs/apk/feed/release/*.apk
+            app/build/outputs/bundle/offlineRelease/*.aab
+            app/build/outputs/bundle/feedRelease/*.aab
+            build/offline-release-dependency-tree.txt
+            build/feed-release-dependency-tree.txt
           if-no-files-found: warn
           retention-days: 14

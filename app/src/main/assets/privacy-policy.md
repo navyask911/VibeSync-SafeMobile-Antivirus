@@ -15,13 +15,16 @@ The storage cleaner examines APK metadata in a folder the user explicitly select
 ## Quarantine
 New quarantine items are stored in app-private no-backup storage using Tink Streaming AEAD with an Android Keystore-wrapped keyset. The app verifies source hashes and decrypted content before reporting success. The original file is intentionally retained; restoring writes a verified copy to a location the user chooses. Legacy pre-hardening quarantine entries may be unencrypted and are labelled accordingly.
 
-## Network, ads and updates
-The scanner does not submit file contents, hashes, filesystem paths, or scan history to a server. No telemetry, analytics, crash-reporting client, URLhaus client, VirusTotal client, or remote threat feed is configured by this branch. The in-app link checker is heuristic-only and does not contact a URL reputation server.
+## Network access and privacy boundary
 
-Google Mobile Ads and Google's User Messaging Platform are included because advertising was requested; when valid release ad IDs are configured and consent/connectivity conditions permit, those SDKs may contact Google. Google Play In-App Updates can contact Google Play when the update check runs. The core hash scanner does not require a network connection. The optional sponsorship link opens an external web page only when the user chooses it.
+The scanner does not submit file contents, hashes, filesystem paths, or scan history to a server. This project removes ad/consent SDKs, analytics, telemetry and crash-reporting clients from all application variants. The `offline` flavor (the recommended default for distribution) omits the Android `INTERNET` permission. It can scan and store results locally without a network connection.
+
+The separate `feed` flavor adds `INTERNET` for the optional HTTPS threat-feed client. Until the explicit in-app opt-in gate is completed, do not distribute the feed flavor as a production build; do not configure a feed endpoint unless you accept that the feed request will contact that endpoint. Scan results and files are not uploaded by feed synchronization. HTTPS does not authenticate a threat feed's publisher; signed-manifest verification remains a production gate.
+
+There is no automatic link-reputation lookup, cloud scanning, Google Play update client, mobile-ad SDK, or in-app sponsorship request in these application variants.
 
 ## Permissions and controls
-The manifest declares package visibility, network state and Internet, legacy external-storage access, all-files access for the optional Downloads monitor, foreground-service and notification permissions. Android settings and runtime permission prompts remain controlled by the operating system. SafeMobile cannot universally block sideloads, force-stop other apps, disable global Developer Options/ADB, intercept all links in other browsers, or guarantee malware detection.
+The base manifest declares package visibility, network-state visibility, legacy external-storage access, all-files access for the optional Downloads monitor, foreground-service and notification permissions. Only the separate feed flavor declares INTERNET. Android settings and runtime permission prompts remain controlled by the operating system. SafeMobile cannot universally block sideloads, force-stop other apps, disable global Developer Options/ADB, intercept all links in other browsers, or guarantee malware detection.
 
 ## Third-party licences
 THIRD_PARTY_NOTICES.md is an audit checkpoint, not a complete set of all dependency licence texts. The repository baseline reviewed for this branch has no root LICENSE file. The maintainer must complete the direct and transitive dependency licence audit before commercial distribution.
