@@ -6,14 +6,15 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 
 @Database(
- entities = [ThreatSignature::class, ScanAudit::class, WhiteListEntry::class, MalwareHashEntity::class, ThreatFeedSyncStateEntity::class, ThreatFeedStagingEntity::class],
- version = 5, exportSchema = false
+ entities = [ThreatSignature::class, ScanAudit::class, WhiteListEntry::class, MalwareHashEntity::class, ThreatFeedSyncStateEntity::class, ThreatFeedStagingEntity::class, SecurityIncidentEntity::class],
+ version = 6, exportSchema = false
 )
 abstract class ThreatDatabase : RoomDatabase() {
  abstract fun threatDao(): ThreatDao
  abstract fun malwareHashDao(): MalwareHashDao
  abstract fun threatFeedSyncStateDao(): ThreatFeedSyncStateDao
  abstract fun threatFeedStagingDao(): ThreatFeedStagingDao
+ abstract fun securityIncidentDao(): SecurityIncidentDao
 
  companion object {
   val MIGRATION_1_2: Migration = object : Migration(1, 2) {
@@ -42,6 +43,13 @@ abstract class ThreatDatabase : RoomDatabase() {
   val MIGRATION_4_5: Migration = object : Migration(4, 5) {
    override fun migrate(database: SupportSQLiteDatabase) {
     database.execSQL("CREATE TABLE IF NOT EXISTS threat_feed_staging (import_id TEXT NOT NULL, indicator_key TEXT NOT NULL, sha256_hash TEXT, md5_hash TEXT, ioc_value TEXT, ioc_type TEXT, threat_name TEXT NOT NULL, source TEXT NOT NULL, first_seen_at INTEGER, last_seen_at INTEGER, updated_at INTEGER NOT NULL, staged_at INTEGER NOT NULL, PRIMARY KEY(import_id, indicator_key))")
+   }
+  }
+  val MIGRATION_5_6: Migration = object : Migration(5, 6) {
+   override fun migrate(database: SupportSQLiteDatabase) {
+    database.execSQL("CREATE TABLE IF NOT EXISTS security_incidents (event_id TEXT NOT NULL, occurred_at INTEGER NOT NULL, event_kind TEXT NOT NULL, installer_package TEXT, source_package TEXT, filename TEXT, sha256_hash TEXT, original_path TEXT, reason TEXT NOT NULL, action_taken TEXT NOT NULL, status TEXT NOT NULL, PRIMARY KEY(event_id))")
+    database.execSQL("CREATE INDEX IF NOT EXISTS index_security_incidents_occurred_at ON security_incidents(occurred_at)")
+    database.execSQL("CREATE INDEX IF NOT EXISTS index_security_incidents_sha256_hash ON security_incidents(sha256_hash)")
    }
   }
  }

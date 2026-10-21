@@ -29,7 +29,7 @@ class SafeMobileApp : Application() {
  override fun onCreate() {
   super.onCreate()
   database=Room.databaseBuilder(this,ThreatDatabase::class.java,"safe_mobile_threats.db")
-   .addMigrations(ThreatDatabase.MIGRATION_1_2, ThreatDatabase.MIGRATION_2_3, ThreatDatabase.MIGRATION_3_4, ThreatDatabase.MIGRATION_4_5)
+   .addMigrations(ThreatDatabase.MIGRATION_1_2, ThreatDatabase.MIGRATION_2_3, ThreatDatabase.MIGRATION_3_4, ThreatDatabase.MIGRATION_4_5, ThreatDatabase.MIGRATION_5_6)
    .build()
   val hashStore=EncryptedHashStore(this)
   val loader=LocalDefinitionLoader(this,database.threatDao(),hashStore)
@@ -51,6 +51,10 @@ class SafeMobileApp : Application() {
  }
  override fun onTerminate() { appScope.cancel(); super.onTerminate() }
  companion object {
+  const val SECURITY_PREFS = "safe_mobile_security_settings"
+  const val KEY_ACCESSIBILITY_GUARD_OPT_IN = "accessibility_guard_opt_in"
+  const val KEY_DOWNLOAD_SENTINEL_ENABLED = "download_sentinel_enabled"
+  const val KEY_STRICT_MODE = "download_sentinel_strict_mode"
   const val PRIVACY_PREFS = "safe_mobile_privacy"
   const val PRIVACY_ACKNOWLEDGED = "acknowledged"
  }
