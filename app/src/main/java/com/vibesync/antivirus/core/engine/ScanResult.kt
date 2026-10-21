@@ -10,5 +10,7 @@ data class ScanResult(
  val durationMs: Long,
  val packageName: String? = null,
  val sourceUri: String? = null,
- val sourceLocalPath: String? = null
+ val sourceLocalPath: String? = null,
+ /** UUIDv4 shared by all assessments that belong to a single scan operation. */
+ val scanSessionId: String? = null
 )
