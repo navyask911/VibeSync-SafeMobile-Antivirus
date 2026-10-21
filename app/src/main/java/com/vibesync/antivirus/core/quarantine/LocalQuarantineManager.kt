@@ -115,7 +115,7 @@ class LocalQuarantineManager(context: Context, private val hashCalculator: HashC
   val recordId = UUID.randomUUID().toString()
   val associatedData = recordId.toByteArray(Charsets.UTF_8)
   val temporaryCiphertext = File(folder, ".$recordId.$ENCRYPTED_EXTENSION.tmp")
-  val ciphertext = File(folder, "\${System.currentTimeMillis()}-$recordId.$ENCRYPTED_EXTENSION")
+  val ciphertext = File(folder, "${System.currentTimeMillis()}-$recordId.$ENCRYPTED_EXTENSION")
   val temporaryMetadata = File(folder, ".$recordId.meta.tmp")
   val metaFile = metadataFile(ciphertext)
   try {
