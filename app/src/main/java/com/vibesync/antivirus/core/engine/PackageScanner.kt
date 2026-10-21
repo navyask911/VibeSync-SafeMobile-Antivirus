@@ -61,7 +61,7 @@ class PackageScanner(
   if (!file.isFile || !file.canRead()) return result(file.name, file.name, null, null, ScanVerdict.NOT_SCANNED, listOf(context.getString(R.string.file_not_readable)), start).copy(sourceLocalPath = file.absolutePath)
   return try {
    val hash = calculator.calculate(file)
-   val output = evaluate(file.name, file.name, hash.sha256, hash.md5, emptyList(), 0, false)
+   val output = evaluate(file.name, file.name, hash.sha256, hash.md5, emptyList(), 0)
    audit(output, start, scanSessionId)
    output.copy(durationMs = elapsed(start), sourceLocalPath = file.absolutePath)
   } catch (cancelled: CancellationException) {
@@ -75,7 +75,7 @@ class PackageScanner(
   val scanSessionId = UUID.randomUUID().toString()
   return try {
    val hash = stream.use { calculator.calculate(it) }
-   val output = evaluate(label, label, hash.sha256, hash.md5, emptyList(), 0, false)
+   val output = evaluate(label, label, hash.sha256, hash.md5, emptyList(), 0)
    audit(output, start, scanSessionId)
    output.copy(durationMs = elapsed(start))
   } catch (cancelled: CancellationException) {
@@ -97,15 +97,15 @@ class PackageScanner(
   val apk = appInfo.sourceDir?.let(::File)
   if (apk == null || !apk.isFile || !apk.canRead()) {
    reasons += context.getString(R.string.apk_unreadable)
-   return result(info.packageName, label, null, null, if (risk.isSuspicious || debugSigned) ScanVerdict.SUSPICIOUS else ScanVerdict.NOT_SCANNED, reasons, start).copy(packageName = info.packageName)
+   return result(info.packageName, label, null, null, if (risk.isSuspicious) ScanVerdict.SUSPICIOUS else ScanVerdict.NOT_SCANNED, reasons, start).copy(packageName = info.packageName)
   }
   val hashes = runCatching { calculator.calculate(apk) }.getOrNull()
    ?: return result(info.packageName, label, null, null, ScanVerdict.NOT_SCANNED, reasons + context.getString(R.string.file_could_not_read), start).copy(packageName = info.packageName)
-  val output = evaluate(info.packageName, label, hashes.sha256, hashes.md5, reasons, risk.score, debugSigned)
+  val output = evaluate(info.packageName, label, hashes.sha256, hashes.md5, reasons, risk.score)
   audit(output, start, scanSessionId)
   return output.copy(durationMs = elapsed(start), packageName = info.packageName)
  }
- private suspend fun evaluate(key: String, label: String, sha: String, md5: String, heuristic: List<String>, score: Int, debug: Boolean): ScanResult {
+ private suspend fun evaluate(key: String, label: String, sha: String, md5: String, heuristic: List<String>, score: Int): ScanResult {
   val encrypted = hashStore.protectHash(sha)
   if (dao.isHashWhitelisted(encrypted)) return ScanResult(key, label, sha, md5, ScanVerdict.NO_MATCH, listOf(context.getString(R.string.hash_allowlisted)), 0)
   val threat = dao.findThreatByEncryptedHash(encrypted)
@@ -114,7 +114,7 @@ class PackageScanner(
    val level = revealMetadataOrPlaintext(threat.threatLevel, "level")
    return ScanResult(key, label, sha, md5, ScanVerdict.THREAT, listOf(context.getString(R.string.hash_match, family, level)), 0)
   }
-  val verdict = if (score >= 45 || debug) ScanVerdict.SUSPICIOUS else ScanVerdict.NO_MATCH
+  val verdict = if (score >= 45) ScanVerdict.SUSPICIOUS else ScanVerdict.NO_MATCH
   val notes = if (heuristic.isEmpty()) listOf(context.getString(R.string.no_match_detail)) else heuristic + context.getString(R.string.risk_review)
   return ScanResult(key, label, sha, md5, verdict, notes, 0)
  }
