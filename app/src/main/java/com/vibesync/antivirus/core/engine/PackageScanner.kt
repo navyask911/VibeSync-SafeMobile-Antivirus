@@ -102,13 +102,17 @@ class PackageScanner(
  suspend fun scanStream(
   label: String,
   stream: java.io.InputStream,
-  scanSessionId: String = UUID.randomUUID().toString()
+  scanSessionId: String = UUID.randomUUID().toString(),
+  persistAudit: Boolean = true
  ): ScanResult {
   val start = System.nanoTime()
   return try {
    val hash = stream.use { calculator.calculate(it) }
    val output = evaluate(label, label, hash.sha256, hash.md5, emptyList(), 0, sha1 = hash.sha1)
-   audit(output, start, scanSessionId)
+   if (persistAudit || output.verdict == ScanVerdict.THREAT ||
+       output.verdict == ScanVerdict.SUSPICIOUS || output.verdict == ScanVerdict.NOT_SCANNED) {
+    audit(output, start, scanSessionId)
+   }
    output.copy(durationMs = elapsed(start), scanSessionId = scanSessionId)
   } catch (cancelled: CancellationException) {
    throw cancelled
@@ -180,7 +184,7 @@ class PackageScanner(
  }
  private suspend fun audit(result: ScanResult, start: Long, scanSessionId: String) {
   dao.insertAudit(ScanAudit(
-   packageOrPath=result.packageOrPath.take(250),
+   packageOrPath=hashStore.protectPrivateText(result.packageOrPath.take(250), "scan-label"),
    hash=result.sha256?.let(hashStore::protectHash).orEmpty(),
    scanTimestamp=System.currentTimeMillis(),
    verdict=result.verdict.name,

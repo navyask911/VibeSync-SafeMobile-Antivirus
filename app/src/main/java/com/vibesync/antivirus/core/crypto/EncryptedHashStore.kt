@@ -45,8 +45,41 @@ class EncryptedHashStore(context: Context) {
   )
  }
 
+ /** Protect user-visible local labels/paths before storing them in the unencrypted Room database. */
+ fun protectPrivateText(value: String, purpose: String): String {
+  require(purpose in PRIVATE_TEXT_PURPOSES) { "Unsupported private metadata field." }
+  require(value.length <= 1024) { "Private metadata is too long." }
+  val encrypted = primitive.encryptDeterministically(
+   value.toByteArray(StandardCharsets.UTF_8), privateTextAad(purpose)
+  )
+  return PRIVATE_TEXT_PREFIX + purpose + ":" + Base64.encodeToString(encrypted, Base64.NO_WRAP)
+ }
+
+ /** Legacy rows are plaintext and remain readable; newly protected rows require the same field purpose. */
+ fun revealPrivateText(value: String, purpose: String): String {
+  require(purpose in PRIVATE_TEXT_PURPOSES) { "Unsupported private metadata field." }
+  if (!value.startsWith(PRIVATE_TEXT_PREFIX)) return value
+  val prefix = PRIVATE_TEXT_PREFIX + purpose + ":"
+  require(value.startsWith(prefix)) { "Protected metadata field purpose does not match." }
+  val encrypted = Base64.decode(value.removePrefix(prefix), Base64.NO_WRAP)
+  return String(
+   primitive.decryptDeterministically(encrypted, privateTextAad(purpose)),
+   StandardCharsets.UTF_8
+  )
+ }
+
+ private fun privateTextAad(purpose: String) =
+  ("vibesync.safe.mobile.private." + purpose + ".v1").toByteArray(StandardCharsets.UTF_8)
+
  private fun metadataAad(purpose: String) =
   ("vibesync.safe.mobile.metadata." + purpose + ".v1").toByteArray(StandardCharsets.UTF_8)
 
- companion object { private val AAD = "vibesync.safe.mobile.hash.v1".toByteArray(StandardCharsets.UTF_8) }
+ companion object {
+  private const val PRIVATE_TEXT_PREFIX = "sm-enc-v1:"
+  private val PRIVATE_TEXT_PURPOSES = setOf(
+   "scan-label", "incident-installer", "incident-source", "incident-filename",
+   "incident-path", "incident-reason", "vault-filename", "vault-path", "vault-copy-path"
+  )
+  private val AAD = "vibesync.safe.mobile.hash.v1".toByteArray(StandardCharsets.UTF_8)
+ }
 }
