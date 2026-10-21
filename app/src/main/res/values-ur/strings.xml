@@ -124,4 +124,23 @@
 <string name="definitions_limited_compact">تعریفیں: صرف EICAR ٹیسٹ دستخط؛ کوریج محدود ہے۔</string>
 <string name="settings_privacy">رازداری اور اجازتیں</string>
 <string name="quarantine_legacy_warning">پرانا قرنطینہ آئٹم: پچھلے ورژن میں خفیہ کاری کے بغیر محفوظ کیا گیا۔</string>
+<string name="overlay_review_title">اوورلے خطرے کا جائزہ</string>
+<string name="overlay_review_description">ان ایپس کا اختیاری محدود جائزہ جو دوسری ایپس کے اوپر دکھانے کی صلاحیت یا رسائی کی خدمات ظاہر کرتی ہیں۔ یہ صرف جانچ کے اشارے ہیں؛ SafeMobile یہ ثابت نہیں کر سکتا کہ کوئی دوسری ایپ اس وقت اوورلے دکھا رہی ہے یا اس کی موجودہ اجازت کیا ہے۔</string>
+<string name="overlay_review_last_attempt">آخری کوشش: %1$s</string>
+<string name="overlay_review_last_success">آخری کامیاب جانچ: %1$s</string>
+<string name="overlay_review_summary">اوورلے صلاحیت ظاہر کرنے والی ایپس: %1$d · رسائی کی خدمات ظاہر کرنے والی ایپس: %2$d · اس آلے پر فعال رسائی کی خدمات: %3$d</string>
+<string name="overlay_review_not_checked">ابھی تک اوورلے خطرے کا کوئی کامیاب جائزہ نہیں ہوا۔</string>
+<string name="overlay_review_failed">آخری جائزے کی کوشش ناکام ہوئی۔ Android نے کام مؤخر کیا یا پیکیج کی ضروری مرئیت محدود کی ہو سکتی ہے۔</string>
+<string name="overlay_review_permission_required">Android نے اس جائزے کی اجازت نہیں دی۔ انسٹال شدہ ایپس کی مرئیت چیک کریں اور دوبارہ کوشش کریں۔</string>
+<string name="overlay_review_reminder_interval">یاددہانی کا وقفہ</string>
+<string name="overlay_review_reminder_12h">ہر 12 گھنٹے</string>
+<string name="overlay_review_reminder_24h">ہر 24 گھنٹے</string>
+<string name="overlay_review_reminder_48h">ہر 48 گھنٹے</string>
+<string name="overlay_review_notifications_off">اطلاعات بند ہیں۔ جائزہ پھر بھی چل سکتا ہے، لیکن یاددہانیاں نہیں دکھائی جائیں گی۔</string>
+<string name="overlay_review_enabled">خودکار جائزہ فعال ہے</string>
+<string name="overlay_review_disabled">جائزہ موقوف ہے</string>
+<string name="overlay_review_notification_channel">SafeMobile رازداری کا جائزہ</string>
+<string name="overlay_review_notification_channel_description">اختیاری اوورلے خطرے کے جائزے کے لیے کم ترجیحی یاددہانیاں۔</string>
+<string name="overlay_review_notification_title">اوورلے خطرے کا جائزہ مکمل ہوگیا</string>
+<string name="overlay_review_notification_body">%1$d ایپس اوورلے کی صلاحیت اور %2$d ایپس رسائی کی خدمات ظاہر کرتی ہیں۔ یہ جانچ کے اشارے ہیں، میلویئر کا ثبوت نہیں۔</string>
 </resources>
