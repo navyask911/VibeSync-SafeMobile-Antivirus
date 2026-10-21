@@ -60,11 +60,11 @@
     <string name="unknown_file">ಆಯ್ದ ಫೈಲ್</string>
     <string name="local_files_only">ಗೌಪ್ಯತೆಯ ಕಾರಣಕ್ಕೆ ಸ್ಕ್ಯಾನರ್ ಗುರುತಿಸಲಾದ ಸ್ಥಳೀಯ ಸಂಗ್ರಹ ಪೂರೈಕೆದಾರರ ಫೈಲ್‌ಗಳನ್ನು ಮಾತ್ರ ತೆರೆಯುತ್ತದೆ. ಕ್ಲೌಡ್ ಅಥವಾ ಮೂರನೇ ವ್ಯಕ್ತಿಯ ಡಾಕ್ಯುಮೆಂಟ್ ಪೂರೈಕೆದಾರರನ್ನು ತೆರೆಯುವುದಿಲ್ಲ.</string>
     <string name="quarantine_confirm_title">ಗುರುತಿಸಿದ ಫೈಲ್ ಅನ್ನು quarantine ಮಾಡಬೇಕೇ?</string>
-    <string name="quarantine_confirm_body">ಈ ಆ್ಯಪ್‌ನ ಖಾಸಗಿ ಸಂಗ್ರಹದಲ್ಲಿ ಪ್ರತಿಯನ್ನು ಉಳಿಸಲಾಗುತ್ತದೆ. ಹ್ಯಾಶ್ ಪರಿಶೀಲನೆಯ ನಂತರ SafeMobile ಆಯ್ದ ಮೂಲ ಫೈಲ್ ತೆಗೆದುಹಾಕಲು ಪ್ರಯತ್ನಿಸುತ್ತದೆ. ಇದು Android ಸಂಗ್ರಹ ಅನುಮತಿ ಮತ್ತು ಪೂರೈಕೆದಾರರ ಮೇಲೆ ಅವಲಂಬಿತವಾಗಿದೆ; ಮೂಲ ಫೈಲ್ ಉಳಿಯಬಹುದು.</string>
+    <string name="quarantine_confirm_body">SafeMobile ಎನ್‌ಕ್ರಿಪ್ಟ್ ಮಾಡಿದ ಖಾಸಗಿ ಪ್ರತಿಯನ್ನು ರಚಿಸಿ ಪರಿಶೀಲಿಸುತ್ತದೆ. ಮೂಲ ಫೈಲ್ ಉಳಿಯುತ್ತದೆ; ಅಳಿಸಲಾಗುವುದಿಲ್ಲ.</string>
     <string name="quarantine_confirm_action">ಫೈಲ್ quarantine ಮಾಡಿ</string>
     <string name="quarantine_file">ಖಾಸಗಿ quarantine ಪ್ರತಿ</string>
     <string name="quarantine_success_removed">ಖಾಸಗಿ quarantine ಪ್ರತಿ ಉಳಿಸಲಾಗಿದೆ (%1$s); ಮೂಲವನ್ನು ತೆಗೆದುಹಾಕಲಾಗಿದೆ ಎಂದು Android ವರದಿ ಮಾಡಿದೆ.</string>
-    <string name="quarantine_success_copy_only">ಖಾಸಗಿ quarantine ಪ್ರತಿ ಉಳಿಸಲಾಗಿದೆ (%1$s), ಆದರೆ Android ಮೂಲವನ್ನು ತೆಗೆದುಹಾಕಲಿಲ್ಲ. ಅಗತ್ಯವಿದ್ದರೆ ಕೈಯಾರೆ ಅಳಿಸಿ.</string>
+    <string name="quarantine_success_copy_only">ಎನ್‌ಕ್ರಿಪ್ಟ್ ಮಾಡಿದ ಕ್ವಾರಂಟೈನ್ ಪ್ರತಿ ಉಳಿಸಲಾಗಿದೆ (%1$s). ಮೂಲ ಫೈಲ್ ಉಳಿಸಲಾಗಿದೆ; ಅಳಿಸಲಾಗಿಲ್ಲ.</string>
     <string name="quarantine_failed">Quarantine ವಿಫಲವಾಗಿದೆ. ಮೂಲ ಫೈಲ್ ಅನ್ನು ಉದ್ದೇಶಪೂರ್ವಕವಾಗಿ ತೆಗೆದುಹಾಕಿಲ್ಲ.</string>
     <string name="uninstall_app">ಆ್ಯಪ್ ಅನ್‌ಇನ್‌ಸ್ಟಾಲ್ ಮಾಡಿ…</string>
     <string name="import_definitions">ಆಫ್‌ಲೈನ್ ಬೆದರಿಕೆ ವ್ಯಾಖ್ಯಾನಗಳನ್ನು ಆಮದು ಮಾಡಿ (JSON)</string>
@@ -123,4 +123,5 @@
 <string name="history_session">ಸೆಷನ್ ID</string>
 <string name="definitions_limited_compact">ವ್ಯಾಖ್ಯಾನಗಳು: EICAR ಪರೀಕ್ಷಾ ಸಹಿ ಮಾತ್ರ; ವ್ಯಾಪ್ತಿ ಸೀಮಿತವಾಗಿದೆ.</string>
 <string name="settings_privacy">ಗೌಪ್ಯತೆ ಮತ್ತು ಅನುಮತಿಗಳು</string>
+<string name="quarantine_legacy_warning">ಹಳೆಯ ಕ್ವಾರಂಟೈನ್ ಅಂಶ: ಹಿಂದಿನ ಆವೃತ್ತಿಯಲ್ಲಿ ಎನ್‌ಕ್ರಿಪ್ಶನ್ ಇಲ್ಲದೆ ಸಂಗ್ರಹಿಸಲಾಗಿದೆ.</string>
 </resources>
