@@ -60,11 +60,11 @@
     <string name="unknown_file">선택한 파일</string>
     <string name="local_files_only">개인정보 보호를 위해 이 검사기는 기기 내의 인식된 저장소 제공자 파일만 엽니다. 클라우드 또는 타사 문서 제공자는 열지 않습니다.</string>
     <string name="quarantine_confirm_title">표시된 파일을 격리할까요?</string>
-    <string name="quarantine_confirm_body">이 앱의 비공개 저장소에 사본을 저장합니다. 해시를 확인한 후 SafeMobile은 선택한 원본을 삭제하려고 시도합니다. 삭제 여부는 Android 저장소 권한과 제공자에 따라 달라지며 원본이 남아 있을 수 있습니다.</string>
+    <string name="quarantine_confirm_body">SafeMobile은 암호화된 비공개 복사본을 만들고 검증합니다. 원본 파일은 유지되며 삭제되지 않습니다.</string>
     <string name="quarantine_confirm_action">파일 격리</string>
     <string name="quarantine_file">비공개 사본 격리</string>
     <string name="quarantine_success_removed">비공개 격리 사본을 저장했습니다(%1$s). Android는 원본이 제거되었다고 보고했습니다.</string>
-    <string name="quarantine_success_copy_only">비공개 격리 사본을 저장했지만(%1$s) Android가 원본을 제거하지 못했습니다. 필요하면 직접 삭제하세요.</string>
+    <string name="quarantine_success_copy_only">암호화된 격리 복사본을 저장했습니다(%1$s). 원본 파일은 유지되었으며 삭제되지 않았습니다.</string>
     <string name="quarantine_failed">격리에 실패했습니다. 원본 파일은 의도적으로 제거하지 않았습니다.</string>
     <string name="uninstall_app">앱 제거…</string>
     <string name="import_definitions">오프라인 위협 정의 가져오기(JSON)</string>
@@ -123,4 +123,5 @@
 <string name="history_session">세션 ID</string>
 <string name="definitions_limited_compact">정의: EICAR 테스트 서명만 포함되어 범위가 제한됩니다.</string>
 <string name="settings_privacy">개인정보 및 권한</string>
+<string name="quarantine_legacy_warning">이전 버전에서 암호화 없이 저장된 이전 격리 항목입니다.</string>
 </resources>
