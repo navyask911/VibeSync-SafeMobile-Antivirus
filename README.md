@@ -1,7 +1,5 @@
-```markdown
-<div align="center">
-
-# 🛡️ VibeSync SafeMobile Antivirus
+                                  **# 🛡️ VibeSync SafeMobile Antivirus**
+                                       
 
 ### 🔒 Privacy-First • ☁️ Zero-Cloud • 🧠 On-Device Intelligence
 
