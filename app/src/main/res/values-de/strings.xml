@@ -67,4 +67,23 @@
 <string name="definitions_limited_compact">Definitionen: nur EICAR-Testsignatur; begrenzte Abdeckung.</string>
 <string name="settings_privacy">Datenschutz und Berechtigungen</string>
 <string name="quarantine_legacy_warning">Älterer Quarantäneeintrag: In einer früheren Version unverschlüsselt gespeichert.</string>
+<string name="overlay_review_title">Overlay-Risikoprüfung</string>
+<string name="overlay_review_description">Optionale bestmögliche Prüfung von Apps, die das Anzeigen über anderen Apps oder Bedienungshilfedienste deklarieren. Das sind nur Hinweise zur Überprüfung; SafeMobile kann nicht feststellen, ob eine andere App gerade ein Overlay anzeigt oder welche Live-Berechtigung sie hat.</string>
+<string name="overlay_review_last_attempt">Letzter Versuch: %1$s</string>
+<string name="overlay_review_last_success">Letzte erfolgreiche Prüfung: %1$s</string>
+<string name="overlay_review_summary">Apps mit deklarierter Overlay-Fähigkeit: %1$d · Apps mit deklarierten Bedienungshilfediensten: %2$d · Auf diesem Gerät aktivierte Bedienungshilfedienste: %3$d</string>
+<string name="overlay_review_not_checked">Noch keine erfolgreiche Overlay-Risikoprüfung.</string>
+<string name="overlay_review_failed">Der letzte Prüfversuch ist fehlgeschlagen. Android hat den Auftrag möglicherweise verschoben oder die erforderliche Paketsichtbarkeit verweigert.</string>
+<string name="overlay_review_permission_required">Android hat diese Prüfung nicht zugelassen. Prüfen Sie die Sichtbarkeit installierter Apps und versuchen Sie es erneut.</string>
+<string name="overlay_review_reminder_interval">Erinnerungsintervall</string>
+<string name="overlay_review_reminder_12h">Alle 12 Stunden</string>
+<string name="overlay_review_reminder_24h">Alle 24 Stunden</string>
+<string name="overlay_review_reminder_48h">Alle 48 Stunden</string>
+<string name="overlay_review_notifications_off">Benachrichtigungen sind deaktiviert. Die Prüfung kann trotzdem laufen, aber es werden keine Erinnerungen angezeigt.</string>
+<string name="overlay_review_enabled">Automatische Prüfung aktiviert</string>
+<string name="overlay_review_disabled">Prüfung pausiert</string>
+<string name="overlay_review_notification_channel">SafeMobile-Datenschutzprüfung</string>
+<string name="overlay_review_notification_channel_description">Erinnerungen mit niedriger Priorität für die optionale Overlay-Risikoprüfung.</string>
+<string name="overlay_review_notification_title">Overlay-Risikoprüfung abgeschlossen</string>
+<string name="overlay_review_notification_body">%1$d Apps deklarieren Overlay-Fähigkeit und %2$d deklarieren Bedienungshilfedienste. Das sind Prüfindikatoren, kein Malware-Nachweis.</string>
 </resources>
