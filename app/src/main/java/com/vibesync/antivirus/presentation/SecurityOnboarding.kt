@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.vibesync.antivirus.R
+import com.vibesync.antivirus.core.security.DeviceOwnerManager
 
 internal object OnboardingPrefs {
     const val NAME = "safe_mobile_onboarding"
@@ -42,6 +43,7 @@ internal fun hasNotificationAccess(context: Context): Boolean =
 @Composable
 internal fun SecurityOnboardingScreen(
     step: Int, storageAccessGranted: Boolean, notificationsGranted: Boolean, sentinelOptIn: Boolean,
+    enterpriseManager: DeviceOwnerManager,
     onRequestStorage: () -> Unit, onContinueStorage: () -> Unit, onContinueInstalledApps: () -> Unit,
     onRequestNotifications: () -> Unit, onSkipNotifications: () -> Unit, onEnableSentinel: () -> Unit,
     onDisableSentinel: () -> Unit, onFinish: () -> Unit, onSkipSetup: () -> Unit
@@ -90,6 +92,7 @@ internal fun SecurityOnboardingScreen(
             color = MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.Bold)
         Text(stringResource(description), style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onSurfaceVariant)
+        if (page == 1) EnterpriseOnboardingNotice(manager = enterpriseManager)
         if (page == 0 || page == 2) {
             val granted = if (page == 0) storageAccessGranted else notificationsGranted
             Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
