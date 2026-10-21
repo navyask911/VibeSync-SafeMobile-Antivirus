@@ -58,7 +58,7 @@ More detail and release conditions are in [docs/DETECTION_COVERAGE.md](docs/DETE
 
 - Android's backup attributes are set to `allowBackup=false`, `fullBackupContent=false`, `dataExtractionRules` excludes the app's root/files/database/shared-preferences/external domains from cloud backup and device transfer, and `hasFragileUserData=false` is set.
 - These settings are checked in the manifest/artifact CI gate. **The maintainers have not performed a physical-device `adb backup` / restore-extraction test in this change.** Modern Android backup behavior differs by OS version and OEM, so do not claim that a device-level test has passed.
-- New quarantine files are encrypted and hash-verified. The Room database itself is **not encrypted with SQLCipher**. Some local rows include package identifiers, file display names or audit metadata in addition to hashes/verdicts; those rows must not be described as “PII-free”. This remains a privacy-hardening/release gate.
+- New quarantine files are encrypted and hash-verified. The Room database itself is **not SQLCipher-encrypted**. Some local rows include package identifiers, file display names or audit metadata in addition to hashes/verdicts; those rows must not be described as “PII-free”. This remains a privacy-hardening/release gate.
 - Downloads monitoring is optional. The user chooses a folder in Android's Storage Access Framework (SAF) picker; SafeMobile persists that folder grant and only polls that selected directory plus a bounded number of subdirectory levels. The app no longer requests `MANAGE_EXTERNAL_STORAGE` or `READ_EXTERNAL_STORAGE`.
 - Revoking the selected folder grant or stopping the monitor removes the monitor's ability to read that folder. The user can stop monitoring in the UI.
 
