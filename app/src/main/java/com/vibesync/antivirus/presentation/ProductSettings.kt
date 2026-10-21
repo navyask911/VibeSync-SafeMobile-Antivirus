@@ -5,10 +5,8 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.widget.Toast
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -82,16 +80,27 @@ internal fun ScanHistoryPanel(audits: List<ScanAudit>) {
                     Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
                         Text(DateFormat.getDateTimeInstance().format(Date(mostRecent.scanTimestamp)), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
                         Text(
-                            if (mostRecent.scanSessionId.isBlank()) stringResource(R.string.history_session) + ": legacy record"
-                            else stringResource(R.string.history_session) + ": " + mostRecent.scanSessionId,
+                            stringResource(R.string.history_session) + ": " + (mostRecent.scanSessionId.ifBlank { "—" }),
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Text(
-                            "${group.size} records · $threats threat matches · $review review findings · $incomplete incomplete",
+                            stringResource(
+                                R.string.results_summary,
+                                threats,
+                                review,
+                                group.count { it.verdict == "NO_MATCH" }
+                            ),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurface
                         )
+                        if (incomplete > 0) {
+                            Text(
+                                "${stringResource(R.string.verdict_not_scanned)}: $incomplete",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.tertiary
+                            )
+                        }
                     }
                 }
             }
@@ -118,19 +127,34 @@ internal fun SafeMobileSettingsPanel(
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text(stringResource(R.string.appearance_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    FilterChip(selected = themeMode == "system", onClick = {
-                        themeMode = "system"
-                        themePrefs.edit().putString(AppearancePreferences.THEME_KEY, themeMode).apply()
-                    }, label = { Text(stringResource(R.string.theme_system)) })
-                    FilterChip(selected = themeMode == "light", onClick = {
-                        themeMode = "light"
-                        themePrefs.edit().putString(AppearancePreferences.THEME_KEY, themeMode).apply()
-                    }, label = { Text(stringResource(R.string.theme_light)) })
-                    FilterChip(selected = themeMode == "dark", onClick = {
-                        themeMode = "dark"
-                        themePrefs.edit().putString(AppearancePreferences.THEME_KEY, themeMode).apply()
-                    }, label = { Text(stringResource(R.string.theme_dark)) })
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    FilterChip(
+                        modifier = Modifier.fillMaxWidth(),
+                        selected = themeMode == "system",
+                        onClick = {
+                            themeMode = "system"
+                            themePrefs.edit().putString(AppearancePreferences.THEME_KEY, themeMode).apply()
+                        },
+                        label = { Text(stringResource(R.string.theme_system)) }
+                    )
+                    FilterChip(
+                        modifier = Modifier.fillMaxWidth(),
+                        selected = themeMode == "light",
+                        onClick = {
+                            themeMode = "light"
+                            themePrefs.edit().putString(AppearancePreferences.THEME_KEY, themeMode).apply()
+                        },
+                        label = { Text(stringResource(R.string.theme_light)) }
+                    )
+                    FilterChip(
+                        modifier = Modifier.fillMaxWidth(),
+                        selected = themeMode == "dark",
+                        onClick = {
+                            themeMode = "dark"
+                            themePrefs.edit().putString(AppearancePreferences.THEME_KEY, themeMode).apply()
+                        },
+                        label = { Text(stringResource(R.string.theme_dark)) }
+                    )
                 }
             }
         }
@@ -176,11 +200,6 @@ internal fun SafeMobileSettingsPanel(
                     clipboard?.setPrimaryClip(ClipData.newPlainText("SafeMobile Ray ID", rayId))
                     Toast.makeText(context, R.string.ray_id_copied, Toast.LENGTH_SHORT).show()
                 }) { Text(stringResource(R.string.ray_id_copy)) }
-                Text(
-                    "This identifier is generated locally and is not transmitted by the scan engine.",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
             }
         }
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
@@ -208,8 +227,7 @@ internal fun SafeMobileSettingsPanel(
                 Text(stringResource(R.string.privacy_body))
                 Text(stringResource(R.string.scan_clean_warning))
                 Text(stringResource(R.string.not_configured))
-                Text("Third-party licence review is not yet complete. See THIRD_PARTY_NOTICES.md in the project repository.")
-                Text("Source and product details: github.com/navyask911/VibeSync-SafeMobile-Antivirus")
+                Text(stringResource(R.string.license_review_pending))
             }
         },
         confirmButton = { TextButton(onClick = { showAbout = false }) { Text(stringResource(R.string.close)) } }
