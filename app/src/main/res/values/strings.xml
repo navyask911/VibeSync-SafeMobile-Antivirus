@@ -135,4 +135,86 @@
 <string name="overlay_review_notification_body">%1$d apps declare overlay capability and %2$d declare accessibility services. These are review indicators, not proof of malware.</string>
 <string name="overlay_review_enabled">Automatic review enabled</string>
 <string name="overlay_review_disabled">Review paused</string>
+
+<string name="features_menu" translatable="false">Security features</string>
+<string name="nav_guardian" translatable="false">Guardian</string>
+<string name="nav_phishing" translatable="false">Link checker</string>
+<string name="nav_cleaner" translatable="false">Storage cleaner</string>
+<string name="why_safemobile" translatable="false">Why SafeMobile? Core Strengths &amp; Features</string>
+<string name="features_disclaimer" translatable="false">Feature availability depends on Android permissions and the current local definitions. These features do not provide guaranteed or complete malware protection.</string>
+<string name="pillar_offline_title" translatable="false">100% Offline Privacy</string>
+<string name="pillar_offline_body" translatable="false">Core file hashing and local signature matching run on-device. Ads and Google Play update checks are separate network-capable features when configured and permitted.</string>
+<string name="pillar_telemetry_title" translatable="false">Zero Cloud Telemetry</string>
+<string name="pillar_telemetry_body" translatable="false">The scanner does not upload file contents or hashes. Advertising and Google Play services may make separate network requests.</string>
+<string name="pillar_whatsapp_title" translatable="false">WhatsApp Trojan Guardian</string>
+<string name="pillar_whatsapp_body" translatable="false">Select and assess APKs or documents you choose. SafeMobile does not automatically inspect every WhatsApp message or attachment.</string>
+<string name="pillar_phishing_title" translatable="false">Phishing Link Blocker</string>
+<string name="pillar_phishing_body" translatable="false">Local URL heuristics are available. No URLhaus threat feed or device-wide browser interception is configured in this build.</string>
+<string name="pillar_cleaner_title" translatable="false">Residual Storage Cleaner</string>
+<string name="pillar_cleaner_body" translatable="false">Choose a folder in Android's picker and review APK metadata before deleting selected items.</string>
+<string name="feature_status_limited" translatable="false">Available with limitations</string>
+<string name="feature_status_local" translatable="false">Local processing</string>
+<string name="feature_status_heuristic" translatable="false">Heuristic-only; no threat feed</string>
+<string name="feature_status_review" translatable="false">User review required</string>
+<string name="open_feature" translatable="false">Open feature</string>
+<string name="guardian_title" translatable="false">Active Guardian</string>
+<string name="guardian_disclaimer" translatable="false">Installation-source metadata and remote-access app presence are review indicators, not proof of malware. Android does not allow a normal app to block every external install or force-stop other apps.</string>
+<string name="guardian_developer_settings" translatable="false">Developer settings and ADB</string>
+<string name="guardian_developer_state" translatable="false">Developer Options</string>
+<string name="guardian_adb_state" translatable="false">USB debugging (ADB)</string>
+<string name="guardian_settings_limit" translatable="false">SafeMobile can report the readable state and open Android Settings. You must change protected global switches yourself.</string>
+<string name="guardian_review_settings" translatable="false">Review Developer Settings</string>
+<string name="guardian_refresh" translatable="false">Refresh review</string>
+<string name="guardian_open_settings_failed" translatable="false">Android Settings could not be opened on this device.</string>
+<string name="guardian_install_sources" translatable="false">Installed-app source review</string>
+<string name="guardian_source_explanation" translatable="false">Shows apps whose installer is not identified as Google Play, plus apps whose label/package resembles a remote-access product. Results depend on Android package visibility and available metadata.</string>
+<string name="guardian_source_play" translatable="false">Installer: Google Play</string>
+<string name="guardian_source_other" translatable="false">Other or alternative installer: %1$s</string>
+<string name="guardian_source_unknown" translatable="false">Installer: unknown or unavailable</string>
+<string name="guardian_remote_tool_notice" translatable="false">Possible remote-access utility present. This alone is not a malware finding.</string>
+<string name="guardian_open_app_info" translatable="false">Open Android App Info</string>
+<string name="guardian_scan_failed" translatable="false">Installed-app source review failed or was blocked by Android.</string>
+<string name="guardian_no_findings" translatable="false">No non-Play or known-label remote-access candidates were returned. This is not a clean-device guarantee.</string>
+<string name="phishing_title" translatable="false">Phishing and link review</string>
+<string name="phishing_disclaimer" translatable="false">Assess a link locally before opening it. No submitted URL is sent to a remote reputation service by this checker.</string>
+<string name="phishing_url_label" translatable="false">Paste a URL or hostname</string>
+<string name="phishing_assess" translatable="false">Assess link locally</string>
+<string name="phishing_invalid" translatable="false">Unable to assess this URL</string>
+<string name="phishing_suspicious" translatable="false">Suspicious URL indicators — review before opening</string>
+<string name="phishing_no_local_match" translatable="false">No local heuristic match — not a safety guarantee</string>
+<string name="phishing_host" translatable="false">Normalized host</string>
+<string name="phishing_no_feed_notice" translatable="false">No local URL threat list is installed. This result uses basic URL heuristics only; it cannot confirm whether the URL is listed by URLhaus or a phishing database.</string>
+<string name="phishing_limitations" translatable="false">This checker is not a global browser blocker. It does not follow redirects, inspect page content, intercept links inside other apps, or verify the live reputation of a website. Shortened links are marked for review, not automatically called malicious.</string>
+<string name="cleaner_title" translatable="false">Storage residual APK cleaner</string>
+<string name="cleaner_description" translatable="false">Choose a folder using Android's Storage Access Framework. SafeMobile checks APK metadata only and never deletes files without your explicit confirmation. Access to Android/media or other folders varies by device.</string>
+<string name="cleaner_no_folder" translatable="false">No folder selected yet.</string>
+<string name="cleaner_folder_selected" translatable="false">Folder access saved. Select Scan Storage to inspect eligible APK files.</string>
+<string name="cleaner_choose_folder" translatable="false">Choose folder</string>
+<string name="cleaner_scan_storage" translatable="false">Scan Storage</string>
+<string name="cleaner_scanning" translatable="false">Inspecting APK metadata…</string>
+<string name="cleaner_scan_complete" translatable="false">Analysis finished. APK candidates found: %1$d</string>
+<string name="cleaner_scan_failed" translatable="false">Storage analysis failed or the selected folder is no longer accessible.</string>
+<string name="cleaner_summary" translatable="false">APK candidates: %1$d · Total size: %2$d bytes</string>
+<string name="cleaner_orphaned_candidate" translatable="false">Orphaned residue candidate — package not currently installed</string>
+<string name="cleaner_outdated_candidate" translatable="false">Outdated candidate — installed package is newer</string>
+<string name="cleaner_installed_match" translatable="false">Installed package/version match</string>
+<string name="cleaner_review_required" translatable="false">Review required — metadata unavailable or ambiguous</string>
+<string name="cleaner_bulk_eligible" translatable="false">Eligible for bulk cleanup review (candidate is at least 30 days old and package is not installed)</string>
+<string name="cleaner_display_limit" translatable="false">Only the first 100 displayed candidates are shown. The scan caps traversal to protect responsiveness.</string>
+<string name="cleaner_delete_selected" translatable="false">Clean selected (%1$d)</string>
+<string name="cleaner_delete_all_eligible" translatable="false">Delete all eligible APK candidates (%1$d)</string>
+<string name="cleaner_bulk_rule" translatable="false">Bulk deletion is limited to parseable APKs with no installed package match that are at least 30 days old. This is a cleanup heuristic, not proof that a file is unwanted.</string>
+<string name="cleaner_delete_confirm_title" translatable="false">Confirm permanent file deletion</string>
+<string name="cleaner_delete_confirm_body" translatable="false">Delete exactly %1$d selected files (approximately %2$d bytes)? This cannot be undone. SafeMobile will re-check their displayed names and available metadata before deletion.</string>
+<string name="cleaner_delete_confirm_action" translatable="false">Delete files</string>
+<string name="cleaner_more_files" translatable="false">And %1$d more…</string>
+<string name="cleaner_delete_result" translatable="false">Deleted: %1$d · Approximate bytes freed: %2$d · Failed or changed: %3$d</string>
+<string name="family_dedication_title" translatable="false">With gratitude</string>
+<string name="family_dedication" translatable="false">Dedicated with deep gratitude to my beloved family, whose immense patience, support, and sacrifice of time during months of solitude made the creation of SafeMobile Antivirus possible—a humble contribution toward keeping the digital world safe for everyone.</string>
+<string name="about_readme" translatable="false">README</string>
+<string name="about_privacy_policy" translatable="false">Privacy</string>
+<string name="about_license" translatable="false">License</string>
+<string name="about_third_party" translatable="false">Third-party notices</string>
+<string name="about_license_missing" translatable="false">No root LICENSE file is present in the reviewed repository. This screen does not assert an open-source license or grant additional permissions. Public visibility alone is not an open-source license.</string>
+
 </resources>

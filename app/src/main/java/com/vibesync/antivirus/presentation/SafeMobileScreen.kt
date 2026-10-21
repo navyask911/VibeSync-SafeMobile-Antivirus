@@ -31,6 +31,8 @@ import androidx.compose.material.icons.filled.FolderOpen
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.Language
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Settings as SettingsIcon
 import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.filled.Warning
@@ -45,6 +47,7 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -112,7 +115,7 @@ import java.io.File
  )
  MaterialTheme(colorScheme = colors, content = content)
 }
-@Composable fun SafeMobileScreen(repository:ThreatRepository,adsEnabled:Boolean,privacyOptionsRequired:Boolean) {
+@Composable fun SafeMobileScreen(repository:ThreatRepository,adsEnabled:Boolean,privacyOptionsRequired:Boolean, sharedText:String? = null, onSharedTextConsumed:() -> Unit = {}) {
  val context=LocalContext.current
  val safeMobileApp=context.applicationContext as SafeMobileApp
  val activity=context as? Activity
@@ -120,6 +123,9 @@ import java.io.File
  val state by vm.state.collectAsStateWithLifecycle()
  val auditEntries by repository.observeRecentAudits().collectAsStateWithLifecycle(initialValue = emptyList())
  var selectedDestination by remember { mutableStateOf("home") }
+ var languageMenuExpanded by remember { mutableStateOf(false) }
+ var featureMenuExpanded by remember { mutableStateOf(false) }
+ var localeOverrideTag by remember { mutableStateOf(LocalePreferences.overrideTag(context)) }
  val statusResource = when {
   state.isScanning -> R.string.scan_running
   state.threatCount > 0 -> R.string.threat_found
@@ -188,16 +194,61 @@ import java.io.File
  LaunchedEffect(adsEnabled,online,interstitial) { if(adsEnabled && online) interstitial?.load() }
  LaunchedEffect(state.completedScans,interstitial,online) { if(state.completedScans>0 && online) interstitial?.showAfterScan(state.completedScans) }
  LaunchedEffect(privacyOptionsRequired) { privacyOptionsVisible = privacyOptionsRequired }
+ LaunchedEffect(sharedText) { if (!sharedText.isNullOrBlank()) selectedDestination = "phishing" }
  Surface(Modifier.fillMaxSize(),color=MaterialTheme.colorScheme.background) {
   Column(Modifier.fillMaxSize()) {
    Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(horizontal=18.dp,vertical=14.dp),verticalArrangement=Arrangement.spacedBy(14.dp)) {
     Row(verticalAlignment=Alignment.CenterVertically) {
-     Box(Modifier.size(52.dp).background(MaterialTheme.colorScheme.primaryContainer,RoundedCornerShape(16.dp)),contentAlignment=Alignment.Center) {
-      androidx.compose.material3.Icon(Icons.Default.Security,contentDescription=null,tint=MaterialTheme.colorScheme.primary,modifier=Modifier.size(34.dp))
+     Box(Modifier.size(46.dp).background(MaterialTheme.colorScheme.primaryContainer,RoundedCornerShape(15.dp)),contentAlignment=Alignment.Center) {
+      androidx.compose.material3.Icon(Icons.Default.Security,contentDescription=null,tint=MaterialTheme.colorScheme.primary,modifier=Modifier.size(31.dp))
      }
-     Column(Modifier.padding(start=12.dp).weight(1f)) {
+     Column(Modifier.padding(start=10.dp).weight(1f)) {
       Text(stringResource(R.string.brand_title),style=MaterialTheme.typography.titleLarge,fontWeight=FontWeight.Black,color=MaterialTheme.colorScheme.onSurface)
       Text(stringResource(R.string.brand_subtitle),style=MaterialTheme.typography.labelMedium,color=MaterialTheme.colorScheme.primary)
+     }
+     Box {
+      IconButton(onClick = { languageMenuExpanded = true }) {
+       androidx.compose.material3.Icon(Icons.Default.Language, contentDescription = stringResource(R.string.language_settings), tint = MaterialTheme.colorScheme.primary)
+      }
+      DropdownMenu(expanded = languageMenuExpanded, onDismissRequest = { languageMenuExpanded = false }) {
+       DropdownMenuItem(
+        text = { Text(stringResource(R.string.language_system_default)) },
+        onClick = {
+         LocalePreferences.saveOverride(context, "")
+         localeOverrideTag = ""
+         languageMenuExpanded = false
+         activity?.recreate()
+        }
+       )
+       LocalePreferences.choices.forEach { choice ->
+        DropdownMenuItem(
+         text = { Text(stringResource(choice.labelResource)) },
+         onClick = {
+          LocalePreferences.saveOverride(context, choice.tag)
+          localeOverrideTag = choice.tag
+          languageMenuExpanded = false
+          activity?.recreate()
+         }
+        )
+       }
+      }
+     }
+     Box {
+      IconButton(onClick = { featureMenuExpanded = true }) {
+       androidx.compose.material3.Icon(Icons.Default.MoreVert, contentDescription = stringResource(R.string.features_menu))
+      }
+      DropdownMenu(expanded = featureMenuExpanded, onDismissRequest = { featureMenuExpanded = false }) {
+       listOf(
+        "guardian" to R.string.nav_guardian,
+        "phishing" to R.string.nav_phishing,
+        "cleaner" to R.string.nav_cleaner
+       ).forEach { (destination, label) ->
+        DropdownMenuItem(
+         text = { Text(stringResource(label)) },
+         onClick = { selectedDestination = destination; featureMenuExpanded = false }
+        )
+       }
+      }
      }
     }
     if (selectedDestination == "home" && !online) {
@@ -291,6 +342,10 @@ import java.io.File
      }
     }
     }
+    if (selectedDestination == "home") CoreStrengthsAccordion { destination -> selectedDestination = destination }
+    if (selectedDestination == "guardian") GuardianPanel()
+    if (selectedDestination == "phishing") PhishingPanel(sharedText) { onSharedTextConsumed() }
+    if (selectedDestination == "cleaner") StorageCleanerPanel()
     state.messageResource?.let { message -> Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant)) { Text(stringResource(message),Modifier.padding(14.dp),color=MaterialTheme.colorScheme.onSurface,style=MaterialTheme.typography.bodySmall) } }
     state.messageText?.let { message -> Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant)) { Text(message,Modifier.padding(14.dp),color=MaterialTheme.colorScheme.onSurface,style=MaterialTheme.typography.bodySmall) } }
     if(selectedDestination == "scan" && state.results.isNotEmpty()) {

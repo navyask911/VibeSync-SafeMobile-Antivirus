@@ -15,6 +15,11 @@
   <provider android:name="com.google.android.gms.ads.MobileAdsInitProvider" tools:node="remove" />
   <activity android:name=".MainActivity" android:exported="true">
    <intent-filter><action android:name="android.intent.action.MAIN" /><category android:name="android.intent.category.LAUNCHER" /></intent-filter>
+   <intent-filter>
+    <action android:name="android.intent.action.SEND" />
+    <category android:name="android.intent.category.DEFAULT" />
+    <data android:mimeType="text/plain" />
+   </intent-filter>
   </activity>
   <service android:name=".core.observer.StorageSentinelService" android:exported="false" android:foregroundServiceType="specialUse">
    <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE" android:value="User-enabled local Downloads folder monitoring to scan new APK files against local threat hashes." />

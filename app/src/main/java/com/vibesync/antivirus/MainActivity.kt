@@ -1,6 +1,7 @@
 package com.vibesync.antivirus
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -28,6 +29,7 @@ class MainActivity : ComponentActivity() {
  override fun attachBaseContext(newBase: Context) {
   super.attachBaseContext(LocalePreferences.wrap(newBase))
  }
+ private var sharedText by mutableStateOf<String?>(null)
  private var adsReady by mutableStateOf(false)
  private var privacyOptionsAvailable by mutableStateOf(false)
  private lateinit var updateManager: AppUpdateManager
@@ -43,9 +45,10 @@ class MainActivity : ComponentActivity() {
   super.onCreate(savedInstanceState)
   updateManager = AppUpdateManagerFactory.create(this)
   updateManager.registerListener(installListener)
+  sharedText = incomingSharedText(intent)
   setContent {
    SafeMobileTheme {
-    SafeMobileScreen(repository = (application as SafeMobileApp).repository, adsEnabled = adsReady, privacyOptionsRequired = privacyOptionsAvailable)
+    SafeMobileScreen(repository = (application as SafeMobileApp).repository, adsEnabled = adsReady, privacyOptionsRequired = privacyOptionsAvailable, sharedText = sharedText, onSharedTextConsumed = { sharedText = null })
    }
   }
   if (BuildConfig.ADS_CONFIGURED) {
@@ -61,6 +64,13 @@ class MainActivity : ComponentActivity() {
   }
   checkForUpdate()
  }
+ override fun onNewIntent(intent: Intent) {
+  super.onNewIntent(intent)
+  setIntent(intent)
+  incomingSharedText(intent)?.let { sharedText = it }
+ }
+ private fun incomingSharedText(intent: Intent?): String? =
+  if (intent?.action == Intent.ACTION_SEND) intent.getCharSequenceExtra(Intent.EXTRA_TEXT)?.toString() else null
  override fun onResume() {
   super.onResume()
   if (!::updateManager.isInitialized) return

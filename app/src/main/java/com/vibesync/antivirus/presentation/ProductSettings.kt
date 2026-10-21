@@ -11,6 +11,10 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -259,6 +263,7 @@ internal fun SafeMobileSettingsPanel(
     var languageMenuExpanded by remember { mutableStateOf(false) }
     var localeOverrideTag by remember { mutableStateOf(LocalePreferences.overrideTag(context)) }
     var showAbout by remember { mutableStateOf(false) }
+    var aboutSection by remember { mutableStateOf("privacy") }
     val rayId = remember(context) { InstallRayId.getOrCreate(context) }
 
     Column(verticalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
@@ -353,20 +358,43 @@ internal fun SafeMobileSettingsPanel(
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(stringResource(R.string.about_legal), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                Text("SafeMobile Antivirus · ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})", style = MaterialTheme.typography.bodySmall)
+                Text("SafeMobile Antivirus · " + BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")", style = MaterialTheme.typography.bodySmall)
                 TextButton(onClick = { showAbout = true }) { Text(stringResource(R.string.about_legal)) }
+            }
+        }
+        Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant), shape = RoundedCornerShape(18.dp)) {
+            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(stringResource(R.string.family_dedication_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                Text(stringResource(R.string.family_dedication), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
     }
 
+    val aboutContent = remember(context, aboutSection) {
+        when (aboutSection) {
+            "readme" -> runCatching { context.assets.open("README.md").bufferedReader().use { it.readText() } }.getOrDefault("Bundled README is unavailable.")
+            "notices" -> runCatching { context.assets.open("THIRD_PARTY_NOTICES.md").bufferedReader().use { it.readText() } }.getOrDefault("Third-party licence notices are unavailable.")
+            "license" -> context.getString(R.string.about_license_missing)
+            else -> runCatching { context.assets.open("privacy-policy.md").bufferedReader().use { it.readText() } }.getOrDefault(context.getString(R.string.privacy_body))
+        }
+    }
     if (showAbout) AlertDialog(
         onDismissRequest = { showAbout = false },
         title = { Text(stringResource(R.string.about_legal)) },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(stringResource(R.string.privacy_body))
-                Text(stringResource(R.string.scan_clean_warning))
-                Text(stringResource(R.string.not_configured))
+            Column(
+                Modifier.fillMaxWidth().heightIn(max = 470.dp).verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+                    TextButton(onClick = { aboutSection = "readme" }) { Text(stringResource(R.string.about_readme)) }
+                    TextButton(onClick = { aboutSection = "privacy" }) { Text(stringResource(R.string.about_privacy_policy)) }
+                }
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+                    TextButton(onClick = { aboutSection = "license" }) { Text(stringResource(R.string.about_license)) }
+                    TextButton(onClick = { aboutSection = "notices" }) { Text(stringResource(R.string.about_third_party)) }
+                }
+                Text(aboutContent, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurface)
             }
         },
         confirmButton = { TextButton(onClick = { showAbout = false }) { Text(stringResource(R.string.close)) } }
