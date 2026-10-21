@@ -146,6 +146,7 @@ import java.io.File
   if (privacyAccepted) action() else { pendingSensitiveAction = action; showPrivacyDisclosure = true }
  }
  var monitoringRunning by remember(context) { mutableStateOf(isStorageSentinelRunning(context)) }
+ var pendingUninstallPackage by remember { mutableStateOf<String?>(null) }
  var showDefinitionImportWarning by remember { mutableStateOf(false) }
  var privacyOptionsVisible by remember { mutableStateOf(privacyOptionsRequired) }
  var pendingQuarantine by remember { mutableStateOf<ScanResult?>(null) }
@@ -164,7 +165,14 @@ import java.io.File
  DisposableEffect(connectivity) { connectivity.start(); onDispose { connectivity.stop() } }
  DisposableEffect(lifecycleOwner, context) {
   val observer = LifecycleEventObserver { _, event ->
-   if (event == Lifecycle.Event.ON_RESUME) { monitoringRunning = isStorageSentinelRunning(context); vm.refreshQuarantine() }
+   if (event == Lifecycle.Event.ON_RESUME) {
+    monitoringRunning = isStorageSentinelRunning(context)
+    vm.refreshQuarantine()
+    pendingUninstallPackage?.let { packageName ->
+     vm.refreshInstalledPackage(packageName)
+     pendingUninstallPackage = null
+    }
+   }
   }
   lifecycleOwner.lifecycle.addObserver(observer)
   onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
@@ -284,13 +292,19 @@ import java.io.File
       state.results.take(80).forEach { result ->
        ScanResultCard(
         result,
-        showUninstall = result.packageName != null && result.verdict in listOf(ScanVerdict.THREAT, ScanVerdict.SUSPICIOUS),
+        showUninstall = result.packageName != null && result.packageName != context.packageName &&
+         result.verdict in listOf(ScanVerdict.THREAT, ScanVerdict.SUSPICIOUS),
         showQuarantine = result.sourceUri != null && result.verdict in listOf(ScanVerdict.THREAT, ScanVerdict.SUSPICIOUS),
         onUninstall = { packageName ->
          val host = activity
          if (host == null) Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show()
-         else runCatching { host.startActivity(Intent(Intent.ACTION_DELETE, Uri.parse("package:$packageName"))) }
-          .onFailure { Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show() }
+         else runCatching {
+          pendingUninstallPackage = packageName
+          host.startActivity(Intent(Intent.ACTION_DELETE, Uri.parse("package:$packageName")))
+         }.onFailure {
+          pendingUninstallPackage = null
+          Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show()
+         }
         },
         onQuarantine = { pendingQuarantine = result }
        )
