@@ -124,4 +124,23 @@
 <string name="definitions_limited_compact">Definições: apenas assinatura de teste EICAR; cobertura limitada.</string>
 <string name="settings_privacy">Privacidade e permissões</string>
 <string name="quarantine_legacy_warning">Item antigo em quarentena: armazenado sem criptografia em uma versão anterior.</string>
+<string name="overlay_review_title">Revisão de risco de sobreposição</string>
+<string name="overlay_review_description">Revisão opcional e limitada de aplicações que declaram capacidade de aparecer sobre outras aplicações e serviços de acessibilidade. São apenas indicadores para análise; o SafeMobile não pode provar que outra aplicação está a exibir uma sobreposição agora nem consultar a sua permissão ativa.</string>
+<string name="overlay_review_last_attempt">Última tentativa: %1$s</string>
+<string name="overlay_review_last_success">Última verificação bem-sucedida: %1$s</string>
+<string name="overlay_review_summary">Aplicações que declaram capacidade de sobreposição: %1$d · Aplicações que declaram serviços de acessibilidade: %2$d · Serviços de acessibilidade ativados neste dispositivo: %3$d</string>
+<string name="overlay_review_not_checked">Ainda não existe uma revisão de risco de sobreposição bem-sucedida.</string>
+<string name="overlay_review_failed">A última tentativa de revisão falhou. O Android pode ter adiado a tarefa ou restringido a visibilidade dos pacotes necessária.</string>
+<string name="overlay_review_permission_required">O Android não permitiu esta revisão. Verifique a visibilidade das aplicações instaladas e tente novamente.</string>
+<string name="overlay_review_reminder_interval">Intervalo dos lembretes</string>
+<string name="overlay_review_reminder_12h">A cada 12 horas</string>
+<string name="overlay_review_reminder_24h">A cada 24 horas</string>
+<string name="overlay_review_reminder_48h">A cada 48 horas</string>
+<string name="overlay_review_notifications_off">As notificações estão desativadas. A revisão pode continuar, mas os lembretes não serão apresentados.</string>
+<string name="overlay_review_enabled">Revisão automática ativada</string>
+<string name="overlay_review_disabled">Revisão em pausa</string>
+<string name="overlay_review_notification_channel">Revisão de privacidade SafeMobile</string>
+<string name="overlay_review_notification_channel_description">Lembretes de baixa prioridade para a revisão opcional do risco de sobreposição.</string>
+<string name="overlay_review_notification_title">Revisão do risco de sobreposição concluída</string>
+<string name="overlay_review_notification_body">%1$d aplicações declaram capacidade de sobreposição e %2$d declaram serviços de acessibilidade. São indicadores para revisão, não provas de malware.</string>
 </resources>
