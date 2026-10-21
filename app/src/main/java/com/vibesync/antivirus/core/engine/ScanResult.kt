@@ -16,5 +16,7 @@ data class ScanResult(
  /** Separate UUIDv4 identifier for each confirmed local signature match. */
  val threatEventId: String? = null,
  /** Normalized local triage score; heuristics alone do not establish malware. */
- val riskScore: Float = 0f
+ val riskScore: Float = 0f,
+ /** SHA-1 digest computed in the same streaming pass when available. */
+ val sha1: String? = null
 )
