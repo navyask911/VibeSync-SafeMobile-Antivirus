@@ -387,7 +387,7 @@ internal fun SafeMobileSettingsPanel(
 
     val aboutContent = remember(context, aboutSection) {
         when (aboutSection) {
-            "readme" -> runCatching { context.assets.open("README.md").bufferedReader().use { it.readText() } }.getOrDefault("Bundled README is unavailable.").let { readme -> "$readme\n\n${context.getString(R.string.not_configured)}" }
+            "readme" -> runCatching { context.assets.open("README.md").bufferedReader().use { it.readText() } }.getOrDefault("Bundled README is unavailable.").let { readme -> "$readme\n\n${context.getString(R.string.features_disclaimer)}\n\n${context.getString(R.string.not_configured)}" }
             "notices" -> runCatching { context.assets.open("THIRD_PARTY_NOTICES.md").bufferedReader().use { it.readText() } }.getOrDefault("Third-party licence notices are unavailable.")
             "license" -> context.getString(R.string.about_license_missing)
             else -> runCatching { context.assets.open("privacy-policy.md").bufferedReader().use { it.readText() } }.getOrDefault(context.getString(R.string.privacy_body))

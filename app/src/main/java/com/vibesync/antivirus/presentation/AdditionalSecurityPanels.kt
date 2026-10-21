@@ -85,8 +85,7 @@ internal fun CoreStrengthsAccordion(onNavigate: (String) -> Unit) {
                 Text(if (expanded) "−" else "+")
             }
             if (expanded) {
-                Text(stringResource(R.string.features_disclaimer), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                FeatureRow(Icons.Default.CloudOff, R.string.pillar_offline_title, R.string.pillar_offline_body, R.string.feature_status_limited) { onNavigate("scan") }
+                FeatureRow(Icons.Default.CloudOff, R.string.pillar_offline_title, R.string.pillar_offline_body, R.string.feature_status_local) { onNavigate("scan") }
                 FeatureRow(Icons.Default.Security, R.string.pillar_telemetry_title, R.string.pillar_telemetry_body, R.string.feature_status_local) { onNavigate("settings") }
                 FeatureRow(Icons.Default.Security, R.string.pillar_whatsapp_title, R.string.pillar_whatsapp_body, R.string.feature_status_limited) { onNavigate("scan") }
                 FeatureRow(Icons.Default.Link, R.string.pillar_phishing_title, R.string.pillar_phishing_body, R.string.feature_status_heuristic) { onNavigate("phishing") }
