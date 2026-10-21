@@ -149,7 +149,7 @@ class PackageScanner(
   if (threat != null) {
    val family = revealMetadataOrPlaintext(threat.malwareFamily, "family")
    val level = revealMetadataOrPlaintext(threat.threatLevel, "level")
-   return ScanResult(key, label, sha, md5, ScanVerdict.THREAT, listOf(context.getString(R.string.hash_match, family, level)), 0)
+   return ScanResult(key, label, sha, md5, ScanVerdict.THREAT, listOf(context.getString(R.string.hash_match, family, level)), 0).copy(threatEventId = UUID.randomUUID().toString())
   }
   val verdict = if (score >= 45) ScanVerdict.SUSPICIOUS else ScanVerdict.NO_MATCH
   val notes = if (heuristic.isEmpty()) listOf(context.getString(R.string.no_match_detail)) else heuristic + context.getString(R.string.risk_review)
@@ -171,7 +171,8 @@ class PackageScanner(
    scanTimestamp=System.currentTimeMillis(),
    verdict=result.verdict.name,
    scanDuration=elapsed(start),
-   scanSessionId=scanSessionId
+   scanSessionId=scanSessionId,
+    threatEventId=result.threatEventId.orEmpty()
   ))
  }
  private fun revealMetadataOrPlaintext(value: String, purpose: String): String =

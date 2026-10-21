@@ -241,7 +241,7 @@ private fun inspectInstallerSources(context: Context): List<GuardianFinding> {
         .toList()
 }
 
-internal data class UrlAssessment(val suspicious: Boolean, val host: String, val invalid: Boolean)
+private data class UrlAssessment(val suspicious: Boolean, val host: String, val invalid: Boolean)
 
 internal object UrlRiskAssessment {
     private val knownShorteners = setOf("bit.ly", "tinyurl.com", "t.co", "is.gd", "cutt.ly", "rb.gy")

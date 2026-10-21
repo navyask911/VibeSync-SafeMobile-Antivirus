@@ -12,5 +12,7 @@ data class ScanResult(
  val sourceUri: String? = null,
  val sourceLocalPath: String? = null,
  /** UUIDv4 shared by all assessments that belong to a single scan operation. */
- val scanSessionId: String? = null
+ val scanSessionId: String? = null,
+ /** Separate UUIDv4 identifier for each confirmed local signature match. */
+ val threatEventId: String? = null
 )

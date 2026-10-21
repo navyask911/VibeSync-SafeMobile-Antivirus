@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 
-@Database(entities = [ThreatSignature::class, ScanAudit::class, WhiteListEntry::class], version = 2, exportSchema = false)
+@Database(entities = [ThreatSignature::class, ScanAudit::class, WhiteListEntry::class], version = 3, exportSchema = false)
 abstract class ThreatDatabase : RoomDatabase() {
  abstract fun threatDao(): ThreatDao
 
@@ -15,6 +15,14 @@ abstract class ThreatDatabase : RoomDatabase() {
    override fun migrate(database: SupportSQLiteDatabase) {
     database.execSQL("ALTER TABLE scan_audits ADD COLUMN scan_session_id TEXT NOT NULL DEFAULT ''")
     database.execSQL("CREATE INDEX IF NOT EXISTS index_scan_audits_scan_session_id ON scan_audits(scan_session_id)")
+   }
+  }
+
+  /** Additive migration preserves old audit rows and does not invent historical threat IDs. */
+  val MIGRATION_2_3: Migration = object : Migration(2, 3) {
+   override fun migrate(database: SupportSQLiteDatabase) {
+    database.execSQL("ALTER TABLE scan_audits ADD COLUMN threat_event_id TEXT NOT NULL DEFAULT ''")
+    database.execSQL("CREATE INDEX IF NOT EXISTS index_scan_audits_threat_event_id ON scan_audits(threat_event_id)")
    }
   }
  }

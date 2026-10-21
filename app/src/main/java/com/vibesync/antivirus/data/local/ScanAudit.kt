@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity(
  tableName = "scan_audits",
- indices = [Index(value = ["scan_timestamp"]), Index(value = ["verdict"]), Index(value = ["scan_session_id"])]
+ indices = [Index(value = ["scan_timestamp"]), Index(value = ["verdict"]), Index(value = ["scan_session_id"]), Index(value = ["threat_event_id"])]
 )
 data class ScanAudit(
  @PrimaryKey(autoGenerate = true) val id: Long = 0,
@@ -15,5 +15,6 @@ data class ScanAudit(
  @ColumnInfo(name = "scan_timestamp") val scanTimestamp: Long,
  @ColumnInfo(name = "verdict") val verdict: String,
  @ColumnInfo(name = "scan_duration") val scanDuration: Long,
- @ColumnInfo(name = "scan_session_id", defaultValue = "''") val scanSessionId: String = ""
+ @ColumnInfo(name = "scan_session_id", defaultValue = "''") val scanSessionId: String = "",
+ @ColumnInfo(name = "threat_event_id", defaultValue = "''") val threatEventId: String = ""
 )
