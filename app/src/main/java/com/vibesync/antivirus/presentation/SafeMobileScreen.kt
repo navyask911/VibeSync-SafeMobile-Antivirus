@@ -124,17 +124,19 @@ import java.io.File
   state.isScanning -> R.string.scan_running
   state.threatCount > 0 -> R.string.threat_found
   state.suspiciousCount > 0 -> R.string.review_recommended
+  state.results.any { it.verdict == ScanVerdict.NOT_SCANNED } -> R.string.verdict_not_scanned
   state.signatureCount <= 1 -> R.string.limited_protection
   else -> R.string.scan_status
  }
  val statusTint = when {
   state.threatCount > 0 -> MaterialTheme.colorScheme.error
+  state.results.any { it.verdict == ScanVerdict.NOT_SCANNED } -> MaterialTheme.colorScheme.onSurfaceVariant
   state.suspiciousCount > 0 || state.signatureCount <= 1 -> MaterialTheme.colorScheme.tertiary
   else -> successStatusColor()
  }
  val statusIcon = when {
   state.isScanning -> Icons.Default.Security
-  state.threatCount > 0 || state.suspiciousCount > 0 || state.signatureCount <= 1 -> Icons.Default.Warning
+  state.threatCount > 0 || state.suspiciousCount > 0 || state.results.any { it.verdict == ScanVerdict.NOT_SCANNED } || state.signatureCount <= 1 -> Icons.Default.Warning
   else -> Icons.Default.CheckCircle
  }
  val lifecycleOwner = LocalLifecycleOwner.current
@@ -291,6 +293,8 @@ import java.io.File
      Column(verticalArrangement=Arrangement.spacedBy(10.dp)) {
       Text(stringResource(R.string.latest_results),style=MaterialTheme.typography.titleLarge,fontWeight=FontWeight.Bold)
       Text(stringResource(R.string.results_summary,state.results.count{it.verdict==ScanVerdict.THREAT},state.results.count{it.verdict==ScanVerdict.SUSPICIOUS},state.results.count{it.verdict==ScanVerdict.NO_MATCH}),color=MaterialTheme.colorScheme.onSurfaceVariant,style=MaterialTheme.typography.bodySmall)
+      val notScannedCount = state.results.count { it.verdict == ScanVerdict.NOT_SCANNED }
+      if (notScannedCount > 0) Text("${stringResource(R.string.verdict_not_scanned)}: $notScannedCount", color=MaterialTheme.colorScheme.onSurfaceVariant, style=MaterialTheme.typography.bodySmall)
       state.results.take(80).forEach { result ->
        ScanResultCard(
         result,
@@ -480,7 +484,7 @@ private fun isStorageSentinelRunning(context: Context): Boolean {
  onUninstall:(String)->Unit,
  onQuarantine:()->Unit
 ) {
- val color=when(result.verdict) { ScanVerdict.THREAT->MaterialTheme.colorScheme.error; ScanVerdict.SUSPICIOUS->MaterialTheme.colorScheme.tertiary; ScanVerdict.NO_MATCH->successStatusColor(); ScanVerdict.NOT_SCANNED->Color(0xFF9CB0BF) }
+ val color=when(result.verdict) { ScanVerdict.THREAT->MaterialTheme.colorScheme.error; ScanVerdict.SUSPICIOUS->MaterialTheme.colorScheme.tertiary; ScanVerdict.NO_MATCH->successStatusColor(); ScanVerdict.NOT_SCANNED->MaterialTheme.colorScheme.onSurfaceVariant }
  val verdictResource=when(result.verdict) { ScanVerdict.THREAT->R.string.verdict_threat; ScanVerdict.SUSPICIOUS->R.string.verdict_suspicious; ScanVerdict.NO_MATCH->R.string.verdict_no_match; ScanVerdict.NOT_SCANNED->R.string.verdict_not_scanned }
  Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surface),shape=RoundedCornerShape(14.dp),modifier=Modifier.fillMaxWidth()) {
   Column(Modifier.padding(14.dp),verticalArrangement=Arrangement.spacedBy(5.dp)) {
