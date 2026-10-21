@@ -124,4 +124,23 @@
 <string name="definitions_limited_compact">डेफिनिशन: फक्त EICAR चाचणी स्वाक्षरी; व्याप्ती मर्यादित आहे.</string>
 <string name="settings_privacy">गोपनीयता आणि परवानग्या</string>
 <string name="quarantine_legacy_warning">जुनी क्वारंटाइन नोंद: मागील आवृत्तीत एन्क्रिप्शनशिवाय साठवलेली.</string>
+<string name="overlay_review_title">ओव्हरले-जोखीम पुनरावलोकन</string>
+<string name="overlay_review_description">इतर अॅप्सच्या वर दिसण्याची क्षमता किंवा प्रवेशयोग्यता सेवा घोषित करणाऱ्या अॅप्सचे ऐच्छिक मर्यादित पुनरावलोकन. हे तपासणीचे संकेत आहेत; दुसरे अॅप सध्या ओव्हरले दाखवत आहे किंवा त्याची थेट परवानगी काय आहे हे SafeMobile सिद्ध करू शकत नाही.</string>
+<string name="overlay_review_last_attempt">शेवटचा प्रयत्न: %1$s</string>
+<string name="overlay_review_last_success">शेवटची यशस्वी तपासणी: %1$s</string>
+<string name="overlay_review_summary">ओव्हरले क्षमता घोषित करणारी अॅप्स: %1$d · प्रवेशयोग्यता सेवा घोषित करणारी अॅप्स: %2$d · या डिव्हाइसवर सक्षम प्रवेशयोग्यता सेवा: %3$d</string>
+<string name="overlay_review_not_checked">अद्याप ओव्हरले-जोखीम पुनरावलोकन यशस्वी झालेले नाही.</string>
+<string name="overlay_review_failed">शेवटचा पुनरावलोकन प्रयत्न अयशस्वी झाला. Android ने काम पुढे ढकलले असेल किंवा आवश्यक पॅकेज दृश्यमानता नाकारली असेल.</string>
+<string name="overlay_review_permission_required">Android ने हे पुनरावलोकन करण्याची परवानगी दिली नाही. स्थापित अॅप्सची दृश्यमानता तपासा आणि पुन्हा प्रयत्न करा.</string>
+<string name="overlay_review_reminder_interval">स्मरणपत्र अंतर</string>
+<string name="overlay_review_reminder_12h">दर 12 तासांनी</string>
+<string name="overlay_review_reminder_24h">दर 24 तासांनी</string>
+<string name="overlay_review_reminder_48h">दर 48 तासांनी</string>
+<string name="overlay_review_notifications_off">सूचना बंद आहेत. पुनरावलोकन सुरू राहू शकते, परंतु स्मरणपत्रे दिसणार नाहीत.</string>
+<string name="overlay_review_enabled">स्वयंचलित पुनरावलोकन सुरू</string>
+<string name="overlay_review_disabled">पुनरावलोकन थांबवले</string>
+<string name="overlay_review_notification_channel">SafeMobile गोपनीयता पुनरावलोकन</string>
+<string name="overlay_review_notification_channel_description">ऐच्छिक ओव्हरले-जोखीम पुनरावलोकनासाठी कमी-प्राधान्य स्मरणपत्रे.</string>
+<string name="overlay_review_notification_title">ओव्हरले-जोखीम पुनरावलोकन पूर्ण झाले</string>
+<string name="overlay_review_notification_body">%1$d अॅप्स ओव्हरले क्षमता आणि %2$d अॅप्स प्रवेशयोग्यता सेवा घोषित करतात. हे तपासणीचे संकेत आहेत, मालवेअरचा पुरावा नाही.</string>
 </resources>
