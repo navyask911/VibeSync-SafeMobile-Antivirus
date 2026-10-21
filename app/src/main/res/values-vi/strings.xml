@@ -60,11 +60,11 @@
     <string name="unknown_file">tệp đã chọn</string>
     <string name="local_files_only">Để bảo vệ quyền riêng tư, trình quét chỉ mở tệp từ nhà cung cấp bộ nhớ cục bộ được nhận diện. Không mở nhà cung cấp tài liệu đám mây hoặc bên thứ ba.</string>
     <string name="quarantine_confirm_title">Cách ly tệp bị đánh dấu này?</string>
-    <string name="quarantine_confirm_body">Một bản sao riêng tư sẽ được lưu trong ứng dụng. Sau khi xác minh mã băm, SafeMobile sẽ thử xóa tệp gốc đã chọn. Việc xóa phụ thuộc vào quyền lưu trữ Android và nhà cung cấp; tệp gốc có thể vẫn còn.</string>
+    <string name="quarantine_confirm_body">SafeMobile sẽ tạo và xác minh một bản sao riêng được mã hóa. Tệp gốc sẽ được giữ lại và không bị xóa.</string>
     <string name="quarantine_confirm_action">Cách ly tệp</string>
     <string name="quarantine_file">Lưu bản sao riêng trong vùng cách ly</string>
     <string name="quarantine_success_removed">Đã lưu bản sao cách ly riêng (%1$s); Android báo rằng tệp gốc đã bị xóa.</string>
-    <string name="quarantine_success_copy_only">Đã lưu bản sao cách ly riêng (%1$s), nhưng Android không thể xóa tệp gốc. Hãy xóa thủ công nếu cần.</string>
+    <string name="quarantine_success_copy_only">Đã lưu bản sao cách ly được mã hóa (%1$s). Tệp gốc được giữ lại và không bị xóa.</string>
     <string name="quarantine_failed">Cách ly thất bại. Tệp gốc không bị cố ý xóa.</string>
     <string name="uninstall_app">Gỡ cài đặt ứng dụng…</string>
     <string name="import_definitions">Nhập định nghĩa mối đe dọa ngoại tuyến (JSON)</string>
@@ -123,4 +123,5 @@
 <string name="history_session">ID phiên</string>
 <string name="definitions_limited_compact">Định nghĩa: chỉ có chữ ký kiểm tra EICAR; phạm vi còn hạn chế.</string>
 <string name="settings_privacy">Quyền riêng tư và quyền truy cập</string>
+<string name="quarantine_legacy_warning">Mục cách ly cũ: được lưu không mã hóa trong phiên bản trước.</string>
 </resources>
