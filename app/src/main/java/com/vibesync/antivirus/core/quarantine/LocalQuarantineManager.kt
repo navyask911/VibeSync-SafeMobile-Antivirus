@@ -22,7 +22,7 @@ import java.util.UUID
 
 data class QuarantineOutcome(val privateCopy: File, val originalRemoved: Boolean)
 
-data class QuarantineMetadata(val originalName: String, val sha256: String, val originalBytes: Long)
+data class QuarantineMetadata(val originalName: String, val sha256: String, val originalBytes: Long, val recordId: String)
 
 /**
  * Keeps quarantined content encrypted with Tink Streaming AEAD. The per-install Tink keyset is
@@ -234,15 +234,8 @@ class LocalQuarantineManager(context: Context, private val hashCalculator: HashC
    "Quarantine metadata failed validation."
   }
   require(recordId == recordIdFromFile(file)) { "Quarantine identifier does not match its metadata." }
-  return QuarantineMetadata(name, hash.lowercase(Locale.ROOT), bytes).copyWithRecordId(recordId)
+  return QuarantineMetadata(name, hash.lowercase(Locale.ROOT), bytes, recordId)
  }
-
- private fun QuarantineMetadata.copyWithRecordId(id: String): QuarantineMetadataWithId =
-  QuarantineMetadataWithId(originalName, sha256, originalBytes, id)
-
- private data class QuarantineMetadataWithId(
-  val originalName: String, val sha256: String, val originalBytes: Long, val recordId: String
- )
 
  private fun metadataFile(file: File): File =
   File(file.parentFile, file.name.removeSuffix(".$ENCRYPTED_EXTENSION") + ".meta")
