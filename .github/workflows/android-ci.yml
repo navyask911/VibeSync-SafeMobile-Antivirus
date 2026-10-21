@@ -99,6 +99,7 @@ jobs:
 
   android-emulator-tests:
     name: Instrumented tests on API ${{ matrix.api-level }}
+    needs: test-lint-build
     if: github.event_name != 'pull_request' || github.base_ref == 'main'
     runs-on: ubuntu-latest
     timeout-minutes: 45
