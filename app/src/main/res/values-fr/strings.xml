@@ -67,4 +67,23 @@
 <string name="definitions_limited_compact">Définitions : signature de test EICAR uniquement ; couverture limitée.</string>
 <string name="settings_privacy">Confidentialité et autorisations</string>
 <string name="quarantine_legacy_warning">Ancien élément en quarantaine : stocké sans chiffrement dans une version précédente.</string>
+<string name="overlay_review_title">Vérification du risque de superposition</string>
+<string name="overlay_review_description">Vérification facultative et limitée des applications qui déclarent pouvoir s’afficher par-dessus d’autres applications ou fournir des services d’accessibilité. Ce sont uniquement des indices à examiner ; SafeMobile ne peut pas prouver qu’une autre application affiche actuellement une superposition ni consulter son autorisation en direct.</string>
+<string name="overlay_review_last_attempt">Dernière tentative : %1$s</string>
+<string name="overlay_review_last_success">Dernière vérification réussie : %1$s</string>
+<string name="overlay_review_summary">Applications déclarant une capacité de superposition : %1$d · Applications déclarant des services d’accessibilité : %2$d · Services d’accessibilité activés sur cet appareil : %3$d</string>
+<string name="overlay_review_not_checked">Aucune vérification réussie du risque de superposition pour le moment.</string>
+<string name="overlay_review_failed">La dernière tentative a échoué. Android a peut-être différé la tâche ou refusé la visibilité requise sur les applications.</string>
+<string name="overlay_review_permission_required">Android n’a pas autorisé cette vérification. Contrôlez la visibilité des applications installées, puis réessayez.</string>
+<string name="overlay_review_reminder_interval">Intervalle des rappels</string>
+<string name="overlay_review_reminder_12h">Toutes les 12 heures</string>
+<string name="overlay_review_reminder_24h">Toutes les 24 heures</string>
+<string name="overlay_review_reminder_48h">Toutes les 48 heures</string>
+<string name="overlay_review_notifications_off">Les notifications sont désactivées. La vérification peut continuer, mais aucun rappel ne sera affiché.</string>
+<string name="overlay_review_enabled">Vérification automatique activée</string>
+<string name="overlay_review_disabled">Vérification en pause</string>
+<string name="overlay_review_notification_channel">Vérification de confidentialité SafeMobile</string>
+<string name="overlay_review_notification_channel_description">Rappels de faible priorité pour la vérification facultative du risque de superposition.</string>
+<string name="overlay_review_notification_title">Vérification du risque de superposition terminée</string>
+<string name="overlay_review_notification_body">%1$d applications déclarent une capacité de superposition et %2$d déclarent des services d’accessibilité. Ce sont des indices, pas une preuve de logiciel malveillant.</string>
 </resources>
