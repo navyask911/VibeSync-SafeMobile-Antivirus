@@ -34,7 +34,14 @@ class MultiLayerScanWorker(context: Context,params: WorkerParameters) : Coroutin
    val apk = static?.apkPath?.let(::File)
    val dex = apk?.let { DexPatternScanner().scan(it) }.orEmpty()
    val ml = static?.permissionFeatures?.let { PermissionModelScorer(applicationContext).probability(it) }
-   val bloom = BloomFilterScanner(applicationContext).mightContainHash(scan.sha256)
+   val bloomScanner = BloomFilterScanner(applicationContext)
+   // SHA-256, SHA-1 and MD5 were calculated in one streaming pass.
+   val bloomChecks = listOfNotNull(scan.sha256, scan.sha1, scan.md5).map { bloomScanner.mightContainHash(it) }
+   val bloom = when {
+    bloomChecks.any { it == true } -> true
+    bloomChecks.any { it == null } -> null
+    else -> false
+   }
    val integrity = IntegrityChecker(applicationContext).check()
    val reasons = linkedSetOf<String>()
    reasons.addAll(scan.reasons); static?.reasons?.let(reasons::addAll)
