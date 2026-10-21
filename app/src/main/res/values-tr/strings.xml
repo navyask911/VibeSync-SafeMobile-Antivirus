@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">VibeSync SafeMobile Antivirus</string>
+    <string name="app_name">SafeMobile Antivirus</string>
     <string name="privacy_title">Gizlilik ve tarama erişimi bildirimi</string>
     <string name="privacy_body">SafeMobile bu cihazda SHA-256 ve MD5 özetlerini hesaplar ve yerel olarak saklanan tanımlarla karşılaştırır. Yerel taramalar dosyaları veya özetleri yüklemez. Reklamlar, yalnızca gizlilik tercihleriniz ve bağlantı durumunuz izin verdiğinde Google Mobile Ads ağ hizmetlerini kullanır. Temel tarama işlevleri ağ olmadan çalışır. Yüklü uygulamaların görünürlüğü ve tüm dosyalara erişim hassas Android izinleridir ve Google Play incelemesi gerektirebilir.</string>
     <string name="privacy_accept">Anladım</string>
     <string name="exit_app">Uygulamadan çık</string>
-    <string name="brand_title">VIBESYNC</string>
-    <string name="brand_subtitle">SAFEMOBILE ANTIVIRUS</string>
+    <string name="brand_title">SafeMobile Antivirus</string>
+    <string name="brand_subtitle">VibeSync</string>
     <string name="scan_status">Yerel koruma panosu</string>
     <string name="scan_running">Cihaz taranıyor…</string>
     <string name="threat_found">Tehdit eşleşmesi bulundu</string>
@@ -103,4 +103,24 @@
     <string name="language_system_default">Sistem varsayılanı</string>
     <string name="limited_protection">Sınırlı koruma — yalnızca EICAR test tanımı</string>
     <string name="review_recommended">İnceleme önerilir</string>
+<string name="nav_home">Ana Sayfa</string>
+<string name="nav_scan">Tara</string>
+<string name="nav_quarantine">Karantina</string>
+<string name="nav_history">Geçmiş</string>
+<string name="nav_settings">Ayarlar</string>
+<string name="settings_title">Ayarlar</string>
+<string name="appearance_title">Görünüm</string>
+<string name="theme_system">Sistem</string>
+<string name="theme_light">Açık</string>
+<string name="theme_dark">Koyu</string>
+<string name="language_settings">Dil</string>
+<string name="about_legal">Hakkında ve Yasal Bilgiler</string>
+<string name="ray_id">SafeMobile Ray ID</string>
+<string name="ray_id_copy">Kimliği kopyala</string>
+<string name="ray_id_copied">Ray ID kopyalandı</string>
+<string name="history_title">Tarama geçmişi</string>
+<string name="history_empty">Henüz yerel tarama geçmişi yok.</string>
+<string name="history_session">Oturum kimliği</string>
+<string name="definitions_limited_compact">Tanımlar: yalnızca EICAR test imzası; kapsam sınırlıdır.</string>
+<string name="settings_privacy">Gizlilik ve izinler</string>
 </resources>
