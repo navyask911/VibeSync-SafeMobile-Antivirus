@@ -37,7 +37,21 @@ The separate research index is a derived development artifact, not a replacement
 
 The reproducible importer is scripts/mendeley_dataset.py. It streams the versioned ZIP over HTTPS when no valid local archive exists, checks response size and ZIP structure/CRC, validates archive paths before extraction, rejects traversal/symlink/special-file entries and configured size limits, extracts into a dedicated cache directory, and writes an inspection/import report.
 
-The coding workspace's first direct download attempt failed because DNS resolution for data.mendeley.com was unavailable (curl: (6) Could not resolve host). This is an environment/network limitation, not evidence that the publisher archive is invalid. The GitHub Actions research workflow retries the download on a network-enabled runner and uploads the inspection report as an artifact. Until that workflow produces a report, actual archive bytes, archive checksum, extracted member list, CSV header, actual row counts, and import statistics remain unverified.
+The local container's first direct download attempt failed because DNS resolution for data.mendeley.com was unavailable (curl: (6) Could not resolve host). The separate GitHub Actions research workflow then downloaded the actual archive successfully, verified ZIP structure and CRCs, safely extracted the manifest, built a separate SQLite research index, ran PRAGMA integrity_check, and uploaded the inspection report as a workflow artifact. The archive and SQLite index remain in the GitHub Actions dataset cache and are not committed to the repository or bundled in the APK/AAB.
+
+Verified by workflow run https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/actions/runs/39578502245 on 21 October 2026:
+- Download archive size: 8,086,309 bytes.
+- Archive SHA-256: eacfd9a2ef80568d48049169521f9a4779a4ab1ee5d3ad78b2d2967624d282f5.
+- ZIP entries: 1; declared expanded bytes: 22,322,772.
+- Manifest member: A 200K Malware Hash Dataset with Experimental Spli/manifest.csv.
+- Extracted manifest SHA-256: a0727c77e6041b2a3ca1d621253557c9acef7b466686fb53e4bfa493905ead0a.
+- Actual headers: sha256, category, binary_label, split, in_binary_experiment, in_multiclass_experiment, in_trimodal_binary, in_trimodal_multiclass.
+- Rows examined (excluding the header): 201,549. Valid SHA-256 rows: 201,549. Invalid hash rows: 0. Duplicate hash rows after the first: 0. Unique SHA-256 hashes: 201,549.
+- binary_label counts: Goodware 111,219; Malware 90,330.
+- category counts: Goodware 111,219; Trojan 42,113; Adware 17,682; Malware_Generic 10,640; Infectors 8,311; Downloaders 5,392; Obfuscated 3,023; Ransomware 1,760; Spying_Stealing 1,011; Other_Malware 398.
+- The resulting research SQLite database passed PRAGMA integrity_check. No records were inserted into or merged with the operational Room malware-indicator database.
+
+The tooling leaves the downloaded ZIP and original extracted manifest unchanged. SHA-256 values are normalized to lowercase only in the derived research index; original field values and all experimental split/mask fields remain preserved in each row's raw JSON record. Dataset labels remain research labels, not verified live threat indicators.
 
 ## No endorsement
 
