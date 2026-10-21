@@ -26,7 +26,7 @@ class SafeMobileApp : Application() {
  private val appScope=CoroutineScope(SupervisorJob()+Dispatchers.IO)
  override fun onCreate() {
   super.onCreate()
-  database=Room.databaseBuilder(this,ThreatDatabase::class.java,"safe_mobile_threats.db").build()
+  database=Room.databaseBuilder(this,ThreatDatabase::class.java,"safe_mobile_threats.db")\n   .addMigrations(ThreatDatabase.MIGRATION_1_2)\n   .build()
   val hashStore=EncryptedHashStore(this)
   val loader=LocalDefinitionLoader(this,database.threatDao(),hashStore)
   val scanner=PackageScanner(this,database.threatDao(),hashStore,HashCalculator())
