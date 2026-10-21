@@ -108,6 +108,9 @@ fun ScanProgressRing(progress: Float?, scanning: Boolean, label: String, modifie
             animationSpec = infiniteRepeatable(tween(1800, easing = LinearEasing)), label = "scan-radar-rotation")
         animatedRotation
     } else 0f
+    val trackColor = MaterialTheme.colorScheme.surfaceVariant
+    val primaryColor = MaterialTheme.colorScheme.primary
+    val secondaryColor = MaterialTheme.colorScheme.secondary
     Box(modifier.size(size).semantics {
         contentDescription = if (normalized != null) label + ", " + (animatedProgress * 100f).roundToInt() + " percent" else label
         progressBarRangeInfo = if (normalized != null) ProgressBarRangeInfo(animatedProgress, 0f..1f)
@@ -118,13 +121,13 @@ fun ScanProgressRing(progress: Float?, scanning: Boolean, label: String, modifie
             val inset = stroke / 2f
             val arcSize = androidx.compose.ui.geometry.Size(size.toPx() - stroke, size.toPx() - stroke)
             val topLeft = androidx.compose.ui.geometry.Offset(inset, inset)
-            drawArc(MaterialTheme.colorScheme.surfaceVariant, 0f, 360f, false, topLeft, arcSize, style = Stroke(width = stroke))
+            drawArc(trackColor, 0f, 360f, false, topLeft, arcSize, style = Stroke(width = stroke))
             if (normalized != null) {
-                drawArc(MaterialTheme.colorScheme.primary, -90f, animatedProgress * 360f, false, topLeft, arcSize,
+                drawArc(primaryColor, -90f, animatedProgress * 360f, false, topLeft, arcSize,
                     style = Stroke(width = stroke, cap = StrokeCap.Round))
             } else if (scanning) {
-                drawArc(Brush.sweepGradient(listOf(Color.Transparent, MaterialTheme.colorScheme.primary,
-                    MaterialTheme.colorScheme.secondary.copy(alpha = 0.15f), Color.Transparent)),
+                drawArc(Brush.sweepGradient(listOf(Color.Transparent, primaryColor,
+                    secondaryColor.copy(alpha = 0.15f), Color.Transparent)),
                     -55f, 130f, false, topLeft, arcSize, style = Stroke(width = stroke, cap = StrokeCap.Round))
             }
         }

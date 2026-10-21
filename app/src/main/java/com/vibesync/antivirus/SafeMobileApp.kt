@@ -43,10 +43,10 @@ class SafeMobileApp : Application() {
   }
  }
  fun scheduleMaintenanceSweep() {
-  val request=PeriodicWorkRequestBuilder<DeepScanWorker>(12,TimeUnit.HOURS)
+  val request=PeriodicWorkRequestBuilder<DeepScanWorker>(6,TimeUnit.HOURS)
    .setConstraints(Constraints.Builder().setRequiresBatteryNotLow(true).build()).build()
   WorkManager.getInstance(this).enqueueUniquePeriodicWork(
-   DeepScanWorker.UNIQUE_NAME,ExistingPeriodicWorkPolicy.KEEP,request
+   DeepScanWorker.UNIQUE_NAME,ExistingPeriodicWorkPolicy.UPDATE,request
   )
  }
  override fun onTerminate() { appScope.cancel(); super.onTerminate() }

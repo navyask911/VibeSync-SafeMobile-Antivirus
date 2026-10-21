@@ -275,7 +275,7 @@ internal fun SafeMobileSettingsPanel(
     val context = LocalContext.current
     val activity = context as? Activity
     val themePrefs = remember(context) { context.getSharedPreferences(AppearancePreferences.PREFS_NAME, Context.MODE_PRIVATE) }
-    var themeMode by remember { mutableStateOf(themePrefs.getString(AppearancePreferences.THEME_KEY, "system") ?: "system") }
+    var themeMode by remember { mutableStateOf(themePrefs.getString(AppearancePreferences.THEME_KEY, "dark") ?: "dark") }
     var languageMenuExpanded by remember { mutableStateOf(false) }
     var localeOverrideTag by remember { mutableStateOf(LocalePreferences.overrideTag(context)) }
     var showAbout by remember { mutableStateOf(false) }
