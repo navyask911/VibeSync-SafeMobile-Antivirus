@@ -60,11 +60,11 @@
     <string name="unknown_file">所选文件</string>
     <string name="local_files_only">为保护隐私，此扫描器只会打开来自可识别设备本地存储提供程序的文件，不会打开云端或第三方文档提供程序中的文件。</string>
     <string name="quarantine_confirm_title">将此标记文件隔离？</string>
-    <string name="quarantine_confirm_body">应用会在自身私有存储中保存一份副本。验证哈希后，SafeMobile 会尝试删除所选原文件。能否删除取决于 Android 存储权限和文件提供程序；原文件可能仍然保留。</string>
+    <string name="quarantine_confirm_body">SafeMobile 将创建并验证加密的私有副本。原始文件会保留，不会删除。</string>
     <string name="quarantine_confirm_action">隔离文件</string>
     <string name="quarantine_file">隔离私有副本</string>
     <string name="quarantine_success_removed">已将副本保存到私有隔离区（%1$s）；Android 报告原文件已删除。</string>
-    <string name="quarantine_success_copy_only">已将副本保存到私有隔离区（%1$s），但 Android 未能删除原文件。如有需要，请手动删除。</string>
+    <string name="quarantine_success_copy_only">已保存加密隔离副本（%1$s）。原始文件已保留，没有删除。</string>
     <string name="quarantine_failed">隔离失败。应用没有主动删除原文件。</string>
     <string name="uninstall_app">卸载应用…</string>
     <string name="import_definitions">导入离线威胁定义（JSON）</string>
@@ -123,4 +123,5 @@
 <string name="history_session">会话 ID</string>
 <string name="definitions_limited_compact">定义库仅包含 EICAR 测试签名；覆盖范围有限。</string>
 <string name="settings_privacy">隐私与权限</string>
+<string name="quarantine_legacy_warning">旧版隔离项目：在之前的版本中以未加密方式存储。</string>
 </resources>
