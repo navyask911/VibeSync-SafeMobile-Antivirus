@@ -142,7 +142,7 @@
 <string name="nav_cleaner" translatable="false">Storage cleaner</string>
 <string name="why_safemobile" translatable="false">Why SafeMobile? Core Strengths &amp; Features</string>
 <string name="features_disclaimer" translatable="false">Feature availability depends on Android permissions and the current local definitions. These features do not provide guaranteed or complete malware protection.</string>
-<string name="pillar_offline_title" translatable="false">100% Offline Privacy</string>
+<string name="pillar_offline_title" translatable="false" formatted="false">100% Offline Privacy</string>
 <string name="pillar_offline_body" translatable="false">Core file hashing and local signature matching run on-device. Ads and Google Play update checks are separate network-capable features when configured and permitted.</string>
 <string name="pillar_telemetry_title" translatable="false">Zero Cloud Telemetry</string>
 <string name="pillar_telemetry_body" translatable="false">The scanner does not upload file contents or hashes. Advertising and Google Play services may make separate network requests.</string>
@@ -151,7 +151,7 @@
 <string name="pillar_phishing_title" translatable="false">Phishing Link Blocker</string>
 <string name="pillar_phishing_body" translatable="false">Local URL heuristics are available. No URLhaus threat feed or device-wide browser interception is configured in this build.</string>
 <string name="pillar_cleaner_title" translatable="false">Residual Storage Cleaner</string>
-<string name="pillar_cleaner_body" translatable="false">Choose a folder in Android's picker and review APK metadata before deleting selected items.</string>
+<string name="pillar_cleaner_body" translatable="false">Choose a folder with the Android picker and review APK metadata before deleting selected items.</string>
 <string name="feature_status_limited" translatable="false">Available with limitations</string>
 <string name="feature_status_local" translatable="false">Local processing</string>
 <string name="feature_status_heuristic" translatable="false">Heuristic-only; no threat feed</string>
@@ -186,7 +186,7 @@
 <string name="phishing_no_feed_notice" translatable="false">No local URL threat list is installed. This result uses basic URL heuristics only; it cannot confirm whether the URL is listed by URLhaus or a phishing database.</string>
 <string name="phishing_limitations" translatable="false">This checker is not a global browser blocker. It does not follow redirects, inspect page content, intercept links inside other apps, or verify the live reputation of a website. Shortened links are marked for review, not automatically called malicious.</string>
 <string name="cleaner_title" translatable="false">Storage residual APK cleaner</string>
-<string name="cleaner_description" translatable="false">Choose a folder using Android's Storage Access Framework. SafeMobile checks APK metadata only and never deletes files without your explicit confirmation. Access to Android/media or other folders varies by device.</string>
+<string name="cleaner_description" translatable="false">Choose a folder with Android Storage Access Framework. SafeMobile checks APK metadata only and never deletes files without your explicit confirmation. Access to Android/media or other folders varies by device.</string>
 <string name="cleaner_no_folder" translatable="false">No folder selected yet.</string>
 <string name="cleaner_folder_selected" translatable="false">Folder access saved. Select Scan Storage to inspect eligible APK files.</string>
 <string name="cleaner_choose_folder" translatable="false">Choose folder</string>
