@@ -94,9 +94,12 @@ class PackageScanner(
    failed.copy(sourceLocalPath = file.absolutePath, scanSessionId = scanSessionId)
   }
  }
- suspend fun scanStream(label: String, stream: java.io.InputStream): ScanResult {
+ suspend fun scanStream(
+  label: String,
+  stream: java.io.InputStream,
+  scanSessionId: String = UUID.randomUUID().toString()
+ ): ScanResult {
   val start = System.nanoTime()
-  val scanSessionId = UUID.randomUUID().toString()
   return try {
    val hash = stream.use { calculator.calculate(it) }
    val output = evaluate(label, label, hash.sha256, hash.md5, emptyList(), 0)
