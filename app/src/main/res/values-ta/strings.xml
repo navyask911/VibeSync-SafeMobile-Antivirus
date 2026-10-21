@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">VibeSync SafeMobile Antivirus</string>
+    <string name="app_name">SafeMobile Antivirus</string>
     <string name="privacy_title">தனியுரிமை மற்றும் ஸ்கேன் அணுகல் அறிவிப்பு</string>
     <string name="privacy_body">SafeMobile இந்தச் சாதனத்திலேயே SHA-256 மற்றும் MD5 ஹாஷ்களைக் கணக்கிட்டு உள்ளூரில் சேமிக்கப்பட்ட வரையறைகளுடன் ஒப்பிடுகிறது. உள்ளூர் ஸ்கேன்கள் கோப்புகளையோ ஹாஷ்களையோ பதிவேற்றாது. உங்கள் தனியுரிமைத் தேர்வுகளும் இணைப்பும் அனுமதிக்கும் போது மட்டுமே விளம்பரங்கள் Google Mobile Ads நெட்வொர்க் சேவைகளைப் பயன்படுத்தும். முக்கிய ஸ்கேனிங் இணையமின்றியும் செயல்படும். நிறுவப்பட்ட செயலிகளின் தெரிவும் அனைத்து கோப்புகளுக்கான அணுகலும் Android இன் முக்கிய அனுமதிகள்; Google Play ஆய்வு தேவைப்படலாம்.</string>
     <string name="privacy_accept">புரிந்துகொண்டேன்</string>
     <string name="exit_app">செயலியிலிருந்து வெளியேறு</string>
-    <string name="brand_title">VIBESYNC</string>
-    <string name="brand_subtitle">SAFEMOBILE ANTIVIRUS</string>
+    <string name="brand_title">SafeMobile Antivirus</string>
+    <string name="brand_subtitle">VibeSync</string>
     <string name="scan_status">உள்ளூர் பாதுகாப்புப் பலகை</string>
     <string name="scan_running">சாதனம் ஸ்கேன் செய்யப்படுகிறது…</string>
     <string name="threat_found">அச்சுறுத்தல் பொருத்தம் கண்டறியப்பட்டது</string>
@@ -103,4 +103,24 @@
     <string name="language_system_default">கணினி இயல்புநிலை</string>
     <string name="limited_protection">வரையறுக்கப்பட்ட பாதுகாப்பு — EICAR சோதனை வரையறை மட்டுமே</string>
     <string name="review_recommended">ஆய்வு பரிந்துரைக்கப்படுகிறது</string>
+<string name="nav_home">முகப்பு</string>
+<string name="nav_scan">ஸ்கேன்</string>
+<string name="nav_quarantine">தனிமைப்படுத்தல்</string>
+<string name="nav_history">வரலாறு</string>
+<string name="nav_settings">அமைப்புகள்</string>
+<string name="settings_title">அமைப்புகள்</string>
+<string name="appearance_title">தோற்றம்</string>
+<string name="theme_system">சிஸ்டம்</string>
+<string name="theme_light">ஒளி</string>
+<string name="theme_dark">இருள்</string>
+<string name="language_settings">மொழி</string>
+<string name="about_legal">பற்றி மற்றும் சட்டத் தகவல்</string>
+<string name="ray_id">SafeMobile Ray ID</string>
+<string name="ray_id_copy">ID நகலெடு</string>
+<string name="ray_id_copied">Ray ID நகலெடுக்கப்பட்டது</string>
+<string name="history_title">ஸ்கேன் வரலாறு</string>
+<string name="history_empty">உள்ளூர் ஸ்கேன் வரலாறு இன்னும் இல்லை.</string>
+<string name="history_session">அமர்வு ID</string>
+<string name="definitions_limited_compact">வரையறைகள்: EICAR சோதனை கையொப்பம் மட்டும்; பாதுகாப்பு வரம்பு குறைவு.</string>
+<string name="settings_privacy">தனியுரிமை மற்றும் அனுமதிகள்</string>
 </resources>
