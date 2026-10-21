@@ -7,7 +7,7 @@ A feed is not activated until all of these checks pass:
 2. Both headers use standard base64. The manifest header decodes to at most 8 KiB of UTF-8 JSON; the signature decodes to exactly 64 bytes.
 3. The manifest bytes are verified exactly as received with Ed25519 against a **raw 32-byte trusted public key** supplied at build time with `SAFE_MOBILE_FEED_ED25519_PUBLIC_KEY_B64`.
 4. The JSON object includes `schema_version: 1`, a positive integer `version`, `source_key` equal to the SHA-256 of the configured HTTPS URL, and the SHA-256 `sha256` of the uncompressed response body.
-5. The downloaded uncompressed body is hashed as it is parsed; after full parsing, its hash must match the signed digest.
+5. The downloaded uncompressed body is limited to 100 MiB and hashed as it is parsed; after full parsing, its hash must match the signed digest.
 6. `version` must be strictly greater than the last accepted version for that source. Version and manifest hash are stored with sync state in Room. Replays, rollback, a missing signature, an unknown key, body tampering, and a source mismatch leave the active indicator table unchanged.
 
 The server signs the exact UTF-8 bytes in the manifest before base64-encoding them. Do not parse and re-serialize the JSON before signing. The signature covers all manifest fields, including schema version, monotonic version, source key and response-body digest.
