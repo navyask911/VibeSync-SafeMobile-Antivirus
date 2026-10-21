@@ -32,9 +32,19 @@ jobs:
         run: python3 -m unittest discover -s scripts -p 'test_*.py' -v
       - name: Proprietary safety policy guard
         run: python3 scripts/check_proprietary_safety.py
-      - name: Generate CycloneDX dependency SBOM
+      - name: Generate CycloneDX dependency SBOM (retry transient repository failures)
         run: |
-          ./gradlew --no-daemon cyclonedxBom
+          set -e
+          attempt=1
+          until ./gradlew --no-daemon cyclonedxBom; do
+            if [ "$attempt" -ge 3 ]; then
+              echo "CycloneDX generation failed after $attempt attempts."
+              exit 1
+            fi
+            echo "CycloneDX attempt $attempt failed (possibly transient Maven rate limiting); retrying in 15 seconds."
+            attempt=$((attempt + 1))
+            sleep 15
+          done
           test -s build/reports/cyclonedx/bom.json
           python3 scripts/render_third_party_notices.py --input build/reports/cyclonedx/bom.json --output build/generated-third-party-notices.md
       - name: Capture dependency graph for licence review
