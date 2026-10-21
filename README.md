@@ -21,8 +21,9 @@ QUERY_ALL_PACKAGES and MANAGE_EXTERNAL_STORAGE are restricted Google Play permis
 
 ## Flagged-result actions
 - Flagged installed apps show an Uninstall action that launches Android's own confirmation UI; the app cannot silently remove an app or block installation.
-- The selected-file scanner refuses cloud and third-party document providers before opening their content. Supported local document providers can be copied to app-private, no-backup quarantine storage.
-- After the private copy's SHA-256 is verified against the scan result, SafeMobile makes a best-effort request to delete the selected original. Android or the provider may deny that request; the UI distinguishes this outcome. Quarantine copies remain in private app storage. The hardening branch adds a Quarantine Vault to list isolated copies, restore a copy to a user-selected destination (retaining the quarantined copy), or permanently delete a copy after confirmation.
+- The selected-file scanner only opens content from explicitly recognized on-device provider authorities; it refuses unknown/cloud providers rather than assuming that every content URI is local.
+- Current quarantine entries use Google Tink Streaming AEAD with an Android Keystore-wrapped keyset, are encrypted in app-private no-backup storage, and are checked by streaming SHA-256 during copy. Before reporting success, SafeMobile decrypts the new object in a verification pass and checks the hash and length. Restore decrypts into a temporary private file, verifies the expected hash/length, writes to a user-selected destination, and reopens that destination to verify its SHA-256. The quarantined object remains until explicitly deleted.
+- SafeMobile deliberately does **not delete the selected original** during quarantine. The user must decide separately how to remove it using Android's supported file-management UI. Legacy quarantine entries created by earlier builds can still appear in the vault, but are clearly labelled as unencrypted; their past contents cannot be retroactively protected.
 
 ## Ads
 The app-ads.txt publisher ID alone does not identify an AdMob app or its ad units. To avoid embedding unverified production IDs, release builds keep ads disabled unless all three GitHub Actions repository variables are configured: ADMOB_APP_ID, ADMOB_BANNER_UNIT_ID, and ADMOB_INTERSTITIAL_UNIT_ID. Set those values from the actual AdMob dashboard. Debug builds always use Google's official test app/ad IDs. When production IDs are configured, UMP consent gates SDK initialization/ad requests. When they are absent, the release does not initialize Mobile Ads and makes no ad requests. The adaptive banner is anchored in the dashboard footer. Interstitials are only considered after every third completed scan, not on app launch or mid-scan. Configure privacy messages in AdMob and do not click production ads during testing.
@@ -57,3 +58,17 @@ The app now has full application-string resource files and an in-app locale over
 ### Release caveats
 
 This branch has a higher version code, but Play Console's usage history must be checked before upload. A passing build does not mean the proprietary dependency licence review, remote definition signing pipeline, threat-feed redistribution rights, physical-device QA, broad-permission eligibility, or complete global localization is finished.
+
+
+## UI and review features on the hardening branch
+
+- The dashboard now uses a compact status surface with separate Home, Scan, Quarantine, History, and Settings destinations. The product title no longer shares a row with the locale selector.
+- System, Light, and Dark appearance choices are persisted locally. Locale overrides are available from Settings. New navigation, settings, and overlay-review strings have first-pass translations in the existing 22 locale resource sets; native-speaker and device-layout review remains outstanding.
+- Scan history groups audit rows by a unique scan-session UUID while preserving older rows through an additive Room migration. Each assessment row remains local. The history view currently shows the newest retained audit rows and should not be interpreted as a complete forever-retained archive or server-registered support log.
+- A locally generated UUIDv4 SafeMobile Ray ID is shown in Settings. It is stored locally and is not sent to an external registration service by the scan engine.
+- The optional Overlay-risk review is off by default. When enabled, WorkManager attempts a best-effort review on foreground return and on a nominal 12-hour periodic interval, subject to Android scheduling and battery constraints. It counts package declarations of overlay capability/accessibility services and counts enabled accessibility-service entries reported by Android. It cannot see live overlay activity, determine another app's actual overlay-grant state, or prove malware. Reminders are low priority and follow the selected 12/24/48-hour interval when notifications are permitted.
+- A first-run legal wall no longer blocks ordinary navigation. The privacy/scan-access disclosure is shown when the user initiates installed-app scanning, selected-file scanning, definition import, or Downloads monitoring; this acknowledgement does not itself grant operating-system permissions or constitute advertising consent.
+
+## Current verification boundary
+
+These changes are being validated in the draft pull request. CI checks (safety guard, tests, lint, and release builds) must pass on the final head before considering a candidate verified. No physical-device/emulator test matrix has been run as part of this source edit. The EICAR-only definition database, restricted-permission Play review, exact third-party license/SBOM audit, and native-speaker localization review remain release blockers. The configured version code and CI signing-secret state are not proof that Google Play will accept the candidate; check the Play Console version history before upload.
