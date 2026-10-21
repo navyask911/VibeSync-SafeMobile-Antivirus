@@ -100,7 +100,7 @@ fun EmptyState(title: String, description: String, modifier: Modifier = Modifier
 }
 
 @Composable
-fun ScanProgressRing(progress: Float?, scanning: Boolean, label: String, modifier: Modifier = Modifier, size: Dp = 88.dp) {
+fun ScanProgressRing(progress: Float?, scanning: Boolean, label: String, modifier: Modifier = Modifier, size: Dp = 88.dp, success: Boolean = false) {
     val normalized = progress?.takeIf { it.isFinite() }?.coerceIn(0f, 1f)
     val animatedProgress by animateFloatAsState(normalized ?: 0f, animationSpec = tween(220), label = "scan-progress")
     val rotation = if (scanning && normalized == null) {
@@ -133,22 +133,25 @@ fun ScanProgressRing(progress: Float?, scanning: Boolean, label: String, modifie
             }
         }
         Text(
-            if (normalized != null) (animatedProgress * 100f).roundToInt().toString() + "%" else if (scanning) "..." else "✓",
+            if (normalized != null) (animatedProgress * 100f).roundToInt().toString() + "%" else if (scanning) "..." else if (success) "✓" else "—",
             style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold,
-            color = if (normalized == null && !scanning) Color(0xFF00A86B) else MaterialTheme.colorScheme.primary
+            color = if (normalized == null && !scanning && success) Color(0xFF00A86B)
+                else if (normalized == null && !scanning) MaterialTheme.colorScheme.onSurfaceVariant
+                else MaterialTheme.colorScheme.primary
         )
     }
 }
 
 @Composable
 fun SecurityStatusCard(status: String, description: String, lastScanLabel: String, threatCount: Int,
-    signatureCount: Int, scanning: Boolean, progress: Float?, onScan: () -> Unit, modifier: Modifier = Modifier) {
+    signatureCount: Int, scanning: Boolean, progress: Float?, hasScanned: Boolean, cleanResult: Boolean,
+    onScan: () -> Unit, modifier: Modifier = Modifier) {
     Card(modifier.fillMaxWidth(), shape = RoundedCornerShape(20.dp),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.22f)),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
         Column(Modifier.fillMaxWidth().padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-                ScanProgressRing(progress, scanning, status, size = 88.dp)
+                ScanProgressRing(progress, scanning, status, size = 88.dp, success = cleanResult)
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(5.dp)) {
                     Text(status, style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
                     Text(description, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -156,7 +159,8 @@ fun SecurityStatusCard(status: String, description: String, lastScanLabel: Strin
                 }
             }
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
-                StatusChip(threatCount.toString() + " confirmed matches", if (threatCount > 0) StatusKind.DANGER else StatusKind.NEUTRAL, Modifier.weight(1f))
+                StatusChip(if (hasScanned) threatCount.toString() + " confirmed matches" else "No scan yet",
+                    if (threatCount > 0) StatusKind.DANGER else StatusKind.NEUTRAL, Modifier.weight(1f))
                 StatusChip(signatureCount.toString() + " local definitions", if (signatureCount > 0) StatusKind.ACTIVE else StatusKind.WARNING, Modifier.weight(1f))
             }
             Button(onClick = onScan, modifier = Modifier.fillMaxWidth(), enabled = !scanning) {

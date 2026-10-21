@@ -348,6 +348,9 @@ import java.util.Date
       description=stringResource(if (storageAccessGranted) R.string.security_scan_coverage else R.string.security_limited_storage),
       lastScanLabel=lastScanLabel, threatCount=state.threatCount, signatureCount=state.signatureCount,
       scanning=state.isScanning, progress=ringProgress,
+      hasScanned=state.lastScanAt != null,
+      cleanResult=state.lastScanAt != null && state.results.isNotEmpty() &&
+       state.results.none { it.verdict in listOf(ScanVerdict.THREAT, ScanVerdict.SUSPICIOUS, ScanVerdict.NOT_SCANNED) },
       onScan={ requestPrivacyAcknowledgement { vm.scanFull() } }
      )
      Row(Modifier.fillMaxWidth(), horizontalArrangement=Arrangement.spacedBy(8.dp)) {
@@ -472,7 +475,7 @@ import java.util.Date
       Text(stringResource(R.string.apps_inventory_count,apps.size),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
       apps.take(80).forEach { result ->
        ScanResultCard(result,
-        showUninstall=result.packageName?.let { canOfferUninstall(context,it) } == true && result.verdict in listOf(ScanVerdict.THREAT,ScanVerdict.SUSPICIOUS),
+        showUninstall=result.packageName?.let { canOfferUninstall(context,it) } == true,
         showQuarantine=false,
         onUninstall={ packageName ->
          val host=activity

@@ -26,7 +26,6 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -36,12 +35,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.app.NotificationManagerCompat
 import com.vibesync.antivirus.core.worker.OverlayRiskReviewManager
-import com.vibesync.antivirus.core.worker.ThreatFeedConfigStore
-import com.vibesync.antivirus.core.worker.ThreatFeedConfiguration
-import com.vibesync.antivirus.core.worker.ThreatFeedFormat
-import com.vibesync.antivirus.core.worker.ThreatFeedRequestMode
-import com.vibesync.antivirus.core.worker.ThreatFeedUpdateMode
-import com.vibesync.antivirus.core.worker.ThreatFeedSyncScheduler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -53,7 +46,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import com.vibesync.antivirus.BuildConfig
 import com.vibesync.antivirus.R
 import com.vibesync.antivirus.core.locale.LocalePreferences

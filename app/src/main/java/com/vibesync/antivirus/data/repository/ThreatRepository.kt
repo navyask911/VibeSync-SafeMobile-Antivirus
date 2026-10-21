@@ -185,13 +185,5 @@ class ThreatRepository(
   definitionLoader.importBundledIfEmpty()
   database.threatDao().countSignatures()
  }
- suspend fun deepScan(): List<ScanResult> = withContext(Dispatchers.IO) {
-  definitionLoader.importBundledIfEmpty()
-  val results=scanner.scanInstalledApps()
-  if(android.os.Build.VERSION.SDK_INT>=android.os.Build.VERSION_CODES.R && android.os.Environment.isExternalStorageManager()) {
-   val downloads=android.os.Environment.getExternalStoragePublicDirectory(android.os.Environment.DIRECTORY_DOWNLOADS)
-   if(downloads.isDirectory) downloads.walkTopDown().maxDepth(3).filter { it.isFile && it.extension.equals("apk",true) }.take(100).forEach { scanner.scanFile(it) }
-  }
-  results
- }
+ suspend fun deepScan(): List<ScanResult> = scanFull()
 }
