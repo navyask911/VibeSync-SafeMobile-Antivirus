@@ -31,11 +31,11 @@ if (signingValues.any { !it.isNullOrBlank() } && !releaseSigningEnabled) {
 
 android {
  namespace = "com.vibesync.antivirus"
- compileSdk = 35
+ compileSdk = 36
  defaultConfig {
   applicationId = "com.vibesync.antivirus"
   minSdk = 26
-  targetSdk = 35
+  targetSdk = 36
   versionCode = 20261022
   versionName = "1.0.2"
   testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
