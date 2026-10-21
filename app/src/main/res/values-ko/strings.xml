@@ -124,4 +124,23 @@
 <string name="definitions_limited_compact">정의: EICAR 테스트 서명만 포함되어 범위가 제한됩니다.</string>
 <string name="settings_privacy">개인정보 및 권한</string>
 <string name="quarantine_legacy_warning">이전 버전에서 암호화 없이 저장된 이전 격리 항목입니다.</string>
+<string name="overlay_review_title">오버레이 위험 검토</string>
+<string name="overlay_review_description">다른 앱 위에 표시할 수 있는 기능이나 접근성 서비스를 선언한 앱을 선택적으로 제한 검토합니다. 이는 검토 신호일 뿐입니다. SafeMobile은 다른 앱이 현재 오버레이를 표시하는지 또는 실제 오버레이 권한 상태를 증명하거나 확인할 수 없습니다.</string>
+<string name="overlay_review_last_attempt">마지막 시도: %1$s</string>
+<string name="overlay_review_last_success">마지막 성공 확인: %1$s</string>
+<string name="overlay_review_summary">오버레이 기능 선언 앱: %1$d · 접근성 서비스 선언 앱: %2$d · 이 기기에서 활성화된 접근성 서비스: %3$d</string>
+<string name="overlay_review_not_checked">성공한 오버레이 위험 검토가 아직 없습니다.</string>
+<string name="overlay_review_failed">마지막 검토에 실패했습니다. Android가 작업을 연기했거나 필요한 패키지 가시성을 제한했을 수 있습니다.</string>
+<string name="overlay_review_permission_required">Android에서 이 검토를 허용하지 않았습니다. 설치된 앱의 가시성을 확인하고 다시 시도하세요.</string>
+<string name="overlay_review_reminder_interval">알림 간격</string>
+<string name="overlay_review_reminder_12h">12시간마다</string>
+<string name="overlay_review_reminder_24h">24시간마다</string>
+<string name="overlay_review_reminder_48h">48시간마다</string>
+<string name="overlay_review_notifications_off">알림이 꺼져 있습니다. 검토는 계속 실행될 수 있지만 리마인더는 표시되지 않습니다.</string>
+<string name="overlay_review_enabled">자동 검토 사용</string>
+<string name="overlay_review_disabled">검토 일시 중지</string>
+<string name="overlay_review_notification_channel">SafeMobile 개인정보 검토</string>
+<string name="overlay_review_notification_channel_description">선택적 오버레이 위험 검토를 위한 낮은 우선순위의 알림입니다.</string>
+<string name="overlay_review_notification_title">오버레이 위험 검토 완료</string>
+<string name="overlay_review_notification_body">%1$d개 앱이 오버레이 기능을, %2$d개 앱이 접근성 서비스를 선언했습니다. 이는 검토 신호이며 악성코드의 증거가 아닙니다.</string>
 </resources>
