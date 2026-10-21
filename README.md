@@ -15,6 +15,7 @@ Google Play In-App Updates can use network connectivity as described below.
 
 - [Overview](#overview)
 - [Architecture overview](#architecture-overview)
+- [Detection coverage](#detection-coverage)
 - [Build settings](#build-settings)
 - [Privacy boundary](#privacy-boundary)
 - [Important antivirus limitation](#important-antivirus-limitation)
@@ -58,6 +59,15 @@ known gaps below are part of this project's documentation and should remain visi
 Do not assume that an optional model, Bloom filter, YARA runtime, third-party threat database, or
 cryptographic feed-signature verification is present unless its artifact and implementation have
 been separately verified. The current known limitations are documented below.
+
+## Detection coverage
+
+**Reviewed 2026-10-22:** SafeMobile is a development candidate, not a production-validated antivirus.
+Local hash matching is active but the bundled baseline is EICAR-only. Permission/manifest and
+device-integrity checks are heuristic triage. Bloom-filter, YARA, TFLite and pinned-signer attestation
+layers remain disabled until verified assets/native runtime/model/trust configuration exist. The
+optional feed importer does not yet verify an Ed25519-signed manifest or enforce feed rollback
+protection. See the [detection coverage matrix](docs/DETECTION_COVERAGE.md) for each layer's status.
 
 ## Build settings
 - Application ID: com.vibesync.antivirus

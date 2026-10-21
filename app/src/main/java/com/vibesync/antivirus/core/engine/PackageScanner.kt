@@ -7,6 +7,8 @@ import com.vibesync.antivirus.R
 import com.vibesync.antivirus.core.crypto.EncryptedHashStore
 import com.vibesync.antivirus.core.crypto.HashCalculator
 import com.vibesync.antivirus.core.heuristics.PermissionRiskAnalyzer
+import com.vibesync.antivirus.core.security.IntegrityChecker
+import kotlin.math.roundToInt
 import com.vibesync.antivirus.data.local.ScanAudit
 import com.vibesync.antivirus.data.local.ThreatDao
 import com.vibesync.antivirus.data.repository.ThreatIntelligenceRepository
@@ -28,6 +30,7 @@ class PackageScanner(
  private val threatIntelligenceRepository: ThreatIntelligenceRepository? = null
 ) {
  private val pm = context.packageManager
+ private val integrityChecker = IntegrityChecker(context)
  suspend fun scanInstalledApps(progress: suspend (processed: Int, total: Int) -> Unit = { _, _ -> }): List<ScanResult> {
   val flags = PackageManager.GET_PERMISSIONS or PackageManager.GET_SERVICES or signingFlags()
   val packages = pm.getInstalledPackages(flags)
@@ -124,13 +127,16 @@ class PackageScanner(
   val permissions = info.requestedPermissions?.toSet().orEmpty()
   val accessibility = info.services.orEmpty().any { it.permission == PermissionRiskAnalyzer.BIND_ACCESSIBILITY }
   val risk = riskAnalyzer.assess(permissions, accessibility)
+  val deviceIntegrity = integrityChecker.check()
+  val adjustedRiskScore = (risk.score * deviceIntegrity.riskMultiplier).roundToInt().coerceIn(0, 100)
   val reasons = risk.reasonResourceIds.map(context::getString).toMutableList()
+  if (deviceIntegrity.isUntrusted) reasons += deviceIntegrity.reasons
   val debugSigned = isDebugSigned(info)
   if (debugSigned) reasons += context.getString(R.string.debug_certificate)
   val apk = appInfo.sourceDir?.let(::File)
   if (apk == null || !apk.isFile || !apk.canRead()) {
    reasons += context.getString(R.string.apk_unreadable)
-   val failed = result(info.packageName, label, null, null, if (risk.isSuspicious) ScanVerdict.SUSPICIOUS else ScanVerdict.NOT_SCANNED, reasons, start).copy(packageName = info.packageName, scanSessionId = scanSessionId)
+   val failed = result(info.packageName, label, null, null, if (adjustedRiskScore >= 45) ScanVerdict.SUSPICIOUS else ScanVerdict.NOT_SCANNED, reasons, start).copy(packageName = info.packageName, scanSessionId = scanSessionId)
    auditSafely(failed, start, scanSessionId)
    return failed
   }
@@ -140,7 +146,7 @@ class PackageScanner(
     auditSafely(failed, start, scanSessionId)
     return failed
    }
-  val output = evaluate(info.packageName, label, hashes.sha256, hashes.md5, reasons, risk.score, sha1 = hashes.sha1)
+  val output = evaluate(info.packageName, label, hashes.sha256, hashes.md5, reasons, adjustedRiskScore, sha1 = hashes.sha1)
   audit(output, start, scanSessionId)
   return output.copy(durationMs = elapsed(start), packageName = info.packageName, scanSessionId = scanSessionId)
  }
