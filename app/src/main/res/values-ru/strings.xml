@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">VibeSync SafeMobile Antivirus</string>
+    <string name="app_name">SafeMobile Antivirus</string>
     <string name="privacy_title">Уведомление о конфиденциальности и доступе к сканированию</string>
     <string name="privacy_body">SafeMobile вычисляет хеши SHA-256 и MD5 на этом устройстве и сверяет их с локально сохранёнными определениями. При локальном сканировании файлы и хеши не отправляются. Реклама использует сетевые службы Google Mobile Ads только при наличии разрешения в настройках конфиденциальности и подключения. Основные функции сканирования работают без сети. Просмотр установленных приложений и доступ ко всем файлам — чувствительные разрешения Android, для которых может потребоваться проверка Google Play.</string>
     <string name="privacy_accept">Понятно</string>
     <string name="exit_app">Выйти из приложения</string>
-    <string name="brand_title">VIBESYNC</string>
-    <string name="brand_subtitle">SAFEMOBILE ANTIVIRUS</string>
+    <string name="brand_title">SafeMobile Antivirus</string>
+    <string name="brand_subtitle">VibeSync</string>
     <string name="scan_status">Панель локальной защиты</string>
     <string name="scan_running">Сканирование устройства…</string>
     <string name="threat_found">Обнаружено совпадение с угрозой</string>
@@ -103,4 +103,24 @@
     <string name="language_system_default">По умолчанию в системе</string>
     <string name="limited_protection">Ограниченная защита — только тестовое определение EICAR</string>
     <string name="review_recommended">Рекомендуется проверка</string>
+<string name="nav_home">Главная</string>
+<string name="nav_scan">Сканирование</string>
+<string name="nav_quarantine">Карантин</string>
+<string name="nav_history">История</string>
+<string name="nav_settings">Настройки</string>
+<string name="settings_title">Настройки</string>
+<string name="appearance_title">Внешний вид</string>
+<string name="theme_system">Системная</string>
+<string name="theme_light">Светлая</string>
+<string name="theme_dark">Тёмная</string>
+<string name="language_settings">Язык</string>
+<string name="about_legal">О приложении и правовая информация</string>
+<string name="ray_id">Ray ID SafeMobile</string>
+<string name="ray_id_copy">Копировать ID</string>
+<string name="ray_id_copied">Ray ID скопирован</string>
+<string name="history_title">История сканирования</string>
+<string name="history_empty">Локальная история сканирования пока пуста.</string>
+<string name="history_session">ID сеанса</string>
+<string name="definitions_limited_compact">База определений содержит только тестовую сигнатуру EICAR; покрытие ограничено.</string>
+<string name="settings_privacy">Конфиденциальность и разрешения</string>
 </resources>
