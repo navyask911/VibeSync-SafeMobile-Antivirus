@@ -202,11 +202,12 @@ import kotlinx.coroutines.launch
    }
   }
  }
- val deleteLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+ val deleteLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
   lastUninstallPackage?.let { vm.refreshInstalledPackage(it) }
   lastUninstallPackage = null
   pendingUninstallPackage = null
-  showUninstallSnackbar(context.getString(R.string.uninstall_complete), null)
+  val message = if (result.resultCode == Activity.RESULT_OK) R.string.uninstall_complete else R.string.uninstall_cancelled
+  showUninstallSnackbar(context.getString(message), null)
  }
  var showDefinitionImportWarning by remember { mutableStateOf(false) }
  var privacyOptionsVisible by remember { mutableStateOf(privacyOptionsRequired) }
