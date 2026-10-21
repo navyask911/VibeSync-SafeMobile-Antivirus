@@ -56,7 +56,10 @@ class DeviceOwnerManager(context: Context) {
   if (!verdict.isMalware || verdict.riskScore <= MIN_SCORE) return false
   val info = try {
    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) app.packageManager.getApplicationInfo(name,PackageManager.ApplicationInfoFlags.of(0L))
-   else { @Suppress("DEPRECATION"); app.packageManager.getApplicationInfo(name,0) }
+   else {
+    @Suppress("DEPRECATION")
+    app.packageManager.getApplicationInfo(name,0)
+   }
   } catch (_: PackageManager.NameNotFoundException) { return false } catch (_: SecurityException) { return false }
   return info.flags and (ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) == 0
  }
