@@ -26,11 +26,11 @@ class MendeleyDatasetTests(unittest.TestCase):
     def test_extracts_and_indexes_research_records_without_discarding_duplicates(self):
         h1, h2 = "a" * 64, "b" * 64
         csv_text = "\n".join([
-            "sha256,label,family,train,test",
+            "sha256,label,family,train,test,in_multiclass_experiment",
+            f"{h1},malware,Trojan,true,false,true",
+            f"{h2},goodware,Benign,false,true,false",
             f"{h1},malware,Trojan,true,false",
-            f"{h2},goodware,Benign,false,true",
-            f"{h1},malware,Trojan,true,false",
-            "invalid-hash,malware,Unknown,false,false",
+            "invalid-hash,malware,Unknown,false,false,false",
         ]) + "\n"
         archive = self.make_zip({"research/manifest.csv": csv_text, "research/README.txt": "fixture"})
         stats = validate_zip(archive)
@@ -46,6 +46,8 @@ class MendeleyDatasetTests(unittest.TestCase):
         self.assertEqual(2, result["unique_sha256_hashes"])
         self.assertEqual("sha256", result["hash_column"])
         self.assertEqual("label", result["label_column"])
+        self.assertNotIn("true", result["category_value_counts_top_100"])
+        self.assertNotIn("false", result["category_value_counts_top_100"])
         self.assertTrue(result["research_labels_not_verified_live_indicators"])
         with sqlite3.connect(db) as connection:
             row_count = connection.execute("SELECT COUNT(*) FROM research_hashes").fetchone()[0]
@@ -53,7 +55,10 @@ class MendeleyDatasetTests(unittest.TestCase):
                 "SELECT split_values_json FROM research_hashes WHERE row_number=2"
             ).fetchone()[0]
         self.assertEqual(4, row_count)
-        self.assertEqual({"train": "true", "test": "false"}, json.loads(split_json))
+        self.assertEqual(
+            {"train": "true", "test": "false", "in_multiclass_experiment": "true"},
+            json.loads(split_json),
+        )
 
     def test_rejects_path_traversal_before_extract(self):
         archive = self.make_zip({

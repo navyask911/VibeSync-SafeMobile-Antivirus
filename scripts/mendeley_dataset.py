@@ -306,7 +306,7 @@ def import_manifest(manifest, database, hash_column=None, label_column=None):
             normalized = {header: norm_name(header) for header in headers}
             excluded = {hash_name, label_name}
             category_columns = [h for h in headers if h not in excluded and any(
-                token in normalized[h] for token in ("family", "category", "multiclass", "threat", "subtype")
+                token in normalized[h] for token in ("family", "category", "threat", "subtype")
             )]
             split_columns = [h for h in headers if h not in excluded and any(
                 token in normalized[h] for token in ("split", "train", "test", "experiment", "mask", "binary", "multiclass", "trimodal")
