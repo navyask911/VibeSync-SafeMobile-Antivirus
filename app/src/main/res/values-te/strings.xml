@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">VibeSync SafeMobile Antivirus</string>
+    <string name="app_name">SafeMobile Antivirus</string>
     <string name="privacy_title">గోప్యత మరియు స్కాన్ యాక్సెస్ ప్రకటన</string>
     <string name="privacy_body">SafeMobile ఈ పరికరంలోనే SHA-256, MD5 హ్యాష్‌లను లెక్కించి స్థానికంగా నిల్వ చేసిన నిర్వచనాలతో పోలుస్తుంది. స్థానిక స్కాన్లు ఫైళ్లు లేదా హ్యాష్‌లను అప్‌లోడ్ చేయవు. మీ గోప్యతా ఎంపికలు, కనెక్టివిటీ అనుమతించినప్పుడే ప్రకటనలు Google Mobile Ads నెట్‌వర్క్ సేవలను ఉపయోగిస్తాయి. ప్రధాన స్కానింగ్ ఫంక్షన్లు ఇంటర్నెట్ లేకుండానే పనిచేస్తాయి. ఇన్‌స్టాల్ చేసిన యాప్‌లను చూడటం, అన్ని ఫైళ్లకు యాక్సెస్ Android యొక్క సున్నితమైన అనుమతులు; Google Play సమీక్ష అవసరం కావచ్చు.</string>
     <string name="privacy_accept">అర్థమైంది</string>
     <string name="exit_app">యాప్ నుండి నిష్క్రమించండి</string>
-    <string name="brand_title">VIBESYNC</string>
-    <string name="brand_subtitle">SAFEMOBILE ANTIVIRUS</string>
+    <string name="brand_title">SafeMobile Antivirus</string>
+    <string name="brand_subtitle">VibeSync</string>
     <string name="scan_status">స్థానిక రక్షణ డ్యాష్‌బోర్డ్</string>
     <string name="scan_running">పరికరాన్ని స్కాన్ చేస్తోంది…</string>
     <string name="threat_found">ముప్పు సరిపోలిక గుర్తించబడింది</string>
@@ -103,4 +103,24 @@
     <string name="language_system_default">సిస్టమ్ డిఫాల్ట్</string>
     <string name="limited_protection">పరిమిత రక్షణ — EICAR పరీక్ష నిర్వచనం మాత్రమే</string>
     <string name="review_recommended">సమీక్ష సిఫార్సు చేయబడింది</string>
+<string name="nav_home">హోమ్</string>
+<string name="nav_scan">స్కాన్</string>
+<string name="nav_quarantine">క్వారంటైన్</string>
+<string name="nav_history">చరిత్ర</string>
+<string name="nav_settings">సెట్టింగ్‌లు</string>
+<string name="settings_title">సెట్టింగ్‌లు</string>
+<string name="appearance_title">రూపం</string>
+<string name="theme_system">సిస్టమ్</string>
+<string name="theme_light">లైట్</string>
+<string name="theme_dark">డార్క్</string>
+<string name="language_settings">భాష</string>
+<string name="about_legal">గురించి మరియు చట్టపరమైన సమాచారం</string>
+<string name="ray_id">SafeMobile Ray ID</string>
+<string name="ray_id_copy">ID కాపీ చేయండి</string>
+<string name="ray_id_copied">Ray ID కాపీ అయింది</string>
+<string name="history_title">స్కాన్ చరిత్ర</string>
+<string name="history_empty">ఇంకా స్థానిక స్కాన్ చరిత్ర లేదు.</string>
+<string name="history_session">సెషన్ ID</string>
+<string name="definitions_limited_compact">డెఫినిషన్‌లు: EICAR పరీక్ష సంతకం మాత్రమే; కవరేజ్ పరిమితం.</string>
+<string name="settings_privacy">గోప్యత మరియు అనుమతులు</string>
 </resources>
