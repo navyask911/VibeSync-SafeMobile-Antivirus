@@ -85,7 +85,7 @@ class PackageScanner(
   }
   return try {
    val hash = calculator.calculate(file)
-   val output = evaluate(file.name, file.name, hash.sha256, hash.md5, emptyList(), 0)
+   val output = evaluate(file.name, file.name, hash.sha256, hash.md5, emptyList(), 0, sha1 = hash.sha1)
    if (persistAllAudit || output.verdict == ScanVerdict.THREAT || output.verdict == ScanVerdict.SUSPICIOUS) audit(output, start, scanSessionId)
    output.copy(durationMs = elapsed(start), sourceLocalPath = file.absolutePath, scanSessionId = scanSessionId)
   } catch (cancelled: CancellationException) {
@@ -104,7 +104,7 @@ class PackageScanner(
   val start = System.nanoTime()
   return try {
    val hash = stream.use { calculator.calculate(it) }
-   val output = evaluate(label, label, hash.sha256, hash.md5, emptyList(), 0)
+   val output = evaluate(label, label, hash.sha256, hash.md5, emptyList(), 0, sha1 = hash.sha1)
    audit(output, start, scanSessionId)
    output.copy(durationMs = elapsed(start), scanSessionId = scanSessionId)
   } catch (cancelled: CancellationException) {
@@ -140,28 +140,28 @@ class PackageScanner(
     auditSafely(failed, start, scanSessionId)
     return failed
    }
-  val output = evaluate(info.packageName, label, hashes.sha256, hashes.md5, reasons, risk.score)
+  val output = evaluate(info.packageName, label, hashes.sha256, hashes.md5, reasons, risk.score, sha1 = hashes.sha1)
   audit(output, start, scanSessionId)
   return output.copy(durationMs = elapsed(start), packageName = info.packageName, scanSessionId = scanSessionId)
  }
- private suspend fun evaluate(key: String, label: String, sha: String, md5: String, heuristic: List<String>, score: Int): ScanResult {
+ private suspend fun evaluate(key: String, label: String, sha: String, md5: String, heuristic: List<String>, score: Int, sha1: String? = null): ScanResult {
   val encrypted = hashStore.protectHash(sha)
-  if (dao.isHashWhitelisted(encrypted)) return ScanResult(key, label, sha, md5, ScanVerdict.NO_MATCH, listOf(context.getString(R.string.hash_allowlisted)), 0)
+  if (dao.isHashWhitelisted(encrypted)) return ScanResult(key, label, sha, md5, ScanVerdict.NO_MATCH, listOf(context.getString(R.string.hash_allowlisted)), 0).copy(sha1 = sha1)
   val threat = dao.findThreatByEncryptedHash(encrypted)
   if (threat != null) {
    val family = revealMetadataOrPlaintext(threat.malwareFamily, "family")
    val level = revealMetadataOrPlaintext(threat.threatLevel, "level")
-   return ScanResult(key, label, sha, md5, ScanVerdict.THREAT, listOf(context.getString(R.string.hash_match, family, level)), 0).copy(threatEventId = UUID.randomUUID().toString(), riskScore = 1f)
+   return ScanResult(key, label, sha, md5, ScanVerdict.THREAT, listOf(context.getString(R.string.hash_match, family, level)), 0).copy(threatEventId = UUID.randomUUID().toString(), riskScore = 1f, sha1 = sha1)
   }
   val feedThreat = threatIntelligenceRepository?.lookupHash(sha, md5)
   if (feedThreat != null) {
    return ScanResult(key, label, sha, md5, ScanVerdict.THREAT,
     listOf(context.getString(R.string.threat_feed_hash_match, feedThreat.threatName, feedThreat.source)), 0)
-    .copy(threatEventId = UUID.randomUUID().toString(), riskScore = 1f)
+    .copy(threatEventId = UUID.randomUUID().toString(), riskScore = 1f, sha1 = sha1)
   }
   val verdict = if (score >= 45) ScanVerdict.SUSPICIOUS else ScanVerdict.NO_MATCH
   val notes = if (heuristic.isEmpty()) listOf(context.getString(R.string.no_match_detail)) else heuristic + context.getString(R.string.risk_review)
-  return ScanResult(key, label, sha, md5, verdict, notes, 0).copy(riskScore = score.coerceIn(0, 100) / 100f)
+  return ScanResult(key, label, sha, md5, verdict, notes, 0).copy(riskScore = score.coerceIn(0, 100) / 100f, sha1 = sha1)
  }
  private suspend fun auditSafely(result: ScanResult, start: Long, scanSessionId: String) {
   try {
