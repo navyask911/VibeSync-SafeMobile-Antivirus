@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">VibeSync SafeMobile Antivirus</string>
+    <string name="app_name">SafeMobile Antivirus</string>
     <string name="privacy_title">הודעת פרטיות וגישה לסריקה</string>
     <string name="privacy_body">SafeMobile מחשבת במכשיר זה גיבובי SHA-256 ו-MD5 ומשווה אותם להגדרות השמורות מקומית. סריקות מקומיות אינן מעלות קבצים או גיבובים. מודעות משתמשות בשירותי הרשת של Google Mobile Ads רק כשהעדפות הפרטיות והחיבור מאפשרים זאת. פעולות הסריקה המרכזיות פועלות ללא רשת. הצגת אפליקציות מותקנות וגישה לכל הקבצים הן הרשאות Android רגישות ועשויות לדרוש בדיקה של Google Play.</string>
     <string name="privacy_accept">הבנתי</string>
     <string name="exit_app">יציאה מהאפליקציה</string>
-    <string name="brand_title">VIBESYNC</string>
-    <string name="brand_subtitle">SAFEMOBILE ANTIVIRUS</string>
+    <string name="brand_title">SafeMobile Antivirus</string>
+    <string name="brand_subtitle">VibeSync</string>
     <string name="scan_status">לוח הגנה מקומי</string>
     <string name="scan_running">המכשיר נסרק…</string>
     <string name="threat_found">נמצאה התאמה לאיום</string>
@@ -103,4 +103,24 @@
     <string name="language_system_default">ברירת המחדל של המערכת</string>
     <string name="limited_protection">הגנה מוגבלת — הגדרת בדיקת EICAR בלבד</string>
     <string name="review_recommended">מומלץ לבדוק</string>
+<string name="nav_home">בית</string>
+<string name="nav_scan">סריקה</string>
+<string name="nav_quarantine">הסגר</string>
+<string name="nav_history">היסטוריה</string>
+<string name="nav_settings">הגדרות</string>
+<string name="settings_title">הגדרות</string>
+<string name="appearance_title">מראה</string>
+<string name="theme_system">מערכת</string>
+<string name="theme_light">בהיר</string>
+<string name="theme_dark">כהה</string>
+<string name="language_settings">שפה</string>
+<string name="about_legal">מידע ומשפטי</string>
+<string name="ray_id">מזהה SafeMobile</string>
+<string name="ray_id_copy">העתקת מזהה</string>
+<string name="ray_id_copied">המזהה הועתק</string>
+<string name="history_title">היסטוריית סריקות</string>
+<string name="history_empty">אין עדיין היסטוריית סריקות מקומית.</string>
+<string name="history_session">מזהה הפעלה</string>
+<string name="definitions_limited_compact">הגדרות: חתימת בדיקת EICAR בלבד; הכיסוי מוגבל.</string>
+<string name="settings_privacy">פרטיות והרשאות</string>
 </resources>
