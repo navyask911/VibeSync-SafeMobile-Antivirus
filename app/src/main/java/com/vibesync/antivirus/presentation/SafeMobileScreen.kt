@@ -243,6 +243,7 @@ import kotlinx.coroutines.launch
   else { notificationsGranted = true; if (onboardingStep == 2) setOnboardingStep(3) }
  }
  val enableSentinel: () -> Unit = {
+  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !hasNotificationAccess(context)) requestNotifications()
   securityPrefs.edit().putBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, true).apply()
   sentinelDesired = true
   sentinelOptIn = true
@@ -540,16 +541,41 @@ import kotlinx.coroutines.launch
      else {
       Text(stringResource(R.string.apps_inventory_count,apps.size),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
       apps.take(80).forEach { result ->
-       ScanResultCard(result,
-        showUninstall=result.packageName?.let { canOfferUninstall(context,it) } == true,
-        showQuarantine=false,
-        onUninstall={ packageName ->
-         val host=activity
-         if (canOfferUninstall(context,packageName) && host != null) runCatching {
-          pendingUninstallPackage=packageName
-          host.startActivity(Intent(Intent.ACTION_DELETE,Uri.parse("package:"+packageName)))
-         }.onFailure { pendingUninstallPackage=null; Toast.makeText(context,R.string.monitor_start_failed,Toast.LENGTH_LONG).show() }
-        }, onQuarantine={}
+       ScanResultCard(
+        result,
+        showUninstall = result.packageName?.let { canOfferUninstall(context,it) } == true,
+        showQuarantine = false,
+        showAppInfo = true,
+        onUninstall = { packageName ->
+         lastUninstallPackage = packageName
+         pendingUninstallPackage = packageName
+         when (vm.requestUninstall(context, packageName,
+          launchDelete = { intent -> deleteLauncher.launch(intent) },
+          openAppInfo = { intent -> context.startActivity(intent) })) {
+          UninstallResult.Success, UninstallResult.RequiresUserAction -> Unit
+          is UninstallResult.BlockedSystemApp -> {
+           showUninstallSnackbar(context.getString(R.string.uninstall_protected), null)
+           try { context.startActivity(UninstallHandler.buildAppInfoIntent(packageName)) }
+           catch (e: ActivityNotFoundException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
+           catch (e: SecurityException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
+          }
+          UninstallResult.NotFound -> {
+           pendingUninstallPackage = null; lastUninstallPackage = null
+           showUninstallSnackbar(context.getString(R.string.uninstall_not_found), null)
+          }
+          UninstallResult.OpenedAppInfo -> showUninstallSnackbar(context.getString(R.string.uninstall_opened_app_info), packageName)
+          UninstallResult.HandlerUnavailable -> {
+           pendingUninstallPackage = null
+           showUninstallSnackbar(context.getString(R.string.uninstall_launch_failed), packageName)
+          }
+         }
+        },
+        onAppInfo = { packageName ->
+         try { context.startActivity(UninstallHandler.buildAppInfoIntent(packageName)) }
+         catch (e: ActivityNotFoundException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
+         catch (e: SecurityException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
+        },
+        onQuarantine = {}
        )
       }
      }
