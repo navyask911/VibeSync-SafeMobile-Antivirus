@@ -369,6 +369,35 @@ def import_manifest(manifest, database, hash_column=None, label_column=None):
             if integrity != "ok":
                 raise DatasetError("Generated research SQLite index failed PRAGMA integrity_check.")
             unique = conn.execute("SELECT COUNT(*) FROM research_seen_hashes").fetchone()[0]
+
+            # Exercise indexed lookups against real imported records, not just schema creation.
+            sample_hashes = [
+                item[0] for item in conn.execute(
+                    "SELECT sha256 FROM research_seen_hashes ORDER BY first_row_number LIMIT 5"
+                )
+            ]
+            sample_lookup_checks = 0
+            for sample_hash in sample_hashes:
+                matched = conn.execute(
+                    "SELECT row_number FROM research_hashes WHERE sha256 = ? ORDER BY row_number LIMIT 1",
+                    (sample_hash,),
+                ).fetchone()
+                expected_row = conn.execute(
+                    "SELECT first_row_number FROM research_seen_hashes WHERE sha256 = ?",
+                    (sample_hash,),
+                ).fetchone()
+                if matched is None or expected_row is None or matched[0] != expected_row[0]:
+                    raise DatasetError("Sample SHA-256 lookup verification failed.")
+                plan = conn.execute(
+                    "EXPLAIN QUERY PLAN SELECT row_number FROM research_hashes WHERE sha256 = ? LIMIT 1",
+                    (sample_hash,),
+                ).fetchall()
+                if not any("research_hashes_sha256_idx" in str(plan_row) for plan_row in plan):
+                    raise DatasetError("Sample lookup is not using the expected SHA-256 index.")
+                sample_lookup_checks += 1
+
+            if valid > 0 and sample_lookup_checks == 0:
+                raise DatasetError("No sample SHA-256 lookups could be verified.")
             metadata = {
                 "dataset_id": DATASET_ID, "version": str(DATASET_VERSION), "doi": DATASET_DOI,
                 "research_only": "true", "hash_column": hash_name, "label_column": label_name,
@@ -391,6 +420,9 @@ def import_manifest(manifest, database, hash_column=None, label_column=None):
         "database_file": database.name, "rows_examined": examined, "valid_sha256_rows": valid,
         "invalid_hash_rows": invalid, "duplicate_hash_rows_after_first": duplicates,
         "unique_sha256_hashes": unique, "hash_column": hash_name, "label_column": label_name,
+        "sample_lookup_checks": sample_lookup_checks,
+        "sample_lookup_validation": "passed",
+        "sample_lookup_index": "research_hashes_sha256_idx",
         "headers": headers, "label_value_counts": dict(labels.most_common(100)),
         "label_value_count_truncated": len(labels) > 100,
         "category_value_counts_top_100": dict(category_counts.most_common(100)),
