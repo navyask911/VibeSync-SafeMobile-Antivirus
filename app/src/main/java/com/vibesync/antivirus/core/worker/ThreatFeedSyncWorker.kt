@@ -13,6 +13,7 @@ import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import androidx.work.BackoffPolicy
 import com.vibesync.antivirus.SafeMobileApp
+import com.vibesync.antivirus.BuildConfig
 import com.vibesync.antivirus.data.local.ThreatFeedSyncStateEntity
 import com.vibesync.antivirus.data.local.ThreatFeedStagingEntity
 import com.vibesync.antivirus.data.local.MalwareHashEntity
@@ -26,6 +27,7 @@ import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URI
 import java.security.MessageDigest
+import java.security.DigestInputStream
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 import java.util.zip.GZIPInputStream
@@ -35,6 +37,8 @@ class ThreatFeedSyncWorker(context: Context, params: WorkerParameters) : Corouti
         val app = applicationContext as? SafeMobileApp ?: return Result.failure()
         val database = app.database
         val store = ThreatFeedConfigStore(applicationContext)
+        if (!BuildConfig.OPTIONAL_FEED_ENABLED || !store.isSyncEnabled()) return Result.success()
+        if (!BuildConfig.FEED_MANIFEST_KEY_CONFIGURED) return Result.failure()
         val config = runCatching { store.load() }.getOrElse { return Result.failure() }
         if (config.url.isBlank()) return Result.success()
 
@@ -57,7 +61,9 @@ class ThreatFeedSyncWorker(context: Context, params: WorkerParameters) : Corouti
             lastError = null,
             lastImportedCount = previousState?.lastImportedCount ?: 0,
             etag = previousState?.etag,
-            lastModified = previousState?.lastModified
+            lastModified = previousState?.lastModified,
+            feedVersion = previousState?.feedVersion ?: 0L,
+            feedManifestSha256 = previousState?.feedManifestSha256
         )
         database.withTransaction { stateDao.upsert(runningState) }
 
@@ -66,6 +72,9 @@ class ThreatFeedSyncWorker(context: Context, params: WorkerParameters) : Corouti
             connection = openFeedConnection(config, previousState?.etag)
             val code = connection.responseCode
             if (code == HttpURLConnection.HTTP_NOT_MODIFIED) {
+                if ((previousState?.feedVersion ?: 0L) <= 0L || previousState?.feedManifestSha256.isNullOrBlank()) {
+                    throw FeedConfigurationException("Unverified 304 response rejected because no signed feed version has been accepted.")
+                }
                 val now = System.currentTimeMillis()
                 database.withTransaction {
                     stateDao.upsert(runningState.copy(
@@ -84,6 +93,15 @@ class ThreatFeedSyncWorker(context: Context, params: WorkerParameters) : Corouti
             if (code == 408 || code == 429 || code >= 500) throw FeedTransientException("The feed endpoint is temporarily unavailable (HTTP $code).")
             if (code !in 200..299) throw FeedConfigurationException("The feed endpoint returned HTTP $code.")
 
+            val signedManifest = SignedFeedManifestVerifier.verifyHeaders(
+                connection.getHeaderField(SignedFeedManifestVerifier.MANIFEST_HEADER),
+                connection.getHeaderField(SignedFeedManifestVerifier.SIGNATURE_HEADER),
+                BuildConfig.FEED_MANIFEST_PUBLIC_KEY_B64
+            )
+            SignedFeedManifestVerifier.validateSourceAndVersion(
+                signedManifest, sourceKey, previousState?.feedVersion ?: 0L
+            )
+
             val remoteFormat = when (config.format) {
                 ThreatFeedFormat.JSON -> ThreatFeedFormat.JSON
                 ThreatFeedFormat.CSV -> ThreatFeedFormat.CSV
@@ -96,7 +114,8 @@ class ThreatFeedSyncWorker(context: Context, params: WorkerParameters) : Corouti
             }
             val raw = connection.inputStream
             val decoded = if (connection.contentEncoding.equals("gzip", ignoreCase = true)) GZIPInputStream(raw, IO_BUFFER_SIZE) else raw
-            val bounded = LimitedInputStream(decoded, MAX_FEED_BYTES)
+            val payloadDigest = MessageDigest.getInstance("SHA-256")
+            val bounded = LimitedInputStream(DigestInputStream(decoded, payloadDigest), MAX_FEED_BYTES)
             val parser = ThreatFeedParser()
             val parsedCount = parser.parse(bounded, remoteFormat, sourceHost) { batch ->
                 val staged = batch.map { row ->
@@ -120,6 +139,8 @@ class ThreatFeedSyncWorker(context: Context, params: WorkerParameters) : Corouti
             if (config.updateMode == ThreatFeedUpdateMode.AUTHORITATIVE_SNAPSHOT) {
                 requireNonEmptyAuthoritativeSnapshot(parsedCount)
             }
+            val actualPayloadSha256 = payloadDigest.digest().joinToString("") { "%02x".format(it) }
+            SignedFeedManifestVerifier.validatePayload(signedManifest, actualPayloadSha256)
             val now = System.currentTimeMillis()
             database.withTransaction {
                 // Replace a source snapshot only after the entire non-empty response parsed.
@@ -143,7 +164,9 @@ class ThreatFeedSyncWorker(context: Context, params: WorkerParameters) : Corouti
                     lastError = null,
                     lastImportedCount = importedCount,
                     etag = connection.getHeaderField("ETag") ?: previousState?.etag,
-                    lastModified = connection.getHeaderField("Last-Modified") ?: previousState?.lastModified
+                    lastModified = connection.getHeaderField("Last-Modified") ?: previousState?.lastModified,
+                    feedVersion = signedManifest.version,
+                    feedManifestSha256 = signedManifest.rawManifestSha256
                 ))
             }
             Result.success()
@@ -315,7 +338,8 @@ object ThreatFeedSyncScheduler {
 
     fun ensurePeriodic(context: Context) {
         val manager = WorkManager.getInstance(context.applicationContext)
-        if (!ThreatFeedConfigStore(context).isConfigured()) {
+        if (!BuildConfig.OPTIONAL_FEED_ENABLED || !ThreatFeedConfigStore(context).isSyncEnabled() ||
+            !BuildConfig.FEED_MANIFEST_KEY_CONFIGURED || !ThreatFeedConfigStore(context).isConfigured()) {
             manager.cancelUniqueWork(ThreatFeedSyncWorker.UNIQUE_NOW_NAME)
             manager.cancelUniqueWork(ThreatFeedSyncWorker.UNIQUE_PERIODIC_NAME)
             return
@@ -332,7 +356,8 @@ object ThreatFeedSyncScheduler {
     }
 
     fun enqueueNow(context: Context) {
-        if (!ThreatFeedConfigStore(context).isConfigured()) return
+        if (!BuildConfig.OPTIONAL_FEED_ENABLED || !BuildConfig.FEED_MANIFEST_KEY_CONFIGURED ||
+            !ThreatFeedConfigStore(context).isSyncEnabled() || !ThreatFeedConfigStore(context).isConfigured()) return
         val request = OneTimeWorkRequestBuilder<ThreatFeedSyncWorker>()
             .setConstraints(constraints())
             .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 30, TimeUnit.MINUTES)
