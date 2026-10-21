@@ -45,7 +45,7 @@ class ThreatIntelligenceRepository(
         val uri = runCatching { URI(raw) }.getOrNull()
         val scheme = uri?.scheme?.lowercase(Locale.ROOT)
         val host = uri?.host
-        if (scheme in setOf("http", "https") && !host.isNullOrBlank()) {
+        if (scheme != null && (scheme == "http" || scheme == "https") && !host.isNullOrBlank()) {
             val userInfo = uri.rawUserInfo?.let { "$it@" }.orEmpty()
             val normalizedHost = host.lowercase(Locale.ROOT).let {
                 if (it.contains(':') && !it.startsWith("[")) "[$it]" else it
