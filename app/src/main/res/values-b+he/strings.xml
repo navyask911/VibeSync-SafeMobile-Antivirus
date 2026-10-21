@@ -60,11 +60,11 @@
     <string name="unknown_file">הקובץ שנבחר</string>
     <string name="local_files_only">לשמירה על הפרטיות, הסורק פותח קבצים רק מספקי אחסון מקומיים מזוהים. ספקי מסמכים בענן או של צד שלישי אינם נפתחים.</string>
     <string name="quarantine_confirm_title">להעביר את הקובץ המסומן להסגר?</string>
-    <string name="quarantine_confirm_body">עותק פרטי יישמר בתוך האפליקציה. לאחר אימות הגיבוב, SafeMobile תנסה להסיר את הקובץ המקורי שנבחר. ההסרה תלויה בהרשאות האחסון של Android ובספק; ייתכן שהמקור יישאר.</string>
+    <string name="quarantine_confirm_body">SafeMobile תיצור עותק פרטי מוצפן ותאמת אותו. הקובץ המקורי יישמר ולא יימחק.</string>
     <string name="quarantine_confirm_action">העברה להסגר</string>
     <string name="quarantine_file">עותק פרטי בהסגר</string>
     <string name="quarantine_success_removed">עותק פרטי נשמר בהסגר (%1$s); Android דיווחה שהמקור הוסר.</string>
-    <string name="quarantine_success_copy_only">עותק פרטי נשמר בהסגר (%1$s), אך Android לא הסירה את המקור. במידת הצורך, מחקו אותו ידנית.</string>
+    <string name="quarantine_success_copy_only">עותק הסגר מוצפן נשמר (%1$s). הקובץ המקורי נשמר ולא נמחק.</string>
     <string name="quarantine_failed">ההעברה להסגר נכשלה. הקובץ המקורי לא הוסר בכוונה.</string>
     <string name="uninstall_app">הסרת התקנת אפליקציה…</string>
     <string name="import_definitions">ייבוא הגדרות איומים לא מקוונות (JSON)</string>
@@ -123,4 +123,5 @@
 <string name="history_session">מזהה הפעלה</string>
 <string name="definitions_limited_compact">הגדרות: חתימת בדיקת EICAR בלבד; הכיסוי מוגבל.</string>
 <string name="settings_privacy">פרטיות והרשאות</string>
+<string name="quarantine_legacy_warning">פריט הסגר ישן: אוחסן ללא הצפנה בגרסה קודמת.</string>
 </resources>
