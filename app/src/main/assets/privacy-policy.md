@@ -19,7 +19,7 @@ New quarantine items are stored in app-private no-backup storage using Tink Stre
 
 The scanner does not submit file contents, hashes, filesystem paths, or scan history to a server. This project removes ad/consent SDKs, analytics, telemetry and crash-reporting clients from all application variants. The `offline` flavor (the recommended default for distribution) omits the Android `INTERNET` permission. It can scan and store results locally without a network connection.
 
-The separate `feed` flavor adds `INTERNET` for the optional HTTPS threat-feed client. Until the explicit in-app opt-in gate is completed, do not distribute the feed flavor as a production build; do not configure a feed endpoint unless you accept that the feed request will contact that endpoint. Scan results and files are not uploaded by feed synchronization. HTTPS does not authenticate a threat feed's publisher; signed-manifest verification remains a production gate.
+The separate `feed` flavor adds `INTERNET` for optional HTTPS threat-feed synchronization. It does not schedule or make requests unless the user saves an endpoint, enables the explicit in-app network-consent switch, and a trusted Ed25519 public verification key was configured at build time. Every successful response requires a detached Ed25519 signature binding the configured source, a strictly newer version, and the response body's SHA-256. Scan results and files are not uploaded by feed synchronization. Do not distribute the feed flavor with sync enabled until the key and publisher/signing process have been reviewed.
 
 There is no automatic link-reputation lookup, cloud scanning, Google Play update client, mobile-ad SDK, or in-app sponsorship request in these application variants.
 

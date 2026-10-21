@@ -8,6 +8,7 @@ plugins {
 }
 fun cfg(value: String): String = "\"" + value.replace("\\", "\\\\").replace("\"", "\\\"") + "\""
 
+val feedManifestPublicKey = providers.environmentVariable("SAFE_MOBILE_FEED_ED25519_PUBLIC_KEY_B64").orNull?.trim().orEmpty()
 val releaseStoreBase64 = providers.environmentVariable("KEYSTORE_BASE64").orNull
 val releaseStorePassword = providers.environmentVariable("KEYSTORE_PASSWORD").orNull
 val releaseKeyAlias = providers.environmentVariable("KEY_ALIAS").orNull
@@ -39,6 +40,8 @@ android {
   versionCode = 20261022
   versionName = "1.0.2"
   testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+  buildConfigField("String", "FEED_MANIFEST_PUBLIC_KEY_B64", cfg(feedManifestPublicKey))
+  buildConfigField("Boolean", "FEED_MANIFEST_KEY_CONFIGURED", (!feedManifestPublicKey.isBlank()).toString())
  }
  signingConfigs {
   if (releaseSigningEnabled) {
@@ -100,10 +103,12 @@ dependencies {
  implementation("com.google.crypto.tink:tink-android:1.16.0")
  implementation("org.tensorflow:tensorflow-lite:2.17.0")
  implementation("com.google.guava:guava:33.4.8-android")
+ implementation("org.bouncycastle:bcprov-jdk18on:1.86")
  androidTestImplementation("androidx.test:runner:1.6.2")
  androidTestImplementation("androidx.test.ext:junit:1.2.1")
  androidTestImplementation("androidx.test:core:1.6.1")
  androidTestImplementation("androidx.room:room-testing:2.7.2")
+ testImplementation("org.json:json:20240303")
  testImplementation("junit:junit:4.13.2")
  testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.2")
 }

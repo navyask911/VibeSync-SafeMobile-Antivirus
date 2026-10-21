@@ -7,7 +7,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 
 @Database(
  entities = [ThreatSignature::class, ScanAudit::class, WhiteListEntry::class, MalwareHashEntity::class, ThreatFeedSyncStateEntity::class, ThreatFeedStagingEntity::class, SecurityIncidentEntity::class, QuarantineVaultEntity::class],
- version = 7, exportSchema = false
+ version = 8, exportSchema = false
 )
 abstract class ThreatDatabase : RoomDatabase() {
  abstract fun threatDao(): ThreatDao
@@ -59,6 +59,12 @@ abstract class ThreatDatabase : RoomDatabase() {
     database.execSQL("CREATE INDEX IF NOT EXISTS index_quarantine_vault_entries_created_at ON quarantine_vault_entries(created_at)")
     database.execSQL("CREATE INDEX IF NOT EXISTS index_quarantine_vault_entries_sha256_hash ON quarantine_vault_entries(sha256_hash)")
     database.execSQL("CREATE INDEX IF NOT EXISTS index_quarantine_vault_entries_status ON quarantine_vault_entries(status)")
+   }
+  }
+  val MIGRATION_7_8: Migration = object : Migration(7, 8) {
+   override fun migrate(database: SupportSQLiteDatabase) {
+    database.execSQL("ALTER TABLE threat_feed_sync_state ADD COLUMN feed_version INTEGER NOT NULL DEFAULT 0")
+    database.execSQL("ALTER TABLE threat_feed_sync_state ADD COLUMN feed_manifest_sha256 TEXT")
    }
   }
  }

@@ -70,6 +70,15 @@ class ThreatFeedConfigStore(context: Context) {
 
     fun isConfigured(): Boolean = preferences.getString(KEY_URL, "").orEmpty().isNotBlank()
 
+    /** Network feed access is a separate explicit consent, false on clean install. */
+    fun isSyncEnabled(): Boolean = preferences.getBoolean(KEY_SYNC_ENABLED, false)
+
+    fun setSyncEnabled(enabled: Boolean) {
+        check(preferences.edit().putBoolean(KEY_SYNC_ENABLED, enabled).commit()) {
+            "Could not save threat-feed network consent."
+        }
+    }
+
     private fun validateHttpsUrl(value: String): String {
         val url = value.trim()
         require(url.isNotBlank() && url.length <= MAX_URL_LENGTH) { "Enter a feed URL." }
@@ -119,6 +128,7 @@ class ThreatFeedConfigStore(context: Context) {
     companion object {
         private const val PREFS_NAME = "safe_mobile_threat_feed"
         private const val KEY_URL = "feed_url"
+        private const val KEY_SYNC_ENABLED = "network_sync_consent"
         private const val KEY_AUTH = "encrypted_auth_key"
         private const val KEY_FORMAT = "format"
         private const val KEY_MODE = "request_mode"
