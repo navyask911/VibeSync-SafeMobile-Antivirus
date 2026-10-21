@@ -124,4 +124,23 @@
 <string name="definitions_limited_compact">Tanımlar: yalnızca EICAR test imzası; kapsam sınırlıdır.</string>
 <string name="settings_privacy">Gizlilik ve izinler</string>
 <string name="quarantine_legacy_warning">Eski karantina öğesi: önceki bir sürümde şifrelenmeden saklanmış.</string>
+<string name="overlay_review_title">Üste bindirme riski incelemesi</string>
+<string name="overlay_review_description">Diğer uygulamaların üzerinde gösterim yeteneği veya erişilebilirlik hizmetleri bildiren uygulamaların isteğe bağlı, sınırlı incelemesi. Bunlar yalnızca inceleme işaretleridir; SafeMobile başka bir uygulamanın şu anda üst katman gösterdiğini veya canlı izin durumunu kanıtlayamaz.</string>
+<string name="overlay_review_last_attempt">Son deneme: %1$s</string>
+<string name="overlay_review_last_success">Son başarılı kontrol: %1$s</string>
+<string name="overlay_review_summary">Üst katman yeteneği bildiren uygulamalar: %1$d · Erişilebilirlik hizmeti bildiren uygulamalar: %2$d · Bu cihazda etkin erişilebilirlik hizmetleri: %3$d</string>
+<string name="overlay_review_not_checked">Henüz başarılı bir üst katman riski incelemesi yapılmadı.</string>
+<string name="overlay_review_failed">Son inceleme denemesi başarısız oldu. Android işi ertelemiş veya gerekli paket görünürlüğünü engellemiş olabilir.</string>
+<string name="overlay_review_permission_required">Android bu incelemeye izin vermedi. Yüklü uygulamaların görünürlüğünü kontrol edip yeniden deneyin.</string>
+<string name="overlay_review_reminder_interval">Hatırlatma aralığı</string>
+<string name="overlay_review_reminder_12h">Her 12 saatte bir</string>
+<string name="overlay_review_reminder_24h">Her 24 saatte bir</string>
+<string name="overlay_review_reminder_48h">Her 48 saatte bir</string>
+<string name="overlay_review_notifications_off">Bildirimler kapalı. İnceleme çalışmaya devam edebilir ancak hatırlatmalar gösterilmez.</string>
+<string name="overlay_review_enabled">Otomatik inceleme etkin</string>
+<string name="overlay_review_disabled">İnceleme duraklatıldı</string>
+<string name="overlay_review_notification_channel">SafeMobile gizlilik incelemesi</string>
+<string name="overlay_review_notification_channel_description">İsteğe bağlı üst katman riski incelemesi için düşük öncelikli hatırlatmalar.</string>
+<string name="overlay_review_notification_title">Üst katman riski incelemesi tamamlandı</string>
+<string name="overlay_review_notification_body">%1$d uygulama üst katman yeteneği, %2$d uygulama erişilebilirlik hizmeti bildiriyor. Bunlar inceleme işaretleridir, kötü amaçlı yazılım kanıtı değildir.</string>
 </resources>
