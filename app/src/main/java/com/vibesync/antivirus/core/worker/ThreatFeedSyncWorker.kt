@@ -98,7 +98,7 @@ class ThreatFeedSyncWorker(context: Context, params: WorkerParameters) : Corouti
             val decoded = if (connection.contentEncoding.equals("gzip", ignoreCase = true)) GZIPInputStream(raw, IO_BUFFER_SIZE) else raw
             val bounded = LimitedInputStream(decoded, MAX_FEED_BYTES)
             val parser = ThreatFeedParser()
-            parser.parse(bounded, remoteFormat, sourceHost) { batch ->
+            val parsedCount = parser.parse(bounded, remoteFormat, sourceHost) { batch ->
                 val staged = batch.map { row ->
                     ThreatFeedStagingEntity(
                         importId = importId,
@@ -117,8 +117,16 @@ class ThreatFeedSyncWorker(context: Context, params: WorkerParameters) : Corouti
                 }
                 database.withTransaction { stagingDao.upsertBatch(staged) }
             }
+            if (config.updateMode == ThreatFeedUpdateMode.AUTHORITATIVE_SNAPSHOT) {
+                requireNonEmptyAuthoritativeSnapshot(parsedCount)
+            }
             val now = System.currentTimeMillis()
             database.withTransaction {
+                // Replace a source snapshot only after the entire non-empty response parsed.
+                // Deletion, staged-row promotion, cleanup, and success state commit atomically.
+                if (config.updateMode == ThreatFeedUpdateMode.AUTHORITATIVE_SNAPSHOT) {
+                    hashDao.deleteSource(sourceHost)
+                }
                 var afterIndicatorKey = ""
                 while (true) {
                     val stagedBatch = stagingDao.nextBatch(importId, afterIndicatorKey, STAGING_BATCH_SIZE)

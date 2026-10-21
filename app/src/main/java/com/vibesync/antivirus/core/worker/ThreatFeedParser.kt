@@ -417,4 +417,13 @@ class ThreatFeedParser(private val batchSize: Int = DEFAULT_BATCH_SIZE) {
     }
 }
 
+/** Reject empty authoritative snapshots rather than deleting a previously valid source set. */
+internal fun requireNonEmptyAuthoritativeSnapshot(indicatorCount: Long) {
+    if (indicatorCount <= 0L) {
+        throw FeedParseException(
+            "Authoritative snapshot contained no usable indicators; previously active indicators were retained."
+        )
+    }
+}
+
 class FeedParseException(message: String) : Exception(message)

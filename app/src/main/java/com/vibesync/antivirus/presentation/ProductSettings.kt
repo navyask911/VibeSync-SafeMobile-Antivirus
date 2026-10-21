@@ -40,6 +40,7 @@ import com.vibesync.antivirus.core.worker.ThreatFeedConfigStore
 import com.vibesync.antivirus.core.worker.ThreatFeedConfiguration
 import com.vibesync.antivirus.core.worker.ThreatFeedFormat
 import com.vibesync.antivirus.core.worker.ThreatFeedRequestMode
+import com.vibesync.antivirus.core.worker.ThreatFeedUpdateMode
 import com.vibesync.antivirus.core.worker.ThreatFeedSyncScheduler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -427,6 +428,7 @@ internal fun ThreatFeedSettingsPanel() {
     var feedFormat by remember { mutableStateOf(initial.format) }
     var requestMode by remember { mutableStateOf(initial.requestMode) }
     var postJson by remember { mutableStateOf(initial.postJson) }
+    var updateMode by remember { mutableStateOf(initial.updateMode) }
     var configured by remember { mutableStateOf(initial.url.isNotBlank()) }
 
     Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
@@ -472,6 +474,24 @@ internal fun ThreatFeedSettingsPanel() {
                     maxLines = 5
                 )
             }
+            Text(stringResource(R.string.threat_feed_update_semantics), style = MaterialTheme.typography.labelLarge)
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                FilterChip(
+                    selected = updateMode == ThreatFeedUpdateMode.INCREMENTAL,
+                    onClick = { updateMode = ThreatFeedUpdateMode.INCREMENTAL },
+                    label = { Text(stringResource(R.string.threat_feed_incremental)) }
+                )
+                FilterChip(
+                    selected = updateMode == ThreatFeedUpdateMode.AUTHORITATIVE_SNAPSHOT,
+                    onClick = { updateMode = ThreatFeedUpdateMode.AUTHORITATIVE_SNAPSHOT },
+                    label = { Text(stringResource(R.string.threat_feed_snapshot)) }
+                )
+            }
+            Text(
+                stringResource(R.string.threat_feed_update_semantics_note),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
             Text(stringResource(R.string.threat_feed_format), style = MaterialTheme.typography.labelLarge)
             Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                 FilterChip(selected = feedFormat == ThreatFeedFormat.AUTO, onClick = { feedFormat = ThreatFeedFormat.AUTO }, label = { Text(stringResource(R.string.threat_feed_auto)) })
@@ -481,7 +501,7 @@ internal fun ThreatFeedSettingsPanel() {
             Button(
                 onClick = {
                     runCatching {
-                        store.save(ThreatFeedConfiguration(feedUrl.trim(), authKey, feedFormat, requestMode, postJson))
+                        store.save(ThreatFeedConfiguration(feedUrl.trim(), authKey, feedFormat, requestMode, postJson, updateMode))
                         ThreatFeedSyncScheduler.ensurePeriodic(context)
                     }.onSuccess {
                         configured = true
@@ -510,6 +530,7 @@ internal fun ThreatFeedSettingsPanel() {
                     feedFormat = ThreatFeedFormat.AUTO
                     requestMode = ThreatFeedRequestMode.GET
                     postJson = ThreatFeedConfiguration.DEFAULT_POST_JSON
+                    updateMode = ThreatFeedUpdateMode.INCREMENTAL
                     configured = false
                     Toast.makeText(context, R.string.threat_feed_cleared, Toast.LENGTH_SHORT).show()
                 }.onFailure {

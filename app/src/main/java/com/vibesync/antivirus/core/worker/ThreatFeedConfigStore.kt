@@ -16,13 +16,16 @@ import javax.crypto.spec.GCMParameterSpec
 
 enum class ThreatFeedFormat { AUTO, JSON, CSV }
 enum class ThreatFeedRequestMode { GET, POST_JSON }
+/** Incremental is the safe default; snapshot replacement requires a complete, non-empty response. */
+enum class ThreatFeedUpdateMode { INCREMENTAL, AUTHORITATIVE_SNAPSHOT }
 
 data class ThreatFeedConfiguration(
     val url: String = "",
     val authKey: String = "",
     val format: ThreatFeedFormat = ThreatFeedFormat.AUTO,
     val requestMode: ThreatFeedRequestMode = ThreatFeedRequestMode.GET,
-    val postJson: String = DEFAULT_POST_JSON
+    val postJson: String = DEFAULT_POST_JSON,
+    val updateMode: ThreatFeedUpdateMode = ThreatFeedUpdateMode.INCREMENTAL
 ) {
     companion object {
         const val DEFAULT_POST_JSON = """{"query":"get_iocs","days":7}"""
@@ -41,7 +44,10 @@ class ThreatFeedConfigStore(context: Context) {
         requestMode = runCatching { ThreatFeedRequestMode.valueOf(preferences.getString(KEY_MODE, "GET") ?: "GET") }
             .getOrDefault(ThreatFeedRequestMode.GET),
         postJson = preferences.getString(KEY_POST_JSON, ThreatFeedConfiguration.DEFAULT_POST_JSON)
-            ?: ThreatFeedConfiguration.DEFAULT_POST_JSON
+            ?: ThreatFeedConfiguration.DEFAULT_POST_JSON,
+        updateMode = runCatching {
+            ThreatFeedUpdateMode.valueOf(preferences.getString(KEY_UPDATE_MODE, "INCREMENTAL") ?: "INCREMENTAL")
+        }.getOrDefault(ThreatFeedUpdateMode.INCREMENTAL)
     )
 
     fun save(config: ThreatFeedConfiguration) {
@@ -54,6 +60,7 @@ class ThreatFeedConfigStore(context: Context) {
         val encryptedAuth = config.authKey.trim().takeIf(String::isNotEmpty)?.let(::encrypt)
         check(preferences.edit().putString(KEY_URL, url).putString(KEY_FORMAT, config.format.name)
             .putString(KEY_MODE, config.requestMode.name).putString(KEY_POST_JSON, config.postJson)
+            .putString(KEY_UPDATE_MODE, config.updateMode.name)
             .putString(KEY_AUTH, encryptedAuth).commit()) { "Could not save feed configuration." }
     }
 
@@ -116,6 +123,7 @@ class ThreatFeedConfigStore(context: Context) {
         private const val KEY_FORMAT = "format"
         private const val KEY_MODE = "request_mode"
         private const val KEY_POST_JSON = "post_json"
+        private const val KEY_UPDATE_MODE = "update_mode"
         private const val KEY_ALIAS = "safemobile_threat_feed_auth_v1"
         private const val TRANSFORMATION = "AES/GCM/NoPadding"
         private const val IV_LENGTH = 12

@@ -246,6 +246,10 @@
 <string name="threat_feed_post_json" translatable="false">POST JSON</string>
 <string name="threat_feed_post_body" translatable="false">JSON request body</string>
 <string name="threat_feed_format" translatable="false">Feed format</string>
+<string name="threat_feed_update_semantics" translatable="false">Feed update semantics</string>
+<string name="threat_feed_incremental" translatable="false">Incremental merge</string>
+<string name="threat_feed_snapshot" translatable="false">Authoritative snapshot</string>
+<string name="threat_feed_update_semantics_note" translatable="false">Incremental merge adds or updates entries and retains older entries from this source. Authoritative snapshot replaces this source only after the complete, non-empty feed parses successfully. Empty snapshots are rejected to protect existing indicators.</string>
 <string name="threat_feed_auto" translatable="false">Auto</string>
 <string name="threat_feed_json" translatable="false">JSON</string>
 <string name="threat_feed_csv" translatable="false">CSV</string>

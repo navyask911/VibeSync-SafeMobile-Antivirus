@@ -39,6 +39,18 @@ class ThreatFeedParserTest {
     }
 
     @Test
+    fun rejectsEmptyAuthoritativeSnapshotToProtectPreviouslyActiveIndicators() {
+        assertThrows(FeedParseException::class.java) {
+            requireNonEmptyAuthoritativeSnapshot(0L)
+        }
+    }
+
+    @Test
+    fun allowsNonEmptyAuthoritativeSnapshot() {
+        requireNonEmptyAuthoritativeSnapshot(1L)
+    }
+
+    @Test
     fun rejectsMalformedCsvEvenAfterEarlierBatchesWereDeliveredToStaging() {
         val sha256 = "c".repeat(64)
         val badSha256 = "d".repeat(64)
