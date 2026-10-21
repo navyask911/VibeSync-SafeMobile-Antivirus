@@ -323,4 +323,29 @@
     <string name="apps_inventory_count">%1$d apps assessed in the latest available results</string>
     <string name="sentinel_scope_title">Monitoring scope and limitations</string>
     <string name="sentinel_scope_body">The current watcher observes APK create, move, and write-close events directly under the public Downloads directory while its foreground service is running. Events can be missed if the service stops or files are stored elsewhere. Post-install checks are best-effort and do not block Android installation.</string>
+
+<string name="risk_accessibility_overlay">Requests Accessibility plus overlay capability (potential overlay/RAT pattern)</string>
+<string name="risk_boot_sms_internet">Combines boot persistence, READ_SMS, and INTERNET (possible SMS/2FA theft pattern)</string>
+<string name="nav_install_sources">App installation sources</string>
+<string name="install_sources_title">App Installation Sources</string>
+<string name="install_sources_body">Recent package-install events with Android-reported installer metadata. External or unknown does not prove malware; review the local scan results.</string>
+<string name="install_source_play_badge">Google Play</string>
+<string name="install_source_external_badge">External / non-Play</string>
+<string name="install_source_unknown_badge">Source unknown</string>
+<string name="install_sources_empty">No install-source events recorded yet</string>
+<string name="install_sources_empty_body">After the privacy disclosure is accepted, package-install events are recorded locally when Android delivers them.</string>
+<string name="notification_install_source_channel">App install-source alerts</string>
+<string name="notification_install_source_title">Review app installation source</string>
+<string name="notification_install_source_body">%1$s was installed; Android reports source: %2$s. Review before deciding what to do.</string>
+<string name="enterprise_title">Enterprise &amp; Device Owner Protection</string>
+<string name="enterprise_status_owner">Device Owner active</string>
+<string name="enterprise_status_standard">Standard Mode — Device Owner is not active</string>
+<string name="enterprise_body">Device Owner is optional for personal use. A fully managed device enables stronger installation restrictions and administrator-controlled response to confirmed local hash matches.</string>
+<string name="enterprise_setup_guide">Enterprise Setup Guide</string>
+<string name="enterprise_auto_response">Automatic response to confirmed malware hash matches</string>
+<string name="enterprise_auto_response_body">When enabled on a Device Owner device, exact local hash/IOC matches above the threshold may be hidden and an uninstall request queued. Permission heuristics and DEX strings alone never trigger removal.</string>
+<string name="enterprise_auto_response_title">Enable automatic enterprise response?</string>
+<string name="enterprise_enable_response">Enable response</string>
+<string name="enterprise_setup_instructions">Standard Mode works without Device Owner privileges. For production, use Android Enterprise QR-code provisioning during device setup. For testing only on a disposable device after factory reset and before completing setup, an administrator may run: adb shell dpm set-device-owner com.vibesync.antivirus/.core.security.AdminReceiver. This cannot be enabled by an in-app button on an already provisioned personal device. Device Owner mode can restrict installation and remove apps, so use it only on devices your organization manages.</string>
+<string name="enterprise_response_warning">Enabling automatic response permits Device Owner-only hiding and silent uninstall requests for non-system apps that have an exact local hash/IOC malware match and a risk score above 0.8. Android callback failures are not treated as successes.</string>
 </resources>
