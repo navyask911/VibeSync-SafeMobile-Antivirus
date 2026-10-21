@@ -29,17 +29,31 @@ internal data class ThreatFeedRecord(
 internal object ThreatFeedIndicatorValidator {
     private val SHA256 = Regex("^[a-fA-F0-9]{64}$")
     private val MD5 = Regex("^[a-fA-F0-9]{32}$")
+    private val SHA256_IOC_TYPES = setOf("sha256_hash", "sha256", "hash_sha256", "file_hash")
+    private val MD5_IOC_TYPES = setOf("md5_hash", "md5", "hash_md5")
 
     fun normalize(record: ThreatFeedRecord, source: String): MalwareHashEntity? {
         val rawHash = record.genericHash?.trim()
+        val type = record.iocType?.trim()?.lowercase(Locale.ROOT)?.takeIf { it.isNotBlank() && it.length <= 80 }
+        val rawIoc = record.iocValue?.trim()?.takeIf {
+            it.isNotEmpty() && it.length <= 2048 && it.none(Char::isISOControl)
+        }
+        // ThreatFox-style APIs put file hashes in the IOC field and classify them by ioc_type.
+        // Promote those values to indexed hash columns so the scanner can match them directly.
+        val iocAsHash = rawIoc?.lowercase(Locale.ROOT)
+        val shaFromIoc = iocAsHash?.takeIf {
+            (type in SHA256_IOC_TYPES || type.isNullOrBlank()) && SHA256.matches(it)
+        }
+        val md5FromIoc = iocAsHash?.takeIf {
+            (type in MD5_IOC_TYPES || type.isNullOrBlank()) && MD5.matches(it)
+        }
         val sha = record.sha256?.trim()?.lowercase(Locale.ROOT)?.takeIf(SHA256::matches)
             ?: rawHash?.lowercase(Locale.ROOT)?.takeIf(SHA256::matches)
+            ?: shaFromIoc
         val md5 = record.md5?.trim()?.lowercase(Locale.ROOT)?.takeIf(MD5::matches)
             ?: rawHash?.lowercase(Locale.ROOT)?.takeIf(MD5::matches)
-        val type = record.iocType?.trim()?.lowercase(Locale.ROOT)?.takeIf { it.isNotBlank() && it.length <= 80 }
-        val ioc = record.iocValue?.trim()?.takeIf {
-            it.isNotEmpty() && it.length <= 2048 && it.none(Char::isISOControl)
-        }?.let { raw ->
+            ?: md5FromIoc
+        val ioc = rawIoc?.takeUnless { shaFromIoc != null || md5FromIoc != null }?.let { raw ->
             if (type == "domain" || type == "hostname" || type == "fqdn") raw.lowercase(Locale.ROOT).trimEnd('.')
             else if (type?.startsWith("ip") == true) raw.lowercase(Locale.ROOT)
             else raw

@@ -35,6 +35,21 @@ class ThreatFeedIndicatorValidatorTest {
         assertNull(row)
     }
 
+    @Test fun promotesHashShapedIocsIntoHashColumns() {
+        val sha = ThreatFeedIndicatorValidator.normalize(
+            ThreatFeedRecord(iocValue = "E".repeat(64), iocType = "sha256_hash", threatName = "Hash IOC"),
+            "threatfox-api.abuse.ch"
+        )
+        val md5 = ThreatFeedIndicatorValidator.normalize(
+            ThreatFeedRecord(iocValue = "F".repeat(32), iocType = "md5_hash", threatName = "Hash IOC"),
+            "threatfox-api.abuse.ch"
+        )
+        assertEquals("e".repeat(64), sha?.sha256Hash)
+        assertNull(sha?.iocValue)
+        assertEquals("f".repeat(32), md5?.md5Hash)
+        assertNull(md5?.iocValue)
+    }
+
     @Test fun genericHashFieldInfersSupportedHashLength() {
         val sha = ThreatFeedIndicatorValidator.normalize(ThreatFeedRecord(genericHash = "c".repeat(64)), "feed.example")
         val md5 = ThreatFeedIndicatorValidator.normalize(ThreatFeedRecord(genericHash = "d".repeat(32)), "feed.example")
