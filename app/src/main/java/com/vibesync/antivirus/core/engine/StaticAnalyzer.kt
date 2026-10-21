@@ -17,7 +17,10 @@ class StaticAnalyzer(context: Context) {
   val flags = PackageManager.GET_PERMISSIONS or PackageManager.GET_SERVICES
   val info = try {
    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) pm.getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(flags.toLong()))
-   else { @Suppress("DEPRECATION"); pm.getPackageInfo(packageName, flags) }
+   else {
+    @Suppress("DEPRECATION")
+    pm.getPackageInfo(packageName, flags)
+   }
   } catch (_: PackageManager.NameNotFoundException) { return null } catch (_: SecurityException) { return null }
   val permissions = info.requestedPermissions?.toSet().orEmpty()
   val accessibility = info.services.orEmpty().any { it.permission == PermissionRiskAnalyzer.BIND_ACCESSIBILITY }
