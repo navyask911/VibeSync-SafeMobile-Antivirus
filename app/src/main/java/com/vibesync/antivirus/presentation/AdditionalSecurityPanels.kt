@@ -52,7 +52,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.vibesync.antivirus.R
+import com.vibesync.antivirus.data.local.MalwareHashEntity
+import com.vibesync.antivirus.data.repository.ThreatRepository
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -280,16 +284,70 @@ internal object UrlRiskAssessment {
 }
 
 @Composable
-internal fun PhishingPanel(sharedText: String?, onSharedTextConsumed: () -> Unit) {
+internal fun PhishingPanel(
+    sharedText: String?,
+    repository: ThreatRepository,
+    onSharedTextConsumed: () -> Unit
+) {
     var input by remember { mutableStateOf(sharedText.orEmpty()) }
     var assessment by remember { mutableStateOf<UrlAssessment?>(null) }
+    var feedMatch by remember { mutableStateOf<MalwareHashEntity?>(null) }
+    var feedLookupLoading by remember { mutableStateOf(false) }
+    var feedLookupComplete by remember { mutableStateOf(false) }
+    var feedLookupFailed by remember { mutableStateOf(false) }
+    val lookupScope = rememberCoroutineScope()
+    var lookupJob by remember { mutableStateOf<Job?>(null) }
+
+    fun resetLookupState() {
+        lookupJob?.cancel()
+        feedMatch = null
+        feedLookupLoading = false
+        feedLookupComplete = false
+        feedLookupFailed = false
+    }
+
+    fun assessAndLookup() {
+        val result = UrlRiskAssessment.assess(input)
+        assessment = result
+        resetLookupState()
+        if (result.invalid || result.host.isBlank()) return
+
+        val rawInput = input.trim()
+        val normalizedLink = if (rawInput.contains("://")) rawInput else "https://" + rawInput
+        val candidates = buildList {
+            add(normalizedLink)
+            add(result.host)
+            if (!rawInput.contains("://")) add("http://" + rawInput)
+        }.distinct()
+        feedLookupLoading = true
+        lookupJob = lookupScope.launch {
+            try {
+                var matched: MalwareHashEntity? = null
+                for (candidate in candidates) {
+                    matched = repository.lookupNetworkIoc(candidate)
+                    if (matched != null) break
+                }
+                feedMatch = matched
+                feedLookupComplete = true
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (_: Exception) {
+                feedLookupFailed = true
+            } finally {
+                feedLookupLoading = false
+            }
+        }
+    }
+
     LaunchedEffect(sharedText) {
         if (!sharedText.isNullOrBlank()) {
             input = sharedText.trim()
             assessment = null
+            resetLookupState()
             onSharedTextConsumed()
         }
     }
+
     Column(verticalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
         Text(stringResource(R.string.phishing_title), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
         Text(stringResource(R.string.phishing_disclaimer), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -297,12 +355,16 @@ internal fun PhishingPanel(sharedText: String?, onSharedTextConsumed: () -> Unit
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 OutlinedTextField(
                     value = input,
-                    onValueChange = { input = it; assessment = null },
+                    onValueChange = {
+                        input = it
+                        assessment = null
+                        resetLookupState()
+                    },
                     label = { Text(stringResource(R.string.phishing_url_label)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )
-                Button(onClick = { assessment = UrlRiskAssessment.assess(input) }, modifier = Modifier.fillMaxWidth()) {
+                Button(onClick = { assessAndLookup() }, modifier = Modifier.fillMaxWidth()) {
                     Icon(Icons.Default.Link, contentDescription = null)
                     Text(stringResource(R.string.phishing_assess), modifier = Modifier.padding(start = 8.dp))
                 }
@@ -322,7 +384,34 @@ internal fun PhishingPanel(sharedText: String?, onSharedTextConsumed: () -> Unit
                             else -> MaterialTheme.colorScheme.primary
                         }
                     )
-                    if (result.host.isNotBlank()) Text(stringResource(R.string.phishing_host) + ": " + result.host, style = MaterialTheme.typography.bodySmall)
+                    if (result.host.isNotBlank()) {
+                        Text(stringResource(R.string.phishing_host) + ": " + result.host, style = MaterialTheme.typography.bodySmall)
+                    }
+                    if (feedLookupLoading) {
+                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            CircularProgressIndicator(Modifier.size(16.dp), strokeWidth = 2.dp)
+                            Text(stringResource(R.string.phishing_feed_checking), style = MaterialTheme.typography.bodySmall)
+                        }
+                    }
+                    feedMatch?.let { match ->
+                        Text(
+                            stringResource(R.string.phishing_feed_match, match.threatName, match.source),
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    } ?: when {
+                        feedLookupFailed -> Text(
+                            stringResource(R.string.phishing_feed_lookup_error),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.tertiary
+                        )
+                        feedLookupComplete -> Text(
+                            stringResource(R.string.phishing_feed_no_match),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
                     Text(stringResource(R.string.phishing_no_feed_notice), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }

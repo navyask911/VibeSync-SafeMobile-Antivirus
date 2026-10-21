@@ -385,7 +385,7 @@ import java.util.Date
     }
     if (selectedDestination == "home") CoreStrengthsAccordion { destination -> selectedDestination = destination }
     if (selectedDestination == "guardian") GuardianPanel()
-    if (selectedDestination == "phishing") PhishingPanel(sharedText) { onSharedTextConsumed() }
+    if (selectedDestination == "phishing") PhishingPanel(sharedText, repository) { onSharedTextConsumed() }
     if (selectedDestination == "cleaner") StorageCleanerPanel()
     state.messageResource?.let { message -> Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant)) { Text(stringResource(message),Modifier.padding(14.dp),color=MaterialTheme.colorScheme.onSurface,style=MaterialTheme.typography.bodySmall) } }
     state.messageText?.let { message -> Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant)) { Text(message,Modifier.padding(14.dp),color=MaterialTheme.colorScheme.onSurface,style=MaterialTheme.typography.bodySmall) } }

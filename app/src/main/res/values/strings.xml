@@ -184,7 +184,11 @@
 <string name="phishing_suspicious" translatable="false">Suspicious URL indicators — review before opening</string>
 <string name="phishing_no_local_match" translatable="false">No local heuristic match — not a safety guarantee</string>
 <string name="phishing_host" translatable="false">Normalized host</string>
-<string name="phishing_no_feed_notice" translatable="false">No local URL threat list is installed. This result uses basic URL heuristics only; it cannot confirm whether the URL is listed by URLhaus or a phishing database.</string>
+<string name="phishing_no_feed_notice" translatable="false">Local lookup checks only indicators currently stored on this device and never queries a remote reputation service.</string>
+<string name="phishing_feed_checking" translatable="false">Checking this URL and host against local threat indicators…</string>
+<string name="phishing_feed_match" translatable="false">Known local threat IOC: %1$s (source: %2$s)</string>
+<string name="phishing_feed_no_match" translatable="false">No local IOC matched this URL or host. This is not a safety guarantee.</string>
+<string name="phishing_feed_lookup_error" translatable="false">Local IOC lookup failed. Try again.</string>
 <string name="phishing_limitations" translatable="false">This checker is not a global browser blocker. It does not follow redirects, inspect page content, intercept links inside other apps, or verify the live reputation of a website. Shortened links are marked for review, not automatically called malicious.</string>
 <string name="cleaner_title" translatable="false">Storage residual APK cleaner</string>
 <string name="cleaner_description" translatable="false">Choose a folder with the Android Storage Access Framework. SafeMobile checks APK metadata only and never deletes files without your explicit confirmation. Access to Android/media or other folders varies by device.</string>
