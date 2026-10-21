@@ -7,10 +7,8 @@ import android.content.Intent
 import android.content.ActivityNotFoundException
 import android.net.Uri
 import android.os.Build
-import android.os.Environment
 import android.os.Handler
 import android.os.Looper
-import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -90,6 +88,7 @@ import com.vibesync.antivirus.SafeMobileApp
 import com.vibesync.antivirus.R
 import com.vibesync.antivirus.core.connectivity.ConnectivityMonitor
 import com.vibesync.antivirus.core.observer.StorageSentinelService
+import com.vibesync.antivirus.core.observer.StorageAccessPreferences
 import com.vibesync.antivirus.core.worker.OverlayRiskReviewManager
 import com.vibesync.antivirus.core.locale.LocalePreferences
 import com.vibesync.antivirus.core.security.DeviceOwnerManager
@@ -227,16 +226,23 @@ import kotlinx.coroutines.launch
   notificationsGranted = hasNotificationAccess(context)
   if (notificationsGranted && onboardingStep == 2) setOnboardingStep(3)
  }
- val legacyStorageLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
-  storageAccessGranted = hasSharedStorageAccess(context)
-  if (storageAccessGranted && onboardingStep == 0) setOnboardingStep(1)
+ val storageTreeLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri: Uri? ->
+  if (uri != null) {
+   val granted = runCatching { StorageAccessPreferences.persistSelectedFolder(context, uri) }.getOrDefault(false)
+   storageAccessGranted = granted
+   if (granted) {
+    if (onboardingStep == 0) setOnboardingStep(1)
+    if (securityPrefs.getBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, false)) {
+     runCatching { context.startForegroundService(Intent(context, StorageSentinelService::class.java)) }
+      .onFailure { Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show() }
+     Handler(Looper.getMainLooper()).postDelayed({
+      monitoringRunning = isStorageSentinelRunning(context) && hasSharedStorageAccess(context)
+     }, 900L)
+    }
+   } else Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show()
+  }
  }
- val requestStorage: () -> Unit = {
-  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-   runCatching { context.startActivity(Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, Uri.parse("package:" + context.packageName))) }
-    .onFailure { Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show() }
-  } else legacyStorageLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
- }
+ val requestStorage: () -> Unit = { storageTreeLauncher.launch(null) }
  val requestNotifications: () -> Unit = {
   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) notificationLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
   else { notificationsGranted = true; if (onboardingStep == 2) setOnboardingStep(3) }
@@ -520,23 +526,9 @@ import kotlinx.coroutines.launch
        color = if (monitoringRunning) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.tertiary
       )
       if (!monitoringRunning) {
-       OutlinedButton(onClick={ requestPrivacyAcknowledgement {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !Environment.isExternalStorageManager()) {
-         context.startActivity(Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,Uri.parse("package:"+context.packageName)))
-        } else {
-         runCatching {
-          context.startForegroundService(Intent(context,com.vibesync.antivirus.core.observer.StorageSentinelService::class.java))
-         }.onSuccess {
-          monitoringRunning = true
-          Handler(Looper.getMainLooper()).postDelayed({
-           monitoringRunning = isStorageSentinelRunning(context)
-          }, 800L)
-         }.onFailure {
-          monitoringRunning = false
-          Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show()
-         }
-        }
-       }},enabled=!state.isScanning,modifier=Modifier.fillMaxWidth()) { Text(stringResource(R.string.monitor_button)) }
+       OutlinedButton(onClick={ requestPrivacyAcknowledgement { enableSentinel() } },enabled=!state.isScanning,modifier=Modifier.fillMaxWidth()) {
+        Text(stringResource(R.string.monitor_button))
+       }
       } else {
        OutlinedButton(onClick={
         context.stopService(Intent(context,com.vibesync.antivirus.core.observer.StorageSentinelService::class.java))

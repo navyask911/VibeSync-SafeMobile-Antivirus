@@ -2,7 +2,6 @@ package com.vibesync.antivirus.presentation
 
 import android.content.Context
 import android.os.Build
-import android.os.Environment
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -31,11 +30,7 @@ internal object OnboardingPrefs {
     const val FIRST_SCAN_REQUESTED = "first_scan_requested"
 }
 internal fun hasSharedStorageAccess(context: Context): Boolean =
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        runCatching { Environment.isExternalStorageManager() }.getOrDefault(false)
-    } else {
-        context.checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == android.content.pm.PackageManager.PERMISSION_GRANTED
-    }
+    com.vibesync.antivirus.core.observer.StorageAccessPreferences.hasAccess(context)
 internal fun hasNotificationAccess(context: Context): Boolean =
     Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
         context.checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) == android.content.pm.PackageManager.PERMISSION_GRANTED
