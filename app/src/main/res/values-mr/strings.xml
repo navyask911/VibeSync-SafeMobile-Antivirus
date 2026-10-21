@@ -60,11 +60,11 @@
     <string name="unknown_file">निवडलेली फाइल</string>
     <string name="local_files_only">गोपनीयतेसाठी स्कॅनर फक्त ओळखल्या जाणाऱ्या स्थानिक स्टोरेज पुरवठादारांच्या फाइल्स उघडतो. क्लाउड किंवा तृतीय-पक्ष दस्तऐवज पुरवठादार उघडले जात नाहीत.</string>
     <string name="quarantine_confirm_title">चिन्हांकित फाइल क्वारंटाइन करायची?</string>
-    <string name="quarantine_confirm_body">या अॅपच्या खासगी स्टोरेजमध्ये प्रत साठवली जाईल. हॅश पडताळल्यानंतर SafeMobile निवडलेली मूळ फाइल काढण्याचा प्रयत्न करेल. काढणे Android परवानग्या आणि पुरवठादारावर अवलंबून आहे; मूळ फाइल राहू शकते.</string>
+    <string name="quarantine_confirm_body">SafeMobile एन्क्रिप्ट केलेली खाजगी प्रत तयार करून तपासेल. मूळ फाइल जतन केली जाईल आणि हटवली जाणार नाही.</string>
     <string name="quarantine_confirm_action">फाइल क्वारंटाइन करा</string>
     <string name="quarantine_file">खासगी क्वारंटाइन प्रत</string>
     <string name="quarantine_success_removed">खासगी क्वारंटाइन प्रत साठवली (%1$s); Android ने मूळ फाइल काढल्याचे सांगितले.</string>
-    <string name="quarantine_success_copy_only">खासगी क्वारंटाइन प्रत साठवली (%1$s), पण Android मूळ फाइल काढू शकले नाही. गरज असल्यास हाताने हटवा.</string>
+    <string name="quarantine_success_copy_only">एन्क्रिप्ट केलेली क्वारंटाइन प्रत जतन केली (%1$s). मूळ फाइल जतन केली; हटवली नाही.</string>
     <string name="quarantine_failed">क्वारंटाइन अयशस्वी. मूळ फाइल जाणूनबुजून काढलेली नाही.</string>
     <string name="uninstall_app">अॅप अनइन्स्टॉल करा…</string>
     <string name="import_definitions">ऑफलाइन धोका व्याख्या आयात करा (JSON)</string>
@@ -123,4 +123,5 @@
 <string name="history_session">सेशन ID</string>
 <string name="definitions_limited_compact">डेफिनिशन: फक्त EICAR चाचणी स्वाक्षरी; व्याप्ती मर्यादित आहे.</string>
 <string name="settings_privacy">गोपनीयता आणि परवानग्या</string>
+<string name="quarantine_legacy_warning">जुनी क्वारंटाइन नोंद: मागील आवृत्तीत एन्क्रिप्शनशिवाय साठवलेली.</string>
 </resources>
