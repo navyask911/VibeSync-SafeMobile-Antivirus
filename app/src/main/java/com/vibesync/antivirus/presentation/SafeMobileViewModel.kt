@@ -51,6 +51,23 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
         scanJob?.cancel()
     }
 
+    /** Re-check one package after Android's uninstall confirmation flow returns. */
+    fun refreshInstalledPackage(packageName: String) {
+        viewModelScope.launch {
+            val refreshed = runCatching { repository.scanInstalledPackage(packageName) }.getOrNull()
+            mutableState.update { old ->
+                val updated = if (refreshed == null) {
+                    old.results.filterNot { it.packageName == packageName }
+                } else if (old.results.any { it.packageName == packageName }) {
+                    old.results.map { if (it.packageName == packageName) refreshed else it }
+                } else {
+                    old.results
+                }
+                old.copy(results = updated)
+            }
+        }
+    }
+
     fun refreshQuarantine() {
         viewModelScope.launch {
             runCatching { repository.listQuarantinedFiles() }
