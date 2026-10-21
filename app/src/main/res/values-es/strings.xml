@@ -7,11 +7,11 @@
 
 <string name="local_files_only">Por privacidad, el escáner solo abre archivos de proveedores de almacenamiento local reconocidos. No abre proveedores en la nube ni de terceros.</string>
 <string name="quarantine_confirm_title">¿Poner este archivo marcado en cuarentena?</string>
-<string name="quarantine_confirm_body">Se guardará una copia privada dentro de la aplicación. Tras verificar su hash, SafeMobile intentará eliminar el original seleccionado. La eliminación depende de los permisos de Android y del proveedor; el original podría permanecer.</string>
+<string name="quarantine_confirm_body">SafeMobile creará y verificará una copia privada cifrada. El archivo original se conservará y no se eliminará.</string>
 <string name="quarantine_confirm_action">Poner en cuarentena</string>
 <string name="quarantine_file">Guardar copia privada en cuarentena</string>
 <string name="quarantine_success_removed">Copia privada guardada (%1$s); Android indicó que se eliminó el original.</string>
-<string name="quarantine_success_copy_only">Copia privada guardada (%1$s), pero Android no permitió eliminar el original. Elimínalo manualmente si es necesario.</string>
+<string name="quarantine_success_copy_only">Copia cifrada en cuarentena guardada (%1$s). El archivo original se conservó y no se eliminó.</string>
 <string name="quarantine_failed">No se pudo completar la cuarentena. No se intentó eliminar intencionadamente el archivo original.</string>
 <string name="uninstall_app">Desinstalar aplicación…</string>
 <string name="scan_progress">Se analizaron %1$d de %2$d aplicaciones instaladas</string>
@@ -66,4 +66,5 @@
 <string name="history_session">ID de sesión</string>
 <string name="definitions_limited_compact">Definiciones: solo firma de prueba EICAR; cobertura limitada.</string>
 <string name="settings_privacy">Privacidad y permisos</string>
+<string name="quarantine_legacy_warning">Elemento de cuarentena antiguo: se almacenó sin cifrado en una versión anterior.</string>
 </resources>
