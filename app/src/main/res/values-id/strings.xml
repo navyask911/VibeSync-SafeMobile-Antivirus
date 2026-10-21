@@ -125,4 +125,23 @@
 <string name="settings_privacy">Privasi dan izin</string>
 
 <string name="quarantine_legacy_warning">Item karantina lama: disimpan tanpa enkripsi pada versi sebelumnya.</string>
+<string name="overlay_review_title">Tinjauan risiko overlay</string>
+<string name="overlay_review_description">Tinjauan opsional terbatas terhadap aplikasi yang menyatakan kemampuan tampil di atas aplikasi lain dan layanan aksesibilitas. Ini hanya indikator untuk ditinjau; SafeMobile tidak dapat membuktikan bahwa aplikasi lain sedang menampilkan overlay atau memeriksa status izin overlay langsungnya.</string>
+<string name="overlay_review_last_attempt">Percobaan terakhir: %1$s</string>
+<string name="overlay_review_last_success">Pemeriksaan berhasil terakhir: %1$s</string>
+<string name="overlay_review_summary">Aplikasi yang menyatakan kemampuan overlay: %1$d · Aplikasi yang menyatakan layanan aksesibilitas: %2$d · Layanan aksesibilitas aktif di perangkat ini: %3$d</string>
+<string name="overlay_review_not_checked">Belum ada tinjauan risiko overlay yang berhasil.</string>
+<string name="overlay_review_failed">Percobaan tinjauan terakhir gagal. Android mungkin menunda pekerjaan atau membatasi visibilitas paket yang diperlukan.</string>
+<string name="overlay_review_permission_required">Android tidak mengizinkan tinjauan ini. Periksa visibilitas aplikasi terpasang, lalu coba lagi.</string>
+<string name="overlay_review_reminder_interval">Interval pengingat</string>
+<string name="overlay_review_reminder_12h">Setiap 12 jam</string>
+<string name="overlay_review_reminder_24h">Setiap 24 jam</string>
+<string name="overlay_review_reminder_48h">Setiap 48 jam</string>
+<string name="overlay_review_notifications_off">Notifikasi dinonaktifkan. Tinjauan tetap dapat berjalan, tetapi pengingat tidak akan ditampilkan.</string>
+<string name="overlay_review_enabled">Tinjauan otomatis aktif</string>
+<string name="overlay_review_disabled">Tinjauan dijeda</string>
+<string name="overlay_review_notification_channel">Tinjauan privasi SafeMobile</string>
+<string name="overlay_review_notification_channel_description">Pengingat prioritas rendah untuk tinjauan risiko overlay opsional.</string>
+<string name="overlay_review_notification_title">Tinjauan risiko overlay selesai</string>
+<string name="overlay_review_notification_body">%1$d aplikasi menyatakan kemampuan overlay dan %2$d menyatakan layanan aksesibilitas. Ini indikator untuk ditinjau, bukan bukti malware.</string>
 </resources>
