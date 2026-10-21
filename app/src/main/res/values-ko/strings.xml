@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">VibeSync SafeMobile Antivirus</string>
+    <string name="app_name">SafeMobile Antivirus</string>
     <string name="privacy_title">개인정보 및 검사 접근 권한 안내</string>
     <string name="privacy_body">SafeMobile은 이 기기에서 SHA-256 및 MD5 해시를 계산하고 로컬에 저장된 정의와 비교합니다. 로컬 검사는 파일이나 해시를 업로드하지 않습니다. 광고는 개인정보 설정과 연결 상태가 허용하는 경우에만 Google Mobile Ads 네트워크 서비스를 사용합니다. 핵심 검사 기능은 네트워크 없이 작동합니다. 설치된 앱 보기와 모든 파일 접근은 민감한 Android 권한이며 Google Play 검토가 필요할 수 있습니다.</string>
     <string name="privacy_accept">확인했습니다</string>
     <string name="exit_app">앱 종료</string>
-    <string name="brand_title">VIBESYNC</string>
-    <string name="brand_subtitle">SAFEMOBILE ANTIVIRUS</string>
+    <string name="brand_title">SafeMobile Antivirus</string>
+    <string name="brand_subtitle">VibeSync</string>
     <string name="scan_status">로컬 보호 대시보드</string>
     <string name="scan_running">기기를 검사하는 중…</string>
     <string name="threat_found">위협 서명과 일치함</string>
@@ -103,4 +103,24 @@
     <string name="language_system_default">시스템 기본값</string>
     <string name="limited_protection">제한된 보호 — EICAR 테스트 정의만 있음</string>
     <string name="review_recommended">검토 권장</string>
+<string name="nav_home">홈</string>
+<string name="nav_scan">검사</string>
+<string name="nav_quarantine">격리</string>
+<string name="nav_history">기록</string>
+<string name="nav_settings">설정</string>
+<string name="settings_title">설정</string>
+<string name="appearance_title">모양</string>
+<string name="theme_system">시스템</string>
+<string name="theme_light">라이트</string>
+<string name="theme_dark">다크</string>
+<string name="language_settings">언어</string>
+<string name="about_legal">정보 및 법적 고지</string>
+<string name="ray_id">SafeMobile Ray ID</string>
+<string name="ray_id_copy">ID 복사</string>
+<string name="ray_id_copied">Ray ID가 복사되었습니다</string>
+<string name="history_title">검사 기록</string>
+<string name="history_empty">로컬 검사 기록이 아직 없습니다.</string>
+<string name="history_session">세션 ID</string>
+<string name="definitions_limited_compact">정의: EICAR 테스트 서명만 포함되어 범위가 제한됩니다.</string>
+<string name="settings_privacy">개인정보 및 권한</string>
 </resources>
