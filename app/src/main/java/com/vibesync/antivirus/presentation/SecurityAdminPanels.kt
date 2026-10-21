@@ -18,6 +18,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.Button
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -76,7 +77,12 @@ internal fun EnterpriseProtectionCard(manager: DeviceOwnerManager, modifier: Mod
 }
 
 @Composable
-internal fun InstallSourceAuditPanel(incidents: List<SecurityIncidentEntity>,onScan: () -> Unit) {
+internal fun InstallSourceAuditPanel(
+ incidents: List<SecurityIncidentEntity>,
+ onScan: () -> Unit,
+ onInspect: (String) -> Unit,
+ onUninstall: (String) -> Unit
+) {
  Column(verticalArrangement=Arrangement.spacedBy(10.dp)) {
   Text(stringResource(R.string.install_sources_title),style=MaterialTheme.typography.titleLarge,fontWeight=FontWeight.Bold)
   Text(stringResource(R.string.install_sources_body),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
@@ -97,8 +103,42 @@ internal fun InstallSourceAuditPanel(incidents: List<SecurityIncidentEntity>,onS
      Text(event.reason.take(1200),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
      if(!event.sha256Hash.isNullOrBlank()) Text(stringResource(R.string.file_hash_label,event.sha256Hash.take(24)),style=MaterialTheme.typography.labelSmall)
      Text(event.actionTaken + " · " + event.status.substringAfter("|","SOURCE_RECORDED"),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+     event.sourcePackage?.takeIf { it.isNotBlank() }?.let { packageName ->
+      Row(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
+       OutlinedButton(onClick={onInspect(packageName)}) { Text(stringResource(R.string.app_info_label)) }
+       Button(onClick={onUninstall(packageName)}) { Text(stringResource(R.string.uninstall_app)) }
+      }
+     }
     }
    }
   }
  }
+}
+
+
+@Composable
+internal fun EnterpriseOnboardingNotice(manager: DeviceOwnerManager) {
+ val owner by manager.isDeviceOwner.collectAsState()
+ var guide by remember { mutableStateOf(false) }
+ LaunchedEffect(Unit) { manager.refreshState() }
+ Card(
+  modifier=Modifier.fillMaxWidth(),
+  shape=RoundedCornerShape(14.dp),
+  colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant)
+ ) {
+  Column(Modifier.padding(12.dp),verticalArrangement=Arrangement.spacedBy(5.dp)) {
+   Text(stringResource(R.string.enterprise_title),style=MaterialTheme.typography.titleSmall,fontWeight=FontWeight.SemiBold)
+   Row(verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(6.dp)) {
+    androidx.compose.material3.Icon(if(owner) Icons.Default.CheckCircle else Icons.Default.Warning,null,
+     tint=if(owner) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.tertiary)
+    Text(stringResource(if(owner) R.string.enterprise_status_owner else R.string.enterprise_status_standard),
+     style=MaterialTheme.typography.labelMedium)
+   }
+   Text(stringResource(R.string.enterprise_body),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+   TextButton(onClick={guide=true}) { Text(stringResource(R.string.enterprise_setup_guide)) }
+  }
+ }
+ if(guide) AlertDialog(onDismissRequest={guide=false},title={Text(stringResource(R.string.enterprise_setup_guide))},
+  text={Text(stringResource(R.string.enterprise_setup_instructions))},
+  confirmButton={TextButton(onClick={guide=false}) { Text(stringResource(R.string.close)) }})
 }
