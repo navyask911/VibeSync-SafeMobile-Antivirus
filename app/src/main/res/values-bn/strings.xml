@@ -124,4 +124,23 @@
 <string name="definitions_limited_compact">ডেফিনিশন: শুধু EICAR পরীক্ষার স্বাক্ষর; সুরক্ষার পরিসর সীমিত।</string>
 <string name="settings_privacy">গোপনীয়তা ও অনুমতি</string>
 <string name="quarantine_legacy_warning">পুরোনো কোয়ারেন্টাইন আইটেম: আগের সংস্করণে এনক্রিপশন ছাড়া সংরক্ষিত।</string>
+<string name="overlay_review_title">ওভারলে-ঝুঁকি পর্যালোচনা</string>
+<string name="overlay_review_description">যেসব অ্যাপ অন্য অ্যাপের ওপর দেখানোর ক্ষমতা বা অ্যাক্সেসিবিলিটি পরিষেবা ঘোষণা করে, সেগুলোর ঐচ্ছিক সীমিত পর্যালোচনা। এগুলো শুধু ঝুঁকির ইঙ্গিত; SafeMobile প্রমাণ করতে পারে না যে অন্য অ্যাপ এখন ওভারলে দেখাচ্ছে বা তার লাইভ অনুমতি কী।</string>
+<string name="overlay_review_last_attempt">সর্বশেষ প্রচেষ্টা: %1$s</string>
+<string name="overlay_review_last_success">সর্বশেষ সফল পরীক্ষা: %1$s</string>
+<string name="overlay_review_summary">ওভারলে ক্ষমতা ঘোষণা করা অ্যাপ: %1$d · অ্যাক্সেসিবিলিটি পরিষেবা ঘোষণা করা অ্যাপ: %2$d · এই ডিভাইসে সক্রিয় অ্যাক্সেসিবিলিটি পরিষেবা: %3$d</string>
+<string name="overlay_review_not_checked">এখনও কোনো সফল ওভারলে-ঝুঁকি পর্যালোচনা হয়নি।</string>
+<string name="overlay_review_failed">সর্বশেষ পর্যালোচনা ব্যর্থ হয়েছে। Android কাজটি পিছিয়ে দিতে পারে বা প্যাকেজ দেখার অনুমতি নাও দিতে পারে।</string>
+<string name="overlay_review_permission_required">Android এই পর্যালোচনার অনুমতি দেয়নি। ইনস্টল করা অ্যাপ দেখার সুযোগ পরীক্ষা করে আবার চেষ্টা করুন।</string>
+<string name="overlay_review_reminder_interval">রিমাইন্ডারের ব্যবধান</string>
+<string name="overlay_review_reminder_12h">প্রতি ১২ ঘণ্টায়</string>
+<string name="overlay_review_reminder_24h">প্রতি ২৪ ঘণ্টায়</string>
+<string name="overlay_review_reminder_48h">প্রতি ৪৮ ঘণ্টায়</string>
+<string name="overlay_review_notifications_off">নোটিফিকেশন বন্ধ। পর্যালোচনা চলতে পারে, তবে রিমাইন্ডার দেখানো হবে না।</string>
+<string name="overlay_review_enabled">স্বয়ংক্রিয় পর্যালোচনা চালু</string>
+<string name="overlay_review_disabled">পর্যালোচনা বিরতিতে</string>
+<string name="overlay_review_notification_channel">SafeMobile গোপনীয়তা পর্যালোচনা</string>
+<string name="overlay_review_notification_channel_description">ঐচ্ছিক ওভারলে-ঝুঁকি পর্যালোচনার জন্য কম-অগ্রাধিকারের রিমাইন্ডার।</string>
+<string name="overlay_review_notification_title">ওভারলে-ঝুঁকি পর্যালোচনা সম্পন্ন</string>
+<string name="overlay_review_notification_body">%1$dটি অ্যাপ ওভারলে ক্ষমতা এবং %2$dটি অ্যাপ অ্যাক্সেসিবিলিটি পরিষেবা ঘোষণা করে। এগুলো পর্যালোচনার ইঙ্গিত, ম্যালওয়্যারের প্রমাণ নয়।</string>
 </resources>
