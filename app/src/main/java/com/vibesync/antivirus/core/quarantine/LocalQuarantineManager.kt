@@ -78,6 +78,7 @@ class LocalQuarantineManager(context: Context, private val hashCalculator: HashC
     throw IOException("The file changed after scanning. The original was retained.")
    }
    if (!temporaryCiphertext.renameTo(ciphertext)) throw IOException("Could not finalize the encrypted quarantine object.")
+   verifyEncryptedObject(ciphertext, primitive, associatedData, copiedHash, total)
    val metadata = Properties().apply {
     setProperty("originalName", originalName)
     setProperty("sha256", copiedHash)
@@ -188,6 +189,33 @@ class LocalQuarantineManager(context: Context, private val hashCalculator: HashC
   val removed = safe.delete()
   if (removed) metadataFile(safe).delete()
   return removed
+ }
+
+ private fun verifyEncryptedObject(
+  ciphertext: File,
+  primitive: StreamingAead,
+  associatedData: ByteArray,
+  expectedHash: String,
+  expectedBytes: Long
+ ) {
+  val digest = MessageDigest.getInstance("SHA-256")
+  var total = 0L
+  FileInputStream(ciphertext).use { encryptedInput ->
+   primitive.newDecryptingStream(encryptedInput, associatedData).use { plaintextInput ->
+    val buffer = ByteArray(HashCalculator.DEFAULT_BUFFER_SIZE)
+    while (true) {
+     val count = plaintextInput.read(buffer)
+     if (count < 0) break
+     if (count == 0) continue
+     total += count
+     if (total > maxQuarantineBytes) throw IOException("Decrypted quarantine object exceeded the permitted size.")
+     digest.update(buffer, 0, count)
+    }
+   }
+  }
+  if (total != expectedBytes || !digest.digest().toHex().equals(expectedHash, ignoreCase = true)) {
+   throw IOException("Encrypted quarantine verification failed.")
+  }
  }
 
  private fun streamingAead(): StreamingAead {
