@@ -60,11 +60,11 @@
     <string name="unknown_file">தேர்ந்தெடுத்த கோப்பு</string>
     <string name="local_files_only">தனியுரிமைக்காக அறியப்பட்ட உள்ளூர் சேமிப்பு வழங்குநர்களின் கோப்புகளை மட்டுமே ஸ்கேனர் திறக்கும். மேக அல்லது மூன்றாம் தரப்பு ஆவண வழங்குநர்கள் திறக்கப்படமாட்டார்கள்.</string>
     <string name="quarantine_confirm_title">குறிக்கப்பட்ட கோப்பை தனிமைப்படுத்தவா?</string>
-    <string name="quarantine_confirm_body">இந்த செயலியின் தனிப்பட்ட சேமிப்பில் ஒரு நகல் சேமிக்கப்படும். ஹாஷைச் சரிபார்த்த பிறகு SafeMobile அசல் கோப்பை அகற்ற முயலும். அகற்றுவது Android அனுமதிகள் மற்றும் வழங்குநரைப் பொறுத்தது; அசல் கோப்பு இருக்கக்கூடும்.</string>
+    <string name="quarantine_confirm_body">SafeMobile குறியாக்கம் செய்யப்பட்ட தனிப்பட்ட நகலை உருவாக்கி சரிபார்க்கும். அசல் கோப்பு வைத்திருக்கப்படும்; நீக்கப்படாது.</string>
     <string name="quarantine_confirm_action">கோப்பை தனிமைப்படுத்து</string>
     <string name="quarantine_file">தனிப்பட்ட தனிமைப்படுத்தல் நகல்</string>
     <string name="quarantine_success_removed">தனிப்பட்ட தனிமைப்படுத்தல் நகல் சேமிக்கப்பட்டது (%1$s); அசல் அகற்றப்பட்டதாக Android தெரிவித்தது.</string>
-    <string name="quarantine_success_copy_only">தனிப்பட்ட தனிமைப்படுத்தல் நகல் சேமிக்கப்பட்டது (%1$s), ஆனால் Android அசலை அகற்றவில்லை. தேவைப்பட்டால் கைமுறையாக நீக்கவும்.</string>
+    <string name="quarantine_success_copy_only">குறியாக்கப்பட்ட தனிமைப்படுத்தல் நகல் சேமிக்கப்பட்டது (%1$s). அசல் கோப்பு வைத்திருக்கப்படுகிறது; நீக்கப்படவில்லை.</string>
     <string name="quarantine_failed">தனிமைப்படுத்தல் தோல்வியடைந்தது. அசல் கோப்பு திட்டமிட்டு அகற்றப்படவில்லை.</string>
     <string name="uninstall_app">செயலியை நிறுவல் நீக்கு…</string>
     <string name="import_definitions">ஆஃப்லைன் அச்சுறுத்தல் வரையறைகளை இறக்குமதி செய் (JSON)</string>
@@ -123,4 +123,5 @@
 <string name="history_session">அமர்வு ID</string>
 <string name="definitions_limited_compact">வரையறைகள்: EICAR சோதனை கையொப்பம் மட்டும்; பாதுகாப்பு வரம்பு குறைவு.</string>
 <string name="settings_privacy">தனியுரிமை மற்றும் அனுமதிகள்</string>
+<string name="quarantine_legacy_warning">பழைய தனிமைப்படுத்தல் உருப்படி: முந்தைய பதிப்பில் குறியாக்கமின்றி சேமிக்கப்பட்டது.</string>
 </resources>
