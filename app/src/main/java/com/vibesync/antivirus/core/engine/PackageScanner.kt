@@ -80,7 +80,7 @@ class PackageScanner(
   val scanSessionId = UUID.randomUUID().toString()
   if (!file.isFile || !file.canRead()) {
    val failed = result(file.name, file.name, null, null, ScanVerdict.NOT_SCANNED, listOf(context.getString(R.string.file_not_readable)), start)
-   if (persistAllAudit) auditSafely(failed, start, scanSessionId)
+   auditSafely(failed, start, scanSessionId)
    return failed.copy(sourceLocalPath = file.absolutePath, scanSessionId = scanSessionId)
   }
   return try {
@@ -92,7 +92,7 @@ class PackageScanner(
    throw cancelled
   } catch (_: Exception) {
    val failed = result(file.name, file.name, null, null, ScanVerdict.NOT_SCANNED, listOf(context.getString(R.string.file_could_not_read)), start)
-   if (persistAllAudit) auditSafely(failed, start, scanSessionId)
+   auditSafely(failed, start, scanSessionId)
    failed.copy(sourceLocalPath = file.absolutePath, scanSessionId = scanSessionId)
   }
  }

@@ -66,7 +66,7 @@ class ThreatRepository(
   for(file in sharedFiles(roots)) {
    currentCoroutineContext().ensureActive()
    val assessed=scanner.scanFile(file,persistAllAudit=false)
-   if(assessed.verdict==ScanVerdict.THREAT || assessed.verdict==ScanVerdict.SUSPICIOUS) findings+=assessed
+   if(assessed.verdict!=ScanVerdict.NO_MATCH) findings+=assessed
    filesProcessed++
    progress((installedCount.toLong()+filesProcessed).coerceAtMost(Int.MAX_VALUE.toLong()).toInt(),
     (installedCount.toLong()+fileCount).coerceAtMost(Int.MAX_VALUE.toLong()).toInt())
