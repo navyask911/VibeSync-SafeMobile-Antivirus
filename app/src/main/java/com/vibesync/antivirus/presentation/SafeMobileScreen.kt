@@ -132,11 +132,13 @@ import java.io.File
   state.threatCount > 0 -> MaterialTheme.colorScheme.error
   state.results.any { it.verdict == ScanVerdict.NOT_SCANNED } -> MaterialTheme.colorScheme.onSurfaceVariant
   state.suspiciousCount > 0 || state.signatureCount <= 1 -> MaterialTheme.colorScheme.tertiary
+  state.lastScanAt == null || state.results.isEmpty() -> MaterialTheme.colorScheme.onSurfaceVariant
   else -> successStatusColor()
  }
  val statusIcon = when {
   state.isScanning -> Icons.Default.Security
   state.threatCount > 0 || state.suspiciousCount > 0 || state.results.any { it.verdict == ScanVerdict.NOT_SCANNED } || state.signatureCount <= 1 -> Icons.Default.Warning
+  state.lastScanAt == null || state.results.isEmpty() -> Icons.Default.Security
   else -> Icons.Default.CheckCircle
  }
  val lifecycleOwner = LocalLifecycleOwner.current
@@ -490,6 +492,13 @@ private fun isStorageSentinelRunning(context: Context): Boolean {
   Column(Modifier.padding(14.dp),verticalArrangement=Arrangement.spacedBy(5.dp)) {
    Text(result.displayName,style=MaterialTheme.typography.titleSmall,fontWeight=FontWeight.Bold)
    Text(stringResource(verdictResource),color=color,style=MaterialTheme.typography.labelLarge)
+   result.scanSessionId?.takeIf { it.isNotBlank() }?.let { sessionId ->
+    Text(
+     stringResource(R.string.history_session) + ": " + sessionId,
+     style = MaterialTheme.typography.labelSmall,
+     color = MaterialTheme.colorScheme.onSurfaceVariant
+    )
+   }
    result.sha256?.let { Text(stringResource(R.string.file_hash_label,it.take(24)),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant) }
    result.reasons.take(3).forEach { Text("• "+it,style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurface) }
    if (showUninstall && result.packageName != null) {
