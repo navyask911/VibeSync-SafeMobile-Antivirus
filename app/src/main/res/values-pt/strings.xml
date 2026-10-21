@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">VibeSync SafeMobile Antivirus</string>
+    <string name="app_name">SafeMobile Antivirus</string>
     <string name="privacy_title">Aviso de privacidade e acesso à verificação</string>
     <string name="privacy_body">O SafeMobile calcula hashes SHA-256 e MD5 neste dispositivo e verifica-os com definições armazenadas localmente. As verificações locais não enviam ficheiros nem hashes. Os anúncios usam os serviços de rede do Google Mobile Ads apenas quando permitido pelas suas opções de privacidade e pela ligação. As funções principais de verificação funcionam sem rede. A visibilidade das aplicações instaladas e o acesso a todos os ficheiros são permissões sensíveis do Android e podem exigir análise do Google Play.</string>
     <string name="privacy_accept">Compreendo</string>
     <string name="exit_app">Sair da aplicação</string>
-    <string name="brand_title">VIBESYNC</string>
-    <string name="brand_subtitle">SAFEMOBILE ANTIVIRUS</string>
+    <string name="brand_title">SafeMobile Antivirus</string>
+    <string name="brand_subtitle">VibeSync</string>
     <string name="scan_status">Painel de proteção local</string>
     <string name="scan_running">A analisar o dispositivo…</string>
     <string name="threat_found">Correspondência de ameaça detetada</string>
@@ -103,4 +103,24 @@
     <string name="language_system_default">Predefinição do sistema</string>
     <string name="limited_protection">Proteção limitada — apenas definição de teste EICAR</string>
     <string name="review_recommended">Recomenda-se revisão</string>
+<string name="nav_home">Início</string>
+<string name="nav_scan">Verificar</string>
+<string name="nav_quarantine">Quarentena</string>
+<string name="nav_history">Histórico</string>
+<string name="nav_settings">Configurações</string>
+<string name="settings_title">Configurações</string>
+<string name="appearance_title">Aparência</string>
+<string name="theme_system">Sistema</string>
+<string name="theme_light">Claro</string>
+<string name="theme_dark">Escuro</string>
+<string name="language_settings">Idioma</string>
+<string name="about_legal">Sobre e informações legais</string>
+<string name="ray_id">Ray ID do SafeMobile</string>
+<string name="ray_id_copy">Copiar ID</string>
+<string name="ray_id_copied">Ray ID copiado</string>
+<string name="history_title">Histórico de verificações</string>
+<string name="history_empty">Ainda não há histórico local.</string>
+<string name="history_session">ID da sessão</string>
+<string name="definitions_limited_compact">Definições: apenas assinatura de teste EICAR; cobertura limitada.</string>
+<string name="settings_privacy">Privacidade e permissões</string>
 </resources>
