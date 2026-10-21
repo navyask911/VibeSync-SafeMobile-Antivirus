@@ -60,11 +60,11 @@
     <string name="unknown_file">seçilen dosya</string>
     <string name="local_files_only">Gizlilik için tarayıcı yalnızca tanınan cihaz içi depolama sağlayıcılarındaki dosyaları açar. Bulut veya üçüncü taraf belge sağlayıcıları açılmaz.</string>
     <string name="quarantine_confirm_title">İşaretlenen dosya karantinaya alınsın mı?</string>
-    <string name="quarantine_confirm_body">Bu uygulamanın özel alanına bir kopya kaydedilir. Özet doğrulandıktan sonra SafeMobile seçilen orijinali silmeyi dener. Silme işlemi Android depolama izinlerine ve sağlayıcıya bağlıdır; orijinal dosya kalabilir.</string>
+    <string name="quarantine_confirm_body">SafeMobile şifrelenmiş özel bir kopya oluşturup doğrular. Orijinal dosya korunur ve silinmez.</string>
     <string name="quarantine_confirm_action">Dosyayı karantinaya al</string>
     <string name="quarantine_file">Özel karantina kopyası</string>
     <string name="quarantine_success_removed">Özel karantina kopyası kaydedildi (%1$s); Android orijinalin kaldırıldığını bildirdi.</string>
-    <string name="quarantine_success_copy_only">Özel karantina kopyası kaydedildi (%1$s), ancak Android orijinali kaldıramadı. Gerekirse elle silin.</string>
+    <string name="quarantine_success_copy_only">Şifrelenmiş karantina kopyası kaydedildi (%1$s). Orijinal dosya korundu ve silinmedi.</string>
     <string name="quarantine_failed">Karantina başarısız. Orijinal dosya kasıtlı olarak kaldırılmadı.</string>
     <string name="uninstall_app">Uygulamayı kaldır…</string>
     <string name="import_definitions">Çevrimdışı tehdit tanımlarını içe aktar (JSON)</string>
@@ -123,4 +123,5 @@
 <string name="history_session">Oturum kimliği</string>
 <string name="definitions_limited_compact">Tanımlar: yalnızca EICAR test imzası; kapsam sınırlıdır.</string>
 <string name="settings_privacy">Gizlilik ve izinler</string>
+<string name="quarantine_legacy_warning">Eski karantina öğesi: önceki bir sürümde şifrelenmeden saklanmış.</string>
 </resources>
