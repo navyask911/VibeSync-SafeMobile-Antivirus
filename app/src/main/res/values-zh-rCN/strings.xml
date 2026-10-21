@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">VibeSync SafeMobile Antivirus</string>
+    <string name="app_name">SafeMobile Antivirus</string>
     <string name="privacy_title">隐私与扫描权限说明</string>
     <string name="privacy_body">SafeMobile 会在此设备上计算 SHA-256 和 MD5 哈希，并与本地保存的定义进行比对。本地扫描不会上传文件或哈希。只有在您的隐私选择和网络连接允许时，广告才会使用 Google Mobile Ads 网络服务。核心扫描功能无需网络即可运行。查看已安装应用和访问所有文件属于 Android 敏感权限，可能需要 Google Play 审核。</string>
     <string name="privacy_accept">我已了解</string>
     <string name="exit_app">退出应用</string>
-    <string name="brand_title">VIBESYNC</string>
-    <string name="brand_subtitle">SAFEMOBILE ANTIVIRUS</string>
+    <string name="brand_title">SafeMobile Antivirus</string>
+    <string name="brand_subtitle">VibeSync</string>
     <string name="scan_status">本地防护面板</string>
     <string name="scan_running">正在扫描设备…</string>
     <string name="threat_found">检测到威胁匹配</string>
@@ -103,4 +103,24 @@
     <string name="language_system_default">系统默认</string>
     <string name="limited_protection">防护有限 — 仅包含 EICAR 测试定义</string>
     <string name="review_recommended">建议复核</string>
+<string name="nav_home">首页</string>
+<string name="nav_scan">扫描</string>
+<string name="nav_quarantine">隔离区</string>
+<string name="nav_history">历史记录</string>
+<string name="nav_settings">设置</string>
+<string name="settings_title">设置</string>
+<string name="appearance_title">外观</string>
+<string name="theme_system">跟随系统</string>
+<string name="theme_light">浅色</string>
+<string name="theme_dark">深色</string>
+<string name="language_settings">语言</string>
+<string name="about_legal">关于与法律信息</string>
+<string name="ray_id">SafeMobile Ray ID</string>
+<string name="ray_id_copy">复制 ID</string>
+<string name="ray_id_copied">Ray ID 已复制</string>
+<string name="history_title">扫描历史</string>
+<string name="history_empty">暂无本地扫描历史记录。</string>
+<string name="history_session">会话 ID</string>
+<string name="definitions_limited_compact">定义库仅包含 EICAR 测试签名；覆盖范围有限。</string>
+<string name="settings_privacy">隐私与权限</string>
 </resources>
