@@ -67,6 +67,21 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
 
     fun requestThreatFeedSync() { repository.requestThreatFeedSync() }
 
+    fun uninstallGuard(context: android.content.Context, packageName: String): PackageGuardResult =
+        SystemPackageGuard.evaluate(context.applicationContext, packageName)
+
+    fun requestUninstall(
+        context: android.content.Context,
+        packageName: String,
+        launchDelete: (android.content.Intent) -> Unit,
+        openAppInfo: (android.content.Intent) -> Unit
+    ): UninstallResult = when (val guard = uninstallGuard(context, packageName)) {
+        is PackageGuardResult.BlockedSystemApp -> UninstallResult.BlockedSystemApp(guard.reason)
+        PackageGuardResult.NotFound -> UninstallResult.NotFound
+        PackageGuardResult.Allowed -> UninstallHandler.request(context.applicationContext, packageName, launchDelete, openAppInfo)
+    }
+
+
     fun scanInstalled() = runScan { onProgress ->
         repository.scanInstalledApps(onProgress)
     }
