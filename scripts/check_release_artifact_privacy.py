@@ -58,7 +58,7 @@ def dex_bytes(archive):
 
 def has_false_boolean_attribute(xmltree_dump, attribute):
     """aapt dump xmltree reports compiled booleans as TYPE_INT_BOOLEAN hex values."""
-    pattern = rf"android:{re.escape(attribute)}\\b[^\\n]*?(?:\\(type 0x12\\)\\s*0x0\\b|=\\s*false\\b)"
+    pattern = rf"android:{re.escape(attribute)}\b[^\n]*?(?:\(type 0x12\)\s*0x0\b|=\s*false\b)"
     return re.search(pattern, xmltree_dump, flags=re.IGNORECASE) is not None
 
 def check_no_tracking_classes(path):
