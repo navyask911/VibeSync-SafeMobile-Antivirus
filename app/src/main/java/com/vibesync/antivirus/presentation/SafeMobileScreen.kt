@@ -556,7 +556,8 @@ private fun isStorageSentinelRunning(context: Context): Boolean {
      color = MaterialTheme.colorScheme.onSurfaceVariant
     )
    }
-   result.sha256?.let { Text(stringResource(R.string.file_hash_label,it.take(24)),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant) }
+   result.threatEventId?.takeIf { it.isNotBlank() }?.let { eventId -> Text(stringResource(R.string.threat_event_ray_id, eventId),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant) }
+    result.sha256?.let { Text(stringResource(R.string.file_hash_label,it.take(24)),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant) }
    result.reasons.take(3).forEach { Text("• "+it,style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurface) }
    if (showUninstall && result.packageName != null) {
     TextButton(onClick={ onUninstall(result.packageName) }) { Text(stringResource(R.string.uninstall_app)) }

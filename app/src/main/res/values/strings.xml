@@ -113,6 +113,7 @@
 <string name="history_title">Scan history</string>
 <string name="history_empty">No local scan history yet.</string>
 <string name="history_session">Session ID</string>
+<string name="threat_event_ray_id" translatable="false">Threat event Ray ID: %1$s</string>
 <string name="definitions_limited_compact">Definitions: EICAR test signature only; coverage is limited.</string>
 <string name="settings_privacy">Privacy and permissions</string>
 <string name="quarantine_legacy_warning">Legacy quarantine item: stored without encryption by an earlier build.</string>

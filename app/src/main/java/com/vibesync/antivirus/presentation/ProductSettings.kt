@@ -108,6 +108,13 @@ internal fun ScanHistoryPanel(audits: List<ScanAudit>) {
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurface
                         )
+                        group.filter { it.threatEventId.isNotBlank() && it.verdict == "THREAT" }.forEach { event ->
+                            Text(
+                                stringResource(R.string.threat_event_ray_id, event.threatEventId),
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
                         if (incomplete > 0) {
                             Text(
                                 "${stringResource(R.string.verdict_not_scanned)}: $incomplete",

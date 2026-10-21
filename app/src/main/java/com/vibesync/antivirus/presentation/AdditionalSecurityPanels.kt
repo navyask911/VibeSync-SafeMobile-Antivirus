@@ -571,15 +571,18 @@ private object StorageCleanerEngine {
                 ?: return candidate(uri, name, providerSize, modified, null, null, R.string.cleaner_review_required, false, actualSize)
             val packageName = info.packageName
             val apkVersion = packageVersion(info)
-            val installedVersion = installedVersion(context.packageManager, packageName)
+            val installedLookup = installedVersion(context.packageManager, packageName)
+            val installedVersion = installedLookup.first
+            val definitelyNotInstalled = installedLookup.second
             val category = when {
-                installedVersion == null -> R.string.cleaner_orphaned_candidate
+                definitelyNotInstalled -> R.string.cleaner_orphaned_candidate
+                installedVersion == null -> R.string.cleaner_review_required
                 apkVersion < installedVersion -> R.string.cleaner_outdated_candidate
                 apkVersion == installedVersion -> R.string.cleaner_installed_match
                 else -> R.string.cleaner_review_required
             }
             val oldEnough = modified > 0L && System.currentTimeMillis() - modified >= BULK_MIN_AGE_MS
-            val eligible = installedVersion == null && oldEnough && packageName.isNotBlank()
+            val eligible = definitelyNotInstalled && oldEnough && packageName.isNotBlank()
             return candidate(uri, name, providerSize, modified, packageName, apkVersion, category, eligible, actualSize)
         } catch (_: Exception) {
             return candidate(uri, name, providerSize, modified, null, null, R.string.cleaner_review_required, false, -1L)
@@ -634,16 +637,17 @@ private object StorageCleanerEngine {
         if (Build.VERSION.SDK_INT >= 28) info.longVersionCode else info.versionCode.toLong()
 
     @Suppress("DEPRECATION")
-    private fun installedVersion(pm: PackageManager, packageName: String): Long? = try {
+    /** Returns (version, definitely-not-installed); access denial is unknown, never orphan proof. */
+    private fun installedVersion(pm: PackageManager, packageName: String): Pair<Long?, Boolean> = try {
         val installed = if (Build.VERSION.SDK_INT >= 33) {
             pm.getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0))
         } else {
             pm.getPackageInfo(packageName, 0)
         }
-        packageVersion(installed)
+        packageVersion(installed) to false
     } catch (_: PackageManager.NameNotFoundException) {
-        null
+        null to true
     } catch (_: SecurityException) {
-        null
+        null to false
     }
 }

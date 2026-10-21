@@ -55,7 +55,13 @@ The repository was publicly visible and had no root `LICENSE` file at the review
 
 The app now has full application-string resource files and an in-app locale override for English, Arabic, German, Spanish, French, Hindi, Japanese, Portuguese, Russian, Simplified Chinese, Korean, Turkish, Indonesian, Vietnamese, Italian, Kannada, Tamil, Telugu, Bengali, Marathi, Urdu, and Hebrew. The added translations are first-pass drafts and need native-speaker review, particularly security/privacy wording and RTL layouts, before production. Locale-resource checks verify key coverage and formatted-placeholder parity; that does not certify translation quality or on-device layout. The current selector includes these locales plus System default.
 
-### Release caveats
+### New hardening-branch security screens
+
+The feature branch adds a globe-based app-language selector using the existing persisted locale override, an expandable feature overview, a Guardian screen for best-effort installed-app installer-source review and read-only Developer Options/ADB status, a local URL-risk checker reachable from Android's share sheet, and a Storage Access Framework APK metadata cleaner. The cleaner requires the user to select a folder and to confirm deletions; inaccessible package metadata is treated as unknown, not evidence that a package is absent. The About & Legal dialog reads a bundled README, privacy notice, and third-party licence checkpoint, and Settings includes the requested family dedication.
+
+A separate random UUIDv4 threat-event Ray ID is generated for each confirmed local signature match, persisted in scan history, and shown with the result. Historical audit rows keep an empty event ID; no historical IDs are fabricated. A candidate release uses versionName 1.0.2 and versionCode 20261022, which must still be checked against Play Console history before upload.
+
+## Release caveats
 
 This branch has a higher version code, but Play Console's usage history must be checked before upload. A passing build does not mean the proprietary dependency licence review, remote definition signing pipeline, threat-feed redistribution rights, physical-device QA, broad-permission eligibility, or complete global localization is finished.
 
