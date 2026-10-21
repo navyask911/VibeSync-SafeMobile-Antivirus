@@ -124,4 +124,23 @@
 <string name="definitions_limited_compact">Định nghĩa: chỉ có chữ ký kiểm tra EICAR; phạm vi còn hạn chế.</string>
 <string name="settings_privacy">Quyền riêng tư và quyền truy cập</string>
 <string name="quarantine_legacy_warning">Mục cách ly cũ: được lưu không mã hóa trong phiên bản trước.</string>
+<string name="overlay_review_title">Đánh giá rủi ro lớp phủ</string>
+<string name="overlay_review_description">Đánh giá tùy chọn, có giới hạn đối với các ứng dụng khai báo khả năng hiển thị trên ứng dụng khác và dịch vụ trợ năng. Đây chỉ là dấu hiệu cần xem xét; SafeMobile không thể chứng minh ứng dụng khác hiện đang hiển thị lớp phủ hoặc kiểm tra trạng thái quyền lớp phủ trực tiếp của ứng dụng đó.</string>
+<string name="overlay_review_last_attempt">Lần thử gần nhất: %1$s</string>
+<string name="overlay_review_last_success">Lần kiểm tra thành công gần nhất: %1$s</string>
+<string name="overlay_review_summary">Ứng dụng khai báo khả năng lớp phủ: %1$d · Ứng dụng khai báo dịch vụ trợ năng: %2$d · Dịch vụ trợ năng đang bật trên thiết bị: %3$d</string>
+<string name="overlay_review_not_checked">Chưa có lần đánh giá rủi ro lớp phủ thành công.</string>
+<string name="overlay_review_failed">Lần đánh giá gần nhất thất bại. Android có thể đã hoãn tác vụ hoặc hạn chế khả năng xem gói ứng dụng cần thiết.</string>
+<string name="overlay_review_permission_required">Android không cho phép thực hiện đánh giá này. Hãy kiểm tra khả năng hiển thị ứng dụng đã cài đặt rồi thử lại.</string>
+<string name="overlay_review_reminder_interval">Khoảng thời gian nhắc</string>
+<string name="overlay_review_reminder_12h">Mỗi 12 giờ</string>
+<string name="overlay_review_reminder_24h">Mỗi 24 giờ</string>
+<string name="overlay_review_reminder_48h">Mỗi 48 giờ</string>
+<string name="overlay_review_notifications_off">Thông báo đang tắt. Đánh giá vẫn có thể chạy nhưng sẽ không hiển thị lời nhắc.</string>
+<string name="overlay_review_enabled">Đã bật đánh giá tự động</string>
+<string name="overlay_review_disabled">Đã tạm dừng đánh giá</string>
+<string name="overlay_review_notification_channel">Đánh giá quyền riêng tư SafeMobile</string>
+<string name="overlay_review_notification_channel_description">Lời nhắc ưu tiên thấp cho đánh giá rủi ro lớp phủ tùy chọn.</string>
+<string name="overlay_review_notification_title">Đã hoàn tất đánh giá rủi ro lớp phủ</string>
+<string name="overlay_review_notification_body">%1$d ứng dụng khai báo khả năng lớp phủ và %2$d ứng dụng khai báo dịch vụ trợ năng. Đây là dấu hiệu cần xem xét, không phải bằng chứng có phần mềm độc hại.</string>
 </resources>
