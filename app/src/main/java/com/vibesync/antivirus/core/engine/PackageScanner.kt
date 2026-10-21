@@ -34,14 +34,25 @@ class PackageScanner(
   progress(0, packages.size)
   for ((index, info) in packages.withIndex()) {
    currentCoroutineContext().ensureActive()
+   val packageStart = System.nanoTime()
    val scanned = try {
     scanPackage(info, scanSessionId)
    } catch (cancelled: CancellationException) {
     throw cancelled
    } catch (_: Exception) {
-    null
+    val failed = result(
+     info.packageName,
+     info.packageName,
+     null,
+     null,
+     ScanVerdict.NOT_SCANNED,
+     listOf(context.getString(R.string.file_could_not_read)),
+     packageStart
+    ).copy(packageName = info.packageName)
+    auditSafely(failed, packageStart, scanSessionId)
+    failed
    }
-   if (scanned != null) results += scanned
+   results += scanned
    progress(index + 1, packages.size)
   }
   return results.sortedBy { when (it.verdict) {
@@ -52,8 +63,14 @@ class PackageScanner(
   } }
  }
  suspend fun scanInstalledPackage(name: String): ScanResult? {
-  val info = runCatching { pm.getPackageInfo(name, PackageManager.GET_PERMISSIONS or PackageManager.GET_SERVICES or signingFlags()) }.getOrNull()
-  return if (info == null) null else scanPackage(info, UUID.randomUUID().toString())
+  val info = try {
+   pm.getPackageInfo(name, PackageManager.GET_PERMISSIONS or PackageManager.GET_SERVICES or signingFlags())
+  } catch (_: PackageManager.NameNotFoundException) {
+   return null
+  } catch (_: SecurityException) {
+   return result(name, name, null, null, ScanVerdict.NOT_SCANNED, listOf(context.getString(R.string.package_metadata_missing)), System.nanoTime())
+  }
+  return scanPackage(info, UUID.randomUUID().toString())
  }
  suspend fun scanFile(file: File): ScanResult {
   val start = System.nanoTime()
