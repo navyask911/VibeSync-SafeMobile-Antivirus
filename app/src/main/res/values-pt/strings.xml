@@ -60,11 +60,11 @@
     <string name="unknown_file">ficheiro selecionado</string>
     <string name="local_files_only">Por privacidade, este verificador só abre ficheiros de fornecedores de armazenamento local reconhecidos. Não abre fornecedores de documentos na nuvem ou de terceiros.</string>
     <string name="quarantine_confirm_title">Colocar este ficheiro sinalizado em quarentena?</string>
-    <string name="quarantine_confirm_body">Será guardada uma cópia privada dentro desta aplicação. Depois de verificar o hash, o SafeMobile tentará remover o original selecionado. A remoção depende das permissões de armazenamento do Android e do fornecedor; o original poderá permanecer.</string>
+    <string name="quarantine_confirm_body">O SafeMobile criará e verificará uma cópia privada criptografada. O arquivo original será mantido e não será excluído.</string>
     <string name="quarantine_confirm_action">Colocar ficheiro em quarentena</string>
     <string name="quarantine_file">Guardar cópia privada em quarentena</string>
     <string name="quarantine_success_removed">Cópia guardada em quarentena privada (%1$s); o Android indicou que o original foi removido.</string>
-    <string name="quarantine_success_copy_only">Cópia guardada em quarentena privada (%1$s), mas o Android não removeu o original. Elimine-o manualmente se necessário.</string>
+    <string name="quarantine_success_copy_only">Cópia criptografada em quarentena salva (%1$s). O arquivo original foi mantido e não foi excluído.</string>
     <string name="quarantine_failed">A quarentena falhou. O ficheiro original não foi removido intencionalmente.</string>
     <string name="uninstall_app">Desinstalar aplicação…</string>
     <string name="import_definitions">Importar definições de ameaças offline (JSON)</string>
@@ -123,4 +123,5 @@
 <string name="history_session">ID da sessão</string>
 <string name="definitions_limited_compact">Definições: apenas assinatura de teste EICAR; cobertura limitada.</string>
 <string name="settings_privacy">Privacidade e permissões</string>
+<string name="quarantine_legacy_warning">Item antigo em quarentena: armazenado sem criptografia em uma versão anterior.</string>
 </resources>
