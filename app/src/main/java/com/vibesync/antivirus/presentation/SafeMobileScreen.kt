@@ -328,7 +328,7 @@ import kotlinx.coroutines.launch
   if (!onboardingComplete) {
    SecurityOnboardingScreen(
     step=onboardingStep, storageAccessGranted=storageAccessGranted, notificationsGranted=notificationsGranted,
-    sentinelOptIn=sentinelOptIn, onRequestStorage=requestStorage,
+    sentinelOptIn=sentinelOptIn, enterpriseManager=ownerManager, onRequestStorage=requestStorage,
     onContinueStorage={ setOnboardingStep(1) }, onContinueInstalledApps={ setOnboardingStep(2) },
     onRequestNotifications=requestNotifications, onSkipNotifications={ setOnboardingStep(3) },
     onEnableSentinel=enableSentinel, onDisableSentinel=disableSentinel,
@@ -459,7 +459,30 @@ import kotlinx.coroutines.launch
      }
     } else if (selectedDestination == "home") TextButton(onClick={ openSponsor(context) }) { Text(stringResource(R.string.coffee_support)) }
     if (selectedDestination == "sources") {
-     InstallSourceAuditPanel(incidents = securityIncidents, onScan = { requestPrivacyAcknowledgement { vm.scanInstalled() } })
+     InstallSourceAuditPanel(
+      incidents = securityIncidents,
+      onScan = { requestPrivacyAcknowledgement { vm.scanInstalled() } },
+      onInspect = { packageName ->
+       try { context.startActivity(UninstallHandler.buildAppInfoIntent(packageName)) }
+       catch (_: ActivityNotFoundException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
+       catch (_: SecurityException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
+      },
+      onUninstall = { packageName ->
+       lastUninstallPackage = packageName
+       pendingUninstallPackage = packageName
+       when (vm.requestUninstall(
+        context, packageName,
+        launchDelete = { intent -> deleteLauncher.launch(intent) },
+        openAppInfo = { intent -> context.startActivity(intent) }
+       )) {
+        UninstallResult.Success, UninstallResult.RequiresUserAction -> Unit
+        is UninstallResult.BlockedSystemApp -> showUninstallSnackbar(context.getString(R.string.uninstall_protected), packageName)
+        UninstallResult.NotFound -> showUninstallSnackbar(context.getString(R.string.uninstall_not_found), null)
+        UninstallResult.OpenedAppInfo -> showUninstallSnackbar(context.getString(R.string.uninstall_opened_app_info), null)
+        UninstallResult.HandlerUnavailable -> showUninstallSnackbar(context.getString(R.string.uninstall_launch_failed), packageName)
+       }
+      }
+     )
     }
     if (selectedDestination == "scan") {
     Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surface),shape=RoundedCornerShape(22.dp),modifier=Modifier.fillMaxWidth()) {
@@ -689,6 +712,7 @@ import kotlinx.coroutines.launch
     }
     if (selectedDestination == "history") ScanHistoryPanel(auditEntries)
     if (selectedDestination == "settings") {
+     EnterpriseProtectionCard(manager = ownerManager)
      SafeMobileSettingsPanel(
       privacyOptionsVisible, monitoringRunning, enableSentinel, disableSentinel,
       { activity?.let { host -> ConsentManager.showPrivacyOptions(host) { privacyOptionsVisible = ConsentManager.privacyOptionsRequired(host) } } },
