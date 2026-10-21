@@ -14,6 +14,7 @@ import com.vibesync.antivirus.data.local.ThreatDatabase
 import com.vibesync.antivirus.data.repository.ThreatRepository
 import com.vibesync.antivirus.data.repository.ThreatIntelligenceRepository
 import com.vibesync.antivirus.core.worker.ThreatFeedSyncScheduler
+import com.vibesync.antivirus.core.security.DeviceOwnerManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -28,6 +29,7 @@ class SafeMobileApp : Application() {
  private val appScope=CoroutineScope(SupervisorJob()+Dispatchers.IO)
  override fun onCreate() {
   super.onCreate()
+  runCatching { DeviceOwnerManager(this).applyEnterpriseDefaults() }
   database=Room.databaseBuilder(this,ThreatDatabase::class.java,"safe_mobile_threats.db")
    .addMigrations(ThreatDatabase.MIGRATION_1_2, ThreatDatabase.MIGRATION_2_3, ThreatDatabase.MIGRATION_3_4, ThreatDatabase.MIGRATION_4_5, ThreatDatabase.MIGRATION_5_6, ThreatDatabase.MIGRATION_6_7)
    .build()
