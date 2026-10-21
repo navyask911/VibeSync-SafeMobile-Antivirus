@@ -32,6 +32,8 @@ jobs:
         run: python3 -m unittest discover -s scripts -p 'test_*.py' -v
       - name: Proprietary safety policy guard
         run: python3 scripts/check_proprietary_safety.py
+      - name: Release documentation accuracy guard
+        run: python3 scripts/check_release_docs.py
       - name: Generate CycloneDX dependency SBOM
         run: |
           ./gradlew --no-daemon cyclonedxBom
