@@ -54,16 +54,21 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
     /** Re-check one package after Android's uninstall confirmation flow returns. */
     fun refreshInstalledPackage(packageName: String) {
         viewModelScope.launch {
-            val refreshed = runCatching { repository.scanInstalledPackage(packageName) }.getOrNull()
+            val outcome = runCatching { repository.scanInstalledPackage(packageName) }
             mutableState.update { old ->
-                val updated = if (refreshed == null) {
-                    old.results.filterNot { it.packageName == packageName }
-                } else if (old.results.any { it.packageName == packageName }) {
-                    old.results.map { if (it.packageName == packageName) refreshed else it }
+                if (outcome.isFailure) {
+                    old.copy(messageResource = R.string.scan_failed, messageText = null)
                 } else {
-                    old.results
+                    val refreshed = outcome.getOrNull()
+                    val updated = if (refreshed == null) {
+                        old.results.filterNot { it.packageName == packageName }
+                    } else if (old.results.any { it.packageName == packageName }) {
+                        old.results.map { if (it.packageName == packageName) refreshed else it }
+                    } else {
+                        old.results
+                    }
+                    old.copy(results = updated)
                 }
-                old.copy(results = updated)
             }
         }
     }
