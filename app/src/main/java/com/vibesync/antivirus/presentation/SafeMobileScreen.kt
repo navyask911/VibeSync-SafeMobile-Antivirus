@@ -610,8 +610,8 @@ import java.util.Date
     val destinations = listOf(
      Triple("home", R.string.nav_home, Icons.Default.Home),
      Triple("scan", R.string.nav_scan, Icons.Default.Search),
-     Triple("apps", R.string.nav_apps, androidx.compose.material.icons.filled.Apps),
-     Triple("analytics", R.string.nav_analytics, androidx.compose.material.icons.filled.BarChart),
+     Triple("apps", R.string.nav_apps, Icons.Default.Security),
+     Triple("analytics", R.string.nav_analytics, Icons.Default.History),
      Triple("settings", R.string.nav_settings, Icons.Default.SettingsIcon)
     )
     destinations.forEach { destination ->
