@@ -56,6 +56,11 @@ def dex_bytes(archive):
             hits.append((name, archive.read(name)))
     return hits
 
+def has_false_boolean_attribute(xmltree_dump, attribute):
+    """aapt dump xmltree reports compiled booleans as TYPE_INT_BOOLEAN hex values."""
+    pattern = rf"android:{re.escape(attribute)}\\b[^\\n]*?(?:\\(type 0x12\\)\\s*0x0\\b|=\\s*false\\b)"
+    return re.search(pattern, xmltree_dump, flags=re.IGNORECASE) is not None
+
 def check_no_tracking_classes(path):
     try:
         with zipfile.ZipFile(path) as archive:
@@ -77,11 +82,11 @@ for apk in offline_apks:
                                    text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
     if manifest_dump.returncode:
         fail("aapt could not inspect the manifest for " + apk.name)
-    if not re.search(r"android:allowBackup[^=]*=false", manifest_dump.stdout):
+    if not has_false_boolean_attribute(manifest_dump.stdout, "allowBackup"):
         fail(apk.name + " must have android:allowBackup=false.")
-    if not re.search(r"android:fullBackupContent[^=]*=false", manifest_dump.stdout):
+    if not has_false_boolean_attribute(manifest_dump.stdout, "fullBackupContent"):
         fail(apk.name + " must explicitly disable fullBackupContent.")
-    if not re.search(r"android:hasFragileUserData[^=]*=false", manifest_dump.stdout):
+    if not has_false_boolean_attribute(manifest_dump.stdout, "hasFragileUserData"):
         fail(apk.name + " must set android:hasFragileUserData=false.")
     if "android:dataExtractionRules" not in manifest_dump.stdout:
         fail(apk.name + " must reference dataExtractionRules.")
