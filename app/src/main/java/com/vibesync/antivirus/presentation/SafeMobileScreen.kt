@@ -209,7 +209,7 @@ import kotlinx.coroutines.launch
   lastUninstallPackage?.let { vm.refreshInstalledPackage(it) }
   lastUninstallPackage = null
   pendingUninstallPackage = null
-  showUninstallSnackbar(context.getString(R.string.uninstall_cancelled), null)
+  showUninstallSnackbar(context.getString(R.string.uninstall_complete), null)
  }
  var showDefinitionImportWarning by remember { mutableStateOf(false) }
  var privacyOptionsVisible by remember { mutableStateOf(privacyOptionsRequired) }
@@ -629,7 +629,7 @@ import kotlinx.coroutines.launch
            catch (e: SecurityException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
           }
           UninstallResult.NotFound -> { pendingUninstallPackage = null; lastUninstallPackage = null; showUninstallSnackbar(context.getString(R.string.uninstall_not_found), null) }
-          UninstallResult.OpenedAppInfo -> showUninstallSnackbar(context.getString(R.string.uninstall_opened_app_info), null)
+          UninstallResult.OpenedAppInfo -> showUninstallSnackbar(context.getString(R.string.uninstall_opened_app_info), packageName)
           UninstallResult.HandlerUnavailable -> { pendingUninstallPackage = null; showUninstallSnackbar(context.getString(R.string.uninstall_launch_failed), packageName) }
          }
         },

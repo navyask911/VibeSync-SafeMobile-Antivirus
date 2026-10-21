@@ -8,6 +8,9 @@ import android.os.Build
 sealed class PackageGuardResult { object Allowed:PackageGuardResult();data class BlockedSystemApp(val reason:String):PackageGuardResult();object NotFound:PackageGuardResult() }
 object SystemPackageGuard {
  fun isSystemFlags(flags:Int)=flags and (ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP)!=0
+ fun evaluateFlags(flags:Int,isActiveDeviceAdmin:Boolean=false):PackageGuardResult =
+  when { isSystemFlags(flags)->PackageGuardResult.BlockedSystemApp("system"); isActiveDeviceAdmin->PackageGuardResult.BlockedSystemApp("admin"); else->PackageGuardResult.Allowed }
+
  fun evaluate(context:Context,raw:String):PackageGuardResult{
   val pkg=normalizePackageName(raw)?:return PackageGuardResult.NotFound
   val pm=context.packageManager

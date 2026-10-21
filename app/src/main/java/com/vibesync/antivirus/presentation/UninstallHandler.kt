@@ -17,7 +17,7 @@ object UninstallHandler {
   val pkg=SystemPackageGuard.normalizePackageName(packageName)?:return UninstallResult.NotFound
   when(val guard=SystemPackageGuard.evaluate(context,pkg)){is PackageGuardResult.BlockedSystemApp->return UninstallResult.BlockedSystemApp(guard.reason);PackageGuardResult.NotFound->return UninstallResult.NotFound;PackageGuardResult.Allowed->Unit}
   // PackageInstaller.uninstall is only attempted for SafeMobile's own installed-package provenance.
-  if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
+  if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.R){
    val installer=runCatching{context.packageManager.getInstallSourceInfo(pkg).installingPackageName}.getOrNull()
    if(installer==context.packageName){
     val callback=Intent(context,UninstallStatusReceiver::class.java).setAction("com.vibesync.antivirus.UNINSTALL_STATUS").putExtra(UninstallStatusReceiver.EXTRA_PACKAGE_NAME,pkg)
