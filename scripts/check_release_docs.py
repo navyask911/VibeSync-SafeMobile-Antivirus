@@ -18,7 +18,7 @@ for forbidden in ("Google Mobile Ads", "Google Play In-App Updates", "AD MOB", "
 for required in ("EICAR test-marker", "No `INTERNET` permission", "not SQLCipher-encrypted", "Not a production-validated antivirus", "Detection coverage"):
     if required.lower() not in README.lower():
         errors.append(f"README.md missing required accuracy statement: {required}")
-for required in ("Disabled", "No libyara JNI runtime", "not a production detection release", "no trained"):
+for required in ("Disabled", "No libyara JNI runtime", "not a production detection release", "No model training provenance"):
     if required.lower() not in COVERAGE.lower():
         errors.append(f"Detection matrix missing required disabled-layer note: {required}")
 if "No model is shipped or evaluated" not in MODEL_CARD:
