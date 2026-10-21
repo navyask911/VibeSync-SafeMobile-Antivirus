@@ -40,7 +40,10 @@ class StaticAnalyzer(context: Context) {
   if (PermissionRiskAnalyzer.REQUEST_INSTALL in permissions) {
    val source = runCatching {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) pm.getInstallSourceInfo(packageName).initiatingPackageName
-    else { @Suppress("DEPRECATION"); pm.getInstallerPackageName(packageName) }
+    else {
+     @Suppress("DEPRECATION")
+     pm.getInstallerPackageName(packageName)
+    }
    }.getOrNull()
    if (source in BROWSERS || source in MESSENGERS) { points += 35; reasons += "Requests REQUEST_INSTALL_PACKAGES and source attribution names " + source }
   }
