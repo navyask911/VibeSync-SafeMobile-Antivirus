@@ -67,4 +67,23 @@
 <string name="definitions_limited_compact">التعريفات: توقيع اختبار EICAR فقط؛ التغطية محدودة.</string>
 <string name="settings_privacy">الخصوصية والأذونات</string>
 <string name="quarantine_legacy_warning">عنصر حجر قديم: خُزّن دون تشفير في إصدار سابق.</string>
+<string name="overlay_review_title">مراجعة مخاطر النوافذ العائمة</string>
+<string name="overlay_review_description">مراجعة اختيارية قدر الإمكان للتطبيقات التي تعلن إمكانية العرض فوق التطبيقات الأخرى وخدمات إمكانية الوصول. هذه مؤشرات للمراجعة فقط؛ لا يستطيع SafeMobile إثبات أن تطبيقًا آخر يعرض نافذة عائمة الآن أو معرفة حالة الإذن المباشرة لتطبيق آخر.</string>
+<string name="overlay_review_last_attempt">آخر محاولة: %1$s</string>
+<string name="overlay_review_last_success">آخر فحص ناجح: %1$s</string>
+<string name="overlay_review_summary">التطبيقات التي تعلن إمكانية العرض العائم: %1$d · التطبيقات التي تعلن خدمات إمكانية الوصول: %2$d · خدمات إمكانية الوصول المفعّلة على هذا الجهاز: %3$d</string>
+<string name="overlay_review_not_checked">لم تُجرَ مراجعة ناجحة لمخاطر النوافذ العائمة بعد.</string>
+<string name="overlay_review_failed">فشلت آخر محاولة للمراجعة. ربما أجّل Android المهمة أو منع رؤية الحزم المطلوبة.</string>
+<string name="overlay_review_permission_required">لم يسمح Android بإجراء هذه المراجعة. تحقق من إمكانية رؤية التطبيقات المثبتة ثم أعد المحاولة.</string>
+<string name="overlay_review_reminder_interval">الفاصل الزمني للتذكير</string>
+<string name="overlay_review_reminder_12h">كل 12 ساعة</string>
+<string name="overlay_review_reminder_24h">كل 24 ساعة</string>
+<string name="overlay_review_reminder_48h">كل 48 ساعة</string>
+<string name="overlay_review_notifications_off">الإشعارات معطّلة. يمكن أن تستمر المراجعة، لكن لن تظهر التذكيرات.</string>
+<string name="overlay_review_enabled">المراجعة التلقائية مفعّلة</string>
+<string name="overlay_review_disabled">المراجعة متوقفة مؤقتًا</string>
+<string name="overlay_review_notification_channel">مراجعة الخصوصية من SafeMobile</string>
+<string name="overlay_review_notification_channel_description">تذكيرات منخفضة الأولوية لمراجعة مخاطر النوافذ العائمة الاختيارية.</string>
+<string name="overlay_review_notification_title">اكتملت مراجعة مخاطر النوافذ العائمة</string>
+<string name="overlay_review_notification_body">تعلن %1$d تطبيقات إمكانية العرض العائم وتعلن %2$d تطبيقات خدمات إمكانية الوصول. هذه مؤشرات للمراجعة وليست دليلًا على وجود برمجيات ضارة.</string>
 </resources>
