@@ -24,6 +24,8 @@ jobs:
           java-version: "17"
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
+      - name: Dataset acquisition tooling unit tests (offline fixtures only)
+        run: python3 -m unittest discover -s scripts -p 'test_*.py' -v
       - name: Proprietary safety policy guard
         run: python3 scripts/check_proprietary_safety.py
       - name: Capture dependency graph for licence review

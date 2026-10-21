@@ -17,6 +17,9 @@ interface ThreatFeedSyncStateDao {
     @Query("SELECT MAX(last_success_at) FROM threat_feed_sync_state")
     fun observeLastSuccessfulSyncAt(): Flow<Long?>
 
+    @Query("SELECT MAX(last_success_at) FROM threat_feed_sync_state")
+    suspend fun getLastSuccessfulSyncAt(): Long?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsert(state: ThreatFeedSyncStateEntity)
 }

@@ -33,6 +33,12 @@ class ThreatRepository(
  fun requestThreatFeedSync() = ThreatFeedSyncScheduler.enqueueNow(context)
  suspend fun lookupThreatHash(sha256: String?, md5: String?) = threatIntelligence.lookupHash(sha256, md5)
  suspend fun lookupNetworkIoc(value: String) = threatIntelligence.lookupIoc(value)
+ fun lookupDomain(domain: String) = threatIntelligence.lookupDomain(domain)
+ fun lookupIpAddress(ipAddress: String) = threatIntelligence.lookupIpAddress(ipAddress)
+ suspend fun getActiveThreatIndicatorCount(): Int = threatIntelligence.getActiveSignatureCount()
+ fun observeActiveSignatureCount(): Flow<Int> = threatIntelligence.observeActiveSignatureCount()
+ fun observeLastSuccessfulThreatFeedSyncTime(): Flow<Long?> = threatIntelligence.observeLastSuccessfulSyncTime()
+ fun syncThreatFeeds() = requestThreatFeedSync()
  suspend fun scanInstalledApps(progress: suspend (Int, Int) -> Unit = { _, _ -> }): List<ScanResult> = withContext(Dispatchers.IO) {
   definitionLoader.importBundledIfEmpty()
   scanner.scanInstalledApps(progress)

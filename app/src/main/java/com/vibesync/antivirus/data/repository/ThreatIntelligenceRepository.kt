@@ -27,6 +27,23 @@ class ThreatIntelligenceRepository(
     suspend fun lookupSha256(sha256: String): MalwareHashEntity? = lookupHash(sha256, null)
     suspend fun lookupMd5(md5: String): MalwareHashEntity? = lookupHash(null, md5)
 
+    /** Typed convenience lookups preserve the same indexed, local-only DAO path. */
+    suspend fun lookupDomain(domain: String): MalwareHashEntity? =
+        lookupIoc(domain.trim().lowercase(Locale.ROOT).trimEnd('.'))
+
+    suspend fun lookupIpAddress(ipAddress: String): MalwareHashEntity? =
+        lookupIoc(ipAddress.trim().lowercase(Locale.ROOT))
+
+    suspend fun getActiveSignatureCount(): Int = activeIndicatorCount()
+
+    fun observeActiveSignatureCount(): Flow<Int> = observeActiveIndicatorCount()
+
+    fun observeLastSuccessfulSyncTime(): Flow<Long?> = observeLastSuccessfulSyncAt()
+
+    suspend fun getLastSuccessfulSyncTime(): Long? = withContext(Dispatchers.IO) {
+        syncStateDao.getLastSuccessfulSyncAt()
+    }
+
     suspend fun lookupIoc(value: String): MalwareHashEntity? = withContext(Dispatchers.IO) {
         val normalized = normalizeIoc(value)
         if (normalized.isBlank() || normalized.length > 2048) null else malwareHashDao.findByIoc(normalized)
