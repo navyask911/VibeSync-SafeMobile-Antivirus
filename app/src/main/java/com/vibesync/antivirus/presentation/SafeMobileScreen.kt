@@ -95,6 +95,7 @@ import com.vibesync.antivirus.core.connectivity.ConnectivityMonitor
 import com.vibesync.antivirus.core.observer.StorageSentinelService
 import com.vibesync.antivirus.core.worker.OverlayRiskReviewManager
 import com.vibesync.antivirus.core.locale.LocalePreferences
+import com.vibesync.antivirus.core.security.DeviceOwnerManager
 import com.vibesync.antivirus.core.engine.ScanResult
 import com.vibesync.antivirus.core.quarantine.LocalQuarantineManager
 import com.vibesync.antivirus.core.engine.ScanVerdict
@@ -134,6 +135,8 @@ import kotlinx.coroutines.launch
  val vm:SafeMobileViewModel=viewModel(factory=SafeMobileViewModel.Factory(repository))
  val state by vm.state.collectAsStateWithLifecycle()
  val auditEntries by repository.observeRecentAudits().collectAsStateWithLifecycle(initialValue = emptyList())
+ val securityIncidents by repository.observeRecentSecurityIncidents().collectAsStateWithLifecycle(initialValue = emptyList())
+ val ownerManager = remember(context) { DeviceOwnerManager(context) }
  var selectedDestination by remember { mutableStateOf("home") }
  val onboardingPrefs = remember(context) { context.getSharedPreferences(OnboardingPrefs.NAME, Context.MODE_PRIVATE) }
 
@@ -284,6 +287,7 @@ import kotlinx.coroutines.launch
   val observer = LifecycleEventObserver { _, event ->
    if (event == Lifecycle.Event.ON_RESUME) {
     storageAccessGranted = hasSharedStorageAccess(context)
+    ownerManager.refreshState()
     sentinelDesired = securityPrefs.getBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, false)
     sentinelOptIn = sentinelDesired
     strictMode = securityPrefs.getBoolean(SafeMobileApp.KEY_STRICT_MODE, false)
@@ -375,6 +379,7 @@ import kotlinx.coroutines.launch
       DropdownMenu(expanded = featureMenuExpanded, onDismissRequest = { featureMenuExpanded = false }) {
        listOf(
         "apps" to R.string.nav_apps,
+        "sources" to R.string.nav_install_sources,
         "sentinel" to R.string.nav_sentinel,
         "analytics" to R.string.nav_analytics,
         "history" to R.string.nav_history,
@@ -405,6 +410,7 @@ import kotlinx.coroutines.launch
        state.results.none { it.verdict in listOf(ScanVerdict.THREAT, ScanVerdict.SUSPICIOUS, ScanVerdict.NOT_SCANNED) },
       onScan={ requestPrivacyAcknowledgement { vm.scanFull() } }
      )
+     EnterpriseProtectionCard(manager = ownerManager)
      Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant), shape = RoundedCornerShape(16.dp), modifier = Modifier.fillMaxWidth()) {
       Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
        Text(stringResource(R.string.download_interceptor_label), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
@@ -452,6 +458,9 @@ import kotlinx.coroutines.launch
       }
      }
     } else if (selectedDestination == "home") TextButton(onClick={ openSponsor(context) }) { Text(stringResource(R.string.coffee_support)) }
+    if (selectedDestination == "sources") {
+     InstallSourceAuditPanel(incidents = securityIncidents, onScan = { requestPrivacyAcknowledgement { vm.scanInstalled() } })
+    }
     if (selectedDestination == "scan") {
     Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surface),shape=RoundedCornerShape(22.dp),modifier=Modifier.fillMaxWidth()) {
      Column(Modifier.padding(18.dp),verticalArrangement=Arrangement.spacedBy(10.dp)) {
