@@ -11,6 +11,7 @@ import com.vibesync.antivirus.core.engine.PackageScanner
 import com.vibesync.antivirus.core.engine.ScanResult
 import com.vibesync.antivirus.core.engine.ScanVerdict
 import com.vibesync.antivirus.core.quarantine.LocalQuarantineManager
+import com.vibesync.antivirus.core.quarantine.QuarantineOutcome
 import com.vibesync.antivirus.core.worker.LocalDefinitionLoader
 import com.vibesync.antivirus.data.local.ThreatDatabase
 import com.vibesync.antivirus.data.local.ScanAudit
@@ -156,8 +157,20 @@ class ThreatRepository(
   }
   return result
  }
+ suspend fun quarantineObservedDownload(uri: Uri, expectedSha256: String?): QuarantineOutcome = withContext(Dispatchers.IO) {
+  LocalQuarantineManager(context).quarantine(uri, expectedSha256, removeOriginalAfterVerified = true)
+ }
+ suspend fun quarantineObservedDownload(file: File, expectedSha256: String?): QuarantineOutcome = withContext(Dispatchers.IO) {
+  LocalQuarantineManager(context).quarantineFile(file, expectedSha256, removeOriginalAfterVerified = true)
+ }
+ suspend fun retryRemoveObservedDownload(uri: Uri): Boolean = withContext(Dispatchers.IO) {
+  LocalQuarantineManager(context).retryRemoveOriginal(uri)
+ }
+ suspend fun retryRemoveObservedDownload(file: File): Boolean = withContext(Dispatchers.IO) {
+  LocalQuarantineManager(context).retryRemoveOriginal(file)
+ }
  suspend fun quarantineSelectedFile(uri: Uri, expectedSha256: String?): String = withContext(Dispatchers.IO) {
-  val outcome = LocalQuarantineManager(context).quarantine(uri, expectedSha256)
+  val outcome = LocalQuarantineManager(context).quarantine(uri, expectedSha256, removeOriginalAfterVerified = false)
   if (outcome.originalRemoved) context.getString(R.string.quarantine_success_removed, outcome.privateCopy.name)
   else context.getString(R.string.quarantine_success_copy_only, outcome.privateCopy.name)
  }

@@ -37,7 +37,7 @@ class LocalQuarantineManager(context: Context, private val hashCalculator: HashC
 
  fun isEncrypted(file: File): Boolean = file.extension.equals(ENCRYPTED_EXTENSION, ignoreCase = true)
 
- fun quarantine(uri: Uri, expectedSha256: String?): QuarantineOutcome {
+ fun quarantine(uri: Uri, expectedSha256: String?, removeOriginalAfterVerified: Boolean = false): QuarantineOutcome {
   require(isKnownLocalUri(uri)) { "For privacy, only recognized on-device storage providers are supported." }
   val resolver = app.contentResolver
   val originalName = queryDisplayName(uri).ifBlank { "selected-file" }.let { File(it).name.take(120) }.ifBlank { "selected-file" }
@@ -91,8 +91,11 @@ class LocalQuarantineManager(context: Context, private val hashCalculator: HashC
     output.fd.sync()
    }
    if (!temporaryMetadata.renameTo(metadataFile)) throw IOException("Could not finalize quarantine metadata.")
-   // Keep the original: removal is a separate, explicit user decision outside this method.
-   return QuarantineOutcome(ciphertext, originalRemoved = false)
+   ciphertext.setExecutable(false, false)
+   metadataFile.setExecutable(false, false)
+   // The sentinel attempts source removal only after encrypted vault contents and metadata are verified and durable.
+   val removed = removeOriginalAfterVerified && removeOriginal(uri)
+   return QuarantineOutcome(ciphertext, originalRemoved = removed)
   } catch (error: Throwable) {
    temporaryCiphertext.delete()
    temporaryMetadata.delete()
@@ -102,7 +105,93 @@ class LocalQuarantineManager(context: Context, private val hashCalculator: HashC
   }
  }
 
- /** Lists encrypted records and old pre-hardening plaintext records without hiding user data. */
+
+ /** Encrypt and verify a direct file before attempting to remove the shared-storage source. */
+ fun quarantineFile(file: File, expectedSha256: String?, removeOriginalAfterVerified: Boolean = true): QuarantineOutcome {
+  val sourceFile = file.canonicalFile
+  require(sourceFile.isFile && sourceFile.canRead()) { "The candidate file cannot be read." }
+  val originalName = sourceFile.name.take(120).ifBlank { "selected-file" }
+  val folder = quarantineDirectory()
+  val recordId = UUID.randomUUID().toString()
+  val associatedData = recordId.toByteArray(Charsets.UTF_8)
+  val temporaryCiphertext = File(folder, ".$recordId.$ENCRYPTED_EXTENSION.tmp")
+  val ciphertext = File(folder, "\${System.currentTimeMillis()}-$recordId.$ENCRYPTED_EXTENSION")
+  val temporaryMetadata = File(folder, ".$recordId.meta.tmp")
+  val metaFile = metadataFile(ciphertext)
+  try {
+   var total = 0L
+   val digest = MessageDigest.getInstance("SHA-256")
+   val primitive = streamingAead()
+   FileInputStream(sourceFile).use { input ->
+    FileOutputStream(temporaryCiphertext).use { rawOutput ->
+     val nonClosingOutput = object : FilterOutputStream(rawOutput) {
+      override fun close() { flush() }
+     }
+     primitive.newEncryptingStream(nonClosingOutput, associatedData).use { encryptedOutput ->
+      val buffer = ByteArray(HashCalculator.DEFAULT_BUFFER_SIZE)
+      while (true) {
+       val count = input.read(buffer)
+       if (count < 0) break
+       if (count == 0) continue
+       total += count
+       if (total > maxQuarantineBytes) throw IOException("File exceeds the 512 MiB quarantine limit.")
+       digest.update(buffer, 0, count)
+       encryptedOutput.write(buffer, 0, count)
+      }
+     }
+     rawOutput.fd.sync()
+    }
+   }
+   val copiedHash = digest.digest().toHex()
+   if (!expectedSha256.isNullOrBlank() && !copiedHash.equals(expectedSha256, ignoreCase = true)) {
+    throw IOException("The file changed after scanning. The original was retained.")
+   }
+   if (!temporaryCiphertext.renameTo(ciphertext)) throw IOException("Could not finalize the encrypted quarantine object.")
+   verifyEncryptedObject(ciphertext, primitive, associatedData, copiedHash, total)
+   val metadata = Properties().apply {
+    setProperty("originalName", originalName)
+    setProperty("sha256", copiedHash)
+    setProperty("originalBytes", total.toString())
+    setProperty("recordId", recordId)
+    setProperty("createdAt", System.currentTimeMillis().toString())
+   }
+   FileOutputStream(temporaryMetadata).use { output ->
+    metadata.store(output, "SafeMobile encrypted quarantine metadata")
+    output.fd.sync()
+   }
+   if (!temporaryMetadata.renameTo(metaFile)) throw IOException("Could not finalize quarantine metadata.")
+   ciphertext.setExecutable(false, false)
+   metaFile.setExecutable(false, false)
+   val removed = removeOriginalAfterVerified && runCatching { sourceFile.delete() }.getOrDefault(false)
+   return QuarantineOutcome(ciphertext, originalRemoved = removed)
+  } catch (error: Throwable) {
+   temporaryCiphertext.delete()
+   temporaryMetadata.delete()
+   if (ciphertext.exists() && !metaFile.exists()) ciphertext.delete()
+   throw error
+  }
+ }
+
+ /** Retry original deletion only after the caller already saved a verified encrypted vault copy. */
+ fun retryRemoveOriginal(uri: Uri): Boolean = removeOriginal(uri)
+ fun retryRemoveOriginal(file: File): Boolean =
+  runCatching { file.canonicalFile.takeIf { it.isFile }?.delete() == true }.getOrDefault(false)
+
+ private fun removeOriginal(uri: Uri): Boolean {
+  if (!supportsLocalUri(uri)) return false
+  val resolver = app.contentResolver
+  return runCatching {
+   if (DocumentsContract.isDocumentUri(app, uri)) {
+    runCatching { DocumentsContract.deleteDocument(resolver, uri) }.getOrElse {
+     resolver.delete(uri, null, null) > 0
+    }
+   } else {
+    resolver.delete(uri, null, null) > 0
+   }
+  }.getOrDefault(false)
+ }
+
+  /** Lists encrypted records and old pre-hardening plaintext records without hiding user data. */
  fun listQuarantinedFiles(): List<File> {
   val root = quarantineDirectory().canonicalFile
   return root.listFiles().orEmpty()
