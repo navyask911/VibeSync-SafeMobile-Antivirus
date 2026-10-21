@@ -59,6 +59,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
@@ -128,7 +129,7 @@ import java.io.File
  val statusTint = when {
   state.threatCount > 0 -> MaterialTheme.colorScheme.error
   state.suspiciousCount > 0 || state.signatureCount <= 1 -> MaterialTheme.colorScheme.tertiary
-  else -> MaterialTheme.colorScheme.primary
+  else -> successStatusColor()
  }
  val statusIcon = when {
   state.isScanning -> Icons.Default.Security
@@ -313,7 +314,8 @@ import java.io.File
           text=runCatching { quarantineManager.displayName(file) }.getOrDefault(file.name),
           style=MaterialTheme.typography.titleSmall,fontWeight=FontWeight.SemiBold,color=MaterialTheme.colorScheme.onSurface
          )
-         Text(stringResource(R.string.quarantine_item_size,file.length()),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+         Text(stringResource(R.string.quarantine_item_size,quarantineManager.displaySize(file)),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+         if (!quarantineManager.isEncrypted(file)) Text(stringResource(R.string.quarantine_legacy_warning),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.tertiary)
          OutlinedButton(
           onClick={ pendingRestoreFile=file; showRestoreWarning=true },
           modifier=Modifier.fillMaxWidth()
@@ -452,6 +454,9 @@ private fun isStorageSentinelRunning(context: Context): Boolean {
   it.service.className == "com.vibesync.antivirus.core.observer.StorageSentinelService" && it.foreground
  }
 }
+@Composable private fun successStatusColor(): Color =
+ if (MaterialTheme.colorScheme.background.luminance() < 0.5f) Color(0xFF81C784) else Color(0xFF2E7D32)
+
 @Composable private fun ScanResultCard(
  result:ScanResult,
  showUninstall:Boolean,
@@ -459,7 +464,7 @@ private fun isStorageSentinelRunning(context: Context): Boolean {
  onUninstall:(String)->Unit,
  onQuarantine:()->Unit
 ) {
- val color=when(result.verdict) { ScanVerdict.THREAT->MaterialTheme.colorScheme.error; ScanVerdict.SUSPICIOUS->MaterialTheme.colorScheme.tertiary; ScanVerdict.NO_MATCH->MaterialTheme.colorScheme.primary; ScanVerdict.NOT_SCANNED->Color(0xFF9CB0BF) }
+ val color=when(result.verdict) { ScanVerdict.THREAT->MaterialTheme.colorScheme.error; ScanVerdict.SUSPICIOUS->MaterialTheme.colorScheme.tertiary; ScanVerdict.NO_MATCH->successStatusColor(); ScanVerdict.NOT_SCANNED->Color(0xFF9CB0BF) }
  val verdictResource=when(result.verdict) { ScanVerdict.THREAT->R.string.verdict_threat; ScanVerdict.SUSPICIOUS->R.string.verdict_suspicious; ScanVerdict.NO_MATCH->R.string.verdict_no_match; ScanVerdict.NOT_SCANNED->R.string.verdict_not_scanned }
  Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surface),shape=RoundedCornerShape(14.dp),modifier=Modifier.fillMaxWidth()) {
   Column(Modifier.padding(14.dp),verticalArrangement=Arrangement.spacedBy(5.dp)) {
