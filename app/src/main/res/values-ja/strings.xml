@@ -7,11 +7,11 @@
 
 <string name="local_files_only">プライバシー保護のため、スキャナーは認識済みの端末内ストレージプロバイダーのファイルのみ開きます。クラウドや第三者のプロバイダーは開きません。</string>
 <string name="quarantine_confirm_title">この警告対象ファイルを隔離しますか？</string>
-<string name="quarantine_confirm_body">アプリ内のプライベート領域にコピーを保存します。ハッシュを検証した後、SafeMobile は選択した元ファイルの削除を試みます。削除の可否は Android の権限とプロバイダーによって異なり、元ファイルが残る場合があります。</string>
+<string name="quarantine_confirm_body">SafeMobile は暗号化されたプライベートコピーを作成して検証します。元のファイルは保持され、削除されません。</string>
 <string name="quarantine_confirm_action">隔離する</string>
 <string name="quarantine_file">プライベート領域に隔離コピーを保存</string>
 <string name="quarantine_success_removed">プライベートな隔離コピーを保存しました（%1$s）。Android は元ファイルの削除を報告しました。</string>
-<string name="quarantine_success_copy_only">プライベートな隔離コピーを保存しました（%1$s）が、Android は元ファイルを削除できませんでした。必要に応じて手動で削除してください。</string>
+<string name="quarantine_success_copy_only">暗号化された隔離コピーを保存しました（%1$s）。元のファイルは保持され、削除されていません。</string>
 <string name="quarantine_failed">隔離に失敗しました。元ファイルの削除は意図的に試みていません。</string>
 <string name="uninstall_app">アプリをアンインストール…</string>
 <string name="scan_progress">インストール済みアプリ %2$d 件中 %1$d 件をスキャン</string>
@@ -66,4 +66,5 @@
 <string name="history_session">セッションID</string>
 <string name="definitions_limited_compact">定義：EICARテスト署名のみ。検出範囲は限定的です。</string>
 <string name="settings_privacy">プライバシーと権限</string>
+<string name="quarantine_legacy_warning">以前のバージョンで暗号化せずに保存された古い隔離項目です。</string>
 </resources>
