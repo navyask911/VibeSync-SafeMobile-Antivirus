@@ -60,11 +60,11 @@
     <string name="unknown_file">file yang dipilih</string>
     <string name="local_files_only">Demi privasi, pemindai hanya membuka file dari penyedia penyimpanan lokal yang dikenali. Penyedia dokumen cloud atau pihak ketiga tidak dibuka.</string>
     <string name="quarantine_confirm_title">Karantina file yang ditandai ini?</string>
-    <string name="quarantine_confirm_body">Salinan pribadi akan disimpan di dalam aplikasi. Setelah hash diverifikasi, SafeMobile akan mencoba menghapus file asli yang dipilih. Penghapusan bergantung pada izin penyimpanan Android dan penyedia; file asli mungkin tetap ada.</string>
+    <string name="quarantine_confirm_body">SafeMobile akan membuat dan memverifikasi salinan pribadi terenkripsi. Berkas asli akan dipertahankan dan tidak dihapus.</string>
     <string name="quarantine_confirm_action">Karantina file</string>
     <string name="quarantine_file">Simpan salinan pribadi di karantina</string>
     <string name="quarantine_success_removed">Salinan karantina pribadi disimpan (%1$s); Android melaporkan file asli telah dihapus.</string>
-    <string name="quarantine_success_copy_only">Salinan karantina pribadi disimpan (%1$s), tetapi Android tidak dapat menghapus file asli. Hapus secara manual jika perlu.</string>
+    <string name="quarantine_success_copy_only">Salinan karantina terenkripsi disimpan (%1$s). Berkas asli dipertahankan dan tidak dihapus.</string>
     <string name="quarantine_failed">Karantina gagal. File asli tidak sengaja dihapus.</string>
     <string name="uninstall_app">Copot pemasangan aplikasi…</string>
     <string name="import_definitions">Impor definisi ancaman offline (JSON)</string>
@@ -124,4 +124,5 @@
 <string name="definitions_limited_compact">Definisi: hanya tanda uji EICAR; cakupan terbatas.</string>
 <string name="settings_privacy">Privasi dan izin</string>
 
+<string name="quarantine_legacy_warning">Item karantina lama: disimpan tanpa enkripsi pada versi sebelumnya.</string>
 </resources>
