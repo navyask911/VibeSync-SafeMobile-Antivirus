@@ -129,9 +129,11 @@ import java.io.File
   else -> R.string.scan_status
  }
  val statusTint = when {
+  state.isScanning -> MaterialTheme.colorScheme.primary
   state.threatCount > 0 -> MaterialTheme.colorScheme.error
+  state.suspiciousCount > 0 -> MaterialTheme.colorScheme.tertiary
   state.results.any { it.verdict == ScanVerdict.NOT_SCANNED } -> MaterialTheme.colorScheme.onSurfaceVariant
-  state.suspiciousCount > 0 || state.signatureCount <= 1 -> MaterialTheme.colorScheme.tertiary
+  state.signatureCount <= 1 -> MaterialTheme.colorScheme.tertiary
   state.lastScanAt == null || state.results.isEmpty() -> MaterialTheme.colorScheme.onSurfaceVariant
   else -> successStatusColor()
  }
