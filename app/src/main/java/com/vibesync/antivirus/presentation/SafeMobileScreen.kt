@@ -80,6 +80,7 @@ import com.vibesync.antivirus.ads.BannerAd
 import com.vibesync.antivirus.ads.ConsentManager
 import com.vibesync.antivirus.ads.InterstitialAdController
 import com.vibesync.antivirus.core.connectivity.ConnectivityMonitor
+import com.vibesync.antivirus.core.worker.OverlayRiskReviewManager
 import com.vibesync.antivirus.core.locale.LocalePreferences
 import com.vibesync.antivirus.core.engine.ScanResult
 import com.vibesync.antivirus.core.quarantine.LocalQuarantineManager
@@ -168,6 +169,7 @@ import java.io.File
    if (event == Lifecycle.Event.ON_RESUME) {
     monitoringRunning = isStorageSentinelRunning(context)
     vm.refreshQuarantine()
+    OverlayRiskReviewManager.requestForegroundReview(context)
     pendingUninstallPackage?.let { packageName ->
      vm.refreshInstalledPackage(packageName)
      pendingUninstallPackage = null
