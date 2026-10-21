@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<string name="app_name">VibeSync SafeMobile Antivirus</string>
+<string name="app_name">SafeMobile Antivirus</string>
 <string name="privacy_title">Privacy and scan-access disclosure</string>
 <string name="privacy_body">SafeMobile calculates SHA-256 and MD5 hashes on this device and checks them against definitions stored locally. Local scans do not upload files or hashes. Ads use Google Mobile Ads network services only when permitted by your privacy choices and connectivity. Core scan functions work without a network. Installed-app visibility and all-files access are sensitive Android permissions and may require Google Play review.</string>
 <string name="privacy_accept">I understand</string><string name="exit_app">Exit app</string>
-<string name="brand_title">VIBESYNC</string><string name="brand_subtitle">SAFEMOBILE ANTIVIRUS</string>
+<string name="brand_title">SafeMobile Antivirus</string><string name="brand_subtitle">VibeSync</string>
 <string name="scan_status">Local protection dashboard</string><string name="scan_running">Scanning device…</string><string name="threat_found">Threat match detected</string>
 <string name="signature_count">Local signatures: %1$d · Scan sessions: %2$d</string>
 <string name="scan_explanation">Checks readable installed APKs against locally stored definitions and reviews files you select. Detection is limited by operating-system access and the definitions installed on this device.</string>
@@ -30,15 +30,322 @@
 <string name="unknown_file">selected file</string>
 <string name="local_files_only">For privacy, this scanner only opens files from recognized on-device storage providers. Cloud or third-party document providers are not opened.</string>
 <string name="quarantine_confirm_title">Quarantine this flagged file?</string>
-<string name="quarantine_confirm_body">A private copy will be saved inside this app. After verifying its hash, SafeMobile will try to remove the selected original. Removal depends on Android storage permissions and the provider; the original may remain.</string>
+<string name="quarantine_confirm_body">SafeMobile will create and verify an encrypted private copy. This action keeps the original file and does not delete it.</string>
 <string name="quarantine_confirm_action">Quarantine file</string>
 <string name="quarantine_file">Quarantine private copy</string>
 <string name="quarantine_success_removed">Quarantine copy saved privately (%1$s); Android reported that the original was removed.</string>
-<string name="quarantine_success_copy_only">Quarantine copy saved privately (%1$s), but Android would not remove the original. Delete it manually if needed.</string>
+<string name="quarantine_success_copy_only">Encrypted quarantine copy saved (%1$s). The original file was retained and was not deleted.</string>
 <string name="quarantine_failed">Quarantine failed. The original file was not intentionally removed.</string>
 <string name="uninstall_app">Uninstall app…</string>
 <string name="import_definitions">Import offline threat definitions (JSON)</string>
 <string name="import_success">Imported %1$d valid signature definitions into local storage.</string>
 <string name="import_failed">Definition file could not be imported. Check the JSON format and SHA-256 values.</string>
 <string name="monitor_stop">Stop Downloads monitoring</string>
+<string name="scan_progress">Scanned %1$d of %2$d installed apps</string>
+<string name="scan_preparing">Preparing scan…</string>
+<string name="scan_cancel">Cancel scan</string>
+<string name="scan_cancelled">Scan cancelled. No complete-device safety conclusion was made.</string>
+<string name="monitor_active">Monitoring is active</string>
+<string name="monitor_inactive">Monitoring is stopped</string>
+<string name="monitor_start_failed">Downloads monitoring could not be started. Check permissions and try again.</string>
+<string name="import_unverified_title">Import unverified definitions?</string>
+<string name="import_unverified_body">SafeMobile validates the JSON structure and hash format, but this local file is not cryptographically authenticated by SafeMobile. Untrusted definitions may create false positives. Import only from a source you trust and are permitted to use. The file and hashes are not uploaded.</string>
+<string name="continue_import">Choose file</string>
+<string name="sponsor_link_failed">The support page could not be opened. Check your connection or try again later.</string>
+<string name="quarantine_vault_title">Quarantine vault</string>
+<string name="quarantine_vault_description">Review isolated private copies here. Restoring writes a copy to a destination you choose and keeps the quarantined original until you delete it.</string>
+<string name="quarantine_vault_empty">No files are currently quarantined.</string>
+<string name="quarantine_vault_limit">Showing the 30 most recent quarantined files.</string>
+<string name="quarantine_item_size">%1$d bytes</string>
+<string name="quarantine_restore">Restore copy…</string>
+<string name="quarantine_delete">Delete permanently</string>
+<string name="quarantine_restore_confirm_title">Restore this quarantined file?</string>
+<string name="quarantine_restore_confirm_body">Restoring writes the file to a location you select. The restored file may be dangerous. Continue only if you trust the file or need it for controlled analysis. The quarantined copy will remain here.</string>
+<string name="quarantine_delete_confirm_title">Permanently delete this quarantined copy?</string>
+<string name="quarantine_delete_confirm_body">This action permanently deletes the private quarantined copy from SafeMobile. It cannot be undone.</string>
+<string name="quarantine_restore_success">A copy of %1$s was written to the selected destination (%2$d bytes). The quarantined original remains stored.</string>
+<string name="quarantine_delete_success">Deleted quarantined file %1$s.</string>
+<string name="quarantine_restore_failed">The quarantined file could not be restored. Check the destination and available storage, then try again.</string>
+<string name="quarantine_delete_failed">The quarantined file could not be deleted.</string>
+<string name="risk_sms_internet">Combines SMS permissions with network access; this is a risk indicator, not proof of malicious behavior.</string>
+<string name="risk_sms_accessibility">Combines SMS permissions with an accessibility service declaration; this is a review signal, not proof of OTP interception or malware.</string>
+<string name="language_label">Language: %1$s</string>
+<string name="language_system_default">System default</string>
+<string name="locale_english" translatable="false">English</string>
+<string name="locale_arabic" translatable="false">العربية</string>
+<string name="locale_german" translatable="false">Deutsch</string>
+<string name="locale_spanish" translatable="false">Español</string>
+<string name="locale_french" translatable="false">Français</string>
+<string name="locale_hindi" translatable="false">हिन्दी</string>
+<string name="locale_japanese" translatable="false">日本語</string>
+<string name="limited_protection">Limited protection — EICAR test definition only</string>
+<string name="review_recommended">Review recommended</string>
+<string name="locale_portuguese" translatable="false">Português</string>
+<string name="locale_russian" translatable="false">Русский</string>
+<string name="locale_chinese" translatable="false">简体中文</string>
+<string name="locale_korean" translatable="false">한국어</string>
+<string name="locale_turkish" translatable="false">Türkçe</string>
+<string name="locale_indonesian" translatable="false">Bahasa Indonesia</string>
+<string name="locale_vietnamese" translatable="false">Tiếng Việt</string>
+<string name="locale_italian" translatable="false">Italiano</string>
+<string name="locale_kannada" translatable="false">ಕನ್ನಡ</string>
+<string name="locale_tamil" translatable="false">தமிழ்</string>
+<string name="locale_telugu" translatable="false">తెలుగు</string>
+<string name="locale_bengali" translatable="false">বাংলা</string>
+<string name="locale_marathi" translatable="false">मराठी</string>
+<string name="locale_urdu" translatable="false">اردو</string>
+<string name="locale_hebrew" translatable="false">עברית</string>
+<string name="nav_home">Home</string>
+<string name="nav_scan">Scan</string>
+<string name="nav_quarantine">Quarantine</string>
+<string name="nav_history">History</string>
+<string name="nav_settings">Settings</string>
+<string name="settings_title">Settings</string>
+<string name="appearance_title">Appearance</string>
+<string name="theme_system">System</string>
+<string name="theme_light">Light</string>
+<string name="theme_dark">Dark</string>
+<string name="language_settings">Language</string>
+<string name="about_legal">About and Legal</string>
+<string name="ray_id">SafeMobile Ray ID</string>
+<string name="ray_id_copy">Copy ID</string>
+<string name="ray_id_copied">Ray ID copied to clipboard</string>
+<string name="history_title">Scan history</string>
+<string name="history_empty">No local scan history yet.</string>
+<string name="history_session">Session ID</string>
+<string name="threat_event_ray_id" translatable="false">Threat event Ray ID: %1$s</string>
+<string name="definitions_limited_compact">Definitions: EICAR test signature only; coverage is limited.</string>
+<string name="settings_privacy">Privacy and permissions</string>
+<string name="quarantine_legacy_warning">Legacy quarantine item: stored without encryption by an earlier build.</string>
+<string name="overlay_review_title">Overlay-risk review</string>
+<string name="overlay_review_description">Optional best-effort review of apps that declare overlay capability and accessibility services. Declarations and enabled accessibility services are only risk indicators; SafeMobile cannot prove that another app is currently displaying an overlay or inspect the current overlay-permission status of another app.</string>
+<string name="overlay_review_last_attempt">Last attempt: %1$s</string>
+<string name="overlay_review_last_success">Last successful check: %1$s</string>
+<string name="overlay_review_summary">Apps declaring overlay capability: %1$d · Apps declaring accessibility services: %2$d · Enabled accessibility services on this device: %3$d</string>
+<string name="overlay_review_not_checked">No successful overlay-risk review yet.</string>
+<string name="overlay_review_failed">The last review attempt failed. Android may have deferred the job or denied the required package visibility.</string>
+<string name="overlay_review_permission_required">Android did not permit this review. Check installed-app visibility and retry.</string>
+<string name="overlay_review_reminder_interval">Reminder interval</string>
+<string name="overlay_review_reminder_12h">Every 12 hours</string>
+<string name="overlay_review_reminder_24h">Every 24 hours</string>
+<string name="overlay_review_reminder_48h">Every 48 hours</string>
+<string name="overlay_review_notifications_off">Notifications are disabled. The review can still run, but reminders will not be shown.</string>
+<string name="overlay_review_notification_channel">SafeMobile privacy review</string>
+<string name="overlay_review_notification_channel_description">Low-priority reminders for the optional overlay-risk review.</string>
+<string name="overlay_review_notification_title">Overlay-risk review completed</string>
+<string name="overlay_review_notification_body">%1$d apps declare overlay capability and %2$d declare accessibility services. These are review indicators, not proof of malware.</string>
+<string name="overlay_review_enabled">Automatic review enabled</string>
+<string name="overlay_review_disabled">Review paused</string>
+
+<string name="features_menu" translatable="false">Security features</string>
+<string name="nav_guardian" translatable="false">Guardian</string>
+<string name="nav_phishing" translatable="false">Link checker</string>
+<string name="nav_cleaner" translatable="false">Storage cleaner</string>
+<string name="why_safemobile" translatable="false">Why SafeMobile? Core Strengths &amp; Features</string>
+<string name="features_disclaimer" translatable="false">Feature availability depends on Android permissions and the current local definitions. These features do not provide guaranteed or complete malware protection.</string>
+<string name="pillar_offline_title" translatable="false" formatted="false">100% Offline Privacy</string>
+<string name="pillar_offline_body" translatable="false">Core file hashing and local signature matching run on-device. Ads and Google Play update checks are separate network-capable features when configured and permitted.</string>
+<string name="pillar_telemetry_title" translatable="false">Zero Cloud Telemetry</string>
+<string name="pillar_telemetry_body" translatable="false">The scanner does not upload file contents or hashes. Advertising and Google Play services may make separate network requests.</string>
+<string name="pillar_whatsapp_title" translatable="false">Messenger Attachment Guardian</string>
+<string name="pillar_whatsapp_body" translatable="false">Select and assess APKs or documents you choose. SafeMobile does not automatically inspect every WhatsApp message or attachment.</string>
+<string name="pillar_phishing_title" translatable="false">Phishing Link Blocker</string>
+<string name="pillar_phishing_body" translatable="false">Local URL heuristics are available. No URLhaus threat feed or device-wide browser interception is configured in this build.</string>
+<string name="pillar_cleaner_title" translatable="false">Residual Storage Cleaner</string>
+<string name="pillar_cleaner_body" translatable="false">Choose a folder with the Android picker and review APK metadata before deleting selected items.</string>
+<string name="feature_status_limited" translatable="false">Available with limitations</string>
+<string name="feature_status_local" translatable="false">Local processing</string>
+<string name="feature_status_heuristic" translatable="false">Heuristic-only; no threat feed</string>
+<string name="feature_status_review" translatable="false">User review required</string>
+<string name="open_feature" translatable="false">Open feature</string>
+<string name="guardian_title" translatable="false">Active Guardian</string>
+<string name="guardian_disclaimer" translatable="false">Installation-source metadata and remote-access app presence are review indicators, not proof of malware. Android does not allow a normal app to block every external install or force-stop other apps.</string>
+<string name="guardian_developer_settings" translatable="false">Developer settings and ADB</string>
+<string name="guardian_developer_state" translatable="false">Developer Options</string>
+<string name="guardian_adb_state" translatable="false">USB debugging (ADB)</string>
+<string name="guardian_settings_limit" translatable="false">SafeMobile can report the readable state and open Android Settings. You must change protected global switches yourself.</string>
+<string name="guardian_review_settings" translatable="false">Review Developer Settings</string>
+<string name="guardian_refresh" translatable="false">Refresh review</string>
+<string name="guardian_open_settings_failed" translatable="false">Android Settings could not be opened on this device.</string>
+<string name="guardian_install_sources" translatable="false">Installed-app source review</string>
+<string name="guardian_source_explanation" translatable="false">Shows apps whose installer is not identified as Google Play, plus apps whose label/package resembles a remote-access product. Results depend on Android package visibility and available metadata.</string>
+<string name="guardian_source_play" translatable="false">Installer: Google Play</string>
+<string name="guardian_source_other" translatable="false">Other or alternative installer: %1$s</string>
+<string name="guardian_source_unknown" translatable="false">Installer: unknown or unavailable</string>
+<string name="guardian_remote_tool_notice" translatable="false">Possible remote-access utility present. This alone is not a malware finding.</string>
+<string name="guardian_open_app_info" translatable="false">Open Android App Info</string>
+<string name="guardian_scan_failed" translatable="false">Installed-app source review failed or was blocked by Android.</string>
+<string name="guardian_no_findings" translatable="false">No non-Play or known-label remote-access candidates were returned. This is not a clean-device guarantee.</string>
+<string name="phishing_title" translatable="false">Phishing and link review</string>
+<string name="phishing_disclaimer" translatable="false">Assess a link locally before opening it. No submitted URL is sent to a remote reputation service by this checker.</string>
+<string name="phishing_url_label" translatable="false">Paste a URL or hostname</string>
+<string name="phishing_assess" translatable="false">Assess link locally</string>
+<string name="phishing_invalid" translatable="false">Unable to assess this URL</string>
+<string name="phishing_suspicious" translatable="false">Suspicious URL indicators — review before opening</string>
+<string name="phishing_no_local_match" translatable="false">No local heuristic match — not a safety guarantee</string>
+<string name="phishing_host" translatable="false">Normalized host</string>
+<string name="phishing_no_feed_notice" translatable="false">Local lookup checks only indicators currently stored on this device and never queries a remote reputation service.</string>
+<string name="phishing_feed_checking" translatable="false">Checking this URL and host against local threat indicators…</string>
+<string name="phishing_feed_match" translatable="false">Known local threat IOC: %1$s (source: %2$s)</string>
+<string name="phishing_feed_no_match" translatable="false">No local IOC matched this URL or host. This is not a safety guarantee.</string>
+<string name="phishing_feed_lookup_error" translatable="false">Local IOC lookup failed. Try again.</string>
+<string name="phishing_limitations" translatable="false">This checker is not a global browser blocker. It does not follow redirects, inspect page content, intercept links inside other apps, or verify the live reputation of a website. Shortened links are marked for review, not automatically called malicious.</string>
+<string name="cleaner_title" translatable="false">Storage residual APK cleaner</string>
+<string name="cleaner_description" translatable="false">Choose a folder with the Android Storage Access Framework. SafeMobile checks APK metadata only and never deletes files without your explicit confirmation. Access to Android/media or other folders varies by device.</string>
+<string name="cleaner_no_folder" translatable="false">No folder selected yet.</string>
+<string name="cleaner_folder_selected" translatable="false">Folder access saved. Select Scan Storage to inspect eligible APK files.</string>
+<string name="cleaner_choose_folder" translatable="false">Choose folder</string>
+<string name="cleaner_scan_storage" translatable="false">Scan Storage</string>
+<string name="cleaner_scanning" translatable="false">Inspecting APK metadata…</string>
+<string name="cleaner_scan_complete" translatable="false">Analysis finished. APK candidates found: %1$d</string>
+<string name="cleaner_scan_failed" translatable="false">Storage analysis failed or the selected folder is no longer accessible.</string>
+<string name="cleaner_summary" translatable="false">APK candidates: %1$d · Total size: %2$d bytes</string>
+<string name="cleaner_orphaned_candidate" translatable="false">Orphaned residue candidate — package not currently installed</string>
+<string name="cleaner_outdated_candidate" translatable="false">Outdated candidate — installed package is newer</string>
+<string name="cleaner_installed_match" translatable="false">Installed package/version match</string>
+<string name="cleaner_review_required" translatable="false">Review required — metadata unavailable or ambiguous</string>
+<string name="cleaner_bulk_eligible" translatable="false">Eligible for bulk cleanup review (candidate is at least 30 days old and package is not installed)</string>
+<string name="cleaner_display_limit" translatable="false">Only the first 100 displayed candidates are shown. The scan caps traversal to protect responsiveness.</string>
+<string name="cleaner_delete_selected" translatable="false">Clean selected (%1$d)</string>
+<string name="cleaner_delete_all_eligible" translatable="false">Delete all eligible APK candidates (%1$d)</string>
+<string name="cleaner_bulk_rule" translatable="false">Bulk deletion is limited to parseable APKs with no installed package match that are at least 30 days old. This is a cleanup heuristic, not proof that a file is unwanted.</string>
+<string name="cleaner_delete_confirm_title" translatable="false">Confirm permanent file deletion</string>
+<string name="cleaner_delete_confirm_body" translatable="false">Delete exactly %1$d selected files (approximately %2$d bytes)? This cannot be undone. SafeMobile will re-check their displayed names and available metadata before deletion.</string>
+<string name="cleaner_delete_confirm_action" translatable="false">Delete files</string>
+<string name="cleaner_more_files" translatable="false">And %1$d more…</string>
+<string name="cleaner_delete_result" translatable="false">Deleted: %1$d · Approximate bytes freed: %2$d · Failed or changed: %3$d</string>
+<string name="family_dedication_title" translatable="false">With gratitude</string>
+<string name="family_dedication" translatable="false">Dedicated with deep gratitude to my beloved family, whose immense patience, support, and sacrifice of time during months of solitude made the creation of SafeMobile Antivirus possible—a humble contribution toward keeping the digital world safe for everyone.</string>
+<string name="about_readme" translatable="false">README</string>
+<string name="about_privacy_policy" translatable="false">Privacy</string>
+<string name="about_license" translatable="false">License</string>
+<string name="about_third_party" translatable="false">Third-party notices</string>
+<string name="about_license_missing" translatable="false">No root LICENSE file is present in the reviewed repository. This screen does not assert an open-source license or grant additional permissions. Public visibility alone is not an open-source license.</string>
+
+
+<string name="threat_feed_hash_match" translatable="false">Known threat hash: %1$s (source: %2$s)</string>
+<string name="threat_feed_dashboard_title" translatable="false">Local threat intelligence</string>
+<string name="threat_feed_active_count" translatable="false">Stored local indicators: %1$d</string>
+<string name="threat_feed_last_success" translatable="false">Last successful sync: %1$s</string>
+<string name="threat_feed_never_synced" translatable="false">No successful feed sync has completed yet.</string>
+<string name="threat_feed_syncing" translatable="false">Feed sync is running.</string>
+<string name="threat_feed_sync_succeeded" translatable="false">Most recent feed attempt succeeded.</string>
+<string name="threat_feed_sync_retry" translatable="false">Network sync will retry when requirements are met.</string>
+<string name="threat_feed_sync_failed" translatable="false">Most recent feed attempt failed. Existing local indicators were retained.</string>
+<string name="threat_feed_status_not_available" translatable="false">No feed attempt has been recorded.</string>
+<string name="threat_feed_sync_now" translatable="false">Sync now</string>
+<string name="threat_feed_configure" translatable="false">Configure feed</string>
+<string name="threat_feed_manage" translatable="false">Feed settings</string>
+<string name="threat_feed_settings_title" translatable="false">Local threat feed synchronization</string>
+<string name="threat_feed_settings_description" translatable="false">Configure a trusted HTTPS JSON or CSV endpoint. No feed URL or API key is enabled by default. Refresh runs only while charging on an unmetered network; press Sync now to queue an immediate attempt.</string>
+<string name="threat_feed_endpoint" translatable="false">HTTPS feed endpoint</string>
+<string name="threat_feed_auth_key" translatable="false">Optional provider Auth-Key</string>
+<string name="threat_feed_credentials_note" translatable="false">The optional key is encrypted with Android Keystore and is not compiled into the APK or written to logs. Do not include credentials in the URL or request body.</string>
+<string name="threat_feed_method" translatable="false">HTTP request method</string>
+<string name="threat_feed_get" translatable="false">GET</string>
+<string name="threat_feed_post_json" translatable="false">POST JSON</string>
+<string name="threat_feed_post_body" translatable="false">JSON request body</string>
+<string name="threat_feed_format" translatable="false">Feed format</string>
+<string name="threat_feed_update_semantics" translatable="false">Feed update semantics</string>
+<string name="threat_feed_incremental" translatable="false">Incremental merge</string>
+<string name="threat_feed_snapshot" translatable="false">Authoritative snapshot</string>
+<string name="threat_feed_update_semantics_note" translatable="false">Incremental merge adds or updates entries and retains older entries from this source. Authoritative snapshot replaces this source only after the complete, non-empty feed parses successfully. Empty snapshots are rejected to protect existing indicators.</string>
+<string name="threat_feed_auto" translatable="false">Auto</string>
+<string name="threat_feed_json" translatable="false">JSON</string>
+<string name="threat_feed_csv" translatable="false">CSV</string>
+<string name="threat_feed_save" translatable="false">Save and schedule sync</string>
+<string name="threat_feed_clear" translatable="false">Remove feed configuration</string>
+<string name="threat_feed_saved" translatable="false">Feed configuration saved. Sync is constrained to charging and unmetered network.</string>
+<string name="threat_feed_cleared" translatable="false">Feed configuration removed and periodic sync cancelled.</string>
+<string name="threat_feed_queue_note" translatable="false">Sync queued. WorkManager waits for charging and an unmetered network.</string>
+<string name="threat_feed_save_error" translatable="false">Could not save feed configuration. Check the HTTPS URL and JSON request body.</string>
+
+    <string name="nav_apps">Apps</string>
+    <string name="nav_sentinel">Download Sentinel</string>
+    <string name="nav_analytics">Protection Analytics</string>
+    <string name="setup_title">Protect your device</string>
+    <string name="setup_skip">Skip</string>
+    <string name="setup_storage_title">Storage access</string>
+    <string name="setup_storage_body">Allow access to scan readable files in shared storage for known local signatures. Android still restricts access to some system and app-private locations; this does not inspect every file on the device.</string>
+    <string name="setup_apps_title">Installed-app visibility</string>
+    <string name="setup_apps_body">SafeMobile checks readable installed APK files and app permission metadata. Package visibility is declared in the manifest; this step does not display a runtime permission dialog. Google Play policy approval is separate.</string>
+    <string name="setup_notifications_title">Notifications</string>
+    <string name="setup_notifications_body">Notifications can show scan reminders and protection-service status. You can continue without them, but alerts may be limited by Android notification settings.</string>
+    <string name="setup_sentinel_title">Background protection</string>
+    <string name="setup_sentinel_body">Download Sentinel is optional. When enabled, its foreground service watches APK file changes directly inside the accessible top-level Downloads folder. It cannot intercept every installation or monitor every app-specific folder.</string>
+    <string name="setup_sentinel_switch">Enable Download Sentinel</string>
+    <string name="setup_sentinel_scope">Best-effort APK file monitoring in Downloads. Android controls installation and can stop background work.</string>
+    <string name="setup_permission_granted">Access available</string>
+    <string name="setup_permission_missing">Not granted — protection is limited</string>
+    <string name="setup_step_progress">Step %1$d of 4</string>
+    <string name="setup_continue">Continue</string>
+    <string name="setup_allow_storage">Allow access</string>
+    <string name="setup_continue_limited">Continue with limited protection</string>
+    <string name="setup_allow_notifications">Allow notifications</string>
+    <string name="setup_notifications_not_now">Not now</string>
+    <string name="setup_finish">Finish setup</string>
+    <string name="security_scan_now">Scan now</string>
+    <string name="security_last_scan_none">No completed scan yet</string>
+    <string name="security_last_scan">Last scan · %1$s</string>
+    <string name="security_scan_coverage">Checks installed APKs and readable shared-storage files against the local definitions available on this device. Results do not certify the device as malware-free.</string>
+    <string name="security_limited_storage">Shared-storage access is unavailable. The scan can inspect installed APKs only; file coverage is limited until access is granted.</string>
+    <string name="analytics_title">Protection Analytics</string>
+    <string name="analytics_subtitle">Local-only view of saved scan audit records and current protection state. Counts reflect the records available here, not a malware-free guarantee.</string>
+    <string name="analytics_scan_in_progress">Scan in progress</string>
+    <string name="analytics_audit_rows">Recent audit records</string>
+    <string name="analytics_confirmed">Confirmed matches</string>
+    <string name="analytics_heuristic">Heuristic warnings</string>
+    <string name="analytics_not_scanned">Not scanned / incomplete</string>
+    <string name="analytics_daily_activity">Daily activity</string>
+    <string name="analytics_recent_window">Seven-day view of the latest 50 local audit entries returned by the database.</string>
+    <string name="analytics_no_audits">No saved audit records</string>
+    <string name="analytics_no_audits_body">Run a scan to populate local history. An empty history is not a clean scan result.</string>
+    <string name="analytics_protection_health">Protection health</string>
+    <string name="analytics_definitions">Local hash definitions</string>
+    <string name="analytics_feed_indicators">Remote-feed indicators</string>
+    <string name="analytics_last_scan">Last completed scan</string>
+    <string name="analytics_storage">Shared-storage access</string>
+    <string name="analytics_notifications">Notifications</string>
+    <string name="analytics_sentinel">Download Sentinel</string>
+    <string name="analytics_sentinel_running">Foreground service running</string>
+    <string name="analytics_sentinel_stopped">Service not running</string>
+    <string name="analytics_current_results">Current scan result rows</string>
+    <string name="analytics_quarantine">Quarantine files</string>
+    <string name="analytics_connection">Network state</string>
+    <string name="analytics_access_available">Available</string>
+    <string name="analytics_limited">Unavailable / limited</string>
+    <string name="analytics_online_local">Online; core hash checks remain local</string>
+    <string name="analytics_offline_local">Offline; core hash checks remain local</string>
+    <string name="analytics_recent_activity">Recent activity</string>
+    <string name="analytics_definition_note">Dataset limitation: bundled offline definitions contain only the harmless EICAR test-marker hash. This is not a real-world malware corpus. User-imported definitions are schema-validated but not publisher-authenticated.</string>
+    <string name="apps_inventory_empty">Installed app inventory is not available yet</string>
+    <string name="apps_inventory_empty_body">Run an installed-app scan to populate this list. System and protected packages are review-only.</string>
+    <string name="apps_inventory_count">%1$d apps assessed in the latest available results</string>
+    <string name="sentinel_scope_title">Monitoring scope and limitations</string>
+    <string name="sentinel_scope_body">The current watcher observes APK create, move, and write-close events directly under the public Downloads directory while its foreground service is running. Events can be missed if the service stops or files are stored elsewhere. Post-install checks are best-effort and do not block Android installation.</string>
+
+<string name="risk_accessibility_overlay">Requests Accessibility plus overlay capability (potential overlay/RAT pattern)</string>
+<string name="risk_boot_sms_internet">Combines boot persistence, READ_SMS, and INTERNET (possible SMS/2FA theft pattern)</string>
+<string name="nav_install_sources">App installation sources</string>
+<string name="install_sources_title">App Installation Sources</string>
+<string name="install_sources_body">Recent package-install events with Android-reported installer metadata. External or unknown does not prove malware; review the local scan results.</string>
+<string name="install_source_play_badge">Google Play</string>
+<string name="install_source_external_badge">External / non-Play</string>
+<string name="install_source_unknown_badge">Source unknown</string>
+<string name="install_sources_empty">No install-source events recorded yet</string>
+<string name="install_sources_empty_body">After the privacy disclosure is accepted, package-install events are recorded locally when Android delivers them.</string>
+<string name="notification_install_source_channel">App install-source alerts</string>
+<string name="notification_install_source_title">Review app installation source</string>
+<string name="notification_install_source_body">%1$s was installed; Android reports source: %2$s. Review before deciding what to do.</string>
+<string name="enterprise_title">Enterprise &amp; Device Owner Protection</string>
+<string name="enterprise_status_owner">Device Owner active</string>
+<string name="enterprise_status_standard">Standard Mode — Device Owner is not active</string>
+<string name="enterprise_body">Device Owner is optional for personal use. A fully managed device enables stronger installation restrictions and administrator-controlled response to confirmed local hash matches.</string>
+<string name="enterprise_setup_guide">Enterprise Setup Guide</string>
+<string name="enterprise_auto_response">Automatic response to confirmed malware hash matches</string>
+<string name="enterprise_auto_response_body">When enabled on a Device Owner device, exact local hash/IOC matches above the threshold may be hidden and an uninstall request queued. Permission heuristics and DEX strings alone never trigger removal.</string>
+<string name="enterprise_auto_response_title">Enable automatic enterprise response?</string>
+<string name="enterprise_enable_response">Enable response</string>
+<string name="enterprise_setup_instructions">Standard Mode works without Device Owner privileges. For production, use Android Enterprise QR-code provisioning during device setup. For testing only on a disposable device after factory reset and before completing setup, an administrator may run: adb shell dpm set-device-owner com.vibesync.antivirus/.core.security.AdminReceiver. This cannot be enabled by an in-app button on an already provisioned personal device. Device Owner mode can restrict installation and remove apps, so use it only on devices your organization manages.</string>
+<string name="enterprise_response_warning">Enabling automatic response permits Device Owner-only hiding and silent uninstall requests for non-system apps that have an exact local hash/IOC malware match and a risk score above 0.8. Android callback failures are not treated as successes.</string>
 </resources>

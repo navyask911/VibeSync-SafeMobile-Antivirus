@@ -11,3 +11,6 @@ captures/
 *.jks
 *.keystore
 .env
+
+# Downloaded/extracted research datasets and derived local indexes (never commit/package).
+.cache/datasets/
