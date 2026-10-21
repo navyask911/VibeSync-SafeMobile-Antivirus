@@ -28,6 +28,15 @@ class PermissionRiskAnalyzer {
    reasons += com.vibesync.antivirus.R.string.risk_sms_accessibility
   }
 
+  if (hasAccessibilityService && SYSTEM_ALERT in permissions) {
+   score += 40
+   reasons += com.vibesync.antivirus.R.string.risk_accessibility_overlay
+  }
+  if (RECEIVE_BOOT in permissions && READ_SMS in permissions && INTERNET in permissions) {
+   score += 25
+   reasons += com.vibesync.antivirus.R.string.risk_boot_sms_internet
+  }
+
   val cluster = listOf(
    RECEIVE_BOOT in permissions,
    SYSTEM_ALERT in permissions,
