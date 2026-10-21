@@ -34,6 +34,7 @@ class ThreatRepository(
  private val threatIntelligence: ThreatIntelligenceRepository
 ) {
  fun observeRecentAudits(): Flow<List<ScanAudit>> = database.threatDao().observeRecentAudits()
+ fun observeRecentSecurityIncidents() = database.securityIncidentDao().observeRecent(100)
  fun observeActiveThreatIndicatorCount(): Flow<Int> = threatIntelligence.observeActiveIndicatorCount()
  fun observeLastSuccessfulThreatFeedSyncAt(): Flow<Long?> = threatIntelligence.observeLastSuccessfulSyncAt()
  fun observeLatestThreatFeedSyncState(): Flow<ThreatFeedSyncStateEntity?> = threatIntelligence.observeLatestSyncState()
