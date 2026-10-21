@@ -58,7 +58,11 @@ class PackageScanner(
  suspend fun scanFile(file: File): ScanResult {
   val start = System.nanoTime()
   val scanSessionId = UUID.randomUUID().toString()
-  if (!file.isFile || !file.canRead()) return result(file.name, file.name, null, null, ScanVerdict.NOT_SCANNED, listOf(context.getString(R.string.file_not_readable)), start).copy(sourceLocalPath = file.absolutePath)
+  if (!file.isFile || !file.canRead()) {
+   val failed = result(file.name, file.name, null, null, ScanVerdict.NOT_SCANNED, listOf(context.getString(R.string.file_not_readable)), start)
+   auditSafely(failed, start, scanSessionId)
+   return failed.copy(sourceLocalPath = file.absolutePath)
+  }
   return try {
    val hash = calculator.calculate(file)
    val output = evaluate(file.name, file.name, hash.sha256, hash.md5, emptyList(), 0)
@@ -67,7 +71,9 @@ class PackageScanner(
   } catch (cancelled: CancellationException) {
    throw cancelled
   } catch (_: Exception) {
-   result(file.name, file.name, null, null, ScanVerdict.NOT_SCANNED, listOf(context.getString(R.string.file_could_not_read)), start).copy(sourceLocalPath = file.absolutePath)
+   val failed = result(file.name, file.name, null, null, ScanVerdict.NOT_SCANNED, listOf(context.getString(R.string.file_could_not_read)), start)
+   auditSafely(failed, start, scanSessionId)
+   failed.copy(sourceLocalPath = file.absolutePath)
   }
  }
  suspend fun scanStream(label: String, stream: java.io.InputStream): ScanResult {
@@ -81,12 +87,16 @@ class PackageScanner(
   } catch (cancelled: CancellationException) {
    throw cancelled
   } catch (_: Exception) {
-   result(label, label, null, null, ScanVerdict.NOT_SCANNED, listOf(context.getString(R.string.file_stream_failed)), start)
+   result(label, label, null, null, ScanVerdict.NOT_SCANNED, listOf(context.getString(R.string.file_stream_failed)), start).also { auditSafely(it, start, scanSessionId) }
   }
  }
  private suspend fun scanPackage(info: PackageInfo, scanSessionId: String): ScanResult {
   val start = System.nanoTime()
-  val appInfo = info.applicationInfo ?: return result(info.packageName, info.packageName, null, null, ScanVerdict.NOT_SCANNED, listOf(context.getString(R.string.package_metadata_missing)), start).copy(packageName = info.packageName)
+  val appInfo = info.applicationInfo ?: run {
+   val failed = result(info.packageName, info.packageName, null, null, ScanVerdict.NOT_SCANNED, listOf(context.getString(R.string.package_metadata_missing)), start).copy(packageName = info.packageName)
+   auditSafely(failed, start, scanSessionId)
+   return failed
+  }
   val label = appInfo.loadLabel(pm).toString()
   val permissions = info.requestedPermissions?.toSet().orEmpty()
   val accessibility = info.services.orEmpty().any { it.permission == PermissionRiskAnalyzer.BIND_ACCESSIBILITY }
@@ -97,10 +107,16 @@ class PackageScanner(
   val apk = appInfo.sourceDir?.let(::File)
   if (apk == null || !apk.isFile || !apk.canRead()) {
    reasons += context.getString(R.string.apk_unreadable)
-   return result(info.packageName, label, null, null, if (risk.isSuspicious) ScanVerdict.SUSPICIOUS else ScanVerdict.NOT_SCANNED, reasons, start).copy(packageName = info.packageName)
+   val failed = result(info.packageName, label, null, null, if (risk.isSuspicious) ScanVerdict.SUSPICIOUS else ScanVerdict.NOT_SCANNED, reasons, start).copy(packageName = info.packageName)
+   auditSafely(failed, start, scanSessionId)
+   return failed
   }
   val hashes = runCatching { calculator.calculate(apk) }.getOrNull()
-   ?: return result(info.packageName, label, null, null, ScanVerdict.NOT_SCANNED, reasons + context.getString(R.string.file_could_not_read), start).copy(packageName = info.packageName)
+   ?: run {
+    val failed = result(info.packageName, label, null, null, ScanVerdict.NOT_SCANNED, reasons + context.getString(R.string.file_could_not_read), start).copy(packageName = info.packageName)
+    auditSafely(failed, start, scanSessionId)
+    return failed
+   }
   val output = evaluate(info.packageName, label, hashes.sha256, hashes.md5, reasons, risk.score)
   audit(output, start, scanSessionId)
   return output.copy(durationMs = elapsed(start), packageName = info.packageName)
@@ -117,6 +133,15 @@ class PackageScanner(
   val verdict = if (score >= 45) ScanVerdict.SUSPICIOUS else ScanVerdict.NO_MATCH
   val notes = if (heuristic.isEmpty()) listOf(context.getString(R.string.no_match_detail)) else heuristic + context.getString(R.string.risk_review)
   return ScanResult(key, label, sha, md5, verdict, notes, 0)
+ }
+ private suspend fun auditSafely(result: ScanResult, start: Long, scanSessionId: String) {
+  try {
+   audit(result, start, scanSessionId)
+  } catch (cancelled: CancellationException) {
+   throw cancelled
+  } catch (_: Exception) {
+   // A diagnostic-row failure must not turn an inaccessible file into a clean verdict.
+  }
  }
  private suspend fun audit(result: ScanResult, start: Long, scanSessionId: String) {
   dao.insertAudit(ScanAudit(
