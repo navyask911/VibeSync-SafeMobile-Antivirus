@@ -59,7 +59,11 @@ def main():
         source = comp_source(component)
         if lic.startswith("UNKNOWN") or source.startswith("UNKNOWN"):
             unknown.append(f"{name}@{version}: licence={lic}; source={source}")
-        lines.append(f"| {name.replace('|', '\\|')} | {version.replace('|', '\\|')} | {lic.replace('|', '\\|')} | {source.replace('|', '\\|')} |")
+        name_cell = name.replace("|", "&#124;")
+        version_cell = version.replace("|", "&#124;")
+        licence_cell = lic.replace("|", "&#124;")
+        source_cell = source.replace("|", "&#124;")
+        lines.append(f"| {name_cell} | {version_cell} | {licence_cell} | {source_cell} |")
     lines.extend(["", f"Metadata completeness: {len(components) - len(unknown)}/{len(components)} components have both a declared licence and a source/package reference.", ""])
     if unknown:
         lines.extend(["## Metadata requiring manual review", ""])

@@ -2,6 +2,7 @@
 """Fail CI if the offline release can access the network or any release packages ads/analytics SDKs."""
 from pathlib import Path
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -76,13 +77,15 @@ for apk in offline_apks:
                                    text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
     if manifest_dump.returncode:
         fail("aapt could not inspect the manifest for " + apk.name)
-    if "android:allowBackup" not in manifest_dump.stdout or "android:allowBackup(0x01010280)=false" not in manifest_dump.stdout:
+    if not re.search(r"android:allowBackup[^=]*=false", manifest_dump.stdout):
         fail(apk.name + " must have android:allowBackup=false.")
-    if "android:fullBackupContent" not in manifest_dump.stdout or "android:fullBackupContent(0x010102" not in manifest_dump.stdout:
+    if not re.search(r"android:fullBackupContent[^=]*=false", manifest_dump.stdout):
         fail(apk.name + " must explicitly disable fullBackupContent.")
-    if "android:hasFragileUserData" not in manifest_dump.stdout:
-        fail(apk.name + " must set hasFragileUserData=false.")
-    if "android.permission.MANAGE_EXTERNAL_STORAGE" in manifest_dump.stdout or "android.permission.READ_EXTERNAL_STORAGE" in manifest_dump.stdout:
+    if not re.search(r"android:hasFragileUserData[^=]*=false", manifest_dump.stdout):
+        fail(apk.name + " must set android:hasFragileUserData=false.")
+    if "android:dataExtractionRules" not in manifest_dump.stdout:
+        fail(apk.name + " must reference dataExtractionRules.")
+    if "android.permission.MANAGE_EXTERNAL_STORAGE" in result.stdout or "android.permission.READ_EXTERNAL_STORAGE" in result.stdout:
         fail(apk.name + " declares broad/legacy storage access; use the SAF.")
     check_no_tracking_classes(apk)
 
