@@ -107,6 +107,8 @@ dependencies {
  implementation("androidx.work:work-runtime-ktx:2.10.2")
  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
  implementation("com.google.crypto.tink:tink-android:1.16.0")
+ implementation("com.google.guava:guava:33.4.8-android")
+ implementation("org.tensorflow:tensorflow-lite:2.17.0")
  implementation("com.google.android.gms:play-services-ads:25.5.0")
  implementation("com.google.android.ump:user-messaging-platform:4.0.0")
  implementation("com.google.android.play:app-update-ktx:2.1.0")
