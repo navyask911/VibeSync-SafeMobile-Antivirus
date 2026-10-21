@@ -411,6 +411,7 @@ internal fun PhishingPanel(
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
+                        else -> Unit
                     }
                     Text(stringResource(R.string.phishing_no_feed_notice), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
