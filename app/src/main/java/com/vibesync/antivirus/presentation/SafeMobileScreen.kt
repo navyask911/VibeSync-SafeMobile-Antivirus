@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
-import android.content.ComponentName
 import android.content.ActivityNotFoundException
 import android.net.Uri
 import android.os.Build
@@ -93,7 +92,6 @@ import com.vibesync.antivirus.ads.BannerAd
 import com.vibesync.antivirus.ads.ConsentManager
 import com.vibesync.antivirus.ads.InterstitialAdController
 import com.vibesync.antivirus.core.connectivity.ConnectivityMonitor
-import com.vibesync.antivirus.core.observer.AccessibilityGuardStatus
 import com.vibesync.antivirus.core.observer.StorageSentinelService
 import com.vibesync.antivirus.core.worker.OverlayRiskReviewManager
 import com.vibesync.antivirus.core.locale.LocalePreferences
@@ -186,7 +184,6 @@ import kotlinx.coroutines.launch
  val setOnboardingStep: (Int) -> Unit = { step -> onboardingStep = step.coerceIn(0, 3); onboardingPrefs.edit().putInt(OnboardingPrefs.STEP, onboardingStep).apply() }
  var pendingUninstallPackage by remember { mutableStateOf<String?>(null) }
  val securityPrefs = remember(context) { context.getSharedPreferences(SafeMobileApp.SECURITY_PREFS, Context.MODE_PRIVATE) }
- var accessibilityGuardEnabled by remember(context) { mutableStateOf(AccessibilityGuardStatus.isGuardActive(context)) }
  var sentinelDesired by remember(context) { mutableStateOf(securityPrefs.getBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, false)) }
  var strictMode by remember(context) { mutableStateOf(securityPrefs.getBoolean(SafeMobileApp.KEY_STRICT_MODE, false)) }
  val snackbarHostState = remember { SnackbarHostState() }
@@ -244,49 +241,26 @@ import kotlinx.coroutines.launch
   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) notificationLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
   else { notificationsGranted = true; if (onboardingStep == 2) setOnboardingStep(3) }
  }
- val openAccessibilitySettings: () -> Unit = {
-  securityPrefs.edit().putBoolean(SafeMobileApp.KEY_ACCESSIBILITY_GUARD_OPT_IN, true)
-   .putBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, true).apply()
-  sentinelDesired = true
-  sentinelOptIn = true
-  runCatching {
-   val target = ComponentName(context, com.vibesync.antivirus.service.SecurityAccessibilityService::class.java).flattenToString()
-   context.startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
-    .putExtra(":settings:fragment_args_key", target).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-  }.onFailure { Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show() }
- }
  val enableSentinel: () -> Unit = {
-  securityPrefs.edit().putBoolean(SafeMobileApp.KEY_ACCESSIBILITY_GUARD_OPT_IN, true)
-   .putBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, true).apply()
+  securityPrefs.edit().putBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, true).apply()
   sentinelDesired = true
   sentinelOptIn = true
   if (!hasSharedStorageAccess(context)) requestStorage()
-  else if (!AccessibilityGuardStatus.isEnabledInSystemSettings(context)) openAccessibilitySettings()
   else runCatching { context.startForegroundService(Intent(context, StorageSentinelService::class.java)) }
    .onFailure { Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show() }
    .onSuccess { Handler(Looper.getMainLooper()).postDelayed({
-    accessibilityGuardEnabled = AccessibilityGuardStatus.isGuardActive(context)
-    monitoringRunning = isStorageSentinelRunning(context) && hasSharedStorageAccess(context)
+    storageAccessGranted = hasSharedStorageAccess(context)
+    monitoringRunning = isStorageSentinelRunning(context) && storageAccessGranted
     if (!monitoringRunning) Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show()
    }, 900L) }
  }
  val disableSentinel: () -> Unit = {
-  securityPrefs.edit().putBoolean(SafeMobileApp.KEY_ACCESSIBILITY_GUARD_OPT_IN, false)
-   .putBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, false).apply()
+  securityPrefs.edit().putBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, false).apply()
   context.stopService(Intent(context, StorageSentinelService::class.java))
-  monitoringRunning = false; sentinelOptIn = false; sentinelDesired = false; accessibilityGuardEnabled = false
+  monitoringRunning = false; sentinelOptIn = false; sentinelDesired = false
   onboardingPrefs.edit().putBoolean(OnboardingPrefs.SENTINEL_OPT_IN, false).apply()
  }
- val toggleProtection: (Boolean) -> Unit = { enabled ->
-  if (enabled) {
-   securityPrefs.edit().putBoolean(SafeMobileApp.KEY_ACCESSIBILITY_GUARD_OPT_IN, true)
-    .putBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, true).apply()
-   sentinelDesired = true
-   if (!hasSharedStorageAccess(context)) requestStorage()
-   else if (!AccessibilityGuardStatus.isEnabledInSystemSettings(context)) openAccessibilitySettings()
-   else enableSentinel()
-  } else disableSentinel()
- }
+ val toggleProtection: (Boolean) -> Unit = { enabled -> if (enabled) enableSentinel() else disableSentinel() }
  val updateStrictMode: (Boolean) -> Unit = { enabled ->
   strictMode = enabled
   securityPrefs.edit().putBoolean(SafeMobileApp.KEY_STRICT_MODE, enabled).apply()
@@ -308,19 +282,18 @@ import kotlinx.coroutines.launch
   val observer = LifecycleEventObserver { _, event ->
    if (event == Lifecycle.Event.ON_RESUME) {
     storageAccessGranted = hasSharedStorageAccess(context)
-    accessibilityGuardEnabled = AccessibilityGuardStatus.isGuardActive(context)
     sentinelDesired = securityPrefs.getBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, false)
     sentinelOptIn = sentinelDesired
     strictMode = securityPrefs.getBoolean(SafeMobileApp.KEY_STRICT_MODE, false)
-    monitoringRunning = isStorageSentinelRunning(context) && storageAccessGranted && accessibilityGuardEnabled
-    if (!accessibilityGuardEnabled && isStorageSentinelRunning(context)) {
+    monitoringRunning = isStorageSentinelRunning(context) && storageAccessGranted
+    if (!storageAccessGranted && isStorageSentinelRunning(context)) {
      context.stopService(Intent(context, StorageSentinelService::class.java))
      monitoringRunning = false
-    } else if (sentinelDesired && accessibilityGuardEnabled && storageAccessGranted && !monitoringRunning) {
+    } else if (sentinelDesired && storageAccessGranted && !monitoringRunning) {
      runCatching { context.startForegroundService(Intent(context, StorageSentinelService::class.java)) }
       .onFailure { Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show() }
      Handler(Looper.getMainLooper()).postDelayed({
-      monitoringRunning = isStorageSentinelRunning(context) && hasSharedStorageAccess(context) && AccessibilityGuardStatus.isGuardActive(context)
+      monitoringRunning = isStorageSentinelRunning(context) && hasSharedStorageAccess(context)
      }, 700L)
     }
     notificationsGranted = hasNotificationAccess(context)
@@ -434,13 +407,13 @@ import kotlinx.coroutines.launch
       Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
        Text(stringResource(R.string.download_interceptor_label), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
        Text(stringResource(R.string.download_interceptor_description), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-       Text(stringResource(if (monitoringRunning && accessibilityGuardEnabled) R.string.download_interceptor_status_enabled else R.string.download_interceptor_status_setup),
+       Text(stringResource(if (monitoringRunning) R.string.download_interceptor_status_enabled else R.string.download_interceptor_status_setup),
         style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         OutlinedButton(onClick = { selectedDestination = "settings" }, modifier = Modifier.weight(1f)) { Text(stringResource(R.string.nav_settings)) }
-        Button(onClick = { if (!accessibilityGuardEnabled) openAccessibilitySettings() else if (!monitoringRunning) toggleProtection(true) else toggleProtection(false) },
+        Button(onClick = { if (!monitoringRunning) toggleProtection(true) else toggleProtection(false) },
          modifier = Modifier.weight(1f)) {
-         Text(stringResource(if (!accessibilityGuardEnabled) R.string.open_accessibility_settings else if (monitoringRunning) R.string.monitor_stop else R.string.monitor_button))
+         Text(stringResource(if (monitoringRunning) R.string.monitor_stop else R.string.monitor_button))
         }
        }
       }
@@ -591,8 +564,6 @@ import kotlinx.coroutines.launch
       Column(Modifier.padding(16.dp),verticalArrangement=Arrangement.spacedBy(8.dp)) {
        Text(stringResource(R.string.sentinel_scope_title),style=MaterialTheme.typography.titleMedium,fontWeight=FontWeight.SemiBold)
        Text(stringResource(R.string.download_interceptor_description),style=MaterialTheme.typography.bodyMedium,color=MaterialTheme.colorScheme.onSurfaceVariant)
-       Text(stringResource(if(accessibilityGuardEnabled) R.string.accessibility_guard_system_on else R.string.accessibility_guard_system_off),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
-       if (!accessibilityGuardEnabled) OutlinedButton(onClick=openAccessibilitySettings,modifier=Modifier.fillMaxWidth()){Text(stringResource(R.string.open_accessibility_settings))}
        StatusChip(stringResource(if(monitoringRunning) R.string.analytics_sentinel_running else R.string.analytics_sentinel_stopped),
         kind=if(monitoringRunning) StatusKind.ACTIVE else StatusKind.WARNING)
       }
@@ -685,9 +656,8 @@ import kotlinx.coroutines.launch
      SafeMobileSettingsPanel(
       privacyOptionsVisible, monitoringRunning, enableSentinel, disableSentinel,
       { activity?.let { host -> ConsentManager.showPrivacyOptions(host) { privacyOptionsVisible = ConsentManager.privacyOptionsRequired(host) } } },
-      accessibilityGuardEnabled = accessibilityGuardEnabled, strictMode = strictMode,
-      onToggleProtection = toggleProtection, onOpenAccessibilitySettings = openAccessibilitySettings,
-      onStrictModeChanged = updateStrictMode
+      strictMode = strictMode,
+      onToggleProtection = toggleProtection, onStrictModeChanged = updateStrictMode
      )
     }
     Spacer(Modifier.height(8.dp))

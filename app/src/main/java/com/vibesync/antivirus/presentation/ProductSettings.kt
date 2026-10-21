@@ -266,10 +266,8 @@ internal fun SafeMobileSettingsPanel(
     onEnableSentinel: () -> Unit,
     onDisableSentinel: () -> Unit,
     onPrivacyOptionsClick: () -> Unit,
-    accessibilityGuardEnabled: Boolean = sentinelEnabled,
     strictMode: Boolean = false,
     onToggleProtection: ((Boolean) -> Unit)? = null,
-    onOpenAccessibilitySettings: (() -> Unit)? = null,
     onStrictModeChanged: ((Boolean) -> Unit)? = null
 ) {
     val context = LocalContext.current
@@ -326,20 +324,15 @@ internal fun SafeMobileSettingsPanel(
                 Text(stringResource(R.string.download_interceptor_description), style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Text(
-                    stringResource(if (sentinelEnabled && accessibilityGuardEnabled) R.string.download_interceptor_status_enabled else R.string.download_interceptor_status_setup),
+                    stringResource(if (sentinelEnabled) R.string.download_interceptor_status_enabled else R.string.download_interceptor_status_setup),
                     style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Row(Modifier.fillMaxWidth(), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
                     Text(stringResource(if (sentinelEnabled) R.string.download_sentinel_running else R.string.download_sentinel_stopped),
                         style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f))
-                    Switch(checked = sentinelEnabled && accessibilityGuardEnabled, onCheckedChange = { enabled ->
+                    Switch(checked = sentinelEnabled, onCheckedChange = { enabled ->
                         if (onToggleProtection != null) onToggleProtection.invoke(enabled)
                         else if (enabled) onEnableSentinel() else onDisableSentinel()
                     })
-                }
-                if (!accessibilityGuardEnabled) {
-                    Button(onClick = { onOpenAccessibilitySettings?.invoke() }, modifier = Modifier.fillMaxWidth()) {
-                        Text(stringResource(R.string.open_accessibility_settings))
-                    }
                 }
                 Text(stringResource(R.string.strict_mode_description), style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant)

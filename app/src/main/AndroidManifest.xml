@@ -27,10 +27,6 @@
   <service android:name=".core.observer.StorageSentinelService" android:exported="false" android:foregroundServiceType="specialUse">
    <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE" android:value="User-enabled local Downloads folder monitoring to scan new APK files against local threat hashes." />
   </service>
-  <service android:name=".service.SecurityAccessibilityService" android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE" android:exported="true" android:label="@string/accessibility_guard_label" android:description="@string/accessibility_guard_description">
-   <intent-filter><action android:name="android.accessibilityservice.AccessibilityService" /></intent-filter>
-   <meta-data android:name="android.accessibilityservice" android:resource="@xml/accessibility_service_config" />
-  </service>
   <activity android:name=".core.observer.ThreatBlockedActivity" android:exported="false" android:excludeFromRecents="true" />
   <receiver android:name=".core.observer.SentinelBootReceiver" android:enabled="true" android:exported="false">
    <intent-filter><action android:name="android.intent.action.BOOT_COMPLETED" /></intent-filter>
