@@ -33,8 +33,7 @@
     <string name="notification_review_body">A new APK or EXE was detected. Scan it before opening.</string>
     <string name="notification_quarantine_title">Download moved to Quarantine Vault</string>
     <string name="notification_quarantine_body">Strict mode moved an unverified download into the encrypted vault where supported. Restore remains available.</string>
-    <string name="notification_install_title">APK installer is controlled by Android.</string>
-    <string name="notification_install_body">Download Sentinel may detect a downloaded APK, but it cannot reliably cancel Android's installer prompt.</string>
+
     <string name="notification_service_title">Download Sentinel is active</string>
     <string name="notification_service_body">Best-effort download monitoring is running while enabled.</string>
     <string name="blocked_activity_settings">Open Settings</string>
