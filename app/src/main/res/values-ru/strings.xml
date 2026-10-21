@@ -60,11 +60,11 @@
     <string name="unknown_file">выбранный файл</string>
     <string name="local_files_only">Для защиты конфиденциальности сканер открывает файлы только из распознаваемых локальных хранилищ. Облачные и сторонние поставщики документов не открываются.</string>
     <string name="quarantine_confirm_title">Поместить отмеченный файл в карантин?</string>
-    <string name="quarantine_confirm_body">Внутри приложения будет сохранена приватная копия. После проверки хеша SafeMobile попытается удалить выбранный оригинал. Возможность удаления зависит от разрешений Android и поставщика хранилища; оригинал может остаться.</string>
+    <string name="quarantine_confirm_body">SafeMobile создаст и проверит зашифрованную частную копию. Исходный файл будет сохранён и не будет удалён.</string>
     <string name="quarantine_confirm_action">Поместить в карантин</string>
     <string name="quarantine_file">Сохранить приватную копию в карантине</string>
     <string name="quarantine_success_removed">Копия сохранена в приватном карантине (%1$s); Android сообщил об удалении оригинала.</string>
-    <string name="quarantine_success_copy_only">Копия сохранена в приватном карантине (%1$s), но Android не удалил оригинал. При необходимости удалите его вручную.</string>
+    <string name="quarantine_success_copy_only">Зашифрованная копия помещена в карантин (%1$s). Исходный файл сохранён и не удалён.</string>
     <string name="quarantine_failed">Не удалось поместить файл в карантин. Оригинал намеренно не удалялся.</string>
     <string name="uninstall_app">Удалить приложение…</string>
     <string name="import_definitions">Импортировать автономные определения угроз (JSON)</string>
@@ -123,4 +123,5 @@
 <string name="history_session">ID сеанса</string>
 <string name="definitions_limited_compact">База определений содержит только тестовую сигнатуру EICAR; покрытие ограничено.</string>
 <string name="settings_privacy">Конфиденциальность и разрешения</string>
+<string name="quarantine_legacy_warning">Старая запись карантина: в предыдущей версии файл хранился без шифрования.</string>
 </resources>
