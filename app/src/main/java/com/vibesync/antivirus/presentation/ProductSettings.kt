@@ -227,7 +227,6 @@ internal fun SafeMobileSettingsPanel(
                 Text(stringResource(R.string.privacy_body))
                 Text(stringResource(R.string.scan_clean_warning))
                 Text(stringResource(R.string.not_configured))
-                Text(stringResource(R.string.license_review_pending))
             }
         },
         confirmButton = { TextButton(onClick = { showAbout = false }) { Text(stringResource(R.string.close)) } }
