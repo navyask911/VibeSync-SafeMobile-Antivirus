@@ -124,4 +124,23 @@
 <string name="definitions_limited_compact">డెఫినిషన్‌లు: EICAR పరీక్ష సంతకం మాత్రమే; కవరేజ్ పరిమితం.</string>
 <string name="settings_privacy">గోప్యత మరియు అనుమతులు</string>
 <string name="quarantine_legacy_warning">పాత క్వారంటైన్ అంశం: మునుపటి వెర్షన్‌లో ఎన్‌క్రిప్షన్ లేకుండా నిల్వ చేయబడింది.</string>
+<string name="overlay_review_title">ఓవర్‌లే ప్రమాద సమీక్ష</string>
+<string name="overlay_review_description">ఇతర యాప్‌లపై కనిపించే సామర్థ్యం లేదా యాక్సెసిబిలిటీ సేవలను ప్రకటించే యాప్‌ల ఐచ్ఛిక పరిమిత సమీక్ష. ఇవి పరిశీలించాల్సిన సూచనలు మాత్రమే; మరొక యాప్ ప్రస్తుతం ఓవర్‌లే చూపుతోందని లేదా దాని ప్రత్యక్ష అనుమతి స్థితిని SafeMobile నిరూపించలేదు.</string>
+<string name="overlay_review_last_attempt">చివరి ప్రయత్నం: %1$s</string>
+<string name="overlay_review_last_success">చివరి విజయవంతమైన తనిఖీ: %1$s</string>
+<string name="overlay_review_summary">ఓవర్‌లే సామర్థ్యాన్ని ప్రకటించే యాప్‌లు: %1$d · యాక్సెసిబిలిటీ సేవలను ప్రకటించే యాప్‌లు: %2$d · ఈ పరికరంలో ప్రారంభించబడిన యాక్సెసిబిలిటీ సేవలు: %3$d</string>
+<string name="overlay_review_not_checked">ఇంకా విజయవంతమైన ఓవర్‌లే ప్రమాద సమీక్ష లేదు.</string>
+<string name="overlay_review_failed">చివరి సమీక్ష ప్రయత్నం విఫలమైంది. Android పనిని వాయిదా వేసి ఉండవచ్చు లేదా అవసరమైన ప్యాకేజీ దృశ్యమానతను నిరాకరించి ఉండవచ్చు.</string>
+<string name="overlay_review_permission_required">Android ఈ సమీక్షను అనుమతించలేదు. ఇన్‌స్టాల్ చేసిన యాప్‌ల దృశ్యమానతను తనిఖీ చేసి మళ్లీ ప్రయత్నించండి.</string>
+<string name="overlay_review_reminder_interval">రిమైండర్ విరామం</string>
+<string name="overlay_review_reminder_12h">ప్రతి 12 గంటలకు</string>
+<string name="overlay_review_reminder_24h">ప్రతి 24 గంటలకు</string>
+<string name="overlay_review_reminder_48h">ప్రతి 48 గంటలకు</string>
+<string name="overlay_review_notifications_off">నోటిఫికేషన్‌లు నిలిపివేయబడ్డాయి. సమీక్ష కొనసాగవచ్చు, కానీ రిమైండర్‌లు చూపబడవు.</string>
+<string name="overlay_review_enabled">ఆటోమేటిక్ సమీక్ష ప్రారంభించబడింది</string>
+<string name="overlay_review_disabled">సమీక్ష నిలిపివేయబడింది</string>
+<string name="overlay_review_notification_channel">SafeMobile గోప్యతా సమీక్ష</string>
+<string name="overlay_review_notification_channel_description">ఐచ్ఛిక ఓవర్‌లే ప్రమాద సమీక్ష కోసం తక్కువ ప్రాధాన్యత గల రిమైండర్‌లు.</string>
+<string name="overlay_review_notification_title">ఓవర్‌లే ప్రమాద సమీక్ష పూర్తయింది</string>
+<string name="overlay_review_notification_body">%1$d యాప్‌లు ఓవర్‌లే సామర్థ్యాన్ని, %2$d యాప్‌లు యాక్సెసిబిలిటీ సేవలను ప్రకటిస్తున్నాయి. ఇవి సమీక్ష సూచనలు మాత్రమే; మాల్‌వేర్‌కు రుజువు కాదు.</string>
 </resources>
