@@ -138,32 +138,7 @@ import kotlinx.coroutines.launch
  val auditEntries by repository.observeRecentAudits().collectAsStateWithLifecycle(initialValue = emptyList())
  var selectedDestination by remember { mutableStateOf("home") }
  val onboardingPrefs = remember(context) { context.getSharedPreferences(OnboardingPrefs.NAME, Context.MODE_PRIVATE) }
- val securityPrefs = remember(context) { context.getSharedPreferences(SafeMobileApp.SECURITY_PREFS, Context.MODE_PRIVATE) }
- var accessibilityGuardEnabled by remember(context) { mutableStateOf(AccessibilityGuardStatus.isGuardActive(context)) }
- var sentinelDesired by remember(context) { mutableStateOf(securityPrefs.getBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, false)) }
- var strictMode by remember(context) { mutableStateOf(securityPrefs.getBoolean(SafeMobileApp.KEY_STRICT_MODE, false)) }
- val snackbarHostState = remember { SnackbarHostState() }
- val uiScope = rememberCoroutineScope()
- var lastUninstallPackage by remember { mutableStateOf<String?>(null) }
- val showUninstallSnackbar: (String, String?) -> Unit = { message, appInfoPackage ->
-  uiScope.launch {
-   val result = snackbarHostState.showSnackbar(
-    message = message,
-    actionLabel = if (appInfoPackage != null) context.getString(R.string.activity_not_found_action) else null
-   )
-   if (result == SnackbarResult.ActionPerformed && appInfoPackage != null) {
-    try { context.startActivity(UninstallHandler.buildAppInfoIntent(appInfoPackage)) }
-    catch (e: ActivityNotFoundException) { Toast.makeText(context, R.string.uninstall_no_settings, Toast.LENGTH_LONG).show() }
-    catch (e: SecurityException) { Toast.makeText(context, R.string.uninstall_no_settings, Toast.LENGTH_LONG).show() }
-   }
-  }
- }
- val deleteLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-  lastUninstallPackage?.let { vm.refreshInstalledPackage(it) }
-  lastUninstallPackage = null
-  pendingUninstallPackage = null
-  showUninstallSnackbar(context.getString(R.string.uninstall_cancelled), null)
- }
+
 
  var onboardingComplete by remember(context) { mutableStateOf(onboardingPrefs.getBoolean(
   OnboardingPrefs.COMPLETED,
@@ -210,6 +185,32 @@ import kotlinx.coroutines.launch
  var monitoringRunning by remember(context) { mutableStateOf(isStorageSentinelRunning(context) && hasSharedStorageAccess(context)) }
  val setOnboardingStep: (Int) -> Unit = { step -> onboardingStep = step.coerceIn(0, 3); onboardingPrefs.edit().putInt(OnboardingPrefs.STEP, onboardingStep).apply() }
  var pendingUninstallPackage by remember { mutableStateOf<String?>(null) }
+ val securityPrefs = remember(context) { context.getSharedPreferences(SafeMobileApp.SECURITY_PREFS, Context.MODE_PRIVATE) }
+ var accessibilityGuardEnabled by remember(context) { mutableStateOf(AccessibilityGuardStatus.isGuardActive(context)) }
+ var sentinelDesired by remember(context) { mutableStateOf(securityPrefs.getBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, false)) }
+ var strictMode by remember(context) { mutableStateOf(securityPrefs.getBoolean(SafeMobileApp.KEY_STRICT_MODE, false)) }
+ val snackbarHostState = remember { SnackbarHostState() }
+ val uiScope = rememberCoroutineScope()
+ var lastUninstallPackage by remember { mutableStateOf<String?>(null) }
+ val showUninstallSnackbar: (String, String?) -> Unit = { message, appInfoPackage ->
+  uiScope.launch {
+   val result = snackbarHostState.showSnackbar(
+    message = message,
+    actionLabel = if (appInfoPackage != null) context.getString(R.string.activity_not_found_action) else null
+   )
+   if (result == SnackbarResult.ActionPerformed && appInfoPackage != null) {
+    try { context.startActivity(UninstallHandler.buildAppInfoIntent(appInfoPackage)) }
+    catch (e: ActivityNotFoundException) { Toast.makeText(context, R.string.uninstall_no_settings, Toast.LENGTH_LONG).show() }
+    catch (e: SecurityException) { Toast.makeText(context, R.string.uninstall_no_settings, Toast.LENGTH_LONG).show() }
+   }
+  }
+ }
+ val deleteLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+  lastUninstallPackage?.let { vm.refreshInstalledPackage(it) }
+  lastUninstallPackage = null
+  pendingUninstallPackage = null
+  showUninstallSnackbar(context.getString(R.string.uninstall_cancelled), null)
+ }
  var showDefinitionImportWarning by remember { mutableStateOf(false) }
  var privacyOptionsVisible by remember { mutableStateOf(privacyOptionsRequired) }
  var pendingQuarantine by remember { mutableStateOf<ScanResult?>(null) }

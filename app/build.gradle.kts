@@ -110,6 +110,10 @@ dependencies {
  implementation("com.google.android.gms:play-services-ads:25.5.0")
  implementation("com.google.android.ump:user-messaging-platform:4.0.0")
  implementation("com.google.android.play:app-update-ktx:2.1.0")
+ androidTestImplementation("androidx.test:runner:1.6.2")
+ androidTestImplementation("androidx.test.ext:junit:1.2.1")
+ androidTestImplementation("androidx.test:core:1.6.1")
+ androidTestImplementation("androidx.room:room-testing:2.7.2")
  testImplementation("junit:junit:4.13.2")
  testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.2")
 }
