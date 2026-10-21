@@ -15,17 +15,18 @@
 | Offline signer pin enforced | **Fail** | Helper exists, but independent expected signer fingerprint is not configured/enforced in ordinary scans. |
 | Feed detached signature + rollback | **Source/tests implemented; end-to-end publisher gate open** | Requires public key configuration, a publisher signing service, signed source and runtime proof. No real snapshot is bundled. |
 | Feed opt-in off by default | **Source/UI gate present** | Test opt-in on a real device; confirm queue cancellation and no request while switch is off. |
-| Room database encrypted or fields minimized | **Fail / open** | Room includes package/file labels and audit identifiers and is not SQLCipher-encrypted. Minimize/retention-limit or encrypt with a reviewed dependency. |
-| Quarantine encryption/restore | **Implementation present; device QA open** | Verify round-trip, tamper detection, key loss behavior and old legacy entries on device. |
+| Room database encrypted or fields minimized | **Partially mitigated; open** | New scan labels, incident labels/paths and quarantine DB labels/paths are AES-SIV field-encrypted with a Keystore-wrapped Tink keyset. Legacy labels may remain plaintext; timestamps, verdicts, session IDs, statuses and other fields remain in the non-SQLCipher Room database. Complete a retention/minimization policy or whole-database encryption review. |
+| Quarantine encryption/restore | **Round-trip instrumented test added; exact-head CI and device QA open** | An instrumented test creates an encrypted quarantine copy, restores to a test content provider and compares bytes. Verify tamper detection, Keystore-loss behavior and legacy items on physical devices. |
 | Root Apache License 2.0 | Present on branch | Confirm owner intended all included first-party source to be Apache-licensed. Third-party assets/data keep upstream terms. |
 | CycloneDX SBOM and third-party notice inventory | **Gradle/CI generation added; materialized artifact pending** | Run SBOM generation, commit/update `docs/sbom.json`, resolve unknown licences/source URLs before release. |
 | `QUERY_ALL_PACKAGES` Play declaration | Documentation and disclosure present; **manual review open** | Submit an accurate Play Console Permissions Declaration Form and wait for decision. |
 | `MANAGE_EXTERNAL_STORAGE` removed | **Source manifest removed; artifact gate pending** | Verify merged offline manifest; SAF monitor must only access the chosen folder. |
 | API 26/30/34/36 emulator matrix | Workflow added; **current exact-head runs pending** | All instrumented matrix jobs must pass on exact final merge head. |
-| Large feed, redirects, outage, permission-denied and SAF/revocation cases | **Incomplete** | Add/finish integration tests; do not mark all Phase 4 instrumented acceptance criteria met on the basis of the Room migration test alone. |
+| Large feed and redirect boundary | **Unit tests added; exact-head CI pending** | Streaming tests cover exactly 100 MiB and 100 MiB + 1, relative HTTPS redirects, cross-host auth restrictions and HTTPS downgrade refusal. These are helper-level tests, not full HTTP outage/atomic rollback tests. |
 | Debug socket-attempt monitor | **Fail / open** | Add local debug-only instrumentation and prove no scan-time socket attempts; offline manifest check is not a substitute. |
 | Native-speaker review | **Fail / open** | Complete `docs/LOCALIZATION_REVIEW.md` for every shipped locale. |
 | Version-code monotonicity vs Git tags | Script + CI gate added | Requires full git history. Verify Play Console version usage manually before release. |
+| Outage, rollback, permission-denied and SAF-revocation cases | **Incomplete** | Add end-to-end HTTP outage/atomic rollback fixtures, exercise revoked URI grants on devices, and capture device/API evidence. Helper tests alone do not close the full QA gate. |
 | Google Play upload | **Manual gate** | Play Console eligibility/version usage/signing/review cannot be inferred from GitHub CI. |
 
 ## Release checklist

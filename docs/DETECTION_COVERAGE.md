@@ -15,7 +15,7 @@
 | Offline signer attestation | **Helper exists, not activated** | Offline helper can hash reported signing certificates and compare to an externally trusted expected fingerprint. | No independently pinned release signer is configured or enforced by ordinary scans. A certificate compared with a fingerprint supplied by itself is not trusted pinning. |
 | Signed threat feed | **Verifier implemented; production source not configured** | The feed worker verifies detached Ed25519 manifest signature, source hash, strictly newer version and streamed payload SHA-256 before staged indicators are promoted. Room stores monotonic feed state; user opt-in is off on clean install. | Requires the build-time public key and a feed publisher that emits the agreed signed headers. No production public key or signed redistributable snapshot is bundled; sync fails closed without the key. |
 | Install-source review | **Best effort** | Uses Android package installer metadata when available. | Cannot intercept installation before Android completes it; unknown sources may remain unknown. |
-| Quarantine | **Implemented with constraints** | Tink Streaming AEAD, Android Keystore-wrapped keyset, hash/length verification and user-chosen restore destination. | Room isn't SQLCipher-encrypted; older quarantine items can be unencrypted. Physical-device restore, revocation and recovery tests remain required. |
+| Quarantine | **Implemented with constraints** | Tink Streaming AEAD, Android Keystore-wrapped keyset, hash/length verification and user-chosen restore destination; new quarantine DB labels/paths are separately field-encrypted with AES-SIV. | Room isn't SQLCipher-encrypted; older quarantine objects/rows can be unencrypted. Round-trip instrumentation is added, but physical-device restore, revocation and recovery tests remain required. |
 
 ## Required before upgrading a layer to “active”
 
@@ -26,5 +26,7 @@
 - **Attestation:** independent trusted signer fingerprint pin, update/rotation policy, and test showing a mismatched signer fails the intended gate.
 
 ## Gate decision
+
+New scan-history and incident labels/paths are field-encrypted, but Room overall remains unencrypted. Full shared-file scans are scoped to the selected SAF tree and bounded per pass.
 
 **Phase 1 source hardening is not a production detection release.** The runtime coverage registry, README and this matrix intentionally say which layers are disabled or not wired into scanning. Do not make comprehensive AV or tested detection-rate claims until the above gates pass.

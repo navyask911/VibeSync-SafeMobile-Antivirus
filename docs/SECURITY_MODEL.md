@@ -73,14 +73,14 @@ The offline flavor contains no Internet permission in its merged manifest. The s
 | APK/file bytes | Read in streaming/local code for hashing; not intentionally retained as scan input | No scan-data upload path |
 | SHA-256/SHA-1/MD5 | In-memory calculation; hashes may be stored protected in scan audit/definition records | No intentional upload |
 | Local threat definitions | Room; encrypted hash/metadata storage exists for part of the signature path; imported feed indicators are local | No cloud dependency for scanning |
-| Scan history | App-private Room rows with label/package-or-path, time, verdict, duration, session and threat event ID | Not intentionally uploaded; Room as a whole is not SQLCipher-encrypted |
+| Scan history | App-private Room rows. New package/file labels are AES-SIV field-encrypted with a Keystore-wrapped Tink keyset; timestamps, verdicts, durations, session IDs and event IDs remain database fields | Not intentionally uploaded; legacy labels may remain plaintext and Room as a whole is not SQLCipher-encrypted |
 | Quarantine files | App-private no-backup directory; new payloads use Tink Streaming AEAD and integrity verification | No upload |
-| Quarantine metadata and preferences | App-private Room/shared preferences | Not intentionally uploaded; filenames/labels may identify user activity |
+| Quarantine metadata and preferences | New quarantine database labels/paths are AES-SIV field-encrypted; app-private preferences retain settings/configuration | Not intentionally uploaded; older rows may be plaintext and metadata fields other than labels/paths are not covered by whole-database encryption |
 | Feed endpoint/auth key (feed variant only) | Endpoint stored in app-private config; optional Auth-Key is protected locally using app's existing Keystore encryption path | A consented feed request contacts the selected endpoint; endpoint/auth credential may be sent to that provider |
 | Ed25519 public key | Build configuration / BuildConfig | Public trust root; private signing key must remain outside app/repository |
 | Audit/event UUIDs | Locally generated and stored for local correlation | No external registration service |
 
-**Important:** the Room database is not SQLCipher-encrypted and some rows include package/file labels and audit metadata. The project must not claim it stores “only non-sensitive hashes” until fields are minimized/retention-limited or database encryption is added and tested.
+**Important:** the Room database is not SQLCipher-encrypted. New user-visible labels/paths are field-encrypted, but old rows can remain plaintext and timestamps, verdicts, status values, session/event IDs and other fields are not protected by whole-database encryption. Do not claim that it stores “only non-sensitive hashes”; retention/minimization and a database-encryption decision remain open.
 
 ## Cryptographic inventory
 
@@ -89,6 +89,7 @@ The offline flavor contains no Internet permission in its merged manifest. The s
 | SHA-256, SHA-1, MD5 | Non-secret hashes of readable files/indicators. SHA-256 is used for feed payload binding and source key; weaker hashes are for compatibility/indexing only. | Computed locally. No rotation; do not use MD5/SHA-1 for trust decisions. |
 | Ed25519 public key | Verify detached signature of a feed manifest in the `feed` flavor. | Supplied as build-time Base64 public key. Public key is not secret but is security-critical. Change it via reviewed release and publisher-key rotation policy. No production key is configured in this candidate. |
 | Ed25519 private signing key | Signs the manifest at the feed publisher. | Must be stored outside the repo and app in an access-controlled signing system; rotation/revocation procedure is not yet operational. Never distribute it with the app. |
+| Tink AES-SIV field keyset | Encrypts newly stored scan labels and incident/quarantine labels or paths with field-specific associated data; existing labels retain a marked legacy plaintext fallback. | Keystore-wrapped using the existing `EncryptedHashStore` keyset. Reinstall/Keystore reset can make encrypted fields unreadable; key rotation and legacy-row cleanup are not automatic. |
 | Tink Streaming AEAD keyset | Encrypt/ authenticate quarantined file payloads. | Per-install keyset stored in app-private no-backup storage and wrapped by Android Keystore. If Keystore/keyset is lost or invalidated, content may be unrecoverable; key rotation and legacy-item migration remain operational risks. |
 | Android Keystore AES-GCM key for feed Auth-Key | Protects optional provider credentials at rest where the existing feed config store uses this path. | Key is device-local and not exported in app storage. Keystore reset/uninstall can make saved encrypted configuration unreadable. |
 
@@ -109,5 +110,7 @@ No SQLCipher database key is present. The OS backup settings are configured to e
 - [ ] Add a debug socket-attempt monitor/network test and independently verify offline builds do not attempt sockets during scans.
 - [ ] Verify no backup extraction on representative devices, test quarantine round-trip, large-feed/redirect/outage paths, and complete emulator matrix.
 - [ ] Finish SBOM/licence metadata review, Play Console permission declaration and native-speaker localization review.
+
+Full shared-file scans visit only the user-selected SAF tree, limited to 10,000 entries and four directory levels per pass; there is no broad shared-storage enumeration without a persisted grant.
 
 See [DETECTION_COVERAGE.md](DETECTION_COVERAGE.md), [PLAY_PERMISSIONS.md](PLAY_PERMISSIONS.md), [LOCALIZATION_REVIEW.md](LOCALIZATION_REVIEW.md), and [RELEASE_GATES.md](RELEASE_GATES.md).
