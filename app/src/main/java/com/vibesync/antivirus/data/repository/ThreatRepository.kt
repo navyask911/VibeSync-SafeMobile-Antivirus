@@ -9,12 +9,15 @@ import com.vibesync.antivirus.core.engine.ScanVerdict
 import com.vibesync.antivirus.core.quarantine.LocalQuarantineManager
 import com.vibesync.antivirus.core.worker.LocalDefinitionLoader
 import com.vibesync.antivirus.data.local.ThreatDatabase
+import com.vibesync.antivirus.data.local.ScanAudit
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.IOException
 
 class ThreatRepository(private val context: Context, private val database: ThreatDatabase, private val scanner: PackageScanner, private val definitionLoader: LocalDefinitionLoader) {
+ fun observeRecentAudits(): Flow<List<ScanAudit>> = database.threatDao().observeRecentAudits()
  suspend fun scanInstalledApps(progress: suspend (Int, Int) -> Unit = { _, _ -> }): List<ScanResult> = withContext(Dispatchers.IO) {
   definitionLoader.importBundledIfEmpty()
   scanner.scanInstalledApps(progress)
