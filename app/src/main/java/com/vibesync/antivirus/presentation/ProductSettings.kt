@@ -1,6 +1,9 @@
 package com.vibesync.antivirus.presentation
 
+import android.Manifest
 import android.app.Activity
+import android.content.pm.PackageManager
+import android.os.Build
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -21,7 +24,14 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.Switch
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import androidx.core.app.NotificationManagerCompat
+import com.vibesync.antivirus.core.worker.OverlayRiskReviewManager
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,6 +48,7 @@ import com.vibesync.antivirus.data.local.ScanAudit
 import java.text.DateFormat
 import java.util.Date
 import java.util.UUID
+import java.text.DateFormat
 
 internal object AppearancePreferences {
     const val PREFS_NAME = "safe_mobile_appearance"
@@ -109,6 +120,135 @@ internal fun ScanHistoryPanel(audits: List<ScanAudit>) {
 }
 
 @Composable
+internal fun OverlayRiskReviewPanel() {
+    val context = LocalContext.current
+    val prefs = remember(context) {
+        context.getSharedPreferences(OverlayRiskReviewManager.PREFS_NAME, Context.MODE_PRIVATE)
+    }
+    var enabled by remember { mutableStateOf(OverlayRiskReviewManager.isEnabled(context)) }
+    var lastAttempt by remember { mutableStateOf(prefs.getLong(OverlayRiskReviewManager.KEY_LAST_ATTEMPT, 0L)) }
+    var lastSuccess by remember { mutableStateOf(prefs.getLong(OverlayRiskReviewManager.KEY_LAST_SUCCESS, 0L)) }
+    var overlayDeclarations by remember { mutableStateOf(prefs.getInt(OverlayRiskReviewManager.KEY_OVERLAY_DECLARATIONS, 0)) }
+    var accessibilityDeclarations by remember { mutableStateOf(prefs.getInt(OverlayRiskReviewManager.KEY_ACCESSIBILITY_DECLARATIONS, 0)) }
+    var enabledServices by remember { mutableStateOf(prefs.getInt(OverlayRiskReviewManager.KEY_ENABLED_ACCESSIBILITY_SERVICES, 0)) }
+    var resultState by remember { mutableStateOf(prefs.getString(OverlayRiskReviewManager.KEY_RESULT, "NOT_CHECKED") ?: "NOT_CHECKED") }
+    var reminderHours by remember { mutableStateOf(prefs.getInt(OverlayRiskReviewManager.KEY_REMINDER_HOURS, 24)) }
+    var intervalMenuExpanded by remember { mutableStateOf(false) }
+    val notificationPermissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { /* The review remains opt-in even when reminders are declined. */ }
+
+    fun refreshFromPreferences() {
+        enabled = OverlayRiskReviewManager.isEnabled(context)
+        lastAttempt = prefs.getLong(OverlayRiskReviewManager.KEY_LAST_ATTEMPT, 0L)
+        lastSuccess = prefs.getLong(OverlayRiskReviewManager.KEY_LAST_SUCCESS, 0L)
+        overlayDeclarations = prefs.getInt(OverlayRiskReviewManager.KEY_OVERLAY_DECLARATIONS, 0)
+        accessibilityDeclarations = prefs.getInt(OverlayRiskReviewManager.KEY_ACCESSIBILITY_DECLARATIONS, 0)
+        enabledServices = prefs.getInt(OverlayRiskReviewManager.KEY_ENABLED_ACCESSIBILITY_SERVICES, 0)
+        resultState = prefs.getString(OverlayRiskReviewManager.KEY_RESULT, "NOT_CHECKED") ?: "NOT_CHECKED"
+        reminderHours = prefs.getInt(OverlayRiskReviewManager.KEY_REMINDER_HOURS, 24)
+    }
+    DisposableEffect(prefs) {
+        val listener = android.content.SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
+            refreshFromPreferences()
+        }
+        prefs.registerOnSharedPreferenceChangeListener(listener)
+        onDispose { prefs.unregisterOnSharedPreferenceChangeListener(listener) }
+    }
+
+    val notificationsAvailable =
+        (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
+            ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) &&
+            NotificationManagerCompat.from(context).areNotificationsEnabled()
+
+    Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            androidx.compose.foundation.layout.Row(
+                verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+            ) {
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text(stringResource(R.string.overlay_review_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                    Text(stringResource(if (enabled) R.string.overlay_review_enabled else R.string.overlay_review_disabled), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+                Switch(checked = enabled, onCheckedChange = { requested ->
+                    OverlayRiskReviewManager.setEnabled(context, requested)
+                    refreshFromPreferences()
+                    if (requested && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                        ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
+                    ) {
+                        notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                    }
+                })
+            }
+            Text(stringResource(R.string.overlay_review_description), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            if (lastAttempt > 0L) {
+                Text(
+                    stringResource(R.string.overlay_review_last_attempt, DateFormat.getDateTimeInstance().format(Date(lastAttempt))),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            if (lastSuccess > 0L) {
+                Text(
+                    stringResource(R.string.overlay_review_last_success, DateFormat.getDateTimeInstance().format(Date(lastSuccess))),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Text(
+                    stringResource(R.string.overlay_review_summary, overlayDeclarations, accessibilityDeclarations, enabledServices),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            } else {
+                Text(
+                    when (resultState) {
+                        "FAILED" -> stringResource(R.string.overlay_review_failed)
+                        "PERMISSION_REQUIRED" -> stringResource(R.string.overlay_review_permission_required)
+                        else -> stringResource(R.string.overlay_review_not_checked)
+                    },
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.tertiary
+                )
+            }
+            androidx.compose.material3.TextButton(
+                onClick = { intervalMenuExpanded = true },
+                enabled = enabled
+            ) {
+                Text(
+                    stringResource(R.string.overlay_review_reminder_interval) + ": " +
+                        stringResource(
+                            when (reminderHours) {
+                                12 -> R.string.overlay_review_reminder_12h
+                                48 -> R.string.overlay_review_reminder_48h
+                                else -> R.string.overlay_review_reminder_24h
+                            }
+                        )
+                )
+            }
+            DropdownMenu(expanded = intervalMenuExpanded, onDismissRequest = { intervalMenuExpanded = false }) {
+                listOf(
+                    12 to R.string.overlay_review_reminder_12h,
+                    24 to R.string.overlay_review_reminder_24h,
+                    48 to R.string.overlay_review_reminder_48h
+                ).forEach { (hours, label) ->
+                    DropdownMenuItem(
+                        text = { Text(stringResource(label)) },
+                        onClick = {
+                            OverlayRiskReviewManager.setReminderIntervalHours(context, hours)
+                            intervalMenuExpanded = false
+                            refreshFromPreferences()
+                        }
+                    )
+                }
+            }
+            if (enabled && !notificationsAvailable) {
+                Text(stringResource(R.string.overlay_review_notifications_off), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+        }
+    }
+}
+
+@Composable
 internal fun SafeMobileSettingsPanel(
     privacyOptionsVisible: Boolean,
     onPrivacyOptionsClick: () -> Unit
@@ -158,6 +298,7 @@ internal fun SafeMobileSettingsPanel(
                 }
             }
         }
+        OverlayRiskReviewPanel()
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(stringResource(R.string.language_settings), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
