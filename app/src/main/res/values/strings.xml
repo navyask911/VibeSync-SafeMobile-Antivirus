@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<string name="app_name">VibeSync SafeMobile Antivirus</string>
+<string name="app_name">SafeMobile Antivirus</string>
 <string name="privacy_title">Privacy and scan-access disclosure</string>
 <string name="privacy_body">SafeMobile calculates SHA-256 and MD5 hashes on this device and checks them against definitions stored locally. Local scans do not upload files or hashes. Ads use Google Mobile Ads network services only when permitted by your privacy choices and connectivity. Core scan functions work without a network. Installed-app visibility and all-files access are sensitive Android permissions and may require Google Play review.</string>
 <string name="privacy_accept">I understand</string><string name="exit_app">Exit app</string>
-<string name="brand_title">VIBESYNC</string><string name="brand_subtitle">SAFEMOBILE ANTIVIRUS</string>
+<string name="brand_title">SafeMobile Antivirus</string><string name="brand_subtitle">VibeSync</string>
 <string name="scan_status">Local protection dashboard</string><string name="scan_running">Scanning device…</string><string name="threat_found">Threat match detected</string>
 <string name="signature_count">Local signatures: %1$d · Scan sessions: %2$d</string>
 <string name="scan_explanation">Checks readable installed APKs against locally stored definitions and reviews files you select. Detection is limited by operating-system access and the definitions installed on this device.</string>
@@ -95,4 +95,24 @@
 <string name="locale_marathi" translatable="false">मराठी</string>
 <string name="locale_urdu" translatable="false">اردو</string>
 <string name="locale_hebrew" translatable="false">עברית</string>
+<string name="nav_home">Home</string>
+<string name="nav_scan">Scan</string>
+<string name="nav_quarantine">Quarantine</string>
+<string name="nav_history">History</string>
+<string name="nav_settings">Settings</string>
+<string name="settings_title">Settings</string>
+<string name="appearance_title">Appearance</string>
+<string name="theme_system">System</string>
+<string name="theme_light">Light</string>
+<string name="theme_dark">Dark</string>
+<string name="language_settings">Language</string>
+<string name="about_legal">About and Legal</string>
+<string name="ray_id">SafeMobile Ray ID</string>
+<string name="ray_id_copy">Copy ID</string>
+<string name="ray_id_copied">Ray ID copied to clipboard</string>
+<string name="history_title">Scan history</string>
+<string name="history_empty">No local scan history yet.</string>
+<string name="history_session">Session ID</string>
+<string name="definitions_limited_compact">Definitions: EICAR test signature only; coverage is limited.</string>
+<string name="settings_privacy">Privacy and permissions</string>
 </resources>
