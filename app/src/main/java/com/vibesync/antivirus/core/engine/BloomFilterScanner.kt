@@ -25,7 +25,8 @@ class BloomFilterScanner(context: Context) {
     val isAvailable: Boolean get() = loaded.filter != null
     val availabilityReason: String get() = loaded.reason
 
-    private fun loadVerifiedFilter(): LoadResult = try {
+    private fun loadVerifiedFilter(): LoadResult {
+        return try {
         val manifest = app.assets.open(MANIFEST_ASSET).use { input -> JSONObject(input.bufferedReader(Charsets.UTF_8).readText()) }
         val filename = manifest.optString("bloom_file", "")
         val expected = manifest.optString("sha256", "").lowercase(Locale.ROOT)
@@ -40,6 +41,7 @@ class BloomFilterScanner(context: Context) {
         LoadResult(filter, "Verified manifest and SHA-256; declared entries=" + count + ".")
     } catch (_: Exception) {
         LoadResult(null, "Bloom filter unavailable: asset or manifest is missing, invalid, or unreadable.")
+        }
     }
 
     private fun InputStream.sha256Hex(): String {
