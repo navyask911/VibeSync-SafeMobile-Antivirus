@@ -129,11 +129,15 @@ import java.util.Date
  val auditEntries by repository.observeRecentAudits().collectAsStateWithLifecycle(initialValue = emptyList())
  var selectedDestination by remember { mutableStateOf("home") }
  val onboardingPrefs = remember(context) { context.getSharedPreferences(OnboardingPrefs.NAME, Context.MODE_PRIVATE) }
- var onboardingComplete by remember(context) { mutableStateOf(onboardingPrefs.getBoolean(OnboardingPrefs.COMPLETED, false)) }
+ var onboardingComplete by remember(context) { mutableStateOf(onboardingPrefs.getBoolean(
+  OnboardingPrefs.COMPLETED,
+  context.getSharedPreferences(SafeMobileApp.PRIVACY_PREFS, Context.MODE_PRIVATE)
+   .getBoolean(SafeMobileApp.PRIVACY_ACKNOWLEDGED, false)
+ )) }
  var onboardingStep by remember(context) { mutableStateOf(onboardingPrefs.getInt(OnboardingPrefs.STEP, 0).coerceIn(0, 3)) }
  var storageAccessGranted by remember(context) { mutableStateOf(hasSharedStorageAccess(context)) }
  var notificationsGranted by remember(context) { mutableStateOf(hasNotificationAccess(context)) }
- var sentinelOptIn by remember(context) { mutableStateOf(onboardingPrefs.getBoolean(OnboardingPrefs.SENTINEL_OPT_IN, false)) }
+ var sentinelOptIn by remember(context) { mutableStateOf(onboardingPrefs.getBoolean(OnboardingPrefs.SENTINEL_OPT_IN, isStorageSentinelRunning(context))) }
  var languageMenuExpanded by remember { mutableStateOf(false) }
  var featureMenuExpanded by remember { mutableStateOf(false) }
  var localeOverrideTag by remember { mutableStateOf(LocalePreferences.overrideTag(context)) }
@@ -167,7 +171,7 @@ import java.util.Date
  val requestPrivacyAcknowledgement: (() -> Unit) -> Unit = { action ->
   if (privacyAccepted) action() else { pendingSensitiveAction = action; showPrivacyDisclosure = true }
  }
- var monitoringRunning by remember(context) { mutableStateOf(isStorageSentinelRunning(context)) }
+ var monitoringRunning by remember(context) { mutableStateOf(isStorageSentinelRunning(context) && hasSharedStorageAccess(context)) }
  val setOnboardingStep: (Int) -> Unit = { step -> onboardingStep = step.coerceIn(0, 3); onboardingPrefs.edit().putInt(OnboardingPrefs.STEP, onboardingStep).apply() }
  var pendingUninstallPackage by remember { mutableStateOf<String?>(null) }
  var showDefinitionImportWarning by remember { mutableStateOf(false) }
@@ -209,7 +213,7 @@ import java.util.Date
    .onFailure { sentinelOptIn = false; Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show() }
    .onSuccess {
     Handler(Looper.getMainLooper()).postDelayed({
-     monitoringRunning = isStorageSentinelRunning(context)
+     monitoringRunning = isStorageSentinelRunning(context) && hasSharedStorageAccess(context)
      sentinelOptIn = monitoringRunning
      onboardingPrefs.edit().putBoolean(OnboardingPrefs.SENTINEL_OPT_IN, monitoringRunning).apply()
      if (!monitoringRunning) Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show()
@@ -237,8 +241,8 @@ import java.util.Date
  DisposableEffect(lifecycleOwner, context) {
   val observer = LifecycleEventObserver { _, event ->
    if (event == Lifecycle.Event.ON_RESUME) {
-    monitoringRunning = isStorageSentinelRunning(context)
     storageAccessGranted = hasSharedStorageAccess(context)
+    monitoringRunning = isStorageSentinelRunning(context) && storageAccessGranted
     notificationsGranted = hasNotificationAccess(context)
     if (!onboardingComplete && onboardingStep == 0 && storageAccessGranted) setOnboardingStep(1)
     if (!onboardingComplete && onboardingStep == 2 && notificationsGranted) setOnboardingStep(3)
@@ -256,6 +260,13 @@ import java.util.Date
  LaunchedEffect(adsEnabled,online,interstitial) { if(adsEnabled && online) interstitial?.load() }
  LaunchedEffect(state.completedScans,interstitial,online) { if(state.completedScans>0 && online) interstitial?.showAfterScan(state.completedScans) }
  LaunchedEffect(privacyOptionsRequired) { privacyOptionsVisible = privacyOptionsRequired }
+ LaunchedEffect(onboardingComplete, privacyAccepted) {
+  if (onboardingComplete && privacyAccepted &&
+      !onboardingPrefs.getBoolean(OnboardingPrefs.FIRST_SCAN_REQUESTED, false)) {
+   onboardingPrefs.edit().putBoolean(OnboardingPrefs.FIRST_SCAN_REQUESTED, true).apply()
+   vm.scanFull()
+  }
+ }
  LaunchedEffect(sharedText) { if (!sharedText.isNullOrBlank()) selectedDestination = "phishing" }
  Surface(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing),color=MaterialTheme.colorScheme.background) {
   if (!onboardingComplete) {
@@ -561,7 +572,7 @@ import java.util.Date
     }
     if (selectedDestination == "history") ScanHistoryPanel(auditEntries)
     if (selectedDestination == "settings") {
-     SafeMobileSettingsPanel(privacyOptionsVisible) {
+     SafeMobileSettingsPanel(privacyOptionsVisible, monitoringRunning, enableSentinel, disableSentinel) {
       activity?.let { host -> ConsentManager.showPrivacyOptions(host) { privacyOptionsVisible = ConsentManager.privacyOptionsRequired(host) } }
      }
     }

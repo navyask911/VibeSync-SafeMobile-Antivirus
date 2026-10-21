@@ -75,24 +75,24 @@ class PackageScanner(
   }
   return scanPackage(info, scanSessionId)
  }
- suspend fun scanFile(file: File, persistCleanAudit: Boolean = true): ScanResult {
+ suspend fun scanFile(file: File, persistAllAudit: Boolean = true): ScanResult {
   val start = System.nanoTime()
   val scanSessionId = UUID.randomUUID().toString()
   if (!file.isFile || !file.canRead()) {
    val failed = result(file.name, file.name, null, null, ScanVerdict.NOT_SCANNED, listOf(context.getString(R.string.file_not_readable)), start)
-   auditSafely(failed, start, scanSessionId)
+   if (persistAllAudit) auditSafely(failed, start, scanSessionId)
    return failed.copy(sourceLocalPath = file.absolutePath, scanSessionId = scanSessionId)
   }
   return try {
    val hash = calculator.calculate(file)
    val output = evaluate(file.name, file.name, hash.sha256, hash.md5, emptyList(), 0)
-   if (persistCleanAudit || output.verdict != ScanVerdict.NO_MATCH) audit(output, start, scanSessionId)
+   if (persistAllAudit || output.verdict == ScanVerdict.THREAT || output.verdict == ScanVerdict.SUSPICIOUS) audit(output, start, scanSessionId)
    output.copy(durationMs = elapsed(start), sourceLocalPath = file.absolutePath, scanSessionId = scanSessionId)
   } catch (cancelled: CancellationException) {
    throw cancelled
   } catch (_: Exception) {
    val failed = result(file.name, file.name, null, null, ScanVerdict.NOT_SCANNED, listOf(context.getString(R.string.file_could_not_read)), start)
-   auditSafely(failed, start, scanSessionId)
+   if (persistAllAudit) auditSafely(failed, start, scanSessionId)
    failed.copy(sourceLocalPath = file.absolutePath, scanSessionId = scanSessionId)
   }
  }

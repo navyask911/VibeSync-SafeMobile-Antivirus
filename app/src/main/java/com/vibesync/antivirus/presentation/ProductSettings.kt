@@ -270,6 +270,9 @@ internal fun OverlayRiskReviewPanel() {
 @Composable
 internal fun SafeMobileSettingsPanel(
     privacyOptionsVisible: Boolean,
+    sentinelEnabled: Boolean,
+    onEnableSentinel: () -> Unit,
+    onDisableSentinel: () -> Unit,
     onPrivacyOptionsClick: () -> Unit
 ) {
     val context = LocalContext.current
@@ -319,6 +322,24 @@ internal fun SafeMobileSettingsPanel(
             }
         }
         OverlayRiskReviewPanel()
+
+        Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
+            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Text(stringResource(R.string.nav_sentinel), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                Text(stringResource(R.string.sentinel_scope_body), style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Row(Modifier.fillMaxWidth(), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+                    Text(
+                        stringResource(if (sentinelEnabled) R.string.analytics_sentinel_running else R.string.analytics_sentinel_stopped),
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.weight(1f)
+                    )
+                    Switch(checked = sentinelEnabled, onCheckedChange = { enabled ->
+                        if (enabled) onEnableSentinel() else onDisableSentinel()
+                    })
+                }
+            }
+        }
 
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -415,128 +436,4 @@ internal fun SafeMobileSettingsPanel(
         },
         confirmButton = { TextButton(onClick = { showAbout = false }) { Text(stringResource(R.string.close)) } }
     )
-}
-
-
-@Composable
-internal fun ThreatFeedSettingsPanel() {
-    val context = LocalContext.current
-    val store = remember(context) { ThreatFeedConfigStore(context) }
-    val initial = remember(store) { store.load() }
-    var feedUrl by remember { mutableStateOf(initial.url) }
-    var authKey by remember { mutableStateOf(initial.authKey) }
-    var feedFormat by remember { mutableStateOf(initial.format) }
-    var requestMode by remember { mutableStateOf(initial.requestMode) }
-    var postJson by remember { mutableStateOf(initial.postJson) }
-    var updateMode by remember { mutableStateOf(initial.updateMode) }
-    var configured by remember { mutableStateOf(initial.url.isNotBlank()) }
-
-    Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Text(stringResource(R.string.threat_feed_settings_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-            Text(stringResource(R.string.threat_feed_settings_description), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            OutlinedTextField(
-                value = feedUrl,
-                onValueChange = { feedUrl = it },
-                label = { Text(stringResource(R.string.threat_feed_endpoint)) },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true
-            )
-            OutlinedTextField(
-                value = authKey,
-                onValueChange = { authKey = it },
-                label = { Text(stringResource(R.string.threat_feed_auth_key)) },
-                supportingText = { Text(stringResource(R.string.threat_feed_credentials_note)) },
-                visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true
-            )
-            Text(stringResource(R.string.threat_feed_method), style = MaterialTheme.typography.labelLarge)
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                FilterChip(
-                    selected = requestMode == ThreatFeedRequestMode.GET,
-                    onClick = { requestMode = ThreatFeedRequestMode.GET },
-                    label = { Text(stringResource(R.string.threat_feed_get)) }
-                )
-                FilterChip(
-                    selected = requestMode == ThreatFeedRequestMode.POST_JSON,
-                    onClick = { requestMode = ThreatFeedRequestMode.POST_JSON },
-                    label = { Text(stringResource(R.string.threat_feed_post_json)) }
-                )
-            }
-            if (requestMode == ThreatFeedRequestMode.POST_JSON) {
-                OutlinedTextField(
-                    value = postJson,
-                    onValueChange = { postJson = it },
-                    label = { Text(stringResource(R.string.threat_feed_post_body)) },
-                    modifier = Modifier.fillMaxWidth(),
-                    minLines = 2,
-                    maxLines = 5
-                )
-            }
-            Text(stringResource(R.string.threat_feed_update_semantics), style = MaterialTheme.typography.labelLarge)
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                FilterChip(
-                    selected = updateMode == ThreatFeedUpdateMode.INCREMENTAL,
-                    onClick = { updateMode = ThreatFeedUpdateMode.INCREMENTAL },
-                    label = { Text(stringResource(R.string.threat_feed_incremental)) }
-                )
-                FilterChip(
-                    selected = updateMode == ThreatFeedUpdateMode.AUTHORITATIVE_SNAPSHOT,
-                    onClick = { updateMode = ThreatFeedUpdateMode.AUTHORITATIVE_SNAPSHOT },
-                    label = { Text(stringResource(R.string.threat_feed_snapshot)) }
-                )
-            }
-            Text(
-                stringResource(R.string.threat_feed_update_semantics_note),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            Text(stringResource(R.string.threat_feed_format), style = MaterialTheme.typography.labelLarge)
-            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                FilterChip(selected = feedFormat == ThreatFeedFormat.AUTO, onClick = { feedFormat = ThreatFeedFormat.AUTO }, label = { Text(stringResource(R.string.threat_feed_auto)) })
-                FilterChip(selected = feedFormat == ThreatFeedFormat.JSON, onClick = { feedFormat = ThreatFeedFormat.JSON }, label = { Text(stringResource(R.string.threat_feed_json)) })
-                FilterChip(selected = feedFormat == ThreatFeedFormat.CSV, onClick = { feedFormat = ThreatFeedFormat.CSV }, label = { Text(stringResource(R.string.threat_feed_csv)) })
-            }
-            Button(
-                onClick = {
-                    runCatching {
-                        store.save(ThreatFeedConfiguration(feedUrl.trim(), authKey, feedFormat, requestMode, postJson, updateMode))
-                        ThreatFeedSyncScheduler.ensurePeriodic(context)
-                    }.onSuccess {
-                        configured = true
-                        Toast.makeText(context, R.string.threat_feed_saved, Toast.LENGTH_SHORT).show()
-                    }.onFailure { error ->
-                        Toast.makeText(context, error.message ?: context.getString(R.string.threat_feed_save_error), Toast.LENGTH_LONG).show()
-                    }
-                },
-                modifier = Modifier.fillMaxWidth()
-            ) { Text(stringResource(R.string.threat_feed_save)) }
-            OutlinedButton(
-                onClick = {
-                    ThreatFeedSyncScheduler.enqueueNow(context)
-                    Toast.makeText(context, R.string.threat_feed_queue_note, Toast.LENGTH_LONG).show()
-                },
-                enabled = configured,
-                modifier = Modifier.fillMaxWidth()
-            ) { Text(stringResource(R.string.threat_feed_sync_now)) }
-            TextButton(onClick = {
-                runCatching {
-                    store.clear()
-                    ThreatFeedSyncScheduler.ensurePeriodic(context)
-                }.onSuccess {
-                    feedUrl = ""
-                    authKey = ""
-                    feedFormat = ThreatFeedFormat.AUTO
-                    requestMode = ThreatFeedRequestMode.GET
-                    postJson = ThreatFeedConfiguration.DEFAULT_POST_JSON
-                    updateMode = ThreatFeedUpdateMode.INCREMENTAL
-                    configured = false
-                    Toast.makeText(context, R.string.threat_feed_cleared, Toast.LENGTH_SHORT).show()
-                }.onFailure {
-                    Toast.makeText(context, R.string.threat_feed_save_error, Toast.LENGTH_LONG).show()
-                }
-            }) { Text(stringResource(R.string.threat_feed_clear)) }
-        }
-    }
 }
