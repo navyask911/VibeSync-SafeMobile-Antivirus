@@ -8,6 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import java.util.Locale
+import java.net.URI
 
 /** Indexed local-only lookups. These functions never perform network I/O. */
 class ThreatIntelligenceRepository(
@@ -27,7 +28,7 @@ class ThreatIntelligenceRepository(
     suspend fun lookupMd5(md5: String): MalwareHashEntity? = lookupHash(null, md5)
 
     suspend fun lookupIoc(value: String): MalwareHashEntity? = withContext(Dispatchers.IO) {
-        val normalized = value.trim().lowercase(Locale.ROOT).trimEnd('.')
+        val normalized = normalizeIoc(value)
         if (normalized.isBlank() || normalized.length > 2048) null else malwareHashDao.findByIoc(normalized)
     }
 
@@ -38,6 +39,26 @@ class ThreatIntelligenceRepository(
         malwareHashDao.countActiveIndicators()
     }
 
+    private fun normalizeIoc(value: String): String {
+        val raw = value.trim()
+        if (raw.isBlank() || raw.length > 2048) return ""
+        val uri = runCatching { URI(raw) }.getOrNull()
+        val scheme = uri?.scheme?.lowercase(Locale.ROOT)
+        val host = uri?.host
+        if (scheme in setOf("http", "https") && !host.isNullOrBlank()) {
+            val userInfo = uri.rawUserInfo?.let { "$it@" }.orEmpty()
+            val normalizedHost = host.lowercase(Locale.ROOT).let {
+                if (it.contains(':') && !it.startsWith("[")) "[$it]" else it
+            }
+            val port = if (uri.port >= 0) ":" + uri.port else ""
+            val path = uri.rawPath.orEmpty()
+            val query = uri.rawQuery?.let { "?" + it }.orEmpty()
+            val fragment = uri.rawFragment?.let { "#" + it }.orEmpty()
+            // Scheme and host are case-insensitive; path and query are kept case-sensitive.
+            return "$scheme://$userInfo$normalizedHost$port$path$query$fragment"
+        }
+        return raw.lowercase(Locale.ROOT).trimEnd('.')
+    }
     companion object {
         private val SHA256 = Regex("^[a-f0-9]{64}$")
         private val MD5 = Regex("^[a-f0-9]{32}$")
