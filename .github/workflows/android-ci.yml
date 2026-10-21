@@ -93,7 +93,7 @@ jobs:
     timeout-minutes: 45
     strategy:
       fail-fast: false
-      max-parallel: 2
+      max-parallel: 1
       matrix:
         api-level: [26, 30, 34, 36]
     steps:
@@ -112,9 +112,9 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          target: google_apis
+          target: default
           arch: x86_64
           profile: pixel_2
-          disable-animations: true
+          disable-animations: false
           script: ./gradlew --no-daemon connectedOfflineDebugAndroidTest
 
