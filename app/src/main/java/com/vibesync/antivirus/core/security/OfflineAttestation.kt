@@ -15,12 +15,18 @@ class OfflineAttestation(private val context: Context) {
         val expected = normalizeSha256(expectedCertificateSha256)
             ?: return OfflineAttestationResult(false, "No trusted expected signer fingerprint is configured.")
         val info = try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                context.packageManager.getPackageInfo(context.packageName,
-                    PackageManager.PackageInfoFlags.of(PackageManager.GET_SIGNING_CERTIFICATES.toLong()))
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                context.packageManager.getPackageInfo(
+                    context.packageName,
+                    PackageManager.PackageInfoFlags.of(PackageManager.GET_SIGNING_CERTIFICATES.toLong())
+                )
             } else {
                 @Suppress("DEPRECATION")
-                context.packageManager.getPackageInfo(context.packageName, PackageManager.GET_SIGNATURES)
+                context.packageManager.getPackageInfo(
+                    context.packageName,
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) PackageManager.GET_SIGNING_CERTIFICATES
+                    else PackageManager.GET_SIGNATURES
+                )
             }
         } catch (_: Exception) { return OfflineAttestationResult(false, "Application signing information is unavailable.") }
         val signatures = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
