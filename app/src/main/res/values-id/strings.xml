@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">VibeSync SafeMobile Antivirus</string>
+    <string name="app_name">SafeMobile Antivirus</string>
     <string name="privacy_title">Pemberitahuan privasi dan akses pemindaian</string>
     <string name="privacy_body">SafeMobile menghitung hash SHA-256 dan MD5 di perangkat ini lalu membandingkannya dengan definisi lokal. Pemindaian lokal tidak mengunggah file atau hash. Iklan menggunakan layanan jaringan Google Mobile Ads hanya jika diizinkan oleh pilihan privasi dan konektivitas Anda. Fungsi pemindaian inti tetap berfungsi tanpa jaringan. Visibilitas aplikasi terpasang dan akses semua file adalah izin Android yang sensitif dan mungkin memerlukan peninjauan Google Play.</string>
     <string name="privacy_accept">Saya mengerti</string>
     <string name="exit_app">Keluar dari aplikasi</string>
-    <string name="brand_title">VIBESYNC</string>
-    <string name="brand_subtitle">SAFEMOBILE ANTIVIRUS</string>
+    <string name="brand_title">SafeMobile Antivirus</string>
+    <string name="brand_subtitle">VibeSync</string>
     <string name="scan_status">Dasbor perlindungan lokal</string>
     <string name="scan_running">Memindai perangkat…</string>
     <string name="threat_found">Kecocokan ancaman ditemukan</string>
@@ -103,4 +103,24 @@
     <string name="language_system_default">Bawaan sistem</string>
     <string name="limited_protection">Perlindungan terbatas — hanya definisi uji EICAR</string>
     <string name="review_recommended">Disarankan untuk ditinjau</string>
+<string name="nav_home">Beranda</string>
+<string name="nav_scan">Pindai</string>
+<string name="nav_quarantine">Karantina</string>
+<string name="nav_history">Riwayat</string>
+<string name="nav_settings">Setelan</string>
+<string name="settings_title">Setelan</string>
+<string name="appearance_title">Tampilan</string>
+<string name="theme_system">Sistem</string>
+<string name="theme_light">Terang</string>
+<string name="theme_dark">Gelap</string>
+<string name="language_settings">Bahasa</string>
+<string name="about_legal">Tentang dan Hukum</string>
+<string name="ray_id">Ray ID SafeMobile</string>
+<string name="ray_id_copy">Salin ID</string>
+<string name="ray_id_copied">Ray ID disalin</string>
+<string name="history_title">Riwayat pemindaian</string>
+<string name="history_empty">Belum ada riwayat pemindaian lokal.</string>
+<string name="history_session">ID sesi</string>
+<string name="definitions_limited_compact">Definisi: hanya tanda uji EICAR; cakupan terbatas.</string>
+<string name="settings_privacy">Privasi dan izin</string>
 </resources>
