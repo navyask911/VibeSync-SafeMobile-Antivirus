@@ -67,4 +67,23 @@
 <string name="definitions_limited_compact">定義：EICARテスト署名のみ。検出範囲は限定的です。</string>
 <string name="settings_privacy">プライバシーと権限</string>
 <string name="quarantine_legacy_warning">以前のバージョンで暗号化せずに保存された古い隔離項目です。</string>
+<string name="overlay_review_title">オーバーレイリスクの確認</string>
+<string name="overlay_review_description">他のアプリの上に表示する機能やユーザー補助サービスを宣言するアプリを、任意で簡易確認します。これは確認の手掛かりにすぎません。SafeMobile は、他のアプリが現在オーバーレイを表示していることや、その実際の許可状態を証明・確認できません。</string>
+<string name="overlay_review_last_attempt">前回の試行：%1$s</string>
+<string name="overlay_review_last_success">最終成功チェック：%1$s</string>
+<string name="overlay_review_summary">オーバーレイ機能を宣言するアプリ：%1$d · ユーザー補助サービスを宣言するアプリ：%2$d · この端末で有効なユーザー補助サービス：%3$d</string>
+<string name="overlay_review_not_checked">オーバーレイリスク確認はまだ成功していません。</string>
+<string name="overlay_review_failed">前回の確認に失敗しました。Android が処理を延期したか、必要なパッケージの可視性を制限した可能性があります。</string>
+<string name="overlay_review_permission_required">Android がこの確認を許可しませんでした。インストール済みアプリの可視性を確認して再試行してください。</string>
+<string name="overlay_review_reminder_interval">リマインダー間隔</string>
+<string name="overlay_review_reminder_12h">12 時間ごと</string>
+<string name="overlay_review_reminder_24h">24 時間ごと</string>
+<string name="overlay_review_reminder_48h">48 時間ごと</string>
+<string name="overlay_review_notifications_off">通知は無効です。確認処理は引き続き実行できますが、リマインダーは表示されません。</string>
+<string name="overlay_review_enabled">自動確認は有効</string>
+<string name="overlay_review_disabled">確認を一時停止中</string>
+<string name="overlay_review_notification_channel">SafeMobile プライバシー確認</string>
+<string name="overlay_review_notification_channel_description">任意のオーバーレイリスク確認について、低優先度のリマインダーを表示します。</string>
+<string name="overlay_review_notification_title">オーバーレイリスク確認が完了しました</string>
+<string name="overlay_review_notification_body">%1$d 個のアプリがオーバーレイ機能を、%2$d 個のアプリがユーザー補助サービスを宣言しています。確認の手掛かりであり、マルウェアの証拠ではありません。</string>
 </resources>
