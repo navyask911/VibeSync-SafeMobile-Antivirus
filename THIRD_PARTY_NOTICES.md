@@ -1,11 +1,11 @@
-# Third-party notices
+# Third-party dependency notices
 
-**Generated from the resolved Gradle dependency graph by CycloneDX in CI. Do not hand-edit dependency rows.** The generated report records the dependency versions and licence/source metadata exposed by the upstream package metadata. It is not a substitute for legal review of all direct/transitive licences or their obligations.
+**Generated from the resolved CycloneDX SBOM by CI; do not hand-edit dependency rows.** The generated file must list each resolved direct and transitive dependency with its licence metadata and upstream source URL, plus a package URL (PURL) when the SBOM exposes one.
 
-The current source tree's hand-maintained checkpoint was replaced by this generation policy in Phase 4. The main-branch SBOM refresh workflow regenerates this file and `docs/sbom.json` after merge. Review any component whose licence or source URL is reported as missing; do not infer that missing metadata means permission to redistribute.
+A package URL is an identifier, not a substitute for an upstream source URL. Components with an unknown licence or missing source URL must remain explicitly listed in the generated **Metadata requiring manual review** section. Unknown metadata is a release blocker until maintainers verify it against the exact published artifact and authoritative upstream source, or remove/replace the component. Do not infer a licence from a project name.
 
-- Aggregate machine-readable SBOM: [docs/sbom.json](docs/sbom.json)
-- Generation script: [scripts/render_third_party_notices.py](scripts/render_third_party_notices.py)
-- Dependency provenance and licence policy: [docs/PROPRIETARY_AND_LICENSE_POLICY.md](docs/PROPRIETARY_AND_LICENSE_POLICY.md)
-- CycloneDX Gradle plugin: https://github.com/CycloneDX/cyclonedx-gradle-plugin
+CI renders dependency rows with `scripts/render_third_party_notices.py`. The main-branch SBOM refresh workflow writes the generated full SBOM to `docs/sbom.json` and commits updated output to the repository. The current source branch does not yet contain that materialized resolved-dependency SBOM; its generation/commit remains pending a successful run of the compliance workflow.
 
+- Machine-readable SBOM: [docs/sbom.json](docs/sbom.json), to be generated from the resolved Gradle graph.
+- Generator: [scripts/render_third_party_notices.py](scripts/render_third_party_notices.py).
+- Dependency and release licence policy: [docs/PROPRIETARY_AND_LICENSE_POLICY.md](docs/PROPRIETARY_AND_LICENSE_POLICY.md).
