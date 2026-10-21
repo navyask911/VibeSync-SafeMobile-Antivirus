@@ -7,6 +7,7 @@ import android.os.IBinder
 import android.util.Log
 import androidx.documentfile.provider.DocumentFile
 import com.vibesync.antivirus.SafeMobileApp
+import com.vibesync.antivirus.core.crypto.EncryptedHashStore
 import com.vibesync.antivirus.core.engine.ScanResult
 import com.vibesync.antivirus.core.engine.ScanVerdict
 import com.vibesync.antivirus.data.local.SecurityIncidentEntity
@@ -33,6 +34,7 @@ import kotlinx.coroutines.launch
 class StorageSentinelService : Service() {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val recent = LinkedHashMap<String, Long>()
+ private val privateTextStore by lazy(LazyThreadSafetyMode.SYNCHRONIZED) { EncryptedHashStore(applicationContext) }
 
     override fun onCreate() {
         super.onCreate()
@@ -110,8 +112,17 @@ class StorageSentinelService : Service() {
  private suspend fun process(r:ScanResult,name:String,path:String,file:File?,uri:Uri?){val app=application as SafeMobileApp;val p=getSharedPreferences(SafeMobileApp.SECURITY_PREFS,MODE_PRIVATE);val strict=p.getBoolean(SafeMobileApp.KEY_STRICT_MODE,false);val malicious=DownloadSentinelPolicy.isConfirmedMalicious(r.verdict);val quarantine=DownloadSentinelPolicy.shouldQuarantine(r.verdict,strict);val id=UUID.randomUUID().toString()
   val reason=when{malicious->"local_sha256_match";r.verdict==ScanVerdict.NOT_SCANNED->"hash_unavailable";strict->"strict_mode_unverified_download";r.verdict==ScanVerdict.SUSPICIOUS->"suspicious_scan_result";else->"no_local_signature_match_unverified"};var removed=false;var action="NOT_QUARANTINED";var status="REVIEW_REQUIRED";var saved:File?=null
   if(quarantine){try{val outcome=when{file!=null->app.repository.quarantineObservedDownload(file,r.sha256);uri!=null->app.repository.quarantineObservedDownload(uri,r.sha256);else->null};saved=outcome?.privateCopy;removed=outcome?.originalRemoved==true;action=if(removed)"MOVED_TO_ENCRYPTED_VAULT"else"ENCRYPTED_COPY_ONLY";status=if(removed)"QUARANTINED"else"SOURCE_RETAINED_COPY_SAVED";if(!removed&&saved!=null){for(wait in longArrayOf(700L,1500L,3000L)){delay(wait);currentCoroutineContext().ensureActive();val ok=when{file!=null->app.repository.retryRemoveObservedDownload(file);uri!=null->app.repository.retryRemoveObservedDownload(uri);else->false};if(ok){removed=true;action="MOVED_TO_ENCRYPTED_VAULT";status="QUARANTINED";break}}};if(saved==null){action="QUARANTINE_FAILED";status="SOURCE_RETAINED"}}catch(c:CancellationException){throw c}catch(_:IOException){action="QUARANTINE_FAILED";status="SOURCE_RETAINED";Log.w(TAG,"Quarantine failed; source retained")}catch(_:java.security.GeneralSecurityException){action="QUARANTINE_FAILED";status="SOURCE_RETAINED";Log.w(TAG,"Quarantine cryptographic key unavailable; source retained")}catch(_:SecurityException){action="QUARANTINE_FAILED";status="SOURCE_RETAINED";Log.w(TAG,"Quarantine access denied; source retained")}catch(_:IllegalArgumentException){action="QUARANTINE_FAILED";status="SOURCE_RETAINED";Log.w(TAG,"Quarantine candidate rejected")}}
-  if(saved!=null){val vault=QuarantineVaultEntity(saved.name,System.currentTimeMillis(),name.take(120),path.take(180),r.sha256?.takeIf{it.matches(Regex("(?i)^[0-9a-f]{64}$"))},null,saved.absolutePath.take(500),reason,if(removed)"QUARANTINED"else"COPY_SAVED_SOURCE_RETAINED");runCatching{app.database.quarantineVaultDao().insert(vault)}.onFailure{Log.w(TAG,"Quarantine vault metadata insert failed",it)}}
-  val event=SecurityIncidentEntity(id,System.currentTimeMillis(),"DOWNLOAD",null,null,name.take(120),r.sha256?.takeIf{it.matches(Regex("(?i)^[0-9a-f]{64}$"))},path.take(180),reason,action,status);runCatching{app.database.securityIncidentDao().insert(event)}.onFailure{Log.w(TAG,"Incident insert failed",it)}
+  if(saved!=null){val vault=QuarantineVaultEntity(saved.name,System.currentTimeMillis(),
+   privateTextStore.protectPrivateText(name.take(120), "vault-filename"),
+   privateTextStore.protectPrivateText(path.take(180), "vault-path"),
+   r.sha256?.takeIf{it.matches(Regex("(?i)^[0-9a-f]{64}$"))},null,
+   privateTextStore.protectPrivateText(saved.absolutePath.take(500), "vault-copy-path"),
+   reason,if(removed)"QUARANTINED"else"COPY_SAVED_SOURCE_RETAINED");runCatching{app.database.quarantineVaultDao().insert(vault)}.onFailure{Log.w(TAG,"Quarantine vault metadata insert failed",it)}}
+  val event=SecurityIncidentEntity(id,System.currentTimeMillis(),"DOWNLOAD",null,null,
+   privateTextStore.protectPrivateText(name.take(120), "incident-filename"),
+   r.sha256?.takeIf{it.matches(Regex("(?i)^[0-9a-f]{64}$"))},
+   privateTextStore.protectPrivateText(path.take(180), "incident-path"),
+   privateTextStore.protectPrivateText(reason, "incident-reason"),action,status);runCatching{app.database.securityIncidentDao().insert(event)}.onFailure{Log.w(TAG,"Incident insert failed",it)}
   when{malicious->SentinelNotificationHelper.malicious(this,name,removed,id);quarantine->SentinelNotificationHelper.quarantined(this,name,removed,id);else->SentinelNotificationHelper.review(this,name,id)}
  }
 

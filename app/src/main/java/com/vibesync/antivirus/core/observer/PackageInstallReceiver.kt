@@ -8,6 +8,7 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.vibesync.antivirus.SafeMobileApp
+import com.vibesync.antivirus.core.crypto.EncryptedHashStore
 import com.vibesync.antivirus.core.security.InstallSourceCategory
 import com.vibesync.antivirus.core.security.InstallSourceVerifier
 import com.vibesync.antivirus.core.worker.MultiLayerScanWorker
@@ -33,6 +34,7 @@ class PackageInstallReceiver : BroadcastReceiver() {
    try {
     val app=appContext as? SafeMobileApp ?: return@launch
     val source=InstallSourceVerifier(appContext).inspect(name)
+    val privateTextStore=EncryptedHashStore(appContext)
     val category=when(source.category) {
      InstallSourceCategory.PLAY_STORE -> "PLAY_STORE"
      InstallSourceCategory.EXTERNAL -> "EXTERNAL"
@@ -46,8 +48,9 @@ class PackageInstallReceiver : BroadcastReceiver() {
     app.database.securityIncidentDao().insert(SecurityIncidentEntity(
      eventId=eventId,occurredAt=System.currentTimeMillis(),
      eventKind=if(update) "PACKAGE_UPDATED" else "PACKAGE_INSTALL",
-     installerPackage=source.initiatingPackageName ?: source.installingPackageName,
-     sourcePackage=name,reason=detail,
+     installerPackage=(source.initiatingPackageName ?: source.installingPackageName)?.let { privateTextStore.protectPrivateText(it, "incident-installer") },
+     sourcePackage=privateTextStore.protectPrivateText(name, "incident-source"),
+     reason=privateTextStore.protectPrivateText(detail.take(1024), "incident-reason"),
      actionTaken=if(source.needsReview && !update) "INSTALL_SOURCE_ALERT" else "SOURCE_RECORDED",
      status=category
     ))
