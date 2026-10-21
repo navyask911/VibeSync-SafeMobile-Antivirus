@@ -31,13 +31,13 @@ if (signingValues.any { !it.isNullOrBlank() } && !releaseSigningEnabled) {
 
 android {
  namespace = "com.vibesync.antivirus"
- compileSdk = 35
+ compileSdk = 36
  defaultConfig {
   applicationId = "com.vibesync.antivirus"
   minSdk = 26
-  targetSdk = 35
-  versionCode = 20261020
-  versionName = "1.0.0"
+  targetSdk = 36
+  versionCode = 20261022
+  versionName = "1.0.2"
   testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   manifestPlaceholders["admobAppId"] = releaseAdMobAppId?.takeIf { it.isNotBlank() } ?: testAdMobAppId
   buildConfigField("String", "BANNER_AD_UNIT_ID", cfg(releaseBannerUnitId?.takeIf { it.isNotBlank() } ?: ""))
@@ -107,9 +107,15 @@ dependencies {
  implementation("androidx.work:work-runtime-ktx:2.10.2")
  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
  implementation("com.google.crypto.tink:tink-android:1.16.0")
+ implementation("com.google.guava:guava:33.4.8-android")
+ implementation("org.tensorflow:tensorflow-lite:2.17.0")
  implementation("com.google.android.gms:play-services-ads:25.5.0")
  implementation("com.google.android.ump:user-messaging-platform:4.0.0")
  implementation("com.google.android.play:app-update-ktx:2.1.0")
+ androidTestImplementation("androidx.test:runner:1.6.2")
+ androidTestImplementation("androidx.test.ext:junit:1.2.1")
+ androidTestImplementation("androidx.test:core:1.6.1")
+ androidTestImplementation("androidx.room:room-testing:2.7.2")
  testImplementation("junit:junit:4.13.2")
  testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.2")
 }

@@ -1,0 +1,65 @@
+name: Mendeley dataset inspection (research-only)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["feat/safemobile-proprietary-hardening-20261021"]
+    paths:
+      - "scripts/mendeley_dataset.py"
+      - "scripts/test_mendeley_dataset.py"
+      - "docs/THREAT_DATASET_ATTRIBUTION.md"
+      - ".github/workflows/mendeley-dataset-research.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mendeley-xv84w8cc72-v1
+  cancel-in-progress: false
+
+jobs:
+  inspect:
+    name: Download, validate, and inspect licensed research dataset
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Restore versioned dataset cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            .cache/datasets/mendeley_xv84w8cc72_v1.zip
+            .cache/datasets/mendeley_xv84w8cc72_v1
+          key: mendeley-xv84w8cc72-v1
+
+      - name: Test dataset pipeline against offline fixtures
+        run: python3 -m unittest discover -s scripts -p 'test_*.py' -v
+
+      - name: Download, validate, safely extract, and inspect dataset
+        id: inspect
+        run: |
+          mkdir -p .cache/datasets
+          python3 scripts/mendeley_dataset.py \
+            --archive .cache/datasets/mendeley_xv84w8cc72_v1.zip \
+            --output .cache/datasets/mendeley_xv84w8cc72_v1 \
+            | tee .cache/datasets/mendeley_xv84w8cc72_v1-console.json
+
+      - name: Save validated cache
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            .cache/datasets/mendeley_xv84w8cc72_v1.zip
+            .cache/datasets/mendeley_xv84w8cc72_v1
+          key: mendeley-xv84w8cc72-v1
+
+      - name: Upload inspection report only
+        if: always() && steps.inspect.outcome == 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: mendeley-xv84w8cc72-v1-inspection-report
+          path: .cache/datasets/mendeley_xv84w8cc72_v1/report.json
+          if-no-files-found: error
+          retention-days: 30

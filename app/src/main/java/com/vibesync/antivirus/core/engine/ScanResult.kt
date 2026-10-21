@@ -10,5 +10,13 @@ data class ScanResult(
  val durationMs: Long,
  val packageName: String? = null,
  val sourceUri: String? = null,
- val sourceLocalPath: String? = null
+ val sourceLocalPath: String? = null,
+ /** UUIDv4 shared by all assessments that belong to a single scan operation. */
+ val scanSessionId: String? = null,
+ /** Separate UUIDv4 identifier for each confirmed local signature match. */
+ val threatEventId: String? = null,
+ /** Normalized local triage score; heuristics alone do not establish malware. */
+ val riskScore: Float = 0f,
+ /** SHA-1 digest computed in the same streaming pass when available. */
+ val sha1: String? = null
 )
