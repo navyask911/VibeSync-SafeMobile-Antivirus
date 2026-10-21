@@ -125,4 +125,23 @@
 <string name="settings_privacy">Privacy e autorizzazioni</string>
 
 <string name="quarantine_legacy_warning">Elemento di quarantena precedente: archiviato senza crittografia in una versione precedente.</string>
+<string name="overlay_review_title">Verifica del rischio overlay</string>
+<string name="overlay_review_description">Verifica facoltativa e limitata delle app che dichiarano la capacità di apparire sopra altre app e i servizi di accessibilità. Sono solo indicatori da esaminare; SafeMobile non può dimostrare che un’altra app stia mostrando un overlay in questo momento né leggere il suo permesso overlay attivo.</string>
+<string name="overlay_review_last_attempt">Ultimo tentativo: %1$s</string>
+<string name="overlay_review_last_success">Ultimo controllo riuscito: %1$s</string>
+<string name="overlay_review_summary">App che dichiarano la capacità overlay: %1$d · App che dichiarano servizi di accessibilità: %2$d · Servizi di accessibilità abilitati su questo dispositivo: %3$d</string>
+<string name="overlay_review_not_checked">Nessuna verifica del rischio overlay è ancora riuscita.</string>
+<string name="overlay_review_failed">L’ultimo tentativo di verifica non è riuscito. Android potrebbe aver rinviato l’attività o negato la visibilità dei pacchetti necessaria.</string>
+<string name="overlay_review_permission_required">Android non ha consentito questa verifica. Controlla la visibilità delle app installate e riprova.</string>
+<string name="overlay_review_reminder_interval">Intervallo promemoria</string>
+<string name="overlay_review_reminder_12h">Ogni 12 ore</string>
+<string name="overlay_review_reminder_24h">Ogni 24 ore</string>
+<string name="overlay_review_reminder_48h">Ogni 48 ore</string>
+<string name="overlay_review_notifications_off">Le notifiche sono disattivate. La verifica può comunque essere eseguita, ma i promemoria non verranno mostrati.</string>
+<string name="overlay_review_enabled">Verifica automatica attiva</string>
+<string name="overlay_review_disabled">Verifica in pausa</string>
+<string name="overlay_review_notification_channel">Verifica privacy SafeMobile</string>
+<string name="overlay_review_notification_channel_description">Promemoria a bassa priorità per la verifica facoltativa del rischio overlay.</string>
+<string name="overlay_review_notification_title">Verifica del rischio overlay completata</string>
+<string name="overlay_review_notification_body">%1$d app dichiarano capacità overlay e %2$d dichiarano servizi di accessibilità. Sono indicatori da esaminare, non prove di malware.</string>
 </resources>
