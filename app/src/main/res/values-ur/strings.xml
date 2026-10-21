@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">VibeSync SafeMobile Antivirus</string>
+    <string name="app_name">SafeMobile Antivirus</string>
     <string name="privacy_title">رازداری اور اسکین رسائی کا نوٹس</string>
     <string name="privacy_body">SafeMobile اس ڈیوائس پر SHA-256 اور MD5 ہیش بناتا ہے اور انہیں مقامی طور پر محفوظ تعریفوں سے ملاتا ہے۔ مقامی اسکین فائلیں یا ہیش اپ لوڈ نہیں کرتے۔ اشتہارات Google Mobile Ads نیٹ ورک خدمات صرف اس وقت استعمال کرتے ہیں جب آپ کی رازداری کی ترجیحات اور کنکشن اجازت دیں۔ بنیادی اسکیننگ انٹرنیٹ کے بغیر بھی چلتی ہے۔ انسٹال شدہ ایپس کی فہرست اور تمام فائلوں تک رسائی حساس Android اجازتیں ہیں اور Google Play کا جائزہ درکار ہو سکتا ہے۔</string>
     <string name="privacy_accept">میں سمجھ گیا</string>
     <string name="exit_app">ایپ سے باہر نکلیں</string>
-    <string name="brand_title">VIBESYNC</string>
-    <string name="brand_subtitle">SAFEMOBILE ANTIVIRUS</string>
+    <string name="brand_title">SafeMobile Antivirus</string>
+    <string name="brand_subtitle">VibeSync</string>
     <string name="scan_status">مقامی تحفظ کا ڈیش بورڈ</string>
     <string name="scan_running">ڈیوائس اسکین ہو رہی ہے…</string>
     <string name="threat_found">خطرے سے مماثلت ملی</string>
@@ -103,4 +103,24 @@
     <string name="language_system_default">سسٹم کی طے شدہ زبان</string>
     <string name="limited_protection">محدود تحفظ — صرف EICAR ٹیسٹ تعریف</string>
     <string name="review_recommended">جائزہ لینے کی سفارش</string>
+<string name="nav_home">ہوم</string>
+<string name="nav_scan">اسکین</string>
+<string name="nav_quarantine">قرنطینہ</string>
+<string name="nav_history">تاریخ</string>
+<string name="nav_settings">ترتیبات</string>
+<string name="settings_title">ترتیبات</string>
+<string name="appearance_title">ظاہری شکل</string>
+<string name="theme_system">سسٹم</string>
+<string name="theme_light">روشن</string>
+<string name="theme_dark">گہرا</string>
+<string name="language_settings">زبان</string>
+<string name="about_legal">تعارف اور قانونی معلومات</string>
+<string name="ray_id">SafeMobile Ray ID</string>
+<string name="ray_id_copy">ID کاپی کریں</string>
+<string name="ray_id_copied">Ray ID کاپی ہو گیا</string>
+<string name="history_title">اسکین کی تاریخ</string>
+<string name="history_empty">ابھی کوئی مقامی اسکین تاریخ نہیں ہے۔</string>
+<string name="history_session">سیشن ID</string>
+<string name="definitions_limited_compact">تعریفیں: صرف EICAR ٹیسٹ دستخط؛ کوریج محدود ہے۔</string>
+<string name="settings_privacy">رازداری اور اجازتیں</string>
 </resources>
