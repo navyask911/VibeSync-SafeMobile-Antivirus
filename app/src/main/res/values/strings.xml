@@ -133,4 +133,6 @@
 <string name="overlay_review_notification_channel_description">Low-priority reminders for the optional overlay-risk review.</string>
 <string name="overlay_review_notification_title">Overlay-risk review completed</string>
 <string name="overlay_review_notification_body">%1$d apps declare overlay capability and %2$d declare accessibility services. These are review indicators, not proof of malware.</string>
+<string name="overlay_review_enabled">Automatic review enabled</string>
+<string name="overlay_review_disabled">Review paused</string>
 </resources>
