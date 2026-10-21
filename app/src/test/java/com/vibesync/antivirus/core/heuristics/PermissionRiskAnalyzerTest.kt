@@ -33,4 +33,15 @@ class PermissionRiskAnalyzerTest {
   assertTrue(result.reasonResourceIds.contains(com.vibesync.antivirus.R.string.risk_sms_accessibility))
   assertTrue(result.isSuspicious)
  }
+ @Test fun accessibilityAndOverlayAddCompoundRiskReason() {
+  val result=PermissionRiskAnalyzer().assess(setOf(PermissionRiskAnalyzer.SYSTEM_ALERT),true)
+  assertTrue(result.reasonResourceIds.contains(com.vibesync.antivirus.R.string.risk_accessibility_overlay))
+  assertTrue(result.score>=80)
+ }
+ @Test fun bootSmsInternetAddsPersistenceRiskReason() {
+  val result=PermissionRiskAnalyzer().assess(setOf(PermissionRiskAnalyzer.RECEIVE_BOOT,PermissionRiskAnalyzer.READ_SMS,PermissionRiskAnalyzer.INTERNET),false)
+  assertTrue(result.reasonResourceIds.contains(com.vibesync.antivirus.R.string.risk_boot_sms_internet))
+  assertTrue(result.score>=55)
+ }
+
 }
