@@ -124,4 +124,23 @@
 <string name="definitions_limited_compact">ವ್ಯಾಖ್ಯಾನಗಳು: EICAR ಪರೀಕ್ಷಾ ಸಹಿ ಮಾತ್ರ; ವ್ಯಾಪ್ತಿ ಸೀಮಿತವಾಗಿದೆ.</string>
 <string name="settings_privacy">ಗೌಪ್ಯತೆ ಮತ್ತು ಅನುಮತಿಗಳು</string>
 <string name="quarantine_legacy_warning">ಹಳೆಯ ಕ್ವಾರಂಟೈನ್ ಅಂಶ: ಹಿಂದಿನ ಆವೃತ್ತಿಯಲ್ಲಿ ಎನ್‌ಕ್ರಿಪ್ಶನ್ ಇಲ್ಲದೆ ಸಂಗ್ರಹಿಸಲಾಗಿದೆ.</string>
+<string name="overlay_review_title">ಓವರ್‌ಲೇ ಅಪಾಯ ಪರಿಶೀಲನೆ</string>
+<string name="overlay_review_description">ಇತರ ಆ್ಯಪ್‌ಗಳ ಮೇಲೆ ಕಾಣುವ ಸಾಮರ್ಥ್ಯ ಅಥವಾ ಪ್ರವೇಶಸಾಧ್ಯತಾ ಸೇವೆಗಳನ್ನು ಘೋಷಿಸುವ ಆ್ಯಪ್‌ಗಳ ಐಚ್ಛಿಕ ಮಿತವಾದ ಪರಿಶೀಲನೆ. ಇವು ಪರಿಶೀಲನೆಗೆ ಸೂಚನೆಗಳು ಮಾತ್ರ; ಮತ್ತೊಂದು ಆ್ಯಪ್ ಈಗ ಓವರ್‌ಲೇ ತೋರಿಸುತ್ತಿದೆಯೇ ಅಥವಾ ಅದರ ನೇರ ಅನುಮತಿ ಸ್ಥಿತಿಯೇನು ಎಂಬುದನ್ನು SafeMobile ಸಾಬೀತುಪಡಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ.</string>
+<string name="overlay_review_last_attempt">ಕೊನೆಯ ಪ್ರಯತ್ನ: %1$s</string>
+<string name="overlay_review_last_success">ಕೊನೆಯ ಯಶಸ್ವಿ ಪರಿಶೀಲನೆ: %1$s</string>
+<string name="overlay_review_summary">ಓವರ್‌ಲೇ ಸಾಮರ್ಥ್ಯ ಘೋಷಿಸುವ ಆ್ಯಪ್‌ಗಳು: %1$d · ಪ್ರವೇಶಸಾಧ್ಯತಾ ಸೇವೆಗಳನ್ನು ಘೋಷಿಸುವ ಆ್ಯಪ್‌ಗಳು: %2$d · ಈ ಸಾಧನದಲ್ಲಿ ಸಕ್ರಿಯವಾಗಿರುವ ಪ್ರವೇಶಸಾಧ್ಯತಾ ಸೇವೆಗಳು: %3$d</string>
+<string name="overlay_review_not_checked">ಇನ್ನೂ ಯಶಸ್ವಿ ಓವರ್‌ಲೇ ಅಪಾಯ ಪರಿಶೀಲನೆ ನಡೆದಿಲ್ಲ.</string>
+<string name="overlay_review_failed">ಕೊನೆಯ ಪರಿಶೀಲನೆ ವಿಫಲವಾಗಿದೆ. Android ಕೆಲಸವನ್ನು ಮುಂದೂಡಿರಬಹುದು ಅಥವಾ ಅಗತ್ಯ ಪ್ಯಾಕೇಜ್ ಗೋಚರತೆಯನ್ನು ನಿರಾಕರಿಸಿರಬಹುದು.</string>
+<string name="overlay_review_permission_required">Android ಈ ಪರಿಶೀಲನೆಗೆ ಅನುಮತಿ ನೀಡಲಿಲ್ಲ. ಸ್ಥಾಪಿತ ಆ್ಯಪ್‌ಗಳ ಗೋಚರತೆಯನ್ನು ಪರಿಶೀಲಿಸಿ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.</string>
+<string name="overlay_review_reminder_interval">ಜ್ಞಾಪನೆ ಮಧ್ಯಂತರ</string>
+<string name="overlay_review_reminder_12h">ಪ್ರತಿ 12 ಗಂಟೆಗೆ</string>
+<string name="overlay_review_reminder_24h">ಪ್ರತಿ 24 ಗಂಟೆಗೆ</string>
+<string name="overlay_review_reminder_48h">ಪ್ರತಿ 48 ಗಂಟೆಗೆ</string>
+<string name="overlay_review_notifications_off">ಅಧಿಸೂಚನೆಗಳು ನಿಷ್ಕ್ರಿಯವಾಗಿವೆ. ಪರಿಶೀಲನೆ ನಡೆಯಬಹುದು, ಆದರೆ ಜ್ಞಾಪನೆಗಳು ತೋರಿಸುವುದಿಲ್ಲ.</string>
+<string name="overlay_review_enabled">ಸ್ವಯಂಚಾಲಿತ ಪರಿಶೀಲನೆ ಸಕ್ರಿಯವಾಗಿದೆ</string>
+<string name="overlay_review_disabled">ಪರಿಶೀಲನೆ ವಿರಾಮದಲ್ಲಿದೆ</string>
+<string name="overlay_review_notification_channel">SafeMobile ಗೌಪ್ಯತಾ ಪರಿಶೀಲನೆ</string>
+<string name="overlay_review_notification_channel_description">ಐಚ್ಛಿಕ ಓವರ್‌ಲೇ ಅಪಾಯ ಪರಿಶೀಲನೆಗೆ ಕಡಿಮೆ ಆದ್ಯತೆಯ ಜ್ಞಾಪನೆಗಳು.</string>
+<string name="overlay_review_notification_title">ಓವರ್‌ಲೇ ಅಪಾಯ ಪರಿಶೀಲನೆ ಪೂರ್ಣಗೊಂಡಿದೆ</string>
+<string name="overlay_review_notification_body">%1$d ಆ್ಯಪ್‌ಗಳು ಓವರ್‌ಲೇ ಸಾಮರ್ಥ್ಯ ಮತ್ತು %2$d ಆ್ಯಪ್‌ಗಳು ಪ್ರವೇಶಸಾಧ್ಯತಾ ಸೇವೆಗಳನ್ನು ಘೋಷಿಸುತ್ತವೆ. ಇವು ಪರಿಶೀಲನೆ ಸೂಚನೆಗಳು, ಮಾಲ್‌ವೇರ್‌ಗೆ ಸಾಕ್ಷಿಯಲ್ಲ.</string>
 </resources>
