@@ -349,9 +349,10 @@ import java.util.Date
       Column(Modifier.padding(16.dp),verticalArrangement=Arrangement.spacedBy(8.dp)) {
        Text(stringResource(R.string.threat_feed_dashboard_title),style=MaterialTheme.typography.titleMedium,fontWeight=FontWeight.Bold)
        Text(stringResource(R.string.threat_feed_active_count,state.activeThreatIndicatorCount),style=MaterialTheme.typography.bodyMedium)
+       val lastSuccessfulSyncAt = state.lastThreatFeedSyncAt
        Text(
-        if (state.lastThreatFeedSyncAt == null) stringResource(R.string.threat_feed_never_synced)
-        else stringResource(R.string.threat_feed_last_success,DateFormat.getDateTimeInstance().format(Date(state.lastThreatFeedSyncAt))),
+        if (lastSuccessfulSyncAt == null) stringResource(R.string.threat_feed_never_synced)
+        else stringResource(R.string.threat_feed_last_success,DateFormat.getDateTimeInstance().format(Date(lastSuccessfulSyncAt))),
         style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant
        )
        val feedStatusResource = when(state.threatFeedSyncStatus) {
