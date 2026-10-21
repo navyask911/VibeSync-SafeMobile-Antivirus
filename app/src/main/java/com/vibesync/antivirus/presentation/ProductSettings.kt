@@ -26,6 +26,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -35,6 +36,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.app.NotificationManagerCompat
 import com.vibesync.antivirus.core.worker.OverlayRiskReviewManager
+import com.vibesync.antivirus.core.worker.ThreatFeedConfigStore
+import com.vibesync.antivirus.core.worker.ThreatFeedConfiguration
+import com.vibesync.antivirus.core.worker.ThreatFeedSyncScheduler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -45,6 +49,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.vibesync.antivirus.BuildConfig
 import com.vibesync.antivirus.R
@@ -277,6 +282,13 @@ internal fun SafeMobileSettingsPanel(
     var showAbout by remember { mutableStateOf(false) }
     var aboutSection by remember { mutableStateOf("privacy") }
     val rayId = remember(context) { InstallRayId.getOrCreate(context) }
+    val feedStore = remember(context) { ThreatFeedConfigStore(context) }
+    var feedUrl by remember { mutableStateOf(feedStore.load().url) }
+    var feedAuthKey by remember { mutableStateOf(feedStore.load().authKey) }
+    var feedConfigSaved by remember { mutableStateOf(feedStore.isConfigured()) }
+    var feedConsentEnabled by remember { mutableStateOf(feedStore.isSyncEnabled()) }
+    var feedConfigMessage by remember { mutableStateOf<String?>(null) }
+    var showFeedConsentDialog by remember { mutableStateOf(false) }
 
     Column(verticalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
         Text(stringResource(R.string.settings_title), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
@@ -315,6 +327,70 @@ internal fun SafeMobileSettingsPanel(
             }
         }
         OverlayRiskReviewPanel()
+
+        if (BuildConfig.OPTIONAL_FEED_ENABLED) {
+            Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
+                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Text(stringResource(R.string.feed_settings_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                    Text(stringResource(R.string.feed_settings_description), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    OutlinedTextField(
+                        value = feedUrl,
+                        onValueChange = { feedUrl = it; feedConfigSaved = false },
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true,
+                        label = { Text(stringResource(R.string.feed_settings_url_label)) },
+                        placeholder = { Text("https://example.invalid/feed.json") }
+                    )
+                    OutlinedTextField(
+                        value = feedAuthKey,
+                        onValueChange = { feedAuthKey = it; feedConfigSaved = false },
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true,
+                        visualTransformation = PasswordVisualTransformation(),
+                        label = { Text(stringResource(R.string.feed_settings_auth_label)) }
+                    )
+                    Button(onClick = {
+                        runCatching {
+                            feedStore.save(feedStore.load().copy(url = feedUrl, authKey = feedAuthKey))
+                        }.onSuccess {
+                            feedConfigSaved = feedStore.isConfigured()
+                            feedConfigMessage = context.getString(R.string.feed_settings_saved)
+                            ThreatFeedSyncScheduler.ensurePeriodic(context)
+                        }.onFailure {
+                            feedConfigMessage = it.message ?: context.getString(R.string.feed_settings_failed)
+                        }
+                    }) { Text(stringResource(R.string.feed_settings_save)) }
+                    feedConfigMessage?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }
+                    Text(
+                        stringResource(
+                            if (BuildConfig.FEED_MANIFEST_KEY_CONFIGURED) R.string.feed_settings_key_ready
+                            else R.string.feed_settings_key_missing
+                        ),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Row(Modifier.fillMaxWidth(), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+                        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Text(stringResource(R.string.feed_settings_opt_in_title), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                            Text(stringResource(R.string.feed_settings_opt_in_description), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                        Switch(
+                            checked = feedConsentEnabled,
+                            enabled = BuildConfig.FEED_MANIFEST_KEY_CONFIGURED && feedConfigSaved && feedUrl.isNotBlank(),
+                            onCheckedChange = { requested ->
+                                if (requested) showFeedConsentDialog = true
+                                else {
+                                    feedStore.setSyncEnabled(false)
+                                    feedConsentEnabled = false
+                                    ThreatFeedSyncScheduler.ensurePeriodic(context)
+                                    feedConfigMessage = context.getString(R.string.feed_settings_disabled)
+                                }
+                            }
+                        )
+                    }
+                }
+            }
+        }
 
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -405,6 +481,27 @@ internal fun SafeMobileSettingsPanel(
             }
         }
     }
+
+    if (showFeedConsentDialog) AlertDialog(
+        onDismissRequest = { showFeedConsentDialog = false },
+        title = { Text(stringResource(R.string.feed_settings_consent_title)) },
+        text = { Text(stringResource(R.string.feed_settings_consent_body)) },
+        confirmButton = {
+            TextButton(onClick = {
+                feedStore.setSyncEnabled(true)
+                feedConsentEnabled = true
+                showFeedConsentDialog = false
+                ThreatFeedSyncScheduler.ensurePeriodic(context)
+                ThreatFeedSyncScheduler.enqueueNow(context)
+                feedConfigMessage = context.getString(R.string.feed_settings_enabled)
+            }) { Text(stringResource(R.string.feed_settings_confirm)) }
+        },
+        dismissButton = {
+            TextButton(onClick = { showFeedConsentDialog = false }) {
+                Text(stringResource(R.string.feed_settings_cancel))
+            }
+        }
+    )
 
     val aboutContent = remember(context, aboutSection) {
         when (aboutSection) {

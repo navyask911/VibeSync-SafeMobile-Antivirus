@@ -14,5 +14,7 @@ data class ThreatFeedSyncStateEntity(
     @ColumnInfo(name = "last_error") val lastError: String? = null,
     @ColumnInfo(name = "last_imported_count") val lastImportedCount: Int = 0,
     @ColumnInfo(name = "etag") val etag: String? = null,
-    @ColumnInfo(name = "last_modified") val lastModified: String? = null
+    @ColumnInfo(name = "last_modified") val lastModified: String? = null,
+    @ColumnInfo(name = "feed_version", defaultValue = "0") val feedVersion: Long = 0L,
+    @ColumnInfo(name = "feed_manifest_sha256") val feedManifestSha256: String? = null
 )

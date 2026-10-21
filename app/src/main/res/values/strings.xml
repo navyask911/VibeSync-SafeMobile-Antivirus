@@ -348,4 +348,22 @@
 <string name="enterprise_enable_response">Enable response</string>
 <string name="enterprise_setup_instructions">Standard Mode works without Device Owner privileges. For production, use Android Enterprise QR-code provisioning during device setup. For testing only on a disposable device after factory reset and before completing setup, an administrator may run: adb shell dpm set-device-owner com.vibesync.antivirus/.core.security.AdminReceiver. This cannot be enabled by an in-app button on an already provisioned personal device. Device Owner mode can restrict installation and remove apps, so use it only on devices your organization manages.</string>
 <string name="enterprise_response_warning">Enabling automatic response permits Device Owner-only hiding and silent uninstall requests for non-system apps that have an exact local hash/IOC malware match and a risk score above 0.8. Android callback failures are not treated as successes.</string>
+
+<string name="feed_settings_title" translatable="false">Optional threat-feed synchronization</string>
+<string name="feed_settings_description" translatable="false">Save a trusted HTTPS JSON/CSV endpoint. The authentication key is encrypted in app-private preferences using Android Keystore. This request is separate from local scanning; scan files, hashes and history are not uploaded.</string>
+<string name="feed_settings_url_label" translatable="false">HTTPS feed URL</string>
+<string name="feed_settings_auth_label" translatable="false">Optional provider Auth-Key</string>
+<string name="feed_settings_save" translatable="false">Save feed configuration</string>
+<string name="feed_settings_saved" translatable="false">Feed configuration saved locally.</string>
+<string name="feed_settings_failed" translatable="false">Feed configuration could not be saved.</string>
+<string name="feed_settings_key_ready" translatable="false">Ed25519 verification key is configured for this build.</string>
+<string name="feed_settings_key_missing" translatable="false">Feed sync is unavailable in this build because no trusted Ed25519 public key was configured at build time.</string>
+<string name="feed_settings_opt_in_title" translatable="false">Enable optional network feed sync</string>
+<string name="feed_settings_opt_in_description" translatable="false">Off by default. When enabled, SafeMobile contacts the HTTPS endpoint above on an unmetered network while charging. Feed bodies must have a valid Ed25519-signed manifest and newer version.</string>
+<string name="feed_settings_consent_title" translatable="false">Allow optional network feed requests?</string>
+<string name="feed_settings_consent_body" translatable="false">This enables network access to the configured feed endpoint. The endpoint and optional Auth-Key may be sent. Scan files, file hashes and scan history are not sent. Local scanning stays on-device. You can turn this off at any time.</string>
+<string name="feed_settings_confirm" translatable="false">Enable feed sync</string>
+<string name="feed_settings_cancel" translatable="false">Cancel</string>
+<string name="feed_settings_enabled" translatable="false">Feed sync enabled. A sync may run when the endpoint is configured and network/battery constraints are met.</string>
+<string name="feed_settings_disabled" translatable="false">Feed sync disabled; queued and periodic work has been cancelled.</string>
 </resources>
