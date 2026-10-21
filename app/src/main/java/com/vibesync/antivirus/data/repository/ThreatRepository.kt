@@ -34,6 +34,8 @@ class ThreatRepository(
  private val threatIntelligence: ThreatIntelligenceRepository
 ) {
  private val privateTextStore by lazy(LazyThreadSafetyMode.SYNCHRONIZED) { EncryptedHashStore(context) }
+ private val maxSafScanFiles = 10_000
+ private val maxSafDirectoryDepth = 4
 
  fun observeRecentAudits(): Flow<List<ScanAudit>> =
   database.threatDao().observeRecentAudits().map { rows ->
@@ -79,7 +81,7 @@ class ThreatRepository(
   var fileCount = 0
   for (ignored in selectedFolderFiles()) {
    currentCoroutineContext().ensureActive()
-   if (fileCount < MAX_SAF_SCAN_FILES) fileCount++
+   if (fileCount < maxSafScanFiles) fileCount++
   }
   var installedCount = 0
   val installedResults = scanner.scanInstalledApps { processed, total ->
@@ -117,10 +119,10 @@ class ThreatRepository(
   fun walk(directory: DocumentFile, depth: Int): Sequence<SelectedFolderFile> = sequence {
    val children = runCatching { directory.listFiles() }.getOrElse { emptyArray() }
    for (child in children) {
-    if (visited >= MAX_SAF_SCAN_FILES) break
+    if (visited >= maxSafScanFiles) break
     visited++
     val label = child.name?.take(250)?.ifBlank { null } ?: context.getString(R.string.unknown_file)
-    if (child.isDirectory && depth < MAX_SAF_DIRECTORY_DEPTH) {
+    if (child.isDirectory && depth < maxSafDirectoryDepth) {
      yieldAll(walk(child, depth + 1))
     } else if (child.isFile && child.canRead()) {
      yield(SelectedFolderFile(child.uri, label))
