@@ -367,7 +367,6 @@ internal fun SafeMobileSettingsPanel(
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(stringResource(R.string.settings_privacy), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
                 Text(stringResource(R.string.privacy_body), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Text(stringResource(R.string.not_configured), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.tertiary)
                 if (privacyOptionsVisible) TextButton(onClick = onPrivacyOptionsClick) { Text(stringResource(R.string.privacy_options)) }
             }
         }
@@ -388,7 +387,7 @@ internal fun SafeMobileSettingsPanel(
 
     val aboutContent = remember(context, aboutSection) {
         when (aboutSection) {
-            "readme" -> runCatching { context.assets.open("README.md").bufferedReader().use { it.readText() } }.getOrDefault("Bundled README is unavailable.")
+            "readme" -> runCatching { context.assets.open("README.md").bufferedReader().use { it.readText() } }.getOrDefault("Bundled README is unavailable.").let { readme -> "$readme\n\n${context.getString(R.string.not_configured)}" }
             "notices" -> runCatching { context.assets.open("THIRD_PARTY_NOTICES.md").bufferedReader().use { it.readText() } }.getOrDefault("Third-party licence notices are unavailable.")
             "license" -> context.getString(R.string.about_license_missing)
             else -> runCatching { context.assets.open("privacy-policy.md").bufferedReader().use { it.readText() } }.getOrDefault(context.getString(R.string.privacy_body))

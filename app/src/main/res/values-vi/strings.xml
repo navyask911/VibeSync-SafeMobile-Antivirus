@@ -11,7 +11,7 @@
     <string name="scan_running">Đang quét thiết bị…</string>
     <string name="threat_found">Phát hiện khớp với mối đe dọa</string>
     <string name="signature_count">Chữ ký cục bộ: %1$d · Phiên quét: %2$d</string>
-    <string name="scan_explanation">Kiểm tra APK đã cài đặt có thể đọc được bằng định nghĩa cục bộ và quét các tệp bạn chọn. Khả năng phát hiện phụ thuộc vào quyền truy cập của hệ điều hành và định nghĩa đã cài trên thiết bị.</string>
+    <string name="scan_explanation">Kiểm tra APK đã cài đặt có thể đọc được bằng định nghĩa cục bộ và quét các tệp bạn chọn. Xem Cài đặt → Giới thiệu &amp; Pháp lý để biết phạm vi quét và chi tiết định nghĩa thử nghiệm.</string>
     <string name="scan_installed">Quét ứng dụng đã cài đặt</string>
     <string name="scan_selected">Quét APK hoặc tệp đã chọn</string>
     <string name="monitor_title">Theo dõi tải xuống</string>

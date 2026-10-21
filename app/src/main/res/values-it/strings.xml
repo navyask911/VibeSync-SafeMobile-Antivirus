@@ -11,7 +11,7 @@
     <string name="scan_running">Scansione del dispositivo…</string>
     <string name="threat_found">Rilevata una corrispondenza con una minaccia</string>
     <string name="signature_count">Firme locali: %1$d · Sessioni di scansione: %2$d</string>
-    <string name="scan_explanation">Controlla gli APK installati leggibili con le definizioni locali ed esamina i file selezionati. Il rilevamento è limitato dall\'accesso consentito dal sistema operativo e dalle definizioni installate sul dispositivo.</string>
+    <string name="scan_explanation">Controlla gli APK installati leggibili con le definizioni locali ed esamina i file selezionati. Consulta Impostazioni → Informazioni e note legali per i dettagli sulla copertura e sulle definizioni di test.</string>
     <string name="scan_installed">Scansiona le app installate</string>
     <string name="scan_selected">Scansiona un APK o file selezionato</string>
     <string name="monitor_title">Monitor download</string>

@@ -139,6 +139,9 @@ class ThreatFeedParser(private val batchSize: Int = DEFAULT_BATCH_SIZE) {
                 }
                 else -> throw FeedParseException("The JSON feed root must be an object or array.")
             }
+            if (reader.peek() != JsonToken.END_DOCUMENT) {
+                throw FeedParseException("JSON feed contains trailing content.")
+            }
         }
     }
 

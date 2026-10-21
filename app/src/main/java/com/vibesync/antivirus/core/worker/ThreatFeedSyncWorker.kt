@@ -14,6 +14,12 @@ import androidx.work.WorkerParameters
 import androidx.work.BackoffPolicy
 import com.vibesync.antivirus.SafeMobileApp
 import com.vibesync.antivirus.data.local.ThreatFeedSyncStateEntity
+import com.vibesync.antivirus.data.local.ThreatFeedStagingEntity
+import com.vibesync.antivirus.data.local.MalwareHashEntity
+import com.vibesync.antivirus.data.local.ThreatDatabase
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.withContext
+import java.util.UUID
 import java.io.FilterInputStream
 import java.io.IOException
 import java.io.InputStream
@@ -37,8 +43,11 @@ class ThreatFeedSyncWorker(context: Context, params: WorkerParameters) : Corouti
         val sourceKey = sha256(config.url)
         val stateDao = database.threatFeedSyncStateDao()
         val hashDao = database.malwareHashDao()
+        val stagingDao = database.threatFeedStagingDao()
         val previousState = runCatching { stateDao.get(sourceKey) }.getOrNull()
         val attemptedAt = System.currentTimeMillis()
+        val importId = UUID.randomUUID().toString()
+        runCatching { stagingDao.deleteStaleBefore(attemptedAt - STAGING_RETENTION_MS) }
         val runningState = ThreatFeedSyncStateEntity(
             sourceKey = sourceKey,
             sourceHost = sourceHost,
@@ -89,40 +98,73 @@ class ThreatFeedSyncWorker(context: Context, params: WorkerParameters) : Corouti
             val decoded = if (connection.contentEncoding.equals("gzip", ignoreCase = true)) GZIPInputStream(raw, IO_BUFFER_SIZE) else raw
             val bounded = LimitedInputStream(decoded, MAX_FEED_BYTES)
             val parser = ThreatFeedParser()
-            val count = parser.parse(bounded, remoteFormat, sourceHost) { batch ->
-                database.withTransaction { hashDao.upsertBatch(batch) }
+            parser.parse(bounded, remoteFormat, sourceHost) { batch ->
+                val staged = batch.map { row ->
+                    ThreatFeedStagingEntity(
+                        importId = importId,
+                        indicatorKey = row.indicatorKey,
+                        sha256Hash = row.sha256Hash,
+                        md5Hash = row.md5Hash,
+                        iocValue = row.iocValue,
+                        iocType = row.iocType,
+                        threatName = row.threatName,
+                        source = row.source,
+                        firstSeenAt = row.firstSeenAt,
+                        lastSeenAt = row.lastSeenAt,
+                        updatedAt = row.updatedAt,
+                        stagedAt = attemptedAt
+                    )
+                }
+                database.withTransaction { stagingDao.upsertBatch(staged) }
             }
             val now = System.currentTimeMillis()
-            val success = runningState.copy(
-                lastAttemptAt = now,
-                lastSuccessAt = now,
-                status = STATUS_SUCCESS,
-                lastError = null,
-                lastImportedCount = count.coerceAtMost(Int.MAX_VALUE.toLong()).toInt(),
-                etag = connection.getHeaderField("ETag") ?: previousState?.etag,
-                lastModified = connection.getHeaderField("Last-Modified") ?: previousState?.lastModified
-            )
-            database.withTransaction { stateDao.upsert(success) }
+            database.withTransaction {
+                var afterIndicatorKey = ""
+                while (true) {
+                    val stagedBatch = stagingDao.nextBatch(importId, afterIndicatorKey, STAGING_BATCH_SIZE)
+                    if (stagedBatch.isEmpty()) break
+                    hashDao.upsertBatch(stagedBatch.map { it.toMalwareHashEntity() })
+                    afterIndicatorKey = stagedBatch.last().indicatorKey
+                }
+                val importedCount = stagingDao.countForImport(importId)
+                stagingDao.deleteForImport(importId)
+                stateDao.upsert(runningState.copy(
+                    lastAttemptAt = now,
+                    lastSuccessAt = now,
+                    status = STATUS_SUCCESS,
+                    lastError = null,
+                    lastImportedCount = importedCount,
+                    etag = connection.getHeaderField("ETag") ?: previousState?.etag,
+                    lastModified = connection.getHeaderField("Last-Modified") ?: previousState?.lastModified
+                ))
+            }
             Result.success()
         } catch (cancelled: kotlinx.coroutines.CancellationException) {
+            withContext(NonCancellable) {
+                storeFailure(
+                    database, runningState, importId,
+                    status = STATUS_RETRY,
+                    message = "Feed synchronization was cancelled; active indicators were not changed."
+                )
+            }
             throw cancelled
         } catch (error: FeedConfigurationException) {
-            storeFailure(database, runningState, status = STATUS_FAILED, message = error.message)
+            storeFailure(database, runningState, importId, status = STATUS_FAILED, message = error.message)
             Result.failure()
         } catch (error: FeedParseException) {
-            storeFailure(database, runningState, status = STATUS_FAILED, message = error.message)
+            storeFailure(database, runningState, importId, status = STATUS_FAILED, message = error.message)
             Result.failure()
         } catch (error: FeedSizeLimitException) {
-            storeFailure(database, runningState, status = STATUS_FAILED, message = "Feed exceeded the maximum supported size.")
+            storeFailure(database, runningState, importId, status = STATUS_FAILED, message = "Feed exceeded the maximum supported size.")
             Result.failure()
         } catch (error: FeedTransientException) {
-            storeFailure(database, runningState, status = STATUS_RETRY, message = error.message)
+            storeFailure(database, runningState, importId, status = STATUS_RETRY, message = error.message)
             Result.retry()
         } catch (error: IOException) {
-            storeFailure(database, runningState, status = STATUS_RETRY, message = "Network read failed; existing local indicators were retained.")
+            storeFailure(database, runningState, importId, status = STATUS_RETRY, message = "Network read failed; existing local indicators were retained.")
             Result.retry()
         } catch (_: Exception) {
-            storeFailure(database, runningState, status = STATUS_FAILED, message = "Feed synchronization failed; existing local indicators were retained.")
+            storeFailure(database, runningState, importId, status = STATUS_FAILED, message = "Feed synchronization failed; existing local indicators were retained.")
             Result.failure()
         } finally {
             connection?.disconnect()
@@ -130,15 +172,16 @@ class ThreatFeedSyncWorker(context: Context, params: WorkerParameters) : Corouti
     }
 
     private suspend fun storeFailure(
-        database: androidx.room.RoomDatabase,
+        database: ThreatDatabase,
         running: ThreatFeedSyncStateEntity,
+        importId: String,
         status: String,
         message: String?
     ) {
-        val stateDao = (applicationContext as? SafeMobileApp)?.database?.threatFeedSyncStateDao() ?: return
         runCatching {
             database.withTransaction {
-                stateDao.upsert(running.copy(
+                database.threatFeedStagingDao().deleteForImport(importId)
+                database.threatFeedSyncStateDao().upsert(running.copy(
                     lastAttemptAt = System.currentTimeMillis(),
                     status = status,
                     lastError = message?.take(220)
@@ -238,8 +281,23 @@ class ThreatFeedSyncWorker(context: Context, params: WorkerParameters) : Corouti
         private const val MAX_FEED_BYTES = 128L * 1024L * 1024L
         private const val IO_BUFFER_SIZE = 64 * 1024
         private const val MAX_REDIRECTS = 3
+        private const val STAGING_BATCH_SIZE = 500
+        private const val STAGING_RETENTION_MS = 7L * 24L * 60L * 60L * 1000L
     }
 }
+
+private fun ThreatFeedStagingEntity.toMalwareHashEntity() = MalwareHashEntity(
+    indicatorKey = indicatorKey,
+    sha256Hash = sha256Hash,
+    md5Hash = md5Hash,
+    iocValue = iocValue,
+    iocType = iocType,
+    threatName = threatName,
+    source = source,
+    firstSeenAt = firstSeenAt,
+    lastSeenAt = lastSeenAt,
+    updatedAt = updatedAt
+)
 
 object ThreatFeedSyncScheduler {
     private fun constraints() = Constraints.Builder()

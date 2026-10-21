@@ -29,7 +29,7 @@ class SafeMobileApp : Application() {
  override fun onCreate() {
   super.onCreate()
   database=Room.databaseBuilder(this,ThreatDatabase::class.java,"safe_mobile_threats.db")
-   .addMigrations(ThreatDatabase.MIGRATION_1_2, ThreatDatabase.MIGRATION_2_3, ThreatDatabase.MIGRATION_3_4)
+   .addMigrations(ThreatDatabase.MIGRATION_1_2, ThreatDatabase.MIGRATION_2_3, ThreatDatabase.MIGRATION_3_4, ThreatDatabase.MIGRATION_4_5)
    .build()
   val hashStore=EncryptedHashStore(this)
   val loader=LocalDefinitionLoader(this,database.threatDao(),hashStore)

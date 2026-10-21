@@ -11,7 +11,7 @@
     <string name="scan_running">ডিভাইস স্ক্যান হচ্ছে…</string>
     <string name="threat_found">হুমকির মিল পাওয়া গেছে</string>
     <string name="signature_count">স্থানীয় স্বাক্ষর: %1$d · স্ক্যান সেশন: %2$d</string>
-    <string name="scan_explanation">পাঠযোগ্য ইনস্টল করা APK স্থানীয় সংজ্ঞার সঙ্গে পরীক্ষা করে এবং আপনার নির্বাচিত ফাইল স্ক্যান করে। অপারেটিং সিস্টেমের প্রবেশাধিকার ও ডিভাইসে থাকা সংজ্ঞা অনুযায়ী শনাক্তকরণ সীমিত।</string>
+    <string name="scan_explanation">পাঠযোগ্য ইনস্টল করা APK স্থানীয় সংজ্ঞার সঙ্গে পরীক্ষা করে এবং আপনার নির্বাচিত ফাইল স্ক্যান করে। স্ক্যানের আওতা ও পরীক্ষার সংজ্ঞা সম্পর্কে জানতে সেটিংস → তথ্য ও আইনি বিভাগ দেখুন।</string>
     <string name="scan_installed">ইনস্টল করা অ্যাপ স্ক্যান করুন</string>
     <string name="scan_selected">নির্বাচিত APK বা ফাইল স্ক্যান করুন</string>
     <string name="monitor_title">ডাউনলোড পর্যবেক্ষণ</string>

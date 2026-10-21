@@ -11,7 +11,7 @@
     <string name="scan_running">기기를 검사하는 중…</string>
     <string name="threat_found">위협 서명과 일치함</string>
     <string name="signature_count">로컬 시그니처: %1$d · 검사 세션: %2$d</string>
-    <string name="scan_explanation">읽을 수 있는 설치된 APK를 로컬 정의와 비교하고 사용자가 선택한 파일을 검사합니다. 탐지 범위는 운영체제의 접근 권한과 이 기기에 설치된 정의에 따라 달라집니다.</string>
+    <string name="scan_explanation">읽을 수 있는 설치된 APK를 로컬 정의와 비교하고 선택한 파일을 검사합니다. 검사 범위와 테스트 정의에 관한 자세한 내용은 설정 → 앱 정보 및 법적 고지에서 확인하세요.</string>
     <string name="scan_installed">설치된 앱 검사</string>
     <string name="scan_selected">선택한 APK 또는 파일 검사</string>
     <string name="monitor_title">다운로드 감시</string>

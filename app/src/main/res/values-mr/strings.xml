@@ -11,7 +11,7 @@
     <string name="scan_running">डिव्हाइस स्कॅन होत आहे…</string>
     <string name="threat_found">धोक्याशी जुळणारी नोंद आढळली</string>
     <string name="signature_count">स्थानिक स्वाक्षऱ्या: %1$d · स्कॅन सत्रे: %2$d</string>
-    <string name="scan_explanation">वाचता येणाऱ्या स्थापित APK ची स्थानिक व्याख्यांशी तपासणी करते आणि तुम्ही निवडलेल्या फाइल्स स्कॅन करते. शोध क्षमता OS प्रवेश आणि डिव्हाइसवर असलेल्या व्याख्यांमुळे मर्यादित आहे.</string>
+    <string name="scan_explanation">वाचता येणाऱ्या स्थापित APK ची स्थानिक व्याख्यांशी तपासणी करते आणि तुम्ही निवडलेल्या फाइल्स स्कॅन करते. स्कॅन कव्हरेज आणि चाचणी व्याख्यांच्या तपशीलांसाठी सेटिंग्ज → माहिती आणि कायदेशीर बाबी पहा.</string>
     <string name="scan_installed">स्थापित अॅप्स स्कॅन करा</string>
     <string name="scan_selected">निवडलेले APK किंवा फाइल स्कॅन करा</string>
     <string name="monitor_title">डाउनलोड निरीक्षण</string>

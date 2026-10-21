@@ -11,7 +11,7 @@
     <string name="scan_running">Cihaz taranıyor…</string>
     <string name="threat_found">Tehdit eşleşmesi bulundu</string>
     <string name="signature_count">Yerel imzalar: %1$d · Tarama oturumları: %2$d</string>
-    <string name="scan_explanation">Okunabilir yüklü APK dosyalarını yerel tanımlarla karşılaştırır ve seçtiğiniz dosyaları inceler. Algılama, işletim sisteminin erişim izinleri ve cihazda yüklü tanımlarla sınırlıdır.</string>
+    <string name="scan_explanation">Okunabilir yüklü APK dosyalarını yerel tanımlarla denetler ve seçtiğiniz dosyaları tarar. Tarama kapsamı ve test tanımları için Ayarlar → Hakkında ve Yasal Bilgiler bölümüne bakın.</string>
     <string name="scan_installed">Yüklü uygulamaları tara</string>
     <string name="scan_selected">Seçili APK veya dosyayı tara</string>
     <string name="monitor_title">İndirme izleyicisi</string>

@@ -11,7 +11,7 @@
     <string name="scan_running">המכשיר נסרק…</string>
     <string name="threat_found">נמצאה התאמה לאיום</string>
     <string name="signature_count">חתימות מקומיות: %1$d · סריקות: %2$d</string>
-    <string name="scan_explanation">בודקת קובצי APK מותקנים שניתן לקרוא מול הגדרות מקומיות וסורקת קבצים שתבחר. יכולת הזיהוי מוגבלת על ידי הרשאות מערכת ההפעלה וההגדרות שבמכשיר.</string>
+    <string name="scan_explanation">בודקת קובצי APK מותקנים שניתנים לקריאה מול הגדרות מקומיות וסורקת קבצים שתבחר. לפרטי כיסוי הסריקה והגדרות הבדיקה, עיין בהגדרות ← מידע ומשפטי.</string>
     <string name="scan_installed">סריקת אפליקציות מותקנות</string>
     <string name="scan_selected">סריקת APK או קובץ שנבחר</string>
     <string name="monitor_title">מעקב הורדות</string>

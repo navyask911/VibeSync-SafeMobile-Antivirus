@@ -11,7 +11,7 @@
     <string name="scan_running">正在扫描设备…</string>
     <string name="threat_found">检测到威胁匹配</string>
     <string name="signature_count">本地特征：%1$d · 扫描次数：%2$d</string>
-    <string name="scan_explanation">根据本地定义检查可读取的已安装 APK，并检查您选择的文件。检测能力受操作系统访问权限和设备上已安装定义的限制。</string>
+    <string name="scan_explanation">使用本地定义检查可读取的已安装 APK，并扫描您选择的文件。扫描覆盖范围和测试定义的详情，请参阅设置 → 关于与法律信息。</string>
     <string name="scan_installed">扫描已安装的应用</string>
     <string name="scan_selected">扫描选定的 APK 或文件</string>
     <string name="monitor_title">下载监控</string>

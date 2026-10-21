@@ -147,7 +147,7 @@
 <string name="pillar_offline_body" translatable="false">Core file hashing and local signature matching run on-device. Ads and Google Play update checks are separate network-capable features when configured and permitted.</string>
 <string name="pillar_telemetry_title" translatable="false">Zero Cloud Telemetry</string>
 <string name="pillar_telemetry_body" translatable="false">The scanner does not upload file contents or hashes. Advertising and Google Play services may make separate network requests.</string>
-<string name="pillar_whatsapp_title" translatable="false">WhatsApp Trojan Guardian</string>
+<string name="pillar_whatsapp_title" translatable="false">Messenger Attachment Guardian</string>
 <string name="pillar_whatsapp_body" translatable="false">Select and assess APKs or documents you choose. SafeMobile does not automatically inspect every WhatsApp message or attachment.</string>
 <string name="pillar_phishing_title" translatable="false">Phishing Link Blocker</string>
 <string name="pillar_phishing_body" translatable="false">Local URL heuristics are available. No URLhaus threat feed or device-wide browser interception is configured in this build.</string>

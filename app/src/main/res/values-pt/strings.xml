@@ -11,7 +11,7 @@
     <string name="scan_running">A analisar o dispositivo…</string>
     <string name="threat_found">Correspondência de ameaça detetada</string>
     <string name="signature_count">Assinaturas locais: %1$d · Sessões de análise: %2$d</string>
-    <string name="scan_explanation">Verifica APKs instalados e acessíveis com definições locais e analisa os ficheiros que selecionar. A deteção é limitada pelo acesso permitido pelo sistema operativo e pelas definições instaladas neste dispositivo.</string>
+    <string name="scan_explanation">Verifica APKs instalados e acessíveis com definições locais e analisa os ficheiros selecionados. Consulte Definições → Sobre e informações legais para detalhes sobre a cobertura da análise e as definições de teste.</string>
     <string name="scan_installed">Analisar aplicações instaladas</string>
     <string name="scan_selected">Analisar um APK ou ficheiro selecionado</string>
     <string name="monitor_title">Monitor de transferências</string>

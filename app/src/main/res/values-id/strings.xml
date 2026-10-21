@@ -11,7 +11,7 @@
     <string name="scan_running">Memindai perangkat…</string>
     <string name="threat_found">Kecocokan ancaman ditemukan</string>
     <string name="signature_count">Signature lokal: %1$d · Sesi pemindaian: %2$d</string>
-    <string name="scan_explanation">Memeriksa APK terpasang yang dapat dibaca dengan definisi lokal dan memindai file yang Anda pilih. Deteksi dibatasi oleh akses sistem operasi dan definisi yang terpasang di perangkat ini.</string>
+    <string name="scan_explanation">Memeriksa APK terpasang yang dapat dibaca dengan definisi lokal dan memindai file yang Anda pilih. Lihat Setelan → Tentang &amp; Legal untuk detail cakupan pemindaian dan definisi pengujian.</string>
     <string name="scan_installed">Pindai aplikasi terpasang</string>
     <string name="scan_selected">Pindai APK atau file yang dipilih</string>
     <string name="monitor_title">Pemantau unduhan</string>

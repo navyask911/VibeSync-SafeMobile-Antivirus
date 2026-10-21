@@ -133,7 +133,6 @@ import java.util.Date
   state.threatCount > 0 -> R.string.threat_found
   state.suspiciousCount > 0 -> R.string.review_recommended
   state.results.any { it.verdict == ScanVerdict.NOT_SCANNED } -> R.string.verdict_not_scanned
-  state.signatureCount <= 1 -> R.string.limited_protection
   else -> R.string.scan_status
  }
  val statusTint = when {
@@ -141,13 +140,12 @@ import java.util.Date
   state.threatCount > 0 -> MaterialTheme.colorScheme.error
   state.suspiciousCount > 0 -> MaterialTheme.colorScheme.tertiary
   state.results.any { it.verdict == ScanVerdict.NOT_SCANNED } -> MaterialTheme.colorScheme.onSurfaceVariant
-  state.signatureCount <= 1 -> MaterialTheme.colorScheme.tertiary
   state.lastScanAt == null || state.results.isEmpty() -> MaterialTheme.colorScheme.onSurfaceVariant
   else -> successStatusColor()
  }
  val statusIcon = when {
   state.isScanning -> Icons.Default.Security
-  state.threatCount > 0 || state.suspiciousCount > 0 || state.results.any { it.verdict == ScanVerdict.NOT_SCANNED } || state.signatureCount <= 1 -> Icons.Default.Warning
+  state.threatCount > 0 || state.suspiciousCount > 0 || state.results.any { it.verdict == ScanVerdict.NOT_SCANNED } -> Icons.Default.Warning
   state.lastScanAt == null || state.results.isEmpty() -> Icons.Default.Security
   else -> Icons.Default.CheckCircle
  }
@@ -293,7 +291,6 @@ import java.util.Date
         Text(stringResource(R.string.scan_cancel))
        }
       }
-      if(state.signatureCount<=1) Text(stringResource(R.string.definitions_limited_compact),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.tertiary)
       Button(onClick={ requestPrivacyAcknowledgement { vm.scanInstalled() } },enabled=!state.isScanning,modifier=Modifier.fillMaxWidth()) {
        if(state.isScanning) CircularProgressIndicator(Modifier.size(18.dp),strokeWidth=2.dp,color=MaterialTheme.colorScheme.onPrimary) else androidx.compose.material3.Icon(Icons.Default.Security,contentDescription=null)
        Text(stringResource(if(state.isScanning) R.string.scan_running else R.string.scan_installed),modifier=Modifier.padding(start=8.dp))
@@ -460,7 +457,6 @@ import java.util.Date
      }
     }
     Spacer(Modifier.height(8.dp))
-    if (selectedDestination == "home") Text(stringResource(R.string.scan_clean_warning),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
    }
    NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
     val destinations = listOf(

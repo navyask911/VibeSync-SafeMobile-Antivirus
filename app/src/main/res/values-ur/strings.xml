@@ -11,7 +11,7 @@
     <string name="scan_running">ڈیوائس اسکین ہو رہی ہے…</string>
     <string name="threat_found">خطرے سے مماثلت ملی</string>
     <string name="signature_count">مقامی دستخط: %1$d · اسکین سیشن: %2$d</string>
-    <string name="scan_explanation">قابلِ مطالعہ انسٹال شدہ APKs کو مقامی تعریفوں سے چیک کرتا ہے اور آپ کی منتخب فائلیں اسکین کرتا ہے۔ شناخت کی صلاحیت OS کی رسائی اور اس ڈیوائس پر موجود تعریفوں تک محدود ہے۔</string>
+    <string name="scan_explanation">قابلِ مطالعہ انسٹال شدہ APKs کو مقامی تعریفوں سے چیک کرتا ہے اور آپ کی منتخب فائلیں اسکین کرتا ہے۔ اسکین کوریج اور آزمائشی تعریفوں کی تفصیلات کے لیے ترتیبات → تعارف اور قانونی معلومات دیکھیں۔</string>
     <string name="scan_installed">انسٹال شدہ ایپس اسکین کریں</string>
     <string name="scan_selected">منتخب APK یا فائل اسکین کریں</string>
     <string name="monitor_title">ڈاؤن لوڈ نگرانی</string>
