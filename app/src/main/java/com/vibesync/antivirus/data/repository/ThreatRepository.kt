@@ -15,6 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.IOException
+import java.util.UUID
 
 class ThreatRepository(private val context: Context, private val database: ThreatDatabase, private val scanner: PackageScanner, private val definitionLoader: LocalDefinitionLoader) {
  fun observeRecentAudits(): Flow<List<ScanAudit>> = database.threatDao().observeRecentAudits()
@@ -32,14 +33,54 @@ class ThreatRepository(private val context: Context, private val database: Threa
  }
  suspend fun scanUri(uri: Uri): ScanResult = withContext(Dispatchers.IO) {
   val quarantineManager = LocalQuarantineManager(context)
+  val scanSessionId = UUID.randomUUID().toString()
+  val label = runCatching {
+   context.contentResolver.query(uri,arrayOf(OpenableColumns.DISPLAY_NAME),null,null,null)?.use { c ->
+    if (c.moveToFirst()) c.getString(0) else null
+   }
+  }.getOrNull() ?: uri.lastPathSegment ?: context.getString(R.string.unknown_file)
   if (!quarantineManager.supportsLocalUri(uri)) {
-   val label = uri.lastPathSegment ?: context.getString(R.string.unknown_file)
-   return@withContext ScanResult(label,label,null,null,ScanVerdict.NOT_SCANNED,listOf(context.getString(R.string.local_files_only)),0)
+   return@withContext recordUnscannedUri(
+    label,
+    context.getString(R.string.local_files_only),
+    scanSessionId
+   )
   }
   definitionLoader.importBundledIfEmpty()
-  val label=context.contentResolver.query(uri,arrayOf(OpenableColumns.DISPLAY_NAME),null,null,null)?.use { c -> if(c.moveToFirst()) c.getString(0) else null } ?: uri.lastPathSegment ?: context.getString(R.string.unknown_file)
-  val stream=context.contentResolver.openInputStream(uri) ?: return@withContext ScanResult(label,label,null,null,ScanVerdict.NOT_SCANNED,listOf(context.getString(R.string.file_stream_failed)),0)
-  scanner.scanStream(label,stream).copy(sourceUri = uri.toString())
+  val stream = runCatching { context.contentResolver.openInputStream(uri) }.getOrNull()
+   ?: return@withContext recordUnscannedUri(
+    label,
+    context.getString(R.string.file_stream_failed),
+    scanSessionId
+   )
+  scanner.scanStream(label, stream, scanSessionId).copy(sourceUri = uri.toString())
+ }
+
+ private suspend fun recordUnscannedUri(label: String, reason: String, scanSessionId: String): ScanResult {
+  val now = System.currentTimeMillis()
+  val result = ScanResult(
+   packageOrPath = label,
+   displayName = label,
+   sha256 = null,
+   md5 = null,
+   verdict = ScanVerdict.NOT_SCANNED,
+   reasons = listOf(reason),
+   durationMs = 0L,
+   scanSessionId = scanSessionId
+  )
+  runCatching {
+   database.threatDao().insertAudit(
+    ScanAudit(
+     packageOrPath = label.take(250),
+     hash = "",
+     scanTimestamp = now,
+     verdict = ScanVerdict.NOT_SCANNED.name,
+     scanDuration = 0L,
+     scanSessionId = scanSessionId
+    )
+   )
+  }
+  return result
  }
  suspend fun quarantineSelectedFile(uri: Uri, expectedSha256: String?): String = withContext(Dispatchers.IO) {
   val outcome = LocalQuarantineManager(context).quarantine(uri, expectedSha256)
