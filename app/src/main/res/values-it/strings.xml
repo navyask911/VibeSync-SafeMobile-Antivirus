@@ -60,11 +60,11 @@
     <string name="unknown_file">file selezionato</string>
     <string name="local_files_only">Per la privacy, lo scanner apre file solo da fornitori di archiviazione locali riconosciuti. I fornitori cloud o di terze parti non vengono aperti.</string>
     <string name="quarantine_confirm_title">Mettere in quarantena questo file segnalato?</string>
-    <string name="quarantine_confirm_body">Una copia privata sarà salvata nell\'app. Dopo aver verificato l\'hash, SafeMobile tenterà di rimuovere l\'originale selezionato. La rimozione dipende dalle autorizzazioni di Android e dal fornitore; l\'originale potrebbe rimanere.</string>
+    <string name="quarantine_confirm_body">SafeMobile creerà e verificherà una copia privata crittografata. Il file originale sarà conservato e non verrà eliminato.</string>
     <string name="quarantine_confirm_action">Metti in quarantena</string>
     <string name="quarantine_file">Salva copia privata in quarantena</string>
     <string name="quarantine_success_removed">Copia privata salvata in quarantena (%1$s); Android ha segnalato la rimozione dell\'originale.</string>
-    <string name="quarantine_success_copy_only">Copia privata salvata in quarantena (%1$s), ma Android non ha rimosso l\'originale. Eliminalo manualmente se necessario.</string>
+    <string name="quarantine_success_copy_only">Copia crittografata in quarantena salvata (%1$s). Il file originale è stato conservato e non eliminato.</string>
     <string name="quarantine_failed">Quarantena non riuscita. L\'originale non è stato rimosso intenzionalmente.</string>
     <string name="uninstall_app">Disinstalla app…</string>
     <string name="import_definitions">Importa definizioni di minacce offline (JSON)</string>
@@ -124,4 +124,5 @@
 <string name="definitions_limited_compact">Definizioni: solo firma di test EICAR; copertura limitata.</string>
 <string name="settings_privacy">Privacy e autorizzazioni</string>
 
+<string name="quarantine_legacy_warning">Elemento di quarantena precedente: archiviato senza crittografia in una versione precedente.</string>
 </resources>
