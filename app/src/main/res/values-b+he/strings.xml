@@ -124,4 +124,23 @@
 <string name="definitions_limited_compact">הגדרות: חתימת בדיקת EICAR בלבד; הכיסוי מוגבל.</string>
 <string name="settings_privacy">פרטיות והרשאות</string>
 <string name="quarantine_legacy_warning">פריט הסגר ישן: אוחסן ללא הצפנה בגרסה קודמת.</string>
+<string name="overlay_review_title">סקירת סיכון שכבות-על</string>
+<string name="overlay_review_description">סקירה אופציונלית ככל האפשר של אפליקציות שמצהירות על יכולת להציג מעל אפליקציות אחרות ועל שירותי נגישות. אלה סימנים לבדיקה בלבד; SafeMobile אינו יכול להוכיח שאפליקציה אחרת מציגה כעת שכבת-על או לקרוא את מצב ההרשאה החי שלה.</string>
+<string name="overlay_review_last_attempt">ניסיון אחרון: %1$s</string>
+<string name="overlay_review_last_success">בדיקה מוצלחת אחרונה: %1$s</string>
+<string name="overlay_review_summary">אפליקציות שמצהירות על יכולת שכבת-על: %1$d · אפליקציות שמצהירות על שירותי נגישות: %2$d · שירותי נגישות פעילים במכשיר: %3$d</string>
+<string name="overlay_review_not_checked">עדיין לא הושלמה סקירת סיכון שכבות-על.</string>
+<string name="overlay_review_failed">ניסיון הסקירה האחרון נכשל. ייתכן ש-Android דחה את המשימה או חסם את נראות החבילות הנדרשת.</string>
+<string name="overlay_review_permission_required">Android לא אפשר לבצע סקירה זו. בדקו את נראות האפליקציות המותקנות ונסו שוב.</string>
+<string name="overlay_review_reminder_interval">מרווח תזכורות</string>
+<string name="overlay_review_reminder_12h">כל 12 שעות</string>
+<string name="overlay_review_reminder_24h">כל 24 שעות</string>
+<string name="overlay_review_reminder_48h">כל 48 שעות</string>
+<string name="overlay_review_notifications_off">ההתראות מושבתות. הסקירה עדיין יכולה לפעול, אך לא יוצגו תזכורות.</string>
+<string name="overlay_review_enabled">הסקירה האוטומטית פעילה</string>
+<string name="overlay_review_disabled">הסקירה מושהית</string>
+<string name="overlay_review_notification_channel">סקירת פרטיות של SafeMobile</string>
+<string name="overlay_review_notification_channel_description">תזכורות בעדיפות נמוכה לסקירת סיכון שכבות-על האופציונלית.</string>
+<string name="overlay_review_notification_title">סקירת סיכון שכבות-על הושלמה</string>
+<string name="overlay_review_notification_body">%1$d אפליקציות מצהירות על יכולת שכבת-על ו-%2$d מצהירות על שירותי נגישות. אלה סימנים לבדיקה, לא הוכחה לנוזקה.</string>
 </resources>
