@@ -319,7 +319,7 @@ internal fun SafeMobileSettingsPanel(
             }
         }
         OverlayRiskReviewPanel()
-        ThreatFeedSettingsPanel()
+
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(stringResource(R.string.language_settings), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)

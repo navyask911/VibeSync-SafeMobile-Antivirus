@@ -451,45 +451,6 @@ import java.util.Date
      }
     }
     }
-    if (selectedDestination == "home") {
-     Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surface),shape=RoundedCornerShape(18.dp),modifier=Modifier.fillMaxWidth()) {
-      Column(Modifier.padding(16.dp),verticalArrangement=Arrangement.spacedBy(8.dp)) {
-       Text(stringResource(R.string.threat_feed_dashboard_title),style=MaterialTheme.typography.titleMedium,fontWeight=FontWeight.Bold)
-       Text(stringResource(R.string.threat_feed_active_count,state.activeThreatIndicatorCount),style=MaterialTheme.typography.bodyMedium)
-       val lastSuccessfulSyncAt = state.lastThreatFeedSyncAt
-       Text(
-        if (lastSuccessfulSyncAt == null) stringResource(R.string.threat_feed_never_synced)
-        else stringResource(R.string.threat_feed_last_success,DateFormat.getDateTimeInstance().format(Date(lastSuccessfulSyncAt))),
-        style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant
-       )
-       val feedStatusResource = when(state.threatFeedSyncStatus) {
-        "RUNNING" -> R.string.threat_feed_syncing
-        "SUCCESS" -> R.string.threat_feed_sync_succeeded
-        "RETRY" -> R.string.threat_feed_sync_retry
-        "FAILED" -> R.string.threat_feed_sync_failed
-        else -> R.string.threat_feed_status_not_available
-       }
-       Text(stringResource(feedStatusResource),style=MaterialTheme.typography.labelMedium,color=MaterialTheme.colorScheme.onSurfaceVariant)
-       state.threatFeedSyncError?.takeIf { it.isNotBlank() }?.let {
-        Text(it,style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.tertiary)
-       }
-       Row(horizontalArrangement=Arrangement.spacedBy(8.dp),modifier=Modifier.fillMaxWidth()) {
-        Button(
-         onClick = {
-          if (state.threatFeedSyncStatus == null && state.lastThreatFeedSyncAt == null && state.activeThreatIndicatorCount == 0) selectedDestination = "settings"
-          else vm.requestThreatFeedSync()
-         },
-         modifier=Modifier.weight(1f)
-        ) {
-         Text(stringResource(if (state.threatFeedSyncStatus == null && state.lastThreatFeedSyncAt == null && state.activeThreatIndicatorCount == 0) R.string.threat_feed_configure else R.string.threat_feed_sync_now))
-        }
-        OutlinedButton(onClick={ selectedDestination = "settings" },modifier=Modifier.weight(1f)) {
-         Text(stringResource(R.string.threat_feed_manage))
-        }
-       }
-      }
-     }
-    }
     if (selectedDestination == "home") CoreStrengthsAccordion { destination -> selectedDestination = destination }
     if (selectedDestination == "apps") {
      SectionHeader(title=stringResource(R.string.nav_apps),actionLabel=stringResource(R.string.security_scan_now),onAction={ requestPrivacyAcknowledgement { vm.scanInstalled() } })
