@@ -60,11 +60,11 @@
     <string name="unknown_file">ఎంచుకున్న ఫైల్</string>
     <string name="local_files_only">గోప్యత కోసం స్కానర్ గుర్తించిన పరికరంలోని స్థానిక నిల్వ ప్రొవైడర్ల ఫైళ్లనే తెరుస్తుంది. క్లౌడ్ లేదా మూడోపక్ష డాక్యుమెంట్ ప్రొవైడర్లను తెరవదు.</string>
     <string name="quarantine_confirm_title">ఈ గుర్తించిన ఫైల్‌ను క్వారంటైన్ చేయాలా?</string>
-    <string name="quarantine_confirm_body">ఈ యాప్‌లోని ప్రైవేట్ నిల్వలో కాపీ భద్రపరచబడుతుంది. హ్యాష్‌ను ధృవీకరించిన తర్వాత SafeMobile ఎంచుకున్న అసలు ఫైల్‌ను తొలగించడానికి ప్రయత్నిస్తుంది. తొలగింపు Android అనుమతులు మరియు ప్రొవైడర్‌పై ఆధారపడి ఉంటుంది; అసలు ఫైల్ మిగిలి ఉండవచ్చు.</string>
+    <string name="quarantine_confirm_body">SafeMobile ఎన్‌క్రిప్ట్ చేసిన ప్రైవేట్ కాపీని సృష్టించి ధృవీకరిస్తుంది. అసలు ఫైల్ అలాగే ఉంచబడుతుంది; తొలగించబడదు.</string>
     <string name="quarantine_confirm_action">ఫైల్‌ను క్వారంటైన్ చేయండి</string>
     <string name="quarantine_file">ప్రైవేట్ క్వారంటైన్ కాపీ</string>
     <string name="quarantine_success_removed">ప్రైవేట్ క్వారంటైన్ కాపీ సేవ్ అయింది (%1$s); అసలు ఫైల్ తొలగించబడిందని Android తెలిపింది.</string>
-    <string name="quarantine_success_copy_only">ప్రైవేట్ క్వారంటైన్ కాపీ సేవ్ అయింది (%1$s), కానీ Android అసలును తొలగించలేదు. అవసరమైతే చేతితో తొలగించండి.</string>
+    <string name="quarantine_success_copy_only">ఎన్‌క్రిప్ట్ చేసిన క్వారంటైన్ కాపీ సేవ్ చేయబడింది (%1$s). అసలు ఫైల్ ఉంచబడింది; తొలగించబడలేదు.</string>
     <string name="quarantine_failed">క్వారంటైన్ విఫలమైంది. అసలు ఫైల్ ఉద్దేశపూర్వకంగా తొలగించబడలేదు.</string>
     <string name="uninstall_app">యాప్‌ను అన్‌ఇన్‌స్టాల్ చేయండి…</string>
     <string name="import_definitions">ఆఫ్‌లైన్ ముప్పు నిర్వచనాలను దిగుమతి చేయండి (JSON)</string>
@@ -123,4 +123,5 @@
 <string name="history_session">సెషన్ ID</string>
 <string name="definitions_limited_compact">డెఫినిషన్‌లు: EICAR పరీక్ష సంతకం మాత్రమే; కవరేజ్ పరిమితం.</string>
 <string name="settings_privacy">గోప్యత మరియు అనుమతులు</string>
+<string name="quarantine_legacy_warning">పాత క్వారంటైన్ అంశం: మునుపటి వెర్షన్‌లో ఎన్‌క్రిప్షన్ లేకుండా నిల్వ చేయబడింది.</string>
 </resources>
