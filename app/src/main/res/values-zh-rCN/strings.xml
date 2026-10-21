@@ -124,4 +124,23 @@
 <string name="definitions_limited_compact">定义库仅包含 EICAR 测试签名；覆盖范围有限。</string>
 <string name="settings_privacy">隐私与权限</string>
 <string name="quarantine_legacy_warning">旧版隔离项目：在之前的版本中以未加密方式存储。</string>
+<string name="overlay_review_title">悬浮窗风险检查</string>
+<string name="overlay_review_description">可选地检查声明了显示在其他应用上层能力或无障碍服务的应用。它们仅是需要复核的指标；SafeMobile 无法证明其他应用当前正在显示悬浮窗，也无法检查其他应用实时的悬浮窗权限状态。</string>
+<string name="overlay_review_last_attempt">上次尝试：%1$s</string>
+<string name="overlay_review_last_success">上次成功检查：%1$s</string>
+<string name="overlay_review_summary">声明悬浮窗能力的应用：%1$d · 声明无障碍服务的应用：%2$d · 此设备上已启用的无障碍服务：%3$d</string>
+<string name="overlay_review_not_checked">尚未成功完成悬浮窗风险检查。</string>
+<string name="overlay_review_failed">上次检查失败。Android 可能推迟了任务或限制了所需的软件包可见性。</string>
+<string name="overlay_review_permission_required">Android 不允许执行此检查。请检查已安装应用的可见性，然后重试。</string>
+<string name="overlay_review_reminder_interval">提醒间隔</string>
+<string name="overlay_review_reminder_12h">每 12 小时</string>
+<string name="overlay_review_reminder_24h">每 24 小时</string>
+<string name="overlay_review_reminder_48h">每 48 小时</string>
+<string name="overlay_review_notifications_off">通知已关闭。检查仍可运行，但不会显示提醒。</string>
+<string name="overlay_review_enabled">已启用自动检查</string>
+<string name="overlay_review_disabled">检查已暂停</string>
+<string name="overlay_review_notification_channel">SafeMobile 隐私检查</string>
+<string name="overlay_review_notification_channel_description">可选悬浮窗风险检查的低优先级提醒。</string>
+<string name="overlay_review_notification_title">悬浮窗风险检查已完成</string>
+<string name="overlay_review_notification_body">%1$d 个应用声明了悬浮窗能力，%2$d 个应用声明了无障碍服务。这些是需要复核的指标，并非恶意软件证据。</string>
 </resources>
