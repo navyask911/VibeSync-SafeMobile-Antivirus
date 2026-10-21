@@ -10,6 +10,8 @@ import com.vibesync.antivirus.core.quarantine.LocalQuarantineManager
 import com.vibesync.antivirus.core.worker.LocalDefinitionLoader
 import com.vibesync.antivirus.data.local.ThreatDatabase
 import com.vibesync.antivirus.data.local.ScanAudit
+import com.vibesync.antivirus.data.local.ThreatFeedSyncStateEntity
+import com.vibesync.antivirus.core.worker.ThreatFeedSyncScheduler
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -17,8 +19,20 @@ import java.io.File
 import java.io.IOException
 import java.util.UUID
 
-class ThreatRepository(private val context: Context, private val database: ThreatDatabase, private val scanner: PackageScanner, private val definitionLoader: LocalDefinitionLoader) {
+class ThreatRepository(
+ private val context: Context,
+ private val database: ThreatDatabase,
+ private val scanner: PackageScanner,
+ private val definitionLoader: LocalDefinitionLoader,
+ private val threatIntelligence: ThreatIntelligenceRepository
+) {
  fun observeRecentAudits(): Flow<List<ScanAudit>> = database.threatDao().observeRecentAudits()
+ fun observeActiveThreatIndicatorCount(): Flow<Int> = threatIntelligence.observeActiveIndicatorCount()
+ fun observeLastSuccessfulThreatFeedSyncAt(): Flow<Long?> = threatIntelligence.observeLastSuccessfulSyncAt()
+ fun observeLatestThreatFeedSyncState(): Flow<ThreatFeedSyncStateEntity?> = threatIntelligence.observeLatestSyncState()
+ fun requestThreatFeedSync() = ThreatFeedSyncScheduler.enqueueNow(context)
+ suspend fun lookupThreatHash(sha256: String?, md5: String?) = threatIntelligence.lookupHash(sha256, md5)
+ suspend fun lookupNetworkIoc(value: String) = threatIntelligence.lookupIoc(value)
  suspend fun scanInstalledApps(progress: suspend (Int, Int) -> Unit = { _, _ -> }): List<ScanResult> = withContext(Dispatchers.IO) {
   definitionLoader.importBundledIfEmpty()
   scanner.scanInstalledApps(progress)

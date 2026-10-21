@@ -12,6 +12,8 @@ import com.vibesync.antivirus.core.worker.DeepScanWorker
 import com.vibesync.antivirus.core.worker.LocalDefinitionLoader
 import com.vibesync.antivirus.data.local.ThreatDatabase
 import com.vibesync.antivirus.data.repository.ThreatRepository
+import com.vibesync.antivirus.data.repository.ThreatIntelligenceRepository
+import com.vibesync.antivirus.core.worker.ThreatFeedSyncScheduler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -27,12 +29,14 @@ class SafeMobileApp : Application() {
  override fun onCreate() {
   super.onCreate()
   database=Room.databaseBuilder(this,ThreatDatabase::class.java,"safe_mobile_threats.db")
-   .addMigrations(ThreatDatabase.MIGRATION_1_2, ThreatDatabase.MIGRATION_2_3)
+   .addMigrations(ThreatDatabase.MIGRATION_1_2, ThreatDatabase.MIGRATION_2_3, ThreatDatabase.MIGRATION_3_4)
    .build()
   val hashStore=EncryptedHashStore(this)
   val loader=LocalDefinitionLoader(this,database.threatDao(),hashStore)
-  val scanner=PackageScanner(this,database.threatDao(),hashStore,HashCalculator())
-  repository=ThreatRepository(this,database,scanner,loader)
+  val intelligence=ThreatIntelligenceRepository(database.malwareHashDao(),database.threatFeedSyncStateDao())
+  val scanner=PackageScanner(this,database.threatDao(),hashStore,HashCalculator(),threatIntelligenceRepository=intelligence)
+  repository=ThreatRepository(this,database,scanner,loader,intelligence)
+  ThreatFeedSyncScheduler.ensurePeriodic(this)
   appScope.launch { runCatching { loader.importBundledIfEmpty() } }
   if (getSharedPreferences(PRIVACY_PREFS, MODE_PRIVATE).getBoolean(PRIVACY_ACKNOWLEDGED, false)) {
    scheduleMaintenanceSweep()

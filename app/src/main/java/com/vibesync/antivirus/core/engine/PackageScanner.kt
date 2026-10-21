@@ -9,6 +9,7 @@ import com.vibesync.antivirus.core.crypto.HashCalculator
 import com.vibesync.antivirus.core.heuristics.PermissionRiskAnalyzer
 import com.vibesync.antivirus.data.local.ScanAudit
 import com.vibesync.antivirus.data.local.ThreatDao
+import com.vibesync.antivirus.data.repository.ThreatIntelligenceRepository
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.security.cert.CertificateFactory
@@ -23,7 +24,8 @@ class PackageScanner(
  private val dao: ThreatDao,
  private val hashStore: EncryptedHashStore,
  private val calculator: HashCalculator = HashCalculator(),
- private val riskAnalyzer: PermissionRiskAnalyzer = PermissionRiskAnalyzer()
+ private val riskAnalyzer: PermissionRiskAnalyzer = PermissionRiskAnalyzer(),
+ private val threatIntelligenceRepository: ThreatIntelligenceRepository? = null
 ) {
  private val pm = context.packageManager
  suspend fun scanInstalledApps(progress: suspend (processed: Int, total: Int) -> Unit = { _, _ -> }): List<ScanResult> {
@@ -150,6 +152,12 @@ class PackageScanner(
    val family = revealMetadataOrPlaintext(threat.malwareFamily, "family")
    val level = revealMetadataOrPlaintext(threat.threatLevel, "level")
    return ScanResult(key, label, sha, md5, ScanVerdict.THREAT, listOf(context.getString(R.string.hash_match, family, level)), 0).copy(threatEventId = UUID.randomUUID().toString())
+  }
+  val feedThreat = threatIntelligenceRepository?.lookupHash(sha, md5)
+  if (feedThreat != null) {
+   return ScanResult(key, label, sha, md5, ScanVerdict.THREAT,
+    listOf(context.getString(R.string.threat_feed_hash_match, feedThreat.threatName, feedThreat.source)), 0)
+    .copy(threatEventId = UUID.randomUUID().toString())
   }
   val verdict = if (score >= 45) ScanVerdict.SUSPICIOUS else ScanVerdict.NO_MATCH
   val notes = if (heuristic.isEmpty()) listOf(context.getString(R.string.no_match_detail)) else heuristic + context.getString(R.string.risk_review)

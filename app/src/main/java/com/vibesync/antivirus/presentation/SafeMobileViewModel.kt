@@ -26,7 +26,11 @@ data class SafeMobileUiState(
     val signatureCount: Int = 0,
     val processedItems: Int = 0,
     val totalItems: Int = 0,
-    val quarantinedFiles: List<File> = emptyList()
+    val quarantinedFiles: List<File> = emptyList(),
+    val activeThreatIndicatorCount: Int = 0,
+    val lastThreatFeedSyncAt: Long? = null,
+    val threatFeedSyncStatus: String? = null,
+    val threatFeedSyncError: String? = null
 ) {
     val threatCount get() = results.count { it.verdict == ScanVerdict.THREAT }
     val suspiciousCount get() = results.count { it.verdict == ScanVerdict.SUSPICIOUS }
@@ -37,7 +41,31 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
     val state = mutableState.asStateFlow()
     private var scanJob: Job? = null
 
-    init { refreshSignatureCount(); refreshQuarantine() }
+    init {
+        refreshSignatureCount()
+        refreshQuarantine()
+        observeThreatFeedState()
+    }
+
+    private fun observeThreatFeedState() {
+        viewModelScope.launch {
+            repository.observeActiveThreatIndicatorCount().collect { count ->
+                mutableState.update { it.copy(activeThreatIndicatorCount = count) }
+            }
+        }
+        viewModelScope.launch {
+            repository.observeLastSuccessfulThreatFeedSyncAt().collect { timestamp ->
+                mutableState.update { it.copy(lastThreatFeedSyncAt = timestamp) }
+            }
+        }
+        viewModelScope.launch {
+            repository.observeLatestThreatFeedSyncState().collect { sync ->
+                mutableState.update { it.copy(threatFeedSyncStatus = sync?.status, threatFeedSyncError = sync?.lastError) }
+            }
+        }
+    }
+
+    fun requestThreatFeedSync() { repository.requestThreatFeedSync() }
 
     fun scanInstalled() = runScan { onProgress ->
         repository.scanInstalledApps(onProgress)
