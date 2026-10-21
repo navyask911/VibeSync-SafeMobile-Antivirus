@@ -67,4 +67,23 @@
 <string name="definitions_limited_compact">डेफिनिशन: केवल EICAR परीक्षण सिग्नेचर; कवरेज सीमित है।</string>
 <string name="settings_privacy">गोपनीयता और अनुमतियाँ</string>
 <string name="quarantine_legacy_warning">पुराना क्वारंटीन आइटम: पिछले संस्करण में बिना एन्क्रिप्शन के संग्रहीत।</string>
+<string name="overlay_review_title">ओवरले-जोखिम समीक्षा</string>
+<string name="overlay_review_description">उन ऐप्स की वैकल्पिक सीमित समीक्षा जो अन्य ऐप्स के ऊपर दिखने की क्षमता या एक्सेसिबिलिटी सेवाएँ घोषित करते हैं। ये केवल समीक्षा के संकेत हैं; SafeMobile यह प्रमाणित नहीं कर सकता कि कोई अन्य ऐप अभी ओवरले दिखा रहा है या उसकी लाइव अनुमति क्या है।</string>
+<string name="overlay_review_last_attempt">पिछला प्रयास: %1$s</string>
+<string name="overlay_review_last_success">पिछली सफल जाँच: %1$s</string>
+<string name="overlay_review_summary">ओवरले क्षमता घोषित करने वाले ऐप: %1$d · एक्सेसिबिलिटी सेवाएँ घोषित करने वाले ऐप: %2$d · इस डिवाइस पर सक्षम एक्सेसिबिलिटी सेवाएँ: %3$d</string>
+<string name="overlay_review_not_checked">अभी तक ओवरले-जोखिम की सफल समीक्षा नहीं हुई है।</string>
+<string name="overlay_review_failed">पिछली समीक्षा विफल हुई। Android ने काम को टाल दिया हो सकता है या आवश्यक पैकेज दृश्यता रोक दी हो सकती है।</string>
+<string name="overlay_review_permission_required">Android ने इस समीक्षा की अनुमति नहीं दी। इंस्टॉल किए गए ऐप्स की दृश्यता जाँचें और फिर प्रयास करें।</string>
+<string name="overlay_review_reminder_interval">रिमाइंडर अंतराल</string>
+<string name="overlay_review_reminder_12h">हर 12 घंटे</string>
+<string name="overlay_review_reminder_24h">हर 24 घंटे</string>
+<string name="overlay_review_reminder_48h">हर 48 घंटे</string>
+<string name="overlay_review_notifications_off">सूचनाएँ बंद हैं। समीक्षा फिर भी चल सकती है, लेकिन रिमाइंडर नहीं दिखेंगे।</string>
+<string name="overlay_review_enabled">स्वचालित समीक्षा चालू</string>
+<string name="overlay_review_disabled">समीक्षा रुकी हुई है</string>
+<string name="overlay_review_notification_channel">SafeMobile गोपनीयता समीक्षा</string>
+<string name="overlay_review_notification_channel_description">वैकल्पिक ओवरले-जोखिम समीक्षा के लिए कम-प्राथमिकता रिमाइंडर।</string>
+<string name="overlay_review_notification_title">ओवरले-जोखिम समीक्षा पूरी हुई</string>
+<string name="overlay_review_notification_body">%1$d ऐप ओवरले क्षमता और %2$d ऐप एक्सेसिबिलिटी सेवाएँ घोषित करते हैं। ये समीक्षा के संकेत हैं, मैलवेयर का प्रमाण नहीं।</string>
 </resources>
