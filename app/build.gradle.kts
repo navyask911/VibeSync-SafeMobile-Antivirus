@@ -12,17 +12,6 @@ val releaseStoreBase64 = providers.environmentVariable("KEYSTORE_BASE64").orNull
 val releaseStorePassword = providers.environmentVariable("KEYSTORE_PASSWORD").orNull
 val releaseKeyAlias = providers.environmentVariable("KEY_ALIAS").orNull
 val releaseKeyPassword = providers.environmentVariable("KEY_PASSWORD").orNull
-val releaseAdMobAppId = providers.environmentVariable("ADMOB_APP_ID").orNull
-val releaseBannerUnitId = providers.environmentVariable("ADMOB_BANNER_UNIT_ID").orNull
-val releaseInterstitialUnitId = providers.environmentVariable("ADMOB_INTERSTITIAL_UNIT_ID").orNull
-val releaseAdValues = listOf(releaseAdMobAppId, releaseBannerUnitId, releaseInterstitialUnitId)
-val releaseAdsConfigured = releaseAdValues.all { !it.isNullOrBlank() }
-if (releaseAdValues.any { !it.isNullOrBlank() } && !releaseAdsConfigured) {
-    throw GradleException("AdMob release configuration is partial. Set ADMOB_APP_ID, ADMOB_BANNER_UNIT_ID and ADMOB_INTERSTITIAL_UNIT_ID, or leave all empty.")
-}
-val testAdMobAppId = "ca-app-pub-3940256099942544~3347511713"
-val testBannerUnitId = "ca-app-pub-3940256099942544/9214589741"
-val testInterstitialUnitId = "ca-app-pub-3940256099942544/1033173712"
 val signingValues = listOf(releaseStoreBase64, releaseStorePassword, releaseKeyAlias, releaseKeyPassword)
 val releaseSigningEnabled = signingValues.all { !it.isNullOrBlank() }
 if (signingValues.any { !it.isNullOrBlank() } && !releaseSigningEnabled) {
@@ -32,6 +21,17 @@ if (signingValues.any { !it.isNullOrBlank() } && !releaseSigningEnabled) {
 android {
  namespace = "com.vibesync.antivirus"
  compileSdk = 36
+ flavorDimensions += "network"
+ productFlavors {
+  create("offline") {
+   dimension = "network"
+   buildConfigField("Boolean", "OPTIONAL_FEED_ENABLED", "false")
+  }
+  create("feed") {
+   dimension = "network"
+   buildConfigField("Boolean", "OPTIONAL_FEED_ENABLED", "true")
+  }
+ }
  defaultConfig {
   applicationId = "com.vibesync.antivirus"
   minSdk = 26
@@ -39,11 +39,6 @@ android {
   versionCode = 20261022
   versionName = "1.0.2"
   testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-  manifestPlaceholders["admobAppId"] = releaseAdMobAppId?.takeIf { it.isNotBlank() } ?: testAdMobAppId
-  buildConfigField("String", "BANNER_AD_UNIT_ID", cfg(releaseBannerUnitId?.takeIf { it.isNotBlank() } ?: ""))
-  buildConfigField("String", "INTERSTITIAL_AD_UNIT_ID", cfg(releaseInterstitialUnitId?.takeIf { it.isNotBlank() } ?: ""))
-  buildConfigField("Boolean", "ADS_CONFIGURED", releaseAdsConfigured.toString())
-  buildConfigField("String", "COFFEE_SUPPORT_URL", cfg("https://github.com/sponsors/navyask911"))
  }
  signingConfigs {
   if (releaseSigningEnabled) {
@@ -64,10 +59,6 @@ android {
   debug {
    applicationIdSuffix = ".debug"
    versionNameSuffix = "-debug"
-   manifestPlaceholders["admobAppId"] = testAdMobAppId
-   buildConfigField("String", "BANNER_AD_UNIT_ID", cfg(testBannerUnitId))
-   buildConfigField("String", "INTERSTITIAL_AD_UNIT_ID", cfg(testInterstitialUnitId))
-   buildConfigField("Boolean", "ADS_CONFIGURED", "true")
   }
   release {
    isMinifyEnabled = true
@@ -107,11 +98,8 @@ dependencies {
  implementation("androidx.work:work-runtime-ktx:2.10.2")
  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
  implementation("com.google.crypto.tink:tink-android:1.16.0")
- implementation("com.google.guava:guava:33.4.8-android")
  implementation("org.tensorflow:tensorflow-lite:2.17.0")
- implementation("com.google.android.gms:play-services-ads:25.5.0")
- implementation("com.google.android.ump:user-messaging-platform:4.0.0")
- implementation("com.google.android.play:app-update-ktx:2.1.0")
+ implementation("com.google.guava:guava:33.4.8-android")
  androidTestImplementation("androidx.test:runner:1.6.2")
  androidTestImplementation("androidx.test.ext:junit:1.2.1")
  androidTestImplementation("androidx.test:core:1.6.1")

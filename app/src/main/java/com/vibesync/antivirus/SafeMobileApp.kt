@@ -38,7 +38,7 @@ class SafeMobileApp : Application() {
   val intelligence=ThreatIntelligenceRepository(database.malwareHashDao(),database.threatFeedSyncStateDao())
   val scanner=PackageScanner(this,database.threatDao(),hashStore,HashCalculator(),threatIntelligenceRepository=intelligence)
   repository=ThreatRepository(this,database,scanner,loader,intelligence)
-  ThreatFeedSyncScheduler.ensurePeriodic(this)
+  if (BuildConfig.OPTIONAL_FEED_ENABLED) ThreatFeedSyncScheduler.ensurePeriodic(this)
   appScope.launch { runCatching { loader.importBundledIfEmpty() } }
   if (getSharedPreferences(PRIVACY_PREFS, MODE_PRIVATE).getBoolean(PRIVACY_ACKNOWLEDGED, false)) {
    scheduleMaintenanceSweep()
