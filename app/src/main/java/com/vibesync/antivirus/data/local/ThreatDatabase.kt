@@ -1,234 +1,65 @@
-package com.vibesync.antivirus.ui.components
+package com.vibesync.antivirus.data.local
 
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.FolderOpen
-import androidx.compose.material.icons.filled.Security
-import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.semantics.ProgressBarRangeInfo
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.progressBarRangeInfo
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.res.stringResource
-import com.vibesync.antivirus.R
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
-import com.vibesync.antivirus.core.engine.ScanResult
-import com.vibesync.antivirus.core.engine.ScanVerdict
-import kotlin.math.roundToInt
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 
-enum class StatusKind { ACTIVE, NEUTRAL, WARNING, DANGER, SAFE }
+@Database(
+ entities = [ThreatSignature::class, ScanAudit::class, WhiteListEntry::class, MalwareHashEntity::class, ThreatFeedSyncStateEntity::class, ThreatFeedStagingEntity::class, SecurityIncidentEntity::class, QuarantineVaultEntity::class],
+ version = 7, exportSchema = false
+)
+abstract class ThreatDatabase : RoomDatabase() {
+ abstract fun threatDao(): ThreatDao
+ abstract fun malwareHashDao(): MalwareHashDao
+ abstract fun threatFeedSyncStateDao(): ThreatFeedSyncStateDao
+ abstract fun threatFeedStagingDao(): ThreatFeedStagingDao
+ abstract fun securityIncidentDao(): SecurityIncidentDao
+ abstract fun quarantineVaultDao(): QuarantineVaultDao
 
-@Composable
-fun StatusChip(label: String, kind: StatusKind = StatusKind.NEUTRAL, modifier: Modifier = Modifier) {
-    val tint = when (kind) {
-        StatusKind.ACTIVE -> MaterialTheme.colorScheme.primary
-        StatusKind.NEUTRAL -> MaterialTheme.colorScheme.onSurfaceVariant
-        StatusKind.WARNING -> MaterialTheme.colorScheme.tertiary
-        StatusKind.DANGER -> MaterialTheme.colorScheme.error
-        StatusKind.SAFE -> Color(0xFF00A86B)
-    }
-    Row(
-        modifier = modifier.clip(RoundedCornerShape(8.dp)).background(tint.copy(alpha = 0.12f))
-            .padding(horizontal = 10.dp, vertical = 7.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(6.dp)
-    ) {
-        Box(Modifier.size(6.dp).clip(CircleShape).background(tint))
-        Text(label, style = MaterialTheme.typography.labelMedium, color = tint, maxLines = 2, overflow = TextOverflow.Ellipsis)
-    }
-}
-
-@Composable
-fun SectionHeader(title: String, modifier: Modifier = Modifier, actionLabel: String? = null, onAction: (() -> Unit)? = null) {
-    Row(modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
-        Text(title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold,
-            color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.weight(1f))
-        if (actionLabel != null && onAction != null) TextButton(onClick = onAction) { Text(actionLabel) }
-    }
-}
-
-@Composable
-fun EmptyState(title: String, description: String, modifier: Modifier = Modifier, actionLabel: String? = null, onAction: (() -> Unit)? = null) {
-    Column(modifier.fillMaxWidth().padding(horizontal = 18.dp, vertical = 24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        Box(Modifier.size(64.dp).clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.10f)),
-            contentAlignment = Alignment.Center) {
-            Icon(Icons.Default.FolderOpen, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(30.dp))
-        }
-        Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface)
-        Text(description, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        if (actionLabel != null && onAction != null) Button(onClick = onAction) { Text(actionLabel) }
-    }
-}
-
-@Composable
-fun ScanProgressRing(progress: Float?, scanning: Boolean, label: String, modifier: Modifier = Modifier, size: Dp = 88.dp, success: Boolean = false) {
-    val normalized = progress?.takeIf { it.isFinite() }?.coerceIn(0f, 1f)
-    val animatedProgress by animateFloatAsState(normalized ?: 0f, animationSpec = tween(220), label = "scan-progress")
-    val rotation = if (scanning && normalized == null) {
-        val transition = rememberInfiniteTransition(label = "scan-radar")
-        val animatedRotation by transition.animateFloat(0f, 360f,
-            animationSpec = infiniteRepeatable(tween(1800, easing = LinearEasing)), label = "scan-radar-rotation")
-        animatedRotation
-    } else 0f
-    val trackColor = MaterialTheme.colorScheme.surfaceVariant
-    val primaryColor = MaterialTheme.colorScheme.primary
-    val secondaryColor = MaterialTheme.colorScheme.secondary
-    Box(modifier.size(size).semantics {
-        contentDescription = if (normalized != null) label + ", " + (animatedProgress * 100f).roundToInt() + " percent" else label
-        progressBarRangeInfo = if (normalized != null) ProgressBarRangeInfo(animatedProgress, 0f..1f)
-            else if (scanning) ProgressBarRangeInfo.Indeterminate else ProgressBarRangeInfo(0f, 0f..1f)
-    }, contentAlignment = Alignment.Center) {
-        Canvas(Modifier.size(size).graphicsLayer { rotationZ = rotation }) {
-            val stroke = 6.dp.toPx()
-            val inset = stroke / 2f
-            val arcSize = androidx.compose.ui.geometry.Size(size.toPx() - stroke, size.toPx() - stroke)
-            val topLeft = androidx.compose.ui.geometry.Offset(inset, inset)
-            drawArc(trackColor, 0f, 360f, false, topLeft, arcSize, style = Stroke(width = stroke))
-            if (normalized != null) {
-                drawArc(primaryColor, -90f, animatedProgress * 360f, false, topLeft, arcSize,
-                    style = Stroke(width = stroke, cap = StrokeCap.Round))
-            } else if (scanning) {
-                drawArc(Brush.sweepGradient(listOf(Color.Transparent, primaryColor,
-                    secondaryColor.copy(alpha = 0.15f), Color.Transparent)),
-                    -55f, 130f, false, topLeft, arcSize, style = Stroke(width = stroke, cap = StrokeCap.Round))
-            }
-        }
-        Text(
-            if (normalized != null) (animatedProgress * 100f).roundToInt().toString() + "%" else if (scanning) "..." else if (success) "✓" else "—",
-            style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold,
-            color = if (normalized == null && !scanning && success) Color(0xFF00A86B)
-                else if (normalized == null && !scanning) MaterialTheme.colorScheme.onSurfaceVariant
-                else MaterialTheme.colorScheme.primary
-        )
-    }
-}
-
-@Composable
-fun SecurityStatusCard(status: String, description: String, lastScanLabel: String, threatCount: Int,
-    signatureCount: Int, scanning: Boolean, progress: Float?, hasScanned: Boolean, cleanResult: Boolean,
-    onScan: () -> Unit, modifier: Modifier = Modifier) {
-    Card(modifier.fillMaxWidth(), shape = RoundedCornerShape(20.dp),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.22f)),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
-        Column(Modifier.fillMaxWidth().padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-                ScanProgressRing(progress, scanning, status, size = 88.dp, success = cleanResult)
-                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(5.dp)) {
-                    Text(status, style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
-                    Text(description, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    Text(lastScanLabel, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                }
-            }
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
-                StatusChip(if (hasScanned) threatCount.toString() + " confirmed matches" else "No scan yet",
-                    if (threatCount > 0) StatusKind.DANGER else StatusKind.NEUTRAL, Modifier.weight(1f))
-                StatusChip(signatureCount.toString() + " local definitions", if (signatureCount > 0) StatusKind.ACTIVE else StatusKind.WARNING, Modifier.weight(1f))
-            }
-            Button(onClick = onScan, modifier = Modifier.fillMaxWidth(), enabled = !scanning) {
-                Icon(Icons.Default.Security, contentDescription = null)
-                Spacer(Modifier.size(8.dp))
-                Text("Scan now")
-            }
-        }
-    }
-}
-
-@Composable
-fun ThreatListItem(result: ScanResult, isProtectedSystemApp: Boolean, showUninstall: Boolean, showQuarantine: Boolean,
-    showAppInfo: Boolean, onUninstall: (String) -> Unit, onAppInfo: (String) -> Unit, onQuarantine: () -> Unit, modifier: Modifier = Modifier) {
-    val kind = when (result.verdict) {
-        ScanVerdict.THREAT -> StatusKind.DANGER
-        ScanVerdict.SUSPICIOUS -> StatusKind.WARNING
-        ScanVerdict.NO_MATCH -> StatusKind.SAFE
-        ScanVerdict.NOT_SCANNED -> StatusKind.NEUTRAL
-    }
-    val verdictLabel = when (result.verdict) {
-        ScanVerdict.THREAT -> "Confirmed signature match"
-        ScanVerdict.SUSPICIOUS -> "Review recommended"
-        ScanVerdict.NO_MATCH -> "No match in scanned definitions"
-        ScanVerdict.NOT_SCANNED -> "Not scanned / incomplete"
-    }
-    Card(modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface), shape = RoundedCornerShape(16.dp)) {
-        Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                Icon(
-                    imageVector = when (result.verdict) {
-                        ScanVerdict.THREAT, ScanVerdict.SUSPICIOUS, ScanVerdict.NOT_SCANNED -> Icons.Default.Warning
-                        ScanVerdict.NO_MATCH -> Icons.Default.CheckCircle
-                    },
-                    contentDescription = null,
-                    tint = when (kind) {
-                        StatusKind.DANGER -> MaterialTheme.colorScheme.error
-                        StatusKind.WARNING -> MaterialTheme.colorScheme.tertiary
-                        StatusKind.SAFE -> Color(0xFF00A86B)
-                        else -> MaterialTheme.colorScheme.onSurfaceVariant
-                    }, modifier = Modifier.size(28.dp)
-                )
-                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                    Text(result.displayName, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                    Text(result.packageName ?: result.packageOrPath, style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
-                }
-            }
-            StatusChip(verdictLabel, kind)
-            result.reasons.take(3).forEach { Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }
-            if (isProtectedSystemApp) Text(stringResource(R.string.uninstall_protected),
-                style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
-                if (showAppInfo && isProtectedSystemApp && result.packageName != null) {
-                    OutlinedButton(onClick = { onAppInfo(result.packageName) }, modifier = Modifier.weight(1f)) {
-                        Text(stringResource(R.string.app_info_label))
-                    }
-                } else if (showUninstall && !isProtectedSystemApp && result.packageName != null) {
-                    OutlinedButton(onClick = { onUninstall(result.packageName) }, modifier = Modifier.weight(1f)) {
-                        Text(stringResource(R.string.uninstall_label))
-                    }
-                }
-                if (showQuarantine) {
-                    OutlinedButton(onClick = onQuarantine, modifier = Modifier.weight(1f)) { Text("Review / quarantine") }
-                }
-            }
-        }
-    }
+ companion object {
+  val MIGRATION_1_2: Migration = object : Migration(1, 2) {
+   override fun migrate(database: SupportSQLiteDatabase) {
+    database.execSQL("ALTER TABLE scan_audits ADD COLUMN scan_session_id TEXT NOT NULL DEFAULT ''")
+    database.execSQL("CREATE INDEX IF NOT EXISTS index_scan_audits_scan_session_id ON scan_audits(scan_session_id)")
+   }
+  }
+  val MIGRATION_2_3: Migration = object : Migration(2, 3) {
+   override fun migrate(database: SupportSQLiteDatabase) {
+    database.execSQL("ALTER TABLE scan_audits ADD COLUMN threat_event_id TEXT NOT NULL DEFAULT ''")
+    database.execSQL("CREATE INDEX IF NOT EXISTS index_scan_audits_threat_event_id ON scan_audits(threat_event_id)")
+   }
+  }
+  /** Additive schema migration; the existing signature and scan-audit tables are preserved. */
+  val MIGRATION_3_4: Migration = object : Migration(3, 4) {
+   override fun migrate(database: SupportSQLiteDatabase) {
+    database.execSQL("CREATE TABLE IF NOT EXISTS malware_hashes (indicator_key TEXT NOT NULL, sha256_hash TEXT, md5_hash TEXT, ioc_value TEXT, ioc_type TEXT, threat_name TEXT NOT NULL, source TEXT NOT NULL, first_seen_at INTEGER, last_seen_at INTEGER, updated_at INTEGER NOT NULL, PRIMARY KEY(indicator_key))")
+    database.execSQL("CREATE INDEX IF NOT EXISTS index_malware_hashes_sha256_hash ON malware_hashes(sha256_hash)")
+    database.execSQL("CREATE INDEX IF NOT EXISTS index_malware_hashes_md5_hash ON malware_hashes(md5_hash)")
+    database.execSQL("CREATE INDEX IF NOT EXISTS index_malware_hashes_ioc_value ON malware_hashes(ioc_value)")
+    database.execSQL("CREATE INDEX IF NOT EXISTS index_malware_hashes_source_updated_at ON malware_hashes(source, updated_at)")
+    database.execSQL("CREATE TABLE IF NOT EXISTS threat_feed_sync_state (source_key TEXT NOT NULL, source_host TEXT NOT NULL, last_attempt_at INTEGER NOT NULL, last_success_at INTEGER, status TEXT NOT NULL, last_error TEXT, last_imported_count INTEGER NOT NULL, etag TEXT, last_modified TEXT, PRIMARY KEY(source_key))")
+   }
+  }
+  val MIGRATION_4_5: Migration = object : Migration(4, 5) {
+   override fun migrate(database: SupportSQLiteDatabase) {
+    database.execSQL("CREATE TABLE IF NOT EXISTS threat_feed_staging (import_id TEXT NOT NULL, indicator_key TEXT NOT NULL, sha256_hash TEXT, md5_hash TEXT, ioc_value TEXT, ioc_type TEXT, threat_name TEXT NOT NULL, source TEXT NOT NULL, first_seen_at INTEGER, last_seen_at INTEGER, updated_at INTEGER NOT NULL, staged_at INTEGER NOT NULL, PRIMARY KEY(import_id, indicator_key))")
+   }
+  }
+  val MIGRATION_5_6: Migration = object : Migration(5, 6) {
+   override fun migrate(database: SupportSQLiteDatabase) {
+    database.execSQL("CREATE TABLE IF NOT EXISTS security_incidents (event_id TEXT NOT NULL, occurred_at INTEGER NOT NULL, event_kind TEXT NOT NULL, installer_package TEXT, source_package TEXT, filename TEXT, sha256_hash TEXT, original_path TEXT, reason TEXT NOT NULL, action_taken TEXT NOT NULL, status TEXT NOT NULL, PRIMARY KEY(event_id))")
+    database.execSQL("CREATE INDEX IF NOT EXISTS index_security_incidents_occurred_at ON security_incidents(occurred_at)")
+    database.execSQL("CREATE INDEX IF NOT EXISTS index_security_incidents_sha256_hash ON security_incidents(sha256_hash)")
+   }
+  }
+  val MIGRATION_6_7: Migration = object : Migration(6, 7) {
+   override fun migrate(database: SupportSQLiteDatabase) {
+    database.execSQL("CREATE TABLE IF NOT EXISTS quarantine_vault_entries (vault_id TEXT NOT NULL, created_at INTEGER NOT NULL, original_filename TEXT NOT NULL, original_path TEXT NOT NULL, sha256_hash TEXT, source_package TEXT, quarantined_path TEXT NOT NULL, detection_reason TEXT NOT NULL, status TEXT NOT NULL, PRIMARY KEY(vault_id))")
+    database.execSQL("CREATE INDEX IF NOT EXISTS index_quarantine_vault_entries_created_at ON quarantine_vault_entries(created_at)")
+    database.execSQL("CREATE INDEX IF NOT EXISTS index_quarantine_vault_entries_sha256_hash ON quarantine_vault_entries(sha256_hash)")
+    database.execSQL("CREATE INDEX IF NOT EXISTS index_quarantine_vault_entries_status ON quarantine_vault_entries(status)")
+   }
+  }
+ }
 }
