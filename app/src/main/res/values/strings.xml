@@ -2,7 +2,7 @@
 <resources>
 <string name="app_name">SafeMobile Antivirus</string>
 <string name="privacy_title">Privacy and scan-access disclosure</string>
-<string name="privacy_body">SafeMobile calculates SHA-256 and MD5 hashes on this device and checks them against definitions stored locally. Local scans do not upload files or hashes. Ads use Google Mobile Ads network services only when permitted by your privacy choices and connectivity. Core scan functions work without a network. Installed-app visibility and all-files access are sensitive Android permissions and may require Google Play review.</string>
+<string name="privacy_body">SafeMobile calculates file hashes on this device and compares them with local definitions. Scan files and hashes are not uploaded. The offline build has no INTERNET permission and includes no ad, analytics, telemetry, or crash-reporting SDK. A separate feed build adds Internet access for a future opt-in HTTPS feed feature; do not use it until its explicit consent gate is in place. Installed-app visibility and all-files access are sensitive Android permissions and may require Google Play review.</string>
 <string name="privacy_accept">I understand</string><string name="exit_app">Exit app</string>
 <string name="brand_title">SafeMobile Antivirus</string><string name="brand_subtitle">VibeSync</string>
 <string name="scan_status">Local protection dashboard</string><string name="scan_running">Scanning device…</string><string name="threat_found">Threat match detected</string>
