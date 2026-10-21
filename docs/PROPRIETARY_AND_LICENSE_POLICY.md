@@ -6,7 +6,7 @@
 - Application ID and namespace: `com.vibesync.antivirus`
 - The repository is publicly visible on GitHub. Public visibility does not, by itself, transfer copyright, but it does mean source code in the repository is publicly readable. Do not place secrets or private materials here.
 - No root `LICENSE` file was present at the baseline commit reviewed for this change. Treat the software's licence status as an unresolved release-governance item until the owner decides whether to add a licence. Do not infer an open-source grant from public visibility.
-- This change does not add an Android runtime dependency, native scanner, remote threat-intelligence client, or third-party signature collection.
+- This change adds an app-owned, configurable HTTPS JSON/CSV threat-feed importer using Android platform networking and the app's existing Room/WorkManager stack. It does not add a provider-specific threat-intelligence SDK/client, configure a provider endpoint, bundle vendor credentials, or ship a third-party signature collection by default.
 
 ## Mandatory change rules
 
