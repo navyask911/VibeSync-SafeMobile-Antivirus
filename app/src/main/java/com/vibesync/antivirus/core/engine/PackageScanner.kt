@@ -13,6 +13,7 @@ import java.io.ByteArrayInputStream
 import java.io.File
 import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
+import java.util.UUID
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
@@ -28,12 +29,13 @@ class PackageScanner(
  suspend fun scanInstalledApps(progress: suspend (processed: Int, total: Int) -> Unit = { _, _ -> }): List<ScanResult> {
   val flags = PackageManager.GET_PERMISSIONS or PackageManager.GET_SERVICES or signingFlags()
   val packages = pm.getInstalledPackages(flags)
+  val scanSessionId = UUID.randomUUID().toString()
   val results = mutableListOf<ScanResult>()
   progress(0, packages.size)
   for ((index, info) in packages.withIndex()) {
    currentCoroutineContext().ensureActive()
    val scanned = try {
-    scanPackage(info)
+    scanPackage(info, scanSessionId)
    } catch (cancelled: CancellationException) {
     throw cancelled
    } catch (_: Exception) {
@@ -51,15 +53,16 @@ class PackageScanner(
  }
  suspend fun scanInstalledPackage(name: String): ScanResult? {
   val info = runCatching { pm.getPackageInfo(name, PackageManager.GET_PERMISSIONS or PackageManager.GET_SERVICES or signingFlags()) }.getOrNull()
-  return if (info == null) null else scanPackage(info)
+  return if (info == null) null else scanPackage(info, UUID.randomUUID().toString())
  }
  suspend fun scanFile(file: File): ScanResult {
   val start = System.nanoTime()
+  val scanSessionId = UUID.randomUUID().toString()
   if (!file.isFile || !file.canRead()) return result(file.name, file.name, null, null, ScanVerdict.NOT_SCANNED, listOf(context.getString(R.string.file_not_readable)), start).copy(sourceLocalPath = file.absolutePath)
   return try {
    val hash = calculator.calculate(file)
    val output = evaluate(file.name, file.name, hash.sha256, hash.md5, emptyList(), 0, false)
-   audit(output, start)
+   audit(output, start, scanSessionId)
    output.copy(durationMs = elapsed(start), sourceLocalPath = file.absolutePath)
   } catch (cancelled: CancellationException) {
    throw cancelled
@@ -69,10 +72,11 @@ class PackageScanner(
  }
  suspend fun scanStream(label: String, stream: java.io.InputStream): ScanResult {
   val start = System.nanoTime()
+  val scanSessionId = UUID.randomUUID().toString()
   return try {
    val hash = stream.use { calculator.calculate(it) }
    val output = evaluate(label, label, hash.sha256, hash.md5, emptyList(), 0, false)
-   audit(output, start)
+   audit(output, start, scanSessionId)
    output.copy(durationMs = elapsed(start))
   } catch (cancelled: CancellationException) {
    throw cancelled
@@ -80,7 +84,7 @@ class PackageScanner(
    result(label, label, null, null, ScanVerdict.NOT_SCANNED, listOf(context.getString(R.string.file_stream_failed)), start)
   }
  }
- private suspend fun scanPackage(info: PackageInfo): ScanResult {
+ private suspend fun scanPackage(info: PackageInfo, scanSessionId: String): ScanResult {
   val start = System.nanoTime()
   val appInfo = info.applicationInfo ?: return result(info.packageName, info.packageName, null, null, ScanVerdict.NOT_SCANNED, listOf(context.getString(R.string.package_metadata_missing)), start).copy(packageName = info.packageName)
   val label = appInfo.loadLabel(pm).toString()
@@ -98,7 +102,7 @@ class PackageScanner(
   val hashes = runCatching { calculator.calculate(apk) }.getOrNull()
    ?: return result(info.packageName, label, null, null, ScanVerdict.NOT_SCANNED, reasons + context.getString(R.string.file_could_not_read), start).copy(packageName = info.packageName)
   val output = evaluate(info.packageName, label, hashes.sha256, hashes.md5, reasons, risk.score, debugSigned)
-  audit(output, start)
+  audit(output, start, scanSessionId)
   return output.copy(durationMs = elapsed(start), packageName = info.packageName)
  }
  private suspend fun evaluate(key: String, label: String, sha: String, md5: String, heuristic: List<String>, score: Int, debug: Boolean): ScanResult {
@@ -114,13 +118,14 @@ class PackageScanner(
   val notes = if (heuristic.isEmpty()) listOf(context.getString(R.string.no_match_detail)) else heuristic + context.getString(R.string.risk_review)
   return ScanResult(key, label, sha, md5, verdict, notes, 0)
  }
- private suspend fun audit(result: ScanResult, start: Long) {
+ private suspend fun audit(result: ScanResult, start: Long, scanSessionId: String) {
   dao.insertAudit(ScanAudit(
    packageOrPath=result.packageOrPath.take(250),
    hash=result.sha256?.let(hashStore::protectHash).orEmpty(),
    scanTimestamp=System.currentTimeMillis(),
    verdict=result.verdict.name,
-   scanDuration=elapsed(start)
+   scanDuration=elapsed(start),
+   scanSessionId=scanSessionId
   ))
  }
  private fun revealMetadataOrPlaintext(value: String, purpose: String): String =
