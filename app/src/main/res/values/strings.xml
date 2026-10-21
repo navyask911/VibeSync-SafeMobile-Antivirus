@@ -218,4 +218,38 @@
 <string name="about_third_party" translatable="false">Third-party notices</string>
 <string name="about_license_missing" translatable="false">No root LICENSE file is present in the reviewed repository. This screen does not assert an open-source license or grant additional permissions. Public visibility alone is not an open-source license.</string>
 
+
+<string name="threat_feed_hash_match" translatable="false">Known threat hash: %1$s (source: %2$s)</string>
+<string name="threat_feed_dashboard_title" translatable="false">Local threat intelligence</string>
+<string name="threat_feed_active_count" translatable="false">Stored local indicators: %1$d</string>
+<string name="threat_feed_last_success" translatable="false">Last successful sync: %1$s</string>
+<string name="threat_feed_never_synced" translatable="false">No successful feed sync has completed yet.</string>
+<string name="threat_feed_syncing" translatable="false">Feed sync is running.</string>
+<string name="threat_feed_sync_succeeded" translatable="false">Most recent feed attempt succeeded.</string>
+<string name="threat_feed_sync_retry" translatable="false">Network sync will retry when requirements are met.</string>
+<string name="threat_feed_sync_failed" translatable="false">Most recent feed attempt failed. Existing local indicators were retained.</string>
+<string name="threat_feed_status_not_available" translatable="false">No feed attempt has been recorded.</string>
+<string name="threat_feed_sync_now" translatable="false">Sync now</string>
+<string name="threat_feed_configure" translatable="false">Configure feed</string>
+<string name="threat_feed_manage" translatable="false">Feed settings</string>
+<string name="threat_feed_settings_title" translatable="false">Local threat feed synchronization</string>
+<string name="threat_feed_settings_description" translatable="false">Configure a trusted HTTPS JSON or CSV endpoint. No feed URL or API key is enabled by default. Refresh runs only while charging on an unmetered network; press Sync now to queue an immediate attempt.</string>
+<string name="threat_feed_endpoint" translatable="false">HTTPS feed endpoint</string>
+<string name="threat_feed_auth_key" translatable="false">Optional provider Auth-Key</string>
+<string name="threat_feed_credentials_note" translatable="false">The optional key is encrypted with Android Keystore and is not compiled into the APK or written to logs. Do not include credentials in the URL or request body.</string>
+<string name="threat_feed_method" translatable="false">HTTP request method</string>
+<string name="threat_feed_get" translatable="false">GET</string>
+<string name="threat_feed_post_json" translatable="false">POST JSON</string>
+<string name="threat_feed_post_body" translatable="false">JSON request body</string>
+<string name="threat_feed_format" translatable="false">Feed format</string>
+<string name="threat_feed_auto" translatable="false">Auto</string>
+<string name="threat_feed_json" translatable="false">JSON</string>
+<string name="threat_feed_csv" translatable="false">CSV</string>
+<string name="threat_feed_save" translatable="false">Save and schedule sync</string>
+<string name="threat_feed_clear" translatable="false">Remove feed configuration</string>
+<string name="threat_feed_saved" translatable="false">Feed configuration saved. Sync is constrained to charging and unmetered network.</string>
+<string name="threat_feed_cleared" translatable="false">Feed configuration removed and periodic sync cancelled.</string>
+<string name="threat_feed_queue_note" translatable="false">Sync queued. WorkManager waits for charging and an unmetered network.</string>
+<string name="threat_feed_save_error" translatable="false">Could not save feed configuration. Check the HTTPS URL and JSON request body.</string>
+
 </resources>

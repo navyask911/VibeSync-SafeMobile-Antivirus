@@ -25,6 +25,8 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -34,6 +36,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.app.NotificationManagerCompat
 import com.vibesync.antivirus.core.worker.OverlayRiskReviewManager
+import com.vibesync.antivirus.core.worker.ThreatFeedConfigStore
+import com.vibesync.antivirus.core.worker.ThreatFeedConfiguration
+import com.vibesync.antivirus.core.worker.ThreatFeedFormat
+import com.vibesync.antivirus.core.worker.ThreatFeedRequestMode
+import com.vibesync.antivirus.core.worker.ThreatFeedSyncScheduler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -45,6 +52,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import com.vibesync.antivirus.BuildConfig
 import com.vibesync.antivirus.R
 import com.vibesync.antivirus.core.locale.LocalePreferences
@@ -310,6 +318,7 @@ internal fun SafeMobileSettingsPanel(
             }
         }
         OverlayRiskReviewPanel()
+        ThreatFeedSettingsPanel()
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(stringResource(R.string.language_settings), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
@@ -406,4 +415,108 @@ internal fun SafeMobileSettingsPanel(
         },
         confirmButton = { TextButton(onClick = { showAbout = false }) { Text(stringResource(R.string.close)) } }
     )
+}
+
+
+@Composable
+internal fun ThreatFeedSettingsPanel() {
+    val context = LocalContext.current
+    val store = remember(context) { ThreatFeedConfigStore(context) }
+    val initial = remember(store) { store.load() }
+    var feedUrl by remember { mutableStateOf(initial.url) }
+    var authKey by remember { mutableStateOf(initial.authKey) }
+    var feedFormat by remember { mutableStateOf(initial.format) }
+    var requestMode by remember { mutableStateOf(initial.requestMode) }
+    var postJson by remember { mutableStateOf(initial.postJson) }
+    var configured by remember { mutableStateOf(initial.url.isNotBlank()) }
+
+    Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Text(stringResource(R.string.threat_feed_settings_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+            Text(stringResource(R.string.threat_feed_settings_description), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            OutlinedTextField(
+                value = feedUrl,
+                onValueChange = { feedUrl = it },
+                label = { Text(stringResource(R.string.threat_feed_endpoint)) },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true
+            )
+            OutlinedTextField(
+                value = authKey,
+                onValueChange = { authKey = it },
+                label = { Text(stringResource(R.string.threat_feed_auth_key)) },
+                supportingText = { Text(stringResource(R.string.threat_feed_credentials_note)) },
+                visualTransformation = PasswordVisualTransformation(),
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true
+            )
+            Text(stringResource(R.string.threat_feed_method), style = MaterialTheme.typography.labelLarge)
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                FilterChip(
+                    selected = requestMode == ThreatFeedRequestMode.GET,
+                    onClick = { requestMode = ThreatFeedRequestMode.GET },
+                    label = { Text(stringResource(R.string.threat_feed_get)) }
+                )
+                FilterChip(
+                    selected = requestMode == ThreatFeedRequestMode.POST_JSON,
+                    onClick = { requestMode = ThreatFeedRequestMode.POST_JSON },
+                    label = { Text(stringResource(R.string.threat_feed_post_json)) }
+                )
+            }
+            if (requestMode == ThreatFeedRequestMode.POST_JSON) {
+                OutlinedTextField(
+                    value = postJson,
+                    onValueChange = { postJson = it },
+                    label = { Text(stringResource(R.string.threat_feed_post_body)) },
+                    modifier = Modifier.fillMaxWidth(),
+                    minLines = 2,
+                    maxLines = 5
+                )
+            }
+            Text(stringResource(R.string.threat_feed_format), style = MaterialTheme.typography.labelLarge)
+            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                FilterChip(selected = feedFormat == ThreatFeedFormat.AUTO, onClick = { feedFormat = ThreatFeedFormat.AUTO }, label = { Text(stringResource(R.string.threat_feed_auto)) })
+                FilterChip(selected = feedFormat == ThreatFeedFormat.JSON, onClick = { feedFormat = ThreatFeedFormat.JSON }, label = { Text(stringResource(R.string.threat_feed_json)) })
+                FilterChip(selected = feedFormat == ThreatFeedFormat.CSV, onClick = { feedFormat = ThreatFeedFormat.CSV }, label = { Text(stringResource(R.string.threat_feed_csv)) })
+            }
+            Button(
+                onClick = {
+                    runCatching {
+                        store.save(ThreatFeedConfiguration(feedUrl.trim(), authKey, feedFormat, requestMode, postJson))
+                        ThreatFeedSyncScheduler.ensurePeriodic(context)
+                    }.onSuccess {
+                        configured = true
+                        Toast.makeText(context, R.string.threat_feed_saved, Toast.LENGTH_SHORT).show()
+                    }.onFailure { error ->
+                        Toast.makeText(context, error.message ?: context.getString(R.string.threat_feed_save_error), Toast.LENGTH_LONG).show()
+                    }
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) { Text(stringResource(R.string.threat_feed_save)) }
+            OutlinedButton(
+                onClick = {
+                    ThreatFeedSyncScheduler.enqueueNow(context)
+                    Toast.makeText(context, R.string.threat_feed_queue_note, Toast.LENGTH_LONG).show()
+                },
+                enabled = configured,
+                modifier = Modifier.fillMaxWidth()
+            ) { Text(stringResource(R.string.threat_feed_sync_now)) }
+            TextButton(onClick = {
+                runCatching {
+                    store.clear()
+                    ThreatFeedSyncScheduler.ensurePeriodic(context)
+                }.onSuccess {
+                    feedUrl = ""
+                    authKey = ""
+                    feedFormat = ThreatFeedFormat.AUTO
+                    requestMode = ThreatFeedRequestMode.GET
+                    postJson = ThreatFeedConfiguration.DEFAULT_POST_JSON
+                    configured = false
+                    Toast.makeText(context, R.string.threat_feed_cleared, Toast.LENGTH_SHORT).show()
+                }.onFailure {
+                    Toast.makeText(context, R.string.threat_feed_save_error, Toast.LENGTH_LONG).show()
+                }
+            }) { Text(stringResource(R.string.threat_feed_clear)) }
+        }
+    }
 }

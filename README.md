@@ -78,3 +78,12 @@ This branch has a higher version code, but Play Console's usage history must be 
 ## Current verification boundary
 
 These changes are being validated in the draft pull request. CI checks (safety guard, tests, lint, and release builds) must pass on the final head before considering a candidate verified. No physical-device/emulator test matrix has been run as part of this source edit. The EICAR-only definition database, restricted-permission Play review, exact third-party license/SBOM audit, and native-speaker localization review remain release blockers. The configured version code and CI signing-secret state are not proof that Google Play will accept the candidate; check the Play Console version history before upload.
+
+
+## Configurable local threat-intelligence synchronization
+
+The hardening branch adds a separate indexed malware_hashes table for SHA-256, MD5 and network indicators (domain/IP/URL), plus per-source synchronization state. Existing encrypted offline threat_signatures, scan audits and their historical data are preserved by the additive Room 3-to-4 migration.
+
+Threat feeds are not enabled by default. In Settings, configure a trusted HTTPS JSON or CSV endpoint and an optional provider Auth-Key. The Auth-Key is encrypted locally using an Android Keystore AES-GCM key; it is not placed in source code, BuildConfig, or logs. The worker accepts GET or JSON POST, follows only HTTPS redirects, will not forward an Auth-Key to another host, caps decoded feed input at 128 MiB, caps CSV field/record size, and streams rows in batches of 500 inside Room transactions. A sync requires an unmetered network and device charging; periodic sync is scheduled every 24 hours. Transient network errors retry, while malformed/auth-rejected responses report failure and retain existing local indicators.
+
+The parser accepts JSON arrays and common objects containing data/results arrays, nested malware sample hash records, and quoted CSV with escaped quotes and multiline fields. Hash lookups use indexed local-only suspend DAO queries. The dashboard exposes the local indicator count and last successful sync time. A matching imported hash is a feed match, but no feed guarantees comprehensive detection. Choose a provider whose access terms permit the intended use and supply your own authorized key when required. The app does not bundle a vendor credential or download malware samples.
