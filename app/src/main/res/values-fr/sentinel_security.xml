@@ -1,24 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="accessibility_guard_label">SafeMobile Accessibility Guard</string>
-    <string name="accessibility_guard_description">When enabled, SafeMobile inspects only package-installer windows for APK installation prompts. It does not collect unrelated screen text or passwords. Cancellation is best-effort and Android may restrict it.</string>
-    <string name="download_interceptor_label">Download Sentinel &amp; Interceptor</string>
-    <string name="download_interceptor_description">Best-effort, permission-dependent protection for APK installer prompts and new APK/EXE downloads. It may interrupt legitimate sideloads and cannot guarantee interception.</string>
-    <string name="download_interceptor_status_enabled">Accessibility Guard and Download Sentinel are enabled.</string>
-    <string name="download_interceptor_status_setup">Enable the Accessibility Guard in Android settings and allow Download Sentinel to run.</string>
-    <string name="download_interceptor_status_disabled">Protection is off. Enable the feature to start monitoring.</string>
-    <string name="open_accessibility_settings">Open Accessibility Settings</string>
+
+    <string name="download_interceptor_label">Download Sentinel</string>
+    <string name="download_interceptor_description">Best-effort monitoring of new APK/EXE files using accessible Downloads and MediaStore entries. Android controls installation; SafeMobile cannot block every installer prompt.</string>
+    <string name="download_interceptor_status_enabled">Download Sentinel is enabled and its foreground service is running.</string>
+    <string name="download_interceptor_status_setup">Enable Download Sentinel and grant storage access to begin monitoring.</string>
+    <string name="download_interceptor_status_disabled">Download Sentinel is off. Enable it to start monitoring.</string>
+
     <string name="strict_mode_label">Strict mode</string>
     <string name="strict_mode_description">Move unknown or unverified APK/EXE downloads into the encrypted Quarantine Vault when supported. Files remain restorable; SafeMobile does not permanently delete them.</string>
-    <string name="accessibility_guard_system_on">Accessibility Guard is enabled in Android settings.</string>
-    <string name="accessibility_guard_system_off">Accessibility Guard is not enabled in Android settings.</string>
+
     <string name="download_sentinel_running">Download Sentinel foreground service is running.</string>
     <string name="download_sentinel_stopped">Download Sentinel foreground service is not running.</string>
-    <string name="blocked_activity_title_confirmed">Malicious APK Blocked by SafeMobile Sentinel.</string>
-    <string name="blocked_activity_title_interrupted">APK installation interrupted by SafeMobile Sentinel.</string>
+    <string name="blocked_activity_title_confirmed">Malicious download detected by SafeMobile Sentinel.</string>
+    <string name="blocked_activity_title_interrupted">Android opened the installer. Download Sentinel cannot reliably block the installation prompt.</string>
     <string name="blocked_activity_title_review">Download needs review</string>
     <string name="blocked_activity_title_quarantine">Download moved to Quarantine Vault</string>
-    <string name="blocked_activity_body">SafeMobile attempted a best-effort cancellation and logged the event locally. An interrupted installer prompt alone does not prove a file is malicious.</string>
+    <string name="blocked_activity_body">SafeMobile checks accessible downloaded files on-device and records local security events. Android controls whether an app is installed.</string>
     <string name="blocked_activity_filename">File: %1$s</string>
     <string name="blocked_activity_installer">Installer: %1$s</string>
     <string name="blocked_activity_reason">Reason: %1$s</string>
@@ -33,8 +31,8 @@
     <string name="notification_review_body">A new APK or EXE was detected. Scan it before opening.</string>
     <string name="notification_quarantine_title">Download moved to Quarantine Vault</string>
     <string name="notification_quarantine_body">Strict mode moved an unverified download into the encrypted vault where supported. Restore remains available.</string>
-    <string name="notification_install_title">APK installation interrupted by SafeMobile Sentinel.</string>
-    <string name="notification_install_body">SafeMobile attempted to close the APK installer prompt. The file may not have been verified as malicious.</string>
+    <string name="notification_install_title">APK installer is controlled by Android.</string>
+    <string name="notification_install_body">Download Sentinel may detect a downloaded APK, but it cannot reliably cancel Android's installer prompt.</string>
     <string name="notification_service_title">Download Sentinel is active</string>
     <string name="notification_service_body">Best-effort download monitoring is running while enabled.</string>
     <string name="blocked_activity_settings">Open Settings</string>
