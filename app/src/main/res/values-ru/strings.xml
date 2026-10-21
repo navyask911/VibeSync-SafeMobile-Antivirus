@@ -124,4 +124,23 @@
 <string name="definitions_limited_compact">База определений содержит только тестовую сигнатуру EICAR; покрытие ограничено.</string>
 <string name="settings_privacy">Конфиденциальность и разрешения</string>
 <string name="quarantine_legacy_warning">Старая запись карантина: в предыдущей версии файл хранился без шифрования.</string>
+<string name="overlay_review_title">Проверка риска наложений</string>
+<string name="overlay_review_description">Необязательная ограниченная проверка приложений, которые заявляют возможность отображения поверх других приложений или наличие служб специальных возможностей. Это только признаки для проверки; SafeMobile не может подтвердить, что другое приложение прямо сейчас показывает наложение, или определить его текущее разрешение.</string>
+<string name="overlay_review_last_attempt">Последняя попытка: %1$s</string>
+<string name="overlay_review_last_success">Последняя успешная проверка: %1$s</string>
+<string name="overlay_review_summary">Приложения с заявленной возможностью наложения: %1$d · Приложения с заявленными службами специальных возможностей: %2$d · Включённые службы специальных возможностей на устройстве: %3$d</string>
+<string name="overlay_review_not_checked">Успешная проверка риска наложений ещё не выполнялась.</string>
+<string name="overlay_review_failed">Последняя проверка не удалась. Android мог отложить задачу или ограничить необходимую видимость пакетов.</string>
+<string name="overlay_review_permission_required">Android не разрешил выполнить эту проверку. Проверьте видимость установленных приложений и повторите попытку.</string>
+<string name="overlay_review_reminder_interval">Интервал напоминаний</string>
+<string name="overlay_review_reminder_12h">Каждые 12 часов</string>
+<string name="overlay_review_reminder_24h">Каждые 24 часа</string>
+<string name="overlay_review_reminder_48h">Каждые 48 часов</string>
+<string name="overlay_review_notifications_off">Уведомления отключены. Проверка может выполняться, но напоминания не будут показываться.</string>
+<string name="overlay_review_enabled">Автоматическая проверка включена</string>
+<string name="overlay_review_disabled">Проверка приостановлена</string>
+<string name="overlay_review_notification_channel">Проверка конфиденциальности SafeMobile</string>
+<string name="overlay_review_notification_channel_description">Напоминания низкого приоритета для необязательной проверки риска наложений.</string>
+<string name="overlay_review_notification_title">Проверка риска наложений завершена</string>
+<string name="overlay_review_notification_body">%1$d приложений заявляют возможность наложения и %2$d — службы специальных возможностей. Это признаки для проверки, а не доказательство вредоносности.</string>
 </resources>
