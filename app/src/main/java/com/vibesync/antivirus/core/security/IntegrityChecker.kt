@@ -17,7 +17,10 @@ class IntegrityChecker(context: Context) {
  }
  private fun installed(name: String): Boolean = try {
   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) app.packageManager.getApplicationInfo(name,PackageManager.ApplicationInfoFlags.of(0L))
-  else { @Suppress("DEPRECATION"); app.packageManager.getApplicationInfo(name,0) }
+  else {
+   @Suppress("DEPRECATION")
+   app.packageManager.getApplicationInfo(name,0)
+  }
   true
  } catch (_: PackageManager.NameNotFoundException) { false } catch (_: SecurityException) { false }
  companion object {
