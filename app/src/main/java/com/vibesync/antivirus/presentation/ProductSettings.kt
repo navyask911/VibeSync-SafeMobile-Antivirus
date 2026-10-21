@@ -48,7 +48,6 @@ import com.vibesync.antivirus.data.local.ScanAudit
 import java.text.DateFormat
 import java.util.Date
 import java.util.UUID
-import java.text.DateFormat
 
 internal object AppearancePreferences {
     const val PREFS_NAME = "safe_mobile_appearance"
