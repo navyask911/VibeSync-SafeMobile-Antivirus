@@ -151,17 +151,17 @@ class PackageScanner(
   if (threat != null) {
    val family = revealMetadataOrPlaintext(threat.malwareFamily, "family")
    val level = revealMetadataOrPlaintext(threat.threatLevel, "level")
-   return ScanResult(key, label, sha, md5, ScanVerdict.THREAT, listOf(context.getString(R.string.hash_match, family, level)), 0).copy(threatEventId = UUID.randomUUID().toString())
+   return ScanResult(key, label, sha, md5, ScanVerdict.THREAT, listOf(context.getString(R.string.hash_match, family, level)), 0).copy(threatEventId = UUID.randomUUID().toString(), riskScore = 1f)
   }
   val feedThreat = threatIntelligenceRepository?.lookupHash(sha, md5)
   if (feedThreat != null) {
    return ScanResult(key, label, sha, md5, ScanVerdict.THREAT,
     listOf(context.getString(R.string.threat_feed_hash_match, feedThreat.threatName, feedThreat.source)), 0)
-    .copy(threatEventId = UUID.randomUUID().toString())
+    .copy(threatEventId = UUID.randomUUID().toString(), riskScore = 1f)
   }
   val verdict = if (score >= 45) ScanVerdict.SUSPICIOUS else ScanVerdict.NO_MATCH
   val notes = if (heuristic.isEmpty()) listOf(context.getString(R.string.no_match_detail)) else heuristic + context.getString(R.string.risk_review)
-  return ScanResult(key, label, sha, md5, verdict, notes, 0)
+  return ScanResult(key, label, sha, md5, verdict, notes, 0).copy(riskScore = score.coerceIn(0, 100) / 100f)
  }
  private suspend fun auditSafely(result: ScanResult, start: Long, scanSessionId: String) {
   try {
