@@ -60,11 +60,11 @@
     <string name="unknown_file">منتخب فائل</string>
     <string name="local_files_only">رازداری کے لیے اسکینر صرف معلوم مقامی اسٹوریج فراہم کنندگان کی فائلیں کھولتا ہے۔ کلاؤڈ یا تیسرے فریق کے دستاویز فراہم کنندگان نہیں کھولے جاتے۔</string>
     <string name="quarantine_confirm_title">اس نشان زد فائل کو قرنطینہ میں رکھیں؟</string>
-    <string name="quarantine_confirm_body">اس ایپ کے نجی اسٹوریج میں ایک نقل محفوظ کی جائے گی۔ ہیش کی تصدیق کے بعد SafeMobile منتخب اصل فائل ہٹانے کی کوشش کرے گا۔ یہ Android کی اسٹوریج اجازتوں اور فراہم کنندہ پر منحصر ہے؛ اصل فائل باقی رہ سکتی ہے۔</string>
+    <string name="quarantine_confirm_body">SafeMobile ایک خفیہ کردہ نجی نقل بنائے گا اور اس کی تصدیق کرے گا۔ اصل فائل محفوظ رہے گی اور حذف نہیں ہوگی۔</string>
     <string name="quarantine_confirm_action">فائل قرنطینہ کریں</string>
     <string name="quarantine_file">نجی قرنطینہ نقل</string>
     <string name="quarantine_success_removed">نجی قرنطینہ نقل محفوظ ہو گئی (%1$s)؛ Android نے بتایا کہ اصل فائل ہٹا دی گئی۔</string>
-    <string name="quarantine_success_copy_only">نجی قرنطینہ نقل محفوظ ہو گئی (%1$s)، مگر Android اصل فائل نہیں ہٹا سکا۔ ضرورت ہو تو اسے دستی طور پر حذف کریں۔</string>
+    <string name="quarantine_success_copy_only">خفیہ کردہ قرنطینہ نقل محفوظ ہوگئی (%1$s)۔ اصل فائل محفوظ رہی اور حذف نہیں ہوئی۔</string>
     <string name="quarantine_failed">قرنطینہ ناکام ہوا۔ اصل فائل جان بوجھ کر نہیں ہٹائی گئی۔</string>
     <string name="uninstall_app">ایپ اَن انسٹال کریں…</string>
     <string name="import_definitions">آف لائن خطرے کی تعریفیں درآمد کریں (JSON)</string>
@@ -123,4 +123,5 @@
 <string name="history_session">سیشن ID</string>
 <string name="definitions_limited_compact">تعریفیں: صرف EICAR ٹیسٹ دستخط؛ کوریج محدود ہے۔</string>
 <string name="settings_privacy">رازداری اور اجازتیں</string>
+<string name="quarantine_legacy_warning">پرانا قرنطینہ آئٹم: پچھلے ورژن میں خفیہ کاری کے بغیر محفوظ کیا گیا۔</string>
 </resources>
