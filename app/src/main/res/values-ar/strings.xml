@@ -7,11 +7,11 @@
 
 <string name="local_files_only">حفاظًا على الخصوصية، يفتح الفاحص الملفات من مزوّدي التخزين المحلي المعروفين فقط. لا يفتح مزوّدي السحابة أو الجهات الخارجية.</string>
 <string name="quarantine_confirm_title">هل تريد عزل هذا الملف الذي تم التحذير منه؟</string>
-<string name="quarantine_confirm_body">سيُحفظ نُسخة خاصة داخل التطبيق. بعد التحقق من البصمة، سيحاول SafeMobile إزالة الملف الأصلي المحدد. تعتمد الإزالة على أذونات Android ومزوّد الملفات؛ وقد يبقى الأصل.</string>
+<string name="quarantine_confirm_body">سيُنشئ SafeMobile نسخة خاصة مشفّرة ويتحقق منها. سيحتفظ بالملف الأصلي ولن يحذفه.</string>
 <string name="quarantine_confirm_action">عزل الملف</string>
 <string name="quarantine_file">حفظ نسخة خاصة في العزل</string>
 <string name="quarantine_success_removed">حُفظت النسخة الخاصة (%1$s)؛ وأفاد Android بإزالة الملف الأصلي.</string>
-<string name="quarantine_success_copy_only">حُفظت النسخة الخاصة (%1$s)، لكن Android لم يتمكن من إزالة الأصل. احذفه يدويًا عند الحاجة.</string>
+<string name="quarantine_success_copy_only">تم حفظ نسخة مشفّرة في الحجر (%1$s). تم الاحتفاظ بالملف الأصلي ولم يُحذف.</string>
 <string name="quarantine_failed">فشل العزل. لم تتم محاولة إزالة الملف الأصلي عمدًا.</string>
 <string name="uninstall_app">إزالة تثبيت التطبيق…</string>
 <string name="scan_progress">تم فحص %1$d من %2$d تطبيقًا مثبتًا</string>
@@ -66,4 +66,5 @@
 <string name="history_session">معرّف الجلسة</string>
 <string name="definitions_limited_compact">التعريفات: توقيع اختبار EICAR فقط؛ التغطية محدودة.</string>
 <string name="settings_privacy">الخصوصية والأذونات</string>
+<string name="quarantine_legacy_warning">عنصر حجر قديم: خُزّن دون تشفير في إصدار سابق.</string>
 </resources>
