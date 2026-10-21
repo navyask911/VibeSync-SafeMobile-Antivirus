@@ -1,6 +1,10 @@
 package com.vibesync.antivirus.data.repository
 import android.content.Context
 import android.net.Uri
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
+import android.os.Environment
 import android.provider.OpenableColumns
 import com.vibesync.antivirus.R
 import com.vibesync.antivirus.core.engine.PackageScanner
@@ -15,6 +19,8 @@ import com.vibesync.antivirus.core.worker.ThreatFeedSyncScheduler
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 import java.io.File
 import java.io.IOException
 import java.util.UUID
@@ -43,6 +49,54 @@ class ThreatRepository(
   definitionLoader.importBundledIfEmpty()
   scanner.scanInstalledApps(progress)
  }
+
+ /** Full scan of installed APKs and readable public shared-storage roots. Uses two lazy passes for progress without holding paths in memory. */
+ suspend fun scanFull(progress: suspend (Int, Int) -> Unit = { _, _ -> }): List<ScanResult> = withContext(Dispatchers.IO) {
+  definitionLoader.importBundledIfEmpty()
+  val roots=accessibleSharedRoots()
+  var fileCount=0
+  for (ignored in sharedFiles(roots)) { currentCoroutineContext().ensureActive(); if(fileCount < Int.MAX_VALUE) fileCount++ }
+  var installedCount=0
+  val installedResults=scanner.scanInstalledApps { processed,total ->
+   installedCount=total
+   progress(processed,(total.toLong()+fileCount).coerceAtMost(Int.MAX_VALUE.toLong()).toInt())
+  }
+  val findings=ArrayList<ScanResult>()
+  var filesProcessed=0
+  for(file in sharedFiles(roots)) {
+   currentCoroutineContext().ensureActive()
+   val assessed=scanner.scanFile(file,persistCleanAudit=false)
+   if(assessed.verdict!=ScanVerdict.NO_MATCH) findings+=assessed
+   filesProcessed++
+   progress((installedCount.toLong()+filesProcessed).coerceAtMost(Int.MAX_VALUE.toLong()).toInt(),
+    (installedCount.toLong()+fileCount).coerceAtMost(Int.MAX_VALUE.toLong()).toInt())
+  }
+  val total=(installedCount.toLong()+fileCount).coerceAtMost(Int.MAX_VALUE.toLong()).toInt()
+  progress(total,total)
+  installedResults+findings
+ }
+
+ @Suppress("DEPRECATION")
+ private fun accessibleSharedRoots(): List<File> {
+  val allowed=if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.R) runCatching { Environment.isExternalStorageManager() }.getOrDefault(false)
+   else context.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)==PackageManager.PERMISSION_GRANTED
+  if(!allowed) return emptyList()
+  val external=Environment.getExternalStorageDirectory()
+  val candidates=listOf(
+   Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+   Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),
+   Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM),
+   Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+   Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES),
+   Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC),
+   File(external,"Android/media")
+  )
+  return candidates.filter { it.isDirectory && it.canRead() }.distinctBy { file ->
+   runCatching { file.canonicalPath }.getOrDefault(file.absolutePath)
+  }
+ }
+ private fun sharedFiles(roots: List<File>): Sequence<File> =
+  roots.asSequence().flatMap { root -> root.walkTopDown().filter { it.isFile && it.canRead() } }
  suspend fun scanInstalledPackage(name: String): ScanResult? = withContext(Dispatchers.IO) {
   definitionLoader.importBundledIfEmpty()
   scanner.scanInstalledPackage(name)

@@ -75,7 +75,7 @@ class PackageScanner(
   }
   return scanPackage(info, scanSessionId)
  }
- suspend fun scanFile(file: File): ScanResult {
+ suspend fun scanFile(file: File, persistCleanAudit: Boolean = true): ScanResult {
   val start = System.nanoTime()
   val scanSessionId = UUID.randomUUID().toString()
   if (!file.isFile || !file.canRead()) {
@@ -86,7 +86,7 @@ class PackageScanner(
   return try {
    val hash = calculator.calculate(file)
    val output = evaluate(file.name, file.name, hash.sha256, hash.md5, emptyList(), 0)
-   audit(output, start, scanSessionId)
+   if (persistCleanAudit || output.verdict != ScanVerdict.NO_MATCH) audit(output, start, scanSessionId)
    output.copy(durationMs = elapsed(start), sourceLocalPath = file.absolutePath, scanSessionId = scanSessionId)
   } catch (cancelled: CancellationException) {
    throw cancelled

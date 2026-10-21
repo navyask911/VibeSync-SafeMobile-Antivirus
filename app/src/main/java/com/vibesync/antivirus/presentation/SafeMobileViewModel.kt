@@ -71,6 +71,10 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
         repository.scanInstalledApps(onProgress)
     }
 
+    fun scanFull() = runScan { onProgress ->
+        repository.scanFull(onProgress)
+    }
+
     fun scanSelected(uri: Uri) = runScan { _ ->
         listOf(repository.scanUri(uri))
     }

@@ -1,5 +1,6 @@
 package com.vibesync.antivirus.presentation
 import android.app.Activity
+import android.Manifest
 import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
@@ -22,6 +23,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -89,33 +93,32 @@ import com.vibesync.antivirus.core.engine.ScanResult
 import com.vibesync.antivirus.core.quarantine.LocalQuarantineManager
 import com.vibesync.antivirus.core.engine.ScanVerdict
 import com.vibesync.antivirus.data.repository.ThreatRepository
+import com.vibesync.antivirus.ui.components.EmptyState
+import com.vibesync.antivirus.ui.components.SecurityStatusCard
+import com.vibesync.antivirus.ui.components.SectionHeader
+import com.vibesync.antivirus.ui.components.StatusChip
+import com.vibesync.antivirus.ui.components.StatusKind
 import java.io.File
 import java.text.DateFormat
 import java.util.Date
 @Composable fun SafeMobileTheme(content: @Composable () -> Unit) {
  val context = LocalContext.current
  val prefs = remember(context) { context.getSharedPreferences(AppearancePreferences.PREFS_NAME, Context.MODE_PRIVATE) }
- var themeMode by remember { mutableStateOf(prefs.getString(AppearancePreferences.THEME_KEY, "system") ?: "system") }
+ var themeMode by remember { mutableStateOf(prefs.getString(AppearancePreferences.THEME_KEY, "dark") ?: "dark") }
  DisposableEffect(prefs) {
   val listener = android.content.SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
-   if (key == AppearancePreferences.THEME_KEY) themeMode = prefs.getString(AppearancePreferences.THEME_KEY, "system") ?: "system"
+   if (key == AppearancePreferences.THEME_KEY) themeMode = prefs.getString(AppearancePreferences.THEME_KEY, "dark") ?: "dark"
   }
   prefs.registerOnSharedPreferenceChangeListener(listener)
   onDispose { prefs.unregisterOnSharedPreferenceChangeListener(listener) }
  }
  val dark = when (themeMode) { "dark" -> true; "light" -> false; else -> isSystemInDarkTheme() }
- val colors = if (dark) darkColorScheme(
-  primary = Color(0xFF38C8F4), secondary = Color(0xFF67BCE9),
-  background = Color(0xFF071A2C), surface = Color(0xFF0D263C), surfaceVariant = Color(0xFF102D45),
-  onPrimary = Color(0xFF071A2C), onBackground = Color(0xFFF3F8FC), onSurface = Color(0xFFF3F8FC),
-  onSurfaceVariant = Color(0xFFB6CBD9), error = Color(0xFFDA3855), tertiary = Color(0xFFFFB74D)
- ) else lightColorScheme(
-  primary = Color(0xFF123E61), secondary = Color(0xFF0F6C87),
-  background = Color(0xFFF3F8FC), surface = Color.White, surfaceVariant = Color(0xFFE3EDF5),
-  onPrimary = Color.White, onBackground = Color(0xFF102D45), onSurface = Color(0xFF102D45),
-  onSurfaceVariant = Color(0xFF425D70), error = Color(0xFFB3261E), tertiary = Color(0xFF8B5E00)
+ MaterialTheme(
+  colorScheme = if (dark) com.vibesync.antivirus.ui.theme.SafeMobileDarkColorScheme else com.vibesync.antivirus.ui.theme.SafeMobileLightColorScheme,
+  typography = com.vibesync.antivirus.ui.theme.SafeMobileTypography,
+  shapes = com.vibesync.antivirus.ui.theme.SafeMobileShapes,
+  content = content
  )
- MaterialTheme(colorScheme = colors, content = content)
 }
 @Composable fun SafeMobileScreen(repository:ThreatRepository,adsEnabled:Boolean,privacyOptionsRequired:Boolean, sharedText:String? = null, onSharedTextConsumed:() -> Unit = {}) {
  val context=LocalContext.current
@@ -125,6 +128,12 @@ import java.util.Date
  val state by vm.state.collectAsStateWithLifecycle()
  val auditEntries by repository.observeRecentAudits().collectAsStateWithLifecycle(initialValue = emptyList())
  var selectedDestination by remember { mutableStateOf("home") }
+ val onboardingPrefs = remember(context) { context.getSharedPreferences(OnboardingPrefs.NAME, Context.MODE_PRIVATE) }
+ var onboardingComplete by remember(context) { mutableStateOf(onboardingPrefs.getBoolean(OnboardingPrefs.COMPLETED, false)) }
+ var onboardingStep by remember(context) { mutableStateOf(onboardingPrefs.getInt(OnboardingPrefs.STEP, 0).coerceIn(0, 3)) }
+ var storageAccessGranted by remember(context) { mutableStateOf(hasSharedStorageAccess(context)) }
+ var notificationsGranted by remember(context) { mutableStateOf(hasNotificationAccess(context)) }
+ var sentinelOptIn by remember(context) { mutableStateOf(onboardingPrefs.getBoolean(OnboardingPrefs.SENTINEL_OPT_IN, false)) }
  var languageMenuExpanded by remember { mutableStateOf(false) }
  var featureMenuExpanded by remember { mutableStateOf(false) }
  var localeOverrideTag by remember { mutableStateOf(LocalePreferences.overrideTag(context)) }
@@ -159,6 +168,7 @@ import java.util.Date
   if (privacyAccepted) action() else { pendingSensitiveAction = action; showPrivacyDisclosure = true }
  }
  var monitoringRunning by remember(context) { mutableStateOf(isStorageSentinelRunning(context)) }
+ val setOnboardingStep: (Int) -> Unit = { step -> onboardingStep = step.coerceIn(0, 3); onboardingPrefs.edit().putInt(OnboardingPrefs.STEP, onboardingStep).apply() }
  var pendingUninstallPackage by remember { mutableStateOf<String?>(null) }
  var showDefinitionImportWarning by remember { mutableStateOf(false) }
  var privacyOptionsVisible by remember { mutableStateOf(privacyOptionsRequired) }
@@ -175,11 +185,63 @@ import java.util.Date
   pendingRestoreFile = null
  }
  val interstitial=remember(activity,adsEnabled,online) { activity?.let { InterstitialAdController(it,adsEnabled && online) } }
+ val notificationLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
+  notificationsGranted = hasNotificationAccess(context)
+  if (notificationsGranted && onboardingStep == 2) setOnboardingStep(3)
+ }
+ val legacyStorageLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
+  storageAccessGranted = hasSharedStorageAccess(context)
+  if (storageAccessGranted && onboardingStep == 0) setOnboardingStep(1)
+ }
+ val requestStorage: () -> Unit = {
+  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+   runCatching { context.startActivity(Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, Uri.parse("package:" + context.packageName))) }
+    .onFailure { Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show() }
+  } else legacyStorageLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+ }
+ val requestNotifications: () -> Unit = {
+  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) notificationLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+  else { notificationsGranted = true; if (onboardingStep == 2) setOnboardingStep(3) }
+ }
+ val enableSentinel: () -> Unit = {
+  if (!hasSharedStorageAccess(context)) requestStorage()
+  else runCatching { context.startForegroundService(Intent(context, com.vibesync.antivirus.core.observer.StorageSentinelService::class.java)) }
+   .onFailure { sentinelOptIn = false; Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show() }
+   .onSuccess {
+    Handler(Looper.getMainLooper()).postDelayed({
+     monitoringRunning = isStorageSentinelRunning(context)
+     sentinelOptIn = monitoringRunning
+     onboardingPrefs.edit().putBoolean(OnboardingPrefs.SENTINEL_OPT_IN, monitoringRunning).apply()
+     if (!monitoringRunning) Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show()
+    }, 900L)
+   }
+ }
+ val disableSentinel: () -> Unit = {
+  context.stopService(Intent(context, com.vibesync.antivirus.core.observer.StorageSentinelService::class.java))
+  monitoringRunning = false; sentinelOptIn = false
+  onboardingPrefs.edit().putBoolean(OnboardingPrefs.SENTINEL_OPT_IN, false).apply()
+ }
+ val finishOnboarding: () -> Unit = {
+  onboardingPrefs.edit().putBoolean(OnboardingPrefs.COMPLETED, true).putInt(OnboardingPrefs.STEP, 4).apply()
+  onboardingComplete = true
+  if (!onboardingPrefs.getBoolean(OnboardingPrefs.FIRST_SCAN_REQUESTED, false)) {
+   requestPrivacyAcknowledgement {
+    if (!onboardingPrefs.getBoolean(OnboardingPrefs.FIRST_SCAN_REQUESTED, false)) {
+     onboardingPrefs.edit().putBoolean(OnboardingPrefs.FIRST_SCAN_REQUESTED, true).apply()
+     vm.scanFull()
+    }
+   }
+  }
+ }
  DisposableEffect(connectivity) { connectivity.start(); onDispose { connectivity.stop() } }
  DisposableEffect(lifecycleOwner, context) {
   val observer = LifecycleEventObserver { _, event ->
    if (event == Lifecycle.Event.ON_RESUME) {
     monitoringRunning = isStorageSentinelRunning(context)
+    storageAccessGranted = hasSharedStorageAccess(context)
+    notificationsGranted = hasNotificationAccess(context)
+    if (!onboardingComplete && onboardingStep == 0 && storageAccessGranted) setOnboardingStep(1)
+    if (!onboardingComplete && onboardingStep == 2 && notificationsGranted) setOnboardingStep(3)
     vm.refreshQuarantine()
     OverlayRiskReviewManager.requestForegroundReview(context)
     pendingUninstallPackage?.let { packageName ->
@@ -195,7 +257,17 @@ import java.util.Date
  LaunchedEffect(state.completedScans,interstitial,online) { if(state.completedScans>0 && online) interstitial?.showAfterScan(state.completedScans) }
  LaunchedEffect(privacyOptionsRequired) { privacyOptionsVisible = privacyOptionsRequired }
  LaunchedEffect(sharedText) { if (!sharedText.isNullOrBlank()) selectedDestination = "phishing" }
- Surface(Modifier.fillMaxSize(),color=MaterialTheme.colorScheme.background) {
+ Surface(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing),color=MaterialTheme.colorScheme.background) {
+  if (!onboardingComplete) {
+   SecurityOnboardingScreen(
+    step=onboardingStep, storageAccessGranted=storageAccessGranted, notificationsGranted=notificationsGranted,
+    sentinelOptIn=sentinelOptIn, onRequestStorage=requestStorage,
+    onContinueStorage={ setOnboardingStep(1) }, onContinueInstalledApps={ setOnboardingStep(2) },
+    onRequestNotifications=requestNotifications, onSkipNotifications={ setOnboardingStep(3) },
+    onEnableSentinel=enableSentinel, onDisableSentinel=disableSentinel,
+    onFinish=finishOnboarding, onSkipSetup=finishOnboarding
+   )
+  } else {
   Column(Modifier.fillMaxSize()) {
    Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(horizontal=18.dp,vertical=14.dp),verticalArrangement=Arrangement.spacedBy(14.dp)) {
     Row(verticalAlignment=Alignment.CenterVertically) {
@@ -239,6 +311,11 @@ import java.util.Date
       }
       DropdownMenu(expanded = featureMenuExpanded, onDismissRequest = { featureMenuExpanded = false }) {
        listOf(
+        "apps" to R.string.nav_apps,
+        "sentinel" to R.string.nav_sentinel,
+        "analytics" to R.string.nav_analytics,
+        "history" to R.string.nav_history,
+        "quarantine" to R.string.nav_quarantine,
         "guardian" to R.string.nav_guardian,
         "phishing" to R.string.nav_phishing,
         "cleaner" to R.string.nav_cleaner
@@ -247,6 +324,39 @@ import java.util.Date
          text = { Text(stringResource(label)) },
          onClick = { selectedDestination = destination; featureMenuExpanded = false }
         )
+       }
+      }
+     }
+    }
+    if (selectedDestination == "home") {
+     val lastScanLabel = state.lastScanAt?.let { DateFormat.getDateTimeInstance().format(Date(it)) }
+      ?.let { context.getString(R.string.security_last_scan, it) } ?: stringResource(R.string.security_last_scan_none)
+     val ringProgress = if (state.isScanning && state.totalItems > 0) state.processedItems.toFloat() / state.totalItems.toFloat() else null
+     SecurityStatusCard(
+      status=stringResource(statusResource),
+      description=stringResource(if (storageAccessGranted) R.string.security_scan_coverage else R.string.security_limited_storage),
+      lastScanLabel=lastScanLabel, threatCount=state.threatCount, signatureCount=state.signatureCount,
+      scanning=state.isScanning, progress=ringProgress,
+      onScan={ requestPrivacyAcknowledgement { vm.scanFull() } }
+     )
+     Row(Modifier.fillMaxWidth(), horizontalArrangement=Arrangement.spacedBy(8.dp)) {
+      OutlinedButton(onClick={ selectedDestination="apps" }, modifier=Modifier.weight(1f)) { Text(stringResource(R.string.nav_apps)) }
+      OutlinedButton(onClick={ selectedDestination="sentinel" }, modifier=Modifier.weight(1f)) { Text(stringResource(R.string.nav_sentinel)) }
+      OutlinedButton(onClick={ selectedDestination="analytics" }, modifier=Modifier.weight(1f)) { Text(stringResource(R.string.nav_analytics)) }
+     }
+     SectionHeader(title=stringResource(R.string.analytics_recent_activity), actionLabel=stringResource(R.string.nav_history), onAction={ selectedDestination="history" })
+     if (auditEntries.isEmpty()) EmptyState(title=stringResource(R.string.analytics_no_audits),description=stringResource(R.string.analytics_no_audits_body),
+      actionLabel=stringResource(R.string.security_scan_now), onAction={ requestPrivacyAcknowledgement { vm.scanFull() } })
+     else auditEntries.take(3).forEach { audit ->
+      Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surface),shape=RoundedCornerShape(14.dp),modifier=Modifier.fillMaxWidth()) {
+       Row(Modifier.padding(12.dp),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(10.dp)) {
+        androidx.compose.material3.Icon(if(audit.verdict==ScanVerdict.THREAT.name) Icons.Default.Warning else Icons.Default.History,
+         contentDescription=null,tint=if(audit.verdict==ScanVerdict.THREAT.name) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary)
+        Column(Modifier.weight(1f)) {
+         Text(audit.packageOrPath,style=MaterialTheme.typography.titleSmall)
+         Text(audit.verdict.replace('_',' ').lowercase(),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+        Text(DateFormat.getTimeInstance(DateFormat.SHORT).format(Date(audit.scanTimestamp)),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
        }
       }
      }
@@ -261,7 +371,7 @@ import java.util.Date
       }
      }
     } else if (selectedDestination == "home") TextButton(onClick={ openSponsor(context) }) { Text(stringResource(R.string.coffee_support)) }
-    if (selectedDestination == "home" || selectedDestination == "scan") {
+    if (selectedDestination == "scan") {
     Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surface),shape=RoundedCornerShape(22.dp),modifier=Modifier.fillMaxWidth()) {
      Column(Modifier.padding(18.dp),verticalArrangement=Arrangement.spacedBy(10.dp)) {
       Row(verticalAlignment=Alignment.CenterVertically) {
@@ -291,7 +401,7 @@ import java.util.Date
         Text(stringResource(R.string.scan_cancel))
        }
       }
-      Button(onClick={ requestPrivacyAcknowledgement { vm.scanInstalled() } },enabled=!state.isScanning,modifier=Modifier.fillMaxWidth()) {
+      Button(onClick={ requestPrivacyAcknowledgement { vm.scanFull() } },enabled=!state.isScanning,modifier=Modifier.fillMaxWidth()) {
        if(state.isScanning) CircularProgressIndicator(Modifier.size(18.dp),strokeWidth=2.dp,color=MaterialTheme.colorScheme.onPrimary) else androidx.compose.material3.Icon(Icons.Default.Security,contentDescription=null)
        Text(stringResource(if(state.isScanning) R.string.scan_running else R.string.scan_installed),modifier=Modifier.padding(start=8.dp))
       }
@@ -303,7 +413,7 @@ import java.util.Date
      }
     }
     }
-    if (selectedDestination == "home") {
+    if (selectedDestination == "home" || selectedDestination == "sentinel") {
     Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant),shape=RoundedCornerShape(18.dp),modifier=Modifier.fillMaxWidth()) {
      Column(Modifier.padding(16.dp),verticalArrangement=Arrangement.spacedBy(8.dp)) {
       Text(stringResource(R.string.monitor_title),style=MaterialTheme.typography.titleMedium,fontWeight=FontWeight.Bold)
@@ -381,6 +491,44 @@ import java.util.Date
      }
     }
     if (selectedDestination == "home") CoreStrengthsAccordion { destination -> selectedDestination = destination }
+    if (selectedDestination == "apps") {
+     SectionHeader(title=stringResource(R.string.nav_apps),actionLabel=stringResource(R.string.security_scan_now),onAction={ requestPrivacyAcknowledgement { vm.scanInstalled() } })
+     val apps=state.results.filter { it.packageName != null }
+     if (apps.isEmpty()) EmptyState(title=stringResource(R.string.apps_inventory_empty),description=stringResource(R.string.apps_inventory_empty_body),
+      actionLabel=stringResource(R.string.security_scan_now),onAction={ requestPrivacyAcknowledgement { vm.scanInstalled() } })
+     else {
+      Text(stringResource(R.string.apps_inventory_count,apps.size),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+      apps.take(80).forEach { result ->
+       ScanResultCard(result,
+        showUninstall=result.packageName?.let { canOfferUninstall(context,it) } == true && result.verdict in listOf(ScanVerdict.THREAT,ScanVerdict.SUSPICIOUS),
+        showQuarantine=false,
+        onUninstall={ packageName ->
+         val host=activity
+         if (canOfferUninstall(context,packageName) && host != null) runCatching {
+          pendingUninstallPackage=packageName
+          host.startActivity(Intent(Intent.ACTION_DELETE,Uri.parse("package:"+packageName)))
+         }.onFailure { pendingUninstallPackage=null; Toast.makeText(context,R.string.monitor_start_failed,Toast.LENGTH_LONG).show() }
+        }, onQuarantine={}
+       )
+      }
+     }
+    }
+    if (selectedDestination == "analytics") ProtectionAnalyticsPanel(
+     audits=auditEntries, results=state.results, signatureCount=state.signatureCount,
+     activeIndicatorCount=state.activeThreatIndicatorCount, lastScanAt=state.lastScanAt, isScanning=state.isScanning,
+     quarantinedCount=state.quarantinedFiles.size, monitoringRunning=monitoringRunning,
+     storageAccessGranted=storageAccessGranted, notificationsGranted=notificationsGranted, online=online
+    )
+    if (selectedDestination == "sentinel") {
+     Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant),shape=RoundedCornerShape(16.dp),modifier=Modifier.fillMaxWidth()) {
+      Column(Modifier.padding(16.dp),verticalArrangement=Arrangement.spacedBy(8.dp)) {
+       Text(stringResource(R.string.sentinel_scope_title),style=MaterialTheme.typography.titleMedium,fontWeight=FontWeight.SemiBold)
+       Text(stringResource(R.string.sentinel_scope_body),style=MaterialTheme.typography.bodyMedium,color=MaterialTheme.colorScheme.onSurfaceVariant)
+       StatusChip(stringResource(if(monitoringRunning) R.string.analytics_sentinel_running else R.string.analytics_sentinel_stopped),
+        kind=if(monitoringRunning) StatusKind.ACTIVE else StatusKind.WARNING)
+      }
+     }
+    }
     if (selectedDestination == "guardian") GuardianPanel()
     if (selectedDestination == "phishing") PhishingPanel(sharedText, repository) { onSharedTextConsumed() }
     if (selectedDestination == "cleaner") StorageCleanerPanel()
@@ -462,8 +610,8 @@ import java.util.Date
     val destinations = listOf(
      Triple("home", R.string.nav_home, Icons.Default.Home),
      Triple("scan", R.string.nav_scan, Icons.Default.Search),
-     Triple("quarantine", R.string.nav_quarantine, Icons.Default.FolderOpen),
-     Triple("history", R.string.nav_history, Icons.Default.History),
+     Triple("apps", R.string.nav_apps, androidx.compose.material.icons.filled.Apps),
+     Triple("analytics", R.string.nav_analytics, androidx.compose.material.icons.filled.BarChart),
      Triple("settings", R.string.nav_settings, Icons.Default.SettingsIcon)
     )
     destinations.forEach { destination ->
@@ -479,6 +627,7 @@ import java.util.Date
     Text(stringResource(R.string.ads_label),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
     BannerAd()
    }
+  }
   }
  }
  if (showDefinitionImportWarning) AlertDialog(
@@ -573,35 +722,38 @@ private fun isStorageSentinelRunning(context: Context): Boolean {
 @Composable private fun successStatusColor(): Color =
  if (MaterialTheme.colorScheme.background.luminance() < 0.5f) Color(0xFF81C784) else Color(0xFF2E7D32)
 
-@Composable private fun ScanResultCard(
- result:ScanResult,
- showUninstall:Boolean,
- showQuarantine:Boolean,
- onUninstall:(String)->Unit,
- onQuarantine:()->Unit
-) {
- val color=when(result.verdict) { ScanVerdict.THREAT->MaterialTheme.colorScheme.error; ScanVerdict.SUSPICIOUS->MaterialTheme.colorScheme.tertiary; ScanVerdict.NO_MATCH->successStatusColor(); ScanVerdict.NOT_SCANNED->MaterialTheme.colorScheme.onSurfaceVariant }
- val verdictResource=when(result.verdict) { ScanVerdict.THREAT->R.string.verdict_threat; ScanVerdict.SUSPICIOUS->R.string.verdict_suspicious; ScanVerdict.NO_MATCH->R.string.verdict_no_match; ScanVerdict.NOT_SCANNED->R.string.verdict_not_scanned }
- Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surface),shape=RoundedCornerShape(14.dp),modifier=Modifier.fillMaxWidth()) {
-  Column(Modifier.padding(14.dp),verticalArrangement=Arrangement.spacedBy(5.dp)) {
-   Text(result.displayName,style=MaterialTheme.typography.titleSmall,fontWeight=FontWeight.Bold)
-   Text(stringResource(verdictResource),color=color,style=MaterialTheme.typography.labelLarge)
-   result.scanSessionId?.takeIf { it.isNotBlank() }?.let { sessionId ->
-    Text(
-     stringResource(R.string.history_session) + ": " + sessionId,
-     style = MaterialTheme.typography.labelSmall,
-     color = MaterialTheme.colorScheme.onSurfaceVariant
-    )
-   }
-   result.threatEventId?.takeIf { it.isNotBlank() }?.let { eventId -> Text(stringResource(R.string.threat_event_ray_id, eventId),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant) }
-    result.sha256?.let { Text(stringResource(R.string.file_hash_label,it.take(24)),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant) }
-   result.reasons.take(3).forEach { Text("• "+it,style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurface) }
-   if (showUninstall && result.packageName != null) {
-    TextButton(onClick={ onUninstall(result.packageName) }) { Text(stringResource(R.string.uninstall_app)) }
-   }
-   if (showQuarantine) {
-    TextButton(onClick=onQuarantine) { Text(stringResource(R.string.quarantine_file)) }
-   }
+@Suppress("DEPRECATION")
+private fun appInfoForUninstall(context: Context, packageName: String): android.content.pm.ApplicationInfo? = runCatching {
+ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) context.packageManager.getApplicationInfo(packageName, android.content.pm.PackageManager.ApplicationInfoFlags.of(0))
+ else context.packageManager.getApplicationInfo(packageName, 0)
+}.getOrNull()
+private fun isProtectedSystemPackage(context: Context, packageName: String): Boolean {
+ if (packageName == context.packageName) return true
+ val flags=appInfoForUninstall(context,packageName)?.flags ?: return false
+ return flags and (android.content.pm.ApplicationInfo.FLAG_SYSTEM or android.content.pm.ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0
+}
+private fun canOfferUninstall(context: Context, packageName: String): Boolean {
+ if (packageName.isBlank() || packageName == context.packageName) return false
+ val flags=appInfoForUninstall(context,packageName)?.flags ?: return false
+ return flags and (android.content.pm.ApplicationInfo.FLAG_SYSTEM or android.content.pm.ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) == 0
+}
+@Composable private fun ScanResultCard(result:ScanResult,showUninstall:Boolean,showQuarantine:Boolean,onUninstall:(String)->Unit,onQuarantine:()->Unit) {
+ val context=LocalContext.current
+ val protectedSystem=result.packageName?.let { isProtectedSystemPackage(context,it) } == true
+ Column(verticalArrangement=Arrangement.spacedBy(6.dp),modifier=Modifier.fillMaxWidth()) {
+  com.vibesync.antivirus.ui.components.ThreatListItem(
+   result=result,isProtectedSystemApp=protectedSystem,
+   showUninstall=showUninstall && result.packageName?.let { canOfferUninstall(context,it) } == true,
+   showQuarantine=showQuarantine,onUninstall=onUninstall,onQuarantine=onQuarantine
+  )
+  result.scanSessionId?.takeIf { it.isNotBlank() }?.let {
+   Text(stringResource(R.string.history_session)+": "+it,modifier=Modifier.padding(horizontal=8.dp),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+  }
+  result.threatEventId?.takeIf { it.isNotBlank() }?.let {
+   Text(stringResource(R.string.threat_event_ray_id,it),modifier=Modifier.padding(horizontal=8.dp),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+  }
+  result.sha256?.let {
+   Text(stringResource(R.string.file_hash_label,it.take(24)),modifier=Modifier.padding(horizontal=8.dp),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
   }
  }
 }
