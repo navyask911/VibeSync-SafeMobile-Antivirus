@@ -90,6 +90,8 @@ import com.vibesync.antivirus.core.quarantine.LocalQuarantineManager
 import com.vibesync.antivirus.core.engine.ScanVerdict
 import com.vibesync.antivirus.data.repository.ThreatRepository
 import java.io.File
+import java.text.DateFormat
+import java.util.Date
 @Composable fun SafeMobileTheme(content: @Composable () -> Unit) {
  val context = LocalContext.current
  val prefs = remember(context) { context.getSharedPreferences(AppearancePreferences.PREFS_NAME, Context.MODE_PRIVATE) }
@@ -341,6 +343,44 @@ import java.io.File
       Text(stringResource(R.string.monitor_note),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
      }
     }
+    }
+    if (selectedDestination == "home") {
+     Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surface),shape=RoundedCornerShape(18.dp),modifier=Modifier.fillMaxWidth()) {
+      Column(Modifier.padding(16.dp),verticalArrangement=Arrangement.spacedBy(8.dp)) {
+       Text(stringResource(R.string.threat_feed_dashboard_title),style=MaterialTheme.typography.titleMedium,fontWeight=FontWeight.Bold)
+       Text(stringResource(R.string.threat_feed_active_count,state.activeThreatIndicatorCount),style=MaterialTheme.typography.bodyMedium)
+       Text(
+        if (state.lastThreatFeedSyncAt == null) stringResource(R.string.threat_feed_never_synced)
+        else stringResource(R.string.threat_feed_last_success,DateFormat.getDateTimeInstance().format(Date(state.lastThreatFeedSyncAt))),
+        style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant
+       )
+       val feedStatusResource = when(state.threatFeedSyncStatus) {
+        "RUNNING" -> R.string.threat_feed_syncing
+        "SUCCESS" -> R.string.threat_feed_sync_succeeded
+        "RETRY" -> R.string.threat_feed_sync_retry
+        "FAILED" -> R.string.threat_feed_sync_failed
+        else -> R.string.threat_feed_status_not_available
+       }
+       Text(stringResource(feedStatusResource),style=MaterialTheme.typography.labelMedium,color=MaterialTheme.colorScheme.onSurfaceVariant)
+       state.threatFeedSyncError?.takeIf { it.isNotBlank() }?.let {
+        Text(it,style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.tertiary)
+       }
+       Row(horizontalArrangement=Arrangement.spacedBy(8.dp),modifier=Modifier.fillMaxWidth()) {
+        Button(
+         onClick = {
+          if (state.threatFeedSyncStatus == null && state.lastThreatFeedSyncAt == null && state.activeThreatIndicatorCount == 0) selectedDestination = "settings"
+          else vm.requestThreatFeedSync()
+         },
+         modifier=Modifier.weight(1f)
+        ) {
+         Text(stringResource(if (state.threatFeedSyncStatus == null && state.lastThreatFeedSyncAt == null && state.activeThreatIndicatorCount == 0) R.string.threat_feed_configure else R.string.threat_feed_sync_now))
+        }
+        OutlinedButton(onClick={ selectedDestination = "settings" },modifier=Modifier.weight(1f)) {
+         Text(stringResource(R.string.threat_feed_manage))
+        }
+       }
+      }
+     }
     }
     if (selectedDestination == "home") CoreStrengthsAccordion { destination -> selectedDestination = destination }
     if (selectedDestination == "guardian") GuardianPanel()
