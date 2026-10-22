@@ -122,6 +122,8 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
       - name: Run instrumented tests on local emulator
         uses: reactivecircus/android-emulator-runner@v2
+        env:
+          EXPECTED_API_LEVEL: ${{ matrix.api-level }}
         with:
           api-level: ${{ matrix.api-level }}
           target: default
@@ -133,8 +135,6 @@ jobs:
           ram-size: 2048M
           heap-size: 512M
           cores: 2
-          env:
-            EXPECTED_API_LEVEL: ${{ matrix.api-level }}
           script: bash scripts/run_instrumented_tests.sh
       - name: Upload instrumented test diagnostics
         if: always()
