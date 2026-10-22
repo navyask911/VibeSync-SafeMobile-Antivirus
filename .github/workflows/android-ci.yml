@@ -127,7 +127,14 @@ jobs:
           target: default
           arch: x86_64
           profile: pixel_2
-          disable-animations: false
+          emulator-boot-timeout: 900
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
+          ram-size: 2048M
+          heap-size: 512M
+          cores: 2
+          env:
+            EXPECTED_API_LEVEL: ${{ matrix.api-level }}
           script: bash scripts/run_instrumented_tests.sh
       - name: Upload instrumented test diagnostics
         if: always()
