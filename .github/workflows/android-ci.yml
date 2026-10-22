@@ -120,6 +120,16 @@ jobs:
           java-version: "17"
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
+      # Assemble the target and instrumentation APKs while no emulator is running.
+      # Keeping dexing/packaging off the AVD startup window avoids system_server/ADB starvation
+      # on API 30 and 36 runners.
+      - name: Prebuild instrumentation APKs before emulator startup
+        env:
+          SAFE_MOBILE_FEED_ED25519_PUBLIC_KEY_B64: ${{ vars.SAFE_MOBILE_FEED_ED25519_PUBLIC_KEY_B64 }}
+        run: |
+          ./gradlew --no-daemon --max-workers=2 --no-parallel \
+            -Dorg.gradle.jvmargs="-Xmx2g -Dfile.encoding=UTF-8" \
+            assembleOfflineDebug assembleOfflineDebugAndroidTest
       - name: Run instrumented tests on local emulator
         uses: reactivecircus/android-emulator-runner@v2
         env:
@@ -132,9 +142,9 @@ jobs:
           emulator-boot-timeout: 900
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none
           disable-animations: true
-          ram-size: 2048M
+          ram-size: 4096M
           heap-size: 512M
-          cores: 2
+          cores: 4
           script: bash scripts/run_instrumented_tests.sh
       - name: Upload instrumented test diagnostics
         if: always()
