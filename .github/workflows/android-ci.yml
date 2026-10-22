@@ -135,7 +135,7 @@ jobs:
         with:
           name: emulator-diagnostics-api-${{ matrix.api-level }}
           path: |
-            build/emulator-diagnostics/logcat.txt
+            build/emulator-diagnostics/
             app/build/reports/androidTests/connected/debug/flavors/offline/
             app/build/outputs/androidTest-results/connected/offlineDebug/
           if-no-files-found: ignore
