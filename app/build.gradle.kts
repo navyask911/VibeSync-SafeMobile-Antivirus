@@ -105,6 +105,8 @@ dependencies {
  implementation("org.tensorflow:tensorflow-lite:2.17.0")
  implementation("com.google.guava:guava:33.4.8-android")
  implementation("org.bouncycastle:bcprov-jdk18on:1.86")
+ // The instrumentation APK is separate from the app APK and must carry its own Kotlin runtime.
+ androidTestImplementation(kotlin("stdlib"))
  androidTestImplementation("androidx.test:runner:1.6.2")
  androidTestImplementation("androidx.test.ext:junit:1.2.1")
  androidTestImplementation("androidx.test:core:1.6.1")
