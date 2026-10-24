@@ -4,6 +4,10 @@ import android.net.Uri
 import android.provider.OpenableColumns
 import com.vibesync.antivirus.R
 import com.vibesync.antivirus.core.engine.PackageScanner
+import com.vibesync.antivirus.core.hashdb.HashDatabaseManager
+import com.vibesync.antivirus.core.hashdb.HashDatabaseCapability
+import com.vibesync.antivirus.core.hashdb.HashDatabaseConfigStore
+import com.vibesync.antivirus.core.worker.HashDatabaseSyncScheduler
 import com.vibesync.antivirus.core.crypto.EncryptedHashStore
 import com.vibesync.antivirus.core.observer.StorageAccessPreferences
 import androidx.documentfile.provider.DocumentFile
@@ -34,7 +38,8 @@ class ThreatRepository(
  private val database: ThreatDatabase,
  private val scanner: PackageScanner,
  private val definitionLoader: LocalDefinitionLoader,
- private val threatIntelligence: ThreatIntelligenceRepository
+ private val threatIntelligence: ThreatIntelligenceRepository,
+ private val hashDatabaseManager: HashDatabaseManager? = null
 ) {
  private val privateTextStore by lazy(LazyThreadSafetyMode.SYNCHRONIZED) { EncryptedHashStore(context) }
  private val maxSafScanFiles = 10_000
@@ -244,6 +249,21 @@ class ThreatRepository(
    QuarantineDeleteOutcome.ACCESS_DENIED -> throw SecurityException("Access to quarantine file was denied.")
    QuarantineDeleteOutcome.FAILED -> throw IOException("Could not permanently delete quarantined file.")
   }
+ }
+
+ suspend fun hashDatabaseCapability(): HashDatabaseCapability = hashDatabaseManager?.let { it.restoreActiveDatabase() }
+  ?: HashDatabaseCapability(false, reason = "Disabled: hash database manager is unavailable.")
+
+ suspend fun importSignedHashDatabase(uri: Uri): HashDatabaseCapability = withContext(Dispatchers.IO) {
+  val manager = hashDatabaseManager ?: throw IllegalStateException("Signed hash database engine is unavailable.")
+  val stream = context.contentResolver.openInputStream(uri) ?: throw IOException(context.getString(R.string.file_stream_failed))
+  manager.importBundle(stream)
+ }
+
+ fun configureHashDatabaseSync(url: String, enabled: Boolean) {
+  HashDatabaseConfigStore(context).configure(url, enabled)
+  HashDatabaseSyncScheduler.ensurePeriodic(context)
+  if (enabled) HashDatabaseSyncScheduler.enqueueNow(context)
  }
 
 suspend fun importOfflineDefinitions(uri: Uri): String = withContext(Dispatchers.IO) {

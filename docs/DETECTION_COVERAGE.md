@@ -4,11 +4,12 @@
 
 | Layer | State | Implemented behavior | Limitation / release decision |
 |---|---|---|---|
-| Local SHA-256 signature matching | Active, severely limited | Room-backed signature matching and user/imported hashes. Bundled baseline contains only the harmless EICAR test marker. | Not a useful real-world malware set. Do not market as comprehensive antivirus. |
+| Legacy local SHA-256 signature matching | Active, severely limited | Room-backed signature matching and user/imported hashes. Bundled baseline contains only the harmless EICAR test marker. | Not a useful real-world malware set. Do not market as comprehensive antivirus. |
+| Signed MD5/SHA-1/SHA-256 database engine | **DISABLED by default** | Signed ZIP bundle import, Ed25519 verification, monotonic versions, Bloom pre-filter and exact indexed Room lookups are implemented. | No independently vetted production database or trusted signing public key is bundled. Enable only after both are provisioned through a trusted release process. No real-world efficacy is claimed. |
 | SHA-1/MD5 computation | Active | HashCalculator computes supported hashes in one streaming pass. | Hash computation alone is not detection; no comprehensive shipped database exists. |
 | Permission/manifest heuristics | Heuristic | Risk-weighted permissions, accessibility declaration, install-source hints and combinations. | Can create false positives and miss malware; no ML model is called. |
 | Root / hook / device integrity | Heuristic | Offline filesystem, package, build-property, SELinux, debugger and emulator indicators; multiplier informs package triage. | Best effort and bypassable; not attestation. |
-| Bloom filter database | **Disabled** | Loader validates manifest version/count and SHA-256 of `assets/hypatia_bloom.db` before deserializing. | Verified non-empty Bloom database/manifest is absent; no Bloom detections are claimed. |
+| Legacy Hypatia Bloom asset | **Disabled** | Existing legacy loader validates a manifest and digest before deserializing. | Verified non-empty `assets/hypatia_bloom.db` is absent; no detections are claimed from that legacy asset. The new signed hash engine builds a Bloom pre-filter only after a signed database is validated. |
 | YARA DEX/assets | **Disabled** | API explicitly reports disabled/unreadable status. | No libyara JNI libraries or curated licensed rules are shipped. |
 | TFLite classifier | **Disabled** | Status API returns no score when model is absent. | No validated `malware_model.tflite` exists; no synthetic model is shipped. |
 | Offline signer attestation | **Disabled by default** | Helper compares signer/asset digest against external expected SHA-256. | No trusted signer fingerprint/database digest is configured. A manifest alone is not a trust root. |
