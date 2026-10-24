@@ -8,7 +8,6 @@ import com.vibesync.antivirus.SafeMobileApp
 import com.vibesync.antivirus.core.hashdb.HashDatabaseConfigStore
 import java.io.IOException
 import java.net.URI
-import java.net.HttpURLConnection
 import javax.net.ssl.HttpsURLConnection
 
 /** Downloads a user-configured signed database bundle only. This worker never uploads scan data. */
@@ -42,7 +41,7 @@ class HashDatabaseSyncWorker(context: Context, params: WorkerParameters) :
                     connection.inputStream.use { app.hashDatabaseManager.importBundle(it) }
                     Result.success()
                 }
-                code == HttpURLConnection.HTTP_TOO_MANY_REQUESTS || code >= 500 -> Result.retry()
+                code == 429 || code >= 500 -> Result.retry()
                 else -> Result.failure()
             }
         } catch (_: IOException) {
