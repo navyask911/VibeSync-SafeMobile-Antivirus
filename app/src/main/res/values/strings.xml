@@ -374,4 +374,12 @@
     <string name="security_filter_files">Files</string>
     <string name="security_filter_sentinel">Sentinel</string>
     <string name="security_filter_vault">Vault</string>
+
+    <string name="device_admin_title">Device Administrator</string>
+    <string name="device_admin_description">Optional consumer protection can support force-lock and password policies. It cannot block APK installation and does not make SafeMobile the Device Owner.</string>
+    <string name="device_admin_enable">Enable Device Administrator</string>
+    <string name="device_admin_disable">Disable Device Administrator</string>
+    <string name="device_admin_active">Device Administrator is active on this device.</string>
+    <string name="device_admin_inactive">Device Administrator is inactive.</string>
+    <string name="device_admin_explanation">Enable SafeMobile's optional screen-lock and password policy controls. SafeMobile does not wipe your device or block APK installation.</string>
 </resources>

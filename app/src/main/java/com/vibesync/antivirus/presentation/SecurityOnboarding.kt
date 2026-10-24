@@ -96,7 +96,10 @@ internal fun SecurityOnboardingScreen(
             color = MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.Bold)
         Text(stringResource(description), style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onSurfaceVariant)
-        if (page == 1) EnterpriseOnboardingNotice(manager = enterpriseManager)
+        if (page == 1) {
+            EnterpriseOnboardingNotice(manager = enterpriseManager)
+            DeviceAdminCard()
+        }
         if (page == 0 || page == 2) {
             val granted = if (page == 0) storageAccessGranted else notificationsGranted
             Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
