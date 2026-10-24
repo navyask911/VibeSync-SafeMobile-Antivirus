@@ -262,4 +262,5 @@
     <string name="voice_alerts_description">보안 이벤트에 기기의 텍스트 음성 변환을 사용합니다. 음성 알림은 기본적으로 꺼져 있으며 기기 밖으로 데이터를 전송하지 않습니다.</string>
     <string name="voice_alerts_enabled">음성 보안 알림 사용</string>
     <string name="voice_alerts_disabled">음성 보안 알림 사용 안 함</string>
+    <string name="hashdb_match">서명된 %1$s 해시 일치: %2$s</string>
 </resources>

@@ -262,4 +262,5 @@
     <string name="voice_alerts_description">سیکیورٹی واقعات کے لیے ڈیوائس کا متن سے آواز کا نظام استعمال کریں۔ آواز کی اطلاعات پہلے سے بند ہیں اور ڈیوائس سے باہر ڈیٹا نہیں بھیجتیں۔</string>
     <string name="voice_alerts_enabled">آواز کی سیکیورٹی اطلاعات فعال</string>
     <string name="voice_alerts_disabled">آواز کی سیکیورٹی اطلاعات غیر فعال</string>
+    <string name="hashdb_match">دستخط شدہ %1$s ہیش مماثل ہے: %2$s</string>
 </resources>

@@ -262,4 +262,5 @@
     <string name="voice_alerts_description">ಭದ್ರತಾ ಘಟನೆಗಳಿಗೆ ಸಾಧನದಲ್ಲಿನ ಪಠ್ಯ-ಧ್ವನಿ ವೈಶಿಷ್ಟ್ಯ ಬಳಸಿ. ಧ್ವನಿ ಎಚ್ಚರಿಕೆಗಳು ಪೂರ್ವನಿಯೋಜಿತವಾಗಿ ಆಫ್ ಆಗಿರುತ್ತವೆ ಮತ್ತು ಡೇಟಾವನ್ನು ಸಾಧನದ ಹೊರಗೆ ಕಳುಹಿಸುವುದಿಲ್ಲ.</string>
     <string name="voice_alerts_enabled">ಧ್ವನಿ ಭದ್ರತಾ ಎಚ್ಚರಿಕೆಗಳು ಸಕ್ರಿಯ</string>
     <string name="voice_alerts_disabled">ಧ್ವನಿ ಭದ್ರತಾ ಎಚ್ಚರಿಕೆಗಳು ನಿಷ್ಕ್ರಿಯ</string>
+    <string name="hashdb_match">ಸಹಿ ಮಾಡಿದ %1$s ಹ್ಯಾಶ್ ಹೊಂದಾಣಿಕೆ: %2$s</string>
 </resources>

@@ -262,4 +262,5 @@
     <string name="voice_alerts_description">使用设备上的文字转语音功能播报安全事件。语音警报默认关闭，不会向设备外发送数据。</string>
     <string name="voice_alerts_enabled">已启用语音安全警报</string>
     <string name="voice_alerts_disabled">已停用语音安全警报</string>
+    <string name="hashdb_match">已签名的 %1$s 哈希匹配：%2$s</string>
 </resources>

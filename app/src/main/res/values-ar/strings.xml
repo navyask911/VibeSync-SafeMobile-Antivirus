@@ -205,4 +205,5 @@
     <string name="voice_alerts_description">استخدم تحويل النص إلى كلام على الجهاز لأحداث الأمان. التنبيهات الصوتية متوقفة افتراضياً ولا ترسل بيانات خارج الجهاز.</string>
     <string name="voice_alerts_enabled">تنبيهات الأمان الصوتية مفعّلة</string>
     <string name="voice_alerts_disabled">تنبيهات الأمان الصوتية متوقفة</string>
+    <string name="hashdb_match">تطابق تجزئة %1$s الموقعة: %2$s</string>
 </resources>

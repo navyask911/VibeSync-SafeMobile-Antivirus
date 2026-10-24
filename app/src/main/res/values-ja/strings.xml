@@ -205,4 +205,5 @@
     <string name="voice_alerts_description">セキュリティイベントに端末内の音声読み上げ機能を使います。音声通知は初期状態でオフで、データを端末外へ送信しません。</string>
     <string name="voice_alerts_enabled">音声セキュリティ通知を有効化</string>
     <string name="voice_alerts_disabled">音声セキュリティ通知を無効化</string>
+    <string name="hashdb_match">署名済み %1$s ハッシュ一致: %2$s</string>
 </resources>

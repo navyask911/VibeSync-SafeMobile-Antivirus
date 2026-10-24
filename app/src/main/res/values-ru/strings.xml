@@ -262,4 +262,5 @@
     <string name="voice_alerts_description">Для событий безопасности используется локальное преобразование текста в речь. Голосовые оповещения по умолчанию отключены и не передают данные за пределы устройства.</string>
     <string name="voice_alerts_enabled">Голосовые оповещения включены</string>
     <string name="voice_alerts_disabled">Голосовые оповещения отключены</string>
+    <string name="hashdb_match">Совпадение подписанного хеша %1$s: %2$s</string>
 </resources>

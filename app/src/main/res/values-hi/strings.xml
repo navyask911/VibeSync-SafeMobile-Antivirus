@@ -205,4 +205,5 @@
     <string name="voice_alerts_description">सुरक्षा घटनाओं के लिए डिवाइस के टेक्स्ट-टू-स्पीच का उपयोग करें। वॉइस अलर्ट डिफ़ॉल्ट रूप से बंद हैं और डेटा डिवाइस से बाहर नहीं भेजते।</string>
     <string name="voice_alerts_enabled">वॉइस सुरक्षा अलर्ट चालू</string>
     <string name="voice_alerts_disabled">वॉइस सुरक्षा अलर्ट बंद</string>
+    <string name="hashdb_match">हस्ताक्षरित %1$s हैश मेल: %2$s</string>
 </resources>

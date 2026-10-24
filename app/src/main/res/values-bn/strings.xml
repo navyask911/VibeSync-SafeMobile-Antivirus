@@ -262,4 +262,5 @@
     <string name="voice_alerts_description">নিরাপত্তা ঘটনার জন্য ডিভাইসের টেক্সট-টু-স্পিচ ব্যবহার করুন। ভয়েস সতর্কতা ডিফল্টভাবে বন্ধ এবং ডেটা ডিভাইসের বাইরে পাঠায় না।</string>
     <string name="voice_alerts_enabled">ভয়েস নিরাপত্তা সতর্কতা চালু</string>
     <string name="voice_alerts_disabled">ভয়েস নিরাপত্তা সতর্কতা বন্ধ</string>
+    <string name="hashdb_match">স্বাক্ষরিত %1$s হ্যাশ মিলেছে: %2$s</string>
 </resources>

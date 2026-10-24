@@ -262,4 +262,5 @@
     <string name="voice_alerts_description">భద్రతా సంఘటనల కోసం పరికరంలోని టెక్స్ట్-టు-స్పీచ్‌ను ఉపయోగించండి. వాయిస్ హెచ్చరికలు డిఫాల్ట్‌గా ఆఫ్‌లో ఉంటాయి మరియు డేటాను పరికరం వెలుపలికి పంపవు.</string>
     <string name="voice_alerts_enabled">వాయిస్ భద్రతా హెచ్చరికలు ప్రారంభం</string>
     <string name="voice_alerts_disabled">వాయిస్ భద్రతా హెచ్చరికలు నిలిపివేయబడ్డాయి</string>
+    <string name="hashdb_match">సంతకం చేసిన %1$s హాష్ సరిపోలింది: %2$s</string>
 </resources>

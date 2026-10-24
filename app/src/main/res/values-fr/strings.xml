@@ -205,4 +205,5 @@
     <string name="voice_alerts_description">Utilise la synthèse vocale locale pour les événements de sécurité. Les alertes vocales sont désactivées par défaut et n’envoient aucune donnée hors de l’appareil.</string>
     <string name="voice_alerts_enabled">Alertes vocales activées</string>
     <string name="voice_alerts_disabled">Alertes vocales désactivées</string>
+    <string name="hashdb_match">Correspondance de hachage %1$s signé : %2$s</string>
 </resources>
