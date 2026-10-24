@@ -38,6 +38,22 @@ Core scanning runs locally. Network use is always **explicit, disclosed, and opt
 
 ## ✨ Features
 
+### Verified capability status (Phase A)
+
+| Capability | Status |
+|---|---|
+| Offline MD5/SHA-1/SHA-256 stream hashing and Room lookups | Implemented; see signed import conditions |
+| Detached Ed25519 signed manual ZIP imports | **DISABLED by default** until a verified public signing key is configured |
+| Signed optional HTTPS definition updates | **DISABLED by default**; GET-only and opt-in |
+| Signed Bloom pre-screen | **DISABLED** — no validated complete signed filter supplied; exact indexed lookup still works |
+| YARA runtime and curated rules | **DISABLED** — none shipped |
+| Validated TFLite malware model | **DISABLED** — no model shipped |
+| Detection efficacy, RSS and latency | **NOT MEASURED**, see [METRICS](docs/METRICS.md) |
+
+**This app is not a certified antivirus product. Results are risk indicators, not proof of malware. No scan data leaves your device.**
+
+[Signed formats](docs/SIGNED_HASH_FORMATS.md) · [Licences](docs/THIRD_PARTY_LICENSES.md)
+
 ### 🔍 Detection & Scanning
 
 | | Feature | Description |
@@ -51,7 +67,7 @@ Core scanning runs locally. Network use is always **explicit, disclosed, and opt
 | ⏰ | **Scheduled scans** | Background scans via WorkManager (battery & network aware). |
 | 🌐 | **Configurable threat-feed sync** | Optional HTTPS endpoint for local indicator synchronization. |
 | 🔐 | **Feed credential encryption** | Credentials secured with Google Tink + Android Keystore. |
-| 🧪 | **Mendeley dataset (dev only)** | Research dataset used for development — **not bundled** in release. |
+| 🧪 | **Dataset benchmarking** | **NOT MEASURED**; no reproducibly licensed malware/benign evaluation corpus is available in CI. |
 
 ### 🧊 Flagged-Result Actions
 

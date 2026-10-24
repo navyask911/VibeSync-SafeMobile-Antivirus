@@ -505,7 +505,7 @@ import kotlinx.coroutines.launch
        androidx.compose.material3.Icon(Icons.Default.FolderOpen,contentDescription=null)
        Text(stringResource(R.string.scan_selected),modifier=Modifier.padding(start=8.dp))
       }
-      OutlinedButton(onClick={ requestPrivacyAcknowledgement { showDefinitionImportWarning = true } },enabled=!state.isScanning,modifier=Modifier.fillMaxWidth()) { Text(stringResource(R.string.import_definitions)) }
+      OutlinedButton(onClick={ requestPrivacyAcknowledgement { showDefinitionImportWarning = true } },enabled=!state.isScanning && BuildConfig.FEED_MANIFEST_KEY_CONFIGURED,modifier=Modifier.fillMaxWidth()) { Text(stringResource(if (BuildConfig.FEED_MANIFEST_KEY_CONFIGURED) R.string.import_definitions else R.string.import_disabled_no_key)) }
      }
     }
     }
@@ -732,7 +732,7 @@ import kotlinx.coroutines.launch
   confirmButton = {
    TextButton(onClick = {
     showDefinitionImportWarning = false
-    definitionsPicker.launch(arrayOf("application/json","text/json","text/plain"))
+    definitionsPicker.launch(arrayOf("application/zip","application/octet-stream"))
    }) { Text(stringResource(R.string.continue_import)) }
   },
   dismissButton = {

@@ -37,9 +37,9 @@
 <string name="quarantine_success_copy_only">Encrypted quarantine copy saved (%1$s). The original file was retained and was not deleted.</string>
 <string name="quarantine_failed">Quarantine failed. The original file was not intentionally removed.</string>
 <string name="uninstall_app">Uninstall app…</string>
-<string name="import_definitions">Import offline threat definitions (JSON)</string>
+<string name="import_definitions">Import signed threat definitions (ZIP)</string>
 <string name="import_success">Imported %1$d valid signature definitions into local storage.</string>
-<string name="import_failed">Definition file could not be imported. Check the JSON format and SHA-256 values.</string>
+<string name="import_failed">Signed definition import failed. Check the trusted key, detached signature, format and version.</string>
 <string name="monitor_stop">Stop Downloads monitoring</string>
 <string name="scan_progress">Scanned %1$d of %2$d installed apps</string>
 <string name="scan_preparing">Preparing scan…</string>
@@ -48,8 +48,8 @@
 <string name="monitor_active">Monitoring is active</string>
 <string name="monitor_inactive">Monitoring is stopped</string>
 <string name="monitor_start_failed">Downloads monitoring could not be started. Check permissions and try again.</string>
-<string name="import_unverified_title">Import unverified definitions?</string>
-<string name="import_unverified_body">SafeMobile validates the JSON structure and hash format, but this local file is not cryptographically authenticated by SafeMobile. Untrusted definitions may create false positives. Import only from a source you trust and are permitted to use. The file and hashes are not uploaded.</string>
+<string name="import_unverified_title">Import signed definitions?</string>
+<string name="import_unverified_body">Only a verified signed ZIP is accepted. The selected archive must contain manifest.json, manifest.sig and hashes.hdb, hashes.hsb or hashes.sdb. Data stays on-device; unsigned, tampered, oversized and downgraded bundles are rejected.</string>
 <string name="continue_import">Choose file</string>
 <string name="sponsor_link_failed">The support page could not be opened. Check your connection or try again later.</string>
 <string name="quarantine_vault_title">Quarantine vault</string>
@@ -366,4 +366,5 @@
 <string name="feed_settings_cancel" translatable="false">Cancel</string>
 <string name="feed_settings_enabled" translatable="false">Feed sync enabled. A sync may run when the endpoint is configured and network/battery constraints are met.</string>
 <string name="feed_settings_disabled" translatable="false">Feed sync disabled; queued and periodic work has been cancelled.</string>
+    <string name="import_disabled_no_key" translatable="false">Signed import DISABLED (no trusted key)</string>
 </resources>

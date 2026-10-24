@@ -11,3 +11,8 @@ Before a production release, maintainers must review the dependency graph artifa
 No ClamAV engine, VirusTotal Public API client, YARA runtime, MalwareBazaar/URLhaus/ThreatFox provider-specific client, or remote signature dataset is approved, bundled, or integrated by this change. The generic importer is not a threat-data provider: terms, authorization, and redistribution rights must be reviewed for any endpoint or content a maintainer chooses to use.
 
 The bundled EICAR definition is a harmless antivirus test-marker signature, not a malware sample. No real malware binaries are bundled by this change.
+
+
+## Phase A: signed local hash-signature interoperability (2026-10-25)
+
+SafeMobile includes its **own** Kotlin parser for documented hash formats; it does not embed ClamAV or Hypatia implementations, their databases, or GPLv3 source. No third-party hash signatures, malware samples, YARA rule sets or trained models are added. See `docs/THIRD_PARTY_LICENSES.md` for the existing library attribution review.

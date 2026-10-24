@@ -16,6 +16,8 @@ data class ThreatFeedStagingEntity(
     @ColumnInfo(name = "indicator_key") val indicatorKey: String,
     @ColumnInfo(name = "sha256_hash") val sha256Hash: String? = null,
     @ColumnInfo(name = "md5_hash") val md5Hash: String? = null,
+    @ColumnInfo(name = "sha1_hash") val sha1Hash: String? = null,
+    @ColumnInfo(name = "file_size") val fileSize: Long? = null,
     @ColumnInfo(name = "ioc_value") val iocValue: String? = null,
     @ColumnInfo(name = "ioc_type") val iocType: String? = null,
     @ColumnInfo(name = "threat_name") val threatName: String,
