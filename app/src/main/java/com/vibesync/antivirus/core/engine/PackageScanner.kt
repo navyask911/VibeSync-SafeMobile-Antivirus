@@ -7,6 +7,7 @@ import com.vibesync.antivirus.R
 import com.vibesync.antivirus.core.crypto.EncryptedHashStore
 import com.vibesync.antivirus.core.crypto.HashCalculator
 import com.vibesync.antivirus.core.hashdb.HashDatabaseManager
+import com.vibesync.antivirus.core.engine.DeepStaticAnalyzer
 import com.vibesync.antivirus.core.heuristics.PermissionRiskAnalyzer
 import com.vibesync.antivirus.core.security.IntegrityChecker
 import kotlin.math.roundToInt
@@ -33,8 +34,9 @@ class PackageScanner(
 ) {
  private val pm = context.packageManager
  private val integrityChecker = IntegrityChecker(context)
+ private val deepStaticAnalyzer = DeepStaticAnalyzer()
  suspend fun scanInstalledApps(progress: suspend (processed: Int, total: Int) -> Unit = { _, _ -> }): List<ScanResult> {
-  val flags = PackageManager.GET_PERMISSIONS or PackageManager.GET_SERVICES or signingFlags()
+  val flags = PackageManager.GET_PERMISSIONS or PackageManager.GET_SERVICES or PackageManager.GET_ACTIVITIES or PackageManager.GET_RECEIVERS or PackageManager.GET_PROVIDERS or signingFlags()
   val packages = pm.getInstalledPackages(flags)
   val scanSessionId = UUID.randomUUID().toString()
   val results = mutableListOf<ScanResult>()
@@ -90,7 +92,23 @@ class PackageScanner(
   }
   return try {
    val hash = calculator.calculate(file)
-   val output = evaluate(file.name, file.name, hash.sha256, hash.md5, emptyList(), 0, sha1 = hash.sha1)
+   val staticReport = if (file.extension.equals("apk", ignoreCase = true)) {
+    val archiveInfo = try {
+     val flags = PackageManager.GET_PERMISSIONS or PackageManager.GET_SERVICES or PackageManager.GET_ACTIVITIES or PackageManager.GET_RECEIVERS or PackageManager.GET_PROVIDERS or signingFlags()
+     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      pm.getPackageArchiveInfo(file.absolutePath, PackageManager.PackageInfoFlags.of(flags.toLong()))
+     } else {
+      @Suppress("DEPRECATION")
+      pm.getPackageArchiveInfo(file.absolutePath, flags)
+     }
+    } catch (_: Exception) { null }
+    archiveInfo?.applicationInfo?.apply { sourceDir = file.absolutePath; publicSourceDir = file.absolutePath }
+    deepStaticAnalyzer.analyze(archiveInfo, file, archiveInfo?.let(::isDebugSigned) == true)
+   } else null
+   val staticReasons = staticReport?.findings.orEmpty().map { "[${it.ruleId}] ${it.evidence} (confidence ${it.confidence}%)" }
+   val staticScore = staticReport?.riskScore ?: 0
+   val output = evaluate(file.name, file.name, hash.sha256, hash.md5, staticReasons, staticScore, sha1 = hash.sha1)
+    .copy(riskReport = staticReport)
    if (persistAllAudit || output.verdict == ScanVerdict.THREAT || output.verdict == ScanVerdict.SUSPICIOUS) audit(output, start, scanSessionId)
    output.copy(durationMs = elapsed(start), sourceLocalPath = file.absolutePath, scanSessionId = scanSessionId)
   } catch (cancelled: CancellationException) {
@@ -152,7 +170,12 @@ class PackageScanner(
     auditSafely(failed, start, scanSessionId)
     return failed
    }
-  val output = evaluate(info.packageName, label, hashes.sha256, hashes.md5, reasons, adjustedRiskScore, sha1 = hashes.sha1)
+  val deepReport = deepStaticAnalyzer.analyze(info, apk, debugSigned)
+  val deepReasons = deepReport.findings.map { "[${it.ruleId}] ${it.evidence} (confidence ${it.confidence}%)" }
+  reasons += deepReasons
+  val combinedRiskScore = maxOf(adjustedRiskScore, deepReport.riskScore)
+  val output = evaluate(info.packageName, label, hashes.sha256, hashes.md5, reasons, combinedRiskScore, sha1 = hashes.sha1)
+   .copy(riskReport = deepReport)
   audit(output, start, scanSessionId)
   return output.copy(durationMs = elapsed(start), packageName = info.packageName, scanSessionId = scanSessionId)
  }
