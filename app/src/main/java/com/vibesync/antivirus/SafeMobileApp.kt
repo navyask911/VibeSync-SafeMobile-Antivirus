@@ -54,6 +54,7 @@ class SafeMobileApp : Application() {
  override fun onTerminate() { appScope.cancel(); super.onTerminate() }
  companion object {
   const val SECURITY_PREFS = "safe_mobile_security_settings"
+  const val KEY_VOICE_ALERTS_ENABLED = "voice_alerts_enabled"
   const val KEY_DOWNLOAD_SENTINEL_ENABLED = "download_sentinel_enabled"
   const val KEY_STRICT_MODE = "download_sentinel_strict_mode"
   const val PRIVACY_PREFS = "safe_mobile_privacy"

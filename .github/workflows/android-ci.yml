@@ -1,9 +1,9 @@
 name: Android CI
 on:
   push:
-    branches: [main, "feat/**"]
-  pull_request:
     branches: [main]
+  pull_request:
+    branches: [main, "feat/**", "phase/**"]
 permissions:
   contents: read
 concurrency:
@@ -15,8 +15,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 40
     steps:
-      - name: Checkout
+      - name: Checkout full history for version-code guard
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -24,10 +26,27 @@ jobs:
           java-version: "17"
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
+      - name: Version-code monotonicity guard
+        run: python3 scripts/check_version_code.py
       - name: Dataset acquisition tooling unit tests (offline fixtures only)
         run: python3 -m unittest discover -s scripts -p 'test_*.py' -v
       - name: Proprietary safety policy guard
         run: python3 scripts/check_proprietary_safety.py
+      - name: Generate CycloneDX dependency SBOM (retry transient repository failures)
+        run: |
+          set -e
+          attempt=1
+          until ./gradlew --no-daemon cyclonedxBom; do
+            if [ "$attempt" -ge 3 ]; then
+              echo "CycloneDX generation failed after $attempt attempts."
+              exit 1
+            fi
+            echo "CycloneDX attempt $attempt failed (possibly transient Maven rate limiting); retrying in 15 seconds."
+            attempt=$((attempt + 1))
+            sleep 15
+          done
+          test -s build/reports/cyclonedx/bom.json
+          python3 scripts/render_third_party_notices.py --input build/reports/cyclonedx/bom.json --output build/generated-third-party-notices.md
       - name: Capture dependency graph for licence review
         run: |
           mkdir -p build
@@ -73,5 +92,70 @@ jobs:
             app/build/outputs/bundle/feedRelease/*.aab
             build/offline-release-dependency-tree.txt
             build/feed-release-dependency-tree.txt
+            build/reports/cyclonedx/bom.json
+            build/generated-third-party-notices.md
           if-no-files-found: warn
           retention-days: 14
+
+  android-emulator-tests:
+    name: Instrumented tests on API ${{ matrix.api-level }}
+    needs: test-lint-build
+    if: github.event_name != 'pull_request' || github.base_ref == 'main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        api-level: [26, 30, 34, 36]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+      # Assemble the target and instrumentation APKs while no emulator is running.
+      # Keeping dexing/packaging off the AVD startup window avoids system_server/ADB starvation
+      # on API 30 and 36 runners.
+      - name: Prebuild instrumentation APKs before emulator startup
+        env:
+          SAFE_MOBILE_FEED_ED25519_PUBLIC_KEY_B64: ${{ vars.SAFE_MOBILE_FEED_ED25519_PUBLIC_KEY_B64 }}
+        run: |
+          ./gradlew --no-daemon --max-workers=2 --no-parallel \
+            -Dorg.gradle.jvmargs="-Xmx2g -Dfile.encoding=UTF-8" \
+            assembleOfflineDebug assembleOfflineDebugAndroidTest
+      - name: Run instrumented tests on local emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        env:
+          EXPECTED_API_LEVEL: ${{ matrix.api-level }}
+        with:
+          api-level: ${{ matrix.api-level }}
+          target: default
+          arch: x86_64
+          profile: pixel_2
+          emulator-boot-timeout: 1200
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
+          # API 36 uses more memory on shared GitHub runners; reserve headroom for ADB and Gradle.
+          ram-size: ${{ matrix.api-level == 36 && '3072M' || '4096M' }}
+          heap-size: ${{ matrix.api-level == 36 && '384M' || '512M' }}
+          cores: ${{ matrix.api-level == 36 && 2 || 4 }}
+          script: bash scripts/run_instrumented_tests.sh
+      - name: Upload instrumented test diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: emulator-diagnostics-api-${{ matrix.api-level }}
+          path: |
+            build/emulator-diagnostics/
+            app/build/reports/androidTests/connected/debug/flavors/offline/
+            app/build/outputs/androidTest-results/connected/offlineDebug/
+          if-no-files-found: ignore
+          retention-days: 7
+

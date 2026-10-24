@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <!-- Test-only restore destination, present only in debug builds; never shipped in release APKs. -->
+        <provider
+            android:name="com.vibesync.antivirus.test.RoundTripContentProvider"
+            android:authorities="com.vibesync.antivirus.test.roundtrip"
+            android:exported="true"
+            android:grantUriPermissions="true" />
+    </application>
+</manifest>

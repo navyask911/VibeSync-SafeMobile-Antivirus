@@ -2,7 +2,7 @@
 <resources>
 <string name="app_name">SafeMobile Antivirus</string>
 <string name="privacy_title">Privacy and scan-access disclosure</string>
-<string name="privacy_body">SafeMobile calculates file hashes on this device and compares them with local definitions. Scan files and hashes are not uploaded. The offline build has no INTERNET permission and includes no ad, analytics, telemetry, or crash-reporting SDK. A separate feed build adds Internet access for a future opt-in HTTPS feed feature; do not use it until its explicit consent gate is in place. Installed-app visibility and all-files access are sensitive Android permissions and may require Google Play review.</string>
+<string name="privacy_body">Before installed-app scanning, SafeMobile reads the installed-package inventory using QUERY_ALL_PACKAGES because reviewing installed apps is core antivirus functionality. Package names and scan results stay on this device; they are not uploaded, sold, shared for ads or analytics, or sent to a server. The offline flavor has no INTERNET permission. Optional Downloads monitoring is off by default and asks you to select a folder with Android’s document picker; SafeMobile does not request all-files access. The separate feed flavor requires an explicit opt-in before contacting its configured HTTPS endpoint.</string>
 <string name="privacy_accept">I understand</string><string name="exit_app">Exit app</string>
 <string name="brand_title">SafeMobile Antivirus</string><string name="brand_subtitle">VibeSync</string>
 <string name="scan_status">Local protection dashboard</string><string name="scan_running">Scanning device…</string><string name="threat_found">Threat match detected</string>
@@ -10,7 +10,7 @@
 <string name="scan_explanation">Checks readable installed APKs against locally stored definitions and reviews files you select. Detection is limited by operating-system access and the definitions installed on this device.</string>
 <string name="scan_installed">Scan installed apps</string><string name="scan_selected">Scan a selected APK or file</string>
 <string name="monitor_title">Downloads sentinel</string>
-<string name="monitor_explanation">Optional monitoring of the public Downloads folder. Android 11+ requires the user to grant all-files access in Settings; Google Play approval is not guaranteed.</string>
+<string name="monitor_explanation">Optional monitoring of a folder you choose in Android’s document picker. SafeMobile only scans supported APK files in that selected folder and its first two subfolder levels. It polls locally while the foreground service is enabled. You can revoke folder access or stop monitoring at any time; no all-files access permission is requested.</string>
 <string name="monitor_button">Enable Downloads monitoring</string><string name="monitor_note">Monitoring is opt-in and can be stopped by the user.</string>
 <string name="latest_results">Latest scan results</string><string name="results_summary">%1$d threat matches · %2$d flagged for review · %3$d with no local match</string>
 <string name="scan_clean_warning">A clean result means there was no match in the local definitions currently installed. This is not a guarantee that a file is safe.</string>
@@ -224,6 +224,7 @@
 
 
 <string name="threat_feed_hash_match" translatable="false">Known threat hash: %1$s (source: %2$s)</string>
+ <string name="hashdb_match">Signed hash database match for %1$s: %2$s</string>
 <string name="threat_feed_dashboard_title" translatable="false">Local threat intelligence</string>
 <string name="threat_feed_active_count" translatable="false">Stored local indicators: %1$d</string>
 <string name="threat_feed_last_success" translatable="false">Last successful sync: %1$s</string>
@@ -266,20 +267,20 @@
     <string name="setup_title">Protect your device</string>
     <string name="setup_skip">Skip</string>
     <string name="setup_storage_title">Storage access</string>
-    <string name="setup_storage_body">Allow access to scan readable files in shared storage for known local signatures. Android still restricts access to some system and app-private locations; this does not inspect every file on the device.</string>
+    <string name="setup_storage_body">Optionally choose a folder for Downloads monitoring. Android opens its system document picker and grants SafeMobile access only to the folder you select. This is not required for core installed-app scanning or for scanning files you choose individually.</string>
     <string name="setup_apps_title">Installed-app visibility</string>
     <string name="setup_apps_body">SafeMobile checks readable installed APK files and app permission metadata. Package visibility is declared in the manifest; this step does not display a runtime permission dialog. Google Play policy approval is separate.</string>
     <string name="setup_notifications_title">Notifications</string>
     <string name="setup_notifications_body">Notifications can show scan reminders and protection-service status. You can continue without them, but alerts may be limited by Android notification settings.</string>
     <string name="setup_sentinel_title">Background protection</string>
-    <string name="setup_sentinel_body">Download Sentinel is optional. When enabled, its foreground service watches APK file changes directly inside the accessible top-level Downloads folder. It cannot intercept every installation or monitor every app-specific folder.</string>
+    <string name="setup_sentinel_body">Download Sentinel is optional. When enabled, it watches APK file changes in the accessible top-level Downloads folder. It does not intercept installations and may miss files in other folders.</string>
     <string name="setup_sentinel_switch">Enable Download Sentinel</string>
     <string name="setup_sentinel_scope">Best-effort APK file monitoring in Downloads. Android controls installation and can stop background work.</string>
     <string name="setup_permission_granted">Access available</string>
     <string name="setup_permission_missing">Not granted — protection is limited</string>
     <string name="setup_step_progress">Step %1$d of 4</string>
     <string name="setup_continue">Continue</string>
-    <string name="setup_allow_storage">Allow access</string>
+    <string name="setup_allow_storage">Choose folder (optional)</string>
     <string name="setup_continue_limited">Continue with limited protection</string>
     <string name="setup_allow_notifications">Allow notifications</string>
     <string name="setup_notifications_not_now">Not now</string>
@@ -366,4 +367,40 @@
 <string name="feed_settings_cancel" translatable="false">Cancel</string>
 <string name="feed_settings_enabled" translatable="false">Feed sync enabled. A sync may run when the endpoint is configured and network/battery constraints are met.</string>
 <string name="feed_settings_disabled" translatable="false">Feed sync disabled; queued and periodic work has been cancelled.</string>
+
+    <string name="security_dashboard_title">Security overview</string>
+    <string name="security_dashboard_subtitle">Offline-first protection on this device</string>
+    <string name="security_filter_overview">Overview</string>
+    <string name="security_filter_apps">Apps</string>
+    <string name="security_filter_files">Files</string>
+    <string name="security_filter_sentinel">Sentinel</string>
+    <string name="security_filter_vault">Vault</string>
+
+    <string name="device_admin_title">Device Administrator</string>
+    <string name="device_admin_description">Optional consumer protection can support force-lock and password policies. It cannot block APK installation and does not make SafeMobile the Device Owner.</string>
+    <string name="device_admin_enable">Enable Device Administrator</string>
+    <string name="device_admin_disable">Disable Device Administrator</string>
+    <string name="device_admin_active">Device Administrator is active on this device.</string>
+    <string name="device_admin_inactive">Device Administrator is inactive.</string>
+    <string name="device_admin_explanation">Enable SafeMobile’s optional screen-lock and password policy controls. SafeMobile does not wipe your device or block APK installation.</string>
+
+    <string name="installer_accessibility_service_title">SafeMobile installer advisory</string>
+    <string name="installer_accessibility_service_description">Optional advisory banner for Android package-installer windows. It does not block, click, or interfere with the system installer. Enable only if you want this reminder.</string>
+    <string name="installer_unscanned_warning">Warning. This APK has not been scanned. Return to SafeMobile to scan first.</string>
+    <string name="post_install_capability_note">Instant post-install scanning and quarantine. Android’s installer cannot be blocked by an ordinary app.</string>
+
+    <string name="security_alert_channel_name">SafeMobile high-priority security alerts</string>
+    <string name="security_alert_channel_description">Urgent local malware detections and quarantine events. Sound can be changed in Android notification settings.</string>
+    <string name="security_alert_file_title">Security threat isolated</string>
+    <string name="security_alert_file_body">A suspicious file (%1$s) was copied to SafeMobile’s encrypted quarantine. The original may still remain in the monitored folder.</string>
+    <string name="security_alert_malware_title">Malicious app detected</string>
+    <string name="security_alert_malware_body">SafeMobile found a local malware match after installation. Review the app or request Android to uninstall it.</string>
+    <string name="security_alert_review_title">App needs security review</string>
+    <string name="security_alert_review_body">The post-install scan found suspicious indicators. This is a risk signal, not a confirmed malware verdict.</string>
+    <string name="security_alert_open_vault">Open Quarantine Vault</string>
+    <string name="security_alert_uninstall">Uninstall app…</string>
+    <string name="voice_alerts_title">Voice security alerts</string>
+    <string name="voice_alerts_description">Use the on-device text-to-speech engine for security events. Voice alerts are off by default and never send data off-device.</string>
+    <string name="voice_alerts_enabled">Voice security alerts enabled</string>
+    <string name="voice_alerts_disabled">Voice security alerts disabled</string>
 </resources>

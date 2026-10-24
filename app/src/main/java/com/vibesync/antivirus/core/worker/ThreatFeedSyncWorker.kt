@@ -21,7 +21,6 @@ import com.vibesync.antivirus.data.local.ThreatDatabase
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.withContext
 import java.util.UUID
-import java.io.FilterInputStream
 import java.io.IOException
 import java.io.InputStream
 import java.net.HttpURLConnection
@@ -115,7 +114,7 @@ class ThreatFeedSyncWorker(context: Context, params: WorkerParameters) : Corouti
             val raw = connection.inputStream
             val decoded = if (connection.contentEncoding.equals("gzip", ignoreCase = true)) GZIPInputStream(raw, IO_BUFFER_SIZE) else raw
             val payloadDigest = MessageDigest.getInstance("SHA-256")
-            val bounded = LimitedInputStream(DigestInputStream(decoded, payloadDigest), MAX_FEED_BYTES)
+            val bounded = BoundedFeedInputStream(DigestInputStream(decoded, payloadDigest), MAX_FEED_BYTES)
             val parser = ThreatFeedParser()
             val parsedCount = parser.parse(bounded, remoteFormat, sourceHost) { batch ->
                 val staged = batch.map { row ->
@@ -263,14 +262,7 @@ class ThreatFeedSyncWorker(context: Context, params: WorkerParameters) : Corouti
                 if (location.isNullOrBlank() || hop >= MAX_REDIRECTS) {
                     throw FeedConfigurationException("Feed endpoint redirected too many times.")
                 }
-                val next = current.resolve(location)
-                if (!next.scheme.equals("https", ignoreCase = true)) {
-                    throw FeedConfigurationException("Insecure feed redirects are blocked.")
-                }
-                if (config.authKey.isNotBlank() && !next.host.equals(current.host, ignoreCase = true)) {
-                    throw FeedConfigurationException("Cross-host redirects are blocked when an Auth-Key is set.")
-                }
-                current = next
+                current = FeedRedirectPolicy.resolve(current, location, config.authKey.isNotBlank())
             } else {
                 return connection
             }
@@ -282,23 +274,6 @@ class ThreatFeedSyncWorker(context: Context, params: WorkerParameters) : Corouti
         MessageDigest.getInstance("SHA-256").digest(value.toByteArray(Charsets.UTF_8))
             .joinToString("") { "%02x".format(it) }
 
-    private class LimitedInputStream(input: InputStream, private val maxBytes: Long) : FilterInputStream(input) {
-        private var count = 0L
-        override fun read(): Int {
-            val value = super.read()
-            if (value >= 0) addCount(1)
-            return value
-        }
-        override fun read(buffer: ByteArray, offset: Int, length: Int): Int {
-            val read = super.read(buffer, offset, length)
-            if (read > 0) addCount(read.toLong())
-            return read
-        }
-        private fun addCount(amount: Long) {
-            count += amount
-            if (count > maxBytes) throw FeedSizeLimitException()
-        }
-    }
 
     companion object {
         const val UNIQUE_PERIODIC_NAME = "safe_mobile_threat_feed_periodic"
@@ -309,7 +284,7 @@ class ThreatFeedSyncWorker(context: Context, params: WorkerParameters) : Corouti
         private const val STATUS_FAILED = "FAILED"
         private const val CONNECT_TIMEOUT_MS = 15_000
         private const val READ_TIMEOUT_MS = 30_000
-        private const val MAX_FEED_BYTES = 128L * 1024L * 1024L
+        private const val MAX_FEED_BYTES = 100L * 1024L * 1024L
         private const val IO_BUFFER_SIZE = 64 * 1024
         private const val MAX_REDIRECTS = 3
         private const val STAGING_BATCH_SIZE = 500
@@ -372,4 +347,3 @@ object ThreatFeedSyncScheduler {
 
 class FeedConfigurationException(message: String) : Exception(message)
 class FeedTransientException(message: String) : IOException(message)
-class FeedSizeLimitException : IOException("Threat feed exceeded the maximum size.")
