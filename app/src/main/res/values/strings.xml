@@ -375,9 +375,9 @@
     <string name="device_admin_status_active" translatable="false">Device administrator is enabled</string>
     <string name="device_admin_status_inactive" translatable="false">Device administrator is not enabled</string>
     <string name="device_admin_body" translatable="false">Consumer mode can request force-lock and a minimum password policy. It cannot block APK installations or fully prevent uninstall; stronger installation controls require a managed Device Owner device.</string>
-    <string name="device_admin_explanation" translatable="false">Enables SafeMobile's force-lock and password-policy capabilities. This does not block APK installs.</string>
+    <string name="device_admin_explanation" translatable="false">Enables SafeMobile force-lock and password-policy capabilities. This does not block APK installs.</string>
     <string name="device_admin_enable" translatable="false">Enable administrator</string>
-    <string name="device_admin_disable_warning" translatable="false">Disabling SafeMobile's administrator removes its lock and password-policy abilities. Android still allows you to continue.</string>
+    <string name="device_admin_disable_warning" translatable="false">Disabling the SafeMobile administrator removes its lock and password-policy abilities. Android still allows users to continue.</string>
     <string name="device_admin_apply_password" translatable="false">Apply password policy</string>
     <string name="device_admin_password_applied" translatable="false">Minimum password policy applied (8 characters).</string>
     <string name="device_admin_password_failed" translatable="false">Android could not apply this password policy.</string>
