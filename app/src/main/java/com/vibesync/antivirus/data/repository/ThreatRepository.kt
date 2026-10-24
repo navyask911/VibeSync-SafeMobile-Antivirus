@@ -13,6 +13,7 @@ import com.vibesync.antivirus.core.engine.ScanVerdict
 import com.vibesync.antivirus.core.quarantine.LocalQuarantineManager
 import com.vibesync.antivirus.core.quarantine.QuarantineOutcome
 import com.vibesync.antivirus.core.worker.LocalDefinitionLoader
+import com.vibesync.antivirus.core.worker.SignedLocalHashImporter
 import com.vibesync.antivirus.data.local.ThreatDatabase
 import com.vibesync.antivirus.data.local.ScanAudit
 import com.vibesync.antivirus.data.local.ThreatFeedSyncStateEntity
@@ -147,7 +148,7 @@ class ThreatRepository(
   runCatching {
    database.threatDao().insertAudit(
     ScanAudit(
-     packageOrPath = label.take(250),
+     packageOrPath = "redacted",
      hash = "",
      scanTimestamp = now,
      verdict = ScanVerdict.NOT_SCANNED.name,
@@ -193,7 +194,8 @@ class ThreatRepository(
  }
  suspend fun importOfflineDefinitions(uri: Uri): String = withContext(Dispatchers.IO) {
   val stream=context.contentResolver.openInputStream(uri) ?: throw IOException(context.getString(R.string.file_stream_failed))
-  context.getString(R.string.import_success,definitionLoader.importFromStream(stream))
+  // No unsigned SAF import: the signed bundle validates the detached signature before promotion.
+  context.getString(R.string.import_success, SignedLocalHashImporter(database).import(stream))
  }
  suspend fun signatureCount(): Int = withContext(Dispatchers.IO) {
   definitionLoader.importBundledIfEmpty()

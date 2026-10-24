@@ -46,13 +46,10 @@ class LocalDefinitionLoader(
      *
      * The user chooses this file explicitly. Schema validation is not cryptographic provenance.
      */
+    @Deprecated("Unsigned user imports are prohibited. Use SignedLocalHashImporter.")
     suspend fun importFromStream(stream: InputStream): Int {
-        importMutex.lock()
-        try {
-            return parseAndImport(stream)
-        } finally {
-            importMutex.unlock()
-        }
+        stream.close()
+        throw SecurityException("Unsigned definition import disabled. Use a signed .zip bundle.")
     }
 
     private suspend fun parseAndImport(stream: InputStream): Int {

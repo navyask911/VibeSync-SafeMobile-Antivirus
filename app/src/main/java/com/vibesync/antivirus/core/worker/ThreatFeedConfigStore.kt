@@ -51,12 +51,9 @@ class ThreatFeedConfigStore(context: Context) {
     )
 
     fun save(config: ThreatFeedConfiguration) {
+        require(config.requestMode == ThreatFeedRequestMode.GET) { "Signed feed updates support GET only." }
         val url = validateHttpsUrl(config.url)
         require(config.authKey.length <= MAX_AUTH_KEY_LENGTH) { "The feed authentication key is too long." }
-        if (config.requestMode == ThreatFeedRequestMode.POST_JSON) {
-            require(config.postJson.length <= MAX_POST_BODY_LENGTH) { "The JSON request body is too large." }
-            JSONObject(config.postJson)
-        }
         val encryptedAuth = config.authKey.trim().takeIf(String::isNotEmpty)?.let(::encrypt)
         check(preferences.edit().putString(KEY_URL, url).putString(KEY_FORMAT, config.format.name)
             .putString(KEY_MODE, config.requestMode.name).putString(KEY_POST_JSON, config.postJson)

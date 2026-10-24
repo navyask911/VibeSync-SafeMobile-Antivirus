@@ -41,6 +41,7 @@ class ThreatFeedSyncWorker(context: Context, params: WorkerParameters) : Corouti
         if (!BuildConfig.FEED_MANIFEST_KEY_CONFIGURED) return Result.failure()
         val config = runCatching { store.load() }.getOrElse { return Result.failure() }
         if (config.url.isBlank()) return Result.success()
+        if (config.requestMode != ThreatFeedRequestMode.GET) return Result.failure()
 
         val uri = runCatching { URI(config.url) }.getOrElse { return Result.failure() }
         val sourceHost = uri.host?.lowercase(Locale.ROOT) ?: return Result.failure()
@@ -124,6 +125,8 @@ class ThreatFeedSyncWorker(context: Context, params: WorkerParameters) : Corouti
                         indicatorKey = row.indicatorKey,
                         sha256Hash = row.sha256Hash,
                         md5Hash = row.md5Hash,
+                        sha1Hash = row.sha1Hash,
+                        fileSize = row.fileSize,
                         iocValue = row.iocValue,
                         iocType = row.iocType,
                         threatName = row.threatName,
@@ -242,19 +245,8 @@ class ThreatFeedSyncWorker(context: Context, params: WorkerParameters) : Corouti
             if (config.authKey.isNotBlank()) connection.setRequestProperty("Auth-Key", config.authKey)
             if (hop == 0 && !etag.isNullOrBlank()) connection.setRequestProperty("If-None-Match", etag)
 
-            when (config.requestMode) {
-                ThreatFeedRequestMode.GET -> connection.requestMethod = "GET"
-                ThreatFeedRequestMode.POST_JSON -> {
-                    connection.requestMethod = "POST"
-                    connection.doOutput = true
-                    connection.setRequestProperty("Content-Type", "application/json; charset=utf-8")
-                }
-            }
-            if (config.requestMode == ThreatFeedRequestMode.POST_JSON) {
-                val body = config.postJson.toByteArray(Charsets.UTF_8)
-                connection.setFixedLengthStreamingMode(body.size)
-                connection.outputStream.use { it.write(body) }
-            }
+            // Signed updates are GET-only and never transmit scan data.
+            connection.requestMethod = "GET"
 
             val code = connection.responseCode
             if (code in 300..399) {
@@ -321,6 +313,8 @@ private fun ThreatFeedStagingEntity.toMalwareHashEntity() = MalwareHashEntity(
     indicatorKey = indicatorKey,
     sha256Hash = sha256Hash,
     md5Hash = md5Hash,
+    sha1Hash = sha1Hash,
+    fileSize = fileSize,
     iocValue = iocValue,
     iocType = iocType,
     threatName = threatName,
