@@ -309,3 +309,8 @@ YARA is **DISABLED — no compliant engine/rules bundled**. SafeMobile contains 
 ## Deep static analysis status
 
 SafeMobile now emits a structured local RiskReport for installed packages and selected APK files. It records advisory findings for exported components lacking manifest permission gates, Device Administrator/AccessibilityService/overlay combinations, SMS and call-log permission combinations, debug-signing metadata, bounded DEX header/entropy signals, common packer-related file names, and a limited permission-to-DEX-string cross-check. Findings include rule ID, severity, evidence and confidence. They are not proof of malware. Known-bad signer fingerprints are **DISABLED** because no reviewed local list is bundled; reflection, native code and dynamic loading can evade the API-string check. See `docs/STATIC_ANALYSIS.md`.
+
+
+## On-device ML status
+
+The TFLite malware classifier is **DISABLED** because there is no trained, evaluated and legally reviewed model artifact in the app. The runtime returns no score when the model is absent. Training/evaluation metrics remain **NOT MEASURED**; see `docs/MODEL_CARD.md` and `docs/METRICS.md`.
