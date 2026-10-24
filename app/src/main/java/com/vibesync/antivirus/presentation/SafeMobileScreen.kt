@@ -77,6 +77,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.style.TextOverflow
 import android.widget.Toast
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -396,7 +397,11 @@ import kotlinx.coroutines.launch
      }
     }
     if (selectedDestination == "home") {
-     val lastScanLabel = state.lastScanAt?.let { DateFormat.getDateTimeInstance().format(Date(it)) }
+     SecurityDashboard(
+       selectedDestination = selectedDestination,
+       onDestinationSelected = { selectedDestination = it }
+      )
+      val lastScanLabel = state.lastScanAt?.let { DateFormat.getDateTimeInstance().format(Date(it)) }
       ?.let { context.getString(R.string.security_last_scan, it) } ?: stringResource(R.string.security_last_scan_none)
      val ringProgress = if (state.isScanning && state.totalItems > 0) state.processedItems.toFloat() / state.totalItems.toFloat() else null
      SecurityStatusCard(
@@ -710,7 +715,7 @@ import kotlinx.coroutines.launch
       selected = selectedDestination == destination.first,
       onClick = { selectedDestination = destination.first },
       icon = { androidx.compose.material3.Icon(destination.third, contentDescription = stringResource(destination.second)) },
-      label = { Text(stringResource(destination.second)) }
+      label = { Text(stringResource(destination.second), maxLines = 1, softWrap = false, overflow = TextOverflow.Ellipsis) }
      )
     }
    }

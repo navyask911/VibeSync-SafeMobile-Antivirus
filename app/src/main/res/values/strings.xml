@@ -366,4 +366,12 @@
 <string name="feed_settings_cancel" translatable="false">Cancel</string>
 <string name="feed_settings_enabled" translatable="false">Feed sync enabled. A sync may run when the endpoint is configured and network/battery constraints are met.</string>
 <string name="feed_settings_disabled" translatable="false">Feed sync disabled; queued and periodic work has been cancelled.</string>
+
+    <string name="security_dashboard_title">Security overview</string>
+    <string name="security_dashboard_subtitle">Offline-first protection on this device</string>
+    <string name="security_filter_overview">Overview</string>
+    <string name="security_filter_apps">Apps</string>
+    <string name="security_filter_files">Files</string>
+    <string name="security_filter_sentinel">Sentinel</string>
+    <string name="security_filter_vault">Vault</string>
 </resources>
