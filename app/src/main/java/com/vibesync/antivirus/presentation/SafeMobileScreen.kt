@@ -323,7 +323,7 @@ import kotlinx.coroutines.launch
   }
  }
  LaunchedEffect(sharedText) { if (!sharedText.isNullOrBlank()) selectedDestination = "phishing" }
- Surface(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing),color=MaterialTheme.colorScheme.background) {
+ Surface(Modifier.fillMaxSize(),color=MaterialTheme.colorScheme.background) {
   if (!onboardingComplete) {
    SecurityOnboardingScreen(
     step=onboardingStep, storageAccessGranted=storageAccessGranted, notificationsGranted=notificationsGranted,
@@ -334,7 +334,7 @@ import kotlinx.coroutines.launch
     onFinish=finishOnboarding, onSkipSetup=finishOnboarding
    )
   } else {
-  Column(Modifier.fillMaxSize()) {
+   Column(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing)) {
    Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(horizontal=18.dp,vertical=14.dp),verticalArrangement=Arrangement.spacedBy(14.dp)) {
     Row(verticalAlignment=Alignment.CenterVertically) {
      Box(Modifier.size(46.dp).background(MaterialTheme.colorScheme.primaryContainer,RoundedCornerShape(15.dp)),contentAlignment=Alignment.Center) {

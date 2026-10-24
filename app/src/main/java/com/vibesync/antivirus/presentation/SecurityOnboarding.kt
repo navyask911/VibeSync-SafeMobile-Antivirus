@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.vibesync.antivirus.R
+import com.vibesync.antivirus.ui.components.PrimaryActionButton
 import com.vibesync.antivirus.core.security.DeviceOwnerManager
 
 internal object OnboardingPrefs {
@@ -62,8 +63,16 @@ internal fun SecurityOnboardingScreen(
         2 -> Icons.Default.Notifications
         else -> Icons.Default.Security
     }
-    Column(
-        modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        containerColor = MaterialTheme.colorScheme.background,
+        contentWindowInsets = WindowInsets.safeDrawing
+    ) { innerPadding ->
+      Column(
+        modifier = Modifier.fillMaxSize()
+            .padding(innerPadding)
+            .consumeWindowInsets(innerPadding)
+            .verticalScroll(rememberScrollState())
             .padding(horizontal = 22.dp, vertical = 18.dp),
         verticalArrangement = Arrangement.spacedBy(18.dp), horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -111,29 +120,32 @@ internal fun SecurityOnboardingScreen(
                 }
             }
         }
-        Button(onClick = {
-            when (page) {
-                0 -> if (storageAccessGranted) onContinueStorage() else onRequestStorage()
-                1 -> onContinueInstalledApps()
-                2 -> if (notificationsGranted) onSkipNotifications() else onRequestNotifications()
-                else -> onFinish()
+        PrimaryActionButton(
+            label = stringResource(
+                when (page) {
+                    0 -> if (storageAccessGranted) R.string.setup_continue else R.string.setup_allow_storage
+                    1 -> R.string.setup_continue
+                    2 -> if (notificationsGranted) R.string.setup_continue else R.string.setup_allow_notifications
+                    else -> R.string.setup_finish
+                }
+            ),
+            onClick = {
+                when (page) {
+                    0 -> if (storageAccessGranted) onContinueStorage() else onRequestStorage()
+                    1 -> onContinueInstalledApps()
+                    2 -> if (notificationsGranted) onSkipNotifications() else onRequestNotifications()
+                    else -> onFinish()
+                }
             }
-        }, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp), shape = RoundedCornerShape(50)) {
-            Text(when (page) {
-                0 -> stringResource(if (storageAccessGranted) R.string.setup_continue else R.string.setup_allow_storage)
-                1 -> stringResource(R.string.setup_continue)
-                2 -> stringResource(if (notificationsGranted) R.string.setup_continue else R.string.setup_allow_notifications)
-                else -> stringResource(R.string.setup_finish)
-            })
-        }
+        )
         if (page == 0 && !storageAccessGranted) {
             OutlinedButton(onClick = onContinueStorage, modifier = Modifier.fillMaxWidth()) { Text(stringResource(R.string.setup_continue_limited)) }
         } else if (page == 2 && !notificationsGranted) {
             TextButton(onClick = onSkipNotifications) { Text(stringResource(R.string.setup_notifications_not_now)) }
         }
-        Spacer(Modifier.weight(1f, fill = false))
         LinearProgressIndicator(progress = (page + 1) / 4f, modifier = Modifier.fillMaxWidth())
         Text(stringResource(R.string.setup_step_progress, page + 1), style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant)
+      }
     }
 }
