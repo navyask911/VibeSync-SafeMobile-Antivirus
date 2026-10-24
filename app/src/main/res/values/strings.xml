@@ -402,4 +402,5 @@
     <string name="voice_alerts_description">Use the on-device text-to-speech engine for security events. Voice alerts are off by default and never send data off-device.</string>
     <string name="voice_alerts_enabled">Voice security alerts enabled</string>
     <string name="voice_alerts_disabled">Voice security alerts disabled</string>
+    <string name="hashdb_match">Signed %1$s hash match: %2$s</string>
 </resources>

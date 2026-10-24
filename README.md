@@ -62,12 +62,14 @@ been separately verified. The current known limitations are documented below.
 
 ## Detection coverage
 
-**Reviewed 2026-10-22:** SafeMobile is a development candidate, not a production-validated antivirus.
-Local hash matching is active but the bundled baseline is EICAR-only. Permission/manifest and
-device-integrity checks are heuristic triage. Bloom-filter, YARA, TFLite and pinned-signer attestation
-layers remain disabled until verified assets/native runtime/model/trust configuration exist. The
-optional feed importer does not yet verify an Ed25519-signed manifest or enforce feed rollback
-protection. See the [detection coverage matrix](docs/DETECTION_COVERAGE.md) for each layer's status.
+**Reviewed 2026-10-24:** SafeMobile is a development candidate, not a production-validated antivirus.
+The legacy bundled hash list remains EICAR-test-marker-only. A signed multi-hash engine supports MD5,
+SHA-1 and SHA-256 with a Bloom pre-filter, indexed exact lookups, detached Ed25519 verification and
+monotonic version checks. That engine ships **DISABLED by default** because no independently vetted,
+production malware signature database or trusted signing public key is bundled. The EICAR marker is
+not meaningful real-world coverage. Permission/manifest and device-integrity checks are heuristic
+triage. YARA and TFLite remain **DISABLED** until a compliant Android runtime/rule pack and a trained,
+validated, licensed model are available. See the [detection coverage matrix](docs/DETECTION_COVERAGE.md).
 
 ## Build settings
 - Application ID: com.vibesync.antivirus

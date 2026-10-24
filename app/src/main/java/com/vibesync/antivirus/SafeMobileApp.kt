@@ -7,6 +7,7 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.vibesync.antivirus.core.crypto.EncryptedHashStore
 import com.vibesync.antivirus.core.crypto.HashCalculator
+import com.vibesync.antivirus.core.hashdb.HashDatabaseManager
 import com.vibesync.antivirus.core.engine.PackageScanner
 import com.vibesync.antivirus.core.worker.DeepScanWorker
 import com.vibesync.antivirus.core.worker.LocalDefinitionLoader
@@ -14,6 +15,7 @@ import com.vibesync.antivirus.data.local.ThreatDatabase
 import com.vibesync.antivirus.data.repository.ThreatRepository
 import com.vibesync.antivirus.data.repository.ThreatIntelligenceRepository
 import com.vibesync.antivirus.core.worker.ThreatFeedSyncScheduler
+import com.vibesync.antivirus.core.worker.HashDatabaseSyncScheduler
 import com.vibesync.antivirus.core.security.DeviceOwnerManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,6 +26,8 @@ import java.util.concurrent.TimeUnit
 class SafeMobileApp : Application() {
  lateinit var database: ThreatDatabase
   private set
+ lateinit var hashDatabaseManager: HashDatabaseManager
+  private set
  lateinit var repository: ThreatRepository
   private set
  private val appScope=CoroutineScope(SupervisorJob()+Dispatchers.IO)
@@ -33,13 +37,18 @@ class SafeMobileApp : Application() {
   database=Room.databaseBuilder(this,ThreatDatabase::class.java,"safe_mobile_threats.db")
    .addMigrations(ThreatDatabase.MIGRATION_1_2, ThreatDatabase.MIGRATION_2_3, ThreatDatabase.MIGRATION_3_4, ThreatDatabase.MIGRATION_4_5, ThreatDatabase.MIGRATION_5_6, ThreatDatabase.MIGRATION_6_7, ThreatDatabase.MIGRATION_7_8)
    .build()
+  hashDatabaseManager=HashDatabaseManager(this,database)
   val hashStore=EncryptedHashStore(this)
   val loader=LocalDefinitionLoader(this,database.threatDao(),hashStore)
   val intelligence=ThreatIntelligenceRepository(database.malwareHashDao(),database.threatFeedSyncStateDao())
-  val scanner=PackageScanner(this,database.threatDao(),hashStore,HashCalculator(),threatIntelligenceRepository=intelligence)
-  repository=ThreatRepository(this,database,scanner,loader,intelligence)
+  val scanner=PackageScanner(this,database.threatDao(),hashStore,HashCalculator(),threatIntelligenceRepository=intelligence,hashDatabaseManager=hashDatabaseManager)
+  repository=ThreatRepository(this,database,scanner,loader,intelligence,hashDatabaseManager=hashDatabaseManager)
   if (BuildConfig.OPTIONAL_FEED_ENABLED) ThreatFeedSyncScheduler.ensurePeriodic(this)
-  appScope.launch { runCatching { loader.importBundledIfEmpty() } }
+  HashDatabaseSyncScheduler.ensurePeriodic(this)
+  appScope.launch {
+   runCatching { hashDatabaseManager.restoreActiveDatabase() }
+   runCatching { loader.importBundledIfEmpty() }
+  }
   if (getSharedPreferences(PRIVACY_PREFS, MODE_PRIVATE).getBoolean(PRIVACY_ACKNOWLEDGED, false)) {
    scheduleMaintenanceSweep()
   }

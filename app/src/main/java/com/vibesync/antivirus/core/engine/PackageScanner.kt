@@ -6,6 +6,7 @@ import android.os.Build
 import com.vibesync.antivirus.R
 import com.vibesync.antivirus.core.crypto.EncryptedHashStore
 import com.vibesync.antivirus.core.crypto.HashCalculator
+import com.vibesync.antivirus.core.hashdb.HashDatabaseManager
 import com.vibesync.antivirus.core.heuristics.PermissionRiskAnalyzer
 import com.vibesync.antivirus.core.security.IntegrityChecker
 import kotlin.math.roundToInt
@@ -27,7 +28,8 @@ class PackageScanner(
  private val hashStore: EncryptedHashStore,
  private val calculator: HashCalculator = HashCalculator(),
  private val riskAnalyzer: PermissionRiskAnalyzer = PermissionRiskAnalyzer(),
- private val threatIntelligenceRepository: ThreatIntelligenceRepository? = null
+ private val threatIntelligenceRepository: ThreatIntelligenceRepository? = null,
+ private val hashDatabaseManager: HashDatabaseManager? = null
 ) {
  private val pm = context.packageManager
  private val integrityChecker = IntegrityChecker(context)
@@ -157,6 +159,12 @@ class PackageScanner(
  private suspend fun evaluate(key: String, label: String, sha: String, md5: String, heuristic: List<String>, score: Int, sha1: String? = null): ScanResult {
   val encrypted = hashStore.protectHash(sha)
   if (dao.isHashWhitelisted(encrypted)) return ScanResult(key, label, sha, md5, ScanVerdict.NO_MATCH, listOf(context.getString(R.string.hash_allowlisted)), 0).copy(sha1 = sha1)
+  val signedHashMatch = hashDatabaseManager?.lookup(sha, md5, sha1)
+  if (signedHashMatch != null) {
+   return ScanResult(key, label, sha, md5, ScanVerdict.THREAT,
+    listOf(context.getString(R.string.hashdb_match, signedHashMatch.algorithm.token.uppercase(), signedHashMatch.threatName)), 0)
+    .copy(threatEventId = UUID.randomUUID().toString(), riskScore = 1f, sha1 = sha1)
+  }
   val threat = dao.findThreatByEncryptedHash(encrypted)
   if (threat != null) {
    val family = revealMetadataOrPlaintext(threat.malwareFamily, "family")
