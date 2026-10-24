@@ -5,6 +5,8 @@ import android.os.Build
 import android.os.Environment
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Apps
@@ -41,7 +43,7 @@ internal fun hasNotificationAccess(context: Context): Boolean =
         context.checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) == android.content.pm.PackageManager.PERMISSION_GRANTED
 
 @Composable
-internal fun SecurityOnboardingScreen(
+internal fun OnboardingScreen(
     step: Int, storageAccessGranted: Boolean, notificationsGranted: Boolean, sentinelOptIn: Boolean,
     enterpriseManager: DeviceOwnerManager,
     onRequestStorage: () -> Unit, onContinueStorage: () -> Unit, onContinueInstalledApps: () -> Unit,
@@ -68,8 +70,10 @@ internal fun SecurityOnboardingScreen(
         else -> Icons.Default.Security
     }
     Column(
-        modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)
-            .padding(horizontal = 22.dp, vertical = 18.dp),
+        // The parent Scaffold has already applied and consumed safe-drawing insets.
+        // A scrollable content column keeps the primary action reachable on short screens.
+        modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())
+            .background(MaterialTheme.colorScheme.background).padding(horizontal = 22.dp, vertical = 18.dp),
         verticalArrangement = Arrangement.spacedBy(18.dp), horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
@@ -116,27 +120,28 @@ internal fun SecurityOnboardingScreen(
                 }
             }
         }
-        Button(onClick = {
-            when (page) {
-                0 -> if (storageAccessGranted) onContinueStorage() else onRequestStorage()
-                1 -> onContinueInstalledApps()
-                2 -> if (notificationsGranted) onSkipNotifications() else onRequestNotifications()
-                else -> onFinish()
-            }
-        }, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp), shape = RoundedCornerShape(50)) {
-            Text(when (page) {
+        PrimaryActionButton(
+            text = when (page) {
                 0 -> stringResource(if (storageAccessGranted) R.string.setup_continue else R.string.setup_allow_storage)
                 1 -> stringResource(R.string.setup_continue)
                 2 -> stringResource(if (notificationsGranted) R.string.setup_continue else R.string.setup_allow_notifications)
                 else -> stringResource(R.string.setup_finish)
-            })
-        }
+            },
+            onClick = {
+                when (page) {
+                    0 -> if (storageAccessGranted) onContinueStorage() else onRequestStorage()
+                    1 -> onContinueInstalledApps()
+                    2 -> if (notificationsGranted) onSkipNotifications() else onRequestNotifications()
+                    else -> onFinish()
+                }
+            }
+        )
         if (page == 0 && !storageAccessGranted) {
             OutlinedButton(onClick = onContinueStorage, modifier = Modifier.fillMaxWidth()) { Text(stringResource(R.string.setup_continue_limited)) }
         } else if (page == 2 && !notificationsGranted) {
             TextButton(onClick = onSkipNotifications) { Text(stringResource(R.string.setup_notifications_not_now)) }
         }
-        Spacer(Modifier.weight(1f, fill = false))
+        Spacer(Modifier.height(8.dp))
         LinearProgressIndicator(progress = (page + 1) / 4f, modifier = Modifier.fillMaxWidth())
         Text(stringResource(R.string.setup_step_progress, page + 1), style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant)

@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
@@ -49,9 +51,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.vibesync.antivirus.BuildConfig
+import com.vibesync.antivirus.SafeMobileApp
+import com.vibesync.antivirus.core.observer.SecurityVoiceAlert
 import com.vibesync.antivirus.R
 import com.vibesync.antivirus.core.locale.LocalePreferences
 import com.vibesync.antivirus.data.local.ScanAudit
@@ -274,6 +279,12 @@ internal fun SafeMobileSettingsPanel(
     onStrictModeChanged: ((Boolean) -> Unit)? = null
 ) {
     val context = LocalContext.current
+    val securityPrefs = remember(context) {
+        context.getSharedPreferences(SafeMobileApp.SECURITY_PREFS, Context.MODE_PRIVATE)
+    }
+    var voiceAlertsEnabled by remember(context) {
+        mutableStateOf(securityPrefs.getBoolean(SecurityVoiceAlert.PREF_VOICE_ALERTS_ENABLED, false))
+    }
     val activity = context as? Activity
     val themePrefs = remember(context) { context.getSharedPreferences(AppearancePreferences.PREFS_NAME, Context.MODE_PRIVATE) }
     var themeMode by remember { mutableStateOf(themePrefs.getString(AppearancePreferences.THEME_KEY, "dark") ?: "dark") }
@@ -295,38 +306,61 @@ internal fun SafeMobileSettingsPanel(
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text(stringResource(R.string.appearance_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    FilterChip(
-                        modifier = Modifier.fillMaxWidth(),
-                        selected = themeMode == "system",
-                        onClick = {
-                            themeMode = "system"
-                            themePrefs.edit().putString(AppearancePreferences.THEME_KEY, themeMode).apply()
-                        },
-                        label = { Text(stringResource(R.string.theme_system)) }
-                    )
-                    FilterChip(
-                        modifier = Modifier.fillMaxWidth(),
-                        selected = themeMode == "light",
-                        onClick = {
-                            themeMode = "light"
-                            themePrefs.edit().putString(AppearancePreferences.THEME_KEY, themeMode).apply()
-                        },
-                        label = { Text(stringResource(R.string.theme_light)) }
-                    )
-                    FilterChip(
-                        modifier = Modifier.fillMaxWidth(),
-                        selected = themeMode == "dark",
-                        onClick = {
-                            themeMode = "dark"
-                            themePrefs.edit().putString(AppearancePreferences.THEME_KEY, themeMode).apply()
-                        },
-                        label = { Text(stringResource(R.string.theme_dark)) }
-                    )
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    contentPadding = PaddingValues(horizontal = 16.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    item {
+                        FilterChip(
+                            selected = themeMode == "system",
+                            onClick = {
+                                themeMode = "system"
+                                themePrefs.edit().putString(AppearancePreferences.THEME_KEY, themeMode).apply()
+                            },
+                            label = { Text(stringResource(R.string.theme_system), maxLines = 1, softWrap = false, overflow = TextOverflow.Ellipsis) }
+                        )
+                    }
+                    item {
+                        FilterChip(
+                            selected = themeMode == "light",
+                            onClick = {
+                                themeMode = "light"
+                                themePrefs.edit().putString(AppearancePreferences.THEME_KEY, themeMode).apply()
+                            },
+                            label = { Text(stringResource(R.string.theme_light), maxLines = 1, softWrap = false, overflow = TextOverflow.Ellipsis) }
+                        )
+                    }
+                    item {
+                        FilterChip(
+                            selected = themeMode == "dark",
+                            onClick = {
+                                themeMode = "dark"
+                                themePrefs.edit().putString(AppearancePreferences.THEME_KEY, themeMode).apply()
+                            },
+                            label = { Text(stringResource(R.string.theme_dark), maxLines = 1, softWrap = false, overflow = TextOverflow.Ellipsis) }
+                        )
+                    }
                 }
             }
         }
         OverlayRiskReviewPanel()
+
+        Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
+            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(stringResource(R.string.security_voice_alerts_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                Text(stringResource(R.string.security_voice_alerts_body), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+                    Text(stringResource(if (voiceAlertsEnabled) R.string.security_voice_alerts_on else R.string.security_voice_alerts_off),
+                        modifier = Modifier.weight(1f), style = MaterialTheme.typography.labelLarge)
+                    Switch(checked = voiceAlertsEnabled, onCheckedChange = { enabled ->
+                        voiceAlertsEnabled = enabled
+                        securityPrefs.edit().putBoolean(SecurityVoiceAlert.PREF_VOICE_ALERTS_ENABLED, enabled).apply()
+                    })
+                }
+            }
+        }
+        DeviceAdminCard()
 
         if (BuildConfig.OPTIONAL_FEED_ENABLED) {
             Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {

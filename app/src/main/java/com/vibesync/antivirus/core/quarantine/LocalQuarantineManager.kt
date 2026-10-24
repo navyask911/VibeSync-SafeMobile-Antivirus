@@ -274,10 +274,17 @@ class LocalQuarantineManager(context: Context, private val hashCalculator: HashC
  }
 
  fun deleteQuarantinedFile(file: File): Boolean {
-  val safe = checkedQuarantineFile(file)
-  val removed = safe.delete()
-  if (removed) metadataFile(safe).delete()
-  return removed
+  return try {
+   // Avoid canonical-path and metadata work for a payload that has already disappeared.
+   if (!file.exists()) return false
+   val safe = checkedQuarantineFile(file)
+   val removed = QuarantineFileDeletion.delete(safe)
+   // Metadata is removed only after the encrypted payload is definitely gone.
+   if (removed) runCatching { metadataFile(safe).delete() }
+   removed
+  } catch (_: SecurityException) {
+   false
+  }
  }
 
  private fun verifyEncryptedObject(

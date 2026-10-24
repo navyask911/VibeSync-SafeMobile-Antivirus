@@ -26,7 +26,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -55,6 +55,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
@@ -125,7 +126,7 @@ import kotlinx.coroutines.launch
   content = content
  )
 }
-@Composable fun SafeMobileScreen(repository:ThreatRepository, sharedText:String? = null, onSharedTextConsumed:() -> Unit = {}) {
+@Composable fun SafeMobileScreen(repository:ThreatRepository, sharedText:String? = null, onSharedTextConsumed:() -> Unit = {}, openDestination: String? = null) {
  val context=LocalContext.current
  val safeMobileApp=context.applicationContext as SafeMobileApp
  val activity=context as? Activity
@@ -134,7 +135,7 @@ import kotlinx.coroutines.launch
  val auditEntries by repository.observeRecentAudits().collectAsStateWithLifecycle(initialValue = emptyList())
  val securityIncidents by repository.observeRecentSecurityIncidents().collectAsStateWithLifecycle(initialValue = emptyList())
  val ownerManager = remember(context) { DeviceOwnerManager(context) }
- var selectedDestination by remember { mutableStateOf("home") }
+ var selectedDestination by remember { mutableStateOf(if (openDestination?.substringBefore(':') == "quarantine") "quarantine" else "home") }
  val onboardingPrefs = remember(context) { context.getSharedPreferences(OnboardingPrefs.NAME, Context.MODE_PRIVATE) }
 
 
@@ -317,9 +318,39 @@ import kotlinx.coroutines.launch
   }
  }
  LaunchedEffect(sharedText) { if (!sharedText.isNullOrBlank()) selectedDestination = "phishing" }
- Surface(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing),color=MaterialTheme.colorScheme.background) {
+ LaunchedEffect(openDestination) { if (openDestination?.substringBefore(':') == "quarantine") selectedDestination = "quarantine" }
+ // Scaffold owns window insets; content applies and consumes its inner padding once.
+ Scaffold(
+  modifier = Modifier.fillMaxSize(),
+  contentWindowInsets = WindowInsets.safeDrawing,
+  bottomBar = {
+   if (onboardingComplete) {
+    NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
+     val destinations = listOf(
+      Triple("home", R.string.nav_home, Icons.Default.Home),
+      Triple("scan", R.string.nav_scan, Icons.Default.Search),
+      Triple("apps", R.string.nav_apps, Icons.Default.Security),
+      Triple("analytics", R.string.nav_analytics, Icons.Default.History),
+      Triple("settings", R.string.nav_settings, Icons.Default.SettingsIcon)
+     )
+     destinations.forEach { destination ->
+      NavigationBarItem(
+       selected = selectedDestination == destination.first,
+       onClick = { selectedDestination = destination.first },
+       icon = { androidx.compose.material3.Icon(destination.third, contentDescription = stringResource(destination.second)) },
+       label = { Text(stringResource(destination.second)) }
+      )
+     }
+    }
+   }
+  }
+ ) { innerPadding ->
+ Surface(
+  Modifier.fillMaxSize().padding(innerPadding).consumeWindowInsets(innerPadding),
+  color=MaterialTheme.colorScheme.background
+ ) {
   if (!onboardingComplete) {
-   SecurityOnboardingScreen(
+   OnboardingScreen(
     step=onboardingStep, storageAccessGranted=storageAccessGranted, notificationsGranted=notificationsGranted,
     sentinelOptIn=sentinelOptIn, enterpriseManager=ownerManager, onRequestStorage=requestStorage,
     onContinueStorage={ setOnboardingStep(1) }, onContinueInstalledApps={ setOnboardingStep(2) },
@@ -393,7 +424,7 @@ import kotlinx.coroutines.launch
      val lastScanLabel = state.lastScanAt?.let { DateFormat.getDateTimeInstance().format(Date(it)) }
       ?.let { context.getString(R.string.security_last_scan, it) } ?: stringResource(R.string.security_last_scan_none)
      val ringProgress = if (state.isScanning && state.totalItems > 0) state.processedItems.toFloat() / state.totalItems.toFloat() else null
-     SecurityStatusCard(
+     SecurityDashboard(
       status=stringResource(statusResource),
       description=stringResource(if (storageAccessGranted) R.string.security_scan_coverage else R.string.security_limited_storage),
       lastScanLabel=lastScanLabel, threatCount=state.threatCount, signatureCount=state.signatureCount,
@@ -705,25 +736,9 @@ import kotlinx.coroutines.launch
     Spacer(Modifier.height(8.dp))
    }
    SnackbarHost(hostState = snackbarHostState)
-   NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
-    val destinations = listOf(
-     Triple("home", R.string.nav_home, Icons.Default.Home),
-     Triple("scan", R.string.nav_scan, Icons.Default.Search),
-     Triple("apps", R.string.nav_apps, Icons.Default.Security),
-     Triple("analytics", R.string.nav_analytics, Icons.Default.History),
-     Triple("settings", R.string.nav_settings, Icons.Default.SettingsIcon)
-    )
-    destinations.forEach { destination ->
-     NavigationBarItem(
-      selected = selectedDestination == destination.first,
-      onClick = { selectedDestination = destination.first },
-      icon = { androidx.compose.material3.Icon(destination.third, contentDescription = stringResource(destination.second)) },
-      label = { Text(stringResource(destination.second)) }
-     )
-    }
-   }
   }
   }
+ }
  }
  if (showDefinitionImportWarning) AlertDialog(
   onDismissRequest = { showDefinitionImportWarning = false },
@@ -765,8 +780,8 @@ import kotlinx.coroutines.launch
    text = { Text(stringResource(R.string.quarantine_delete_confirm_body)) },
    confirmButton = {
     TextButton(onClick = {
-     vm.deleteQuarantinedFile(file)
      pendingDeleteFile = null
+     vm.deleteQuarantinedFile(file)
     }) { Text(stringResource(R.string.quarantine_delete), color = MaterialTheme.colorScheme.error) }
    },
    dismissButton = {
