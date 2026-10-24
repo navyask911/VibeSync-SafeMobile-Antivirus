@@ -10,6 +10,7 @@ import com.vibesync.antivirus.SafeMobileApp
 import com.vibesync.antivirus.core.crypto.EncryptedHashStore
 import com.vibesync.antivirus.core.engine.ScanResult
 import com.vibesync.antivirus.core.engine.ScanVerdict
+import com.vibesync.antivirus.core.observer.SecurityAlertNotifier
 import com.vibesync.antivirus.data.local.SecurityIncidentEntity
 import com.vibesync.antivirus.data.local.QuarantineVaultEntity
 import java.io.File
@@ -123,7 +124,12 @@ class StorageSentinelService : Service() {
    r.sha256?.takeIf{it.matches(Regex("(?i)^[0-9a-f]{64}$"))},
    privateTextStore.protectPrivateText(path.take(180), "incident-path"),
    privateTextStore.protectPrivateText(reason, "incident-reason"),action,status);runCatching{app.database.securityIncidentDao().insert(event)}.onFailure{Log.w(TAG,"Incident insert failed",it)}
-  when{malicious->SentinelNotificationHelper.malicious(this,name,removed,id);quarantine->SentinelNotificationHelper.quarantined(this,name,removed,id);else->SentinelNotificationHelper.review(this,name,id)}
+  if(saved!=null && (malicious || r.verdict==ScanVerdict.SUSPICIOUS)) {
+    // Audible/high-priority alert only after encrypted quarantine content was successfully saved.
+    SecurityAlertNotifier.notifyQuarantinedFile(this,name,id,malicious)
+   } else {
+    when{malicious->SentinelNotificationHelper.malicious(this,name,removed,id);quarantine->SentinelNotificationHelper.quarantined(this,name,removed,id);else->SentinelNotificationHelper.review(this,name,id)}
+   }
  }
 
  override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {

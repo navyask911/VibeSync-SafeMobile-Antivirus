@@ -125,7 +125,13 @@ import kotlinx.coroutines.launch
   content = content
  )
 }
-@Composable fun SafeMobileScreen(repository:ThreatRepository, sharedText:String? = null, onSharedTextConsumed:() -> Unit = {}) {
+@Composable fun SafeMobileScreen(
+ repository:ThreatRepository,
+ sharedText:String? = null,
+ onSharedTextConsumed:() -> Unit = {},
+ openQuarantine:Boolean = false,
+ onOpenQuarantineConsumed:() -> Unit = {}
+) {
  val context=LocalContext.current
  val safeMobileApp=context.applicationContext as SafeMobileApp
  val activity=context as? Activity
@@ -324,6 +330,12 @@ import kotlinx.coroutines.launch
   }
  }
  LaunchedEffect(sharedText) { if (!sharedText.isNullOrBlank()) selectedDestination = "phishing" }
+ LaunchedEffect(openQuarantine) {
+  if (openQuarantine) {
+   selectedDestination = "quarantine"
+   onOpenQuarantineConsumed()
+  }
+ }
  Surface(Modifier.fillMaxSize(),color=MaterialTheme.colorScheme.background) {
   if (!onboardingComplete) {
    SecurityOnboardingScreen(
