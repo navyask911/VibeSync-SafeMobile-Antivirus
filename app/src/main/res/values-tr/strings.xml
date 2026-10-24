@@ -263,4 +263,22 @@
     <string name="voice_alerts_enabled">Sesli güvenlik uyarıları açık</string>
     <string name="voice_alerts_disabled">Sesli güvenlik uyarıları kapalı</string>
     <string name="hashdb_match">İmzalı %1$s özeti eşleşti: %2$s</string>
+    <string name="detection_capabilities_title">Tespit yetenekleri</string>
+    <string name="detection_capabilities_description">Bu derlemede hangi güvenlik kontrollerinin etkin, tavsiye niteliğinde, koşullu veya kullanılamaz olduğunu görün.</string>
+    <string name="detection_capabilities_truth_title">Önemli: tarama sonuçlarının anlamı</string>
+    <string name="detection_capabilities_truth_body">Yerel eşleşme bulunmaması dosyanın güvenli olduğunu kanıtlamaz. Güvenilir imzalama anahtarı ve doğrulanmış üretim veritabanı yapılandırılana kadar imzalı karma motoru devre dışıdır. YARA ve makine öğrenimi devre dışıdır. Sezgisel kontroller yanlış uyarılar verebilir. Aşağıdaki ölçümler yapılmamıştır.</string>
+    <string name="detection_capabilities_enabled">Etkin</string>
+    <string name="detection_capabilities_disabled">Devre dışı</string>
+    <string name="detection_capabilities_limited">Sınırlı kapsam</string>
+    <string name="detection_capabilities_advisory">Yalnızca tavsiye</string>
+    <string name="detection_capabilities_conditional">Koşullu</string>
+    <string name="detection_capabilities_metrics_title">Tespit performansı ölçümleri</string>
+    <string name="detection_capabilities_import_signed_db">İmzalı karma veritabanını içe aktar</string>
+    <string name="detection_capabilities_import_yara">İnceleme için YARA kurallarını içe aktar (çalıştırılmaz)</string>
+    <string name="detection_capabilities_sync">İmzalı veritabanı güncellemeleri</string>
+    <string name="detection_capabilities_feed_url">HTTPS güncelleme URL’si</string>
+    <string name="detection_capabilities_sync_enabled">Otomatik güncellemeleri etkinleştir</string>
+    <string name="detection_capabilities_save">Güncelleme ayarlarını kaydet</string>
+    <string name="detection_capabilities_sync_privacy">Yalnızca indirme. Tarama sonuçları, dosyalar, karmalar ve paket adları yüklenmez.</string>
+    <string name="detection_capabilities_sync_unavailable">Bu çevrimdışı derlemede veya güvenilir imzalama anahtarı yapılandırılana kadar otomatik güncellemeler kullanılamaz.</string>
 </resources>

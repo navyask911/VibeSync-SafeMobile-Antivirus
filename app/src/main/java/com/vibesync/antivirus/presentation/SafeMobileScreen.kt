@@ -94,6 +94,7 @@ import com.vibesync.antivirus.core.worker.OverlayRiskReviewManager
 import com.vibesync.antivirus.core.locale.LocalePreferences
 import com.vibesync.antivirus.core.security.DeviceOwnerManager
 import com.vibesync.antivirus.core.engine.ScanResult
+import com.vibesync.antivirus.core.hashdb.HashDatabaseCapability
 import com.vibesync.antivirus.core.quarantine.LocalQuarantineManager
 import com.vibesync.antivirus.core.engine.ScanVerdict
 import com.vibesync.antivirus.data.repository.ThreatRepository
@@ -224,6 +225,8 @@ import kotlinx.coroutines.launch
  val quarantineManager = remember(context) { LocalQuarantineManager(context) }
  val apkPicker=rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri:Uri? -> uri?.let(vm::scanSelected) }
  val definitionsPicker=rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri:Uri? -> uri?.let(vm::importOfflineDefinitions) }
+ val signedHashDatabasePicker=rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri:Uri? -> uri?.let(vm::importSignedHashDatabase) }
+ val pendingYaraPicker=rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri:Uri? -> uri?.let(vm::importPendingYaraRule) }
  val restorePicker=rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/octet-stream")) { uri:Uri? ->
   val file = pendingRestoreFile
   if (uri != null && file != null) vm.restoreQuarantinedFile(file, uri)
@@ -398,7 +401,8 @@ import kotlinx.coroutines.launch
         "quarantine" to R.string.nav_quarantine,
         "guardian" to R.string.nav_guardian,
         "phishing" to R.string.nav_phishing,
-        "cleaner" to R.string.nav_cleaner
+        "cleaner" to R.string.nav_cleaner,
+        "capabilities" to R.string.detection_capabilities_title
        ).forEach { (destination, label) ->
         DropdownMenuItem(
          text = { Text(stringResource(label)) },
@@ -426,6 +430,7 @@ import kotlinx.coroutines.launch
        state.results.none { it.verdict in listOf(ScanVerdict.THREAT, ScanVerdict.SUSPICIOUS, ScanVerdict.NOT_SCANNED) },
       onScan={ requestPrivacyAcknowledgement { vm.scanFull() } }
      )
+     Text(stringResource(R.string.scan_clean_warning), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
      EnterpriseProtectionCard(manager = ownerManager)
      Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant), shape = RoundedCornerShape(16.dp), modifier = Modifier.fillMaxWidth()) {
       Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -709,6 +714,16 @@ import kotlinx.coroutines.launch
       monitoringRunning, enableSentinel, disableSentinel,
       strictMode = strictMode,
       onToggleProtection = toggleProtection, onStrictModeChanged = updateStrictMode
+     )
+    }
+    if (selectedDestination == "capabilities") {
+     DetectionCapabilitiesScreen(
+      hashDatabaseCapability = state.hashDatabaseCapability,
+      initialUpdateUrl = state.hashDatabaseUpdateUrl,
+      initialUpdatesEnabled = state.hashDatabaseUpdatesEnabled,
+      onImportSignedDatabase = { signedHashDatabasePicker.launch(arrayOf("application/zip", "application/octet-stream", "application/x-zip-compressed")) },
+      onImportYaraRulesForReview = { pendingYaraPicker.launch(arrayOf("text/plain", "application/octet-stream", "application/x-yara")) },
+      onSaveUpdateConfiguration = { url, enabled -> vm.configureHashDatabaseSync(url, enabled) }
      )
     }
     Spacer(Modifier.height(8.dp))

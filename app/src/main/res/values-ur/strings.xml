@@ -263,4 +263,22 @@
     <string name="voice_alerts_enabled">آواز کی سیکیورٹی اطلاعات فعال</string>
     <string name="voice_alerts_disabled">آواز کی سیکیورٹی اطلاعات غیر فعال</string>
     <string name="hashdb_match">دستخط شدہ %1$s ہیش مماثل ہے: %2$s</string>
+    <string name="detection_capabilities_title">پتہ لگانے کی صلاحیتیں</string>
+    <string name="detection_capabilities_description">دیکھیں کہ اس بلڈ میں کون سی حفاظتی جانچیں فعال، مشاورتی، مشروط یا دستیاب نہیں ہیں۔</string>
+    <string name="detection_capabilities_truth_title">اہم: اسکین کے نتائج کا مطلب</string>
+    <string name="detection_capabilities_truth_body">مقامی مماثلت نہ ملنا فائل کے محفوظ ہونے کا ثبوت نہیں۔ دستخط شدہ ہیش انجن اس وقت تک غیر فعال رہے گا جب تک قابل اعتماد دستخطی کلید اور تصدیق شدہ پیداواری ڈیٹابیس ترتیب نہ دیے جائیں۔ YARA اور مشین لرننگ غیر فعال ہیں۔ ہیؤرسٹکس غلط انتباہات دے سکتی ہیں۔ ذیل کے اعدادوشمار ناپے نہیں گئے۔</string>
+    <string name="detection_capabilities_enabled">فعال</string>
+    <string name="detection_capabilities_disabled">غیر فعال</string>
+    <string name="detection_capabilities_limited">محدود کوریج</string>
+    <string name="detection_capabilities_advisory">صرف مشاورتی</string>
+    <string name="detection_capabilities_conditional">مشروط</string>
+    <string name="detection_capabilities_metrics_title">پتہ لگانے کی کارکردگی کے اعدادوشمار</string>
+    <string name="detection_capabilities_import_signed_db">دستخط شدہ ہیش ڈیٹابیس درآمد کریں</string>
+    <string name="detection_capabilities_import_yara">جائزے کے لیے YARA قواعد درآمد کریں (چلائے نہیں جائیں گے)</string>
+    <string name="detection_capabilities_sync">دستخط شدہ ڈیٹابیس کی تازہ کاریاں</string>
+    <string name="detection_capabilities_feed_url">HTTPS اپ ڈیٹ URL</string>
+    <string name="detection_capabilities_sync_enabled">خودکار تازہ کاریاں فعال کریں</string>
+    <string name="detection_capabilities_save">اپ ڈیٹ ترتیبات محفوظ کریں</string>
+    <string name="detection_capabilities_sync_privacy">صرف ڈاؤن لوڈ۔ اسکین کے نتائج، فائلیں، ہیش اور پیکیج کے نام اپ لوڈ نہیں کیے جاتے۔</string>
+    <string name="detection_capabilities_sync_unavailable">اس آف لائن بلڈ میں یا قابل اعتماد دستخطی کلید ترتیب دیے جانے تک خودکار تازہ کاریاں دستیاب نہیں۔</string>
 </resources>

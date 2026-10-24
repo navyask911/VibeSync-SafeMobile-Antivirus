@@ -263,4 +263,22 @@
     <string name="voice_alerts_enabled">התראות אבטחה קוליות מופעלות</string>
     <string name="voice_alerts_disabled">התראות אבטחה קוליות מושבתות</string>
     <string name="hashdb_match">התאמת גיבוב %1$s חתומה: %2$s</string>
+    <string name="detection_capabilities_title">יכולות זיהוי</string>
+    <string name="detection_capabilities_description">בדקו אילו בדיקות אבטחה פעילות, מייעצות, מותנות או אינן זמינות בגרסה זו.</string>
+    <string name="detection_capabilities_truth_title">חשוב: משמעות תוצאות הסריקה</string>
+    <string name="detection_capabilities_truth_body">היעדר התאמה מקומית אינו מוכיח שקובץ בטוח. מנוע הגיבובים החתומים נשאר מושבת עד להגדרת מפתח חתימה מהימן ומסד נתונים מאומת לייצור. YARA ולמידת מכונה מושבתים. היוריסטיקות עלולות להציג התרעות שווא. המדדים שלהלן לא נמדדו.</string>
+    <string name="detection_capabilities_enabled">פעיל</string>
+    <string name="detection_capabilities_disabled">מושבת</string>
+    <string name="detection_capabilities_limited">כיסוי מוגבל</string>
+    <string name="detection_capabilities_advisory">מידע מייעץ בלבד</string>
+    <string name="detection_capabilities_conditional">מותנה</string>
+    <string name="detection_capabilities_metrics_title">מדדי ביצועי זיהוי</string>
+    <string name="detection_capabilities_import_signed_db">ייבוא מסד גיבובים חתום</string>
+    <string name="detection_capabilities_import_yara">ייבוא כללי YARA לבדיקה (לא יופעלו)</string>
+    <string name="detection_capabilities_sync">עדכוני מסד נתונים חתום</string>
+    <string name="detection_capabilities_feed_url">כתובת עדכון HTTPS</string>
+    <string name="detection_capabilities_sync_enabled">הפעלת עדכונים אוטומטיים</string>
+    <string name="detection_capabilities_save">שמירת הגדרות עדכון</string>
+    <string name="detection_capabilities_sync_privacy">הורדה בלבד. תוצאות סריקה, קבצים, גיבובים ושמות חבילות אינם מועלים.</string>
+    <string name="detection_capabilities_sync_unavailable">עדכונים אוטומטיים אינם זמינים בגרסה הלא מקוונת או עד להגדרת מפתח חתימה מהימן.</string>
 </resources>

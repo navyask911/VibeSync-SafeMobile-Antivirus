@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.vibesync.antivirus.R
 import com.vibesync.antivirus.core.engine.ScanResult
 import com.vibesync.antivirus.core.engine.ScanVerdict
+import com.vibesync.antivirus.core.hashdb.HashDatabaseCapability
 import com.vibesync.antivirus.data.repository.ThreatRepository
 import java.io.File
 import kotlinx.coroutines.CancellationException
@@ -32,7 +33,10 @@ data class SafeMobileUiState(
     val activeThreatIndicatorCount: Int = 0,
     val lastThreatFeedSyncAt: Long? = null,
     val threatFeedSyncStatus: String? = null,
-    val threatFeedSyncError: String? = null
+    val threatFeedSyncError: String? = null,
+    val hashDatabaseCapability: HashDatabaseCapability = HashDatabaseCapability(false, reason = "Disabled: trusted public key or vetted database is missing."),
+    val hashDatabaseUpdateUrl: String = "",
+    val hashDatabaseUpdatesEnabled: Boolean = false
 ) {
     val threatCount get() = results.count { it.verdict == ScanVerdict.THREAT }
     val suspiciousCount get() = results.count { it.verdict == ScanVerdict.SUSPICIOUS }
@@ -47,6 +51,7 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
         refreshSignatureCount()
         refreshQuarantine()
         observeThreatFeedState()
+        refreshHashDatabaseCapability()
     }
 
     private fun observeThreatFeedState() {
@@ -64,6 +69,54 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
             repository.observeLatestThreatFeedSyncState().collect { sync ->
                 mutableState.update { it.copy(threatFeedSyncStatus = sync?.status, threatFeedSyncError = sync?.lastError) }
             }
+        }
+    }
+
+    fun refreshHashDatabaseCapability() {
+        viewModelScope.launch {
+            val capability = runCatching { repository.hashDatabaseCapability() }
+                .getOrElse { HashDatabaseCapability(false, reason = it.message ?: "Signed hash database is unavailable.") }
+            val config = runCatching { repository.hashDatabaseSyncConfig() }.getOrNull()
+            mutableState.update { old ->
+                old.copy(
+                    hashDatabaseCapability = capability,
+                    hashDatabaseUpdateUrl = config?.url.orEmpty(),
+                    hashDatabaseUpdatesEnabled = config?.enabled == true
+                )
+            }
+        }
+    }
+
+    fun importSignedHashDatabase(uri: Uri) {
+        viewModelScope.launch {
+            runCatching { repository.importSignedHashDatabase(uri) }
+                .onSuccess { capability ->
+                    mutableState.update { it.copy(hashDatabaseCapability = capability, messageResource = null,
+                        messageText = "Signed hash database accepted: version ${capability.version}, ${capability.indicatorCount} indicators.") }
+                }
+                .onFailure { error ->
+                    refreshHashDatabaseCapability()
+                    mutableState.update { it.copy(messageResource = null,
+                        messageText = "Signed hash database was not activated: ${error.message ?: "verification failed"}.") }
+                }
+        }
+    }
+
+    fun importPendingYaraRule(uri: Uri) {
+        viewModelScope.launch {
+            runCatching { repository.importPendingYaraRule(uri) }
+                .onSuccess { message -> mutableState.update { it.copy(messageResource = null, messageText = message) } }
+                .onFailure { error -> mutableState.update { it.copy(messageResource = null,
+                    messageText = "YARA rules were not activated: ${error.message ?: "import failed"}." ) } }
+        }
+    }
+
+    fun configureHashDatabaseSync(url: String, enabled: Boolean) {
+        viewModelScope.launch {
+            runCatching { repository.configureHashDatabaseSync(url, enabled) }
+                .onSuccess { refreshHashDatabaseCapability() }
+                .onFailure { error -> mutableState.update { it.copy(messageResource = null,
+                    messageText = "Update settings were not saved: ${error.message ?: "invalid HTTPS URL"}." ) } }
         }
     }
 
