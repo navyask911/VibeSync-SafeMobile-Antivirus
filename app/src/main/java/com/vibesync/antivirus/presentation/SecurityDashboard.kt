@@ -77,6 +77,7 @@ internal fun SecurityDashboard(
                     )
                 }
             }
+            InstallerWarningBanner(modifier = Modifier.padding(horizontal = 12.dp))
             Spacer(Modifier.height(4.dp))
         }
     }

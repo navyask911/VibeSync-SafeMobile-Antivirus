@@ -382,4 +382,9 @@
     <string name="device_admin_active">Device Administrator is active on this device.</string>
     <string name="device_admin_inactive">Device Administrator is inactive.</string>
     <string name="device_admin_explanation">Enable SafeMobile's optional screen-lock and password policy controls. SafeMobile does not wipe your device or block APK installation.</string>
+
+    <string name="installer_accessibility_service_title">SafeMobile installer advisory</string>
+    <string name="installer_accessibility_service_description">Optional advisory banner for Android package-installer windows. It does not block, click, or interfere with the system installer. Enable only if you want this reminder.</string>
+    <string name="installer_unscanned_warning">Warning. This APK has not been scanned. Return to SafeMobile to scan first.</string>
+    <string name="post_install_capability_note">Instant post-install scanning and quarantine. Android's installer cannot be blocked by an ordinary app.</string>
 </resources>

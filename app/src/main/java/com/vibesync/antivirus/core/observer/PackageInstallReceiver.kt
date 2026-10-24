@@ -20,6 +20,10 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import java.util.UUID
 
+/**
+ * System package broadcasts arrive after Android has installed/replaced a package. This receiver
+ * queues offline post-install analysis; it is not a pre-install interception point.
+ */
 class PackageInstallReceiver : BroadcastReceiver() {
  override fun onReceive(context: Context, intent: Intent) {
   if (intent.action != Intent.ACTION_PACKAGE_ADDED && intent.action != Intent.ACTION_PACKAGE_REPLACED) return
@@ -55,6 +59,7 @@ class PackageInstallReceiver : BroadcastReceiver() {
      status=category
     ))
     if(source.needsReview && !update) InstallSourceNotifier.notify(appContext,label,source.sourceLabel,eventId)
+    // WorkManager runs the local scan off the broadcast thread; no network constraint or upload is used.
     val request=OneTimeWorkRequestBuilder<MultiLayerScanWorker>().setInputData(
      Data.Builder().putString(MultiLayerScanWorker.KEY_PACKAGE_NAME,name)
       .putString(MultiLayerScanWorker.KEY_EVENT_ID,eventId).build()
