@@ -1,7 +1,5 @@
 package com.vibesync.antivirus.core.engine
 
-internal data class DeepStaticDexSample(val name: String, val bytes: ByteArray)
-
 import android.content.pm.ActivityInfo
 import android.content.pm.ComponentInfo
 import android.content.pm.PackageInfo
@@ -16,6 +14,8 @@ import java.nio.ByteOrder
 import java.util.Locale
 import java.util.zip.ZipFile
 import kotlin.math.ln
+
+internal data class DeepStaticDexSample(val name: String, val bytes: ByteArray)
 
 /**
  * Local, bounded APK metadata/structure review. It never loads or executes APK code.
@@ -111,7 +111,7 @@ class DeepStaticAnalyzer {
         kind = kind,
         name = name.orEmpty().take(MAX_COMPONENT_NAME_CHARS),
         exported = exported,
-        permission = when (this) { is ActivityInfo -> this.permission; is ServiceInfo -> this.permission; is ProviderInfo -> this.permission; else -> null },
+        permission = when (this) { is ActivityInfo -> this.permission; is ServiceInfo -> this.permission; is ProviderInfo -> this.readPermission ?: this.writePermission; else -> null },
         readPermission = (this as? ProviderInfo)?.readPermission,
         writePermission = (this as? ProviderInfo)?.writePermission
     )
