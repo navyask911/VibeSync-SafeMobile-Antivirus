@@ -262,4 +262,5 @@
     <string name="voice_alerts_description">Dùng chuyển văn bản thành giọng nói trên thiết bị cho sự kiện bảo mật. Cảnh báo giọng nói mặc định tắt và không gửi dữ liệu ra ngoài thiết bị.</string>
     <string name="voice_alerts_enabled">Đã bật cảnh báo giọng nói</string>
     <string name="voice_alerts_disabled">Đã tắt cảnh báo giọng nói</string>
+    <string name="hashdb_match">Khớp hàm băm %1$s đã ký: %2$s</string>
 </resources>

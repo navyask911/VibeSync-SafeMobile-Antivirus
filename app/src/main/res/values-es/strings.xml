@@ -205,4 +205,5 @@
     <string name="voice_alerts_description">Usa la conversión de texto a voz del dispositivo para eventos de seguridad. Está desactivada de forma predeterminada y no envía datos fuera del dispositivo.</string>
     <string name="voice_alerts_enabled">Alertas de voz activadas</string>
     <string name="voice_alerts_disabled">Alertas de voz desactivadas</string>
+    <string name="hashdb_match">Coincidencia de hash %1$s firmado: %2$s</string>
 </resources>

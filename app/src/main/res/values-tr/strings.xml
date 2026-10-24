@@ -262,4 +262,5 @@
     <string name="voice_alerts_description">Güvenlik olaylarında cihazdaki metin-konuşma özelliğini kullanın. Sesli uyarılar varsayılan olarak kapalıdır ve cihaz dışına veri göndermez.</string>
     <string name="voice_alerts_enabled">Sesli güvenlik uyarıları açık</string>
     <string name="voice_alerts_disabled">Sesli güvenlik uyarıları kapalı</string>
+    <string name="hashdb_match">İmzalı %1$s özeti eşleşti: %2$s</string>
 </resources>

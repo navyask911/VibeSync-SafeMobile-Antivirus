@@ -205,4 +205,5 @@
     <string name="voice_alerts_description">Verwenden Sie die lokale Text-in-Sprache-Funktion für Sicherheitsereignisse. Sprachwarnungen sind standardmäßig aus und senden keine Daten vom Gerät.</string>
     <string name="voice_alerts_enabled">Sprachwarnungen aktiviert</string>
     <string name="voice_alerts_disabled">Sprachwarnungen deaktiviert</string>
+    <string name="hashdb_match">Signierter %1$s-Hash stimmt überein: %2$s</string>
 </resources>

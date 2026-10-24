@@ -262,4 +262,5 @@
     <string name="voice_alerts_description">सुरक्षा घटनांसाठी डिव्हाइसवरील मजकूर-वाचन वापरा. आवाजातील सूचना डीफॉल्टने बंद असतात आणि डेटा डिव्हाइसबाहेर पाठवत नाहीत.</string>
     <string name="voice_alerts_enabled">आवाजातील सुरक्षा सूचना सुरू</string>
     <string name="voice_alerts_disabled">आवाजातील सुरक्षा सूचना बंद</string>
+    <string name="hashdb_match">स्वाक्षरी केलेला %1$s हॅश जुळला: %2$s</string>
 </resources>

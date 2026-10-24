@@ -263,4 +263,5 @@
     <string name="voice_alerts_description">Gunakan teks-ke-ucapan di perangkat untuk peristiwa keamanan. Peringatan suara nonaktif secara default dan tidak mengirim data ke luar perangkat.</string>
     <string name="voice_alerts_enabled">Peringatan suara aktif</string>
     <string name="voice_alerts_disabled">Peringatan suara nonaktif</string>
+    <string name="hashdb_match">Hash %1$s bertanda tangan cocok: %2$s</string>
 </resources>

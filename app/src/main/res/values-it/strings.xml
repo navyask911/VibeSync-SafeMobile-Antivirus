@@ -263,4 +263,5 @@
     <string name="voice_alerts_description">Usa la sintesi vocale del dispositivo per gli eventi di sicurezza. Gli avvisi vocali sono disattivati per impostazione predefinita e non inviano dati fuori dal dispositivo.</string>
     <string name="voice_alerts_enabled">Avvisi vocali attivi</string>
     <string name="voice_alerts_disabled">Avvisi vocali disattivati</string>
+    <string name="hashdb_match">Corrispondenza hash %1$s firmato: %2$s</string>
 </resources>

@@ -262,4 +262,5 @@
     <string name="voice_alerts_description">பாதுகாப்பு நிகழ்வுகளுக்கு சாதனத்திலுள்ள உரை-குரல் வசதியைப் பயன்படுத்தவும். குரல் எச்சரிக்கைகள் இயல்பாக முடக்கப்பட்டுள்ளன; தரவைச் சாதனத்திற்கு வெளியே அனுப்பாது.</string>
     <string name="voice_alerts_enabled">குரல் பாதுகாப்பு எச்சரிக்கைகள் இயக்கப்பட்டன</string>
     <string name="voice_alerts_disabled">குரல் பாதுகாப்பு எச்சரிக்கைகள் முடக்கப்பட்டன</string>
+    <string name="hashdb_match">கையொப்பமிட்ட %1$s ஹாஷ் பொருத்தம்: %2$s</string>
 </resources>

@@ -262,4 +262,5 @@
     <string name="voice_alerts_description">השתמשו בהמרת טקסט לדיבור במכשיר עבור אירועי אבטחה. ההתראות הקוליות כבויות כברירת מחדל ואינן שולחות מידע החוצה.</string>
     <string name="voice_alerts_enabled">התראות אבטחה קוליות מופעלות</string>
     <string name="voice_alerts_disabled">התראות אבטחה קוליות מושבתות</string>
+    <string name="hashdb_match">התאמת גיבוב %1$s חתומה: %2$s</string>
 </resources>
