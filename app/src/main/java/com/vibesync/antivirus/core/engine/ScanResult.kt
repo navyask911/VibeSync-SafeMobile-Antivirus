@@ -18,5 +18,7 @@ data class ScanResult(
  /** Normalized local triage score; heuristics alone do not establish malware. */
  val riskScore: Float = 0f,
  /** SHA-1 digest computed in the same streaming pass when available. */
- val sha1: String? = null
+ val sha1: String? = null,
+ /** Structured, local-only static analysis findings; not persisted as an unencrypted database object. */
+ val riskReport: RiskReport? = null
 )

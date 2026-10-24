@@ -9,6 +9,7 @@ This file records detection-engine-specific license decisions. The CI-generated 
 | VirusTotal YARA engine | BSD-3-Clause upstream | License-compatible in principle, but no vetted Android JNI build/native runtime or reviewed rules pack is bundled in this phase. YARA remains DISABLED. |
 | Hypatia source code | AGPL-3.0-or-later | No code or rule set copied; the app is licensed Apache-2.0 and no AGPL-compatibility decision was made. |
 | Mendeley 200K malware-hash research dataset, version 1 | CC BY 4.0 | Its citation and attribution are recorded in docs/THREAT_DATASET_ATTRIBUTION.md. It is not imported into the production database. |
+| APKiD (considered for packer detection) | Dual-license GPL/commercial; no commercial license obtained | Not integrated and no source/rules copied. A bounded in-app filename/DEX-structure heuristic is used instead and is not represented as equivalent to APKiD. |\
 | Runtime production hash definitions | Not bundled | Disabled until the owner/release process verifies redistribution rights, provenance, false positives, and signs the exact bytes with the configured trust root. |
 
 Before adding a dependency or dataset, review the exact distributed artifact's license and upstream source. An SBOM license field alone is not legal approval. No Hypatia/AGPL source code or data is copied.

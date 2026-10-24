@@ -304,3 +304,8 @@ caveats above before distribution.
 ## YARA status and import boundary
 
 YARA is **DISABLED — no compliant engine/rules bundled**. SafeMobile contains no Android libyara JNI runtime or reviewed redistributable rules pack. A user-selected UTF-8 `.yar` file may be stored under the app-private pending-rule directory for future review, but this only performs bounded text validation; it does not compile or execute rules, and cannot return a YARA verdict. Imported content remains local and is not uploaded. See `docs/YARA_STATUS.md` and `docs/THIRD_PARTY_LICENSES.md`.
+
+
+## Deep static analysis status
+
+SafeMobile now emits a structured local RiskReport for installed packages and selected APK files. It records advisory findings for exported components lacking manifest permission gates, Device Administrator/AccessibilityService/overlay combinations, SMS and call-log permission combinations, debug-signing metadata, bounded DEX header/entropy signals, common packer-related file names, and a limited permission-to-DEX-string cross-check. Findings include rule ID, severity, evidence and confidence. They are not proof of malware. Known-bad signer fingerprints are **DISABLED** because no reviewed local list is bundled; reflection, native code and dynamic loading can evade the API-string check. See `docs/STATIC_ANALYSIS.md`.
