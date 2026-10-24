@@ -299,3 +299,8 @@ validation of detection breadth, unverified production feed provenance, pending 
 restricted-permission eligibility, physical-device QA, and first-pass translations mean this branch
 must not be represented as a comprehensive or production-validated antivirus. Review the release
 caveats above before distribution.
+
+
+## YARA status and import boundary
+
+YARA is **DISABLED — no compliant engine/rules bundled**. SafeMobile contains no Android libyara JNI runtime or reviewed redistributable rules pack. A user-selected UTF-8 `.yar` file may be stored under the app-private pending-rule directory for future review, but this only performs bounded text validation; it does not compile or execute rules, and cannot return a YARA verdict. Imported content remains local and is not uploaded. See `docs/YARA_STATUS.md` and `docs/THIRD_PARTY_LICENSES.md`.
