@@ -10,6 +10,8 @@ import com.vibesync.antivirus.core.engine.ScanVerdict
 import com.vibesync.antivirus.core.engine.StaticAnalyzer
 import com.vibesync.antivirus.core.engine.ThreatVerdict
 import com.vibesync.antivirus.core.security.DeviceOwnerManager
+import com.vibesync.antivirus.core.observer.SecurityAlertNotifier
+import com.vibesync.antivirus.core.observer.SecurityVoiceAlert
 import com.vibesync.antivirus.core.security.IntegrityChecker
 import com.vibesync.antivirus.data.local.SecurityIncidentEntity
 import kotlinx.coroutines.CancellationException
@@ -76,6 +78,11 @@ class MultiLayerScanWorker(context: Context,params: WorkerParameters) : Coroutin
    if (previous != null) dao.updateAssessment(eventId,scan.sha256,reason,action.take(500),(previous.status + "|" + status).take(200))
    else dao.insert(SecurityIncidentEntity(eventId,System.currentTimeMillis(),"PACKAGE_INSTALL",sourcePackage=name,sha256Hash=scan.sha256,
     reason=reason.ifBlank { "Post-install scan completed." },actionTaken=action.take(500),status=status))
+   // Android exposes package-added events after installation; this alert follows the local scan.
+   if (exact || scan.verdict == ScanVerdict.SUSPICIOUS || score >= 0.45f) {
+    runCatching { SecurityAlertNotifier.notifyThreat(applicationContext, eventId, confirmed = exact) }
+    runCatching { SecurityVoiceAlert.announce(applicationContext, confirmed = exact) }
+   }
    Result.success()
   } catch (cancelled: CancellationException) { throw cancelled }
   catch (_: Exception) { if (runAttemptCount < 2) Result.retry() else Result.failure() }

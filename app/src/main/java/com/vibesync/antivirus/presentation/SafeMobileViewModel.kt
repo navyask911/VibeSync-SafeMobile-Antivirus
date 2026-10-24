@@ -8,9 +8,12 @@ import com.vibesync.antivirus.R
 import com.vibesync.antivirus.core.engine.ScanResult
 import com.vibesync.antivirus.core.engine.ScanVerdict
 import com.vibesync.antivirus.data.repository.ThreatRepository
+import com.vibesync.antivirus.core.observer.SecurityVoiceAlert
 import java.io.File
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -148,15 +151,34 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
         }
     }
 
+    /** Permanently deletes a quarantined payload off the main thread. Failed deletion leaves it listed. */
     fun deleteQuarantinedFile(file: File) {
         viewModelScope.launch {
             mutableState.update { it.copy(messageResource = null, messageText = null) }
-            runCatching { repository.deleteQuarantinedFile(file) }
-                .onSuccess { message ->
-                    mutableState.update { it.copy(messageText = message, messageResource = null) }
-                    refreshQuarantine()
+            try {
+                val message = withContext(Dispatchers.IO) {
+                    try {
+                        repository.deleteQuarantinedFile(file)
+                    } catch (denied: SecurityException) {
+                        // SAF/private-storage or file permissions can change between display and confirmation.
+                        throw denied
+                    }
                 }
-                .onFailure { mutableState.update { it.copy(messageText = null, messageResource = R.string.quarantine_delete_failed) } }
+                mutableState.update { it.copy(messageText = message, messageResource = null) }
+                refreshQuarantine()
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (_: SecurityException) {
+                mutableState.update {
+                    it.copy(messageText = null, messageResource = R.string.quarantine_delete_failed)
+                }
+                refreshQuarantine()
+            } catch (_: Exception) {
+                mutableState.update {
+                    it.copy(messageText = null, messageResource = R.string.quarantine_delete_failed)
+                }
+                refreshQuarantine()
+            }
         }
     }
 
@@ -238,6 +260,11 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
             runCatching { repository.signatureCount() }
                 .onSuccess { count -> mutableState.update { it.copy(signatureCount = count) } }
         }
+    }
+
+    override fun onCleared() {
+        SecurityVoiceAlert.shutdown()
+        super.onCleared()
     }
 
     class Factory(private val repository: ThreatRepository) : ViewModelProvider.Factory {

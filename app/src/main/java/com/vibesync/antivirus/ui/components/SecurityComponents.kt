@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -74,7 +76,7 @@ fun StatusChip(label: String, kind: StatusKind = StatusKind.NEUTRAL, modifier: M
         horizontalArrangement = Arrangement.spacedBy(6.dp)
     ) {
         Box(Modifier.size(6.dp).clip(CircleShape).background(tint))
-        Text(label, style = MaterialTheme.typography.labelMedium, color = tint, maxLines = 2, overflow = TextOverflow.Ellipsis)
+        Text(label, style = MaterialTheme.typography.labelMedium, color = tint, maxLines = 1, softWrap = false, overflow = TextOverflow.Ellipsis)
     }
 }
 
@@ -160,10 +162,23 @@ fun SecurityStatusCard(status: String, description: String, lastScanLabel: Strin
                     Text(lastScanLabel, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
-                StatusChip(if (hasScanned) threatCount.toString() + " confirmed matches" else "No scan yet",
-                    if (threatCount > 0) StatusKind.DANGER else StatusKind.NEUTRAL, Modifier.weight(1f))
-                StatusChip(signatureCount.toString() + " local definitions", if (signatureCount > 0) StatusKind.ACTIVE else StatusKind.WARNING, Modifier.weight(1f))
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                item {
+                    StatusChip(
+                        if (hasScanned) "${threatCount} matches" else "No scan",
+                        if (threatCount > 0) StatusKind.DANGER else StatusKind.NEUTRAL
+                    )
+                }
+                item {
+                    StatusChip(
+                        "${signatureCount} local defs",
+                        if (signatureCount > 0) StatusKind.ACTIVE else StatusKind.WARNING
+                    )
+                }
             }
             Button(onClick = onScan, modifier = Modifier.fillMaxWidth(), enabled = !scanning) {
                 Icon(Icons.Default.Security, contentDescription = null)

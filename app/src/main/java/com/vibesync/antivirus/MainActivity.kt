@@ -19,16 +19,19 @@ class MainActivity : ComponentActivity() {
         super.attachBaseContext(LocalePreferences.wrap(newBase))
     }
     private var sharedText by mutableStateOf<String?>(null)
+    private var openDestination by mutableStateOf<String?>(null)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         sharedText = incomingSharedText(intent)
+        openDestination = intent.getStringExtra(EXTRA_OPEN_DESTINATION)?.let { it + ":" + System.nanoTime() }
         setContent {
             SafeMobileTheme {
                 SafeMobileScreen(
                     repository = (application as SafeMobileApp).repository,
                     sharedText = sharedText,
-                    onSharedTextConsumed = { sharedText = null }
+                    onSharedTextConsumed = { sharedText = null },
+                    openDestination = openDestination
                 )
             }
         }
@@ -37,6 +40,10 @@ class MainActivity : ComponentActivity() {
         super.onNewIntent(intent)
         setIntent(intent)
         incomingSharedText(intent)?.let { sharedText = it }
+        intent.getStringExtra(EXTRA_OPEN_DESTINATION)?.let { openDestination = it + ":" + System.nanoTime() }
+    }
+    companion object {
+        const val EXTRA_OPEN_DESTINATION = "com.vibesync.antivirus.OPEN_DESTINATION"
     }
     private fun incomingSharedText(intent: Intent?): String? =
         if (intent?.action == Intent.ACTION_SEND) intent.getCharSequenceExtra(Intent.EXTRA_TEXT)?.toString() else null
