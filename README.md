@@ -314,3 +314,8 @@ SafeMobile now emits a structured local RiskReport for installed packages and se
 ## On-device ML status
 
 The TFLite malware classifier is **DISABLED** because there is no trained, evaluated and legally reviewed model artifact in the app. The runtime returns no score when the model is absent. Training/evaluation metrics remain **NOT MEASURED**; see `docs/MODEL_CARD.md` and `docs/METRICS.md`.
+
+
+## Benchmark truth and regression gates
+
+`docs/METRICS.md` records coverage and measurement availability. The CI benchmark evaluator intentionally emits `NOT_MEASURED` until an owner-approved dataset manifest, verified APK corpus and real on-device outcomes are provided. It cannot execute the Android scanner or invent results. TPR/FPR, precision and latency regressions are only checked against an approved, comparable measured baseline.
