@@ -206,4 +206,22 @@
     <string name="voice_alerts_enabled">音声セキュリティ通知を有効化</string>
     <string name="voice_alerts_disabled">音声セキュリティ通知を無効化</string>
     <string name="hashdb_match">署名済み %1$s ハッシュ一致: %2$s</string>
+    <string name="detection_capabilities_title">検出機能</string>
+    <string name="detection_capabilities_description">このビルドで有効、参考情報のみ、条件付き、または利用不可のセキュリティ検査を確認できます。</string>
+    <string name="detection_capabilities_truth_title">重要：スキャン結果の意味</string>
+    <string name="detection_capabilities_truth_body">ローカルで一致しなくても、ファイルが安全だとは証明できません。信頼できる署名鍵と検証済みの本番データベースが設定されるまで、署名付きハッシュエンジンは無効です。YARA と機械学習も無効です。ヒューリスティックは誤警告を出すことがあります。以下の指標は未測定です。</string>
+    <string name="detection_capabilities_enabled">有効</string>
+    <string name="detection_capabilities_disabled">無効</string>
+    <string name="detection_capabilities_limited">限定的な検出範囲</string>
+    <string name="detection_capabilities_advisory">参考情報のみ</string>
+    <string name="detection_capabilities_conditional">条件付き</string>
+    <string name="detection_capabilities_metrics_title">検出性能指標</string>
+    <string name="detection_capabilities_import_signed_db">署名付きハッシュデータベースをインポート</string>
+    <string name="detection_capabilities_import_yara">確認用 YARA ルールをインポート（実行されません）</string>
+    <string name="detection_capabilities_sync">署名付きデータベースの更新</string>
+    <string name="detection_capabilities_feed_url">HTTPS 更新 URL</string>
+    <string name="detection_capabilities_sync_enabled">自動更新を有効化</string>
+    <string name="detection_capabilities_save">更新設定を保存</string>
+    <string name="detection_capabilities_sync_privacy">ダウンロードのみ。スキャン結果、ファイル、ハッシュ、パッケージ名はアップロードされません。</string>
+    <string name="detection_capabilities_sync_unavailable">このオフラインビルドでは、または信頼できる署名鍵が設定されるまでは自動更新を利用できません。</string>
 </resources>

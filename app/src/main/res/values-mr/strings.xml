@@ -263,4 +263,22 @@
     <string name="voice_alerts_enabled">आवाजातील सुरक्षा सूचना सुरू</string>
     <string name="voice_alerts_disabled">आवाजातील सुरक्षा सूचना बंद</string>
     <string name="hashdb_match">स्वाक्षरी केलेला %1$s हॅश जुळला: %2$s</string>
+    <string name="detection_capabilities_title">शोध क्षमता</string>
+    <string name="detection_capabilities_description">या बिल्डमध्ये कोणत्या सुरक्षा तपासण्या सुरू, सल्लागार, अटींवर आधारित किंवा अनुपलब्ध आहेत ते पहा.</string>
+    <string name="detection_capabilities_truth_title">महत्त्वाचे: स्कॅन परिणामांचा अर्थ</string>
+    <string name="detection_capabilities_truth_body">स्थानिक जुळणी न मिळणे म्हणजे फाइल सुरक्षित आहे याचा पुरावा नाही. विश्वासार्ह स्वाक्षरी की आणि पडताळलेला उत्पादन डेटाबेस सेट होईपर्यंत स्वाक्षरी हॅश इंजिन बंद राहते. YARA आणि मशीन लर्निंग बंद आहेत. हीयुरिस्टिक्स चुकीचे इशारे देऊ शकतात. खालील मेट्रिक्स मोजलेले नाहीत.</string>
+    <string name="detection_capabilities_enabled">सुरू</string>
+    <string name="detection_capabilities_disabled">बंद</string>
+    <string name="detection_capabilities_limited">मर्यादित कव्हरेज</string>
+    <string name="detection_capabilities_advisory">फक्त सल्ला</string>
+    <string name="detection_capabilities_conditional">अटींवर आधारित</string>
+    <string name="detection_capabilities_metrics_title">शोध कामगिरी मेट्रिक्स</string>
+    <string name="detection_capabilities_import_signed_db">स्वाक्षरी केलेला हॅश डेटाबेस आयात करा</string>
+    <string name="detection_capabilities_import_yara">पुनरावलोकनासाठी YARA नियम आयात करा (चालवले जात नाहीत)</string>
+    <string name="detection_capabilities_sync">स्वाक्षरी केलेले डेटाबेस अपडेट</string>
+    <string name="detection_capabilities_feed_url">HTTPS अपडेट URL</string>
+    <string name="detection_capabilities_sync_enabled">स्वयंचलित अपडेट सुरू करा</string>
+    <string name="detection_capabilities_save">अपडेट सेटिंग जतन करा</string>
+    <string name="detection_capabilities_sync_privacy">फक्त डाउनलोड. स्कॅन परिणाम, फाइल, हॅश किंवा पॅकेज नावे अपलोड होत नाहीत.</string>
+    <string name="detection_capabilities_sync_unavailable">या ऑफलाइन बिल्डमध्ये किंवा विश्वासार्ह स्वाक्षरी की सेट होईपर्यंत स्वयंचलित अपडेट उपलब्ध नाहीत.</string>
 </resources>

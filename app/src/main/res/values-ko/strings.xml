@@ -263,4 +263,22 @@
     <string name="voice_alerts_enabled">음성 보안 알림 사용</string>
     <string name="voice_alerts_disabled">음성 보안 알림 사용 안 함</string>
     <string name="hashdb_match">서명된 %1$s 해시 일치: %2$s</string>
+    <string name="detection_capabilities_title">탐지 기능</string>
+    <string name="detection_capabilities_description">이 빌드에서 활성화되었거나 참고용, 조건부 또는 사용할 수 없는 보안 검사를 확인하세요.</string>
+    <string name="detection_capabilities_truth_title">중요: 검사 결과의 의미</string>
+    <string name="detection_capabilities_truth_body">로컬 일치 항목이 없다고 파일이 안전한 것은 아닙니다. 신뢰할 수 있는 서명 키와 검증된 운영용 데이터베이스가 설정될 때까지 서명 해시 엔진은 비활성화됩니다. YARA와 머신러닝도 비활성화되어 있습니다. 휴리스틱은 오탐을 낼 수 있습니다. 아래 지표는 측정되지 않았습니다.</string>
+    <string name="detection_capabilities_enabled">활성화</string>
+    <string name="detection_capabilities_disabled">비활성화</string>
+    <string name="detection_capabilities_limited">제한된 범위</string>
+    <string name="detection_capabilities_advisory">참고용</string>
+    <string name="detection_capabilities_conditional">조건부</string>
+    <string name="detection_capabilities_metrics_title">탐지 성능 지표</string>
+    <string name="detection_capabilities_import_signed_db">서명된 해시 데이터베이스 가져오기</string>
+    <string name="detection_capabilities_import_yara">검토용 YARA 규칙 가져오기 (실행되지 않음)</string>
+    <string name="detection_capabilities_sync">서명된 데이터베이스 업데이트</string>
+    <string name="detection_capabilities_feed_url">HTTPS 업데이트 URL</string>
+    <string name="detection_capabilities_sync_enabled">자동 업데이트 사용</string>
+    <string name="detection_capabilities_save">업데이트 설정 저장</string>
+    <string name="detection_capabilities_sync_privacy">다운로드만 수행합니다. 검사 결과, 파일, 해시 및 패키지 이름은 업로드하지 않습니다.</string>
+    <string name="detection_capabilities_sync_unavailable">오프라인 빌드에서는 또는 신뢰할 수 있는 서명 키를 설정하기 전에는 자동 업데이트를 사용할 수 없습니다.</string>
 </resources>

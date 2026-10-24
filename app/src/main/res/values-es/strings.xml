@@ -206,4 +206,22 @@
     <string name="voice_alerts_enabled">Alertas de voz activadas</string>
     <string name="voice_alerts_disabled">Alertas de voz desactivadas</string>
     <string name="hashdb_match">Coincidencia de hash %1$s firmado: %2$s</string>
+    <string name="detection_capabilities_title">Capacidades de detección</string>
+    <string name="detection_capabilities_description">Consulta qué comprobaciones están activas, son orientativas, condicionales o no están disponibles en esta compilación.</string>
+    <string name="detection_capabilities_truth_title">Importante: significado de los resultados</string>
+    <string name="detection_capabilities_truth_body">No encontrar coincidencias locales no demuestra que un archivo sea seguro. El motor de hashes firmados permanece desactivado hasta configurar una clave de firma de confianza y una base de datos de producción verificada. YARA y el aprendizaje automático están desactivados. Las heurísticas pueden generar falsos avisos. Las métricas siguientes no se han medido.</string>
+    <string name="detection_capabilities_enabled">Activo</string>
+    <string name="detection_capabilities_disabled">Desactivado</string>
+    <string name="detection_capabilities_limited">Cobertura limitada</string>
+    <string name="detection_capabilities_advisory">Solo orientativo</string>
+    <string name="detection_capabilities_conditional">Condicional</string>
+    <string name="detection_capabilities_metrics_title">Métricas de rendimiento de detección</string>
+    <string name="detection_capabilities_import_signed_db">Importar base de datos de hashes firmada</string>
+    <string name="detection_capabilities_import_yara">Importar reglas YARA para revisar (no se ejecutan)</string>
+    <string name="detection_capabilities_sync">Actualizaciones de la base firmada</string>
+    <string name="detection_capabilities_feed_url">URL de actualización HTTPS</string>
+    <string name="detection_capabilities_sync_enabled">Activar actualizaciones automáticas</string>
+    <string name="detection_capabilities_save">Guardar ajustes de actualización</string>
+    <string name="detection_capabilities_sync_privacy">Solo descargas. No se suben resultados, archivos, hashes ni nombres de paquetes.</string>
+    <string name="detection_capabilities_sync_unavailable">Las actualizaciones automáticas no están disponibles en esta compilación sin conexión o hasta configurar una clave de firma de confianza.</string>
 </resources>

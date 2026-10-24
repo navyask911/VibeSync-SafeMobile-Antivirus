@@ -206,4 +206,22 @@
     <string name="voice_alerts_enabled">Alertes vocales activées</string>
     <string name="voice_alerts_disabled">Alertes vocales désactivées</string>
     <string name="hashdb_match">Correspondance de hachage %1$s signé : %2$s</string>
+    <string name="detection_capabilities_title">Capacités de détection</string>
+    <string name="detection_capabilities_description">Consultez les contrôles actifs, indicatifs, conditionnels ou indisponibles dans cette version.</string>
+    <string name="detection_capabilities_truth_title">Important : signification des résultats</string>
+    <string name="detection_capabilities_truth_body">Aucune correspondance locale ne prouve pas qu’un fichier est sûr. Le moteur de hachages signés reste désactivé tant qu’une clé de signature fiable et une base de production vérifiée ne sont pas configurées. YARA et l’apprentissage automatique sont désactivés. Les heuristiques peuvent produire de fausses alertes. Les métriques ci-dessous ne sont pas mesurées.</string>
+    <string name="detection_capabilities_enabled">Activé</string>
+    <string name="detection_capabilities_disabled">Désactivé</string>
+    <string name="detection_capabilities_limited">Couverture limitée</string>
+    <string name="detection_capabilities_advisory">À titre indicatif</string>
+    <string name="detection_capabilities_conditional">Conditionnel</string>
+    <string name="detection_capabilities_metrics_title">Métriques de performance de détection</string>
+    <string name="detection_capabilities_import_signed_db">Importer une base de hachages signée</string>
+    <string name="detection_capabilities_import_yara">Importer des règles YARA pour examen (non exécutées)</string>
+    <string name="detection_capabilities_sync">Mises à jour de la base signée</string>
+    <string name="detection_capabilities_feed_url">URL de mise à jour HTTPS</string>
+    <string name="detection_capabilities_sync_enabled">Activer les mises à jour automatiques</string>
+    <string name="detection_capabilities_save">Enregistrer les paramètres de mise à jour</string>
+    <string name="detection_capabilities_sync_privacy">Téléchargement uniquement. Aucun résultat, fichier, hachage ni nom de paquet n’est envoyé.</string>
+    <string name="detection_capabilities_sync_unavailable">Les mises à jour automatiques sont indisponibles dans cette version hors ligne ou tant qu’une clé de signature fiable n’est pas configurée.</string>
 </resources>

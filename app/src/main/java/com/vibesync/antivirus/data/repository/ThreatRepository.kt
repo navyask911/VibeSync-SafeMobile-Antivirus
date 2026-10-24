@@ -8,6 +8,7 @@ import com.vibesync.antivirus.core.engine.YaraRuleImportStore
 import com.vibesync.antivirus.core.hashdb.HashDatabaseManager
 import com.vibesync.antivirus.core.hashdb.HashDatabaseCapability
 import com.vibesync.antivirus.core.hashdb.HashDatabaseConfigStore
+import com.vibesync.antivirus.core.hashdb.HashDatabaseSyncConfig
 import com.vibesync.antivirus.core.worker.HashDatabaseSyncScheduler
 import com.vibesync.antivirus.core.crypto.EncryptedHashStore
 import com.vibesync.antivirus.core.observer.StorageAccessPreferences
@@ -260,6 +261,8 @@ class ThreatRepository(
   val stream = context.contentResolver.openInputStream(uri) ?: throw IOException(context.getString(R.string.file_stream_failed))
   manager.importBundle(stream)
  }
+
+ fun hashDatabaseSyncConfig(): HashDatabaseSyncConfig = HashDatabaseConfigStore(context).read()
 
  fun configureHashDatabaseSync(url: String, enabled: Boolean) {
   HashDatabaseConfigStore(context).configure(url, enabled)

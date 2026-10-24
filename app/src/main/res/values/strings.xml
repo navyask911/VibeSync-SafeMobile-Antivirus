@@ -403,4 +403,22 @@
     <string name="voice_alerts_enabled">Voice security alerts enabled</string>
     <string name="voice_alerts_disabled">Voice security alerts disabled</string>
     <string name="hashdb_match">Signed %1$s hash match: %2$s</string>
+    <string name="detection_capabilities_title">Detection capabilities</string>
+    <string name="detection_capabilities_description">See which security checks are enabled, advisory, conditional, or unavailable in this build.</string>
+    <string name="detection_capabilities_truth_title">Important: what scan results mean</string>
+    <string name="detection_capabilities_truth_body">No local match does not prove a file is safe. The signed hash engine stays disabled until a trusted signing key and a vetted production database are configured. YARA and machine learning are disabled. Heuristics can produce false alarms. Metrics below are not measured.</string>
+    <string name="detection_capabilities_enabled">Enabled</string>
+    <string name="detection_capabilities_disabled">Disabled</string>
+    <string name="detection_capabilities_limited">Limited coverage</string>
+    <string name="detection_capabilities_advisory">Advisory only</string>
+    <string name="detection_capabilities_conditional">Conditional</string>
+    <string name="detection_capabilities_metrics_title">Detection performance metrics</string>
+    <string name="detection_capabilities_import_signed_db">Import signed hash database</string>
+    <string name="detection_capabilities_import_yara">Import YARA rules for review (not executed)</string>
+    <string name="detection_capabilities_sync">Signed database updates</string>
+    <string name="detection_capabilities_feed_url">HTTPS update URL</string>
+    <string name="detection_capabilities_sync_enabled">Enable automatic updates</string>
+    <string name="detection_capabilities_save">Save update settings</string>
+    <string name="detection_capabilities_sync_privacy">Downloads only. Scan results, files, hashes, and package names are not uploaded.</string>
+    <string name="detection_capabilities_sync_unavailable">Automatic updates are unavailable in this offline build or until a trusted signing key is configured.</string>
 </resources>
