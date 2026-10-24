@@ -224,6 +224,7 @@
 
 
 <string name="threat_feed_hash_match" translatable="false">Known threat hash: %1$s (source: %2$s)</string>
+ <string name="hashdb_match">Signed hash database match for %1$s: %2$s</string>
 <string name="threat_feed_dashboard_title" translatable="false">Local threat intelligence</string>
 <string name="threat_feed_active_count" translatable="false">Stored local indicators: %1$d</string>
 <string name="threat_feed_last_success" translatable="false">Last successful sync: %1$s</string>
