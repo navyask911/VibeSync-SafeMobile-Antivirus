@@ -42,7 +42,7 @@ class DeepStaticAnalyzerTest {
             debugCertificate = false,
             signerMaterialAvailable = true,
             entryNames = emptySet(),
-            dexSamples = listOf(DeepStaticAnalyzer.DexSampleData("classes.dex", "Landroid/telephony/SmsMessage;".toByteArray(Charsets.ISO_8859_1))),
+            dexSamples = listOf(DeepStaticDexSample("classes.dex", "Landroid/telephony/SmsMessage;".toByteArray(Charsets.ISO_8859_1))),
             archiveIssues = emptyList()
         )
         assertFalse(report.findings.any { it.ruleId == "REQUESTED_PERMISSION_API_REFERENCE_MISMATCH" })
@@ -57,7 +57,7 @@ class DeepStaticAnalyzerTest {
             debugCertificate = false,
             signerMaterialAvailable = true,
             entryNames = emptySet(),
-            dexSamples = listOf(DeepStaticAnalyzer.DexSampleData("classes.dex", ByteArray(128))),
+            dexSamples = listOf(DeepStaticDexSample("classes.dex", ByteArray(128))),
             archiveIssues = emptyList()
         )
         val finding = report.findings.single { it.ruleId == "REQUESTED_PERMISSION_API_REFERENCE_MISMATCH" }
