@@ -74,7 +74,7 @@ FORBIDDEN_ACCESSIBILITY_APIS = (
 )
 for path in (ROOT / "app" / "src" / "main").rglob("*.kt"):
     source = path.read_text(encoding="utf-8")
-    if not re.search(r':\\s*(?:android\\.accessibilityservice\\.)?AccessibilityService\\b', source):
+    if not re.search(r':\s*(?:android\.accessibilityservice\.)?AccessibilityService\b', source):
         continue
     relative = path.relative_to(ROOT)
     if relative != ALLOWED_INSTALLER_ADVISORY:
