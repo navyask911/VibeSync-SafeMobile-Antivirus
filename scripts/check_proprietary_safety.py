@@ -59,13 +59,51 @@ for base in scan_roots:
             if pattern.search(source):
                 errors.append(f"Possible {label} found in {path.relative_to(ROOT)}; review without printing secret values.")
 
-# Permission-audit strings are allowed; an actual app-spying AccessibilityService subclass is not.
+# Permission-audit strings are allowed. App-screen, credential, and OTP surveillance is prohibited.
+# A single explicit exception permits the requested installer-window advisory, provided it cannot
+# read the accessibility tree or capture/interfere with touch input. Keep this gate restrictive.
+ALLOWED_INSTALLER_ADVISORY = Path(
+    "app/src/main/java/com/vibesync/antivirus/core/observer/InstallerAccessibilityService.kt"
+)
+ADVISORY_CONFIG = ROOT / "app" / "src" / "main" / "res" / "xml" / "installer_accessibility_service.xml"
+MANIFEST = ROOT / "app" / "src" / "main" / "AndroidManifest.xml"
+FORBIDDEN_ACCESSIBILITY_APIS = (
+    "rootInActiveWindow", "getRootInActiveWindow", "AccessibilityNodeInfo",
+    "findAccessibilityNodeInfos", "performGlobalAction", "dispatchGesture",
+    "TYPE_WINDOW_CONTENT_CHANGED", "TYPE_VIEW_TEXT_CHANGED", "onKeyEvent",
+)
 for path in (ROOT / "app" / "src" / "main").rglob("*.kt"):
     source = path.read_text(encoding="utf-8")
-    if re.search(r':\s*(?:android\.accessibilityservice\.)?AccessibilityService\b', source):
+    if not re.search(r':\\s*(?:android\\.accessibilityservice\\.)?AccessibilityService\\b', source):
+        continue
+    relative = path.relative_to(ROOT)
+    if relative != ALLOWED_INSTALLER_ADVISORY:
         errors.append(
-            f"AccessibilityService implementation found in {path.relative_to(ROOT)}; "
-            "this policy prohibits app-screen/credential/OTP surveillance."
+            f"Unapproved AccessibilityService implementation in {relative}; "
+            "only the constrained, non-reading installer advisory is permitted."
+        )
+        continue
+    config = ADVISORY_CONFIG.read_text(encoding="utf-8") if ADVISORY_CONFIG.exists() else ""
+    manifest = MANIFEST.read_text(encoding="utf-8") if MANIFEST.exists() else ""
+    safe_source = (
+        "WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE" in source
+        and "WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE" in source
+        and "AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED" in source
+        and "WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY" in source
+        and not any(api in source for api in FORBIDDEN_ACCESSIBILITY_APIS)
+    )
+    safe_config = (
+        'android:canRetrieveWindowContent="false"' in config
+        and 'android:accessibilityEventTypes="typeWindowStateChanged"' in config
+    )
+    safe_manifest = (
+        '.core.observer.InstallerAccessibilityService' in manifest
+        and 'android.permission.BIND_ACCESSIBILITY_SERVICE' in manifest
+    )
+    if not (safe_source and safe_config and safe_manifest):
+        errors.append(
+            f"Installer advisory {relative} violates its non-reading/non-interfering contract; "
+            "do not read app contents or capture/interfere with touch input."
         )
 
 

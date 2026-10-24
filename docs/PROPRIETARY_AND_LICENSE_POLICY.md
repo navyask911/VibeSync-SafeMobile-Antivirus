@@ -11,3 +11,7 @@ Third-party dependencies remain under their own respective licences. The SBOM an
 - Play restricted permission disclosure: [PLAY_PERMISSIONS.md](PLAY_PERMISSIONS.md)
 
 No root licence grants a right to redistribute bundled malware feeds, YARA rules, training data, model assets, or copied code unless the upstream item is separately verified as compatible and its required attribution/notice is included.
+
+## Accessibility API safety boundary
+
+The app-screen surveillance guard remains mandatory. The only reviewed exception is the optional installer advisory at `InstallerAccessibilityService.kt`: its configuration must use window-state events only with `canRetrieveWindowContent=false`, its overlay must be non-focusable and non-touchable, and it must not read accessibility nodes, dispatch gestures, or perform global actions. The CI guard validates this specific implementation and rejects other AccessibilityService subclasses. This advisory cannot prevent Android's installer from appearing or completing installation, and sideloaded builds may need explicit Restricted settings approval.
