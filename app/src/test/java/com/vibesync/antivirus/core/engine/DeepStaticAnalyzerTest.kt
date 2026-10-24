@@ -18,7 +18,7 @@ class DeepStaticAnalyzerTest {
             debugCertificate = true,
             signerMaterialAvailable = true,
             entryNames = setOf("lib/arm64-v8a/libjiagu.so"),
-            dexSamples = listOf(DeepStaticAnalyzer.DexSampleData("classes.dex", ByteArray(128))),
+            dexSamples = listOf(DeepStaticDexSample("classes.dex", ByteArray(128))),
             archiveIssues = emptyList()
         )
         val ids = report.findings.map { it.ruleId }.toSet()

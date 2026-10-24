@@ -1,5 +1,7 @@
 package com.vibesync.antivirus.core.engine
 
+internal data class DeepStaticDexSample(val name: String, val bytes: ByteArray)
+
 import android.content.pm.ActivityInfo
 import android.content.pm.ComponentInfo
 import android.content.pm.PackageInfo
@@ -45,7 +47,7 @@ class DeepStaticAnalyzer {
             debugCertificate = debugCertificate,
             signerMaterialAvailable = signerPresent ?: true,
             entryNames = structure.entryNames,
-            dexSamples = structure.dexSamples.map { DeepStaticAnalyzer.DexSampleData(it.name, it.bytes) },
+            dexSamples = structure.dexSamples.map { DeepStaticDexSample(it.name, it.bytes) },
             archiveIssues = structure.issues,
             signerObservations = signerObservations
         )
@@ -109,7 +111,7 @@ class DeepStaticAnalyzer {
         kind = kind,
         name = name.orEmpty().take(MAX_COMPONENT_NAME_CHARS),
         exported = exported,
-        permission = permission,
+        permission = when (this) { is ActivityInfo -> this.permission; is ServiceInfo -> this.permission; is ProviderInfo -> this.permission; else -> null },
         readPermission = (this as? ProviderInfo)?.readPermission,
         writePermission = (this as? ProviderInfo)?.writePermission
     )
@@ -159,7 +161,7 @@ class DeepStaticAnalyzer {
             debugCertificate: Boolean,
             signerMaterialAvailable: Boolean,
             entryNames: Set<String>,
-            dexSamples: List<DexSampleData>,
+            dexSamples: List<DeepStaticDexSample>,
             archiveIssues: List<String>,
             signerObservations: List<String> = emptyList()
         ): RiskReport {
@@ -245,7 +247,6 @@ class DeepStaticAnalyzer {
         }
 
         private data class InternalDexSample(val name: String, val bytes: ByteArray)
-        internal data class DexSampleData(val name: String, val bytes: ByteArray)
         private const val DEX_HEADER_SIZE = 0x70
         private const val DEX_ENDIAN_TAG = 0x12345678
         private const val MIN_ENTROPY_SAMPLE_BYTES = 64 * 1024
