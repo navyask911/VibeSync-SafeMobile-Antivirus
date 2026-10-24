@@ -10,7 +10,7 @@ The siren is attached to the `security_alert_high` notification channel. On Andr
 
 ## Consumer Device Administrator versus Device Owner
 
-The consumer Device Administrator prompt is user-mediated. These narrowly scoped policies are declared: `force-lock` and `limit-password`. They enable a force-lock request and a minimum-password policy where the Android version and device policy state permit them. Platform support varies, and legacy Device Admin APIs are restricted/deprecated on modern Android.
+The consumer Device Administrator prompt is user-mediated. These narrowly scoped policies are declared: `force-lock` and `limit-password`. They enable a force-lock request. The `limit-password` declaration is retained for platforms that still support it, but Android rejects legacy password-policy APIs for device-admin apps targeting API 29 and newer. In this target-36 app, the password-policy action therefore fails safely on current Android; it is not a reliable consumer-mode control. Platform documentation: https://developers.google.com/android/work/device-admin-deprecation.
 
 Classic Device Administrator **cannot block APK installation**, cannot stop Android's package installer from presenting its UI, and cannot guarantee anti-uninstall. The disable-request callback can explain consequences but cannot deny a user who chooses to deactivate the administrator. Stronger managed installation restrictions belong to a fully managed Device Owner deployment; they are not activated by a consumer one-tap prompt and should not be implied as available on ordinary personal devices. No `wipe-data` policy is declared.
 

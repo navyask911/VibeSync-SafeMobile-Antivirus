@@ -25,12 +25,15 @@ class DeviceAdminManager(context: Context) {
         if (!isActive() || length !in 6..16) return false
         return try {
             val manager = policies ?: return false
-            manager.setPasswordQuality(component, DevicePolicyManager.PASSWORD_QUALITY_SOMETHING)
+            manager.setPasswordQuality(component, DevicePolicyManager.PASSWORD_QUALITY_COMPLEX)
             manager.setPasswordMinimumLength(component, length)
             true
         } catch (_: SecurityException) {
             false
         } catch (_: IllegalArgumentException) {
+            false
+        } catch (_: IllegalStateException) {
+            // Modern Android can reject legacy password policy combinations for target-SDK 30+ apps.
             false
         }
     }
