@@ -9,7 +9,7 @@ import android.util.Log
  * Standard consumer Device Administrator receiver. It does not grant Device Owner privileges
  * and cannot prevent APK installation. Events are logged locally only.
  */
-class AntivirusAdminReceiver : DeviceAdminReceiver() {
+open class AntivirusAdminReceiver : DeviceAdminReceiver() {
     override fun onEnabled(context: Context, intent: Intent) {
         super.onEnabled(context, intent)
         Log.i(TAG, "Device Administrator enabled")

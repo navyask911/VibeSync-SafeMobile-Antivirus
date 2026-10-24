@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.asStateFlow
 class DeviceOwnerManager(context: Context) {
  private val app = context.applicationContext
  private val dpm = app.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
- private val admin = ComponentName(app,AntivirusAdminReceiver::class.java)
+ private val admin = ComponentName(app,AdminReceiver::class.java)
  private val prefs = app.getSharedPreferences(PREFS_NAME,Context.MODE_PRIVATE)
  private val ownerState = MutableStateFlow(isOwner())
  val isDeviceOwner: StateFlow<Boolean> = ownerState.asStateFlow()
