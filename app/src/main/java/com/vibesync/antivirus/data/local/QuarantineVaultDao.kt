@@ -10,4 +10,5 @@ interface QuarantineVaultDao {
  @Query("SELECT * FROM quarantine_vault_entries ORDER BY created_at DESC LIMIT :limit") fun observeRecent(limit: Int = 100): Flow<List<QuarantineVaultEntity>>
  @Query("SELECT * FROM quarantine_vault_entries ORDER BY created_at DESC LIMIT :limit") suspend fun listRecent(limit: Int = 100): List<QuarantineVaultEntity>
  @Query("SELECT * FROM quarantine_vault_entries WHERE vault_id = :vaultId LIMIT 1") suspend fun findById(vaultId: String): QuarantineVaultEntity?
+ @Query("DELETE FROM quarantine_vault_entries WHERE quarantined_path IN (:paths)") suspend fun deleteByPaths(paths: List<String>): Int
 }

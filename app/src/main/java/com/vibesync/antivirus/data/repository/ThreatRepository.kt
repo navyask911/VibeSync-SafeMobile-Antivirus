@@ -188,7 +188,11 @@ class ThreatRepository(
  suspend fun deleteQuarantinedFile(file: File): String = withContext(Dispatchers.IO) {
   val manager = LocalQuarantineManager(context)
   val label = manager.displayName(file)
+  // Capture path aliases before deletion. The Room index is touched only after the payload is gone.
+  val rowPaths = listOf(file.absolutePath, runCatching { file.canonicalPath }.getOrDefault(file.absolutePath)).distinct()
   if (!manager.deleteQuarantinedFile(file)) throw IOException("Could not permanently delete quarantined file.")
+  // The file-backed vault remains the source of truth; stale legacy metadata is best-effort cleanup.
+  runCatching { database.quarantineVaultDao().deleteByPaths(rowPaths) }
   context.getString(R.string.quarantine_delete_success, label)
  }
  suspend fun importOfflineDefinitions(uri: Uri): String = withContext(Dispatchers.IO) {
