@@ -7,9 +7,12 @@ import com.vibesync.antivirus.core.engine.PackageScanner
 import com.vibesync.antivirus.core.crypto.EncryptedHashStore
 import com.vibesync.antivirus.core.observer.StorageAccessPreferences
 import androidx.documentfile.provider.DocumentFile
+import androidx.room.withTransaction
 import com.vibesync.antivirus.core.engine.ScanResult
 import com.vibesync.antivirus.core.engine.ScanVerdict
 import com.vibesync.antivirus.core.quarantine.LocalQuarantineManager
+import com.vibesync.antivirus.core.quarantine.QuarantineDeleteOperation
+import com.vibesync.antivirus.core.quarantine.QuarantineDeleteOutcome
 import com.vibesync.antivirus.core.quarantine.QuarantineOutcome
 import com.vibesync.antivirus.core.worker.LocalDefinitionLoader
 import com.vibesync.antivirus.data.local.ThreatDatabase
@@ -226,11 +229,24 @@ class ThreatRepository(
  }
  suspend fun deleteQuarantinedFile(file: File): String = withContext(Dispatchers.IO) {
   val manager = LocalQuarantineManager(context)
-  val label = manager.displayName(file)
-  if (!manager.deleteQuarantinedFile(file)) throw IOException("Could not permanently delete quarantined file.")
-  context.getString(R.string.quarantine_delete_success, label)
+  val label = runCatching { manager.displayName(file) }.getOrDefault(file.name)
+  val operation = QuarantineDeleteOperation(
+   deletePayload = { candidate -> manager.deleteQuarantinedFile(candidate) },
+   deleteRoomEntry = { vaultId ->
+    database.withTransaction {
+     database.quarantineVaultDao().deleteById(vaultId)
+    }
+   }
+  )
+  when (operation.delete(file)) {
+   QuarantineDeleteOutcome.DELETED -> context.getString(R.string.quarantine_delete_success, label)
+   QuarantineDeleteOutcome.FILE_NOT_FOUND -> throw java.io.FileNotFoundException("Quarantine file no longer exists.")
+   QuarantineDeleteOutcome.ACCESS_DENIED -> throw SecurityException("Access to quarantine file was denied.")
+   QuarantineDeleteOutcome.FAILED -> throw IOException("Could not permanently delete quarantined file.")
+  }
  }
- suspend fun importOfflineDefinitions(uri: Uri): String = withContext(Dispatchers.IO) {
+
+suspend fun importOfflineDefinitions(uri: Uri): String = withContext(Dispatchers.IO) {
   val stream=context.contentResolver.openInputStream(uri) ?: throw IOException(context.getString(R.string.file_stream_failed))
   context.getString(R.string.import_success,definitionLoader.importFromStream(stream))
  }

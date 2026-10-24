@@ -756,22 +756,17 @@ import kotlinx.coroutines.launch
   }
  )
  pendingDeleteFile?.let { file ->
-  AlertDialog(
-   onDismissRequest = { pendingDeleteFile = null },
-   title = { Text(stringResource(R.string.quarantine_delete_confirm_title)) },
-   text = { Text(stringResource(R.string.quarantine_delete_confirm_body)) },
-   confirmButton = {
-    TextButton(onClick = {
-     vm.deleteQuarantinedFile(file)
-     pendingDeleteFile = null
-    }) { Text(stringResource(R.string.quarantine_delete), color = MaterialTheme.colorScheme.error) }
-   },
-   dismissButton = {
-    TextButton(onClick = { pendingDeleteFile = null }) { Text(stringResource(R.string.close)) }
+  QuarantineDeleteDialog(
+   fileName = runCatching { quarantineManager.displayName(file) }.getOrDefault(file.name),
+   onDismiss = { pendingDeleteFile = null },
+   onConfirm = {
+    // Dismiss synchronously before starting asynchronous file/Room work.
+    pendingDeleteFile = null
+    vm.deleteQuarantinedFile(file)
    }
   )
  }
- pendingQuarantine?.let { flagged ->
+pendingQuarantine?.let { flagged ->
   AlertDialog(
    onDismissRequest={ pendingQuarantine = null },
    title={ Text(stringResource(R.string.quarantine_confirm_title)) },
