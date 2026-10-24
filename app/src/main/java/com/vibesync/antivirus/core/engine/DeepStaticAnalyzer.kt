@@ -233,7 +233,7 @@ class DeepStaticAnalyzer {
             if (dexSamples.isNotEmpty() && archiveIssues.none { it.contains("DEX_SIZE_LIMIT") || it == "DEX_TOTAL_SIZE_LIMIT" }) {
                 val mismatches = sensitive.filter { permission ->
                     val markers = API_USE_RULES.firstOrNull { it.first == permission }?.second ?: return@filter false
-                    markers.none { marker -> dexSamples.none { sample -> containsAsciiIgnoreCase(sample.bytes, marker) } }
+                    markers.all { marker -> dexSamples.none { sample -> containsAsciiIgnoreCase(sample.bytes, marker) } }
                 }
                 if (mismatches.isNotEmpty()) {
                     add("REQUESTED_PERMISSION_API_REFERENCE_MISMATCH", RiskSeverity.LOW, 25, "No known static DEX string reference was found for requested permission(s): ${mismatches.joinToString()}. Reflection, native calls, libraries or dynamic code may explain the absence.")
