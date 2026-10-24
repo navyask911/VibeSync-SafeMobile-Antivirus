@@ -79,7 +79,7 @@ class MultiLayerScanWorker(context: Context,params: WorkerParameters) : Coroutin
    else dao.insert(SecurityIncidentEntity(eventId,System.currentTimeMillis(),"PACKAGE_INSTALL",sourcePackage=name,sha256Hash=scan.sha256,
     reason=reason.ifBlank { "Post-install scan completed." },actionTaken=action.take(500),status=status))
    // Android exposes package-added events after installation; this alert follows the local scan.
-   if (exact || score >= 0.45f) {
+   if (exact || scan.verdict == ScanVerdict.SUSPICIOUS || score >= 0.45f) {
     runCatching { SecurityAlertNotifier.notifyThreat(applicationContext, eventId, confirmed = exact) }
     runCatching { SecurityVoiceAlert.announce(applicationContext, confirmed = exact) }
    }
