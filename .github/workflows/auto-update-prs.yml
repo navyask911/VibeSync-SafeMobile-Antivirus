@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Update every open PR branch
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.AUTO_UPDATE_TOKEN }}
         run: |
           gh pr list --repo ${{ github.repository }} --state open \
             --json number --jq '.[].number' | while read pr; do
