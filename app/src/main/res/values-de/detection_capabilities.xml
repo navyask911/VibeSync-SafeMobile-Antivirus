@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="detection_capabilities_title">Erkennungsfunktionen</string>
+    <string name="detection_capabilities_description">Zeigt, welche Sicherheitsprüfungen in diesem Build aktiv, beratend, bedingt oder nicht verfügbar sind.</string>
+    <string name="detection_capabilities_truth_title">Wichtig: Bedeutung der Scan-Ergebnisse</string>
+    <string name="detection_capabilities_truth_body">Kein lokaler Treffer beweist nicht, dass eine Datei sicher ist. Die signierte Hash-Engine bleibt deaktiviert, bis ein vertrauenswürdiger Signaturschlüssel und eine geprüfte Produktionsdatenbank konfiguriert sind. YARA und maschinelles Lernen sind deaktiviert. Heuristiken können Fehlalarme auslösen. Die folgenden Kennzahlen wurden nicht gemessen.</string>
+    <string name="detection_capabilities_enabled">Aktiv</string>
+    <string name="detection_capabilities_disabled">Deaktiviert</string>
+    <string name="detection_capabilities_limited">Begrenzte Abdeckung</string>
+    <string name="detection_capabilities_advisory">Nur Hinweis</string>
+    <string name="detection_capabilities_conditional">Bedingt</string>
+    <string name="detection_capabilities_metrics_title">Kennzahlen zur Erkennungsleistung</string>
+    <string name="detection_capabilities_import_signed_db">Signierte Hash-Datenbank importieren</string>
+    <string name="detection_capabilities_import_yara">YARA-Regeln zur Prüfung importieren (nicht ausgeführt)</string>
+    <string name="detection_capabilities_sync">Updates der signierten Datenbank</string>
+    <string name="detection_capabilities_feed_url">HTTPS-Update-URL</string>
+    <string name="detection_capabilities_sync_enabled">Automatische Updates aktivieren</string>
+    <string name="detection_capabilities_save">Update-Einstellungen speichern</string>
+    <string name="detection_capabilities_sync_privacy">Nur Downloads. Scan-Ergebnisse, Dateien, Hashes und Paketnamen werden nicht hochgeladen.</string>
+    <string name="detection_capabilities_sync_unavailable">Automatische Updates sind in diesem Offline-Build oder ohne konfigurierten vertrauenswürdigen Signaturschlüssel nicht verfügbar.</string>
+</resources>
