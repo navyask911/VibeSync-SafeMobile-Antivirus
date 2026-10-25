@@ -86,7 +86,7 @@ class HashDatabaseManager(context: Context, private val database: ThreatDatabase
         }
     }
 
-    suspend fun lookup(sha256: String?, md5: String?, sha1: String?): HashDatabaseMatch? {
+    suspend fun lookup(sha256: String?, md5: String?, sha1: String?, fileSize: Long? = null): HashDatabaseMatch? {
         if (!loaded) restoreActiveDatabase()
         val filter = bloom ?: return null
         val candidates = listOf(
@@ -99,9 +99,9 @@ class HashDatabaseManager(context: Context, private val database: ThreatDatabase
             val normalized = digest.lowercase(java.util.Locale.ROOT)
             if (!filter.mightContain(algorithm.token + ":" + normalized)) continue
             val row = when (algorithm) {
-                HashAlgorithm.SHA256 -> dao.findSignedBySha256(normalized)
-                HashAlgorithm.MD5 -> dao.findSignedByMd5(normalized)
-                HashAlgorithm.SHA1 -> dao.findSignedBySha1(normalized)
+                HashAlgorithm.SHA256 -> dao.findSignedBySha256(normalized, fileSize)
+                HashAlgorithm.MD5 -> dao.findSignedByMd5(normalized, fileSize)
+                HashAlgorithm.SHA1 -> dao.findSignedBySha1(normalized, fileSize)
             }
             if (row != null && row.source == HASH_DATABASE_SOURCE) {
                 return HashDatabaseMatch(algorithm, row.threatName)
@@ -165,6 +165,7 @@ class HashDatabaseManager(context: Context, private val database: ThreatDatabase
                         indicatorKey = "$HASH_DATABASE_SOURCE:${row.bloomKey}",
                         sha256Hash = row.hash.takeIf { row.algorithm == HashAlgorithm.SHA256 },
                         md5Hash = row.hash.takeIf { row.algorithm == HashAlgorithm.MD5 },
+                        fileSize = row.fileSize,
                         iocValue = row.hash.takeIf { row.algorithm == HashAlgorithm.SHA1 },
                         iocType = "sha1_hash".takeIf { row.algorithm == HashAlgorithm.SHA1 },
                         threatName = row.threatName,

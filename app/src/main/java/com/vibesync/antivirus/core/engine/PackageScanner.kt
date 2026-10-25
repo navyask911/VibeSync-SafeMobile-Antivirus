@@ -182,7 +182,7 @@ class PackageScanner(
  private suspend fun evaluate(key: String, label: String, sha: String, md5: String, heuristic: List<String>, score: Int, sha1: String? = null, fileSize: Long? = null): ScanResult {
   val encrypted = hashStore.protectHash(sha)
   if (dao.isHashWhitelisted(encrypted)) return ScanResult(key, label, sha, md5, ScanVerdict.NO_MATCH, listOf(context.getString(R.string.hash_allowlisted)), 0).copy(sha1 = sha1)
-  val signedHashMatch = hashDatabaseManager?.lookup(sha, md5, sha1)
+  val signedHashMatch = hashDatabaseManager?.lookup(sha, md5, sha1, fileSize)
   if (signedHashMatch != null) {
    return ScanResult(key, label, sha, md5, ScanVerdict.THREAT,
     listOf(context.getString(R.string.hashdb_match, signedHashMatch.algorithm.token.uppercase(), signedHashMatch.threatName)), 0)
