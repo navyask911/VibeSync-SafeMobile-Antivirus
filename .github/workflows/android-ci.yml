@@ -69,6 +69,24 @@ jobs:
         run: ./gradlew --no-daemon testOfflineDebugUnitTest
       - name: Android lint
         run: ./gradlew --no-daemon lintOfflineDebug lintFeedDebug
+      - name: Validate database signing public key on main CI
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          DB_SIGNING_PUBLIC_KEY: ${{ secrets.DB_SIGNING_PUBLIC_KEY }}
+        run: |
+          python3 - <<'PY'
+          import base64
+          import os
+          import sys
+          value = os.environ.get("DB_SIGNING_PUBLIC_KEY", "").strip()
+          try:
+              raw = base64.b64decode(value, validate=True)
+          except Exception as error:
+              sys.exit(f"DB_SIGNING_PUBLIC_KEY is missing or invalid Base64: {error}")
+          if len(raw) != 32:
+              sys.exit(f"DB_SIGNING_PUBLIC_KEY must decode to 32 raw Ed25519 bytes; got {len(raw)}")
+          print("Database signing public key: configured (32-byte Ed25519 key).")
+          PY
       - name: Build offline and optional feed variants
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
@@ -76,7 +94,7 @@ jobs:
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           SAFE_MOBILE_FEED_ED25519_PUBLIC_KEY_B64: ${{ vars.SAFE_MOBILE_FEED_ED25519_PUBLIC_KEY_B64 }}
-          SAFE_MOBILE_HASHDB_ED25519_PUBLIC_KEY_B64: ${{ vars.SAFE_MOBILE_HASHDB_ED25519_PUBLIC_KEY_B64 }}
+          SAFE_MOBILE_HASHDB_ED25519_PUBLIC_KEY_B64: ${{ secrets.DB_SIGNING_PUBLIC_KEY }}
         run: ./gradlew --no-daemon assembleOfflineDebug assembleOfflineRelease assembleFeedRelease bundleOfflineRelease bundleFeedRelease
       - name: Verify release artifact privacy boundary
         run: python3 scripts/check_release_artifact_privacy.py
