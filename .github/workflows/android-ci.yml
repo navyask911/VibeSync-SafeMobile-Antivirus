@@ -30,6 +30,19 @@ jobs:
         run: python3 scripts/check_version_code.py
       - name: Dataset acquisition tooling unit tests (offline fixtures only)
         run: python3 -m unittest discover -s scripts -p 'test_*.py' -v
+      - name: Detection benchmark readiness report
+        run: |
+          mkdir -p build
+          python3 scripts/benchmark_detection.py --output build/detection-benchmark.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.loads(Path("build/detection-benchmark.json").read_text(encoding="utf-8"))
+          assert result["status"] == "NOT_MEASURED", "No approved corpus means metrics must remain NOT_MEASURED"
+          assert all(value == "NOT MEASURED" for value in result["metrics"].values()), "Never fabricate efficacy"
+          assert result["regression_gate"]["status"] == "NOT_RUN"
+          print("Detection benchmark: NOT_MEASURED (no approved corpus or device scan).")
+          PY
       - name: Proprietary safety policy guard
         run: python3 scripts/check_proprietary_safety.py
       - name: Generate CycloneDX dependency SBOM (retry transient repository failures)
@@ -95,6 +108,7 @@ jobs:
             build/feed-release-dependency-tree.txt
             build/reports/cyclonedx/bom.json
             build/generated-third-party-notices.md
+            build/detection-benchmark.json
           if-no-files-found: warn
           retention-days: 14
 
