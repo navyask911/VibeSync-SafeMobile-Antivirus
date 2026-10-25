@@ -1,6 +1,6 @@
 # SafeMobile Detection Coverage Matrix
 
-**Status reviewed:** 2026-10-22. This is an implementation inventory, not an efficacy certification.
+**Status reviewed:** 2026-10-24. This is an implementation inventory, not an efficacy certification.
 
 | Layer | State | Implemented behavior | Limitation / release decision |
 |---|---|---|---|
@@ -8,6 +8,7 @@
 | Signed MD5/SHA-1/SHA-256 database engine | **DISABLED by default** | Signed ZIP bundle import, Ed25519 verification, monotonic versions, Bloom pre-filter and exact indexed Room lookups are implemented. | No independently vetted production database or trusted signing public key is bundled. Enable only after both are provisioned through a trusted release process. No real-world efficacy is claimed. |
 | SHA-1/MD5 computation | Active | HashCalculator computes supported hashes in one streaming pass. | Hash computation alone is not detection; no comprehensive shipped database exists. |
 | Permission/manifest heuristics | Heuristic | Risk-weighted permissions, accessibility declaration, install-source hints and combinations. | Can create false positives and miss malware; no ML model is called. |
+| Deep static RiskReport | Advisory, enabled | Locally inspects exported component metadata, sensitive permission combinations, signer/debug metadata, DEX headers/entropy sample, common packer filenames, and a limited permission-to-DEX-string cross-check. Findings carry rule ID, severity, evidence and confidence. | Not a full manifest parser/disassembler; finding severity is heuristic. Reflection/native/dynamic loading can evade API references; file names/entropy and exported components can false-positive. Known-bad certificate fingerprints are DISABLED. |
 | Root / hook / device integrity | Heuristic | Offline filesystem, package, build-property, SELinux, debugger and emulator indicators; multiplier informs package triage. | Best effort and bypassable; not attestation. |
 | Legacy Hypatia Bloom asset | **Disabled** | Existing legacy loader validates a manifest and digest before deserializing. | Verified non-empty `assets/hypatia_bloom.db` is absent; no detections are claimed from that legacy asset. The new signed hash engine builds a Bloom pre-filter only after a signed database is validated. |
 | YARA rules | **DISABLED** | API explicitly reports disabled/unreadable status; selected UTF-8 rule files can be stored as pending local files for review. | No Android libyara JNI runtime or curated, license-reviewed, signature-verified rules pack is shipped. Pending files are never compiled/executed. |

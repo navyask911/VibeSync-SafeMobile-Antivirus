@@ -197,5 +197,4 @@ Third-party libraries are used under their respective licenses. Review the [`LIC
 
 **Built with 🛡️ by VibeSync · Privacy-first by design**
 
-</div>
-```
+
