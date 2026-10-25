@@ -48,7 +48,7 @@ Phase A is **MERGED BUT DISABLED / INERT pending provisioning**. Its code suppor
 
 To provision Phase A, the owner must generate and safeguard an Ed25519 keypair, configure the corresponding trusted public key in the release, obtain a redistributable malware-hash dataset with verified provenance and licence, convert it to a supported format such as `.hsb`, sign the exact database bytes, and import the signed bundle through Android's Storage Access Framework. Never commit the private key. See [signed database format and trust boundaries](docs/HASH_DATABASE_SIGNING.md) and [detection coverage](docs/DETECTION_COVERAGE.md).
 
-The Phase B YARA runtime and Phase D ML/TFLite model remain **DISABLED**: no approved YARA Android runtime/rules or validated trained model is bundled. No detection-efficacy metrics are claimed; see [metrics](docs/METRICS.md) on `main`.
+The Phase B YARA runtime and Phase D ML/TFLite model remain **DISABLED**: no approved YARA Android runtime/rules or validated trained model is bundled. No detection-efficacy metrics are claimed; see [metrics on `main`](https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/blob/main/docs/METRICS.md).
 
 ---
 
