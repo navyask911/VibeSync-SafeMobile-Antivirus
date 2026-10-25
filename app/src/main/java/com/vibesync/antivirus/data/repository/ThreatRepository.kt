@@ -261,6 +261,8 @@ class ThreatRepository(
   manager.importBundle(stream)
  }
 
+ fun hashDatabaseSyncConfig(): com.vibesync.antivirus.core.hashdb.HashDatabaseSyncConfig = HashDatabaseConfigStore(context).read()
+
  fun configureHashDatabaseSync(url: String, enabled: Boolean) {
   HashDatabaseConfigStore(context).configure(url, enabled)
   HashDatabaseSyncScheduler.ensurePeriodic(context)

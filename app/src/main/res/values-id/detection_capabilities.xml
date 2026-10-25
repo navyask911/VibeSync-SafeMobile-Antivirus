@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="detection_capabilities_title">Kemampuan deteksi</string>
+    <string name="detection_capabilities_description">Lihat pemeriksaan keamanan yang aktif, berupa saran, bersyarat, atau tidak tersedia pada build ini.</string>
+    <string name="detection_capabilities_truth_title">Penting: arti hasil pemindaian</string>
+    <string name="detection_capabilities_truth_body">Tidak ada kecocokan lokal bukan bukti bahwa file aman. Mesin hash bertanda tangan tetap nonaktif hingga kunci penandatangan tepercaya dan basis data produksi terverifikasi dikonfigurasi. YARA dan pembelajaran mesin nonaktif. Heuristik dapat memberi peringatan palsu. Metrik di bawah belum diukur.</string>
+    <string name="detection_capabilities_enabled">Aktif</string>
+    <string name="detection_capabilities_disabled">Nonaktif</string>
+    <string name="detection_capabilities_limited">Cakupan terbatas</string>
+    <string name="detection_capabilities_advisory">Hanya indikasi</string>
+    <string name="detection_capabilities_conditional">Bersyarat</string>
+    <string name="detection_capabilities_metrics_title">Metrik kinerja deteksi</string>
+    <string name="detection_capabilities_import_signed_db">Impor basis data hash bertanda tangan</string>
+    <string name="detection_capabilities_import_yara">Impor aturan YARA untuk ditinjau (tidak dijalankan)</string>
+    <string name="detection_capabilities_sync">Pembaruan basis data bertanda tangan</string>
+    <string name="detection_capabilities_feed_url">URL pembaruan HTTPS</string>
+    <string name="detection_capabilities_sync_enabled">Aktifkan pembaruan otomatis</string>
+    <string name="detection_capabilities_save">Simpan setelan pembaruan</string>
+    <string name="detection_capabilities_sync_privacy">Hanya unduhan. Hasil pemindaian, file, hash, dan nama paket tidak diunggah.</string>
+    <string name="detection_capabilities_sync_unavailable">Pembaruan otomatis tidak tersedia pada build offline ini atau sebelum kunci penandatangan tepercaya dikonfigurasi.</string>
+</resources>

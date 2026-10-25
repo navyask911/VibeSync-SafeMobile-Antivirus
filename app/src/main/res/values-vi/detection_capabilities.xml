@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="detection_capabilities_title">Khả năng phát hiện</string>
+    <string name="detection_capabilities_description">Xem các bước kiểm tra bảo mật đang bật, chỉ mang tính tham khảo, có điều kiện hoặc không khả dụng trong bản dựng này.</string>
+    <string name="detection_capabilities_truth_title">Quan trọng: ý nghĩa kết quả quét</string>
+    <string name="detection_capabilities_truth_body">Không có kết quả khớp cục bộ không chứng minh tệp an toàn. Công cụ băm có chữ ký vẫn bị tắt cho đến khi cấu hình khóa ký đáng tin cậy và cơ sở dữ liệu phát hành đã được kiểm duyệt. YARA và học máy đang tắt. Phân tích heuristic có thể cảnh báo sai. Các chỉ số dưới đây chưa được đo.</string>
+    <string name="detection_capabilities_enabled">Đã bật</string>
+    <string name="detection_capabilities_disabled">Đã tắt</string>
+    <string name="detection_capabilities_limited">Phạm vi giới hạn</string>
+    <string name="detection_capabilities_advisory">Chỉ tham khảo</string>
+    <string name="detection_capabilities_conditional">Có điều kiện</string>
+    <string name="detection_capabilities_metrics_title">Chỉ số hiệu quả phát hiện</string>
+    <string name="detection_capabilities_import_signed_db">Nhập cơ sở dữ liệu băm đã ký</string>
+    <string name="detection_capabilities_import_yara">Nhập quy tắc YARA để xem xét (không thực thi)</string>
+    <string name="detection_capabilities_sync">Cập nhật cơ sở dữ liệu có chữ ký</string>
+    <string name="detection_capabilities_feed_url">URL cập nhật HTTPS</string>
+    <string name="detection_capabilities_sync_enabled">Bật cập nhật tự động</string>
+    <string name="detection_capabilities_save">Lưu cài đặt cập nhật</string>
+    <string name="detection_capabilities_sync_privacy">Chỉ tải xuống. Kết quả quét, tệp, mã băm và tên gói không được tải lên.</string>
+    <string name="detection_capabilities_sync_unavailable">Không có cập nhật tự động trong bản dựng ngoại tuyến này hoặc cho đến khi cấu hình khóa ký đáng tin cậy.</string>
+</resources>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="detection_capabilities_title">检测能力</string>
+    <string name="detection_capabilities_description">查看此构建中的安全检查是已启用、仅供参考、有条件启用还是不可用。</string>
+    <string name="detection_capabilities_truth_title">重要提示：扫描结果的含义</string>
+    <string name="detection_capabilities_truth_body">没有本地匹配并不能证明文件安全。在配置可信签名密钥和经过审核的生产数据库之前，签名哈希引擎会保持禁用。YARA 和机器学习也处于禁用状态。启发式检查可能产生误报。以下指标尚未测量。</string>
+    <string name="detection_capabilities_enabled">已启用</string>
+    <string name="detection_capabilities_disabled">已禁用</string>
+    <string name="detection_capabilities_limited">覆盖有限</string>
+    <string name="detection_capabilities_advisory">仅供参考</string>
+    <string name="detection_capabilities_conditional">有条件</string>
+    <string name="detection_capabilities_metrics_title">检测性能指标</string>
+    <string name="detection_capabilities_import_signed_db">导入已签名哈希数据库</string>
+    <string name="detection_capabilities_import_yara">导入 YARA 规则供审核（不会执行）</string>
+    <string name="detection_capabilities_sync">签名数据库更新</string>
+    <string name="detection_capabilities_feed_url">HTTPS 更新网址</string>
+    <string name="detection_capabilities_sync_enabled">启用自动更新</string>
+    <string name="detection_capabilities_save">保存更新设置</string>
+    <string name="detection_capabilities_sync_privacy">仅下载。不会上传扫描结果、文件、哈希或应用包名。</string>
+    <string name="detection_capabilities_sync_unavailable">此离线构建无法自动更新，或需先配置可信签名密钥后才能更新。</string>
+</resources>

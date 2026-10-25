@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="detection_capabilities_title">সনাক্তকরণ সক্ষমতা</string>
+    <string name="detection_capabilities_description">এই বিল্ডে কোন নিরাপত্তা পরীক্ষা চালু, পরামর্শমূলক, শর্তসাপেক্ষ বা অনুপলব্ধ তা দেখুন।</string>
+    <string name="detection_capabilities_truth_title">গুরুত্বপূর্ণ: স্ক্যান ফলাফলের অর্থ</string>
+    <string name="detection_capabilities_truth_body">স্থানীয় মিল না পাওয়া ফাইল নিরাপদ প্রমাণ করে না। বিশ্বস্ত স্বাক্ষর কী এবং যাচাইকৃত উৎপাদন ডেটাবেস না থাকা পর্যন্ত স্বাক্ষরিত হ্যাশ ইঞ্জিন বন্ধ থাকে। YARA এবং মেশিন লার্নিং বন্ধ। হিউরিস্টিক ভুল সতর্কতা দিতে পারে। নিচের মেট্রিক মাপা হয়নি।</string>
+    <string name="detection_capabilities_enabled">চালু</string>
+    <string name="detection_capabilities_disabled">বন্ধ</string>
+    <string name="detection_capabilities_limited">সীমিত কভারেজ</string>
+    <string name="detection_capabilities_advisory">শুধু পরামর্শমূলক</string>
+    <string name="detection_capabilities_conditional">শর্তসাপেক্ষ</string>
+    <string name="detection_capabilities_metrics_title">সনাক্তকরণ কর্মক্ষমতার মেট্রিক</string>
+    <string name="detection_capabilities_import_signed_db">স্বাক্ষরিত হ্যাশ ডেটাবেস আমদানি</string>
+    <string name="detection_capabilities_import_yara">পর্যালোচনার জন্য YARA নিয়ম আমদানি (চালানো হয় না)</string>
+    <string name="detection_capabilities_sync">স্বাক্ষরিত ডেটাবেস আপডেট</string>
+    <string name="detection_capabilities_feed_url">HTTPS আপডেট URL</string>
+    <string name="detection_capabilities_sync_enabled">স্বয়ংক্রিয় আপডেট চালু করুন</string>
+    <string name="detection_capabilities_save">আপডেট সেটিংস সংরক্ষণ</string>
+    <string name="detection_capabilities_sync_privacy">শুধু ডাউনলোড। স্ক্যান ফলাফল, ফাইল, হ্যাশ বা প্যাকেজের নাম আপলোড হয় না।</string>
+    <string name="detection_capabilities_sync_unavailable">এই অফলাইন বিল্ডে বা বিশ্বস্ত স্বাক্ষর কী সেট না করা পর্যন্ত স্বয়ংক্রিয় আপডেট অনুপলব্ধ।</string>
+</resources>

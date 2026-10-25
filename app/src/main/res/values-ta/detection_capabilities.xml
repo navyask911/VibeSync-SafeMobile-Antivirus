@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="detection_capabilities_title">கண்டறிதல் திறன்கள்</string>
+    <string name="detection_capabilities_description">இந்த உருவாக்கத்தில் இயக்கப்பட்ட, ஆலோசனை சார்ந்த, நிபந்தனைக்குட்பட்ட அல்லது கிடைக்காத பாதுகாப்புச் சோதனைகளைப் பார்க்கவும்.</string>
+    <string name="detection_capabilities_truth_title">முக்கியம்: ஸ்கேன் முடிவுகளின் பொருள்</string>
+    <string name="detection_capabilities_truth_body">உள்ளூர் பொருத்தம் இல்லை என்பதால் கோப்பு பாதுகாப்பானது என்று நிரூபிக்க முடியாது. நம்பகமான கையொப்ப விசையும் சரிபார்க்கப்பட்ட உற்பத்தி தரவுத்தளமும் அமைக்கப்படும் வரை கையொப்ப ஹாஷ் இயந்திரம் முடக்கப்பட்டிருக்கும். YARA மற்றும் இயந்திரக் கற்றல் முடக்கப்பட்டுள்ளன. ஹியூரிஸ்டிக் தவறான எச்சரிக்கைகளைத் தரலாம். கீழுள்ள அளவீடுகள் அளக்கப்படவில்லை.</string>
+    <string name="detection_capabilities_enabled">இயக்கப்பட்டது</string>
+    <string name="detection_capabilities_disabled">முடக்கப்பட்டது</string>
+    <string name="detection_capabilities_limited">வரையறுக்கப்பட்ட கவரேஜ்</string>
+    <string name="detection_capabilities_advisory">ஆலோசனை மட்டும்</string>
+    <string name="detection_capabilities_conditional">நிபந்தனைக்குட்பட்டது</string>
+    <string name="detection_capabilities_metrics_title">கண்டறிதல் செயல்திறன் அளவீடுகள்</string>
+    <string name="detection_capabilities_import_signed_db">கையொப்பமிட்ட ஹாஷ் தரவுத்தளத்தை இறக்குமதி செய்யவும்</string>
+    <string name="detection_capabilities_import_yara">மதிப்பாய்வுக்காக YARA விதிகளை இறக்குமதி செய்யவும் (இயக்கப்படாது)</string>
+    <string name="detection_capabilities_sync">கையொப்பமிட்ட தரவுத்தள புதுப்பிப்புகள்</string>
+    <string name="detection_capabilities_feed_url">HTTPS புதுப்பிப்பு URL</string>
+    <string name="detection_capabilities_sync_enabled">தானியங்கி புதுப்பிப்புகளை இயக்கவும்</string>
+    <string name="detection_capabilities_save">புதுப்பிப்பு அமைப்புகளைச் சேமிக்கவும்</string>
+    <string name="detection_capabilities_sync_privacy">பதிவிறக்கம் மட்டும். ஸ்கேன் முடிவுகள், கோப்புகள், ஹாஷ்கள் அல்லது தொகுப்பு பெயர்கள் பதிவேற்றப்படாது.</string>
+    <string name="detection_capabilities_sync_unavailable">இந்த ஆஃப்லைன் உருவாக்கத்தில் அல்லது நம்பகமான கையொப்ப விசை அமைக்கப்படும் வரை தானியங்கி புதுப்பிப்புகள் கிடைக்காது.</string>
+</resources>

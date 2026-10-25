@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="detection_capabilities_title">إمكانات الكشف</string>
+    <string name="detection_capabilities_description">تعرف على فحوص الأمان المفعلة أو الاستشارية أو المشروطة أو غير المتاحة في هذا الإصدار.</string>
+    <string name="detection_capabilities_truth_title">مهم: معنى نتائج الفحص</string>
+    <string name="detection_capabilities_truth_body">عدم العثور على تطابق محلي لا يثبت أن الملف آمن. يظل محرك التجزئة الموقّع معطلاً حتى إعداد مفتاح موثوق وقاعدة إنتاج مدققة. YARA والتعلم الآلي معطلان. قد تنتج المؤشرات الإرشادية إنذارات كاذبة. المقاييس أدناه غير مقاسة.</string>
+    <string name="detection_capabilities_enabled">مفعّل</string>
+    <string name="detection_capabilities_disabled">معطّل</string>
+    <string name="detection_capabilities_limited">تغطية محدودة</string>
+    <string name="detection_capabilities_advisory">إرشادي فقط</string>
+    <string name="detection_capabilities_conditional">مشروط</string>
+    <string name="detection_capabilities_metrics_title">مقاييس أداء الكشف</string>
+    <string name="detection_capabilities_import_signed_db">استيراد قاعدة تجزئات موقعة</string>
+    <string name="detection_capabilities_import_yara">استيراد قواعد YARA للمراجعة دون تنفيذ</string>
+    <string name="detection_capabilities_sync">تحديثات قاعدة البيانات الموقعة</string>
+    <string name="detection_capabilities_feed_url">عنوان تحديث HTTPS</string>
+    <string name="detection_capabilities_sync_enabled">تفعيل التحديثات التلقائية</string>
+    <string name="detection_capabilities_save">حفظ إعدادات التحديث</string>
+    <string name="detection_capabilities_sync_privacy">تنزيل فقط. لا تُرفع نتائج الفحص أو الملفات أو التجزئات أو أسماء الحزم.</string>
+    <string name="detection_capabilities_sync_unavailable">التحديثات التلقائية غير متاحة في هذا الإصدار غير المتصل أو حتى إعداد مفتاح توقيع موثوق.</string>
+</resources>
