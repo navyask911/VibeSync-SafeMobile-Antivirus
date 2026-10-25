@@ -154,19 +154,23 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
      * File and Room work runs on IO. UI state is only mutated after returning to Main.
      */
     fun deleteQuarantinedFile(file: File) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val result = runCatching { repository.deleteQuarantinedFile(file) }
-            withContext(Dispatchers.Main) {
-                result
-                    .onSuccess { message ->
-                        mutableState.update { it.copy(messageText = message, messageResource = null) }
-                        refreshQuarantine()
-                    }
-                    .onFailure {
-                        mutableState.update {
-                            it.copy(messageText = null, messageResource = R.string.quarantine_delete_failed)
-                        }
-                    }
+        viewModelScope.launch {
+            mutableState.update { it.copy(messageResource = null, messageText = null) }
+            try {
+                // Never block the UI thread with encrypted-file deletion.
+                val message = withContext(Dispatchers.IO) {
+                    repository.deleteQuarantinedFile(file)
+                }
+                mutableState.update { it.copy(messageText = message, messageResource = null) }
+                refreshQuarantine()
+            } catch (cancelled: CancellationException) {
+                // Do not transform lifecycle cancellation into a deletion error.
+                throw cancelled
+            } catch (_: Exception) {
+                mutableState.update {
+                    it.copy(messageText = null, messageResource = R.string.quarantine_delete_failed)
+                }
+                refreshQuarantine()
             }
         }
     }

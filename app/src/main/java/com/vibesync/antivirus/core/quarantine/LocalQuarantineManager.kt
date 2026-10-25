@@ -274,17 +274,17 @@ class LocalQuarantineManager(context: Context, private val hashCalculator: HashC
  }
 
  fun deleteQuarantinedFile(file: File): Boolean {
-  val safe = checkedQuarantineFile(file)
-  if (!safe.exists()) return false
-  val removed = try {
-   safe.delete()
+  // Validate the canonical vault path before accessing or removing the encrypted payload.
+  // Android permissions/storage can change between showing the vault and confirmation.
+  val safe = try {
+   checkedQuarantineFile(file)
   } catch (_: SecurityException) {
-   false
-  } catch (_: Exception) {
-   false
+   return false
+  } catch (_: java.io.IOException) {
+   return false
   }
-  if (!removed) return false
-  // The encrypted payload is gone. Try to remove its metadata sidecar as well.
+  if (!QuarantineFileDeletion.delete(safe)) return false
+  // Only after deleting the encrypted payload may its metadata sidecar be removed.
   runCatching {
    val sidecar = metadataFile(safe)
    if (sidecar.exists()) sidecar.delete()
