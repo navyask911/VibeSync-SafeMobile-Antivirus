@@ -250,7 +250,7 @@ class ThreatFeedParser(private val batchSize: Int = DEFAULT_BATCH_SIZE) {
             val row = csv.readRecord() ?: break
             if (row.isEmpty() || row.all(String::isBlank) || row.firstOrNull()?.trim()?.startsWith("#") == true) continue
             val candidate = row.map(::normalizeField)
-            if (candidate.any { it in SHA256_KEYS || it in MD5_KEYS || it == "hash" || it in IOC_KEYS }) {
+            if (candidate.any { it in SHA256_KEYS || it in SHA1_KEYS || it in MD5_KEYS || it == "hash" || it in IOC_KEYS }) {
                 header = candidate
                 break
             }
