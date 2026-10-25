@@ -37,8 +37,8 @@ android {
   applicationId = "com.vibesync.antivirus"
   minSdk = 26
   targetSdk = 36
-  versionCode = 20261022
-  versionName = "1.0.2"
+  versionCode = 20261023
+  versionName = "1.0.3"
   testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   buildConfigField("String", "FEED_MANIFEST_PUBLIC_KEY_B64", cfg(feedManifestPublicKey))
   buildConfigField("Boolean", "FEED_MANIFEST_KEY_CONFIGURED", (!feedManifestPublicKey.isBlank()).toString())
@@ -82,6 +82,7 @@ android {
 kapt { correctErrorTypes = true }
 dependencies {
  implementation("androidx.core:core-ktx:1.16.0")
+ implementation("androidx.documentfile:documentfile:1.0.1")
  implementation("androidx.activity:activity-compose:1.10.1")
     implementation("androidx.fragment:fragment-ktx:1.8.9")
  implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.9.1")
@@ -104,6 +105,8 @@ dependencies {
  implementation("org.tensorflow:tensorflow-lite:2.17.0")
  implementation("com.google.guava:guava:33.4.8-android")
  implementation("org.bouncycastle:bcprov-jdk18on:1.86")
+ // The instrumentation APK is separate from the app APK and must carry its own Kotlin runtime.
+ androidTestImplementation(kotlin("stdlib"))
  androidTestImplementation("androidx.test:runner:1.6.2")
  androidTestImplementation("androidx.test.ext:junit:1.2.1")
  androidTestImplementation("androidx.test:core:1.6.1")

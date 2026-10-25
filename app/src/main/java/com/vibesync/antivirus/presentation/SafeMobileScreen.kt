@@ -7,10 +7,8 @@ import android.content.Intent
 import android.content.ActivityNotFoundException
 import android.net.Uri
 import android.os.Build
-import android.os.Environment
 import android.os.Handler
 import android.os.Looper
-import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -79,6 +77,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.style.TextOverflow
 import android.widget.Toast
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -90,6 +89,7 @@ import com.vibesync.antivirus.SafeMobileApp
 import com.vibesync.antivirus.R
 import com.vibesync.antivirus.core.connectivity.ConnectivityMonitor
 import com.vibesync.antivirus.core.observer.StorageSentinelService
+import com.vibesync.antivirus.core.observer.StorageAccessPreferences
 import com.vibesync.antivirus.core.worker.OverlayRiskReviewManager
 import com.vibesync.antivirus.core.locale.LocalePreferences
 import com.vibesync.antivirus.core.security.DeviceOwnerManager
@@ -125,7 +125,13 @@ import kotlinx.coroutines.launch
   content = content
  )
 }
-@Composable fun SafeMobileScreen(repository:ThreatRepository, sharedText:String? = null, onSharedTextConsumed:() -> Unit = {}) {
+@Composable fun SafeMobileScreen(
+ repository:ThreatRepository,
+ sharedText:String? = null,
+ onSharedTextConsumed:() -> Unit = {},
+ openQuarantine:Boolean = false,
+ onOpenQuarantineConsumed:() -> Unit = {}
+) {
  val context=LocalContext.current
  val safeMobileApp=context.applicationContext as SafeMobileApp
  val activity=context as? Activity
@@ -227,16 +233,23 @@ import kotlinx.coroutines.launch
   notificationsGranted = hasNotificationAccess(context)
   if (notificationsGranted && onboardingStep == 2) setOnboardingStep(3)
  }
- val legacyStorageLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
-  storageAccessGranted = hasSharedStorageAccess(context)
-  if (storageAccessGranted && onboardingStep == 0) setOnboardingStep(1)
+ val storageTreeLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri: Uri? ->
+  if (uri != null) {
+   val granted = runCatching { StorageAccessPreferences.persistSelectedFolder(context, uri) }.getOrDefault(false)
+   storageAccessGranted = granted
+   if (granted) {
+    if (onboardingStep == 0) setOnboardingStep(1)
+    if (securityPrefs.getBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, false)) {
+     runCatching { context.startForegroundService(Intent(context, StorageSentinelService::class.java)) }
+      .onFailure { Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show() }
+     Handler(Looper.getMainLooper()).postDelayed({
+      monitoringRunning = isStorageSentinelRunning(context) && hasSharedStorageAccess(context)
+     }, 900L)
+    }
+   } else Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show()
+  }
  }
- val requestStorage: () -> Unit = {
-  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-   runCatching { context.startActivity(Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, Uri.parse("package:" + context.packageName))) }
-    .onFailure { Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show() }
-  } else legacyStorageLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
- }
+ val requestStorage: () -> Unit = { storageTreeLauncher.launch(null) }
  val requestNotifications: () -> Unit = {
   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) notificationLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
   else { notificationsGranted = true; if (onboardingStep == 2) setOnboardingStep(3) }
@@ -317,7 +330,13 @@ import kotlinx.coroutines.launch
   }
  }
  LaunchedEffect(sharedText) { if (!sharedText.isNullOrBlank()) selectedDestination = "phishing" }
- Surface(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing),color=MaterialTheme.colorScheme.background) {
+ LaunchedEffect(openQuarantine) {
+  if (openQuarantine) {
+   selectedDestination = "quarantine"
+   onOpenQuarantineConsumed()
+  }
+ }
+ Surface(Modifier.fillMaxSize(),color=MaterialTheme.colorScheme.background) {
   if (!onboardingComplete) {
    SecurityOnboardingScreen(
     step=onboardingStep, storageAccessGranted=storageAccessGranted, notificationsGranted=notificationsGranted,
@@ -328,7 +347,7 @@ import kotlinx.coroutines.launch
     onFinish=finishOnboarding, onSkipSetup=finishOnboarding
    )
   } else {
-  Column(Modifier.fillMaxSize()) {
+   Column(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing)) {
    Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(horizontal=18.dp,vertical=14.dp),verticalArrangement=Arrangement.spacedBy(14.dp)) {
     Row(verticalAlignment=Alignment.CenterVertically) {
      Box(Modifier.size(46.dp).background(MaterialTheme.colorScheme.primaryContainer,RoundedCornerShape(15.dp)),contentAlignment=Alignment.Center) {
@@ -390,7 +409,11 @@ import kotlinx.coroutines.launch
      }
     }
     if (selectedDestination == "home") {
-     val lastScanLabel = state.lastScanAt?.let { DateFormat.getDateTimeInstance().format(Date(it)) }
+     SecurityDashboard(
+       selectedDestination = selectedDestination,
+       onDestinationSelected = { selectedDestination = it }
+      )
+      val lastScanLabel = state.lastScanAt?.let { DateFormat.getDateTimeInstance().format(Date(it)) }
       ?.let { context.getString(R.string.security_last_scan, it) } ?: stringResource(R.string.security_last_scan_none)
      val ringProgress = if (state.isScanning && state.totalItems > 0) state.processedItems.toFloat() / state.totalItems.toFloat() else null
      SecurityStatusCard(
@@ -520,23 +543,9 @@ import kotlinx.coroutines.launch
        color = if (monitoringRunning) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.tertiary
       )
       if (!monitoringRunning) {
-       OutlinedButton(onClick={ requestPrivacyAcknowledgement {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !Environment.isExternalStorageManager()) {
-         context.startActivity(Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,Uri.parse("package:"+context.packageName)))
-        } else {
-         runCatching {
-          context.startForegroundService(Intent(context,com.vibesync.antivirus.core.observer.StorageSentinelService::class.java))
-         }.onSuccess {
-          monitoringRunning = true
-          Handler(Looper.getMainLooper()).postDelayed({
-           monitoringRunning = isStorageSentinelRunning(context)
-          }, 800L)
-         }.onFailure {
-          monitoringRunning = false
-          Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show()
-         }
-        }
-       }},enabled=!state.isScanning,modifier=Modifier.fillMaxWidth()) { Text(stringResource(R.string.monitor_button)) }
+       OutlinedButton(onClick={ requestPrivacyAcknowledgement { enableSentinel() } },enabled=!state.isScanning,modifier=Modifier.fillMaxWidth()) {
+        Text(stringResource(R.string.monitor_button))
+       }
       } else {
        OutlinedButton(onClick={
         context.stopService(Intent(context,com.vibesync.antivirus.core.observer.StorageSentinelService::class.java))
@@ -718,7 +727,7 @@ import kotlinx.coroutines.launch
       selected = selectedDestination == destination.first,
       onClick = { selectedDestination = destination.first },
       icon = { androidx.compose.material3.Icon(destination.third, contentDescription = stringResource(destination.second)) },
-      label = { Text(stringResource(destination.second)) }
+      label = { Text(stringResource(destination.second), maxLines = 1, softWrap = false, overflow = TextOverflow.Ellipsis) }
      )
     }
    }
@@ -759,22 +768,17 @@ import kotlinx.coroutines.launch
   }
  )
  pendingDeleteFile?.let { file ->
-  AlertDialog(
-   onDismissRequest = { pendingDeleteFile = null },
-   title = { Text(stringResource(R.string.quarantine_delete_confirm_title)) },
-   text = { Text(stringResource(R.string.quarantine_delete_confirm_body)) },
-   confirmButton = {
-    TextButton(onClick = {
-     vm.deleteQuarantinedFile(file)
-     pendingDeleteFile = null
-    }) { Text(stringResource(R.string.quarantine_delete), color = MaterialTheme.colorScheme.error) }
-   },
-   dismissButton = {
-    TextButton(onClick = { pendingDeleteFile = null }) { Text(stringResource(R.string.close)) }
+  QuarantineDeleteDialog(
+   fileName = runCatching { quarantineManager.displayName(file) }.getOrDefault(file.name),
+   onDismiss = { pendingDeleteFile = null },
+   onConfirm = {
+    // Dismiss synchronously before starting asynchronous file/Room work.
+    pendingDeleteFile = null
+    vm.deleteQuarantinedFile(file)
    }
   )
  }
- pendingQuarantine?.let { flagged ->
+pendingQuarantine?.let { flagged ->
   AlertDialog(
    onDismissRequest={ pendingQuarantine = null },
    title={ Text(stringResource(R.string.quarantine_confirm_title)) },

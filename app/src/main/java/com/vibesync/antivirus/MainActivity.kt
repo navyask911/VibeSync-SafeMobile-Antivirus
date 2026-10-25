@@ -10,6 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.vibesync.antivirus.core.locale.LocalePreferences
+import com.vibesync.antivirus.core.observer.SecurityAlertNotifier
 import com.vibesync.antivirus.presentation.SafeMobileScreen
 import com.vibesync.antivirus.presentation.SafeMobileTheme
 
@@ -19,16 +20,20 @@ class MainActivity : ComponentActivity() {
         super.attachBaseContext(LocalePreferences.wrap(newBase))
     }
     private var sharedText by mutableStateOf<String?>(null)
+    private var openQuarantine by mutableStateOf(false)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         sharedText = incomingSharedText(intent)
+        openQuarantine = intent.getBooleanExtra(SecurityAlertNotifier.EXTRA_OPEN_QUARANTINE, false)
         setContent {
             SafeMobileTheme {
                 SafeMobileScreen(
                     repository = (application as SafeMobileApp).repository,
                     sharedText = sharedText,
-                    onSharedTextConsumed = { sharedText = null }
+                    onSharedTextConsumed = { sharedText = null },
+                    openQuarantine = openQuarantine,
+                    onOpenQuarantineConsumed = { openQuarantine = false }
                 )
             }
         }
@@ -37,6 +42,7 @@ class MainActivity : ComponentActivity() {
         super.onNewIntent(intent)
         setIntent(intent)
         incomingSharedText(intent)?.let { sharedText = it }
+        if (intent.getBooleanExtra(SecurityAlertNotifier.EXTRA_OPEN_QUARANTINE, false)) openQuarantine = true
     }
     private fun incomingSharedText(intent: Intent?): String? =
         if (intent?.action == Intent.ACTION_SEND) intent.getCharSequenceExtra(Intent.EXTRA_TEXT)?.toString() else null

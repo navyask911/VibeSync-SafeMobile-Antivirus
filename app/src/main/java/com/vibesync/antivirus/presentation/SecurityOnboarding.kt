@@ -2,8 +2,9 @@ package com.vibesync.antivirus.presentation
 
 import android.content.Context
 import android.os.Build
-import android.os.Environment
 import androidx.compose.foundation.background
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -21,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.vibesync.antivirus.R
+import com.vibesync.antivirus.ui.components.PrimaryActionButton
 import com.vibesync.antivirus.core.security.DeviceOwnerManager
 
 internal object OnboardingPrefs {
@@ -31,11 +33,7 @@ internal object OnboardingPrefs {
     const val FIRST_SCAN_REQUESTED = "first_scan_requested"
 }
 internal fun hasSharedStorageAccess(context: Context): Boolean =
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        runCatching { Environment.isExternalStorageManager() }.getOrDefault(false)
-    } else {
-        context.checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == android.content.pm.PackageManager.PERMISSION_GRANTED
-    }
+    com.vibesync.antivirus.core.observer.StorageAccessPreferences.hasAccess(context)
 internal fun hasNotificationAccess(context: Context): Boolean =
     Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
         context.checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) == android.content.pm.PackageManager.PERMISSION_GRANTED
@@ -67,8 +65,16 @@ internal fun SecurityOnboardingScreen(
         2 -> Icons.Default.Notifications
         else -> Icons.Default.Security
     }
-    Column(
-        modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        containerColor = MaterialTheme.colorScheme.background,
+        contentWindowInsets = WindowInsets.safeDrawing
+    ) { innerPadding ->
+      Column(
+        modifier = Modifier.fillMaxSize()
+            .padding(innerPadding)
+            .consumeWindowInsets(innerPadding)
+            .verticalScroll(rememberScrollState())
             .padding(horizontal = 22.dp, vertical = 18.dp),
         verticalArrangement = Arrangement.spacedBy(18.dp), horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -92,7 +98,10 @@ internal fun SecurityOnboardingScreen(
             color = MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.Bold)
         Text(stringResource(description), style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onSurfaceVariant)
-        if (page == 1) EnterpriseOnboardingNotice(manager = enterpriseManager)
+        if (page == 1) {
+            EnterpriseOnboardingNotice(manager = enterpriseManager)
+            DeviceAdminCard()
+        }
         if (page == 0 || page == 2) {
             val granted = if (page == 0) storageAccessGranted else notificationsGranted
             Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
@@ -116,29 +125,32 @@ internal fun SecurityOnboardingScreen(
                 }
             }
         }
-        Button(onClick = {
-            when (page) {
-                0 -> if (storageAccessGranted) onContinueStorage() else onRequestStorage()
-                1 -> onContinueInstalledApps()
-                2 -> if (notificationsGranted) onSkipNotifications() else onRequestNotifications()
-                else -> onFinish()
+        PrimaryActionButton(
+            label = stringResource(
+                when (page) {
+                    0 -> if (storageAccessGranted) R.string.setup_continue else R.string.setup_allow_storage
+                    1 -> R.string.setup_continue
+                    2 -> if (notificationsGranted) R.string.setup_continue else R.string.setup_allow_notifications
+                    else -> R.string.setup_finish
+                }
+            ),
+            onClick = {
+                when (page) {
+                    0 -> if (storageAccessGranted) onContinueStorage() else onRequestStorage()
+                    1 -> onContinueInstalledApps()
+                    2 -> if (notificationsGranted) onSkipNotifications() else onRequestNotifications()
+                    else -> onFinish()
+                }
             }
-        }, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp), shape = RoundedCornerShape(50)) {
-            Text(when (page) {
-                0 -> stringResource(if (storageAccessGranted) R.string.setup_continue else R.string.setup_allow_storage)
-                1 -> stringResource(R.string.setup_continue)
-                2 -> stringResource(if (notificationsGranted) R.string.setup_continue else R.string.setup_allow_notifications)
-                else -> stringResource(R.string.setup_finish)
-            })
-        }
+        )
         if (page == 0 && !storageAccessGranted) {
             OutlinedButton(onClick = onContinueStorage, modifier = Modifier.fillMaxWidth()) { Text(stringResource(R.string.setup_continue_limited)) }
         } else if (page == 2 && !notificationsGranted) {
             TextButton(onClick = onSkipNotifications) { Text(stringResource(R.string.setup_notifications_not_now)) }
         }
-        Spacer(Modifier.weight(1f, fill = false))
         LinearProgressIndicator(progress = (page + 1) / 4f, modifier = Modifier.fillMaxWidth())
         Text(stringResource(R.string.setup_step_progress, page + 1), style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant)
+      }
     }
 }

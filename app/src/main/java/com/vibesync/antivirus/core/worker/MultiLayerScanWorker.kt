@@ -10,6 +10,7 @@ import com.vibesync.antivirus.core.engine.ScanVerdict
 import com.vibesync.antivirus.core.engine.StaticAnalyzer
 import com.vibesync.antivirus.core.engine.ThreatVerdict
 import com.vibesync.antivirus.core.security.DeviceOwnerManager
+import com.vibesync.antivirus.core.observer.SecurityAlertNotifier
 import com.vibesync.antivirus.core.security.IntegrityChecker
 import com.vibesync.antivirus.data.local.SecurityIncidentEntity
 import kotlinx.coroutines.CancellationException
@@ -76,6 +77,9 @@ class MultiLayerScanWorker(context: Context,params: WorkerParameters) : Coroutin
    if (previous != null) dao.updateAssessment(eventId,scan.sha256,reason,action.take(500),(previous.status + "|" + status).take(200))
    else dao.insert(SecurityIncidentEntity(eventId,System.currentTimeMillis(),"PACKAGE_INSTALL",sourcePackage=name,sha256Hash=scan.sha256,
     reason=reason.ifBlank { "Post-install scan completed." },actionTaken=action.take(500),status=status))
+   // Installed apps are not silently deleted or falsely described as quarantined; offer Android uninstall confirmation.
+   if (exact) SecurityAlertNotifier.notifyMaliciousApp(applicationContext,name,eventId)
+   else if (score >= 0.45f) SecurityAlertNotifier.notifySuspiciousApp(applicationContext,name,eventId)
    Result.success()
   } catch (cancelled: CancellationException) { throw cancelled }
   catch (_: Exception) { if (runAttemptCount < 2) Result.retry() else Result.failure() }

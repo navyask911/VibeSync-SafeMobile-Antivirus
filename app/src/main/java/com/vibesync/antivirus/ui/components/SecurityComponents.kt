@@ -74,7 +74,7 @@ fun StatusChip(label: String, kind: StatusKind = StatusKind.NEUTRAL, modifier: M
         horizontalArrangement = Arrangement.spacedBy(6.dp)
     ) {
         Box(Modifier.size(6.dp).clip(CircleShape).background(tint))
-        Text(label, style = MaterialTheme.typography.labelMedium, color = tint, maxLines = 2, overflow = TextOverflow.Ellipsis)
+        Text(label, style = MaterialTheme.typography.labelMedium, color = tint, maxLines = 1, softWrap = false, overflow = TextOverflow.Ellipsis)
     }
 }
 

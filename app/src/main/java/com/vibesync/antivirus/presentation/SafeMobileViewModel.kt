@@ -10,6 +10,8 @@ import com.vibesync.antivirus.core.engine.ScanVerdict
 import com.vibesync.antivirus.data.repository.ThreatRepository
 import java.io.File
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -148,19 +150,28 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
         }
     }
 
+    /**
+     * File and Room work runs on IO. UI state is only mutated after returning to Main.
+     */
     fun deleteQuarantinedFile(file: File) {
-        viewModelScope.launch {
-            mutableState.update { it.copy(messageResource = null, messageText = null) }
-            runCatching { repository.deleteQuarantinedFile(file) }
-                .onSuccess { message ->
-                    mutableState.update { it.copy(messageText = message, messageResource = null) }
-                    refreshQuarantine()
-                }
-                .onFailure { mutableState.update { it.copy(messageText = null, messageResource = R.string.quarantine_delete_failed) } }
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = runCatching { repository.deleteQuarantinedFile(file) }
+            withContext(Dispatchers.Main) {
+                result
+                    .onSuccess { message ->
+                        mutableState.update { it.copy(messageText = message, messageResource = null) }
+                        refreshQuarantine()
+                    }
+                    .onFailure {
+                        mutableState.update {
+                            it.copy(messageText = null, messageResource = R.string.quarantine_delete_failed)
+                        }
+                    }
+            }
         }
     }
 
-    fun importOfflineDefinitions(uri: Uri) {
+fun importOfflineDefinitions(uri: Uri) {
         if (mutableState.value.isScanning) return
         viewModelScope.launch {
             mutableState.update { it.copy(messageResource = null, messageText = null) }

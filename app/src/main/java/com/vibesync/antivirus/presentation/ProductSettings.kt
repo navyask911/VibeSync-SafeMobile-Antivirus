@@ -52,6 +52,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.vibesync.antivirus.BuildConfig
+import com.vibesync.antivirus.SafeMobileApp
 import com.vibesync.antivirus.R
 import com.vibesync.antivirus.core.locale.LocalePreferences
 import com.vibesync.antivirus.data.local.ScanAudit
@@ -289,6 +290,8 @@ internal fun SafeMobileSettingsPanel(
     var feedConsentEnabled by remember { mutableStateOf(feedStore.isSyncEnabled()) }
     var feedConfigMessage by remember { mutableStateOf<String?>(null) }
     var showFeedConsentDialog by remember { mutableStateOf(false) }
+    val voicePrefs = remember(context) { context.getSharedPreferences(SafeMobileApp.SECURITY_PREFS, Context.MODE_PRIVATE) }
+    var voiceAlertsEnabled by remember(context) { mutableStateOf(voicePrefs.getBoolean(SafeMobileApp.KEY_VOICE_ALERTS_ENABLED, false)) }
 
     Column(verticalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
         Text(stringResource(R.string.settings_title), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
@@ -413,6 +416,28 @@ internal fun SafeMobileSettingsPanel(
                 Row(Modifier.fillMaxWidth(), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
                     Text(stringResource(R.string.strict_mode_label), modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium)
                     Switch(checked = strictMode, onCheckedChange = { onStrictModeChanged?.invoke(it) })
+                }
+            }
+        }
+
+        Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
+            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(stringResource(R.string.voice_alerts_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                Text(stringResource(R.string.voice_alerts_description), style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Row(Modifier.fillMaxWidth(), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+                    Text(
+                        stringResource(if (voiceAlertsEnabled) R.string.voice_alerts_enabled else R.string.voice_alerts_disabled),
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.weight(1f)
+                    )
+                    Switch(
+                        checked = voiceAlertsEnabled,
+                        onCheckedChange = { enabled ->
+                            voiceAlertsEnabled = enabled
+                            voicePrefs.edit().putBoolean(SafeMobileApp.KEY_VOICE_ALERTS_ENABLED, enabled).apply()
+                        }
+                    )
                 }
             }
         }

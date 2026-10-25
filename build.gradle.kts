@@ -1,4 +1,5 @@
 plugins {
+    id("org.cyclonedx.bom") version "3.5.1"
  id("com.android.application") version "8.13.2" apply false
  id("org.jetbrains.kotlin.android") version "2.2.21" apply false
  id("org.jetbrains.kotlin.kapt") version "2.2.21" apply false

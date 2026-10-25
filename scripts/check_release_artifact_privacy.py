@@ -2,6 +2,7 @@
 """Fail CI if the offline release can access the network or any release packages ads/analytics SDKs."""
 from pathlib import Path
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -55,6 +56,11 @@ def dex_bytes(archive):
             hits.append((name, archive.read(name)))
     return hits
 
+def has_false_boolean_attribute(xmltree_dump, attribute):
+    """aapt dump xmltree reports compiled booleans as TYPE_INT_BOOLEAN hex values."""
+    pattern = rf"android:{re.escape(attribute)}\b[^\n]*?(?:\(type 0x12\)\s*0x0\b|=\s*false\b)"
+    return re.search(pattern, xmltree_dump, flags=re.IGNORECASE) is not None
+
 def check_no_tracking_classes(path):
     try:
         with zipfile.ZipFile(path) as archive:
@@ -72,6 +78,20 @@ for apk in offline_apks:
         fail("aapt could not read " + apk.name + ": " + result.stderr.strip())
     if "android.permission.INTERNET" in result.stdout:
         fail(apk.name + " declares INTERNET; offline release must not request it.")
+    manifest_dump = subprocess.run([aapt, "dump", "xmltree", str(apk), "AndroidManifest.xml"],
+                                   text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
+    if manifest_dump.returncode:
+        fail("aapt could not inspect the manifest for " + apk.name)
+    if not has_false_boolean_attribute(manifest_dump.stdout, "allowBackup"):
+        fail(apk.name + " must have android:allowBackup=false.")
+    if not has_false_boolean_attribute(manifest_dump.stdout, "fullBackupContent"):
+        fail(apk.name + " must explicitly disable fullBackupContent.")
+    if not has_false_boolean_attribute(manifest_dump.stdout, "hasFragileUserData"):
+        fail(apk.name + " must set android:hasFragileUserData=false.")
+    if "android:dataExtractionRules" not in manifest_dump.stdout:
+        fail(apk.name + " must reference dataExtractionRules.")
+    if "android.permission.MANAGE_EXTERNAL_STORAGE" in result.stdout or "android.permission.READ_EXTERNAL_STORAGE" in result.stdout:
+        fail(apk.name + " declares broad/legacy storage access; use the SAF.")
     check_no_tracking_classes(apk)
 
 for apk in feed_apks:
