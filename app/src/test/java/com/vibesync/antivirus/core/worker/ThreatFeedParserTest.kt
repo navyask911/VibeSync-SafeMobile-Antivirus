@@ -68,4 +68,19 @@ class ThreatFeedParserTest {
         }
         assertEquals(1, deliveredBatches)
     }
+    @Test
+    fun parsesSha1AndFileSizeFromCsvForSizeConstrainedMatching() = runBlocking {
+        val digest = "d".repeat(40)
+        val csv = "sha1,file_size,threat_name\n$digest,68,Size bound test"
+        val rows = mutableListOf<MalwareHashEntity>()
+        val total = ThreatFeedParser().parse(
+            ByteArrayInputStream(csv.toByteArray(Charsets.UTF_8)),
+            ThreatFeedFormat.CSV,
+            "feed.example"
+        ) { batch -> rows.addAll(batch) }
+        assertEquals(1L, total)
+        assertEquals(digest, rows.single().sha1Hash)
+        assertEquals(68L, rows.single().fileSize)
+    }
+
 }
