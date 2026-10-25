@@ -35,7 +35,7 @@ class SafeMobileApp : Application() {
   super.onCreate()
   runCatching { DeviceOwnerManager(this).applyEnterpriseDefaults() }
   database=Room.databaseBuilder(this,ThreatDatabase::class.java,"safe_mobile_threats.db")
-   .addMigrations(ThreatDatabase.MIGRATION_1_2, ThreatDatabase.MIGRATION_2_3, ThreatDatabase.MIGRATION_3_4, ThreatDatabase.MIGRATION_4_5, ThreatDatabase.MIGRATION_5_6, ThreatDatabase.MIGRATION_6_7, ThreatDatabase.MIGRATION_7_8)
+   .addMigrations(ThreatDatabase.MIGRATION_1_2, ThreatDatabase.MIGRATION_2_3, ThreatDatabase.MIGRATION_3_4, ThreatDatabase.MIGRATION_4_5, ThreatDatabase.MIGRATION_5_6, ThreatDatabase.MIGRATION_6_7, ThreatDatabase.MIGRATION_7_8, ThreatDatabase.MIGRATION_8_9)
    .build()
   hashDatabaseManager=HashDatabaseManager(this,database)
   val hashStore=EncryptedHashStore(this)
