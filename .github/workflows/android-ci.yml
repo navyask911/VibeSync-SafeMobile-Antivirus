@@ -63,6 +63,7 @@ jobs:
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           SAFE_MOBILE_FEED_ED25519_PUBLIC_KEY_B64: ${{ vars.SAFE_MOBILE_FEED_ED25519_PUBLIC_KEY_B64 }}
+          SAFE_MOBILE_HASHDB_ED25519_PUBLIC_KEY_B64: ${{ vars.SAFE_MOBILE_HASHDB_ED25519_PUBLIC_KEY_B64 }}
         run: ./gradlew --no-daemon assembleOfflineDebug assembleOfflineRelease assembleFeedRelease bundleOfflineRelease bundleFeedRelease
       - name: Verify release artifact privacy boundary
         run: python3 scripts/check_release_artifact_privacy.py

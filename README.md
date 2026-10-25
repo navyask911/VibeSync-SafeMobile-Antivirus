@@ -36,6 +36,14 @@ Core scanning runs locally. Network use is always **explicit, disclosed, and opt
 
 ---
 
+## 🔏 Phase A — Signed local hash database
+
+**Implemented but disabled by default.** The Phase A local hash engine supports MD5, SHA-1 and SHA-256, a Bloom pre-filter backed by exact indexed matching, detached Ed25519 verification, and monotonic database version checks. An EICAR-only development marker is not real-world malware protection. No trusted production Ed25519 public key or independently reviewed, redistributable malware-signature database is bundled, so **this engine does not provide active malware-signature detection until the owner provisions and imports a valid signed database**.
+
+To enable the feature safely, the owner must generate and protect an Ed25519 signing keypair, configure the corresponding trusted public key for the intended release, obtain a dataset with confirmed redistribution rights and provenance, convert it to one of the supported hash-bundle formats (including `.hsb`), sign its exact bytes, and import the bundle via Android's Storage Access Framework. Never commit the private key or imply protection before provisioning. The optional network updater does not upload files, hashes, scan results or telemetry. See [signed database format and trust boundaries](docs/HASH_DATABASE_SIGNING.md) and [detection coverage](docs/DETECTION_COVERAGE.md).
+
+---
+
 ## ✨ Features
 
 ### 🔍 Detection & Scanning
