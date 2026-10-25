@@ -155,7 +155,7 @@
     <string name="setup_notifications_title">Notifications</string>
     <string name="setup_notifications_body">Notifications can show scan reminders and protection-service status. You can continue without them, but alerts may be limited by Android notification settings.</string>
     <string name="setup_sentinel_title">Background protection</string>
-    <string name="setup_sentinel_body">Download Sentinel is optional. When enabled, its foreground service watches APK file changes directly inside the accessible top-level Downloads folder. It cannot intercept every installation or monitor every app-specific folder.</string>
+    <string name="setup_sentinel_body">Download Sentinel is optional. When enabled, it watches APK file changes in the accessible top-level Downloads folder. It does not intercept installations and may miss files in other folders.</string>
     <string name="setup_sentinel_switch">Enable Download Sentinel</string>
     <string name="setup_sentinel_scope">Best-effort APK file monitoring in Downloads. Android controls installation and can stop background work.</string>
     <string name="setup_permission_granted">Access available</string>
