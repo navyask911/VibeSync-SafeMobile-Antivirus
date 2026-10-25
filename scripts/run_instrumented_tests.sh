@@ -79,11 +79,59 @@ if ! wait_for_runtime 180 "initial emulator startup"; then
   fi
 fi
 
-# Keep Gradle's parallel work bounded while the emulator is running to reduce VM memory pressure.
-./gradlew --no-daemon --max-workers=2 --no-parallel \
-  -Dorg.gradle.jvmargs="-Xmx2g -Dfile.encoding=UTF-8" \
-  connectedOfflineDebugAndroidTest
-test_status=$?
+# APKs are prebuilt by CI before emulator startup, so Gradle only needs to install and run them.
+# API 36's software-emulated system_server can stall if it competes with a 2 GiB Gradle JVM.
+workers=2
+heap=2g
+if [[ "$EXPECTED_API" == "36" ]]; then
+  workers=1
+  heap=1024m
+fi
+
+gradle_log="$DIAGNOSTICS_DIR/connected-gradle.log"
+./gradlew --no-daemon --max-workers="$workers" --no-parallel \
+  -Dorg.gradle.jvmargs="-Xmx$heap -XX:ActiveProcessorCount=2 -Dfile.encoding=UTF-8" \
+  connectedOfflineDebugAndroidTest 2>&1 | tee "$gradle_log"
+test_status=${PIPESTATUS[0]}
+
+# A lost API-level property in ddmlib means no tests actually executed. Recover *only* that
+# infrastructure failure; never retry/override a real failing test assertion or lint gate.
+if [[ "$EXPECTED_API" == "36" && "$test_status" -ne 0 ]] &&
+   grep -Eq 'Unknown API Level|No compatible devices connected' "$gradle_log"; then
+  echo "API 36 emulator property-query failure detected. Trying the prebuilt instrumentation APKs directly via ADB."
+  timeout 15s adb kill-server || true
+  timeout 15s adb start-server || true
+  if ! wait_for_runtime 300 "API 36 ADB recovery"; then
+    echo "ADB recovery failed; keeping instrumented test failure."
+    capture_diagnostics "-recovery-failed"
+  else
+    app_apk="app/build/outputs/apk/offline/debug/app-offline-debug.apk"
+    test_apk="app/build/outputs/apk/androidTest/offline/debug/app-offline-debug-androidTest.apk"
+    if [[ ! -s "$app_apk" || ! -s "$test_apk" ]]; then
+      echo "Prebuilt instrumentation artifacts missing; cannot run direct ADB fallback."
+    elif timeout 180s adb -s "$DEVICE_SERIAL" install -r -t "$app_apk" &&
+         timeout 180s adb -s "$DEVICE_SERIAL" install -r -t "$test_apk"; then
+      instrument_log="$DIAGNOSTICS_DIR/instrumentation-api36.log"
+      timeout 600s adb -s "$DEVICE_SERIAL" shell am instrument -w -r \
+        com.vibesync.antivirus.debug.test/androidx.test.runner.AndroidJUnitRunner \
+        2>&1 | tee "$instrument_log"
+      instrument_status=${PIPESTATUS[0]}
+      # Both a nonzero executed test count and the AndroidJUnitRunner success code are mandatory.
+      # Do not treat "no compatible devices" or zero tests as success.
+      if [[ "$instrument_status" -eq 0 ]] &&
+         grep -Eq 'OK \([1-9][0-9]* tests?\)' "$instrument_log" &&
+         grep -Eq 'INSTRUMENTATION_CODE: -1' "$instrument_log" &&
+         ! grep -Eq 'FAILURES!!!|INSTRUMENTATION_FAILED|INSTRUMENTATION_ABORTED|Process crashed|FAILURE:' "$instrument_log"; then
+        echo "API 36 instrumented test suite executed successfully using prebuilt APKs."
+        test_status=0
+      else
+        echo "API 36 instrumentation did not report a verified passing test suite."
+      fi
+    else
+      echo "ADB APK install failed; preserving the original instrumented test failure."
+    fi
+  fi
+fi
 
 capture_diagnostics
 timeout 15s adb -s "$DEVICE_SERIAL" shell run-as com.vibesync.antivirus.debug \
