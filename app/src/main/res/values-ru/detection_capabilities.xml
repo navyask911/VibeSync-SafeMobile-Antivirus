@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="detection_capabilities_title">Возможности обнаружения</string>
+    <string name="detection_capabilities_description">Посмотрите, какие проверки безопасности включены, носят рекомендательный характер, условны или недоступны в этой сборке.</string>
+    <string name="detection_capabilities_truth_title">Важно: что означают результаты сканирования</string>
+    <string name="detection_capabilities_truth_body">Отсутствие локального совпадения не доказывает безопасность файла. Механизм подписанных хешей остаётся отключённым, пока не настроены доверенный ключ подписи и проверенная производственная база. YARA и машинное обучение отключены. Эвристики могут давать ложные предупреждения. Приведённые ниже метрики не измерялись.</string>
+    <string name="detection_capabilities_enabled">Включено</string>
+    <string name="detection_capabilities_disabled">Отключено</string>
+    <string name="detection_capabilities_limited">Ограниченное покрытие</string>
+    <string name="detection_capabilities_advisory">Только рекомендация</string>
+    <string name="detection_capabilities_conditional">Условно</string>
+    <string name="detection_capabilities_metrics_title">Метрики эффективности обнаружения</string>
+    <string name="detection_capabilities_import_signed_db">Импортировать подписанную базу хешей</string>
+    <string name="detection_capabilities_import_yara">Импортировать правила YARA для проверки (не выполняются)</string>
+    <string name="detection_capabilities_sync">Обновления подписанной базы</string>
+    <string name="detection_capabilities_feed_url">URL обновления HTTPS</string>
+    <string name="detection_capabilities_sync_enabled">Включить автоматические обновления</string>
+    <string name="detection_capabilities_save">Сохранить настройки обновления</string>
+    <string name="detection_capabilities_sync_privacy">Только загрузка. Результаты сканирования, файлы, хеши и имена пакетов не отправляются.</string>
+    <string name="detection_capabilities_sync_unavailable">Автоматические обновления недоступны в этой автономной сборке или пока не настроен доверенный ключ подписи.</string>
+</resources>

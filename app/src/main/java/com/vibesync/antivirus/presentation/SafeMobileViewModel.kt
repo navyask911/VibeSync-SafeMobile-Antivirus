@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.vibesync.antivirus.R
 import com.vibesync.antivirus.core.engine.ScanResult
 import com.vibesync.antivirus.core.engine.ScanVerdict
+import com.vibesync.antivirus.core.hashdb.HashDatabaseCapability
 import com.vibesync.antivirus.data.repository.ThreatRepository
 import java.io.File
 import kotlinx.coroutines.CancellationException
@@ -32,7 +33,10 @@ data class SafeMobileUiState(
     val activeThreatIndicatorCount: Int = 0,
     val lastThreatFeedSyncAt: Long? = null,
     val threatFeedSyncStatus: String? = null,
-    val threatFeedSyncError: String? = null
+    val threatFeedSyncError: String? = null,
+    val hashDatabaseCapability: HashDatabaseCapability = HashDatabaseCapability(false, reason = "Disabled: trusted key or signed database missing."),
+    val hashDatabaseUpdateUrl: String = "",
+    val hashDatabaseUpdatesEnabled: Boolean = false
 ) {
     val threatCount get() = results.count { it.verdict == ScanVerdict.THREAT }
     val suspiciousCount get() = results.count { it.verdict == ScanVerdict.SUSPICIOUS }
@@ -47,6 +51,7 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
         refreshSignatureCount()
         refreshQuarantine()
         observeThreatFeedState()
+        refreshHashDatabaseCapability()
     }
 
     private fun observeThreatFeedState() {
@@ -63,6 +68,59 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
         viewModelScope.launch {
             repository.observeLatestThreatFeedSyncState().collect { sync ->
                 mutableState.update { it.copy(threatFeedSyncStatus = sync?.status, threatFeedSyncError = sync?.lastError) }
+            }
+        }
+    }
+
+
+    fun refreshHashDatabaseCapability() {
+        viewModelScope.launch {
+            val capability = try { repository.hashDatabaseCapability() }
+            catch (cancelled: CancellationException) { throw cancelled }
+            catch (error: Exception) { HashDatabaseCapability(false, reason = error.message ?: "Signed hash database unavailable.") }
+            val config = runCatching { repository.hashDatabaseSyncConfig() }.getOrNull()
+            mutableState.update { it.copy(hashDatabaseCapability = capability,
+                hashDatabaseUpdateUrl = config?.url.orEmpty(), hashDatabaseUpdatesEnabled = config?.enabled == true) }
+        }
+    }
+
+    fun importSignedHashDatabase(uri: Uri) {
+        viewModelScope.launch {
+            try {
+                val capability = repository.importSignedHashDatabase(uri)
+                mutableState.update { it.copy(hashDatabaseCapability = capability, messageResource = null,
+                    messageText = "Signed database accepted: version " + capability.version + ", " + capability.indicatorCount + " indicators.") }
+            } catch (cancelled: CancellationException) { throw cancelled }
+            catch (error: Exception) {
+                refreshHashDatabaseCapability()
+                mutableState.update { it.copy(messageResource = null,
+                    messageText = "Signed database not activated: " + (error.message ?: "verification failed") + ".") }
+            }
+        }
+    }
+
+    fun importPendingYaraRule(uri: Uri) {
+        viewModelScope.launch {
+            try {
+                val message = repository.importPendingYaraRule(uri)
+                mutableState.update { it.copy(messageResource = null, messageText = message) }
+            } catch (cancelled: CancellationException) { throw cancelled }
+            catch (error: Exception) {
+                mutableState.update { it.copy(messageResource = null,
+                    messageText = "YARA remains disabled: " + (error.message ?: "import failed") + ".") }
+            }
+        }
+    }
+
+    fun configureHashDatabaseSync(url: String, enabled: Boolean) {
+        viewModelScope.launch {
+            try {
+                repository.configureHashDatabaseSync(url, enabled)
+                refreshHashDatabaseCapability()
+            } catch (cancelled: CancellationException) { throw cancelled }
+            catch (error: Exception) {
+                mutableState.update { it.copy(messageResource = null,
+                    messageText = "Update settings were not saved: " + (error.message ?: "invalid HTTPS URL") + ".") }
             }
         }
     }

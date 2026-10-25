@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="detection_capabilities_title">గుర్తింపు సామర్థ్యాలు</string>
+    <string name="detection_capabilities_description">ఈ బిల్డ్‌లో సక్రియంగా ఉన్న, సూచనాత్మకమైన, షరతులతో కూడిన లేదా అందుబాటులో లేని భద్రతా తనిఖీలను చూడండి.</string>
+    <string name="detection_capabilities_truth_title">ముఖ్యం: స్కాన్ ఫలితాల అర్థం</string>
+    <string name="detection_capabilities_truth_body">స్థానిక సరిపోలిక లేకపోవడం ఫైల్ సురక్షితమని నిరూపించదు. విశ్వసనీయ సంతకం కీ మరియు ధృవీకరించిన ఉత్పత్తి డేటాబేస్ అమర్చేవరకు సంతకం చేసిన హ్యాష్ ఇంజిన్ నిలిపివేయబడుతుంది. YARA మరియు మెషీన్ లెర్నింగ్ నిలిపివేయబడ్డాయి. హ్యూరిస్టిక్స్ తప్పుడు హెచ్చరికలు ఇవ్వవచ్చు. దిగువ మెట్రిక్‌లు కొలవబడలేదు.</string>
+    <string name="detection_capabilities_enabled">ప్రారంభించబడింది</string>
+    <string name="detection_capabilities_disabled">నిలిపివేయబడింది</string>
+    <string name="detection_capabilities_limited">పరిమిత కవరేజ్</string>
+    <string name="detection_capabilities_advisory">సూచన మాత్రమే</string>
+    <string name="detection_capabilities_conditional">షరతులతో కూడినది</string>
+    <string name="detection_capabilities_metrics_title">గుర్తింపు పనితీరు మెట్రిక్‌లు</string>
+    <string name="detection_capabilities_import_signed_db">సంతకం చేసిన హ్యాష్ డేటాబేస్‌ను దిగుమతి చేయండి</string>
+    <string name="detection_capabilities_import_yara">సమీక్ష కోసం YARA నియమాలను దిగుమతి చేయండి (నడపబడవు)</string>
+    <string name="detection_capabilities_sync">సంతకం చేసిన డేటాబేస్ నవీకరణలు</string>
+    <string name="detection_capabilities_feed_url">HTTPS నవీకరణ URL</string>
+    <string name="detection_capabilities_sync_enabled">ఆటోమేటిక్ నవీకరణలను ప్రారంభించండి</string>
+    <string name="detection_capabilities_save">నవీకరణ సెట్టింగ్‌లను సేవ్ చేయండి</string>
+    <string name="detection_capabilities_sync_privacy">డౌన్‌లోడ్ మాత్రమే. స్కాన్ ఫలితాలు, ఫైళ్లు, హ్యాష్‌లు లేదా ప్యాకేజీ పేర్లు అప్‌లోడ్ చేయబడవు.</string>
+    <string name="detection_capabilities_sync_unavailable">ఈ ఆఫ్‌లైన్ బిల్డ్‌లో లేదా విశ్వసనీయ సంతకం కీ అమర్చే వరకు ఆటోమేటిక్ నవీకరణలు అందుబాటులో ఉండవు.</string>
+</resources>
