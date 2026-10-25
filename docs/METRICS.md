@@ -1,20 +1,28 @@
-# Measured security metrics
+# Detection metrics
 
-**Phase A status (2026-10-25): NOT MEASURED — validated, licensed malware and benign APK corpora were not supplied to CI.** Do not interpret a passing unit test as a detection-accuracy measurement.
+**Status:** NOT MEASURED — there is no legally verified, labeled APK malware test corpus and no >=1,000-sample benign APK corpus available as an approved local CI fixture. The checked-in research dataset is a hash manifest, not an APK binary corpus. CI must not invent effectiveness values from the EICAR test marker.
 
-| Metric | Value | Why |
+Last documentation review: 2026-10-24.
+Code snapshot reviewed: `470f9de208b3c4a26e551921356ca3c75d96a2ff` (Phase C static-analysis head at the time this document was first prepared). This is a code-review reference, not a benchmark run.
+
+| Metric | Value | Reason / interpretation |
 |---|---|---|
-| True-positive rate (TPR) | **NOT MEASURED** | MH-100K licensed test split unavailable |
-| False-positive rate (FPR) | **NOT MEASURED** | 1,000 reproducibly sampled and licensed F-Droid APKs unavailable |
-| Precision / recall | **NOT MEASURED** | Requires the above labelled corpora |
-| Scanning RSS (<120 MB target) | **NOT MEASURED** | Physical-device benchmark/profiled corpus required |
-| Total scan latency (<500 ms target) | **NOT MEASURED** | Controlled APK set and hardware required |
-| TFLite latency / memory | **DISABLED** | No trained, independently validated TFLite artifact |
-| YARA runtime / detection | **DISABLED** | No validated JNI engine or licensed rules |
-| Bloom pre-screen | **DISABLED** | No signed, source-complete verified Bloom snapshot |
-| Hash algorithms | MD5, SHA-1, SHA-256 | Supported by streaming HashCalculator and exact Room lookups |
-| Detached Ed25519 checks | Unit tests | No production public key configured; absent key disables external signed bundle acceptance |
+| Malware true-positive rate (TPR / recall) | NOT MEASURED | No legally approved labeled APK malware test split and production signature database; no inference of efficacy from hash computation alone. |
+| Benign false-positive rate (FPR) | NOT MEASURED | No approved corpus of at least 1,000 benign F-Droid APK binaries has been placed in CI; heuristics have not been evaluated against that corpus. |
+| Precision | NOT MEASURED | No paired labeled malware/benign end-to-end corpus run. |
+| Per-sample latency | NOT MEASURED | The Phase F harness and reference emulator run have not completed. |
+| Peak RSS / additional ML memory | NOT MEASURED | No full-corpus run and no ML model is shipped. |
+| TFLite accuracy / TPR / FPR / precision / recall | NOT MEASURED | ML engine is DISABLED; no validated model is loaded. |
+| YARA TPR / FPR | NOT MEASURED | YARA engine and production rule set are DISABLED. |
+| Signed hash database TPR / FPR | NOT MEASURED | Matcher implementation exists, but it is DISABLED until trusted signing configuration and a vetted production signature set are provisioned. |
 
-No efficacy percentage, zero-error claim, or third-party certification is inferred from implementation tests. A future benchmark must publish corpus provenance, sample counts, immutable dataset revisions, split definitions, hardware, CI artifact paths, measurements, and signed expected baselines before threshold gates are switched on. The *first* reproducible benchmark is a baseline, not a regression failure. Until then: **NOT MEASURED**.
+## Benchmark provenance
 
-Unit tests cover accept/reject paths for signed manifests, tampered payloads, unsigned input, incorrect algorithm formats and bounded archive reads. They do **not** constitute a fuzzing certification. Zip-bomb and malformed-archive full fuzzing: **NOT MEASURED — no dedicated fuzz campaign was run**.
+- Malware research dataset identified in `docs/THREAT_DATASET_ATTRIBUTION.md`: Mendeley Data version 1, title “A 200K Malware Hash Dataset with Experimental Splits for Machine Learning Classification”, DOI `10.17632/xv84w8cc72.1`, publisher-declared CC BY 4.0. It is a manifest of hash records, not APK binaries; it is not treated as an operational threat feed or used to claim TPR.
+- Benign APK corpus: NOT OBTAINED / NOT MEASURED. No APK binary corpus was bundled into Git or CI.
+- Reference device/emulator: NOT MEASURED for the detection benchmark.
+- Commit SHA/date for empirical metrics: NOT APPLICABLE UNTIL A BENCHMARK RUN COMPLETES. The snapshot SHA above does not attach any measured metric to itself.
+
+## Regression-gate policy
+
+Phase F will record JSON benchmark output. If legal sample corpora and a verified signature set are supplied to the offline harness, the measured values can be reported with dataset revision, corpus manifest hashes, device/emulator spec, and exact commit SHA. On the first real run, a baseline will be established; regression gates activate after the baseline exists. With missing corpora, metrics remain explicitly NOT MEASURED and no numbers or fake baseline will be emitted.
