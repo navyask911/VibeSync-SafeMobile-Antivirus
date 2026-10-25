@@ -103,7 +103,7 @@ jobs:
     needs: test-lint-build
     if: github.event_name != 'pull_request' || github.base_ref == 'main'
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 55
     strategy:
       fail-fast: false
       max-parallel: 1
@@ -131,21 +131,50 @@ jobs:
           ./gradlew --no-daemon --max-workers=2 --no-parallel \
             -Dorg.gradle.jvmargs="-Xmx2g -Dfile.encoding=UTF-8" \
             assembleOfflineDebug assembleOfflineDebugAndroidTest
+      # GitHub-hosted runners do not always expose /dev/kvm. Enable KVM when available;
+      # let android-emulator-runner select software emulation otherwise. Never skip tests.
+      - name: Configure optional KVM hardware acceleration
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -e /dev/kvm ]]; then
+            echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' |
+              sudo tee /etc/udev/rules.d/99-kvm4all.rules
+            sudo udevadm control --reload-rules
+            sudo udevadm trigger --name-match=kvm ||
+              echo "::warning::Could not refresh KVM udev permissions."
+          fi
+          if [[ -r /dev/kvm && -w /dev/kvm ]]; then
+            echo "KVM available: using accelerated Android emulation."
+          else
+            echo "::warning::KVM unavailable: Android emulator runner will use software emulation. Instrumented tests remain required."
+          fi
       - name: Run instrumented tests on local emulator
         uses: reactivecircus/android-emulator-runner@v2
         env:
           EXPECTED_API_LEVEL: ${{ matrix.api-level }}
         with:
           api-level: ${{ matrix.api-level }}
+          # AOSP 'default' is the leanest verified API 34/36 image already installed by CI;
+          # google_apis adds Play-services components and does not solve missing host KVM.
           target: default
           arch: x86_64
           profile: pixel_2
-          emulator-boot-timeout: 900
-          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none
+          force-avd-creation: true
+          emulator-boot-timeout: 1200
+          # -noaudio is the action's supported audio-disabling mechanism.
+          # 'corrupt-avd-ihate-waiting' and 'disable-audio' are not valid action.yml inputs.
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
           disable-animations: true
-          ram-size: 4096M
-          heap-size: 512M
-          cores: 4
+          disable-spellchecker: true
+          # Action's 'auto' checks /dev/kvm: with KVM, hardware acceleration stays
+          # enabled; without KVM, the runner appends '-accel off' to boot with QEMU TCG.
+          disable-linux-hw-accel: auto
+          # Reserve host CPU/memory headroom on API 34/36 for ADB and the Gradle JVM,
+          # especially on runners without /dev/kvm that must use software emulation.
+          ram-size: ${{ matrix.api-level >= 34 && '3072M' || '4096M' }}
+          heap-size: ${{ matrix.api-level >= 34 && '384M' || '512M' }}
+          cores: ${{ matrix.api-level >= 34 && 2 || 4 }}
           script: bash scripts/run_instrumented_tests.sh
       - name: Upload instrumented test diagnostics
         if: always()
