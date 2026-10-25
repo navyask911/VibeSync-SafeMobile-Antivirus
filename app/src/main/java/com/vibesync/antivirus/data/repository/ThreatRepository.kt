@@ -4,6 +4,7 @@ import android.net.Uri
 import android.provider.OpenableColumns
 import com.vibesync.antivirus.R
 import com.vibesync.antivirus.core.engine.PackageScanner
+import com.vibesync.antivirus.core.engine.YaraRuleImportStore
 import com.vibesync.antivirus.core.hashdb.HashDatabaseManager
 import com.vibesync.antivirus.core.hashdb.HashDatabaseCapability
 import com.vibesync.antivirus.core.hashdb.HashDatabaseConfigStore
@@ -264,6 +265,12 @@ class ThreatRepository(
   HashDatabaseConfigStore(context).configure(url, enabled)
   HashDatabaseSyncScheduler.ensurePeriodic(context)
   if (enabled) HashDatabaseSyncScheduler.enqueueNow(context)
+ }
+
+ suspend fun importPendingYaraRule(uri: Uri): String = withContext(Dispatchers.IO) {
+  val stream = context.contentResolver.openInputStream(uri) ?: throw IOException(context.getString(R.string.file_stream_failed))
+  val saved = YaraRuleImportStore(context).importPending(stream)
+  "Stored ${saved.name} for review. YARA remains DISABLED; this file will not be executed."
  }
 
 suspend fun importOfflineDefinitions(uri: Uri): String = withContext(Dispatchers.IO) {
