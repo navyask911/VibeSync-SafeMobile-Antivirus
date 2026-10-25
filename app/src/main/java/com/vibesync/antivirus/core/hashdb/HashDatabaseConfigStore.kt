@@ -17,6 +17,10 @@ class HashDatabaseConfigStore(context: Context) {
     fun configure(url: String, enabled: Boolean) {
         val normalized = url.trim()
         require(normalized.length <= 2048) { "URL exceeds the supported length." }
+        if (!enabled && normalized.isEmpty()) {
+            prefs.edit().putString(KEY_URL, "").putBoolean(KEY_ENABLED, false).apply()
+            return
+        }
         val parsed = URI(normalized)
         require(parsed.scheme.equals("https", ignoreCase = true) && !parsed.host.isNullOrBlank()) {
             "Only an HTTPS signature-download URL is allowed."
