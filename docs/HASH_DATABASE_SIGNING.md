@@ -26,3 +26,6 @@ The optional WorkManager client performs HTTPS GET only, only in the network-ena
 ## Baseline and licensing decision
 
 No production signature dataset is bundled until its redistribution rights, provenance, freshness and false-positive characteristics have been reviewed and its exact bytes have been signed by the configured trusted key. The publicly cited 201,549-row Mendeley manifest is research metadata (CC BY 4.0), not a corpus of APK binaries or an independently authenticated live-threat feed. It is not silently promoted to a production signature baseline.
+## Exact-size hash matching in the clean-room integration
+
+The size-aware local lookup extends SHA-256, SHA-1, and MD5 imported-indicator matches with the number of bytes actually hashed. A record with a declared `file_size` must match that size; legacy records with no size field remain supported. In the Ed25519-signed hash database, explicit size metadata from `.hdb` or `.hsb` rows is preserved when stored, and candidate lookups check it after the existing Bloom prefilter. A hash Bloom hit alone is never a threat verdict. Signing keys and a legally vetted production malware corpus are **not bundled**, so the signed database remains **disabled/inert** until separately provisioned. The application does not claim measured detection efficacy.

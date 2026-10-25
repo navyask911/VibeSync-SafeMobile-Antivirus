@@ -107,7 +107,7 @@ class PackageScanner(
    } else null
    val staticReasons = staticReport?.findings.orEmpty().map { "[${it.ruleId}] ${it.evidence} (confidence ${it.confidence}%)" }
    val staticScore = staticReport?.riskScore ?: 0
-   val output = evaluate(file.name, file.name, hash.sha256, hash.md5, staticReasons, staticScore, sha1 = hash.sha1)
+   val output = evaluate(file.name, file.name, hash.sha256, hash.md5, staticReasons, staticScore, sha1 = hash.sha1, fileSize = hash.bytesRead)
     .copy(riskReport = staticReport)
    if (persistAllAudit || output.verdict == ScanVerdict.THREAT || output.verdict == ScanVerdict.SUSPICIOUS) audit(output, start, scanSessionId)
    output.copy(durationMs = elapsed(start), sourceLocalPath = file.absolutePath, scanSessionId = scanSessionId)
@@ -128,7 +128,7 @@ class PackageScanner(
   val start = System.nanoTime()
   return try {
    val hash = stream.use { calculator.calculate(it) }
-   val output = evaluate(label, label, hash.sha256, hash.md5, emptyList(), 0, sha1 = hash.sha1)
+   val output = evaluate(label, label, hash.sha256, hash.md5, emptyList(), 0, sha1 = hash.sha1, fileSize = hash.bytesRead)
    if (persistAudit || output.verdict == ScanVerdict.THREAT ||
        output.verdict == ScanVerdict.SUSPICIOUS || output.verdict == ScanVerdict.NOT_SCANNED) {
     audit(output, start, scanSessionId)
@@ -174,15 +174,15 @@ class PackageScanner(
   val deepReasons = deepReport.findings.map { "[${it.ruleId}] ${it.evidence} (confidence ${it.confidence}%)" }
   reasons += deepReasons
   val combinedRiskScore = maxOf(adjustedRiskScore, deepReport.riskScore)
-  val output = evaluate(info.packageName, label, hashes.sha256, hashes.md5, reasons, combinedRiskScore, sha1 = hashes.sha1)
+  val output = evaluate(info.packageName, label, hashes.sha256, hashes.md5, reasons, combinedRiskScore, sha1 = hashes.sha1, fileSize = hashes.bytesRead)
    .copy(riskReport = deepReport)
   audit(output, start, scanSessionId)
   return output.copy(durationMs = elapsed(start), packageName = info.packageName, scanSessionId = scanSessionId)
  }
- private suspend fun evaluate(key: String, label: String, sha: String, md5: String, heuristic: List<String>, score: Int, sha1: String? = null): ScanResult {
+ private suspend fun evaluate(key: String, label: String, sha: String, md5: String, heuristic: List<String>, score: Int, sha1: String? = null, fileSize: Long? = null): ScanResult {
   val encrypted = hashStore.protectHash(sha)
   if (dao.isHashWhitelisted(encrypted)) return ScanResult(key, label, sha, md5, ScanVerdict.NO_MATCH, listOf(context.getString(R.string.hash_allowlisted)), 0).copy(sha1 = sha1)
-  val signedHashMatch = hashDatabaseManager?.lookup(sha, md5, sha1)
+  val signedHashMatch = hashDatabaseManager?.lookup(sha, md5, sha1, fileSize)
   if (signedHashMatch != null) {
    return ScanResult(key, label, sha, md5, ScanVerdict.THREAT,
     listOf(context.getString(R.string.hashdb_match, signedHashMatch.algorithm.token.uppercase(), signedHashMatch.threatName)), 0)
@@ -194,7 +194,7 @@ class PackageScanner(
    val level = revealMetadataOrPlaintext(threat.threatLevel, "level")
    return ScanResult(key, label, sha, md5, ScanVerdict.THREAT, listOf(context.getString(R.string.hash_match, family, level)), 0).copy(threatEventId = UUID.randomUUID().toString(), riskScore = 1f, sha1 = sha1)
   }
-  val feedThreat = threatIntelligenceRepository?.lookupHash(sha, md5)
+  val feedThreat = threatIntelligenceRepository?.lookupHash(sha, md5, sha1, fileSize)
   if (feedThreat != null) {
    return ScanResult(key, label, sha, md5, ScanVerdict.THREAT,
     listOf(context.getString(R.string.threat_feed_hash_match, feedThreat.threatName, feedThreat.source)), 0)

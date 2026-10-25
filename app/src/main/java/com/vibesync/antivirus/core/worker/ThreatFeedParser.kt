@@ -23,14 +23,18 @@ internal data class ThreatFeedRecord(
     val iocType: String? = null,
     val threatName: String? = null,
     val firstSeenAt: Long? = null,
-    val lastSeenAt: Long? = null
+    val lastSeenAt: Long? = null,
+    val sha1: String? = null,
+    val fileSize: Long? = null
 )
 
 internal object ThreatFeedIndicatorValidator {
     private val SHA256 = Regex("^[a-fA-F0-9]{64}$")
     private val MD5 = Regex("^[a-fA-F0-9]{32}$")
+    private val SHA1 = Regex("^[a-fA-F0-9]{40}$")
     private val SHA256_IOC_TYPES = setOf("sha256_hash", "sha256", "hash_sha256", "file_hash")
     private val MD5_IOC_TYPES = setOf("md5_hash", "md5", "hash_md5")
+    private val SHA1_IOC_TYPES = setOf("sha1_hash", "sha1", "hash_sha1")
 
     fun normalize(record: ThreatFeedRecord, source: String): MalwareHashEntity? {
         val rawHash = record.genericHash?.trim()
@@ -44,23 +48,30 @@ internal object ThreatFeedIndicatorValidator {
         val shaFromIoc = iocAsHash?.takeIf {
             (type in SHA256_IOC_TYPES || type.isNullOrBlank()) && SHA256.matches(it)
         }
+        val sha1FromIoc = iocAsHash?.takeIf {
+            (type in SHA1_IOC_TYPES || type.isNullOrBlank()) && SHA1.matches(it)
+        }
         val md5FromIoc = iocAsHash?.takeIf {
             (type in MD5_IOC_TYPES || type.isNullOrBlank()) && MD5.matches(it)
         }
         val sha = record.sha256?.trim()?.lowercase(Locale.ROOT)?.takeIf(SHA256::matches)
             ?: rawHash?.lowercase(Locale.ROOT)?.takeIf(SHA256::matches)
             ?: shaFromIoc
+        val sha1 = record.sha1?.trim()?.lowercase(Locale.ROOT)?.takeIf(SHA1::matches)
+            ?: rawHash?.lowercase(Locale.ROOT)?.takeIf(SHA1::matches)
+            ?: sha1FromIoc
         val md5 = record.md5?.trim()?.lowercase(Locale.ROOT)?.takeIf(MD5::matches)
             ?: rawHash?.lowercase(Locale.ROOT)?.takeIf(MD5::matches)
             ?: md5FromIoc
-        val ioc = rawIoc?.takeUnless { shaFromIoc != null || md5FromIoc != null }?.let { raw ->
+        val ioc = rawIoc?.takeUnless { shaFromIoc != null || sha1FromIoc != null || md5FromIoc != null }?.let { raw ->
             if (type == "domain" || type == "hostname" || type == "fqdn") raw.lowercase(Locale.ROOT).trimEnd('.')
             else if (type?.startsWith("ip") == true) raw.lowercase(Locale.ROOT)
             else raw
         }
-        if (sha == null && md5 == null && ioc == null) return null
+        if (sha == null && sha1 == null && md5 == null && ioc == null) return null
         val primary = when {
             sha != null -> "sha256:$sha"
+            sha1 != null -> "sha1:$sha1"
             md5 != null -> "md5:$md5"
             else -> "ioc:" + type.orEmpty() + ":" + ioc.orEmpty()
         }
@@ -72,6 +83,8 @@ internal object ThreatFeedIndicatorValidator {
             indicatorKey = "$safeSource:$primary",
             sha256Hash = sha,
             md5Hash = md5,
+            sha1Hash = sha1,
+            fileSize = record.fileSize?.takeIf { it >= 0L },
             iocValue = ioc,
             iocType = type,
             threatName = safeName,
@@ -160,6 +173,8 @@ class ThreatFeedParser(private val batchSize: Int = DEFAULT_BATCH_SIZE) {
     private suspend fun readRow(reader: JsonReader, sink: BatchSink) {
         var sha: String? = null
         var md5: String? = null
+        var sha1: String? = null
+        var fileSize: Long? = null
         var genericHash: String? = null
         var ioc: String? = null
         var iocType: String? = null
@@ -172,6 +187,8 @@ class ThreatFeedParser(private val batchSize: Int = DEFAULT_BATCH_SIZE) {
             when {
                 name in SHA256_KEYS -> sha = readOptionalPrimitive(reader)
                 name in MD5_KEYS -> md5 = readOptionalPrimitive(reader)
+                name in SHA1_KEYS -> sha1 = readOptionalPrimitive(reader)
+                name in SIZE_KEYS -> fileSize = readOptionalPrimitive(reader)?.toLongOrNull()
                 name == "hash" -> genericHash = readOptionalPrimitive(reader)
                 name in IOC_KEYS -> ioc = readOptionalPrimitive(reader)
                 name in IOC_TYPE_KEYS -> iocType = readOptionalPrimitive(reader)
@@ -198,12 +215,14 @@ class ThreatFeedParser(private val batchSize: Int = DEFAULT_BATCH_SIZE) {
             }
         }
         reader.endObject()
-        sink.add(ThreatFeedRecord(sha, md5, genericHash, ioc, iocType, threat, firstSeen, lastSeen))
+        sink.add(ThreatFeedRecord(sha, md5, genericHash, ioc, iocType, threat, firstSeen, lastSeen, sha1, fileSize))
     }
 
     private fun readSample(reader: JsonReader): ThreatFeedRecord {
         var sha: String? = null
         var md5: String? = null
+        var sha1: String? = null
+        var fileSize: Long? = null
         var genericHash: String? = null
         var threat: String? = null
         var firstSeen: Long? = null
@@ -212,6 +231,8 @@ class ThreatFeedParser(private val batchSize: Int = DEFAULT_BATCH_SIZE) {
             when (val name = normalizeField(reader.nextName())) {
                 in SHA256_KEYS -> sha = readOptionalPrimitive(reader)
                 in MD5_KEYS -> md5 = readOptionalPrimitive(reader)
+                in SHA1_KEYS -> sha1 = readOptionalPrimitive(reader)
+                in SIZE_KEYS -> fileSize = readOptionalPrimitive(reader)?.toLongOrNull()
                 "hash" -> genericHash = readOptionalPrimitive(reader)
                 in THREAT_NAME_KEYS -> threat = readOptionalPrimitive(reader)
                 in FIRST_SEEN_KEYS -> firstSeen = parseTimestamp(readOptionalPrimitive(reader))
@@ -219,7 +240,7 @@ class ThreatFeedParser(private val batchSize: Int = DEFAULT_BATCH_SIZE) {
             }
         }
         reader.endObject()
-        return ThreatFeedRecord(sha256 = sha, md5 = md5, genericHash = genericHash, threatName = threat, firstSeenAt = firstSeen)
+        return ThreatFeedRecord(sha256 = sha, md5 = md5, genericHash = genericHash, threatName = threat, firstSeenAt = firstSeen, sha1 = sha1, fileSize = fileSize)
     }
 
     private suspend fun parseCsv(input: InputStream, sink: BatchSink) {
@@ -229,7 +250,7 @@ class ThreatFeedParser(private val batchSize: Int = DEFAULT_BATCH_SIZE) {
             val row = csv.readRecord() ?: break
             if (row.isEmpty() || row.all(String::isBlank) || row.firstOrNull()?.trim()?.startsWith("#") == true) continue
             val candidate = row.map(::normalizeField)
-            if (candidate.any { it in SHA256_KEYS || it in MD5_KEYS || it == "hash" || it in IOC_KEYS }) {
+            if (candidate.any { it in SHA256_KEYS || it in SHA1_KEYS || it in MD5_KEYS || it == "hash" || it in IOC_KEYS }) {
                 header = candidate
                 break
             }
@@ -246,6 +267,8 @@ class ThreatFeedParser(private val batchSize: Int = DEFAULT_BATCH_SIZE) {
             sink.add(ThreatFeedRecord(
                 sha256 = value(SHA256_KEYS),
                 md5 = value(MD5_KEYS),
+                sha1 = value(SHA1_KEYS),
+                fileSize = value(SIZE_KEYS)?.toLongOrNull(),
                 genericHash = value(setOf("hash")),
                 iocValue = value(IOC_KEYS),
                 iocType = value(IOC_TYPE_KEYS),
@@ -259,6 +282,8 @@ class ThreatFeedParser(private val batchSize: Int = DEFAULT_BATCH_SIZE) {
     private fun recordFromFields(fields: Map<String, String>) = ThreatFeedRecord(
         sha256 = fields.value(SHA256_KEYS),
         md5 = fields.value(MD5_KEYS),
+        sha1 = fields.value(SHA1_KEYS),
+        fileSize = fields.value(SIZE_KEYS)?.toLongOrNull(),
         genericHash = fields["hash"],
         iocValue = fields.value(IOC_KEYS),
         iocType = fields.value(IOC_TYPE_KEYS),
@@ -406,12 +431,14 @@ class ThreatFeedParser(private val batchSize: Int = DEFAULT_BATCH_SIZE) {
         private val JSON_ARRAY_KEYS = setOf("data", "results", "iocs", "indicators", "definitions", "items")
         private val SHA256_KEYS = setOf("sha256", "sha256hash", "hashsha256")
         private val MD5_KEYS = setOf("md5", "md5hash", "hashmd5")
+        private val SHA1_KEYS = setOf("sha1", "sha1hash", "hashsha1")
+        private val SIZE_KEYS = setOf("filesize", "sizebytes")
         private val IOC_KEYS = setOf("ioc", "iocvalue", "domain", "hostname", "fqdn", "ip", "ipaddress", "ipport", "url", "indicator")
         private val IOC_TYPE_KEYS = setOf("ioctype", "indicatortype", "type")
         private val THREAT_NAME_KEYS = setOf("malware", "malwareprintable", "malwarefamily", "threatname", "family", "signature", "threat")
         private val FIRST_SEEN_KEYS = setOf("firstseen", "firstseenat", "timestamp", "timestampfirstseen", "time", "timestamputc")
         private val LAST_SEEN_KEYS = setOf("lastseen", "lastseenat", "updated", "lastupdated", "timestampupdated")
-        private val HASH_OR_IOC_KEYS = SHA256_KEYS + MD5_KEYS + IOC_KEYS + setOf("hash")
+        private val HASH_OR_IOC_KEYS = SHA256_KEYS + SHA1_KEYS + MD5_KEYS + IOC_KEYS + setOf("hash")
         private val ACCEPTED_QUERY_STATUSES = setOf("ok", "success", "no_results", "not_found")
         private val PRIMITIVE_TOKENS = setOf(JsonToken.STRING, JsonToken.NUMBER, JsonToken.BOOLEAN, JsonToken.NULL)
     }

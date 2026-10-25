@@ -56,4 +56,15 @@ class ThreatFeedIndicatorValidatorTest {
         assertEquals("c".repeat(64), sha?.sha256Hash)
         assertEquals("d".repeat(32), md5?.md5Hash)
     }
+    @Test fun acceptsValidSha1AndExactFileSizeWithoutWeakeningValidation() {
+        val record = ThreatFeedIndicatorValidator.normalize(
+            ThreatFeedRecord(sha1 = "C".repeat(40), fileSize = 68L, threatName = "Unit test"),
+            "feed.example"
+        )
+        assertNotNull(record)
+        assertEquals("c".repeat(40), record?.sha1Hash)
+        assertEquals(68L, record?.fileSize)
+        assertNull(record?.sha256Hash)
+    }
+
 }

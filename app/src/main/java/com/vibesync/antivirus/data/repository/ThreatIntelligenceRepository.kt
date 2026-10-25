@@ -15,13 +15,15 @@ class ThreatIntelligenceRepository(
     private val malwareHashDao: MalwareHashDao,
     private val syncStateDao: ThreatFeedSyncStateDao
 ) {
-    suspend fun lookupHash(sha256: String?, md5: String?): MalwareHashEntity? = withContext(Dispatchers.IO) {
+    suspend fun lookupHash(sha256: String?, md5: String?, sha1: String? = null, fileSize: Long? = null): MalwareHashEntity? = withContext(Dispatchers.IO) {
         val sha = sha256?.trim()?.lowercase(Locale.ROOT)
         if (!sha.isNullOrBlank() && SHA256.matches(sha)) {
-            malwareHashDao.findBySha256(sha)?.let { return@withContext it }
+            malwareHashDao.findBySha256(sha, fileSize)?.let { return@withContext it }
         }
+        val sh1 = sha1?.trim()?.lowercase(Locale.ROOT)
+        if (!sh1.isNullOrBlank() && SHA1.matches(sh1)) malwareHashDao.findBySha1(sh1, fileSize)?.let { return@withContext it }
         val md = md5?.trim()?.lowercase(Locale.ROOT)
-        if (!md.isNullOrBlank() && MD5.matches(md)) malwareHashDao.findByMd5(md) else null
+        if (!md.isNullOrBlank() && MD5.matches(md)) malwareHashDao.findByMd5(md, fileSize) else null
     }
 
     suspend fun lookupSha256(sha256: String): MalwareHashEntity? = lookupHash(sha256, null)
@@ -79,5 +81,6 @@ class ThreatIntelligenceRepository(
     companion object {
         private val SHA256 = Regex("^[a-f0-9]{64}$")
         private val MD5 = Regex("^[a-f0-9]{32}$")
+        private val SHA1 = Regex("^[a-f0-9]{40}$")
     }
 }
