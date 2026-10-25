@@ -36,11 +36,19 @@ Core scanning runs locally. Network use is always **explicit, disclosed, and opt
 
 ---
 
-## 🔏 Phase A — Signed local hash database
+## 🔏 Threat-intelligence engines
 
-**Implemented but disabled by default.** The Phase A local hash engine supports MD5, SHA-1 and SHA-256, a Bloom pre-filter backed by exact indexed matching, detached Ed25519 verification, and monotonic database version checks. An EICAR-only development marker is not real-world malware protection. No trusted production Ed25519 public key or independently reviewed, redistributable malware-signature database is bundled, so **this engine does not provide active malware-signature detection until the owner provisions and imports a valid signed database**.
+### (a) Existing JSON/CSV feed importer — available, unsigned
 
-To enable the feature safely, the owner must generate and protect an Ed25519 signing keypair, configure the corresponding trusted public key for the intended release, obtain a dataset with confirmed redistribution rights and provenance, convert it to one of the supported hash-bundle formats (including `.hsb`), sign its exact bytes, and import the bundle via Android's Storage Access Framework. Never commit the private key or imply protection before provisioning. The optional network updater does not upload files, hashes, scan results or telemetry. See [signed database format and trust boundaries](docs/HASH_DATABASE_SIGNING.md) and [detection coverage](docs/DETECTION_COVERAGE.md).
+The existing user-configured HTTPS JSON/CSV threat-feed importer is implemented and available in the network-enabled flavor. It has **no default provider or automatic malware dataset**: a user must explicitly configure a trusted source and enable synchronization. Imported indicators are stored and matched locally; the scanner does not upload scanned files, their hashes, or scan results. The feed content is **not authenticated by a detached Ed25519 signature**. HTTPS transport and optional credentials alone do not establish publisher authenticity or malware-detection efficacy.
+
+### (b) Phase A Ed25519-signed hash database — merged but inert
+
+Phase A is **MERGED BUT DISABLED / INERT pending provisioning**. Its code supports MD5, SHA-1 and SHA-256, a Bloom pre-filter followed by exact indexed matches, detached Ed25519 verification, and monotonic signed-database version checks. No trusted signing public key or independently reviewed, redistributable production malware-hash database is bundled; the existing EICAR-only development marker is not real-world malware protection. **Phase A detects no production malware until the owner provisions a trusted key and imports a correctly signed database.**
+
+To provision Phase A, the owner must generate and safeguard an Ed25519 keypair, configure the corresponding trusted public key in the release, obtain a redistributable malware-hash dataset with verified provenance and licence, convert it to a supported format such as `.hsb`, sign the exact database bytes, and import the signed bundle through Android's Storage Access Framework. Never commit the private key. See [signed database format and trust boundaries](docs/HASH_DATABASE_SIGNING.md) and [detection coverage](docs/DETECTION_COVERAGE.md).
+
+The Phase B YARA runtime and Phase D ML/TFLite model remain **DISABLED**: no approved YARA Android runtime/rules or validated trained model is bundled. No detection-efficacy metrics are claimed; see [metrics](docs/METRICS.md) on `main`.
 
 ---
 
@@ -116,7 +124,7 @@ To enable the feature safely, the owner must generate and protect an Ed25519 sig
 | ☕ JDK | 17 |
 | 🧱 Build System | Gradle Kotlin DSL |
 | 🏷️ Version Name | `1.0.2` |
-| 🔢 Version Code | `20261022` (hardening branch) |
+| 🔢 Version Code | `20261022` (candidate; confirm unused in Play Console) |
 
 ---
 
@@ -137,9 +145,9 @@ To enable the feature safely, the owner must generate and protect an Ed25519 sig
 
 ---
 
-## 🧭 Screens (Hardening Branch)
+## 🧭 Security screens and merge status
 
-The hardening branch adds security-focused screens for review and audit:
+The original Phase 4 hardening branch still exists, but its compliance foundation is already merged into `main`. Phase A (signed hash database, inert), Phase B (YARA disabled), Phase C (bounded local static risk analysis), and Phase D (ML disabled) have also been merged. **Phase E (capability UI, PR #12) and Phase F (provenance-gated metrics, PR #13) are still open and are not yet merged.** The security-focused screens include:
 
 - 🛡️ **Security review dashboard**
 - 🧾 **Findings detail & audit trail**
@@ -150,13 +158,19 @@ The hardening branch adds security-focused screens for review and audit:
 
 ---
 
+## 🌍 Localization status
+
+**22 language resource sets are bundled**: English, Arabic, German, Spanish, French, Hindi, Japanese, Portuguese, Russian, Simplified Chinese, Korean, Turkish, Indonesian, Vietnamese, Italian, Kannada, Tamil, Telugu, Bengali, Marathi, Urdu and Hebrew. The in-app selector also offers System default. These are first-pass translations: resource-key and format-placeholder checks do not establish translation quality or device compatibility. **The number of languages confirmed to have passed both native-speaker review and on-device testing is not documented or independently verified**; do not treat all 22 as production-validated. Security/privacy copy, RTL layouts and text overflow still require review.
+
+---
+
 ## ⚠️ Known Limitations
 
 - 🚫 **Not a certified antivirus product** — results are heuristic risk indicators.
 - 🧱 **No system-level scanning** — no kernel drivers or privileged access.
 - ☁️ **No cloud-scale malware database** — detection is local-only.
 - 🔬 **No independent security audit** — verification is limited to local testing.
-- 🌍 **Partial localization** — only bundled locales are complete.
+- 🌍 **Unverified localization quality** — 22 language resources are bundled, but native-speaker and on-device validation remain unconfirmed.
 - 🧪 **Optional features unverified** — model/YARA/signature artifacts must be checked before assuming presence.
 
 ---
@@ -184,7 +198,7 @@ Contributions and bug reports are welcome via the [Issues page](https://github.c
 
 ## 📄 License & Third-Party Components
 
-Third-party libraries are used under their respective licenses. Review the [`LICENSE`](LICENSE) file and dependency licenses before redistribution.
+The verified root [`LICENSE`](LICENSE) contains the **Apache License, Version 2.0 (Apache-2.0)** and a Navyask911 copyright notice. The repository also contains [`NOTICE`](NOTICE) and [`docs/THIRD_PARTY_LICENSES.md`](docs/THIRD_PARTY_LICENSES.md), which record third-party provenance and detection-engine licensing decisions. The CycloneDX SBOM and generated [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) track resolved dependencies; upstream licences, notices, and redistribution obligations must still be reviewed before commercial distribution.
 
 ---
 
