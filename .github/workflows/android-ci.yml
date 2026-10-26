@@ -211,27 +211,10 @@ jobs:
           ram-size: ${{ matrix.api-level >= 34 && '3072M' || '4096M' }}
           heap-size: ${{ matrix.api-level >= 34 && '384M' || '512M' }}
           cores: ${{ matrix.api-level >= 34 && 2 || 4 }}
-          # Keep the tested wrapper: readiness checks, bounded retries, diagnostics and
-          # connectedOfflineDebugAndroidTest. A bare connectedDebugAndroidTest would
-          # bypass those protections and target the wrong product flavor.
-          script: |
-            cleanup_crashpad() {
-              (
-                sleep 30
-                # Use -f: Linux process names are limited to 15 chars, whereas
-                # "crashpad_handler" is longer; -x may miss the actual process.
-                # The bound prevents exit cleanup from hanging indefinitely.
-                for attempt in 1 2 3 4 5 6; do
-                  if ! pgrep -f '[/]crashpad_handler([[:space:]]|$)' >/dev/null 2>&1; then
-                    break
-                  fi
-                  pkill -9 -f '[/]crashpad_handler([[:space:]]|$)' || true
-                  sleep 5
-                done
-              ) || true
-            }
-            trap cleanup_crashpad EXIT
-            bash scripts/run_instrumented_tests.sh
+          # android-emulator-runner passes script to /usr/bin/sh -c, which expects
+          # a single command; the Bash wrapper installs the Crashpad EXIT trap.
+          # Keep its readiness checks, diagnostics and connectedOfflineDebugAndroidTest.
+          script: bash scripts/run_instrumented_tests.sh
       # The action can fail during emulator startup before 'script' ever runs.
       # This unconditional cleanup complements the EXIT trap above.
       - name: Clean up orphaned Crashpad processes
