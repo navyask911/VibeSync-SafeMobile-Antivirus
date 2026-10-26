@@ -1,10 +1,10 @@
 {
   "bomFormat" : "CycloneDX",
   "specVersion" : "1.6",
-  "serialNumber" : "urn:uuid:1b6215e7-4e88-4983-bf3f-902ba6758f02",
+  "serialNumber" : "urn:uuid:dc5afe6d-b679-4400-96e5-617722f3846b",
   "version" : 1,
   "metadata" : {
-    "timestamp" : "2026-10-25T07:19:11Z",
+    "timestamp" : "2026-10-26T19:34:57Z",
     "tools" : {
       "components" : [
         {
@@ -26,7 +26,7 @@
       "externalReferences" : [
         {
           "type" : "build-system",
-          "url" : "https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/actions/runs/40172237629"
+          "url" : "https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/actions/runs/40387865810"
         },
         {
           "type" : "vcs",
@@ -309,6 +309,70 @@
     },
     {
       "type" : "library",
+      "bom-ref" : "pkg:maven/androidx.annotation/annotation-jvm@1.10.0?type=jar",
+      "publisher" : "The Android Open Source Project",
+      "group" : "androidx.annotation",
+      "name" : "annotation-jvm",
+      "version" : "1.10.0",
+      "description" : "Provides source annotations for tooling and readability.",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "115b24fa6dc2fbca9edd40aadb0ce03e"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "388cfaa79001d0f024d28f6a13d5a3dfc2f0e18f"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "ddd072ddbb553178e205517ce777b2f05aa9e412982d9ecb4eedc74f1212f697"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "07c3d87a7643270cf9279ad0c9526947b5e8ab8f92360c2d5441645de4a004b73420b7e223ce4c226fcc8a1377d357d6fc45f10f285b21742b417e0d60f20798"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "6491d7b6bfa4e3d3e57ed759f834eba34b12036f72e5d3d4d7cae09a693c8850"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "458cbbdea13770f96f71cfd792eb762d326886e2f32a491ab99aa8de62b4bc78c8537f27f4ebd15767ce94a54217628c8418b272685814d74a56dc018f80b501"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "7840b78037fe48dd0d6ea64144a681597e37461bffab7147f5a6a9a5aeeba49922cba52879388a9a2c98c1d08584b16e"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "ec84375e2c62aeee50baa912a8ba705766a136f8e51069705e0523c2dbb5662396fa218d8db3e7f18d3d180d957887a3"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/androidx.annotation/annotation-jvm@1.10.0?type=jar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://cs.android.com/androidx/platform/frameworks/support"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
       "bom-ref" : "pkg:maven/androidx.annotation/annotation-jvm@1.8.2?type=jar",
       "publisher" : "The Android Open Source Project",
       "group" : "androidx.annotation",
@@ -421,6 +485,36 @@
         }
       ],
       "purl" : "pkg:maven/androidx.annotation/annotation-jvm@1.9.1?type=jar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://cs.android.com/androidx/platform/frameworks/support"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
+      "publisher" : "The Android Open Source Project",
+      "group" : "androidx.annotation",
+      "name" : "annotation",
+      "version" : "1.10.0",
+      "description" : "Provides source annotations for tooling and readability.",
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
       "modified" : false,
       "externalReferences" : [
         {
@@ -690,44 +784,44 @@
     },
     {
       "type" : "library",
-      "bom-ref" : "pkg:maven/androidx.collection/collection-jvm@1.5.0?type=jar",
+      "bom-ref" : "pkg:maven/androidx.collection/collection-jvm@1.6.0?type=jar",
       "publisher" : "The Android Open Source Project",
       "group" : "androidx.collection",
       "name" : "collection-jvm",
-      "version" : "1.5.0",
+      "version" : "1.6.0",
       "description" : "Standalone efficient collections.",
       "hashes" : [
         {
           "alg" : "MD5",
-          "content" : "4421442c114a4f8c8fe587cf2d668237"
+          "content" : "5c83ba2e87588689550f1b1526ec0c73"
         },
         {
           "alg" : "SHA-1",
-          "content" : "7ba2c69414d46ebc2dd76598bdd0a75c54281a57"
+          "content" : "f53ad8c314e5fb7acad45fab5ee00ee3e8c5ca07"
         },
         {
           "alg" : "SHA-256",
-          "content" : "70b35924e4babcdffa37d0e575ee039c56a2d97123342624c48b603233704341"
+          "content" : "839fcec147704611a222159fa84e3e062f68eee80caa549ddd1222d5210a13df"
         },
         {
           "alg" : "SHA-512",
-          "content" : "f880e01f84c789dcf00b01a485f4f7035a146626423975414a6d39396b08d181db20c0113efb22749beafcf54981febcb0532962acb9d57481d4fae5b66e14ce"
+          "content" : "61578fe2c717f832ccaac713fad0f99690ff5766580b18f1d39a4f1a5b349c99a513c99caa775c82f60a9a7aeec1eb9cc23dc2127d01eae3afe49eb4053a0679"
         },
         {
           "alg" : "SHA3-256",
-          "content" : "cd9978c6af6299e7076a58cd452483fd56515e14dfb930b3f6f9bfc26cd9d9dd"
+          "content" : "d8726586b69973db9d97d6c4abf8aad1c092e029463b6ebdce64b666a2f51c98"
         },
         {
           "alg" : "SHA3-512",
-          "content" : "788b92fd38debbe0a87672f5c090aab8a335f8ee24198ada8fe3b05421e54ec9cbff6561f70faf8c6af01aec58ec07aa19e16a399c44ce64e0f3bbe3cb1e3160"
+          "content" : "5534180b526ca016221d018ca213148f54bb1083a171b5d4f41e4a1af882342d26b72da10d28eeadb18b676c7b9f3cbbd73e22931870e4c789186920bd6b503a"
         },
         {
           "alg" : "SHA-384",
-          "content" : "7b617fa3a623f1e6c56555e2bdf4570adf1251b175e4779c41e24183d9a5c0a96eb0d0760c793110122596724cc2b625"
+          "content" : "9cd106fe8ba21e19ce789052a5d76961ccfe8ab2eb9f3de378ee12fb1a35cfe1ba68fa4ef2ce65e4d7ba114e953daf08"
         },
         {
           "alg" : "SHA3-384",
-          "content" : "fe8a718e0a7f720104152e1a8e9533e603ebe027373cec213f55505a6e719cd0c687254e3a3b413a009f48d39ef576de"
+          "content" : "0fc86680c8fb0f6edcd01db1ba4f45280021b422ae70c3f9fdc36d08af979951d12580037c94087bdc9fdb9326f9f77e"
         }
       ],
       "licenses" : [
@@ -737,7 +831,7 @@
           }
         }
       ],
-      "purl" : "pkg:maven/androidx.collection/collection-jvm@1.5.0?type=jar",
+      "purl" : "pkg:maven/androidx.collection/collection-jvm@1.6.0?type=jar",
       "modified" : false,
       "externalReferences" : [
         {
@@ -802,6 +896,70 @@
         }
       ],
       "purl" : "pkg:maven/androidx.collection/collection-ktx@1.5.0?type=jar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://cs.android.com/androidx/platform/frameworks/support"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/androidx.collection/collection-ktx@1.6.0?type=jar",
+      "publisher" : "The Android Open Source Project",
+      "group" : "androidx.collection",
+      "name" : "collection-ktx",
+      "version" : "1.6.0",
+      "description" : "Kotlin extensions for 'collection' artifact",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "12c900a57c62212dc2b8c39352716a2f"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "27c78a926a16a1bf792b2285cf2834e8caae4a07"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "939b4a8697640e77d83e4e8b4c4a9d18f8130198c5961194af8dd9db9dc7c353"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "51acf28f24d8e00ee31a746f2da0977aeee8b8942e18ff2d7ebd6c59c4ff78072165879b165452c9e5f6b62ce649229bb10bf91b34f9cf9fd865638054ae2e60"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "b1ba0cad01f8e473d6e36c9dab4621ea348f64ba2ef5ab3d6457bb8e871a5431"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "815d6560b5737fe2aac023046b5e4024297c58d141d269c3ce59e45b1dd6b58ee46491e36a811ece224ce09971a45365cb11f71b44552affcc5e28eeebbe97b7"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "4e761f1accd7245c9ce2dc8968e4d6549933a798d748dca523fe1eb60acb2f1ad21c963cc3326f455ded8e600d6a181a"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "6d1e286b005ce6fc86199d50fb95406ea095c7358451517084b5666003f75a44bcfccc7e68e14be720daecbf479eb513"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/androidx.collection/collection-ktx@1.6.0?type=jar",
       "modified" : false,
       "externalReferences" : [
         {
@@ -930,6 +1088,36 @@
         }
       ],
       "purl" : "pkg:maven/androidx.collection/collection@1.5.0?type=jar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://cs.android.com/androidx/platform/frameworks/support"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
+      "publisher" : "The Android Open Source Project",
+      "group" : "androidx.collection",
+      "name" : "collection",
+      "version" : "1.6.0",
+      "description" : "Standalone efficient collections.",
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
       "modified" : false,
       "externalReferences" : [
         {
@@ -3860,6 +4048,775 @@
         {
           "type" : "vcs",
           "url" : "http://source.android.com"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/androidx.datastore/datastore-android@1.3.0?type=aar",
+      "publisher" : "The Android Open Source Project",
+      "group" : "androidx.datastore",
+      "name" : "datastore-android",
+      "version" : "1.3.0",
+      "description" : "Android DataStore - contains the underlying store used by each serialization method along with components that require an Android dependency",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "4dd54e5207c85259d57d4648ecc41aa9"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "785cf6340398b246611b1309d920e8daad8df018"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "c187fea8ed248eb25f43c71af323e6108db1d3c35945120983954f77e7769eb9"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "46a8787c75b4574864457b1f91baa878a96d4a0b7073208f35afb35a625b3e64b5fe9b75ee10be5d228709a093ac22bf5c50d88f5aebd92aa2880dd709daacc9"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "032c5087ed7682cb26d68dbbcd7d3d64a3fb5f95f69d941995a2ef58d62ce8f8"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "9a0c8c887abe39e4aa37b9ee4c2c9c9a82eb3f582a53798e94ebd71c06409729ab968043360dbb3d7c466c053b69877b99051f62abbdf1b152d3d599adbbc2dd"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "a842c05bfd6c4a08db0508168fd2d9c1922ad4332f32f944c721e6ad4b77f1c3fcc3cebb369967b27c89195a6256215e"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "e909a5f5247406c5b7ee22015ec5506837f96a78b02fc1d06e02c736e162e04e3bf96997cb14388966c501d8189db56a"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/androidx.datastore/datastore-android@1.3.0?type=aar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://cs.android.com/androidx/platform/frameworks/support"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/androidx.datastore/datastore-core-android@1.3.0?type=aar",
+      "publisher" : "The Android Open Source Project",
+      "group" : "androidx.datastore",
+      "name" : "datastore-core-android",
+      "version" : "1.3.0",
+      "description" : "Android DataStore Core - contains the underlying store used by each serialization method",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "eff2c01a446b2928f1b474d6a810451b"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "7f918fc5cc4ce7a96dd7d789e6eeeb282adb89b4"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "b518fe03fbc8cdd1bfaddc1c0ab8a28ba7570c42462ac0a8c6caed7a389cc875"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "a40c3f75a4e1eb14944d398c67939d62ce3b93339d7f10835087159bed0ecad41fff57da04dc2a6d9eded9f3658e553e2d8f35fb483995d72b7cf09bcf4d2e56"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "1ab65958ec9fc6aaabccc1c5d67668df283eeff5438c771a64509b09da61003f"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "9bfafbba21b94659b8fe0ce68a3d50deacb7dd44ad4be39361611b351b869187f291a6bd4d09a07a30e45ed24c4b6494b7b3f3e10d76211f0d67823d1db46a45"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "c2a64e0965f623aacecadb9c4f75c86ef6c49840831bc6fa3a79a770a1a3f2548e0cd56327b5eed996f74c0874c73a4f"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "da0d8431284bfa8de71f779463f0db31fc1bff07258a3a0553f4f755beda6c36d1cf8cee16827332504d8dae637d0e7f"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/androidx.datastore/datastore-core-android@1.3.0?type=aar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://cs.android.com/androidx/platform/frameworks/support"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/androidx.datastore/datastore-core-okio-jvm@1.3.0?type=jar",
+      "publisher" : "The Android Open Source Project",
+      "group" : "androidx.datastore",
+      "name" : "datastore-core-okio-jvm",
+      "version" : "1.3.0",
+      "description" : "Android DataStore Core Okio- contains APIs to use datastore-core in multiplatform via okio",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "7ae9192b018e4f67efce0d175df23d12"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "f2c7ec19197dea75968ccb3c090eab7573c7f9db"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "54cbdc3e6d477078a2f1dba43b6328870dfee23cc356da5aa1b2271151cc29a4"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "1ddaad186274fb699a63bf9c02975323ba18b1c46f7302cf286d863baf71f480c993ebdc09d9712c2d1aa30929edd4091c13ba9a44593359b473a7e60a9d04a9"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "2235b9cc767660ba761b4a3a761df3feaed82ce48cb7db37e89817228fd3649e"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "eb5b9fd71e99cf1b7fceff6da1f6c684cd98c4b641d464c9fdf04e30ae1910267515daf8f120f46195611f248b27dfe7b1a5ae663b221f9e020b4714ce46cd9e"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "73d8a762749f05e346d915574e074f501988c58bb0c30a739cafe5e530daa70feda7aa7b522fbd838a8fca06d095d17c"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "54b65b777e4f1af1abe97d86f4afe4c73ae2e0ef5cb13d3573fe511467da6f12c32fad80de649df813cddf3900cccb31"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/androidx.datastore/datastore-core-okio-jvm@1.3.0?type=jar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://cs.android.com/androidx/platform/frameworks/support"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/androidx.datastore/datastore-core-okio@1.3.0?type=jar",
+      "publisher" : "The Android Open Source Project",
+      "group" : "androidx.datastore",
+      "name" : "datastore-core-okio",
+      "version" : "1.3.0",
+      "description" : "Android DataStore Core Okio- contains APIs to use datastore-core in multiplatform via okio",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "44728cd0f467f742f30d40cebe5b58e7"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "558830703d91cf44770dcd6f82c132758a55ce8d"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "31a6f4f098db6b7a989124f210825ca4b61ceb1c3eb184be1b00d44c90eb1457"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "050bd592ab205edb29a41b7e978a64bf90c18b35190eac48daa54b8777c9d296386510ee74c6b8adef7d89d59562b54f1655eb4ab9d5ae924c24f88690e31605"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "67d98040b2409740f4d61b431fcef452c9c31175a99068dbedd2dd02384c709c"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "595ced3be7a129b7227aef89a01f6b62ac934181ebfa6b63b8beed412d1931b7c2dd0173d62a84cb98bd8d439153343b5354eabcec16a4314237cac4b801bb2f"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "c43b1defed9dcc4b1d45cfff0b3565b7f5e9611a94726dda05c32a147d3eb4d512ad1c8317773ca54c775c2aefe61ac6"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "914d3b0d1fb66b8ca1d63046039c7b72a276110252dfa6a73f2f5d9b43497da9432e450729354cd12689483258d9ba34"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/androidx.datastore/datastore-core-okio@1.3.0?type=jar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://cs.android.com/androidx/platform/frameworks/support"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/androidx.datastore/datastore-core@1.3.0?type=jar",
+      "publisher" : "The Android Open Source Project",
+      "group" : "androidx.datastore",
+      "name" : "datastore-core",
+      "version" : "1.3.0",
+      "description" : "Android DataStore Core - contains the underlying store used by each serialization method",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "eecef324722ef15bca9bb6a33640d6d9"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "563d0319ce28a64cf9bb2e0675337b89558f9ab2"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "2334aafff90a100f19a7e4fd9833cbf0156e8e17ccf3463ea16226bfac283ab4"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "55844fb245b45828f6aaa6fdca280b8f10bb7530ab2993afbbf9ed5d62972ad981a9f117488cd7a9d3dfff1fb7378934945bf59ce217ce7e56fb4ce74edbb92e"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "4615a92225d9a694eb91a356eeb49422d599e50867fa46f1acbdf9f40fa9f61f"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "338f710535a2db966ffc1519ee1126c4a349aca0d82aea561292b99bdffaf494497c04a278f97e8287339a0e5215dc64ca408e76cc44a98a8a4730a5f2d9e885"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "bd1907625db61fa049d6f9fbe4ba24a0551cf93a4faafbfce52c126d96b2899e3b654073fa60c69c636d4afbf9d74f70"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "3a7559a0e34037e644aa6af231c69ad40e66346830cff016b8e72626d563b7529cfacacd63b390eee65d9edefa40e935"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/androidx.datastore/datastore-core@1.3.0?type=jar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://cs.android.com/androidx/platform/frameworks/support"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/androidx.datastore/datastore-preferences-android@1.3.0?type=aar",
+      "publisher" : "The Android Open Source Project",
+      "group" : "androidx.datastore",
+      "name" : "datastore-preferences-android",
+      "version" : "1.3.0",
+      "description" : "Android Preferences DataStore",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "90188344212898be3f21892a54232275"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "edf8ea2c35357c70c549f78067d73bbf735fab8d"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "1a6b2952271e6f87262338eb530561d5f4b47ef4bd9aadd2793b3beae10c69b5"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "52513c8267acf6b45f2eb150d5daba41b8d0f1fe14c2f9e66aeea933103a6fbcaf7a29b5e3cb91dd25dfffcbd4be2818a8bdbf4b86ae7225b9bc4eff96ede1d0"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "d459efdbbe1fa9555b6d8b5e168df10cc30a1dafa76043699f8095867f830e85"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "d0dadfd4f54272c488e2f8b42c1fe2ce637a252a3a4e9bd624b96a5d765906a96eca1d079c325dc94a01699139146008bfb425b7e0c956a6b266c46d3b74a896"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "a71f15feab7f05d8de56613062dd8576c0c8bb6f03bbcae3a0533cfdd703772c708fd5bdc130f5f05b3f987750e8c4f5"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "3574137aa40d36425728131c1bf6323d2f1a0db2e72e4e2dc3c7b938a294be723adffa7d59011f6193627522cb876c78"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/androidx.datastore/datastore-preferences-android@1.3.0?type=aar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://cs.android.com/androidx/platform/frameworks/support"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/androidx.datastore/datastore-preferences-core-android@1.3.0?type=aar",
+      "publisher" : "The Android Open Source Project",
+      "group" : "androidx.datastore",
+      "name" : "datastore-preferences-core-android",
+      "version" : "1.3.0",
+      "description" : "Android Preferences DataStore without the Android Dependencies",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "1aa56f8f744e44bf61d904e93b7ee55e"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "50e334e2fea99dc8ba7f2fa3e374a4628d7653fb"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "45f9b2b89e8122c347e53ed1cfd6f30850777521f078d707d5b06ffa5337876a"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "89a9ebc486ec0610ffab30f99ca74e2db9f9745967f675de9980e0fbe209a19b87c43c17349efb33237d29e10b75113bf3cb72a1c9cb726375426cb132f69f12"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "33bfdfa9f26ccbff4a20b93c6cf96cd98a1af63781d7fe3f3e4d4c1927bb00ba"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "71f8d99bd2c146055e8bfce795573b25ced0b04f6736d544575314bf54b9f747de0d0285c6306bc7994b25ff9e3b37589159272891b68d4a740723523cf5408d"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "16c687ea1590b85303a882148b8531a1a957d0198b62ea03098274ad4081f0f10b1e3f29bdad6c1725ee8090982c2fa1"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "a96f61fa692e78b6a088c7171d923d8f179d64f4ef78c10e0f79dfd47db9f81722aa7f7e199b0e38484aa5e88fe61448"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/androidx.datastore/datastore-preferences-core-android@1.3.0?type=aar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://cs.android.com/androidx/platform/frameworks/support"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/androidx.datastore/datastore-preferences-core@1.3.0?type=jar",
+      "publisher" : "The Android Open Source Project",
+      "group" : "androidx.datastore",
+      "name" : "datastore-preferences-core",
+      "version" : "1.3.0",
+      "description" : "Android Preferences DataStore without the Android Dependencies",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "661515c4782d180c8c4ca78d1bb87c86"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "4797533902805d1bad1bf950659372bf16025d5f"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "86535b12b014baabaabd515b57ef0867804b2b682607e3a5197cfb91ef2581a4"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "8c36759702fcd2b279881b316a546f51f747e45081164fbfe67875d9c93acb08cf404c9765fbcb97dece9bc14eeff1d2b41247f204e4c360dcbdbb33eb3c5872"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "8279187af64078fc43a41294fd96f7ca106a9833b0f64e12bc47005a1c35f1ba"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "b2d83887a3943faf87b5e1939c51a9eb62eb0309fb39522d449078b51b89e51b708b7f241cee92d396861448c3aa6987c7b472041d056c40711e45369f4ff801"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "f1e13ada828942697d66ae44c634f77ae5447dea1480ceb0ba313e48e84eacf83423f6dfa8081a46c0d2d01b27b5bde7"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "e85a4931bbe4c70d43296a644a633543586b7b2def23c79b1907e9184c71584f9541e306ba058648cf34990eb8ef688f"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/androidx.datastore/datastore-preferences-core@1.3.0?type=jar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://cs.android.com/androidx/platform/frameworks/support"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/androidx.datastore/datastore-preferences-external-protobuf@1.3.0?type=jar",
+      "publisher" : "The Android Open Source Project",
+      "group" : "androidx.datastore",
+      "name" : "datastore-preferences-external-protobuf",
+      "version" : "1.3.0",
+      "description" : "Repackaged proto-lite dependency for use by datastore preferences",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "df5b436ae8de2c7aa20de53adf6b46f9"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "cefa47d9ef6f877ed6805edd0f6aac8a7df3380e"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "59226809f449e3409058da98df384a18d24316443e4a1d657e63771b5fd87e36"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "4c05695bc883236c153750783678766edf03bc27d4dda448421736db827773737883b3961a7728e69779e486d9d7a25d5f133aba33374c2f83f58f3cbe828b2a"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "80408e1430f7ce353373ae119d7edb09a3e110400a07d55da1fdb3603326846c"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "fee6418453cd93c047c909867dd171dbebf5bf3ad16e5b40ca6a9239d437b6b43550037827abf1024ceedb3231dc2fa513bb79a7552039ec1b81f1b516389259"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "6ea928c96dc3b31a7fdc57615c0bd296a58a84c6ce34641f032b2cbf47e88329d2a2dfc34bea57a610ad7c7d62baacfd"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "f3ff88c54820ce17691b023151537dea97a1e3681fb742f43f0af31777d2fcb39247010786213d76b2d5040d34d07898"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "BSD-3-Clause",
+            "url" : "https://opensource.org/licenses/BSD-3-Clause"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/androidx.datastore/datastore-preferences-external-protobuf@1.3.0?type=jar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://cs.android.com/androidx/platform/frameworks/support"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/androidx.datastore/datastore-preferences-proto@1.3.0?type=jar",
+      "publisher" : "The Android Open Source Project",
+      "group" : "androidx.datastore",
+      "name" : "datastore-preferences-proto",
+      "version" : "1.3.0",
+      "description" : "Jarjar the generated proto for use by datastore-preferences.",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "768c538d43368dcede12e97b5e910b2f"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "1866e2980256742c45074b90095a7c6cb22e3285"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "dcc7a13558f43a9742aefcf2ece90b44f12c0f6c873d19f0b64460198e2d4eed"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "17d0909e2e23675a86febb9db4084f747b67d97ef2b4ed66584f0a109a4f386ee5825496544719eda7c7ceb431ca68e19655bbaf84252af35e5595726cc0e93e"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "725d73a2b7cc667c00a6b4060230f8ad842608c3b9e5ed24e309b9da58bc2a39"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "37163f7f078547f951cce41149e8195465e50b9707ae7c75a92c0bc3df401b473a51a1f7fae2df78b7f3c1afcbe3f99939db5e7e8d19d79c715f5d1b35e7322e"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "b670ef4c09d248a52143217538a12f2d8928a762f6ea95c970d1bbe6415a1daa513e161adccd34a8de5388c22364103d"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "6d370fe84b0aa3a626535d5922eb56951a73654b78dcd7fccae0bca579be79f7164df9cbe014679479b70f58d00e91c5"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/androidx.datastore/datastore-preferences-proto@1.3.0?type=jar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://cs.android.com/androidx/platform/frameworks/support"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/androidx.datastore/datastore-preferences@1.3.0?type=jar",
+      "publisher" : "The Android Open Source Project",
+      "group" : "androidx.datastore",
+      "name" : "datastore-preferences",
+      "version" : "1.3.0",
+      "description" : "Android Preferences DataStore",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "14eb4cd0aa35fc920935d84e0cc7a942"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "90c76be418a0079bc0af1e9a75fb844cf5a30fdc"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "1c0148c8609495da67ed9f811488cc566b1623a0864dab64d88e4365eabe4aca"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "61e8b8b0ca83dddcc935920faf48065fbc082a404fa96443e1940422f49a2d1dc0593d3947c42568bb760bac76634afa9753302663ca53f8bc0054c94e5e59d6"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "083d1188762696dcd921f8305fe437990d1426e94b4e6ff49e8171ddaf0de526"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "15f2dade3fd677809bca72ffe706e6df8f67758e44cd8a9fd78c39220fab7f20f331f357408f7afe7876cf349687f84e784fadde11bbd12daf0ddb82aa80305c"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "f0b97f2224f1455e57ce6aac29442a90b38d24af5ac7253dcad40298fded4612bd20798878d6082fa448a061be7ec3d4"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "f568840d259cb7d20748f0a1792a0137836c705646941a522ad27b8370088598f269a5e5b142c3d303839145f7553ac0"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/androidx.datastore/datastore-preferences@1.3.0?type=jar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://cs.android.com/androidx/platform/frameworks/support"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/androidx.datastore/datastore@1.3.0?type=jar",
+      "publisher" : "The Android Open Source Project",
+      "group" : "androidx.datastore",
+      "name" : "datastore",
+      "version" : "1.3.0",
+      "description" : "Android DataStore - contains the underlying store used by each serialization method along with components that require an Android dependency",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "7c6bb8a55c62f55c82a160fa9d6fdc7b"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "0c1d3e97c1f3a0e4780ed3d3c7039c9c83b3d6b0"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "2fa6a80eafb5fddb1422ee2ba858625be66dfb46fdc4d5eb509e6170d474e713"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "19f2120f88e3afaf3e43971af93926c8f95caa1aa9fbeb8a23f303a808e8e749ea2bcb0fdc552035de82e6e69c27974b86953d9fed79371b2e3af171e4249020"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "28732e588dc72ca72415c2fbb8e2c385dc9c8fd81aba413e78b8d9e6227fe87a"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "78b98dd4a00ca9f6b596d3324534cd30b5ea644cad45b77b065398c6dab64eda627052ae5d385c8957235e1b22e2d020ddf4bb6033b0c2e3b1651b8401123b63"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "a07de2fd8e00da575f6e0f7c47cece4e8b343bf11f77d8bfaf2de531bab2b605ad801436374e88021bbac175f1c13871"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "d31f73131ba8fe181a16d09a513929eceec8c7f181e60aadefdc9f62c773b1e06baeda8d1f5858f276b855f197f742f8"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/androidx.datastore/datastore@1.3.0?type=jar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://cs.android.com/androidx/platform/frameworks/support"
         }
       ],
       "properties" : [
@@ -7351,43 +8308,44 @@
     },
     {
       "type" : "library",
-      "bom-ref" : "pkg:maven/androidx.tracing/tracing-ktx@1.2.0?type=aar",
+      "bom-ref" : "pkg:maven/androidx.tracing/tracing-android@2.0.1?type=aar",
+      "publisher" : "The Android Open Source Project",
       "group" : "androidx.tracing",
-      "name" : "tracing-ktx",
-      "version" : "1.2.0",
+      "name" : "tracing-android",
+      "version" : "2.0.1",
       "description" : "Android Tracing",
       "hashes" : [
         {
           "alg" : "MD5",
-          "content" : "bc151d5f17c6f82d780b00abe830e3cc"
+          "content" : "0fda5833e265ba908fdb44a142fd8aa2"
         },
         {
           "alg" : "SHA-1",
-          "content" : "f151f88aed5054c9db05c90acb6b09728d3b1d81"
+          "content" : "89f756acf67ecd1baba74fa1ba6bc9ad9cf7a634"
         },
         {
           "alg" : "SHA-256",
-          "content" : "c33f9cbd931e6190ca38aa09bf8a7a8a19391d4b0fb7a7605a6b59f2d42580d1"
+          "content" : "d094408d356e5d2556db33362eae90c4fe0f22856c72982dd5f744634fdeb18c"
         },
         {
           "alg" : "SHA-512",
-          "content" : "01bae232aa80fe5b80eec707967d0b506b877eec2c547cd6d72d5cf551b7032925ae143323980ec460379d509956f2700aaa33fdd47cd575e49cbe623b927979"
+          "content" : "88b70ab864104b3da86c67e38df598ac1c1bf9d434baa8bac22b24e56b42ba36e4745cb119c3eb81008c6e36e42209af8cd9dc2a25e5d05284d2f87cab577265"
         },
         {
           "alg" : "SHA3-256",
-          "content" : "729202b43f54c9994d0b938e671e9da3da4574a1dcc7cfc883bf582e74e96cb0"
+          "content" : "7ae1566977c328eeef5e71fa6f123e94236abfebb69d0c74d3b01b27ba1ae9fb"
         },
         {
           "alg" : "SHA3-512",
-          "content" : "ae406a2b5043e3526e79b1706afddfaf2061d310cfb55d5639456a3b36b022289d3dfc89509768cecbeea4a6354bffe69b186317492631b8cea20d18d266252e"
+          "content" : "5736bfbe8b79286ff29559f3ceea3ab3e746e5166ae2bd6dac4a7e90f1d8ffee1e7dddca3b8a1778986743b85f4d00262eeccdf839b98cb0d8351b2194773c5c"
         },
         {
           "alg" : "SHA-384",
-          "content" : "11b08f9d7ff3ff633f781dbacc6b351315b94361c14d25ad212f41637e4c91c75a07bfd5039d1735aecdc2c4990aa4d0"
+          "content" : "7a94ff0a6eaccb57879c1e421e3914f5ed0b45a93a19c0d3ee81e7ac035b88cf75be920b64c86f0369380e9754a91d1c"
         },
         {
           "alg" : "SHA3-384",
-          "content" : "a5b1d33aed7122817ba63e8debcfdbeae119e702a5ee24c0f6b88aa22f4ecff78699c9914edebc2566bc7f335694898a"
+          "content" : "5073fdd9fb17cd84a06cdb52b534c917f9f9bcb3be991335d962d09e16d290a69f0b342b6eb9eb6b8d50f3508d937432"
         }
       ],
       "licenses" : [
@@ -7397,7 +8355,71 @@
           }
         }
       ],
-      "purl" : "pkg:maven/androidx.tracing/tracing-ktx@1.2.0?type=aar",
+      "purl" : "pkg:maven/androidx.tracing/tracing-android@2.0.1?type=aar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://cs.android.com/androidx/platform/frameworks/support"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/androidx.tracing/tracing-ktx@2.0.1?type=aar",
+      "publisher" : "The Android Open Source Project",
+      "group" : "androidx.tracing",
+      "name" : "tracing-ktx",
+      "version" : "2.0.1",
+      "description" : "Android Tracing",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "580ee66ad824da063f0fdc913c6c60e4"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "cc39482be156479ddf76bf82164696776fcbbedf"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "65b9f5d4ebbc7c286379d0dd9d70c68b1ed68c7452c22541f501e8467c31282d"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "cd2d635de1df09fefdb43b01dfb654cc2e2d7747a7e7ea910e1f5ba9ced878c2e571390628f507c6493bafe62a582c6341bf9fdc1b0d6299150a0549ab47bd37"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "2358b03719ffafd1da338f13b21831de21ca35de8c12917d910d71d91d12492e"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "674fff19a4e5345caeffe4e035b9ce14f789356bd6170ddb6d28a70fa333fe0263c217268c64d91e03bab8df1a58cb9dd3f3e8a553728c3f82fae65e8c92d6f1"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "ea61e4aa659154b69c0e45fbbe924e4ae6ca79a458b97cfb67f34042a8cdf3335846a5430d391b4bed706345b79035e6"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "7251dd6ffabfc12a76001f23fc62043f08df379ed4bd5467a7e5ae31825dcbde7f04fc969c7b416f519cccfb7e563451"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/androidx.tracing/tracing-ktx@2.0.1?type=aar",
       "modified" : false,
       "externalReferences" : [
         {
@@ -7477,45 +8499,12 @@
     },
     {
       "type" : "library",
-      "bom-ref" : "pkg:maven/androidx.tracing/tracing@1.2.0?type=aar",
+      "bom-ref" : "pkg:maven/androidx.tracing/tracing@2.0.1?type=pom",
+      "publisher" : "The Android Open Source Project",
       "group" : "androidx.tracing",
       "name" : "tracing",
-      "version" : "1.2.0",
+      "version" : "2.0.1",
       "description" : "Android Tracing",
-      "hashes" : [
-        {
-          "alg" : "MD5",
-          "content" : "5bcd84db5a5ced2fcbbadf8cc1d9c8b3"
-        },
-        {
-          "alg" : "SHA-1",
-          "content" : "a6ac2cc501278fdc99c56b428548e0cd1e9300f7"
-        },
-        {
-          "alg" : "SHA-256",
-          "content" : "6faa90390d1fdbf0adb9a99bf99de67b94c6c6f35aea9510593a9d17973736a2"
-        },
-        {
-          "alg" : "SHA-512",
-          "content" : "a82247792ca2585facbff6b3bdc66fe6d1953e453536816c75a180206bed7fe515da3244e98c10421a16d2bc140427df28a2464497dc2e3fc65ff17abe11c724"
-        },
-        {
-          "alg" : "SHA3-256",
-          "content" : "44cf4c58e5acaea8081e5535f9f7579229d5bd7ea649ebdd25194f68f0bb3d43"
-        },
-        {
-          "alg" : "SHA3-512",
-          "content" : "88828d326749efd5251c2c25f7fb24195275dc4ce033c023403da7c94c4f3bb552dd18dd53feece6f938f0639a79289dc110e7cd1f8fa5a8878f97503f2f4a9d"
-        },
-        {
-          "alg" : "SHA-384",
-          "content" : "e2d6a3f5476eb7f2a8fb8ee81efdd81ceac971be2523976f5ec1056f1b8a4ea694ef435828614b667d967d23a90e638b"
-        },
-        {
-          "alg" : "SHA3-384",
-          "content" : "49b8a46473cb8f47a52ba32704bb0d44534494bc73a0003b3cb137b5d77f6c079113932af2de4a460aedf9abdcfb833f"
-        }
-      ],
       "licenses" : [
         {
           "license" : {
@@ -7523,7 +8512,7 @@
           }
         }
       ],
-      "purl" : "pkg:maven/androidx.tracing/tracing@1.2.0?type=aar",
+      "purl" : "pkg:maven/androidx.tracing/tracing@2.0.1?type=pom",
       "modified" : false,
       "externalReferences" : [
         {
@@ -11942,6 +12931,132 @@
         {
           "type" : "vcs",
           "url" : "https://github.com/JetBrains/intellij-community"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/com.squareup.okio/okio-jvm@3.17.0?type=jar",
+      "group" : "com.squareup.okio",
+      "name" : "okio-jvm",
+      "version" : "3.17.0",
+      "description" : "A modern I/O library for Android, Java, and Kotlin Multiplatform.",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "96ad357689fd2841747aec56e94a7162"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "a12d684ec0df9541b3869ae60a4a5257fd3613df"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "3b13dcc3e1573047c2d507fc4f7fcb0bb0cbcd9d395da21d20e09406e2cd6a73"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "2da2e240fb11ee254554bd59b94d4f9545078f69182a56cb528cb3228e42b8cd8e7a6547ed81d198f105413ff03e111f42a903ff092c4c3a0c3b46433ad10921"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "fca6940c1a89a0951559cbb3a9aef63cdfff96ca0aaf2ef8b8847ef1d52e52a8"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "21fc1f60c7f201b85649e3eb5a56ad376f49e0d18dedd3d64c8bfdb6180c58a8fbb8cddf4411b6bea271908dfa09f7bf46d8bf138ca134bae38b8450d1ab478d"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "ef53c6670e1819033ce2be6a4396795f693ba8d0d73a0e6507f5cd0baae7eaa9c6f1a0138482550e7a13cc2182af8e83"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "20d14db69ea7e8d692111057f7daecd595eccc56585550b18d042b1374cbf9edfcf1a24e8c1a2955e90341927bbd986b"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/com.squareup.okio/okio-jvm@3.17.0?type=jar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://github.com/square/okio/"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/com.squareup.okio/okio@3.17.0?type=jar",
+      "group" : "com.squareup.okio",
+      "name" : "okio",
+      "version" : "3.17.0",
+      "description" : "A modern I/O library for Android, Java, and Kotlin Multiplatform.",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "97f50ce670f601dd9985efd82574fc7c"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "8ef358a316477e91dbe32e78abf6c8c49e1a06df"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "892898ff13b0cfda5f0bf689eb33b7c00c853b2531fcd4fe20fe5302d37981d8"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "45ff512698550fb67d3785e2bdcd1c5ace2a56e6bbb30e4253681f0da4b30e4fde88b5700b8b5a45cac2a366e9e6a0a817b7311c837810be7932386ce7d84d79"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "9605f1cd62cc7d9a8a7bda33e3f9d97f2ea9a9d24afd1d02a33c691b27c81b8a"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "b149a60d6a20ae3ac0b4ab4b42ebf9310654eb0e565a606914632ad20ff6fffea784e60b6dc68bfaaf214ef095f2096631bb5b86eb95bdda28b4ace642fcaf5f"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "a4cf1c2d5ed71bc66cc2a33dabbada4e80226436b8c54a1f8666e53e2b7b08a3dbeb61336d1ac21e06f6fc72f363acfb"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "d00b7e0514552f7e3b101f0a9fac5b5b58d7e002a2317cb74c1d3064f4a06d1b795a76c3f21493133457793eb3a28a51"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/com.squareup.okio/okio@3.17.0?type=jar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://github.com/square/okio/"
         }
       ],
       "properties" : [
@@ -18701,6 +19816,70 @@
     },
     {
       "type" : "library",
+      "bom-ref" : "pkg:maven/org.jetbrains.kotlinx/atomicfu-jvm@0.28.0?type=jar",
+      "group" : "org.jetbrains.kotlinx",
+      "name" : "atomicfu-jvm",
+      "version" : "0.28.0",
+      "description" : "AtomicFU utilities",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "70921245a0aed3c3e3d17c34ca3dbd87"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "6a9ac536f4b2144e57c176fd4e26821eb12084f4"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "39576ec46b83412ff7a2909d24cccbba90400e91f9aa67b250309bc0872ecf52"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "222e76c73577cd301aa7cd736609687cf7fa8340680a00cc5c15370834370c7884998b1b92f39dada0256d4ff521adce86b6813c61c70586c1e70e503e5491b0"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "bfb214679291efececfd534cc46f1cc7a7f8cd92e7589e69ed018a754bea2fd2"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "74fb8d8862c0fa7240d9c00a4d7970c055abf693ddfd2007a67362f8abb78443f2261e6e343390564272deafa6b09cb88e690989c952f0f6a8504338de3a5c4a"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "79f9c0b5647b96d4bc86ef8a5fa0e6c6b96d61de216d52aec9779b8d3be03761e1e52f9fd5b7e701d9029c55ca774ab6"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "6361498a7460e879e047ebee6406966314de89ecd20acdf71b53c7f3104684bb13acbdfc886dca872a973dfc43f9aea7"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0",
+            "url" : "https://www.apache.org/licenses/LICENSE-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/org.jetbrains.kotlinx/atomicfu-jvm@0.28.0?type=jar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://github.com/Kotlin/kotlinx.atomicfu"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
       "bom-ref" : "pkg:maven/org.jetbrains.kotlinx/atomicfu@0.21.0?type=jar",
       "group" : "org.jetbrains.kotlinx",
       "name" : "atomicfu",
@@ -18840,6 +20019,70 @@
         }
       ],
       "purl" : "pkg:maven/org.jetbrains.kotlinx/atomicfu@0.23.1?type=jar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://github.com/Kotlin/kotlinx.atomicfu"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "true"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/org.jetbrains.kotlinx/atomicfu@0.28.0?type=jar",
+      "group" : "org.jetbrains.kotlinx",
+      "name" : "atomicfu",
+      "version" : "0.28.0",
+      "description" : "AtomicFU utilities",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "fda2522d50dc4dae76046801b672d6d2"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "c86e4d97485fb199c453d0ce21cd4d92d2fad457"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "d3da227e1a06c1955c11014cdefa59969ab0ca0507a81ea8a0fd05ab6c4dbc9c"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "215bc680ca852dba59f5f482e82dbdd96fed031e8b3eafe9b4fb4d8caf4c8e06179b9eea3a779b1ed6d2b9f781f827d6ce32c0b994f46c5193072d22c4f17453"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "827c118253a30adc7211d8483b363fcfce624abd0bbca50b93fbc24ed2d8e6c7"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "d21f5d7ce7c310d874736fed4be023f425fc4207a40fe6643ce6d27ff075534172c0adbd4919f5e2eb26853408aa6b6d94865018a02fa5ef7105d5fa854ae9d8"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "00f9087be575d093ebc2b230783e828f126775260bfa310403e4d24649404052162e26a913c71f250c74f529b05674ac"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "09a8283f00e0b5d05d78cd7f71558ab88279b6d2cb84f44b482524d53ab30672c68c3501417603c1cc19dae18674f891"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0",
+            "url" : "https://www.apache.org/licenses/LICENSE-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/org.jetbrains.kotlinx/atomicfu@0.28.0?type=jar",
       "modified" : false,
       "externalReferences" : [
         {
@@ -20107,6 +21350,69 @@
     },
     {
       "type" : "library",
+      "bom-ref" : "pkg:maven/org.jetbrains.kotlinx/kotlinx-serialization-protobuf@1.7.3?type=jar",
+      "group" : "org.jetbrains.kotlinx",
+      "name" : "kotlinx-serialization-protobuf",
+      "version" : "1.7.3",
+      "description" : "Kotlin multiplatform serialization runtime library",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "ae6c8483646ca28096985761beb00045"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "42d5ad034a503d9a19bfb5c636283a2f8c4b4037"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "74c76d47e55d866bc18d9ed889ae39cbce7db0b77de5a72010dab1f244793577"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "4cb3bc8b68e562d7154be467b10e9ff56fd2bd6e84d622185fae85115c3893f5c85dff46fe3e6cc00b94c0176f0c3281c233a5e65907bf72044e330c6d15f900"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "856d2ce3f83d70f22e7ca9a84eaec857cf9d57f8fcdd4aebc6ab788f6ad87c08"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "e4020ed2a43283a84ece8e9bedd04c9c536d34f792e49ca5b76ad4b2d305d71fb36433a1a09f653c7aa43ed42a5364bc621dfc58589ddbb228cc579f1051593a"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "cce347c018c729ac27d33d221f6b5c6478450c47d7d1ef58a02b8bc7d4f020153ba8a68a6e3c382360a642aaead5c1e8"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "fae0b344332b8549a260e71929b31cc58ce52df5ce6bda2f29dab00f10b7fac106c96b13868adb4c6326ba5f1c7ae84c"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/org.jetbrains.kotlinx/kotlinx-serialization-protobuf@1.7.3?type=jar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://github.com/Kotlin/kotlinx.serialization"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
       "bom-ref" : "pkg:maven/org.jetbrains/annotations@13.0?type=jar",
       "group" : "org.jetbrains",
       "name" : "annotations",
@@ -20472,6 +21778,7 @@
         "pkg:maven/androidx.compose.ui/ui@1.8.2?type=jar",
         "pkg:maven/androidx.compose/compose-bom@2025.05.01?type=pom",
         "pkg:maven/androidx.core/core-ktx@1.16.0?type=aar",
+        "pkg:maven/androidx.datastore/datastore-preferences@1.3.0?type=jar",
         "pkg:maven/androidx.documentfile/documentfile@1.0.1?type=aar",
         "pkg:maven/androidx.fragment/fragment-ktx@1.8.9?type=aar",
         "pkg:maven/androidx.lifecycle/lifecycle-runtime-compose@2.9.1?type=jar",
@@ -20546,6 +21853,7 @@
     {
       "ref" : "pkg:maven/androidx.activity/activity@1.10.1?type=aar",
       "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
         "pkg:maven/androidx.core/core-ktx@1.16.0?type=aar",
         "pkg:maven/androidx.core/core-viewtree@1.0.0?type=aar",
@@ -20555,13 +21863,19 @@
         "pkg:maven/androidx.lifecycle/lifecycle-viewmodel@2.9.1?type=aar",
         "pkg:maven/androidx.profileinstaller/profileinstaller@1.4.0?type=aar",
         "pkg:maven/androidx.savedstate/savedstate@1.3.0?type=jar",
-        "pkg:maven/androidx.tracing/tracing@1.2.0?type=aar",
+        "pkg:maven/androidx.tracing/tracing@2.0.1?type=pom",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
         "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.10.2?type=jar"
       ]
     },
     {
       "ref" : "pkg:maven/androidx.annotation/annotation-experimental@1.4.1?type=aar",
+      "dependsOn" : [
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/androidx.annotation/annotation-jvm@1.10.0?type=jar",
       "dependsOn" : [
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar"
       ]
@@ -20575,8 +21889,13 @@
     {
       "ref" : "pkg:maven/androidx.annotation/annotation-jvm@1.9.1?type=jar",
       "dependsOn" : [
-        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.1.10?type=jar",
-        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar"
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.1.10?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
+      "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation-jvm@1.10.0?type=jar"
       ]
     },
     {
@@ -20589,12 +21908,14 @@
     {
       "ref" : "pkg:maven/androidx.arch.core/core-common@2.2.0?type=jar",
       "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar"
       ]
     },
     {
       "ref" : "pkg:maven/androidx.arch.core/core-runtime@2.2.0?type=aar",
       "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
         "pkg:maven/androidx.arch.core/core-common@2.2.0?type=jar"
       ]
@@ -20606,16 +21927,24 @@
       ]
     },
     {
-      "ref" : "pkg:maven/androidx.collection/collection-jvm@1.5.0?type=jar",
+      "ref" : "pkg:maven/androidx.collection/collection-jvm@1.6.0?type=jar",
       "dependsOn" : [
-        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
-        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar"
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
+        "pkg:maven/org.jspecify/jspecify@1.0.0?type=jar"
       ]
     },
     {
       "ref" : "pkg:maven/androidx.collection/collection-ktx@1.5.0?type=jar",
       "dependsOn" : [
         "pkg:maven/androidx.collection/collection@1.5.0?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/androidx.collection/collection-ktx@1.6.0?type=jar",
+      "dependsOn" : [
+        "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar"
       ]
     },
     {
@@ -20629,16 +21958,21 @@
       "ref" : "pkg:maven/androidx.collection/collection@1.5.0?type=jar",
       "dependsOn" : [
         "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
-        "pkg:maven/androidx.collection/collection-jvm@1.5.0?type=jar",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
+      "dependsOn" : [
+        "pkg:maven/androidx.collection/collection-jvm@1.6.0?type=jar"
       ]
     },
     {
       "ref" : "pkg:maven/androidx.compose.animation/animation-android@1.8.2?type=aar",
       "dependsOn" : [
         "pkg:maven/androidx.annotation/annotation-experimental@1.4.1?type=aar",
-        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
-        "pkg:maven/androidx.collection/collection@1.5.0?type=jar",
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
+        "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
         "pkg:maven/androidx.compose.animation/animation-core@1.8.2?type=jar",
         "pkg:maven/androidx.compose.foundation/foundation-layout@1.8.2?type=jar",
         "pkg:maven/androidx.compose.runtime/runtime@1.8.2?type=jar",
@@ -20652,8 +21986,8 @@
     {
       "ref" : "pkg:maven/androidx.compose.animation/animation-core-android@1.8.2?type=aar",
       "dependsOn" : [
-        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
-        "pkg:maven/androidx.collection/collection@1.5.0?type=jar",
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
+        "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
         "pkg:maven/androidx.compose.runtime/runtime@1.8.2?type=jar",
         "pkg:maven/androidx.compose.ui/ui-graphics@1.8.2?type=jar",
         "pkg:maven/androidx.compose.ui/ui-unit@1.8.2?type=jar",
@@ -20684,8 +22018,8 @@
       "ref" : "pkg:maven/androidx.compose.foundation/foundation-android@1.8.2?type=aar",
       "dependsOn" : [
         "pkg:maven/androidx.annotation/annotation-experimental@1.4.1?type=aar",
-        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
-        "pkg:maven/androidx.collection/collection@1.5.0?type=jar",
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
+        "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
         "pkg:maven/androidx.compose.animation/animation@1.8.2?type=jar",
         "pkg:maven/androidx.compose.foundation/foundation-layout@1.8.2?type=jar",
         "pkg:maven/androidx.compose.runtime/runtime@1.8.2?type=jar",
@@ -20701,8 +22035,8 @@
       "ref" : "pkg:maven/androidx.compose.foundation/foundation-layout-android@1.8.2?type=aar",
       "dependsOn" : [
         "pkg:maven/androidx.annotation/annotation-experimental@1.4.1?type=aar",
-        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
-        "pkg:maven/androidx.collection/collection@1.5.0?type=jar",
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
+        "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
         "pkg:maven/androidx.compose.animation/animation-core@1.8.2?type=jar",
         "pkg:maven/androidx.compose.runtime/runtime@1.8.2?type=jar",
         "pkg:maven/androidx.compose.ui/ui-unit@1.8.2?type=jar",
@@ -20733,7 +22067,7 @@
       "ref" : "pkg:maven/androidx.compose.material/material-android@1.8.2?type=aar",
       "dependsOn" : [
         "pkg:maven/androidx.annotation/annotation-experimental@1.4.1?type=aar",
-        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.compose.animation/animation-core@1.8.2?type=jar",
         "pkg:maven/androidx.compose.animation/animation@1.8.2?type=jar",
         "pkg:maven/androidx.compose.foundation/foundation-layout@1.8.2?type=jar",
@@ -20781,7 +22115,7 @@
     {
       "ref" : "pkg:maven/androidx.compose.material/material-ripple-android@1.8.2?type=aar",
       "dependsOn" : [
-        "pkg:maven/androidx.collection/collection@1.5.0?type=jar",
+        "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
         "pkg:maven/androidx.compose.animation/animation@1.8.2?type=jar",
         "pkg:maven/androidx.compose.foundation/foundation@1.8.2?type=jar",
         "pkg:maven/androidx.compose.runtime/runtime@1.8.2?type=jar",
@@ -20808,8 +22142,8 @@
       "dependsOn" : [
         "pkg:maven/androidx.activity/activity-compose@1.10.1?type=aar",
         "pkg:maven/androidx.annotation/annotation-experimental@1.4.1?type=aar",
-        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
-        "pkg:maven/androidx.collection/collection@1.5.0?type=jar",
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
+        "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
         "pkg:maven/androidx.compose.animation/animation-core@1.8.2?type=jar",
         "pkg:maven/androidx.compose.foundation/foundation-layout@1.8.2?type=jar",
         "pkg:maven/androidx.compose.foundation/foundation@1.8.2?type=jar",
@@ -20840,7 +22174,7 @@
       "ref" : "pkg:maven/androidx.compose.runtime/runtime-android@1.8.2?type=aar",
       "dependsOn" : [
         "pkg:maven/androidx.annotation/annotation-experimental@1.4.1?type=aar",
-        "pkg:maven/androidx.collection/collection@1.5.0?type=jar",
+        "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-common@2.2.21?type=pom",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
         "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-android@1.10.2?type=jar",
@@ -20850,8 +22184,8 @@
     {
       "ref" : "pkg:maven/androidx.compose.runtime/runtime-saveable-android@1.8.2?type=aar",
       "dependsOn" : [
-        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
-        "pkg:maven/androidx.collection/collection@1.5.0?type=jar",
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
+        "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
         "pkg:maven/androidx.compose.runtime/runtime@1.8.2?type=jar",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar"
       ]
@@ -20875,9 +22209,9 @@
       "dependsOn" : [
         "pkg:maven/androidx.activity/activity-ktx@1.10.1?type=aar",
         "pkg:maven/androidx.annotation/annotation-experimental@1.4.1?type=aar",
-        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.autofill/autofill@1.0.0?type=aar",
-        "pkg:maven/androidx.collection/collection@1.5.0?type=jar",
+        "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
         "pkg:maven/androidx.compose.runtime/runtime-saveable@1.8.2?type=jar",
         "pkg:maven/androidx.compose.runtime/runtime@1.8.2?type=jar",
         "pkg:maven/androidx.compose.ui/ui-geometry@1.8.2?type=jar",
@@ -20902,7 +22236,7 @@
     {
       "ref" : "pkg:maven/androidx.compose.ui/ui-geometry-android@1.8.2?type=aar",
       "dependsOn" : [
-        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.compose.runtime/runtime@1.8.2?type=jar",
         "pkg:maven/androidx.compose.ui/ui-util@1.8.2?type=jar",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar"
@@ -20918,8 +22252,8 @@
       "ref" : "pkg:maven/androidx.compose.ui/ui-graphics-android@1.8.2?type=aar",
       "dependsOn" : [
         "pkg:maven/androidx.annotation/annotation-experimental@1.4.1?type=aar",
-        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
-        "pkg:maven/androidx.collection/collection@1.5.0?type=jar",
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
+        "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
         "pkg:maven/androidx.compose.runtime/runtime@1.8.2?type=jar",
         "pkg:maven/androidx.compose.ui/ui-unit@1.8.2?type=jar",
         "pkg:maven/androidx.compose.ui/ui-util@1.8.2?type=jar",
@@ -20940,8 +22274,8 @@
       "ref" : "pkg:maven/androidx.compose.ui/ui-text-android@1.8.2?type=aar",
       "dependsOn" : [
         "pkg:maven/androidx.annotation/annotation-experimental@1.4.1?type=aar",
-        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
-        "pkg:maven/androidx.collection/collection@1.5.0?type=jar",
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
+        "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
         "pkg:maven/androidx.compose.runtime/runtime-saveable@1.8.2?type=jar",
         "pkg:maven/androidx.compose.runtime/runtime@1.8.2?type=jar",
         "pkg:maven/androidx.compose.ui/ui-graphics@1.8.2?type=jar",
@@ -20965,7 +22299,7 @@
       "ref" : "pkg:maven/androidx.compose.ui/ui-tooling-android@1.8.2?type=aar",
       "dependsOn" : [
         "pkg:maven/androidx.activity/activity-compose@1.10.1?type=aar",
-        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.compose.animation/animation@1.8.2?type=jar",
         "pkg:maven/androidx.compose.material/material@1.8.2?type=pom",
         "pkg:maven/androidx.compose.runtime/runtime@1.8.2?type=jar",
@@ -20981,7 +22315,7 @@
       "ref" : "pkg:maven/androidx.compose.ui/ui-tooling-data-android@1.8.2?type=aar",
       "dependsOn" : [
         "pkg:maven/androidx.annotation/annotation-experimental@1.4.1?type=aar",
-        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.compose.runtime/runtime@1.8.2?type=jar",
         "pkg:maven/androidx.compose.ui/ui@1.8.2?type=jar",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar"
@@ -20996,7 +22330,7 @@
     {
       "ref" : "pkg:maven/androidx.compose.ui/ui-tooling-preview-android@1.8.2?type=aar",
       "dependsOn" : [
-        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.compose.runtime/runtime@1.8.2?type=jar",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-common@2.2.21?type=pom"
       ]
@@ -21018,9 +22352,9 @@
       "ref" : "pkg:maven/androidx.compose.ui/ui-unit-android@1.8.2?type=aar",
       "dependsOn" : [
         "pkg:maven/androidx.annotation/annotation-experimental@1.4.1?type=aar",
-        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
-        "pkg:maven/androidx.collection/collection-ktx@1.5.0?type=jar",
-        "pkg:maven/androidx.collection/collection@1.5.0?type=jar",
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
+        "pkg:maven/androidx.collection/collection-ktx@1.6.0?type=jar",
+        "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
         "pkg:maven/androidx.compose.runtime/runtime@1.8.2?type=jar",
         "pkg:maven/androidx.compose.ui/ui-geometry@1.8.2?type=jar",
         "pkg:maven/androidx.compose.ui/ui-util@1.8.2?type=jar",
@@ -21039,7 +22373,7 @@
       "ref" : "pkg:maven/androidx.compose.ui/ui-util-android@1.8.2?type=aar",
       "dependsOn" : [
         "pkg:maven/androidx.annotation/annotation-experimental@1.4.1?type=aar",
-        "pkg:maven/androidx.collection/collection@1.5.0?type=jar",
+        "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar"
       ]
     },
@@ -21079,6 +22413,7 @@
     {
       "ref" : "pkg:maven/androidx.concurrent/concurrent-futures@1.1.0?type=jar",
       "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
         "pkg:maven/com.google.guava/listenablefuture@1.0?type=jar",
         "pkg:maven/com.google.guava/listenablefuture@9999.0-empty-to-avoid-conflict-with-guava?type=jar"
@@ -21087,6 +22422,7 @@
     {
       "ref" : "pkg:maven/androidx.core/core-ktx@1.16.0?type=aar",
       "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
         "pkg:maven/androidx.core/core@1.16.0?type=aar",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar"
@@ -21102,13 +22438,14 @@
       "ref" : "pkg:maven/androidx.core/core@1.16.0?type=aar",
       "dependsOn" : [
         "pkg:maven/androidx.annotation/annotation-experimental@1.4.1?type=aar",
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
-        "pkg:maven/androidx.collection/collection@1.5.0?type=jar",
+        "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
         "pkg:maven/androidx.concurrent/concurrent-futures@1.1.0?type=jar",
         "pkg:maven/androidx.core/core-viewtree@1.0.0?type=aar",
         "pkg:maven/androidx.interpolator/interpolator@1.0.0?type=aar",
         "pkg:maven/androidx.lifecycle/lifecycle-runtime@2.9.1?type=jar",
-        "pkg:maven/androidx.tracing/tracing@1.2.0?type=aar",
+        "pkg:maven/androidx.tracing/tracing@2.0.1?type=pom",
         "pkg:maven/androidx.versionedparcelable/versionedparcelable@1.1.1?type=aar",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
         "pkg:maven/org.jspecify/jspecify@1.0.0?type=jar"
@@ -21124,21 +22461,139 @@
     {
       "ref" : "pkg:maven/androidx.customview/customview@1.0.0?type=aar",
       "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
         "pkg:maven/androidx.core/core@1.16.0?type=aar"
       ]
     },
     {
+      "ref" : "pkg:maven/androidx.datastore/datastore-android@1.3.0?type=aar",
+      "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
+        "pkg:maven/androidx.datastore/datastore-core-okio@1.3.0?type=jar",
+        "pkg:maven/androidx.datastore/datastore-core@1.3.0?type=jar",
+        "pkg:maven/com.squareup.okio/okio@3.17.0?type=jar",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.10.2?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/androidx.datastore/datastore-core-android@1.3.0?type=aar",
+      "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
+        "pkg:maven/androidx.tracing/tracing@2.0.1?type=pom",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.10.2?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/androidx.datastore/datastore-core-okio-jvm@1.3.0?type=jar",
+      "dependsOn" : [
+        "pkg:maven/androidx.datastore/datastore-core@1.3.0?type=jar",
+        "pkg:maven/com.squareup.okio/okio@3.17.0?type=jar",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.10.2?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/androidx.datastore/datastore-core-okio@1.3.0?type=jar",
+      "dependsOn" : [
+        "pkg:maven/androidx.datastore/datastore-core-okio-jvm@1.3.0?type=jar",
+        "pkg:maven/androidx.datastore/datastore-core@1.3.0?type=jar",
+        "pkg:maven/com.squareup.okio/okio@3.17.0?type=jar",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/atomicfu@0.28.0?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.10.2?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/kotlinx-serialization-core@1.7.3?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/androidx.datastore/datastore-core@1.3.0?type=jar",
+      "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
+        "pkg:maven/androidx.datastore/datastore-core-android@1.3.0?type=aar",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/atomicfu@0.28.0?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.10.2?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/androidx.datastore/datastore-preferences-android@1.3.0?type=aar",
+      "dependsOn" : [
+        "pkg:maven/androidx.datastore/datastore-preferences-core@1.3.0?type=jar",
+        "pkg:maven/androidx.datastore/datastore@1.3.0?type=jar",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.10.2?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/androidx.datastore/datastore-preferences-core-android@1.3.0?type=aar",
+      "dependsOn" : [
+        "pkg:maven/androidx.datastore/datastore-core-okio@1.3.0?type=jar",
+        "pkg:maven/androidx.datastore/datastore-core@1.3.0?type=jar",
+        "pkg:maven/androidx.datastore/datastore-preferences-proto@1.3.0?type=jar",
+        "pkg:maven/com.squareup.okio/okio@3.17.0?type=jar",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/atomicfu@0.28.0?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/androidx.datastore/datastore-preferences-core@1.3.0?type=jar",
+      "dependsOn" : [
+        "pkg:maven/androidx.datastore/datastore-core-okio@1.3.0?type=jar",
+        "pkg:maven/androidx.datastore/datastore-core@1.3.0?type=jar",
+        "pkg:maven/androidx.datastore/datastore-preferences-core-android@1.3.0?type=aar",
+        "pkg:maven/com.squareup.okio/okio@3.17.0?type=jar",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/atomicfu@0.28.0?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/kotlinx-serialization-core@1.7.3?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/kotlinx-serialization-protobuf@1.7.3?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/androidx.datastore/datastore-preferences-external-protobuf@1.3.0?type=jar",
+      "dependsOn" : [ ]
+    },
+    {
+      "ref" : "pkg:maven/androidx.datastore/datastore-preferences-proto@1.3.0?type=jar",
+      "dependsOn" : [
+        "pkg:maven/androidx.datastore/datastore-preferences-external-protobuf@1.3.0?type=jar",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/androidx.datastore/datastore-preferences@1.3.0?type=jar",
+      "dependsOn" : [
+        "pkg:maven/androidx.datastore/datastore-preferences-android@1.3.0?type=aar",
+        "pkg:maven/androidx.datastore/datastore-preferences-core@1.3.0?type=jar",
+        "pkg:maven/androidx.datastore/datastore@1.3.0?type=jar",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.10.2?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/androidx.datastore/datastore@1.3.0?type=jar",
+      "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
+        "pkg:maven/androidx.datastore/datastore-android@1.3.0?type=aar",
+        "pkg:maven/androidx.datastore/datastore-core-okio@1.3.0?type=jar",
+        "pkg:maven/androidx.datastore/datastore-core@1.3.0?type=jar",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.10.2?type=jar"
+      ]
+    },
+    {
       "ref" : "pkg:maven/androidx.documentfile/documentfile@1.0.1?type=aar",
       "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar"
       ]
     },
     {
       "ref" : "pkg:maven/androidx.emoji2/emoji2@1.4.0?type=aar",
       "dependsOn" : [
-        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
-        "pkg:maven/androidx.collection/collection@1.5.0?type=jar",
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
+        "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
         "pkg:maven/androidx.core/core@1.16.0?type=aar",
         "pkg:maven/androidx.lifecycle/lifecycle-process@2.9.1?type=aar",
         "pkg:maven/androidx.startup/startup-runtime@1.1.1?type=aar"
@@ -21149,6 +22604,7 @@
       "dependsOn" : [
         "pkg:maven/androidx.activity/activity-ktx@1.10.1?type=aar",
         "pkg:maven/androidx.collection/collection-ktx@1.5.0?type=jar",
+        "pkg:maven/androidx.collection/collection-ktx@1.6.0?type=jar",
         "pkg:maven/androidx.core/core-ktx@1.16.0?type=aar",
         "pkg:maven/androidx.fragment/fragment@1.8.9?type=aar",
         "pkg:maven/androidx.lifecycle/lifecycle-livedata-core-ktx@2.9.1?type=aar",
@@ -21162,8 +22618,10 @@
       "dependsOn" : [
         "pkg:maven/androidx.activity/activity@1.10.1?type=aar",
         "pkg:maven/androidx.annotation/annotation-experimental@1.4.1?type=aar",
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
         "pkg:maven/androidx.collection/collection@1.5.0?type=jar",
+        "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
         "pkg:maven/androidx.core/core-ktx@1.16.0?type=aar",
         "pkg:maven/androidx.lifecycle/lifecycle-livedata-core@2.9.1?type=aar",
         "pkg:maven/androidx.lifecycle/lifecycle-runtime@2.9.1?type=jar",
@@ -21186,20 +22644,20 @@
     {
       "ref" : "pkg:maven/androidx.interpolator/interpolator@1.0.0?type=aar",
       "dependsOn" : [
-        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar"
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom"
       ]
     },
     {
       "ref" : "pkg:maven/androidx.lifecycle/lifecycle-common-java8@2.9.1?type=jar",
       "dependsOn" : [
-        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.lifecycle/lifecycle-common@2.9.1?type=jar"
       ]
     },
     {
       "ref" : "pkg:maven/androidx.lifecycle/lifecycle-common-jvm@2.9.1?type=jar",
       "dependsOn" : [
-        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
         "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.10.2?type=jar",
         "pkg:maven/org.jspecify/jspecify@1.0.0?type=jar"
@@ -21217,7 +22675,7 @@
         "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
         "pkg:maven/androidx.lifecycle/lifecycle-common-jvm@2.9.1?type=jar",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
-        "pkg:maven/org.jetbrains.kotlinx/atomicfu@0.23.1?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/atomicfu@0.28.0?type=jar",
         "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.10.2?type=jar"
       ]
     },
@@ -21253,7 +22711,7 @@
     {
       "ref" : "pkg:maven/androidx.lifecycle/lifecycle-process@2.9.1?type=aar",
       "dependsOn" : [
-        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.lifecycle/lifecycle-runtime@2.9.1?type=jar",
         "pkg:maven/androidx.startup/startup-runtime@1.1.1?type=aar",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar"
@@ -21262,7 +22720,7 @@
     {
       "ref" : "pkg:maven/androidx.lifecycle/lifecycle-runtime-android@2.9.1?type=aar",
       "dependsOn" : [
-        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.arch.core/core-common@2.2.0?type=jar",
         "pkg:maven/androidx.arch.core/core-runtime@2.2.0?type=aar",
         "pkg:maven/androidx.core/core-viewtree@1.0.0?type=aar",
@@ -21276,7 +22734,7 @@
     {
       "ref" : "pkg:maven/androidx.lifecycle/lifecycle-runtime-compose-android@2.9.1?type=aar",
       "dependsOn" : [
-        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.compose.runtime/runtime@1.8.2?type=jar",
         "pkg:maven/androidx.lifecycle/lifecycle-runtime-ktx@2.9.1?type=jar",
         "pkg:maven/androidx.lifecycle/lifecycle-runtime@2.9.1?type=jar"
@@ -21294,7 +22752,7 @@
     {
       "ref" : "pkg:maven/androidx.lifecycle/lifecycle-runtime-ktx-android@2.9.1?type=aar",
       "dependsOn" : [
-        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.lifecycle/lifecycle-runtime@2.9.1?type=jar",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
         "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-android@1.10.2?type=jar"
@@ -21329,7 +22787,7 @@
     {
       "ref" : "pkg:maven/androidx.lifecycle/lifecycle-viewmodel-android@2.9.1?type=aar",
       "dependsOn" : [
-        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.core/core-viewtree@1.0.0?type=aar",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
         "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-android@1.10.2?type=jar",
@@ -21339,7 +22797,7 @@
     {
       "ref" : "pkg:maven/androidx.lifecycle/lifecycle-viewmodel-compose-android@2.9.1?type=aar",
       "dependsOn" : [
-        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.compose.runtime/runtime@1.8.2?type=jar",
         "pkg:maven/androidx.compose.ui/ui@1.8.2?type=jar",
         "pkg:maven/androidx.lifecycle/lifecycle-common@2.9.1?type=jar",
@@ -21371,7 +22829,7 @@
     {
       "ref" : "pkg:maven/androidx.lifecycle/lifecycle-viewmodel-savedstate-android@2.9.1?type=aar",
       "dependsOn" : [
-        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.core/core-ktx@1.16.0?type=aar",
         "pkg:maven/androidx.lifecycle/lifecycle-livedata-core@2.9.1?type=aar",
         "pkg:maven/androidx.lifecycle/lifecycle-viewmodel@2.9.1?type=aar",
@@ -21406,6 +22864,7 @@
     {
       "ref" : "pkg:maven/androidx.loader/loader@1.0.0?type=aar",
       "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
         "pkg:maven/androidx.core/core@1.16.0?type=aar",
         "pkg:maven/androidx.lifecycle/lifecycle-livedata@2.9.1?type=aar",
@@ -21415,7 +22874,7 @@
     {
       "ref" : "pkg:maven/androidx.profileinstaller/profileinstaller@1.4.0?type=aar",
       "dependsOn" : [
-        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.concurrent/concurrent-futures@1.1.0?type=jar",
         "pkg:maven/androidx.startup/startup-runtime@1.1.1?type=aar",
         "pkg:maven/com.google.guava/listenablefuture@9999.0-empty-to-avoid-conflict-with-guava?type=jar"
@@ -21424,6 +22883,7 @@
     {
       "ref" : "pkg:maven/androidx.room/room-common-jvm@2.7.2?type=jar",
       "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.1.10?type=jar",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar"
@@ -21509,9 +22969,9 @@
       "ref" : "pkg:maven/androidx.room/room-runtime-android@2.7.2?type=aar",
       "dependsOn" : [
         "pkg:maven/androidx.annotation/annotation-experimental@1.4.1?type=aar",
-        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.arch.core/core-runtime@2.2.0?type=aar",
-        "pkg:maven/androidx.collection/collection@1.5.0?type=jar",
+        "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
         "pkg:maven/androidx.room/room-common@2.7.2?type=jar",
         "pkg:maven/androidx.sqlite/sqlite-framework@2.5.1?type=jar",
         "pkg:maven/androidx.sqlite/sqlite@2.5.1?type=jar",
@@ -21533,7 +22993,7 @@
         "pkg:maven/androidx.sqlite/sqlite@2.5.1?type=jar",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
         "pkg:maven/org.jetbrains.kotlinx/atomicfu@0.21.0?type=jar",
-        "pkg:maven/org.jetbrains.kotlinx/atomicfu@0.23.1?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/atomicfu@0.28.0?type=jar",
         "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.10.2?type=jar",
         "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.7.3?type=jar"
       ]
@@ -21566,7 +23026,7 @@
     {
       "ref" : "pkg:maven/androidx.savedstate/savedstate-android@1.3.0?type=aar",
       "dependsOn" : [
-        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.core/core-ktx@1.16.0?type=aar",
         "pkg:maven/androidx.core/core-viewtree@1.0.0?type=aar",
         "pkg:maven/androidx.lifecycle/lifecycle-common@2.9.1?type=jar",
@@ -21596,14 +23056,14 @@
     {
       "ref" : "pkg:maven/androidx.sqlite/sqlite-android@2.5.1?type=aar",
       "dependsOn" : [
-        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar"
       ]
     },
     {
       "ref" : "pkg:maven/androidx.sqlite/sqlite-framework-android@2.5.1?type=aar",
       "dependsOn" : [
-        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.sqlite/sqlite@2.5.1?type=jar",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar"
       ]
@@ -21628,13 +23088,14 @@
     {
       "ref" : "pkg:maven/androidx.startup/startup-runtime@1.1.1?type=aar",
       "dependsOn" : [
-        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
-        "pkg:maven/androidx.tracing/tracing@1.2.0?type=aar"
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
+        "pkg:maven/androidx.tracing/tracing@2.0.1?type=pom"
       ]
     },
     {
       "ref" : "pkg:maven/androidx.test.ext/junit@1.2.1?type=aar",
       "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
         "pkg:maven/androidx.test.services/storage@1.5.0?type=aar",
         "pkg:maven/androidx.test/core@1.6.1?type=aar",
@@ -21646,6 +23107,7 @@
     {
       "ref" : "pkg:maven/androidx.test.services/storage@1.5.0?type=aar",
       "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
         "pkg:maven/androidx.test/monitor@1.7.2?type=aar"
       ]
@@ -21653,13 +23115,14 @@
     {
       "ref" : "pkg:maven/androidx.test/core@1.6.1?type=aar",
       "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
         "pkg:maven/androidx.concurrent/concurrent-futures-ktx@1.1.0?type=jar",
         "pkg:maven/androidx.lifecycle/lifecycle-common@2.3.1?type=jar",
         "pkg:maven/androidx.lifecycle/lifecycle-common@2.9.1?type=jar",
         "pkg:maven/androidx.test/monitor@1.7.2?type=aar",
         "pkg:maven/androidx.tracing/tracing@1.1.0?type=aar",
-        "pkg:maven/androidx.tracing/tracing@1.2.0?type=aar",
+        "pkg:maven/androidx.tracing/tracing@2.0.1?type=pom",
         "pkg:maven/com.google.guava/listenablefuture@1.0?type=jar",
         "pkg:maven/com.google.guava/listenablefuture@9999.0-empty-to-avoid-conflict-with-guava?type=jar",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
@@ -21670,27 +23133,38 @@
     {
       "ref" : "pkg:maven/androidx.test/monitor@1.7.2?type=aar",
       "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
         "pkg:maven/androidx.tracing/tracing@1.1.0?type=aar",
-        "pkg:maven/androidx.tracing/tracing@1.2.0?type=aar",
+        "pkg:maven/androidx.tracing/tracing@2.0.1?type=pom",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar"
       ]
     },
     {
       "ref" : "pkg:maven/androidx.test/runner@1.6.2?type=aar",
       "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
         "pkg:maven/androidx.test.services/storage@1.5.0?type=aar",
         "pkg:maven/androidx.test/monitor@1.7.2?type=aar",
         "pkg:maven/androidx.tracing/tracing@1.1.0?type=aar",
-        "pkg:maven/androidx.tracing/tracing@1.2.0?type=aar",
+        "pkg:maven/androidx.tracing/tracing@2.0.1?type=pom",
         "pkg:maven/junit/junit@4.13.2?type=jar"
       ]
     },
     {
-      "ref" : "pkg:maven/androidx.tracing/tracing-ktx@1.2.0?type=aar",
+      "ref" : "pkg:maven/androidx.tracing/tracing-android@2.0.1?type=aar",
       "dependsOn" : [
-        "pkg:maven/androidx.tracing/tracing@1.2.0?type=aar",
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
+        "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.10.2?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/androidx.tracing/tracing-ktx@2.0.1?type=aar",
+      "dependsOn" : [
+        "pkg:maven/androidx.tracing/tracing@2.0.1?type=pom",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar"
       ]
     },
@@ -21699,21 +23173,24 @@
       "dependsOn" : [ ]
     },
     {
-      "ref" : "pkg:maven/androidx.tracing/tracing@1.2.0?type=aar",
+      "ref" : "pkg:maven/androidx.tracing/tracing@2.0.1?type=pom",
       "dependsOn" : [
-        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar"
+        "pkg:maven/androidx.tracing/tracing-android@2.0.1?type=aar"
       ]
     },
     {
       "ref" : "pkg:maven/androidx.versionedparcelable/versionedparcelable@1.1.1?type=aar",
       "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
-        "pkg:maven/androidx.collection/collection@1.5.0?type=jar"
+        "pkg:maven/androidx.collection/collection@1.5.0?type=jar",
+        "pkg:maven/androidx.collection/collection@1.6.0?type=pom"
       ]
     },
     {
       "ref" : "pkg:maven/androidx.viewpager/viewpager@1.0.0?type=aar",
       "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
         "pkg:maven/androidx.core/core@1.16.0?type=aar",
         "pkg:maven/androidx.customview/customview@1.0.0?type=aar"
@@ -21735,7 +23212,7 @@
         "pkg:maven/androidx.lifecycle/lifecycle-service@2.9.1?type=aar",
         "pkg:maven/androidx.room/room-ktx@2.7.2?type=aar",
         "pkg:maven/androidx.startup/startup-runtime@1.1.1?type=aar",
-        "pkg:maven/androidx.tracing/tracing-ktx@1.2.0?type=aar",
+        "pkg:maven/androidx.tracing/tracing-ktx@2.0.1?type=aar",
         "pkg:maven/com.google.guava/listenablefuture@9999.0-empty-to-avoid-conflict-with-guava?type=jar",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
         "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-android@1.10.2?type=jar"
@@ -22040,8 +23517,8 @@
     {
       "ref" : "pkg:maven/com.google.crypto.tink/tink-android@1.16.0?type=jar",
       "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation-jvm@1.10.0?type=jar",
         "pkg:maven/androidx.annotation/annotation-jvm@1.8.2?type=jar",
-        "pkg:maven/androidx.annotation/annotation-jvm@1.9.1?type=jar",
         "pkg:maven/com.google.code.findbugs/jsr305@3.0.2?type=jar",
         "pkg:maven/com.google.code.gson/gson@2.10.1?type=jar",
         "pkg:maven/com.google.errorprone/error_prone_annotations@2.36.0?type=jar"
@@ -22306,6 +23783,19 @@
     {
       "ref" : "pkg:maven/com.intellij/annotations@12.0?type=jar",
       "dependsOn" : [ ]
+    },
+    {
+      "ref" : "pkg:maven/com.squareup.okio/okio-jvm@3.17.0?type=jar",
+      "dependsOn" : [
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/com.squareup.okio/okio@3.17.0?type=jar",
+      "dependsOn" : [
+        "pkg:maven/com.squareup.okio/okio-jvm@3.17.0?type=jar",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar"
+      ]
     },
     {
       "ref" : "pkg:maven/com.squareup.okio/okio@3.9.1?type=jar",
@@ -23078,6 +24568,12 @@
       ]
     },
     {
+      "ref" : "pkg:maven/org.jetbrains.kotlinx/atomicfu-jvm@0.28.0?type=jar",
+      "dependsOn" : [
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar"
+      ]
+    },
+    {
       "ref" : "pkg:maven/org.jetbrains.kotlinx/atomicfu@0.21.0?type=jar",
       "dependsOn" : [
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-common@2.2.21?type=pom"
@@ -23093,9 +24589,14 @@
       "ref" : "pkg:maven/org.jetbrains.kotlinx/atomicfu@0.23.1?type=jar",
       "dependsOn" : [
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-common@2.1.0?type=pom",
-        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-common@2.2.21?type=pom",
-        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.1.0?type=jar",
-        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar"
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.1.0?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/org.jetbrains.kotlinx/atomicfu@0.28.0?type=jar",
+      "dependsOn" : [
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/atomicfu-jvm@0.28.0?type=jar"
       ]
     },
     {
@@ -23157,6 +24658,7 @@
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.1.0?type=jar",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
         "pkg:maven/org.jetbrains.kotlinx/atomicfu@0.23.1?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/atomicfu@0.28.0?type=jar",
         "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core-jvm@1.10.2?type=jar"
       ]
     },
@@ -23265,6 +24767,13 @@
       "ref" : "pkg:maven/org.jetbrains.kotlinx/kotlinx-serialization-json@1.7.3?type=pom",
       "dependsOn" : [
         "pkg:maven/org.jetbrains.kotlinx/kotlinx-serialization-json-jvm@1.7.3?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/org.jetbrains.kotlinx/kotlinx-serialization-protobuf@1.7.3?type=jar",
+      "dependsOn" : [
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/kotlinx-serialization-core@1.7.3?type=jar"
       ]
     },
     {

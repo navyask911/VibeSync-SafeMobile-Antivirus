@@ -1,6 +1,6 @@
 # Third-party dependency notices
 
-Generated from the CycloneDX SBOM by `scripts/render_third_party_notices.py`. Components: 337.
+Generated from the CycloneDX SBOM by `scripts/render_third_party_notices.py`. Components: 359.
 
 Regenerate this file with the CI SBOM refresh workflow; do not hand-edit dependency rows.
 
@@ -38,8 +38,10 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | animation-android | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | animation-core | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | animation-core-android | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| annotation | 1.10.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | annotation | 1.9.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | annotation-experimental | 1.4.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| annotation-jvm | 1.10.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | annotation-jvm | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | annotation-jvm | 1.9.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | annotations | 12.0 | [Apache License 2](http://www.apache.org/licenses/LICENSE-2.0.txt) | https://github.com/JetBrains/intellij-community |
@@ -51,7 +53,9 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | atomicfu | 0.21.0 | Apache-2.0 | https://github.com/Kotlin/kotlinx.atomicfu |
 | atomicfu | 0.22.0 | Apache-2.0 | https://github.com/Kotlin/kotlinx.atomicfu |
 | atomicfu | 0.23.1 | Apache-2.0 | https://github.com/Kotlin/kotlinx.atomicfu |
+| atomicfu | 0.28.0 | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0) | https://github.com/Kotlin/kotlinx.atomicfu |
 | atomicfu-jvm | 0.22.0 | Apache-2.0 | https://github.com/Kotlin/kotlinx.atomicfu |
+| atomicfu-jvm | 0.28.0 | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0) | https://github.com/Kotlin/kotlinx.atomicfu |
 | auto-common | 1.2.1 | Apache-2.0 | http://github.com/google/auto |
 | auto-service | 1.1.1 | Apache-2.0 | http://github.com/google/auto |
 | auto-service-annotations | 1.1.1 | Apache-2.0 | http://github.com/google/auto |
@@ -68,8 +72,10 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | checker-qual | 3.43.0 | MIT | https://github.com/typetools/checker-framework.git |
 | collection | 1.4.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | collection | 1.5.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
-| collection-jvm | 1.5.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| collection | 1.6.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| collection-jvm | 1.6.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | collection-ktx | 1.5.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| collection-ktx | 1.6.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | common | 31.13.2 | Apache-2.0 | Package URL: pkg:maven/com.android.tools/common@31.13.2?type=jar |
 | commons-codec | 1.15 | Apache-2.0 | https://github.com/apache/commons-codec |
 | commons-io | 2.16.1 | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0) | https://gitbox.apache.org/repos/asf?p=commons-io.git |
@@ -87,6 +93,18 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | customview | 1.0.0 | Apache-2.0 | http://source.android.com |
 | customview-poolingcontainer | 1.0.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | dagger | 2.48 | Apache-2.0 | https://github.com/google/dagger/ |
+| datastore | 1.3.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| datastore-android | 1.3.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| datastore-core | 1.3.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| datastore-core-android | 1.3.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| datastore-core-okio | 1.3.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| datastore-core-okio-jvm | 1.3.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| datastore-preferences | 1.3.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| datastore-preferences-android | 1.3.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| datastore-preferences-core | 1.3.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| datastore-preferences-core-android | 1.3.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| datastore-preferences-external-protobuf | 1.3.0 | [BSD-3-Clause](https://opensource.org/licenses/BSD-3-Clause) | https://cs.android.com/androidx/platform/frameworks/support |
+| datastore-preferences-proto | 1.3.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | ddmlib | 31.13.2 | Apache-2.0 | Package URL: pkg:maven/com.android.tools.ddms/ddmlib@31.13.2?type=jar |
 | documentfile | 1.0.1 | Apache-2.0 | http://source.android.com |
 | emoji2 | 1.4.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
@@ -207,6 +225,7 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | kotlinx-serialization-json-jvm | 1.6.3 | Apache-2.0 | https://github.com/Kotlin/kotlinx.serialization |
 | kotlinx-serialization-json-jvm | 1.7.3 | Apache-2.0 | https://github.com/Kotlin/kotlinx.serialization |
 | kotlinx-serialization-json-okio | 1.6.3 | Apache-2.0 | https://github.com/Kotlin/kotlinx.serialization |
+| kotlinx-serialization-protobuf | 1.7.3 | Apache-2.0 | https://github.com/Kotlin/kotlinx.serialization |
 | kxml2 | 2.3.0 | [BSD style](http://kxml.cvs.sourceforge.net/viewvc/kxml/kxml2/license.txt?view=markup); [Public Domain](http://creativecommons.org/licenses/publicdomain) | http://kxml.cvs.sourceforge.net/viewvc/kxml/kxml2/ |
 | launcher | 0.0.9-alpha03 | [Android Software Development Kit License Agreement](https://developer.android.com/studio/terms) | Package URL: pkg:maven/com.google.testing.platform/launcher@0.0.9-alpha03?type=jar |
 | lifecycle-common | 2.3.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
@@ -269,7 +288,9 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | netty-transport | 4.1.93.Final | Apache-2.0 | Package URL: pkg:maven/io.netty/netty-transport@4.1.93.Final?type=jar |
 | netty-transport-native-unix-common | 4.1.110.Final | Apache-2.0 | Package URL: pkg:maven/io.netty/netty-transport-native-unix-common@4.1.110.Final?type=jar |
 | netty-transport-native-unix-common | 4.1.93.Final | Apache-2.0 | Package URL: pkg:maven/io.netty/netty-transport-native-unix-common@4.1.93.Final?type=jar |
+| okio | 3.17.0 | Apache-2.0 | https://github.com/square/okio/ |
 | okio | 3.9.1 | Apache-2.0 | https://github.com/square/okio/ |
+| okio-jvm | 3.17.0 | Apache-2.0 | https://github.com/square/okio/ |
 | opencensus-api | 0.31.0 | Apache-2.0 | https://github.com/census-instrumentation/opencensus-java |
 | opencensus-proto | 0.2.0 | Apache-2.0 | https://github.com/census-instrumentation/opencensus-proto |
 | opentelemetry-api | 1.41.0 | Apache-2.0 | Package URL: pkg:maven/io.opentelemetry/opentelemetry-api@1.41.0?type=jar |
@@ -318,8 +339,9 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | tink | 1.7.0 | Apache-2.0 | https://github.com/google/tink.git |
 | tink-android | 1.16.0 | Apache-2.0 | https://github.com/tink-crypto/tink-java.git |
 | tracing | 1.1.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
-| tracing | 1.2.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
-| tracing-ktx | 1.2.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| tracing | 2.0.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| tracing-android | 2.0.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| tracing-ktx | 2.0.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | ui | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | ui-android | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | ui-geometry | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
@@ -344,7 +366,7 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | work-runtime | 2.10.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | work-runtime-ktx | 2.10.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 
-Metadata completeness: 335/337 components have both a declared licence and a source/package reference.
+Metadata completeness: 357/359 components have both a declared licence and a source/package reference.
 
 ## Metadata requiring manual review
 
