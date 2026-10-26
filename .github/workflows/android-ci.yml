@@ -96,6 +96,8 @@ jobs:
           SAFE_MOBILE_FEED_ED25519_PUBLIC_KEY_B64: ${{ vars.SAFE_MOBILE_FEED_ED25519_PUBLIC_KEY_B64 }}
           SAFE_MOBILE_HASHDB_ED25519_PUBLIC_KEY_B64: ${{ secrets.DB_SIGNING_PUBLIC_KEY }}
         run: ./gradlew --no-daemon assembleOfflineDebug assembleOfflineRelease assembleFeedRelease bundleOfflineRelease bundleFeedRelease
+      - name: Build and validate harmless siren fixture
+        run: bash scripts/test_siren.sh
       - name: Verify release artifact privacy boundary
         run: python3 scripts/check_release_artifact_privacy.py
       - name: Report release signing configuration
@@ -219,4 +221,5 @@ jobs:
             app/build/outputs/androidTest-results/connected/offlineDebug/
           if-no-files-found: ignore
           retention-days: 7
+
 

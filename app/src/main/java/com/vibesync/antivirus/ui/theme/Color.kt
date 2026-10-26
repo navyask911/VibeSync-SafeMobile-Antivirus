@@ -4,18 +4,18 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
 
-val SafeMobileDarkBackground = Color(0xFF0B0F14)
-val SafeMobileDarkSurface = Color(0xFF131A22)
-val SafeMobileDarkSurfaceVariant = Color(0xFF1C2530)
-val SafeMobileCyan = Color(0xFF00E5C3)
-val SafeMobileTeal = Color(0xFF1DE9B6)
+val SafeMobileDarkBackground = Color(0xFF121212)
+val SafeMobileDarkSurface = Color(0xFF191D24)
+val SafeMobileDarkSurfaceVariant = Color(0xFF252D38)
+val SafeMobileCyan = Color(0xFF00E5FF)
+val SafeMobileTeal = Color(0xFF448AFF)
 val SafeMobileAmber = Color(0xFFFFB74D)
 val SafeMobileDanger = Color(0xFFFF5252)
 val SafeMobileSuccess = Color(0xFF00E676)
 
 val SafeMobileDarkColorScheme = darkColorScheme(
     primary = SafeMobileCyan, onPrimary = SafeMobileDarkBackground,
-    primaryContainer = Color(0xFF123D3A), onPrimaryContainer = Color(0xFFB7FFF2),
+    primaryContainer = Color(0xFF003944), onPrimaryContainer = Color(0xFFB3F5FF),
     secondary = SafeMobileTeal, onSecondary = SafeMobileDarkBackground,
     secondaryContainer = Color(0xFF163B35), onSecondaryContainer = Color(0xFFC0FFF0),
     tertiary = SafeMobileAmber, onTertiary = Color(0xFF271900),
@@ -35,3 +35,4 @@ val SafeMobileLightColorScheme = lightColorScheme(
     surfaceVariant = Color(0xFFE4F0EF), onSurfaceVariant = Color(0xFF3F5452),
     error = Color(0xFFB3261E), onError = Color.White
 )
+

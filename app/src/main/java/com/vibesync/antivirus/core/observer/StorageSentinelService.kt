@@ -47,69 +47,50 @@ class StorageSentinelService : Service() {
             return
         }
         scope.launch {
-            try {
-                while (currentCoroutineContext().isActive) {
-                    val treeUri = StorageAccessPreferences.selectedTreeUri(this@StorageSentinelService)
-                    val root = treeUri?.let { DocumentFile.fromTreeUri(this@StorageSentinelService, it) }
-                    if (root == null || !root.canRead()) {
-                        Log.w(TAG, "Selected SAF folder is no longer available; stopping monitor")
-                        stopSelf()
-                        break
-                    }
-                    scanDirectory(root, root.name.orEmpty().ifBlank { "Selected folder" }, 0, intArrayOf(MAX_ENTRIES_PER_PASS))
-                    delay(POLL_INTERVAL_MS)
-                }
-            } catch (cancelled: CancellationException) {
-                throw cancelled
-            } catch (failure: SecurityException) {
-                Log.w(TAG, "Selected SAF folder access was revoked", failure)
-                stopSelf()
-            } catch (failure: Exception) {
-                Log.w(TAG, "SAF folder monitoring pass failed", failure)
-                delay(POLL_INTERVAL_MS)
-            }
-        }
-    }
-
-    private suspend fun scanDirectory(directory: DocumentFile, relativePath: String, depth: Int, budget: IntArray) {
-        currentCoroutineContext().ensureActive()
-        if (budget[0] <= 0 || !directory.canRead()) return
-        val children = runCatching { directory.listFiles() }.getOrElse {
-            Log.w(TAG, "Could not list selected SAF folder", it)
-            return
-        }
-        for (child in children) {
-            currentCoroutineContext().ensureActive()
-            if (budget[0]-- <= 0) break
-            val name = child.name?.take(180).orEmpty()
-            if (child.isDirectory && depth < MAX_DIRECTORY_DEPTH) {
-                scanDirectory(child, relativePath + "/" + name, depth + 1, budget)
-            } else if (child.isFile && candidate(name)) {
-                val size = runCatching { child.length() }.getOrDefault(0L)
-                val modified = runCatching { child.lastModified() }.getOrDefault(0L)
-                if (shouldProcess(name, size, modified)) {
-                    delay(FILE_SETTLE_DELAY_MS)
-                    currentCoroutineContext().ensureActive()
-                    if (child.exists() && child.canRead()) {
+            while (currentCoroutineContext().isActive) {
+                try {
+                    val roots = StorageAccessPreferences.accessibleTreeUris(this@StorageSentinelService)
+                    if (roots.isEmpty()) { stopSelf(); break }
+                    var visited = 0
+                    for (child in SafTreeWalker.files(this@StorageSentinelService, roots)) {
+                        currentCoroutineContext().ensureActive()
+                        if (++visited % 128 == 0) delay(25L)
+                        val name = child.name?.take(180).orEmpty()
+                        if (!candidate(name)) continue
+                        val size = child.length()
+                        val modified = child.lastModified()
+                        val identity = child.uri.toString()
+                        if (!shouldProcess(identity, size, modified)) continue
+                        delay(FILE_SETTLE_DELAY_MS)
+                        if (!child.exists() || !child.canRead() || child.length() != size || child.lastModified() != modified) continue
                         try {
-                            processUri(child.uri, name, relativePath + "/")
-                        } catch (cancelled: CancellationException) {
-                            throw cancelled
-                        } catch (failure: SecurityException) {
-                            Log.w(TAG, "Selected SAF file could not be opened")
-                        } catch (failure: IOException) {
-                            Log.w(TAG, "Selected SAF file processing failed")
-                        }
+                            val result = (application as SafeMobileApp).repository.scanUri(child.uri)
+                            if (result.verdict != ScanVerdict.NOT_SCANNED) {
+                                process(result, name, name, null, child.uri)
+                                rememberProcessed(identity, size, modified)
+                            }
+                        } catch (cancelled: CancellationException) { throw cancelled }
+                        catch (failure: Exception) { Log.w(TAG, "Granted file scan failed; it will be retried", failure) }
                     }
-                }
+                } catch (cancelled: CancellationException) { throw cancelled }
+                catch (failure: Exception) { Log.w(TAG, "Folder sweep failed; retrying without losing saved grants", failure) }
+                delay(POLL_INTERVAL_MS)
             }
         }
     }
 
  private fun candidate(n:String)=n.endsWith(".apk",true)||n.endsWith(".exe",true)
  private fun hasStorage() = StorageAccessPreferences.hasAccess(this)
- private fun shouldProcess(name:String,size:Long,modified:Long):Boolean{val k=name.take(180).lowercase()+":"+size+":"+modified;val now=System.currentTimeMillis();synchronized(recent){val prev=recent.put(k,now);recent.entries.removeIf{now-it.value>90000L};while(recent.size>256){val it=recent.entries.iterator();if(it.hasNext()){it.next();it.remove()}else break};return prev==null||now-prev>=10000L}}
- private suspend fun processUri(uri:Uri,name:String,rel:String?){val r=(application as SafeMobileApp).repository.scanUri(uri);process(r,name,((rel?:"Shared storage/")+name).take(180),null,uri)}
+ private fun shouldProcess(uri: String, size: Long, modified: Long): Boolean = synchronized(recent) {
+    val key = "$uri:$size:$modified"
+    val seen = recent[key] ?: return@synchronized true
+    // Providers without a modification timestamp are periodically rechecked.
+    modified == 0L && System.currentTimeMillis() - seen >= 60_000L
+ }
+ private fun rememberProcessed(uri: String, size: Long, modified: Long) = synchronized(recent) {
+    recent["$uri:$size:$modified"] = System.currentTimeMillis()
+    while (recent.size > 4096) { val iterator = recent.entries.iterator(); iterator.next(); iterator.remove() }
+ }
  private suspend fun process(r:ScanResult,name:String,path:String,file:File?,uri:Uri?){val app=application as SafeMobileApp;val p=getSharedPreferences(SafeMobileApp.SECURITY_PREFS,MODE_PRIVATE);val strict=p.getBoolean(SafeMobileApp.KEY_STRICT_MODE,false);val malicious=DownloadSentinelPolicy.isConfirmedMalicious(r.verdict);val quarantine=DownloadSentinelPolicy.shouldQuarantine(r.verdict,strict);val id=UUID.randomUUID().toString()
   val reason=when{malicious->"local_sha256_match";r.verdict==ScanVerdict.NOT_SCANNED->"hash_unavailable";strict->"strict_mode_unverified_download";r.verdict==ScanVerdict.SUSPICIOUS->"suspicious_scan_result";else->"no_local_signature_match_unverified"};var removed=false;var action="NOT_QUARANTINED";var status="REVIEW_REQUIRED";var saved:File?=null
   if(quarantine){try{val outcome=when{file!=null->app.repository.quarantineObservedDownload(file,r.sha256);uri!=null->app.repository.quarantineObservedDownload(uri,r.sha256);else->null};saved=outcome?.privateCopy;removed=outcome?.originalRemoved==true;action=if(removed)"MOVED_TO_ENCRYPTED_VAULT"else"ENCRYPTED_COPY_ONLY";status=if(removed)"QUARANTINED"else"SOURCE_RETAINED_COPY_SAVED";if(!removed&&saved!=null){for(wait in longArrayOf(700L,1500L,3000L)){delay(wait);currentCoroutineContext().ensureActive();val ok=when{file!=null->app.repository.retryRemoveObservedDownload(file);uri!=null->app.repository.retryRemoveObservedDownload(uri);else->false};if(ok){removed=true;action="MOVED_TO_ENCRYPTED_VAULT";status="QUARANTINED";break}}};if(saved==null){action="QUARANTINE_FAILED";status="SOURCE_RETAINED"}}catch(c:CancellationException){throw c}catch(_:IOException){action="QUARANTINE_FAILED";status="SOURCE_RETAINED";Log.w(TAG,"Quarantine failed; source retained")}catch(_:java.security.GeneralSecurityException){action="QUARANTINE_FAILED";status="SOURCE_RETAINED";Log.w(TAG,"Quarantine cryptographic key unavailable; source retained")}catch(_:SecurityException){action="QUARANTINE_FAILED";status="SOURCE_RETAINED";Log.w(TAG,"Quarantine access denied; source retained")}catch(_:IllegalArgumentException){action="QUARANTINE_FAILED";status="SOURCE_RETAINED";Log.w(TAG,"Quarantine candidate rejected")}}
@@ -153,7 +134,6 @@ class StorageSentinelService : Service() {
     private const val TAG = "SafeMobileSentinel"
     private const val POLL_INTERVAL_MS = 4_000L
     private const val FILE_SETTLE_DELAY_MS = 800L
-    private const val MAX_ENTRIES_PER_PASS = 500
-    private const val MAX_DIRECTORY_DEPTH = 2
  }
 }
+

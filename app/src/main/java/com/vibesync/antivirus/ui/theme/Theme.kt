@@ -4,7 +4,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 
 @Composable
-fun SafeMobileMaterialTheme(darkTheme: Boolean, content: @Composable () -> Unit) {
+fun SafeMobileMaterialTheme(darkTheme: Boolean = true, content: @Composable () -> Unit) {
     MaterialTheme(
         colorScheme = if (darkTheme) SafeMobileDarkColorScheme else SafeMobileLightColorScheme,
         typography = SafeMobileTypography,
@@ -12,3 +12,4 @@ fun SafeMobileMaterialTheme(darkTheme: Boolean, content: @Composable () -> Unit)
         content = content
     )
 }
+

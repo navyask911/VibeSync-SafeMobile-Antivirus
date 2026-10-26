@@ -20,6 +20,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 data class SafeMobileUiState(
+    val scanSummary: com.vibesync.antivirus.core.engine.ScanCompletionSummary? = null,
+    val securityAssessment: com.vibesync.antivirus.core.security.DeviceSecurityAssessment? = null,
     val isScanning: Boolean = false,
     val results: List<ScanResult> = emptyList(),
     val completedScans: Int = 0,
@@ -46,6 +48,10 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
     private var scanJob: Job? = null
 
     init {
+        repository.loadScanSummary()?.let { summary ->
+            mutableState.update { it.copy(scanSummary = summary, lastScanAt = summary.completedAt) }
+        }
+        refreshSecurityScore()
         refreshSignatureCount()
         refreshQuarantine()
         observeThreatFeedState()
@@ -71,12 +77,21 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
     }
 
 
+    fun refreshSecurityScore() {
+        viewModelScope.launch {
+            runCatching { repository.securityAssessment() }.onSuccess { assessment ->
+                mutableState.update { it.copy(securityAssessment = assessment, hashDatabaseCapability = repository.currentHashDatabaseCapability() ?: it.hashDatabaseCapability) }
+            }
+        }
+    }
+    fun reportPlayProtect(enabled: Boolean) { repository.reportPlayProtect(enabled); refreshSecurityScore() }
+
     fun refreshHashDatabaseCapability() {
         viewModelScope.launch {
             val capability = try { repository.hashDatabaseCapability() }
             catch (cancelled: CancellationException) { throw cancelled }
             catch (error: Exception) { HashDatabaseCapability(false, reason = error.message ?: "Signed hash database unavailable.") }
-            mutableState.update { it.copy(hashDatabaseCapability = capability) }
+            mutableState.update { it.copy(hashDatabaseCapability = capability) }; refreshSecurityScore()
         }
     }
 
@@ -244,6 +259,7 @@ fun importOfflineDefinitions(uri: Uri) {
                 )
             }
             try {
+                val signedDefinitionsUsed = repository.currentHashDatabaseCapability()?.enabled == true
                 val results = task { processed, total ->
                     mutableState.update { state ->
                         state.copy(
@@ -252,8 +268,12 @@ fun importOfflineDefinitions(uri: Uri) {
                         )
                     }
                 }
+                val summary = com.vibesync.antivirus.core.engine.ScanCompletionSummary.from(
+                    results, mutableState.value.processedItems, System.currentTimeMillis()).copy(signedDefinitionsUsed = signedDefinitionsUsed)
+                repository.saveScanSummary(summary)
                 mutableState.update { state ->
                     state.copy(
+                        scanSummary = summary,
                         isScanning = false,
                         results = results,
                         completedScans = state.completedScans + 1,
@@ -264,6 +284,7 @@ fun importOfflineDefinitions(uri: Uri) {
                     )
                 }
                 refreshSignatureCount()
+                refreshSecurityScore()
             } catch (cancelled: CancellationException) {
                 mutableState.update {
                     it.copy(
@@ -306,3 +327,4 @@ fun importOfflineDefinitions(uri: Uri) {
         }
     }
 }
+
