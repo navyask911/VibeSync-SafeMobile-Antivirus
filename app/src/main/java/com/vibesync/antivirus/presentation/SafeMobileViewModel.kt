@@ -267,7 +267,12 @@ fun importOfflineDefinitions(uri: Uri) {
                             totalItems = total.coerceAtLeast(0)
                         )
                     }
-                }
+                }.sortedBy { result -> when (result.verdict) {
+                    ScanVerdict.THREAT -> 0
+                    ScanVerdict.SUSPICIOUS -> 1
+                    ScanVerdict.NOT_SCANNED -> 2
+                    ScanVerdict.NO_MATCH -> 3
+                } }
                 val summary = com.vibesync.antivirus.core.engine.ScanCompletionSummary.from(
                     results, mutableState.value.processedItems, System.currentTimeMillis()).copy(signedDefinitionsUsed = signedDefinitionsUsed)
                 repository.saveScanSummary(summary)

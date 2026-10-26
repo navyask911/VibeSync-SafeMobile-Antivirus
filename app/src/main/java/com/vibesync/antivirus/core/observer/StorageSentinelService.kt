@@ -55,22 +55,22 @@ class StorageSentinelService : Service() {
                     for (child in SafTreeWalker.files(this@StorageSentinelService, roots)) {
                         currentCoroutineContext().ensureActive()
                         if (++visited % 128 == 0) delay(25L)
-                        val name = child.name?.take(180).orEmpty()
-                        if (!candidate(name)) continue
-                        val size = child.length()
-                        val modified = child.lastModified()
-                        val identity = child.uri.toString()
-                        if (!shouldProcess(identity, size, modified)) continue
-                        delay(FILE_SETTLE_DELAY_MS)
-                        if (!child.exists() || !child.canRead() || child.length() != size || child.lastModified() != modified) continue
                         try {
+                            val name = child.name?.take(180).orEmpty()
+                            if (!candidate(name)) continue
+                            val size = child.length()
+                            val modified = child.lastModified()
+                            val identity = child.uri.toString()
+                            if (!shouldProcess(identity, size, modified)) continue
+                            delay(FILE_SETTLE_DELAY_MS)
+                            if (!child.exists() || !child.canRead() || child.length() != size || child.lastModified() != modified) continue
                             val result = (application as SafeMobileApp).repository.scanUri(child.uri)
                             if (result.verdict != ScanVerdict.NOT_SCANNED) {
                                 process(result, name, name, null, child.uri)
                                 rememberProcessed(identity, size, modified)
                             }
                         } catch (cancelled: CancellationException) { throw cancelled }
-                        catch (failure: Exception) { Log.w(TAG, "Granted file scan failed; it will be retried", failure) }
+                        catch (failure: Exception) { Log.w(TAG, "Granted file scan failed; continuing with other files", failure) }
                     }
                 } catch (cancelled: CancellationException) { throw cancelled }
                 catch (failure: Exception) { Log.w(TAG, "Folder sweep failed; retrying without losing saved grants", failure) }

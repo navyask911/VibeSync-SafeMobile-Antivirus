@@ -21,7 +21,8 @@ object SafTreeWalker {
                 try {
                     if (child.isDirectory) pending.addLast(child)
                     else if (child.isFile && visited.add(child.uri.toString()) && child.canRead()) yield(child)
-                } catch (_: SecurityException) { /* A revoked child must not interrupt another folder. */ }
+                } catch (cancelled: kotlinx.coroutines.CancellationException) { throw cancelled }
+                catch (failure: Exception) { Log.w("SafeMobileSentinel", "One granted entry was unavailable; continuing", failure) }
             }
         }
     }

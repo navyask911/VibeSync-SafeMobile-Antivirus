@@ -638,7 +638,7 @@ import kotlinx.coroutines.launch
     if (selectedDestination == "guardian") GuardianPanel()
     if (selectedDestination == "phishing") PhishingPanel(sharedText, repository) { onSharedTextConsumed() }
     if (selectedDestination == "cleaner") StorageCleanerPanel()
-    state.messageResource?.let { message -> Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant)) { Text(stringResource(message),Modifier.padding(14.dp),color=MaterialTheme.colorScheme.onSurface,style=MaterialTheme.typography.bodySmall) } }
+    state.messageResource?.takeUnless { it == R.string.scan_complete && selectedDestination in listOf("home", "scan") }?.let { message -> Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant)) { Text(stringResource(message),Modifier.padding(14.dp),color=MaterialTheme.colorScheme.onSurface,style=MaterialTheme.typography.bodySmall) } }
     state.messageText?.let { message -> Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant)) { Text(message,Modifier.padding(14.dp),color=MaterialTheme.colorScheme.onSurface,style=MaterialTheme.typography.bodySmall) } }
     if(selectedDestination == "scan" && state.results.isNotEmpty()) {
      Column(verticalArrangement=Arrangement.spacedBy(10.dp)) {

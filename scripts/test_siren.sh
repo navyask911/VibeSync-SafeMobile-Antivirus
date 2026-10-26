@@ -55,7 +55,8 @@ cat <<MSG
 3. Enable Download Sentinel and choose a folder the system picker permits.
 4. Copy $siren_out/SafeMobile-Siren-Test.apk into that granted folder AFTER importing the hash.
    Watch: adb logcat -s SafeMobileScan SafeMobileSentinel SafeMobileSecurityAlert
-5. To test the post-install receiver instead, install the harmless APK after importing its hash:
+5. To test the post-install receiver instead, stop Sentinel temporarily (or keep the APK
+   outside monitored folders), then install the harmless APK after importing its hash:
    adb install "$siren_out/SafeMobile-Siren-Test.apk"
    (Uninstall an older fixture first if Android reports a signing mismatch.)
 6. Clean up the test app: adb uninstall com.safemobile.sirentest
