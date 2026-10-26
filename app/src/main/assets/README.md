@@ -6,7 +6,7 @@ Native Android Kotlin app using Jetpack Compose Material 3, Room, WorkManager, G
 - Application ID: com.vibesync.antivirus
 - Min SDK 26; compile and target SDK 36 (Android 16)
 - JDK 17, Gradle Kotlin DSL
-- Candidate version name 1.0.2; version code 20261022 on the hardening branch. Confirm version-code availability in Play Console before upload because repository history cannot establish whether a code was already used there.
+- Candidate version name 1.0.5; version code 20261027. Confirm version-code availability in Play Console before upload.
 - CI runs tests and lint, then builds debug and release APKs plus a release AAB. If the four standard KEYSTORE_* / KEY_* GitHub Actions secrets are configured, release APK/AAB outputs are signed; otherwise they remain unsigned.
 
 ## Privacy boundary
