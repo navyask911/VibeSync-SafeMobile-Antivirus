@@ -88,6 +88,7 @@ import com.vibesync.antivirus.SafeMobileApp
 import com.vibesync.antivirus.R
 import com.vibesync.antivirus.core.connectivity.ConnectivityMonitor
 import com.vibesync.antivirus.core.worker.HashDatabaseSyncScheduler
+import com.vibesync.antivirus.core.posture.DevicePostureMonitor
 import com.vibesync.antivirus.core.observer.StorageSentinelService
 import com.vibesync.antivirus.core.observer.StorageAccessPreferences
 import com.vibesync.antivirus.core.observer.FullScreenAlertAccess
@@ -115,7 +116,9 @@ import kotlinx.coroutines.launch
  sharedText:String? = null,
  onSharedTextConsumed:() -> Unit = {},
  openQuarantine:Boolean = false,
- onOpenQuarantineConsumed:() -> Unit = {}
+ onOpenQuarantineConsumed:() -> Unit = {},
+ openDevicePosture:Boolean = false,
+ onOpenDevicePostureConsumed:() -> Unit = {}
 ) {
  val context=LocalContext.current
  val safeMobileApp=context.applicationContext as SafeMobileApp
@@ -123,6 +126,8 @@ import kotlinx.coroutines.launch
  val activity=context as? Activity
  val vm:SafeMobileViewModel=viewModel(factory=SafeMobileViewModel.Factory(repository))
  val state by vm.state.collectAsStateWithLifecycle()
+ val postureVm:DevicePostureViewModel=viewModel(factory=DevicePostureViewModel.Factory(safeMobileApp.devicePostureRepository))
+ val postureState by postureVm.state.collectAsStateWithLifecycle()
  val initialHashSyncPending by androidx.compose.runtime.produceState(initialValue = false, context) {
   HashDatabaseSyncScheduler.initialSyncPending(context).collect { value = it }
  }
@@ -237,6 +242,7 @@ import kotlinx.coroutines.launch
    securityAlertsEnabled = notificationsGranted
    securityPrefs.edit().putBoolean(SafeMobileApp.KEY_SECURITY_ALERTS_ENABLED, notificationsGranted).apply()
    pendingAlertEnable = false
+   if (notificationsGranted && privacyAccepted) DevicePostureMonitor.enqueueNow(context)
   }
  }
  val storageTreeLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) folderResult@{ result ->
@@ -312,6 +318,7 @@ import kotlinx.coroutines.launch
   } else {
    securityAlertsEnabled = true
    securityPrefs.edit().putBoolean(SafeMobileApp.KEY_SECURITY_ALERTS_ENABLED, true).apply()
+   if (privacyAccepted) DevicePostureMonitor.enqueueNow(context)
   }
  }
  val updateStrictMode: (Boolean) -> Unit = { enabled ->
@@ -331,13 +338,14 @@ import kotlinx.coroutines.launch
   }
  }
  DisposableEffect(connectivity) { connectivity.start(); onDispose { connectivity.stop() } }
- DisposableEffect(lifecycleOwner, context) {
+ DisposableEffect(lifecycleOwner, context, privacyAccepted) {
   val observer = LifecycleEventObserver { _, event ->
    if (event == Lifecycle.Event.ON_RESUME) {
     fullScreenAlertsGranted = FullScreenAlertAccess.isGranted(context)
     storageAccessGranted = hasSharedStorageAccess(context)
     folderUris = StorageAccessPreferences.accessibleTreeUris(context)
     vm.refreshSecurityScore()
+    if (privacyAccepted) postureVm.refresh()
     ownerManager.refreshState()
     sentinelDesired = securityPrefs.getBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, false)
     sentinelOptIn = sentinelDesired
@@ -364,6 +372,7 @@ import kotlinx.coroutines.launch
   onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
  }
  LaunchedEffect(onboardingComplete, privacyAccepted) {
+  if (privacyAccepted) postureVm.refresh()
   if (onboardingComplete && privacyAccepted &&
       !onboardingPrefs.getBoolean(OnboardingPrefs.FIRST_SCAN_REQUESTED, false)) {
    onboardingPrefs.edit().putBoolean(OnboardingPrefs.FIRST_SCAN_REQUESTED, true).apply()
@@ -373,7 +382,7 @@ import kotlinx.coroutines.launch
  LaunchedEffect(initialHashSyncPending) {
   if (!initialHashSyncPending) { vm.refreshHashDatabaseCapability(); vm.refreshSecurityScore() }
  }
- LaunchedEffect(lifecycleOwner) {
+ LaunchedEffect(lifecycleOwner, privacyAccepted) {
   lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
    while (true) {
     fullScreenAlertsGranted = FullScreenAlertAccess.isGranted(context)
@@ -381,6 +390,7 @@ import kotlinx.coroutines.launch
     storageAccessGranted = folderUris.isNotEmpty()
     monitoringRunning = isStorageSentinelRunning(context) && storageAccessGranted
     vm.refreshSecurityScore()
+    if (privacyAccepted) postureVm.refresh(force = false)
     kotlinx.coroutines.delay(30_000L)
    }
   }
@@ -390,6 +400,13 @@ import kotlinx.coroutines.launch
   if (openQuarantine) {
    selectedDestination = "quarantine"
    onOpenQuarantineConsumed()
+  }
+ }
+ LaunchedEffect(openDevicePosture) {
+  if (openDevicePosture) {
+   selectedDestination = "posture"
+   if (privacyAccepted) postureVm.refresh()
+   onOpenDevicePostureConsumed()
   }
  }
  LaunchedEffect(state.messageResource) {
@@ -451,6 +468,7 @@ import kotlinx.coroutines.launch
         "apps" to R.string.nav_apps,
         "sources" to R.string.nav_install_sources,
         "sentinel" to R.string.nav_sentinel,
+        "posture" to R.string.posture_title,
         "analytics" to R.string.nav_analytics,
         "history" to R.string.nav_history,
         "quarantine" to R.string.nav_quarantine,
@@ -480,6 +498,10 @@ import kotlinx.coroutines.launch
       onCancel = vm::cancelScan)
     }
     if (selectedDestination == "home") {
+     DevicePostureDashboardCard(postureState, onOpen = {
+      selectedDestination = "posture"
+      if (privacyAccepted) postureVm.refresh()
+     })
      LimitedProtectionBanner(
       downloads = folderUris.isNotEmpty() && StorageAccessPreferences.hasRole(context, StorageAccessPreferences.DOWNLOADS),
       whatsapp = folderUris.isNotEmpty() && StorageAccessPreferences.hasRole(context, StorageAccessPreferences.WHATSAPP),
@@ -633,6 +655,15 @@ import kotlinx.coroutines.launch
       onSkip = { selectedDestination = "home" })
     }
     if (selectedDestination == "guardian") GuardianPanel()
+    if (selectedDestination == "posture") DevicePostureScreen(
+     state = postureState, alertsAvailable = securityAlertsEnabled && notificationsGranted,
+     onRefresh = { requestPrivacyAcknowledgement { postureVm.refresh() } },
+     onMonitoringChanged = { enabled ->
+      if (enabled) requestPrivacyAcknowledgement { postureVm.setMonitoring(context, true) }
+      else postureVm.setMonitoring(context, false)
+     },
+     onEnableAlerts = { requestPrivacyAcknowledgement { changeSecurityAlerts(true) } }
+    )
     if (selectedDestination == "phishing") PhishingPanel(sharedText, repository) { onSharedTextConsumed() }
     if (selectedDestination == "cleaner") StorageCleanerPanel()
     state.messageResource?.takeUnless { it == R.string.scan_complete && selectedDestination in listOf("home", "scan") }?.let { message -> Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant)) { Text(stringResource(message),Modifier.padding(14.dp),color=MaterialTheme.colorScheme.onSurface,style=MaterialTheme.typography.bodySmall) } }

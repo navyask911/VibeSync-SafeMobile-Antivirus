@@ -11,6 +11,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.vibesync.antivirus.core.locale.LocalePreferences
 import com.vibesync.antivirus.core.observer.SecurityAlertNotifier
+import com.vibesync.antivirus.core.posture.PostureChangeNotifier
 import com.vibesync.antivirus.presentation.SafeMobileScreen
 import com.vibesync.antivirus.presentation.SafeMobileTheme
 
@@ -21,12 +22,14 @@ class MainActivity : ComponentActivity() {
     }
     private var sharedText by mutableStateOf<String?>(null)
     private var openQuarantine by mutableStateOf(false)
+    private var openDevicePosture by mutableStateOf(false)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge(statusBarStyle = androidx.activity.SystemBarStyle.dark(android.graphics.Color.TRANSPARENT),
             navigationBarStyle = androidx.activity.SystemBarStyle.dark(android.graphics.Color.rgb(15, 23, 42)))
         sharedText = incomingSharedText(intent)
         openQuarantine = intent.getBooleanExtra(SecurityAlertNotifier.EXTRA_OPEN_QUARANTINE, false)
+        openDevicePosture = intent.getBooleanExtra(PostureChangeNotifier.EXTRA_OPEN_POSTURE, false)
         setContent {
             SafeMobileTheme {
                 SafeMobileScreen(
@@ -34,7 +37,9 @@ class MainActivity : ComponentActivity() {
                     sharedText = sharedText,
                     onSharedTextConsumed = { sharedText = null },
                     openQuarantine = openQuarantine,
-                    onOpenQuarantineConsumed = { openQuarantine = false }
+                    onOpenQuarantineConsumed = { openQuarantine = false },
+                    openDevicePosture = openDevicePosture,
+                    onOpenDevicePostureConsumed = { openDevicePosture = false }
                 )
             }
         }
@@ -44,6 +49,7 @@ class MainActivity : ComponentActivity() {
         setIntent(intent)
         incomingSharedText(intent)?.let { sharedText = it }
         if (intent.getBooleanExtra(SecurityAlertNotifier.EXTRA_OPEN_QUARANTINE, false)) openQuarantine = true
+        if (intent.getBooleanExtra(PostureChangeNotifier.EXTRA_OPEN_POSTURE, false)) openDevicePosture = true
     }
     override fun onResume() {
         super.onResume()
