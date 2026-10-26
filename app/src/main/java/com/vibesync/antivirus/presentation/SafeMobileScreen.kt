@@ -75,6 +75,7 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.style.TextOverflow
@@ -88,6 +89,7 @@ import com.vibesync.antivirus.BuildConfig
 import com.vibesync.antivirus.SafeMobileApp
 import com.vibesync.antivirus.R
 import com.vibesync.antivirus.core.connectivity.ConnectivityMonitor
+import com.vibesync.antivirus.core.worker.HashDatabaseSyncScheduler
 import com.vibesync.antivirus.core.observer.StorageSentinelService
 import com.vibesync.antivirus.core.observer.StorageAccessPreferences
 import com.vibesync.antivirus.core.worker.OverlayRiskReviewManager
@@ -137,6 +139,9 @@ import kotlinx.coroutines.launch
  val activity=context as? Activity
  val vm:SafeMobileViewModel=viewModel(factory=SafeMobileViewModel.Factory(repository))
  val state by vm.state.collectAsStateWithLifecycle()
+ val initialHashSyncPending by androidx.compose.runtime.produceState(initialValue = false, context) {
+  HashDatabaseSyncScheduler.initialSyncPending(context).collect { value = it }
+ }
  val auditEntries by repository.observeRecentAudits().collectAsStateWithLifecycle(initialValue = emptyList())
  val securityIncidents by repository.observeRecentSecurityIncidents().collectAsStateWithLifecycle(initialValue = emptyList())
  val ownerManager = remember(context) { DeviceOwnerManager(context) }
@@ -193,6 +198,7 @@ import kotlinx.coroutines.launch
  val securityPrefs = remember(context) { context.getSharedPreferences(SafeMobileApp.SECURITY_PREFS, Context.MODE_PRIVATE) }
  var sentinelDesired by remember(context) { mutableStateOf(securityPrefs.getBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, false)) }
  var strictMode by remember(context) { mutableStateOf(securityPrefs.getBoolean(SafeMobileApp.KEY_STRICT_MODE, false)) }
+ var securityAlertsEnabled by remember(context) { mutableStateOf(securityPrefs.getBoolean(SafeMobileApp.KEY_SECURITY_ALERTS_ENABLED, false)) }
  val snackbarHostState = remember { SnackbarHostState() }
  val uiScope = rememberCoroutineScope()
  var lastUninstallPackage by remember { mutableStateOf<String?>(null) }
@@ -224,7 +230,6 @@ import kotlinx.coroutines.launch
  val quarantineManager = remember(context) { LocalQuarantineManager(context) }
  val apkPicker=rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri:Uri? -> uri?.let(vm::scanSelected) }
  val definitionsPicker=rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri:Uri? -> uri?.let(vm::importOfflineDefinitions) }
-  val signedHashDatabasePicker=rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri:Uri? -> uri?.let(vm::importSignedHashDatabase) }
   val pendingYaraPicker=rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri:Uri? -> uri?.let(vm::importPendingYaraRule) }
  val restorePicker=rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/octet-stream")) { uri:Uri? ->
   val file = pendingRestoreFile
@@ -233,14 +238,13 @@ import kotlinx.coroutines.launch
  }
  val notificationLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
   notificationsGranted = hasNotificationAccess(context)
-  if (notificationsGranted && onboardingStep == 2) setOnboardingStep(3)
  }
  val storageTreeLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri: Uri? ->
   if (uri != null) {
    val granted = runCatching { StorageAccessPreferences.persistSelectedFolder(context, uri) }.getOrDefault(false)
    storageAccessGranted = granted
+   if (onboardingStep == 0) setOnboardingStep(1)
    if (granted) {
-    if (onboardingStep == 0) setOnboardingStep(1)
     if (securityPrefs.getBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, false)) {
      runCatching { context.startForegroundService(Intent(context, StorageSentinelService::class.java)) }
       .onFailure { Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show() }
@@ -302,6 +306,7 @@ import kotlinx.coroutines.launch
     sentinelDesired = securityPrefs.getBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, false)
     sentinelOptIn = sentinelDesired
     strictMode = securityPrefs.getBoolean(SafeMobileApp.KEY_STRICT_MODE, false)
+    securityAlertsEnabled = securityPrefs.getBoolean(SafeMobileApp.KEY_SECURITY_ALERTS_ENABLED, false)
     monitoringRunning = isStorageSentinelRunning(context) && storageAccessGranted
     if (!storageAccessGranted && isStorageSentinelRunning(context)) {
      context.stopService(Intent(context, StorageSentinelService::class.java))
@@ -314,8 +319,6 @@ import kotlinx.coroutines.launch
      }, 700L)
     }
     notificationsGranted = hasNotificationAccess(context)
-    if (!onboardingComplete && onboardingStep == 0 && storageAccessGranted) setOnboardingStep(1)
-    if (!onboardingComplete && onboardingStep == 2 && notificationsGranted) setOnboardingStep(3)
     vm.refreshQuarantine()
     OverlayRiskReviewManager.requestForegroundReview(context)
     pendingUninstallPackage?.let { packageName -> vm.refreshInstalledPackage(packageName); pendingUninstallPackage = null }
@@ -342,10 +345,14 @@ import kotlinx.coroutines.launch
   if (!onboardingComplete) {
    SecurityOnboardingScreen(
     step=onboardingStep, storageAccessGranted=storageAccessGranted, notificationsGranted=notificationsGranted,
-    sentinelOptIn=sentinelOptIn, enterpriseManager=ownerManager, onRequestStorage=requestStorage,
+    sentinelOptIn=sentinelOptIn, strictModeOptIn=strictMode, securityAlertsOptIn=securityAlertsEnabled,
+    initialSyncPending=initialHashSyncPending,
+    onRequestStorage=requestStorage,
     onContinueStorage={ setOnboardingStep(1) }, onContinueInstalledApps={ setOnboardingStep(2) },
     onRequestNotifications=requestNotifications, onSkipNotifications={ setOnboardingStep(3) },
     onEnableSentinel=enableSentinel, onDisableSentinel=disableSentinel,
+    onStrictModeChanged={ enabled -> strictMode=enabled; securityPrefs.edit().putBoolean(SafeMobileApp.KEY_STRICT_MODE, enabled).apply() },
+    onSecurityAlertsChanged={ enabled -> securityAlertsEnabled=enabled; securityPrefs.edit().putBoolean(SafeMobileApp.KEY_SECURITY_ALERTS_ENABLED, enabled).apply() },
     onFinish=finishOnboarding, onSkipSetup=finishOnboarding
    )
   } else {
@@ -353,7 +360,7 @@ import kotlinx.coroutines.launch
    Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(horizontal=18.dp,vertical=14.dp),verticalArrangement=Arrangement.spacedBy(14.dp)) {
     Row(verticalAlignment=Alignment.CenterVertically) {
      Box(Modifier.size(46.dp).background(MaterialTheme.colorScheme.primaryContainer,RoundedCornerShape(15.dp)),contentAlignment=Alignment.Center) {
-      androidx.compose.material3.Icon(Icons.Default.Security,contentDescription=null,tint=MaterialTheme.colorScheme.primary,modifier=Modifier.size(31.dp))
+      androidx.compose.material3.Icon(painterResource(R.drawable.ic_launcher_foreground),contentDescription=stringResource(R.string.app_name),tint=Color.Unspecified,modifier=Modifier.size(35.dp))
      }
      Column(Modifier.padding(start=10.dp).weight(1f)) {
       Text(stringResource(R.string.brand_title),style=MaterialTheme.typography.titleLarge,fontWeight=FontWeight.Black,color=MaterialTheme.colorScheme.onSurface)
@@ -412,10 +419,15 @@ import kotlinx.coroutines.launch
      }
     }
     if (selectedDestination == "home") {
-     SecurityDashboard(
-       selectedDestination = selectedDestination,
-       onDestinationSelected = { selectedDestination = it }
-      )
+     SecurityDashboard()
+     if (initialHashSyncPending) {
+      Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.primaryContainer),shape=RoundedCornerShape(16.dp),modifier=Modifier.fillMaxWidth()) {
+       Row(Modifier.padding(14.dp), horizontalArrangement=Arrangement.spacedBy(10.dp), verticalAlignment=Alignment.CenterVertically) {
+        CircularProgressIndicator(Modifier.size(18.dp), strokeWidth=2.dp)
+        Text(stringResource(R.string.hash_database_initial_syncing), style=MaterialTheme.typography.bodyMedium)
+       }
+      }
+     }
       val lastScanLabel = state.lastScanAt?.let { DateFormat.getDateTimeInstance().format(Date(it)) }
       ?.let { context.getString(R.string.security_last_scan, it) } ?: stringResource(R.string.security_last_scan_none)
      val ringProgress = if (state.isScanning && state.totalItems > 0) state.processedItems.toFloat() / state.totalItems.toFloat() else null
@@ -430,30 +442,8 @@ import kotlinx.coroutines.launch
       onScan={ requestPrivacyAcknowledgement { vm.scanFull() } }
      )
      Text(stringResource(R.string.scan_clean_warning), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-     EnterpriseProtectionCard(manager = ownerManager)
-     Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant), shape = RoundedCornerShape(16.dp), modifier = Modifier.fillMaxWidth()) {
-      Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-       Text(stringResource(R.string.download_interceptor_label), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-       Text(stringResource(R.string.download_interceptor_description), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-       Text(stringResource(if (monitoringRunning) R.string.download_interceptor_status_enabled else R.string.download_interceptor_status_setup),
-        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-       Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        OutlinedButton(onClick = { selectedDestination = "settings" }, modifier = Modifier.weight(1f)) { Text(stringResource(R.string.nav_settings)) }
-        Button(onClick = { if (!monitoringRunning) toggleProtection(true) else toggleProtection(false) },
-         modifier = Modifier.weight(1f)) {
-         Text(stringResource(if (monitoringRunning) R.string.monitor_stop else R.string.monitor_button))
-        }
-       }
-      }
-     }
-     Row(Modifier.fillMaxWidth(), horizontalArrangement=Arrangement.spacedBy(8.dp)) {
-      OutlinedButton(onClick={ selectedDestination="apps" }, modifier=Modifier.weight(1f)) { Text(stringResource(R.string.nav_apps)) }
-      OutlinedButton(onClick={ selectedDestination="sentinel" }, modifier=Modifier.weight(1f)) { Text(stringResource(R.string.nav_sentinel)) }
-      OutlinedButton(onClick={ selectedDestination="analytics" }, modifier=Modifier.weight(1f)) { Text(stringResource(R.string.nav_analytics)) }
-     }
      SectionHeader(title=stringResource(R.string.analytics_recent_activity), actionLabel=stringResource(R.string.nav_history), onAction={ selectedDestination="history" })
-     if (auditEntries.isEmpty()) EmptyState(title=stringResource(R.string.analytics_no_audits),description=stringResource(R.string.analytics_no_audits_body),
-      actionLabel=stringResource(R.string.security_scan_now), onAction={ requestPrivacyAcknowledgement { vm.scanFull() } })
+     if (auditEntries.isEmpty()) EmptyState(title=stringResource(R.string.analytics_no_audits),description=stringResource(R.string.analytics_no_audits_body))
      else auditEntries.take(3).forEach { audit ->
       Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surface),shape=RoundedCornerShape(14.dp),modifier=Modifier.fillMaxWidth()) {
        Row(Modifier.padding(12.dp),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(10.dp)) {
@@ -708,21 +698,19 @@ import kotlinx.coroutines.launch
     }
     if (selectedDestination == "history") ScanHistoryPanel(auditEntries)
     if (selectedDestination == "settings") {
-     EnterpriseProtectionCard(manager = ownerManager)
      SafeMobileSettingsPanel(
       monitoringRunning, enableSentinel, disableSentinel,
       strictMode = strictMode,
+      securityAlertsEnabled = securityAlertsEnabled,
+      onSecurityAlertsChanged = { enabled -> securityAlertsEnabled=enabled; securityPrefs.edit().putBoolean(SafeMobileApp.KEY_SECURITY_ALERTS_ENABLED, enabled).apply() },
       onToggleProtection = toggleProtection, onStrictModeChanged = updateStrictMode
      )
     }
     if (selectedDestination == "capabilities") {
      DetectionCapabilitiesScreen(
       hashDatabaseCapability = state.hashDatabaseCapability,
-      initialUpdateUrl = state.hashDatabaseUpdateUrl,
-      initialUpdatesEnabled = state.hashDatabaseUpdatesEnabled,
-      onImportSignedDatabase = { signedHashDatabasePicker.launch(arrayOf("application/zip", "application/octet-stream")) },
-      onImportYaraRulesForReview = { pendingYaraPicker.launch(arrayOf("text/plain", "application/octet-stream", "application/x-yara")) },
-      onSaveUpdateConfiguration = { url, enabled -> vm.configureHashDatabaseSync(url, enabled) }
+      initialSyncPending = initialHashSyncPending,
+      onImportYaraRulesForReview = { pendingYaraPicker.launch(arrayOf("text/plain", "application/octet-stream", "application/x-yara")) }
      )
     }
     Spacer(Modifier.height(8.dp))

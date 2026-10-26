@@ -50,33 +50,6 @@ class HashDatabaseManager(context: Context, private val database: ThreatDatabase
         }
     }
 
-    /**
-     * Restores an existing signed database, or imports the bundled database on first launch.
-     * Bundle bytes are verified before any record is activated or persisted.
-     */
-    suspend fun activateBundledDatabaseIfMissing(): HashDatabaseCapability = withContext(Dispatchers.IO) {
-        mutex.withLock {
-            val restored = restoreActiveUnsafe()
-            if (activeFile.isFile) return@withLock restored
-
-            loaded = false
-            try {
-                appContext.assets.open(BUNDLED_DATABASE_ASSET).use { input ->
-                    importBundleUnsafe(input)
-                }
-            } catch (error: Exception) {
-                loaded = true
-                bloom = null
-                capability = HashDatabaseCapability(
-                    enabled = false,
-                    reason = "Disabled: bundled signed hash database could not be loaded or verified."
-                )
-                Log.e(TAG, "Bundled signed hash database is unavailable or invalid; app will continue with it inactive.", error)
-                capability
-            }
-        }
-    }
-
     private suspend fun importBundleUnsafe(input: java.io.InputStream): HashDatabaseCapability {
         require(BuildConfig.HASHDB_PUBLIC_KEY_CONFIGURED && BuildConfig.HASHDB_PUBLIC_KEY_B64.isNotBlank()) {
             "Disabled: a trusted hash-database Ed25519 public key is not configured."
@@ -89,8 +62,13 @@ class HashDatabaseManager(context: Context, private val database: ThreatDatabase
             bundle.databaseBytes, HashAlgorithm.fromDatabaseName(bundle.databaseName)
         )
         val acceptedVersion = preferences.getLong(KEY_LAST_VERSION, 0L)
-        require(parsed.version > acceptedVersion) {
-            "Hash database version rollback or replay was rejected."
+        require(parsed.version >= acceptedVersion) {
+            "Hash database version rollback was rejected."
+        }
+        // Every downloaded bundle has already been signature-verified. A matching active version
+        // is a silent no-op; an equal version can still restore a missing/corrupt local copy.
+        if (parsed.version == acceptedVersion && capability.enabled && capability.version == parsed.version) {
+            return capability
         }
 
         val nextBloom = HashDatabaseBloomFilter.fromRecords(parsed.records)
@@ -238,7 +216,7 @@ class HashDatabaseManager(context: Context, private val database: ThreatDatabase
     private fun initialDisabledState(): HashDatabaseCapability = HashDatabaseCapability(
         enabled = false,
         reason = if (BuildConfig.HASHDB_PUBLIC_KEY_CONFIGURED && BuildConfig.HASHDB_PUBLIC_KEY_B64.isNotBlank()) {
-            "Disabled: no signed production hash database is bundled or imported."
+            "Disabled: no signed production hash database has been downloaded or imported."
         } else {
             "Disabled: trusted hash-database Ed25519 public key is not configured."
         }
@@ -247,7 +225,6 @@ class HashDatabaseManager(context: Context, private val database: ThreatDatabase
     companion object {
         const val HASH_DATABASE_SOURCE = "signed-hashdb"
         private const val TAG = "HashDatabaseManager"
-        private const val BUNDLED_DATABASE_ASSET = "safe-mobile-hashdb.bundle.zip"
         private const val PREFERENCES = "safe_mobile_signed_hash_database"
         private const val KEY_LAST_VERSION = "last_accepted_version"
     }

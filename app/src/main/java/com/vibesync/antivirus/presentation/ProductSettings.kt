@@ -271,6 +271,8 @@ internal fun SafeMobileSettingsPanel(
     onEnableSentinel: () -> Unit,
     onDisableSentinel: () -> Unit,
     strictMode: Boolean = false,
+    securityAlertsEnabled: Boolean = false,
+    onSecurityAlertsChanged: ((Boolean) -> Unit)? = null,
     onToggleProtection: ((Boolean) -> Unit)? = null,
     onStrictModeChanged: ((Boolean) -> Unit)? = null
 ) {
@@ -410,6 +412,14 @@ internal fun SafeMobileSettingsPanel(
                         if (onToggleProtection != null) onToggleProtection.invoke(enabled)
                         else if (enabled) onEnableSentinel() else onDisableSentinel()
                     })
+                }
+                Text(stringResource(R.string.security_alerts_title), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                Text(stringResource(R.string.security_alerts_description), style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Row(Modifier.fillMaxWidth(), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+                    Text(stringResource(if (securityAlertsEnabled) R.string.security_alerts_enabled else R.string.security_alerts_disabled),
+                        modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium)
+                    Switch(checked = securityAlertsEnabled, onCheckedChange = { onSecurityAlertsChanged?.invoke(it) })
                 }
                 Text(stringResource(R.string.strict_mode_description), style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant)

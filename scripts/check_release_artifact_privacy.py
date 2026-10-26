@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fail CI if the offline release can access the network or any release packages ads/analytics SDKs."""
+"""Verify Play artifacts omit the signed hash database and unwanted tracking SDKs."""
 from pathlib import Path
 import os
 import re
@@ -23,6 +23,13 @@ BAD_MARKERS = (
     b"io/sentry",
     b"com/bugsnag",
 )
+FORBIDDEN_DB_ASSETS = (
+    "safe-mobile-hashdb.bundle.zip",
+    "hashes.hsb",
+    "hashes.hsb.sig",
+    "malware_hashes.hsb",
+    "malware_hashes.sig",
+)
 
 def fail(message):
     print("Release privacy check FAILED: " + message, file=sys.stderr)
@@ -35,7 +42,7 @@ if not aapt and sdk:
     if candidates:
         aapt = str(candidates[-1])
 if not aapt:
-    fail("aapt was not found; cannot inspect the APK manifest permissions.")
+    fail("aapt was not found; cannot inspect APK manifests.")
 
 offline_apks = list((APK_ROOT / "offline" / "release").glob("*.apk"))
 feed_apks = list((APK_ROOT / "feed" / "release").glob("*.apk"))
@@ -49,59 +56,54 @@ if not any(p.name.lower().startswith("app-offline-release") for p in release_bun
 if not any(p.name.lower().startswith("app-feed-release") for p in release_bundles):
     fail("feed release AAB is missing.")
 
-def dex_bytes(archive):
-    hits = []
-    for name in archive.namelist():
-        if name.endswith(".dex"):
-            hits.append((name, archive.read(name)))
-    return hits
-
 def has_false_boolean_attribute(xmltree_dump, attribute):
-    """aapt dump xmltree reports compiled booleans as TYPE_INT_BOOLEAN hex values."""
-    pattern = rf"android:{re.escape(attribute)}\b[^\n]*?(?:\(type 0x12\)\s*0x0\b|=\s*false\b)"
-    return re.search(pattern, xmltree_dump, flags=re.IGNORECASE) is not None
+    return re.search(
+        rf"android:{re.escape(attribute)}\b[^\n]*?(?:\(type 0x12\)\s*0x0\b|=\s*false\b)",
+        xmltree_dump, flags=re.IGNORECASE
+    ) is not None
 
-def check_no_tracking_classes(path):
+def inspect_artifact(path):
     try:
         with zipfile.ZipFile(path) as archive:
-            for name, data in dex_bytes(archive):
-                for marker in BAD_MARKERS:
-                    if marker in data:
-                        fail(path.name + " contains forbidden ad/analytics/crash SDK marker " + marker.decode())
+            names = archive.namelist()
+            for name in names:
+                basename = name.rsplit("/", 1)[-1]
+                if basename in FORBIDDEN_DB_ASSETS and (name.startswith("assets/") or name.startswith("base/assets/")):
+                    fail(path.name + " contains forbidden bundled database asset: " + name)
+            for name in names:
+                if name.endswith(".dex"):
+                    data = archive.read(name)
+                    for marker in BAD_MARKERS:
+                        if marker in data:
+                            fail(path.name + " contains forbidden ad/analytics/crash SDK marker " + marker.decode())
+                    if b"mb-api.abuse.ch" in data or b"bazaar.abuse.ch" in data:
+                        fail(path.name + " contains a direct MalwareBazaar runtime endpoint.")
     except zipfile.BadZipFile:
         fail("Cannot read release archive: " + str(path))
 
-for apk in offline_apks:
+def check_permissions(apk):
     result = subprocess.run([aapt, "dump", "permissions", str(apk)], text=True,
                             stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
     if result.returncode:
         fail("aapt could not read " + apk.name + ": " + result.stderr.strip())
-    if "android.permission.INTERNET" in result.stdout:
-        fail(apk.name + " declares INTERNET; offline release must not request it.")
-    manifest_dump = subprocess.run([aapt, "dump", "xmltree", str(apk), "AndroidManifest.xml"],
-                                   text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
-    if manifest_dump.returncode:
+    if "android.permission.INTERNET" not in result.stdout:
+        fail(apk.name + " must declare INTERNET for the GitHub Releases signed-database updater.")
+    manifest = subprocess.run([aapt, "dump", "xmltree", str(apk), "AndroidManifest.xml"],
+                              text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
+    if manifest.returncode:
         fail("aapt could not inspect the manifest for " + apk.name)
-    if not has_false_boolean_attribute(manifest_dump.stdout, "allowBackup"):
-        fail(apk.name + " must have android:allowBackup=false.")
-    if not has_false_boolean_attribute(manifest_dump.stdout, "fullBackupContent"):
-        fail(apk.name + " must explicitly disable fullBackupContent.")
-    if not has_false_boolean_attribute(manifest_dump.stdout, "hasFragileUserData"):
-        fail(apk.name + " must set android:hasFragileUserData=false.")
-    if "android:dataExtractionRules" not in manifest_dump.stdout:
+    for attribute in ("allowBackup", "fullBackupContent", "hasFragileUserData"):
+        if not has_false_boolean_attribute(manifest.stdout, attribute):
+            fail(apk.name + " must explicitly set android:" + attribute + "=false.")
+    if "android:dataExtractionRules" not in manifest.stdout:
         fail(apk.name + " must reference dataExtractionRules.")
     if "android.permission.MANAGE_EXTERNAL_STORAGE" in result.stdout or "android.permission.READ_EXTERNAL_STORAGE" in result.stdout:
         fail(apk.name + " declares broad/legacy storage access; use the SAF.")
-    check_no_tracking_classes(apk)
+    inspect_artifact(apk)
 
-for apk in feed_apks:
-    result = subprocess.run([aapt, "dump", "permissions", str(apk)], text=True,
-                            stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
-    if result.returncode or "android.permission.INTERNET" not in result.stdout:
-        fail(apk.name + " must explicitly contain INTERNET because this is the opt-in feed flavor.")
-    check_no_tracking_classes(apk)
+for artifact in offline_apks + feed_apks:
+    check_permissions(artifact)
+for artifact in release_bundles:
+    inspect_artifact(artifact)
 
-for bundle in release_bundles:
-    check_no_tracking_classes(bundle)
-
-print("Release privacy checks passed: offline APK has no INTERNET permission; release APKs/AABs contain no blocked ad, analytics, or crash-reporting SDK markers.")
+print("Release privacy checks passed: APK/AAB artifacts omit the database and direct MalwareBazaar endpoints.")
