@@ -2,11 +2,27 @@ package com.vibesync.antivirus.presentation
 
 import android.content.pm.ApplicationInfo
 import com.vibesync.antivirus.core.security.ProtectedPackagePolicy
+import com.vibesync.antivirus.core.security.TrustedPackageWhitelist
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class SystemPackageGuardTest {
+    @Test fun allGoogleNamespacesAndVendorSystemAppsAreExcluded() {
+        listOf("com.google.android.gms", "com.google.chromeremotedesktop", "com.android.settings", "android.internal.service").forEach {
+            assertTrue(TrustedPackageWhitelist.isProtected(0, it))
+            assertFalse(ProtectedPackagePolicy.isUserInstalled(0, it))
+        }
+        assertTrue(TrustedPackageWhitelist.isProtected(ApplicationInfo.FLAG_SYSTEM, "vendor.carrier.service"))
+        assertTrue(TrustedPackageWhitelist.isProtected(ApplicationInfo.FLAG_UPDATED_SYSTEM_APP, "vendor.carrier.service"))
+    }
+
+    @Test fun namespaceBoundariesDoNotExcludeUnrelatedApps() {
+        assertFalse(TrustedPackageWhitelist.hasProtectedNamespace("com.googleevil.fixture"))
+        assertFalse(TrustedPackageWhitelist.hasProtectedNamespace("com.androidtools.fixture"))
+        assertTrue(ProtectedPackagePolicy.isUserInstalled(0, "com.example.fixture"))
+    }
+
     @Test fun systemFlagsReturnBlocked() {
         assertTrue(SystemPackageGuard.evaluateFlags(ApplicationInfo.FLAG_SYSTEM) is PackageGuardResult.BlockedSystemApp)
         assertTrue(SystemPackageGuard.evaluateFlags(ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) is PackageGuardResult.BlockedSystemApp)

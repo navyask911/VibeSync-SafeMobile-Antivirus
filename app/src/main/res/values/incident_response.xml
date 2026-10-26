@@ -7,7 +7,7 @@
     <string name="incident_warning" translatable="false">This installed app matched a known malware hash. Avoid opening it. Uninstall it using Android’s confirmation screen. SafeMobile has not quarantined or removed this installed app.</string>
     <string name="incident_uninstall_now" translatable="false">UNINSTALL NOW</string>
     <string name="incident_dismiss" translatable="false">Dismiss (Not Recommended)</string>
-    <string name="incident_review_threat" translatable="false">Review threat</string>
+    <string name="incident_review_threat" translatable="false">Review Threat</string>
     <string name="incident_user_confirmation" translatable="false">App removal always requires your confirmation in Android. SafeMobile does not silently uninstall apps.</string>
     <string name="incident_alerts_explanation" translatable="false">Opt in to urgent notifications and a five-second siren at maximum alarm volume for confirmed malware. Opening SafeMobile or dismissing an incident stops the siren. Android sound and Do Not Disturb settings may limit audio.</string>
     <string name="incident_full_screen_settings" translatable="false">Full-screen incident alerts</string>

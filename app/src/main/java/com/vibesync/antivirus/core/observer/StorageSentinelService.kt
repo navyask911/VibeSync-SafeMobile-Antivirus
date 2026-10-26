@@ -65,6 +65,10 @@ class StorageSentinelService : Service() {
                             delay(FILE_SETTLE_DELAY_MS)
                             if (!child.exists() || !child.canRead() || child.length() != size || child.lastModified() != modified) continue
                             val result = (application as SafeMobileApp).repository.scanUri(child.uri)
+                            if (!(application as SafeMobileApp).repository.isReviewableResult(result)) {
+                                rememberProcessed(identity, size, modified)
+                                continue
+                            }
                             if (result.verdict != ScanVerdict.NOT_SCANNED) {
                                 process(result, name, name, null, child.uri)
                                 rememberProcessed(identity, size, modified)

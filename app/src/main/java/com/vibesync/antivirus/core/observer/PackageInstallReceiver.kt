@@ -35,6 +35,7 @@ class PackageInstallReceiver : BroadcastReceiver() {
    return
   }
   if(packageName==appContext.packageName) return
+  if(com.vibesync.antivirus.core.security.TrustedPackageWhitelist.hasProtectedNamespace(packageName)) return
   val update=intent.action==Intent.ACTION_PACKAGE_REPLACED || intent.getBooleanExtra(Intent.EXTRA_REPLACING,false)
   val eventId=UUID.randomUUID().toString()
   val pending=goAsync()
@@ -42,6 +43,7 @@ class PackageInstallReceiver : BroadcastReceiver() {
   scope.launch {
    try {
     val app=appContext as? SafeMobileApp ?: return@launch
+    if (!com.vibesync.antivirus.core.security.TrustedPackageWhitelist.isEligibleForReview(appContext,packageName)) return@launch
     val source=InstallSourceVerifier(appContext).inspect(packageName)
     val privateTextStore=EncryptedHashStore(appContext)
     val category=when(source.category) {

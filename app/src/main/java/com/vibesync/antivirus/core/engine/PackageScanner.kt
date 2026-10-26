@@ -11,6 +11,7 @@ import com.vibesync.antivirus.core.engine.DeepStaticAnalyzer
 import com.vibesync.antivirus.core.heuristics.PermissionRiskAnalyzer
 import com.vibesync.antivirus.core.security.IntegrityChecker
 import com.vibesync.antivirus.core.security.ProtectedPackagePolicy
+import com.vibesync.antivirus.core.security.TrustedPackageWhitelist
 import kotlin.math.roundToInt
 import com.vibesync.antivirus.data.local.ScanAudit
 import com.vibesync.antivirus.data.local.ThreatDao
@@ -76,6 +77,7 @@ class PackageScanner(
   } }
  }
  suspend fun scanInstalledPackage(name: String): ScanResult? {
+  if (TrustedPackageWhitelist.hasProtectedNamespace(name)) return null
   val scanSessionId = UUID.randomUUID().toString()
   val info = try {
    pm.getPackageInfo(name, PackageManager.GET_PERMISSIONS or PackageManager.GET_SERVICES or signingFlags())
