@@ -28,6 +28,8 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
       - name: Version-code monotonicity guard
         run: python3 scripts/check_version_code.py
+      - name: Validate Kannada/French resource coverage and TTS locale strings
+        run: python3 scripts/check_locale_completeness.py
       - name: Dataset acquisition tooling unit tests (offline fixtures only)
         run: python3 -m unittest discover -s scripts -p 'test_*.py' -v
       - name: Detection benchmark readiness report
