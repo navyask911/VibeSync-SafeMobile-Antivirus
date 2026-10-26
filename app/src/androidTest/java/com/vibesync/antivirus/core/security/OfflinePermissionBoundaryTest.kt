@@ -9,16 +9,17 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.vibesync.antivirus.SafeMobileApp
 import com.vibesync.antivirus.core.observer.StorageAccessPreferences
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class OfflinePermissionBoundaryTest {
-    @Test fun offlineVariantDoesNotRequestInternetOrBroadStorage() {
+class NetworkPermissionBoundaryTest {
+    @Test fun hashDatabaseSyncNeedsInternetButBroadStorageRemainsForbidden() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val info = context.packageManager.getPackageInfo(context.packageName, PackageManager.GET_PERMISSIONS)
         val requested = info.requestedPermissions.orEmpty().toSet()
-        assertFalse(Manifest.permission.INTERNET in requested)
+        assertTrue(Manifest.permission.INTERNET in requested)
         assertFalse(Manifest.permission.MANAGE_EXTERNAL_STORAGE in requested)
         assertFalse(Manifest.permission.READ_EXTERNAL_STORAGE in requested)
     }
