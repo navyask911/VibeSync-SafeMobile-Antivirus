@@ -107,6 +107,23 @@ for path in (ROOT / "app" / "src" / "main").rglob("*.kt"):
         )
 
 
+# Device Posture may audit metadata and open Settings, but must never automate settings,
+# inspect screen/notification content, change another app's policy, or contact a server.
+POSTURE_SOURCE = ROOT / "app/src/main/java/com/vibesync/antivirus/core/posture"
+posture_forbidden = (
+    r"\b(?:rootInActiveWindow|AccessibilityNodeInfo|NotificationListenerService)\b",
+    r"\b(?:performGlobalAction|dispatchGesture|performAction|getRootInActiveWindow|bindService)\s*\(",
+    r"Settings\.(?:Secure|Global|System)\.put\w*\s*\(",
+    r"\b(?:setApplicationHidden|setPackagesSuspended|setUninstallBlocked|removeActiveAdmin|lockNow|wipeData)\s*\(",
+    r"\b(?:ACTION_ADD_DEVICE_ADMIN|ACTION_DELETE|ACTION_UNINSTALL_PACKAGE)\b",
+    r"\b(?:HttpURLConnection|HttpsURLConnection|OkHttpClient|Retrofit|Socket|WebView)\b",
+    r"\bURL\s*\(",
+)
+for path in POSTURE_SOURCE.glob("*.kt"):
+    source = path.read_text(encoding="utf-8")
+    if any(re.search(pattern, source) for pattern in posture_forbidden):
+        errors.append(f"Device Posture must remain a local, read-only metadata audit: {path.relative_to(ROOT)}.")
+
 # Localization resource coverage and placeholder parity. This is a structural check, not a
 # certification of translation quality or native-speaker review.
 RESOURCES = ROOT / "app" / "src" / "main" / "res"
@@ -170,3 +187,4 @@ if errors:
 
 print("Proprietary safety policy check passed.")
 print("This guard does not certify dependency licences, complete SBOM coverage, or Play Console eligibility.")
+

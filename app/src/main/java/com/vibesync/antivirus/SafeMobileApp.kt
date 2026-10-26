@@ -12,6 +12,8 @@ import com.vibesync.antivirus.core.crypto.HashCalculator
 import com.vibesync.antivirus.core.engine.PackageScanner
 import com.vibesync.antivirus.core.hashdb.HashDatabaseManager
 import com.vibesync.antivirus.core.security.DeviceOwnerManager
+import com.vibesync.antivirus.core.posture.DevicePostureMonitor
+import com.vibesync.antivirus.core.posture.DevicePostureRepository
 import com.vibesync.antivirus.core.worker.DeepScanWorker
 import com.vibesync.antivirus.core.worker.HashDatabaseSyncScheduler
 import com.vibesync.antivirus.core.worker.LocalDefinitionLoader
@@ -35,6 +37,7 @@ class SafeMobileApp : Application() {
         private set
 
     private val appScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    val devicePostureRepository by lazy { DevicePostureRepository(this) }
 
     override fun onCreate() {
         super.onCreate()
@@ -88,6 +91,7 @@ class SafeMobileApp : Application() {
     }
 
     fun scheduleMaintenanceSweep() {
+        DevicePostureMonitor.ensureScheduled(this)
         val request = PeriodicWorkRequestBuilder<DeepScanWorker>(6, TimeUnit.HOURS)
             .setConstraints(Constraints.Builder().setRequiresBatteryNotLow(true).build())
             .build()
@@ -113,3 +117,4 @@ class SafeMobileApp : Application() {
         const val KEY_INITIAL_HASH_SYNC_REQUESTED = "initial_hash_sync_requested"
     }
 }
+
