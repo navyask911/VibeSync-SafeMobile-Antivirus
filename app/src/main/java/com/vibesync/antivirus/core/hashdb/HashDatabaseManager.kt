@@ -1,6 +1,7 @@
 package com.vibesync.antivirus.core.hashdb
 
 import android.content.Context
+import android.util.Log
 import androidx.room.withTransaction
 import com.vibesync.antivirus.BuildConfig
 import com.vibesync.antivirus.data.local.MalwareHashDao
@@ -44,46 +45,76 @@ class HashDatabaseManager(context: Context, private val database: ThreatDatabase
     suspend fun importBundle(input: java.io.InputStream): HashDatabaseCapability = withContext(Dispatchers.IO) {
         mutex.withLock {
             if (!loaded) restoreActiveUnsafe()
-            require(BuildConfig.HASHDB_PUBLIC_KEY_CONFIGURED && BuildConfig.HASHDB_PUBLIC_KEY_B64.isNotBlank()) {
-                "Disabled: a trusted hash-database Ed25519 public key is not configured."
-            }
-            val bundle = HashDatabaseBundleReader.read(input)
-            require(HashDatabaseSignatureVerifier.verify(
-                bundle.databaseBytes, bundle.detachedSignatureBytes, BuildConfig.HASHDB_PUBLIC_KEY_B64
-            )) { "Signed hash database signature verification failed." }
-            val parsed = HashDatabaseFormat.parse(
-                bundle.databaseBytes, HashAlgorithm.fromDatabaseName(bundle.databaseName)
-            )
-            val acceptedVersion = preferences.getLong(KEY_LAST_VERSION, 0L)
-            require(parsed.version > acceptedVersion) {
-                "Hash database version rollback or replay was rejected."
-            }
+            importBundleUnsafe(input)
+        }
+    }
 
-            val nextBloom = HashDatabaseBloomFilter.fromRecords(parsed.records)
-            replaceDatabaseRecords(parsed.records)
+    /**
+     * Restores an existing signed database, or imports the bundled database on first launch.
+     * Bundle bytes are verified before any record is activated or persisted.
+     */
+    suspend fun activateBundledDatabaseIfMissing(): HashDatabaseCapability = withContext(Dispatchers.IO) {
+        mutex.withLock {
+            val restored = restoreActiveUnsafe()
+            if (activeFile.isFile) return@withLock restored
+
             try {
-                writeActiveBundle(bundle.archiveBytes)
-                val saved = preferences.edit().putLong(KEY_LAST_VERSION, parsed.version).commit()
-                check(saved) { "Could not persist accepted hash database version." }
+                appContext.assets.open(BUNDLED_DATABASE_ASSET).use { input ->
+                    importBundleUnsafe(input)
+                }
             } catch (error: Exception) {
+                loaded = true
                 bloom = null
                 capability = HashDatabaseCapability(
                     enabled = false,
-                    reason = "Signed database activation did not complete; local database matching is disabled."
+                    reason = "Disabled: bundled signed hash database could not be loaded or verified."
                 )
-                loaded = false
-                throw IllegalStateException("Signed database activation failed closed.", error)
+                Log.e(TAG, "Bundled signed hash database is unavailable or invalid; app will continue with it inactive.", error)
+                capability
             }
-            bloom = nextBloom
-            loaded = true
-            capability = HashDatabaseCapability(
-                enabled = true,
-                version = parsed.version,
-                indicatorCount = parsed.records.size,
-                reason = "Signed local hash database active."
-            )
-            capability
         }
+    }
+
+    private suspend fun importBundleUnsafe(input: java.io.InputStream): HashDatabaseCapability {
+        require(BuildConfig.HASHDB_PUBLIC_KEY_CONFIGURED && BuildConfig.HASHDB_PUBLIC_KEY_B64.isNotBlank()) {
+            "Disabled: a trusted hash-database Ed25519 public key is not configured."
+        }
+        val bundle = HashDatabaseBundleReader.read(input)
+        require(HashDatabaseSignatureVerifier.verify(
+            bundle.databaseBytes, bundle.detachedSignatureBytes, BuildConfig.HASHDB_PUBLIC_KEY_B64
+        )) { "Signed hash database signature verification failed." }
+        val parsed = HashDatabaseFormat.parse(
+            bundle.databaseBytes, HashAlgorithm.fromDatabaseName(bundle.databaseName)
+        )
+        val acceptedVersion = preferences.getLong(KEY_LAST_VERSION, 0L)
+        require(parsed.version > acceptedVersion) {
+            "Hash database version rollback or replay was rejected."
+        }
+
+        val nextBloom = HashDatabaseBloomFilter.fromRecords(parsed.records)
+        replaceDatabaseRecords(parsed.records)
+        try {
+            writeActiveBundle(bundle.archiveBytes)
+            val saved = preferences.edit().putLong(KEY_LAST_VERSION, parsed.version).commit()
+            check(saved) { "Could not persist accepted hash database version." }
+        } catch (error: Exception) {
+            bloom = null
+            capability = HashDatabaseCapability(
+                enabled = false,
+                reason = "Signed database activation did not complete; local database matching is disabled."
+            )
+            loaded = false
+            throw IllegalStateException("Signed database activation failed closed.", error)
+        }
+        bloom = nextBloom
+        loaded = true
+        capability = HashDatabaseCapability(
+            enabled = true,
+            version = parsed.version,
+            indicatorCount = parsed.records.size,
+            reason = "Signed local hash database active."
+        )
+        return capability
     }
 
     suspend fun lookup(sha256: String?, md5: String?, sha1: String?, fileSize: Long? = null): HashDatabaseMatch? {
