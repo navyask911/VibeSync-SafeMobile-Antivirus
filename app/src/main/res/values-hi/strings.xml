@@ -217,4 +217,8 @@
     <string name="security_alerts_description">खतरा मिलने या क्वारंटीन होने पर स्थानीय सूचनाएँ दिखाएँ। आपके चालू करने तक बंद।</string>
     <string name="security_alerts_enabled">अलर्ट चालू</string>
     <string name="security_alerts_disabled">अलर्ट बंद</string>
+    <string name="voice_malicious_quarantined">चेतावनी। एक दुर्भावनापूर्ण ऐप मिला है और उसे क्वारंटीन कर दिया गया है।</string>
+    <string name="voice_suspicious_quarantined">चेतावनी। एक संदिग्ध फ़ाइल को सेफ़मोबाइल के एन्क्रिप्टेड क्वारंटीन में अलग किया गया है।</string>
+    <string name="voice_alert_malware_detected">चेतावनी। इंस्टॉल करने के बाद एक दुर्भावनापूर्ण ऐप मिला है। अभी उसकी जाँच करें या उसे अनइंस्टॉल करें।</string>
+    <string name="voice_app_review">चेतावनी। नए इंस्टॉल किए गए ऐप की सुरक्षा जाँच आवश्यक है।</string>
 </resources>

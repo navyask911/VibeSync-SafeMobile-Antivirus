@@ -274,4 +274,9 @@
     <string name="security_alerts_description">ముప్పు గుర్తించినప్పుడు లేదా క్వారంటైన్ చేసినప్పుడు స్థానిక నోటిఫికేషన్‌లు చూపండి. మీరు ఆన్ చేసే వరకు ఆఫ్.</string>
     <string name="security_alerts_enabled">హెచ్చరికలు ఆన్</string>
     <string name="security_alerts_disabled">హెచ్చరికలు ఆఫ్</string>
+    <string name="voice_malicious_quarantined">హెచ్చరిక. హానికరమైన యాప్ గుర్తించబడింది మరియు క్వారంటైన్ చేయబడింది.</string>
+    <string name="voice_suspicious_quarantined">హెచ్చరిక. అనుమానాస్పద ఫైల్ సేఫ్‌మొబైల్ ఎన్‌క్రిప్ట్ చేసిన క్వారంటైన్‌లో వేరుచేయబడింది.</string>
+    <string name="voice_alert_malware_detected">హెచ్చరిక. ఇన్‌స్టాల్ చేసిన తర్వాత హానికరమైన యాప్ గుర్తించబడింది. ఇప్పుడే సమీక్షించండి లేదా అన్‌ఇన్‌స్టాల్ చేయండి.</string>
+    <string name="voice_app_review">హెచ్చరిక. కొత్తగా ఇన్‌స్టాల్ చేసిన యాప్‌కు భద్రతా సమీక్ష అవసరం.</string>
 </resources>
+

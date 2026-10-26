@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="voice_malicious_quarantined">Uyarı. Kötü amaçlı bir uygulama tespit edildi ve karantinaya alındı.</string>
-    <string name="voice_suspicious_quarantined">Uyarı. Şüpheli bir dosya SafeMobile şifreli karantinasında yalıtıldı.</string>
-    <string name="voice_malicious_installed">Uyarı. Kurulumdan sonra kötü amaçlı bir uygulama tespit edildi. Hemen inceleyin veya kaldırın.</string>
-    <string name="voice_app_review">Uyarı. Yeni yüklenen bir uygulamanın güvenlik incelemesi gerekiyor.</string>
-</resources>

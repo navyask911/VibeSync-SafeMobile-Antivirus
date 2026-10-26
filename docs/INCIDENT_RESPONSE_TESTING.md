@@ -37,6 +37,38 @@ STREAM_ALARM siren, avoiding a second channel sound that would continue after ca
 High importance, content and dismissal actions remain available when Android permits notifications.
 Handler timing is a 5,000 ms scheduled stop, subject to normal Android scheduling/process limits.
 
+## Add any TTS language
+
+Installed-app warnings use `R.string.voice_alert_malware_detected`, with the English fallback
+in `app/src/main/res/values/strings.xml`. The engine calls
+`textToSpeech.setLanguage(Locale.getDefault())`; warning text is loaded with `context.getString(...)`
+from resources configured for that same system locale at speech time. No English warning is
+hardcoded in the speech engine. Quarantined-file and review warnings retain separate resource
+keys, so installed apps are never falsely described as already quarantined.
+
+Translations for all 22 currently supported app languages are included, including Hindi,
+Kannada and Spanish. To add another global language, add a translated entry with the same
+key to the appropriate resource file and rebuild the app, for example:
+
+- `app/src/main/res/values-hi/strings.xml` — Hindi (already included)
+- `app/src/main/res/values-kn/strings.xml` — Kannada (already included)
+- `app/src/main/res/values-es/strings.xml` — Spanish (already included)
+- `app/src/main/res/values-sw/strings.xml` — Swahili (example additional language)
+
+```xml
+<resources>
+    <string name="voice_alert_malware_detected">Onyo. Programu hasidi imegunduliwa baada ya kusakinishwa. Ikague au uiondoe sasa.</string>
+</resources>
+```
+
+Also translate `voice_malicious_quarantined`, `voice_suspicious_quarantined`, and `voice_app_review`.
+The repository's localization guard requires each supported `strings.xml` to cover all
+translatable fallback keys; copy and translate the existing fallback file when adding a new locale.
+Android automatically selects matching resources after the phone language changes. The owner
+must also install/enable that language's TTS voice pack in Android settings. TTS speaks the supplied
+translated text; the voice pack does not translate English. An untranslated resource falls back
+to English, and a missing/unsupported voice pack is logged without crashing or blocking the app.
+
 ## Quarantine and appearance
 
 - Delete an ordinary quarantined fixture; confirm its encrypted file and Room index are removed.

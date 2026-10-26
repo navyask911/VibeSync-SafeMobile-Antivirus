@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="voice_malicious_quarantined">ಎಚ್ಚರಿಕೆ. ದುರುದ್ದೇಶಪೂರಿತ ಆ್ಯಪ್ ಪತ್ತೆಯಾಗಿದೆ ಮತ್ತು ಅದನ್ನು ಪ್ರತ್ಯೇಕಿಸಲಾಗಿದೆ.</string>
-    <string name="voice_suspicious_quarantined">ಎಚ್ಚರಿಕೆ. ಅನುಮಾನಾಸ್ಪದ ಫೈಲ್ ಅನ್ನು ಸೇಫ್‌ಮೊಬೈಲ್‌ನ ಎನ್‌ಕ್ರಿಪ್ಟ್ ಮಾಡಿದ ಕ್ವಾರಂಟೈನ್‌ನಲ್ಲಿ ಪ್ರತ್ಯೇಕಿಸಲಾಗಿದೆ.</string>
-    <string name="voice_malicious_installed">ಎಚ್ಚರಿಕೆ. ಸ್ಥಾಪನೆಯ ನಂತರ ದುರುದ್ದೇಶಪೂರಿತ ಆ್ಯಪ್ ಪತ್ತೆಯಾಗಿದೆ. ಅದನ್ನು ಈಗ ಪರಿಶೀಲಿಸಿ ಅಥವಾ ಅನ್‌ಇನ್‌ಸ್ಟಾಲ್ ಮಾಡಿ.</string>
-    <string name="voice_app_review">ಎಚ್ಚರಿಕೆ. ಹೊಸದಾಗಿ ಸ್ಥಾಪಿಸಿದ ಆ್ಯಪ್‌ನ ಸುರಕ್ಷತಾ ಪರಿಶೀಲನೆ ಅಗತ್ಯವಿದೆ.</string>
-</resources>

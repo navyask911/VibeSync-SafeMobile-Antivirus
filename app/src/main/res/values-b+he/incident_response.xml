@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="voice_malicious_quarantined">אזהרה. זוהתה אפליקציה זדונית והיא הועברה להסגר.</string>
-    <string name="voice_suspicious_quarantined">אזהרה. קובץ חשוד בודד בהסגר המוצפן של SafeMobile.</string>
-    <string name="voice_malicious_installed">אזהרה. זוהתה אפליקציה זדונית לאחר ההתקנה. יש לבדוק אותה או להסיר אותה כעת.</string>
-    <string name="voice_app_review">אזהרה. אפליקציה שהותקנה לאחרונה דורשת בדיקת אבטחה.</string>
-</resources>

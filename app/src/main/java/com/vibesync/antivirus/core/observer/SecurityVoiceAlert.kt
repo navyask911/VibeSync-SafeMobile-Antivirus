@@ -9,6 +9,7 @@ import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import android.util.Log
 import androidx.annotation.StringRes
+import com.vibesync.antivirus.R
 import com.vibesync.antivirus.SafeMobileApp
 import java.util.Locale
 
@@ -17,18 +18,14 @@ object SecurityVoiceAlert {
     private val handler = Handler(Looper.getMainLooper())
     private var active: OneShotSpeech? = null
 
-    fun speakIfEnabled(context: Context, @StringRes messageResource: Int) {
+    fun speakIfEnabled(context: Context, @StringRes messageResource: Int = R.string.voice_alert_malware_detected) {
         val app = context.applicationContext
         if (!app.getSharedPreferences(SafeMobileApp.SECURITY_PREFS, Context.MODE_PRIVATE)
                 .getBoolean(SafeMobileApp.KEY_VOICE_ALERTS_ENABLED, false)) return
         handler.post {
             active?.shutdown()
             runCatching {
-                val locale = Locale.getDefault()
-                val localized = app.createConfigurationContext(Configuration(app.resources.configuration).apply {
-                    setLocale(locale)
-                })
-                OneShotSpeech(app, localized.getString(messageResource), locale).also {
+                OneShotSpeech(app, messageResource).also {
                     active = it
                     it.start()
                 }
@@ -44,8 +41,8 @@ object SecurityVoiceAlert {
         } else handler.post { stop() }
     }
 
-    private class OneShotSpeech(private val context: Context, private val message: String,
-                                private val locale: Locale) : TextToSpeech.OnInitListener {
+    private class OneShotSpeech(private val context: Context, @StringRes private val messageResource: Int) :
+        TextToSpeech.OnInitListener {
         private var textToSpeech: TextToSpeech? = null
         private var closed = false
         private val timeout = Runnable { shutdown() }
@@ -59,26 +56,32 @@ object SecurityVoiceAlert {
         override fun onInit(status: Int) {
             // Defer: an engine may invoke onInit before its constructor has returned.
             handler.post {
-                val tts = textToSpeech ?: return@post
+                val textToSpeech = this.textToSpeech ?: return@post
                 if (closed) return@post
                 runCatching {
                     if (status != TextToSpeech.SUCCESS) { shutdown(); return@runCatching }
-                    val availability = tts.setLanguage(locale)
+                    val locale = Locale.getDefault()
+                    val availability = textToSpeech.setLanguage(Locale.getDefault())
                     if (availability == TextToSpeech.LANG_MISSING_DATA || availability == TextToSpeech.LANG_NOT_SUPPORTED) {
                         Log.w(TAG, "Local voice pack unavailable for " + locale.toLanguageTag())
                         shutdown()
                         return@runCatching
                     }
-                    tts.setAudioAttributes(AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_ALARM)
+                    // Resolve translated text at speech time, using the same current system locale.
+                    val context = this.context.createConfigurationContext(Configuration(this.context.resources.configuration).apply {
+                        setLocale(locale)
+                    })
+                    val message = context.getString(messageResource)
+                    textToSpeech.setAudioAttributes(AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_ALARM)
                         .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH).build())
-                    tts.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
+                    textToSpeech.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
                         override fun onStart(utteranceId: String?) = Unit
                         override fun onDone(utteranceId: String?) { handler.post { shutdown() } }
                         @Deprecated("Compatibility callback")
                         override fun onError(utteranceId: String?) { handler.post { shutdown() } }
                         override fun onError(utteranceId: String?, errorCode: Int) { handler.post { shutdown() } }
                     })
-                    if (tts.speak(message, TextToSpeech.QUEUE_FLUSH, null, utteranceId) == TextToSpeech.ERROR) shutdown()
+                    if (textToSpeech.speak(message, TextToSpeech.QUEUE_FLUSH, null, utteranceId) == TextToSpeech.ERROR) shutdown()
                 }.onFailure { Log.w(TAG, "Unable to speak local warning", it); shutdown() }
             }
         }

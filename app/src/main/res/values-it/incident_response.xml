@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="voice_malicious_quarantined">Attenzione. È stata rilevata un’app dannosa ed è stata messa in quarantena.</string>
-    <string name="voice_suspicious_quarantined">Attenzione. Un file sospetto è stato isolato nella quarantena crittografata di SafeMobile.</string>
-    <string name="voice_malicious_installed">Attenzione. È stata rilevata un’app dannosa dopo l’installazione. Controllala o disinstallala ora.</string>
-    <string name="voice_app_review">Attenzione. Un’app appena installata richiede un controllo di sicurezza.</string>
-</resources>

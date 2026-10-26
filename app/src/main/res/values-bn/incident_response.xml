@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="voice_malicious_quarantined">সতর্কতা। একটি ক্ষতিকারক অ্যাপ শনাক্ত করে কোয়ারেন্টিনে রাখা হয়েছে।</string>
-    <string name="voice_suspicious_quarantined">সতর্কতা। একটি সন্দেহজনক ফাইল সেফমোবাইলের এনক্রিপ্ট করা কোয়ারেন্টিনে আলাদা করা হয়েছে।</string>
-    <string name="voice_malicious_installed">সতর্কতা। ইনস্টল করার পরে একটি ক্ষতিকারক অ্যাপ শনাক্ত হয়েছে। এখনই পর্যালোচনা করুন বা আনইনস্টল করুন।</string>
-    <string name="voice_app_review">সতর্কতা। নতুন ইনস্টল করা একটি অ্যাপের নিরাপত্তা পর্যালোচনা প্রয়োজন।</string>
-</resources>

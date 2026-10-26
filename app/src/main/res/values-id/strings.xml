@@ -275,4 +275,9 @@
     <string name="security_alerts_description">Tampilkan notifikasi lokal saat ancaman terdeteksi atau dikarantina. Nonaktif sampai Anda mengaktifkannya.</string>
     <string name="security_alerts_enabled">Peringatan aktif</string>
     <string name="security_alerts_disabled">Peringatan nonaktif</string>
+    <string name="voice_malicious_quarantined">Peringatan. Aplikasi berbahaya terdeteksi dan dikarantina.</string>
+    <string name="voice_suspicious_quarantined">Peringatan. File mencurigakan diisolasi dalam karantina terenkripsi SafeMobile.</string>
+    <string name="voice_alert_malware_detected">Peringatan. Aplikasi berbahaya terdeteksi setelah diinstal. Tinjau atau uninstal sekarang.</string>
+    <string name="voice_app_review">Peringatan. Aplikasi yang baru diinstal memerlukan pemeriksaan keamanan.</string>
 </resources>
+

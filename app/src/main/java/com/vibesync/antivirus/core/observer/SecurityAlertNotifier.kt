@@ -49,7 +49,7 @@ object SecurityAlertNotifier {
     fun notifyMaliciousApp(context: Context, packageName: String, eventId: String) {
         if (!runCatching { SystemPackageGuard.isUserInstalled(context, packageName) }.getOrDefault(false)) return
         show(context, eventId, context.getString(R.string.security_alert_malware_title),
-            context.getString(R.string.security_alert_malware_body), packageName, R.string.voice_malicious_installed, true)
+            context.getString(R.string.security_alert_malware_body), packageName, R.string.voice_alert_malware_detected, true)
     }
 
     fun notifySuspiciousApp(context: Context, packageName: String, eventId: String) {

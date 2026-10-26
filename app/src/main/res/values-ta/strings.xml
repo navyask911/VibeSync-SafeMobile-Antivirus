@@ -274,4 +274,9 @@
     <string name="security_alerts_description">அச்சுறுத்தல் கண்டறியப்பட்டாலோ தனிமைப்படுத்தப்பட்டாலோ உள்ளூர் அறிவிப்புகளைக் காட்டவும். நீங்கள் இயக்கும் வரை முடக்கப்பட்டிருக்கும்.</string>
     <string name="security_alerts_enabled">எச்சரிக்கைகள் இயக்கப்பட்டுள்ளன</string>
     <string name="security_alerts_disabled">எச்சரிக்கைகள் முடக்கப்பட்டுள்ளன</string>
+    <string name="voice_malicious_quarantined">எச்சரிக்கை. தீங்கிழைக்கும் செயலி கண்டறியப்பட்டுத் தனிமைப்படுத்தப்பட்டது.</string>
+    <string name="voice_suspicious_quarantined">எச்சரிக்கை. சந்தேகத்திற்குரிய கோப்பு சேஃப்மொபைலின் மறைகுறியாக்கப்பட்ட தனிமைப்படுத்தல் பெட்டகத்தில் தனிமைப்படுத்தப்பட்டது.</string>
+    <string name="voice_alert_malware_detected">எச்சரிக்கை. நிறுவிய பிறகு தீங்கிழைக்கும் செயலி கண்டறியப்பட்டது. இப்போது அதைச் சரிபார்க்கவும் அல்லது நிறுவல் நீக்கவும்.</string>
+    <string name="voice_app_review">எச்சரிக்கை. புதிதாக நிறுவப்பட்ட செயலிக்குப் பாதுகாப்புச் சரிபார்ப்பு தேவை.</string>
 </resources>
+

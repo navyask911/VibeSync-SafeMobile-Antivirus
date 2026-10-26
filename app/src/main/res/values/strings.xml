@@ -414,4 +414,8 @@
     <string name="security_alerts_description">Show local notifications when a threat is detected or quarantined. Off until you turn it on.</string>
     <string name="security_alerts_enabled">Alerts on</string>
     <string name="security_alerts_disabled">Alerts off</string>
+    <string name="voice_malicious_quarantined">Warning. A malicious app was detected and quarantined.</string>
+    <string name="voice_suspicious_quarantined">Warning. A suspicious file was isolated in SafeMobile’s encrypted quarantine.</string>
+    <string name="voice_alert_malware_detected">Warning. A malicious app was detected after installation. Review or uninstall it now.</string>
+    <string name="voice_app_review">Warning. A newly installed app needs security review.</string>
 </resources>

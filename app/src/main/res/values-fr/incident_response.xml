@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="voice_malicious_quarantined">Attention. Une application malveillante a été détectée et mise en quarantaine.</string>
-    <string name="voice_suspicious_quarantined">Attention. Un fichier suspect a été isolé dans la quarantaine chiffrée de SafeMobile.</string>
-    <string name="voice_malicious_installed">Attention. Une application malveillante a été détectée après son installation. Vérifiez-la ou désinstallez-la maintenant.</string>
-    <string name="voice_app_review">Attention. Une application récemment installée nécessite un contrôle de sécurité.</string>
-</resources>

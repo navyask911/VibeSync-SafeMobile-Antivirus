@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="voice_malicious_quarantined">Внимание. Обнаружено вредоносное приложение, оно помещено в карантин.</string>
-    <string name="voice_suspicious_quarantined">Внимание. Подозрительный файл изолирован в зашифрованном карантине SafeMobile.</string>
-    <string name="voice_malicious_installed">Внимание. После установки обнаружено вредоносное приложение. Проверьте или удалите его сейчас.</string>
-    <string name="voice_app_review">Внимание. Недавно установленное приложение требует проверки безопасности.</string>
-</resources>

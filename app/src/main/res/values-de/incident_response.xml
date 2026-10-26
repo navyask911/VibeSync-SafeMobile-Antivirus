@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="voice_malicious_quarantined">Warnung. Eine schädliche App wurde erkannt und unter Quarantäne gestellt.</string>
-    <string name="voice_suspicious_quarantined">Warnung. Eine verdächtige Datei wurde in der verschlüsselten Quarantäne von SafeMobile isoliert.</string>
-    <string name="voice_malicious_installed">Warnung. Nach der Installation wurde eine schädliche App erkannt. Prüfen oder deinstallieren Sie sie jetzt.</string>
-    <string name="voice_app_review">Warnung. Eine neu installierte App muss auf Sicherheitsrisiken geprüft werden.</string>
-</resources>

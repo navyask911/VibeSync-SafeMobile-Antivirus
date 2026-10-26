@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="voice_malicious_quarantined">चेतावणी. हानिकारक ॲप आढळले असून ते क्वारंटाइनमध्ये ठेवले आहे.</string>
-    <string name="voice_suspicious_quarantined">चेतावणी. संशयास्पद फाइल सेफमोबाइलच्या एन्क्रिप्ट केलेल्या क्वारंटाइनमध्ये वेगळी ठेवली आहे.</string>
-    <string name="voice_malicious_installed">चेतावणी. इंस्टॉल केल्यानंतर हानिकारक ॲप आढळले आहे. आत्ताच तपासा किंवा अनइंस्टॉल करा.</string>
-    <string name="voice_app_review">चेतावणी. नव्याने इंस्टॉल केलेल्या ॲपची सुरक्षा तपासणी आवश्यक आहे.</string>
-</resources>

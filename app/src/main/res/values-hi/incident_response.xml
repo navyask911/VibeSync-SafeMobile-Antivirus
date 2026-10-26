@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="voice_malicious_quarantined">चेतावनी। एक दुर्भावनापूर्ण ऐप मिला है और उसे क्वारंटीन कर दिया गया है।</string>
-    <string name="voice_suspicious_quarantined">चेतावनी। एक संदिग्ध फ़ाइल को सेफ़मोबाइल के एन्क्रिप्टेड क्वारंटीन में अलग किया गया है।</string>
-    <string name="voice_malicious_installed">चेतावनी। इंस्टॉल करने के बाद एक दुर्भावनापूर्ण ऐप मिला है। अभी उसकी जाँच करें या उसे अनइंस्टॉल करें।</string>
-    <string name="voice_app_review">चेतावनी। नए इंस्टॉल किए गए ऐप की सुरक्षा जाँच आवश्यक है।</string>
-</resources>

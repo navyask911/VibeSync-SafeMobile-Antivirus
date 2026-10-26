@@ -274,4 +274,9 @@
     <string name="security_alerts_description">Показывать локальные уведомления при обнаружении угрозы или помещении файла в карантин. Выключено, пока вы не включите.</string>
     <string name="security_alerts_enabled">Оповещения включены</string>
     <string name="security_alerts_disabled">Оповещения выключены</string>
+    <string name="voice_malicious_quarantined">Внимание. Обнаружено вредоносное приложение, оно помещено в карантин.</string>
+    <string name="voice_suspicious_quarantined">Внимание. Подозрительный файл изолирован в зашифрованном карантине SafeMobile.</string>
+    <string name="voice_alert_malware_detected">Внимание. После установки обнаружено вредоносное приложение. Проверьте или удалите его сейчас.</string>
+    <string name="voice_app_review">Внимание. Недавно установленное приложение требует проверки безопасности.</string>
 </resources>
+

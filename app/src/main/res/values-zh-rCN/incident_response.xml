@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="voice_malicious_quarantined">警告。已检测到恶意应用并将其隔离。</string>
-    <string name="voice_suspicious_quarantined">警告。可疑文件已被移至SafeMobile的加密隔离区。</string>
-    <string name="voice_malicious_installed">警告。安装后检测到恶意应用。请立即检查或卸载。</string>
-    <string name="voice_app_review">警告。新安装的应用需要进行安全检查。</string>
-</resources>
