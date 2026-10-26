@@ -759,6 +759,8 @@ import kotlinx.coroutines.launch
      DetectionCapabilitiesScreen(
       hashDatabaseCapability = state.hashDatabaseCapability,
       initialSyncPending = initialHashSyncPending,
+       yaraMatchCount = state.results.sumOf { it.riskReport?.yaraResult?.matches?.size ?: 0 },
+       yaraMatchedRuleNames = state.results.flatMap { it.riskReport?.yaraResult?.matchedRules.orEmpty() }.distinct(),
       onImportYaraRulesForReview = { pendingYaraPicker.launch(arrayOf("text/plain", "application/octet-stream", "application/x-yara")) }
      )
     }
