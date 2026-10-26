@@ -202,3 +202,18 @@ Third-party libraries are used under their respective licenses. Review the [`LIC
 The scheduled [signed hash database workflow (every 6 hours)](.github/workflows/update-malware-db.yml) builds versioned **hash-only SHA-256 indicator releases** from [MalwareBazaar (abuse.ch)](https://bazaar.abuse.ch/) after the owner has confirmed the source's redistribution rights, provisioned their API key and Ed25519 keypair, and configured the Android public-key trust root. **No malware sample binaries or threat database are bundled in APK/AAB artifacts.** The Android app checks only this repository's GitHub Releases and verifies each signed download before activation; it never contacts MalwareBazaar. Fair-use API access is not, by itself, a commercial redistribution licence; any published derived Release must credit the source and comply with its terms.
 
 The Android app expects a signed ZIP containing `hashes.hsb` and `hashes.hsb.sig`, not two loose files. The current loader accepts at most **200,000 records and 16 MiB** of database text. The workflow **fails without publishing** if the full publisher export exceeds these bounds; it never silently truncates the feed. The signed hash engine remains **disabled pending owner provisioning**, and detection effectiveness remains **NOT_MEASURED**. See [setup, licensing and current limitations](docs/MALWAREBAZAAR_DB_WORKFLOW.md).
+
+
+### Phase B — offline DEX signature subset
+
+SafeMobile bundles five MIT-attributed, DEX-focused **YARA-compatible limited rules**, not libyara.
+On startup the small bundled `.yar` is validated; any unsupported syntax disables **all** bundled rules.
+On APK scanning, up to the existing bounded `classes*.dex` extracts are searched for exact ASCII
+indicators combined with Boolean conditions, with rule name, severity, MITRE ID and string/pattern
+evidence attached to advisory `RiskReport` findings. No network access or native code is used.
+The detection capabilities screen shows **ACTIVE (LIMITED)** only on successful load, rule count
+and the most recent displayed scan's match count. Imported rules remain review-only and
+**never run**. These patterns may match legitimate code and do not catch decrypted-at-runtime,
+native, or otherwise absent DEX content. The app has no claim of full YARA coverage or
+real-world detection rate. See [docs/YARA_STATUS.md](docs/YARA_STATUS.md), [NOTICE](NOTICE),
+and [the licence inventory](docs/THIRD_PARTY_LICENSES.md).

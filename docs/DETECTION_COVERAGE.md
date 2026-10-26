@@ -11,7 +11,7 @@
 | Deep static RiskReport | Advisory, enabled | Locally inspects exported component metadata, sensitive permission combinations, signer/debug metadata, DEX headers/entropy sample, common packer filenames, and a limited permission-to-DEX-string cross-check. Findings carry rule ID, severity, evidence and confidence. | Not a full manifest parser/disassembler; finding severity is heuristic. Reflection/native/dynamic loading can evade API references; file names/entropy and exported components can false-positive. Known-bad certificate fingerprints are DISABLED. |
 | Root / hook / device integrity | Heuristic | Offline filesystem, package, build-property, SELinux, debugger and emulator indicators; multiplier informs package triage. | Best effort and bypassable; not attestation. |
 | Legacy Hypatia Bloom asset | **Disabled** | Existing legacy loader validates a manifest and digest before deserializing. | Verified non-empty `assets/hypatia_bloom.db` is absent; no detections are claimed from that legacy asset. The new signed hash engine builds a Bloom pre-filter only after a signed database is validated. |
-| YARA rules | **DISABLED** | API explicitly reports disabled/unreadable status; selected UTF-8 rule files can be stored as pending local files for review. | No Android libyara JNI runtime or curated, license-reviewed, signature-verified rules pack is shipped. Pending files are never compiled/executed. |
+| Bundled YARA-compatible DEX rules | **ACTIVE (LIMITED) when bundled pack validates; otherwise DISABLED** | Five MIT-attributed, exact-literal and Boolean-condition DEX indicators run locally on bounded extracted DEX entries. Results attach rule IDs, MITRE technique, severity and pattern evidence to RiskReport; imported rules stay pending. | This is not libyara/full YARA, unpacking or emulation. Legitimate apps can match. No independent signed rule-update channel; bundled asset authenticity comes from the signed APK. |
 | TFLite classifier | **Disabled** | Status API returns no score when model is absent. | No validated `malware_model.tflite` exists; no synthetic model is shipped. |
 | Offline signer attestation | **Disabled by default** | Helper compares signer/asset digest against external expected SHA-256. | No trusted signer fingerprint/database digest is configured. A manifest alone is not a trust root. |
 | Signed feed manifest / rollback | **Not implemented** | Optional HTTPS JSON/CSV importer validates transport/records and stores imported indicators. | No detached Ed25519 verification or monotonic feed-version rollback gate exists. |
@@ -21,7 +21,7 @@
 ## Required artifacts before activation
 
 - `assets/hypatia_bloom.db` and versioned `assets/manifest.json`, trusted source/licence provenance and reproducible generation.
-- `assets/yara_rules/` plus libyara JNI for supported ABIs, resource limits, compatible notices and benign/malicious regression fixtures.
+- A separately reviewed libyara JNI build for supported ABIs and independently signed rule-pack updates would be required before claiming full native YARA. The present local APK-bundled subset has separate documented limits.
 - `assets/malware_model.tflite` only after reproducible training, evaluation, calibrated thresholds and false-positive/false-negative reports.
 
 No empty, random, EICAR-relabelled, or synthetic content may be represented as a production threat set.
