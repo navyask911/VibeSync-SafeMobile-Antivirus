@@ -1,5 +1,6 @@
 package com.vibesync.antivirus
 import android.app.Application
+import android.util.Log
 import androidx.room.Room
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
@@ -46,8 +47,10 @@ class SafeMobileApp : Application() {
   if (BuildConfig.OPTIONAL_FEED_ENABLED) ThreatFeedSyncScheduler.ensurePeriodic(this)
   HashDatabaseSyncScheduler.ensurePeriodic(this)
   appScope.launch {
-   runCatching { hashDatabaseManager.restoreActiveDatabase() }
+   runCatching { hashDatabaseManager.activateBundledDatabaseIfMissing() }
+    .onFailure { Log.e("SafeMobileApp", "Signed hash database initialization failed; app will continue with database inactive.", it) }
    runCatching { loader.importBundledIfEmpty() }
+    .onFailure { Log.e("SafeMobileApp", "Local threat definitions could not be loaded.", it) }
   }
   if (getSharedPreferences(PRIVACY_PREFS, MODE_PRIVATE).getBoolean(PRIVACY_ACKNOWLEDGED, false)) {
    scheduleMaintenanceSweep()
