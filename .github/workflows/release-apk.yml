@@ -56,6 +56,12 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
+      - name: Validate version code against tagged releases
+        run: python3 scripts/check_version_code.py
+
+      - name: Test bundled YARA rules before production build
+        run: ./gradlew --no-daemon testOfflineDebugUnitTest
+
       - name: Build production offline APK
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
@@ -79,6 +85,19 @@ jobs:
           apksigner_bin="$(find "$ANDROID_HOME/build-tools" -maxdepth 2 -type f -name apksigner | sort -V | tail -n 1)"
           test -x "$apksigner_bin"
           "$apksigner_bin" verify --verbose --print-certs "$apk"
+          # Fail rather than publish v1.0.8 without the Phase B detection assets.
+          python3 - "$apk" <<'PY'
+          import sys
+          import zipfile
+          with zipfile.ZipFile(sys.argv[1]) as zf:
+              asset = "assets/yara/safemobile_android_dex.yar"
+              if asset not in zf.namelist():
+                  raise SystemExit(f"SAFE STOP: bundled YARA rules missing: {asset}")
+              text = zf.read(asset).decode("utf-8", errors="strict")
+              if "rule Takopii_Overlay_Banker_DEX" not in text or "rule Takopii_DCL_AntiForensics_DEX" not in text:
+                  raise SystemExit("SAFE STOP: expected Phase B YARA rules absent from signed APK")
+              print("Signed APK contains reviewed Phase B YARA DEX rule pack.")
+          PY
           if unzip -l "$apk" | grep -E 'assets/(safe-mobile-hashdb\.bundle\.zip|hashes\.(hsb|hdb|sdb|s1b)(\.sig)?)' >/dev/null; then
             echo "SAFE STOP: APK must not embed a hash database; it syncs signed releases after install." >&2
             exit 1
@@ -108,7 +127,9 @@ jobs:
           The first launch queues a network-constrained WorkManager sync; scanning stays on-device.
           APK version: ${{ steps.verify-apk.outputs.version_name }} (version code ${{ steps.verify-apk.outputs.version_code }}).
           Built from commit ${GITHUB_SHA}.
-          Includes scan-completion feedback, a transparent configuration score, cyan glass styling, and recursive multi-folder SAF monitoring.
+          Includes the Phase B bundled on-device Kotlin YARA-compatible DEX scanner, adapted MIT-licensed rules, Detection Capabilities ACTIVE (LIMITED) status, and scan-rule match reporting.
+          The YARA engine supports only a bounded subset of the YARA language; findings are advisory SUSPICIOUS indicators, not definitive malware verdicts.
+          Also includes scan-completion feedback, a transparent configuration score, cyan glass styling, and recursive multi-folder SAF monitoring.
           Optional harmless siren fixture: first import siren-test-definitions.json in Scan > Import definitions, then copy SafeMobile-Siren-Test.apk into a monitored folder or install it to test the post-install receiver. The test APK contains no executable code.
           Android 11+ blocks the main Download folder in SAF; select a subfolder or WhatsApp Documents. Skip remains available.
           Device test instructions: https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/blob/${GITHUB_SHA}/docs/SIREN_AND_FOLDER_TESTING.md
