@@ -7,6 +7,10 @@ import android.os.Build
 import android.provider.Settings
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.google.crypto.tink.CleartextKeysetHandle
+import com.google.crypto.tink.KeyTemplates
+import com.google.crypto.tink.KeysetHandle
+import com.google.crypto.tink.integration.android.SharedPrefKeysetWriter
 import java.io.File
 import java.util.UUID
 import org.junit.Assert.*
@@ -49,6 +53,27 @@ class DevicePostureIntegrationTest {
             catch (_: java.security.GeneralSecurityException) { }
             assertArrayEquals(damaged, file.readBytes())
         } finally { deleteFixture(file) }
+    }
+
+    @Suppress("DEPRECATION")
+    @Test fun cleartextKeysetIsRefusedEvenWithAnAvailableKeystoreMasterKey() {
+        val prefs = "posture-test-${UUID.randomUUID()}"
+        val file = File(context.noBackupFilesDir, "$prefs.bin")
+        try {
+            EncryptedPostureSnapshotStore(context, file, prefs).write(PostureSnapshot())
+            val encrypted = file.readBytes()
+            // Model a legacy/fallback keyset in isolated test preferences, never production keys.
+            val unprotected = KeysetHandle.generateNew(KeyTemplates.get("AES256_GCM"))
+            CleartextKeysetHandle.write(unprotected, SharedPrefKeysetWriter(context, "posture_keyset", prefs))
+            try {
+                EncryptedPostureSnapshotStore(context, file, prefs).write(PostureSnapshot())
+                fail("Cleartext keysets must be refused even if isUsingKeystore is true")
+            } catch (_: java.security.GeneralSecurityException) { }
+            assertArrayEquals(encrypted, file.readBytes())
+        } finally {
+            context.getSharedPreferences(prefs, Context.MODE_PRIVATE).edit().clear().commit()
+            deleteFixture(file)
+        }
     }
 
     @Test fun settingsLinksUseReviewDestinationsAndNeverAnAdministratorActivation() {

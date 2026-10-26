@@ -39,13 +39,14 @@ object PostureChangeNotifier {
             val digest = MessageDigest.getInstance("SHA-256").digest(key.toByteArray(Charsets.UTF_8))
             val id = ((digest[0].toInt() and 127) shl 24) or ((digest[1].toInt() and 255) shl 16) or
                 ((digest[2].toInt() and 255) shl 8) or (digest[3].toInt() and 255)
+            val tag = digest.joinToString("") { (it.toInt() and 255).toString(16).padStart(2, '0') }
             val open = Intent(context, MainActivity::class.java).putExtra(EXTRA_OPEN_POSTURE, true)
                 .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
                 .setData(Uri.fromParts("safemobile-posture", key, null))
             val pending = PendingIntent.getActivity(context, id, open, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
             val message = localized.getString(R.string.posture_change_body, finding.appName.take(100),
                 localized.getString(PostureText.title(finding.access)), localized.getString(PostureText.explanation(finding)))
-            NotificationManagerCompat.from(context).notify("posture", id, NotificationCompat.Builder(context, CHANNEL)
+            NotificationManagerCompat.from(context).notify(tag, id, NotificationCompat.Builder(context, CHANNEL)
                 .setSmallIcon(R.drawable.ic_launcher).setContentTitle(localized.getString(R.string.posture_change_title))
                 .setContentText(message).setStyle(NotificationCompat.BigTextStyle().bigText(message))
                 .setContentIntent(pending).addAction(0, localized.getString(R.string.posture_review), pending)
