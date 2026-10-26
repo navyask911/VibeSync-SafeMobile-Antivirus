@@ -443,4 +443,15 @@
     <string name="feed_settings_cancel">Annuler</string>
     <string name="feed_settings_enabled">Synchronisation activée. Elle s’exécutera lorsque les contraintes réseau et batterie seront remplies.</string>
     <string name="feed_settings_disabled">Synchronisation désactivée ; les tâches programmées sont annulées.</string>
+    <string name="theme_appearance_description">Choisissez un thème. Le changement s’applique immédiatement et reste enregistré hors ligne.</string>
+    <string name="theme_midnight">Bleu nuit</string>
+    <string name="theme_light">Clair épuré</string>
+    <string name="theme_oled">Noir OLED pur</string>
+    <string name="ui_play_protect_title">Vérifier Play Protect</string>
+    <string name="ui_play_protect_description">Dans Google Play, ouvrez votre profil, Play Protect, puis Paramètres. Cette version ne peut pas vérifier le réglage automatiquement. Le statut déclaré compte dans le score pendant 24 h.</string>
+    <string name="ui_google_play_unavailable">Google Play n’est pas disponible sur cet appareil.</string>
+    <string name="ui_open_google_play">Ouvrir Google Play</string>
+    <string name="ui_checked_on">J’ai vérifié : activé</string>
+    <string name="ui_checked_off">J’ai vérifié : désactivé</string>
+    <string name="ui_not_now">Pas maintenant</string>
 </resources>

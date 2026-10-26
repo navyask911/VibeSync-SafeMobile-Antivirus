@@ -3,6 +3,11 @@ package com.vibesync.antivirus
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+import com.vibesync.antivirus.ui.theme.AppTheme
+import com.vibesync.antivirus.ui.theme.ThemePreferences
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.compose.setContent
@@ -20,6 +25,8 @@ class MainActivity : ComponentActivity() {
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(LocalePreferences.wrap(newBase))
     }
+    private val themePreferences by lazy { ThemePreferences(this) }
+    private var selectedTheme by mutableStateOf(AppTheme.MIDNIGHT)
     private var sharedText by mutableStateOf<String?>(null)
     private var openQuarantine by mutableStateOf(false)
     private var openDevicePosture by mutableStateOf(false)
@@ -27,13 +34,22 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge(statusBarStyle = androidx.activity.SystemBarStyle.dark(android.graphics.Color.TRANSPARENT),
             navigationBarStyle = androidx.activity.SystemBarStyle.dark(android.graphics.Color.rgb(15, 23, 42)))
+        lifecycleScope.launch { themePreferences.selected.collect { saved -> selectedTheme = saved } }
         sharedText = incomingSharedText(intent)
         openQuarantine = intent.getBooleanExtra(SecurityAlertNotifier.EXTRA_OPEN_QUARANTINE, false)
         openDevicePosture = intent.getBooleanExtra(PostureChangeNotifier.EXTRA_OPEN_POSTURE, false)
         setContent {
-            SafeMobileTheme {
+            SafeMobileTheme(theme = selectedTheme) {
                 SafeMobileScreen(
                     repository = (application as SafeMobileApp).repository,
+                    appTheme = selectedTheme,
+                    onAppThemeChanged = { choice ->
+                        selectedTheme = choice
+                        lifecycleScope.launch {
+                            runCatching { themePreferences.save(choice) }
+                                .onFailure { Log.e("SafeMobileTheme", "Could not save theme", it) }
+                        }
+                    },
                     sharedText = sharedText,
                     onSharedTextConsumed = { sharedText = null },
                     openQuarantine = openQuarantine,

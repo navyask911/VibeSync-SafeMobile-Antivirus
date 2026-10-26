@@ -500,5 +500,16 @@
     <string name="feed_settings_cancel">ರದ್ದುಮಾಡಿ</string>
     <string name="feed_settings_enabled">ಫೀಡ್ ಸಮನ್ವಯ ಸಕ್ರಿಯವಾಗಿದೆ. ನೆಟ್‌ವರ್ಕ್ ಮತ್ತು ಬ್ಯಾಟರಿ ಷರತ್ತುಗಳು ಪೂರ್ತಿಯಾದಾಗ ನಡೆಯುತ್ತದೆ.</string>
     <string name="feed_settings_disabled">ಫೀಡ್ ಸಮನ್ವಯ ನಿಷ್ಕ್ರಿಯವಾಗಿದೆ; ಬಾಕಿ ಮತ್ತು ನಿಯಮಿತ ಕೆಲಸ ರದ್ದಾಗಿದೆ.</string>
+    <string name="theme_appearance_description">ಬಣ್ಣದ ಥೀಮ್ ಆಯ್ಕೆಮಾಡಿ. ಬದಲಾವಣೆ ತಕ್ಷಣ ಅನ್ವಯಿಸಿ ಆಫ್‌ಲೈನ್‌ನಲ್ಲಿಯೂ ಉಳಿಯುತ್ತದೆ.</string>
+    <string name="theme_midnight">ಮಧ್ಯರಾತ್ರಿ ನೀಲಿ</string>
+    <string name="theme_light">ಸ್ವಚ್ಛ ಬೆಳಕು</string>
+    <string name="theme_oled">ಶುದ್ಧ OLED ಕಪ್ಪು</string>
+    <string name="ui_play_protect_title">Play Protect ಪರಿಶೀಲಿಸಿ</string>
+    <string name="ui_play_protect_description">Google Play ನಲ್ಲಿ ಪ್ರೊಫೈಲ್, Play Protect ಮತ್ತು ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ತೆರೆಯಿರಿ. ಆ್ಯಪ್ ಈ ಸ್ಥಿತಿಯನ್ನು ಸ್ವಯಂ ಪರಿಶೀಲಿಸಲಾರದು. ನೀವು ನೀಡಿದ ಸ್ಥಿತಿಯನ್ನು 24 ಗಂಟೆ ಅಂಕಕ್ಕೆ ಬಳಸಲಾಗುತ್ತದೆ.</string>
+    <string name="ui_google_play_unavailable">ಈ ಸಾಧನದಲ್ಲಿ Google Play ಲಭ್ಯವಿಲ್ಲ.</string>
+    <string name="ui_open_google_play">Google Play ತೆರೆಯಿರಿ</string>
+    <string name="ui_checked_on">ನಾನು ಪರಿಶೀಲಿಸಿದೆ: ಆನ್</string>
+    <string name="ui_checked_off">ನಾನು ಪರಿಶೀಲಿಸಿದೆ: ಆಫ್</string>
+    <string name="ui_not_now">ಈಗ ಬೇಡ</string>
 </resources>
 

@@ -17,11 +17,19 @@ val DMSans = FontFamily(
 val SafeMobileTypography = Typography().run {
     copy(
         displayLarge = displayLarge.copy(fontFamily = DMSans, fontWeight = FontWeight.Bold, letterSpacing = (-0.5).sp),
+        displayMedium = displayMedium.copy(fontFamily = DMSans, fontWeight = FontWeight.Bold),
+        displaySmall = displaySmall.copy(fontFamily = DMSans, fontWeight = FontWeight.Bold),
         headlineLarge = headlineLarge.copy(fontFamily = DMSans, fontWeight = FontWeight.Bold),
-        headlineMedium = headlineMedium.copy(fontFamily = DMSans, fontWeight = FontWeight.SemiBold),
-        titleLarge = titleLarge.copy(fontFamily = DMSans, fontWeight = FontWeight.SemiBold, letterSpacing = 0.2.sp),
+        headlineMedium = headlineMedium.copy(fontFamily = DMSans, fontWeight = FontWeight.Bold),
+        headlineSmall = headlineSmall.copy(fontFamily = DMSans, fontWeight = FontWeight.Bold),
+        titleLarge = titleLarge.copy(fontFamily = DMSans, fontWeight = FontWeight.Bold, letterSpacing = 0.2.sp),
         titleMedium = titleMedium.copy(fontFamily = DMSans, fontWeight = FontWeight.Medium, letterSpacing = 0.2.sp),
-        bodyLarge = bodyLarge.copy(fontFamily = DMSans, lineHeight = 25.sp, letterSpacing = 0.2.sp),
-        bodyMedium = bodyMedium.copy(fontFamily = DMSans, lineHeight = 22.sp, letterSpacing = 0.15.sp)
+        titleSmall = titleSmall.copy(fontFamily = DMSans, fontWeight = FontWeight.Medium),
+        bodyLarge = bodyLarge.copy(fontFamily = DMSans, fontWeight = FontWeight.Normal, lineHeight = 25.sp, letterSpacing = 0.2.sp),
+        bodyMedium = bodyMedium.copy(fontFamily = DMSans, fontWeight = FontWeight.Normal, lineHeight = 22.sp, letterSpacing = 0.15.sp),
+        bodySmall = bodySmall.copy(fontFamily = DMSans, fontWeight = FontWeight.Normal),
+        labelLarge = labelLarge.copy(fontFamily = DMSans, fontWeight = FontWeight.Medium),
+        labelMedium = labelMedium.copy(fontFamily = DMSans, fontWeight = FontWeight.Medium),
+        labelSmall = labelSmall.copy(fontFamily = DMSans, fontWeight = FontWeight.Medium)
     )
 }

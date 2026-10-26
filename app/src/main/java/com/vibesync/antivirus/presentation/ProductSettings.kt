@@ -9,6 +9,11 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.Alignment
+import androidx.compose.material3.RadioButton
+import com.vibesync.antivirus.ui.theme.AppTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.Row
@@ -302,7 +307,9 @@ internal fun SafeMobileSettingsPanel(
     securityAlertsEnabled: Boolean = false,
     onSecurityAlertsChanged: ((Boolean) -> Unit)? = null,
     onToggleProtection: ((Boolean) -> Unit)? = null,
-    onStrictModeChanged: ((Boolean) -> Unit)? = null
+    onStrictModeChanged: ((Boolean) -> Unit)? = null,
+    appTheme: AppTheme = AppTheme.MIDNIGHT,
+    onAppThemeChanged: (AppTheme) -> Unit = {}
 ) {
     val context = LocalContext.current
     val activity = context as? Activity
@@ -327,8 +334,27 @@ internal fun SafeMobileSettingsPanel(
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text(stringResource(R.string.appearance_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                Text(stringResource(R.string.cyber_dark_appearance),
+                Text(stringResource(R.string.theme_appearance_description),
                     style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                for (option in AppTheme.entries) {
+                    val label = when (option) {
+                        AppTheme.MIDNIGHT -> R.string.theme_midnight
+                        AppTheme.LIGHT -> R.string.theme_light
+                        AppTheme.OLED -> R.string.theme_oled
+                    }
+                    Row(
+                        modifier = Modifier.fillMaxWidth().selectable(
+                            selected = appTheme == option,
+                            role = Role.RadioButton,
+                            onClick = { onAppThemeChanged(option) }
+                        ).padding(vertical = 6.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        RadioButton(selected = appTheme == option, onClick = null)
+                        Text(stringResource(label), color = MaterialTheme.colorScheme.onSurface)
+                    }
+                }
             }
         }
         OverlayRiskReviewPanel()
