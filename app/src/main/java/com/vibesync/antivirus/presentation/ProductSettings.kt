@@ -151,10 +151,8 @@ internal fun OverlayRiskReviewPanel() {
     var resultState by remember { mutableStateOf(prefs.getString(OverlayRiskReviewManager.KEY_RESULT, "NOT_CHECKED") ?: "NOT_CHECKED") }
     var reminderHours by remember { mutableStateOf(prefs.getInt(OverlayRiskReviewManager.KEY_REMINDER_HOURS, 24)) }
     var intervalMenuExpanded by remember { mutableStateOf(false) }
-    val notificationPermissionLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { /* The review remains opt-in even when reminders are declined. */ }
-
+    var showNotificationPermissionPrompt by remember { mutableStateOf(false) }
+    var pendingReviewEnable by remember { mutableStateOf(false) }
     fun refreshFromPreferences() {
         enabled = OverlayRiskReviewManager.isEnabled(context)
         lastAttempt = prefs.getLong(OverlayRiskReviewManager.KEY_LAST_ATTEMPT, 0L)
@@ -164,6 +162,16 @@ internal fun OverlayRiskReviewPanel() {
         enabledServices = prefs.getInt(OverlayRiskReviewManager.KEY_ENABLED_ACCESSIBILITY_SERVICES, 0)
         resultState = prefs.getString(OverlayRiskReviewManager.KEY_RESULT, "NOT_CHECKED") ?: "NOT_CHECKED"
         reminderHours = prefs.getInt(OverlayRiskReviewManager.KEY_REMINDER_HOURS, 24)
+    }
+
+    val notificationPermissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        if (pendingReviewEnable) {
+            OverlayRiskReviewManager.setEnabled(context, granted)
+            pendingReviewEnable = false
+            refreshFromPreferences()
+        }
     }
     DisposableEffect(prefs) {
         val listener = android.content.SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
@@ -188,12 +196,17 @@ internal fun OverlayRiskReviewPanel() {
                     Text(stringResource(if (enabled) R.string.overlay_review_enabled else R.string.overlay_review_disabled), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
                 Switch(checked = enabled, onCheckedChange = { requested ->
-                    OverlayRiskReviewManager.setEnabled(context, requested)
-                    refreshFromPreferences()
-                    if (requested && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                    if (!requested) {
+                        OverlayRiskReviewManager.setEnabled(context, false)
+                        refreshFromPreferences()
+                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
                         ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
                     ) {
-                        notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                        pendingReviewEnable = true
+                        showNotificationPermissionPrompt = true
+                    } else {
+                        OverlayRiskReviewManager.setEnabled(context, true)
+                        refreshFromPreferences()
                     }
                 })
             }
@@ -263,6 +276,26 @@ internal fun OverlayRiskReviewPanel() {
             }
         }
     }
+    if (showNotificationPermissionPrompt) AlertDialog(
+        onDismissRequest = {
+            showNotificationPermissionPrompt = false
+            pendingReviewEnable = false
+        },
+        title = { Text(stringResource(R.string.overlay_review_title)) },
+        text = { Text(stringResource(R.string.overlay_review_description)) },
+        confirmButton = {
+            TextButton(onClick = {
+                showNotificationPermissionPrompt = false
+                notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }) { Text(stringResource(R.string.setup_allow_notifications)) }
+        },
+        dismissButton = {
+            TextButton(onClick = {
+                showNotificationPermissionPrompt = false
+                pendingReviewEnable = false
+            }) { Text(stringResource(R.string.setup_notifications_not_now)) }
+        }
+    )
 }
 
 @Composable

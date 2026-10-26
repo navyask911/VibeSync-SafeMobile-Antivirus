@@ -154,7 +154,6 @@ import kotlinx.coroutines.launch
   context.getSharedPreferences(SafeMobileApp.PRIVACY_PREFS, Context.MODE_PRIVATE)
    .getBoolean(SafeMobileApp.PRIVACY_ACKNOWLEDGED, false)
  )) }
- var onboardingStep by remember(context) { mutableStateOf(onboardingPrefs.getInt(OnboardingPrefs.STEP, 0).coerceIn(0, 3)) }
  var storageAccessGranted by remember(context) { mutableStateOf(hasSharedStorageAccess(context)) }
  var notificationsGranted by remember(context) { mutableStateOf(hasNotificationAccess(context)) }
  var sentinelOptIn by remember(context) { mutableStateOf(onboardingPrefs.getBoolean(OnboardingPrefs.SENTINEL_OPT_IN, isStorageSentinelRunning(context))) }
@@ -193,8 +192,11 @@ import kotlinx.coroutines.launch
   if (privacyAccepted) action() else { pendingSensitiveAction = action; showPrivacyDisclosure = true }
  }
  var monitoringRunning by remember(context) { mutableStateOf(isStorageSentinelRunning(context) && hasSharedStorageAccess(context)) }
- val setOnboardingStep: (Int) -> Unit = { step -> onboardingStep = step.coerceIn(0, 3); onboardingPrefs.edit().putInt(OnboardingPrefs.STEP, onboardingStep).apply() }
  var pendingUninstallPackage by remember { mutableStateOf<String?>(null) }
+ var showNotificationPermissionPrompt by remember { mutableStateOf(false) }
+ var showStoragePermissionPrompt by remember { mutableStateOf(false) }
+ var pendingAlertEnable by remember { mutableStateOf(false) }
+ var pendingSentinelEnable by remember { mutableStateOf(false) }
  val securityPrefs = remember(context) { context.getSharedPreferences(SafeMobileApp.SECURITY_PREFS, Context.MODE_PRIVATE) }
  var sentinelDesired by remember(context) { mutableStateOf(securityPrefs.getBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, false)) }
  var strictMode by remember(context) { mutableStateOf(securityPrefs.getBoolean(SafeMobileApp.KEY_STRICT_MODE, false)) }
@@ -238,41 +240,66 @@ import kotlinx.coroutines.launch
  }
  val notificationLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
   notificationsGranted = hasNotificationAccess(context)
- }
- val storageTreeLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri: Uri? ->
-  if (uri != null) {
-   val granted = runCatching { StorageAccessPreferences.persistSelectedFolder(context, uri) }.getOrDefault(false)
-   storageAccessGranted = granted
-   if (onboardingStep == 0) setOnboardingStep(1)
-   if (granted) {
-    if (securityPrefs.getBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, false)) {
-     runCatching { context.startForegroundService(Intent(context, StorageSentinelService::class.java)) }
-      .onFailure { Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show() }
-     Handler(Looper.getMainLooper()).postDelayed({
-      monitoringRunning = isStorageSentinelRunning(context) && hasSharedStorageAccess(context)
-     }, 900L)
-    }
-   } else Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show()
+  if (pendingAlertEnable) {
+   securityAlertsEnabled = notificationsGranted
+   securityPrefs.edit().putBoolean(SafeMobileApp.KEY_SECURITY_ALERTS_ENABLED, notificationsGranted).apply()
+   pendingAlertEnable = false
   }
  }
- val requestStorage: () -> Unit = { storageTreeLauncher.launch(null) }
- val requestNotifications: () -> Unit = {
-  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) notificationLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-  else { notificationsGranted = true; if (onboardingStep == 2) setOnboardingStep(3) }
+ val storageTreeLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri: Uri? ->
+  val granted = uri?.let { selected ->
+   runCatching { StorageAccessPreferences.persistSelectedFolder(context, selected) }.getOrDefault(false)
+  } ?: false
+  storageAccessGranted = granted
+  if (pendingSentinelEnable) {
+   pendingSentinelEnable = false
+   if (granted) {
+    runCatching { context.startForegroundService(Intent(context, StorageSentinelService::class.java)) }
+     .onSuccess {
+      securityPrefs.edit().putBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, true).apply()
+      sentinelDesired = true
+      sentinelOptIn = true
+      Handler(Looper.getMainLooper()).postDelayed({
+       monitoringRunning = isStorageSentinelRunning(context) && hasSharedStorageAccess(context)
+      }, 900L)
+     }
+     .onFailure {
+      securityPrefs.edit().putBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, false).apply()
+      sentinelDesired = false
+      sentinelOptIn = false
+      monitoringRunning = false
+      Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show()
+     }
+   } else {
+    securityPrefs.edit().putBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, false).apply()
+    sentinelDesired = false
+    sentinelOptIn = false
+    monitoringRunning = false
+   }
+  } else if (granted && securityPrefs.getBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, false)) {
+   runCatching { context.startForegroundService(Intent(context, StorageSentinelService::class.java)) }
+    .onFailure { Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show() }
+  }
  }
+ val requestStorage: () -> Unit = { pendingSentinelEnable = true; showStoragePermissionPrompt = true }
  val enableSentinel: () -> Unit = {
-  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !hasNotificationAccess(context)) requestNotifications()
-  securityPrefs.edit().putBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, true).apply()
-  sentinelDesired = true
-  sentinelOptIn = true
   if (!hasSharedStorageAccess(context)) requestStorage()
   else runCatching { context.startForegroundService(Intent(context, StorageSentinelService::class.java)) }
-   .onFailure { Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show() }
-   .onSuccess { Handler(Looper.getMainLooper()).postDelayed({
-    storageAccessGranted = hasSharedStorageAccess(context)
-    monitoringRunning = isStorageSentinelRunning(context) && storageAccessGranted
-    if (!monitoringRunning) Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show()
-   }, 900L) }
+   .onSuccess {
+    securityPrefs.edit().putBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, true).apply()
+    sentinelDesired = true
+    sentinelOptIn = true
+    Handler(Looper.getMainLooper()).postDelayed({
+     storageAccessGranted = hasSharedStorageAccess(context)
+     monitoringRunning = isStorageSentinelRunning(context) && storageAccessGranted
+    }, 900L)
+   }
+   .onFailure {
+    securityPrefs.edit().putBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, false).apply()
+    sentinelDesired = false
+    sentinelOptIn = false
+    Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show()
+   }
  }
  val disableSentinel: () -> Unit = {
   securityPrefs.edit().putBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, false).apply()
@@ -281,6 +308,19 @@ import kotlinx.coroutines.launch
   onboardingPrefs.edit().putBoolean(OnboardingPrefs.SENTINEL_OPT_IN, false).apply()
  }
  val toggleProtection: (Boolean) -> Unit = { enabled -> if (enabled) enableSentinel() else disableSentinel() }
+ val changeSecurityAlerts: (Boolean) -> Unit = { enabled ->
+  if (!enabled) {
+   pendingAlertEnable = false
+   securityAlertsEnabled = false
+   securityPrefs.edit().putBoolean(SafeMobileApp.KEY_SECURITY_ALERTS_ENABLED, false).apply()
+  } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !hasNotificationAccess(context)) {
+   pendingAlertEnable = true
+   showNotificationPermissionPrompt = true
+  } else {
+   securityAlertsEnabled = true
+   securityPrefs.edit().putBoolean(SafeMobileApp.KEY_SECURITY_ALERTS_ENABLED, true).apply()
+  }
+ }
  val updateStrictMode: (Boolean) -> Unit = { enabled ->
   strictMode = enabled
   securityPrefs.edit().putBoolean(SafeMobileApp.KEY_STRICT_MODE, enabled).apply()
@@ -344,16 +384,9 @@ import kotlinx.coroutines.launch
  Surface(Modifier.fillMaxSize(),color=MaterialTheme.colorScheme.background) {
   if (!onboardingComplete) {
    SecurityOnboardingScreen(
-    step=onboardingStep, storageAccessGranted=storageAccessGranted, notificationsGranted=notificationsGranted,
-    sentinelOptIn=sentinelOptIn, strictModeOptIn=strictMode, securityAlertsOptIn=securityAlertsEnabled,
     initialSyncPending=initialHashSyncPending,
-    onRequestStorage=requestStorage,
-    onContinueStorage={ setOnboardingStep(1) }, onContinueInstalledApps={ setOnboardingStep(2) },
-    onRequestNotifications=requestNotifications, onSkipNotifications={ setOnboardingStep(3) },
-    onEnableSentinel=enableSentinel, onDisableSentinel=disableSentinel,
-    onStrictModeChanged={ enabled -> strictMode=enabled; securityPrefs.edit().putBoolean(SafeMobileApp.KEY_STRICT_MODE, enabled).apply() },
-    onSecurityAlertsChanged={ enabled -> securityAlertsEnabled=enabled; securityPrefs.edit().putBoolean(SafeMobileApp.KEY_SECURITY_ALERTS_ENABLED, enabled).apply() },
-    onFinish=finishOnboarding, onSkipSetup=finishOnboarding
+    onFinish=finishOnboarding,
+    onSkipSetup=finishOnboarding
    )
   } else {
    Column(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing)) {
@@ -702,7 +735,7 @@ import kotlinx.coroutines.launch
       monitoringRunning, enableSentinel, disableSentinel,
       strictMode = strictMode,
       securityAlertsEnabled = securityAlertsEnabled,
-      onSecurityAlertsChanged = { enabled -> securityAlertsEnabled=enabled; securityPrefs.edit().putBoolean(SafeMobileApp.KEY_SECURITY_ALERTS_ENABLED, enabled).apply() },
+      onSecurityAlertsChanged = changeSecurityAlerts,
       onToggleProtection = toggleProtection, onStrictModeChanged = updateStrictMode
      )
     }
@@ -793,7 +826,48 @@ pendingQuarantine?.let { flagged ->
    dismissButton={ TextButton(onClick={ pendingQuarantine = null }) { Text(stringResource(R.string.close)) } }
   )
  }
- if(showPrivacyDisclosure) AlertDialog(
+ if (showNotificationPermissionPrompt) AlertDialog(
+   onDismissRequest = { showNotificationPermissionPrompt = false; pendingAlertEnable = false },
+   title = { Text(stringResource(R.string.security_alerts_title)) },
+   text = { Text(stringResource(R.string.security_alerts_description)) },
+   confirmButton = {
+    TextButton(onClick = {
+     showNotificationPermissionPrompt = false
+     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      notificationLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+     } else {
+      pendingAlertEnable = false
+      securityAlertsEnabled = true
+      securityPrefs.edit().putBoolean(SafeMobileApp.KEY_SECURITY_ALERTS_ENABLED, true).apply()
+     }
+    }) { Text(stringResource(R.string.setup_allow_notifications)) }
+   },
+   dismissButton = {
+    TextButton(onClick = {
+     showNotificationPermissionPrompt = false
+     pendingAlertEnable = false
+    }) { Text(stringResource(R.string.setup_notifications_not_now)) }
+   }
+  )
+  if (showStoragePermissionPrompt) AlertDialog(
+   onDismissRequest = { showStoragePermissionPrompt = false; pendingSentinelEnable = false },
+   title = { Text(stringResource(R.string.setup_sentinel_title)) },
+   text = { Text(stringResource(R.string.setup_sentinel_body)) },
+   confirmButton = {
+    TextButton(onClick = {
+     showStoragePermissionPrompt = false
+     storageTreeLauncher.launch(null)
+    }) { Text(stringResource(R.string.setup_allow_storage)) }
+   },
+   dismissButton = {
+    TextButton(onClick = {
+     showStoragePermissionPrompt = false
+     pendingSentinelEnable = false
+     storageAccessGranted = hasSharedStorageAccess(context)
+    }) { Text(stringResource(R.string.setup_continue_limited)) }
+   }
+  )
+  if(showPrivacyDisclosure) AlertDialog(
   onDismissRequest={ showPrivacyDisclosure=false; pendingSensitiveAction=null },
   title={ Text(stringResource(R.string.privacy_title)) },
   text={ Text(stringResource(R.string.privacy_body)) },

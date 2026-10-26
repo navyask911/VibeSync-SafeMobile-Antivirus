@@ -1,5 +1,6 @@
 package com.vibesync.antivirus.core.worker
 import android.content.Context
+import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.vibesync.antivirus.SafeMobileApp
@@ -27,6 +28,7 @@ class MultiLayerScanWorker(context: Context,params: WorkerParameters) : Coroutin
   try {
    val scan = app.repository.scanInstalledPackage(name)
    if (scan == null) {
+    Log.d("SafeMobileScan", "Final scan result: package=$name unavailable")
     val prior = dao.findById(eventId)
     if (prior != null) dao.updateAssessment(eventId,prior.sha256Hash,prior.reason + "\nPackage wasn't visible at scan time.",prior.actionTaken,prior.status + "|SCAN_UNAVAILABLE")
     return@withContext Result.success()
@@ -78,11 +80,15 @@ class MultiLayerScanWorker(context: Context,params: WorkerParameters) : Coroutin
    else dao.insert(SecurityIncidentEntity(eventId,System.currentTimeMillis(),"PACKAGE_INSTALL",sourcePackage=name,sha256Hash=scan.sha256,
     reason=reason.ifBlank { "Post-install scan completed." },actionTaken=action.take(500),status=status))
    // Installed apps are not silently deleted or falsely described as quarantined; offer Android uninstall confirmation.
+   Log.d("SafeMobileScan", "Final scan result: package=$name verdict=$status score=$score exact=$exact")
    if (exact) SecurityAlertNotifier.notifyMaliciousApp(applicationContext,name,eventId)
    else if (score >= 0.45f) SecurityAlertNotifier.notifySuspiciousApp(applicationContext,name,eventId)
    Result.success()
   } catch (cancelled: CancellationException) { throw cancelled }
-  catch (_: Exception) { if (runAttemptCount < 2) Result.retry() else Result.failure() }
+  catch (error: Exception) {
+   Log.e("SafeMobileScan", "Final scan result: package=$name failed; attempt=$runAttemptCount", error)
+   if (runAttemptCount < 2) Result.retry() else Result.failure()
+  }
  }
  companion object { const val KEY_PACKAGE_NAME = "multi_layer.package_name"; const val KEY_EVENT_ID = "multi_layer.event_id" }
 }

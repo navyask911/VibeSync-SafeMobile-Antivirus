@@ -26,6 +26,13 @@ class SystemPackageGuardTest {
         ).forEach { packageName ->
             assertFalse(ProtectedPackagePolicy.isUserInstalled(0, packageName))
         }
+        listOf(
+            "com.android.fake.userapp",
+            "com.google.android.fake.userapp",
+            "android.internal.fake"
+        ).forEach { packageName ->
+            assertFalse(ProtectedPackagePolicy.isUserInstalled(0, packageName))
+        }
     }
 
     @Test fun appCannotOfferItselfForReviewOrRemoval() {

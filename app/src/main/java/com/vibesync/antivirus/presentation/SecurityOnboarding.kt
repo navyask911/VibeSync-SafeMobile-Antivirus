@@ -1,44 +1,44 @@
 package com.vibesync.antivirus.presentation
 
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Build
-import androidx.compose.foundation.background
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Apps
-import androidx.compose.material.icons.filled.FolderOpen
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Security
-import androidx.compose.material3.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.Button
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.vibesync.antivirus.R
-import com.vibesync.antivirus.ui.components.PrimaryActionButton
 
-@Composable
-private fun OptInRow(titleRes: Int, bodyRes: Int, checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
-    Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-        shape = RoundedCornerShape(16.dp), modifier = Modifier.fillMaxWidth()) {
-        Row(Modifier.fillMaxWidth().padding(14.dp), verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(stringResource(titleRes), fontWeight = FontWeight.SemiBold)
-                Text(stringResource(bodyRes), style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant)
-            }
-            Switch(checked = checked, onCheckedChange = onCheckedChange)
-        }
-    }
-}
+internal fun hasSharedStorageAccess(context: Context): Boolean =
+    com.vibesync.antivirus.core.observer.StorageAccessPreferences.hasAccess(context)
+
+internal fun hasNotificationAccess(context: Context): Boolean =
+    Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
+        context.checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
 
 internal object OnboardingPrefs {
     const val NAME = "safe_mobile_onboarding"
@@ -47,137 +47,70 @@ internal object OnboardingPrefs {
     const val SENTINEL_OPT_IN = "sentinel_opt_in"
     const val FIRST_SCAN_REQUESTED = "first_scan_requested"
 }
-internal fun hasSharedStorageAccess(context: Context): Boolean =
-    com.vibesync.antivirus.core.observer.StorageAccessPreferences.hasAccess(context)
-internal fun hasNotificationAccess(context: Context): Boolean =
-    Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
-        context.checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) == android.content.pm.PackageManager.PERMISSION_GRANTED
 
 @Composable
 internal fun SecurityOnboardingScreen(
-    step: Int, storageAccessGranted: Boolean, notificationsGranted: Boolean, sentinelOptIn: Boolean,
-    strictModeOptIn: Boolean, securityAlertsOptIn: Boolean, initialSyncPending: Boolean,
-    onRequestStorage: () -> Unit, onContinueStorage: () -> Unit, onContinueInstalledApps: () -> Unit,
-    onRequestNotifications: () -> Unit, onSkipNotifications: () -> Unit, onEnableSentinel: () -> Unit,
-    onDisableSentinel: () -> Unit, onStrictModeChanged: (Boolean) -> Unit,
-    onSecurityAlertsChanged: (Boolean) -> Unit, onFinish: () -> Unit, onSkipSetup: () -> Unit
+    initialSyncPending: Boolean,
+    onFinish: () -> Unit,
+    onSkipSetup: () -> Unit
 ) {
-    val page = step.coerceIn(0, 3)
-    val title = when (page) {
-        0 -> R.string.setup_storage_title
-        1 -> R.string.setup_apps_title
-        2 -> R.string.setup_notifications_title
-        else -> R.string.setup_sentinel_title
-    }
-    val description = when (page) {
-        0 -> R.string.setup_storage_body
-        1 -> R.string.setup_apps_body
-        2 -> R.string.setup_notifications_body
-        else -> R.string.setup_sentinel_body
-    }
-    val icon = when (page) {
-        0 -> Icons.Default.FolderOpen
-        1 -> Icons.Default.Apps
-        2 -> Icons.Default.Notifications
-        else -> Icons.Default.Security
-    }
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        containerColor = MaterialTheme.colorScheme.background,
-        contentWindowInsets = WindowInsets.safeDrawing
-    ) { innerPadding ->
-      Column(
-        modifier = Modifier.fillMaxSize()
-            .padding(innerPadding)
-            .consumeWindowInsets(innerPadding)
-            .verticalScroll(rememberScrollState())
-            .padding(horizontal = 22.dp, vertical = 18.dp),
-        verticalArrangement = Arrangement.spacedBy(18.dp), horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Text(stringResource(R.string.setup_title), style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.weight(1f))
-            TextButton(onClick = onSkipSetup) { Text(stringResource(R.string.setup_skip)) }
-        }
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-            repeat(4) { index ->
-                Box(Modifier.size(if (index == page) 14.dp else 10.dp).clip(RoundedCornerShape(50))
-                    .background(if (index <= page) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant))
+        containerColor = MaterialTheme.colorScheme.background
+    ) { insets ->
+        Column(
+            modifier = Modifier.fillMaxSize().padding(insets).padding(horizontal = 24.dp, vertical = 20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(18.dp)
+        ) {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                TextButton(onClick = onSkipSetup) { Text(stringResource(R.string.setup_skip)) }
             }
-        }
-        Spacer(Modifier.height(4.dp))
-        Box(Modifier.size(96.dp).clip(RoundedCornerShape(24.dp))
-            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
-            Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(44.dp))
-        }
-        Text(stringResource(title), style = MaterialTheme.typography.headlineMedium, textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.Bold)
-        Text(stringResource(description), style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.onSurfaceVariant)
-        if (initialSyncPending) {
-            Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-                shape = RoundedCornerShape(16.dp), modifier = Modifier.fillMaxWidth()) {
-                Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    CircularProgressIndicator(modifier = Modifier.size(18.dp), strokeWidth = 2.dp)
-                    Text(stringResource(R.string.hash_database_initial_syncing), style = MaterialTheme.typography.bodyMedium)
-                }
-            }
-        }
-        if (page == 1) {
-            DeviceAdminCard()
-        }
-        if (page == 0 || page == 2) {
-            val granted = if (page == 0) storageAccessGranted else notificationsGranted
-            Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-                shape = RoundedCornerShape(16.dp), modifier = Modifier.fillMaxWidth()) {
-                Text(stringResource(if (granted) R.string.setup_permission_granted else R.string.setup_permission_missing),
-                    Modifier.padding(14.dp), style = MaterialTheme.typography.labelLarge,
-                    color = if (granted) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.tertiary)
-            }
-        }
-        if (page == 3) {
-            Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-                shape = RoundedCornerShape(16.dp), modifier = Modifier.fillMaxWidth()) {
-                Row(Modifier.fillMaxWidth().padding(14.dp), verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                        Text(stringResource(R.string.setup_sentinel_switch), fontWeight = FontWeight.SemiBold)
-                        Text(stringResource(R.string.setup_sentinel_scope), style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Spacer(Modifier.height(18.dp))
+            Icon(
+                Icons.Default.Security,
+                contentDescription = stringResource(R.string.app_name),
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(64.dp)
+            )
+            Text(
+                stringResource(R.string.setup_title),
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
+            )
+            Text(
+                stringResource(R.string.setup_storage_body),
+                style = MaterialTheme.typography.bodyLarge,
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            if (initialSyncPending) {
+                Card(
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+                    shape = RoundedCornerShape(16.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(
+                        Modifier.padding(14.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        CircularProgressIndicator(modifier = Modifier.size(18.dp), strokeWidth = 2.dp)
+                        Text(stringResource(R.string.hash_database_initial_syncing), style = MaterialTheme.typography.bodyMedium)
                     }
-                    Switch(checked = sentinelOptIn, onCheckedChange = { if (it) onEnableSentinel() else onDisableSentinel() })
                 }
             }
-            OptInRow(R.string.strict_mode_title, R.string.strict_mode_description, strictModeOptIn, onStrictModeChanged)
-            OptInRow(R.string.security_alerts_title, R.string.security_alerts_description, securityAlertsOptIn, onSecurityAlertsChanged)
-        }
-        PrimaryActionButton(
-            label = stringResource(
-                when (page) {
-                    0 -> if (storageAccessGranted) R.string.setup_continue else R.string.setup_allow_storage
-                    1 -> R.string.setup_continue
-                    2 -> if (notificationsGranted) R.string.setup_continue else R.string.setup_allow_notifications
-                    else -> R.string.setup_finish
-                }
-            ),
-            onClick = {
-                when (page) {
-                    0 -> if (storageAccessGranted) onContinueStorage() else onRequestStorage()
-                    1 -> onContinueInstalledApps()
-                    2 -> if (notificationsGranted) onSkipNotifications() else onRequestNotifications()
-                    else -> onFinish()
-                }
+            Spacer(Modifier.weight(1f))
+            Text(
+                stringResource(R.string.setup_apps_body),
+                style = MaterialTheme.typography.bodySmall,
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Button(onClick = onFinish, modifier = Modifier.fillMaxWidth()) {
+                Text(stringResource(R.string.setup_finish))
             }
-        )
-        if (page == 0 && !storageAccessGranted) {
-            OutlinedButton(onClick = onContinueStorage, modifier = Modifier.fillMaxWidth()) { Text(stringResource(R.string.setup_continue_limited)) }
-        } else if (page == 2 && !notificationsGranted) {
-            TextButton(onClick = onSkipNotifications) { Text(stringResource(R.string.setup_notifications_not_now)) }
         }
-        LinearProgressIndicator(progress = (page + 1) / 4f, modifier = Modifier.fillMaxWidth())
-        Text(stringResource(R.string.setup_step_progress, page + 1), style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant)
-      }
     }
 }
