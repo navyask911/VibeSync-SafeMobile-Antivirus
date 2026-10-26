@@ -263,4 +263,17 @@
     <string name="voice_alerts_enabled">已启用语音安全警报</string>
     <string name="voice_alerts_disabled">已停用语音安全警报</string>
     <string name="hashdb_match">已签名的 %1$s 哈希匹配：%2$s</string>
+    <string name="hash_database_sync_title">已签名的威胁定义</string>
+    <string name="hash_database_initial_syncing">正在更新威胁定义…</string>
+    <string name="hash_database_sync_description">静默检查 SafeMobile GitHub Releases 中的更新。每个下载的数据库都会在启用前验证签名。</string>
+    <string name="hash_database_sync_interval">联网时每 6 小时自动检查</string>
+    <string name="device_security_score">设备安全评分</string>
+    <string name="device_security_score_preview">预览仪表盘。暂时没有测量评分。</string>
+    <string name="strict_mode_title">严格模式</string>
+    <string name="strict_mode_label">严格模式</string>
+    <string name="strict_mode_description">对下载的文件采用更严格的监控。可选，默认关闭。</string>
+    <string name="security_alerts_title">安全提醒</string>
+    <string name="security_alerts_description">检测到威胁或隔离文件时显示本地通知。需由你开启，默认关闭。</string>
+    <string name="security_alerts_enabled">提醒已开启</string>
+    <string name="security_alerts_disabled">提醒已关闭</string>
 </resources>
