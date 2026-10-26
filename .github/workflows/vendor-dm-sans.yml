@@ -1,0 +1,41 @@
+name: Vendor pinned DM Sans fonts
+on:
+  push:
+    branches: ["feat/v1.0.9-oppo-fixes"]
+    paths: [".github/workflows/vendor-dm-sans.yml"]
+permissions:
+  contents: write
+jobs:
+  vendor-fonts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Download and verify original SIL OFL 1.1 font assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          readonly upstream=4412393b7d2de9fe7a92064c2dce9b5af5d7fd26
+          readonly root="https://raw.githubusercontent.com/googlefonts/dm-fonts/${upstream}/Sans"
+          mkdir -p app/src/main/res/font docs/licenses
+          curl --fail --location --retry 3 --silent --show-error "${root}/fonts/ttf/DMSans-Regular.ttf" -o app/src/main/res/font/dm_sans_regular.ttf
+          curl --fail --location --retry 3 --silent --show-error "${root}/fonts/ttf/DMSans-Medium.ttf" -o app/src/main/res/font/dm_sans_medium.ttf
+          curl --fail --location --retry 3 --silent --show-error "${root}/fonts/ttf/DMSans-Bold.ttf" -o app/src/main/res/font/dm_sans_bold.ttf
+          curl --fail --location --retry 3 --silent --show-error "${root}/OFL.txt" -o docs/licenses/DM_SANS_OFL.txt
+          test "$(git hash-object app/src/main/res/font/dm_sans_regular.ttf)" = 9b1d3099a7b431b026c597c5b41be79a155adc62
+          test "$(git hash-object app/src/main/res/font/dm_sans_medium.ttf)" = 39ddfe4c3612291a39c17dced309093f7241fc9c
+          test "$(git hash-object app/src/main/res/font/dm_sans_bold.ttf)" = db8d71a1c74e4bfdd2c6360f55b48c4f25f626ff
+          test "$(git hash-object docs/licenses/DM_SANS_OFL.txt)" = 4430b85ac62998e2edb914360f9ebdfe43f4deaa
+          file app/src/main/res/font/*.ttf
+      - name: Commit pinned original fonts to this feature branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add app/src/main/res/font/dm_sans_regular.ttf app/src/main/res/font/dm_sans_medium.ttf app/src/main/res/font/dm_sans_bold.ttf docs/licenses/DM_SANS_OFL.txt
+          if git diff --cached --quiet; then echo 'Pinned font files already committed.'; exit 0; fi
+          git commit -m 'Assets: vendor verified DM Sans font weights and OFL license'
+          git push origin HEAD:feat/v1.0.9-oppo-fixes

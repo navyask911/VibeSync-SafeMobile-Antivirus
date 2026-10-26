@@ -1,6 +1,12 @@
 package com.vibesync.antivirus
 
 import android.app.Application
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.os.Build
+import com.vibesync.antivirus.core.observer.PackageInstallReceiver
 import android.util.Log
 import androidx.room.Room
 import androidx.work.Constraints
@@ -38,10 +44,30 @@ class SafeMobileApp : Application() {
         private set
 
     private val appScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private var runtimePackageInstallReceiver: BroadcastReceiver? = null
     val devicePostureRepository by lazy { DevicePostureRepository(this) }
 
     override fun onCreate() {
         super.onCreate()
+        // Manifest-only implicit PACKAGE_ADDED is not delivered on Android 8+.
+        // Register while SafeMobile is running; OEM process shutdown may still limit delivery.
+        val packageFilter = IntentFilter().apply {
+            addAction(Intent.ACTION_PACKAGE_ADDED)
+            addAction(Intent.ACTION_PACKAGE_REPLACED)
+            addDataScheme("package")
+        }
+        runCatching {
+            val receiver = PackageInstallReceiver()
+            if (Build.VERSION.SDK_INT >= 33) {
+                registerReceiver(receiver, packageFilter, Context.RECEIVER_EXPORTED)
+            } else {
+                @Suppress("DEPRECATION")
+                registerReceiver(receiver, packageFilter)
+            }
+            runtimePackageInstallReceiver = receiver
+            Log.d("SafeMobileScan", "Runtime post-install receiver registered")
+        }.onFailure { Log.w("SafeMobileScan", "Unable to register runtime package receiver", it) }
+
         // Only ~2 KiB of signed-APK text is loaded; all APK scanning stays on Dispatchers.IO.
         BundledYaraEngine.initialize(assets)
         runCatching { DeviceOwnerManager(this).applyEnterpriseDefaults() }
@@ -104,6 +130,8 @@ class SafeMobileApp : Application() {
     }
 
     override fun onTerminate() {
+        runtimePackageInstallReceiver?.let { receiver -> runCatching { unregisterReceiver(receiver) } }
+        runtimePackageInstallReceiver = null
         appScope.cancel()
         super.onTerminate()
     }

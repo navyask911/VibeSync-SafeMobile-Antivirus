@@ -42,7 +42,7 @@ fun DetectionCapabilitiesScreen(
                 Text(stringResource(R.string.hash_database_sync_interval), style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.primary)
                 Text(if (hashDatabaseCapability.enabled) {
-                    "Active signed database · ${hashDatabaseCapability.indicatorCount} indicators · version ${hashDatabaseCapability.version ?: "—"}"
+                    stringResource(R.string.ui_yara_database_active, hashDatabaseCapability.indicatorCount, hashDatabaseCapability.version ?: "—")
                 } else hashDatabaseCapability.reason, style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
@@ -52,12 +52,12 @@ fun DetectionCapabilitiesScreen(
         Card(modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)) {
             Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
-                Text("Offline DEX rule signatures", style = MaterialTheme.typography.titleMedium,
+                Text(stringResource(R.string.ui_yara_title), style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold)
-                Text(if (yaraCapability.active) "ACTIVE (LIMITED) · " + yaraCapability.ruleCount + " bundled rules"
-                    else "DISABLED · 0 active rules", style = MaterialTheme.typography.labelMedium,
+                Text(if (yaraCapability.active) stringResource(R.string.ui_yara_active, yaraCapability.ruleCount)
+                    else stringResource(R.string.ui_yara_disabled), style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.primary)
-                Text("Latest scan: " + yaraMatchCount + " matching DEX signatures. Advisory matches are not confirmed malware.",
+                Text(stringResource(R.string.ui_yara_match_summary, yaraMatchCount),
                     style = MaterialTheme.typography.bodySmall)
                 if (yaraMatchedRuleNames.isNotEmpty()) {
                     Text(yaraMatchedRuleNames.take(8).joinToString(", "),

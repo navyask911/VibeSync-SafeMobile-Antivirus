@@ -71,11 +71,11 @@ class PostureSnapshotComparisonTest {
         assertEquals(200L, next.lastCompleteCheckAt)
     }
 
-    @Test fun systemClassificationUsesMetadataNotSpoofablePackagePrefixes() {
-        assertTrue(a.copy(packageName = "com.google.fake.reader").highRisk)
+    @Test fun bothSystemMetadataAndProtectedVendorNamespacesSuppressRisk() {
+        assertFalse(a.copy(packageName = "com.google.fake.reader").highRisk)
         assertFalse(a.copy(systemApp = true).highRisk)
         assertFalse(a.copy(systemApp = null).highRisk)
-        assertTrue(a.copy(access = PostureAccess.OVERLAY, systemApp = true).highRisk)
+        assertFalse(a.copy(access = PostureAccess.OVERLAY, systemApp = true).highRisk)
         assertFalse(a.copy(access = PostureAccess.OVERLAY, state = PostureGrantState.UNKNOWN).highRisk)
         assertFalse(a.copy(access = PostureAccess.OVERLAY, state = PostureGrantState.NOT_GRANTED).highRisk)
         assertEquals(1, report(a, admin, listener).highRiskAppCount)

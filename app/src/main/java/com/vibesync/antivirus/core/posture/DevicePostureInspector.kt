@@ -10,6 +10,7 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.provider.Settings
 import android.view.accessibility.AccessibilityManager
+import com.vibesync.antivirus.core.security.TrustedPackageWhitelist
 
 /** Reads permission/service metadata only. Never binds to an accessibility or notification service. */
 class DevicePostureInspector(context: Context) {
@@ -20,7 +21,17 @@ class DevicePostureInspector(context: Context) {
         val findings = mutableListOf<PostureFinding>()
         val unavailable = mutableSetOf<PostureAccess>()
         fun collect(access: PostureAccess, read: () -> List<PostureFinding>) {
-            try { findings += read() } catch (_: Exception) { unavailable += access }
+            try {
+                findings += read().filter { candidate ->
+                    if (TrustedPackageWhitelist.hasProtectedNamespace(candidate.packageName)) return@filter false
+                    if (candidate.systemApp != false) {
+                        // Inaccessible metadata is unknown, not approval for third-party review.
+                        if (candidate.systemApp == null) unavailable += access
+                        return@filter false
+                    }
+                    TrustedPackageWhitelist.isEligibleForReview(app, candidate.packageName)
+                }
+            } catch (_: Exception) { unavailable += access }
         }
         collect(PostureAccess.ACCESSIBILITY) {
             val manager = app.getSystemService(AccessibilityManager::class.java) ?: error("Accessibility metadata unavailable")
@@ -67,7 +78,6 @@ class DevicePostureInspector(context: Context) {
                 finding(PostureAccess.OVERLAY, pkg.packageName, known = info).copy(state = state)
             }
         }
-        findings.filter { it.systemApp == null }.forEach { unavailable += it.access }
         return DevicePostureReport(findings.distinctBy { Triple(it.access, it.packageName, it.componentName) }
             .sortedWith(compareByDescending<PostureFinding> { it.nonSystemHighRisk }.thenBy { it.appName.lowercase() }),
             unavailable, System.currentTimeMillis())
@@ -79,7 +89,8 @@ class DevicePostureInspector(context: Context) {
             @Suppress("DEPRECATION")
             pm.getApplicationInfo(name, 0)
         }.getOrNull()
-        val isSystem = info?.let { it.flags and (ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0 }
+        val isSystem = info?.let { TrustedPackageWhitelist.isProtected(it.flags, name) }
+            ?: if (TrustedPackageWhitelist.hasProtectedNamespace(name)) true else null
         return PostureFinding(access, name, info?.let { runCatching { it.loadLabel(pm).toString().take(160) }.getOrNull() } ?: name,
             component?.flattenToString(), isSystem)
     }

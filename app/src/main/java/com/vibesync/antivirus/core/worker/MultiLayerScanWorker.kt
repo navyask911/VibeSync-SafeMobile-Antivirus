@@ -27,6 +27,7 @@ class MultiLayerScanWorker(context: Context,params: WorkerParameters) : Coroutin
   try {
    // A package broadcast may cold-start the process before Application's async restore finishes.
    app.hashDatabaseManager.restoreActiveDatabase()
+   Log.d("SafeMobileScan", "Post-install worker scanning package=$name event=$eventId")
    val scan = app.repository.scanInstalledPackage(name)
    if (scan == null) {
     Log.d("SafeMobileScan", "Final scan result: package=$name unavailable")

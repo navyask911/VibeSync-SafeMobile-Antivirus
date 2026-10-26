@@ -8,7 +8,7 @@ import android.content.Context
  * not a certificate or malware-safety verdict. Downloaded APKs are not trusted by their names.
  */
 object TrustedPackageWhitelist {
-    private val prefixes = listOf("com.google.android.", "com.android.", "com.google.", "android.")
+    private val prefixes = listOf("com.google.android.", "com.android.", "com.google.", "com.oppo.", "com.coloros.", "android.")
     private val packages = setOf("android", "com.android.vending")
 
     fun hasProtectedNamespace(packageName: String): Boolean =

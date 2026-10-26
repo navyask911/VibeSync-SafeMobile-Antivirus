@@ -1,5 +1,7 @@
 package com.vibesync.antivirus.core.posture
 
+import com.vibesync.antivirus.core.security.TrustedPackageWhitelist
+
 enum class PostureAccess { ACCESSIBILITY, DEVICE_ADMIN, NOTIFICATION_LISTENER, OVERLAY }
 enum class PostureGrantState { ENABLED, NOT_GRANTED, UNKNOWN }
 
@@ -15,8 +17,8 @@ data class PostureFinding(
     val stale: Boolean = false
 ) {
     val highRisk: Boolean get() = state == PostureGrantState.ENABLED &&
-        (access == PostureAccess.OVERLAY || systemApp == false)
-    val nonSystemHighRisk: Boolean get() = highRisk && systemApp == false
+        systemApp == false && !TrustedPackageWhitelist.hasProtectedNamespace(packageName)
+    val nonSystemHighRisk: Boolean get() = highRisk
 }
 
 data class DevicePostureReport(
@@ -26,7 +28,7 @@ data class DevicePostureReport(
 ) {
     val highRiskAppCount: Int get() = findings.filter { it.nonSystemHighRisk }.map { it.packageName }.distinct().size
     fun grants(access: PostureAccess): Set<PostureCapability> = findings.asSequence()
-        .filter { it.access == access && it.state == PostureGrantState.ENABLED }
+        .filter { it.access == access && it.state == PostureGrantState.ENABLED && it.systemApp == false &&\n            !TrustedPackageWhitelist.hasProtectedNamespace(it.packageName) }
         .map { PostureCapability(it.access, it.packageName) }.toSet()
 
     /** Do not erase a previously observed risk just because a later Android read is unavailable. */
@@ -34,7 +36,8 @@ data class DevicePostureReport(
         if (previous == null) return this
         fun key(finding: PostureFinding) = Triple(finding.access, finding.packageName, finding.componentName)
         val fresh = findings.associateBy(::key)
-        val retained = previous.findings.filter { old -> old.access in unavailable &&
+        val retained = previous.findings.filter { old -> old.systemApp == false &&
+            !TrustedPackageWhitelist.hasProtectedNamespace(old.packageName) && old.access in unavailable &&
             (fresh[key(old)] == null || fresh[key(old)]?.state == PostureGrantState.UNKNOWN ||
                 (fresh[key(old)]?.state == PostureGrantState.ENABLED && fresh[key(old)]?.systemApp == null)) }
             .map { it.copy(stale = true) }
