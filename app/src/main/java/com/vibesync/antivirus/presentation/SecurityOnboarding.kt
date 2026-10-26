@@ -1,5 +1,8 @@
 package com.vibesync.antivirus.presentation
 
+import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,6 +32,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.vibesync.antivirus.R
+
+internal fun hasSharedStorageAccess(context: Context): Boolean =
+    com.vibesync.antivirus.core.observer.StorageAccessPreferences.hasAccess(context)
+
+internal fun hasNotificationAccess(context: Context): Boolean =
+    Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
+        context.checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
 
 internal object OnboardingPrefs {
     const val NAME = "safe_mobile_onboarding"

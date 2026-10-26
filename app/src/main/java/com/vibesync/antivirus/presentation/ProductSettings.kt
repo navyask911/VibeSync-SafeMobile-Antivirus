@@ -153,16 +153,6 @@ internal fun OverlayRiskReviewPanel() {
     var intervalMenuExpanded by remember { mutableStateOf(false) }
     var showNotificationPermissionPrompt by remember { mutableStateOf(false) }
     var pendingReviewEnable by remember { mutableStateOf(false) }
-    val notificationPermissionLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { granted ->
-        if (pendingReviewEnable) {
-            OverlayRiskReviewManager.setEnabled(context, granted)
-            pendingReviewEnable = false
-            refreshFromPreferences()
-        }
-    }
-
     fun refreshFromPreferences() {
         enabled = OverlayRiskReviewManager.isEnabled(context)
         lastAttempt = prefs.getLong(OverlayRiskReviewManager.KEY_LAST_ATTEMPT, 0L)
@@ -172,6 +162,16 @@ internal fun OverlayRiskReviewPanel() {
         enabledServices = prefs.getInt(OverlayRiskReviewManager.KEY_ENABLED_ACCESSIBILITY_SERVICES, 0)
         resultState = prefs.getString(OverlayRiskReviewManager.KEY_RESULT, "NOT_CHECKED") ?: "NOT_CHECKED"
         reminderHours = prefs.getInt(OverlayRiskReviewManager.KEY_REMINDER_HOURS, 24)
+    }
+
+    val notificationPermissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        if (pendingReviewEnable) {
+            OverlayRiskReviewManager.setEnabled(context, granted)
+            pendingReviewEnable = false
+            refreshFromPreferences()
+        }
     }
     DisposableEffect(prefs) {
         val listener = android.content.SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->

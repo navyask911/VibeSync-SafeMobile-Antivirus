@@ -154,7 +154,6 @@ import kotlinx.coroutines.launch
   context.getSharedPreferences(SafeMobileApp.PRIVACY_PREFS, Context.MODE_PRIVATE)
    .getBoolean(SafeMobileApp.PRIVACY_ACKNOWLEDGED, false)
  )) }
- var onboardingStep by remember(context) { mutableStateOf(onboardingPrefs.getInt(OnboardingPrefs.STEP, 0).coerceIn(0, 3)) }
  var storageAccessGranted by remember(context) { mutableStateOf(hasSharedStorageAccess(context)) }
  var notificationsGranted by remember(context) { mutableStateOf(hasNotificationAccess(context)) }
  var sentinelOptIn by remember(context) { mutableStateOf(onboardingPrefs.getBoolean(OnboardingPrefs.SENTINEL_OPT_IN, isStorageSentinelRunning(context))) }
@@ -193,7 +192,6 @@ import kotlinx.coroutines.launch
   if (privacyAccepted) action() else { pendingSensitiveAction = action; showPrivacyDisclosure = true }
  }
  var monitoringRunning by remember(context) { mutableStateOf(isStorageSentinelRunning(context) && hasSharedStorageAccess(context)) }
- val setOnboardingStep: (Int) -> Unit = { step -> onboardingStep = step.coerceIn(0, 3); onboardingPrefs.edit().putInt(OnboardingPrefs.STEP, onboardingStep).apply() }
  var pendingUninstallPackage by remember { mutableStateOf<String?>(null) }
  var showNotificationPermissionPrompt by remember { mutableStateOf(false) }
  var showStoragePermissionPrompt by remember { mutableStateOf(false) }
