@@ -4,6 +4,8 @@ import android.content.pm.ApplicationInfo
 
 /** Only ordinary user-installed apps are eligible for app-risk review or removal actions. */
 object ProtectedPackagePolicy {
+    private val protectedPackagePrefixes = listOf("com.android.", "com.google.android.", "android.")
+
     private val protectedPackages = setOf(
         "android",
         "com.android.systemui",
@@ -33,6 +35,7 @@ object ProtectedPackagePolicy {
         val systemFlags = ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP
         return flags and systemFlags == 0 &&
             packageName !in protectedPackages &&
+            protectedPackagePrefixes.none(packageName::startsWith) &&
             packageName != ownPackageName
     }
 }

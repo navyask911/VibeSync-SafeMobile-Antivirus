@@ -21,7 +21,7 @@ import com.vibesync.antivirus.R
  * users retain control over sound and vibration in system notification settings.
  */
 object SecurityAlertNotifier {
-    const val CHANNEL_ID = "security_alert_high"
+    const val CHANNEL_ID = "security_alert_high_alarm_v2"
     const val EXTRA_OPEN_QUARANTINE = "com.vibesync.antivirus.OPEN_QUARANTINE"
 
     fun ensureChannel(context: Context) {
@@ -29,7 +29,7 @@ object SecurityAlertNotifier {
         val manager = context.getSystemService(NotificationManager::class.java) ?: return
         val sound = Uri.parse("android.resource://${context.packageName}/${R.raw.security_alert_siren}")
         val audio = AudioAttributes.Builder()
-            .setUsage(AudioAttributes.USAGE_NOTIFICATION_EVENT)
+            .setUsage(AudioAttributes.USAGE_ALARM)
             .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
             .build()
         val channel = NotificationChannel(
