@@ -264,4 +264,17 @@
     <string name="voice_alerts_enabled">Peringatan suara aktif</string>
     <string name="voice_alerts_disabled">Peringatan suara nonaktif</string>
     <string name="hashdb_match">Hash %1$s bertanda tangan cocok: %2$s</string>
+    <string name="hash_database_sync_title">Definisi ancaman bertanda tangan</string>
+    <string name="hash_database_initial_syncing">Memperbarui definisi ancaman…</string>
+    <string name="hash_database_sync_description">Pembaruan diperiksa secara senyap dari GitHub Releases SafeMobile. Setiap basis data yang diunduh diverifikasi tanda tangannya sebelum diaktifkan.</string>
+    <string name="hash_database_sync_interval">Pemeriksaan otomatis setiap 6 jam saat terhubung</string>
+    <string name="device_security_score">Skor Keamanan Perangkat</string>
+    <string name="device_security_score_preview">Indikator pratinjau. Skor terukur belum tersedia.</string>
+    <string name="strict_mode_title">Mode ketat</string>
+    <string name="strict_mode_label">Mode ketat</string>
+    <string name="strict_mode_description">Pantau file yang diunduh dengan lebih ketat. Opsional dan nonaktif secara default.</string>
+    <string name="security_alerts_title">Peringatan keamanan</string>
+    <string name="security_alerts_description">Tampilkan notifikasi lokal saat ancaman terdeteksi atau dikarantina. Nonaktif sampai Anda mengaktifkannya.</string>
+    <string name="security_alerts_enabled">Peringatan aktif</string>
+    <string name="security_alerts_disabled">Peringatan nonaktif</string>
 </resources>

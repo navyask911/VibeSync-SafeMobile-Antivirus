@@ -206,4 +206,17 @@
     <string name="voice_alerts_enabled">تنبيهات الأمان الصوتية مفعّلة</string>
     <string name="voice_alerts_disabled">تنبيهات الأمان الصوتية متوقفة</string>
     <string name="hashdb_match">تطابق تجزئة %1$s الموقعة: %2$s</string>
+    <string name="hash_database_sync_title">تعريفات التهديدات الموقعة</string>
+    <string name="hash_database_initial_syncing">جارٍ تحديث تعريفات التهديدات…</string>
+    <string name="hash_database_sync_description">يتم التحقق بهدوء من التحديثات عبر إصدارات GitHub الخاصة بـ SafeMobile. يتم التحقق من توقيع كل قاعدة بيانات قبل تفعيلها.</string>
+    <string name="hash_database_sync_interval">تحقق تلقائي كل 6 ساعات عند الاتصال</string>
+    <string name="device_security_score">درجة أمان الجهاز</string>
+    <string name="device_security_score_preview">مؤشر للمعاينة. لا تتوفر درجة مقاسة بعد.</string>
+    <string name="strict_mode_title">الوضع الصارم</string>
+    <string name="strict_mode_label">الوضع الصارم</string>
+    <string name="strict_mode_description">استخدام مراقبة أكثر صرامة للملفات التي تم تنزيلها. اختياري ومُعطل افتراضيًا.</string>
+    <string name="security_alerts_title">تنبيهات الأمان</string>
+    <string name="security_alerts_description">إظهار إشعارات محلية عند اكتشاف تهديد أو عزله. تظل معطلة حتى تفعيلها.</string>
+    <string name="security_alerts_enabled">التنبيهات مفعلة</string>
+    <string name="security_alerts_disabled">التنبيهات معطلة</string>
 </resources>

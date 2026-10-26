@@ -206,4 +206,17 @@
     <string name="voice_alerts_enabled">Alertas de voz activadas</string>
     <string name="voice_alerts_disabled">Alertas de voz desactivadas</string>
     <string name="hashdb_match">Coincidencia de hash %1$s firmado: %2$s</string>
+    <string name="hash_database_sync_title">Definiciones de amenazas firmadas</string>
+    <string name="hash_database_initial_syncing">Actualizando definiciones de amenazas…</string>
+    <string name="hash_database_sync_description">Las actualizaciones se comprueban en silencio desde GitHub Releases de SafeMobile. Cada base descargada se verifica antes de activarse.</string>
+    <string name="hash_database_sync_interval">Comprobación automática cada 6 horas con conexión</string>
+    <string name="device_security_score">Puntuación de seguridad del dispositivo</string>
+    <string name="device_security_score_preview">Indicador de vista previa. Aún no hay una puntuación medida.</string>
+    <string name="strict_mode_title">Modo estricto</string>
+    <string name="strict_mode_label">Modo estricto</string>
+    <string name="strict_mode_description">Supervisa con más rigor los archivos descargados. Es opcional y está desactivado de forma predeterminada.</string>
+    <string name="security_alerts_title">Alertas de seguridad</string>
+    <string name="security_alerts_description">Muestra notificaciones locales cuando se detecta o pone en cuarentena una amenaza. Desactivadas hasta que las actives.</string>
+    <string name="security_alerts_enabled">Alertas activadas</string>
+    <string name="security_alerts_disabled">Alertas desactivadas</string>
 </resources>

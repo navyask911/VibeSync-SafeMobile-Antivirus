@@ -206,4 +206,17 @@
     <string name="voice_alerts_enabled">音声セキュリティ通知を有効化</string>
     <string name="voice_alerts_disabled">音声セキュリティ通知を無効化</string>
     <string name="hashdb_match">署名済み %1$s ハッシュ一致: %2$s</string>
+    <string name="hash_database_sync_title">署名済み脅威定義</string>
+    <string name="hash_database_initial_syncing">脅威定義を更新しています…</string>
+    <string name="hash_database_sync_description">SafeMobile の GitHub Releases から更新を通知なしで確認します。ダウンロードしたデータベースは有効化前に毎回署名を検証します。</string>
+    <string name="hash_database_sync_interval">接続時に6時間ごとに自動確認</string>
+    <string name="device_security_score">デバイスのセキュリティスコア</string>
+    <string name="device_security_score_preview">プレビュー表示です。測定済みのスコアはまだありません。</string>
+    <string name="strict_mode_title">厳格モード</string>
+    <string name="strict_mode_label">厳格モード</string>
+    <string name="strict_mode_description">ダウンロードしたファイルをより厳格に監視します。任意設定で、初期状態はオフです。</string>
+    <string name="security_alerts_title">セキュリティ通知</string>
+    <string name="security_alerts_description">脅威の検出または隔離時にローカル通知を表示します。オンにするまでオフです。</string>
+    <string name="security_alerts_enabled">通知オン</string>
+    <string name="security_alerts_disabled">通知オフ</string>
 </resources>

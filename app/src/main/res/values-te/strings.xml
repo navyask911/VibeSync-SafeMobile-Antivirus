@@ -263,4 +263,17 @@
     <string name="voice_alerts_enabled">వాయిస్ భద్రతా హెచ్చరికలు ప్రారంభం</string>
     <string name="voice_alerts_disabled">వాయిస్ భద్రతా హెచ్చరికలు నిలిపివేయబడ్డాయి</string>
     <string name="hashdb_match">సంతకం చేసిన %1$s హాష్ సరిపోలింది: %2$s</string>
+    <string name="hash_database_sync_title">సంతకం చేసిన ముప్పు నిర్వచనాలు</string>
+    <string name="hash_database_initial_syncing">ముప్పు నిర్వచనాలు నవీకరిస్తున్నాం…</string>
+    <string name="hash_database_sync_description">SafeMobile GitHub Releases నుండి నవీకరణలను నిశ్శబ్దంగా తనిఖీ చేస్తుంది. సక్రియం చేయడానికి ముందు డౌన్‌లోడ్ చేసిన ప్రతి డేటాబేస్ సంతకం ధృవీకరించబడుతుంది.</string>
+    <string name="hash_database_sync_interval">కనెక్ట్ అయినప్పుడు ప్రతి 6 గంటలకు ఆటోమేటిక్ తనిఖీ</string>
+    <string name="device_security_score">పరికర భద్రత స్కోరు</string>
+    <string name="device_security_score_preview">పరిదృశ్య సూచిక. కొలిచిన స్కోరు ఇంకా అందుబాటులో లేదు.</string>
+    <string name="strict_mode_title">కఠిన మోడ్</string>
+    <string name="strict_mode_label">కఠిన మోడ్</string>
+    <string name="strict_mode_description">డౌన్‌లోడ్ చేసిన ఫైళ్లను మరింత కఠినంగా పర్యవేక్షించండి. ఐచ్ఛికం; డిఫాల్ట్‌గా ఆఫ్.</string>
+    <string name="security_alerts_title">భద్రతా హెచ్చరికలు</string>
+    <string name="security_alerts_description">ముప్పు గుర్తించినప్పుడు లేదా క్వారంటైన్ చేసినప్పుడు స్థానిక నోటిఫికేషన్‌లు చూపండి. మీరు ఆన్ చేసే వరకు ఆఫ్.</string>
+    <string name="security_alerts_enabled">హెచ్చరికలు ఆన్</string>
+    <string name="security_alerts_disabled">హెచ్చరికలు ఆఫ్</string>
 </resources>

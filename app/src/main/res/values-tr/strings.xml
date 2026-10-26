@@ -263,4 +263,17 @@
     <string name="voice_alerts_enabled">Sesli güvenlik uyarıları açık</string>
     <string name="voice_alerts_disabled">Sesli güvenlik uyarıları kapalı</string>
     <string name="hashdb_match">İmzalı %1$s özeti eşleşti: %2$s</string>
+    <string name="hash_database_sync_title">İmzalı tehdit tanımları</string>
+    <string name="hash_database_initial_syncing">Tehdit tanımları güncelleniyor…</string>
+    <string name="hash_database_sync_description">Güncellemeler SafeMobile GitHub Releases üzerinden sessizce denetlenir. İndirilen her veritabanının imzası etkinleştirilmeden önce doğrulanır.</string>
+    <string name="hash_database_sync_interval">Bağlantı varken 6 saatte bir otomatik denetim</string>
+    <string name="device_security_score">Cihaz Güvenlik Puanı</string>
+    <string name="device_security_score_preview">Önizleme göstergesi. Ölçülmüş bir puan henüz yok.</string>
+    <string name="strict_mode_title">Sıkı Mod</string>
+    <string name="strict_mode_label">Sıkı Mod</string>
+    <string name="strict_mode_description">İndirilen dosyaları daha sıkı izleyin. İsteğe bağlıdır ve varsayılan olarak kapalıdır.</string>
+    <string name="security_alerts_title">Güvenlik Uyarıları</string>
+    <string name="security_alerts_description">Tehdit algılandığında veya karantinaya alındığında yerel bildirim göster. Sen açana kadar kapalıdır.</string>
+    <string name="security_alerts_enabled">Uyarılar açık</string>
+    <string name="security_alerts_disabled">Uyarılar kapalı</string>
 </resources>

@@ -263,4 +263,17 @@
     <string name="voice_alerts_enabled">음성 보안 알림 사용</string>
     <string name="voice_alerts_disabled">음성 보안 알림 사용 안 함</string>
     <string name="hashdb_match">서명된 %1$s 해시 일치: %2$s</string>
+    <string name="hash_database_sync_title">서명된 위협 정의</string>
+    <string name="hash_database_initial_syncing">위협 정의 업데이트 중…</string>
+    <string name="hash_database_sync_description">SafeMobile GitHub Releases에서 업데이트를 조용히 확인합니다. 다운로드한 데이터베이스는 활성화 전에 서명을 검증합니다.</string>
+    <string name="hash_database_sync_interval">연결 시 6시간마다 자동 확인</string>
+    <string name="device_security_score">기기 보안 점수</string>
+    <string name="device_security_score_preview">미리보기 게이지입니다. 측정된 점수는 아직 없습니다.</string>
+    <string name="strict_mode_title">엄격 모드</string>
+    <string name="strict_mode_label">엄격 모드</string>
+    <string name="strict_mode_description">다운로드한 파일을 더 엄격하게 모니터링합니다. 선택 사항이며 기본적으로 꺼져 있습니다.</string>
+    <string name="security_alerts_title">보안 알림</string>
+    <string name="security_alerts_description">위협 감지 또는 격리 시 로컬 알림을 표시합니다. 사용자가 켤 때까지 꺼져 있습니다.</string>
+    <string name="security_alerts_enabled">알림 켜짐</string>
+    <string name="security_alerts_disabled">알림 꺼짐</string>
 </resources>
