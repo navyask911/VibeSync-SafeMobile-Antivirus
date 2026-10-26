@@ -53,9 +53,116 @@ class YaraScannerTest {
               description = "reject" 
               severity = "high"
              strings:
-              $a = /regex/ ascii
+              ${'/regex/ ascii
+             condition:
+              ${'            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun undefinedConditionIdentifierCannotSilentlyBecomeNoMatch() {
+        val sample = """
+            rule Reject {
+             meta:
+              description = "reject"
+              severity = "medium"
+             strings:
+              $a = "some-pattern" ascii
+             condition:
+              ${'            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}a = /regex/ ascii
              condition:
               $a
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun undefinedConditionIdentifierCannotSilentlyBecomeNoMatch() {
+        val sample = """
+            rule Reject {
+             meta:
+              description = "reject"
+              severity = "medium"
+             strings:
+              ${'"some-pattern" ascii
+             condition:
+              $other
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}a = "some-pattern" ascii
+             condition:
+              $other
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}a
             }
         """.trimIndent()
         assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
@@ -71,6 +178,1278 @@ class YaraScannerTest {
               $a = "some-pattern" ascii
              condition:
               $other
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}a = /regex/ ascii
+             condition:
+              ${'            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun undefinedConditionIdentifierCannotSilentlyBecomeNoMatch() {
+        val sample = """
+            rule Reject {
+             meta:
+              description = "reject"
+              severity = "medium"
+             strings:
+              ${'"some-pattern" ascii
+             condition:
+              $other
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}a = "some-pattern" ascii
+             condition:
+              $other
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}a
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun undefinedConditionIdentifierCannotSilentlyBecomeNoMatch() {
+        val sample = """
+            rule Reject {
+             meta:
+              description = "reject"
+              severity = "medium"
+             strings:
+              ${'"some-pattern" ascii
+             condition:
+              $other
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}a = "some-pattern" ascii
+             condition:
+              $other
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}other
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}a = /regex/ ascii
+             condition:
+              $a
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun undefinedConditionIdentifierCannotSilentlyBecomeNoMatch() {
+        val sample = """
+            rule Reject {
+             meta:
+              description = "reject"
+              severity = "medium"
+             strings:
+              ${'"some-pattern" ascii
+             condition:
+              ${'            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}a = "some-pattern" ascii
+             condition:
+              $other
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}a
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun undefinedConditionIdentifierCannotSilentlyBecomeNoMatch() {
+        val sample = """
+            rule Reject {
+             meta:
+              description = "reject"
+              severity = "medium"
+             strings:
+              $a = "some-pattern" ascii
+             condition:
+              $other
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}a = /regex/ ascii
+             condition:
+              ${'            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun undefinedConditionIdentifierCannotSilentlyBecomeNoMatch() {
+        val sample = """
+            rule Reject {
+             meta:
+              description = "reject"
+              severity = "medium"
+             strings:
+              ${'"some-pattern" ascii
+             condition:
+              $other
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}a = "some-pattern" ascii
+             condition:
+              $other
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}a
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun undefinedConditionIdentifierCannotSilentlyBecomeNoMatch() {
+        val sample = """
+            rule Reject {
+             meta:
+              description = "reject"
+              severity = "medium"
+             strings:
+              ${'"some-pattern" ascii
+             condition:
+              $other
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}a = "some-pattern" ascii
+             condition:
+              $other
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}other
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}a = "some-pattern" ascii
+             condition:
+              ${'            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}a
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun undefinedConditionIdentifierCannotSilentlyBecomeNoMatch() {
+        val sample = """
+            rule Reject {
+             meta:
+              description = "reject"
+              severity = "medium"
+             strings:
+              $a = "some-pattern" ascii
+             condition:
+              $other
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}a = /regex/ ascii
+             condition:
+              ${'            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun undefinedConditionIdentifierCannotSilentlyBecomeNoMatch() {
+        val sample = """
+            rule Reject {
+             meta:
+              description = "reject"
+              severity = "medium"
+             strings:
+              ${'"some-pattern" ascii
+             condition:
+              $other
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}a = "some-pattern" ascii
+             condition:
+              $other
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}a
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun undefinedConditionIdentifierCannotSilentlyBecomeNoMatch() {
+        val sample = """
+            rule Reject {
+             meta:
+              description = "reject"
+              severity = "medium"
+             strings:
+              ${'"some-pattern" ascii
+             condition:
+              $other
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}a = "some-pattern" ascii
+             condition:
+              $other
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}other
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}a
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun undefinedConditionIdentifierCannotSilentlyBecomeNoMatch() {
+        val sample = """
+            rule Reject {
+             meta:
+              description = "reject"
+              severity = "medium"
+             strings:
+              $a = "some-pattern" ascii
+             condition:
+              ${'            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}a = /regex/ ascii
+             condition:
+              ${'            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun undefinedConditionIdentifierCannotSilentlyBecomeNoMatch() {
+        val sample = """
+            rule Reject {
+             meta:
+              description = "reject"
+              severity = "medium"
+             strings:
+              ${'"some-pattern" ascii
+             condition:
+              $other
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}a = "some-pattern" ascii
+             condition:
+              $other
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}a
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun undefinedConditionIdentifierCannotSilentlyBecomeNoMatch() {
+        val sample = """
+            rule Reject {
+             meta:
+              description = "reject"
+              severity = "medium"
+             strings:
+              ${'"some-pattern" ascii
+             condition:
+              $other
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}a = "some-pattern" ascii
+             condition:
+              $other
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}other
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}a = /regex/ ascii
+             condition:
+              ${'            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun undefinedConditionIdentifierCannotSilentlyBecomeNoMatch() {
+        val sample = """
+            rule Reject {
+             meta:
+              description = "reject"
+              severity = "medium"
+             strings:
+              ${'"some-pattern" ascii
+             condition:
+              ${'            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}a = "some-pattern" ascii
+             condition:
+              $other
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}a
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun undefinedConditionIdentifierCannotSilentlyBecomeNoMatch() {
+        val sample = """
+            rule Reject {
+             meta:
+              description = "reject"
+              severity = "medium"
+             strings:
+              ${'"some-pattern" ascii
+             condition:
+              $other
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}a = "some-pattern" ascii
+             condition:
+              $other
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}other
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}a = "some-pattern" ascii
+             condition:
+              ${'            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}a
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun undefinedConditionIdentifierCannotSilentlyBecomeNoMatch() {
+        val sample = """
+            rule Reject {
+             meta:
+              description = "reject"
+              severity = "medium"
+             strings:
+              ${'"some-pattern" ascii
+             condition:
+              $other
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}a = "some-pattern" ascii
+             condition:
+              $other
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}other
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}a
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun undefinedConditionIdentifierCannotSilentlyBecomeNoMatch() {
+        val sample = """
+            rule Reject {
+             meta:
+              description = "reject"
+              severity = "medium"
+             strings:
+              ${'"some-pattern" ascii
+             condition:
+              ${'            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}a = "some-pattern" ascii
+             condition:
+              $other
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}other
+            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}a = "some-pattern" ascii
+             condition:
+              ${'            }
+        """.trimIndent()
+        assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
+    }
+
+    @Test fun oversizedRulePackFailsClosed() {
+        assertTrue(runCatching { YaraScanner.fromRules("a".repeat(YaraScanner.MAX_RULE_BYTES + 1)) }.isFailure)
+    }
+
+    @Test fun readableFileWithoutActiveRulesReportsDisabledRatherThanNoMatch() {
+        val file = File.createTempFile("yara-disabled", ".dex")
+        try {
+            file.writeBytes(validDex("something"))
+            val result = YaraScanner().scan(file)
+            assertEquals(YaraScanState.DISABLED, result.state)
+            assertFalse(result.reason.isNullOrBlank())
+        } finally { file.delete() }
+    }
+
+    @Test fun absentFileIsNotScanned() {
+        assertEquals(YaraScanState.NOT_SCANNED,
+            YaraScanner().scan(File("/this/path/does/not/exist/sample.dex")).state)
+    }
+}
+}other
             }
         """.trimIndent()
         assertTrue(runCatching { YaraScanner.fromRules(sample) }.isFailure)
