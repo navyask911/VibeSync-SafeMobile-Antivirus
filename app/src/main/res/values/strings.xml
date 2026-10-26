@@ -103,7 +103,7 @@
 <string name="settings_title">Settings</string>
 <string name="appearance_title">Appearance</string>
 <string name="theme_system">System</string>
-<string name="theme_light">Light</string>
+<string name="theme_light">Clean Light</string>
 <string name="theme_dark">Dark</string>
 <string name="language_settings">Language</string>
 <string name="about_legal">About and Legal</string>
@@ -482,7 +482,7 @@
     <string name="ui_yara_match_summary">Latest scan: %1$d matching DEX signatures. Advisory matches do not confirm malware.</string>
     <string name="theme_appearance_description">Choose a color theme. Changes take effect immediately and remain available offline.</string>
     <string name="theme_midnight">Midnight Blue</string>
-    <string name="theme_light">Clean Light</string>
+    
     <string name="theme_oled">Pure OLED Black</string>
     <string name="ui_play_protect_title">Check Play Protect</string>
     <string name="ui_play_protect_description">In Google Play, open your profile, Play Protect, then Settings. This build cannot verify the setting automatically. Your reported status is used for the score for 24 hours.</string>

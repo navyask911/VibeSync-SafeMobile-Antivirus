@@ -111,7 +111,7 @@
 <string name="settings_title">ಸೆಟ್ಟಿಂಗ್‌ಗಳು</string>
 <string name="appearance_title">ಗೋಚರತೆ</string>
 <string name="theme_system">ಸಿಸ್ಟಮ್</string>
-<string name="theme_light">ಲೈಟ್</string>
+<string name="theme_light">ಸ್ವಚ್ಛ ಬೆಳಕು</string>
 <string name="theme_dark">ಡಾರ್ಕ್</string>
 <string name="language_settings">ಭಾಷೆ</string>
 <string name="about_legal">ಬಗ್ಗೆ ಮತ್ತು ಕಾನೂನು ಮಾಹಿತಿ</string>
@@ -502,7 +502,7 @@
     <string name="feed_settings_disabled">ಫೀಡ್ ಸಮನ್ವಯ ನಿಷ್ಕ್ರಿಯವಾಗಿದೆ; ಬಾಕಿ ಮತ್ತು ನಿಯಮಿತ ಕೆಲಸ ರದ್ದಾಗಿದೆ.</string>
     <string name="theme_appearance_description">ಬಣ್ಣದ ಥೀಮ್ ಆಯ್ಕೆಮಾಡಿ. ಬದಲಾವಣೆ ತಕ್ಷಣ ಅನ್ವಯಿಸಿ ಆಫ್‌ಲೈನ್‌ನಲ್ಲಿಯೂ ಉಳಿಯುತ್ತದೆ.</string>
     <string name="theme_midnight">ಮಧ್ಯರಾತ್ರಿ ನೀಲಿ</string>
-    <string name="theme_light">ಸ್ವಚ್ಛ ಬೆಳಕು</string>
+    
     <string name="theme_oled">ಶುದ್ಧ OLED ಕಪ್ಪು</string>
     <string name="ui_play_protect_title">Play Protect ಪರಿಶೀಲಿಸಿ</string>
     <string name="ui_play_protect_description">Google Play ನಲ್ಲಿ ಪ್ರೊಫೈಲ್, Play Protect ಮತ್ತು ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ತೆರೆಯಿರಿ. ಆ್ಯಪ್ ಈ ಸ್ಥಿತಿಯನ್ನು ಸ್ವಯಂ ಪರಿಶೀಲಿಸಲಾರದು. ನೀವು ನೀಡಿದ ಸ್ಥಿತಿಯನ್ನು 24 ಗಂಟೆ ಅಂಕಕ್ಕೆ ಬಳಸಲಾಗುತ್ತದೆ.</string>

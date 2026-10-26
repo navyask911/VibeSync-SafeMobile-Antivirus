@@ -54,7 +54,7 @@
 <string name="settings_title">Paramètres</string>
 <string name="appearance_title">Apparence</string>
 <string name="theme_system">Système</string>
-<string name="theme_light">Clair</string>
+<string name="theme_light">Clair épuré</string>
 <string name="theme_dark">Sombre</string>
 <string name="language_settings">Langue</string>
 <string name="about_legal">À propos et mentions légales</string>
@@ -445,7 +445,7 @@
     <string name="feed_settings_disabled">Synchronisation désactivée ; les tâches programmées sont annulées.</string>
     <string name="theme_appearance_description">Choisissez un thème. Le changement s’applique immédiatement et reste enregistré hors ligne.</string>
     <string name="theme_midnight">Bleu nuit</string>
-    <string name="theme_light">Clair épuré</string>
+    
     <string name="theme_oled">Noir OLED pur</string>
     <string name="ui_play_protect_title">Vérifier Play Protect</string>
     <string name="ui_play_protect_description">Dans Google Play, ouvrez votre profil, Play Protect, puis Paramètres. Cette version ne peut pas vérifier le réglage automatiquement. Le statut déclaré compte dans le score pendant 24 h.</string>
