@@ -13,7 +13,7 @@ class QuarantineDeleteOperationTest {
         var rowDeleted = false
         val operation = QuarantineDeleteOperation(deletePayload = { false },
             deleteRoomEntry = { rowDeleted = true }, exists = { true })
-        assertEquals(QuarantineDeleteOutcome.FAILED, operation.delete(File("locked.smq")))
+        assertEquals(QuarantineDeleteOutcome.ACCESS_DENIED, operation.delete(File("locked.smq")))
         assertFalse(rowDeleted)
     }
 
