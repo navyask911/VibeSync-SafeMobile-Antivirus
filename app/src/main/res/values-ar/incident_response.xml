@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="voice_malicious_quarantined">تحذير. تم اكتشاف تطبيق ضار ووضعه في الحجر.</string>
+    <string name="voice_suspicious_quarantined">تحذير. تم عزل ملف مشبوه في الحجر المشفر لتطبيق SafeMobile.</string>
+    <string name="voice_malicious_installed">تحذير. تم اكتشاف تطبيق ضار بعد تثبيته. راجعه أو أزل تثبيته الآن.</string>
+    <string name="voice_app_review">تحذير. يحتاج تطبيق تم تثبيته حديثًا إلى مراجعة أمنية.</string>
+</resources>

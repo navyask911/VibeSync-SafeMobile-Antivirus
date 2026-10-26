@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="voice_malicious_quarantined">Peringatan. Aplikasi berbahaya terdeteksi dan dikarantina.</string>
+    <string name="voice_suspicious_quarantined">Peringatan. File mencurigakan diisolasi dalam karantina terenkripsi SafeMobile.</string>
+    <string name="voice_malicious_installed">Peringatan. Aplikasi berbahaya terdeteksi setelah diinstal. Tinjau atau uninstal sekarang.</string>
+    <string name="voice_app_review">Peringatan. Aplikasi yang baru diinstal memerlukan pemeriksaan keamanan.</string>
+</resources>

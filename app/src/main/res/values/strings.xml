@@ -66,7 +66,7 @@
 <string name="quarantine_restore_success">A copy of %1$s was written to the selected destination (%2$d bytes). The quarantined original remains stored.</string>
 <string name="quarantine_delete_success">Deleted quarantined file %1$s.</string>
 <string name="quarantine_restore_failed">The quarantined file could not be restored. Check the destination and available storage, then try again.</string>
-<string name="quarantine_delete_failed">The quarantined file could not be deleted.</string>
+<string name="quarantine_delete_failed">File could not be deleted</string>
 <string name="risk_sms_internet">Combines SMS permissions with network access; this is a risk indicator, not proof of malicious behavior.</string>
 <string name="risk_sms_accessibility">Combines SMS permissions with an accessibility service declaration; this is a review signal, not proof of OTP interception or malware.</string>
 <string name="language_label">Language: %1$s</string>

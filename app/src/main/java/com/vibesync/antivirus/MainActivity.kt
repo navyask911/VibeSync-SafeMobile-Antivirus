@@ -23,7 +23,8 @@ class MainActivity : ComponentActivity() {
     private var openQuarantine by mutableStateOf(false)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        enableEdgeToEdge(statusBarStyle = androidx.activity.SystemBarStyle.dark(android.graphics.Color.TRANSPARENT),
+            navigationBarStyle = androidx.activity.SystemBarStyle.dark(android.graphics.Color.rgb(15, 23, 42)))
         sharedText = incomingSharedText(intent)
         openQuarantine = intent.getBooleanExtra(SecurityAlertNotifier.EXTRA_OPEN_QUARANTINE, false)
         setContent {
@@ -44,6 +45,11 @@ class MainActivity : ComponentActivity() {
         incomingSharedText(intent)?.let { sharedText = it }
         if (intent.getBooleanExtra(SecurityAlertNotifier.EXTRA_OPEN_QUARANTINE, false)) openQuarantine = true
     }
+    override fun onResume() {
+        super.onResume()
+        SecurityAlertNotifier.stopIncidentAudio()
+    }
     private fun incomingSharedText(intent: Intent?): String? =
         if (intent?.action == Intent.ACTION_SEND) intent.getCharSequenceExtra(Intent.EXTRA_TEXT)?.toString() else null
 }
+

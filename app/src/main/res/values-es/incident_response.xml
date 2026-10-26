@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="voice_malicious_quarantined">Advertencia. Se detectó una aplicación maliciosa y se puso en cuarentena.</string>
+    <string name="voice_suspicious_quarantined">Advertencia. Se aisló un archivo sospechoso en la cuarentena cifrada de SafeMobile.</string>
+    <string name="voice_malicious_installed">Advertencia. Se detectó una aplicación maliciosa después de instalarla. Revísala o desinstálala ahora.</string>
+    <string name="voice_app_review">Advertencia. Una aplicación recién instalada necesita una revisión de seguridad.</string>
+</resources>

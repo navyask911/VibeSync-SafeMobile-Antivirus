@@ -25,7 +25,7 @@ import androidx.compose.material.icons.filled.FolderOpen
 import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
+import com.vibesync.antivirus.ui.components.CyberCard as Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -148,7 +148,7 @@ fun ScanProgressRing(progress: Float?, scanning: Boolean, label: String, modifie
 fun SecurityStatusCard(status: String, description: String, lastScanLabel: String, threatCount: Int,
     signatureCount: Int, scanning: Boolean, progress: Float?, hasScanned: Boolean, cleanResult: Boolean,
     onScan: () -> Unit, modifier: Modifier = Modifier) {
-    Card(modifier.fillMaxWidth(), shape = RoundedCornerShape(20.dp),
+    Card(modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.22f)),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
         Column(Modifier.fillMaxWidth().padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -232,3 +232,4 @@ fun ThreatListItem(result: ScanResult, isProtectedSystemApp: Boolean, showUninst
         }
     }
 }
+

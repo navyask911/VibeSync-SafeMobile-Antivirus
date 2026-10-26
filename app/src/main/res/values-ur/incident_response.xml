@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="voice_malicious_quarantined">انتباہ۔ ایک نقصان دہ ایپ کی نشاندہی ہوئی ہے اور اسے قرنطینہ میں رکھا گیا ہے۔</string>
+    <string name="voice_suspicious_quarantined">انتباہ۔ ایک مشکوک فائل کو سیف موبائل کے خفیہ کردہ قرنطینہ میں الگ کیا گیا ہے۔</string>
+    <string name="voice_malicious_installed">انتباہ۔ انسٹال کرنے کے بعد ایک نقصان دہ ایپ کی نشاندہی ہوئی ہے۔ ابھی جائزہ لیں یا اَن انسٹال کریں۔</string>
+    <string name="voice_app_review">انتباہ۔ نئی انسٹال کردہ ایپ کا حفاظتی جائزہ ضروری ہے۔</string>
+</resources>

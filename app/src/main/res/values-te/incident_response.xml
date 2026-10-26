@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="voice_malicious_quarantined">హెచ్చరిక. హానికరమైన యాప్ గుర్తించబడింది మరియు క్వారంటైన్ చేయబడింది.</string>
+    <string name="voice_suspicious_quarantined">హెచ్చరిక. అనుమానాస్పద ఫైల్ సేఫ్‌మొబైల్ ఎన్‌క్రిప్ట్ చేసిన క్వారంటైన్‌లో వేరుచేయబడింది.</string>
+    <string name="voice_malicious_installed">హెచ్చరిక. ఇన్‌స్టాల్ చేసిన తర్వాత హానికరమైన యాప్ గుర్తించబడింది. ఇప్పుడే సమీక్షించండి లేదా అన్‌ఇన్‌స్టాల్ చేయండి.</string>
+    <string name="voice_app_review">హెచ్చరిక. కొత్తగా ఇన్‌స్టాల్ చేసిన యాప్‌కు భద్రతా సమీక్ష అవసరం.</string>
+</resources>

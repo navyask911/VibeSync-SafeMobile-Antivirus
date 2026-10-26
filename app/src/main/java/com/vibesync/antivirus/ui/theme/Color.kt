@@ -1,38 +1,28 @@
 package com.vibesync.antivirus.ui.theme
 
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
 
-val SafeMobileDarkBackground = Color(0xFF121212)
-val SafeMobileDarkSurface = Color(0xFF191D24)
-val SafeMobileDarkSurfaceVariant = Color(0xFF252D38)
-val SafeMobileCyan = Color(0xFF00E5FF)
-val SafeMobileTeal = Color(0xFF448AFF)
-val SafeMobileAmber = Color(0xFFFFB74D)
-val SafeMobileDanger = Color(0xFFFF5252)
-val SafeMobileSuccess = Color(0xFF00E676)
+val SafeMobileDarkBackground = Color(0xFF0F172A)
+val SafeMobileDarkSurface = Color(0xFF1E293B)
+val SafeMobileDarkSurfaceVariant = Color(0xFF273449)
+val SafeMobileCyan = Color(0xFF06B6D4)
+val SafeMobileTeal = Color(0xFF38BDF8)
+val SafeMobileAmber = Color(0xFFFBBF24)
+val SafeMobileDanger = Color(0xFFF87171)
+val SafeMobileSuccess = Color(0xFF4ADE80)
 
 val SafeMobileDarkColorScheme = darkColorScheme(
-    primary = SafeMobileCyan, onPrimary = SafeMobileDarkBackground,
-    primaryContainer = Color(0xFF003944), onPrimaryContainer = Color(0xFFB3F5FF),
-    secondary = SafeMobileTeal, onSecondary = SafeMobileDarkBackground,
-    secondaryContainer = Color(0xFF163B35), onSecondaryContainer = Color(0xFFC0FFF0),
-    tertiary = SafeMobileAmber, onTertiary = Color(0xFF271900),
-    background = SafeMobileDarkBackground, onBackground = Color(0xFFF3F7FA),
-    surface = SafeMobileDarkSurface, onSurface = Color(0xFFF3F7FA),
-    surfaceVariant = SafeMobileDarkSurfaceVariant, onSurfaceVariant = Color(0xFFC0CBD4),
-    error = SafeMobileDanger, onError = Color(0xFF240608)
+    primary = SafeMobileCyan, onPrimary = Color(0xFF002F38),
+    primaryContainer = Color(0xFF164E63), onPrimaryContainer = Color(0xFFCFFAFE),
+    secondary = SafeMobileTeal, onSecondary = Color(0xFF082F49),
+    secondaryContainer = Color(0xFF0C4A6E), onSecondaryContainer = Color(0xFFE0F2FE),
+    tertiary = SafeMobileAmber, onTertiary = Color(0xFF422006),
+    background = SafeMobileDarkBackground, onBackground = Color(0xFFF1F5F9),
+    surface = SafeMobileDarkSurface, onSurface = Color(0xFFF1F5F9),
+    surfaceVariant = SafeMobileDarkSurfaceVariant, onSurfaceVariant = Color(0xFFCBD5E1),
+    surfaceTint = Color.Transparent,
+    outline = Color(0xFF64748B), outlineVariant = Color(0xFF334155),
+    error = SafeMobileDanger, onError = Color(0xFF450A0A),
+    errorContainer = Color(0xFF7F1D1D), onErrorContainer = Color(0xFFFEE2E2)
 )
-val SafeMobileLightColorScheme = lightColorScheme(
-    primary = Color(0xFF00897B), onPrimary = Color.White,
-    primaryContainer = Color(0xFFB2DFDB), onPrimaryContainer = Color(0xFF00201C),
-    secondary = Color(0xFF00695C), onSecondary = Color.White,
-    secondaryContainer = Color(0xFFB2DFDB), onSecondaryContainer = Color(0xFF00201C),
-    tertiary = Color(0xFF8A5700), onTertiary = Color.White,
-    background = Color(0xFFF7F9FC), onBackground = Color(0xFF142326),
-    surface = Color.White, onSurface = Color(0xFF142326),
-    surfaceVariant = Color(0xFFE4F0EF), onSurfaceVariant = Color(0xFF3F5452),
-    error = Color(0xFFB3261E), onError = Color.White
-)
-

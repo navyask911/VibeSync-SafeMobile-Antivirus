@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="voice_malicious_quarantined">Cảnh báo. Đã phát hiện và cách ly một ứng dụng độc hại.</string>
+    <string name="voice_suspicious_quarantined">Cảnh báo. Một tệp đáng ngờ đã được cách ly trong kho cách ly mã hóa của SafeMobile.</string>
+    <string name="voice_malicious_installed">Cảnh báo. Đã phát hiện ứng dụng độc hại sau khi cài đặt. Hãy xem xét hoặc gỡ cài đặt ngay.</string>
+    <string name="voice_app_review">Cảnh báo. Một ứng dụng mới cài đặt cần được kiểm tra bảo mật.</string>
+</resources>

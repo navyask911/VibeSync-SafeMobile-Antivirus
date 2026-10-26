@@ -8,6 +8,7 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
+import com.vibesync.antivirus.ui.components.CyberCard as Card
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -55,7 +56,7 @@ internal fun ProtectionAnalyticsPanel(
             MetricCard(androidx.compose.ui.res.stringResource(R.string.analytics_not_scanned), incomplete.toString(), Modifier.weight(1f), warning = incomplete > 0)
         }
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-            shape = RoundedCornerShape(18.dp), modifier = Modifier.fillMaxWidth()) {
+            shape = RoundedCornerShape(16.dp), modifier = Modifier.fillMaxWidth()) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 SectionHeader(title = androidx.compose.ui.res.stringResource(R.string.analytics_daily_activity))
                 Text(androidx.compose.ui.res.stringResource(R.string.analytics_recent_window),
@@ -89,7 +90,7 @@ internal fun ProtectionAnalyticsPanel(
             }
         }
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-            shape = RoundedCornerShape(18.dp), modifier = Modifier.fillMaxWidth()) {
+            shape = RoundedCornerShape(16.dp), modifier = Modifier.fillMaxWidth()) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 SectionHeader(title = androidx.compose.ui.res.stringResource(R.string.analytics_protection_health))
                 HealthRow(androidx.compose.ui.res.stringResource(R.string.analytics_definitions), signatureCount.toString(),
@@ -115,7 +116,7 @@ internal fun ProtectionAnalyticsPanel(
             }
         }
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-            shape = RoundedCornerShape(18.dp), modifier = Modifier.fillMaxWidth()) {
+            shape = RoundedCornerShape(16.dp), modifier = Modifier.fillMaxWidth()) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 SectionHeader(title = androidx.compose.ui.res.stringResource(R.string.analytics_recent_activity))
                 if (audits.isEmpty()) {
@@ -186,3 +187,4 @@ private fun recentDailyBars(audits: List<ScanAudit>): List<Pair<String, Int>> {
         labels[start.get(Calendar.DAY_OF_WEEK)] to audits.count { it.scanTimestamp >= start.timeInMillis && it.scanTimestamp < end.timeInMillis }
     }
 }
+

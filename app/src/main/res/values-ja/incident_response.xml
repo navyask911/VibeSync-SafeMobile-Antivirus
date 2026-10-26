@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="voice_malicious_quarantined">警告。悪意のあるアプリを検出し、隔離しました。</string>
+    <string name="voice_suspicious_quarantined">警告。不審なファイルをSafeMobileの暗号化された隔離領域に隔離しました。</string>
+    <string name="voice_malicious_installed">警告。インストール後に悪意のあるアプリを検出しました。今すぐ確認するか、アンインストールしてください。</string>
+    <string name="voice_app_review">警告。新しくインストールされたアプリのセキュリティ確認が必要です。</string>
+</resources>

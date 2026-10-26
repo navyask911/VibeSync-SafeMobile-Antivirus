@@ -187,7 +187,6 @@ class PackageScanner(
  }
  private suspend fun evaluate(key: String, label: String, sha: String, md5: String, heuristic: List<String>, score: Int, sha1: String? = null, fileSize: Long? = null): ScanResult {
   val encrypted = hashStore.protectHash(sha)
-  if (dao.isHashWhitelisted(encrypted)) return ScanResult(key, label, sha, md5, ScanVerdict.NO_MATCH, listOf(context.getString(R.string.hash_allowlisted)), 0).copy(sha1 = sha1)
   val signedHashMatch = hashDatabaseManager?.lookup(sha, md5, sha1, fileSize)
   if (signedHashMatch != null) {
    return ScanResult(key, label, sha, md5, ScanVerdict.THREAT,
@@ -206,6 +205,8 @@ class PackageScanner(
     listOf(context.getString(R.string.threat_feed_hash_match, feedThreat.threatName, feedThreat.source)), 0)
     .copy(threatEventId = UUID.randomUUID().toString(), riskScore = 1f, sha1 = sha1)
   }
+  // An allow/dismiss choice can suppress heuristics, never an exact known-malware match.
+  if (dao.isHashWhitelisted(encrypted)) return ScanResult(key, label, sha, md5, ScanVerdict.NO_MATCH, listOf(context.getString(R.string.hash_allowlisted)), 0).copy(sha1 = sha1)
   val verdict = if (score >= 45) ScanVerdict.SUSPICIOUS else ScanVerdict.NO_MATCH
   val notes = if (heuristic.isEmpty()) listOf(context.getString(R.string.no_match_detail)) else heuristic + context.getString(R.string.risk_review)
   return ScanResult(key, label, sha, md5, verdict, notes, 0).copy(riskScore = score.coerceIn(0, 100) / 100f, sha1 = sha1)
@@ -252,3 +253,4 @@ class PackageScanner(
   ScanResult(key, label, sha, md5, verdict, reasons, elapsed(start))
  private fun elapsed(start: Long) = ((System.nanoTime() - start) / 1_000_000L).coerceAtLeast(0)
 }
+

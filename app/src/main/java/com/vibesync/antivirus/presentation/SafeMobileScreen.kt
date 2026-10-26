@@ -41,7 +41,7 @@ import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
+import com.vibesync.antivirus.ui.components.CyberCard as Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
@@ -70,9 +70,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.painterResource
@@ -110,23 +107,7 @@ import java.text.DateFormat
 import java.util.Date
 import kotlinx.coroutines.launch
 @Composable fun SafeMobileTheme(content: @Composable () -> Unit) {
- val context = LocalContext.current
- val prefs = remember(context) { context.getSharedPreferences(AppearancePreferences.PREFS_NAME, Context.MODE_PRIVATE) }
- var themeMode by remember { mutableStateOf(prefs.getString(AppearancePreferences.THEME_KEY, "dark") ?: "dark") }
- DisposableEffect(prefs) {
-  val listener = android.content.SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
-   if (key == AppearancePreferences.THEME_KEY) themeMode = prefs.getString(AppearancePreferences.THEME_KEY, "dark") ?: "dark"
-  }
-  prefs.registerOnSharedPreferenceChangeListener(listener)
-  onDispose { prefs.unregisterOnSharedPreferenceChangeListener(listener) }
- }
- val dark = when (themeMode) { "dark" -> true; "light" -> false; else -> isSystemInDarkTheme() }
- MaterialTheme(
-  colorScheme = if (dark) com.vibesync.antivirus.ui.theme.SafeMobileDarkColorScheme else com.vibesync.antivirus.ui.theme.SafeMobileLightColorScheme,
-  typography = com.vibesync.antivirus.ui.theme.SafeMobileTypography,
-  shapes = com.vibesync.antivirus.ui.theme.SafeMobileShapes,
-  content = content
- )
+ com.vibesync.antivirus.ui.theme.SafeMobileMaterialTheme(content)
 }
 @Composable fun SafeMobileScreen(
  repository:ThreatRepository,
@@ -407,6 +388,11 @@ import kotlinx.coroutines.launch
    onOpenQuarantineConsumed()
   }
  }
+ LaunchedEffect(state.messageResource) {
+  if (state.messageResource == R.string.quarantine_delete_failed) {
+   Toast.makeText(context, R.string.quarantine_delete_failed, Toast.LENGTH_LONG).show()
+  }
+ }
  Surface(Modifier.fillMaxSize(),color=MaterialTheme.colorScheme.background) {
   if (!onboardingComplete) {
    SecurityOnboardingScreen(
@@ -505,7 +491,7 @@ import kotlinx.coroutines.launch
      SectionHeader(title=stringResource(R.string.analytics_recent_activity), actionLabel=stringResource(R.string.nav_history), onAction={ selectedDestination="history" })
      if (auditEntries.isEmpty()) EmptyState(title=stringResource(R.string.analytics_no_audits),description=stringResource(R.string.analytics_no_audits_body))
      else auditEntries.take(3).forEach { audit ->
-      Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surface),shape=RoundedCornerShape(14.dp),modifier=Modifier.fillMaxWidth()) {
+      Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surface),shape=RoundedCornerShape(16.dp),modifier=Modifier.fillMaxWidth()) {
        Row(Modifier.padding(12.dp),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(10.dp)) {
         androidx.compose.material3.Icon(if(audit.verdict==ScanVerdict.THREAT.name) Icons.Default.Warning else Icons.Default.History,
          contentDescription=null,tint=if(audit.verdict==ScanVerdict.THREAT.name) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary)
@@ -545,7 +531,7 @@ import kotlinx.coroutines.launch
      )
     }
     if (selectedDestination == "scan") {
-    Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surface),shape=RoundedCornerShape(22.dp),modifier=Modifier.fillMaxWidth()) {
+    Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surface),shape=RoundedCornerShape(16.dp),modifier=Modifier.fillMaxWidth()) {
      Column(Modifier.padding(18.dp),verticalArrangement=Arrangement.spacedBy(10.dp)) {
       Row(verticalAlignment=Alignment.CenterVertically) {
        androidx.compose.material3.Icon(statusIcon,contentDescription=null,tint=statusTint,modifier=Modifier.size(30.dp))
@@ -682,7 +668,7 @@ import kotlinx.coroutines.launch
      }
     }
     if (selectedDestination == "quarantine") {
-    Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant),shape=RoundedCornerShape(18.dp),modifier=Modifier.fillMaxWidth()) {
+    Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant),shape=RoundedCornerShape(16.dp),modifier=Modifier.fillMaxWidth()) {
      Column(Modifier.padding(16.dp),verticalArrangement=Arrangement.spacedBy(10.dp)) {
       Text(stringResource(R.string.quarantine_vault_title),style=MaterialTheme.typography.titleMedium,fontWeight=FontWeight.Bold)
       Text(stringResource(R.string.quarantine_vault_description),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
@@ -817,7 +803,7 @@ pendingQuarantine?.let { flagged ->
  if (showNotificationPermissionPrompt) AlertDialog(
    onDismissRequest = { showNotificationPermissionPrompt = false; pendingAlertEnable = false },
    title = { Text(stringResource(R.string.security_alerts_title)) },
-   text = { Text(stringResource(R.string.security_alerts_description)) },
+   text = { Text(stringResource(R.string.incident_alerts_explanation)) },
    confirmButton = {
     TextButton(onClick = {
      showNotificationPermissionPrompt = false

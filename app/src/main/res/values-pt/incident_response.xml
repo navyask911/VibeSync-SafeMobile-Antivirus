@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="voice_malicious_quarantined">Aviso. Foi detectado um aplicativo malicioso e ele foi colocado em quarentena.</string>
+    <string name="voice_suspicious_quarantined">Aviso. Um arquivo suspeito foi isolado na quarentena criptografada do SafeMobile.</string>
+    <string name="voice_malicious_installed">Aviso. Foi detectado um aplicativo malicioso após a instalação. Revise ou desinstale agora.</string>
+    <string name="voice_app_review">Aviso. Um aplicativo recém-instalado precisa de uma revisão de segurança.</string>
+</resources>

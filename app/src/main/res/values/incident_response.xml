@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="voice_malicious_quarantined">Warning. A malicious app was detected and quarantined.</string>
+    <string name="voice_suspicious_quarantined">Warning. A suspicious file was isolated in SafeMobile’s encrypted quarantine.</string>
+    <string name="voice_malicious_installed">Warning. A malicious app was detected after installation. Review or uninstall it now.</string>
+    <string name="voice_app_review">Warning. A newly installed app needs security review.</string>
+    <string name="incident_channel_description" translatable="false">Urgent local threat alerts with a five-second alarm when enabled.</string>
+    <string name="incident_title" translatable="false">Malicious app detected</string>
+    <string name="incident_loading" translatable="false">Loading app details…</string>
+    <string name="incident_app_unavailable" translatable="false">App is no longer available</string>
+    <string name="incident_warning" translatable="false">This installed app matched a known malware hash. Avoid opening it. Uninstall it using Android’s confirmation screen. SafeMobile has not quarantined or removed this installed app.</string>
+    <string name="incident_uninstall_now" translatable="false">UNINSTALL NOW</string>
+    <string name="incident_dismiss" translatable="false">Dismiss (Not Recommended)</string>
+    <string name="incident_review_threat" translatable="false">Review threat</string>
+    <string name="incident_user_confirmation" translatable="false">App removal always requires your confirmation in Android. SafeMobile does not silently uninstall apps.</string>
+    <string name="incident_alerts_explanation" translatable="false">Opt in to urgent notifications and a five-second siren at maximum alarm volume for confirmed malware. Opening SafeMobile or dismissing an incident stops the siren. Android sound and Do Not Disturb settings may limit audio.</string>
+    <string name="incident_full_screen_settings" translatable="false">Full-screen incident alerts</string>
+    <string name="incident_full_screen_explanation" translatable="false">Android 14+ controls full-screen access. You may enable it in system settings for urgent incident notifications. If you leave it off, SafeMobile uses a high-priority notification. This is optional.</string>
+    <string name="incident_open_settings" translatable="false">Open settings</string>
+    <string name="cyber_dark_appearance" translatable="false">Cyber Dark · Deep navy, slate cards and neon cyan</string>
+</resources>
