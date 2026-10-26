@@ -24,7 +24,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Require production signing and database trust keys
+      - name: Require production signing configuration
         shell: bash
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
@@ -41,10 +41,10 @@ jobs:
           python3 - <<'PY'
           import base64
           import os
-          key = base64.b64decode(os.environ["DB_SIGNING_PUBLIC_KEY"], validate=True)
+          key = base64.b64decode(os.environ.get("DB_SIGNING_PUBLIC_KEY", ""), validate=True)
           if len(key) != 32:
-              raise SystemExit("SAFE STOP: DB_SIGNING_PUBLIC_KEY must decode to 32 Ed25519 bytes.")
-          print("Production keystore and Ed25519 trust root are configured.")
+              raise SystemExit("SAFE STOP: DB_SIGNING_PUBLIC_KEY must be a Base64 raw 32-byte Ed25519 key.")
+          print("Production signing configuration and database trust root are present.")
           PY
 
       - name: Set up JDK 17
@@ -56,13 +56,6 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Download and verify latest signed database bundle
-        env:
-          GH_TOKEN: ${{ github.token }}
-          SAFE_MOBILE_HASHDB_ED25519_PUBLIC_KEY_B64: ${{ secrets.DB_SIGNING_PUBLIC_KEY }}
-          REQUIRE_DB_SIGNATURE: "true"
-        run: python3 scripts/download_latest_hashdb_bundle.py
-
       - name: Build production offline APK
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
@@ -72,7 +65,7 @@ jobs:
           SAFE_MOBILE_HASHDB_ED25519_PUBLIC_KEY_B64: ${{ secrets.DB_SIGNING_PUBLIC_KEY }}
         run: ./gradlew --no-daemon assembleOfflineRelease
 
-      - name: Verify signed APK and bundled database
+      - name: Verify signed APK excludes bundled database
         id: verify-apk
         shell: bash
         run: |
@@ -86,7 +79,10 @@ jobs:
           apksigner_bin="$(find "$ANDROID_HOME/build-tools" -maxdepth 2 -type f -name apksigner | sort -V | tail -n 1)"
           test -x "$apksigner_bin"
           "$apksigner_bin" verify --verbose --print-certs "$apk"
-          unzip -l "$apk" | grep -F 'assets/safe-mobile-hashdb.bundle.zip' >/dev/null
+          if unzip -l "$apk" | grep -E 'assets/(safe-mobile-hashdb\.bundle\.zip|hashes\.(hsb|hdb|sdb|s1b)(\.sig)?)' >/dev/null; then
+            echo "SAFE STOP: APK must not embed a hash database; it syncs signed releases after install." >&2
+            exit 1
+          fi
           version_name="$(sed -nE 's/^[[:space:]]*versionName = "([^"]+)".*/\1/p' app/build.gradle.kts | head -n 1)"
           version_code="$(sed -nE 's/^[[:space:]]*versionCode = ([0-9]+).*/\1/p' app/build.gradle.kts | head -n 1)"
           test -n "$version_name" && test -n "$version_code"
@@ -104,9 +100,9 @@ jobs:
           set -euo pipefail
           tag="safemobile-v${{ steps.verify-apk.outputs.version_name }}-code${{ steps.verify-apk.outputs.version_code }}-run${GITHUB_RUN_NUMBER}"
           cat > release-notes.txt <<EOF
-          Production offline SafeMobile Antivirus APK.
-          The signed MalwareBazaar SHA-256 database is bundled in the APK and verified with the embedded Ed25519 trust root on first launch.
-          If the bundled database is unavailable or fails verification, the app opens with hash-database protection inactive and logs the error.
+          Production SafeMobile Antivirus APK.
+          The signed SHA-256 database is downloaded only from this repository's GitHub Releases, verified with the embedded Ed25519 trust root before activation, and never packaged in the APK/AAB.
+          The first launch queues a network-constrained WorkManager sync; scanning stays on-device.
           APK version: ${{ steps.verify-apk.outputs.version_name }} (version code ${{ steps.verify-apk.outputs.version_code }}).
           Built from commit ${GITHUB_SHA}.
           EOF

@@ -10,6 +10,7 @@ import com.vibesync.antivirus.core.hashdb.HashDatabaseManager
 import com.vibesync.antivirus.core.engine.DeepStaticAnalyzer
 import com.vibesync.antivirus.core.heuristics.PermissionRiskAnalyzer
 import com.vibesync.antivirus.core.security.IntegrityChecker
+import com.vibesync.antivirus.core.security.ProtectedPackagePolicy
 import kotlin.math.roundToInt
 import com.vibesync.antivirus.data.local.ScanAudit
 import com.vibesync.antivirus.data.local.ThreatDao
@@ -37,7 +38,10 @@ class PackageScanner(
  private val deepStaticAnalyzer = DeepStaticAnalyzer()
  suspend fun scanInstalledApps(progress: suspend (processed: Int, total: Int) -> Unit = { _, _ -> }): List<ScanResult> {
   val flags = PackageManager.GET_PERMISSIONS or PackageManager.GET_SERVICES or PackageManager.GET_ACTIVITIES or PackageManager.GET_RECEIVERS or PackageManager.GET_PROVIDERS or signingFlags()
-  val packages = pm.getInstalledPackages(flags)
+  val packages = pm.getInstalledPackages(flags).filter { info ->
+   val appInfo = info.applicationInfo
+   appInfo != null && ProtectedPackagePolicy.isUserInstalled(appInfo.flags, info.packageName, context.packageName)
+  }
   val scanSessionId = UUID.randomUUID().toString()
   val results = mutableListOf<ScanResult>()
   progress(0, packages.size)
@@ -80,6 +84,8 @@ class PackageScanner(
   } catch (_: SecurityException) {
    return result(name, name, null, null, ScanVerdict.NOT_SCANNED, listOf(context.getString(R.string.package_metadata_missing)), System.nanoTime()).copy(packageName = name, scanSessionId = scanSessionId)
   }
+  val appInfo = info.applicationInfo ?: return null
+  if (!ProtectedPackagePolicy.isUserInstalled(appInfo.flags, info.packageName, context.packageName)) return null
   return scanPackage(info, scanSessionId)
  }
  suspend fun scanFile(file: File, persistAllAudit: Boolean = true): ScanResult {

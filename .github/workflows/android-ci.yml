@@ -87,12 +87,6 @@ jobs:
               sys.exit(f"DB_SIGNING_PUBLIC_KEY must decode to 32 raw Ed25519 bytes; got {len(raw)}")
           print("Database signing public key: configured (32-byte Ed25519 key).")
           PY
-      - name: Download and verify latest signed database bundle for APK assets
-        env:
-          GH_TOKEN: ${{ github.token }}
-          SAFE_MOBILE_HASHDB_ED25519_PUBLIC_KEY_B64: ${{ secrets.DB_SIGNING_PUBLIC_KEY }}
-          REQUIRE_DB_SIGNATURE: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-        run: python3 scripts/download_latest_hashdb_bundle.py
       - name: Build offline and optional feed variants
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}

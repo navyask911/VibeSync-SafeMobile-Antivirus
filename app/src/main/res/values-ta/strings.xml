@@ -263,4 +263,15 @@
     <string name="voice_alerts_enabled">குரல் பாதுகாப்பு எச்சரிக்கைகள் இயக்கப்பட்டன</string>
     <string name="voice_alerts_disabled">குரல் பாதுகாப்பு எச்சரிக்கைகள் முடக்கப்பட்டன</string>
     <string name="hashdb_match">கையொப்பமிட்ட %1$s ஹாஷ் பொருத்தம்: %2$s</string>
+    <string name="hash_database_sync_title">கையொப்பமிட்ட அச்சுறுத்தல் வரையறைகள்</string>
+    <string name="hash_database_initial_syncing">அச்சுறுத்தல் வரையறைகள் புதுப்பிக்கப்படுகின்றன…</string>
+    <string name="hash_database_sync_description">SafeMobile GitHub Releases-இல் புதுப்பிப்புகள் அமைதியாகச் சரிபார்க்கப்படும். செயல்படுத்துவதற்கு முன் பதிவிறக்கிய ஒவ்வொரு தரவுத்தளத்தின் கையொப்பமும் சரிபார்க்கப்படும்.</string>
+    <string name="hash_database_sync_interval">இணைப்பு இருக்கும்போது ஒவ்வொரு 6 மணிநேரத்திற்கும் தானியங்கு சரிபார்ப்பு</string>
+    <string name="device_security_score">சாதனப் பாதுகாப்பு மதிப்பெண்</string>
+    <string name="device_security_score_preview">முன்னோட்டக் குறியீடு. அளவிடப்பட்ட மதிப்பெண் இன்னும் கிடைக்கவில்லை.</string>
+    <string name="strict_mode_title">கடுமையான பயன்முறை</string>
+    <string name="security_alerts_title">பாதுகாப்பு எச்சரிக்கைகள்</string>
+    <string name="security_alerts_description">அச்சுறுத்தல் கண்டறியப்பட்டாலோ தனிமைப்படுத்தப்பட்டாலோ உள்ளூர் அறிவிப்புகளைக் காட்டவும். நீங்கள் இயக்கும் வரை முடக்கப்பட்டிருக்கும்.</string>
+    <string name="security_alerts_enabled">எச்சரிக்கைகள் இயக்கப்பட்டுள்ளன</string>
+    <string name="security_alerts_disabled">எச்சரிக்கைகள் முடக்கப்பட்டுள்ளன</string>
 </resources>

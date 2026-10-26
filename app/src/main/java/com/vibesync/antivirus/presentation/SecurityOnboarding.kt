@@ -23,7 +23,22 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.vibesync.antivirus.R
 import com.vibesync.antivirus.ui.components.PrimaryActionButton
-import com.vibesync.antivirus.core.security.DeviceOwnerManager
+
+@Composable
+private fun OptInRow(titleRes: Int, bodyRes: Int, checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
+    Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+        shape = RoundedCornerShape(16.dp), modifier = Modifier.fillMaxWidth()) {
+        Row(Modifier.fillMaxWidth().padding(14.dp), verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(stringResource(titleRes), fontWeight = FontWeight.SemiBold)
+                Text(stringResource(bodyRes), style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+            Switch(checked = checked, onCheckedChange = onCheckedChange)
+        }
+    }
+}
 
 internal object OnboardingPrefs {
     const val NAME = "safe_mobile_onboarding"
@@ -41,10 +56,11 @@ internal fun hasNotificationAccess(context: Context): Boolean =
 @Composable
 internal fun SecurityOnboardingScreen(
     step: Int, storageAccessGranted: Boolean, notificationsGranted: Boolean, sentinelOptIn: Boolean,
-    enterpriseManager: DeviceOwnerManager,
+    strictModeOptIn: Boolean, securityAlertsOptIn: Boolean, initialSyncPending: Boolean,
     onRequestStorage: () -> Unit, onContinueStorage: () -> Unit, onContinueInstalledApps: () -> Unit,
     onRequestNotifications: () -> Unit, onSkipNotifications: () -> Unit, onEnableSentinel: () -> Unit,
-    onDisableSentinel: () -> Unit, onFinish: () -> Unit, onSkipSetup: () -> Unit
+    onDisableSentinel: () -> Unit, onStrictModeChanged: (Boolean) -> Unit,
+    onSecurityAlertsChanged: (Boolean) -> Unit, onFinish: () -> Unit, onSkipSetup: () -> Unit
 ) {
     val page = step.coerceIn(0, 3)
     val title = when (page) {
@@ -98,8 +114,17 @@ internal fun SecurityOnboardingScreen(
             color = MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.Bold)
         Text(stringResource(description), style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onSurfaceVariant)
+        if (initialSyncPending) {
+            Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+                shape = RoundedCornerShape(16.dp), modifier = Modifier.fillMaxWidth()) {
+                Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    CircularProgressIndicator(modifier = Modifier.size(18.dp), strokeWidth = 2.dp)
+                    Text(stringResource(R.string.hash_database_initial_syncing), style = MaterialTheme.typography.bodyMedium)
+                }
+            }
+        }
         if (page == 1) {
-            EnterpriseOnboardingNotice(manager = enterpriseManager)
             DeviceAdminCard()
         }
         if (page == 0 || page == 2) {
@@ -124,6 +149,8 @@ internal fun SecurityOnboardingScreen(
                     Switch(checked = sentinelOptIn, onCheckedChange = { if (it) onEnableSentinel() else onDisableSentinel() })
                 }
             }
+            OptInRow(R.string.strict_mode_title, R.string.strict_mode_description, strictModeOptIn, onStrictModeChanged)
+            OptInRow(R.string.security_alerts_title, R.string.security_alerts_description, securityAlertsOptIn, onSecurityAlertsChanged)
         }
         PrimaryActionButton(
             label = stringResource(

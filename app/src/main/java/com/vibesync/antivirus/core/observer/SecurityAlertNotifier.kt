@@ -94,6 +94,8 @@ object SecurityAlertNotifier {
         val app = context.applicationContext
         // Voice alerts are independent from notification permission, but still explicitly opt-in.
         SecurityVoiceAlert.speakIfEnabled(app, spokenText)
+        val securityPrefs = app.getSharedPreferences(com.vibesync.antivirus.SafeMobileApp.SECURITY_PREFS, Context.MODE_PRIVATE)
+        if (!securityPrefs.getBoolean(com.vibesync.antivirus.SafeMobileApp.KEY_SECURITY_ALERTS_ENABLED, false)) return
         if (
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
             ContextCompat.checkSelfPermission(app, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED

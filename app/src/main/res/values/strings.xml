@@ -2,7 +2,7 @@
 <resources>
 <string name="app_name">SafeMobile Antivirus</string>
 <string name="privacy_title">Privacy and scan-access disclosure</string>
-<string name="privacy_body">Before installed-app scanning, SafeMobile reads the installed-package inventory using QUERY_ALL_PACKAGES because reviewing installed apps is core antivirus functionality. Package names and scan results stay on this device; they are not uploaded, sold, shared for ads or analytics, or sent to a server. The offline flavor has no INTERNET permission. Optional Downloads monitoring is off by default and asks you to select a folder with Android’s document picker; SafeMobile does not request all-files access. The separate feed flavor requires an explicit opt-in before contacting its configured HTTPS endpoint.</string>
+<string name="privacy_body">Before installed-app scanning, SafeMobile reads the installed-package inventory using QUERY_ALL_PACKAGES because reviewing installed apps is core antivirus functionality. Package names and scan results stay on this device; they are not uploaded, sold, shared for ads or analytics, or sent to a server. When connected, the app requests signed threat definitions from SafeMobile GitHub Releases. Every downloaded database is signature-verified before activation. The app never contacts MalwareBazaar or uploads scan data. Optional Downloads monitoring is off by default and uses the Android document picker; SafeMobile does not request all-files access. The separate feed feature requires explicit opt-in before contacting its configured HTTPS endpoint.</string>
 <string name="privacy_accept">I understand</string><string name="exit_app">Exit app</string>
 <string name="brand_title">SafeMobile Antivirus</string><string name="brand_subtitle">VibeSync</string>
 <string name="scan_status">Local protection dashboard</string><string name="scan_running">Scanning device…</string><string name="threat_found">Threat match detected</string>
@@ -403,4 +403,15 @@
     <string name="voice_alerts_description">Use the on-device text-to-speech engine for security events. Voice alerts are off by default and never send data off-device.</string>
     <string name="voice_alerts_enabled">Voice security alerts enabled</string>
     <string name="voice_alerts_disabled">Voice security alerts disabled</string>
+    <string name="hash_database_sync_title">Signed threat definitions</string>
+    <string name="hash_database_initial_syncing">Updating threat definitions…</string>
+    <string name="hash_database_sync_description">Updates are checked silently from SafeMobile GitHub Releases. Every downloaded database is signature-verified before activation.</string>
+    <string name="hash_database_sync_interval">Automatic check every 6 hours when connected</string>
+    <string name="device_security_score">Device Security Score</string>
+    <string name="device_security_score_preview">Preview gauge. A measured score is not available yet.</string>
+    <string name="strict_mode_title">Strict Mode</string>
+    <string name="security_alerts_title">Security Alerts</string>
+    <string name="security_alerts_description">Show local notifications when a threat is detected or quarantined. Off until you turn it on.</string>
+    <string name="security_alerts_enabled">Alerts on</string>
+    <string name="security_alerts_disabled">Alerts off</string>
 </resources>

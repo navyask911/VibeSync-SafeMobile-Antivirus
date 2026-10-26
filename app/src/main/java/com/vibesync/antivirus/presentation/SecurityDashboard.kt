@@ -1,85 +1,60 @@
 package com.vibesync.antivirus.presentation
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.FilterChip
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.vibesync.antivirus.R
 import com.vibesync.antivirus.ui.components.GlassCard
-import com.vibesync.antivirus.ui.theme.SecurityTokens
 
-private data class DashboardFilter(val destination: String, val labelRes: Int)
-
-private val dashboardFilters = listOf(
-    DashboardFilter("home", R.string.security_filter_overview),
-    DashboardFilter("apps", R.string.security_filter_apps),
-    DashboardFilter("scan", R.string.security_filter_files),
-    DashboardFilter("sentinel", R.string.security_filter_sentinel),
-    DashboardFilter("quarantine", R.string.security_filter_vault)
-)
-
-/** Home-page navigation filters remain horizontal and one-line at all font scales. */
+/** Visual preview only: this gauge is not a computed security rating. */
 @Composable
-internal fun SecurityDashboard(
-    selectedDestination: String,
-    onDestinationSelected: (String) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    GlassCard(modifier = modifier.fillMaxWidth(), contentPadding = PaddingValues(0.dp)) {
-        Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Column(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 14.dp),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
-                Text(
-                    text = stringResource(R.string.security_dashboard_title),
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    text = stringResource(R.string.security_dashboard_subtitle),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-            LazyRow(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 2.dp)
-            ) {
-                items(dashboardFilters, key = { it.destination }) { filter ->
-                    FilterChip(
-                        selected = selectedDestination == filter.destination,
-                        onClick = { onDestinationSelected(filter.destination) },
-                        shape = SecurityTokens.chipShape,
-                        label = {
-                            Text(
-                                text = stringResource(filter.labelRes),
-                                maxLines = 1,
-                                softWrap = false,
-                                overflow = TextOverflow.Ellipsis,
-                                style = MaterialTheme.typography.labelLarge
-                            )
-                        }
-                    )
+internal fun SecurityDashboard(modifier: Modifier = Modifier) {
+    GlassCard(modifier = modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(18.dp),
+            horizontalArrangement = Arrangement.spacedBy(18.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(contentAlignment = Alignment.Center, modifier = Modifier.size(106.dp)) {
+                val track = MaterialTheme.colorScheme.surfaceVariant
+                val accent = MaterialTheme.colorScheme.primary
+                Canvas(Modifier.size(102.dp)) {
+                    val stroke = 9.dp.toPx()
+                    val inset = stroke / 2f
+                    drawArc(track, -90f, 360f, false,
+                        topLeft = Offset(inset, inset),
+                        size = androidx.compose.ui.geometry.Size(size.width - stroke, size.height - stroke),
+                        style = androidx.compose.ui.graphics.drawscope.Stroke(stroke, cap = StrokeCap.Round))
+                    drawArc(accent, -90f, 280.8f, false,
+                        topLeft = Offset(inset, inset),
+                        size = androidx.compose.ui.geometry.Size(size.width - stroke, size.height - stroke),
+                        style = androidx.compose.ui.graphics.drawscope.Stroke(stroke, cap = StrokeCap.Round))
+                }
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text("78", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
+                    Text("/ 100", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
-            InstallerWarningBanner(modifier = Modifier.padding(horizontal = 12.dp))
-            Spacer(Modifier.height(4.dp))
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(stringResource(R.string.device_security_score), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                Text(stringResource(R.string.device_security_score_preview), style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
         }
     }
 }

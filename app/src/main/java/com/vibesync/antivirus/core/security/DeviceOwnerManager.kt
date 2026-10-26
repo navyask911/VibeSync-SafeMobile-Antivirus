@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.UserManager
 import com.vibesync.antivirus.core.engine.ThreatVerdict
+import com.vibesync.antivirus.core.security.ProtectedPackagePolicy
 import com.vibesync.antivirus.core.observer.PackageUninstallResultReceiver
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -61,7 +62,7 @@ class DeviceOwnerManager(context: Context) {
     app.packageManager.getApplicationInfo(name,0)
    }
   } catch (_: PackageManager.NameNotFoundException) { return false } catch (_: SecurityException) { return false }
-  return info.flags and (ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) == 0
+  return ProtectedPackagePolicy.isUserInstalled(info.flags, name, app.packageName)
  }
  private fun isOwner() = runCatching { dpm.isDeviceOwnerApp(app.packageName) }.getOrDefault(false)
  companion object {

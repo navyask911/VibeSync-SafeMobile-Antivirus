@@ -263,4 +263,15 @@
     <string name="voice_alerts_enabled">Đã bật cảnh báo giọng nói</string>
     <string name="voice_alerts_disabled">Đã tắt cảnh báo giọng nói</string>
     <string name="hashdb_match">Khớp hàm băm %1$s đã ký: %2$s</string>
+    <string name="hash_database_sync_title">Định nghĩa mối đe dọa đã ký</string>
+    <string name="hash_database_initial_syncing">Đang cập nhật định nghĩa mối đe dọa…</string>
+    <string name="hash_database_sync_description">Bản cập nhật được kiểm tra âm thầm từ GitHub Releases của SafeMobile. Mỗi cơ sở dữ liệu tải xuống đều được xác minh chữ ký trước khi kích hoạt.</string>
+    <string name="hash_database_sync_interval">Tự động kiểm tra mỗi 6 giờ khi có kết nối</string>
+    <string name="device_security_score">Điểm bảo mật thiết bị</string>
+    <string name="device_security_score_preview">Đồng hồ xem trước. Chưa có điểm được đo.</string>
+    <string name="strict_mode_title">Chế độ nghiêm ngặt</string>
+    <string name="security_alerts_title">Cảnh báo bảo mật</string>
+    <string name="security_alerts_description">Hiển thị thông báo cục bộ khi phát hiện hoặc cách ly mối đe dọa. Mặc định tắt cho đến khi bạn bật.</string>
+    <string name="security_alerts_enabled">Đã bật cảnh báo</string>
+    <string name="security_alerts_disabled">Đã tắt cảnh báo</string>
 </resources>

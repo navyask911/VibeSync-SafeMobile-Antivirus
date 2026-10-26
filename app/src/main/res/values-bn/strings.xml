@@ -263,4 +263,15 @@
     <string name="voice_alerts_enabled">ভয়েস নিরাপত্তা সতর্কতা চালু</string>
     <string name="voice_alerts_disabled">ভয়েস নিরাপত্তা সতর্কতা বন্ধ</string>
     <string name="hashdb_match">স্বাক্ষরিত %1$s হ্যাশ মিলেছে: %2$s</string>
+    <string name="hash_database_sync_title">স্বাক্ষরিত হুমকি সংজ্ঞা</string>
+    <string name="hash_database_initial_syncing">হুমকি সংজ্ঞা আপডেট হচ্ছে…</string>
+    <string name="hash_database_sync_description">SafeMobile GitHub Releases থেকে নীরবে আপডেট পরীক্ষা করা হয়। সক্রিয় করার আগে প্রতিটি ডাউনলোড করা ডেটাবেসের স্বাক্ষর যাচাই হয়।</string>
+    <string name="hash_database_sync_interval">সংযোগ থাকলে প্রতি ৬ ঘণ্টায় স্বয়ংক্রিয় পরীক্ষা</string>
+    <string name="device_security_score">ডিভাইস নিরাপত্তা স্কোর</string>
+    <string name="device_security_score_preview">পূর্বরূপ সূচক। পরিমাপ করা স্কোর এখনও উপলভ্য নয়।</string>
+    <string name="strict_mode_title">কঠোর মোড</string>
+    <string name="security_alerts_title">নিরাপত্তা সতর্কতা</string>
+    <string name="security_alerts_description">হুমকি শনাক্ত হলে বা কোয়ারেন্টাইনে রাখলে স্থানীয় বিজ্ঞপ্তি দেখান। আপনি চালু না করা পর্যন্ত বন্ধ।</string>
+    <string name="security_alerts_enabled">সতর্কতা চালু</string>
+    <string name="security_alerts_disabled">সতর্কতা বন্ধ</string>
 </resources>

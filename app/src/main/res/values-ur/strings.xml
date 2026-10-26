@@ -263,4 +263,15 @@
     <string name="voice_alerts_enabled">آواز کی سیکیورٹی اطلاعات فعال</string>
     <string name="voice_alerts_disabled">آواز کی سیکیورٹی اطلاعات غیر فعال</string>
     <string name="hashdb_match">دستخط شدہ %1$s ہیش مماثل ہے: %2$s</string>
+    <string name="hash_database_sync_title">دستخط شدہ خطرے کی تعریفیں</string>
+    <string name="hash_database_initial_syncing">خطرے کی تعریفیں اپ ڈیٹ ہو رہی ہیں…</string>
+    <string name="hash_database_sync_description">SafeMobile GitHub Releases سے اپ ڈیٹس خاموشی سے چیک کرتا ہے۔ فعال کرنے سے پہلے ہر ڈاؤن لوڈ شدہ ڈیٹابیس کے دستخط کی تصدیق ہوتی ہے۔</string>
+    <string name="hash_database_sync_interval">کنکشن ہونے پر ہر 6 گھنٹے میں خودکار جانچ</string>
+    <string name="device_security_score">ڈیوائس سیکیورٹی اسکور</string>
+    <string name="device_security_score_preview">پیش منظر میٹر۔ ناپا ہوا اسکور ابھی دستیاب نہیں۔</string>
+    <string name="strict_mode_title">سخت موڈ</string>
+    <string name="security_alerts_title">سیکیورٹی الرٹس</string>
+    <string name="security_alerts_description">خطرہ ملنے یا قرنطینہ کرنے پر مقامی اطلاع دکھائیں۔ آپ کے آن کرنے تک بند۔</string>
+    <string name="security_alerts_enabled">الرٹس آن</string>
+    <string name="security_alerts_disabled">الرٹس آف</string>
 </resources>

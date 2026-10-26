@@ -3,7 +3,7 @@
 ## Current verified product state
 
 - Core scanning is local-first and can continue without network connectivity.
-- The bundled `offline-threat-definitions.json` contains the harmless EICAR test-marker SHA-256 only. It is not a real-world malware database.
+- The local `offline-threat-definitions.json` contains the harmless EICAR test-marker SHA-256 only. It is not a real-world malware database.
 - A generic, user-configured HTTPS JSON/CSV threat-feed importer and indexed local hash/IOC lookups are implemented. No vendor endpoint or credential is configured by default. Requests use HTTPS and may include a user-supplied provider Auth-Key encrypted at rest with Android Keystore; this is transport/provider authentication, not a cryptographically signed feed manifest.
 - User-selected JSON imports are schema-validated local inputs, not cryptographically authenticated publisher feeds. The app warns users of this limitation.
 - No raw file, file contents, or file hashes are uploaded by the local scanner.
@@ -11,7 +11,7 @@
 
 ## Candidate sources — not yet authorized for production
 
-MalwareBazaar, URLhaus, ThreatFox, ClamAV signatures, YARA rules, and other community data may be investigated, but they must not be enabled until maintainers confirm the exact current terms, commercial/for-profit access rights, authentication requirements, redistribution permissions, licence notices, provenance, freshness, and false-positive process.
+The owner-gated MalwareBazaar builder is documented in `docs/MALWAREBAZAAR_DB_WORKFLOW.md`; the Android app receives only its signed GitHub Release bundle and never queries MalwareBazaar directly. URLhaus, ThreatFox, ClamAV signatures, YARA rules, and other community data must not be enabled until maintainers confirm the exact current terms, commercial/for-profit access rights, authentication requirements, redistribution permissions, licence notices, provenance, freshness, and false-positive process.
 
 A free-to-download app may still be treated as commercial/for-profit when sponsored or ad-supported. Do not assume an API's no-cost tier permits product use or redistribution.
 

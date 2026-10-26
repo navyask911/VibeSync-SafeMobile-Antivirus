@@ -263,4 +263,15 @@
     <string name="voice_alerts_enabled">आवाजातील सुरक्षा सूचना सुरू</string>
     <string name="voice_alerts_disabled">आवाजातील सुरक्षा सूचना बंद</string>
     <string name="hashdb_match">स्वाक्षरी केलेला %1$s हॅश जुळला: %2$s</string>
+    <string name="hash_database_sync_title">स्वाक्षरी केलेल्या धोक्याच्या व्याख्या</string>
+    <string name="hash_database_initial_syncing">धोक्याच्या व्याख्या अद्ययावत होत आहेत…</string>
+    <string name="hash_database_sync_description">SafeMobile GitHub Releases मधून अद्यतने शांतपणे तपासली जातात. सक्रिय करण्यापूर्वी प्रत्येक डाउनलोड केलेल्या डेटाबेसची स्वाक्षरी पडताळली जाते.</string>
+    <string name="hash_database_sync_interval">कनेक्ट असताना दर ६ तासांनी स्वयंचलित तपासणी</string>
+    <string name="device_security_score">डिव्हाइस सुरक्षा गुण</string>
+    <string name="device_security_score_preview">पूर्वावलोकन गेज. मोजलेले गुण अद्याप उपलब्ध नाहीत.</string>
+    <string name="strict_mode_title">कठोर मोड</string>
+    <string name="security_alerts_title">सुरक्षा सूचना</string>
+    <string name="security_alerts_description">धोका आढळल्यास किंवा क्वारंटाइन केल्यास स्थानिक सूचना दाखवा. तुम्ही सुरू करेपर्यंत बंद.</string>
+    <string name="security_alerts_enabled">सूचना सुरू</string>
+    <string name="security_alerts_disabled">सूचना बंद</string>
 </resources>

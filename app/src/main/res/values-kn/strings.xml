@@ -263,4 +263,15 @@
     <string name="voice_alerts_enabled">ಧ್ವನಿ ಭದ್ರತಾ ಎಚ್ಚರಿಕೆಗಳು ಸಕ್ರಿಯ</string>
     <string name="voice_alerts_disabled">ಧ್ವನಿ ಭದ್ರತಾ ಎಚ್ಚರಿಕೆಗಳು ನಿಷ್ಕ್ರಿಯ</string>
     <string name="hashdb_match">ಸಹಿ ಮಾಡಿದ %1$s ಹ್ಯಾಶ್ ಹೊಂದಾಣಿಕೆ: %2$s</string>
+    <string name="hash_database_sync_title">ಸಹಿ ಮಾಡಿದ ಬೆದರಿಕೆ ವ್ಯಾಖ್ಯಾನಗಳು</string>
+    <string name="hash_database_initial_syncing">ಬೆದರಿಕೆ ವ್ಯಾಖ್ಯಾನಗಳನ್ನು ನವೀಕರಿಸಲಾಗುತ್ತಿದೆ…</string>
+    <string name="hash_database_sync_description">SafeMobile GitHub Releases‌ನಿಂದ ನವೀಕರಣಗಳನ್ನು ಮೌನವಾಗಿ ಪರಿಶೀಲಿಸಲಾಗುತ್ತದೆ. ಸಕ್ರಿಯಗೊಳಿಸುವ ಮೊದಲು ಪ್ರತಿ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿದ ಡೇಟಾಬೇಸ್ ಸಹಿಯನ್ನು ಪರಿಶೀಲಿಸಲಾಗುತ್ತದೆ.</string>
+    <string name="hash_database_sync_interval">ಸಂಪರ್ಕ ಇದ್ದಾಗ ಪ್ರತಿ 6 ಗಂಟೆಗೆ ಸ್ವಯಂಚಾಲಿತ ಪರಿಶೀಲನೆ</string>
+    <string name="device_security_score">ಸಾಧನದ ಭದ್ರತಾ ಅಂಕ</string>
+    <string name="device_security_score_preview">ಪೂರ್ವವೀಕ್ಷಣೆಯ ಸೂಚಕ. ಅಳೆಯಲಾದ ಅಂಕ ಇನ್ನೂ ಲಭ್ಯವಿಲ್ಲ.</string>
+    <string name="strict_mode_title">ಕಠಿಣ ಮೋಡ್</string>
+    <string name="security_alerts_title">ಭದ್ರತಾ ಎಚ್ಚರಿಕೆಗಳು</string>
+    <string name="security_alerts_description">ಬೆದರಿಕೆ ಪತ್ತೆಯಾದಾಗ ಅಥವಾ ಕ್ವಾರಂಟೈನ್ ಮಾಡಿದಾಗ ಸ್ಥಳೀಯ ಅಧಿಸೂಚನೆಗಳನ್ನು ತೋರಿಸಿ. ನೀವು ಆನ್ ಮಾಡುವವರೆಗೆ ಆಫ್.</string>
+    <string name="security_alerts_enabled">ಎಚ್ಚರಿಕೆಗಳು ಆನ್</string>
+    <string name="security_alerts_disabled">ಎಚ್ಚರಿಕೆಗಳು ಆಫ್</string>
 </resources>

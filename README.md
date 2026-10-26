@@ -3,7 +3,7 @@
 
 # 🛡️ VibeSync SafeMobile Antivirus
 
-**A native Android security app — offline-first, privacy-respecting, and built with modern Kotlin.**
+**A native Android security app with on-device scanning and signed, GitHub Releases-only definition updates.**
 
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.x-7F52FF?logo=kotlin&logoColor=white)](https://kotlinlang.org)
 [![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-Material%203-4285F4?logo=jetpackcompose&logoColor=white)](https://developer.android.com/jetpack/compose)
@@ -199,6 +199,6 @@ Third-party libraries are used under their respective licenses. Review the [`LIC
 
 ## Optional owner-gated MalwareBazaar SHA-256 releases
 
-The weekly [signed hash database workflow](.github/workflows/update-malware-db.yml) can download **hash-only SHA-256 indicators** from [MalwareBazaar (abuse.ch)](https://bazaar.abuse.ch/) after the owner has confirmed the source's redistribution rights, provisioned their API key and Ed25519 keypair, and configured the Android public-key trust root. **No malware sample binaries or downloaded MalwareBazaar hash list are bundled in this repository.** Fair-use API access is not, by itself, a commercial redistribution licence; any published derived Release must credit the source and comply with its terms.
+The scheduled [signed hash database workflow (every 6 hours)](.github/workflows/update-malware-db.yml) builds versioned **hash-only SHA-256 indicator releases** from [MalwareBazaar (abuse.ch)](https://bazaar.abuse.ch/) after the owner has confirmed the source's redistribution rights, provisioned their API key and Ed25519 keypair, and configured the Android public-key trust root. **No malware sample binaries or threat database are bundled in APK/AAB artifacts.** The Android app checks only this repository's GitHub Releases and verifies each signed download before activation; it never contacts MalwareBazaar. Fair-use API access is not, by itself, a commercial redistribution licence; any published derived Release must credit the source and comply with its terms.
 
 The Android app expects a signed ZIP containing `hashes.hsb` and `hashes.hsb.sig`, not two loose files. The current loader accepts at most **200,000 records and 16 MiB** of database text. The workflow **fails without publishing** if the full publisher export exceeds these bounds; it never silently truncates the feed. The signed hash engine remains **disabled pending owner provisioning**, and detection effectiveness remains **NOT_MEASURED**. See [setup, licensing and current limitations](docs/MALWAREBAZAAR_DB_WORKFLOW.md).

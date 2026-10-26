@@ -206,4 +206,15 @@
     <string name="voice_alerts_enabled">Sprachwarnungen aktiviert</string>
     <string name="voice_alerts_disabled">Sprachwarnungen deaktiviert</string>
     <string name="hashdb_match">Signierter %1$s-Hash stimmt überein: %2$s</string>
+    <string name="hash_database_sync_title">Signierte Bedrohungsdefinitionen</string>
+    <string name="hash_database_initial_syncing">Bedrohungsdefinitionen werden aktualisiert…</string>
+    <string name="hash_database_sync_description">Updates werden unauffällig über die GitHub Releases von SafeMobile geprüft. Jede heruntergeladene Datenbank wird vor der Aktivierung anhand ihrer Signatur geprüft.</string>
+    <string name="hash_database_sync_interval">Automatische Prüfung alle 6 Stunden bei Verbindung</string>
+    <string name="device_security_score">Gerätesicherheitswert</string>
+    <string name="device_security_score_preview">Vorschauanzeige. Ein gemessener Wert ist noch nicht verfügbar.</string>
+    <string name="strict_mode_title">Strikter Modus</string>
+    <string name="security_alerts_title">Sicherheitsmeldungen</string>
+    <string name="security_alerts_description">Lokale Benachrichtigungen bei erkannten oder isolierten Bedrohungen anzeigen. Standardmäßig aus.</string>
+    <string name="security_alerts_enabled">Meldungen aktiviert</string>
+    <string name="security_alerts_disabled">Meldungen deaktiviert</string>
 </resources>

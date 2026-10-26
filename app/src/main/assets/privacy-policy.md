@@ -3,12 +3,12 @@
 Last reviewed for the current hardening branch: 21 October 2026.
 
 ## Local scanning and data
-SafeMobile hashes readable installed APKs and files you explicitly select, then compares hashes against definitions stored in the app's local database. Scan contents and hashes are not uploaded by the scanner. This build's bundled definitions include only the harmless EICAR antivirus test marker; a no-match result is not proof that a file is safe.
+SafeMobile hashes readable installed APKs and files you explicitly select, then compares hashes against definitions stored in the app's local database. Scan contents and hashes are not uploaded by the scanner. When connected, WorkManager may request the latest signed database from this project's GitHub Releases API; the bundle is signature-verified before activation. The app never queries MalwareBazaar directly. A no-match result is not proof that a file is safe. Production APK/AAB artifacts do not bundle the signed threat database.
 
 The app stores recent scan audit records in its private Room database. Records include the package/file display identifier, timestamp, verdict, duration, scan-session identifier, and a protected hash value when available. Scan history is local to the app. The app does not offer a complete audit export or configurable retention policy in this build. Application data is not intended to be backed up (Android backup is disabled in the manifest).
 
 ## Files and installed applications
-SafeMobile requests installed-package visibility for its scan and source-review features. The user may select an individual file or folder using Android's system picker. Downloads monitoring requires the user to enable it and may ask for all-files access on Android versions that require it. Android limits access to protected directories; not every WhatsApp or Telegram path can be inspected on every device.
+SafeMobile requests installed-package visibility for its scan and source-review features. The user may select an individual file or folder using Android's system picker. Downloads monitoring is optional and only runs after the user enables it. Android limits access to protected directories; not every WhatsApp or Telegram path can be inspected on every device.
 
 The storage cleaner examines APK metadata in a folder the user explicitly selects. It copies APK data temporarily into the app cache for metadata inspection, then deletes those temporary copies. Cleanup candidates are not automatically treated as malicious. A deletion is performed only after the user confirms the exact selected set, and the cleaner rechecks the current document metadata where the provider exposes it.
 

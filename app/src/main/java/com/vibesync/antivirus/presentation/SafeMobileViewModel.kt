@@ -35,8 +35,6 @@ data class SafeMobileUiState(
     val threatFeedSyncStatus: String? = null,
     val threatFeedSyncError: String? = null,
     val hashDatabaseCapability: HashDatabaseCapability = HashDatabaseCapability(false, reason = "Disabled: trusted key or signed database missing."),
-    val hashDatabaseUpdateUrl: String = "",
-    val hashDatabaseUpdatesEnabled: Boolean = false
 ) {
     val threatCount get() = results.count { it.verdict == ScanVerdict.THREAT }
     val suspiciousCount get() = results.count { it.verdict == ScanVerdict.SUSPICIOUS }
@@ -78,9 +76,7 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
             val capability = try { repository.hashDatabaseCapability() }
             catch (cancelled: CancellationException) { throw cancelled }
             catch (error: Exception) { HashDatabaseCapability(false, reason = error.message ?: "Signed hash database unavailable.") }
-            val config = runCatching { repository.hashDatabaseSyncConfig() }.getOrNull()
-            mutableState.update { it.copy(hashDatabaseCapability = capability,
-                hashDatabaseUpdateUrl = config?.url.orEmpty(), hashDatabaseUpdatesEnabled = config?.enabled == true) }
+            mutableState.update { it.copy(hashDatabaseCapability = capability) }
         }
     }
 
@@ -112,18 +108,7 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
         }
     }
 
-    fun configureHashDatabaseSync(url: String, enabled: Boolean) {
-        viewModelScope.launch {
-            try {
-                repository.configureHashDatabaseSync(url, enabled)
-                refreshHashDatabaseCapability()
-            } catch (cancelled: CancellationException) { throw cancelled }
-            catch (error: Exception) {
-                mutableState.update { it.copy(messageResource = null,
-                    messageText = "Update settings were not saved: " + (error.message ?: "invalid HTTPS URL") + ".") }
-            }
-        }
-    }
+    fun requestHashDatabaseSync() = repository.requestHashDatabaseSync()
 
     fun requestThreatFeedSync() { repository.requestThreatFeedSync() }
 

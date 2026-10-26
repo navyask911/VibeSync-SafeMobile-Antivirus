@@ -263,4 +263,15 @@
     <string name="voice_alerts_enabled">Голосовые оповещения включены</string>
     <string name="voice_alerts_disabled">Голосовые оповещения отключены</string>
     <string name="hashdb_match">Совпадение подписанного хеша %1$s: %2$s</string>
+    <string name="hash_database_sync_title">Подписанные определения угроз</string>
+    <string name="hash_database_initial_syncing">Обновление определений угроз…</string>
+    <string name="hash_database_sync_description">Обновления незаметно проверяются в GitHub Releases SafeMobile. Перед активацией каждая загруженная база проверяется подписью.</string>
+    <string name="hash_database_sync_interval">Автоматическая проверка каждые 6 часов при подключении к сети</string>
+    <string name="device_security_score">Оценка безопасности устройства</string>
+    <string name="device_security_score_preview">Предварительный индикатор. Измеренная оценка пока недоступна.</string>
+    <string name="strict_mode_title">Строгий режим</string>
+    <string name="security_alerts_title">Оповещения безопасности</string>
+    <string name="security_alerts_description">Показывать локальные уведомления при обнаружении угрозы или помещении файла в карантин. Выключено, пока вы не включите.</string>
+    <string name="security_alerts_enabled">Оповещения включены</string>
+    <string name="security_alerts_disabled">Оповещения выключены</string>
 </resources>
