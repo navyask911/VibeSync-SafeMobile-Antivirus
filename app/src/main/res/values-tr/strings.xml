@@ -270,8 +270,6 @@
     <string name="device_security_score">Cihaz Güvenlik Puanı</string>
     <string name="device_security_score_preview">Önizleme göstergesi. Ölçülmüş bir puan henüz yok.</string>
     <string name="strict_mode_title">Sıkı Mod</string>
-    <string name="strict_mode_label">Sıkı Mod</string>
-    <string name="strict_mode_description">İndirilen dosyaları daha sıkı izleyin. İsteğe bağlıdır ve varsayılan olarak kapalıdır.</string>
     <string name="security_alerts_title">Güvenlik Uyarıları</string>
     <string name="security_alerts_description">Tehdit algılandığında veya karantinaya alındığında yerel bildirim göster. Sen açana kadar kapalıdır.</string>
     <string name="security_alerts_enabled">Uyarılar açık</string>

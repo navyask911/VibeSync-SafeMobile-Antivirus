@@ -270,8 +270,6 @@
     <string name="device_security_score">Pontuação de segurança do dispositivo</string>
     <string name="device_security_score_preview">Indicador de prévia. Ainda não há uma pontuação medida.</string>
     <string name="strict_mode_title">Modo estrito</string>
-    <string name="strict_mode_label">Modo estrito</string>
-    <string name="strict_mode_description">Aplicar monitoramento mais rigoroso aos arquivos baixados. Opcional e desativado por padrão.</string>
     <string name="security_alerts_title">Alertas de segurança</string>
     <string name="security_alerts_description">Mostrar notificações locais quando uma ameaça for detectada ou colocada em quarentena. Desativado até você ativar.</string>
     <string name="security_alerts_enabled">Alertas ativados</string>

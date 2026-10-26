@@ -213,8 +213,6 @@
     <string name="device_security_score">デバイスのセキュリティスコア</string>
     <string name="device_security_score_preview">プレビュー表示です。測定済みのスコアはまだありません。</string>
     <string name="strict_mode_title">厳格モード</string>
-    <string name="strict_mode_label">厳格モード</string>
-    <string name="strict_mode_description">ダウンロードしたファイルをより厳格に監視します。任意設定で、初期状態はオフです。</string>
     <string name="security_alerts_title">セキュリティ通知</string>
     <string name="security_alerts_description">脅威の検出または隔離時にローカル通知を表示します。オンにするまでオフです。</string>
     <string name="security_alerts_enabled">通知オン</string>

@@ -270,8 +270,6 @@
     <string name="device_security_score">डिव्हाइस सुरक्षा गुण</string>
     <string name="device_security_score_preview">पूर्वावलोकन गेज. मोजलेले गुण अद्याप उपलब्ध नाहीत.</string>
     <string name="strict_mode_title">कठोर मोड</string>
-    <string name="strict_mode_label">कठोर मोड</string>
-    <string name="strict_mode_description">डाउनलोड केलेल्या फाइल्सवर अधिक कठोर देखरेख ठेवा. ऐच्छिक आणि डीफॉल्टने बंद.</string>
     <string name="security_alerts_title">सुरक्षा सूचना</string>
     <string name="security_alerts_description">धोका आढळल्यास किंवा क्वारंटाइन केल्यास स्थानिक सूचना दाखवा. तुम्ही सुरू करेपर्यंत बंद.</string>
     <string name="security_alerts_enabled">सूचना सुरू</string>

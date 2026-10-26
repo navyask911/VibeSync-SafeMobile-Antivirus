@@ -270,8 +270,6 @@
     <string name="device_security_score">ডিভাইস নিরাপত্তা স্কোর</string>
     <string name="device_security_score_preview">পূর্বরূপ সূচক। পরিমাপ করা স্কোর এখনও উপলভ্য নয়।</string>
     <string name="strict_mode_title">কঠোর মোড</string>
-    <string name="strict_mode_label">কঠোর মোড</string>
-    <string name="strict_mode_description">ডাউনলোড করা ফাইল আরও কঠোরভাবে পর্যবেক্ষণ করুন। ঐচ্ছিক, ডিফল্টে বন্ধ।</string>
     <string name="security_alerts_title">নিরাপত্তা সতর্কতা</string>
     <string name="security_alerts_description">হুমকি শনাক্ত হলে বা কোয়ারেন্টাইনে রাখলে স্থানীয় বিজ্ঞপ্তি দেখান। আপনি চালু না করা পর্যন্ত বন্ধ।</string>
     <string name="security_alerts_enabled">সতর্কতা চালু</string>

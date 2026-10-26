@@ -213,8 +213,6 @@
     <string name="device_security_score">डिवाइस सुरक्षा स्कोर</string>
     <string name="device_security_score_preview">पूर्वावलोकन गेज। मापा गया स्कोर अभी उपलब्ध नहीं है।</string>
     <string name="strict_mode_title">सख्त मोड</string>
-    <string name="strict_mode_label">सख्त मोड</string>
-    <string name="strict_mode_description">डाउनलोड की गई फ़ाइलों की अधिक सख्ती से निगरानी करें। वैकल्पिक, डिफ़ॉल्ट रूप से बंद।</string>
     <string name="security_alerts_title">सुरक्षा अलर्ट</string>
     <string name="security_alerts_description">खतरा मिलने या क्वारंटीन होने पर स्थानीय सूचनाएँ दिखाएँ। आपके चालू करने तक बंद।</string>
     <string name="security_alerts_enabled">अलर्ट चालू</string>

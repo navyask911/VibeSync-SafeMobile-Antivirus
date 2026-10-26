@@ -213,8 +213,6 @@
     <string name="device_security_score">Score de sécurité de l’appareil</string>
     <string name="device_security_score_preview">Jauge d’aperçu. Aucun score mesuré n’est encore disponible.</string>
     <string name="strict_mode_title">Mode strict</string>
-    <string name="strict_mode_label">Mode strict</string>
-    <string name="strict_mode_description">Appliquer une surveillance plus stricte aux fichiers téléchargés. Facultatif et désactivé par défaut.</string>
     <string name="security_alerts_title">Alertes de sécurité</string>
     <string name="security_alerts_description">Afficher des notifications locales lorsqu’une menace est détectée ou mise en quarantaine. Désactivé tant que vous ne l’activez pas.</string>
     <string name="security_alerts_enabled">Alertes activées</string>

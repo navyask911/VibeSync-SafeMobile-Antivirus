@@ -270,8 +270,6 @@
     <string name="device_security_score">ڈیوائس سیکیورٹی اسکور</string>
     <string name="device_security_score_preview">پیش منظر میٹر۔ ناپا ہوا اسکور ابھی دستیاب نہیں۔</string>
     <string name="strict_mode_title">سخت موڈ</string>
-    <string name="strict_mode_label">سخت موڈ</string>
-    <string name="strict_mode_description">ڈاؤن لوڈ کی گئی فائلوں کی زیادہ سخت نگرانی کریں۔ اختیاری اور بطورِ طے شدہ بند۔</string>
     <string name="security_alerts_title">سیکیورٹی الرٹس</string>
     <string name="security_alerts_description">خطرہ ملنے یا قرنطینہ کرنے پر مقامی اطلاع دکھائیں۔ آپ کے آن کرنے تک بند۔</string>
     <string name="security_alerts_enabled">الرٹس آن</string>

@@ -270,8 +270,6 @@
     <string name="device_security_score">设备安全评分</string>
     <string name="device_security_score_preview">预览仪表盘。暂时没有测量评分。</string>
     <string name="strict_mode_title">严格模式</string>
-    <string name="strict_mode_label">严格模式</string>
-    <string name="strict_mode_description">对下载的文件采用更严格的监控。可选，默认关闭。</string>
     <string name="security_alerts_title">安全提醒</string>
     <string name="security_alerts_description">检测到威胁或隔离文件时显示本地通知。需由你开启，默认关闭。</string>
     <string name="security_alerts_enabled">提醒已开启</string>

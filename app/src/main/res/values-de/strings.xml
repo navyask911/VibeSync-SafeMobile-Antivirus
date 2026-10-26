@@ -213,8 +213,6 @@
     <string name="device_security_score">Gerätesicherheitswert</string>
     <string name="device_security_score_preview">Vorschauanzeige. Ein gemessener Wert ist noch nicht verfügbar.</string>
     <string name="strict_mode_title">Strikter Modus</string>
-    <string name="strict_mode_label">Strikter Modus</string>
-    <string name="strict_mode_description">Heruntergeladene Dateien strenger überwachen. Optional und standardmäßig deaktiviert.</string>
     <string name="security_alerts_title">Sicherheitsmeldungen</string>
     <string name="security_alerts_description">Lokale Benachrichtigungen bei erkannten oder isolierten Bedrohungen anzeigen. Standardmäßig aus.</string>
     <string name="security_alerts_enabled">Meldungen aktiviert</string>

@@ -270,8 +270,6 @@
     <string name="device_security_score">ציון אבטחת המכשיר</string>
     <string name="device_security_score_preview">מד תצוגה מקדימה. ציון מדוד עדיין אינו זמין.</string>
     <string name="strict_mode_title">מצב מחמיר</string>
-    <string name="strict_mode_label">מצב מחמיר</string>
-    <string name="strict_mode_description">הפעל ניטור מחמיר יותר לקבצים שהורדו. אפשרות זו כבויה כברירת מחדל.</string>
     <string name="security_alerts_title">התראות אבטחה</string>
     <string name="security_alerts_description">הצג התראות מקומיות בעת זיהוי איום או העברתו להסגר. כבוי עד להפעלה שלך.</string>
     <string name="security_alerts_enabled">התראות מופעלות</string>

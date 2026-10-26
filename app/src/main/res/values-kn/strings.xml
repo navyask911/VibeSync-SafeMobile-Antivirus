@@ -270,8 +270,6 @@
     <string name="device_security_score">ಸಾಧನದ ಭದ್ರತಾ ಅಂಕ</string>
     <string name="device_security_score_preview">ಪೂರ್ವವೀಕ್ಷಣೆಯ ಸೂಚಕ. ಅಳೆಯಲಾದ ಅಂಕ ಇನ್ನೂ ಲಭ್ಯವಿಲ್ಲ.</string>
     <string name="strict_mode_title">ಕಠಿಣ ಮೋಡ್</string>
-    <string name="strict_mode_label">ಕಠಿಣ ಮೋಡ್</string>
-    <string name="strict_mode_description">ಡೌನ್‌ಲೋಡ್ ಮಾಡಿದ ಫೈಲ್‌ಗಳಿಗೆ ಹೆಚ್ಚು ಕಟ್ಟುನಿಟ್ಟಿನ ಮೇಲ್ವಿಚಾರಣೆ. ಐಚ್ಛಿಕ; ಪೂರ್ವನಿಯೋಜಿತವಾಗಿ ಆಫ್.</string>
     <string name="security_alerts_title">ಭದ್ರತಾ ಎಚ್ಚರಿಕೆಗಳು</string>
     <string name="security_alerts_description">ಬೆದರಿಕೆ ಪತ್ತೆಯಾದಾಗ ಅಥವಾ ಕ್ವಾರಂಟೈನ್ ಮಾಡಿದಾಗ ಸ್ಥಳೀಯ ಅಧಿಸೂಚನೆಗಳನ್ನು ತೋರಿಸಿ. ನೀವು ಆನ್ ಮಾಡುವವರೆಗೆ ಆಫ್.</string>
     <string name="security_alerts_enabled">ಎಚ್ಚರಿಕೆಗಳು ಆನ್</string>

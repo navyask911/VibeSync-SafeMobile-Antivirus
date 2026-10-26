@@ -410,8 +410,6 @@
     <string name="device_security_score">Device Security Score</string>
     <string name="device_security_score_preview">Preview gauge. A measured score is not available yet.</string>
     <string name="strict_mode_title">Strict Mode</string>
-    <string name="strict_mode_label">Strict Mode</string>
-    <string name="strict_mode_description">Use stricter monitoring behavior for downloaded files. Optional and off by default.</string>
     <string name="security_alerts_title">Security Alerts</string>
     <string name="security_alerts_description">Show local notifications when a threat is detected or quarantined. Off until you turn it on.</string>
     <string name="security_alerts_enabled">Alerts on</string>
