@@ -92,6 +92,9 @@ jobs:
           echo "version_name=$version_name" >> "$GITHUB_OUTPUT"
           echo "version_code=$version_code" >> "$GITHUB_OUTPUT"
 
+      - name: Build valid harmless siren-test APK and matching local definition
+        run: bash scripts/test_siren.sh
+
       - name: Publish installable APK to a new GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -105,8 +108,16 @@ jobs:
           The first launch queues a network-constrained WorkManager sync; scanning stays on-device.
           APK version: ${{ steps.verify-apk.outputs.version_name }} (version code ${{ steps.verify-apk.outputs.version_code }}).
           Built from commit ${GITHUB_SHA}.
+          Includes scan-completion feedback, a transparent configuration score, cyan glass styling, and recursive multi-folder SAF monitoring.
+          Optional harmless siren fixture: first import siren-test-definitions.json in Scan > Import definitions, then copy SafeMobile-Siren-Test.apk into a monitored folder or install it to test the post-install receiver. The test APK contains no executable code.
+          Android 11+ blocks the main Download folder in SAF; select a subfolder or WhatsApp Documents. Skip remains available.
+          Device test instructions: https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/blob/${GITHUB_SHA}/docs/SIREN_AND_FOLDER_TESTING.md
           EOF
           gh release create "$tag" --target "$GITHUB_SHA" \
             --title "SafeMobile Antivirus ${{ steps.verify-apk.outputs.version_name }} (build ${GITHUB_RUN_NUMBER})" \
             --notes-file release-notes.txt \
-            "${{ steps.verify-apk.outputs.apk_path }}"
+            "${{ steps.verify-apk.outputs.apk_path }}" \
+            "build/siren-test/SafeMobile-Siren-Test.apk" \
+            "build/siren-test/siren-test-definitions.json" \
+            "build/siren-test/SHA256SUMS.txt"
+

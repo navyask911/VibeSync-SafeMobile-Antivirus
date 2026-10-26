@@ -81,6 +81,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.style.TextOverflow
 import android.widget.Toast
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -146,6 +147,14 @@ import kotlinx.coroutines.launch
  val securityIncidents by repository.observeRecentSecurityIncidents().collectAsStateWithLifecycle(initialValue = emptyList())
  val ownerManager = remember(context) { DeviceOwnerManager(context) }
  var selectedDestination by remember { mutableStateOf("home") }
+ val contentScrollState = rememberScrollState()
+ var folderUris by remember(context) { mutableStateOf(StorageAccessPreferences.accessibleTreeUris(context)) }
+ var pendingFolderRole by remember { mutableStateOf(StorageAccessPreferences.DOWNLOADS) }
+ var showPlayProtectDialog by remember { mutableStateOf(false) }
+ LaunchedEffect(selectedDestination) { contentScrollState.scrollTo(0) }
+ LaunchedEffect(state.scanSummary?.completedAt) {
+  if (state.scanSummary != null && selectedDestination == "home") contentScrollState.animateScrollTo(0)
+ }
  val onboardingPrefs = remember(context) { context.getSharedPreferences(OnboardingPrefs.NAME, Context.MODE_PRIVATE) }
 
 
@@ -165,6 +174,7 @@ import kotlinx.coroutines.launch
   state.threatCount > 0 -> R.string.threat_found
   state.suspiciousCount > 0 -> R.string.review_recommended
   state.results.any { it.verdict == ScanVerdict.NOT_SCANNED } -> R.string.verdict_not_scanned
+  state.scanSummary != null -> R.string.scan_complete
   else -> R.string.scan_status
  }
  val statusTint = when {
@@ -246,42 +256,42 @@ import kotlinx.coroutines.launch
    pendingAlertEnable = false
   }
  }
- val storageTreeLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri: Uri? ->
-  val granted = uri?.let { selected ->
-   runCatching { StorageAccessPreferences.persistSelectedFolder(context, selected) }.getOrDefault(false)
-  } ?: false
-  storageAccessGranted = granted
-  if (pendingSentinelEnable) {
+ val storageTreeLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) folderResult@{ result ->
+  val uri = result.data?.data
+  if (result.resultCode != Activity.RESULT_OK || uri == null) {
    pendingSentinelEnable = false
-   if (granted) {
-    runCatching { context.startForegroundService(Intent(context, StorageSentinelService::class.java)) }
-     .onSuccess {
-      securityPrefs.edit().putBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, true).apply()
-      sentinelDesired = true
-      sentinelOptIn = true
-      Handler(Looper.getMainLooper()).postDelayed({
-       monitoringRunning = isStorageSentinelRunning(context) && hasSharedStorageAccess(context)
-      }, 900L)
-     }
-     .onFailure {
-      securityPrefs.edit().putBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, false).apply()
-      sentinelDesired = false
-      sentinelOptIn = false
-      monitoringRunning = false
-      Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show()
-     }
-   } else {
-    securityPrefs.edit().putBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, false).apply()
-    sentinelDesired = false
-    sentinelOptIn = false
-    monitoringRunning = false
+   selectedDestination = "home"
+   return@folderResult
+  }
+  if (StorageAccessPreferences.isStorageRoot(uri)) {
+   Toast.makeText(context, "Android blocks monitoring the storage root. Select Download where allowed, or a subfolder on Android 11+.", Toast.LENGTH_LONG).show()
+   pendingSentinelEnable = false
+   selectedDestination = "home"
+   return@folderResult
+  }
+  val role = pendingFolderRole
+  val grantFlags = result.data?.flags ?: Intent.FLAG_GRANT_READ_URI_PERMISSION
+  uiScope.launch {
+   val granted = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+    runCatching { StorageAccessPreferences.persistSelectedFolder(context, uri, role, grantFlags) }.getOrDefault(false)
    }
-  } else if (granted && securityPrefs.getBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, false)) {
-   runCatching { context.startForegroundService(Intent(context, StorageSentinelService::class.java)) }
-    .onFailure { Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show() }
+   pendingSentinelEnable = false
+   folderUris = StorageAccessPreferences.accessibleTreeUris(context)
+   storageAccessGranted = folderUris.isNotEmpty()
+   if (granted) {
+    securityPrefs.edit().putBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, true).apply()
+    sentinelDesired = true
+    sentinelOptIn = true
+    runCatching { context.startForegroundService(Intent(context, StorageSentinelService::class.java)) }
+     .onFailure { Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show() }
+    Handler(Looper.getMainLooper()).postDelayed({ monitoringRunning = isStorageSentinelRunning(context) && hasSharedStorageAccess(context) }, 900L)
+   } else {
+    Toast.makeText(context, "Folder access was not granted. You can continue with limited protection.", Toast.LENGTH_LONG).show()
+    selectedDestination = "home"
+   }
   }
  }
- val requestStorage: () -> Unit = { pendingSentinelEnable = true; showStoragePermissionPrompt = true }
+ val requestStorage: () -> Unit = { selectedDestination = "sentinel" }
  val enableSentinel: () -> Unit = {
   if (!hasSharedStorageAccess(context)) requestStorage()
   else runCatching { context.startForegroundService(Intent(context, StorageSentinelService::class.java)) }
@@ -342,6 +352,8 @@ import kotlinx.coroutines.launch
   val observer = LifecycleEventObserver { _, event ->
    if (event == Lifecycle.Event.ON_RESUME) {
     storageAccessGranted = hasSharedStorageAccess(context)
+    folderUris = StorageAccessPreferences.accessibleTreeUris(context)
+    vm.refreshSecurityScore()
     ownerManager.refreshState()
     sentinelDesired = securityPrefs.getBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, false)
     sentinelOptIn = sentinelDesired
@@ -374,6 +386,20 @@ import kotlinx.coroutines.launch
    vm.scanFull()
   }
  }
+ LaunchedEffect(initialHashSyncPending) {
+  if (!initialHashSyncPending) { vm.refreshHashDatabaseCapability(); vm.refreshSecurityScore() }
+ }
+ LaunchedEffect(lifecycleOwner) {
+  lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+   while (true) {
+    folderUris = StorageAccessPreferences.accessibleTreeUris(context)
+    storageAccessGranted = folderUris.isNotEmpty()
+    monitoringRunning = isStorageSentinelRunning(context) && storageAccessGranted
+    vm.refreshSecurityScore()
+    kotlinx.coroutines.delay(30_000L)
+   }
+  }
+ }
  LaunchedEffect(sharedText) { if (!sharedText.isNullOrBlank()) selectedDestination = "phishing" }
  LaunchedEffect(openQuarantine) {
   if (openQuarantine) {
@@ -390,7 +416,7 @@ import kotlinx.coroutines.launch
    )
   } else {
    Column(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing)) {
-   Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(horizontal=18.dp,vertical=14.dp),verticalArrangement=Arrangement.spacedBy(14.dp)) {
+   Column(Modifier.weight(1f).verticalScroll(contentScrollState).padding(horizontal=18.dp,vertical=14.dp),verticalArrangement=Arrangement.spacedBy(14.dp)) {
     Row(verticalAlignment=Alignment.CenterVertically) {
      Box(Modifier.size(46.dp).background(MaterialTheme.colorScheme.primaryContainer,RoundedCornerShape(15.dp)),contentAlignment=Alignment.Center) {
       androidx.compose.material3.Icon(painterResource(R.drawable.ic_launcher_foreground),contentDescription=stringResource(R.string.app_name),tint=Color.Unspecified,modifier=Modifier.size(35.dp))
@@ -451,8 +477,19 @@ import kotlinx.coroutines.launch
       }
      }
     }
+    if (selectedDestination == "home" || selectedDestination == "scan") {
+     ScanFeedbackCard(state,
+      onResults = { selectedDestination = if (state.results.isEmpty()) "history" else "scan" },
+      onCancel = vm::cancelScan)
+    }
     if (selectedDestination == "home") {
-     SecurityDashboard()
+     LimitedProtectionBanner(
+      downloads = folderUris.isNotEmpty() && StorageAccessPreferences.hasRole(context, StorageAccessPreferences.DOWNLOADS),
+      whatsapp = folderUris.isNotEmpty() && StorageAccessPreferences.hasRole(context, StorageAccessPreferences.WHATSAPP),
+      running = monitoringRunning, onSetup = { selectedDestination = "sentinel" })
+     SecurityDashboard(state.securityAssessment,
+      onCheckPlayProtect = { requestPrivacyAcknowledgement { showPlayProtectDialog = true } },
+      onSync = { vm.requestHashDatabaseSync() })
      if (initialHashSyncPending) {
       Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.primaryContainer),shape=RoundedCornerShape(16.dp),modifier=Modifier.fillMaxWidth()) {
        Row(Modifier.padding(14.dp), horizontalArrangement=Arrangement.spacedBy(10.dp), verticalAlignment=Alignment.CenterVertically) {
@@ -461,20 +498,10 @@ import kotlinx.coroutines.launch
        }
       }
      }
-      val lastScanLabel = state.lastScanAt?.let { DateFormat.getDateTimeInstance().format(Date(it)) }
-      ?.let { context.getString(R.string.security_last_scan, it) } ?: stringResource(R.string.security_last_scan_none)
-     val ringProgress = if (state.isScanning && state.totalItems > 0) state.processedItems.toFloat() / state.totalItems.toFloat() else null
-     SecurityStatusCard(
-      status=stringResource(statusResource),
-      description=stringResource(if (storageAccessGranted) R.string.security_scan_coverage else R.string.security_limited_storage),
-      lastScanLabel=lastScanLabel, threatCount=state.threatCount, signatureCount=state.signatureCount,
-      scanning=state.isScanning, progress=ringProgress,
-      hasScanned=state.lastScanAt != null,
-      cleanResult=state.lastScanAt != null && state.results.isNotEmpty() &&
-       state.results.none { it.verdict in listOf(ScanVerdict.THREAT, ScanVerdict.SUSPICIOUS, ScanVerdict.NOT_SCANNED) },
-      onScan={ requestPrivacyAcknowledgement { vm.scanFull() } }
-     )
-     Text(stringResource(R.string.scan_clean_warning), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+     Button(onClick = { requestPrivacyAcknowledgement { vm.scanFull() } }, enabled = !state.isScanning, modifier = Modifier.fillMaxWidth()) {
+      androidx.compose.material3.Icon(Icons.Default.Security, contentDescription = null)
+      Text(stringResource(R.string.security_scan_now), Modifier.padding(start = 8.dp))
+     }
      SectionHeader(title=stringResource(R.string.analytics_recent_activity), actionLabel=stringResource(R.string.nav_history), onAction={ selectedDestination="history" })
      if (auditEntries.isEmpty()) EmptyState(title=stringResource(R.string.analytics_no_audits),description=stringResource(R.string.analytics_no_audits_body))
      else auditEntries.take(3).forEach { audit ->
@@ -528,25 +555,6 @@ import kotlinx.coroutines.launch
        }
       }
       Text(stringResource(R.string.scan_explanation),style=MaterialTheme.typography.bodyMedium,color=MaterialTheme.colorScheme.onSurface)
-      if (state.isScanning) {
-       if (state.totalItems > 0) {
-        LinearProgressIndicator(
-         progress = (state.processedItems.toFloat() / state.totalItems.toFloat()).coerceIn(0f, 1f),
-         modifier = Modifier.fillMaxWidth()
-        )
-        Text(
-         stringResource(R.string.scan_progress, state.processedItems, state.totalItems),
-         style = MaterialTheme.typography.bodySmall,
-         color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-       } else {
-        LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
-        Text(stringResource(R.string.scan_preparing), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-       }
-       TextButton(onClick = vm::cancelScan, modifier = Modifier.fillMaxWidth()) {
-        Text(stringResource(R.string.scan_cancel))
-       }
-      }
       Button(onClick={ requestPrivacyAcknowledgement { vm.scanFull() } },enabled=!state.isScanning,modifier=Modifier.fillMaxWidth()) {
        if(state.isScanning) CircularProgressIndicator(Modifier.size(18.dp),strokeWidth=2.dp,color=MaterialTheme.colorScheme.onPrimary) else androidx.compose.material3.Icon(Icons.Default.Security,contentDescription=null)
        Text(stringResource(if(state.isScanning) R.string.scan_running else R.string.scan_installed),modifier=Modifier.padding(start=8.dp))
@@ -556,30 +564,6 @@ import kotlinx.coroutines.launch
        Text(stringResource(R.string.scan_selected),modifier=Modifier.padding(start=8.dp))
       }
       OutlinedButton(onClick={ requestPrivacyAcknowledgement { showDefinitionImportWarning = true } },enabled=!state.isScanning,modifier=Modifier.fillMaxWidth()) { Text(stringResource(R.string.import_definitions)) }
-     }
-    }
-    }
-    if (selectedDestination == "home" || selectedDestination == "sentinel") {
-    Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant),shape=RoundedCornerShape(18.dp),modifier=Modifier.fillMaxWidth()) {
-     Column(Modifier.padding(16.dp),verticalArrangement=Arrangement.spacedBy(8.dp)) {
-      Text(stringResource(R.string.monitor_title),style=MaterialTheme.typography.titleMedium,fontWeight=FontWeight.Bold)
-      Text(stringResource(R.string.monitor_explanation),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
-      Text(
-       stringResource(if (monitoringRunning) R.string.monitor_active else R.string.monitor_inactive),
-       style = MaterialTheme.typography.labelLarge,
-       color = if (monitoringRunning) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.tertiary
-      )
-      if (!monitoringRunning) {
-       OutlinedButton(onClick={ requestPrivacyAcknowledgement { enableSentinel() } },enabled=!state.isScanning,modifier=Modifier.fillMaxWidth()) {
-        Text(stringResource(R.string.monitor_button))
-       }
-      } else {
-       OutlinedButton(onClick={
-        context.stopService(Intent(context,com.vibesync.antivirus.core.observer.StorageSentinelService::class.java))
-        monitoringRunning = false
-       },enabled=true,modifier=Modifier.fillMaxWidth()) { Text(stringResource(R.string.monitor_stop)) }
-      }
-      Text(stringResource(R.string.monitor_note),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
      }
     }
     }
@@ -638,19 +622,23 @@ import kotlinx.coroutines.launch
      storageAccessGranted=storageAccessGranted, notificationsGranted=notificationsGranted, online=online
     )
     if (selectedDestination == "sentinel") {
-     Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant),shape=RoundedCornerShape(16.dp),modifier=Modifier.fillMaxWidth()) {
-      Column(Modifier.padding(16.dp),verticalArrangement=Arrangement.spacedBy(8.dp)) {
-       Text(stringResource(R.string.sentinel_scope_title),style=MaterialTheme.typography.titleMedium,fontWeight=FontWeight.SemiBold)
-       Text(stringResource(R.string.download_interceptor_description),style=MaterialTheme.typography.bodyMedium,color=MaterialTheme.colorScheme.onSurfaceVariant)
-       StatusChip(stringResource(if(monitoringRunning) R.string.analytics_sentinel_running else R.string.analytics_sentinel_stopped),
-        kind=if(monitoringRunning) StatusKind.ACTIVE else StatusKind.WARNING)
-      }
-     }
+     SentinelFolderPanel(context, folderUris, monitoringRunning,
+      onAdd = { role -> requestPrivacyAcknowledgement {
+       pendingFolderRole = role; pendingSentinelEnable = true; showStoragePermissionPrompt = true
+      } },
+      onRemove = { uri -> uiScope.launch {
+       kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { StorageAccessPreferences.removeFolder(context, uri) }
+       folderUris = StorageAccessPreferences.accessibleTreeUris(context)
+       storageAccessGranted = folderUris.isNotEmpty()
+       if (!storageAccessGranted) disableSentinel()
+      } },
+      onStart = { requestPrivacyAcknowledgement { enableSentinel() } }, onStop = disableSentinel,
+      onSkip = { selectedDestination = "home" })
     }
     if (selectedDestination == "guardian") GuardianPanel()
     if (selectedDestination == "phishing") PhishingPanel(sharedText, repository) { onSharedTextConsumed() }
     if (selectedDestination == "cleaner") StorageCleanerPanel()
-    state.messageResource?.let { message -> Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant)) { Text(stringResource(message),Modifier.padding(14.dp),color=MaterialTheme.colorScheme.onSurface,style=MaterialTheme.typography.bodySmall) } }
+    state.messageResource?.takeUnless { it == R.string.scan_complete && selectedDestination in listOf("home", "scan") }?.let { message -> Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant)) { Text(stringResource(message),Modifier.padding(14.dp),color=MaterialTheme.colorScheme.onSurface,style=MaterialTheme.typography.bodySmall) } }
     state.messageText?.let { message -> Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant)) { Text(message,Modifier.padding(14.dp),color=MaterialTheme.colorScheme.onSurface,style=MaterialTheme.typography.bodySmall) } }
     if(selectedDestination == "scan" && state.results.isNotEmpty()) {
      Column(verticalArrangement=Arrangement.spacedBy(10.dp)) {
@@ -850,13 +838,17 @@ pendingQuarantine?.let { flagged ->
    }
   )
   if (showStoragePermissionPrompt) AlertDialog(
-   onDismissRequest = { showStoragePermissionPrompt = false; pendingSentinelEnable = false },
+   onDismissRequest = { showStoragePermissionPrompt = false; pendingSentinelEnable = false; selectedDestination = "home" },
    title = { Text(stringResource(R.string.setup_sentinel_title)) },
-   text = { Text(stringResource(R.string.setup_sentinel_body)) },
+   text = { Text("Choose the folder you want monitored. Android 11+ blocks the main Download folder and storage root; a Download subfolder or WhatsApp Documents can be granted. Only the selected tree is scanned. You can choose Not now and continue.") },
    confirmButton = {
     TextButton(onClick = {
      showStoragePermissionPrompt = false
-     storageTreeLauncher.launch(null)
+     runCatching { storageTreeLauncher.launch(StorageAccessPreferences.pickerIntent(pendingFolderRole)) }
+      .onFailure {
+       pendingSentinelEnable = false; selectedDestination = "home"
+       Toast.makeText(context, "The folder picker is unavailable. Limited protection remains available.", Toast.LENGTH_LONG).show()
+      }
     }) { Text(stringResource(R.string.setup_allow_storage)) }
    },
    dismissButton = {
@@ -864,10 +856,30 @@ pendingQuarantine?.let { flagged ->
      showStoragePermissionPrompt = false
      pendingSentinelEnable = false
      storageAccessGranted = hasSharedStorageAccess(context)
+     selectedDestination = "home"
     }) { Text(stringResource(R.string.setup_continue_limited)) }
    }
   )
-  if(showPrivacyDisclosure) AlertDialog(
+  if (showPlayProtectDialog) AlertDialog(
+  onDismissRequest = { showPlayProtectDialog = false },
+  title = { Text("Check Play Protect") },
+  text = { Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+   Text("In Google Play, open your profile > Play Protect > Settings. This build cannot verify that status automatically. Your reported status is used for the score for 24 hours.")
+   TextButton(onClick = {
+    runCatching {
+     val intent = context.packageManager.getLaunchIntentForPackage("com.android.vending")
+      ?: throw ActivityNotFoundException()
+     context.startActivity(intent)
+    }.onFailure { Toast.makeText(context, "Google Play is unavailable on this device.", Toast.LENGTH_LONG).show() }
+   }) { Text("Open Google Play") }
+  } },
+  confirmButton = { TextButton(onClick = { vm.reportPlayProtect(true); showPlayProtectDialog = false }) { Text("I checked: On") } },
+  dismissButton = { Row {
+   TextButton(onClick = { vm.reportPlayProtect(false); showPlayProtectDialog = false }) { Text("I checked: Off") }
+   TextButton(onClick = { showPlayProtectDialog = false }) { Text("Not now") }
+  } }
+ )
+ if(showPrivacyDisclosure) AlertDialog(
   onDismissRequest={ showPrivacyDisclosure=false; pendingSensitiveAction=null },
   title={ Text(stringResource(R.string.privacy_title)) },
   text={ Text(stringResource(R.string.privacy_body)) },
@@ -934,3 +946,4 @@ private fun canOfferUninstall(context: Context, packageName: String): Boolean {
   }
  }
 }
+

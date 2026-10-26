@@ -28,13 +28,18 @@ class HashDatabaseSyncWorker(context: Context, params: WorkerParameters) :
         val app = applicationContext as? SafeMobileApp ?: return Result.failure()
         var temporary: java.io.File? = null
         return try {
-            val assetUrl = latestBundleAssetUrl()
+            val asset = latestBundleAsset()
             temporary = java.io.File.createTempFile("safe-mobile-hashdb-", ".zip", applicationContext.cacheDir)
-            download(assetUrl, temporary, MAX_BUNDLE_BYTES)
+            download(asset.url, temporary, MAX_BUNDLE_BYTES)
             val capability = temporary.inputStream().use { input ->
                 app.hashDatabaseManager.importBundle(input)
             }
-            if (!capability.enabled) Result.failure() else Result.success()
+            if (!capability.enabled) Result.failure() else {
+                capability.version?.let { version ->
+                    com.vibesync.antivirus.core.hashdb.HashDatabaseFreshness.recordVerifiedRelease(applicationContext, version, asset.publishedAt)
+                }
+                Result.success()
+            }
         } catch (error: IOException) {
             android.util.Log.w(TAG, "GitHub hash database sync will retry after a network error.", error)
             Result.retry()
@@ -46,7 +51,9 @@ class HashDatabaseSyncWorker(context: Context, params: WorkerParameters) :
         }
     }
 
-    private fun latestBundleAssetUrl(): String {
+    private data class BundleAsset(val url: String, val publishedAt: Long)
+
+    private fun latestBundleAsset(): BundleAsset {
         val bytes = getBytes(RELEASES_API, API_HOSTS, MAX_RELEASES_JSON_BYTES)
         val releases = JSONArray(String(bytes, StandardCharsets.UTF_8))
         var latestPublished = ""
@@ -66,7 +73,10 @@ class HashDatabaseSyncWorker(context: Context, params: WorkerParameters) :
                 }
             }
         }
-        return latestUrl ?: throw IOException("No published GitHub Release contains the signed database bundle.")
+        val url = latestUrl ?: throw IOException("No published GitHub Release contains the signed database bundle.")
+        val publishedAt = runCatching { java.time.Instant.parse(latestPublished).toEpochMilli() }.getOrNull()
+            ?: throw IOException("GitHub database release omitted a valid publication time.")
+        return BundleAsset(url, publishedAt)
     }
 
     private fun isReleaseAssetUrl(value: String): Boolean = runCatching {
@@ -169,3 +179,4 @@ class HashDatabaseSyncWorker(context: Context, params: WorkerParameters) :
         )
     }
 }
+

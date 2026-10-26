@@ -43,7 +43,32 @@ class ThreatRepository(
 ) {
  private val privateTextStore by lazy(LazyThreadSafetyMode.SYNCHRONIZED) { EncryptedHashStore(context) }
  private val maxSafScanFiles = 10_000
- private val maxSafDirectoryDepth = 4
+
+ fun currentHashDatabaseCapability() = hashDatabaseManager?.capability
+ suspend fun securityAssessment() = withContext(Dispatchers.IO) {
+  if (!context.getSharedPreferences(com.vibesync.antivirus.SafeMobileApp.PRIVACY_PREFS, Context.MODE_PRIVATE)
+      .getBoolean(com.vibesync.antivirus.SafeMobileApp.PRIVACY_ACKNOWLEDGED, false)) {
+   return@withContext com.vibesync.antivirus.core.security.DeviceSecurityScore.evaluate(
+    com.vibesync.antivirus.core.security.DeviceSecuritySignals(), System.currentTimeMillis())
+  }
+  val active = hashDatabaseManager?.capability
+  val updatedAt = if (active?.enabled == true)
+   com.vibesync.antivirus.core.hashdb.HashDatabaseFreshness.updatedAt(context, active.version) else null
+  com.vibesync.antivirus.core.security.DeviceSecurityScore.evaluate(
+   com.vibesync.antivirus.core.security.DeviceSecurityInspector.inspect(context, updatedAt), System.currentTimeMillis())
+ }
+ fun reportPlayProtect(enabled: Boolean) = com.vibesync.antivirus.core.security.DeviceSecurityInspector.reportPlayProtect(context, enabled)
+ fun loadScanSummary(): com.vibesync.antivirus.core.engine.ScanCompletionSummary? = runCatching {
+  val p = context.getSharedPreferences("safe_mobile_last_scan", Context.MODE_PRIVATE)
+  val time = p.getLong("completed_at", 0L)
+  if (time <= 0L) null else com.vibesync.antivirus.core.engine.ScanCompletionSummary(
+   p.getInt("apps", 0), p.getInt("files", 0), p.getInt("threats", 0), p.getInt("review", 0), p.getInt("unreadable", 0), time, p.getBoolean("signed_definitions_used", false))
+ }.getOrNull()
+ fun saveScanSummary(summary: com.vibesync.antivirus.core.engine.ScanCompletionSummary) {
+  context.getSharedPreferences("safe_mobile_last_scan", Context.MODE_PRIVATE).edit()
+   .putInt("apps", summary.appCount).putInt("files", summary.fileCount).putInt("threats", summary.threats)
+   .putInt("review", summary.review).putInt("unreadable", summary.unreadable).putLong("completed_at", summary.completedAt).putBoolean("signed_definitions_used", summary.signedDefinitionsUsed).apply()
+ }
 
  fun observeRecentAudits(): Flow<List<ScanAudit>> =
   database.threatDao().observeRecentAudits().map { rows ->
@@ -120,24 +145,12 @@ class ThreatRepository(
   * most 10,000 items per pass. It never probes or enumerates shared storage outside that grant.
   */
  private fun selectedFolderFiles(): Sequence<SelectedFolderFile> = sequence {
-  if (!StorageAccessPreferences.hasAccess(context)) return@sequence
-  val treeUri = StorageAccessPreferences.selectedTreeUri(context) ?: return@sequence
-  val root = runCatching { DocumentFile.fromTreeUri(context, treeUri) }.getOrNull() ?: return@sequence
-  var visited = 0
-  fun walk(directory: DocumentFile, depth: Int): Sequence<SelectedFolderFile> = sequence {
-   val children = runCatching { directory.listFiles() }.getOrElse { emptyArray() }
-   for (child in children) {
-    if (visited >= maxSafScanFiles) break
-    visited++
-    val label = child.name?.take(250)?.ifBlank { null } ?: context.getString(R.string.unknown_file)
-    if (child.isDirectory && depth < maxSafDirectoryDepth) {
-     yieldAll(walk(child, depth + 1))
-    } else if (child.isFile && child.canRead()) {
-     yield(SelectedFolderFile(child.uri, label))
-    }
-   }
+  var count = 0
+  for (file in com.vibesync.antivirus.core.observer.SafTreeWalker.files(context,
+      StorageAccessPreferences.accessibleTreeUris(context))) {
+   if (++count > maxSafScanFiles) break
+   yield(SelectedFolderFile(file.uri, file.name?.take(250) ?: context.getString(R.string.unknown_file)))
   }
-  yieldAll(walk(root, 0))
  }
 
  private fun encryptPrivateText(value: String?, purpose: String): String? =
@@ -278,3 +291,4 @@ suspend fun importOfflineDefinitions(uri: Uri): String = withContext(Dispatchers
  }
  suspend fun deepScan(): List<ScanResult> = scanFull()
 }
+
