@@ -27,7 +27,7 @@ fun GlassCard(
         shape = SecurityTokens.cardShape,
         color = MaterialTheme.colorScheme.surface.copy(alpha = SecurityTokens.glassSurfaceAlpha),
         contentColor = MaterialTheme.colorScheme.onSurface,
-        border = BorderStroke(1.dp, SecurityTokens.glassBorder.copy(alpha = SecurityTokens.glassBorderAlpha)),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = SecurityTokens.glassBorderAlpha)),
         tonalElevation = SecurityTokens.cardElevation,
         shadowElevation = SecurityTokens.cardElevation
     ) {

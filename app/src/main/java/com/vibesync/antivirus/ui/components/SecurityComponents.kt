@@ -161,14 +161,14 @@ fun SecurityStatusCard(status: String, description: String, lastScanLabel: Strin
                 }
             }
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
-                StatusChip(if (hasScanned) threatCount.toString() + " confirmed matches" else "No scan yet",
+                StatusChip(if (hasScanned) stringResource(R.string.ui_threats_found, threatCount) else stringResource(R.string.history_empty),
                     if (threatCount > 0) StatusKind.DANGER else StatusKind.NEUTRAL, Modifier.weight(1f))
-                StatusChip(signatureCount.toString() + " local definitions", if (signatureCount > 0) StatusKind.ACTIVE else StatusKind.WARNING, Modifier.weight(1f))
+                StatusChip(stringResource(R.string.threat_feed_active_count, signatureCount), if (signatureCount > 0) StatusKind.ACTIVE else StatusKind.WARNING, Modifier.weight(1f))
             }
             Button(onClick = onScan, modifier = Modifier.fillMaxWidth(), enabled = !scanning) {
                 Icon(Icons.Default.Security, contentDescription = null)
                 Spacer(Modifier.size(8.dp))
-                Text("Scan now")
+                Text(stringResource(R.string.scan_installed))
             }
         }
     }
@@ -226,7 +226,7 @@ fun ThreatListItem(result: ScanResult, isProtectedSystemApp: Boolean, showUninst
                     }
                 }
                 if (showQuarantine) {
-                    OutlinedButton(onClick = onQuarantine, modifier = Modifier.weight(1f)) { Text("Review / quarantine") }
+                    OutlinedButton(onClick = onQuarantine, modifier = Modifier.weight(1f)) { Text(stringResource(R.string.quarantine_confirm_action)) }
                 }
             }
         }

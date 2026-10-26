@@ -29,7 +29,7 @@ class PackageInstallReceiver : BroadcastReceiver() {
   if (intent.action != Intent.ACTION_PACKAGE_ADDED && intent.action != Intent.ACTION_PACKAGE_REPLACED) return
   val appContext=context.applicationContext
   val packageName=intent.data?.schemeSpecificPart?.takeIf { it.isNotBlank() } ?: return
-  Log.d("SafeMobileScan", "New package installed: $packageName")
+  Log.d("SafeMobileScan", "Package install broadcast detected: package=$packageName action=" + intent.action)
   if (!appContext.getSharedPreferences(SafeMobileApp.PRIVACY_PREFS,Context.MODE_PRIVATE).getBoolean(SafeMobileApp.PRIVACY_ACKNOWLEDGED,false)) {
    Log.d("SafeMobileScan", "Post-install scan skipped: privacy disclosure not acknowledged.")
    return
@@ -75,7 +75,9 @@ class PackageInstallReceiver : BroadcastReceiver() {
       Data.Builder().putString(MultiLayerScanWorker.KEY_PACKAGE_NAME,packageName)
        .putString(MultiLayerScanWorker.KEY_EVENT_ID,eventId).build()
      ).addTag("post_install_scan").build()
+     Log.d("SafeMobileScan", "Post-install scan starting: enqueue package=$packageName event=$eventId")
      WorkManager.getInstance(appContext).enqueue(request)
+     Log.d("SafeMobileScan", "Post-install scan queued: package=$packageName event=$eventId")
     } catch (error: Exception) {
      Log.e("SafeMobileScan", "Unable to queue post-install scan: $packageName", error)
     } finally { pending.finish(); scope.cancel() }

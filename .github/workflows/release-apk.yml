@@ -59,6 +59,16 @@ jobs:
       - name: Validate version code against tagged releases
         run: python3 scripts/check_version_code.py
 
+      - name: Validate translated resources and offline font provenance
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/check_locale_completeness.py
+          test "$(git hash-object app/src/main/res/font/dm_sans_regular.ttf)" = 9b1d3099a7b431b026c597c5b41be79a155adc62
+          test "$(git hash-object app/src/main/res/font/dm_sans_medium.ttf)" = 39ddfe4c3612291a39c17dced309093f7241fc9c
+          test "$(git hash-object app/src/main/res/font/dm_sans_bold.ttf)" = db8d71a1c74e4bfdd2c6360f55b48c4f25f626ff
+          test "$(git hash-object docs/licenses/DM_SANS_OFL.txt)" = 4430b85ac62998e2edb914360f9ebdfe43f4deaa
+
       - name: Test bundled YARA rules before production build
         run: ./gradlew --no-daemon testOfflineDebugUnitTest
 
@@ -129,6 +139,11 @@ jobs:
           Built from commit ${GITHUB_SHA}.
           Includes the Phase B bundled on-device Kotlin YARA-compatible DEX scanner, adapted MIT-licensed rules, Detection Capabilities ACTIVE (LIMITED) status, and scan-rule match reporting.
           The YARA engine supports only a bounded subset of the YARA language; findings are advisory SUSPICIOUS indicators, not definitive malware verdicts.
+          v1.0.9 hardening: exclude flagged core system and Oppo/ColorOS packages from Device Posture review; show third-party installed apps only.
+          Fix post-install scan delivery while SafeMobile runs using a runtime-registered PACKAGE_ADDED receiver; offer Android 13+ notification permission and settings recovery. Android/OEM limits still apply when the app is force-stopped.
+          Improve Quarantine Vault confirmation sequencing and error handling: dismiss before asynchronous deletion, preserve Room records if file deletion fails.
+          Full translated resource coverage for Kannada and French, localized scan progress and sentinel/dashboard strings, system-locale TTS wording; 22 language resources retain Android fallback where translations are unavailable.
+          Bundles pinned SIL OFL 1.1 DM Sans Regular, Medium and Bold for modern Latin typography with platform fallback for other scripts.
           Also includes scan-completion feedback, a transparent configuration score, cyan glass styling, and recursive multi-folder SAF monitoring.
           Optional harmless siren fixture: first import siren-test-definitions.json in Scan > Import definitions, then copy SafeMobile-Siren-Test.apk into a monitored folder or install it to test the post-install receiver. The test APK contains no executable code.
           Android 11+ blocks the main Download folder in SAF; select a subfolder or WhatsApp Documents. Skip remains available.

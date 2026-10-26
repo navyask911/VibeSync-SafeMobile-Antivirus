@@ -61,6 +61,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -108,11 +109,14 @@ import java.io.File
 import java.text.DateFormat
 import java.util.Date
 import kotlinx.coroutines.launch
-@Composable fun SafeMobileTheme(content: @Composable () -> Unit) {
- com.vibesync.antivirus.ui.theme.SafeMobileMaterialTheme(content)
-}
+@Composable fun SafeMobileTheme(
+ theme: com.vibesync.antivirus.ui.theme.AppTheme = com.vibesync.antivirus.ui.theme.AppTheme.MIDNIGHT,
+ content: @Composable () -> Unit
+) { com.vibesync.antivirus.ui.theme.SafeMobileMaterialTheme(theme = theme, content = content) }
 @Composable fun SafeMobileScreen(
  repository:ThreatRepository,
+  appTheme: com.vibesync.antivirus.ui.theme.AppTheme = com.vibesync.antivirus.ui.theme.AppTheme.MIDNIGHT,
+  onAppThemeChanged: (com.vibesync.antivirus.ui.theme.AppTheme) -> Unit = {},
  sharedText:String? = null,
  onSharedTextConsumed:() -> Unit = {},
  openQuarantine:Boolean = false,
@@ -192,6 +196,7 @@ import kotlinx.coroutines.launch
  var monitoringRunning by remember(context) { mutableStateOf(isStorageSentinelRunning(context) && hasSharedStorageAccess(context)) }
  var pendingUninstallPackage by remember { mutableStateOf<String?>(null) }
  var showNotificationPermissionPrompt by remember { mutableStateOf(false) }
+  val notificationPermissionPromptKey = "notification_permission_first_prompted"
  var showStoragePermissionPrompt by remember { mutableStateOf(false) }
  var pendingAlertEnable by remember { mutableStateOf(false) }
  var pendingSentinelEnable by remember { mutableStateOf(false) }
@@ -253,7 +258,7 @@ import kotlinx.coroutines.launch
    return@folderResult
   }
   if (StorageAccessPreferences.isStorageRoot(uri)) {
-   Toast.makeText(context, "Android blocks monitoring the storage root. Select Download where allowed, or a subfolder on Android 11+.", Toast.LENGTH_LONG).show()
+   Toast.makeText(context, R.string.ui_storage_root_blocked, Toast.LENGTH_LONG).show()
    pendingSentinelEnable = false
    selectedDestination = "home"
    return@folderResult
@@ -372,6 +377,14 @@ import kotlinx.coroutines.launch
   onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
  }
  LaunchedEffect(onboardingComplete, privacyAccepted) {
+  // Explain and request notifications on the first consented launch on Android 13+.
+  if (onboardingComplete && privacyAccepted && Build.VERSION.SDK_INT >= 33 &&
+      !notificationsGranted && !securityPrefs.getBoolean(notificationPermissionPromptKey, false)) {
+    securityPrefs.edit().putBoolean(notificationPermissionPromptKey, true).apply()
+    // Respect any prior opt-out. The Android permission grant must not enable alerts without consent.
+    pendingAlertEnable = securityPrefs.getBoolean(SafeMobileApp.KEY_SECURITY_ALERTS_ENABLED, false)
+    showNotificationPermissionPrompt = true
+  }
   if (privacyAccepted) postureVm.refresh()
   if (onboardingComplete && privacyAccepted &&
       !onboardingPrefs.getBoolean(OnboardingPrefs.FIRST_SCAN_REQUESTED, false)) {
@@ -485,7 +498,21 @@ import kotlinx.coroutines.launch
       }
      }
     }
-    if (selectedDestination == "home" || selectedDestination == "scan") {
+    if (privacyAccepted && !notificationsGranted && Build.VERSION.SDK_INT >= 33) {
+       Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer)) {
+         Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+           Text(stringResource(R.string.ui_notifications_denied), color = MaterialTheme.colorScheme.onErrorContainer)
+           OutlinedButton(onClick = {
+             val settings = Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                 Uri.parse("package:" + context.packageName))
+             runCatching { context.startActivity(settings) }.onFailure {
+               Toast.makeText(context, R.string.ui_notifications_settings_unavailable, Toast.LENGTH_LONG).show()
+             }
+           }) { Text(stringResource(R.string.ui_enable_notifications_settings)) }
+         }
+       }
+     }
+     if (selectedDestination == "home" || selectedDestination == "scan") {
      if (selectedDestination == "home") {
       if (!fullScreenAlertsGranted) FullScreenAlertPermissionCard(onOpenSettings = {
        runCatching { FullScreenAlertAccess.settingsIntent(context)?.let(context::startActivity) }
@@ -726,7 +753,7 @@ import kotlinx.coroutines.launch
           text=runCatching { quarantineManager.displayName(file) }.getOrDefault(file.name),
           style=MaterialTheme.typography.titleSmall,fontWeight=FontWeight.SemiBold,color=MaterialTheme.colorScheme.onSurface
          )
-         Text(stringResource(R.string.quarantine_item_size,quarantineManager.displaySize(file)),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+         Text(stringResource(R.string.quarantine_item_size,runCatching { quarantineManager.displaySize(file) }.getOrDefault(0L)),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
          if (!quarantineManager.isEncrypted(file)) Text(stringResource(R.string.quarantine_legacy_warning),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.tertiary)
          OutlinedButton(
           onClick={ pendingRestoreFile=file; showRestoreWarning=true },
@@ -752,7 +779,8 @@ import kotlinx.coroutines.launch
       strictMode = strictMode,
       securityAlertsEnabled = securityAlertsEnabled,
       onSecurityAlertsChanged = changeSecurityAlerts,
-      onToggleProtection = toggleProtection, onStrictModeChanged = updateStrictMode
+      onToggleProtection = toggleProtection, onStrictModeChanged = updateStrictMode,
+       appTheme = appTheme, onAppThemeChanged = onAppThemeChanged
      )
     }
     if (selectedDestination == "capabilities") {
@@ -827,7 +855,7 @@ import kotlinx.coroutines.launch
    onConfirm = {
     // Dismiss synchronously before starting asynchronous file/Room work.
     pendingDeleteFile = null
-    vm.deleteQuarantinedFile(file)
+     uiScope.launch { withFrameNanos { }; vm.deleteQuarantinedFile(file) }
    }
   )
  }
@@ -870,14 +898,14 @@ pendingQuarantine?.let { flagged ->
   if (showStoragePermissionPrompt) AlertDialog(
    onDismissRequest = { showStoragePermissionPrompt = false; pendingSentinelEnable = false; selectedDestination = "home" },
    title = { Text(stringResource(R.string.setup_sentinel_title)) },
-   text = { Text("Choose the folder you want monitored. Android 11+ blocks the main Download folder and storage root; a Download subfolder or WhatsApp Documents can be granted. Only the selected tree is scanned. You can choose Not now and continue.") },
+   text = { Text(stringResource(R.string.ui_folder_picker_explanation)) },
    confirmButton = {
     TextButton(onClick = {
      showStoragePermissionPrompt = false
      runCatching { storageTreeLauncher.launch(StorageAccessPreferences.pickerIntent(pendingFolderRole)) }
       .onFailure {
        pendingSentinelEnable = false; selectedDestination = "home"
-       Toast.makeText(context, "The folder picker is unavailable. Limited protection remains available.", Toast.LENGTH_LONG).show()
+       Toast.makeText(context, R.string.ui_folder_picker_unavailable, Toast.LENGTH_LONG).show()
       }
     }) { Text(stringResource(R.string.setup_allow_storage)) }
    },
@@ -892,21 +920,21 @@ pendingQuarantine?.let { flagged ->
   )
   if (showPlayProtectDialog) AlertDialog(
   onDismissRequest = { showPlayProtectDialog = false },
-  title = { Text("Check Play Protect") },
+  title = { Text(stringResource(R.string.ui_play_protect_title)) },
   text = { Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-   Text("In Google Play, open your profile > Play Protect > Settings. This build cannot verify that status automatically. Your reported status is used for the score for 24 hours.")
+   Text(stringResource(R.string.ui_play_protect_description))
    TextButton(onClick = {
     runCatching {
      val intent = context.packageManager.getLaunchIntentForPackage("com.android.vending")
       ?: throw ActivityNotFoundException()
      context.startActivity(intent)
-    }.onFailure { Toast.makeText(context, "Google Play is unavailable on this device.", Toast.LENGTH_LONG).show() }
-   }) { Text("Open Google Play") }
+    }.onFailure { Toast.makeText(context, R.string.ui_google_play_unavailable, Toast.LENGTH_LONG).show() }
+   }) { Text(stringResource(R.string.ui_open_google_play)) }
   } },
-  confirmButton = { TextButton(onClick = { vm.reportPlayProtect(true); showPlayProtectDialog = false }) { Text("I checked: On") } },
+  confirmButton = { TextButton(onClick = { vm.reportPlayProtect(true); showPlayProtectDialog = false }) { Text(stringResource(R.string.ui_checked_on)) } },
   dismissButton = { Row {
-   TextButton(onClick = { vm.reportPlayProtect(false); showPlayProtectDialog = false }) { Text("I checked: Off") }
-   TextButton(onClick = { showPlayProtectDialog = false }) { Text("Not now") }
+   TextButton(onClick = { vm.reportPlayProtect(false); showPlayProtectDialog = false }) { Text(stringResource(R.string.ui_checked_off)) }
+   TextButton(onClick = { showPlayProtectDialog = false }) { Text(stringResource(R.string.ui_not_now)) }
   } }
  )
  if(showPrivacyDisclosure) AlertDialog(

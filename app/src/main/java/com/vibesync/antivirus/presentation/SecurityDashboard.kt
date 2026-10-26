@@ -46,27 +46,27 @@ internal fun SecurityDashboard(assessment: DeviceSecurityAssessment?, onCheckPla
                     }
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(if (assessment == null) "—" else score.toString(), style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.Bold)
-                        Text("/ 100", style = MaterialTheme.typography.labelMedium)
+                        Text(stringResource(R.string.ui_score_out_of_100), style = MaterialTheme.typography.labelMedium)
                     }
                 }
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Text("Device Security Score", style = MaterialTheme.typography.titleLarge)
-                    Text(if (assessment == null) "Checking device protection…" else
-                        "Configuration score · ${4 - assessment.unknownChecks}/4 checks available",
+                    Text(stringResource(R.string.ui_score_title), style = MaterialTheme.typography.titleLarge)
+                    Text(if (assessment == null) stringResource(R.string.ui_score_checking) else
+                        stringResource(R.string.ui_score_checks, 4 - assessment.unknownChecks, 4),
                         style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
             if (assessment != null) {
                 val signals = assessment.signals
-                ScoreRow("Play Protect (reported)", when(signals.playProtectEnabled) { true -> "On"; false -> "Off · −20"; null -> "Not verified" })
-                ScoreRow("Threat database", if (assessment.databaseStale) "Missing or older than 24h · −10" else "Updated within 24h")
-                ScoreRow("Non-system accessibility apps", signals.nonSystemAccessibilityApps?.let { "$it enabled" + if(it > 0) " · −20" else "" } ?: "Not available")
-                ScoreRow("Non-system device administrators", signals.nonSystemDeviceAdmins?.let { "$it enabled" + if(it > 0) " · −20" else "" } ?: "Not available")
-                Text("Starts at 100; each issue is deducted once. Unknown checks do not imply protection. Enabled accessibility and admin apps may be legitimate—review them before making changes.",
+                ScoreRow(stringResource(R.string.ui_score_play_protect), when(signals.playProtectEnabled) { true -> stringResource(R.string.ui_on); false -> stringResource(R.string.ui_off_20); null -> stringResource(R.string.ui_not_verified) })
+                ScoreRow(stringResource(R.string.ui_score_database), if (assessment.databaseStale) stringResource(R.string.ui_stale_10) else stringResource(R.string.ui_updated_24))
+                ScoreRow(stringResource(R.string.ui_score_accessibility), signals.nonSystemAccessibilityApps?.let { stringResource(R.string.ui_enabled_count, it) + if(it > 0) stringResource(R.string.ui_penalty_20) else "" } ?: stringResource(R.string.ui_unavailable))
+                ScoreRow(stringResource(R.string.ui_score_admin), signals.nonSystemDeviceAdmins?.let { stringResource(R.string.ui_enabled_count, it) + if(it > 0) stringResource(R.string.ui_penalty_20) else "" } ?: stringResource(R.string.ui_unavailable))
+                Text(stringResource(R.string.ui_score_explanation),
                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    TextButton(onClick = onCheckPlayProtect) { Text("Check Play Protect") }
-                    if (assessment.databaseStale) TextButton(onClick = onSync) { Text("Update definitions") }
+                    TextButton(onClick = onCheckPlayProtect) { Text(stringResource(R.string.ui_check_play_protect)) }
+                    if (assessment.databaseStale) TextButton(onClick = onSync) { Text(stringResource(R.string.ui_update_definitions)) }
                 }
             }
         }
@@ -90,26 +90,26 @@ internal fun ScanFeedbackCard(state: SafeMobileUiState, onResults: () -> Unit, o
             if (state.isScanning) {
                 val progress = if (state.totalItems > 0) (state.processedItems.toFloat() / state.totalItems).coerceIn(0f, 1f) else null
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                    ScanProgressRing(progress, true, "Scan in progress", size = 96.dp)
+                    ScanProgressRing(progress, true, stringResource(R.string.ui_scanning_progress), size = 96.dp)
                     Column(Modifier.weight(1f)) {
-                        Text("Scanning your device", style = MaterialTheme.typography.titleLarge)
-                        Text(if (state.totalItems > 0) "${state.processedItems} of ${state.totalItems} items checked" else "Preparing app inventory…")
+                        Text(stringResource(R.string.ui_scanning_title), style = MaterialTheme.typography.titleLarge)
+                        Text(if (state.totalItems > 0) stringResource(R.string.ui_items_checked, state.processedItems, state.totalItems) else stringResource(R.string.ui_preparing_inventory))
                     }
                 }
-                TextButton(onClick = onCancel) { Text("Cancel scan") }
+                TextButton(onClick = onCancel) { Text(stringResource(R.string.ui_cancel_scan)) }
             } else if (summary != null) {
-                Text("Scan Complete", style = MaterialTheme.typography.headlineSmall,
+                Text(stringResource(R.string.scan_complete), style = MaterialTheme.typography.headlineSmall,
                     color = if (summary.threats > 0) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary)
-                Text("Scanned ${summary.appCount} apps · ${summary.fileCount} files.", style = MaterialTheme.typography.titleMedium)
-                Text("${summary.threats} Threats Found", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                Text(stringResource(R.string.ui_scanned_summary, summary.appCount, summary.fileCount), style = MaterialTheme.typography.titleMedium)
+                Text(stringResource(R.string.ui_threats_found, summary.threats), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                 if (summary.review > 0 || summary.unreadable > 0) Text(
-                    "${summary.review} items need review · ${summary.unreadable} could not be scanned.", color = MaterialTheme.colorScheme.tertiary)
-                else if (summary.appCount + summary.fileCount == 0) Text("No readable items were available. Run another scan after selecting files or installing apps.")
+                    stringResource(R.string.ui_review_summary, summary.review, summary.unreadable), color = MaterialTheme.colorScheme.tertiary)
+                else if (summary.appCount + summary.fileCount == 0) Text(stringResource(R.string.ui_no_readable_items))
                 else if (summary.threats == 0) Text(stringResource(R.string.system_app_scan_complete))
-                if (!summary.signedDefinitionsUsed) Text("This scan ran without active signed threat definitions. Update definitions and scan again for full hash coverage.", color = MaterialTheme.colorScheme.tertiary)
+                if (!summary.signedDefinitionsUsed) Text(stringResource(R.string.ui_unsigned_definitions_warning), color = MaterialTheme.colorScheme.tertiary)
                 state.results.filter { it.verdict == ScanVerdict.THREAT }.take(3).forEach { Text("• ${it.displayName}", color = MaterialTheme.colorScheme.error) }
                 Text(DateFormat.getDateTimeInstance().format(Date(summary.completedAt)), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                TextButton(onClick = onResults) { Text("View scan results") }
+                TextButton(onClick = onResults) { Text(stringResource(R.string.ui_view_scan_results)) }
             }
         }
     }

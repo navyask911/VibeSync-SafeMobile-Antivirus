@@ -1,13 +1,15 @@
 package com.vibesync.antivirus.ui.theme
-
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 
-/** One palette for every entry point; system/light preferences cannot override production dark. */
 @Composable
-fun SafeMobileMaterialTheme(content: @Composable () -> Unit) {
+fun SafeMobileMaterialTheme(theme: AppTheme = AppTheme.MIDNIGHT, content: @Composable () -> Unit) {
     MaterialTheme(
-        colorScheme = SafeMobileDarkColorScheme,
+        colorScheme = when (theme) {
+            AppTheme.MIDNIGHT -> SafeMobileDarkColorScheme
+            AppTheme.LIGHT -> SafeMobileLightColorScheme
+            AppTheme.OLED -> SafeMobileOledColorScheme
+        },
         typography = SafeMobileTypography,
         shapes = SafeMobileShapes,
         content = content
