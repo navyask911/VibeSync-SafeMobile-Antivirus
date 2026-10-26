@@ -23,7 +23,8 @@ data class RiskReport(
         "Known-bad certificate fingerprint list: DISABLED (no reviewed local list is bundled).",
         "Requested-permission/API comparison uses bounded DEX string evidence, not complete disassembly; reflection, native code and dynamic loading may evade it.",
         "Packer/entropy indicators are heuristic and may flag legitimate protectors or compressed/encrypted content."
-    )
+    ),
+    val yaraResult: YaraScanResult? = null
 ) {
     init { require(riskScore in 0..100) }
     val isSuspicious: Boolean get() = riskScore >= 45

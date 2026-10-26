@@ -39,7 +39,7 @@ class DeepStaticAnalyzer {
             if (history > 1) signerObservations += "Signer certificate history contains $history certificates; rotation history is informational, not a malware verdict."
         }
         val structure = inspectApk(apk)
-        return analyzeObservations(
+        val report = analyzeObservations(
             requestedPermissions = permissions,
             hasAccessibilityService = accessibility,
             deviceAdminReceivers = deviceAdmin,
@@ -50,6 +50,54 @@ class DeepStaticAnalyzer {
             dexSamples = structure.dexSamples.map { DeepStaticDexSample(it.name, it.bytes) },
             archiveIssues = structure.issues,
             signerObservations = signerObservations
+        )
+        // The APK reader above already bounds DEX entry and total uncompressed sizes.
+        // Scanner callers run on Dispatchers.IO and never execute target code.
+        val scanned = structure.dexSamples.map { sample ->
+            sample.name to BundledYaraEngine.scanDex(sample.bytes)
+        }
+        val matched = scanned.flatMap { it.second.matches }.distinctBy { it.ruleName }
+        val yaraState = when {
+            scanned.any { it.second.state == YaraScanState.MATCHES } -> YaraScanState.MATCHES
+            scanned.any { it.second.state == YaraScanState.DISABLED } -> YaraScanState.DISABLED
+            scanned.any { it.second.state == YaraScanState.NOT_SCANNED } -> YaraScanState.NOT_SCANNED
+            scanned.isEmpty() -> YaraScanState.NOT_SCANNED
+            else -> YaraScanState.NO_MATCH
+        }
+        val yaraResult = YaraScanResult(yaraState, matched,
+            when (yaraState) {
+                YaraScanState.DISABLED -> BundledYaraEngine.capability.reason
+                YaraScanState.NOT_SCANNED -> "No complete valid DEX was checked by bundled rules."
+                else -> null
+            }
+        )
+        val findings = scanned.flatMap { (dexName, result) ->
+            result.matches.map { hit ->
+                RiskFinding(
+                    ruleId = "YARA_" + hit.ruleName,
+                    severity = hit.severity,
+                    confidence = if (hit.severity == RiskSeverity.HIGH) 70 else 50,
+                    evidence = "Limited DEX rule " + hit.ruleName + " (" + hit.mitreTechnique +
+                        ") matched in " + dexName.take(120) + ". String evidence: " +
+                        hit.matchedPatterns.joinToString(", ") + ". Advisory only, not malware proof."
+                )
+            }
+        }.distinctBy { it.ruleId + it.evidence }.take(64)
+        val addedRisk = when {
+            findings.any { it.severity == RiskSeverity.HIGH } -> 65
+            findings.any { it.severity == RiskSeverity.MEDIUM } -> 45
+            findings.any { it.severity == RiskSeverity.LOW } -> 25
+            else -> 0
+        }
+        return report.copy(
+            findings = (report.findings + findings).distinctBy { it.ruleId + it.evidence },
+            riskScore = maxOf(report.riskScore, addedRisk),
+            observations = (report.observations + ("Bounded DEX rules: " + yaraState.name +
+                "; loaded " + BundledYaraEngine.capability.ruleCount +
+                "; matching " + matched.size + ". Encrypted, unloaded or native payloads may evade static checks.")).distinct(),
+            limitations = report.limitations +
+                "Limited DEX rules support only exact ASCII literals and boolean conditions; not full libyara or code emulation.",
+            yaraResult = yaraResult
         )
     }
 

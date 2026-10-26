@@ -3,6 +3,25 @@
 # invoking Gradle. sys.boot_completed alone is not sufficient on slow/headless API 30+ AVDs.
 set -uo pipefail
 
+# reactivecircus/android-emulator-runner invokes 'script' via /usr/bin/sh -c.
+# Its script input must be ONE shell command; keep this Bash EXIT trap here
+# rather than passing a multiline YAML script that the action truncates.
+cleanup_crashpad() {
+  (
+    sleep 30
+    # Linux comm names truncate at 15 bytes, so pgrep -x crashpad_handler
+    # can miss the process. Match the full executable path instead.
+    for attempt in 1 2 3 4 5 6; do
+      if ! pgrep -f '[/]crashpad_handler([[:space:]]|$)' >/dev/null 2>&1; then
+        break
+      fi
+      pkill -9 -f '[/]crashpad_handler([[:space:]]|$)' || true
+      sleep 5
+    done
+  ) || true
+}
+trap cleanup_crashpad EXIT
+
 DEVICE_SERIAL="${ANDROID_SERIAL:-emulator-5554}"
 EXPECTED_API="${EXPECTED_API_LEVEL:-}"
 DIAGNOSTICS_DIR="build/emulator-diagnostics"

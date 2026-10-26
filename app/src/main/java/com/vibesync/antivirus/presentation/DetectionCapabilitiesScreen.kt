@@ -17,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.vibesync.antivirus.R
+import com.vibesync.antivirus.core.engine.BundledYaraEngine
 import com.vibesync.antivirus.core.engine.DetectionCoverage
 import com.vibesync.antivirus.core.engine.DetectionLayerState
 import com.vibesync.antivirus.core.hashdb.HashDatabaseCapability
@@ -25,6 +26,8 @@ import com.vibesync.antivirus.core.hashdb.HashDatabaseCapability
 fun DetectionCapabilitiesScreen(
     hashDatabaseCapability: HashDatabaseCapability,
     initialSyncPending: Boolean,
+    yaraMatchCount: Int = 0,
+    yaraMatchedRuleNames: List<String> = emptyList(),
     onImportYaraRulesForReview: () -> Unit
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -45,7 +48,26 @@ fun DetectionCapabilitiesScreen(
             }
         }
 
-        DetectionCoverage.layers.forEach { layer ->
+        val yaraCapability = BundledYaraEngine.capability
+        Card(modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)) {
+            Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
+                Text("Offline DEX rule signatures", style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold)
+                Text(if (yaraCapability.active) "ACTIVE (LIMITED) · " + yaraCapability.ruleCount + " bundled rules"
+                    else "DISABLED · 0 active rules", style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.primary)
+                Text("Latest scan: " + yaraMatchCount + " matching DEX signatures. Advisory matches are not confirmed malware.",
+                    style = MaterialTheme.typography.bodySmall)
+                if (yaraMatchedRuleNames.isNotEmpty()) {
+                    Text(yaraMatchedRuleNames.take(8).joinToString(", "),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+            }
+        }
+        DetectionCoverage.layers.forEach { declared ->
+            val layer = DetectionCoverage.status(declared.id) ?: declared
             val statusText = when (layer.id) {
                 "signed-multi-hash-database" -> if (hashDatabaseCapability.enabled) stringResource(R.string.detection_capabilities_enabled) else stringResource(R.string.detection_capabilities_disabled)
                 else -> when (layer.state) {

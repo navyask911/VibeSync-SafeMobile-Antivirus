@@ -10,4 +10,4 @@ Certificate rotation history is shown as informational rather than suspicious. T
 
 ## Not bundled
 
-APKiD is dual-licensed GPL/commercial and relies on YARA rules. No compatible closed-source APKiD license was acquired, so no APKiD code/rules were copied. The in-app structural checks are a deliberately small advisory detector and are not represented as equivalent coverage. YARA and TFLite remain disabled.
+APKiD is dual-licensed GPL/commercial and relies on YARA rules. No compatible closed-source APKiD license was acquired, so no APKiD code/rules were copied. The in-app structural checks are a deliberately small advisory detector and are not represented as equivalent coverage. A limited, APK-bundled, MIT-attributed YARA-compatible DEX literal/Boolean subset runs when the pack validates; this is not full YARA. TFLite remains disabled.

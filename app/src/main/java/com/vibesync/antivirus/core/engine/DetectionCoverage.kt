@@ -19,7 +19,7 @@ object DetectionCoverage {
         DetectionLayerStatus("bloom-hash-index", DetectionLayerState.DISABLED,
             "A verified non-empty hypatia_bloom.db and manifest.json are not currently shipped."),
         DetectionLayerStatus("yara-dex-and-assets", DetectionLayerState.DISABLED,
-            "No libyara JNI runtime or curated bundled YARA rules are currently shipped."),
+            "No validated bundled rule pack loaded yet; no DEX rule scan claimed."),
         DetectionLayerStatus("tflite-permission-model", DetectionLayerState.DISABLED,
             "No trained, validated and legally distributable malware_model.tflite is currently shipped."),
         DetectionLayerStatus("offline-signer-attestation", DetectionLayerState.DISABLED,
@@ -27,5 +27,13 @@ object DetectionCoverage {
         DetectionLayerStatus("signed-feed-manifest", DetectionLayerState.CONDITIONAL,
             "Detached Ed25519 manifest verification and rollback protection are implemented; a trusted build-time public key and signed production feed are not configured.")
     )
-    fun status(id: String): DetectionLayerStatus? = layers.firstOrNull { it.id == id }
+    fun status(id: String): DetectionLayerStatus? {
+        if (id == "yara-dex-and-assets") {
+            val cap = BundledYaraEngine.capability
+            return DetectionLayerStatus(id,
+                if (cap.active) DetectionLayerState.ACTIVE_LIMITED else DetectionLayerState.DISABLED,
+                cap.reason)
+        }
+        return layers.firstOrNull { it.id == id }
+    }
 }
