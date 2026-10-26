@@ -30,8 +30,10 @@ does not make an antivirus automatically eligible as an alarm/calling app.
 verification service. It excludes SYSTEM and UPDATED_SYSTEM_APP flags and namespaces
 `com.google.android.*`, `com.android.*`, `com.google.*`, and the existing `android.*` protection.
 Installed-app inventory/single-package scans skip them before local hash classification.
-Post-install source prompts, reviewable results, incident lists with uninstall actions, and the
-Sentinel's installed-result guard use this policy. Existing uninstall guards remain in force.
+Post-install source prompts, reviewable results, incident lists with uninstall actions, Guardian's
+source inventory, the optional permission-review worker, and the Sentinel's installed-result guard
+use this policy. Existing uninstall guards remain in force. Guardian and permission-review counts
+must not reintroduce excluded system packages through their independent package-manager queries.
 
 The dashboard therefore says **System apps protected from review and uninstall**. A clean result
 reports no threats in the items actually checked and explicitly says this scan did not verify
