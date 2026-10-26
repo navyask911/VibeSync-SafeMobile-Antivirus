@@ -41,10 +41,14 @@ Downloaded APKs remain files rather than installed components. A Google-like fil
 namespace is not proof of publisher identity: blindly trusting it would let malware spoof the
 allowlist. Raw downloaded files retain exact-hash detection/quarantine and cannot uninstall or
 disable the installed OS component. No known-malware file hash is rewritten as a safe verdict.
+An installed third-party app can also choose a previously unused Google-like namespace and be
+excluded by the requested broad installed-package rule. This is a detection tradeoff, not proof
+that the publisher is Google. Strong publisher verification would additionally require trusted
+signer certificates; this change does not invent a certificate trust list.
 
 Google Play's Device and Network Abuse policy prohibits unauthorized interference; it does not
 define this namespace list as a security certification or require declaring known malware safe.
-These management exclusions are SafeMobile's conservative product policy, not a claim of Play
+These management exclusions are SafeMobile's explicit product policy, not a claim of Play
 approval or cryptographically verified system integrity.
 
 References:
