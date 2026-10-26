@@ -274,4 +274,9 @@
     <string name="security_alerts_description">위협 감지 또는 격리 시 로컬 알림을 표시합니다. 사용자가 켤 때까지 꺼져 있습니다.</string>
     <string name="security_alerts_enabled">알림 켜짐</string>
     <string name="security_alerts_disabled">알림 꺼짐</string>
+    <string name="voice_malicious_quarantined">경고. 악성 앱을 탐지하여 격리했습니다.</string>
+    <string name="voice_suspicious_quarantined">경고. 의심스러운 파일을 SafeMobile의 암호화된 격리 보관함에 격리했습니다.</string>
+    <string name="voice_alert_malware_detected">경고. 설치 후 악성 앱이 탐지되었습니다. 지금 검토하거나 삭제하세요.</string>
+    <string name="voice_app_review">경고. 새로 설치한 앱의 보안 검토가 필요합니다.</string>
 </resources>
+

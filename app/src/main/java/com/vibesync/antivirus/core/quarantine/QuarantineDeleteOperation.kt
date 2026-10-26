@@ -2,6 +2,7 @@ package com.vibesync.antivirus.core.quarantine
 
 import java.io.File
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.withContext
 
 /** Result of deleting a quarantined file and then removing its local index record. */
@@ -29,6 +30,10 @@ internal class QuarantineDeleteOperation(
             if (!deletePayload(file)) return@withContext QuarantineDeleteOutcome.FAILED
             deleteRoomEntry(file.name)
             QuarantineDeleteOutcome.DELETED
+        } catch (cancelled: CancellationException) {
+            throw cancelled
+        } catch (_: java.io.FileNotFoundException) {
+            QuarantineDeleteOutcome.FILE_NOT_FOUND
         } catch (_: SecurityException) {
             QuarantineDeleteOutcome.ACCESS_DENIED
         } catch (_: Exception) {
@@ -36,3 +41,4 @@ internal class QuarantineDeleteOperation(
         }
     }
 }
+

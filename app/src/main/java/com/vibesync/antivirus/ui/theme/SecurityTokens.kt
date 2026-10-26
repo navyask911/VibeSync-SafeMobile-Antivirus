@@ -7,11 +7,11 @@ import androidx.compose.ui.unit.dp
 
 /** Shared styling primitives for the security dashboard's restrained glass-surface treatment. */
 object SecurityTokens {
-    val glassTint = Color(0xFF16232C)
-    val glassBorder = Color(0xFF00E5FF)
-    const val glassSurfaceAlpha = 0.78f
+    val glassTint = Color(0xFF1E293B)
+    val glassBorder = Color(0xFF06B6D4)
+    const val glassSurfaceAlpha = 0.94f
     const val glassBorderAlpha = 0.22f
-    val cardElevation: Dp = 4.dp
+    val cardElevation: Dp = 0.dp
     val cardShape = RoundedCornerShape(16.dp)
     val chipShape = RoundedCornerShape(50)
 }

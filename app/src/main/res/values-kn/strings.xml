@@ -274,4 +274,9 @@
     <string name="security_alerts_description">ಬೆದರಿಕೆ ಪತ್ತೆಯಾದಾಗ ಅಥವಾ ಕ್ವಾರಂಟೈನ್ ಮಾಡಿದಾಗ ಸ್ಥಳೀಯ ಅಧಿಸೂಚನೆಗಳನ್ನು ತೋರಿಸಿ. ನೀವು ಆನ್ ಮಾಡುವವರೆಗೆ ಆಫ್.</string>
     <string name="security_alerts_enabled">ಎಚ್ಚರಿಕೆಗಳು ಆನ್</string>
     <string name="security_alerts_disabled">ಎಚ್ಚರಿಕೆಗಳು ಆಫ್</string>
+    <string name="voice_malicious_quarantined">ಎಚ್ಚರಿಕೆ. ದುರುದ್ದೇಶಪೂರಿತ ಆ್ಯಪ್ ಪತ್ತೆಯಾಗಿದೆ ಮತ್ತು ಅದನ್ನು ಪ್ರತ್ಯೇಕಿಸಲಾಗಿದೆ.</string>
+    <string name="voice_suspicious_quarantined">ಎಚ್ಚರಿಕೆ. ಅನುಮಾನಾಸ್ಪದ ಫೈಲ್ ಅನ್ನು ಸೇಫ್‌ಮೊಬೈಲ್‌ನ ಎನ್‌ಕ್ರಿಪ್ಟ್ ಮಾಡಿದ ಕ್ವಾರಂಟೈನ್‌ನಲ್ಲಿ ಪ್ರತ್ಯೇಕಿಸಲಾಗಿದೆ.</string>
+    <string name="voice_alert_malware_detected">ಎಚ್ಚರಿಕೆ. ಸ್ಥಾಪನೆಯ ನಂತರ ದುರುದ್ದೇಶಪೂರಿತ ಆ್ಯಪ್ ಪತ್ತೆಯಾಗಿದೆ. ಅದನ್ನು ಈಗ ಪರಿಶೀಲಿಸಿ ಅಥವಾ ಅನ್‌ಇನ್‌ಸ್ಟಾಲ್ ಮಾಡಿ.</string>
+    <string name="voice_app_review">ಎಚ್ಚರಿಕೆ. ಹೊಸದಾಗಿ ಸ್ಥಾಪಿಸಿದ ಆ್ಯಪ್‌ನ ಸುರಕ್ಷತಾ ಪರಿಶೀಲನೆ ಅಗತ್ಯವಿದೆ.</string>
 </resources>
+

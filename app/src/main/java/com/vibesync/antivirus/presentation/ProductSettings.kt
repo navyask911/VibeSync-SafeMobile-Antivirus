@@ -20,7 +20,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
+import com.vibesync.antivirus.ui.components.CyberCard as Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -59,11 +59,6 @@ import com.vibesync.antivirus.data.local.ScanAudit
 import java.text.DateFormat
 import java.util.Date
 import java.util.UUID
-
-internal object AppearancePreferences {
-    const val PREFS_NAME = "safe_mobile_appearance"
-    const val THEME_KEY = "theme_mode"
-}
 
 internal object InstallRayId {
     private const val PREFS_NAME = "safe_mobile_installation"
@@ -311,8 +306,6 @@ internal fun SafeMobileSettingsPanel(
 ) {
     val context = LocalContext.current
     val activity = context as? Activity
-    val themePrefs = remember(context) { context.getSharedPreferences(AppearancePreferences.PREFS_NAME, Context.MODE_PRIVATE) }
-    var themeMode by remember { mutableStateOf(themePrefs.getString(AppearancePreferences.THEME_KEY, "dark") ?: "dark") }
     var languageMenuExpanded by remember { mutableStateOf(false) }
     var localeOverrideTag by remember { mutableStateOf(LocalePreferences.overrideTag(context)) }
     var showAbout by remember { mutableStateOf(false) }
@@ -325,6 +318,7 @@ internal fun SafeMobileSettingsPanel(
     var feedConsentEnabled by remember { mutableStateOf(feedStore.isSyncEnabled()) }
     var feedConfigMessage by remember { mutableStateOf<String?>(null) }
     var showFeedConsentDialog by remember { mutableStateOf(false) }
+    var showFullScreenPrompt by remember { mutableStateOf(false) }
     val voicePrefs = remember(context) { context.getSharedPreferences(SafeMobileApp.SECURITY_PREFS, Context.MODE_PRIVATE) }
     var voiceAlertsEnabled by remember(context) { mutableStateOf(voicePrefs.getBoolean(SafeMobileApp.KEY_VOICE_ALERTS_ENABLED, false)) }
 
@@ -333,35 +327,8 @@ internal fun SafeMobileSettingsPanel(
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text(stringResource(R.string.appearance_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    FilterChip(
-                        modifier = Modifier.fillMaxWidth(),
-                        selected = themeMode == "system",
-                        onClick = {
-                            themeMode = "system"
-                            themePrefs.edit().putString(AppearancePreferences.THEME_KEY, themeMode).apply()
-                        },
-                        label = { Text(stringResource(R.string.theme_system)) }
-                    )
-                    FilterChip(
-                        modifier = Modifier.fillMaxWidth(),
-                        selected = themeMode == "light",
-                        onClick = {
-                            themeMode = "light"
-                            themePrefs.edit().putString(AppearancePreferences.THEME_KEY, themeMode).apply()
-                        },
-                        label = { Text(stringResource(R.string.theme_light)) }
-                    )
-                    FilterChip(
-                        modifier = Modifier.fillMaxWidth(),
-                        selected = themeMode == "dark",
-                        onClick = {
-                            themeMode = "dark"
-                            themePrefs.edit().putString(AppearancePreferences.THEME_KEY, themeMode).apply()
-                        },
-                        label = { Text(stringResource(R.string.theme_dark)) }
-                    )
-                }
+                Text(stringResource(R.string.cyber_dark_appearance),
+                    style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
         OverlayRiskReviewPanel()
@@ -447,12 +414,17 @@ internal fun SafeMobileSettingsPanel(
                     })
                 }
                 Text(stringResource(R.string.security_alerts_title), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
-                Text(stringResource(R.string.security_alerts_description), style = MaterialTheme.typography.bodySmall,
+                Text(stringResource(R.string.incident_alerts_explanation), style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Row(Modifier.fillMaxWidth(), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
                     Text(stringResource(if (securityAlertsEnabled) R.string.security_alerts_enabled else R.string.security_alerts_disabled),
                         modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium)
                     Switch(checked = securityAlertsEnabled, onCheckedChange = { onSecurityAlertsChanged?.invoke(it) })
+                }
+                if (securityAlertsEnabled && Build.VERSION.SDK_INT >= 34) {
+                    OutlinedButton(onClick = { showFullScreenPrompt = true }, modifier = Modifier.fillMaxWidth()) {
+                        Text(stringResource(R.string.incident_full_screen_settings))
+                    }
                 }
                 Text(stringResource(R.string.strict_mode_description), style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -542,13 +514,29 @@ internal fun SafeMobileSettingsPanel(
                 TextButton(onClick = { showAbout = true }) { Text(stringResource(R.string.about_legal)) }
             }
         }
-        Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant), shape = RoundedCornerShape(18.dp)) {
+        Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant), shape = RoundedCornerShape(16.dp)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(stringResource(R.string.family_dedication_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
                 Text(stringResource(R.string.family_dedication), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
     }
+
+    if (showFullScreenPrompt && Build.VERSION.SDK_INT >= 34) AlertDialog(
+        onDismissRequest = { showFullScreenPrompt = false },
+        title = { Text(stringResource(R.string.incident_full_screen_settings)) },
+        text = { Text(stringResource(R.string.incident_full_screen_explanation)) },
+        confirmButton = { TextButton(onClick = {
+            showFullScreenPrompt = false
+            runCatching {
+                context.startActivity(android.content.Intent(android.provider.Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT,
+                    android.net.Uri.fromParts("package", context.packageName, null)))
+            }.onFailure { Toast.makeText(context, R.string.uninstall_no_settings, Toast.LENGTH_LONG).show() }
+        }) { Text(stringResource(R.string.incident_open_settings)) } },
+        dismissButton = { TextButton(onClick = { showFullScreenPrompt = false }) {
+            Text(stringResource(R.string.setup_notifications_not_now))
+        } }
+    )
 
     if (showFeedConsentDialog) AlertDialog(
         onDismissRequest = { showFeedConsentDialog = false },
@@ -601,3 +589,4 @@ internal fun SafeMobileSettingsPanel(
         confirmButton = { TextButton(onClick = { showAbout = false }) { Text(stringResource(R.string.close)) } }
     )
 }
+

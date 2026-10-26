@@ -7,6 +7,19 @@ import java.io.File
 
 class QuarantineFileDeletionTest {
     @Test
+    fun disappearingLockedAndUnexpectedStorageFailuresDoNotEscape() {
+        for (error in listOf(java.io.FileNotFoundException(), java.io.IOException("locked"), IllegalStateException("storage"))) {
+            assertFalse(QuarantineFileDeletion.delete(File("payload.smq"), exists = { true }, delete = { throw error }))
+            assertFalse(QuarantineFileDeletion.delete(File("payload.smq"), exists = { throw error }))
+        }
+    }
+
+    @Test
+    fun fileSystemRefusalIsReturnedAsFailure() {
+        assertFalse(QuarantineFileDeletion.delete(File("locked.smq"), exists = { true }, delete = { false }))
+    }
+
+    @Test
     fun deleteSucceedsForPresentPayload() {
         var deleteCalled = false
         val result = QuarantineFileDeletion.delete(
@@ -40,3 +53,4 @@ class QuarantineFileDeletionTest {
         assertFalse(result)
     }
 }
+

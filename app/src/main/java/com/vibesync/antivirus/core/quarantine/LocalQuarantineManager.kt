@@ -280,7 +280,9 @@ class LocalQuarantineManager(context: Context, private val hashCalculator: HashC
    checkedQuarantineFile(file)
   } catch (_: SecurityException) {
    return false
-  } catch (_: java.io.IOException) {
+  } catch (_: java.io.FileNotFoundException) {
+   return false
+  } catch (_: Exception) {
    return false
   }
   if (!QuarantineFileDeletion.delete(safe)) return false
@@ -412,3 +414,4 @@ class LocalQuarantineManager(context: Context, private val hashCalculator: HashC
   private val LEGACY_PREFIX = Regex("^\\d+-[0-9a-fA-F-]{36}-")
  }
 }
+

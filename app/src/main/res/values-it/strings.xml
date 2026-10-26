@@ -275,4 +275,9 @@
     <string name="security_alerts_description">Mostra notifiche locali quando viene rilevata o messa in quarantena una minaccia. Disattivata finché non la attivi.</string>
     <string name="security_alerts_enabled">Avvisi attivi</string>
     <string name="security_alerts_disabled">Avvisi disattivi</string>
+    <string name="voice_malicious_quarantined">Attenzione. È stata rilevata un’app dannosa ed è stata messa in quarantena.</string>
+    <string name="voice_suspicious_quarantined">Attenzione. Un file sospetto è stato isolato nella quarantena crittografata di SafeMobile.</string>
+    <string name="voice_alert_malware_detected">Attenzione. È stata rilevata un’app dannosa dopo l’installazione. Controllala o disinstallala ora.</string>
+    <string name="voice_app_review">Attenzione. Un’app appena installata richiede un controllo di sicurezza.</string>
 </resources>
+

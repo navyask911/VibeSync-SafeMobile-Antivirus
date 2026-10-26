@@ -7,5 +7,6 @@ import androidx.compose.ui.unit.dp
 val SafeMobileShapes = Shapes(
     small = RoundedCornerShape(8.dp),
     medium = RoundedCornerShape(16.dp),
-    large = RoundedCornerShape(20.dp)
+    large = RoundedCornerShape(16.dp)
 )
+

@@ -9,6 +9,37 @@ import org.junit.Test
 
 class QuarantineDeleteOperationTest {
     @Test
+    fun lockedPayloadNeverDeletesItsRoomRecord() = runBlocking {
+        var rowDeleted = false
+        val operation = QuarantineDeleteOperation(deletePayload = { false },
+            deleteRoomEntry = { rowDeleted = true }, exists = { true })
+        assertEquals(QuarantineDeleteOutcome.FAILED, operation.delete(File("locked.smq")))
+        assertFalse(rowDeleted)
+    }
+
+    @Test
+    fun disappearingFileIsReportedWithoutDeletingTheRoomRecord() = runBlocking {
+        var rowDeleted = false
+        val operation = QuarantineDeleteOperation(deletePayload = { throw java.io.FileNotFoundException() },
+            deleteRoomEntry = { rowDeleted = true }, exists = { true })
+        assertEquals(QuarantineDeleteOutcome.FILE_NOT_FOUND, operation.delete(File("gone.smq")))
+        assertFalse(rowDeleted)
+    }
+
+    @Test
+    fun roomFailureIsReportedAndCancellationRemainsCancellation() = runBlocking {
+        val operation = QuarantineDeleteOperation(deletePayload = { true },
+            deleteRoomEntry = { throw IllegalStateException("Room unavailable") }, exists = { true })
+        assertEquals(QuarantineDeleteOutcome.FAILED, operation.delete(File("payload.smq")))
+        val cancelled = QuarantineDeleteOperation(deletePayload = { true },
+            deleteRoomEntry = { throw kotlinx.coroutines.CancellationException("cancelled") }, exists = { true })
+        try {
+            cancelled.delete(File("payload.smq"))
+            org.junit.Assert.fail("Cancellation must propagate")
+        } catch (_: kotlinx.coroutines.CancellationException) { }
+    }
+
+    @Test
     fun deleteSuccessRemovesFileAndRoomRecord() = runBlocking {
         val file = File.createTempFile("quarantine-delete", ".encrypted")
         file.writeText("encrypted-test-content")
@@ -57,3 +88,4 @@ class QuarantineDeleteOperationTest {
         }
     }
 }
+

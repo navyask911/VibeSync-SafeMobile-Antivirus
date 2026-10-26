@@ -11,7 +11,7 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
+import com.vibesync.antivirus.ui.components.CyberCard as Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -39,11 +39,8 @@ import java.util.Date
 @Composable
 internal fun EnterpriseProtectionCard(manager: DeviceOwnerManager, modifier: Modifier = Modifier) {
  val owner by manager.isDeviceOwner.collectAsState()
- var enabled by remember { mutableStateOf(manager.isAutomaticResponseConfigured()) }
  var guide by remember { mutableStateOf(false) }
- var confirm by remember { mutableStateOf(false) }
- LaunchedEffect(Unit) { manager.refreshState(); enabled = manager.isAutomaticResponseConfigured() }
- LaunchedEffect(owner) { enabled = manager.isAutomaticResponseConfigured() }
+ LaunchedEffect(Unit) { manager.refreshState() }
  Card(modifier.fillMaxWidth(),shape=RoundedCornerShape(16.dp),colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant)) {
   Column(Modifier.padding(14.dp),verticalArrangement=Arrangement.spacedBy(8.dp)) {
    Text(stringResource(R.string.enterprise_title),style=MaterialTheme.typography.titleMedium,fontWeight=FontWeight.SemiBold)
@@ -54,25 +51,15 @@ internal fun EnterpriseProtectionCard(manager: DeviceOwnerManager, modifier: Mod
      style=MaterialTheme.typography.labelLarge,color=if(owner) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.tertiary)
    }
    Text(stringResource(R.string.enterprise_body),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
-   if(owner) Row(verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(8.dp)) {
-    Column(Modifier.weight(1f),verticalArrangement=Arrangement.spacedBy(4.dp)) {
-     Text(stringResource(R.string.enterprise_auto_response),style=MaterialTheme.typography.labelLarge)
-     Text(stringResource(R.string.enterprise_auto_response_body),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
-    }
-    Switch(checked=enabled,onCheckedChange={ value ->
-     if(value) confirm=true else { manager.setAutomaticResponseEnabled(false); enabled=false }
-    })
-   }
+   Text(stringResource(R.string.incident_user_confirmation), style=MaterialTheme.typography.bodySmall,
+    color=MaterialTheme.colorScheme.onSurfaceVariant)
    OutlinedButton(onClick={guide=true},modifier=Modifier.fillMaxWidth()) { Text(stringResource(R.string.enterprise_setup_guide)) }
   }
  }
  if(guide) AlertDialog(onDismissRequest={guide=false},title={Text(stringResource(R.string.enterprise_setup_guide))},
   text={Text(stringResource(R.string.enterprise_setup_instructions))},
   confirmButton={TextButton(onClick={guide=false}) { Text(stringResource(R.string.close)) }})
- if(confirm) AlertDialog(onDismissRequest={confirm=false},title={Text(stringResource(R.string.enterprise_auto_response_title))},
-  text={Text(stringResource(R.string.enterprise_response_warning))},
-  confirmButton={Button(onClick={enabled=manager.setAutomaticResponseEnabled(true);confirm=false}) { Text(stringResource(R.string.enterprise_enable_response)) }},
-  dismissButton={TextButton(onClick={confirm=false}) { Text(stringResource(R.string.close)) }})
+
 }
 
 @Composable
@@ -93,7 +80,7 @@ internal fun InstallSourceAuditPanel(
   } else rows.take(30).forEach { event ->
    val play=event.status.startsWith("PLAY_STORE")
    val external=event.status.startsWith("EXTERNAL")
-   Card(Modifier.fillMaxWidth(),shape=RoundedCornerShape(14.dp),colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surface)) {
+   Card(Modifier.fillMaxWidth(),shape=RoundedCornerShape(16.dp),colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surface)) {
     Column(Modifier.padding(12.dp),verticalArrangement=Arrangement.spacedBy(5.dp)) {
      Text(event.sourcePackage ?: stringResource(R.string.unknown_file),style=MaterialTheme.typography.titleSmall,fontWeight=FontWeight.SemiBold)
      Text(stringResource(if(play) R.string.install_source_play_badge else if(external) R.string.install_source_external_badge else R.string.install_source_unknown_badge),
@@ -122,7 +109,7 @@ internal fun EnterpriseOnboardingNotice(manager: DeviceOwnerManager) {
  LaunchedEffect(Unit) { manager.refreshState() }
  Card(
   modifier=Modifier.fillMaxWidth(),
-  shape=RoundedCornerShape(14.dp),
+  shape=RoundedCornerShape(16.dp),
   colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant)
  ) {
   Column(Modifier.padding(12.dp),verticalArrangement=Arrangement.spacedBy(5.dp)) {
@@ -141,3 +128,4 @@ internal fun EnterpriseOnboardingNotice(manager: DeviceOwnerManager) {
   text={Text(stringResource(R.string.enterprise_setup_instructions))},
   confirmButton={TextButton(onClick={guide=false}) { Text(stringResource(R.string.close)) }})
 }
+

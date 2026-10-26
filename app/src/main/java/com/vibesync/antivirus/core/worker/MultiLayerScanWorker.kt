@@ -10,7 +10,6 @@ import com.vibesync.antivirus.core.engine.PermissionModelScorer
 import com.vibesync.antivirus.core.engine.ScanVerdict
 import com.vibesync.antivirus.core.engine.StaticAnalyzer
 import com.vibesync.antivirus.core.engine.ThreatVerdict
-import com.vibesync.antivirus.core.security.DeviceOwnerManager
 import com.vibesync.antivirus.core.observer.SecurityAlertNotifier
 import com.vibesync.antivirus.core.security.IntegrityChecker
 import com.vibesync.antivirus.data.local.SecurityIncidentEntity
@@ -26,6 +25,8 @@ class MultiLayerScanWorker(context: Context,params: WorkerParameters) : Coroutin
   val app = applicationContext as? SafeMobileApp ?: return@withContext Result.failure()
   val dao = app.database.securityIncidentDao()
   try {
+   // A package broadcast may cold-start the process before Application's async restore finishes.
+   app.hashDatabaseManager.restoreActiveDatabase()
    val scan = app.repository.scanInstalledPackage(name)
    if (scan == null) {
     Log.d("SafeMobileScan", "Final scan result: package=$name unavailable")
@@ -33,6 +34,8 @@ class MultiLayerScanWorker(context: Context,params: WorkerParameters) : Coroutin
     if (prior != null) dao.updateAssessment(eventId,prior.sha256Hash,prior.reason + "\nPackage wasn't visible at scan time.",prior.actionTaken,prior.status + "|SCAN_UNAVAILABLE")
     return@withContext Result.success()
    }
+   // Exact threats must alert even if a later optional heuristic/audit step fails.
+   if (scan.verdict == ScanVerdict.THREAT) SecurityAlertNotifier.notifyMaliciousApp(applicationContext,name,eventId)
    val static = StaticAnalyzer(applicationContext).analyze(name)
    val apk = static?.apkPath?.let(::File)
    val dex = apk?.let { DexPatternScanner().scan(it) }.orEmpty()
@@ -68,11 +71,8 @@ class MultiLayerScanWorker(context: Context,params: WorkerParameters) : Coroutin
    val verdict = ThreatVerdict(name,score,reasons.toList().take(40),exact)
    val previous = dao.findById(eventId)
    var action = previous?.actionTaken ?: "POST_INSTALL_SCAN_COMPLETED"
-   val owner = DeviceOwnerManager(applicationContext)
-   if (verdict.isMalware && score > DeviceOwnerManager.MIN_SCORE && owner.isAutomaticResponseEnabled()) {
-    if (owner.hideConfirmedThreat(name,verdict)) action += "; DEVICE_OWNER_HIDDEN"
-    if (owner.requestConfirmedThreatUninstall(name,verdict,eventId)) action += "; DEVICE_OWNER_UNINSTALL_REQUESTED"
-   } else if (exact) action += "; CONFIRMED_LOCAL_HASH_MATCH"
+   // Consumer incident response always requires a user-confirmed Android uninstall.
+   if (exact) action += "; CONFIRMED_LOCAL_HASH_MATCH"
    else if (score >= 0.45f) action += "; RISK_REVIEW"
    val reason = (previous?.reason.orEmpty() + "\n" + verdict.reasons.joinToString("; ")).trim().take(4000)
    val status = when { exact -> "MALWARE_HASH_MATCH"; score >= 0.45f -> "RISK_REVIEW"; else -> "SCAN_COMPLETE" }
@@ -81,8 +81,7 @@ class MultiLayerScanWorker(context: Context,params: WorkerParameters) : Coroutin
     reason=reason.ifBlank { "Post-install scan completed." },actionTaken=action.take(500),status=status))
    // Installed apps are not silently deleted or falsely described as quarantined; offer Android uninstall confirmation.
    Log.d("SafeMobileScan", "Final scan result: package=$name verdict=$status score=$score exact=$exact")
-   if (exact) SecurityAlertNotifier.notifyMaliciousApp(applicationContext,name,eventId)
-   else if (score >= 0.45f) SecurityAlertNotifier.notifySuspiciousApp(applicationContext,name,eventId)
+   if (!exact && score >= 0.45f) SecurityAlertNotifier.notifySuspiciousApp(applicationContext,name,eventId)
    Result.success()
   } catch (cancelled: CancellationException) { throw cancelled }
   catch (error: Exception) {
@@ -92,3 +91,4 @@ class MultiLayerScanWorker(context: Context,params: WorkerParameters) : Coroutin
  }
  companion object { const val KEY_PACKAGE_NAME = "multi_layer.package_name"; const val KEY_EVENT_ID = "multi_layer.event_id" }
 }
+

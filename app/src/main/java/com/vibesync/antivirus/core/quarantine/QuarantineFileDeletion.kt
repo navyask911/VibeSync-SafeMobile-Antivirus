@@ -12,7 +12,10 @@ internal object QuarantineFileDeletion {
         exists(file) && delete(file)
     } catch (_: SecurityException) {
         false
-    } catch (_: java.io.IOException) {
+    } catch (_: java.io.FileNotFoundException) {
+        false
+    } catch (_: Exception) {
         false
     }
 }
+
