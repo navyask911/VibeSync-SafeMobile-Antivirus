@@ -379,10 +379,10 @@ import kotlinx.coroutines.launch
  LaunchedEffect(onboardingComplete, privacyAccepted) {
   // Explain and request notifications on the first consented launch on Android 13+.
   if (onboardingComplete && privacyAccepted && Build.VERSION.SDK_INT >= 33 &&
-      !notificationsGranted && !securityPrefs.getBoolean(notificationPermissionPromptKey, false) &&
-      !securityPrefs.contains(SafeMobileApp.KEY_SECURITY_ALERTS_ENABLED)) {
+      !notificationsGranted && !securityPrefs.getBoolean(notificationPermissionPromptKey, false)) {
     securityPrefs.edit().putBoolean(notificationPermissionPromptKey, true).apply()
-    pendingAlertEnable = true
+    // Respect any prior opt-out. The Android permission grant must not enable alerts without consent.
+    pendingAlertEnable = securityPrefs.getBoolean(SafeMobileApp.KEY_SECURITY_ALERTS_ENABLED, false)
     showNotificationPermissionPrompt = true
   }
   if (privacyAccepted) postureVm.refresh()

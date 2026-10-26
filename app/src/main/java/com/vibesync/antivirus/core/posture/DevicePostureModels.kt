@@ -28,7 +28,8 @@ data class DevicePostureReport(
 ) {
     val highRiskAppCount: Int get() = findings.filter { it.nonSystemHighRisk }.map { it.packageName }.distinct().size
     fun grants(access: PostureAccess): Set<PostureCapability> = findings.asSequence()
-        .filter { it.access == access && it.state == PostureGrantState.ENABLED && it.systemApp == false &&\n            !TrustedPackageWhitelist.hasProtectedNamespace(it.packageName) }
+        .filter { it.access == access && it.state == PostureGrantState.ENABLED && it.systemApp == false &&
+            !TrustedPackageWhitelist.hasProtectedNamespace(it.packageName) }
         .map { PostureCapability(it.access, it.packageName) }.toSet()
 
     /** Do not erase a previously observed risk just because a later Android read is unavailable. */
