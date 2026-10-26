@@ -9,10 +9,12 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
-import androidx.work.getWorkInfosForUniqueWorkFlow
+import androidx.lifecycle.Observer
 import com.vibesync.antivirus.BuildConfig
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import java.util.concurrent.TimeUnit
 
 object HashDatabaseSyncScheduler {
@@ -50,16 +52,19 @@ object HashDatabaseSyncScheduler {
         )
     }
 
-    fun initialSyncPending(context: Context): Flow<Boolean> =
-        WorkManager.getInstance(context)
-            .getWorkInfosForUniqueWorkFlow(INITIAL_WORK_NAME)
-            .map { workInfos ->
-                workInfos.any {
-                    it.state == WorkInfo.State.ENQUEUED ||
-                        it.state == WorkInfo.State.RUNNING ||
-                        it.state == WorkInfo.State.BLOCKED
-                }
-            }
+    fun initialSyncPending(context: Context): Flow<Boolean> = callbackFlow {
+        val workInfos = WorkManager.getInstance(context)
+            .getWorkInfosForUniqueWorkLiveData(INITIAL_WORK_NAME)
+        val observer = Observer<List<WorkInfo>> { infos ->
+            trySend(infos.orEmpty().any {
+                it.state == WorkInfo.State.ENQUEUED ||
+                    it.state == WorkInfo.State.RUNNING ||
+                    it.state == WorkInfo.State.BLOCKED
+            })
+        }
+        workInfos.observeForever(observer)
+        awaitClose { workInfos.removeObserver(observer) }
+    }.distinctUntilChanged()
 
     private fun networkConstraints() = Constraints.Builder()
         .setRequiredNetworkType(NetworkType.CONNECTED)
