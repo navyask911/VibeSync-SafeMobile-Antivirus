@@ -95,7 +95,8 @@ class DevicePostureIntegrationTest {
         val intents = PostureSettingsLinks.candidates(finding.copy(access = PostureAccess.NOTIFICATION_LISTENER))
         if (Build.VERSION.SDK_INT >= 30) {
             assertEquals(Settings.ACTION_NOTIFICATION_LISTENER_DETAIL_SETTINGS, intents.first().action)
-            assertEquals(finding.componentName, intents.first().getStringExtra(Settings.EXTRA_NOTIFICATION_LISTENER_COMPONENT_NAME))
+            assertEquals(ComponentName.unflattenFromString(finding.componentName!!)?.flattenToString(),
+                intents.first().getStringExtra(Settings.EXTRA_NOTIFICATION_LISTENER_COMPONENT_NAME))
         } else assertEquals(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS, intents.first().action)
     }
 
