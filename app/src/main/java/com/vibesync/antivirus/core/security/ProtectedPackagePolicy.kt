@@ -35,7 +35,7 @@ object ProtectedPackagePolicy {
         val systemFlags = ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP
         return flags and systemFlags == 0 &&
             packageName !in protectedPackages &&
-            protectedPackagePrefixes.none(packageName::startsWith) &&
+            protectedPackagePrefixes.none { prefix -> packageName.startsWith(prefix) } &&
             packageName != ownPackageName
     }
 }
