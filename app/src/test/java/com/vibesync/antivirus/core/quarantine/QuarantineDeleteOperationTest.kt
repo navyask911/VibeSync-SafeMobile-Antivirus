@@ -9,11 +9,11 @@ import org.junit.Test
 
 class QuarantineDeleteOperationTest {
     @Test
-    fun lockedPayloadNeverDeletesItsRoomRecord() = runBlocking {
+    fun failedPayloadDeletionNeverDeletesItsRoomRecord() = runBlocking {
         var rowDeleted = false
         val operation = QuarantineDeleteOperation(deletePayload = { false },
             deleteRoomEntry = { rowDeleted = true }, exists = { true })
-        assertEquals(QuarantineDeleteOutcome.ACCESS_DENIED, operation.delete(File("locked.smq")))
+        assertEquals(QuarantineDeleteOutcome.FAILED, operation.delete(File("locked.smq")))
         assertFalse(rowDeleted)
     }
 
