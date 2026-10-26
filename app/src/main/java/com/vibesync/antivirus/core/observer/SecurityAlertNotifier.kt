@@ -53,6 +53,7 @@ object SecurityAlertNotifier {
     }
 
     fun notifySuspiciousApp(context: Context, packageName: String, eventId: String) {
+        if (!runCatching { SystemPackageGuard.isUserInstalled(context, packageName) }.getOrDefault(false)) return
         show(context, eventId, context.getString(R.string.security_alert_review_title),
             context.getString(R.string.security_alert_review_body), null, R.string.voice_app_review, false)
     }
@@ -92,9 +93,8 @@ object SecurityAlertNotifier {
             .addAction(R.drawable.ic_launcher, app.getString(if (packageName != null)
                 R.string.incident_review_threat else R.string.security_alert_open_vault), content)
             .addAction(0, app.getString(R.string.incident_dismiss), dismiss)
-        val manager = app.getSystemService(NotificationManager::class.java)
         if (confirmed && packageName != null &&
-            (Build.VERSION.SDK_INT < 34 || manager?.canUseFullScreenIntent() == true)) {
+            FullScreenAlertAccess.isGranted(app)) {
             builder.setFullScreenIntent(content, true)
         } else if (confirmed && packageName != null) {
             Log.d(TAG, "Full-screen access unavailable; using heads-up incident notification")

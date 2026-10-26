@@ -7,6 +7,7 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import com.vibesync.antivirus.core.security.ProtectedPackagePolicy
+import com.vibesync.antivirus.core.security.TrustedPackageWhitelist
 
 sealed class PackageGuardResult {
     object Allowed : PackageGuardResult()
@@ -16,7 +17,7 @@ sealed class PackageGuardResult {
 
 object SystemPackageGuard {
     fun isSystemFlags(flags: Int): Boolean =
-        flags and (ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0
+        TrustedPackageWhitelist.hasSystemFlags(flags)
 
     fun evaluateFlags(flags: Int, isActiveDeviceAdmin: Boolean = false): PackageGuardResult =
         when {
@@ -83,3 +84,4 @@ object SystemPackageGuard {
         return packageName
     }
 }
+

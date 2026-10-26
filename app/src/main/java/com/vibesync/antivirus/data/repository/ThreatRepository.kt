@@ -25,6 +25,8 @@ import com.vibesync.antivirus.data.local.ThreatFeedSyncStateEntity
 import com.vibesync.antivirus.core.worker.ThreatFeedSyncScheduler
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.flowOn
+import com.vibesync.antivirus.core.security.TrustedPackageWhitelist
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.currentCoroutineContext
@@ -85,8 +87,19 @@ class ThreatRepository(
      originalPath = row.originalPath?.let { revealPrivateTextSafely(it, "incident-path") },
      reason = revealPrivateTextSafely(row.reason, "incident-reason")
     )
+   }.filter { row ->
+    row.eventKind !in setOf("PACKAGE_INSTALL", "PACKAGE_UPDATED") ||
+     row.sourcePackage?.let(::isEligibleInstalledApp) == true
    }
-  }
+  }.flowOn(Dispatchers.IO)
+
+ /** Raw downloaded files have no installed-package identity and keep exact-hash detection. */
+ suspend fun isReviewableResult(result: ScanResult): Boolean = withContext(Dispatchers.IO) {
+  result.packageName?.let(::isEligibleInstalledApp) ?: true
+ }
+
+ private fun isEligibleInstalledApp(name: String): Boolean =
+  TrustedPackageWhitelist.isEligibleForReview(context, name)
 
  private fun revealPrivateTextSafely(value: String, purpose: String): String =
   runCatching { privateTextStore.revealPrivateText(value, purpose) }

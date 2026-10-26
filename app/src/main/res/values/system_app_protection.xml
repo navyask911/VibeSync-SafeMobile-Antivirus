@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="full_screen_dashboard_warning" translatable="false">Critical Alerts Disabled: Tap to grant permission for full-screen malware warnings.</string>
+    <string name="full_screen_dashboard_fallback" translatable="false">Full-screen access is optional. When Security Alerts are enabled, the five-second siren and high-priority notification still work without this access, subject to Android notification and sound settings.</string>
+    <string name="full_screen_settings_unavailable" translatable="false">Full-screen alert settings could not be opened. You can continue using SafeMobile.</string>
+    <string name="system_app_protection_badge" translatable="false">System apps protected from review and uninstall</string>
+    <string name="system_app_scan_complete" translatable="false">Scan Complete. No threats found in the items checked. System apps are excluded from review and uninstall; their integrity has not been verified by this scan.</string>
+</resources>

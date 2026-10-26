@@ -90,6 +90,7 @@ import com.vibesync.antivirus.core.connectivity.ConnectivityMonitor
 import com.vibesync.antivirus.core.worker.HashDatabaseSyncScheduler
 import com.vibesync.antivirus.core.observer.StorageSentinelService
 import com.vibesync.antivirus.core.observer.StorageAccessPreferences
+import com.vibesync.antivirus.core.observer.FullScreenAlertAccess
 import com.vibesync.antivirus.core.worker.OverlayRiskReviewManager
 import com.vibesync.antivirus.core.locale.LocalePreferences
 import com.vibesync.antivirus.core.security.DeviceOwnerManager
@@ -118,6 +119,7 @@ import kotlinx.coroutines.launch
 ) {
  val context=LocalContext.current
  val safeMobileApp=context.applicationContext as SafeMobileApp
+ var fullScreenAlertsGranted by remember(context) { mutableStateOf(FullScreenAlertAccess.isGranted(context)) }
  val activity=context as? Activity
  val vm:SafeMobileViewModel=viewModel(factory=SafeMobileViewModel.Factory(repository))
  val state by vm.state.collectAsStateWithLifecycle()
@@ -332,6 +334,7 @@ import kotlinx.coroutines.launch
  DisposableEffect(lifecycleOwner, context) {
   val observer = LifecycleEventObserver { _, event ->
    if (event == Lifecycle.Event.ON_RESUME) {
+    fullScreenAlertsGranted = FullScreenAlertAccess.isGranted(context)
     storageAccessGranted = hasSharedStorageAccess(context)
     folderUris = StorageAccessPreferences.accessibleTreeUris(context)
     vm.refreshSecurityScore()
@@ -373,6 +376,7 @@ import kotlinx.coroutines.launch
  LaunchedEffect(lifecycleOwner) {
   lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
    while (true) {
+    fullScreenAlertsGranted = FullScreenAlertAccess.isGranted(context)
     folderUris = StorageAccessPreferences.accessibleTreeUris(context)
     storageAccessGranted = folderUris.isNotEmpty()
     monitoringRunning = isStorageSentinelRunning(context) && storageAccessGranted
@@ -464,6 +468,13 @@ import kotlinx.coroutines.launch
      }
     }
     if (selectedDestination == "home" || selectedDestination == "scan") {
+     if (selectedDestination == "home") {
+      if (!fullScreenAlertsGranted) FullScreenAlertPermissionCard(onOpenSettings = {
+       runCatching { FullScreenAlertAccess.settingsIntent(context)?.let(context::startActivity) }
+        .onFailure { Toast.makeText(context, R.string.full_screen_settings_unavailable, Toast.LENGTH_LONG).show() }
+      })
+      SystemAppProtectionBadge()
+     }
      ScanFeedbackCard(state,
       onResults = { selectedDestination = if (state.results.isEmpty()) "history" else "scan" },
       onCancel = vm::cancelScan)

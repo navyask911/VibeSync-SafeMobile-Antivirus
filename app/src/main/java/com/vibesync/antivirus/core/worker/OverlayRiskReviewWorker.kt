@@ -41,7 +41,11 @@ class OverlayRiskReviewWorker(
   return try {
    val packages = applicationContext.packageManager.getInstalledPackages(
     PackageManager.GET_PERMISSIONS or PackageManager.GET_SERVICES
-   )
+   ).filter { info ->
+    info.applicationInfo?.let { app ->
+     com.vibesync.antivirus.core.security.ProtectedPackagePolicy.isUserInstalled(app.flags, info.packageName, applicationContext.packageName)
+    } == true
+   }
    val overlayDeclarations = packages.count { info ->
     info.requestedPermissions?.contains(OVERLAY_PERMISSION) == true
    }
@@ -50,10 +54,13 @@ class OverlayRiskReviewWorker(
      service.permission == ACCESSIBILITY_SERVICE_PERMISSION
     }
    }
+   val reviewablePackageNames = packages.mapTo(hashSetOf()) { it.packageName }
    val enabledAccessibilityServices = Settings.Secure.getString(
     applicationContext.contentResolver,
     Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
-   ).orEmpty().split(':').count { it.isNotBlank() }
+   ).orEmpty().split(':').count { component ->
+    android.content.ComponentName.unflattenFromString(component)?.packageName?.let(reviewablePackageNames::contains) == true
+   }
 
    val now = System.currentTimeMillis()
    prefs.edit()
@@ -189,3 +196,4 @@ object OverlayRiskReviewManager {
   WorkManager.getInstance(context).enqueueUniqueWork(FOREGROUND_WORK, ExistingWorkPolicy.KEEP, request)
  }
 }
+

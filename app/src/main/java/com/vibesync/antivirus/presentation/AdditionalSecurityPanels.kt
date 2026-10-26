@@ -215,7 +215,7 @@ private fun inspectInstallerSources(context: Context): List<GuardianFinding> {
     val pm = context.packageManager
     return pm.getInstalledApplications(PackageManager.GET_META_DATA)
         .asSequence()
-        .filter { it.packageName != context.packageName }
+        .filter { com.vibesync.antivirus.core.security.ProtectedPackagePolicy.isUserInstalled(it.flags, it.packageName, context.packageName) }
         .map { app ->
             val label = runCatching { app.loadLabel(pm).toString() }.getOrDefault(app.packageName)
             val candidate = (app.packageName + " " + label).lowercase(Locale.ROOT)

@@ -10,6 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.vibesync.antivirus.R
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -103,7 +105,7 @@ internal fun ScanFeedbackCard(state: SafeMobileUiState, onResults: () -> Unit, o
                 if (summary.review > 0 || summary.unreadable > 0) Text(
                     "${summary.review} items need review · ${summary.unreadable} could not be scanned.", color = MaterialTheme.colorScheme.tertiary)
                 else if (summary.appCount + summary.fileCount == 0) Text("No readable items were available. Run another scan after selecting files or installing apps.")
-                else if (summary.threats == 0) Text("No threats found in the items checked. A scan cannot guarantee that a device is risk-free.")
+                else if (summary.threats == 0) Text(stringResource(R.string.system_app_scan_complete))
                 if (!summary.signedDefinitionsUsed) Text("This scan ran without active signed threat definitions. Update definitions and scan again for full hash coverage.", color = MaterialTheme.colorScheme.tertiary)
                 state.results.filter { it.verdict == ScanVerdict.THREAT }.take(3).forEach { Text("• ${it.displayName}", color = MaterialTheme.colorScheme.error) }
                 Text(DateFormat.getDateTimeInstance().format(Date(summary.completedAt)), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)

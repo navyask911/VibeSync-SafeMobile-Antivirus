@@ -267,7 +267,7 @@ fun importOfflineDefinitions(uri: Uri) {
                             totalItems = total.coerceAtLeast(0)
                         )
                     }
-                }.sortedBy { result -> when (result.verdict) {
+                }.filter { repository.isReviewableResult(it) }.sortedBy { result -> when (result.verdict) {
                     ScanVerdict.THREAT -> 0
                     ScanVerdict.SUSPICIOUS -> 1
                     ScanVerdict.NOT_SCANNED -> 2
