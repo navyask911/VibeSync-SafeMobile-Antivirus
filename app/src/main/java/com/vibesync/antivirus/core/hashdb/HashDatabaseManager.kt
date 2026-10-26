@@ -45,6 +45,7 @@ class HashDatabaseManager(context: Context, private val database: ThreatDatabase
     suspend fun importBundle(input: java.io.InputStream): HashDatabaseCapability = withContext(Dispatchers.IO) {
         mutex.withLock {
             if (!loaded) restoreActiveUnsafe()
+            loaded = false
             importBundleUnsafe(input)
         }
     }
@@ -58,6 +59,7 @@ class HashDatabaseManager(context: Context, private val database: ThreatDatabase
             val restored = restoreActiveUnsafe()
             if (activeFile.isFile) return@withLock restored
 
+            loaded = false
             try {
                 appContext.assets.open(BUNDLED_DATABASE_ASSET).use { input ->
                     importBundleUnsafe(input)
@@ -142,10 +144,12 @@ class HashDatabaseManager(context: Context, private val database: ThreatDatabase
     }
 
     private suspend fun restoreActiveUnsafe(): HashDatabaseCapability {
-        loaded = true
+        // Keep lookups waiting on this mutex until restore/import has reached a final state.
+        loaded = false
         if (!BuildConfig.HASHDB_PUBLIC_KEY_CONFIGURED || BuildConfig.HASHDB_PUBLIC_KEY_B64.isBlank()) {
             bloom = null
             capability = initialDisabledState()
+            loaded = true
             return capability
         }
         if (!activeFile.isFile || !activeFile.canRead()) {
@@ -154,6 +158,7 @@ class HashDatabaseManager(context: Context, private val database: ThreatDatabase
                 enabled = false,
                 reason = "Disabled: no signed production hash database is bundled or imported."
             )
+            loaded = true
             return capability
         }
         return try {
@@ -175,6 +180,7 @@ class HashDatabaseManager(context: Context, private val database: ThreatDatabase
                 indicatorCount = parsed.records.size,
                 reason = "Signed local hash database active."
             )
+            loaded = true
             capability
         } catch (_: Exception) {
             bloom = null
@@ -182,6 +188,7 @@ class HashDatabaseManager(context: Context, private val database: ThreatDatabase
                 enabled = false,
                 reason = "Disabled: stored signature database failed integrity, version, or format checks."
             )
+            loaded = true
             capability
         }
     }
@@ -239,6 +246,8 @@ class HashDatabaseManager(context: Context, private val database: ThreatDatabase
 
     companion object {
         const val HASH_DATABASE_SOURCE = "signed-hashdb"
+        private const val TAG = "HashDatabaseManager"
+        private const val BUNDLED_DATABASE_ASSET = "safe-mobile-hashdb.bundle.zip"
         private const val PREFERENCES = "safe_mobile_signed_hash_database"
         private const val KEY_LAST_VERSION = "last_accepted_version"
     }
