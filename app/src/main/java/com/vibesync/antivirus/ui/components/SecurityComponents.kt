@@ -184,7 +184,7 @@ fun ThreatListItem(result: ScanResult, isProtectedSystemApp: Boolean, showUninst
         ScanVerdict.NO_MATCH -> StatusKind.SAFE
         ScanVerdict.NOT_SCANNED -> StatusKind.NEUTRAL
     }
-    val verdictLabel = stringResource(when (result.verdict) {
+    val verdictLabel = if (result.trustedByUser) stringResource(R.string.trusted_app_saved) else stringResource(when (result.verdict) {
         ScanVerdict.THREAT -> R.string.verdict_threat
         ScanVerdict.SUSPICIOUS -> R.string.verdict_suspicious
         ScanVerdict.NO_MATCH -> R.string.verdict_no_match
@@ -226,8 +226,7 @@ fun ThreatListItem(result: ScanResult, isProtectedSystemApp: Boolean, showUninst
                         Text(stringResource(R.string.uninstall_label))
                     }
                 }
-                if (result.packageName != null && result.sha256 != null &&
-                    result.verdict == ScanVerdict.SUSPICIOUS && !isProtectedSystemApp) {
+                if (result.packageName != null && !result.trustedByUser && !isProtectedSystemApp) {
                     OutlinedButton(onClick = { onTrust(result) }, modifier = Modifier.weight(1f)) {
                         Text(stringResource(R.string.trusted_app_mark))
                     }

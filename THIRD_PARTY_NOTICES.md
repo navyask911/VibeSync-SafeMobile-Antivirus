@@ -372,3 +372,12 @@ Metadata completeness: 357/359 components have both a declared licence and a sou
 
 - app@unspecified: licence=UNKNOWN — review required; source=Package URL: pkg:maven/VibeSync-SafeMobile-Antivirus/app@unspecified?project_path=%3Aapp
 - javax.annotation-api@1.3.2: licence=UNKNOWN — review required; source=https://github.com/javaee/javax.annotation
+
+## Developer translation tooling (not shipped in Android)
+
+- `deep-translator` 1.11.4, MIT, Nidhal Baccouri and contributors.
+  Source: https://github.com/nidhaloff/deep-translator/tree/v1.11.4
+  Used only by the explicitly invoked resource-generation script. No translator
+  client or runtime translation network permission is added to the APK.
+  GoogleTranslator accesses Google's translation service; use is subject to
+  Google's service terms. MIT covers the Python client, not the remote service.

@@ -162,11 +162,13 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
     fun trustApp(result: ScanResult) {
         viewModelScope.launch {
             try {
-                if (repository.trustHeuristicApp(result)) {
+                if (repository.trustApp(result)) {
+                    com.vibesync.antivirus.core.observer.SecurityAlertNotifier.stopIncidentAudio()
                     mutableState.update { state -> state.copy(
                         results = state.results.map {
-                            if (it.packageName == result.packageName && it.sha256 == result.sha256)
-                                it.copy(verdict = ScanVerdict.NO_MATCH, riskScore = 0f, reasons = emptyList())
+                            if (it.packageName == result.packageName)
+                                it.copy(verdict = ScanVerdict.NO_MATCH, riskScore = 0f, reasons = emptyList(),
+                                    riskReport = null, threatEventId = null, trustedByUser = true)
                             else it
                         },
                         messageResource = R.string.trusted_app_saved, messageText = null

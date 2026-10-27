@@ -51,11 +51,10 @@ class ThreatRepository(
  suspend fun installedAppInventory(): List<InstalledAppItem> = withContext(Dispatchers.IO) {
   scanner.installedAppInventory()
  }
- suspend fun trustHeuristicApp(result: ScanResult): Boolean {
+ suspend fun trustApp(result: ScanResult): Boolean {
   val name = result.packageName ?: return false
-  val hash = result.sha256 ?: return false
-  if (result.verdict == ScanVerdict.THREAT || !isEligibleInstalledApp(name)) return false
-  return trustedAppStore.trust(name, hash)
+  if (!isEligibleInstalledApp(name)) return false
+  return trustedAppStore.trust(name)
  }
 
  fun currentHashDatabaseCapability() = hashDatabaseManager?.capability
