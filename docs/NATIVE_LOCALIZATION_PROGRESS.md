@@ -20,7 +20,7 @@ Work branch: `feat/v1.0.12-native-localization`.
 | 9 | Portuguese | values-pt | Complete; 700 keys validated |
 | 10 | Italian | values-it | Complete; 700 keys validated |
 | 11 | Korean | values-ko | Complete; 700 keys validated |
-| 12 | Turkish | values-tr | Pending |
+| 12 | Turkish | values-tr | Complete; 700 keys validated |
 | 13 | Vietnamese | values-vi | Pending |
 | 14 | Indonesian | values-id | Pending |
 | 15 | Bengali | values-bn | Pending |
