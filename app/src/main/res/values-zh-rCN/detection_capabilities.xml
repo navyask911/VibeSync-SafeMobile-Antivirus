@@ -3,7 +3,7 @@
     <string name="detection_capabilities_title">检测能力</string>
     <string name="detection_capabilities_description">查看此构建中的安全检查是已启用、仅供参考、有条件启用还是不可用。</string>
     <string name="detection_capabilities_truth_title">重要提示：扫描结果的含义</string>
-    <string name="detection_capabilities_truth_body">没有本地匹配并不能证明文件安全。在配置可信签名密钥和经过审核的生产数据库之前，签名哈希引擎会保持禁用。YARA 和机器学习也处于禁用状态。启发式检查可能产生误报。以下指标尚未测量。</string>
+    <string name="detection_capabilities_truth_body">没有本地匹配不能证明文件安全。在配置可信签名密钥和经审核的生产数据库之前，已签名哈希引擎保持禁用。经验证的内置规则加载成功后，会运行有限的离线 DEX 规则；机器学习仍被禁用。启发式检查可能产生误报。以下性能指标尚未测量。</string>
     <string name="detection_capabilities_enabled">已启用</string>
     <string name="detection_capabilities_disabled">已禁用</string>
     <string name="detection_capabilities_limited">覆盖有限</string>

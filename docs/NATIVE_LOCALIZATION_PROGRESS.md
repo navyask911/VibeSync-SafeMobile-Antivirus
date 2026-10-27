@@ -14,7 +14,7 @@ Work branch: `feat/v1.0.12-native-localization`.
 | 3 | Hindi | values-hi | Complete; 700 keys validated |
 | 4 | Kannada | values-kn | Complete; 700 keys validated |
 | 5 | Russian | values-ru | Complete; 700 keys validated |
-| 6 | Chinese | values-zh-rCN | Pending |
+| 6 | Chinese | values-zh-rCN | Complete; 700 keys validated |
 | 7 | Japanese | values-ja | Pending |
 | 8 | Arabic | values-ar | Pending |
 | 9 | Portuguese | values-pt | Pending |
