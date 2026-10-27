@@ -3,7 +3,7 @@
     <string name="detection_capabilities_title">Capacités de détection</string>
     <string name="detection_capabilities_description">Consultez les contrôles actifs, indicatifs, conditionnels ou indisponibles dans cette version.</string>
     <string name="detection_capabilities_truth_title">Important : signification des résultats</string>
-    <string name="detection_capabilities_truth_body">Aucune correspondance locale ne prouve pas qu’un fichier est sûr. Le moteur de hachages signés reste désactivé tant qu’une clé de signature fiable et une base de production vérifiée ne sont pas configurées. YARA et l’apprentissage automatique sont désactivés. Les heuristiques peuvent produire de fausses alertes. Les métriques ci-dessous ne sont pas mesurées.</string>
+    <string name="detection_capabilities_truth_body">L’absence de correspondance locale ne prouve pas qu’un fichier est sûr. Le moteur d’empreintes signées reste désactivé tant qu’une clé de signature fiable et une base de production vérifiée ne sont pas configurées. Un ensemble limité de règles DEX hors ligne fonctionne lorsque les règles incluses vérifiées sont chargées ; l’apprentissage automatique reste désactivé. Les heuristiques peuvent produire de fausses alertes. Les métriques ci-dessous ne sont pas mesurées.</string>
     <string name="detection_capabilities_enabled">Activé</string>
     <string name="detection_capabilities_disabled">Désactivé</string>
     <string name="detection_capabilities_limited">Couverture limitée</string>
