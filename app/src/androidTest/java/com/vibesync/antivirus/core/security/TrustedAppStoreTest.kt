@@ -13,6 +13,32 @@ import java.util.UUID
 
 @RunWith(AndroidJUnit4::class)
 class TrustedAppStoreTest {
+    @Test fun trustedApkWithRenamedExtensionSkipsFileAndStreamScanners() = runBlocking {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val store = TrustedAppStore(context)
+        val renamed = java.io.File.createTempFile("trusted-rename-", ".bin", context.cacheDir)
+        try {
+            java.io.File(context.applicationInfo.sourceDir).copyTo(renamed, overwrite = true)
+            assertTrue(store.trust(context.packageName))
+            val app = context as SafeMobileApp
+            val fileResult = app.repository.scanFile(renamed)
+            val scanner = com.vibesync.antivirus.core.engine.PackageScanner(context,
+                app.database.threatDao(), com.vibesync.antivirus.core.crypto.EncryptedHashStore(context))
+            val streamResult = scanner.scanStream("renamed.bin", renamed.inputStream())
+            for (result in listOf(fileResult, streamResult)) {
+                assertTrue(result.trustedByUser)
+                assertEquals(ScanVerdict.NO_MATCH, result.verdict)
+                assertNull(result.sha256)
+                assertNull(result.md5)
+                assertNull(result.riskReport)
+                assertNull(result.threatEventId)
+            }
+        } finally {
+            store.untrust(context.packageName)
+            renamed.delete()
+        }
+    }
+
     @Test fun packageTrustBypassesAllEnginesWithoutReadingApkBytes() = runBlocking {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val store = TrustedAppStore(context)

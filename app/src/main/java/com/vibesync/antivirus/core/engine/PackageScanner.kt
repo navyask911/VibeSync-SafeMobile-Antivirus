@@ -115,8 +115,7 @@ class PackageScanner(
   }
   return try {
    // Read only package identity before any hash, DEX, model or heuristic work.
-   val identity = if (file.extension.equals("apk", ignoreCase = true))
-    pm.getPackageArchiveInfo(file.absolutePath, 0)?.packageName else null
+   val identity = pm.getPackageArchiveInfo(file.absolutePath, 0)?.packageName
    if (identity != null && trustedAppStore.isTrusted(identity)) {
     return trustedResult(identity, scanSessionId, start).copy(sourceLocalPath = file.absolutePath)
    }
@@ -156,12 +155,16 @@ class PackageScanner(
  ): ScanResult {
   val start = System.nanoTime()
   return try {
-   if (label.substringBefore('?').endsWith(".apk", ignoreCase = true)) {
+   val inputStream = stream.buffered()
+   inputStream.mark(2)
+   val zipHeader = inputStream.read() == 0x50 && inputStream.read() == 0x4b
+   inputStream.reset()
+   if (zipHeader || label.substringBefore('?').endsWith(".apk", ignoreCase = true)) {
     // A content URI does not expose package identity. Stage APK bytes in app-private
     // cache so PackageManager can read the manifest before any detection engine.
     val staged = File.createTempFile("trust-identity-", ".apk", context.cacheDir)
     try {
-     stream.use { input -> staged.outputStream().use { output ->
+     inputStream.use { input -> staged.outputStream().use { output ->
       val buffer = ByteArray(64 * 1024)
       var total = 0L
       while (true) {
@@ -177,7 +180,7 @@ class PackageScanner(
       sourceLocalPath = null, scanSessionId = scanSessionId)
     } finally { staged.delete() }
    }
-   val hash = stream.use { calculator.calculate(it) }
+   val hash = inputStream.use { calculator.calculate(it) }
    val output = evaluate(label, label, hash.sha256, hash.md5, emptyList(), 0, sha1 = hash.sha1, fileSize = hash.bytesRead)
    if (persistAudit || output.verdict == ScanVerdict.THREAT ||
        output.verdict == ScanVerdict.SUSPICIOUS || output.verdict == ScanVerdict.NOT_SCANNED) {
@@ -188,7 +191,7 @@ class PackageScanner(
    throw cancelled
   } catch (_: Exception) {
    result(label, label, null, null, ScanVerdict.NOT_SCANNED, listOf(context.getString(R.string.file_stream_failed)), start).copy(scanSessionId = scanSessionId).also { auditSafely(it, start, scanSessionId) }
-  }
+  } finally { runCatching { stream.close() } }
  }
  private suspend fun scanPackage(info: PackageInfo, scanSessionId: String): ScanResult {
   val start = System.nanoTime()
