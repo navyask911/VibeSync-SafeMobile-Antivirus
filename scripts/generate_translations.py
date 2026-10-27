@@ -15,7 +15,6 @@ import argparse
 import copy
 import hashlib
 import json
-import os
 from pathlib import Path
 import re
 import tempfile
@@ -34,7 +33,7 @@ LOCALES = dict(pair.split(':') for pair in (
 ).split())
 TOKEN = re.compile(r'%(?:\d+\$)?[-#+ 0,(]*\d*(?:\.\d+)?[a-zA-Z%]|\\[nrt\\]|https?://[^\s]+')
 # Tokens/product names legitimately retain their spelling; never exempt whole sentences.
-INVARIANT = re.compile(r'^(?:[\W\d_]+|SafeMobile|YARA|SHA-256|MD5|APK|EXE|Android|OK|DM Sans)$')
+INVARIANT = re.compile(r'^(?:[\W\d_]+|SafeMobile|VibeSync|YARA|SHA-256|MD5|APK|EXE|Android|OK|DM Sans)$')
 
 
 def source_files(res: Path):
@@ -68,7 +67,9 @@ def restore(text, tokens):
     return text
 
 
-def validate(source, translated):
+def validate(source, translated, resource_name=""):
+    if resource_name.startswith("locale_") and source == translated:
+        return  # Native language names in the language picker are intentional invariants.
     if not translated.strip():
         raise ValueError('Empty translation')
     if sorted(TOKEN.findall(source)) != sorted(TOKEN.findall(translated)):
@@ -92,18 +93,18 @@ def write_json(path, data):
     temporary.replace(path)
 
 
-def translate_text(source, language, translator, cache, cache_path, retries, delay):
+def translate_text(source, language, translator, cache, cache_path, retries, delay, resource_name=""):
     key = hashlib.sha256((language + '\0' + source).encode()).hexdigest()
-    if INVARIANT.fullmatch(source.strip()):
+    if resource_name.startswith('locale_') or INVARIANT.fullmatch(source.strip()):
         return source
     if key in cache:
-        validate(source, cache[key])
+        validate(source, cache[key], resource_name)
         return cache[key]
     protected, tokens = protect(source)
     for attempt in range(retries + 1):
         try:
             translated = restore(translator.translate(protected), tokens)
-            validate(source, translated)
+            validate(source, translated, resource_name)
             cache[key] = translated
             write_json(cache_path, cache)
             time.sleep(delay)
@@ -134,7 +135,7 @@ def validate_locale(res, locale):
                 continue
             key = entry.attrib['name']
             try:
-                validate(text_of(entry), text_of(actual[key]))
+                validate(text_of(entry), text_of(actual[key]), key)
                 count += 1
             except (KeyError, ValueError) as error:
                 errors.append(key + ': ' + str(error))
@@ -156,7 +157,7 @@ def generate_locale(res, locale, language, translator, cache, cache_path, retrie
                     continue
                 entry = copy.deepcopy(original)
                 source = text_of(original)
-                entry.text = android_escape(translate_text(source, language, translator, cache, cache_path, retries, delay))
+                entry.text = android_escape(translate_text(source, language, translator, cache, cache_path, retries, delay, entry.attrib["name"]))
                 entry.tail = None
                 output.append(entry)
                 generated_keys.add(entry.attrib['name'])
@@ -204,7 +205,7 @@ def main():
     if unknown:
         parser.error('Unknown Android locales: ' + ', '.join(sorted(unknown)))
     cache = json.loads(args.cache.read_text()) if args.cache.exists() else {}
-    report = {'provider': 'deep-translator/GoogleTranslator', 'human_reviewed': False, 'locales': {}}
+    report = {'provider': 'deep-translator/GoogleTranslator', 'human_reviewed': False, 'locales': {locale: {'status': 'pending'} for locale in args.locales}}
     if not args.validate_only:
         from deep_translator import GoogleTranslator
         # deep-translator has no request timeout option; bound every provider request.
@@ -228,8 +229,12 @@ def main():
             write_json(args.report, report)
             # Provider failure usually affects every locale. Stop, retain cache and
             # existing translations; rerun resumes instead of generating English XML.
-            raise SystemExit(str(error))
+            if not args.validate_only:
+                raise SystemExit(str(error))
+            print(str(error), flush=True)
         write_json(args.report, report)
+    if any(item['status'] != 'validated' for item in report['locales'].values()):
+        raise SystemExit('Incomplete localization; see ' + str(args.report))
     print('Resource validation passed. Native-speaker linguistic review is still required.')
 
 
