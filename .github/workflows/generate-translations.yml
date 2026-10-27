@@ -1,0 +1,65 @@
+name: Generate reviewed-candidate Android translations
+on:
+  push:
+    branches: ["translate-resources/**"]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: safemobile-translation-generation
+  cancel-in-progress: false
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install build-only translation client
+        run: python3 -m pip install -r scripts/translation-requirements.txt
+      - name: Verify provider access before resource generation
+        run: |
+          python3 - <<'PY'
+          import deep_translator.google as provider
+          from deep_translator import GoogleTranslator
+          original = provider.requests.get
+          def bounded_get(*args, **kwargs):
+              kwargs.setdefault("timeout", 20)
+              return original(*args, **kwargs)
+          provider.requests.get = bounded_get
+          translated = GoogleTranslator(source="en", target="fr").translate("Scan installed apps")
+          if not translated or translated == "Scan installed apps":
+              raise SystemExit("Provider did not return a translated smoke-test string")
+          print("Provider smoke test succeeded.")
+          PY
+      - name: Generate all 51 locales
+        run: python3 scripts/generate_translations.py --retries 2 --delay 1
+      - name: Verify generated resources
+        run: |
+          python3 scripts/generate_translations.py --validate-only
+          python3 scripts/check_locale_completeness.py
+          python3 scripts/check_ja_kn_and_siren.py
+          python3 scripts/check_proprietary_safety.py
+          git diff --check
+      - name: Commit complete generated resources to this candidate branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add app/src/main/res
+          if ! git diff --cached --quiet; then
+            git commit -m "i18n: generate validated Google translations for 51 locales"
+            git push origin HEAD:"${GITHUB_REF_NAME}"
+          fi
+      - name: Preserve generation report and resumable cache
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: translation-generation-report
+          path: |
+            build/translation-report.json
+            build/translation-cache.json
+          if-no-files-found: ignore
