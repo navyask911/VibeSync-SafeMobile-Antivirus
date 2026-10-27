@@ -30,7 +30,7 @@ Work branch: `feat/v1.0.12-native-localization`.
 | 19 | Gujarati | values-gu | Complete; 700 keys validated |
 | 20 | Malayalam | values-ml | Complete; 700 keys validated |
 | 21 | Punjabi | values-pa | Complete; 700 keys validated |
-| 22 | Urdu | values-ur | Pending |
+| 22 | Urdu | values-ur | Complete; 700 keys validated |
 
 Each completed locale includes all default string keys, including the separate
 posture, incident, siren, download and uninstall resources. XML parsing,

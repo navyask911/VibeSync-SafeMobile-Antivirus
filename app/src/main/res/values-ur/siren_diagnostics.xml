@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<!-- Explicit English fallbacks; professionally reviewed translation not yet available. -->
-  <string name="siren_test_settings_title">Siren diagnostics</string>
-  <string name="siren_test_settings_description">Test the five-second siren and alert preview. This does not detect malware, modify your threat database, or request an uninstall.</string>
-  <string name="siren_test_button">Test Threat Siren</string>
-  <string name="siren_test_title">SIREN TEST — NOT A REAL THREAT</string>
-  <string name="siren_test_notification">Manual sound check. No malicious app has been detected.</string>
-  <string name="siren_test_preview">This is a SafeMobile siren test. No installed app was flagged and no uninstall is requested. Tap Dismiss to stop the audio.</string>
-  <string name="voice_siren_test">This is a SafeMobile siren test. No threat has been detected.</string>
-  <string name="battery_review_title">Battery restrictions may delay protection</string>
-  <string name="battery_review_body">Battery saver or app optimization is active. Some Oppo/ColorOS devices restrict background scans and installation alerts. Review the battery settings for SafeMobile; this does not guarantee continuous monitoring.</string>
-  <string name="battery_review_action">Review battery settings</string>
-  <string name="battery_review_unavailable">Android battery settings could not be opened.</string>
-  <string name="full_screen_dashboard_warning">Critical Alerts Disabled: Tap to grant permission for full-screen malware warnings.</string>
-  <string name="full_screen_dashboard_fallback">Full-screen access is optional. When Security Alerts are enabled, the five-second siren and high-priority notification still work without this access, subject to Android notification and sound settings.</string>
-  <string name="full_screen_settings_unavailable">Full-screen alert settings could not be opened. You can continue using SafeMobile.</string>
-  <string name="system_app_protection_badge">System apps protected from review and uninstall</string>
-  <string name="system_app_scan_complete">Scan Complete. No threats found in the items checked. System apps are excluded from review and uninstall; their integrity has not been verified by this scan.</string>
-  <string name="ui_folder_access_not_granted">Folder access was not granted. You can continue with limited protection.</string>
+<string name="siren_test_settings_title">سائرن کی تشخیص</string>
+<string name="siren_test_settings_description">پانچ سیکنڈ سائرن اور انتباہ کا پیش منظر جانچیں۔ خطرہ نہیں ڈھونڈتا، ڈیٹابیس نہیں بدلتا یا ایپ ہٹانے کو نہیں کہتا۔</string>
+<string name="siren_test_button">خطرہ سائرن آزمائیں</string>
+<string name="siren_test_title">سائرن آزمائش — حقیقی خطرہ نہیں</string>
+<string name="siren_test_notification">دستی آواز آزمائش۔ نقصان دہ ایپ نہیں ملی۔</string>
+<string name="siren_test_preview">یہ SafeMobile سائرن آزمائش ہے۔ ایپ نشان زد نہیں، ہٹانے کی درخواست نہیں۔ آواز روکنے کو نظرانداز کریں چھوئیں۔</string>
+<string name="voice_siren_test">یہ SafeMobile سائرن آزمائش ہے۔ خطرہ نہیں ملا۔</string>
+<string name="battery_review_title">بیٹری کی حدود تحفظ میں تاخیر کر سکتی ہیں</string>
+<string name="battery_review_body">بیٹری بچت یا ایپ اصلاح فعال۔ کچھ Oppo/ColorOS آلات پس منظر جانچ اور تنصیب انتباہ محدود کرتے ہیں۔ SafeMobile بیٹری ترتیبات دیکھیں؛ مسلسل نگرانی کی ضمانت نہیں۔</string>
+<string name="battery_review_action">بیٹری ترتیبات دیکھیں</string>
+<string name="battery_review_unavailable">Android بیٹری ترتیبات نہیں کھلیں۔</string>
+<string name="full_screen_dashboard_warning">اہم انتباہ بند: مکمل پردے خطرہ اطلاع کی اجازت کے لیے چھوئیں۔</string>
+<string name="full_screen_dashboard_fallback">مکمل پردے کی رسائی اختیاری۔ حفاظتی انتباہ فعال ہوں تو اس کے بغیر بھی پانچ سیکنڈ سائرن اور اعلیٰ ترجیح اطلاع Android آواز اور اطلاع ترتیبات کے مطابق چلتے ہیں۔</string>
+<string name="full_screen_settings_unavailable">مکمل پردے انتباہ کی ترتیبات نہیں کھلیں۔ SafeMobile جاری رکھ سکتے ہیں۔</string>
+<string name="system_app_protection_badge">سسٹم ایپس جائزے اور ہٹانے سے محفوظ</string>
+<string name="system_app_scan_complete">جانچ مکمل۔ جانچی اشیا میں خطرہ نہیں۔ سسٹم ایپس جائزے اور ہٹانے سے باہر؛ اس جانچ نے ان کی سالمیت ثابت نہیں کی۔</string>
+<string name="ui_folder_access_not_granted">فولڈر رسائی نہیں ملی۔ محدود تحفظ کے ساتھ جاری رکھ سکتے ہیں۔</string>
 </resources>
