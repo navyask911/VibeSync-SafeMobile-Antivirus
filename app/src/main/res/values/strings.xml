@@ -492,9 +492,9 @@
     <string name="ui_checked_off">I checked: Off</string>
     <string name="ui_not_now">Not now</string>
 <string name="trusted_app_mark">Mark as Trusted</string>
-<string name="trusted_app_explanation">This exact APK was trusted by you. Heuristic warnings are muted, but known malware signatures are never ignored.</string>
-<string name="trusted_app_saved">This APK is trusted for heuristic alerts. A changed APK will be reviewed again.</string>
-<string name="trusted_app_denied">Trust unavailable: verified malware cannot be bypassed.</string>
+<string name="trusted_app_explanation">Safe by your choice. This package and future updates bypass all scanners and alerts, including known malware checks.</string>
+<string name="trusted_app_saved">Safe (trusted by you)</string>
+<string name="trusted_app_denied">Unable to trust this app. Try again.</string>
 <string name="apps_inventory_load_failed">Unable to read installed apps. Check Android visibility and try again.</string>
 <string name="apps_scanning_in_progress">Scanning installed apps. Inventory remains visible during analysis.</string>
 <string name="apps_no_user_installed">No visible user-installed apps found.</string>

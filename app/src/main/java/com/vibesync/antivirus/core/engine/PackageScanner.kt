@@ -91,6 +91,7 @@ class PackageScanner(
   } }
  }
  suspend fun scanInstalledPackage(name: String): ScanResult? {
+  if (trustedAppStore.isTrusted(name)) return trustedResult(name, UUID.randomUUID().toString(), System.nanoTime())
   if (TrustedPackageWhitelist.hasProtectedNamespace(name)) return null
   val scanSessionId = UUID.randomUUID().toString()
   val info = try {
@@ -113,6 +114,12 @@ class PackageScanner(
    return failed.copy(sourceLocalPath = file.absolutePath, scanSessionId = scanSessionId)
   }
   return try {
+   // Read only package identity before any hash, DEX, model or heuristic work.
+   val identity = if (file.extension.equals("apk", ignoreCase = true))
+    pm.getPackageArchiveInfo(file.absolutePath, 0)?.packageName else null
+   if (identity != null && trustedAppStore.isTrusted(identity)) {
+    return trustedResult(identity, scanSessionId, start).copy(sourceLocalPath = file.absolutePath)
+   }
    val hash = calculator.calculate(file)
    val staticReport = if (file.extension.equals("apk", ignoreCase = true)) {
     val archiveInfo = try {
@@ -149,6 +156,27 @@ class PackageScanner(
  ): ScanResult {
   val start = System.nanoTime()
   return try {
+   if (label.substringBefore('?').endsWith(".apk", ignoreCase = true)) {
+    // A content URI does not expose package identity. Stage APK bytes in app-private
+    // cache so PackageManager can read the manifest before any detection engine.
+    val staged = File.createTempFile("trust-identity-", ".apk", context.cacheDir)
+    try {
+     stream.use { input -> staged.outputStream().use { output ->
+      val buffer = ByteArray(64 * 1024)
+      var total = 0L
+      while (true) {
+       currentCoroutineContext().ensureActive()
+       val read = input.read(buffer)
+       if (read < 0) break
+       total += read
+       require(total <= 512L * 1024 * 1024) { "APK staging limit exceeded" }
+       output.write(buffer, 0, read)
+      }
+     } }
+     return scanFile(staged, persistAudit).copy(packageOrPath = label, displayName = label,
+      sourceLocalPath = null, scanSessionId = scanSessionId)
+    } finally { staged.delete() }
+   }
    val hash = stream.use { calculator.calculate(it) }
    val output = evaluate(label, label, hash.sha256, hash.md5, emptyList(), 0, sha1 = hash.sha1, fileSize = hash.bytesRead)
    if (persistAudit || output.verdict == ScanVerdict.THREAT ||
@@ -164,6 +192,7 @@ class PackageScanner(
  }
  private suspend fun scanPackage(info: PackageInfo, scanSessionId: String): ScanResult {
   val start = System.nanoTime()
+  if (trustedAppStore.isTrusted(info.packageName)) return trustedResult(info.packageName, scanSessionId, start)
   val appInfo = info.applicationInfo ?: run {
    val failed = result(info.packageName, info.packageName, null, null, ScanVerdict.NOT_SCANNED, listOf(context.getString(R.string.package_metadata_missing)), start).copy(packageName = info.packageName, scanSessionId = scanSessionId)
    auditSafely(failed, start, scanSessionId)
@@ -198,13 +227,14 @@ class PackageScanner(
   val combinedRiskScore = maxOf(adjustedRiskScore, deepReport.riskScore)
   val assessed = evaluate(info.packageName, label, hashes.sha256, hashes.md5, reasons, combinedRiskScore, sha1 = hashes.sha1, fileSize = hashes.bytesRead)
    .copy(riskReport = deepReport)
-  val output = if (assessed.verdict != ScanVerdict.THREAT &&
-      trustedAppStore.isTrusted(info.packageName, hashes.sha256)) {
-   assessed.copy(verdict = ScanVerdict.NO_MATCH, reasons = listOf(context.getString(R.string.trusted_app_explanation)), riskScore = 0f)
-  } else assessed
+  val output = assessed
   audit(output, start, scanSessionId)
   return output.copy(durationMs = elapsed(start), packageName = info.packageName, scanSessionId = scanSessionId)
  }
+ private fun trustedResult(name: String, session: String, start: Long) =
+  result(name, name, null, null, ScanVerdict.NO_MATCH,
+   listOf(context.getString(R.string.trusted_app_explanation)), start).copy(
+    packageName = name, scanSessionId = session, trustedByUser = true)
  private suspend fun evaluate(key: String, label: String, sha: String, md5: String, heuristic: List<String>, score: Int, sha1: String? = null, fileSize: Long? = null): ScanResult {
   val encrypted = hashStore.protectHash(sha)
   val signedHashMatch = hashDatabaseManager?.lookup(sha, md5, sha1, fileSize)

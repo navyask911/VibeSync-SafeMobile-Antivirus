@@ -20,5 +20,7 @@ data class ScanResult(
  /** SHA-1 digest computed in the same streaming pass when available. */
  val sha1: String? = null,
  /** Structured, local-only static analysis findings; not persisted as an unencrypted database object. */
- val riskReport: RiskReport? = null
+ val riskReport: RiskReport? = null,
+ /** User override; no detection engine was executed. */
+ val trustedByUser: Boolean = false
 )

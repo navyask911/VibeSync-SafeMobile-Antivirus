@@ -217,3 +217,28 @@ and the most recent displayed scan's match count. Imported rules remain review-o
 native, or otherwise absent DEX content. The app has no claim of full YARA coverage or
 real-world detection rate. See [docs/YARA_STATUS.md](docs/YARA_STATUS.md), [NOTICE](NOTICE),
 and [the licence inventory](docs/THIRD_PARTY_LICENSES.md).
+
+### v1.0.12 candidate: user trust and translation generation
+
+User trust is an absolute, local package-name override. Marking an installed app
+as trusted skips hash matching, DEX/YARA, permission models and heuristics, and
+suppresses package alerts and Download Sentinel quarantine for that app. Trust
+continues across updates and includes existing digest-based trust choices.
+The UI marks these results **Safe (trusted by you)**; this is a user decision,
+not a scan result. Untrusted packages retain automatic post-install scanning.
+
+`scripts/generate_translations.py` uses pinned build-time `deep-translator`
+GoogleTranslator to generate all default string-resource XML files for 51 Android
+locales. It protects format arguments, validates XML and key coverage, caches
+successful calls and refuses unchanged English sentences. It never fills failed
+translations with English. Only public UI text is sent to Google during this
+explicit developer operation; the dependency is not included in the app.
+
+Run `python3 -m pip install -r scripts/translation-requirements.txt`, then
+`python3 scripts/generate_translations.py`. Use `--validate-only` to audit
+resources without network calls. Generation failed in this environment because
+Google returned HTTP 429 even on the initial translation request and retries.
+Existing locale files remain incomplete. Machine translation also requires
+native-speaker review; automated resource checks cannot certify perfect wording.
+Do not advertise complete global localization or publish this candidate as the
+requested fully localized v1.0.12 until generation and review are complete.

@@ -69,6 +69,7 @@ class PackageInstallReceiver : BroadcastReceiver() {
   val scope=CoroutineScope(SupervisorJob()+Dispatchers.IO)
   scope.launch {
    try {
+    if (com.vibesync.antivirus.core.security.TrustedAppStore(appContext).isTrusted(packageName)) return@launch
     val app=appContext as? SafeMobileApp ?: return@launch
     if (!com.vibesync.antivirus.core.security.TrustedPackageWhitelist.isEligibleForReview(appContext,packageName)) return@launch
     val source=InstallSourceVerifier(appContext).inspect(packageName)
@@ -91,7 +92,8 @@ class PackageInstallReceiver : BroadcastReceiver() {
      actionTaken=if(source.needsReview && !update) "INSTALL_SOURCE_ALERT" else "SOURCE_RECORDED",
      status=category
     ))
-    if(source.needsReview && !update) InstallSourceNotifier.notify(appContext,label,source.sourceLabel,eventId)
+    if(source.needsReview && !update &&
+       !com.vibesync.antivirus.core.security.TrustedAppStore(appContext).isTrusted(packageName)) InstallSourceNotifier.notify(appContext,label,source.sourceLabel,eventId)
    } catch (error: Exception) {
     Log.w("SafeMobileScan", "Install-source audit unavailable: $packageName", error)
    } finally { pending.finish(); scope.cancel() }

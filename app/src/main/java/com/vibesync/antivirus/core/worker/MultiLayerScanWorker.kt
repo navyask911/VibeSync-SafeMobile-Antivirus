@@ -25,6 +25,10 @@ class MultiLayerScanWorker(context: Context,params: WorkerParameters) : Coroutin
   val app = applicationContext as? SafeMobileApp ?: return@withContext Result.failure()
   val dao = app.database.securityIncidentDao()
   try {
+   if (com.vibesync.antivirus.core.security.TrustedAppStore(applicationContext).isTrusted(name)) {
+    Log.d("SafeMobileScan", "User-trusted package: all scanners and alerts bypassed")
+    return@withContext Result.success()
+   }
    // A package broadcast may cold-start the process before Application's async restore finishes.
    app.hashDatabaseManager.restoreActiveDatabase()
    Log.d("SafeMobileScan", "Post-install worker scanning package=$name event=$eventId")
@@ -35,6 +39,7 @@ class MultiLayerScanWorker(context: Context,params: WorkerParameters) : Coroutin
     if (prior != null) dao.updateAssessment(eventId,prior.sha256Hash,prior.reason + "\nPackage wasn't visible at scan time.",prior.actionTaken,prior.status + "|SCAN_UNAVAILABLE")
     return@withContext Result.success()
    }
+   if (scan.trustedByUser) return@withContext Result.success()
    // Exact threats must alert even if a later optional heuristic/audit step fails.
    if (scan.verdict == ScanVerdict.THREAT) SecurityAlertNotifier.notifyMaliciousApp(applicationContext,name,eventId)
    val static = StaticAnalyzer(applicationContext).analyze(name)

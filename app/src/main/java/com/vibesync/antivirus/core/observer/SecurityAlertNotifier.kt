@@ -47,13 +47,15 @@ object SecurityAlertNotifier {
             confirmedMalicious)
     }
 
-    fun notifyMaliciousApp(context: Context, packageName: String, eventId: String) {
+    suspend fun notifyMaliciousApp(context: Context, packageName: String, eventId: String) {
+        if (com.vibesync.antivirus.core.security.TrustedAppStore(context).isTrusted(packageName)) return
         if (!runCatching { SystemPackageGuard.isUserInstalled(context, packageName) }.getOrDefault(false)) return
         show(context, eventId, context.getString(R.string.security_alert_malware_title),
             context.getString(R.string.security_alert_malware_body), packageName, R.string.voice_alert_malware_detected, true)
     }
 
-    fun notifySuspiciousApp(context: Context, packageName: String, eventId: String) {
+    suspend fun notifySuspiciousApp(context: Context, packageName: String, eventId: String) {
+        if (com.vibesync.antivirus.core.security.TrustedAppStore(context).isTrusted(packageName)) return
         if (!runCatching { SystemPackageGuard.isUserInstalled(context, packageName) }.getOrDefault(false)) return
         show(context, eventId, context.getString(R.string.security_alert_review_title),
             context.getString(R.string.security_alert_review_body), null, R.string.voice_app_review, false)
