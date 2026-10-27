@@ -1,0 +1,7 @@
+<resources>
+<string name="full_screen_dashboard_warning">ತುರ್ತು ಎಚ್ಚರಿಕೆಗಳು ನಿಷ್ಕ್ರಿಯವಾಗಿವೆ: ಪೂರ್ಣಪರದೆ ಮಾಲ್‌ವೇರ್ ಎಚ್ಚರಿಕೆಗಳಿಗೆ ಅನುಮತಿ ನೀಡಲು ಟ್ಯಾಪ್ ಮಾಡಿ.</string>
+<string name="full_screen_dashboard_fallback">ಪೂರ್ಣಪರದೆ ಎಚ್ಚರಿಕೆಗಳು ಐಚ್ಛಿಕ. ಭದ್ರತಾ ಎಚ್ಚರಿಕೆಗಳು ಸಕ್ರಿಯವಾಗಿದ್ದರೆ Android ನಿಯಮಗಳೊಳಗೆ ಐದು ಸೆಕೆಂಡುಗಳ ಸೈರನ್ ಮತ್ತು ಪ್ರಮುಖ ಅಧಿಸೂಚನೆಗಳು ಕೆಲಸ ಮಾಡುತ್ತವೆ.</string>
+<string name="full_screen_settings_unavailable">ಪೂರ್ಣಪರದೆ ಎಚ್ಚರಿಕೆ ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ತೆರೆಯಲಾಗಲಿಲ್ಲ. SafeMobile ಬಳಸಬಹುದು.</string>
+<string name="system_app_protection_badge">ವ್ಯವಸ್ಥೆಯ ಆ್ಯಪ್‌ಗಳನ್ನು ಅಪಾಯಪಟ್ಟಿ ಮತ್ತು ಅನ್‌ಇನ್‌ಸ್ಟಾಲ್‌ನಿಂದ ರಕ್ಷಿಸಲಾಗಿದೆ</string>
+<string name="system_app_scan_complete">ಸ್ಕ್ಯಾನ್ ಮುಗಿದಿದೆ. ಪರಿಶೀಲಿಸಿದ ಅಂಶಗಳಲ್ಲಿ ಬೆದರಿಕೆ ಕಂಡುಬಂದಿಲ್ಲ. ವ್ಯವಸ್ಥೆಯ ಆ್ಯಪ್‌ಗಳನ್ನು ಅಳಿಸಲು ಸೂಚಿಸುವುದಿಲ್ಲ; ಅವುಗಳ ಸಮಗ್ರತೆಯನ್ನು ಈ ಸ್ಕ್ಯಾನ್ ಪರಿಶೀಲಿಸಿಲ್ಲ.</string>
+</resources>

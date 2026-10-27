@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="siren_test_settings_title">ಸೈರನ್ ಪರೀಕ್ಷೆ</string>
+  <string name="siren_test_settings_description">ಐದು ಸೆಕೆಂಡುಗಳ ಸೈರನ್ ಮತ್ತು ಎಚ್ಚರಿಕೆ ಪರದೆಯನ್ನು ಪರೀಕ್ಷಿಸಿ. ಇದು ಮಾಲ್‌ವೇರ್ ಪತ್ತೆಯಲ್ಲ; ಬೆದರಿಕೆ ದತ್ತಸಂಚಯ ಬದಲಾಗುವುದಿಲ್ಲ ಮತ್ತು ಆ್ಯಪ್ ಅಳಿಸಲು ಕೇಳುವುದಿಲ್ಲ.</string>
+  <string name="siren_test_button">ಬೆದರಿಕೆ ಸೈರನ್ ಪರೀಕ್ಷಿಸಿ</string>
+  <string name="siren_test_title">ಸೈರನ್ ಪರೀಕ್ಷೆ — ನಿಜವಾದ ಬೆದರಿಕೆ ಅಲ್ಲ</string>
+  <string name="siren_test_notification">ಕೈಯಾರೆ ಧ್ವನಿ ಪರೀಕ್ಷೆ. ದುರುದ್ದೇಶಪೂರಿತ ಆ್ಯಪ್ ಪತ್ತೆಯಾಗಿಲ್ಲ.</string>
+  <string name="siren_test_preview">ಇದು SafeMobile ಸೈರನ್ ಪರೀಕ್ಷೆ. ಯಾವುದೇ ಸ್ಥಾಪಿತ ಆ್ಯಪ್ ಅನ್ನು ಅಪಾಯಕಾರಿ ಎಂದು ಗುರುತಿಸಿಲ್ಲ ಅಥವಾ ಅಳಿಸಲು ವಿನಂತಿಸಿಲ್ಲ. ಧ್ವನಿ ನಿಲ್ಲಿಸಲು ಮುಚ್ಚಿ ಒತ್ತಿ.</string>
+  <string name="voice_siren_test">ಇದು SafeMobile ಸೈರನ್ ಪರೀಕ್ಷೆ. ಯಾವುದೇ ಬೆದರಿಕೆ ಪತ್ತೆಯಾಗಿಲ್ಲ.</string>
+  <string name="battery_review_title">ಬ್ಯಾಟರಿ ನಿರ್ಬಂಧಗಳಿಂದ ರಕ್ಷಣೆ ವಿಳಂಬವಾಗಬಹುದು</string>
+  <string name="battery_review_body">ಬ್ಯಾಟರಿ ಉಳಿತಾಯ ಅಥವಾ ಆ್ಯಪ್ ಆಪ್ಟಿಮೈಸೇಶನ್ ಸಕ್ರಿಯವಾಗಿದೆ. ಕೆಲವು Oppo/ColorOS ಸಾಧನಗಳು ಹಿನ್ನೆಲೆ ಸ್ಕ್ಯಾನ್ ಮತ್ತು ಸ್ಥಾಪನೆ ಎಚ್ಚರಿಕೆಗಳನ್ನು ನಿರ್ಬಂಧಿಸಬಹುದು. SafeMobile ಬ್ಯಾಟರಿ ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ಪರಿಶೀಲಿಸಿ.</string>
+  <string name="battery_review_action">ಬ್ಯಾಟರಿ ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ಪರಿಶೀಲಿಸಿ</string>
+  <string name="battery_review_unavailable">Android ಬ್ಯಾಟರಿ ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ತೆರೆಯಲಾಗಲಿಲ್ಲ.</string>
+ <string name="ui_folder_access_not_granted">ಫೋಲ್ಡರ್ ಪ್ರವೇಶಕ್ಕೆ ಅನುಮತಿ ಸಿಗಲಿಲ್ಲ. ಸೀಮಿತ ರಕ್ಷಣೆಯೊಂದಿಗೆ ಮುಂದುವರಿಸಬಹುದು.</string>
+</resources>

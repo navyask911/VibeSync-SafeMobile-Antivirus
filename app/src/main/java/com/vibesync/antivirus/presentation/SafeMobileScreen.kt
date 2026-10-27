@@ -280,7 +280,7 @@ import kotlinx.coroutines.launch
      .onFailure { Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show() }
     Handler(Looper.getMainLooper()).postDelayed({ monitoringRunning = isStorageSentinelRunning(context) && hasSharedStorageAccess(context) }, 900L)
    } else {
-    Toast.makeText(context, "Folder access was not granted. You can continue with limited protection.", Toast.LENGTH_LONG).show()
+    Toast.makeText(context, R.string.ui_folder_access_not_granted, Toast.LENGTH_LONG).show()
     selectedDestination = "home"
    }
   }
@@ -519,6 +519,7 @@ import kotlinx.coroutines.launch
         .onFailure { Toast.makeText(context, R.string.full_screen_settings_unavailable, Toast.LENGTH_LONG).show() }
       })
       SystemAppProtectionBadge()
+      BatteryOptimizationCard()
      }
      ScanFeedbackCard(state,
       onResults = { selectedDestination = if (state.results.isEmpty()) "history" else "scan" },

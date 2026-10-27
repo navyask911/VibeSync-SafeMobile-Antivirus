@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="siren_test_settings_title">サイレンの動作確認</string>
+  <string name="siren_test_settings_description">5秒間のサイレンと警告画面をテストします。マルウェア判定、脅威データベースの変更、アンインストール要求は行いません。</string>
+  <string name="siren_test_button">脅威サイレンをテスト</string>
+  <string name="siren_test_title">サイレンテスト — 実際の脅威ではありません</string>
+  <string name="siren_test_notification">手動の音声テストです。悪意のあるアプリは検出されていません。</string>
+  <string name="siren_test_preview">これは SafeMobile のサイレンテストです。インストール済みアプリに危険判定は出されておらず、アンインストールも要求しません。「閉じる」で音声を停止します。</string>
+  <string name="voice_siren_test">これは SafeMobile のサイレンテストです。脅威は検出されていません。</string>
+  <string name="battery_review_title">バッテリー制限により保護が遅れる可能性があります</string>
+  <string name="battery_review_body">省電力モードまたはアプリの電池最適化が有効です。Oppo/ColorOS ではバックグラウンドのスキャンやインストール通知が制限される場合があります。SafeMobile の電池設定を確認してください。</string>
+  <string name="battery_review_action">バッテリー設定を確認</string>
+  <string name="battery_review_unavailable">Android のバッテリー設定を開けませんでした。</string>
+ <string name="ui_folder_access_not_granted">フォルダーへのアクセスが許可されませんでした。制限付き保護で続行できます。</string>
+</resources>

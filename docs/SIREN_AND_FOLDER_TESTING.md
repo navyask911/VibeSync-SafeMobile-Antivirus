@@ -1,4 +1,28 @@
-# SafeMobile 1.0.6 device testing
+# SafeMobile 1.0.10 device testing
+
+## Manual siren diagnostic (not a malware detection)
+
+In **Settings > Siren diagnostics**, tap **Test Threat Siren**. This user-triggered
+five-second alarm calls the production `SecurityAlertNotifier` and opens a clearly
+labeled `ThreatDetectedActivity` preview. It does NOT create an incident record,
+modify hash/signature definitions, flag any installed app or offer an uninstall action.
+Tap **Dismiss** to stop the test. Check `adb logcat -s SafeMobileSiren SafeMobileSecurityAlert SafeMobileScan`
+if playback is inaudible. Android notification permission, alarm volume, DND and
+Oppo/ColorOS audio policies may independently affect delivery.
+
+The test proves **local playback/UI only**, not successful post-install detection.
+The harmless `SafeMobile-Siren-Test.apk` requires importing the exact matching
+`siren-test-definitions.json` from the SAME release before installation. If the
+definitions are absent or a different APK build is installed, no verified local
+hash match exists and the app must not falsely sound the real-threat siren.
+
+**Android 8+ limitation:** A manifest-registered implicit PACKAGE_ADDED receiver
+cannot guarantee background delivery. The runtime receiver observes installs while
+SafeMobile's process is alive. No app-level battery setting can guarantee delivery
+after a user/OEM force-stop. Use the Dashboard's battery settings advisory and
+enable notifications where available. Android 14+ full-screen access is optional;
+when ungranted, a high-priority notification is the fallback. The automatic siren
+still requires an exact verified hash match and the user's Security Alerts opt-in.
 
 ## Valid, harmless siren fixture
 

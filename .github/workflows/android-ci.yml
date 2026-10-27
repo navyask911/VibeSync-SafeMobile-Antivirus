@@ -30,6 +30,8 @@ jobs:
         run: python3 scripts/check_version_code.py
       - name: Validate Kannada/French resource coverage and TTS locale strings
         run: python3 scripts/check_locale_completeness.py
+      - name: Check Kannada/Japanese translations and siren receiver safety
+        run: python3 scripts/check_ja_kn_and_siren.py
       - name: Dataset acquisition tooling unit tests (offline fixtures only)
         run: python3 -m unittest discover -s scripts -p 'test_*.py' -v
       - name: Detection benchmark readiness report

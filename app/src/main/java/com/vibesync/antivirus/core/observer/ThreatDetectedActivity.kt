@@ -62,6 +62,7 @@ class ThreatDetectedActivity : ComponentActivity() {
     private var target by mutableStateOf<AppPresentation?>(null)
     private var loading by mutableStateOf(true)
     private var eventId: String? = null
+    private var manualTest by mutableStateOf(false)
     private var requestGeneration = 0
 
     override fun attachBaseContext(newBase: Context) { super.attachBaseContext(LocalePreferences.wrap(newBase)) }
@@ -88,22 +89,28 @@ class ThreatDetectedActivity : ComponentActivity() {
                 Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     Column(Modifier.safeDrawingPadding().verticalScroll(rememberScrollState()).padding(24.dp),
                         verticalArrangement = Arrangement.spacedBy(20.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(stringResource(R.string.incident_title), style = MaterialTheme.typography.headlineLarge,
+                        Text(stringResource(if (manualTest) R.string.siren_test_title else R.string.incident_title), style = MaterialTheme.typography.headlineLarge,
                             color = MaterialTheme.colorScheme.error, fontWeight = FontWeight.Bold)
                         GlassCard(Modifier.fillMaxWidth()) {
                             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                                 target?.icon?.let { Image(it, contentDescription = null, modifier = Modifier.size(72.dp)) }
-                                Text(target?.label ?: stringResource(if (loading) R.string.incident_loading else R.string.incident_app_unavailable),
-                                    style = MaterialTheme.typography.titleLarge)
-                                target?.let { Text(it.packageName, style = MaterialTheme.typography.bodySmall) }
-                                Text(stringResource(R.string.incident_warning), color = MaterialTheme.colorScheme.onSurface)
+                                if (manualTest) {
+                                    Text(stringResource(R.string.siren_test_preview), style = MaterialTheme.typography.titleMedium)
+                                } else {
+                                    Text(target?.label ?: stringResource(if (loading) R.string.incident_loading else R.string.incident_app_unavailable),
+                                        style = MaterialTheme.typography.titleLarge)
+                                    target?.let { Text(it.packageName, style = MaterialTheme.typography.bodySmall) }
+                                    Text(stringResource(R.string.incident_warning), color = MaterialTheme.colorScheme.onSurface)
+                                }
                             }
                         }
-                        Button(onClick = ::requestUninstall, enabled = target != null,
-                            colors = ButtonDefaults.buttonColors(containerColor = red, contentColor = Color.White),
-                            modifier = Modifier.fillMaxWidth().heightIn(min = 96.dp)) {
-                            Text(stringResource(R.string.incident_uninstall_now), style = MaterialTheme.typography.headlineSmall,
-                                fontWeight = FontWeight.ExtraBold)
+                        if (!manualTest) {
+                            Button(onClick = ::requestUninstall, enabled = target != null,
+                                colors = ButtonDefaults.buttonColors(containerColor = red, contentColor = MaterialTheme.colorScheme.onError),
+                                modifier = Modifier.fillMaxWidth().heightIn(min = 96.dp)) {
+                                Text(stringResource(R.string.incident_uninstall_now), style = MaterialTheme.typography.headlineSmall,
+                                    fontWeight = FontWeight.ExtraBold)
+                            }
                         }
                         OutlinedButton(onClick = ::dismissIncident, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
                             Text(stringResource(R.string.incident_dismiss))
@@ -122,6 +129,8 @@ class ThreatDetectedActivity : ComponentActivity() {
 
     private fun loadIncident(intent: Intent) {
         eventId = intent.getStringExtra(SecurityAlertNotifier.EXTRA_EVENT_ID)
+        manualTest = intent.getBooleanExtra(SecurityAlertNotifier.EXTRA_TEST_MODE, false)
+        if (manualTest) { target = null; loading = false; return }
         val name = SystemPackageGuard.normalizePackageName(intent.getStringExtra(EXTRA_PACKAGE))
         val generation = ++requestGeneration
         target = null

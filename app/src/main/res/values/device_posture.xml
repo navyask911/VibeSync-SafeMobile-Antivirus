@@ -1,49 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="posture_title" translatable="false">Device Posture</string>
-    <string name="posture_intro" translatable="false">Review powerful app permissions on this device. This audit reads access settings only; it never reads your screen or notifications and never changes another app’s permissions.</string>
-    <string name="posture_risk_note" translatable="false">HIGH RISK means powerful access, not proof of spyware. Legitimate screen readers, work administrators and companion apps may need it. Review access you do not recognize.</string>
-    <string name="posture_open" translatable="false">Review device permissions</string>
-    <string name="posture_refresh" translatable="false">Run posture audit</string>
-    <string name="posture_checking" translatable="false">Checking permission metadata…</string>
-    <string name="posture_failed" translatable="false">The audit could not refresh. Previously observed findings are retained. Try again or review Android settings directly.</string>
-    <string name="posture_not_checked" translatable="false">Run an audit to review accessibility, administrators, notification access and overlays.</string>
-    <string name="posture_accessibility" translatable="false">Accessibility access</string>
-    <string name="posture_administrators" translatable="false">Device administrator access</string>
-    <string name="posture_listeners" translatable="false">Notification access</string>
-    <string name="posture_overlays" translatable="false">Draw over other apps</string>
-    <string name="posture_high_risk" translatable="false">HIGH RISK</string>
-    <string name="posture_system" translatable="false">System app · review only if unexpected</string>
-    <string name="posture_unknown_system" translatable="false">System classification unavailable · review access</string>
-    <string name="posture_enabled" translatable="false">Access enabled</string>
-    <string name="posture_not_granted" translatable="false">Declared by app · access not granted</string>
-    <string name="posture_unknown_grant" translatable="false">Declared by app · Android did not expose grant state</string>
-    <string name="posture_stale" translatable="false">Last-known finding: Android could not refresh this access. Review in settings.</string>
-    <string name="posture_fix" translatable="false">Fix this</string>
-    <string name="posture_no_access" translatable="false">No enabled apps found in the accessible current profile for this category.</string>
-    <string name="posture_unavailable" translatable="false">This category is partly unavailable. Missing metadata is not a clean result; review Android settings.</string>
-    <string name="posture_settings_missing" translatable="false">Android settings could not be opened. You can continue using SafeMobile.</string>
-    <string name="posture_overlay_limit" translatable="false">Overlay entries distinguish Android’s allowed, denied and unavailable app-op states. Permission declarations alone are not treated as enabled. Some devices do not expose another app’s grant state.</string>
-    <string name="posture_monitor_title" translatable="false">Loophole Monitor</string>
-    <string name="posture_monitor_description" translatable="false">Compare enabled accessibility, administrators and notification readers about every 6 hours. Snapshots stay encrypted on this device. The first successful check establishes a silent baseline; Android may defer background work.</string>
-    <string name="posture_monitor_toggle" translatable="false">Monitor security changes</string>
-    <string name="posture_monitor_waiting" translatable="false">Waiting for the first successful encrypted comparison.</string>
-    <string name="posture_monitor_last" translatable="false">Last complete comparison: %1$s</string>
-    <string name="posture_storage_error" translatable="false">The encrypted baseline is unavailable. Monitoring will retry without replacing it or saving an unprotected snapshot.</string>
-    <string name="posture_monitor_partial" translatable="false">The last comparison was incomplete. Last-known values were preserved; the monitor will retry.</string>
-    <string name="posture_pending" translatable="false">%1$d observed changes await notification delivery.</string>
-    <string name="posture_alerts_off" translatable="false">Security change notifications need Security Alerts and Android notification access. The read-only audit and dashboard warnings work without notifications.</string>
-    <string name="posture_enable_alerts" translatable="false">Enable change notifications</string>
-    <string name="posture_dashboard_warning" translatable="false">⚠️ Loopholes Detected. Tap to review high-risk permissions.</string>
-    <string name="posture_high_risk_count" translatable="false">%1$d non-system apps hold high-risk access.</string>
-    <string name="posture_change_channel" translatable="false">Device security changes</string>
-    <string name="posture_change_title" translatable="false">Security Change Detected</string>
-    <string name="posture_change_body" translatable="false">App %1$s gained %2$s since a previous check. %3$s Tap to review.</string>
-    <string name="posture_review" translatable="false">Review permissions</string>
-    <string name="posture_screen_content" translatable="false">Its accessibility service can retrieve screen content exposed by Android.</string>
-    <string name="posture_accessibility_power" translatable="false">Accessibility services may observe interactions or assist with controls, depending on their capabilities.</string>
-    <string name="posture_admin_power" translatable="false">An administrator can enforce device policies such as locking the device.</string>
-    <string name="posture_notification_power" translatable="false">A notification listener can read notification content that Android exposes to it.</string>
-    <string name="posture_overlay_power" translatable="false">Overlay access can display content over other apps and may obscure their controls.</string>
-    <string name="posture_checked_at" translatable="false">Current-profile metadata checked: %1$s</string>
+    <string name="posture_title">Device Posture</string>
+    <string name="posture_intro">Review powerful app permissions on this device. This audit reads access settings only; it never reads your screen or notifications and never changes another app’s permissions.</string>
+    <string name="posture_risk_note">HIGH RISK means powerful access, not proof of spyware. Legitimate screen readers, work administrators and companion apps may need it. Review access you do not recognize.</string>
+    <string name="posture_open">Review device permissions</string>
+    <string name="posture_refresh">Run posture audit</string>
+    <string name="posture_checking">Checking permission metadata…</string>
+    <string name="posture_failed">The audit could not refresh. Previously observed findings are retained. Try again or review Android settings directly.</string>
+    <string name="posture_not_checked">Run an audit to review accessibility, administrators, notification access and overlays.</string>
+    <string name="posture_accessibility">Accessibility access</string>
+    <string name="posture_administrators">Device administrator access</string>
+    <string name="posture_listeners">Notification access</string>
+    <string name="posture_overlays">Draw over other apps</string>
+    <string name="posture_high_risk">HIGH RISK</string>
+    <string name="posture_system">System app · review only if unexpected</string>
+    <string name="posture_unknown_system">System classification unavailable · review access</string>
+    <string name="posture_enabled">Access enabled</string>
+    <string name="posture_not_granted">Declared by app · access not granted</string>
+    <string name="posture_unknown_grant">Declared by app · Android did not expose grant state</string>
+    <string name="posture_stale">Last-known finding: Android could not refresh this access. Review in settings.</string>
+    <string name="posture_fix">Fix this</string>
+    <string name="posture_no_access">No enabled apps found in the accessible current profile for this category.</string>
+    <string name="posture_unavailable">This category is partly unavailable. Missing metadata is not a clean result; review Android settings.</string>
+    <string name="posture_settings_missing">Android settings could not be opened. You can continue using SafeMobile.</string>
+    <string name="posture_overlay_limit">Overlay entries distinguish Android’s allowed, denied and unavailable app-op states. Permission declarations alone are not treated as enabled. Some devices do not expose another app’s grant state.</string>
+    <string name="posture_monitor_title">Loophole Monitor</string>
+    <string name="posture_monitor_description">Compare enabled accessibility, administrators and notification readers about every 6 hours. Snapshots stay encrypted on this device. The first successful check establishes a silent baseline; Android may defer background work.</string>
+    <string name="posture_monitor_toggle">Monitor security changes</string>
+    <string name="posture_monitor_waiting">Waiting for the first successful encrypted comparison.</string>
+    <string name="posture_monitor_last">Last complete comparison: %1$s</string>
+    <string name="posture_storage_error">The encrypted baseline is unavailable. Monitoring will retry without replacing it or saving an unprotected snapshot.</string>
+    <string name="posture_monitor_partial">The last comparison was incomplete. Last-known values were preserved; the monitor will retry.</string>
+    <string name="posture_pending">%1$d observed changes await notification delivery.</string>
+    <string name="posture_alerts_off">Security change notifications need Security Alerts and Android notification access. The read-only audit and dashboard warnings work without notifications.</string>
+    <string name="posture_enable_alerts">Enable change notifications</string>
+    <string name="posture_dashboard_warning">⚠️ Loopholes Detected. Tap to review high-risk permissions.</string>
+    <string name="posture_high_risk_count">%1$d non-system apps hold high-risk access.</string>
+    <string name="posture_change_channel">Device security changes</string>
+    <string name="posture_change_title">Security Change Detected</string>
+    <string name="posture_change_body">App %1$s gained %2$s since a previous check. %3$s Tap to review.</string>
+    <string name="posture_review">Review permissions</string>
+    <string name="posture_screen_content">Its accessibility service can retrieve screen content exposed by Android.</string>
+    <string name="posture_accessibility_power">Accessibility services may observe interactions or assist with controls, depending on their capabilities.</string>
+    <string name="posture_admin_power">An administrator can enforce device policies such as locking the device.</string>
+    <string name="posture_notification_power">A notification listener can read notification content that Android exposes to it.</string>
+    <string name="posture_overlay_power">Overlay access can display content over other apps and may obscure their controls.</string>
+    <string name="posture_checked_at">Current-profile metadata checked: %1$s</string>
 </resources>
