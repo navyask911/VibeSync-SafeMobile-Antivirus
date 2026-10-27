@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<!-- Explicit English fallback for locales pending reviewed translation. Kannada and Japanese have separate localized files. -->
+<!-- English fallback for Posture and incident resources pending reviewed translation. -->
   <string name="posture_title">Device Posture</string>
   <string name="posture_intro">Review powerful app permissions on this device. This audit reads access settings only; it never reads your screen or notifications and never changes another app’s permissions.</string>
   <string name="posture_risk_note">HIGH RISK means powerful access, not proof of spyware. Legitimate screen readers, work administrators and companion apps may need it. Review access you do not recognize.</string>
@@ -61,69 +61,4 @@
   <string name="incident_full_screen_explanation">Android 14+ controls full-screen access. You may enable it in system settings for urgent incident notifications. If you leave it off, SafeMobile uses a high-priority notification. This is optional.</string>
   <string name="incident_open_settings">Open settings</string>
   <string name="cyber_dark_appearance">Cyber Dark · Deep navy, slate cards and neon cyan</string>
-  <string name="download_interceptor_label">Download Sentinel</string>
-  <string name="download_interceptor_description">Best-effort monitoring of new APK/EXE files using accessible Downloads and MediaStore entries. Android controls installation; SafeMobile cannot block every installer prompt.</string>
-  <string name="download_interceptor_status_enabled">Download Sentinel is enabled and its foreground service is running.</string>
-  <string name="download_interceptor_status_setup">Enable Download Sentinel and grant storage access to begin monitoring.</string>
-  <string name="download_interceptor_status_disabled">Download Sentinel is off. Enable it to start monitoring.</string>
-  <string name="strict_mode_label">Strict mode</string>
-  <string name="strict_mode_description">Move unknown or unverified APK/EXE downloads into the encrypted Quarantine Vault when supported. Files remain restorable; SafeMobile does not permanently delete them.</string>
-  <string name="download_sentinel_running">Download Sentinel foreground service is running.</string>
-  <string name="download_sentinel_stopped">Download Sentinel foreground service is not running.</string>
-  <string name="blocked_activity_title_confirmed">Malicious download detected by SafeMobile Sentinel.</string>
-  <string name="blocked_activity_title_interrupted">Android opened the installer. Download Sentinel cannot reliably block the installation prompt.</string>
-  <string name="blocked_activity_title_review">Download needs review</string>
-  <string name="blocked_activity_title_quarantine">Download moved to Quarantine Vault</string>
-  <string name="blocked_activity_body">SafeMobile checks accessible downloaded files on-device and records local security events. Android controls whether an app is installed.</string>
-  <string name="blocked_activity_filename">File: %1$s</string>
-  <string name="blocked_activity_installer">Installer: %1$s</string>
-  <string name="blocked_activity_reason">Reason: %1$s</string>
-  <string name="blocked_activity_open_app">Open SafeMobile</string>
-  <string name="blocked_activity_done">Done</string>
-  <string name="notification_sentinel_channel">Download Sentinel alerts</string>
-  <string name="notification_blocked_title">Blocked malicious download from messenger.</string>
-  <string name="notification_blocked_body">The file was moved to the encrypted Quarantine Vault where Android permissions allowed it.</string>
-  <string name="notification_detected_title">Potentially unsafe download detected</string>
-  <string name="notification_detected_body">SafeMobile saved a copy in the encrypted vault, but Android may have left the original in place.</string>
-  <string name="notification_review_title">Unverified download needs review</string>
-  <string name="notification_review_body">A new APK or EXE was detected. Scan it before opening.</string>
-  <string name="notification_quarantine_title">Download moved to Quarantine Vault</string>
-  <string name="notification_quarantine_body">Strict mode moved an unverified download into the encrypted vault where supported. Restore remains available.</string>
-  <string name="notification_service_title">Download Sentinel is active</string>
-  <string name="notification_service_body">Best-effort download monitoring is running while enabled.</string>
-  <string name="blocked_activity_settings">Open Settings</string>
-  <string name="uninstall_label">Uninstall</string>
-  <string name="app_info_label">App Info</string>
-  <string name="uninstall_not_found">This app is no longer installed or is not visible to SafeMobile.</string>
-  <string name="uninstall_protected">This app is protected by Android or device policy. Open App Info to manage it.</string>
-  <string name="uninstall_opened_app_info">The uninstaller was unavailable. App Info was opened instead.</string>
-  <string name="uninstall_launch_failed">Android did not open the uninstall prompt.</string>
-  <string name="uninstall_no_settings">App Info could not be opened on this device.</string>
-  <string name="uninstall_cancelled">Uninstall was cancelled or did not complete. The app list was refreshed.</string>
-  <string name="uninstall_complete">The app list was refreshed after the uninstall flow.</string>
-  <string name="uninstall_guard_reason_system">System or updated-system package</string>
-  <string name="uninstall_guard_reason_admin">Active device administrator</string>
-  <string name="uninstall_guard_reason_source">Preinstalled package without a user installer</string>
-  <string name="uninstall_guard_reason_invalid">Invalid package name</string>
-  <string name="security_incident_title">Local security event</string>
-  <string name="manual_test_checklist">Manual test checklist: install from Downloads, share an APK from WhatsApp, deny accessibility and notification permissions, test strict mode, and verify restore from Quarantine Vault.</string>
-  <string name="activity_not_found_action">Open Settings</string>
-  <string name="detection_capabilities_title">Detection capabilities</string>
-  <string name="detection_capabilities_description">See which security checks are enabled, advisory, conditional, or unavailable in this build.</string>
-  <string name="detection_capabilities_truth_title">Important: what scan results mean</string>
-  <string name="detection_capabilities_truth_body">No local match does not prove a file is safe. The signed hash engine stays disabled until a trusted signing key and a vetted production database are configured. A limited offline DEX rule subset runs when verified bundled rules load; machine learning remains disabled. Heuristics can produce false alarms. Metrics below are not measured.</string>
-  <string name="detection_capabilities_enabled">Enabled</string>
-  <string name="detection_capabilities_disabled">Disabled</string>
-  <string name="detection_capabilities_limited">Limited coverage</string>
-  <string name="detection_capabilities_advisory">Advisory only</string>
-  <string name="detection_capabilities_conditional">Conditional</string>
-  <string name="detection_capabilities_metrics_title">Detection performance metrics</string>
-  <string name="detection_capabilities_import_signed_db">Import signed hash database</string>
-  <string name="detection_capabilities_import_yara">Import YARA rules for review (not executed)</string>
-  <string name="detection_capabilities_sync">Signed database updates</string>
-  <string name="detection_capabilities_feed_url">HTTPS update URL</string>
-  <string name="detection_capabilities_sync_enabled">Enable automatic updates</string>
-  <string name="detection_capabilities_save">Save update settings</string>
-  <string name="detection_capabilities_sync_privacy">Downloads only. Scan results, files, hashes, and package names are not uploaded.</string>
-  <string name="detection_capabilities_sync_unavailable">Automatic updates are unavailable in this offline build or until a trusted signing key is configured.</string>
 </resources>
