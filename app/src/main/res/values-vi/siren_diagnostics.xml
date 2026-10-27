@@ -17,4 +17,5 @@
   <string name="full_screen_settings_unavailable">Full-screen alert settings could not be opened. You can continue using SafeMobile.</string>
   <string name="system_app_protection_badge">System apps protected from review and uninstall</string>
   <string name="system_app_scan_complete">Scan Complete. No threats found in the items checked. System apps are excluded from review and uninstall; their integrity has not been verified by this scan.</string>
+  <string name="ui_folder_access_not_granted">Folder access was not granted. You can continue with limited protection.</string>
 </resources>
