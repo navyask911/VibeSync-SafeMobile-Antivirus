@@ -11,4 +11,5 @@
   <string name="battery_review_body">ಬ್ಯಾಟರಿ ಉಳಿತಾಯ ಅಥವಾ ಆ್ಯಪ್ ಆಪ್ಟಿಮೈಸೇಶನ್ ಸಕ್ರಿಯವಾಗಿದೆ. ಕೆಲವು Oppo/ColorOS ಸಾಧನಗಳು ಹಿನ್ನೆಲೆ ಸ್ಕ್ಯಾನ್ ಮತ್ತು ಸ್ಥಾಪನೆ ಎಚ್ಚರಿಕೆಗಳನ್ನು ನಿರ್ಬಂಧಿಸಬಹುದು. SafeMobile ಬ್ಯಾಟರಿ ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ಪರಿಶೀಲಿಸಿ.</string>
   <string name="battery_review_action">ಬ್ಯಾಟರಿ ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ಪರಿಶೀಲಿಸಿ</string>
   <string name="battery_review_unavailable">Android ಬ್ಯಾಟರಿ ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ತೆರೆಯಲಾಗಲಿಲ್ಲ.</string>
+ <string name="ui_folder_access_not_granted">ಫೋಲ್ಡರ್ ಪ್ರವೇಶಕ್ಕೆ ಅನುಮತಿ ಸಿಗಲಿಲ್ಲ. ಸೀಮಿತ ರಕ್ಷಣೆಯೊಂದಿಗೆ ಮುಂದುವರಿಸಬಹುದು.</string>
 </resources>

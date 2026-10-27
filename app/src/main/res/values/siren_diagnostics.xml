@@ -11,4 +11,5 @@
   <string name="battery_review_body">Battery saver or app optimization is active. Some Oppo/ColorOS devices restrict background scans and installation alerts. Review the battery settings for SafeMobile; this does not guarantee continuous monitoring.</string>
   <string name="battery_review_action">Review battery settings</string>
   <string name="battery_review_unavailable">Android battery settings could not be opened.</string>
+ <string name="ui_folder_access_not_granted">Folder access was not granted. You can continue with limited protection.</string>
 </resources>

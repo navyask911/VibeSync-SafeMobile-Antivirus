@@ -11,4 +11,5 @@
   <string name="battery_review_body">省電力モードまたはアプリの電池最適化が有効です。Oppo/ColorOS ではバックグラウンドのスキャンやインストール通知が制限される場合があります。SafeMobile の電池設定を確認してください。</string>
   <string name="battery_review_action">バッテリー設定を確認</string>
   <string name="battery_review_unavailable">Android のバッテリー設定を開けませんでした。</string>
+ <string name="ui_folder_access_not_granted">フォルダーへのアクセスが許可されませんでした。制限付き保護で続行できます。</string>
 </resources>

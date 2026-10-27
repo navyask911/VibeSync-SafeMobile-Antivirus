@@ -64,6 +64,7 @@ jobs:
         run: |
           set -euo pipefail
           python3 scripts/check_locale_completeness.py
+          python3 scripts/check_ja_kn_and_siren.py
           test "$(git hash-object app/src/main/res/font/dm_sans_regular.ttf)" = 9b1d3099a7b431b026c597c5b41be79a155adc62
           test "$(git hash-object app/src/main/res/font/dm_sans_medium.ttf)" = 39ddfe4c3612291a39c17dced309093f7241fc9c
           test "$(git hash-object app/src/main/res/font/dm_sans_bold.ttf)" = db8d71a1c74e4bfdd2c6360f55b48c4f25f626ff
