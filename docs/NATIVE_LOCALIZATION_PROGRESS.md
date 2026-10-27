@@ -26,7 +26,7 @@ Work branch: `feat/v1.0.12-native-localization`.
 | 15 | Bengali | values-bn | Complete; 700 keys validated |
 | 16 | Tamil | values-ta | Complete; 700 keys validated |
 | 17 | Telugu | values-te | Complete; 700 keys validated |
-| 18 | Marathi | values-mr | Pending |
+| 18 | Marathi | values-mr | Complete; 700 keys validated |
 | 19 | Gujarati | values-gu | Pending |
 | 20 | Malayalam | values-ml | Pending |
 | 21 | Punjabi | values-pa | Pending |
