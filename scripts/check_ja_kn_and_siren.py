@@ -38,6 +38,14 @@ if activity is None or activity.get(ANDROID + "exported") != "false":
 files = ("strings.xml", "device_posture.xml", "incident_response.xml",
          "sentinel_security.xml", "system_app_protection.xml",
          "detection_capabilities.xml", "siren_diagnostics.xml")
+# All user-facing resources must be translatable so Kannada/Japanese override lookup works.
+for file in files:
+    default_xml = ET.parse(res / "values" / file).getroot()
+    forbidden = [x.attrib["name"] for x in default_xml.findall("string")
+                 if x.attrib.get("translatable") == "false" and not x.attrib["name"].startswith("locale_")]
+    if forbidden:
+        errors.append(f"Untranslatable UI strings in {file}: {', '.join(forbidden)}")
+
 for lang in ("kn", "ja"):
     for file in files:
         source = strings(res / "values" / file)
