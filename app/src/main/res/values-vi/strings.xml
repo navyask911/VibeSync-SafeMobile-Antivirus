@@ -278,7 +278,7 @@
     <string name="voice_suspicious_quarantined">Cảnh báo. Một tệp đáng ngờ đã được cách ly trong kho cách ly mã hóa của SafeMobile.</string>
     <string name="voice_alert_malware_detected">Cảnh báo. Đã phát hiện ứng dụng độc hại sau khi cài đặt. Hãy xem xét hoặc gỡ cài đặt ngay.</string>
     <string name="voice_app_review">Cảnh báo. Một ứng dụng mới cài đặt cần được kiểm tra bảo mật.</string>
-    <string name="locale_english" translatable="false">English</string>
+    <string name="locale_english" translatable="false">Tiếng Anh</string>
     <string name="locale_arabic" translatable="false">العربية</string>
     <string name="locale_german" translatable="false">Deutsch</string>
     <string name="locale_spanish" translatable="false">Español</string>
@@ -380,7 +380,7 @@
 <string name="cleaner_delete_result">Đã xóa: %1$d · Byte giải phóng ước tính: %2$d · Thất bại hoặc thay đổi: %3$d</string>
 <string name="family_dedication_title">Với lòng biết ơn</string>
 <string name="family_dedication">Trân trọng dành tặng gia đình yêu quý, những người đã kiên nhẫn, ủng hộ và hy sinh thời gian suốt nhiều tháng làm việc đơn độc để SafeMobile Antivirus ra đời — một đóng góp nhỏ bé cho thế giới số an toàn với mọi người.</string>
-    <string name="about_readme">README</string>
+    <string name="about_readme">Hướng dẫn dự án</string>
 <string name="about_privacy_policy">Quyền riêng tư</string>
 <string name="about_license">Giấy phép</string>
 <string name="about_third_party">Thông báo bên thứ ba</string>

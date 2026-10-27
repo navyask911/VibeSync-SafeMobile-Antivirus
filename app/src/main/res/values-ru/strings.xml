@@ -278,7 +278,7 @@
     <string name="voice_suspicious_quarantined">Внимание. Подозрительный файл изолирован в зашифрованном карантине SafeMobile.</string>
     <string name="voice_alert_malware_detected">Внимание. После установки обнаружено вредоносное приложение. Проверьте или удалите его сейчас.</string>
     <string name="voice_app_review">Внимание. Недавно установленное приложение требует проверки безопасности.</string>
-    <string name="locale_english" translatable="false">English</string>
+    <string name="locale_english" translatable="false">Английский</string>
     <string name="locale_arabic" translatable="false">العربية</string>
     <string name="locale_german" translatable="false">Deutsch</string>
     <string name="locale_spanish" translatable="false">Español</string>
@@ -380,7 +380,7 @@
     <string name="cleaner_delete_result">Удалено: %1$d · Освобождено примерно байт: %2$d · Ошибок или изменений: %3$d</string>
     <string name="family_dedication_title">С благодарностью</string>
     <string name="family_dedication">С глубокой благодарностью моей любимой семье. Её огромное терпение, поддержка и пожертвованное время в течение месяцев уединённой работы сделали возможным создание SafeMobile Antivirus — скромный вклад в безопасность цифрового мира для всех.</string>
-    <string name="about_readme">README</string>
+    <string name="about_readme">Описание проекта</string>
     <string name="about_privacy_policy">Конфиденциальность</string>
     <string name="about_license">Лицензия</string>
     <string name="about_third_party">Уведомления третьих сторон</string>

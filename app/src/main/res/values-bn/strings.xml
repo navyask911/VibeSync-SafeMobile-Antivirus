@@ -278,7 +278,7 @@
     <string name="voice_suspicious_quarantined">সতর্কতা। একটি সন্দেহজনক ফাইল সেফমোবাইলের এনক্রিপ্ট করা কোয়ারেন্টিনে আলাদা করা হয়েছে।</string>
     <string name="voice_alert_malware_detected">সতর্কতা। ইনস্টল করার পরে একটি ক্ষতিকারক অ্যাপ শনাক্ত হয়েছে। এখনই পর্যালোচনা করুন বা আনইনস্টল করুন।</string>
     <string name="voice_app_review">সতর্কতা। নতুন ইনস্টল করা একটি অ্যাপের নিরাপত্তা পর্যালোচনা প্রয়োজন।</string>
-    <string name="locale_english" translatable="false">English</string>
+    <string name="locale_english" translatable="false">ইংরেজি</string>
     <string name="locale_arabic" translatable="false">العربية</string>
     <string name="locale_german" translatable="false">Deutsch</string>
     <string name="locale_spanish" translatable="false">Español</string>
@@ -380,7 +380,7 @@
 <string name="cleaner_delete_result">মুছেছে: %1$d · আনুমানিক খালি বাইট: %2$d · ব্যর্থ বা বদলেছে: %3$d</string>
 <string name="family_dedication_title">কৃতজ্ঞতায়</string>
 <string name="family_dedication">প্রিয় পরিবারকে গভীর কৃতজ্ঞতায় উৎসর্গ করছি। দীর্ঘ একাকী কাজের মাসগুলিতে তাঁদের অসীম ধৈর্য, সমর্থন ও সময়ের ত্যাগ SafeMobile Antivirus তৈরি সম্ভব করেছে — সকলের জন্য নিরাপদ ডিজিটাল জগতে একটি বিনম্র অবদান।</string>
-    <string name="about_readme">README</string>
+    <string name="about_readme">প্রকল্পের পরিচিতি</string>
 <string name="about_privacy_policy">গোপনীয়তা</string>
 <string name="about_license">লাইসেন্স</string>
 <string name="about_third_party">তৃতীয় পক্ষের বিজ্ঞপ্তি</string>

@@ -278,7 +278,7 @@
     <string name="voice_suspicious_quarantined">警告。可疑文件已被移至SafeMobile的加密隔离区。</string>
     <string name="voice_alert_malware_detected">警告。安装后检测到恶意应用。请立即检查或卸载。</string>
     <string name="voice_app_review">警告。新安装的应用需要进行安全检查。</string>
-    <string name="locale_english" translatable="false">English</string>
+    <string name="locale_english" translatable="false">英语</string>
     <string name="locale_arabic" translatable="false">العربية</string>
     <string name="locale_german" translatable="false">Deutsch</string>
     <string name="locale_spanish" translatable="false">Español</string>
@@ -380,7 +380,7 @@
     <string name="cleaner_delete_result">已删除：%1$d · 约释放字节数：%2$d · 失败或已更改：%3$d</string>
     <string name="family_dedication_title">衷心致谢</string>
     <string name="family_dedication">谨以深深的感激献给我挚爱的家人。他们无比的耐心、支持，以及在我数月独自开发期间所付出的时间与牺牲，使 SafeMobile Antivirus 得以诞生，为所有人的数字世界安全尽一份绵薄之力。</string>
-    <string name="about_readme">README</string>
+    <string name="about_readme">项目说明</string>
     <string name="about_privacy_policy">隐私</string>
     <string name="about_license">许可证</string>
     <string name="about_third_party">第三方声明</string>

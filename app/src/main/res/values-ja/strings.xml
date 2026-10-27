@@ -278,7 +278,7 @@
     <string name="voice_suspicious_quarantined">警告。不審なファイルをSafeMobileの暗号化された隔離領域に隔離しました。</string>
     <string name="voice_alert_malware_detected">警告。インストール後に悪意のあるアプリを検出しました。今すぐ確認するか、アンインストールしてください。</string>
     <string name="voice_app_review">警告。新しくインストールされたアプリのセキュリティ確認が必要です。</string>
-    <string name="locale_english" translatable="false">English</string>
+    <string name="locale_english" translatable="false">英語</string>
     <string name="locale_arabic" translatable="false">العربية</string>
     <string name="locale_german" translatable="false">Deutsch</string>
     <string name="locale_spanish" translatable="false">Español</string>
@@ -380,7 +380,7 @@
     <string name="cleaner_delete_result">削除：%1$d 件 · 解放した容量：約 %2$d バイト · 失敗または変更：%3$d 件</string>
     <string name="family_dedication_title">感謝を込めて</string>
     <string name="family_dedication">愛する家族に深い感謝を捧げます。長い孤独な開発期間に示してくれた大きな忍耐と支え、そして時間の犠牲によって SafeMobile Antivirus が生まれました。すべての人のデジタル世界をより安全にするための、ささやかな貢献です。</string>
-    <string name="about_readme">README</string>
+    <string name="about_readme">プロジェクトの説明</string>
     <string name="about_privacy_policy">プライバシー</string>
     <string name="about_license">ライセンス</string>
     <string name="about_third_party">第三者に関する通知</string>

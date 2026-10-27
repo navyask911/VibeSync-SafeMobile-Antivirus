@@ -418,7 +418,7 @@
     <string name="cleaner_delete_confirm_action">ಫೈಲ್‌ಗಳನ್ನು ಅಳಿಸಿ</string>
     <string name="cleaner_more_files">ಮತ್ತು %1$d ಇನ್ನಷ್ಟು…</string>
     <string name="cleaner_delete_result">ಅಳಿಸಲಾಗಿದೆ: %1$d · ಖಾಲಿಯಾದ ಬೈಟ್‌ಗಳು: %2$d · ವಿಫಲ: %3$d</string>
-    <string name="locale_english">English</string>
+    <string name="locale_english" translatable="false">ಇಂಗ್ಲಿಷ್</string>
     <string name="locale_arabic">العربية</string>
     <string name="locale_german">Deutsch</string>
     <string name="locale_spanish">Español</string>
@@ -442,7 +442,7 @@
     <string name="locale_hebrew">עברית</string>
     <string name="family_dedication_title">ಕೃತಜ್ಞತೆಯೊಂದಿಗೆ</string>
     <string name="family_dedication">ನನ್ನ ಪ್ರೀತಿಯ ಕುಟುಂಬಕ್ಕೆ ಆಳವಾದ ಕೃತಜ್ಞತೆಯೊಂದಿಗೆ ಸಮರ್ಪಣೆ. SafeMobile Antivirus ರಚನೆಯ ದೀರ್ಘ ತಿಂಗಳುಗಳಲ್ಲಿ ಅವರ ತಾಳ್ಮೆ, ಬೆಂಬಲ ಮತ್ತು ತ್ಯಾಗದಿಂದ ಎಲ್ಲರ ಡಿಜಿಟಲ್ ಸುರಕ್ಷತೆಗೆ ಈ ಸಣ್ಣ ಕೊಡುಗೆ ಸಾಧ್ಯವಾಯಿತು.</string>
-    <string name="about_readme">README</string>
+    <string name="about_readme">ಯೋಜನೆಯ ಪರಿಚಯ</string>
     <string name="about_privacy_policy">ಗೌಪ್ಯತಾ ನೀತಿ</string>
     <string name="about_license">ಪರವಾನಗಿ</string>
     <string name="about_third_party">ಮೂರನೇ ಪಕ್ಷದ ಪರವಾನಗಿಗಳು</string>

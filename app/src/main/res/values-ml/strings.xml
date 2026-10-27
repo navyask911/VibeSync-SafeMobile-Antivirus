@@ -102,7 +102,7 @@
 <string name="risk_sms_accessibility">SMS അനുമതികളും പ്രവേശനക്ഷമതാ പ്രഖ്യാപനവും സംയോജിപ്പിക്കുന്നു; അവലോകന സൂചനയാണ്, OTP മോഷണത്തിന്റെയോ ദോഷകരമായ സോഫ്റ്റ്‌വെയറിന്റെയോ തെളിവല്ല.</string>
 <string name="language_label">ഭാഷ: %1$s</string>
 <string name="language_system_default">ഉപകരണത്തിന്റെ ഭാഷ</string>
-<string name="locale_english" translatable="false">English</string>
+<string name="locale_english" translatable="false">ഇംഗ്ലീഷ്</string>
 <string name="locale_arabic" translatable="false">العربية</string>
 <string name="locale_german" translatable="false">Deutsch</string>
 <string name="locale_spanish" translatable="false">Español</string>
@@ -246,7 +246,7 @@
 <string name="cleaner_delete_result">നീക്കിയത്: %1$d · ഏകദേശ ഒഴിവായ ബൈറ്റുകൾ: %2$d · പരാജയം അല്ലെങ്കിൽ മാറ്റം: %3$d</string>
 <string name="family_dedication_title">നന്ദിയോടെ</string>
 <string name="family_dedication">എന്റെ പ്രിയ കുടുംബത്തിന് ആഴത്തിലുള്ള നന്ദിയോടെ സമർപ്പിക്കുന്നു. മാസങ്ങളുടെ ഏകാന്തപ്രവർത്തനത്തിൽ അവരുടെ അളവറ്റ ക്ഷമയും പിന്തുണയും സമയത്യാഗവും SafeMobile Antivirus സാധ്യമാക്കി — എല്ലാവർക്കും സുരക്ഷിതമായ ഡിജിറ്റൽ ലോകത്തിനുള്ള വിനീതമായ സംഭാവന.</string>
-<string name="about_readme">README</string>
+<string name="about_readme">പദ്ധതി പരിചയം</string>
 <string name="about_privacy_policy">സ്വകാര്യത</string>
 <string name="about_license">അനുമതിപത്രം</string>
 <string name="about_third_party">മൂന്നാം കക്ഷി അറിയിപ്പുകൾ</string>

@@ -102,7 +102,7 @@
 <string name="risk_sms_accessibility">SMS અને સુલભતા સેવા સાથે જાહેર છે; સમીક્ષાનો સંકેત, OTP ચોરી કે હાનિકારક સોફ્ટવેરનો પુરાવો નહીં.</string>
 <string name="language_label">ભાષા: %1$s</string>
 <string name="language_system_default">ઉપકરણની મૂળ ભાષા</string>
-<string name="locale_english" translatable="false">English</string>
+<string name="locale_english" translatable="false">અંગ્રેજી</string>
 <string name="locale_arabic" translatable="false">العربية</string>
 <string name="locale_german" translatable="false">Deutsch</string>
 <string name="locale_spanish" translatable="false">Español</string>
@@ -246,7 +246,7 @@
 <string name="cleaner_delete_result">કાઢી: %1$d · અંદાજે ખાલી બાઇટ: %2$d · નિષ્ફળ અથવા બદલાઈ: %3$d</string>
 <string name="family_dedication_title">કૃતજ્ઞતા સાથે</string>
 <string name="family_dedication">મારા પ્રિય પરિવારને હૃદયપૂર્વક સમર્પિત. એકલતામાં કામના મહિનાઓ દરમ્યાન તેમની અપાર ધીરજ, સહાય અને સમયના ત્યાગથી SafeMobile Antivirus બન્યું — દરેક માટે સલામત ડિજિટલ જગત તરફ નમ્ર યોગદાન.</string>
-<string name="about_readme">README</string>
+<string name="about_readme">પ્રોજેક્ટનો પરિચય</string>
 <string name="about_privacy_policy">ગોપનીયતા</string>
 <string name="about_license">પરવાનો</string>
 <string name="about_third_party">તૃતીય પક્ષની સૂચનાઓ</string>

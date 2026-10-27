@@ -278,7 +278,7 @@
     <string name="voice_suspicious_quarantined">Uyarı. Şüpheli bir dosya SafeMobile şifreli karantinasında yalıtıldı.</string>
     <string name="voice_alert_malware_detected">Uyarı. Kurulumdan sonra kötü amaçlı bir uygulama tespit edildi. Hemen inceleyin veya kaldırın.</string>
     <string name="voice_app_review">Uyarı. Yeni yüklenen bir uygulamanın güvenlik incelemesi gerekiyor.</string>
-    <string name="locale_english" translatable="false">English</string>
+    <string name="locale_english" translatable="false">İngilizce</string>
     <string name="locale_arabic" translatable="false">العربية</string>
     <string name="locale_german" translatable="false">Deutsch</string>
     <string name="locale_spanish" translatable="false">Español</string>
@@ -380,7 +380,7 @@
 <string name="cleaner_delete_result">Silinen: %1$d · Açılan yaklaşık alan: %2$d bayt · Başarısız veya değişmiş: %3$d</string>
 <string name="family_dedication_title">Minnetle</string>
 <string name="family_dedication">Aylar süren yalnız çalışma boyunca büyük sabrı, desteği ve zamanından fedakârlığıyla SafeMobile Antivirus’ün ortaya çıkmasını sağlayan sevgili aileme derin minnetle adanmıştır. Herkes için güvenli bir dijital dünyaya mütevazı bir katkı olması dileğiyle.</string>
-    <string name="about_readme">README</string>
+    <string name="about_readme">Proje kılavuzu</string>
 <string name="about_privacy_policy">Gizlilik</string>
 <string name="about_license">Lisans</string>
 <string name="about_third_party">Üçüncü taraf bildirimleri</string>

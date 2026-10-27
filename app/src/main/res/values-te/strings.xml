@@ -278,7 +278,7 @@
     <string name="voice_suspicious_quarantined">హెచ్చరిక. అనుమానాస్పద ఫైల్ సేఫ్‌మొబైల్ ఎన్‌క్రిప్ట్ చేసిన క్వారంటైన్‌లో వేరుచేయబడింది.</string>
     <string name="voice_alert_malware_detected">హెచ్చరిక. ఇన్‌స్టాల్ చేసిన తర్వాత హానికరమైన యాప్ గుర్తించబడింది. ఇప్పుడే సమీక్షించండి లేదా అన్‌ఇన్‌స్టాల్ చేయండి.</string>
     <string name="voice_app_review">హెచ్చరిక. కొత్తగా ఇన్‌స్టాల్ చేసిన యాప్‌కు భద్రతా సమీక్ష అవసరం.</string>
-    <string name="locale_english" translatable="false">English</string>
+    <string name="locale_english" translatable="false">ఆంగ్లం</string>
     <string name="locale_arabic" translatable="false">العربية</string>
     <string name="locale_german" translatable="false">Deutsch</string>
     <string name="locale_spanish" translatable="false">Español</string>
@@ -380,7 +380,7 @@
 <string name="cleaner_delete_result">తొలగించినవి: %1$d · ఖాళీ అయిన అంచనా బైట్లు: %2$d · విఫలమైనవి లేదా మారినవి: %3$d</string>
 <string name="family_dedication_title">కృతజ్ఞతలతో</string>
 <string name="family_dedication">నెలల ఏకాంత శ్రమలో అపార సహనం, మద్దతు, సమయ త్యాగంతో SafeMobile Antivirus సృష్టిని సాధ్యం చేసిన నా ప్రియమైన కుటుంబానికి హృదయపూర్వక కృతజ్ఞతలతో అంకితం. అందరికీ సురక్షిత డిజిటల్ ప్రపంచం కోసం ఒక వినమ్ర సహకారం.</string>
-    <string name="about_readme">README</string>
+    <string name="about_readme">ప్రాజెక్ట్ పరిచయం</string>
 <string name="about_privacy_policy">గోప్యత</string>
 <string name="about_license">లైసెన్స్</string>
 <string name="about_third_party">మూడో పక్ష ప్రకటనలు</string>

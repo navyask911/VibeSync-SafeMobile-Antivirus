@@ -279,7 +279,7 @@
     <string name="voice_suspicious_quarantined">Peringatan. File mencurigakan diisolasi dalam karantina terenkripsi SafeMobile.</string>
     <string name="voice_alert_malware_detected">Peringatan. Aplikasi berbahaya terdeteksi setelah diinstal. Tinjau atau uninstal sekarang.</string>
     <string name="voice_app_review">Peringatan. Aplikasi yang baru diinstal memerlukan pemeriksaan keamanan.</string>
-    <string name="locale_english" translatable="false">English</string>
+    <string name="locale_english" translatable="false">Bahasa Inggris</string>
     <string name="locale_arabic" translatable="false">العربية</string>
     <string name="locale_german" translatable="false">Deutsch</string>
     <string name="locale_spanish" translatable="false">Español</string>
@@ -381,7 +381,7 @@
 <string name="cleaner_delete_result">Terhapus: %1$d · Perkiraan bita bebas: %2$d · Gagal atau berubah: %3$d</string>
 <string name="family_dedication_title">Dengan rasa syukur</string>
 <string name="family_dedication">Dipersembahkan dengan rasa syukur mendalam kepada keluarga tercinta, yang kesabaran, dukungan, dan pengorbanan waktunya selama berbulan-bulan bekerja sendiri memungkinkan terciptanya SafeMobile Antivirus — sumbangan sederhana untuk dunia digital yang aman bagi semua.</string>
-    <string name="about_readme">README</string>
+    <string name="about_readme">Panduan proyek</string>
 <string name="about_privacy_policy">Privasi</string>
 <string name="about_license">Lisensi</string>
 <string name="about_third_party">Pemberitahuan pihak ketiga</string>

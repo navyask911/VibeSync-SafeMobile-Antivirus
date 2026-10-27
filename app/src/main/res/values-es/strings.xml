@@ -278,7 +278,7 @@
     <string name="voice_suspicious_quarantined">Advertencia. Se aisló un archivo sospechoso en la cuarentena cifrada de SafeMobile.</string>
     <string name="voice_alert_malware_detected">Advertencia. Se detectó una aplicación maliciosa después de instalarla. Revísala o desinstálala ahora.</string>
     <string name="voice_app_review">Advertencia. Una aplicación recién instalada necesita una revisión de seguridad.</string>
-    <string name="locale_english" translatable="false">English</string>
+    <string name="locale_english" translatable="false">Inglés</string>
     <string name="locale_arabic" translatable="false">العربية</string>
     <string name="locale_german" translatable="false">Deutsch</string>
     <string name="locale_spanish" translatable="false">Español</string>
@@ -380,7 +380,7 @@
     <string name="cleaner_delete_result">Eliminados: %1$d · Octetos liberados aproximadamente: %2$d · Fallidos o modificados: %3$d</string>
     <string name="family_dedication_title">Con gratitud</string>
     <string name="family_dedication">Dedicado con profunda gratitud a mi querida familia, cuya enorme paciencia, apoyo y sacrificio durante meses de trabajo en soledad hicieron posible la creación de SafeMobile Antivirus: una humilde aportación para que el mundo digital sea más seguro para todos.</string>
-    <string name="about_readme">README</string>
+    <string name="about_readme">Guía del proyecto</string>
     <string name="about_privacy_policy">Privacidad</string>
     <string name="about_license">Licencia</string>
     <string name="about_third_party">Avisos de terceros</string>

@@ -418,7 +418,7 @@
     <string name="cleaner_delete_confirm_action">Supprimer les fichiers</string>
     <string name="cleaner_more_files">Et %1$d autres…</string>
     <string name="cleaner_delete_result">Supprimés : %1$d · Octets libérés : %2$d · Échecs : %3$d</string>
-    <string name="locale_english">English</string>
+    <string name="locale_english" translatable="false">Anglais</string>
     <string name="locale_arabic">العربية</string>
     <string name="locale_german">Deutsch</string>
     <string name="locale_spanish">Español</string>

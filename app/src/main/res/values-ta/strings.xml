@@ -278,7 +278,7 @@
     <string name="voice_suspicious_quarantined">எச்சரிக்கை. சந்தேகத்திற்குரிய கோப்பு சேஃப்மொபைலின் மறைகுறியாக்கப்பட்ட தனிமைப்படுத்தல் பெட்டகத்தில் தனிமைப்படுத்தப்பட்டது.</string>
     <string name="voice_alert_malware_detected">எச்சரிக்கை. நிறுவிய பிறகு தீங்கிழைக்கும் செயலி கண்டறியப்பட்டது. இப்போது அதைச் சரிபார்க்கவும் அல்லது நிறுவல் நீக்கவும்.</string>
     <string name="voice_app_review">எச்சரிக்கை. புதிதாக நிறுவப்பட்ட செயலிக்குப் பாதுகாப்புச் சரிபார்ப்பு தேவை.</string>
-    <string name="locale_english" translatable="false">English</string>
+    <string name="locale_english" translatable="false">ஆங்கிலம்</string>
     <string name="locale_arabic" translatable="false">العربية</string>
     <string name="locale_german" translatable="false">Deutsch</string>
     <string name="locale_spanish" translatable="false">Español</string>
@@ -380,7 +380,7 @@
 <string name="cleaner_delete_result">நீக்கியவை: %1$d · விடுவித்த தோராய பைட்டுகள்: %2$d · தோல்வி அல்லது மாறியவை: %3$d</string>
 <string name="family_dedication_title">நன்றியுடன்</string>
 <string name="family_dedication">பல மாதத் தனிமைப் பணியில் பொறுமையாலும் ஆதரவாலும் நேரத் தியாகத்தாலும் SafeMobile Antivirus உருவாக உதவிய அன்புக் குடும்பத்துக்கு ஆழ்ந்த நன்றியுடன் அர்ப்பணிக்கிறேன். அனைவருக்கும் பாதுகாப்பான டிஜிட்டல் உலகுக்கான எளிய பங்களிப்பு இது.</string>
-    <string name="about_readme">README</string>
+    <string name="about_readme">திட்ட அறிமுகம்</string>
 <string name="about_privacy_policy">தனியுரிமை</string>
 <string name="about_license">உரிமம்</string>
 <string name="about_third_party">மூன்றாம் தரப்பு அறிவிப்புகள்</string>
