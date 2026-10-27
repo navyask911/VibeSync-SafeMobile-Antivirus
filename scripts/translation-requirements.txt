@@ -1,3 +1,0 @@
-# Build-time only, never packaged in Android. MIT: https://github.com/nidhaloff/deep-translator
-# Version/license verified from the installed distribution metadata.
-deep-translator==1.11.4
