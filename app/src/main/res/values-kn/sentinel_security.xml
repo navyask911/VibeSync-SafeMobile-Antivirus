@@ -44,6 +44,6 @@
 <string name="uninstall_guard_reason_source">ಬಳಕೆದಾರ ಸ್ಥಾಪಕವಿಲ್ಲದ ಪೂರ್ವಸ್ಥಾಪಿತ ಆ್ಯಪ್</string>
 <string name="uninstall_guard_reason_invalid">ಅಮಾನ್ಯ ಆ್ಯಪ್ ಹೆಸರು</string>
 <string name="security_incident_title">ಸ್ಥಳೀಯ ಭದ್ರತಾ ಘಟನೆ</string>
-<string name="manual_test_checklist">ಕೈಯಾರೆ ಪರೀಕ್ಷೆ: Downloads ಮತ್ತು WhatsApp ನಿಂದ APK ಸ್ಥಾಪಿಸಿ, ಅನುಮತಿ ನಿರಾಕರಿಸಿ, ಕಟ್ಟುನಿಟ್ಟಿನ ಮೋಡ್ ಪರಿಶೀಲಿಸಿ ಮತ್ತು ಕ್ವಾರಂಟೈನ್‌ನಿಂದ ಮರುಸ್ಥಾಪಿಸಿ.</string>
+<string name="manual_test_checklist">ಕೈಯಾರೆ ಪರೀಕ್ಷೆ: Downloads ಮತ್ತು ಸಂದೇಶ ಆ್ಯಪ್‌ಗಳು ನಿಂದ APK ಸ್ಥಾಪಿಸಿ, ಅನುಮತಿ ನಿರಾಕರಿಸಿ, ಕಟ್ಟುನಿಟ್ಟಿನ ಮೋಡ್ ಪರಿಶೀಲಿಸಿ ಮತ್ತು ಕ್ವಾರಂಟೈನ್‌ನಿಂದ ಮರುಸ್ಥಾಪಿಸಿ.</string>
 <string name="activity_not_found_action">ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ತೆರೆಯಿರಿ</string>
 </resources>

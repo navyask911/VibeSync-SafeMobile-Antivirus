@@ -44,6 +44,6 @@
 <string name="uninstall_guard_reason_source">ユーザーがインストールしていないプリインストールアプリ</string>
 <string name="uninstall_guard_reason_invalid">無効なパッケージ名</string>
 <string name="security_incident_title">端末内のセキュリティイベント</string>
-<string name="manual_test_checklist">手動テスト: ダウンロードまたは WhatsApp から APK を扱い、権限拒否、厳格モード、隔離庫からの復元を確認してください。</string>
+<string name="manual_test_checklist">手動テスト: ダウンロードまたは メッセージアプリ から APK を扱い、権限拒否、厳格モード、隔離庫からの復元を確認してください。</string>
 <string name="activity_not_found_action">設定を開く</string>
 </resources>

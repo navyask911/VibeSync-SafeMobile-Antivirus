@@ -12,6 +12,7 @@ import com.vibesync.antivirus.core.heuristics.PermissionRiskAnalyzer
 import com.vibesync.antivirus.core.security.IntegrityChecker
 import com.vibesync.antivirus.core.security.ProtectedPackagePolicy
 import com.vibesync.antivirus.core.security.TrustedPackageWhitelist
+import com.vibesync.antivirus.core.security.TrustedAppStore
 import kotlin.math.roundToInt
 import com.vibesync.antivirus.data.local.ScanAudit
 import com.vibesync.antivirus.data.local.ThreatDao
@@ -36,7 +37,20 @@ class PackageScanner(
 ) {
  private val pm = context.packageManager
  private val integrityChecker = IntegrityChecker(context)
+ private val trustedAppStore = TrustedAppStore(context)
  private val deepStaticAnalyzer = DeepStaticAnalyzer()
+ fun installedAppInventory(): List<InstalledAppItem> {
+  @Suppress("DEPRECATION")
+  val packages = pm.getInstalledPackages(0)
+  return packages.asSequence().filter { info ->
+   val flags = info.applicationInfo?.flags ?: return@filter false
+   ProtectedPackagePolicy.isUserInstalled(flags, info.packageName, context.packageName)
+  }.map { info ->
+   val label = runCatching { info.applicationInfo?.loadLabel(pm)?.toString() }
+    .getOrNull().orEmpty().ifBlank { info.packageName }
+   InstalledAppItem(info.packageName, label)
+  }.distinctBy { it.packageName }.sortedBy { it.displayName.lowercase(java.util.Locale.getDefault()) }.toList()
+ }
  suspend fun scanInstalledApps(progress: suspend (processed: Int, total: Int) -> Unit = { _, _ -> }): List<ScanResult> {
   val flags = PackageManager.GET_PERMISSIONS or PackageManager.GET_SERVICES or PackageManager.GET_ACTIVITIES or PackageManager.GET_RECEIVERS or PackageManager.GET_PROVIDERS or signingFlags()
   val packages = pm.getInstalledPackages(flags).filter { info ->
@@ -182,8 +196,12 @@ class PackageScanner(
   val deepReasons = deepReport.findings.map { "[${it.ruleId}] ${it.evidence} (confidence ${it.confidence}%)" }
   reasons += deepReasons
   val combinedRiskScore = maxOf(adjustedRiskScore, deepReport.riskScore)
-  val output = evaluate(info.packageName, label, hashes.sha256, hashes.md5, reasons, combinedRiskScore, sha1 = hashes.sha1, fileSize = hashes.bytesRead)
+  val assessed = evaluate(info.packageName, label, hashes.sha256, hashes.md5, reasons, combinedRiskScore, sha1 = hashes.sha1, fileSize = hashes.bytesRead)
    .copy(riskReport = deepReport)
+  val output = if (assessed.verdict != ScanVerdict.THREAT &&
+      trustedAppStore.isTrusted(info.packageName, hashes.sha256)) {
+   assessed.copy(verdict = ScanVerdict.NO_MATCH, reasons = listOf(context.getString(R.string.trusted_app_explanation)), riskScore = 0f)
+  } else assessed
   audit(output, start, scanSessionId)
   return output.copy(durationMs = elapsed(start), packageName = info.packageName, scanSessionId = scanSessionId)
  }

@@ -49,6 +49,6 @@
     <string name="uninstall_guard_reason_source">Preinstalled package without a user installer</string>
     <string name="uninstall_guard_reason_invalid">Invalid package name</string>
     <string name="security_incident_title">Local security event</string>
-    <string name="manual_test_checklist">Manual test checklist: install from Downloads, share an APK from WhatsApp, deny accessibility and notification permissions, test strict mode, and verify restore from Quarantine Vault.</string>
+    <string name="manual_test_checklist">Manual test checklist: install from Downloads, share an APK from Messaging Apps, deny accessibility and notification permissions, test strict mode, and verify restore from Quarantine Vault.</string>
     <string name="activity_not_found_action">Open Settings</string>
 </resources>

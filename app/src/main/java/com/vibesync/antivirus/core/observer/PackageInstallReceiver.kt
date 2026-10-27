@@ -26,18 +26,45 @@ import java.util.UUID
  */
 class PackageInstallReceiver : BroadcastReceiver() {
  override fun onReceive(context: Context, intent: Intent) {
-  if (intent.action != Intent.ACTION_PACKAGE_ADDED && intent.action != Intent.ACTION_PACKAGE_REPLACED) return
-  val appContext=context.applicationContext
-  val packageName=intent.data?.schemeSpecificPart?.takeIf { it.isNotBlank() } ?: return
-  Log.d("SafeMobileScan", "Package install broadcast detected: package=$packageName action=" + intent.action)
-  if (!appContext.getSharedPreferences(SafeMobileApp.PRIVACY_PREFS,Context.MODE_PRIVATE).getBoolean(SafeMobileApp.PRIVACY_ACKNOWLEDGED,false)) {
-   Log.d("SafeMobileScan", "Post-install scan skipped: privacy disclosure not acknowledged.")
+  if (intent.action != Intent.ACTION_PACKAGE_ADDED && intent.action != Intent.ACTION_PACKAGE_REPLACED) {
+   Log.e("SafeMobileScan", "Unexpected install receiver action (ignored): " + intent.action)
    return
   }
-  if(packageName==appContext.packageName) return
-  if(com.vibesync.antivirus.core.security.TrustedPackageWhitelist.hasProtectedNamespace(packageName)) return
+  val appContext=context.applicationContext
+  // Android always reports the INSTALLED package via package:; the originating installer
+  // (including messaging apps) is separately accessible through InstallSourceInfo.
+  val uri = intent.data
+  val packageName = uri?.takeIf { it.scheme == "package" }?.schemeSpecificPart
+   ?.removePrefix("//")?.takeIf { it.matches(Regex("[A-Za-z0-9_]+(\\.[A-Za-z0-9_]+)+")) }
+  if (packageName == null) {
+   Log.e("SafeMobileScan", "Install broadcast missing valid package: URI; action=" + intent.action +
+     " scheme=" + uri?.scheme + " rawUriPresent=" + (uri != null))
+   return
+  }
+  Log.d("SafeMobileScan", "Package broadcast received action=" + intent.action + " package=" + packageName +
+    " replacing=" + intent.getBooleanExtra(Intent.EXTRA_REPLACING,false))
+  if (!appContext.getSharedPreferences(SafeMobileApp.PRIVACY_PREFS,Context.MODE_PRIVATE).getBoolean(SafeMobileApp.PRIVACY_ACKNOWLEDGED,false)) {
+   Log.e("SafeMobileScan", "Cannot audit install until privacy notice is accepted.")
+   return
+  }
+  if(packageName==appContext.packageName) { Log.d("SafeMobileScan","Own package installed; skip"); return }
+  if(com.vibesync.antivirus.core.security.TrustedPackageWhitelist.hasProtectedNamespace(packageName)) {
+   Log.d("SafeMobileScan","Protected OS package; skip consumer scan: " + packageName); return
+  }
   val update=intent.action==Intent.ACTION_PACKAGE_REPLACED || intent.getBooleanExtra(Intent.EXTRA_REPLACING,false)
   val eventId=UUID.randomUUID().toString()
+  // Queue immediately while the broadcast is live: slow Room/Keystore audit must not
+  // consume the system's broadcast deadline or silently prevent the threat scan.
+  try {
+   val request = OneTimeWorkRequestBuilder<MultiLayerScanWorker>().setInputData(
+    Data.Builder().putString(MultiLayerScanWorker.KEY_PACKAGE_NAME,packageName)
+     .putString(MultiLayerScanWorker.KEY_EVENT_ID,eventId).build()
+   ).addTag("post_install_scan").build()
+   WorkManager.getInstance(appContext).enqueue(request)
+   Log.d("SafeMobileScan", "Post-install scan scheduled immediately: " + packageName)
+  } catch (error: Exception) {
+   Log.e("SafeMobileScan", "CRITICAL: post-install work enqueue failed for " + packageName, error)
+  }
   val pending=goAsync()
   val scope=CoroutineScope(SupervisorJob()+Dispatchers.IO)
   scope.launch {
@@ -67,21 +94,7 @@ class PackageInstallReceiver : BroadcastReceiver() {
     if(source.needsReview && !update) InstallSourceNotifier.notify(appContext,label,source.sourceLabel,eventId)
    } catch (error: Exception) {
     Log.w("SafeMobileScan", "Install-source audit unavailable: $packageName", error)
-   } finally {
-    try {
-     // Every broadcast owns independent work, even if optional audit persistence failed.
-     // No package-level REPLACE, historic alert status, dismissal or cooldown can suppress it.
-     val request=OneTimeWorkRequestBuilder<MultiLayerScanWorker>().setInputData(
-      Data.Builder().putString(MultiLayerScanWorker.KEY_PACKAGE_NAME,packageName)
-       .putString(MultiLayerScanWorker.KEY_EVENT_ID,eventId).build()
-     ).addTag("post_install_scan").build()
-     Log.d("SafeMobileScan", "Post-install scan starting: enqueue package=$packageName event=$eventId")
-     WorkManager.getInstance(appContext).enqueue(request)
-     Log.d("SafeMobileScan", "Post-install scan queued: package=$packageName event=$eventId")
-    } catch (error: Exception) {
-     Log.e("SafeMobileScan", "Unable to queue post-install scan: $packageName", error)
-    } finally { pending.finish(); scope.cancel() }
-   }
+   } finally { pending.finish(); scope.cancel() }
   }
  }
  private fun resolveLabel(context: Context,packageName: String): String = try {

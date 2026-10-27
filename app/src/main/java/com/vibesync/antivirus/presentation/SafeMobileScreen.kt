@@ -188,6 +188,9 @@ import kotlinx.coroutines.launch
  val connected by connectivity.online.collectAsStateWithLifecycle()
  val online = BuildConfig.OPTIONAL_FEED_ENABLED && connected
  var privacyAccepted by remember { mutableStateOf(context.getSharedPreferences(SafeMobileApp.PRIVACY_PREFS,0).getBoolean(SafeMobileApp.PRIVACY_ACKNOWLEDGED,false)) }
+ LaunchedEffect(selectedDestination, privacyAccepted) {
+  if (selectedDestination == "apps" && privacyAccepted) vm.refreshInstalledInventory()
+ }
  var showPrivacyDisclosure by remember { mutableStateOf(false) }
  var pendingSensitiveAction by remember { mutableStateOf<(() -> Unit)?>(null) }
  val requestPrivacyAcknowledgement: (() -> Unit) -> Unit = { action ->
@@ -537,6 +540,10 @@ import kotlinx.coroutines.launch
      SecurityDashboard(state.securityAssessment,
       onCheckPlayProtect = { requestPrivacyAcknowledgement { showPlayProtectDialog = true } },
       onSync = { vm.requestHashDatabaseSync() })
+     HomeSecurityMetrics(
+      summary = state.scanSummary,
+      hashDbPublishedAt = com.vibesync.antivirus.core.hashdb.HashDatabaseFreshness.updatedAt(context, state.hashDatabaseCapability.version)
+     )
      if (initialHashSyncPending) {
       Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.primaryContainer),shape=RoundedCornerShape(16.dp),modifier=Modifier.fillMaxWidth()) {
        Row(Modifier.padding(14.dp), horizontalArrangement=Arrangement.spacedBy(10.dp), verticalAlignment=Alignment.CenterVertically) {
@@ -618,7 +625,28 @@ import kotlinx.coroutines.launch
     if (selectedDestination == "apps") {
      SectionHeader(title=stringResource(R.string.nav_apps),actionLabel=stringResource(R.string.security_scan_now),onAction={ requestPrivacyAcknowledgement { vm.scanInstalled() } })
      val apps=state.results.filter { it.packageName != null }
-     if (apps.isEmpty()) EmptyState(title=stringResource(R.string.apps_inventory_empty),description=stringResource(R.string.apps_inventory_empty_body),
+     if (state.isScanning) {
+       LinearProgressIndicator(modifier=Modifier.fillMaxWidth())
+       Text(stringResource(R.string.apps_scanning_in_progress), style=MaterialTheme.typography.bodySmall)
+      }
+      if (state.inventoryLoading) CircularProgressIndicator()
+      if (apps.isEmpty() && state.installedApps.isNotEmpty()) {
+       Text(stringResource(R.string.apps_inventory_count, state.installedApps.size), style=MaterialTheme.typography.bodyMedium)
+       state.installedApps.take(80).forEach { item ->
+        Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surface), modifier=Modifier.fillMaxWidth()) {
+         Row(Modifier.fillMaxWidth().padding(12.dp), verticalAlignment=Alignment.CenterVertically, horizontalArrangement=Arrangement.spacedBy(8.dp)) {
+          Column(Modifier.weight(1f)) {
+           Text(item.displayName, style=MaterialTheme.typography.titleSmall)
+           Text(item.packageName, style=MaterialTheme.typography.labelSmall, color=MaterialTheme.colorScheme.onSurfaceVariant)
+          }
+          TextButton(onClick={ runCatching { context.startActivity(UninstallHandler.buildAppInfoIntent(item.packageName)) }
+            .onFailure { Toast.makeText(context,R.string.uninstall_no_settings,Toast.LENGTH_SHORT).show() } }) {
+           Text(stringResource(R.string.app_info_label))
+          }
+         }
+        }
+       }
+      } else if (apps.isEmpty()) EmptyState(title=stringResource(R.string.apps_inventory_empty),description=stringResource(if(state.inventoryLoaded) R.string.apps_no_user_installed else R.string.apps_inventory_empty_body),
       actionLabel=stringResource(R.string.security_scan_now),onAction={ requestPrivacyAcknowledgement { vm.scanInstalled() } })
      else {
       Text(stringResource(R.string.apps_inventory_count,apps.size),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
@@ -657,7 +685,7 @@ import kotlinx.coroutines.launch
          catch (e: ActivityNotFoundException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
          catch (e: SecurityException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
         },
-        onQuarantine = {}
+        onQuarantine = {}, onTrust = { vm.trustApp(it) }
        )
       }
      }
@@ -732,7 +760,7 @@ import kotlinx.coroutines.launch
          catch (e: ActivityNotFoundException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
          catch (e: SecurityException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
         },
-        onQuarantine = { pendingQuarantine = result }
+        onQuarantine = { pendingQuarantine = result }, onTrust = { vm.trustApp(it) }
        )
       }
      }
@@ -981,7 +1009,8 @@ private fun canOfferUninstall(context: Context, packageName: String): Boolean {
 }
 @Composable private fun ScanResultCard(
  result:ScanResult, showUninstall:Boolean, showQuarantine:Boolean, showAppInfo:Boolean,
- onUninstall:(String)->Unit, onAppInfo:(String)->Unit, onQuarantine:()->Unit
+ onUninstall:(String)->Unit, onAppInfo:(String)->Unit, onQuarantine:()->Unit,
+ onTrust:(ScanResult)->Unit = {}
 ) {
  val context=LocalContext.current
  val packageName=result.packageName
@@ -992,7 +1021,7 @@ private fun canOfferUninstall(context: Context, packageName: String): Boolean {
    result=result,isProtectedSystemApp=protectedSystem,
    showUninstall=showUninstall && guard is PackageGuardResult.Allowed,
    showQuarantine=showQuarantine,showAppInfo=showAppInfo && protectedSystem,
-   onUninstall=onUninstall,onAppInfo=onAppInfo,onQuarantine=onQuarantine
+   onUninstall=onUninstall,onAppInfo=onAppInfo,onQuarantine=onQuarantine,onTrust=onTrust
   )
   result.scanSessionId?.takeIf { it.isNotBlank() }?.let {
    Text(stringResource(R.string.history_session)+": "+it,modifier=Modifier.padding(horizontal=8.dp),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
