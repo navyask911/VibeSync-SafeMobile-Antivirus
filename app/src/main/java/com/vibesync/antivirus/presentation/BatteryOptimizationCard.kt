@@ -1,6 +1,7 @@
 package com.vibesync.antivirus.presentation
 
 import android.content.Intent
+import android.net.Uri
 import android.os.PowerManager
 import android.provider.Settings
 import android.widget.Toast
@@ -42,9 +43,20 @@ internal fun BatteryOptimizationCard() {
             Text(stringResource(R.string.battery_review_body), color = MaterialTheme.colorScheme.onErrorContainer,
                 style = MaterialTheme.typography.bodySmall)
             OutlinedButton(modifier = Modifier.fillMaxWidth(), onClick = {
-                // Open settings rather than invoking the Play-restricted direct exemption dialog.
-                runCatching { context.startActivity(Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)) }
-                    .onFailure { Toast.makeText(context, R.string.battery_review_unavailable, Toast.LENGTH_LONG).show() }
+                // Only request exemption after an explicit user action. Android owns consent;
+                // an exemption does not bypass force-stop, OEM policies or battery saver.
+                val request = if (powerManager?.isIgnoringBatteryOptimizations(context.packageName) == false) {
+                    Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
+                        Uri.parse("package:" + context.packageName))
+                } else {
+                    Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)
+                }
+                runCatching { context.startActivity(request) }.recoverCatching {
+                    // Some OEMs do not expose the per-app request activity.
+                    context.startActivity(Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS))
+                }.onFailure {
+                    Toast.makeText(context, R.string.battery_review_unavailable, Toast.LENGTH_LONG).show()
+                }
             }) { Text(stringResource(R.string.battery_review_action)) }
         }
     }
