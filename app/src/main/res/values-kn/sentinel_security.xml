@@ -1,6 +1,6 @@
 <resources>
 <string name="download_interceptor_label">ಡೌನ್‌ಲೋಡ್ ಕಾವಲುಗಾರ</string>
-<string name="download_interceptor_description">ಲಭ್ಯವಿರುವ Downloads ಮತ್ತು MediaStore ಫೈಲ್‌ಗಳಲ್ಲಿ ಹೊಸ APK/EXEಗಳನ್ನು ಸಾಧ್ಯವಾದಷ್ಟು ಮೇಲ್ವಿಚಾರಣೆ ಮಾಡುತ್ತದೆ. ಸ್ಥಾಪನೆಯನ್ನು Android ನಿಯಂತ್ರಿಸುತ್ತದೆ; ಪ್ರತಿಯೊಂದು ಸ್ಥಾಪನೆಯನ್ನು SafeMobile ತಡೆಯಲಾಗುವುದಿಲ್ಲ.</string>
+    <string name="download_interceptor_description">ಲಭ್ಯವಿರುವ ಡೌನ್‌ಲೋಡ್‌ಗಳು ಮತ್ತು MediaStore ನಮೂದುಗಳಿಂದ ಹೊಸ APK/EXEಗಳ ಮೇಲ್ವಿಚಾರಣೆ Android ಮಿತಿಗಳಿಗೆ ಒಳಪಟ್ಟಿದೆ. ಸ್ಥಾಪನೆಯನ್ನು Android ನಿಯಂತ್ರಿಸುತ್ತದೆ; ಪ್ರತಿಯೊಂದು ಸ್ಥಾಪನಾ ಸಂವಾದವನ್ನೂ SafeMobile ತಡೆಯಲಾಗುವುದಿಲ್ಲ.</string>
 <string name="download_interceptor_status_enabled">ಡೌನ್‌ಲೋಡ್ ಕಾವಲುಗಾರ ಸಕ್ರಿಯವಾಗಿದೆ; ಹಿನ್ನೆಲೆ ಸೇವೆ ನಡೆಯುತ್ತಿದೆ.</string>
 <string name="download_interceptor_status_setup">ಡೌನ್‌ಲೋಡ್ ಮೇಲ್ವಿಚಾರಣೆಯನ್ನು ಪ್ರಾರಂಭಿಸಲು ಸಂಗ್ರಹಣೆ ಅನುಮತಿ ನೀಡಿ.</string>
 <string name="download_interceptor_status_disabled">ಡೌನ್‌ಲೋಡ್ ಕಾವಲುಗಾರ ನಿಷ್ಕ್ರಿಯವಾಗಿದೆ.</string>
@@ -44,6 +44,6 @@
 <string name="uninstall_guard_reason_source">ಬಳಕೆದಾರ ಸ್ಥಾಪಕವಿಲ್ಲದ ಪೂರ್ವಸ್ಥಾಪಿತ ಆ್ಯಪ್</string>
 <string name="uninstall_guard_reason_invalid">ಅಮಾನ್ಯ ಆ್ಯಪ್ ಹೆಸರು</string>
 <string name="security_incident_title">ಸ್ಥಳೀಯ ಭದ್ರತಾ ಘಟನೆ</string>
-<string name="manual_test_checklist">ಕೈಯಾರೆ ಪರೀಕ್ಷೆ: Downloads ಮತ್ತು ಸಂದೇಶ ಆ್ಯಪ್‌ಗಳು ನಿಂದ APK ಸ್ಥಾಪಿಸಿ, ಅನುಮತಿ ನಿರಾಕರಿಸಿ, ಕಟ್ಟುನಿಟ್ಟಿನ ಮೋಡ್ ಪರಿಶೀಲಿಸಿ ಮತ್ತು ಕ್ವಾರಂಟೈನ್‌ನಿಂದ ಮರುಸ್ಥಾಪಿಸಿ.</string>
+    <string name="manual_test_checklist">ಕೈಯಾರೆ ಪರೀಕ್ಷೆ: ಡೌನ್‌ಲೋಡ್‌ಗಳಿಂದ ಸ್ಥಾಪಿಸಿ, ಸಂದೇಶ ಆ್ಯಪ್‌ನಿಂದ APK ಹಂಚಿ, ಪ್ರವೇಶಸೌಲಭ್ಯ ಮತ್ತು ಸೂಚನೆಗಳ ಅನುಮತಿ ನಿರಾಕರಿಸಿ, ಕಟ್ಟುನಿಟ್ಟಿನ ಮೋಡ್ ಪರೀಕ್ಷಿಸಿ ಮತ್ತು ಕ್ವಾರಂಟೈನ್ ಸಂಗ್ರಹದಿಂದ ಮರುಸ್ಥಾಪನೆ ಪರಿಶೀಲಿಸಿ.</string>
 <string name="activity_not_found_action">ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ತೆರೆಯಿರಿ</string>
 </resources>
