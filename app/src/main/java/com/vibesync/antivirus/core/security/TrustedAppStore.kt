@@ -31,7 +31,7 @@ class TrustedAppStore(context: Context) {
   val target = id(packageName,sha256) ?: return false
   store.edit { preferences ->
    // Bounded to prevent unbounded user-controlled data growth.
-   preferences[key] = ((preferences[key] ?: emptySet()) + target).takeLast(500).toSet()
+   preferences[key] = ((preferences[key] ?: emptySet()) + target).toList().takeLast(500).toSet()
   }
   return true
  }
