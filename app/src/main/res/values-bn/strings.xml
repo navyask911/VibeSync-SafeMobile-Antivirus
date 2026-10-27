@@ -149,7 +149,7 @@
 <string name="setup_title">ডিভাইস সুরক্ষিত করুন</string>
 <string name="setup_skip">এড়িয়ে যান</string>
 <string name="setup_storage_title">সংরক্ষণস্থলে প্রবেশাধিকার</string>
-<string name="setup_storage_body">ভাগ করা সংরক্ষণস্থলের পাঠযোগ্য ফাইল পরিচিত স্থানীয় স্বাক্ষর দিয়ে স্ক্যানের অনুমতি দিন। Android কিছু সিস্টেম ও অ্যাপের ব্যক্তিগত স্থান সীমিত রাখে; ডিভাইসের প্রতিটি ফাইল পরীক্ষা হয় না।</string>
+<string name="setup_storage_body">ডাউনলোড পর্যবেক্ষণের জন্য চাইলে ফোল্ডার বাছুন। Android নথি নির্বাচক খুলে SafeMobile-কে শুধু নির্বাচিত ফোল্ডারের অনুমতি দেয়। ইনস্টল করা অ্যাপ বা আলাদা নির্বাচিত ফাইল স্ক্যানে এটি দরকার নেই।</string>
 <string name="setup_apps_title">ইনস্টল করা অ্যাপের দৃশ্যমানতা</string>
 <string name="setup_apps_body">SafeMobile পাঠযোগ্য ইনস্টল করা APK ও অ্যাপের অনুমতির তথ্য পরীক্ষা করে। প্যাকেজের দৃশ্যমানতা ঘোষণাপত্রে নির্ধারিত; এই ধাপে অনুমতির সংলাপ দেখানো হয় না। Google Play নীতির অনুমোদন আলাদা।</string>
 <string name="setup_notifications_title">বিজ্ঞপ্তি</string>

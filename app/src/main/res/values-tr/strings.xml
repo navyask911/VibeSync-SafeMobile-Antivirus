@@ -149,7 +149,7 @@
 <string name="setup_title">Cihazınızı koruyun</string>
 <string name="setup_skip">Atla</string>
 <string name="setup_storage_title">Depolama erişimi</string>
-<string name="setup_storage_body">Paylaşılan depolamadaki okunabilir dosyaları bilinen yerel imzalarla taramak için erişim verin. Android bazı sistem ve uygulamaya özel konumları kısıtlar; cihazdaki her dosya incelenmez.</string>
+<string name="setup_storage_body">İndirme izleme için isteğe bağlı bir klasör seçin. Android belge seçicisini açar ve SafeMobile’a yalnızca seçtiğiniz klasörün erişimini verir. Yüklü uygulamaları veya tek tek seçilen dosyaları taramak için gerekli değildir.</string>
 <string name="setup_apps_title">Yüklü uygulama görünürlüğü</string>
 <string name="setup_apps_body">SafeMobile okunabilir yüklü APK’ları ve uygulama izin bilgilerini denetler. Paket görünürlüğü bildirim dosyasında tanımlıdır; bu adım izin penceresi açmaz. Google Play politika onayı ayrıdır.</string>
 <string name="setup_notifications_title">Bildirimler</string>

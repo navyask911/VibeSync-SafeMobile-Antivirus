@@ -231,5 +231,6 @@ Translations are edited directly in Android XML resources, one locale at a
 time. External translation clients and their generation scripts have been
 removed. No translation service is contacted by the app or the normal build.
 Resource checks preserve formatting placeholders and Android escaping. Coverage
-of the 22 requested locales is being completed sequentially; other locale
-folders retain Android fallback until separately translated.
+of all 22 requested locales includes every one of the 700 default string keys,
+including permission, incident, siren and download alerts. Other locale folders
+retain Android fallback until separately translated.

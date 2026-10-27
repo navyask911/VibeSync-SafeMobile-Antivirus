@@ -150,7 +150,7 @@
 <string name="setup_title">Lindungi perangkat Anda</string>
 <string name="setup_skip">Lewati</string>
 <string name="setup_storage_title">Akses penyimpanan</string>
-<string name="setup_storage_body">Izinkan pemindaian berkas yang dapat dibaca di penyimpanan bersama untuk mencari tanda tangan lokal yang dikenal. Android tetap membatasi lokasi sistem dan pribadi aplikasi; tidak semua berkas perangkat diperiksa.</string>
+<string name="setup_storage_body">Anda boleh memilih folder untuk pemantauan unduhan. Android membuka pemilih dokumen dan memberi SafeMobile akses hanya ke folder pilihan. Tidak diperlukan untuk memindai aplikasi terpasang atau berkas yang dipilih satu per satu.</string>
 <string name="setup_apps_title">Visibilitas aplikasi terpasang</string>
 <string name="setup_apps_body">SafeMobile memeriksa APK terpasang yang dapat dibaca serta metadata izin aplikasi. Visibilitas paket dinyatakan dalam manifes; langkah ini tidak menampilkan dialog izin. Persetujuan kebijakan Google Play terpisah.</string>
 <string name="setup_notifications_title">Notifikasi</string>

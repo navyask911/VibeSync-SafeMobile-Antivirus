@@ -149,7 +149,7 @@
 <string name="setup_title">Bảo vệ thiết bị</string>
 <string name="setup_skip">Bỏ qua</string>
 <string name="setup_storage_title">Truy cập bộ nhớ</string>
-<string name="setup_storage_body">Cho phép quét tệp có thể đọc trong bộ nhớ dùng chung để tìm chữ ký cục bộ đã biết. Android vẫn hạn chế một số vị trí hệ thống và riêng tư của ứng dụng; không kiểm tra mọi tệp trên thiết bị.</string>
+<string name="setup_storage_body">Bạn có thể chọn thư mục để theo dõi tải xuống. Android mở trình chọn tài liệu và chỉ cấp SafeMobile quyền vào thư mục đã chọn. Không bắt buộc cho quét ứng dụng đã cài hoặc tệp được chọn riêng.</string>
 <string name="setup_apps_title">Khả năng xem ứng dụng đã cài</string>
 <string name="setup_apps_body">SafeMobile kiểm tra APK đã cài có thể đọc và siêu dữ liệu quyền ứng dụng. Khả năng xem gói được khai báo trong bản kê; bước này không hiện hộp thoại cấp quyền. Việc phê duyệt chính sách Google Play là riêng biệt.</string>
 <string name="setup_notifications_title">Thông báo</string>

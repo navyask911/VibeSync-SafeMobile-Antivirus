@@ -149,7 +149,7 @@
 <string name="setup_title">डिव्हाइसचे संरक्षण करा</string>
 <string name="setup_skip">वगळा</string>
 <string name="setup_storage_title">साठवण प्रवेश</string>
-<string name="setup_storage_body">सामायिक साठवणीतील वाचता येणाऱ्या फाइल्स ज्ञात स्थानिक स्वाक्षऱ्यांनी तपासण्यास परवानगी द्या. Android काही प्रणाली व अॅपच्या खासगी जागा मर्यादित करते; प्रत्येक फाइल तपासली जात नाही.</string>
+<string name="setup_storage_body">डाउनलोड निरीक्षणासाठी हवे असल्यास फोल्डर निवडा. Android दस्तऐवज निवडक उघडून फक्त निवडलेल्या फोल्डरचा प्रवेश SafeMobile ला देते. स्थापित अॅप्स किंवा स्वतंत्र निवडलेल्या फाइल्स तपासण्यासाठी हे आवश्यक नाही.</string>
 <string name="setup_apps_title">स्थापित अॅप्सची दृश्यता</string>
 <string name="setup_apps_body">SafeMobile वाचता येणारे स्थापित APK व अॅप परवानग्यांची माहिती तपासते. पॅकेज दृश्यता जाहीरनाम्यात दिली आहे; या टप्प्यात परवानगी संवाद येत नाही. Google Play धोरण मंजुरी स्वतंत्र आहे.</string>
 <string name="setup_notifications_title">सूचना</string>

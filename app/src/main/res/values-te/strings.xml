@@ -149,7 +149,7 @@
 <string name="setup_title">పరికరాన్ని రక్షించండి</string>
 <string name="setup_skip">దాటవేయి</string>
 <string name="setup_storage_title">నిల్వకు అనుమతి</string>
-<string name="setup_storage_body">భాగస్వామ్య నిల్వలో చదవగలిగే ఫైళ్లను తెలిసిన స్థానిక సంతకాలతో పరీక్షించడానికి అనుమతించండి. కొన్ని వ్యవస్థ, యాప్ వ్యక్తిగత స్థానాలను Android పరిమితం చేస్తుంది; పరికరంలోని ప్రతి ఫైల్ పరీక్షించబడదు.</string>
+<string name="setup_storage_body">డౌన్‌లోడ్ పర్యవేక్షణ కోసం కావాలంటే ఫోల్డర్ ఎంచుకోండి. Android పత్రాల ఎంపికను తెరిచి ఎంచుకున్న ఫోల్డర్‌కే SafeMobile అనుమతి ఇస్తుంది. ఇన్‌స్టాల్ చేసిన యాప్‌లు లేదా విడిగా ఎంచుకున్న ఫైళ్ల పరీక్షకు ఇది అవసరం లేదు.</string>
 <string name="setup_apps_title">ఇన్‌స్టాల్ చేసిన యాప్‌ల దృశ్యమానత</string>
 <string name="setup_apps_body">SafeMobile చదవగలిగే ఇన్‌స్టాల్ చేసిన APKలు, యాప్ అనుమతుల సమాచారాన్ని పరీక్షిస్తుంది. ప్యాకేజీ దృశ్యమానత ప్రకటన ఫైల్‌లో పేర్కొనబడింది; ఈ దశ అనుమతి సంభాషణ చూపదు. Google Play విధాన ఆమోదం వేరు.</string>
 <string name="setup_notifications_title">నోటిఫికేషన్‌లు</string>

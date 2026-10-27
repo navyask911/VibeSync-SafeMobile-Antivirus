@@ -150,7 +150,7 @@
 <string name="setup_title">Proteggi il dispositivo</string>
 <string name="setup_skip">Salta</string>
 <string name="setup_storage_title">Accesso ai file</string>
-<string name="setup_storage_body">Consenti la scansione dei file leggibili nello spazio condiviso per cercare firme locali note. Android limita alcune posizioni di sistema e private; non vengono esaminati tutti i file del dispositivo.</string>
+<string name="setup_storage_body">Puoi scegliere una cartella per monitorare gli scaricamenti. Android apre il selettore di documenti e concede a SafeMobile accesso solo alla cartella scelta. Non è necessario per scansionare app installate o singoli file selezionati.</string>
 <string name="setup_apps_title">Visibilità delle app installate</string>
 <string name="setup_apps_body">SafeMobile controlla gli APK installati leggibili e i metadati delle autorizzazioni. La visibilità dei pacchetti è dichiarata nel manifesto; questo passaggio non mostra una richiesta di autorizzazione. L’approvazione di Google Play è separata.</string>
 <string name="setup_notifications_title">Notifiche</string>
