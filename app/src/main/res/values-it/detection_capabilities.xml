@@ -3,7 +3,7 @@
     <string name="detection_capabilities_title">Capacità di rilevamento</string>
     <string name="detection_capabilities_description">Visualizza i controlli attivi, indicativi, condizionali o non disponibili in questa build.</string>
     <string name="detection_capabilities_truth_title">Importante: significato dei risultati</string>
-    <string name="detection_capabilities_truth_body">Nessuna corrispondenza locale non dimostra che un file sia sicuro. Il motore di hash firmati resta disattivato finché non vengono configurati una chiave di firma attendibile e un database di produzione verificato. YARA e apprendimento automatico sono disattivati. Le euristiche possono generare falsi allarmi. Le metriche seguenti non sono state misurate.</string>
+    <string name="detection_capabilities_truth_body">L’assenza di corrispondenze locali non dimostra che un file sia sicuro. Il motore di hash firmati resta disattivato finché non sono configurati una chiave attendibile e un database di produzione verificato. Un sottoinsieme limitato di regole DEX offline viene eseguito quando le regole incluse verificate si caricano; l’apprendimento automatico resta disattivato. Le euristiche possono generare falsi allarmi. Le metriche seguenti non sono misurate.</string>
     <string name="detection_capabilities_enabled">Attivo</string>
     <string name="detection_capabilities_disabled">Disattivato</string>
     <string name="detection_capabilities_limited">Copertura limitata</string>
