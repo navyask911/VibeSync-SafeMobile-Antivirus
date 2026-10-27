@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.vibesync.antivirus.R
 import com.vibesync.antivirus.core.engine.ScanResult
+import com.vibesync.antivirus.core.engine.InstalledAppItem
 import com.vibesync.antivirus.core.engine.ScanVerdict
 import com.vibesync.antivirus.core.hashdb.HashDatabaseCapability
 import com.vibesync.antivirus.data.repository.ThreatRepository
@@ -24,6 +25,9 @@ data class SafeMobileUiState(
     val securityAssessment: com.vibesync.antivirus.core.security.DeviceSecurityAssessment? = null,
     val isScanning: Boolean = false,
     val results: List<ScanResult> = emptyList(),
+    val installedApps: List<InstalledAppItem> = emptyList(),
+    val inventoryLoading: Boolean = false,
+    val inventoryLoaded: Boolean = false,
     val completedScans: Int = 0,
     val lastScanAt: Long? = null,
     val messageResource: Int? = null,
@@ -142,8 +146,40 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
     }
 
 
-    fun scanInstalled() = runScan { onProgress ->
-        repository.scanInstalledApps(onProgress)
+    fun refreshInstalledInventory() {
+        viewModelScope.launch {
+            mutableState.update { it.copy(inventoryLoading = true) }
+            try {
+                val inventory = withContext(Dispatchers.IO) { repository.installedAppInventory() }
+                mutableState.update { it.copy(installedApps = inventory, inventoryLoading = false, inventoryLoaded = true) }
+            } catch (cancelled: CancellationException) { throw cancelled }
+            catch (_: Exception) {
+                mutableState.update { it.copy(inventoryLoading = false, inventoryLoaded = false, messageResource = R.string.apps_inventory_load_failed) }
+            }
+        }
+    }
+
+    fun trustApp(result: ScanResult) {
+        viewModelScope.launch {
+            try {
+                if (repository.trustHeuristicApp(result)) {
+                    mutableState.update { state -> state.copy(
+                        results = state.results.map {
+                            if (it.packageName == result.packageName && it.sha256 == result.sha256)
+                                it.copy(verdict = ScanVerdict.NO_MATCH, riskScore = 0f, reasons = emptyList())
+                            else it
+                        },
+                        messageResource = R.string.trusted_app_saved, messageText = null
+                    ) }
+                } else mutableState.update { it.copy(messageResource = R.string.trusted_app_denied) }
+            } catch (cancelled: CancellationException) { throw cancelled }
+            catch (_: Exception) { mutableState.update { it.copy(messageResource = R.string.trusted_app_denied) } }
+        }
+    }
+
+    fun scanInstalled() {
+        refreshInstalledInventory()
+        runScan { onProgress -> repository.scanInstalledApps(onProgress) }
     }
 
     fun scanFull() = runScan { onProgress ->

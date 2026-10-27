@@ -27,6 +27,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.flowOn
 import com.vibesync.antivirus.core.security.TrustedPackageWhitelist
+import com.vibesync.antivirus.core.security.TrustedAppStore
+import com.vibesync.antivirus.core.engine.InstalledAppItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.currentCoroutineContext
@@ -45,6 +47,16 @@ class ThreatRepository(
 ) {
  private val privateTextStore by lazy(LazyThreadSafetyMode.SYNCHRONIZED) { EncryptedHashStore(context) }
  private val maxSafScanFiles = 10_000
+ private val trustedAppStore = TrustedAppStore(context)
+ suspend fun installedAppInventory(): List<InstalledAppItem> = withContext(Dispatchers.IO) {
+  scanner.installedAppInventory()
+ }
+ suspend fun trustHeuristicApp(result: ScanResult): Boolean {
+  val name = result.packageName ?: return false
+  val hash = result.sha256 ?: return false
+  if (result.verdict == ScanVerdict.THREAT || !isEligibleInstalledApp(name)) return false
+  return trustedAppStore.trust(name, hash)
+ }
 
  fun currentHashDatabaseCapability() = hashDatabaseManager?.capability
  suspend fun securityAssessment() = withContext(Dispatchers.IO) {

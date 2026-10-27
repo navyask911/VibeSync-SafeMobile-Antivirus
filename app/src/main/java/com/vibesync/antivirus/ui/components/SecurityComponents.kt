@@ -176,19 +176,20 @@ fun SecurityStatusCard(status: String, description: String, lastScanLabel: Strin
 
 @Composable
 fun ThreatListItem(result: ScanResult, isProtectedSystemApp: Boolean, showUninstall: Boolean, showQuarantine: Boolean,
-    showAppInfo: Boolean, onUninstall: (String) -> Unit, onAppInfo: (String) -> Unit, onQuarantine: () -> Unit, modifier: Modifier = Modifier) {
+    showAppInfo: Boolean, onUninstall: (String) -> Unit, onAppInfo: (String) -> Unit, onQuarantine: () -> Unit,
+    onTrust: (ScanResult) -> Unit = {}, modifier: Modifier = Modifier) {
     val kind = when (result.verdict) {
         ScanVerdict.THREAT -> StatusKind.DANGER
         ScanVerdict.SUSPICIOUS -> StatusKind.WARNING
         ScanVerdict.NO_MATCH -> StatusKind.SAFE
         ScanVerdict.NOT_SCANNED -> StatusKind.NEUTRAL
     }
-    val verdictLabel = when (result.verdict) {
-        ScanVerdict.THREAT -> "Confirmed signature match"
-        ScanVerdict.SUSPICIOUS -> "Review recommended"
-        ScanVerdict.NO_MATCH -> "No match in scanned definitions"
-        ScanVerdict.NOT_SCANNED -> "Not scanned / incomplete"
-    }
+    val verdictLabel = stringResource(when (result.verdict) {
+        ScanVerdict.THREAT -> R.string.verdict_threat
+        ScanVerdict.SUSPICIOUS -> R.string.verdict_suspicious
+        ScanVerdict.NO_MATCH -> R.string.verdict_no_match
+        ScanVerdict.NOT_SCANNED -> R.string.verdict_not_scanned
+    })
     Card(modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface), shape = RoundedCornerShape(16.dp)) {
         Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -223,6 +224,12 @@ fun ThreatListItem(result: ScanResult, isProtectedSystemApp: Boolean, showUninst
                 } else if (showUninstall && !isProtectedSystemApp && result.packageName != null) {
                     OutlinedButton(onClick = { onUninstall(result.packageName) }, modifier = Modifier.weight(1f)) {
                         Text(stringResource(R.string.uninstall_label))
+                    }
+                }
+                if (result.packageName != null && result.sha256 != null &&
+                    result.verdict == ScanVerdict.SUSPICIOUS && !isProtectedSystemApp) {
+                    OutlinedButton(onClick = { onTrust(result) }, modifier = Modifier.weight(1f)) {
+                        Text(stringResource(R.string.trusted_app_mark))
                     }
                 }
                 if (showQuarantine) {
