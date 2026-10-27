@@ -29,7 +29,7 @@ Work branch: `feat/v1.0.12-native-localization`.
 | 18 | Marathi | values-mr | Complete; 700 keys validated |
 | 19 | Gujarati | values-gu | Complete; 700 keys validated |
 | 20 | Malayalam | values-ml | Complete; 700 keys validated |
-| 21 | Punjabi | values-pa | Pending |
+| 21 | Punjabi | values-pa | Complete; 700 keys validated |
 | 22 | Urdu | values-ur | Pending |
 
 Each completed locale includes all default string keys, including the separate
