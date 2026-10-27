@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<!-- Explicit English fallbacks; professionally reviewed translation not yet available. -->
-  <string name="siren_test_settings_title">Siren diagnostics</string>
-  <string name="siren_test_settings_description">Test the five-second siren and alert preview. This does not detect malware, modify your threat database, or request an uninstall.</string>
-  <string name="siren_test_button">Test Threat Siren</string>
-  <string name="siren_test_title">SIREN TEST — NOT A REAL THREAT</string>
-  <string name="siren_test_notification">Manual sound check. No malicious app has been detected.</string>
-  <string name="siren_test_preview">This is a SafeMobile siren test. No installed app was flagged and no uninstall is requested. Tap Dismiss to stop the audio.</string>
-  <string name="voice_siren_test">This is a SafeMobile siren test. No threat has been detected.</string>
-  <string name="battery_review_title">Battery restrictions may delay protection</string>
-  <string name="battery_review_body">Battery saver or app optimization is active. Some Oppo/ColorOS devices restrict background scans and installation alerts. Review the battery settings for SafeMobile; this does not guarantee continuous monitoring.</string>
-  <string name="battery_review_action">Review battery settings</string>
-  <string name="battery_review_unavailable">Android battery settings could not be opened.</string>
-  <string name="full_screen_dashboard_warning">Critical Alerts Disabled: Tap to grant permission for full-screen malware warnings.</string>
-  <string name="full_screen_dashboard_fallback">Full-screen access is optional. When Security Alerts are enabled, the five-second siren and high-priority notification still work without this access, subject to Android notification and sound settings.</string>
-  <string name="full_screen_settings_unavailable">Full-screen alert settings could not be opened. You can continue using SafeMobile.</string>
-  <string name="system_app_protection_badge">System apps protected from review and uninstall</string>
-  <string name="system_app_scan_complete">Scan Complete. No threats found in the items checked. System apps are excluded from review and uninstall; their integrity has not been verified by this scan.</string>
-  <string name="ui_folder_access_not_granted">Folder access was not granted. You can continue with limited protection.</string>
+<string name="siren_test_settings_title">சைரன் சோதனை</string>
+<string name="siren_test_settings_description">ஐந்து நொடிச் சைரனையும் எச்சரிக்கை முன்னோட்டத்தையும் சோதிக்கவும். தீம்பொருளைக் கண்டறியாது, தரவுத்தளத்தை மாற்றாது, நிறுவல் நீக்கத்தைக் கோராது.</string>
+<string name="siren_test_button">அச்சுறுத்தல் சைரனைச் சோதி</string>
+<string name="siren_test_title">சைரன் சோதனை — உண்மையான அச்சுறுத்தல் அல்ல</string>
+<string name="siren_test_notification">கைமுறை ஒலிச் சோதனை. தீங்கான செயலி கண்டறியப்படவில்லை.</string>
+<string name="siren_test_preview">இது SafeMobile சைரன் சோதனை. செயலி குறிக்கப்படவில்லை; நிறுவல் நீக்கம் கோரப்படவில்லை. ஒலியை நிறுத்த புறக்கணி என்பதைத் தட்டவும்.</string>
+<string name="voice_siren_test">இது SafeMobile சைரன் சோதனை. அச்சுறுத்தல் கண்டறியப்படவில்லை.</string>
+<string name="battery_review_title">மின்கலக் கட்டுப்பாடுகள் பாதுகாப்பைத் தாமதிக்கலாம்</string>
+<string name="battery_review_body">மின்சேமிப்பு அல்லது செயலி மேம்படுத்தல் இயக்கத்தில் உள்ளது. சில Oppo/ColorOS சாதனங்கள் பின்னணி ஆய்வுகளையும் நிறுவல் எச்சரிக்கைகளையும் கட்டுப்படுத்தும். SafeMobile மின்கல அமைப்புகளைப் பார்க்கவும்; தொடர்ந்த கண்காணிப்பு உறுதியல்ல.</string>
+<string name="battery_review_action">மின்கல அமைப்புகளைப் பார்</string>
+<string name="battery_review_unavailable">Android மின்கல அமைப்புகளைத் திறக்க முடியவில்லை.</string>
+<string name="full_screen_dashboard_warning">முக்கிய எச்சரிக்கைகள் முடக்கம்: முழுத்திரைத் தீம்பொருள் எச்சரிக்கை அனுமதிக்கு தட்டவும்.</string>
+<string name="full_screen_dashboard_fallback">முழுத்திரை அணுகல் விருப்பமானது. பாதுகாப்பு எச்சரிக்கைகள் இயக்கத்தில் இருந்தால் இவ்வணுகலின்றியும் ஐந்து நொடிச் சைரனும் அதிக முன்னுரிமை அறிவிப்பும் Android ஒலி மற்றும் அறிவிப்பு அமைப்புகளுக்குட்பட்டு இயங்கும்.</string>
+<string name="full_screen_settings_unavailable">முழுத்திரை எச்சரிக்கை அமைப்புகளைத் திறக்க முடியவில்லை. SafeMobile ஐத் தொடர்ந்து பயன்படுத்தலாம்.</string>
+<string name="system_app_protection_badge">அமைப்புச் செயலிகள் பார்வை மற்றும் நிறுவல் நீக்கத்திலிருந்து பாதுகாக்கப்படும்</string>
+<string name="system_app_scan_complete">ஆய்வு முடிந்தது. சோதித்தவற்றில் அச்சுறுத்தல் இல்லை. அமைப்புச் செயலிகள் பார்வை மற்றும் நிறுவல் நீக்கத்திலிருந்து விலக்கப்பட்டுள்ளன; அவற்றின் ஒருமைப்பாடு இவ்வாய்வால் உறுதிசெய்யப்படவில்லை.</string>
+<string name="ui_folder_access_not_granted">கோப்புறை அணுகல் தரப்படவில்லை. வரம்புடைய பாதுகாப்புடன் தொடரலாம்.</string>
 </resources>

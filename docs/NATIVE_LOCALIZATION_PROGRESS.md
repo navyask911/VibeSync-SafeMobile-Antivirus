@@ -24,7 +24,7 @@ Work branch: `feat/v1.0.12-native-localization`.
 | 13 | Vietnamese | values-vi | Complete; 700 keys validated |
 | 14 | Indonesian | values-id | Complete; 700 keys validated |
 | 15 | Bengali | values-bn | Complete; 700 keys validated |
-| 16 | Tamil | values-ta | Pending |
+| 16 | Tamil | values-ta | Complete; 700 keys validated |
 | 17 | Telugu | values-te | Pending |
 | 18 | Marathi | values-mr | Pending |
 | 19 | Gujarati | values-gu | Pending |
