@@ -3,7 +3,7 @@
     <string name="detection_capabilities_title">탐지 기능</string>
     <string name="detection_capabilities_description">이 빌드에서 활성화되었거나 참고용, 조건부 또는 사용할 수 없는 보안 검사를 확인하세요.</string>
     <string name="detection_capabilities_truth_title">중요: 검사 결과의 의미</string>
-    <string name="detection_capabilities_truth_body">로컬 일치 항목이 없다고 파일이 안전한 것은 아닙니다. 신뢰할 수 있는 서명 키와 검증된 운영용 데이터베이스가 설정될 때까지 서명 해시 엔진은 비활성화됩니다. YARA와 머신러닝도 비활성화되어 있습니다. 휴리스틱은 오탐을 낼 수 있습니다. 아래 지표는 측정되지 않았습니다.</string>
+    <string name="detection_capabilities_truth_body">로컬 일치가 없다고 파일이 안전한 것은 아닙니다. 신뢰할 서명 키와 검증된 운영 데이터베이스가 설정될 때까지 서명 해시 엔진은 꺼져 있습니다. 검증된 기본 규칙이 로드되면 제한된 오프라인 DEX 규칙이 실행됩니다. 머신러닝은 비활성 상태입니다. 휴리스틱은 오탐할 수 있으며 아래 지표는 측정되지 않았습니다.</string>
     <string name="detection_capabilities_enabled">활성화</string>
     <string name="detection_capabilities_disabled">비활성화</string>
     <string name="detection_capabilities_limited">제한된 범위</string>
