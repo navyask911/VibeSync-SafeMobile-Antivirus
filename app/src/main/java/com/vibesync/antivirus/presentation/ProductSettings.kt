@@ -58,6 +58,10 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.vibesync.antivirus.BuildConfig
 import com.vibesync.antivirus.SafeMobileApp
+import com.vibesync.antivirus.core.observer.SecurityAlertNotifier
+import com.vibesync.antivirus.core.observer.ThreatDetectedActivity
+import android.content.Intent
+import android.util.Log
 import com.vibesync.antivirus.R
 import com.vibesync.antivirus.core.locale.LocalePreferences
 import com.vibesync.antivirus.data.local.ScanAudit
@@ -355,6 +359,22 @@ internal fun SafeMobileSettingsPanel(
                         Text(stringResource(label), color = MaterialTheme.colorScheme.onSurface)
                     }
                 }
+            }
+        }
+        Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
+            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Text(stringResource(R.string.siren_test_settings_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                Text(stringResource(R.string.siren_test_settings_description), style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Button(onClick = {
+                    // Explicit user-initiated demo; never inserts a fabricated malware record.
+                    val eventId = SecurityAlertNotifier.runManualSirenTest(context)
+                    val preview = Intent(context, ThreatDetectedActivity::class.java)
+                        .putExtra(SecurityAlertNotifier.EXTRA_TEST_MODE, true)
+                        .putExtra("security.incident.event_id", eventId)
+                    runCatching { context.startActivity(preview) }
+                        .onFailure { Log.w("SafeMobileSiren", "Manual siren preview unavailable", it) }
+                }) { Text(stringResource(R.string.siren_test_button)) }
             }
         }
         OverlayRiskReviewPanel()

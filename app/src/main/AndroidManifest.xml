@@ -7,6 +7,7 @@
  <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
  <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+ <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
  <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
  <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
  <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
@@ -37,7 +38,7 @@
    <intent-filter><action android:name="android.app.action.DEVICE_ADMIN_ENABLED" /></intent-filter>
   </receiver>
   <receiver android:name=".core.observer.PackageUninstallResultReceiver" android:enabled="true" android:exported="false" />
-  <receiver android:name=".core.observer.PackageInstallReceiver" android:enabled="true" android:exported="false">
+  <receiver android:name=".core.observer.PackageInstallReceiver" android:enabled="true" android:exported="true">
    <intent-filter><action android:name="android.intent.action.PACKAGE_ADDED" /><action android:name="android.intent.action.PACKAGE_REPLACED" /><data android:scheme="package" /></intent-filter>
   </receiver>
   <service

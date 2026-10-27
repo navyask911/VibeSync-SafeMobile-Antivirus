@@ -519,6 +519,7 @@ import kotlinx.coroutines.launch
         .onFailure { Toast.makeText(context, R.string.full_screen_settings_unavailable, Toast.LENGTH_LONG).show() }
       })
       SystemAppProtectionBadge()
+      BatteryOptimizationCard()
      }
      ScanFeedbackCard(state,
       onResults = { selectedDestination = if (state.results.isEmpty()) "history" else "scan" },

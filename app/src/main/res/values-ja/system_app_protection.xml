@@ -1,0 +1,7 @@
+<resources>
+<string name="full_screen_dashboard_warning">重要な通知が無効です。タップしてマルウェアの全画面警告を許可してください。</string>
+<string name="full_screen_dashboard_fallback">全画面通知は任意です。セキュリティ通知が有効なら、Android の制限内で5秒間のサイレンと重要通知が利用できます。</string>
+<string name="full_screen_settings_unavailable">全画面通知の設定を開けませんでした。SafeMobile は引き続き利用できます。</string>
+<string name="system_app_protection_badge">システムアプリはリスク判定とアンインストールの対象外です</string>
+<string name="system_app_scan_complete">スキャンが完了しました。確認した項目に脅威は見つかりませんでした。システムアプリは削除対象外で、完全性はこのスキャンでは検証されていません。</string>
+</resources>

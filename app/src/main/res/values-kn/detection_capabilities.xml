@@ -3,7 +3,7 @@
     <string name="detection_capabilities_title">ಪತ್ತೆ ಸಾಮರ್ಥ್ಯಗಳು</string>
     <string name="detection_capabilities_description">ಈ ಬಿಲ್ಡ್‌ನಲ್ಲಿ ಸಕ್ರಿಯ, ಸಲಹಾತ್ಮಕ, ಷರತ್ತುಬದ್ಧ ಅಥವಾ ಲಭ್ಯವಿಲ್ಲದ ಭದ್ರತಾ ಪರಿಶೀಲನೆಗಳನ್ನು ನೋಡಿ.</string>
     <string name="detection_capabilities_truth_title">ಮುಖ್ಯ: ಸ್ಕ್ಯಾನ್ ಫಲಿತಾಂಶಗಳ ಅರ್ಥ</string>
-    <string name="detection_capabilities_truth_body">ಸ್ಥಳೀಯ ಹೊಂದಾಣಿಕೆ ಇಲ್ಲದಿರುವುದು ಫೈಲ್ ಸುರಕ್ಷಿತವೆಂಬುದಕ್ಕೆ ಸಾಕ್ಷಿಯಲ್ಲ. ವಿಶ್ವಾಸಾರ್ಹ ಸಹಿ ಕೀ ಮತ್ತು ಪರಿಶೀಲಿತ ಉತ್ಪಾದನಾ ಡೇಟಾಬೇಸ್ ಹೊಂದಿಸುವವರೆಗೆ ಸಹಿ ಮಾಡಿದ ಹ್ಯಾಶ್ ಎಂಜಿನ್ ನಿಷ್ಕ್ರಿಯವಾಗಿರುತ್ತದೆ. YARA ಮತ್ತು ಯಂತ್ರ ಕಲಿಕೆ ನಿಷ್ಕ್ರಿಯವಾಗಿವೆ. ಹ್ಯೂರಿಸ್ಟಿಕ್‌ಗಳು ತಪ್ಪು ಎಚ್ಚರಿಕೆ ನೀಡಬಹುದು. ಕೆಳಗಿನ ಮಾಪಕಗಳನ್ನು ಅಳೆಯಲಾಗಿಲ್ಲ.</string>
+    <string name="detection_capabilities_truth_body">ಸ್ಥಳೀಯ ಹೊಂದಾಣಿಕೆ ಇಲ್ಲದಿದ್ದರೂ ಫೈಲ್ ಸುರಕ್ಷಿತವೆಂದು ಖಚಿತಪಡಿಸಲಾಗುವುದಿಲ್ಲ. ಪರಿಶೀಲಿತ ಸಹಿ ಕೀ ಮತ್ತು ಡೇಟಾಬೇಸ್ ಸಕ್ರಿಯವಾದಾಗ ಮಾತ್ರ ಸಹಿ ಮಾಡಿದ ಹ್ಯಾಶ್ ಪರಿಶೀಲನೆ ಕೆಲಸ ಮಾಡುತ್ತದೆ. ಒಳಗೊಂಡ ನಿಯಮಗಳು ಪರಿಶೀಲನೆಗೊಂಡಿದ್ದರೆ ಸೀಮಿತ ಆಫ್‌ಲೈನ್ DEX ನಿಯಮಗಳು ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತವೆ; ಯಂತ್ರ ಕಲಿಕೆ ನಿಷ್ಕ್ರಿಯವಾಗಿದೆ. ಸೂಚಕಾಧಾರಿತ ಪರಿಶೀಲನೆ ತಪ್ಪು ಎಚ್ಚರಿಕೆ ನೀಡಬಹುದು. ಕಾರ್ಯಕ್ಷಮತೆಯ ಮಾಪಕಗಳನ್ನು ಅಳೆಯಲಾಗಿಲ್ಲ.</string>
     <string name="detection_capabilities_enabled">ಸಕ್ರಿಯ</string>
     <string name="detection_capabilities_disabled">ನಿಷ್ಕ್ರಿಯ</string>
     <string name="detection_capabilities_limited">ಸೀಮಿತ ವ್ಯಾಪ್ತಿ</string>

@@ -24,6 +24,7 @@ object SecurityAlertNotifier {
     const val CHANNEL_ID = "security_incident_v3"
     const val EXTRA_OPEN_QUARANTINE = "com.vibesync.antivirus.OPEN_QUARANTINE"
     internal const val EXTRA_EVENT_ID = "security.incident.event_id"
+    const val EXTRA_TEST_MODE = "security.incident.manual_test"
 
     fun ensureChannel(context: Context) {
         val manager = context.getSystemService(NotificationManager::class.java) ?: return
@@ -58,23 +59,42 @@ object SecurityAlertNotifier {
             context.getString(R.string.security_alert_review_body), null, R.string.voice_app_review, false)
     }
 
+    /**
+     * Explicit user-initiated AUDIO/NOTIFICATION diagnostic. Does not fabricate a malware verdict,
+     * mark any app as infected, insert an incident row, or bypass production hash verification.
+     * Returns its unique test event id for a foreground-only preview activity.
+     */
+    fun runManualSirenTest(context: Context): String {
+        val eventId = "manual-siren-test-" + java.util.UUID.randomUUID().toString()
+        Log.d(TAG, "Manual siren test requested by user, event=$eventId")
+        show(context, eventId, context.getString(R.string.siren_test_title),
+            context.getString(R.string.siren_test_notification), null,
+            R.string.voice_siren_test, confirmed = true, testMode = true)
+        return eventId
+    }
+
     private fun show(context: Context, eventId: String, title: String, body: String,
-                     packageName: String?, voiceResource: Int, confirmed: Boolean) {
+                     packageName: String?, voiceResource: Int, confirmed: Boolean,
+                     testMode: Boolean = false) {
         val app = context.applicationContext
         SecurityVoiceAlert.speakIfEnabled(app, voiceResource)
         val enabled = app.getSharedPreferences(SafeMobileApp.SECURITY_PREFS, Context.MODE_PRIVATE)
             .getBoolean(SafeMobileApp.KEY_SECURITY_ALERTS_ENABLED, false)
-        if (!enabled) return
-        if (confirmed) SecurityIncidentSiren.start(app)
+        if (!enabled && !testMode) return
+        if (confirmed) {
+            Log.d(TAG, if (testMode) "Manual siren playback start" else "Verified threat siren playback start")
+            SecurityIncidentSiren.start(app)
+        }
         if (Build.VERSION.SDK_INT >= 33 && ContextCompat.checkSelfPermission(app,
                 Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             Log.w(TAG, "Notification permission denied; opt-in local audio remains available")
             return
         }
         ensureChannel(app)
-        val open = if (confirmed && packageName != null) {
+        val open = if (confirmed && (packageName != null || testMode)) {
             Intent(app, ThreatDetectedActivity::class.java)
                 .putExtra(ThreatDetectedActivity.EXTRA_PACKAGE, packageName)
+                .putExtra(EXTRA_TEST_MODE, testMode)
         } else Intent(app, MainActivity::class.java).putExtra(EXTRA_OPEN_QUARANTINE, true)
         open.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
             .putExtra(EXTRA_EVENT_ID, eventId)
@@ -93,7 +113,7 @@ object SecurityAlertNotifier {
             .addAction(R.drawable.ic_launcher, app.getString(if (packageName != null)
                 R.string.incident_review_threat else R.string.security_alert_open_vault), content)
             .addAction(0, app.getString(R.string.incident_dismiss), dismiss)
-        if (confirmed && packageName != null &&
+        if (confirmed && packageName != null && !testMode &&
             FullScreenAlertAccess.isGranted(app)) {
             builder.setFullScreenIntent(content, true)
         } else if (confirmed && packageName != null) {

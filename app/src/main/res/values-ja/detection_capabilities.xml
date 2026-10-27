@@ -3,7 +3,7 @@
     <string name="detection_capabilities_title">検出機能</string>
     <string name="detection_capabilities_description">このビルドで有効、参考情報のみ、条件付き、または利用不可のセキュリティ検査を確認できます。</string>
     <string name="detection_capabilities_truth_title">重要：スキャン結果の意味</string>
-    <string name="detection_capabilities_truth_body">ローカルで一致しなくても、ファイルが安全だとは証明できません。信頼できる署名鍵と検証済みの本番データベースが設定されるまで、署名付きハッシュエンジンは無効です。YARA と機械学習も無効です。ヒューリスティックは誤警告を出すことがあります。以下の指標は未測定です。</string>
+    <string name="detection_capabilities_truth_body">端末内の照合で一致がなくても、ファイルの安全性は証明されません。署名付きハッシュ照合は信頼できる鍵と検証済みデータベースが有効な場合にのみ利用できます。組み込みルールが検証されると、限定的なオフライン DEX ルール検査が動作します。機械学習は無効です。推定による判定には誤検出の可能性があります。性能指標は未測定です。</string>
     <string name="detection_capabilities_enabled">有効</string>
     <string name="detection_capabilities_disabled">無効</string>
     <string name="detection_capabilities_limited">限定的な検出範囲</string>
