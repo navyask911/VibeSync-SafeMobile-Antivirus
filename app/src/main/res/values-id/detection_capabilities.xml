@@ -3,7 +3,7 @@
     <string name="detection_capabilities_title">Kemampuan deteksi</string>
     <string name="detection_capabilities_description">Lihat pemeriksaan keamanan yang aktif, berupa saran, bersyarat, atau tidak tersedia pada build ini.</string>
     <string name="detection_capabilities_truth_title">Penting: arti hasil pemindaian</string>
-    <string name="detection_capabilities_truth_body">Tidak ada kecocokan lokal bukan bukti bahwa file aman. Mesin hash bertanda tangan tetap nonaktif hingga kunci penandatangan tepercaya dan basis data produksi terverifikasi dikonfigurasi. YARA dan pembelajaran mesin nonaktif. Heuristik dapat memberi peringatan palsu. Metrik di bawah belum diukur.</string>
+    <string name="detection_capabilities_truth_body">Tidak ada kecocokan lokal bukan bukti berkas aman. Mesin hash bertanda tangan tetap nonaktif hingga kunci tepercaya dan basis data produksi terverifikasi diatur. Sebagian kecil aturan DEX luring dijalankan saat aturan bawaan terverifikasi dimuat; pembelajaran mesin tetap nonaktif. Heuristik dapat memberi peringatan palsu. Metrik di bawah belum diukur.</string>
     <string name="detection_capabilities_enabled">Aktif</string>
     <string name="detection_capabilities_disabled">Nonaktif</string>
     <string name="detection_capabilities_limited">Cakupan terbatas</string>
