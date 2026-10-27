@@ -47,5 +47,5 @@ existing fallback until separately translated.
 Do not mark the complete 22-language task finished or publish the fully localized
 v1.0.12 release until all rows are complete and the final head passes all five
 Android CI checks. Then merge, verify main and use the repository's signed APK
-release workflow. Current app version is 1.0.12, versionCode 20261104; preserve
+release workflow. Current app version is 1.0.12, versionCode 20261105; preserve
 application ID and signing settings.
