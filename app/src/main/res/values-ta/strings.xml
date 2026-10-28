@@ -558,5 +558,108 @@
 <string name="locale_th">ไทย</string>
 <string name="locale_uk">Українська</string>
 <string name="locale_uz">O‘zbekcha</string>
-</resources>
 
+<string name="format_label_value">%1$s: %2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s – %2$s</string>
+<string name="format_version">%1$s · பதிப்பு %2$s (%3$s)</string>
+<string name="format_package_version">%1$s · பதிப்பு %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">பாதுகாப்பான தரவூட்ட முகவரியை உள்ளிடுங்கள்</string>
+<string name="storage_size_unavailable">அளவு கிடைக்கவில்லை</string>
+<string name="blocked_reason_hash">உள்ளூர் அச்சுறுத்தல் கையொப்பத்துடன் பொருத்தம் கண்டறியப்பட்டது.</string>
+<string name="blocked_reason_action">சாத்தியமான அளவுக்கு உள்ளூர் பாதுகாப்பு நடவடிக்கை மேற்கொள்ள முயற்சி செய்யப்பட்டது.</string>
+<string name="signed_import_success">கையொப்பமிடப்பட்ட தரவுத்தளம் ஏற்கப்பட்டது: பதிப்பு %1$s · %2$s.</string>
+<string name="signed_import_failed">கையொப்பமிடப்பட்ட தரவுத்தளம் செயல்படுத்தப்படவில்லை. கையொப்பம், பதிப்பு, கோப்பு வடிவத்தைச் சரிபார்க்கவும்.</string>
+<string name="rule_import_pending">மதிப்பாய்வுக்காக %1$s சேமிக்கப்பட்டது. இறக்குமதி செய்த விதிகள் செயலற்ற நிலையிலேயே இருக்கும்; இந்தக் கோப்பு இயக்கப்படாது.</string>
+<string name="rule_import_failed">விதிகளை இறக்குமதி செய்ய முடியவில்லை. இறக்குமதி செய்த விதிகள் செயலற்ற நிலையிலேயே இருக்கும்.</string>
+<string name="restore_result_localized">%1$s (%2$s) என்பதன் நகல் மீட்டெடுக்கப்பட்டது. தனிமைப்படுத்தப்பட்ட மூலக் கோப்பு தொடர்ந்து சேமிக்கப்பட்டுள்ளது.</string>
+<string name="cleaner_confirm_localized">%1$s (%2$s) ஐ நிரந்தரமாக நீக்கவா? இதை மீட்டெடுக்க முடியாது. SafeMobile பெயர்களையும் மெட்டாதரவையும் மீண்டும் சரிபார்க்கும்.</string>
+<string name="cleaner_result_localized">நீக்கப்பட்டவை: %1$s · விடுவிக்கப்பட்ட இடம்: %2$s · தோல்வி அல்லது மாறியவை: %3$s</string>
+<string name="about_localized_notices">மூன்றாம் தரப்புக் கூறுகளுக்கு அவற்றின் சொந்த உரிமங்கள் பொருந்தும். மூல அறிவிப்புகள் தணிக்கையின் சரிபார்ப்புக் கட்டமே; உரிம ஆய்வு நிறைவடைந்ததாக அர்த்தமல்ல. மூல அறிவிப்புகளையும் உரிம நிபந்தனைகளையும் அறிய அசல் ஆவணங்களைத் திறக்கவும்.</string>
+<string name="about_open_original">அசல் ஆவணங்களைத் திறக்கவும்</string>
+<string name="about_localized_privacy">ஸ்கேன் செய்யப்பட்ட கோப்புகள், ஹாஷ்கள், தொகுப்பு பெயர்கள் மற்றும் முடிவுகள் இந்தச் சாதனத்திலேயே இருக்கும். உள்ளூர் தணிக்கை மெட்டாதரவும் தனிமைப்படுத்தப்பட்ட நகல்களும் மறையாக்கப்பட்ட தனியார் சேமிப்பகத்தைப் பயன்படுத்தும். கையொப்பமிடப்பட்ட வரையறைகளின் புதுப்பிப்புகள் இந்தத் திட்டத்தின் வெளியீட்டுச் சேவையைத் தொடர்புகொள்கின்றன; தனி தரவூட்டம் உங்கள் ஒப்புதலுக்குப் பிறகே அமைக்கப்பட்ட முகவரியைத் தொடர்புகொள்ளும். நீங்கள் தேர்ந்தெடுத்த கோப்புறைகளையே கண்காணிக்கலாம்; அதை நிறுத்தவும் முடியும். Android அனுமதிகள் உங்கள் கட்டுப்பாட்டில் உள்ளன. இந்தப் பதிப்பில் விளம்பரம், மேக ஸ்கேன் அல்லது இணைப்பு நற்பெயர் சேவை இல்லை.</string>
+<string name="coverage_local_title">உள்ளூர் சோதனை வரையறைகள்</string>
+<string name="coverage_local_body">சேர்க்கப்பட்ட பழைய வரையறைகளில் தீங்கற்ற வைரஸ் தடுப்பு சோதனைக் குறி மட்டுமே உள்ளது. நிஜ உலகத் தீம்பொருள்களுக்கு எதிரான பாதுகாப்பு இதில் இல்லை.</string>
+<string name="coverage_signed_title">கையொப்பமிடப்பட்ட ஹாஷ் தரவுத்தளம்</string>
+<string name="coverage_signed_body">துல்லியமான ஹாஷ் பொருத்தத்துக்கு நம்பகமான கையொப்பச் சாவியும் ஏற்கப்பட்ட கையொப்பமிடப்பட்ட தரவுத்தளமும் தேவை. பயன்பாட்டுக்கான தரவுத்தளம் சேர்க்கப்படவில்லை.</string>
+<string name="coverage_static_title">செயலியின் நிலையான பகுப்பாய்வு</string>
+<string name="coverage_static_body">வரையறுக்கப்பட்ட தொகுப்பு பகுப்பாய்வு ஆலோசனைத் தகவல்களைத் தருகிறது. ஒரு முடிவு மட்டும் தீம்பொருளை நிரூபிக்காது; அறியப்பட்ட தீங்கு விளைவிக்கும் கையொப்பமிடுபவர்களின் பட்டியல் முடக்கப்பட்டுள்ளது.</string>
+<string name="coverage_permissions_title">அனுமதிகளும் அறிக்கைக் கோப்பும்</string>
+<string name="coverage_permissions_body">அனுமதிகளின் சேர்க்கையும் தெரியும் தொகுப்பு அறிவிப்புகளும் கைமுறை ஆய்வுக்கு உதவுகின்றன. அவை பயிற்சியளிக்கப்பட்ட வகைப்படுத்தல் அல்ல.</string>
+<string name="coverage_integrity_title">சாதன ஒருமைப்பாட்டுக் குறிகாட்டிகள்</string>
+<string name="coverage_integrity_body">ரூட் அணுகல், குறுக்கீடுகள், உருவாக்கப் பண்புகள், பாதுகாப்பு அமலாக்கம், பிழைத்திருத்திகள் மற்றும் மெய்நிகர் சாதனங்கள் ஆகியவை உள்ளூர் மதிப்பீட்டு முறைகளால் சோதிக்கப்படுகின்றன; உறுதிச் சான்றளிப்பால் அல்ல.</string>
+<string name="coverage_bloom_title">நிகழ்தகவு அடிப்படையிலான ஹாஷ் குறியீடு</string>
+<string name="coverage_bloom_body">சரிபார்க்கப்பட்ட, காலியாக இல்லாத நிகழ்தகவுக் குறியீடும் அதன் அறிக்கையும் சேர்க்கப்படவில்லை. இந்த விருப்ப அடுக்கு கிடைக்கவில்லை.</string>
+<string name="coverage_rules_title">சேர்க்கப்பட்ட நிரல் கையொப்பங்கள்</string>
+<string name="coverage_rules_body">சரிபார்க்கப்பட்ட சேர்க்கப்பட்ட விதிகள் குறைந்த எண்ணிக்கையிலான நேரடி நிரல் வடிவங்களை மட்டுமே சோதிக்கின்றன. பொருத்தங்கள் ஆலோசனைக்கானவை; தீம்பொருளை உறுதிப்படுத்தாது.</string>
+<string name="coverage_rules_unavailable">சேர்க்கப்பட்ட விதிகள் ஏற்றப்படவில்லை அல்லது சரிபார்ப்பில் தோல்வியடைந்தன. நிரல் கையொப்ப ஸ்கேன் நடைபெற்றதாகக் கூறப்படவில்லை.</string>
+<string name="coverage_model_title">அனுமதி வகைப்படுத்தும் மாதிரி</string>
+<string name="coverage_model_body">பயிற்சியளிக்கப்பட்ட, சரிபார்க்கப்பட்ட மற்றும் விநியோகிக்கக்கூடிய வகைப்படுத்தும் மாதிரி சேர்க்கப்படவில்லை. இயந்திரக் கற்றல் முடக்கப்பட்டுள்ளது.</string>
+<string name="coverage_signer_title">இணையமற்ற கையொப்பமிடுபவர் உறுதிப்படுத்தல்</string>
+<string name="coverage_signer_body">தனியாக நிர்ணயிக்கப்பட்ட எதிர்பார்க்கப்படும் கையொப்பச் சான்றிதழின் கைரேகை அமைக்கப்படவில்லை.</string>
+<string name="coverage_feed_title">கையொப்பமிடப்பட்ட தரவூட்டச் சரிபார்ப்பு</string>
+<string name="coverage_feed_body">தனித்த கையொப்பத்தைச் சரிபார்க்கவும் பழைய பதிப்புக்கு மீளுவதைத் தடுக்கவும் உருவாக்க நேரத்தில் நம்பகமான சாவியும் அமைக்கப்பட்ட கையொப்பமிடப்பட்ட தரவூட்டமும் தேவை.</string>
+<string name="hash_status_active">கையொப்பமிடப்பட்ட உள்ளூர் ஹாஷ் தரவுத்தளம் செயலில் உள்ளது.</string>
+<string name="hash_status_missing">கையொப்பமிடப்பட்ட தரவுத்தளம் ஏற்கப்படும் வரை ஹாஷ் பொருத்தம் முடக்கப்பட்டுள்ளது.</string>
+<string name="hash_status_key">நம்பகமான கையொப்பச் சாவி கிடைக்காததால் ஹாஷ் பொருத்தம் முடக்கப்பட்டுள்ளது.</string>
+<string name="hash_status_invalid">சேமிக்கப்பட்ட வரையறைகள் ஒருமைப்பாடு, பதிப்பு அல்லது வடிவச் சோதனைகளில் தோல்வியடைந்தன. ஹாஷ் பொருத்தம் தொடர்ந்து முடக்கப்படும்.</string>
+<string name="hash_status_activation">தரவுத்தளச் செயல்படுத்தல் நிறைவடையவில்லை. ஹாஷ் பொருத்தம் தொடர்ந்து முடக்கப்படும்.</string>
+<string name="finding_confidence">%1$s · நம்பகத் தன்மை: %2$d%%</string>
+<string name="finding_exported">வெளியிலிருந்து அணுகக்கூடிய கூறுக்கு அறிக்கைக் கோப்பில் தெளிவான அனுமதி கட்டுப்பாடு தெரியவில்லை. நிரலுக்குள் சோதனைகள் இருக்கலாம்.</string>
+<string name="finding_admin">செயலி சாதன நிர்வாகப் பெறுநரை அறிவிக்கிறது. இந்த உணர்வுள்ள திறன் தவறான பயன்பாட்டின் சான்றல்ல.</string>
+<string name="finding_accessibility">செயலி அணுகல்தன்மைச் சேவையை அறிவிக்கிறது. முறையான உதவிச் செயலிகளுக்கு இந்த அணுகல் தேவைப்படலாம்.</string>
+<string name="finding_overlay">செயலி பிற திரைகளின் மேல் தோன்ற அனுமதி கேட்கிறது. இது முறையாக இருக்கலாம்; மற்ற திரைகளை மறைக்கவும் முடியும்.</string>
+<string name="finding_combined">அணுகல்தன்மையுடன் மேல் தோற்றம், குறுஞ்செய்தி அல்லது அழைப்பு வரலாற்று அணுகல் இணைந்துள்ளது. செயலியின் நோக்கத்தை ஆய்வு செய்யவும்.</string>
+<string name="finding_sms_calls">செயலி குறுஞ்செய்தி மற்றும் அழைப்பு வரலாறு ஆகிய இரண்டுக்கும் அனுமதி கேட்கிறது.</string>
+<string name="finding_sms_network">குறுஞ்செய்தி அணுகலுடன் இணைய அணுகலும் இணைந்துள்ளது. சூழலுக்கேற்ப ஆய்வு தேவை.</string>
+<string name="finding_signer">கையொப்பச் சான்றிதழின் மெட்டாதரவு இல்லை அல்லது படிக்க முடியவில்லை.</string>
+<string name="finding_archive">தொகுப்புக் கோப்பை முழுமையாகப் பரிசோதிக்க முடியவில்லை. நிலையான பகுப்பாய்வு முழுமையடையவில்லை.</string>
+<string name="finding_packer">தொகுப்பில் உள்ள பாதை அறியப்பட்ட தொகுப்பு அல்லது பாதுகாப்புக் கருவியைப் போன்று உள்ளது. முறையான செயலிகளும் அவற்றைப் பயன்படுத்தலாம்.</string>
+<string name="finding_dex_header">நிரல் தலைப்பில் வடிவம் அல்லது அளவுக்கான புலங்கள் முரணாக உள்ளன. இது தீம்பொருளை நிரூபிக்காது.</string>
+<string name="finding_dex_short">நிரல் உள்ளீடு செல்லுபடியாகும் தலைப்பைவிடச் சிறியது; முழுவதுமாகச் சோதிக்க முடியவில்லை.</string>
+<string name="finding_entropy">நிரல் மாதிரியில் பைட் சீரற்ற தன்மை அதிகம். மறையாக்கம், தொகுப்பு அல்லது தீங்கற்ற சுருக்கப்பட்ட உள்ளடக்கம் காரணமாக இருக்கலாம்.</string>
+<string name="finding_api">கோரப்பட்ட அனுமதிக்கான எதிர்பார்க்கப்பட்ட நிலையான மேற்கோள் கிடைக்கவில்லை. பிரதிபலிப்பு, நூலகங்கள் அல்லது பின்னர் ஏற்றப்படும் நிரல் காரணமாக இருக்கலாம்.</string>
+<string name="finding_rules">சேர்க்கப்பட்ட குறுகிய வரம்புள்ள நிரல் கையொப்பத்துடன் பொருத்தம் கண்டறியப்பட்டது. இது ஆலோசனை மட்டுமே; தீம்பொருளுக்கான ஆதாரம் அல்ல.</string>
+<string name="finding_other">கூடுதல் உள்ளூர் குறிகாட்டிகளை கைமுறையாக ஆய்வு செய்ய வேண்டும். அவை தீம்பொருளை உறுதிப்படுத்தாது.</string>
+<string name="integrity_manager">ரூட் அணுகல் அல்லது குறுக்கீட்டு மேலாளர் தெரிகிறார்: %1$s</string>
+<string name="integrity_test_keys">சாதன உருவாக்கம் சோதனைக் கையொப்பச் சாவிகளைப் பயன்படுத்துகிறது.</string>
+<string name="integrity_debug_build">உருவாக்கப் பண்புகள் பிழைத்திருத்தக்கூடிய அல்லது உற்பத்திக்கானதல்லாத அமைப்பைக் காட்டுகின்றன.</string>
+<string name="integrity_selinux">படிக்கக்கூடிய உள்ளூர் நிலைப்படி கட்டாயப் பாதுகாப்பு அமலாக்கம் முடக்கப்பட்டுள்ளது.</string>
+<string name="integrity_debugger">இந்தச் செயல்முறையுடன் பிழைத்திருத்தி இணைக்கப்பட்டுள்ளது.</string>
+<string name="integrity_emulator">உருவாக்கப் பண்புகள் மெய்நிகர் அல்லது சோதனைச் சாதனத்தைப் போல உள்ளன.</string>
+<string name="audit_scan_pending">நிறுவல் பதிவு செய்யப்பட்டது. உள்ளூர் பகுப்பாய்வு நிலுவையில் உள்ளது.</string>
+<string name="audit_scan_complete">உறுதிசெய்யப்பட்ட கையொப்பப் பொருத்தமின்றி உள்ளூர் பகுப்பாய்வு முடிந்தது. இது பாதுகாப்புக்கான உத்தரவாதமல்ல.</string>
+<string name="audit_scan_unavailable">பகுப்பாய்வு நடந்தபோது தொகுப்பைக் காண முடியவில்லை.</string>
+<string name="audit_scan_threat">உள்ளூர் அச்சுறுத்தல் கையொப்பத்துடன் துல்லியப் பொருத்தம் கிடைத்தது.</string>
+<string name="audit_scan_review">உள்ளூர் குறிகாட்டிகள் ஆய்வு செய்யப்பட வேண்டும்; அவை தீம்பொருளை உறுதிப்படுத்தாது.</string>
+<string name="audit_source_recorded">நிறுவலின் மூலம் பதிவு செய்யப்பட்டது.</string>
+<string name="audit_uninstall_requested">Android செயலியை நீக்குவதற்கான உறுதிப்படுத்தல் கோரப்பட்டது.</string>
+<string name="audit_uninstall_success">செயலி வெற்றிகரமாக நீக்கப்பட்டதாக Android தெரிவித்தது.</string>
+<string name="audit_uninstall_failed">செயலியை நீக்கும் கோரிக்கையை Android நிறைவேற்ற முடியவில்லை.</string>
+<string name="severity_test">தீங்கற்ற சோதனைக் குறி</string>
+<string name="severity_low">குறைந்த தீவிரம்</string>
+<string name="severity_medium">நடுத்தர தீவிரம்</string>
+<string name="severity_high">அதிக தீவிரம்</string>
+<string name="severity_critical">மிகக் கடுமையான தீவிரம்</string>
+<string name="severity_unknown">தீவிரம் குறிப்பிடப்படவில்லை</string>
+<plurals name="l10n_scanned_apps"><item quantity="other">%1$d செயலிகள் ஸ்கேன் செய்யப்பட்டன</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="other">%1$d கோப்புகள் ஸ்கேன் செய்யப்பட்டன</item></plurals>
+<plurals name="l10n_threats"><item quantity="other">%1$d அச்சுறுத்தல்கள் கண்டறியப்பட்டன</item></plurals>
+<plurals name="l10n_review"><item quantity="other">%1$d முடிவுகள் ஆய்வு செய்யப்பட வேண்டும்</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="other">%1$d உருப்படிகளை ஸ்கேன் செய்ய முடியவில்லை</item></plurals>
+<plurals name="l10n_no_match"><item quantity="other">%1$d முடிவுகளுக்கு உள்ளூர் பொருத்தம் இல்லை</item></plurals>
+<plurals name="l10n_apps"><item quantity="other">%1$d செயலிகள்</item></plurals>
+<plurals name="l10n_files"><item quantity="other">%1$d கோப்புகள்</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="other">அமைப்பு சாராத %1$d செயலிகளுக்கு அதிக ஆபத்துள்ள அணுகல் உள்ளது.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="other">கவனிக்கப்பட்ட %1$d மாற்றங்களுக்கு அறிவிப்பு நிலுவையில் உள்ளது.</item></plurals>
+<plurals name="l10n_rules"><item quantity="other">வரையறுக்கப்பட்ட பாதுகாப்பு · சேர்க்கப்பட்ட %1$d விதிகள்</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="other">சமீபத்திய ஸ்கேன்: %1$d ஆலோசனை நிரல் பொருத்தங்கள்.</item></plurals>
+<plurals name="l10n_imported"><item quantity="other">%1$d செல்லுபடியாகும் கையொப்பங்கள் உள்ளூர் சேமிப்பகத்தில் இறக்குமதி செய்யப்பட்டன.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="other">%1$d பைட்டுகள்</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="other">ரூட் தொடர்பான %1$d கோப்புமுறை குறிகாட்டிகள் உள்ளன.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="other">குறுக்கீட்டுக்கான %1$d குறிகாட்டிகள் உள்ளன.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="other">%1$d செயலிகள் செயல்படுத்தப்பட்டன</item></plurals>
+<plurals name="l10n_indicators"><item quantity="other">%1$d குறிகாட்டிகள்</item></plurals>
+<plurals name="l10n_progress"><item quantity="other">%2$d செயலிகளில் %1$d சரிபார்க்கப்பட்டன</item></plurals>
+</resources>
