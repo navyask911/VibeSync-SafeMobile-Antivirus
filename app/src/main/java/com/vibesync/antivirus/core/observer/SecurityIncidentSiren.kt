@@ -11,6 +11,8 @@ import com.vibesync.antivirus.R
 
 /** The notification channel is silent: this is the only owner of siren audio and its stop timer. */
 internal object SecurityIncidentSiren {
+    @Volatile internal var playing: Boolean = false
+        private set
     private val handler = Handler(Looper.getMainLooper())
     private var player: MediaPlayer? = null
     private var audioManager: AudioManager? = null
@@ -49,6 +51,7 @@ internal object SecurityIncidentSiren {
                 media.setVolume(1f, 1f)
                 media.setOnErrorListener { _, _, _ -> controller.stop(); true }
                 media.start()
+                playing = true
               }
             } catch (error: Exception) {
                 Log.w(TAG, "Unable to play local siren", error)
@@ -66,6 +69,7 @@ internal object SecurityIncidentSiren {
     }
 
     private fun releasePlayer() {
+        playing = false
         player?.let { current ->
             player = null
             runCatching { current.stop() }

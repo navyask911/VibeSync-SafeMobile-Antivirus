@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="trusted_app_options">Valinnat</string>
+<string name="trusted_app_remove">Poista luottamus</string>
+<string name="trusted_app_removed">Luottamus poistettu. Tämän paketin tulevat tarkistukset ja varoitukset on otettu käyttöön.</string>
+<string name="trusted_app_remove_failed">Luottamusta ei voitu poistaa. Yritä uudelleen.</string>
+<string name="install_sentinel_title">Asennusten seuranta</string>
+<string name="install_sentinel_active">SafeMobile Sentinel: aktiivinen ja seuraa</string>
+<string name="install_sentinel_description">Paikalliset tarkistukset asennuksen jälkeen pysyvällä ilmoituksella. Ei säännöllistä kyselyä tai hereilläpitolukkoa. Android voi pysäyttää palvelun.</string>
+<string name="install_sentinel_stop">Pysäytä asennusten seuranta</string>
+<string name="install_scan_progress">Analysoidaan juuri asennettua sovellusta: %1$s</string>
+<string name="analytics_chart_title">Tarkistusten tulokset</string>
+<string name="analytics_other">Muut tulokset</string>
+<string name="analytics_total">Tulokset</string>
+<string name="analytics_weekly_scans">Viikon tarkistukset</string>
+<string name="analytics_week_note">Tallennetut istunnot maanantaista sunnuntaihin. Mukana voi olla keskeneräisiä tarkistuksia.</string>
+<string name="posture_overlay_select_app">Valitse Android 11:ssä tai uudemmassa %1$s muiden sovellusten päällä näyttämisen asetusluettelosta.</string>
+<string name="install_scan_received">Asennustapahtuma vastaanotettu. Avaa SafeMobile tarkastelua varten.</string>
+</resources>

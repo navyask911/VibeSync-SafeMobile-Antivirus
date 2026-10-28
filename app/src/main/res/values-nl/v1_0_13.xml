@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="trusted_app_options">Opties</string>
+<string name="trusted_app_remove">Vertrouwen intrekken</string>
+<string name="trusted_app_removed">Vertrouwen ingetrokken. Toekomstige scans en waarschuwingen zijn weer ingeschakeld voor dit pakket.</string>
+<string name="trusted_app_remove_failed">Kon het vertrouwen niet intrekken. Probeer opnieuw.</string>
+<string name="install_sentinel_title">Installatiebewaking</string>
+<string name="install_sentinel_active">SafeMobile Sentinel: actief en aan het bewaken</string>
+<string name="install_sentinel_description">Lokale controles na installatie met een blijvende melding. Geen periodieke opvragingen of slaapblokkering. Android kan de service stoppen.</string>
+<string name="install_sentinel_stop">Installatiebewaking stoppen</string>
+<string name="install_scan_progress">Nieuw geïnstalleerde app analyseren: %1$s</string>
+<string name="analytics_chart_title">Scanresultaten</string>
+<string name="analytics_other">Overige resultaten</string>
+<string name="analytics_total">Resultaten</string>
+<string name="analytics_weekly_scans">Wekelijkse scans</string>
+<string name="analytics_week_note">Vastgelegde sessies van maandag tot zondag. Onvolledige scans kunnen zijn inbegrepen.</string>
+<string name="posture_overlay_select_app">Selecteer op Android 11 of nieuwer %1$s in de instellingenlijst voor weergave boven andere apps.</string>
+<string name="install_scan_received">Installatiegebeurtenis ontvangen. Open SafeMobile om deze te bekijken.</string>
+</resources>

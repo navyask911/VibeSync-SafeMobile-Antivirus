@@ -107,10 +107,20 @@ if [[ "$EXPECTED_API" == "36" ]]; then
   heap=1024m
 fi
 
+fixture_args=()
+instrument_fixture_args=()
+if [[ -f build/siren-test/SafeMobile-Siren-Test.apk ]]; then
+  adb push build/siren-test/SafeMobile-Siren-Test.apk /data/local/tmp/SafeMobile-Siren-Test.apk
+  fixture_args+=("-Pandroid.testInstrumentationRunnerArguments.sirenFixturePath=/data/local/tmp/SafeMobile-Siren-Test.apk")
+  instrument_fixture_args+=(-e sirenFixturePath /data/local/tmp/SafeMobile-Siren-Test.apk)
+elif [[ "${GITHUB_ACTIONS:-false}" == "true" ]]; then
+  echo "Required background-install test fixture is missing." >&2
+  exit 1
+fi
 gradle_log="$DIAGNOSTICS_DIR/connected-gradle.log"
 ./gradlew --no-daemon --max-workers="$workers" --no-parallel \
   -Dorg.gradle.jvmargs="-Xmx$heap -XX:ActiveProcessorCount=2 -Dfile.encoding=UTF-8" \
-  connectedOfflineDebugAndroidTest 2>&1 | tee "$gradle_log"
+  "${fixture_args[@]}" connectedOfflineDebugAndroidTest 2>&1 | tee "$gradle_log"
 test_status=${PIPESTATUS[0]}
 
 # A lost API-level property in ddmlib means no tests actually executed. Recover *only* that
@@ -132,6 +142,7 @@ if [[ "$EXPECTED_API" == "36" && "$test_status" -ne 0 ]] &&
          timeout 180s adb -s "$DEVICE_SERIAL" install -r -t "$test_apk"; then
       instrument_log="$DIAGNOSTICS_DIR/instrumentation-api36.log"
       timeout 600s adb -s "$DEVICE_SERIAL" shell am instrument -w -r \
+        "${instrument_fixture_args[@]}" \
         com.vibesync.antivirus.debug.test/androidx.test.runner.AndroidJUnitRunner \
         2>&1 | tee "$instrument_log"
       instrument_status=${PIPESTATUS[0]}

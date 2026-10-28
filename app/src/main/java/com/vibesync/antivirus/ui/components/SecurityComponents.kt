@@ -22,18 +22,25 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.FolderOpen
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import com.vibesync.antivirus.ui.components.CyberCard as Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -177,7 +184,8 @@ fun SecurityStatusCard(status: String, description: String, lastScanLabel: Strin
 @Composable
 fun ThreatListItem(result: ScanResult, isProtectedSystemApp: Boolean, showUninstall: Boolean, showQuarantine: Boolean,
     showAppInfo: Boolean, onUninstall: (String) -> Unit, onAppInfo: (String) -> Unit, onQuarantine: () -> Unit,
-    onTrust: (ScanResult) -> Unit = {}, modifier: Modifier = Modifier) {
+    onTrust: (ScanResult) -> Unit = {}, onRemoveTrust: (String) -> Unit = {}, modifier: Modifier = Modifier) {
+    var optionsExpanded by remember(result.packageName, result.trustedByUser) { mutableStateOf(false) }
     val kind = when (result.verdict) {
         ScanVerdict.THREAT -> StatusKind.DANGER
         ScanVerdict.SUSPICIOUS -> StatusKind.WARNING
@@ -211,6 +219,20 @@ fun ThreatListItem(result: ScanResult, isProtectedSystemApp: Boolean, showUninst
                     Text(result.packageName ?: result.packageOrPath, style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
                 }
+                if (result.trustedByUser && result.packageName != null) {
+                    Box {
+                        IconButton(onClick = { optionsExpanded = true }) {
+                            Icon(Icons.Default.MoreVert, contentDescription = stringResource(R.string.trusted_app_options))
+                        }
+                        DropdownMenu(expanded = optionsExpanded, onDismissRequest = { optionsExpanded = false }) {
+                            if (showUninstall && !isProtectedSystemApp) DropdownMenuItem(
+                                text = { Text(stringResource(R.string.uninstall_label)) },
+                                onClick = { optionsExpanded = false; onUninstall(result.packageName) })
+                            DropdownMenuItem(text = { Text(stringResource(R.string.trusted_app_remove)) },
+                                onClick = { optionsExpanded = false; onRemoveTrust(result.packageName) })
+                        }
+                    }
+                }
             }
             StatusChip(verdictLabel, kind)
             result.reasons.take(3).forEach { Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }
@@ -221,7 +243,7 @@ fun ThreatListItem(result: ScanResult, isProtectedSystemApp: Boolean, showUninst
                     OutlinedButton(onClick = { onAppInfo(result.packageName) }, modifier = Modifier.weight(1f)) {
                         Text(stringResource(R.string.app_info_label))
                     }
-                } else if (showUninstall && !isProtectedSystemApp && result.packageName != null) {
+                } else if (showUninstall && !result.trustedByUser && !isProtectedSystemApp && result.packageName != null) {
                     OutlinedButton(onClick = { onUninstall(result.packageName) }, modifier = Modifier.weight(1f)) {
                         Text(stringResource(R.string.uninstall_label))
                     }
@@ -231,7 +253,7 @@ fun ThreatListItem(result: ScanResult, isProtectedSystemApp: Boolean, showUninst
                         Text(stringResource(R.string.trusted_app_mark))
                     }
                 }
-                if (showQuarantine) {
+                if (showQuarantine && !result.trustedByUser) {
                     OutlinedButton(onClick = onQuarantine, modifier = Modifier.weight(1f)) { Text(stringResource(R.string.quarantine_confirm_action)) }
                 }
             }

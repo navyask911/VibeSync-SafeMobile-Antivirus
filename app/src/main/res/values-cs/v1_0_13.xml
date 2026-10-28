@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="trusted_app_options">Možnosti</string>
+<string name="trusted_app_remove">Zrušit důvěru</string>
+<string name="trusted_app_removed">Důvěra byla zrušena. Budoucí kontroly a upozornění pro tento balíček jsou znovu zapnuté.</string>
+<string name="trusted_app_remove_failed">Důvěru se nepodařilo zrušit. Zkuste to znovu.</string>
+<string name="install_sentinel_title">Sledování instalací</string>
+<string name="install_sentinel_active">SafeMobile Sentinel: aktivní a sleduje</string>
+<string name="install_sentinel_description">Místní kontroly po instalaci s trvalým oznámením. Bez pravidelného dotazování nebo blokování spánku. Android může službu zastavit.</string>
+<string name="install_sentinel_stop">Zastavit sledování instalací</string>
+<string name="install_scan_progress">Analyzuje se nově nainstalovaná aplikace: %1$s</string>
+<string name="analytics_chart_title">Výsledky kontrol</string>
+<string name="analytics_other">Ostatní výsledky</string>
+<string name="analytics_total">Výsledky</string>
+<string name="analytics_weekly_scans">Týdenní kontroly</string>
+<string name="analytics_week_note">Zaznamenané relace od pondělí do neděle. Mohou zahrnovat nedokončené kontroly.</string>
+<string name="posture_overlay_select_app">V Androidu 11 nebo novějším vyberte %1$s v seznamu nastavení zobrazení přes jiné aplikace.</string>
+<string name="install_scan_received">Událost instalace přijata. Otevřete SafeMobile a zkontrolujte ji.</string>
+</resources>

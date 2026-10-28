@@ -377,6 +377,7 @@ internal fun SafeMobileSettingsPanel(
                 }) { Text(stringResource(R.string.siren_test_button)) }
             }
         }
+        InstallSentinelSettings()
         OverlayRiskReviewPanel()
 
         if (BuildConfig.OPTIONAL_FEED_ENABLED) {

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="trusted_app_options">விருப்பங்கள்</string>
+<string name="trusted_app_remove">நம்பிக்கையை நீக்கு</string>
+<string name="trusted_app_removed">நம்பிக்கை நீக்கப்பட்டது. இந்தத் தொகுப்பின் எதிர்கால ஆய்வுகளும் எச்சரிக்கைகளும் மீண்டும் இயக்கப்பட்டுள்ளன.</string>
+<string name="trusted_app_remove_failed">நம்பிக்கையை நீக்க முடியவில்லை. மீண்டும் முயலவும்.</string>
+<string name="install_sentinel_title">நிறுவல் கண்காணிப்பு</string>
+<string name="install_sentinel_active">SafeMobile Sentinel: செயல்பாட்டில், கண்காணிக்கிறது</string>
+<string name="install_sentinel_description">நிலையான அறிவிப்புடன் நிறுவிய பின் சாதனத்திலேயே ஆய்வு. தொடர்ச்சியான வினவலோ சாதனத்தை விழிப்பில் வைக்கும் பூட்டோ இல்லை. Android சேவையை நிறுத்தலாம்.</string>
+<string name="install_sentinel_stop">நிறுவல் கண்காணிப்பை நிறுத்து</string>
+<string name="install_scan_progress">புதிதாக நிறுவிய செயலியை ஆய்வு செய்கிறது: %1$s</string>
+<string name="analytics_chart_title">ஆய்வு முடிவுகள்</string>
+<string name="analytics_other">பிற முடிவுகள்</string>
+<string name="analytics_total">முடிவுகள்</string>
+<string name="analytics_weekly_scans">வாராந்திர ஆய்வுகள்</string>
+<string name="analytics_week_note">திங்கள் முதல் ஞாயிறு வரையிலான பதிவான அமர்வுகள். முழுமையடையாத ஆய்வுகளும் இருக்கலாம்.</string>
+<string name="posture_overlay_select_app">Android 11 அல்லது அதற்குப் பிந்தைய பதிப்பில், பிற செயலிகளின் மேல் காட்டும் அமைப்புப் பட்டியலில் %1$s என்பதைத் தேர்ந்தெடுக்கவும்.</string>
+<string name="install_scan_received">நிறுவல் நிகழ்வு பெறப்பட்டது. மதிப்பாய்வு செய்ய SafeMobile திறக்கவும்.</string>
+</resources>

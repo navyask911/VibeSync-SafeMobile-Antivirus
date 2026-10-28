@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="trusted_app_options">বিকল্প</string>
+<string name="trusted_app_remove">বিশ্বাস সরান</string>
+<string name="trusted_app_removed">বিশ্বাস সরানো হয়েছে। এই প্যাকেজের ভবিষ্যৎ পরীক্ষা ও সতর্কতা আবার চালু হয়েছে।</string>
+<string name="trusted_app_remove_failed">বিশ্বাস সরানো যায়নি। আবার চেষ্টা করুন।</string>
+<string name="install_sentinel_title">ইনস্টল পর্যবেক্ষণ</string>
+<string name="install_sentinel_active">SafeMobile Sentinel: সক্রিয় ও পর্যবেক্ষণ চলছে</string>
+<string name="install_sentinel_description">স্থায়ী বিজ্ঞপ্তিসহ ইনস্টলের পর স্থানীয় পরীক্ষা। বারবার খোঁজ বা যন্ত্র জাগিয়ে রাখার লক নেই। Android পরিষেবাটি থামাতে পারে।</string>
+<string name="install_sentinel_stop">ইনস্টল পর্যবেক্ষণ বন্ধ করুন</string>
+<string name="install_scan_progress">নতুন ইনস্টল করা অ্যাপ পরীক্ষা চলছে: %1$s</string>
+<string name="analytics_chart_title">পরীক্ষার ফলাফল</string>
+<string name="analytics_other">অন্যান্য ফলাফল</string>
+<string name="analytics_total">ফলাফল</string>
+<string name="analytics_weekly_scans">সাপ্তাহিক পরীক্ষা</string>
+<string name="analytics_week_note">সোমবার থেকে রবিবারের নথিভুক্ত সেশন। অসম্পূর্ণ পরীক্ষাও অন্তর্ভুক্ত থাকতে পারে।</string>
+<string name="posture_overlay_select_app">Android 11 বা পরবর্তীতে, অন্য অ্যাপের উপরে দেখানোর সেটিংস তালিকায় %1$s বেছে নিন।</string>
+<string name="install_scan_received">ইনস্টলের ঘটনা পাওয়া গেছে। পর্যালোচনার জন্য SafeMobile খুলুন।</string>
+</resources>

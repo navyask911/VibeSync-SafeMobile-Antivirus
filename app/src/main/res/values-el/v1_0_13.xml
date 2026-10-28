@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="trusted_app_options">Επιλογές</string>
+<string name="trusted_app_remove">Ανάκληση εμπιστοσύνης</string>
+<string name="trusted_app_removed">Η εμπιστοσύνη ανακλήθηκε. Οι μελλοντικοί έλεγχοι και ειδοποιήσεις ενεργοποιήθηκαν ξανά για αυτό το πακέτο.</string>
+<string name="trusted_app_remove_failed">Δεν ήταν δυνατή η ανάκληση εμπιστοσύνης. Δοκιμάστε ξανά.</string>
+<string name="install_sentinel_title">Παρακολούθηση εγκαταστάσεων</string>
+<string name="install_sentinel_active">SafeMobile Sentinel: ενεργό και παρακολουθεί</string>
+<string name="install_sentinel_description">Τοπικοί έλεγχοι μετά την εγκατάσταση με μόνιμη ειδοποίηση. Χωρίς περιοδικές ερωτήσεις ή κλείδωμα αφύπνισης. Το Android μπορεί να διακόψει την υπηρεσία.</string>
+<string name="install_sentinel_stop">Διακοπή παρακολούθησης εγκαταστάσεων</string>
+<string name="install_scan_progress">Ανάλυση νέας εγκατεστημένης εφαρμογής: %1$s</string>
+<string name="analytics_chart_title">Αποτελέσματα ελέγχων</string>
+<string name="analytics_other">Άλλα αποτελέσματα</string>
+<string name="analytics_total">Αποτελέσματα</string>
+<string name="analytics_weekly_scans">Εβδομαδιαίοι έλεγχοι</string>
+<string name="analytics_week_note">Καταγεγραμμένες συνεδρίες από Δευτέρα έως Κυριακή. Ενδέχεται να περιλαμβάνονται ημιτελείς έλεγχοι.</string>
+<string name="posture_overlay_select_app">Στο Android 11 ή νεότερο, επιλέξτε %1$s στη λίστα ρυθμίσεων εμφάνισης πάνω από άλλες εφαρμογές.</string>
+<string name="install_scan_received">Λήφθηκε συμβάν εγκατάστασης. Ανοίξτε το SafeMobile για έλεγχο.</string>
+</resources>

@@ -218,6 +218,32 @@ native, or otherwise absent DEX content. The app has no claim of full YARA cover
 real-world detection rate. See [docs/YARA_STATUS.md](docs/YARA_STATUS.md), [NOTICE](NOTICE),
 and [the licence inventory](docs/THIRD_PARTY_LICENSES.md).
 
+### v1.0.13: trust menus, install diagnostics and local charts
+
+Trusted scan cards and incident details hide the primary uninstall action behind
+a name-row options menu with Uninstall and Remove trust. Removal revokes package
+and legacy digest overrides; displayed results are reassessed.
+
+After privacy consent, opening SafeMobile starts a user-stoppable foreground
+install sentinel. It listens for protected system package events without polling
+or wake locks. A silent install notification proves receipt; the live service and
+WorkManager share one serial, idempotent local scan processor. Confirmed threats
+retain the five-second siren and permission-gated full-screen notification.
+The reserved no-code test APK triggers a clearly marked diagnostic without a
+database import or a fabricated malware record. Android/OEM force-stop restrictions
+still apply; a persistent service cannot guarantee delivery in every device state.
+
+Compose Canvas donut and weekly bar charts appear on the dashboard and analytics
+screen. Room aggregates all stored audits and counts scan sessions, not individual
+apps, for Monday–Sunday bars. No-match results and detected threats are not claimed
+as guaranteed-safe files or blocked installations. New v1.0.13 strings are translated
+directly in all 51 locale folders; earlier full coverage remains the 22 requested
+languages. See [validation and physical-device checks](docs/V1_0_13_TESTING.md).
+
+Overlay remediation passes the flagged app’s package URI and new-task flag. Android
+11+ deliberately opens the global overlay list despite that URI; the app shows a
+localized hint identifying which app to select.
+
 ### v1.0.12: user trust and native resource translations
 
 User trust is an absolute, local package-name override. Marking an installed app

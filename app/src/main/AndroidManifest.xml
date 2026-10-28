@@ -24,6 +24,9 @@
     <data android:mimeType="text/plain" />
    </intent-filter>
   </activity>
+  <service android:name=".core.observer.InstallSentinelService" android:exported="false" android:foregroundServiceType="specialUse">
+   <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE" android:value="User-visible on-device post-install security monitoring. Maintains a protected package-event receiver and processes install events locally; idle without polling or wake locks." />
+  </service>
   <service android:name=".core.observer.StorageSentinelService" android:exported="false" android:foregroundServiceType="specialUse">
    <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE" android:value="User-enabled local Downloads folder monitoring to scan new APK files against local threat hashes." />
   </service>

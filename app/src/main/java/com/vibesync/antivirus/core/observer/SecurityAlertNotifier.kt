@@ -27,11 +27,12 @@ object SecurityAlertNotifier {
     const val EXTRA_TEST_MODE = "security.incident.manual_test"
 
     fun ensureChannel(context: Context) {
+        val local = com.vibesync.antivirus.core.locale.LocalePreferences.wrap(context)
         val manager = context.getSystemService(NotificationManager::class.java) ?: return
         manager.createNotificationChannel(NotificationChannel(
-            CHANNEL_ID, context.getString(R.string.security_alert_channel_name), NotificationManager.IMPORTANCE_HIGH
+            CHANNEL_ID, local.getString(R.string.security_alert_channel_name), NotificationManager.IMPORTANCE_HIGH
         ).apply {
-            description = context.getString(R.string.incident_channel_description)
+            description = local.getString(R.string.incident_channel_description)
             lockscreenVisibility = android.app.Notification.VISIBILITY_PRIVATE
             // Channel audio cannot be stopped by our timer. MediaPlayer owns alarm audio.
             setSound(null, null)
@@ -50,15 +51,17 @@ object SecurityAlertNotifier {
     suspend fun notifyMaliciousApp(context: Context, packageName: String, eventId: String) {
         if (com.vibesync.antivirus.core.security.TrustedAppStore(context).isTrusted(packageName)) return
         if (!runCatching { SystemPackageGuard.isUserInstalled(context, packageName) }.getOrDefault(false)) return
-        show(context, eventId, context.getString(R.string.security_alert_malware_title),
-            context.getString(R.string.security_alert_malware_body), packageName, R.string.voice_alert_malware_detected, true)
+        val local = com.vibesync.antivirus.core.locale.LocalePreferences.wrap(context)
+        show(local, eventId, local.getString(R.string.security_alert_malware_title),
+            local.getString(R.string.security_alert_malware_body), packageName, R.string.voice_alert_malware_detected, true)
     }
 
     suspend fun notifySuspiciousApp(context: Context, packageName: String, eventId: String) {
         if (com.vibesync.antivirus.core.security.TrustedAppStore(context).isTrusted(packageName)) return
         if (!runCatching { SystemPackageGuard.isUserInstalled(context, packageName) }.getOrDefault(false)) return
-        show(context, eventId, context.getString(R.string.security_alert_review_title),
-            context.getString(R.string.security_alert_review_body), null, R.string.voice_app_review, false)
+        val local = com.vibesync.antivirus.core.locale.LocalePreferences.wrap(context)
+        show(local, eventId, local.getString(R.string.security_alert_review_title),
+            local.getString(R.string.security_alert_review_body), null, R.string.voice_app_review, false)
     }
 
     /**
@@ -75,6 +78,14 @@ object SecurityAlertNotifier {
         return eventId
     }
 
+    internal fun runInstallSirenDiagnostic(context: Context, eventId: String) {
+        val local = com.vibesync.antivirus.core.locale.LocalePreferences.wrap(context)
+        Log.e(TAG, "Install receiver diagnostic: five-second test alarm; no malware verdict event=$eventId")
+        show(local, eventId, local.getString(R.string.siren_test_title),
+            local.getString(R.string.siren_test_notification), null, R.string.voice_siren_test,
+            confirmed = true, testMode = true)
+    }
+
     private fun show(context: Context, eventId: String, title: String, body: String,
                      packageName: String?, voiceResource: Int, confirmed: Boolean,
                      testMode: Boolean = false) {
@@ -83,7 +94,8 @@ object SecurityAlertNotifier {
         val enabled = app.getSharedPreferences(SafeMobileApp.SECURITY_PREFS, Context.MODE_PRIVATE)
             .getBoolean(SafeMobileApp.KEY_SECURITY_ALERTS_ENABLED, false)
         if (!enabled && !testMode) return
-        if (confirmed) {
+        InstallScanNotifications.escalated(eventId)
+        if (confirmed && InstallScanNotifications.claimAlarm(eventId)) {
             Log.d(TAG, if (testMode) "Manual siren playback start" else "Verified threat siren playback start")
             SecurityIncidentSiren.start(app)
         }
@@ -115,7 +127,7 @@ object SecurityAlertNotifier {
             .addAction(R.drawable.ic_launcher, app.getString(if (packageName != null)
                 R.string.incident_review_threat else R.string.security_alert_open_vault), content)
             .addAction(0, app.getString(R.string.incident_dismiss), dismiss)
-        if (confirmed && packageName != null && !testMode &&
+        if (confirmed && (packageName != null || testMode) &&
             FullScreenAlertAccess.isGranted(app)) {
             builder.setFullScreenIntent(content, true)
         } else if (confirmed && packageName != null) {
@@ -135,7 +147,7 @@ object SecurityAlertNotifier {
         eventId?.let { NotificationManagerCompat.from(context).cancel(notificationId(it)) }
     }
 
-    private fun notificationId(eventId: String): Int = 710_000 + (eventId.hashCode() and 0x000F_FFFF)
+    internal fun notificationId(eventId: String): Int = 710_000 + (eventId.hashCode() and 0x000F_FFFF)
     private const val TAG = "SafeMobileSecurityAlert"
 }
 

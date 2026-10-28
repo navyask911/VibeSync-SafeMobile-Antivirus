@@ -170,6 +170,7 @@ jobs:
           ./gradlew --no-daemon --max-workers=2 --no-parallel \
             -Dorg.gradle.jvmargs="-Xmx2g -Dfile.encoding=UTF-8" \
             assembleOfflineDebug assembleOfflineDebugAndroidTest
+          bash scripts/test_siren.sh
       # GitHub-hosted runners do not always expose /dev/kvm. Enable KVM when available;
       # let android-emulator-runner select software emulation otherwise. Never skip tests.
       - name: Configure optional KVM hardware acceleration

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="trusted_app_options">ಆಯ್ಕೆಗಳು</string>
+<string name="trusted_app_remove">ವಿಶ್ವಾಸ ತೆಗೆದುಹಾಕಿ</string>
+<string name="trusted_app_removed">ವಿಶ್ವಾಸ ತೆಗೆದುಹಾಕಲಾಗಿದೆ. ಈ ಪ್ಯಾಕೇಜ್‌ಗೆ ಮುಂದಿನ ಪರಿಶೀಲನೆಗಳು ಮತ್ತು ಎಚ್ಚರಿಕೆಗಳು ಸಕ್ರಿಯವಾಗಿವೆ.</string>
+<string name="trusted_app_remove_failed">ವಿಶ್ವಾಸ ತೆಗೆದುಹಾಕಲಾಗಲಿಲ್ಲ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.</string>
+<string name="install_sentinel_title">ಸ್ಥಾಪನೆ ಮೇಲ್ವಿಚಾರಣೆ</string>
+<string name="install_sentinel_active">SafeMobile Sentinel: ಸಕ್ರಿಯ, ಮೇಲ್ವಿಚಾರಣೆ ನಡೆಯುತ್ತಿದೆ</string>
+<string name="install_sentinel_description">ಶಾಶ್ವತ ಸೂಚನೆಯೊಂದಿಗೆ ಸ್ಥಾಪನೆಯ ನಂತರ ಸ್ಥಳೀಯ ಪರಿಶೀಲನೆ. ಪುನರಾವರ್ತಿತ ಹುಡುಕಾಟ ಅಥವಾ ಸಾಧನವನ್ನು ಎಚ್ಚರದಲ್ಲಿಡುವ ಲಾಕ್ ಇಲ್ಲ. Android ಸೇವೆಯನ್ನು ನಿಲ್ಲಿಸಬಹುದು.</string>
+<string name="install_sentinel_stop">ಸ್ಥಾಪನೆ ಮೇಲ್ವಿಚಾರಣೆ ನಿಲ್ಲಿಸಿ</string>
+<string name="install_scan_progress">ಹೊಸದಾಗಿ ಸ್ಥಾಪಿಸಿದ ಆ್ಯಪ್ ಪರಿಶೀಲಿಸಲಾಗುತ್ತಿದೆ: %1$s</string>
+<string name="analytics_chart_title">ಪರಿಶೀಲನೆಯ ಫಲಿತಾಂಶಗಳು</string>
+<string name="analytics_other">ಇತರ ಫಲಿತಾಂಶಗಳು</string>
+<string name="analytics_total">ಫಲಿತಾಂಶಗಳು</string>
+<string name="analytics_weekly_scans">ವಾರದ ಪರಿಶೀಲನೆಗಳು</string>
+<string name="analytics_week_note">ಸೋಮವಾರದಿಂದ ಭಾನುವಾರದವರೆಗಿನ ದಾಖಲಿತ ಅವಧಿಗಳು. ಅಪೂರ್ಣ ಪರಿಶೀಲನೆಗಳೂ ಸೇರಿರಬಹುದು.</string>
+<string name="posture_overlay_select_app">Android 11 ಅಥವಾ ನಂತರದ ಆವೃತ್ತಿಯಲ್ಲಿ, ಇತರ ಆ್ಯಪ್‌ಗಳ ಮೇಲೆ ಪ್ರದರ್ಶನದ ಸೆಟ್ಟಿಂಗ್ ಪಟ್ಟಿಯಲ್ಲಿ %1$s ಆಯ್ಕೆಮಾಡಿ.</string>
+<string name="install_scan_received">ಸ್ಥಾಪನೆಯ ಘಟನೆ ಸ್ವೀಕರಿಸಲಾಗಿದೆ. ಪರಿಶೀಲಿಸಲು SafeMobile ತೆರೆಯಿರಿ.</string>
+</resources>

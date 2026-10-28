@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="trusted_app_options">ఎంపికలు</string>
+<string name="trusted_app_remove">నమ్మకాన్ని తొలగించు</string>
+<string name="trusted_app_removed">నమ్మకం తొలగించబడింది. ఈ ప్యాకేజీకి భవిష్యత్ పరీక్షలు, హెచ్చరికలు మళ్లీ ప్రారంభమయ్యాయి.</string>
+<string name="trusted_app_remove_failed">నమ్మకాన్ని తొలగించలేకపోయాం. మళ్లీ ప్రయత్నించండి.</string>
+<string name="install_sentinel_title">ఇన్‌స్టాలేషన్ పర్యవేక్షణ</string>
+<string name="install_sentinel_active">SafeMobile Sentinel: క్రియాశీలం, పర్యవేక్షిస్తోంది</string>
+<string name="install_sentinel_description">స్థిరమైన నోటిఫికేషన్‌తో ఇన్‌స్టాల్ చేసిన తర్వాత స్థానిక పరీక్షలు. పదేపదే విచారణ లేదా పరికరాన్ని మేల్కొలిపి ఉంచే లాక్ లేదు. Android సేవను ఆపవచ్చు.</string>
+<string name="install_sentinel_stop">ఇన్‌స్టాలేషన్ పర్యవేక్షణను ఆపు</string>
+<string name="install_scan_progress">కొత్తగా ఇన్‌స్టాల్ చేసిన యాప్‌ను పరీక్షిస్తోంది: %1$s</string>
+<string name="analytics_chart_title">పరీక్ష ఫలితాలు</string>
+<string name="analytics_other">ఇతర ఫలితాలు</string>
+<string name="analytics_total">ఫలితాలు</string>
+<string name="analytics_weekly_scans">వారపు పరీక్షలు</string>
+<string name="analytics_week_note">సోమవారం నుంచి ఆదివారం వరకు నమోదైన సెషన్లు. అసంపూర్ణ పరీక్షలు కూడా ఉండవచ్చు.</string>
+<string name="posture_overlay_select_app">Android 11 లేదా ఆపై వెర్షన్‌లో, ఇతర యాప్‌లపై చూపించే సెట్టింగ్‌ల జాబితాలో %1$s ఎంచుకోండి.</string>
+<string name="install_scan_received">ఇన్‌స్టాలేషన్ సంఘటన అందింది. సమీక్ష కోసం SafeMobile తెరవండి.</string>
+</resources>
