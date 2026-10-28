@@ -701,4 +701,108 @@
 <string name="detection_capabilities_save">പുതുക്കൽ ക്രമീകരണങ്ങൾ സൂക്ഷിക്കുക</string>
 <string name="detection_capabilities_sync_privacy">ഇറക്കൽ മാത്രം. ഫലങ്ങൾ, ഫയലുകൾ, ഹാഷുകൾ, പാക്കേജ് പേരുകൾ അപ്‌ലോഡ് ചെയ്യില്ല.</string>
 <string name="detection_capabilities_sync_unavailable">ഈ ഓഫ്‌ലൈൻ പതിപ്പിലോ വിശ്വസ്ത ഒപ്പുകീ ക്രമീകരിക്കുന്നതുവരെയോ സ്വയമേവ പുതുക്കൽ ലഭ്യമല്ല.</string>
+
+<string name="format_label_value">%1$s: %2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s – %2$s</string>
+<string name="format_version">%1$s · പതിപ്പ് %2$s (%3$s)</string>
+<string name="format_package_version">%1$s · പതിപ്പ് %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">സുരക്ഷിത ഫീഡ് വിലാസം നൽകുക</string>
+<string name="storage_size_unavailable">വലുപ്പം ലഭ്യമല്ല</string>
+<string name="blocked_reason_hash">പ്രാദേശിക ഭീഷണി സിഗ്നേച്ചറുമായി പൊരുത്തപ്പെട്ടു.</string>
+<string name="blocked_reason_action">കഴിയുന്നത്ര പ്രാദേശിക സുരക്ഷാ നടപടി സ്വീകരിക്കാൻ ശ്രമിച്ചു.</string>
+<string name="signed_import_success">ഒപ്പിട്ട ഡാറ്റാബേസ് സ്വീകരിച്ചു: പതിപ്പ് %1$s · %2$s.</string>
+<string name="signed_import_failed">ഒപ്പിട്ട ഡാറ്റാബേസ് സജീവമാക്കിയില്ല. ഒപ്പ്, പതിപ്പ്, ഫയൽ ഫോർമാറ്റ് പരിശോധിക്കുക.</string>
+<string name="rule_import_pending">അവലോകനത്തിനായി %1$s സൂക്ഷിച്ചു. ഇറക്കുമതി ചെയ്ത നിയമങ്ങൾ പ്രവർത്തനരഹിതമാണ്; ഈ ഫയൽ പ്രവർത്തിപ്പിക്കില്ല.</string>
+<string name="rule_import_failed">നിയമങ്ങൾ ഇറക്കുമതി ചെയ്യാനായില്ല. ഇറക്കുമതി ചെയ്ത നിയമങ്ങൾ പ്രവർത്തനരഹിതമായി തുടരും.</string>
+<string name="restore_result_localized">%1$s (%2$s) എന്നതിന്റെ പകർപ്പ് പുനഃസ്ഥാപിച്ചു. ക്വാറന്റൈനിലുള്ള മൂല ഫയൽ സൂക്ഷിച്ചിരിക്കുന്നു.</string>
+<string name="cleaner_confirm_localized">%1$s (%2$s) എന്നത് സ്ഥിരമായി ഇല്ലാതാക്കണോ? ഇത് പഴയപടിയാക്കാനാവില്ല. SafeMobile പേരുകളും മെറ്റാഡാറ്റയും വീണ്ടും പരിശോധിക്കും.</string>
+<string name="cleaner_result_localized">ഇല്ലാതാക്കിയത്: %1$s · ഒഴിവായ ഇടം: %2$s · പരാജയപ്പെട്ടതോ മാറിയതോ: %3$s</string>
+<string name="about_localized_notices">മൂന്നാം കക്ഷി ഘടകങ്ങൾക്ക് അവയുടെ സ്വന്തം ലൈസൻസുകൾ ബാധകമാണ്. യഥാർത്ഥ അറിയിപ്പുകൾ ഓഡിറ്റിലെ പരിശോധനാ ഘട്ടമാണ്, പൂർത്തിയായ ലൈസൻസ് അവലോകനമല്ല. ഉറവിട അറിയിപ്പുകളും ലൈസൻസ് വ്യവസ്ഥകളും കാണാൻ യഥാർത്ഥ രേഖകൾ തുറക്കുക.</string>
+<string name="about_open_original">യഥാർത്ഥ രേഖകൾ തുറക്കുക</string>
+<string name="about_localized_privacy">പരിശോധിച്ച ഫയലുകൾ, ഹാഷുകൾ, പാക്കേജ് പേരുകൾ, ഫലങ്ങൾ എന്നിവ ഈ ഉപകരണത്തിൽ തന്നെയിരിക്കും. പ്രാദേശിക ഓഡിറ്റ് മെറ്റാഡാറ്റയും ക്വാറന്റൈൻ പകർപ്പുകളും എൻക്രിപ്റ്റ് ചെയ്ത സ്വകാര്യ സംഭരണത്തിൽ സൂക്ഷിക്കുന്നു. ഒപ്പിട്ട നിർവചനങ്ങളുടെ പുതുക്കലുകൾ ഈ പദ്ധതിയുടെ റിലീസ് സേവനവുമായി ബന്ധപ്പെടും; വേറിട്ട ഫീഡ് നിങ്ങൾ സമ്മതിച്ചശേഷം മാത്രമേ ക്രമീകരിച്ച വിലാസവുമായി ബന്ധപ്പെടൂ. നിങ്ങൾ തിരഞ്ഞെടുക്കുന്ന ഫോൾഡറുകളിലാണ് നിരീക്ഷണം; അത് നിർത്താം. Android അനുമതികൾ നിങ്ങളുടെ നിയന്ത്രണത്തിലാണ്. ഈ പതിപ്പിൽ പരസ്യങ്ങളോ ക്ലൗഡ് സ്കാനിംഗോ ലിങ്ക് വിശ്വാസ്യതാ സേവനമോ ഇല്ല.</string>
+<string name="coverage_local_title">പ്രാദേശിക പരിശോധനാ നിർവചനങ്ങൾ</string>
+<string name="coverage_local_body">ഉൾപ്പെടുത്തിയ പഴയ നിർവചനങ്ങളിൽ ഹാനികരമല്ലാത്ത ആന്റിവൈറസ് പരിശോധനാ അടയാളം മാത്രമേയുള്ളൂ. യഥാർത്ഥ മാൽവെയറിനെതിരായ പരിരക്ഷ അവ നൽകുന്നില്ല.</string>
+<string name="coverage_signed_title">ഒപ്പിട്ട ഹാഷ് ഡാറ്റാബേസ്</string>
+<string name="coverage_signed_body">കൃത്യമായ ഹാഷ് പൊരുത്തത്തിന് വിശ്വസനീയ ഒപ്പിടൽ താക്കോലും സ്വീകരിച്ച ഒപ്പിട്ട ഡാറ്റാബേസും വേണം. ഉൽപ്പാദന ഡാറ്റാബേസ് ഉൾപ്പെടുത്തിയിട്ടില്ല.</string>
+<string name="coverage_static_title">ആപ്ലിക്കേഷന്റെ സ്റ്റാറ്റിക് വിശകലനം</string>
+<string name="coverage_static_body">പരിമിതമായ പാക്കേജ് വിശകലനം ഉപദേശസ്വഭാവമുള്ള കണ്ടെത്തലുകൾ നൽകുന്നു. കണ്ടെത്തൽ മാത്രം മാൽവെയർ തെളിയിക്കുന്നില്ല; അറിയപ്പെടുന്ന ദോഷകരമായ ഒപ്പുകാരുടെ പട്ടിക പ്രവർത്തനരഹിതമാണ്.</string>
+<string name="coverage_permissions_title">അനുമതികളും മാനിഫെസ്റ്റും</string>
+<string name="coverage_permissions_body">അനുമതികളുടെ കൂട്ടങ്ങളും കാണാവുന്ന പാക്കേജ് പ്രഖ്യാപനങ്ങളും നേരിട്ടുള്ള പരിശോധനയ്ക്ക് സഹായിക്കുന്നു. അവ പരിശീലിപ്പിച്ച വർഗ്ഗീകരണമല്ല.</string>
+<string name="coverage_integrity_title">ഉപകരണ സമഗ്രതാ സൂചനകൾ</string>
+<string name="coverage_integrity_body">റൂട്ട് ആക്സസ്, ഹുക്കുകൾ, ബിൽഡ് ഗുണങ്ങൾ, സുരക്ഷാ നിർബന്ധിതാവസ്ഥ, ഡീബഗറുകൾ, എമുലേറ്ററുകൾ എന്നിവ പ്രാദേശിക അനുമാനരീതിയിലാണ് പരിശോധിക്കുന്നത്; ഔദ്യോഗിക സാക്ഷ്യപ്പെടുത്തലിലൂടെയല്ല.</string>
+<string name="coverage_bloom_title">സാധ്യതാപരമായ ഹാഷ് സൂചിക</string>
+<string name="coverage_bloom_body">പരിശോധിച്ച, ശൂന്യമല്ലാത്ത സാധ്യതാ സൂചികയും അതിന്റെ മാനിഫെസ്റ്റും ഉൾപ്പെടുത്തിയിട്ടില്ല. ഈ ഐച്ഛിക പാളി ലഭ്യമല്ല.</string>
+<string name="coverage_rules_title">ഉൾപ്പെടുത്തിയ കോഡ് സിഗ്നേച്ചറുകൾ</string>
+<string name="coverage_rules_body">സാധൂകരിച്ച ഉൾപ്പെടുത്തിയ നിയമങ്ങൾ കുറച്ച് അക്ഷരാർത്ഥത്തിലുള്ള കോഡ് മാതൃകകൾ പരിശോധിക്കുന്നു. പൊരുത്തങ്ങൾ ഉപദേശമാണ്; മാൽവെയർ സ്ഥിരീകരണമല്ല.</string>
+<string name="coverage_rules_unavailable">ഉൾപ്പെടുത്തിയ നിയമങ്ങൾ ലോഡ് ചെയ്തില്ല അല്ലെങ്കിൽ സാധൂകരണത്തിൽ പരാജയപ്പെട്ടു. കോഡ് സിഗ്നേച്ചർ പരിശോധന നടന്നതായി അവകാശപ്പെടുന്നില്ല.</string>
+<string name="coverage_model_title">അനുമതി വർഗ്ഗീകരണ മാതൃക</string>
+<string name="coverage_model_body">പരിശീലിപ്പിച്ചതും സാധൂകരിച്ചതും വിതരണം ചെയ്യാവുന്നതുമായ വർഗ്ഗീകരണ മാതൃക ഉൾപ്പെടുത്തിയിട്ടില്ല. മെഷീൻ ലേണിംഗ് പ്രവർത്തനരഹിതമാണ്.</string>
+<string name="coverage_signer_title">ഓഫ്‌ലൈൻ ഒപ്പുകാരൻ സ്ഥിരീകരണം</string>
+<string name="coverage_signer_body">സ്വതന്ത്രമായി നിശ്ചയിച്ച പ്രതീക്ഷിക്കുന്ന ഒപ്പിടൽ സർട്ടിഫിക്കറ്റിന്റെ വിരലടയാളം ക്രമീകരിച്ചിട്ടില്ല.</string>
+<string name="coverage_feed_title">ഒപ്പിട്ട ഫീഡ് സ്ഥിരീകരണം</string>
+<string name="coverage_feed_body">വേർതിരിച്ച ഒപ്പ് പരിശോധിക്കാനും പഴയ പതിപ്പിലേക്ക് മടങ്ങുന്നത് തടയാനും ബിൽഡ് സമയത്ത് വിശ്വസനീയ താക്കോലും ക്രമീകരിച്ച ഒപ്പിട്ട ഫീഡും വേണം.</string>
+<string name="hash_status_active">ഒപ്പിട്ട പ്രാദേശിക ഹാഷ് ഡാറ്റാബേസ് സജീവമാണ്.</string>
+<string name="hash_status_missing">ഒപ്പിട്ട ഡാറ്റാബേസ് സ്വീകരിക്കുന്നതുവരെ ഹാഷ് പൊരുത്തപ്പെടുത്തൽ പ്രവർത്തനരഹിതമാണ്.</string>
+<string name="hash_status_key">വിശ്വസനീയ ഒപ്പിടൽ താക്കോൽ ലഭ്യമല്ലാത്തതിനാൽ ഹാഷ് പൊരുത്തപ്പെടുത്തൽ പ്രവർത്തനരഹിതമാണ്.</string>
+<string name="hash_status_invalid">സൂക്ഷിച്ച നിർവചനങ്ങൾ സമഗ്രത, പതിപ്പ് അല്ലെങ്കിൽ ഫോർമാറ്റ് പരിശോധനയിൽ പരാജയപ്പെട്ടു. ഹാഷ് പൊരുത്തപ്പെടുത്തൽ പ്രവർത്തനരഹിതമായി തുടരും.</string>
+<string name="hash_status_activation">ഡാറ്റാബേസ് സജീവമാക്കൽ പൂർത്തിയായില്ല. ഹാഷ് പൊരുത്തപ്പെടുത്തൽ പ്രവർത്തനരഹിതമായി തുടരും.</string>
+<string name="finding_confidence">%1$s · വിശ്വാസനില: %2$d%%</string>
+<string name="finding_exported">പുറത്തുനിന്ന് ലഭ്യമായ ഘടകത്തിന് മാനിഫെസ്റ്റിൽ വ്യക്തമായ അനുമതി തടസ്സം കാണുന്നില്ല. കോഡിനുള്ളിൽ പരിശോധനകൾ ഉണ്ടായേക്കാം.</string>
+<string name="finding_admin">ആപ്പ് ഉപകരണ ഭരണ റിസീവർ പ്രഖ്യാപിക്കുന്നു. ഈ സെൻസിറ്റീവ് ശേഷി ദുരുപയോഗത്തിന്റെ തെളിവല്ല.</string>
+<string name="finding_accessibility">ആപ്പ് ആക്സസിബിലിറ്റി സേവനം പ്രഖ്യാപിക്കുന്നു. അംഗീകൃത സഹായ ആപ്പുകൾക്ക് ഈ ആക്സസ് ആവശ്യമായേക്കാം.</string>
+<string name="finding_overlay">ആപ്പ് മറ്റ് സ്ക്രീനുകൾക്ക് മുകളിൽ കാണിക്കുന്ന അനുമതി ആവശ്യപ്പെടുന്നു. ഇത് നിയമാനുസൃതമായിരിക്കാം, പക്ഷേ മറ്റു സ്ക്രീനുകൾ മറയ്ക്കാം.</string>
+<string name="finding_combined">ആക്സസിബിലിറ്റിക്കൊപ്പം സ്ക്രീൻ ഓവർലേ, സന്ദേശങ്ങൾ അല്ലെങ്കിൽ കോൾ ചരിത്രം എന്നിവയുടെ ആക്സസും ഉണ്ട്. ആപ്പിന്റെ ഉദ്ദേശ്യം പരിശോധിക്കുക.</string>
+<string name="finding_sms_calls">ആപ്പ് സന്ദേശങ്ങളുടെയും കോൾ ചരിത്രത്തിന്റെയും അനുമതികൾ ആവശ്യപ്പെടുന്നു.</string>
+<string name="finding_sms_network">സന്ദേശ ആക്സസിനൊപ്പം ഇന്റർനെറ്റ് ആക്സസും ഉണ്ട്. സാഹചര്യാനുസൃത അവലോകനം ആവശ്യമാണ്.</string>
+<string name="finding_signer">ഒപ്പിടൽ സർട്ടിഫിക്കറ്റ് മെറ്റാഡാറ്റ കാണുന്നില്ല അല്ലെങ്കിൽ വായിക്കാൻ കഴിയുന്നില്ല.</string>
+<string name="finding_archive">പാക്കേജ് കണ്ടെയ്‌നർ പൂർണ്ണമായി പരിശോധിക്കാനായില്ല. സ്റ്റാറ്റിക് വിശകലനം അപൂർണ്ണമാണ്.</string>
+<string name="finding_packer">പാക്കേജ് പാത അറിയപ്പെടുന്ന പാക്കിംഗ് അല്ലെങ്കിൽ സംരക്ഷണ ഉപകരണം പോലെയാണ്. നിയമാനുസൃത ആപ്പുകളും അവ ഉപയോഗിക്കാം.</string>
+<string name="finding_dex_header">കോഡ് ഹെഡറിലെ ഫോർമാറ്റ് അല്ലെങ്കിൽ വലുപ്പ ഫീൽഡുകൾ പൊരുത്തപ്പെടുന്നില്ല. ഇത് മാൽവെയറിന്റെ തെളിവല്ല.</string>
+<string name="finding_dex_short">കോഡ് എൻട്രി സാധുവായ ഹെഡറിനേക്കാൾ ചെറുതാണ്; പൂർണ്ണമായി പരിശോധിക്കാനായില്ല.</string>
+<string name="finding_entropy">കോഡ് സാമ്പിളിൽ ബൈറ്റ് ക്രമക്കേട് കൂടുതലാണ്. എൻക്രിപ്ഷനോ പാക്കിംഗോ ഹാനികരമല്ലാത്ത കംപ്രസ് ചെയ്ത ഉള്ളടക്കമോ കാരണം ആകാം.</string>
+<string name="finding_api">ആവശ്യപ്പെട്ട അനുമതിക്കുള്ള പ്രതീക്ഷിച്ച സ്റ്റാറ്റിക് പരാമർശം കണ്ടെത്തിയില്ല. റിഫ്ലെക്ഷനോ ലൈബ്രറികളോ ചലനാത്മകമായി ലോഡ് ചെയ്ത കോഡോ കാരണം ആകാം.</string>
+<string name="finding_rules">ഉൾപ്പെടുത്തിയ പരിമിത കോഡ് സിഗ്നേച്ചറുമായി പൊരുത്തപ്പെട്ടു. ഇത് ഉപദേശം മാത്രമാണ്, മാൽവെയറിന്റെ തെളിവല്ല.</string>
+<string name="finding_other">കൂടുതൽ പ്രാദേശിക സൂചനകൾ നേരിട്ട് പരിശോധിക്കണം. അവ മാൽവെയർ സ്ഥിരീകരിക്കുന്നില്ല.</string>
+<string name="integrity_manager">റൂട്ട് ആക്സസ് അല്ലെങ്കിൽ ഹുക്കിംഗ് മാനേജർ കാണുന്നു: %1$s</string>
+<string name="integrity_test_keys">ഉപകരണ ബിൽഡിൽ പരിശോധനയ്ക്കുള്ള ഒപ്പിടൽ താക്കോലുകളാണ് ഉപയോഗിക്കുന്നത്.</string>
+<string name="integrity_debug_build">ബിൽഡ് ഗുണങ്ങൾ ഡീബഗ് ചെയ്യാവുന്നതോ ഉൽപ്പാദനത്തിനല്ലാത്തതോ ആയ സിസ്റ്റം സൂചിപ്പിക്കുന്നു.</string>
+<string name="integrity_selinux">വായിക്കാവുന്ന പ്രാദേശിക സ്ഥിതി നിർബന്ധിത സുരക്ഷാ നടപ്പാക്കൽ ഓഫാണെന്ന് കാണിക്കുന്നു.</string>
+<string name="integrity_debugger">ഈ പ്രക്രിയയിൽ ഡീബഗർ ബന്ധിപ്പിച്ചിരിക്കുന്നു.</string>
+<string name="integrity_emulator">ബിൽഡ് ഗുണങ്ങൾ എമുലേറ്ററിനെയോ പരിശോധനാ ഉപകരണത്തെയോ അനുസ്മരിപ്പിക്കുന്നു.</string>
+<string name="audit_scan_pending">ഇൻസ്റ്റാളേഷൻ രേഖപ്പെടുത്തി. പ്രാദേശിക വിശകലനം ബാക്കിയുണ്ട്.</string>
+<string name="audit_scan_complete">സ്ഥിരീകരിച്ച സിഗ്നേച്ചർ പൊരുത്തമില്ലാതെ പ്രാദേശിക വിശകലനം പൂർത്തിയായി. ഇത് സുരക്ഷാ ഉറപ്പല്ല.</string>
+<string name="audit_scan_unavailable">വിശകലനസമയത്ത് പാക്കേജ് ദൃശ്യമായിരുന്നില്ല.</string>
+<string name="audit_scan_threat">കൃത്യമായ പ്രാദേശിക ഭീഷണി സിഗ്നേച്ചറുമായി പൊരുത്തപ്പെട്ടു.</string>
+<string name="audit_scan_review">പ്രാദേശിക സൂചനകൾ അവലോകനം ചെയ്യണം; അവ മാൽവെയർ സ്ഥിരീകരിക്കുന്നില്ല.</string>
+<string name="audit_source_recorded">ഇൻസ്റ്റാളേഷൻ ഉറവിടം രേഖപ്പെടുത്തി.</string>
+<string name="audit_uninstall_requested">Android അൺഇൻസ്റ്റാൾ സ്ഥിരീകരണം ആവശ്യപ്പെട്ടു.</string>
+<string name="audit_uninstall_success">അൺഇൻസ്റ്റാൾ വിജയിച്ചതായി Android അറിയിച്ചു.</string>
+<string name="audit_uninstall_failed">അൺഇൻസ്റ്റാൾ അഭ്യർത്ഥന പൂർത്തിയാക്കാൻ Android-ന് കഴിഞ്ഞില്ല.</string>
+<string name="severity_test">ഹാനികരമല്ലാത്ത പരിശോധനാ അടയാളം</string>
+<string name="severity_low">കുറഞ്ഞ തീവ്രത</string>
+<string name="severity_medium">ഇടത്തരം തീവ്രത</string>
+<string name="severity_high">ഉയർന്ന തീവ്രത</string>
+<string name="severity_critical">അത്യന്തം ഗുരുതരം</string>
+<string name="severity_unknown">തീവ്രത വ്യക്തമാക്കിയിട്ടില്ല</string>
+<plurals name="l10n_scanned_apps"><item quantity="one">%1$d ആപ്പ് പരിശോധിച്ചു</item><item quantity="other">%1$d ആപ്പ് പരിശോധിച്ചു</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="one">%1$d ഫയൽ പരിശോധിച്ചു</item><item quantity="other">%1$d ഫയൽ പരിശോധിച്ചു</item></plurals>
+<plurals name="l10n_threats"><item quantity="one">%1$d ഭീഷണി കണ്ടെത്തി</item><item quantity="other">%1$d ഭീഷണി കണ്ടെത്തി</item></plurals>
+<plurals name="l10n_review"><item quantity="one">%1$d ഫലം അവലോകനം ചെയ്യണം</item><item quantity="other">%1$d ഫലം അവലോകനം ചെയ്യണം</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="one">%1$d ഇനം പരിശോധിക്കാനായില്ല</item><item quantity="other">%1$d ഇനം പരിശോധിക്കാനായില്ല</item></plurals>
+<plurals name="l10n_no_match"><item quantity="one">%1$d ഫലത്തിന് പ്രാദേശിക പൊരുത്തമില്ല</item><item quantity="other">%1$d ഫലത്തിന് പ്രാദേശിക പൊരുത്തമില്ല</item></plurals>
+<plurals name="l10n_apps"><item quantity="one">%1$d ആപ്പ്</item><item quantity="other">%1$d ആപ്പ്</item></plurals>
+<plurals name="l10n_files"><item quantity="one">%1$d ഫയൽ</item><item quantity="other">%1$d ഫയൽ</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="one">സിസ്റ്റത്തിൽപ്പെടാത്ത %1$d ആപ്പിന് ഉയർന്ന അപകടസാധ്യതയുള്ള ആക്സസ് ഉണ്ട്.</item><item quantity="other">സിസ്റ്റത്തിൽപ്പെടാത്ത %1$d ആപ്പിന് ഉയർന്ന അപകടസാധ്യതയുള്ള ആക്സസ് ഉണ്ട്.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="one">രേഖപ്പെടുത്തിയ %1$d മാറ്റത്തിന്റെ അറിയിപ്പ് ബാക്കിയുണ്ട്.</item><item quantity="other">രേഖപ്പെടുത്തിയ %1$d മാറ്റത്തിന്റെ അറിയിപ്പ് ബാക്കിയുണ്ട്.</item></plurals>
+<plurals name="l10n_rules"><item quantity="one">പരിമിത പരിരക്ഷ · ഉൾപ്പെടുത്തിയ %1$d നിയമം</item><item quantity="other">പരിമിത പരിരക്ഷ · ഉൾപ്പെടുത്തിയ %1$d നിയമം</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="one">അവസാന പരിശോധന: ഉപദേശസ്വഭാവമുള്ള %1$d കോഡ് പൊരുത്തം.</item><item quantity="other">അവസാന പരിശോധന: ഉപദേശസ്വഭാവമുള്ള %1$d കോഡ് പൊരുത്തം.</item></plurals>
+<plurals name="l10n_imported"><item quantity="one">%1$d സാധുവായ സിഗ്നേച്ചർ പ്രാദേശിക സംഭരണത്തിലേക്ക് ഇറക്കുമതി ചെയ്തു.</item><item quantity="other">%1$d സാധുവായ സിഗ്നേച്ചർ പ്രാദേശിക സംഭരണത്തിലേക്ക് ഇറക്കുമതി ചെയ്തു.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="one">%1$d ബൈറ്റ്</item><item quantity="other">%1$d ബൈറ്റ്</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="one">റൂട്ടുമായി ബന്ധപ്പെട്ട %1$d ഫയൽസിസ്റ്റം സൂചനയുണ്ട്.</item><item quantity="other">റൂട്ടുമായി ബന്ധപ്പെട്ട %1$d ഫയൽസിസ്റ്റം സൂചനയുണ്ട്.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="one">ഹുക്കിംഗിന്റെ %1$d സൂചനയുണ്ട്.</item><item quantity="other">ഹുക്കിംഗിന്റെ %1$d സൂചനയുണ്ട്.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="one">%1$d ആപ്പ് സജീവമാക്കി</item><item quantity="other">%1$d ആപ്പ് സജീവമാക്കി</item></plurals>
+<plurals name="l10n_indicators"><item quantity="one">%1$d സൂചന</item><item quantity="other">%1$d സൂചന</item></plurals>
+<plurals name="l10n_progress"><item quantity="one">%2$d ആപ്പുകളിൽ %1$d എണ്ണം പരിശോധിച്ചു</item><item quantity="other">%2$d ആപ്പുകളിൽ %1$d എണ്ണം പരിശോധിച്ചു</item></plurals>
 </resources>
