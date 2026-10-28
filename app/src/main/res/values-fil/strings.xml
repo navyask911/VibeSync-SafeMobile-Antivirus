@@ -701,4 +701,108 @@
 <string name="detection_capabilities_save">Save update settings</string>
 <string name="detection_capabilities_sync_privacy">Downloads only. Scan results, files, hashes, and package names are not uploaded.</string>
 <string name="detection_capabilities_sync_unavailable">Automatic updates are unavailable in this offline build or until a trusted signing key is configured.</string>
+
+<string name="format_label_value">%1$s: %2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s – %2$s</string>
+<string name="format_version">%1$s · Bersyon %2$s (%3$s)</string>
+<string name="format_package_version">%1$s · Bersyon %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">Maglagay ng ligtas na address ng feed</string>
+<string name="storage_size_unavailable">Hindi available ang laki</string>
+<string name="blocked_reason_hash">May tumugmang lokal na lagda ng banta.</string>
+<string name="blocked_reason_action">Sinubukang magsagawa ng lokal na hakbang sa seguridad sa abot ng makakaya.</string>
+<string name="signed_import_success">Tinanggap ang nilagdaang database: bersyon %1$s · %2$s.</string>
+<string name="signed_import_failed">Hindi na-activate ang nilagdaang database. Suriin ang lagda, bersyon, at format ng file.</string>
+<string name="rule_import_pending">Nai-save ang %1$s para sa pagsusuri. Mananatiling naka-disable ang mga na-import na tuntunin at hindi patatakbuhin ang file na ito.</string>
+<string name="rule_import_failed">Hindi ma-import ang mga tuntunin. Mananatiling naka-disable ang mga na-import na tuntunin.</string>
+<string name="restore_result_localized">Naibalik ang kopya ng %1$s (%2$s). Nakaimbak pa rin ang orihinal sa kuwarantina.</string>
+<string name="cleaner_confirm_localized">Permanenteng burahin ang %1$s (%2$s)? Hindi na ito maibabalik. Muling susuriin ng SafeMobile ang mga pangalan at metadata.</string>
+<string name="cleaner_result_localized">Nabura: %1$s · Espasyong nabakante: %2$s · Nabigo o nagbago: %3$s</string>
+<string name="about_localized_notices">Mananatiling saklaw ng kani-kanilang lisensya ang mga bahagi mula sa ibang tagapagbigay. Ang mga orihinal na abiso ay bahagi ng pagsusuri sa audit, hindi patunay na natapos ang pagsusuri sa lisensya. Buksan ang orihinal na mga dokumento para sa mga abiso ng pinagmulan at mga tuntunin ng lisensya.</string>
+<string name="about_open_original">Buksan ang orihinal na mga dokumento</string>
+<string name="about_localized_privacy">Nananatili sa device na ito ang mga na-scan na file, hash, pangalan ng package, at resulta. Gumagamit ng naka-encrypt na pribadong imbakan ang lokal na metadata ng audit at mga kopyang nasa kuwarantina. Kumokonekta ang mga update ng nilagdaang depinisyon sa serbisyo ng paglabas ng proyektong ito; kumokonekta lamang ang hiwalay na feed sa nakatakdang address matapos kang pumayag. Ang pagsubaybay sa folder ay para lamang sa mga folder na pinili mo at maaaring ihinto. Ikaw ang may kontrol sa mga pahintulot ng Android. Walang ad, cloud scanning, o serbisyo ng reputasyon ng link sa bersyong ito.</string>
+<string name="coverage_local_title">Lokal na depinisyon para sa pagsubok</string>
+<string name="coverage_local_body">Ang mga lumang depinisyong kasama ay naglalaman lamang ng hindi nakapipinsalang panandang pansubok para sa antivirus. Hindi ito nagbibigay ng proteksiyon laban sa totoong malware.</string>
+<string name="coverage_signed_title">Nilagdaang database ng hash</string>
+<string name="coverage_signed_body">Kailangan ang mapagkakatiwalaang signing key at tinanggap na nilagdaang database para sa eksaktong pagtutugma ng hash. Walang kasamang database para sa aktuwal na paggamit.</string>
+<string name="coverage_static_title">Statikong pagsusuri ng app</string>
+<string name="coverage_static_body">Nagbibigay lamang ng mga paunang natuklasan ang limitadong pagsusuri ng package. Hindi patunay ng malware ang isang natuklasan; naka-disable ang mga listahan ng kilalang mapaminsalang lumagda.</string>
+<string name="coverage_permissions_title">Mga pahintulot at manifest</string>
+<string name="coverage_permissions_body">Nakakatulong sa manu-manong pagsusuri ang mga kombinasyon ng pahintulot at nakikitang deklarasyon ng package. Hindi ito isang sinanay na pang-uri.</string>
+<string name="coverage_integrity_title">Mga palatandaan ng integridad ng device</string>
+<string name="coverage_integrity_body">Sinusuri ang root access, hooks, mga katangian ng build, pagpapatupad ng seguridad, debugger, at emulator gamit ang lokal na pagtatantya, hindi opisyal na pagpapatunay.</string>
+<string name="coverage_bloom_title">Probabilistikong index ng hash</string>
+<string name="coverage_bloom_body">Walang kasamang napatunayan at hindi bakanteng probabilistikong index at manifest nito. Hindi available ang opsyonal na bahaging ito.</string>
+<string name="coverage_rules_title">Mga kasamang lagda ng code</string>
+<string name="coverage_rules_body">Sinusuri ng mga na-validate na kasamang tuntunin ang limitadong literal na mga pattern ng code. Gabay lamang ang mga tugma at hindi kumpirmasyon ng malware.</string>
+<string name="coverage_rules_unavailable">Hindi na-load o hindi pumasa sa pag-validate ang mga kasamang tuntunin. Hindi ipinapahayag na may isinagawang pag-scan ng lagda ng code.</string>
+<string name="coverage_model_title">Modelo ng pag-uuri ng pahintulot</string>
+<string name="coverage_model_body">Walang kasamang sinanay, na-validate, at maaaring ipamahaging modelo ng pag-uuri. Naka-disable ang machine learning.</string>
+<string name="coverage_signer_title">Offline na pagpapatunay ng lumagda</string>
+<string name="coverage_signer_body">Hindi pa naitakda ang inaasahang fingerprint ng sertipiko ng lagda na hiwalay na pinagtibay.</string>
+<string name="coverage_feed_title">Pagpapatunay ng nilagdaang feed</string>
+<string name="coverage_feed_body">Kailangan ang mapagkakatiwalaang key sa paggawa ng build at nakatakdang nilagdaang feed para sa hiwalay na pag-verify ng lagda at proteksiyon sa pagbabalik sa lumang bersyon.</string>
+<string name="hash_status_active">Aktibo ang lokal na nilagdaang database ng hash.</string>
+<string name="hash_status_missing">Naka-disable ang pagtutugma ng hash hangga\'t hindi tinatanggap ang nilagdaang database.</string>
+<string name="hash_status_key">Naka-disable ang pagtutugma ng hash dahil walang mapagkakatiwalaang signing key.</string>
+<string name="hash_status_invalid">Bumagsak sa pagsusuri ng integridad, bersyon, o format ang mga nakaimbak na depinisyon. Mananatiling naka-disable ang pagtutugma ng hash.</string>
+<string name="hash_status_activation">Hindi nakumpleto ang pag-activate ng database. Mananatiling naka-disable ang pagtutugma ng hash.</string>
+<string name="finding_confidence">%1$s · Antas ng katiyakan: %2$d%%</string>
+<string name="finding_exported">Walang nakikitang limitasyon ng pahintulot sa manifest ang isang inilantad na bahagi. Maaaring may pagsusuri pa rin sa antas ng code.</string>
+<string name="finding_admin">Nagdedeklara ang app ng receiver para sa pamamahala ng device. Hindi patunay ng pang-aabuso ang sensitibong kakayahang ito.</string>
+<string name="finding_accessibility">Nagdedeklara ang app ng accessibility service. Maaaring kailangan ito ng mga lehitimong pantulong na app.</string>
+<string name="finding_overlay">Humihingi ang app ng pahintulot na magpakita sa ibabaw ng ibang screen. Maaari itong lehitimo ngunit maaari ring tumakip sa ibang screen.</string>
+<string name="finding_combined">Kasama ng accessibility ang access sa overlay, text message, o kasaysayan ng tawag. Suriin ang layunin ng app.</string>
+<string name="finding_sms_calls">Humihingi ang app ng pahintulot sa mga text message at kasaysayan ng tawag.</string>
+<string name="finding_sms_network">Pinagsasama ang access sa text message at internet. Kailangan itong suriin ayon sa sitwasyon.</string>
+<string name="finding_signer">Nawawala o hindi mabasa ang metadata ng sertipiko ng lagda.</string>
+<string name="finding_archive">Hindi lubusang nasuri ang lalagyan ng package. Hindi kumpleto ang statikong pagsusuri.</string>
+<string name="finding_packer">Kahawig ng kilalang kasangkapan sa pag-pack o proteksiyon ang isang path sa package. Maaari ring gumamit nito ang mga lehitimong app.</string>
+<string name="finding_dex_header">Hindi magkakatugma ang format o laki sa header ng code. Hindi nito pinatutunayan ang malware.</string>
+<string name="finding_dex_short">Mas maikli kaysa wastong header ang isang bahagi ng code kaya hindi ito lubusang nasuri.</string>
+<string name="finding_entropy">Mataas ang byte entropy ng isang sample ng code. Maaaring sanhi ito ng encryption, pag-pack, o hindi mapaminsalang naka-compress na nilalaman.</string>
+<string name="finding_api">Walang natagpuang inaasahang statikong sanggunian para sa hiniling na pahintulot. Maaaring dulot ito ng reflection, mga library, o code na dinamikong nilo-load.</string>
+<string name="finding_rules">May tumugmang limitadong kasamang lagda ng code. Babala lamang ito, hindi patunay ng malware.</string>
+<string name="finding_other">Kailangang manu-manong suriin ang iba pang lokal na palatandaan. Hindi nila kinukumpirma ang malware.</string>
+<string name="integrity_manager">May nakikitang tagapamahala ng root access o hooking: %1$s</string>
+<string name="integrity_test_keys">Gumagamit ang build ng device ng mga pansubok na signing key.</string>
+<string name="integrity_debug_build">Ipinapakita ng mga katangian ng build na maaaring i-debug ang system o hindi ito para sa produksiyon.</string>
+<string name="integrity_selinux">Ipinapakita ng nababasang lokal na katayuan na naka-off ang sapilitang pagpapatupad ng seguridad.</string>
+<string name="integrity_debugger">May debugger na nakakabit sa prosesong ito.</string>
+<string name="integrity_emulator">Kahawig ng emulator o pansubok na device ang mga katangian ng build.</string>
+<string name="audit_scan_pending">Naitala ang pag-install. Nakabinbin ang lokal na pagsusuri.</string>
+<string name="audit_scan_complete">Natapos ang lokal na pagsusuri nang walang kumpirmadong tugma ng lagda. Hindi ito garantiya ng kaligtasan.</string>
+<string name="audit_scan_unavailable">Hindi nakita ang package nang isagawa ang pagsusuri.</string>
+<string name="audit_scan_threat">May eksaktong tugma sa lokal na lagda ng banta.</string>
+<string name="audit_scan_review">Kailangang suriin ang mga lokal na palatandaan; hindi nila kinukumpirma ang malware.</string>
+<string name="audit_source_recorded">Naitala ang pinagmulan ng pag-install.</string>
+<string name="audit_uninstall_requested">Hiniling ang pagkumpirma ng Android sa pag-uninstall.</string>
+<string name="audit_uninstall_success">Iniulat ng Android na matagumpay ang pag-uninstall.</string>
+<string name="audit_uninstall_failed">Hindi nakumpleto ng Android ang kahilingan sa pag-uninstall.</string>
+<string name="severity_test">Hindi mapaminsalang panandang pansubok</string>
+<string name="severity_low">Mababang antas ng panganib</string>
+<string name="severity_medium">Katamtamang antas ng panganib</string>
+<string name="severity_high">Mataas na antas ng panganib</string>
+<string name="severity_critical">Kritikal na antas ng panganib</string>
+<string name="severity_unknown">Hindi tinukoy ang antas ng panganib</string>
+<plurals name="l10n_scanned_apps"><item quantity="one">Na-scan ang %1$d app</item><item quantity="other">Na-scan ang %1$d app</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="one">Na-scan ang %1$d file</item><item quantity="other">Na-scan ang %1$d file</item></plurals>
+<plurals name="l10n_threats"><item quantity="one">May %1$d bantang natagpuan</item><item quantity="other">May %1$d bantang natagpuan</item></plurals>
+<plurals name="l10n_review"><item quantity="one">May %1$d resultang kailangang suriin</item><item quantity="other">May %1$d resultang kailangang suriin</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="one">Hindi na-scan ang %1$d item</item><item quantity="other">Hindi na-scan ang %1$d item</item></plurals>
+<plurals name="l10n_no_match"><item quantity="one">%1$d resultang walang lokal na tugma</item><item quantity="other">%1$d resultang walang lokal na tugma</item></plurals>
+<plurals name="l10n_apps"><item quantity="one">%1$d app</item><item quantity="other">%1$d app</item></plurals>
+<plurals name="l10n_files"><item quantity="one">%1$d file</item><item quantity="other">%1$d file</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="one">May %1$d app na hindi pang-system na may mataas na panganib na access.</item><item quantity="other">May %1$d app na hindi pang-system na may mataas na panganib na access.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="one">May %1$d naitalang pagbabagong naghihintay ng abiso.</item><item quantity="other">May %1$d naitalang pagbabagong naghihintay ng abiso.</item></plurals>
+<plurals name="l10n_rules"><item quantity="one">Limitadong saklaw · %1$d kasamang tuntunin</item><item quantity="other">Limitadong saklaw · %1$d kasamang tuntunin</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="one">Pinakahuling scan: %1$d tugma sa code na gabay lamang.</item><item quantity="other">Pinakahuling scan: %1$d tugma sa code na gabay lamang.</item></plurals>
+<plurals name="l10n_imported"><item quantity="one">Na-import ang %1$d wastong lagda sa lokal na imbakan.</item><item quantity="other">Na-import ang %1$d wastong lagda sa lokal na imbakan.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="one">%1$d byte</item><item quantity="other">%1$d byte</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="one">May %1$d palatandaan ng file system na may kaugnayan sa root.</item><item quantity="other">May %1$d palatandaan ng file system na may kaugnayan sa root.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="one">May %1$d palatandaan ng hooking.</item><item quantity="other">May %1$d palatandaan ng hooking.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="one">Naka-enable ang %1$d app</item><item quantity="other">Naka-enable ang %1$d app</item></plurals>
+<plurals name="l10n_indicators"><item quantity="one">%1$d palatandaan</item><item quantity="other">%1$d palatandaan</item></plurals>
+<plurals name="l10n_progress"><item quantity="one">Nasuri ang %1$d sa %2$d app</item><item quantity="other">Nasuri ang %1$d sa %2$d app</item></plurals>
 </resources>

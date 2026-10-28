@@ -558,5 +558,108 @@
 <string name="locale_th">ไทย</string>
 <string name="locale_uk">Українська</string>
 <string name="locale_uz">O‘zbekcha</string>
-</resources>
 
+<string name="format_label_value">%1$s: %2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s – %2$s</string>
+<string name="format_version">%1$s · आवृत्ती %2$s (%3$s)</string>
+<string name="format_package_version">%1$s · आवृत्ती %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">सुरक्षित फीडचा पत्ता प्रविष्ट करा</string>
+<string name="storage_size_unavailable">आकार उपलब्ध नाही</string>
+<string name="blocked_reason_hash">स्थानिक धोक्याच्या स्वाक्षरीशी जुळणारा नमुना आढळला.</string>
+<string name="blocked_reason_action">शक्य तितकी स्थानिक सुरक्षा कारवाई करण्याचा प्रयत्न केला.</string>
+<string name="signed_import_success">स्वाक्षरी केलेला डेटाबेस स्वीकारला: आवृत्ती %1$s · %2$s.</string>
+<string name="signed_import_failed">स्वाक्षरी केलेला डेटाबेस सक्रिय झाला नाही. स्वाक्षरी, आवृत्ती आणि फाइलचे स्वरूप तपासा.</string>
+<string name="rule_import_pending">पुनरावलोकनासाठी %1$s जतन केले. आयात केलेले नियम निष्क्रिय राहतील आणि ही फाइल चालवली जाणार नाही.</string>
+<string name="rule_import_failed">नियम आयात करता आले नाहीत. आयात केलेले नियम निष्क्रियच राहतील.</string>
+<string name="restore_result_localized">%1$s (%2$s) ची एक प्रत पुनर्संचयित केली. विलगीकरणातील मूळ फाइल अजून जतन आहे.</string>
+<string name="cleaner_confirm_localized">%1$s (%2$s) कायमची हटवायची का? ही कृती पूर्ववत करता येणार नाही. SafeMobile नावे आणि मेटाडेटा पुन्हा तपासेल.</string>
+<string name="cleaner_result_localized">हटवले: %1$s · मोकळी झालेली जागा: %2$s · अयशस्वी किंवा बदललेले: %3$s</string>
+<string name="about_localized_notices">तृतीय-पक्ष घटकांचे स्वतःचे परवाने लागू होतात. मूळ सूचना लेखापरीक्षणातील तपासणीचा टप्पा आहेत; संपूर्ण परवाना पुनरावलोकन झाल्याचा पुरावा नाहीत. स्रोत सूचना आणि परवान्याच्या अटी पाहण्यासाठी मूळ कागदपत्रे उघडा.</string>
+<string name="about_open_original">मूळ कागदपत्रे उघडा</string>
+<string name="about_localized_privacy">स्कॅन केलेल्या फाइल्स, हॅश, पॅकेजची नावे आणि निष्कर्ष या उपकरणावरच राहतात. स्थानिक लेखापरीक्षण मेटाडेटा आणि विलगीकरणातील प्रती कूटबद्ध खाजगी साठवणीत ठेवतात. स्वाक्षरी केलेल्या व्याख्यांची अद्यतने या प्रकल्पाच्या प्रकाशन सेवेशी संपर्क साधतात; स्वतंत्र फीड फक्त तुमच्या संमतीनंतर नियोजित पत्त्याशी संपर्क साधतो. फोल्डर निरीक्षण तुम्ही निवडलेल्या फोल्डरपुरते असते आणि थांबवता येते. Android परवानग्या तुमच्या नियंत्रणात असतात. या आवृत्तीत जाहिराती, क्लाउड स्कॅन किंवा दुव्यांच्या विश्वासार्हतेची सेवा नाही.</string>
+<string name="coverage_local_title">स्थानिक चाचणी व्याख्या</string>
+<string name="coverage_local_body">सोबत दिलेल्या जुन्या व्याख्यांमध्ये केवळ निरुपद्रवी अँटीव्हायरस चाचणी चिन्ह आहे. त्या प्रत्यक्ष मालवेअरविरुद्ध संरक्षण देत नाहीत.</string>
+<string name="coverage_signed_title">स्वाक्षरी केलेला हॅश डेटाबेस</string>
+<string name="coverage_signed_body">अचूक हॅश जुळवणीसाठी विश्वासार्ह स्वाक्षरी की आणि स्वीकारलेला स्वाक्षरी केलेला डेटाबेस आवश्यक आहे. उत्पादन-वापराचा डेटाबेस सोबत दिलेला नाही.</string>
+<string name="coverage_static_title">अॅपचे स्थिर विश्लेषण</string>
+<string name="coverage_static_body">मर्यादित पॅकेज विश्लेषण सल्ल्यासाठी निष्कर्ष देते. एक निष्कर्ष मालवेअर सिद्ध करत नाही; ज्ञात हानिकारक स्वाक्षरीकर्त्यांची यादी निष्क्रिय आहे.</string>
+<string name="coverage_permissions_title">परवानग्या आणि मॅनिफेस्ट</string>
+<string name="coverage_permissions_body">परवानग्यांचे समूह आणि दिसणाऱ्या पॅकेज घोषणा हाताने तपासणीस मदत करतात. हे प्रशिक्षित वर्गीकरण नाही.</string>
+<string name="coverage_integrity_title">उपकरणाच्या अखंडतेचे संकेत</string>
+<string name="coverage_integrity_body">रूट प्रवेश, हुक, बिल्ड गुणधर्म, सुरक्षा अंमलबजावणी, डीबगर आणि इम्युलेटर स्थानिक अंदाजाधारित पद्धतींनी तपासले जातात, अधिकृत प्रमाणनाने नाही.</string>
+<string name="coverage_bloom_title">संभाव्यतेवर आधारित हॅश निर्देशांक</string>
+<string name="coverage_bloom_body">पडताळलेला, रिकामा नसलेला संभाव्यता निर्देशांक आणि त्याचा मॅनिफेस्ट सोबत दिलेला नाही. हा पर्यायी स्तर उपलब्ध नाही.</string>
+<string name="coverage_rules_title">सोबत दिलेल्या कोड स्वाक्षऱ्या</string>
+<string name="coverage_rules_body">पडताळलेले सोबतचे नियम काही मर्यादित अक्षरशः कोड नमुने तपासतात. जुळण्या केवळ सल्ल्यासाठी असतात, मालवेअरची पुष्टी करत नाहीत.</string>
+<string name="coverage_rules_unavailable">सोबतचे नियम लोड झाले नाहीत किंवा पडताळणीत अयशस्वी झाले. कोड स्वाक्षरी स्कॅन झाल्याचा दावा केला जात नाही.</string>
+<string name="coverage_model_title">परवानगी वर्गीकरण मॉडेल</string>
+<string name="coverage_model_body">प्रशिक्षित, पडताळलेले आणि वितरित करण्यायोग्य वर्गीकरण मॉडेल सोबत नाही. मशीन लर्निंग निष्क्रिय आहे.</string>
+<string name="coverage_signer_title">ऑफलाइन स्वाक्षरीकर्ता प्रमाणीकरण</string>
+<string name="coverage_signer_body">स्वतंत्रपणे निश्चित केलेला अपेक्षित स्वाक्षरी प्रमाणपत्राचा फिंगरप्रिंट सेट केलेला नाही.</string>
+<string name="coverage_feed_title">स्वाक्षरी केलेल्या फीडची पडताळणी</string>
+<string name="coverage_feed_body">वेगळ्या स्वाक्षरीची पडताळणी आणि जुन्या आवृत्तीकडे परतणे टाळण्यासाठी बिल्डच्या वेळी विश्वासार्ह की आणि सेट केलेला स्वाक्षरी फीड आवश्यक आहे.</string>
+<string name="hash_status_active">स्वाक्षरी केलेला स्थानिक हॅश डेटाबेस सक्रिय आहे.</string>
+<string name="hash_status_missing">स्वाक्षरी केलेला डेटाबेस स्वीकारेपर्यंत हॅश जुळवणी निष्क्रिय आहे.</string>
+<string name="hash_status_key">विश्वासार्ह स्वाक्षरी की उपलब्ध नसल्याने हॅश जुळवणी निष्क्रिय आहे.</string>
+<string name="hash_status_invalid">साठवलेल्या व्याख्या अखंडता, आवृत्ती किंवा स्वरूप तपासणीत अयशस्वी झाल्या. हॅश जुळवणी निष्क्रियच राहील.</string>
+<string name="hash_status_activation">डेटाबेस सक्रिय करण्याची प्रक्रिया पूर्ण झाली नाही. हॅश जुळवणी निष्क्रियच राहील.</string>
+<string name="finding_confidence">%1$s · विश्वास पातळी: %2$d%%</string>
+<string name="finding_exported">बाहेरून वापरता येणाऱ्या घटकासाठी मॅनिफेस्टमध्ये स्पष्ट परवानगीची अट दिसत नाही. कोडमध्ये तपासणी असू शकते.</string>
+<string name="finding_admin">अॅप उपकरण प्रशासनाचा रिसीव्हर घोषित करते. ही संवेदनशील क्षमता गैरवापराचा पुरावा नाही.</string>
+<string name="finding_accessibility">अॅप अॅक्सेसिबिलिटी सेवा घोषित करते. वैध सहाय्यक अॅप्सना हा प्रवेश लागू शकतो.</string>
+<string name="finding_overlay">अॅप इतर स्क्रीनवर दिसण्यासाठी परवानगी मागते. हे योग्यही असू शकते, पण इतर स्क्रीन झाकू शकते.</string>
+<string name="finding_combined">अॅक्सेसिबिलिटीबरोबर स्क्रीनवर दिसणे, संदेश किंवा कॉल इतिहासाचा प्रवेश आहे. अॅपचा उद्देश तपासा.</string>
+<string name="finding_sms_calls">अॅप संदेश आणि कॉल इतिहास या दोन्हींच्या परवानग्या मागते.</string>
+<string name="finding_sms_network">संदेश प्रवेशाबरोबर इंटरनेट प्रवेशही आहे. संदर्भानुसार तपासणी आवश्यक आहे.</string>
+<string name="finding_signer">स्वाक्षरी प्रमाणपत्राचा मेटाडेटा गायब आहे किंवा वाचता येत नाही.</string>
+<string name="finding_archive">पॅकेजची फाइल पूर्णपणे तपासता आली नाही. स्थिर विश्लेषण अपूर्ण आहे.</string>
+<string name="finding_packer">पॅकेजचा मार्ग परिचित पॅकिंग किंवा संरक्षण साधनासारखा दिसतो. वैध अॅप्सही अशी साधने वापरू शकतात.</string>
+<string name="finding_dex_header">कोडच्या शीर्षकातील स्वरूप किंवा आकाराचे घटक विसंगत आहेत. हा मालवेअरचा पुरावा नाही.</string>
+<string name="finding_dex_short">कोडचा भाग वैध शीर्षकापेक्षा लहान असल्याने पूर्ण तपासता आला नाही.</string>
+<string name="finding_entropy">कोड नमुन्यात बाइटची अनिश्चितता जास्त आहे. कूटबद्धीकरण, पॅकिंग किंवा निरुपद्रवी संक्षिप्त सामग्री याचे कारण असू शकते.</string>
+<string name="finding_api">मागितलेल्या परवानगीसाठी अपेक्षित स्थिर संदर्भ आढळला नाही. रिफ्लेक्शन, लायब्ररी किंवा नंतर लोड होणारा कोड कारण असू शकतो.</string>
+<string name="finding_rules">सोबतच्या मर्यादित कोड स्वाक्षरीशी जुळणी आढळली. हा केवळ सल्ला आहे, मालवेअरचा पुरावा नाही.</string>
+<string name="finding_other">अतिरिक्त स्थानिक संकेतांची हाताने तपासणी आवश्यक आहे. ते मालवेअरची पुष्टी करत नाहीत.</string>
+<string name="integrity_manager">रूट प्रवेश किंवा हुकिंग व्यवस्थापक दिसतो: %1$s</string>
+<string name="integrity_test_keys">उपकरणाचा बिल्ड चाचणी स्वाक्षरी की वापरतो.</string>
+<string name="integrity_debug_build">बिल्ड गुणधर्म डीबग करता येणारी किंवा उत्पादनासाठी नसलेली प्रणाली दाखवतात.</string>
+<string name="integrity_selinux">वाचता येणारी स्थानिक स्थिती अनिवार्य सुरक्षा अंमलबजावणी बंद असल्याचे सांगते.</string>
+<string name="integrity_debugger">या प्रक्रियेला डीबगर जोडलेला आहे.</string>
+<string name="integrity_emulator">बिल्ड गुणधर्म इम्युलेटर किंवा चाचणी उपकरणासारखे आहेत.</string>
+<string name="audit_scan_pending">स्थापना नोंदवली. स्थानिक विश्लेषण बाकी आहे.</string>
+<string name="audit_scan_complete">खात्रीशीर स्वाक्षरी जुळणीशिवाय स्थानिक विश्लेषण पूर्ण झाले. ही सुरक्षिततेची हमी नाही.</string>
+<string name="audit_scan_unavailable">विश्लेषणावेळी पॅकेज दिसत नव्हते.</string>
+<string name="audit_scan_threat">अचूक स्थानिक धोक्याच्या स्वाक्षरीशी जुळणी आढळली.</string>
+<string name="audit_scan_review">स्थानिक संकेत तपासणे आवश्यक आहे; ते मालवेअरची पुष्टी करत नाहीत.</string>
+<string name="audit_source_recorded">स्थापनेचा स्रोत नोंदवला.</string>
+<string name="audit_uninstall_requested">Android कडून अॅप काढण्याची पुष्टी मागितली.</string>
+<string name="audit_uninstall_success">अॅप यशस्वीपणे काढले गेल्याचे Android ने कळवले.</string>
+<string name="audit_uninstall_failed">Android अॅप काढण्याची विनंती पूर्ण करू शकले नाही.</string>
+<string name="severity_test">निरुपद्रवी चाचणी चिन्ह</string>
+<string name="severity_low">कमी गंभीरता</string>
+<string name="severity_medium">मध्यम गंभीरता</string>
+<string name="severity_high">जास्त गंभीरता</string>
+<string name="severity_critical">अतिगंभीर</string>
+<string name="severity_unknown">गंभीरता नमूद केलेली नाही</string>
+<plurals name="l10n_scanned_apps"><item quantity="one">%1$d अॅप स्कॅन केले</item><item quantity="other">%1$d अॅप्स स्कॅन केली</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="one">%1$d फाइल स्कॅन केली</item><item quantity="other">%1$d फाइल्स स्कॅन केल्या</item></plurals>
+<plurals name="l10n_threats"><item quantity="one">%1$d धोका आढळला</item><item quantity="other">%1$d धोके आढळले</item></plurals>
+<plurals name="l10n_review"><item quantity="one">%1$d निष्कर्ष तपासणे आवश्यक आहे</item><item quantity="other">%1$d निष्कर्ष तपासणे आवश्यक आहे</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="one">%1$d घटक स्कॅन करता आला नाही</item><item quantity="other">%1$d घटक स्कॅन करता आले नाहीत</item></plurals>
+<plurals name="l10n_no_match"><item quantity="one">%1$d निष्कर्षाला स्थानिक जुळणी नाही</item><item quantity="other">%1$d निष्कर्षांना स्थानिक जुळणी नाही</item></plurals>
+<plurals name="l10n_apps"><item quantity="one">%1$d अॅप</item><item quantity="other">%1$d अॅप्स</item></plurals>
+<plurals name="l10n_files"><item quantity="one">%1$d फाइल</item><item quantity="other">%1$d फाइल्स</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="one">प्रणालीबाहेरील %1$d अॅपला उच्च जोखमीचा प्रवेश आहे.</item><item quantity="other">प्रणालीबाहेरील %1$d अॅप्सना उच्च जोखमीचा प्रवेश आहे.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="one">नोंदलेला %1$d बदल सूचनेसाठी प्रलंबित आहे.</item><item quantity="other">नोंदलेल्या %1$d बदलांची सूचना बाकी आहे.</item></plurals>
+<plurals name="l10n_rules"><item quantity="one">मर्यादित कव्हरेज · सोबतचा %1$d नियम</item><item quantity="other">मर्यादित कव्हरेज · सोबतचे %1$d नियम</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="one">शेवटचा स्कॅन: %1$d सल्लात्मक कोड जुळणी.</item><item quantity="other">शेवटचा स्कॅन: %1$d सल्लात्मक कोड जुळण्या.</item></plurals>
+<plurals name="l10n_imported"><item quantity="one">%1$d वैध स्वाक्षरी स्थानिक साठवणीत आयात झाली.</item><item quantity="other">%1$d वैध स्वाक्षऱ्या स्थानिक साठवणीत आयात झाल्या.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="one">%1$d बाइट</item><item quantity="other">%1$d बाइट्स</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="one">रूटशी संबंधित %1$d फाइल प्रणाली संकेत आहे.</item><item quantity="other">रूटशी संबंधित %1$d फाइल प्रणाली संकेत आहेत.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="one">हुकिंगचा %1$d संकेत आहे.</item><item quantity="other">हुकिंगचे %1$d संकेत आहेत.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="one">%1$d अॅप सक्रिय केले</item><item quantity="other">%1$d अॅप्स सक्रिय केली</item></plurals>
+<plurals name="l10n_indicators"><item quantity="one">%1$d संकेत</item><item quantity="other">%1$d संकेत</item></plurals>
+<plurals name="l10n_progress"><item quantity="one">%2$d अॅप्सपैकी %1$d अॅप तपासले</item><item quantity="other">%2$d अॅप्सपैकी %1$d तपासली</item></plurals>
+</resources>

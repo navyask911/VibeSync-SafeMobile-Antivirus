@@ -73,6 +73,23 @@ jobs:
         run: ./gradlew --no-daemon testOfflineDebugUnitTest
       - name: Android lint
         run: ./gradlew --no-daemon lintOfflineDebug lintFeedDebug
+      - name: Print Android lint error locations when lint fails
+        if: failure()
+        shell: bash
+        run: |
+          echo "Read-only lint diagnostics (does not change lint severity or build gates):"
+          for report in app/build/reports/lint-results-*.txt; do
+            if [[ -f "$report" ]]; then
+              echo "--- $report ---"
+              grep -E 'Error:|[0-9]+ errors' "$report" | head -n 300 || true
+            fi
+          done
+          for report in app/build/reports/lint-results-*.xml; do
+            if [[ -f "$report" ]]; then
+              echo "--- XML error identifiers in $report ---"
+              grep -B 1 'severity="Error"' "$report" | head -n 400 || true
+            fi
+          done
       - name: Validate database signing public key on main CI
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         env:

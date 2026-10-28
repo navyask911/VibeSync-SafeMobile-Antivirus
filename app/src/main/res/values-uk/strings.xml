@@ -701,4 +701,108 @@
 <string name="detection_capabilities_save">Save update settings</string>
 <string name="detection_capabilities_sync_privacy">Downloads only. Scan results, files, hashes, and package names are not uploaded.</string>
 <string name="detection_capabilities_sync_unavailable">Automatic updates are unavailable in this offline build or until a trusted signing key is configured.</string>
+
+<string name="format_label_value">%1$s: %2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s – %2$s</string>
+<string name="format_version">%1$s · Версія %2$s (%3$s)</string>
+<string name="format_package_version">%1$s · Версія %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">Введіть безпечну адресу джерела</string>
+<string name="storage_size_unavailable">Розмір недоступний</string>
+<string name="blocked_reason_hash">Знайдено збіг із локальним підписом загрози.</string>
+<string name="blocked_reason_action">Було зроблено спробу локальної захисної дії в межах можливого.</string>
+<string name="signed_import_success">Підписану базу даних прийнято: версія %1$s · %2$s.</string>
+<string name="signed_import_failed">Підписану базу даних не активовано. Перевірте підпис, версію та формат файлу.</string>
+<string name="rule_import_pending">%1$s збережено для перевірки. Імпортовані правила залишаться вимкненими, а цей файл не запускатиметься.</string>
+<string name="rule_import_failed">Не вдалося імпортувати правила. Імпортовані правила залишаться вимкненими.</string>
+<string name="restore_result_localized">Відновлено копію %1$s (%2$s). Оригінал у карантині залишається збереженим.</string>
+<string name="cleaner_confirm_localized">Назавжди видалити %1$s (%2$s)? Цю дію неможливо скасувати. SafeMobile повторно перевірить назви та метадані.</string>
+<string name="cleaner_result_localized">Видалено: %1$s · Звільнено місця: %2$s · Помилки або зміни: %3$s</string>
+<string name="about_localized_notices">Сторонні компоненти й надалі підпорядковуються власним ліцензіям. Оригінальні повідомлення є контрольним етапом аудиту, а не завершеною перевіркою ліцензій. Відкрийте оригінальні документи, щоб переглянути повідомлення джерел і ліцензійні умови.</string>
+<string name="about_open_original">Відкрити оригінальні документи</string>
+<string name="about_localized_privacy">Проскановані файли, хеші, назви пакетів і результати залишаються на цьому пристрої. Локальні метадані аудиту та копії в карантині зберігаються в зашифрованому приватному сховищі. Оновлення підписаних визначень зв’язуються зі службою випусків цього проєкту; окреме джерело звертається до налаштованої адреси лише після згоди. Моніторинг папок діє лише для вибраних вами папок і може бути зупинений. Дозволи Android залишаються під вашим контролем. Ця версія не містить реклами, хмарного сканування чи служби репутації посилань.</string>
+<string name="coverage_local_title">Локальні тестові визначення</string>
+<string name="coverage_local_body">У комплекті зі старими визначеннями є лише нешкідливий антивірусний тестовий маркер. Вони не забезпечують захист від реального шкідливого ПЗ.</string>
+<string name="coverage_signed_title">Підписана хеш-база</string>
+<string name="coverage_signed_body">Для точного зіставлення хешів потрібні довірений ключ підпису та прийнята підписана база даних. Робочої бази даних у комплекті немає.</string>
+<string name="coverage_static_title">Статичний аналіз застосунків</string>
+<string name="coverage_static_body">Обмежений аналіз пакетів надає рекомендаційні висновки. Окремий висновок не доводить наявність шкідливого ПЗ; списки відомих зловмисних підписантів вимкнені.</string>
+<string name="coverage_permissions_title">Дозволи та маніфест</string>
+<string name="coverage_permissions_body">Комбінації дозволів і видимі декларації пакетів допомагають під час ручної перевірки. Це не навчена класифікація.</string>
+<string name="coverage_integrity_title">Індикатори цілісності пристрою</string>
+<string name="coverage_integrity_body">Root-доступ, перехоплення, властивості збірки, застосування захисту, налагоджувачі й емулятори перевіряються локальними евристиками, а не атестацією.</string>
+<string name="coverage_bloom_title">Імовірнісний індекс хешів</string>
+<string name="coverage_bloom_body">Перевірений непорожній імовірнісний індекс і його маніфест не постачаються. Цей необов’язковий рівень недоступний.</string>
+<string name="coverage_rules_title">Вбудовані підписи коду</string>
+<string name="coverage_rules_body">Перевірені вбудовані правила шукають обмежений набір буквальних шаблонів коду. Збіги мають рекомендаційний характер і не підтверджують шкідливе ПЗ.</string>
+<string name="coverage_rules_unavailable">Вбудовані правила не завантажилися або не пройшли перевірку. Ми не стверджуємо, що виконано сканування підписів коду.</string>
+<string name="coverage_model_title">Модель класифікації дозволів</string>
+<string name="coverage_model_body">Навченої, перевіреної та придатної для розповсюдження моделі класифікації немає. Машинне навчання вимкнено.</string>
+<string name="coverage_signer_title">Офлайн-перевірка підписанта</string>
+<string name="coverage_signer_body">Незалежно закріплений очікуваний відбиток сертифіката підпису не налаштовано.</string>
+<string name="coverage_feed_title">Перевірка підписаного джерела</string>
+<string name="coverage_feed_body">Перевірка окремого підпису й захист від повернення до старішої версії потребують довіреного ключа під час збірки та налаштованого підписаного джерела.</string>
+<string name="hash_status_active">Підписана локальна хеш-база активна.</string>
+<string name="hash_status_missing">Зіставлення хешів вимкнене до прийняття підписаної бази даних.</string>
+<string name="hash_status_key">Зіставлення хешів вимкнене, оскільки немає довіреного ключа підпису.</string>
+<string name="hash_status_invalid">Збережені визначення не пройшли перевірку цілісності, версії або формату. Зіставлення хешів залишається вимкненим.</string>
+<string name="hash_status_activation">Активація бази даних не завершилася. Зіставлення хешів залишається вимкненим.</string>
+<string name="finding_confidence">%1$s · Упевненість: %2$d%%</string>
+<string name="finding_exported">Експортований компонент не має видимого обмеження дозволу в маніфесті. Перевірки на рівні коду все ж можуть існувати.</string>
+<string name="finding_admin">Застосунок оголошує приймач адміністрування пристрою. Ця чутлива функція не є доказом зловживання.</string>
+<string name="finding_accessibility">Застосунок оголошує службу спеціальних можливостей. Законні допоміжні застосунки можуть потребувати такого доступу.</string>
+<string name="finding_overlay">Застосунок запитує дозвіл на накладання поверх екранів. Це може бути законно, але також може приховувати інші екрани.</string>
+<string name="finding_combined">Доступ до спеціальних можливостей поєднаний із накладанням, SMS або історією викликів. Перевірте призначення застосунку.</string>
+<string name="finding_sms_calls">Застосунок запитує дозволи і до SMS, і до історії викликів.</string>
+<string name="finding_sms_network">Доступ до SMS поєднаний із доступом до інтернету. Потрібна перевірка з урахуванням контексту.</string>
+<string name="finding_signer">Метадані сертифіката підпису відсутні або не читаються.</string>
+<string name="finding_archive">Не вдалося повністю перевірити контейнер пакета. Статичний аналіз неповний.</string>
+<string name="finding_packer">Шлях у пакеті нагадує відомий інструмент пакування або захисту. Законні застосунки також можуть його використовувати.</string>
+<string name="finding_dex_header">Заголовок коду має неузгоджені поля формату або розміру. Це не доводить наявність шкідливого ПЗ.</string>
+<string name="finding_dex_short">Елемент коду коротший за правильний заголовок і не був повністю перевірений.</string>
+<string name="finding_entropy">Зразок коду має високу ентропію байтів. Причиною може бути шифрування, пакування або нешкідливі стислі дані.</string>
+<string name="finding_api">Не знайдено очікуваного статичного посилання для запитаного дозволу. Причиною можуть бути рефлексія, бібліотеки або динамічно завантажений код.</string>
+<string name="finding_rules">Знайдено збіг з обмеженим вбудованим підписом коду. Це лише підказка, а не доказ шкідливого ПЗ.</string>
+<string name="finding_other">Додаткові локальні індикатори потребують ручної перевірки. Вони не підтверджують шкідливе ПЗ.</string>
+<string name="integrity_manager">Видно менеджер root-доступу або перехоплення: %1$s</string>
+<string name="integrity_test_keys">Збірка пристрою використовує тестові ключі підпису.</string>
+<string name="integrity_debug_build">Властивості збірки вказують на налагоджувану або несерійну систему.</string>
+<string name="integrity_selinux">Доступний для читання локальний стан показує, що обов’язкове застосування захисту вимкнено.</string>
+<string name="integrity_debugger">До цього процесу підключено налагоджувач.</string>
+<string name="integrity_emulator">Властивості збірки нагадують емулятор або тестовий пристрій.</string>
+<string name="audit_scan_pending">Встановлення зареєстровано. Локальний аналіз очікується.</string>
+<string name="audit_scan_complete">Локальний аналіз завершено без підтвердженого збігу підпису. Це не гарантія безпеки.</string>
+<string name="audit_scan_unavailable">Пакет не було видно під час аналізу.</string>
+<string name="audit_scan_threat">Знайдено точний збіг із локальним підписом загрози.</string>
+<string name="audit_scan_review">Локальні індикатори потребують перевірки; вони не підтверджують шкідливе ПЗ.</string>
+<string name="audit_source_recorded">Джерело встановлення зареєстровано.</string>
+<string name="audit_uninstall_requested">Запитано підтвердження видалення в Android.</string>
+<string name="audit_uninstall_success">Android повідомив про успішне видалення.</string>
+<string name="audit_uninstall_failed">Android не зміг завершити запит на видалення.</string>
+<string name="severity_test">Нешкідливий тестовий маркер</string>
+<string name="severity_low">Низька серйозність</string>
+<string name="severity_medium">Середня серйозність</string>
+<string name="severity_high">Висока серйозність</string>
+<string name="severity_critical">Критична серйозність</string>
+<string name="severity_unknown">Серйозність не вказана</string>
+<plurals name="l10n_scanned_apps"><item quantity="one">Проскановано %1$d застосунок</item><item quantity="few">Проскановано %1$d застосунки</item><item quantity="many">Проскановано %1$d застосунків</item><item quantity="other">Проскановано %1$d застосунку</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="one">Проскановано %1$d файл</item><item quantity="few">Проскановано %1$d файли</item><item quantity="many">Проскановано %1$d файлів</item><item quantity="other">Проскановано %1$d файлу</item></plurals>
+<plurals name="l10n_threats"><item quantity="one">Виявлено %1$d загрозу</item><item quantity="few">Виявлено %1$d загрози</item><item quantity="many">Виявлено %1$d загроз</item><item quantity="other">Виявлено %1$d загрози</item></plurals>
+<plurals name="l10n_review"><item quantity="one">%1$d результат потребує перевірки</item><item quantity="few">%1$d результати потребують перевірки</item><item quantity="many">%1$d результатів потребують перевірки</item><item quantity="other">%1$d результату потребує перевірки</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="one">%1$d об’єкт не вдалося просканувати</item><item quantity="few">%1$d об’єкти не вдалося просканувати</item><item quantity="many">%1$d об’єктів не вдалося просканувати</item><item quantity="other">%1$d об’єкта не вдалося просканувати</item></plurals>
+<plurals name="l10n_no_match"><item quantity="one">%1$d результат без локального збігу</item><item quantity="few">%1$d результати без локального збігу</item><item quantity="many">%1$d результатів без локального збігу</item><item quantity="other">%1$d результату без локального збігу</item></plurals>
+<plurals name="l10n_apps"><item quantity="one">%1$d застосунок</item><item quantity="few">%1$d застосунки</item><item quantity="many">%1$d застосунків</item><item quantity="other">%1$d застосунку</item></plurals>
+<plurals name="l10n_files"><item quantity="one">%1$d файл</item><item quantity="few">%1$d файли</item><item quantity="many">%1$d файлів</item><item quantity="other">%1$d файлу</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="one">%1$d несистемний застосунок має доступ високого ризику.</item><item quantity="few">%1$d несистемні застосунки мають доступ високого ризику.</item><item quantity="many">%1$d несистемних застосунків мають доступ високого ризику.</item><item quantity="other">%1$d несистемного застосунку має доступ високого ризику.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="one">%1$d помічена зміна очікує сповіщення.</item><item quantity="few">%1$d помічені зміни очікують сповіщення.</item><item quantity="many">%1$d помічених змін очікують сповіщення.</item><item quantity="other">%1$d поміченої зміни очікує сповіщення.</item></plurals>
+<plurals name="l10n_rules"><item quantity="one">Обмежене покриття · %1$d вбудоване правило</item><item quantity="few">Обмежене покриття · %1$d вбудовані правила</item><item quantity="many">Обмежене покриття · %1$d вбудованих правил</item><item quantity="other">Обмежене покриття · %1$d вбудованого правила</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="one">Останнє сканування: %1$d рекомендаційний збіг коду.</item><item quantity="few">Останнє сканування: %1$d рекомендаційні збіги коду.</item><item quantity="many">Останнє сканування: %1$d рекомендаційних збігів коду.</item><item quantity="other">Останнє сканування: %1$d рекомендаційного збігу коду.</item></plurals>
+<plurals name="l10n_imported"><item quantity="one">До локального сховища імпортовано %1$d правильний підпис.</item><item quantity="few">До локального сховища імпортовано %1$d правильні підписи.</item><item quantity="many">До локального сховища імпортовано %1$d правильних підписів.</item><item quantity="other">До локального сховища імпортовано %1$d правильного підпису.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="one">%1$d байт</item><item quantity="few">%1$d байти</item><item quantity="many">%1$d байтів</item><item quantity="other">%1$d байта</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="one">Наявний %1$d індикатор файлової системи, пов’язаний із root.</item><item quantity="few">Наявні %1$d індикатори файлової системи, пов’язані з root.</item><item quantity="many">Наявні %1$d індикаторів файлової системи, пов’язаних із root.</item><item quantity="other">Наявний %1$d індикатора файлової системи, пов’язаного із root.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="one">Наявний %1$d індикатор перехоплення.</item><item quantity="few">Наявні %1$d індикатори перехоплення.</item><item quantity="many">Наявні %1$d індикаторів перехоплення.</item><item quantity="other">Наявний %1$d індикатора перехоплення.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="one">Увімкнено %1$d застосунок</item><item quantity="few">Увімкнено %1$d застосунки</item><item quantity="many">Увімкнено %1$d застосунків</item><item quantity="other">Увімкнено %1$d застосунку</item></plurals>
+<plurals name="l10n_indicators"><item quantity="one">%1$d індикатор</item><item quantity="few">%1$d індикатори</item><item quantity="many">%1$d індикаторів</item><item quantity="other">%1$d індикатора</item></plurals>
+<plurals name="l10n_progress"><item quantity="one">Перевірено %1$d із %2$d застосунків</item><item quantity="few">Перевірено %1$d із %2$d застосунків</item><item quantity="many">Перевірено %1$d із %2$d застосунків</item><item quantity="other">Перевірено %1$d із %2$d застосунків</item></plurals>
 </resources>

@@ -558,5 +558,108 @@
 <string name="locale_th">ไทย</string>
 <string name="locale_uk">Українська</string>
 <string name="locale_uz">O‘zbekcha</string>
-</resources>
 
+<string name="format_label_value">%1$s: %2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s – %2$s</string>
+<string name="format_version">%1$s · Versão %2$s (%3$s)</string>
+<string name="format_package_version">%1$s · Versão %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">Introduza um endereço de fonte seguro</string>
+<string name="storage_size_unavailable">Tamanho indisponível</string>
+<string name="blocked_reason_hash">Foi encontrada correspondência com uma assinatura de ameaça local.</string>
+<string name="blocked_reason_action">Foi tentada uma ação de segurança local, na medida do possível.</string>
+<string name="signed_import_success">Base de dados assinada aceite: versão %1$s · %2$s.</string>
+<string name="signed_import_failed">A base de dados assinada não foi ativada. Verifique a assinatura, a versão e o formato do ficheiro.</string>
+<string name="rule_import_pending">%1$s guardado para análise. As regras importadas continuam desativadas e este ficheiro não será executado.</string>
+<string name="rule_import_failed">Não foi possível importar as regras. As regras importadas continuam desativadas.</string>
+<string name="restore_result_localized">Foi restaurada uma cópia de %1$s (%2$s). O original em quarentena permanece guardado.</string>
+<string name="cleaner_confirm_localized">Eliminar definitivamente %1$s (%2$s)? Esta ação não pode ser anulada. O SafeMobile voltará a verificar os nomes e os metadados.</string>
+<string name="cleaner_result_localized">Eliminados: %1$s · Espaço libertado: %2$s · Falhas ou alterações: %3$s</string>
+<string name="about_localized_notices">Os componentes de terceiros mantêm as respetivas licenças. Os avisos originais são uma etapa de verificação da auditoria, não uma revisão de licenças concluída. Abra os documentos originais para consultar os avisos de origem e os termos das licenças.</string>
+<string name="about_open_original">Abrir documentos originais</string>
+<string name="about_localized_privacy">Os ficheiros analisados, os hashes, os nomes dos pacotes e os resultados permanecem neste dispositivo. Os metadados de auditoria locais e as cópias em quarentena utilizam armazenamento privado encriptado. As atualizações de definições assinadas contactam o serviço de versões deste projeto; uma fonte separada só contacta o endereço configurado após a sua autorização. A monitorização de pastas utiliza as pastas que escolher e pode ser interrompida. As permissões do Android permanecem sob o seu controlo. Esta versão não contém publicidade, análise na nuvem nem serviço de reputação de ligações.</string>
+<string name="coverage_local_title">Definições de teste locais</string>
+<string name="coverage_local_body">As definições antigas incluídas contêm apenas um marcador inofensivo de teste de antivírus. Não oferecem cobertura contra programas maliciosos reais.</string>
+<string name="coverage_signed_title">Base de dados de hashes assinada</string>
+<string name="coverage_signed_body">A correspondência exata de hashes exige uma chave de assinatura fidedigna e uma base de dados assinada e aceite. Não está incluída qualquer base de dados de produção.</string>
+<string name="coverage_static_title">Análise estática de aplicações</string>
+<string name="coverage_static_body">A análise limitada dos pacotes apresenta resultados indicativos. Um resultado isolado não comprova a presença de programas maliciosos; as listas de signatários maliciosos conhecidos estão desativadas.</string>
+<string name="coverage_permissions_title">Permissões e manifesto</string>
+<string name="coverage_permissions_body">As combinações de permissões e as declarações visíveis dos pacotes ajudam à revisão manual. Não constituem uma classificação treinada.</string>
+<string name="coverage_integrity_title">Indicadores de integridade do dispositivo</string>
+<string name="coverage_integrity_body">O acesso de raiz, os ganchos, as propriedades da compilação, a aplicação da segurança, os depuradores e os emuladores são verificados com heurísticas locais, não com atestação.</string>
+<string name="coverage_bloom_title">Índice probabilístico de hashes</string>
+<string name="coverage_bloom_body">Não estão incluídos um índice probabilístico verificado e não vazio nem o respetivo manifesto. Esta camada opcional está indisponível.</string>
+<string name="coverage_rules_title">Assinaturas de código incluídas</string>
+<string name="coverage_rules_body">As regras incluídas e validadas verificam um conjunto limitado de padrões literais de código. As correspondências são indicativas e não confirmam programas maliciosos.</string>
+<string name="coverage_rules_unavailable">As regras incluídas não foram carregadas ou não passaram na validação. Não se afirma ter realizado uma análise de assinaturas de código.</string>
+<string name="coverage_model_title">Modelo de classificação de permissões</string>
+<string name="coverage_model_body">Não está incluído qualquer modelo de classificação treinado, validado e distribuível. A aprendizagem automática está desativada.</string>
+<string name="coverage_signer_title">Atestação offline do signatário</string>
+<string name="coverage_signer_body">Não foi configurada uma impressão digital esperada e fixada de forma independente para o certificado de assinatura.</string>
+<string name="coverage_feed_title">Verificação de fonte assinada</string>
+<string name="coverage_feed_body">A verificação de assinaturas separadas e a proteção contra regressões exigem uma chave fidedigna na compilação e uma fonte assinada configurada.</string>
+<string name="hash_status_active">A base de dados local de hashes assinada está ativa.</string>
+<string name="hash_status_missing">A correspondência de hashes está desativada até ser aceite uma base de dados assinada.</string>
+<string name="hash_status_key">A correspondência de hashes está desativada porque não existe uma chave de assinatura fidedigna.</string>
+<string name="hash_status_invalid">As definições guardadas falharam as verificações de integridade, versão ou formato. A correspondência de hashes permanece desativada.</string>
+<string name="hash_status_activation">A ativação da base de dados não foi concluída. A correspondência de hashes permanece desativada.</string>
+<string name="finding_confidence">%1$s · Confiança: %2$d%%</string>
+<string name="finding_exported">Um componente exportado não apresenta uma restrição de permissão visível no manifesto. Poderão existir verificações ao nível do código.</string>
+<string name="finding_admin">A aplicação declara um recetor de administração do dispositivo. Esta capacidade sensível não é prova de abuso.</string>
+<string name="finding_accessibility">A aplicação declara um serviço de acessibilidade. As aplicações de assistência legítimas podem precisar deste acesso.</string>
+<string name="finding_overlay">A aplicação pede acesso para sobreposição. As sobreposições podem ser legítimas, mas também podem ocultar outros ecrãs.</string>
+<string name="finding_combined">A acessibilidade está combinada com sobreposição, mensagens de texto ou histórico de chamadas. Analise a finalidade da aplicação.</string>
+<string name="finding_sms_calls">A aplicação solicita permissões de mensagens de texto e histórico de chamadas.</string>
+<string name="finding_sms_network">O acesso às mensagens de texto está combinado com o acesso à Internet. É necessária uma análise contextual.</string>
+<string name="finding_signer">Os metadados do certificado de assinatura estão em falta ou são ilegíveis.</string>
+<string name="finding_archive">Não foi possível inspecionar totalmente o contentor do pacote. A análise estática está incompleta.</string>
+<string name="finding_packer">Um caminho do pacote assemelha-se a uma ferramenta conhecida de empacotamento ou proteção. Aplicações legítimas também podem utilizá-la.</string>
+<string name="finding_dex_header">O cabeçalho do código apresenta campos de formato ou tamanho inconsistentes. Isto não prova a presença de programas maliciosos.</string>
+<string name="finding_dex_short">Uma entrada de código é mais curta do que um cabeçalho válido e não pôde ser totalmente inspecionada.</string>
+<string name="finding_entropy">Uma amostra de código tem elevada entropia de bytes. A encriptação, o empacotamento ou conteúdo comprimido inofensivo podem explicá-la.</string>
+<string name="finding_api">Não foi encontrada a referência estática esperada para uma permissão solicitada. A reflexão, as bibliotecas ou o código carregado dinamicamente podem explicar a ausência.</string>
+<string name="finding_rules">Uma assinatura de código limitada e incluída correspondeu. É um aviso, não prova de programas maliciosos.</string>
+<string name="finding_other">Outros indicadores locais necessitam de revisão manual. Não confirmam programas maliciosos.</string>
+<string name="integrity_manager">Está visível um gestor de acesso de raiz ou de ganchos: %1$s</string>
+<string name="integrity_test_keys">A compilação do dispositivo utiliza chaves de assinatura de teste.</string>
+<string name="integrity_debug_build">As propriedades de compilação indicam um sistema depurável ou não destinado a produção.</string>
+<string name="integrity_selinux">O estado local legível indica que a imposição obrigatória de segurança está desativada.</string>
+<string name="integrity_debugger">Está ligado um depurador a este processo.</string>
+<string name="integrity_emulator">As propriedades da compilação assemelham-se às de um emulador ou dispositivo de teste.</string>
+<string name="audit_scan_pending">A instalação foi registada. A análise local está pendente.</string>
+<string name="audit_scan_complete">A análise local terminou sem correspondência confirmada de assinatura. Isto não garante a segurança.</string>
+<string name="audit_scan_unavailable">O pacote não estava visível durante a análise.</string>
+<string name="audit_scan_threat">Foi encontrada uma correspondência exata com uma assinatura de ameaça local.</string>
+<string name="audit_scan_review">Os indicadores locais requerem análise; não confirmam programas maliciosos.</string>
+<string name="audit_source_recorded">A origem da instalação foi registada.</string>
+<string name="audit_uninstall_requested">Foi solicitada a confirmação de desinstalação do Android.</string>
+<string name="audit_uninstall_success">O Android informou que a desinstalação foi bem-sucedida.</string>
+<string name="audit_uninstall_failed">O Android não conseguiu concluir o pedido de desinstalação.</string>
+<string name="severity_test">Marcador de teste inofensivo</string>
+<string name="severity_low">Gravidade baixa</string>
+<string name="severity_medium">Gravidade moderada</string>
+<string name="severity_high">Gravidade elevada</string>
+<string name="severity_critical">Gravidade crítica</string>
+<string name="severity_unknown">Gravidade não especificada</string>
+<plurals name="l10n_scanned_apps"><item quantity="one">Foi analisada %1$d aplicação</item><item quantity="other">Foram analisadas %1$d aplicações</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="one">Foi analisado %1$d ficheiro</item><item quantity="other">Foram analisados %1$d ficheiros</item></plurals>
+<plurals name="l10n_threats"><item quantity="one">Foi encontrada %1$d ameaça</item><item quantity="other">Foram encontradas %1$d ameaças</item></plurals>
+<plurals name="l10n_review"><item quantity="one">%1$d resultado necessita de revisão</item><item quantity="other">%1$d resultados necessitam de revisão</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="one">Não foi possível analisar %1$d item</item><item quantity="other">Não foi possível analisar %1$d itens</item></plurals>
+<plurals name="l10n_no_match"><item quantity="one">%1$d resultado sem correspondência local</item><item quantity="other">%1$d resultados sem correspondência local</item></plurals>
+<plurals name="l10n_apps"><item quantity="one">%1$d aplicação</item><item quantity="other">%1$d aplicações</item></plurals>
+<plurals name="l10n_files"><item quantity="one">%1$d ficheiro</item><item quantity="other">%1$d ficheiros</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="one">%1$d aplicação não pertencente ao sistema tem acesso de alto risco.</item><item quantity="other">%1$d aplicações não pertencentes ao sistema têm acesso de alto risco.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="one">%1$d alteração observada aguarda notificação.</item><item quantity="other">%1$d alterações observadas aguardam notificação.</item></plurals>
+<plurals name="l10n_rules"><item quantity="one">Cobertura limitada · %1$d regra incluída</item><item quantity="other">Cobertura limitada · %1$d regras incluídas</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="one">Última análise: %1$d correspondência indicativa de código.</item><item quantity="other">Última análise: %1$d correspondências indicativas de código.</item></plurals>
+<plurals name="l10n_imported"><item quantity="one">Foi importada %1$d assinatura válida para o armazenamento local.</item><item quantity="other">Foram importadas %1$d assinaturas válidas para o armazenamento local.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="one">%1$d byte</item><item quantity="other">%1$d bytes</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="one">Está presente %1$d indicador do sistema de ficheiros relacionado com raiz.</item><item quantity="other">Estão presentes %1$d indicadores do sistema de ficheiros relacionados com raiz.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="one">Está presente %1$d indicador de interceção.</item><item quantity="other">Estão presentes %1$d indicadores de interceção.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="one">%1$d aplicação ativada</item><item quantity="other">%1$d aplicações ativadas</item></plurals>
+<plurals name="l10n_indicators"><item quantity="one">%1$d indicador</item><item quantity="other">%1$d indicadores</item></plurals>
+<plurals name="l10n_progress"><item quantity="one">Verificada %1$d de %2$d aplicação</item><item quantity="other">Verificadas %1$d de %2$d aplicações</item></plurals>
+</resources>

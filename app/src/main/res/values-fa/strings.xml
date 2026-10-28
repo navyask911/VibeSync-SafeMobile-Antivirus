@@ -701,4 +701,108 @@
 <string name="detection_capabilities_save">Save update settings</string>
 <string name="detection_capabilities_sync_privacy">Downloads only. Scan results, files, hashes, and package names are not uploaded.</string>
 <string name="detection_capabilities_sync_unavailable">Automatic updates are unavailable in this offline build or until a trusted signing key is configured.</string>
+
+<string name="format_label_value">%1$s: %2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s – %2$s</string>
+<string name="format_version">%1$s · نسخهٔ %2$s (%3$s)</string>
+<string name="format_package_version">%1$s · نسخهٔ %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">نشانی منبع امن را وارد کنید</string>
+<string name="storage_size_unavailable">اندازه در دسترس نیست</string>
+<string name="blocked_reason_hash">با امضای تهدید محلی مطابقت پیدا شد.</string>
+<string name="blocked_reason_action">تا حد امکان برای انجام اقدام امنیتی محلی تلاش شد.</string>
+<string name="signed_import_success">پایگاه دادهٔ امضاشده پذیرفته شد: نسخهٔ %1$s · %2$s.</string>
+<string name="signed_import_failed">پایگاه دادهٔ امضاشده فعال نشد. امضا، نسخه و قالب فایل را بررسی کنید.</string>
+<string name="rule_import_pending">%1$s برای بررسی ذخیره شد. قوانین واردشده غیرفعال می‌مانند و این فایل اجرا نمی‌شود.</string>
+<string name="rule_import_failed">قوانین وارد نشدند. قوانین واردشده غیرفعال می‌مانند.</string>
+<string name="restore_result_localized">یک نسخه از %1$s (%2$s) بازیابی شد. فایل اصلی در قرنطینه همچنان ذخیره است.</string>
+<string name="cleaner_confirm_localized">%1$s (%2$s) برای همیشه حذف شود؟ این کار برگشت‌پذیر نیست. SafeMobile نام‌ها و فراداده‌ها را دوباره بررسی می‌کند.</string>
+<string name="cleaner_result_localized">حذف‌شده: %1$s · فضای آزادشده: %2$s · ناموفق یا تغییرکرده: %3$s</string>
+<string name="about_localized_notices">اجزای شخص ثالث همچنان تابع مجوزهای خودشان هستند. اطلاعیه‌های اصلی یک مرحلهٔ کنترل ممیزی هستند، نه بررسی تکمیل‌شدهٔ مجوزها. برای دیدن اطلاعیه‌های منبع و شرایط مجوز، اسناد اصلی را باز کنید.</string>
+<string name="about_open_original">باز کردن اسناد اصلی</string>
+<string name="about_localized_privacy">فایل‌های اسکن‌شده، هش‌ها، نام بسته‌ها و نتایج روی همین دستگاه باقی می‌مانند. فراداده‌های ممیزی محلی و نسخه‌های قرنطینه در فضای خصوصی رمزگذاری‌شده ذخیره می‌شوند. به‌روزرسانی تعاریف امضاشده به سرویس انتشار پروژه متصل می‌شود؛ منبع جداگانه فقط پس از رضایت شما به نشانی تنظیم‌شده متصل خواهد شد. پایش پوشه‌ها تنها شامل پوشه‌های انتخابی شماست و می‌توان آن را متوقف کرد. مجوزهای Android تحت کنترل شما هستند. این نسخه فاقد تبلیغ، اسکن ابری یا سرویس اعتبارسنجی پیوند است.</string>
+<string name="coverage_local_title">تعاریف آزمایشی محلی</string>
+<string name="coverage_local_body">تعاریف قدیمی همراه برنامه فقط یک نشانگر آزمایشی بی‌ضرر آنتی‌ویروس دارند. این تعاریف در برابر بدافزار واقعی پوششی فراهم نمی‌کنند.</string>
+<string name="coverage_signed_title">پایگاه دادهٔ هش امضاشده</string>
+<string name="coverage_signed_body">تطبیق دقیق هش به کلید امضای معتبر و پایگاه دادهٔ امضاشدهٔ پذیرفته‌شده نیاز دارد. پایگاه دادهٔ عملیاتی همراه برنامه نیست.</string>
+<string name="coverage_static_title">تحلیل ایستای برنامه</string>
+<string name="coverage_static_body">تحلیل محدود بسته، یافته‌های راهنما ارائه می‌دهد. یک یافته به‌تنهایی وجود بدافزار را ثابت نمی‌کند؛ فهرست امضاکنندگان مخرب شناخته‌شده غیرفعال است.</string>
+<string name="coverage_permissions_title">مجوزها و مانیفست</string>
+<string name="coverage_permissions_body">ترکیب مجوزها و اعلان‌های قابل مشاهدهٔ بسته به بررسی دستی کمک می‌کنند. این موارد طبقه‌بندی آموزش‌دیده نیستند.</string>
+<string name="coverage_integrity_title">نشانگرهای یکپارچگی دستگاه</string>
+<string name="coverage_integrity_body">دسترسی روت، قلاب‌ها، ویژگی‌های ساخت، اعمال امنیت، اشکال‌زداها و شبیه‌سازها با روش‌های تخمینی محلی بررسی می‌شوند، نه گواهی اصالت.</string>
+<string name="coverage_bloom_title">نمایهٔ احتمالاتی هش</string>
+<string name="coverage_bloom_body">نمایهٔ احتمالاتی تأییدشده و غیرخالی همراه با مانیفست آن ارائه نشده است. این لایهٔ اختیاری در دسترس نیست.</string>
+<string name="coverage_rules_title">امضاهای کد همراه</string>
+<string name="coverage_rules_body">قوانین همراهِ اعتبارسنجی‌شده مجموعهٔ محدودی از الگوهای لفظی کد را بررسی می‌کنند. تطبیق‌ها صرفاً راهنما هستند و بدافزار را تأیید نمی‌کنند.</string>
+<string name="coverage_rules_unavailable">قوانین همراه بارگیری نشدند یا اعتبارسنجی را نگذرانده‌اند. ادعایی دربارهٔ اجرای اسکن امضای کد وجود ندارد.</string>
+<string name="coverage_model_title">مدل طبقه‌بندی مجوز</string>
+<string name="coverage_model_body">مدل طبقه‌بندی آموزش‌دیده، اعتبارسنجی‌شده و قابل توزیعی همراه برنامه نیست. یادگیری ماشینی غیرفعال است.</string>
+<string name="coverage_signer_title">تأیید آفلاین امضاکننده</string>
+<string name="coverage_signer_body">اثر انگشت مورد انتظار گواهی امضا که مستقل تثبیت شده باشد تنظیم نشده است.</string>
+<string name="coverage_feed_title">تأیید منبع امضاشده</string>
+<string name="coverage_feed_body">بررسی امضای جداگانه و جلوگیری از بازگشت به نسخهٔ قدیمی به کلید معتبر در زمان ساخت و منبع امضاشدهٔ تنظیم‌شده نیاز دارد.</string>
+<string name="hash_status_active">پایگاه دادهٔ هش محلی امضاشده فعال است.</string>
+<string name="hash_status_missing">تطبیق هش تا زمان پذیرش پایگاه دادهٔ امضاشده غیرفعال است.</string>
+<string name="hash_status_key">تطبیق هش به دلیل نبود کلید امضای معتبر غیرفعال است.</string>
+<string name="hash_status_invalid">تعاریف ذخیره‌شده در بررسی یکپارچگی، نسخه یا قالب رد شدند. تطبیق هش غیرفعال می‌ماند.</string>
+<string name="hash_status_activation">فعال‌سازی پایگاه داده کامل نشد. تطبیق هش غیرفعال می‌ماند.</string>
+<string name="finding_confidence">%1$s · میزان اطمینان: %2$d%%</string>
+<string name="finding_exported">یک مؤلفهٔ در دسترس بیرونی، محدودیت مجوز آشکاری در مانیفست ندارد. بررسی‌های سطح کد همچنان ممکن است وجود داشته باشند.</string>
+<string name="finding_admin">برنامه گیرندهٔ مدیریت دستگاه را اعلام می‌کند. این قابلیت حساس نشانهٔ قطعی سوءاستفاده نیست.</string>
+<string name="finding_accessibility">برنامه سرویس دسترس‌پذیری را اعلام می‌کند. برنامه‌های کمکی معتبر ممکن است به این دسترسی نیاز داشته باشند.</string>
+<string name="finding_overlay">برنامه مجوز نمایش روی سایر صفحه‌ها را می‌خواهد. این کار می‌تواند مجاز باشد اما ممکن است صفحه‌های دیگر را بپوشاند.</string>
+<string name="finding_combined">دسترس‌پذیری با دسترسی به هم‌پوشانی صفحه، پیامک یا تاریخچهٔ تماس ترکیب شده است. هدف برنامه را بررسی کنید.</string>
+<string name="finding_sms_calls">برنامه مجوز پیامک و تاریخچهٔ تماس را با هم درخواست می‌کند.</string>
+<string name="finding_sms_network">دسترسی پیامک با دسترسی اینترنت ترکیب شده است. بررسی متناسب با شرایط لازم است.</string>
+<string name="finding_signer">فراداده‌های گواهی امضا موجود نیست یا خوانده نمی‌شود.</string>
+<string name="finding_archive">محتوای بسته به‌طور کامل بررسی نشد. تحلیل ایستا ناقص است.</string>
+<string name="finding_packer">مسیر بسته شبیه ابزار شناخته‌شدهٔ بسته‌بندی یا محافظت است. برنامه‌های معتبر هم ممکن است از آن استفاده کنند.</string>
+<string name="finding_dex_header">سرآیند کد دارای بخش‌های ناسازگار قالب یا اندازه است. این نشانهٔ قطعی بدافزار نیست.</string>
+<string name="finding_dex_short">بخش کد از سرآیند معتبر کوتاه‌تر است و بررسی کامل آن ممکن نشد.</string>
+<string name="finding_entropy">نمونهٔ کد آنتروپی بایتی بالایی دارد. رمزگذاری، بسته‌بندی یا محتوای فشردهٔ بی‌ضرر ممکن است علت آن باشد.</string>
+<string name="finding_api">ارجاع ایستای مورد انتظار برای مجوز درخواستی یافت نشد. بازتاب، کتابخانه‌ها یا کد بارگذاری‌شدهٔ پویا ممکن است علت باشند.</string>
+<string name="finding_rules">مطابقتی با یک امضای کد محدود همراه پیدا شد. این فقط یک نشانه است، نه مدرک بدافزار.</string>
+<string name="finding_other">نشانگرهای محلی بیشتر نیازمند بررسی دستی هستند. این موارد بدافزار را تأیید نمی‌کنند.</string>
+<string name="integrity_manager">مدیر دسترسی روت یا قلاب‌گذاری دیده می‌شود: %1$s</string>
+<string name="integrity_test_keys">نسخهٔ ساخت دستگاه از کلیدهای امضای آزمایشی استفاده می‌کند.</string>
+<string name="integrity_debug_build">ویژگی‌های ساخت نشان می‌دهد سامانه قابل اشکال‌زدایی یا غیرعملیاتی است.</string>
+<string name="integrity_selinux">وضعیت محلی خواندنی نشان می‌دهد اعمال اجباری امنیت خاموش است.</string>
+<string name="integrity_debugger">اشکال‌زدا به این فرایند متصل است.</string>
+<string name="integrity_emulator">ویژگی‌های ساخت به شبیه‌ساز یا دستگاه آزمایشی شباهت دارند.</string>
+<string name="audit_scan_pending">نصب ثبت شد. تحلیل محلی در انتظار است.</string>
+<string name="audit_scan_complete">تحلیل محلی بدون تطبیق تأییدشدهٔ امضا پایان یافت. این تضمین ایمنی نیست.</string>
+<string name="audit_scan_unavailable">بسته هنگام تحلیل قابل مشاهده نبود.</string>
+<string name="audit_scan_threat">مطابقت دقیق با امضای تهدید محلی پیدا شد.</string>
+<string name="audit_scan_review">نشانگرهای محلی نیازمند بررسی هستند؛ بدافزار را تأیید نمی‌کنند.</string>
+<string name="audit_source_recorded">منبع نصب ثبت شد.</string>
+<string name="audit_uninstall_requested">درخواست تأیید حذف برنامه از Android ارسال شد.</string>
+<string name="audit_uninstall_success">Android حذف موفق برنامه را گزارش کرد.</string>
+<string name="audit_uninstall_failed">Android نتوانست درخواست حذف برنامه را کامل کند.</string>
+<string name="severity_test">نشانگر آزمایشی بی‌ضرر</string>
+<string name="severity_low">شدت کم</string>
+<string name="severity_medium">شدت متوسط</string>
+<string name="severity_high">شدت زیاد</string>
+<string name="severity_critical">شدت بحرانی</string>
+<string name="severity_unknown">شدت مشخص نشده است</string>
+<plurals name="l10n_scanned_apps"><item quantity="one">%1$d برنامه اسکن شد</item><item quantity="other">%1$d برنامه اسکن شدند</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="one">%1$d فایل اسکن شد</item><item quantity="other">%1$d فایل اسکن شدند</item></plurals>
+<plurals name="l10n_threats"><item quantity="one">%1$d تهدید پیدا شد</item><item quantity="other">%1$d تهدید پیدا شدند</item></plurals>
+<plurals name="l10n_review"><item quantity="one">%1$d نتیجه به بررسی نیاز دارد</item><item quantity="other">%1$d نتیجه به بررسی نیاز دارند</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="one">%1$d مورد قابل اسکن نبود</item><item quantity="other">%1$d مورد قابل اسکن نبودند</item></plurals>
+<plurals name="l10n_no_match"><item quantity="one">%1$d نتیجه بدون تطبیق محلی</item><item quantity="other">%1$d نتیجه بدون تطبیق محلی</item></plurals>
+<plurals name="l10n_apps"><item quantity="one">%1$d برنامه</item><item quantity="other">%1$d برنامه</item></plurals>
+<plurals name="l10n_files"><item quantity="one">%1$d فایل</item><item quantity="other">%1$d فایل</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="one">%1$d برنامهٔ غیرسیستمی دسترسی پرخطر دارد.</item><item quantity="other">%1$d برنامهٔ غیرسیستمی دسترسی پرخطر دارند.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="one">%1$d تغییر مشاهده‌شده در انتظار اعلان است.</item><item quantity="other">%1$d تغییر مشاهده‌شده در انتظار اعلان هستند.</item></plurals>
+<plurals name="l10n_rules"><item quantity="one">پوشش محدود · %1$d قانون همراه</item><item quantity="other">پوشش محدود · %1$d قانون همراه</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="one">اسکن اخیر: %1$d تطبیق راهنمای کد.</item><item quantity="other">اسکن اخیر: %1$d تطبیق راهنمای کد.</item></plurals>
+<plurals name="l10n_imported"><item quantity="one">%1$d امضای معتبر به حافظهٔ محلی وارد شد.</item><item quantity="other">%1$d امضای معتبر به حافظهٔ محلی وارد شدند.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="one">%1$d بایت</item><item quantity="other">%1$d بایت</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="one">%1$d نشانگر سامانهٔ فایل مرتبط با روت وجود دارد.</item><item quantity="other">%1$d نشانگر سامانهٔ فایل مرتبط با روت وجود دارند.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="one">%1$d نشانگر قلاب‌گذاری وجود دارد.</item><item quantity="other">%1$d نشانگر قلاب‌گذاری وجود دارند.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="one">%1$d برنامه فعال شد</item><item quantity="other">%1$d برنامه فعال شدند</item></plurals>
+<plurals name="l10n_indicators"><item quantity="one">%1$d نشانگر</item><item quantity="other">%1$d نشانگر</item></plurals>
+<plurals name="l10n_progress"><item quantity="one">%1$d از %2$d برنامه بررسی شد</item><item quantity="other">%1$d از %2$d برنامه بررسی شدند</item></plurals>
 </resources>

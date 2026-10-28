@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.vibesync.antivirus.R
+import com.vibesync.antivirus.core.locale.UiText
+import com.vibesync.antivirus.core.locale.UiNumber
 import com.vibesync.antivirus.core.engine.ScanResult
 import com.vibesync.antivirus.core.engine.InstalledAppItem
 import com.vibesync.antivirus.core.engine.ScanVerdict
@@ -31,7 +33,7 @@ data class SafeMobileUiState(
     val completedScans: Int = 0,
     val lastScanAt: Long? = null,
     val messageResource: Int? = null,
-    val messageText: String? = null,
+    val messageText: UiText? = null,
     val signatureCount: Int = 0,
     val processedItems: Int = 0,
     val totalItems: Int = 0,
@@ -40,7 +42,7 @@ data class SafeMobileUiState(
     val lastThreatFeedSyncAt: Long? = null,
     val threatFeedSyncStatus: String? = null,
     val threatFeedSyncError: String? = null,
-    val hashDatabaseCapability: HashDatabaseCapability = HashDatabaseCapability(false, reason = "Disabled: trusted key or signed database missing."),
+    val hashDatabaseCapability: HashDatabaseCapability = HashDatabaseCapability(false, reason = ""),
 ) {
     val threatCount get() = results.count { it.verdict == ScanVerdict.THREAT }
     val suspiciousCount get() = results.count { it.verdict == ScanVerdict.SUSPICIOUS }
@@ -94,7 +96,7 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
         viewModelScope.launch {
             val capability = try { repository.hashDatabaseCapability() }
             catch (cancelled: CancellationException) { throw cancelled }
-            catch (error: Exception) { HashDatabaseCapability(false, reason = error.message ?: "Signed hash database unavailable.") }
+            catch (error: Exception) { HashDatabaseCapability(false, reason = "") }
             mutableState.update { it.copy(hashDatabaseCapability = capability) }; refreshSecurityScore()
         }
     }
@@ -104,12 +106,12 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
             try {
                 val capability = repository.importSignedHashDatabase(uri)
                 mutableState.update { it.copy(hashDatabaseCapability = capability, messageResource = null,
-                    messageText = "Signed database accepted: version " + capability.version + ", " + capability.indicatorCount + " indicators.") }
+                    messageText = UiText(R.string.signed_import_success, listOf(capability.version?.let { UiNumber(it) } ?: "—", UiText(R.plurals.l10n_indicators, listOf(capability.indicatorCount), capability.indicatorCount)))) }
             } catch (cancelled: CancellationException) { throw cancelled }
             catch (error: Exception) {
                 refreshHashDatabaseCapability()
-                mutableState.update { it.copy(messageResource = null,
-                    messageText = "Signed database not activated: " + (error.message ?: "verification failed") + ".") }
+                mutableState.update { it.copy(messageResource = R.string.signed_import_failed,
+                    messageText = null) }
             }
         }
     }
@@ -121,8 +123,8 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
                 mutableState.update { it.copy(messageResource = null, messageText = message) }
             } catch (cancelled: CancellationException) { throw cancelled }
             catch (error: Exception) {
-                mutableState.update { it.copy(messageResource = null,
-                    messageText = "YARA remains disabled: " + (error.message ?: "import failed") + ".") }
+                mutableState.update { it.copy(messageResource = R.string.rule_import_failed,
+                    messageText = null) }
             }
         }
     }
@@ -167,7 +169,7 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
                     mutableState.update { state -> state.copy(
                         results = state.results.map {
                             if (it.packageName == result.packageName)
-                                it.copy(verdict = ScanVerdict.NO_MATCH, riskScore = 0f, reasons = emptyList(),
+                                it.copy(verdict = ScanVerdict.NO_MATCH, riskScore = 0f, reasons = emptyList(), reasonTexts = emptyList(),
                                     riskReport = null, threatEventId = null, trustedByUser = true)
                             else it
                         },
@@ -186,7 +188,7 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
                 // Never leave the former override displayed as a measured clean result.
                 mutableState.update { old -> old.copy(results = old.results.map { item ->
                     if (item.packageName == packageName) item.copy(trustedByUser = false,
-                        verdict = ScanVerdict.NOT_SCANNED, reasons = emptyList(), riskReport = null,
+                        verdict = ScanVerdict.NOT_SCANNED, reasons = emptyList(), reasonTexts = emptyList(), riskReport = null,
                         threatEventId = null) else item
                 }, messageResource = R.string.trusted_app_removed, messageText = null) }
                 refreshInstalledPackage(packageName)
@@ -203,7 +205,7 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
                     if (!repository.isTrusted(name)) {
                         mutableState.update { old -> old.copy(results = old.results.map { item ->
                             if (item.packageName == name && item.trustedByUser)
-                                item.copy(trustedByUser = false, verdict = ScanVerdict.NOT_SCANNED, reasons = emptyList()) else item
+                                item.copy(trustedByUser = false, verdict = ScanVerdict.NOT_SCANNED, reasons = emptyList(), reasonTexts = emptyList()) else item
                         }) }
                         refreshInstalledPackage(name)
                     }

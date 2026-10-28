@@ -701,4 +701,108 @@
 <string name="detection_capabilities_save">Save update settings</string>
 <string name="detection_capabilities_sync_privacy">Downloads only. Scan results, files, hashes, and package names are not uploaded.</string>
 <string name="detection_capabilities_sync_unavailable">Automatic updates are unavailable in this offline build or until a trusted signing key is configured.</string>
+
+<string name="format_label_value">%1$s: %2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s – %2$s</string>
+<string name="format_version">%1$s · Versie %2$s (%3$s)</string>
+<string name="format_package_version">%1$s · Versie %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">Voer een veilig feedadres in</string>
+<string name="storage_size_unavailable">Grootte niet beschikbaar</string>
+<string name="blocked_reason_hash">Er is een overeenkomst met een lokale dreigingshandtekening gevonden.</string>
+<string name="blocked_reason_action">Er is zo goed mogelijk geprobeerd een lokale beveiligingsactie uit te voeren.</string>
+<string name="signed_import_success">Ondertekende database geaccepteerd: versie %1$s · %2$s.</string>
+<string name="signed_import_failed">De ondertekende database is niet geactiveerd. Controleer de handtekening, versie en bestandsindeling.</string>
+<string name="rule_import_pending">%1$s opgeslagen voor controle. Geïmporteerde regels blijven uitgeschakeld en dit bestand wordt niet uitgevoerd.</string>
+<string name="rule_import_failed">Regels konden niet worden geïmporteerd. Geïmporteerde regels blijven uitgeschakeld.</string>
+<string name="restore_result_localized">Een kopie van %1$s (%2$s) is hersteld. Het origineel blijft in quarantaine opgeslagen.</string>
+<string name="cleaner_confirm_localized">%1$s (%2$s) permanent verwijderen? Dit kan niet ongedaan worden gemaakt. SafeMobile controleert namen en metagegevens opnieuw.</string>
+<string name="cleaner_result_localized">Verwijderd: %1$s · Vrijgemaakte ruimte: %2$s · Mislukt of gewijzigd: %3$s</string>
+<string name="about_localized_notices">Onderdelen van derden behouden hun eigen licenties. De oorspronkelijke kennisgevingen vormen een controlepunt bij de audit, geen afgeronde licentiebeoordeling. Open de oorspronkelijke documenten om bronvermeldingen en licentievoorwaarden te bekijken.</string>
+<string name="about_open_original">Oorspronkelijke documenten openen</string>
+<string name="about_localized_privacy">Scanbestanden, hashes, pakketnamen en resultaten blijven op dit apparaat. Lokale auditgegevens en quarantainekopieën worden versleuteld opgeslagen in privéopslag. Updates van ondertekende definities maken contact met de releaseservice van dit project; een afzonderlijke feed maakt pas na toestemming contact met het ingestelde adres. Mapbewaking gebruikt alleen mappen die u kiest en kan worden gestopt. Android-machtigingen blijven onder uw beheer. Deze versie bevat geen advertenties, cloudscans of dienst voor de reputatie van koppelingen.</string>
+<string name="coverage_local_title">Lokale testdefinities</string>
+<string name="coverage_local_body">De meegeleverde oude definities bevatten alleen een onschadelijke antivirustestmarkering. Ze bieden geen dekking tegen echte malware.</string>
+<string name="coverage_signed_title">Ondertekende hashdatabase</string>
+<string name="coverage_signed_body">Exacte hashvergelijking vereist een vertrouwde ondertekeningssleutel en een geaccepteerde ondertekende database. Er is geen productiedatabase meegeleverd.</string>
+<string name="coverage_static_title">Statische appanalyse</string>
+<string name="coverage_static_body">Beperkte pakketanalyse levert indicatieve bevindingen op. Een bevinding alleen bewijst geen malware; lijsten met bekende kwaadwillende ondertekenaars zijn uitgeschakeld.</string>
+<string name="coverage_permissions_title">Machtigingen en manifest</string>
+<string name="coverage_permissions_body">Combinaties van machtigingen en zichtbare pakketdeclaraties ondersteunen handmatige beoordeling. Ze vormen geen getrainde classificatie.</string>
+<string name="coverage_integrity_title">Indicatoren voor apparaatintegriteit</string>
+<string name="coverage_integrity_body">Roottoegang, hooks, buildeigenschappen, beveiligingshandhaving, debuggers en emulators worden met lokale heuristieken gecontroleerd, niet met attestatie.</string>
+<string name="coverage_bloom_title">Probabilistische hashindex</string>
+<string name="coverage_bloom_body">Er zijn geen geverifieerde, niet-lege probabilistische index en bijbehorend manifest meegeleverd. Deze optionele laag is niet beschikbaar.</string>
+<string name="coverage_rules_title">Meegeleverde codehandtekeningen</string>
+<string name="coverage_rules_body">Gevalideerde meegeleverde regels controleren een beperkte reeks letterlijke codepatronen. Overeenkomsten zijn indicatief en bevestigen geen malware.</string>
+<string name="coverage_rules_unavailable">Meegeleverde regels konden niet worden geladen of slaagden niet voor validatie. Er wordt niet beweerd dat er een codehandtekeningenscan is uitgevoerd.</string>
+<string name="coverage_model_title">Model voor machtigingsclassificatie</string>
+<string name="coverage_model_body">Er is geen getraind, gevalideerd en distribueerbaar classificatiemodel meegeleverd. Machinelearning is uitgeschakeld.</string>
+<string name="coverage_signer_title">Offline verificatie van ondertekenaar</string>
+<string name="coverage_signer_body">Er is geen onafhankelijk vastgelegde verwachte vingerafdruk van het ondertekeningscertificaat ingesteld.</string>
+<string name="coverage_feed_title">Verificatie van ondertekende feed</string>
+<string name="coverage_feed_body">Controle van een afzonderlijke handtekening en bescherming tegen terugdraaien vereisen een vertrouwde sleutel bij het bouwen en een ingestelde ondertekende feed.</string>
+<string name="hash_status_active">De ondertekende lokale hashdatabase is actief.</string>
+<string name="hash_status_missing">Hashvergelijking is uitgeschakeld totdat een ondertekende database is geaccepteerd.</string>
+<string name="hash_status_key">Hashvergelijking is uitgeschakeld omdat er geen vertrouwde ondertekeningssleutel beschikbaar is.</string>
+<string name="hash_status_invalid">Opgeslagen definities zijn niet geslaagd voor controles op integriteit, versie of indeling. Hashvergelijking blijft uitgeschakeld.</string>
+<string name="hash_status_activation">Databaseactivering is niet voltooid. Hashvergelijking blijft uitgeschakeld.</string>
+<string name="finding_confidence">%1$s · Betrouwbaarheid: %2$d%%</string>
+<string name="finding_exported">Een geëxporteerd onderdeel heeft geen zichtbare machtigingsbeperking in het manifest. Controles in de code kunnen nog wel bestaan.</string>
+<string name="finding_admin">De app declareert een ontvanger voor apparaatbeheer. Deze gevoelige mogelijkheid bewijst geen misbruik.</string>
+<string name="finding_accessibility">De app declareert een toegankelijkheidsservice. Legitieme ondersteunende apps kunnen deze toegang nodig hebben.</string>
+<string name="finding_overlay">De app vraagt toestemming om over andere schermen te worden weergegeven. Dit kan legitiem zijn, maar ook andere schermen verbergen.</string>
+<string name="finding_combined">Toegankelijkheid wordt gecombineerd met schermoverlay, toegang tot sms-berichten of belgeschiedenis. Beoordeel het doel van de app.</string>
+<string name="finding_sms_calls">De app vraagt machtigingen voor zowel sms-berichten als belgeschiedenis.</string>
+<string name="finding_sms_network">Toegang tot sms-berichten wordt gecombineerd met internettoegang. Dit vereist beoordeling in context.</string>
+<string name="finding_signer">Metagegevens van het ondertekeningscertificaat ontbreken of zijn onleesbaar.</string>
+<string name="finding_archive">De pakketcontainer kon niet volledig worden onderzocht. Statische analyse is onvolledig.</string>
+<string name="finding_packer">Een pakketpad lijkt op een bekend inpak- of beveiligingshulpmiddel. Legitieme apps kunnen zulke hulpmiddelen ook gebruiken.</string>
+<string name="finding_dex_header">Een codeheader bevat tegenstrijdige indelings- of groottevelden. Dit bewijst geen malware.</string>
+<string name="finding_dex_short">Een codeonderdeel is korter dan een geldige header en kon niet volledig worden onderzocht.</string>
+<string name="finding_entropy">Een codemonster heeft een hoge byte-entropie. Versleuteling, inpakken of onschadelijke gecomprimeerde inhoud kan dit verklaren.</string>
+<string name="finding_api">Er is geen verwachte statische verwijzing gevonden voor een aangevraagde machtiging. Reflectie, bibliotheken of dynamisch geladen code kunnen de oorzaak zijn.</string>
+<string name="finding_rules">Er is een overeenkomst met een beperkte meegeleverde codehandtekening. Dit is een aanwijzing, geen bewijs van malware.</string>
+<string name="finding_other">Aanvullende lokale indicatoren moeten handmatig worden beoordeeld. Ze bevestigen geen malware.</string>
+<string name="integrity_manager">Een beheerprogramma voor roottoegang of hooking is zichtbaar: %1$s</string>
+<string name="integrity_test_keys">De apparaatbuild gebruikt testondertekeningssleutels.</string>
+<string name="integrity_debug_build">Buildeigenschappen wijzen op een systeem waarop foutopsporing mogelijk is of dat niet voor productie bedoeld is.</string>
+<string name="integrity_selinux">De leesbare lokale status geeft aan dat verplichte beveiligingshandhaving is uitgeschakeld.</string>
+<string name="integrity_debugger">Er is een debugger aan dit proces gekoppeld.</string>
+<string name="integrity_emulator">Buildeigenschappen lijken op die van een emulator of testapparaat.</string>
+<string name="audit_scan_pending">De installatie is vastgelegd. Lokale analyse moet nog plaatsvinden.</string>
+<string name="audit_scan_complete">De lokale analyse is voltooid zonder bevestigde handtekeningovereenkomst. Dit is geen veiligheidsgarantie.</string>
+<string name="audit_scan_unavailable">Het pakket was tijdens de analyse niet zichtbaar.</string>
+<string name="audit_scan_threat">Er is een exacte overeenkomst met een lokale dreigingshandtekening gevonden.</string>
+<string name="audit_scan_review">Lokale indicatoren vereisen beoordeling; ze bevestigen geen malware.</string>
+<string name="audit_source_recorded">De installatiebron is vastgelegd.</string>
+<string name="audit_uninstall_requested">Android is om bevestiging van verwijdering gevraagd.</string>
+<string name="audit_uninstall_success">Android meldde dat de verwijdering is geslaagd.</string>
+<string name="audit_uninstall_failed">Android kon het verwijderingsverzoek niet voltooien.</string>
+<string name="severity_test">Onschadelijke testmarkering</string>
+<string name="severity_low">Lage ernst</string>
+<string name="severity_medium">Gemiddelde ernst</string>
+<string name="severity_high">Hoge ernst</string>
+<string name="severity_critical">Kritieke ernst</string>
+<string name="severity_unknown">Ernst niet opgegeven</string>
+<plurals name="l10n_scanned_apps"><item quantity="one">%1$d app gescand</item><item quantity="other">%1$d apps gescand</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="one">%1$d bestand gescand</item><item quantity="other">%1$d bestanden gescand</item></plurals>
+<plurals name="l10n_threats"><item quantity="one">%1$d dreiging gevonden</item><item quantity="other">%1$d dreigingen gevonden</item></plurals>
+<plurals name="l10n_review"><item quantity="one">%1$d resultaat moet worden beoordeeld</item><item quantity="other">%1$d resultaten moeten worden beoordeeld</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="one">%1$d onderdeel kon niet worden gescand</item><item quantity="other">%1$d onderdelen konden niet worden gescand</item></plurals>
+<plurals name="l10n_no_match"><item quantity="one">%1$d resultaat zonder lokale overeenkomst</item><item quantity="other">%1$d resultaten zonder lokale overeenkomst</item></plurals>
+<plurals name="l10n_apps"><item quantity="one">%1$d app</item><item quantity="other">%1$d apps</item></plurals>
+<plurals name="l10n_files"><item quantity="one">%1$d bestand</item><item quantity="other">%1$d bestanden</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="one">%1$d niet-systeemapp heeft risicovolle toegang.</item><item quantity="other">%1$d niet-systeemapps hebben risicovolle toegang.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="one">%1$d waargenomen wijziging wacht op een melding.</item><item quantity="other">%1$d waargenomen wijzigingen wachten op een melding.</item></plurals>
+<plurals name="l10n_rules"><item quantity="one">Beperkte dekking · %1$d meegeleverde regel</item><item quantity="other">Beperkte dekking · %1$d meegeleverde regels</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="one">Laatste scan: %1$d indicatieve codeovereenkomst.</item><item quantity="other">Laatste scan: %1$d indicatieve codeovereenkomsten.</item></plurals>
+<plurals name="l10n_imported"><item quantity="one">%1$d geldige handtekening geïmporteerd in lokale opslag.</item><item quantity="other">%1$d geldige handtekeningen geïmporteerd in lokale opslag.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="one">%1$d byte</item><item quantity="other">%1$d bytes</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="one">%1$d indicator voor roottoegang in het bestandssysteem aanwezig.</item><item quantity="other">%1$d indicatoren voor roottoegang in het bestandssysteem aanwezig.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="one">%1$d hookingindicator aanwezig.</item><item quantity="other">%1$d hookingindicatoren aanwezig.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="one">%1$d app ingeschakeld</item><item quantity="other">%1$d apps ingeschakeld</item></plurals>
+<plurals name="l10n_indicators"><item quantity="one">%1$d indicator</item><item quantity="other">%1$d indicatoren</item></plurals>
+<plurals name="l10n_progress"><item quantity="one">%1$d van %2$d app gecontroleerd</item><item quantity="other">%1$d van %2$d apps gecontroleerd</item></plurals>
 </resources>

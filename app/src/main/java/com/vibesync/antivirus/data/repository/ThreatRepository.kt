@@ -3,6 +3,7 @@ import android.content.Context
 import android.net.Uri
 import android.provider.OpenableColumns
 import com.vibesync.antivirus.R
+import com.vibesync.antivirus.core.locale.UiText
 import com.vibesync.antivirus.core.engine.PackageScanner
 import com.vibesync.antivirus.core.engine.YaraRuleImportStore
 import com.vibesync.antivirus.core.hashdb.HashDatabaseManager
@@ -267,22 +268,22 @@ class ThreatRepository(
  suspend fun retryRemoveObservedDownload(file: File): Boolean = withContext(Dispatchers.IO) {
   LocalQuarantineManager(context).retryRemoveOriginal(file)
  }
- suspend fun quarantineSelectedFile(uri: Uri, expectedSha256: String?): String = withContext(Dispatchers.IO) {
+ suspend fun quarantineSelectedFile(uri: Uri, expectedSha256: String?): UiText = withContext(Dispatchers.IO) {
   val outcome = LocalQuarantineManager(context).quarantine(uri, expectedSha256, removeOriginalAfterVerified = false)
-  if (outcome.originalRemoved) context.getString(R.string.quarantine_success_removed, outcome.privateCopy.name)
-  else context.getString(R.string.quarantine_success_copy_only, outcome.privateCopy.name)
+  if (outcome.originalRemoved) UiText(R.string.quarantine_success_removed, listOf(outcome.privateCopy.name))
+  else UiText(R.string.quarantine_success_copy_only, listOf(outcome.privateCopy.name))
  }
 
  suspend fun listQuarantinedFiles(): List<File> = withContext(Dispatchers.IO) {
   LocalQuarantineManager(context).listQuarantinedFiles()
  }
- suspend fun restoreQuarantinedFile(file: File, destinationUri: Uri): String = withContext(Dispatchers.IO) {
+ suspend fun restoreQuarantinedFile(file: File, destinationUri: Uri): UiText = withContext(Dispatchers.IO) {
   val manager = LocalQuarantineManager(context)
   val label = manager.displayName(file)
   val bytes = manager.restoreToUri(file, destinationUri)
-  context.getString(R.string.quarantine_restore_success, label, bytes)
+  UiText(R.string.restore_result_localized, listOf(label, UiText(R.plurals.l10n_bytes, listOf(bytes), bytes.coerceAtMost(Int.MAX_VALUE.toLong()).toInt())))
  }
- suspend fun deleteQuarantinedFile(file: File): String = withContext(Dispatchers.IO) {
+ suspend fun deleteQuarantinedFile(file: File): UiText = withContext(Dispatchers.IO) {
   val manager = LocalQuarantineManager(context)
   val label = runCatching { manager.displayName(file) }.getOrDefault(file.name)
   val operation = QuarantineDeleteOperation(
@@ -294,7 +295,7 @@ class ThreatRepository(
    }
   )
   when (operation.delete(file)) {
-   QuarantineDeleteOutcome.DELETED -> context.getString(R.string.quarantine_delete_success, label)
+   QuarantineDeleteOutcome.DELETED -> UiText(R.string.quarantine_delete_success, listOf(label))
    QuarantineDeleteOutcome.FILE_NOT_FOUND -> throw java.io.FileNotFoundException("Quarantine file no longer exists.")
    QuarantineDeleteOutcome.ACCESS_DENIED -> throw SecurityException("Access to quarantine file was denied.")
    QuarantineDeleteOutcome.FAILED -> throw IOException("Could not permanently delete quarantined file.")
@@ -312,15 +313,15 @@ class ThreatRepository(
 
  fun requestHashDatabaseSync() = HashDatabaseSyncScheduler.enqueueNow(context)
 
- suspend fun importPendingYaraRule(uri: Uri): String = withContext(Dispatchers.IO) {
+ suspend fun importPendingYaraRule(uri: Uri): UiText = withContext(Dispatchers.IO) {
   val stream = context.contentResolver.openInputStream(uri) ?: throw IOException(context.getString(R.string.file_stream_failed))
   val saved = YaraRuleImportStore(context).importPending(stream)
-  "Stored ${saved.name} for review. YARA remains DISABLED; this file will not be executed."
+  UiText(R.string.rule_import_pending, listOf(saved.name))
  }
 
-suspend fun importOfflineDefinitions(uri: Uri): String = withContext(Dispatchers.IO) {
+suspend fun importOfflineDefinitions(uri: Uri): UiText = withContext(Dispatchers.IO) {
   val stream=context.contentResolver.openInputStream(uri) ?: throw IOException(context.getString(R.string.file_stream_failed))
-  context.getString(R.string.import_success,definitionLoader.importFromStream(stream))
+  definitionLoader.importFromStream(stream).let { UiText(R.plurals.l10n_imported, listOf(it), it) }
  }
  suspend fun signatureCount(): Int = withContext(Dispatchers.IO) {
   definitionLoader.importBundledIfEmpty()

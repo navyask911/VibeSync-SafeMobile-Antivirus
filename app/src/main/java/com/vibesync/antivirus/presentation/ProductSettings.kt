@@ -1,5 +1,6 @@
 package com.vibesync.antivirus.presentation
 
+import androidx.compose.ui.res.pluralStringResource
 import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
@@ -103,19 +104,14 @@ internal fun ScanHistoryPanel(audits: List<ScanAudit>) {
                 val incomplete = group.count { it.verdict == "NOT_SCANNED" }
                 Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
                     Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
-                        Text(DateFormat.getDateTimeInstance().format(Date(mostRecent.scanTimestamp)), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                        Text(localizedDate(mostRecent.scanTimestamp), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
                         Text(
-                            stringResource(R.string.history_session) + ": " + (mostRecent.scanSessionId.ifBlank { "—" }),
+                            stringResource(R.string.format_label_value, stringResource(R.string.history_session), mostRecent.scanSessionId.ifBlank { "—" }),
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Text(
-                            stringResource(
-                                R.string.results_summary,
-                                threats,
-                                review,
-                                group.count { it.verdict == "NO_MATCH" }
-                            ),
+                            listOf(pluralStringResource(R.plurals.l10n_threats, threats, threats), pluralStringResource(R.plurals.l10n_review, review, review), group.count { it.verdict == "NO_MATCH" }.let { pluralStringResource(R.plurals.l10n_no_match, it, it) }).joinToString(" · "),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurface
                         )
@@ -128,7 +124,7 @@ internal fun ScanHistoryPanel(audits: List<ScanAudit>) {
                         }
                         if (incomplete > 0) {
                             Text(
-                                "${stringResource(R.string.verdict_not_scanned)}: $incomplete",
+                                pluralStringResource(R.plurals.l10n_unreadable, incomplete, incomplete),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.tertiary
                             )
@@ -217,14 +213,14 @@ internal fun OverlayRiskReviewPanel() {
             Text(stringResource(R.string.overlay_review_description), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             if (lastAttempt > 0L) {
                 Text(
-                    stringResource(R.string.overlay_review_last_attempt, DateFormat.getDateTimeInstance().format(Date(lastAttempt))),
+                    stringResource(R.string.overlay_review_last_attempt, localizedDate(lastAttempt)),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
             if (lastSuccess > 0L) {
                 Text(
-                    stringResource(R.string.overlay_review_last_success, DateFormat.getDateTimeInstance().format(Date(lastSuccess))),
+                    stringResource(R.string.overlay_review_last_success, localizedDate(lastSuccess)),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -391,7 +387,7 @@ internal fun SafeMobileSettingsPanel(
                         modifier = Modifier.fillMaxWidth(),
                         singleLine = true,
                         label = { Text(stringResource(R.string.feed_settings_url_label)) },
-                        placeholder = { Text("https://example.invalid/feed.json") }
+                        placeholder = { Text(stringResource(R.string.feed_url_hint)) }
                     )
                     OutlinedTextField(
                         value = feedAuthKey,
@@ -409,7 +405,7 @@ internal fun SafeMobileSettingsPanel(
                             feedConfigMessage = context.getString(R.string.feed_settings_saved)
                             ThreatFeedSyncScheduler.ensurePeriodic(context)
                         }.onFailure {
-                            feedConfigMessage = it.message ?: context.getString(R.string.feed_settings_failed)
+                            feedConfigMessage = context.getString(R.string.feed_settings_failed)
                         }
                     }) { Text(stringResource(R.string.feed_settings_save)) }
                     feedConfigMessage?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }
@@ -543,7 +539,7 @@ internal fun SafeMobileSettingsPanel(
                 Text(rayId, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Button(onClick = {
                     val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager
-                    clipboard?.setPrimaryClip(ClipData.newPlainText("SafeMobile Ray ID", rayId))
+                    clipboard?.setPrimaryClip(ClipData.newPlainText(context.getString(R.string.ray_id), rayId))
                     Toast.makeText(context, R.string.ray_id_copied, Toast.LENGTH_SHORT).show()
                 }) { Text(stringResource(R.string.ray_id_copy)) }
             }
@@ -557,7 +553,7 @@ internal fun SafeMobileSettingsPanel(
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(stringResource(R.string.about_legal), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                Text(stringResource(R.string.brand_title) + " · " + BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")", style = MaterialTheme.typography.bodySmall)
+                Text(stringResource(R.string.format_version, stringResource(R.string.app_name), BuildConfig.VERSION_NAME, localizedNumber(BuildConfig.VERSION_CODE)), style = MaterialTheme.typography.bodySmall)
                 TextButton(onClick = { showAbout = true }) { Text(stringResource(R.string.about_legal)) }
             }
         }
@@ -608,10 +604,10 @@ internal fun SafeMobileSettingsPanel(
 
     val aboutContent = remember(context, aboutSection) {
         when (aboutSection) {
-            "readme" -> runCatching { context.assets.open("README.md").bufferedReader().use { it.readText() } }.getOrDefault("Bundled README is unavailable.").let { readme -> "$readme\n\n${context.getString(R.string.features_disclaimer)}\n\n${context.getString(R.string.not_configured)}" }
-            "notices" -> runCatching { context.assets.open("THIRD_PARTY_NOTICES.md").bufferedReader().use { it.readText() } }.getOrDefault("Third-party licence notices are unavailable.")
+            "readme" -> listOf(R.string.scan_explanation, R.string.scan_clean_warning, R.string.monitor_explanation, R.string.quarantine_vault_description, R.string.features_disclaimer).joinToString("\n\n") { context.getString(it) }
+            "notices" -> context.getString(R.string.about_localized_notices)
             "license" -> context.getString(R.string.about_license_missing)
-            else -> runCatching { context.assets.open("privacy-policy.md").bufferedReader().use { it.readText() } }.getOrDefault(context.getString(R.string.privacy_body))
+            else -> context.getString(R.string.privacy_body) + "\n\n" + context.getString(R.string.about_localized_privacy)
         }
     }
     if (showAbout) AlertDialog(
@@ -631,6 +627,16 @@ internal fun SafeMobileSettingsPanel(
                     TextButton(onClick = { aboutSection = "notices" }) { Text(stringResource(R.string.about_third_party)) }
                 }
                 Text(aboutContent, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurface)
+                TextButton(onClick = {
+                    val document = when (aboutSection) {
+                        "readme" -> "app/src/main/assets/README.md"
+                        "notices" -> "app/src/main/assets/THIRD_PARTY_NOTICES.md"
+                        "license" -> "LICENSE"
+                        else -> "app/src/main/assets/privacy-policy.md"
+                    }
+                    runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, android.net.Uri.parse("https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/blob/main/$document"))) }
+                        .onFailure { Toast.makeText(context, R.string.uninstall_no_settings, Toast.LENGTH_LONG).show() }
+                }) { Text(stringResource(R.string.about_open_original)) }
             }
         },
         confirmButton = { TextButton(onClick = { showAbout = false }) { Text(stringResource(R.string.close)) } }

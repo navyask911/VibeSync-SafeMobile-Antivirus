@@ -701,4 +701,108 @@
 <string name="detection_capabilities_save">Save update settings</string>
 <string name="detection_capabilities_sync_privacy">Downloads only. Scan results, files, hashes, and package names are not uploaded.</string>
 <string name="detection_capabilities_sync_unavailable">Automatic updates are unavailable in this offline build or until a trusted signing key is configured.</string>
+
+<string name="format_label_value">%1$s: %2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s – %2$s</string>
+<string name="format_version">%1$s · เวอร์ชัน %2$s (%3$s)</string>
+<string name="format_package_version">%1$s · เวอร์ชัน %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">ป้อนที่อยู่แหล่งข้อมูลที่ปลอดภัย</string>
+<string name="storage_size_unavailable">ไม่มีข้อมูลขนาด</string>
+<string name="blocked_reason_hash">พบรายการตรงกับลายเซ็นภัยคุกคามในเครื่อง</string>
+<string name="blocked_reason_action">ได้พยายามดำเนินการรักษาความปลอดภัยในเครื่องเท่าที่ทำได้</string>
+<string name="signed_import_success">ยอมรับฐานข้อมูลที่ลงลายเซ็นแล้ว: เวอร์ชัน %1$s · %2$s</string>
+<string name="signed_import_failed">ไม่สามารถเปิดใช้งานฐานข้อมูลที่ลงลายเซ็นได้ โปรดตรวจสอบลายเซ็น เวอร์ชัน และรูปแบบไฟล์</string>
+<string name="rule_import_pending">บันทึก %1$s ไว้เพื่อตรวจสอบ กฎที่นำเข้ายังคงปิดใช้งานและจะไม่มีการเรียกใช้ไฟล์นี้</string>
+<string name="rule_import_failed">ไม่สามารถนำเข้ากฎได้ กฎที่นำเข้ายังคงปิดใช้งาน</string>
+<string name="restore_result_localized">กู้คืนสำเนาของ %1$s (%2$s) แล้ว ไฟล์ต้นฉบับที่กักกันไว้ยังคงถูกเก็บรักษา</string>
+<string name="cleaner_confirm_localized">ลบ %1$s (%2$s) อย่างถาวรหรือไม่ การกระทำนี้ย้อนกลับไม่ได้ SafeMobile จะตรวจสอบชื่อและข้อมูลกำกับอีกครั้ง</string>
+<string name="cleaner_result_localized">ลบแล้ว: %1$s · พื้นที่ที่คืนได้: %2$s · ล้มเหลวหรือเปลี่ยนแปลง: %3$s</string>
+<string name="about_localized_notices">ส่วนประกอบของบุคคลที่สามยังคงอยู่ภายใต้ใบอนุญาตของตนเอง ประกาศต้นฉบับเป็นจุดตรวจสอบในการตรวจสอบบัญชี ไม่ใช่การตรวจสอบใบอนุญาตที่เสร็จสมบูรณ์ เปิดเอกสารต้นฉบับเพื่อดูประกาศแหล่งที่มาและเงื่อนไขใบอนุญาต</string>
+<string name="about_open_original">เปิดเอกสารต้นฉบับ</string>
+<string name="about_localized_privacy">ไฟล์ที่สแกน ค่าแฮช ชื่อแพ็กเกจ และผลลัพธ์จะคงอยู่บนอุปกรณ์นี้ ข้อมูลกำกับการตรวจสอบในเครื่องและสำเนาที่กักกันใช้พื้นที่จัดเก็บส่วนตัวที่เข้ารหัส การอัปเดตข้อกำหนดที่ลงลายเซ็นจะติดต่อบริการเผยแพร่ของโครงการนี้ ส่วนแหล่งข้อมูลแยกต่างหากจะติดต่อที่อยู่ที่กำหนดไว้หลังจากคุณยินยอมเท่านั้น การเฝ้าดูโฟลเดอร์ใช้เฉพาะโฟลเดอร์ที่คุณเลือกและสามารถหยุดได้ คุณควบคุมสิทธิ์ Android ได้เอง รุ่นนี้ไม่มีโฆษณา การสแกนบนคลาวด์ หรือบริการตรวจสอบชื่อเสียงของลิงก์</string>
+<string name="coverage_local_title">ข้อกำหนดทดสอบในเครื่อง</string>
+<string name="coverage_local_body">ข้อกำหนดเก่าที่มาพร้อมแอปมีเพียงเครื่องหมายทดสอบโปรแกรมป้องกันไวรัสที่ไม่เป็นอันตราย ไม่ได้ให้การป้องกันมัลแวร์จริง</string>
+<string name="coverage_signed_title">ฐานข้อมูลแฮชที่ลงลายเซ็น</string>
+<string name="coverage_signed_body">การจับคู่แฮชแบบตรงทั้งหมดต้องใช้กุญแจลงลายเซ็นที่เชื่อถือได้และฐานข้อมูลที่ลงลายเซ็นซึ่งได้รับการยอมรับ ไม่มีฐานข้อมูลสำหรับใช้งานจริงรวมมาให้</string>
+<string name="coverage_static_title">การวิเคราะห์แอปแบบคงที่</string>
+<string name="coverage_static_body">การวิเคราะห์แพ็กเกจแบบจำกัดให้ผลการค้นพบเพื่อประกอบการพิจารณา ผลการค้นพบเพียงอย่างเดียวไม่พิสูจน์ว่าเป็นมัลแวร์ รายชื่อผู้ลงลายเซ็นอันตรายที่รู้จักถูกปิดใช้งาน</string>
+<string name="coverage_permissions_title">สิทธิ์และไฟล์ประกาศ</string>
+<string name="coverage_permissions_body">การรวมสิทธิ์และประกาศแพ็กเกจที่มองเห็นช่วยให้ตรวจสอบด้วยตนเองได้ แต่ไม่ใช่การจำแนกโดยโมเดลที่ฝึกมาแล้ว</string>
+<string name="coverage_integrity_title">ตัวบ่งชี้ความสมบูรณ์ของอุปกรณ์</string>
+<string name="coverage_integrity_body">การเข้าถึงระดับราก การดักจับ คุณสมบัติบิลด์ การบังคับใช้ความปลอดภัย ตัวแก้ไขข้อบกพร่อง และโปรแกรมจำลอง ถูกตรวจด้วยวิธีประมาณค่าในเครื่อง ไม่ใช่การรับรองความถูกต้อง</string>
+<string name="coverage_bloom_title">ดัชนีแฮชแบบความน่าจะเป็น</string>
+<string name="coverage_bloom_body">ไม่มีดัชนีความน่าจะเป็นที่ผ่านการตรวจสอบและไม่ว่างเปล่า รวมถึงไฟล์ประกาศของดัชนีนี้ ชั้นการป้องกันเสริมนี้จึงไม่พร้อมใช้งาน</string>
+<string name="coverage_rules_title">ลายเซ็นโค้ดที่รวมมา</string>
+<string name="coverage_rules_body">กฎที่รวมมาและผ่านการตรวจสอบจะค้นหารูปแบบข้อความโค้ดจำนวนจำกัด รายการที่ตรงกันเป็นเพียงข้อบ่งชี้ ไม่ใช่การยืนยันมัลแวร์</string>
+<string name="coverage_rules_unavailable">ไม่สามารถโหลดกฎที่รวมมาหรือกฎไม่ผ่านการตรวจสอบ จึงไม่อ้างว่ามีการสแกนลายเซ็นโค้ด</string>
+<string name="coverage_model_title">โมเดลจำแนกสิทธิ์</string>
+<string name="coverage_model_body">ไม่มีโมเดลจำแนกที่ผ่านการฝึก ตรวจสอบ และพร้อมเผยแพร่รวมมาให้ ระบบการเรียนรู้ของเครื่องถูกปิดใช้งาน</string>
+<string name="coverage_signer_title">การยืนยันผู้ลงลายเซ็นแบบออฟไลน์</string>
+<string name="coverage_signer_body">ยังไม่ได้กำหนดลายนิ้วมือใบรับรองลายเซ็นที่คาดหวังซึ่งตรึงค่าอย่างเป็นอิสระ</string>
+<string name="coverage_feed_title">การตรวจสอบแหล่งข้อมูลที่ลงลายเซ็น</string>
+<string name="coverage_feed_body">การตรวจสอบลายเซ็นแยกต่างหากและการป้องกันย้อนกลับไปใช้รุ่นเก่าต้องใช้กุญแจที่เชื่อถือได้ขณะสร้างแอปและแหล่งข้อมูลที่ลงลายเซ็นซึ่งกำหนดค่าแล้ว</string>
+<string name="hash_status_active">ฐานข้อมูลแฮชในเครื่องที่ลงลายเซ็นทำงานอยู่</string>
+<string name="hash_status_missing">การจับคู่แฮชถูกปิดใช้งานจนกว่าจะยอมรับฐานข้อมูลที่ลงลายเซ็น</string>
+<string name="hash_status_key">การจับคู่แฮชถูกปิดใช้งานเพราะไม่มีกุญแจลงลายเซ็นที่เชื่อถือได้</string>
+<string name="hash_status_invalid">ข้อกำหนดที่เก็บไว้ไม่ผ่านการตรวจความสมบูรณ์ เวอร์ชัน หรือรูปแบบ การจับคู่แฮชยังคงปิดใช้งาน</string>
+<string name="hash_status_activation">การเปิดใช้งานฐานข้อมูลยังไม่เสร็จสิ้น การจับคู่แฮชยังคงปิดใช้งาน</string>
+<string name="finding_confidence">%1$s · ระดับความเชื่อมั่น: %2$d%%</string>
+<string name="finding_exported">ส่วนประกอบที่เปิดให้ภายนอกเข้าถึงไม่มีข้อจำกัดสิทธิ์ที่เห็นได้ในไฟล์ประกาศ แต่อาจมีการตรวจสอบในระดับโค้ด</string>
+<string name="finding_admin">แอปประกาศตัวรับการจัดการอุปกรณ์ ความสามารถที่ละเอียดอ่อนนี้ไม่ใช่หลักฐานการใช้งานในทางที่ผิด</string>
+<string name="finding_accessibility">แอปประกาศบริการช่วยการเข้าถึง แอปช่วยเหลือที่ถูกต้องตามกฎหมายอาจต้องใช้สิทธิ์นี้</string>
+<string name="finding_overlay">แอปขอสิทธิ์แสดงทับหน้าจอ การแสดงทับอาจเป็นการใช้งานปกติ แต่ก็อาจปิดบังหน้าจออื่น</string>
+<string name="finding_combined">สิทธิ์ช่วยการเข้าถึงถูกใช้ร่วมกับการแสดงทับ การเข้าถึงข้อความ หรือประวัติการโทร โปรดตรวจสอบวัตถุประสงค์ของแอป</string>
+<string name="finding_sms_calls">แอปขอสิทธิ์ทั้งข้อความและประวัติการโทร</string>
+<string name="finding_sms_network">การเข้าถึงข้อความใช้ร่วมกับการเข้าถึงอินเทอร์เน็ต ต้องประเมินตามบริบท</string>
+<string name="finding_signer">ข้อมูลกำกับใบรับรองลายเซ็นสูญหายหรืออ่านไม่ได้</string>
+<string name="finding_archive">ไม่สามารถตรวจสอบเนื้อหาของแพ็กเกจได้ครบถ้วน การวิเคราะห์แบบคงที่ไม่สมบูรณ์</string>
+<string name="finding_packer">เส้นทางในแพ็กเกจคล้ายเครื่องมือบรรจุหรือป้องกันที่รู้จัก แอปที่ถูกต้องก็อาจใช้เครื่องมือดังกล่าว</string>
+<string name="finding_dex_header">ส่วนหัวของโค้ดมีข้อมูลรูปแบบหรือขนาดไม่สอดคล้องกัน แต่ไม่พิสูจน์ว่าเป็นมัลแวร์</string>
+<string name="finding_dex_short">รายการโค้ดสั้นกว่าส่วนหัวที่ถูกต้องและไม่สามารถตรวจสอบได้ครบถ้วน</string>
+<string name="finding_entropy">ตัวอย่างโค้ดมีค่าเอนโทรปีของไบต์สูง อาจเกิดจากการเข้ารหัส การบรรจุ หรือข้อมูลบีบอัดที่ไม่เป็นอันตราย</string>
+<string name="finding_api">ไม่พบการอ้างอิงแบบคงที่ที่คาดไว้สำหรับสิทธิ์ที่ร้องขอ อาจเกิดจากการสะท้อน การใช้ไลบรารี หรือโค้ดที่โหลดแบบไดนามิก</string>
+<string name="finding_rules">พบความตรงกันกับลายเซ็นโค้ดที่รวมมาในขอบเขตจำกัด นี่เป็นเพียงข้อบ่งชี้ ไม่ใช่หลักฐานของมัลแวร์</string>
+<string name="finding_other">ต้องตรวจสอบตัวบ่งชี้อื่นในเครื่องด้วยตนเอง สิ่งเหล่านี้ไม่ได้ยืนยันมัลแวร์</string>
+<string name="integrity_manager">พบตัวจัดการสิทธิ์ระดับรากหรือเครื่องมือดักจับ: %1$s</string>
+<string name="integrity_test_keys">บิลด์ของอุปกรณ์ใช้กุญแจลงลายเซ็นสำหรับทดสอบ</string>
+<string name="integrity_debug_build">คุณสมบัติบิลด์ชี้ว่าเป็นระบบที่แก้ไขข้อบกพร่องได้หรือไม่ใช่ระบบสำหรับใช้งานจริง</string>
+<string name="integrity_selinux">สถานะในเครื่องที่อ่านได้ระบุว่าปิดการบังคับใช้ความปลอดภัยภาคบังคับ</string>
+<string name="integrity_debugger">มีตัวแก้ไขข้อบกพร่องเชื่อมต่อกับกระบวนการนี้</string>
+<string name="integrity_emulator">คุณสมบัติบิลด์คล้ายโปรแกรมจำลองหรืออุปกรณ์ทดสอบ</string>
+<string name="audit_scan_pending">บันทึกการติดตั้งแล้ว กำลังรอการวิเคราะห์ในเครื่อง</string>
+<string name="audit_scan_complete">การวิเคราะห์ในเครื่องเสร็จโดยไม่มีลายเซ็นที่ตรงกันซึ่งยืนยันได้ ไม่ใช่การรับประกันความปลอดภัย</string>
+<string name="audit_scan_unavailable">มองไม่เห็นแพ็กเกจระหว่างการวิเคราะห์</string>
+<string name="audit_scan_threat">พบความตรงกันแบบสมบูรณ์กับลายเซ็นภัยคุกคามในเครื่อง</string>
+<string name="audit_scan_review">ตัวบ่งชี้ในเครื่องต้องได้รับการตรวจสอบ และยังไม่ยืนยันมัลแวร์</string>
+<string name="audit_source_recorded">บันทึกแหล่งที่มาของการติดตั้งแล้ว</string>
+<string name="audit_uninstall_requested">ขอการยืนยันการถอนการติดตั้งจาก Android แล้ว</string>
+<string name="audit_uninstall_success">Android รายงานว่าถอนการติดตั้งสำเร็จ</string>
+<string name="audit_uninstall_failed">Android ไม่สามารถดำเนินคำขอถอนการติดตั้งได้</string>
+<string name="severity_test">เครื่องหมายทดสอบที่ไม่เป็นอันตราย</string>
+<string name="severity_low">ความรุนแรงต่ำ</string>
+<string name="severity_medium">ความรุนแรงปานกลาง</string>
+<string name="severity_high">ความรุนแรงสูง</string>
+<string name="severity_critical">ความรุนแรงวิกฤต</string>
+<string name="severity_unknown">ไม่ระบุระดับความรุนแรง</string>
+<plurals name="l10n_scanned_apps"><item quantity="other">สแกนแอป %1$d รายการ</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="other">สแกนไฟล์ %1$d รายการ</item></plurals>
+<plurals name="l10n_threats"><item quantity="other">พบภัยคุกคาม %1$d รายการ</item></plurals>
+<plurals name="l10n_review"><item quantity="other">ต้องตรวจสอบผลลัพธ์ %1$d รายการ</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="other">สแกนรายการ %1$d รายการไม่ได้</item></plurals>
+<plurals name="l10n_no_match"><item quantity="other">ผลลัพธ์ %1$d รายการไม่มีข้อมูลตรงกันในเครื่อง</item></plurals>
+<plurals name="l10n_apps"><item quantity="other">แอป %1$d รายการ</item></plurals>
+<plurals name="l10n_files"><item quantity="other">ไฟล์ %1$d รายการ</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="other">แอปที่ไม่ใช่ระบบ %1$d รายการมีสิทธิ์ความเสี่ยงสูง</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="other">มีการเปลี่ยนแปลงที่ตรวจพบ %1$d รายการรอแจ้งเตือน</item></plurals>
+<plurals name="l10n_rules"><item quantity="other">ขอบเขตจำกัด · กฎที่รวมมา %1$d รายการ</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="other">สแกนล่าสุด: พบรูปแบบโค้ดเพื่อประกอบการพิจารณา %1$d รายการ</item></plurals>
+<plurals name="l10n_imported"><item quantity="other">นำเข้าลายเซ็นที่ถูกต้อง %1$d รายการในพื้นที่จัดเก็บของอุปกรณ์</item></plurals>
+<plurals name="l10n_bytes"><item quantity="other">%1$d ไบต์</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="other">พบตัวบ่งชี้ระบบไฟล์ที่เกี่ยวกับสิทธิ์ระดับราก %1$d รายการ</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="other">พบตัวบ่งชี้การดักจับ %1$d รายการ</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="other">เปิดใช้งานแอป %1$d รายการ</item></plurals>
+<plurals name="l10n_indicators"><item quantity="other">ตัวบ่งชี้ %1$d รายการ</item></plurals>
+<plurals name="l10n_progress"><item quantity="other">ตรวจสอบแอปแล้ว %1$d จาก %2$d รายการ</item></plurals>
 </resources>

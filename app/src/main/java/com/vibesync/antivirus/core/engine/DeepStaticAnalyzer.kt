@@ -79,7 +79,8 @@ class DeepStaticAnalyzer {
                     confidence = if (hit.severity == RiskSeverity.HIGH) 70 else 50,
                     evidence = "Limited DEX rule " + hit.ruleName + " (" + hit.mitreTechnique +
                         ") matched in " + dexName.take(120) + ". String evidence: " +
-                        hit.matchedPatterns.joinToString(", ") + ". Advisory only, not malware proof."
+                        hit.matchedPatterns.joinToString(", ") + ". Advisory only, not malware proof.",
+                    details = listOf(hit.ruleName, hit.mitreTechnique, dexName.take(120)) + hit.matchedPatterns
                 )
             }
         }.distinctBy { it.ruleId + it.evidence }.take(64)
@@ -215,8 +216,8 @@ class DeepStaticAnalyzer {
         ): RiskReport {
             val findings = mutableListOf<RiskFinding>()
             val observations = signerObservations.toMutableList()
-            fun add(id: String, severity: RiskSeverity, confidence: Int, evidence: String) {
-                findings += RiskFinding(id, severity, evidence, confidence)
+            fun add(id: String, severity: RiskSeverity, confidence: Int, evidence: String, details: List<String> = emptyList()) {
+                findings += RiskFinding(id, severity, evidence, confidence, details)
             }
             val protectedPermissions = setOf(
                 "android.permission.READ_SMS", "android.permission.RECEIVE_SMS", "android.permission.SEND_SMS",
@@ -233,11 +234,11 @@ class DeepStaticAnalyzer {
                 val severity = if (component.kind == "receiver" || component.kind == "provider" || component.kind == "service") RiskSeverity.MEDIUM else RiskSeverity.LOW
                 add(
                     "EXPORTED_${component.kind.uppercase(Locale.ROOT)}_UNPROTECTED", severity, 40,
-                    "Exported ${component.kind} ${component.name} has no manifest permission gate visible to this scan; code-level access checks may still exist."
+                    "Exported ${component.kind} ${component.name} has no manifest permission gate visible to this scan; code-level access checks may still exist.", listOf(component.name)
                 )
             }
             deviceAdminReceivers.forEach { name ->
-                add("DEVICE_ADMIN_RECEIVER_DECLARED", RiskSeverity.LOW, 45, "Declares a Device Administrator receiver: ${name.take(MAX_COMPONENT_NAME_CHARS)}. This is a sensitive capability, not proof of abuse.")
+                add("DEVICE_ADMIN_RECEIVER_DECLARED", RiskSeverity.LOW, 45, "Declares a Device Administrator receiver: ${name.take(MAX_COMPONENT_NAME_CHARS)}. This is a sensitive capability, not proof of abuse.", listOf(name.take(MAX_COMPONENT_NAME_CHARS)))
             }
             if (hasAccessibilityService) {
                 add("ACCESSIBILITY_SERVICE_DECLARED", RiskSeverity.LOW, 40, "Declares a bound AccessibilityService; legitimate assistive apps may require this capability.")
@@ -259,7 +260,7 @@ class DeepStaticAnalyzer {
             }
             for (entryName in entryNames) {
                 val pattern = PACKER_PATH_PATTERNS.firstOrNull { it.first.matches(entryName) } ?: continue
-                add("PACKER_NAME_${pattern.second}", RiskSeverity.LOW, 40, "APK contains a path commonly associated with a packer/protector: ${entryName.take(MAX_ENTRY_NAME_CHARS)}.")
+                add("PACKER_NAME_${pattern.second}", RiskSeverity.LOW, 40, "APK contains a path commonly associated with a packer/protector: ${entryName.take(MAX_ENTRY_NAME_CHARS)}.", listOf(entryName.take(MAX_ENTRY_NAME_CHARS)))
             }
             dexSamples.forEach { sample ->
                 val bytes = sample.bytes
@@ -269,10 +270,10 @@ class DeepStaticAnalyzer {
                     val headerSize = ByteBuffer.wrap(bytes, 36, 4).order(ByteOrder.LITTLE_ENDIAN).int
                     val endian = ByteBuffer.wrap(bytes, 40, 4).order(ByteOrder.LITTLE_ENDIAN).int
                     if (!magicOk || headerSize != DEX_HEADER_SIZE || endian != DEX_ENDIAN_TAG || declaredSize != bytes.size.toLong()) {
-                        add("DEX_HEADER_ANOMALY", RiskSeverity.MEDIUM, 55, "DEX header in ${sample.name} has inconsistent magic/size/endian fields; packed or truncated files are possible, but this is not proof of malware.")
+                        add("DEX_HEADER_ANOMALY", RiskSeverity.MEDIUM, 55, "DEX header in ${sample.name} has inconsistent magic/size/endian fields; packed or truncated files are possible, but this is not proof of malware.", listOf(sample.name))
                     }
                 } else {
-                    add("DEX_HEADER_TRUNCATED", RiskSeverity.MEDIUM, 55, "DEX entry ${sample.name} is shorter than a valid DEX header.")
+                    add("DEX_HEADER_TRUNCATED", RiskSeverity.MEDIUM, 55, "DEX entry ${sample.name} is shorter than a valid DEX header.", listOf(sample.name))
                 }
                 if (bytes.size >= MIN_ENTROPY_SAMPLE_BYTES && shannonEntropy(bytes, minOf(bytes.size, MAX_ENTROPY_SAMPLE_BYTES)) >= HIGH_ENTROPY_THRESHOLD) {
                     add("DEX_HIGH_ENTROPY_SAMPLE", RiskSeverity.LOW, 25, "The leading DEX sample has high byte entropy, which may indicate encryption/packing or a benign compressed payload.")
@@ -284,7 +285,7 @@ class DeepStaticAnalyzer {
                     markers.all { marker -> dexSamples.none { sample -> containsAsciiIgnoreCase(sample.bytes, marker) } }
                 }
                 if (mismatches.isNotEmpty()) {
-                    add("REQUESTED_PERMISSION_API_REFERENCE_MISMATCH", RiskSeverity.LOW, 25, "No known static DEX string reference was found for requested permission(s): ${mismatches.joinToString()}. Reflection, native calls, libraries or dynamic code may explain the absence.")
+                    add("REQUESTED_PERMISSION_API_REFERENCE_MISMATCH", RiskSeverity.LOW, 25, "No known static DEX string reference was found for requested permission(s): ${mismatches.joinToString()}. Reflection, native calls, libraries or dynamic code may explain the absence.", mismatches.toList())
                 }
             }
             val score = findings.sumOf { finding ->

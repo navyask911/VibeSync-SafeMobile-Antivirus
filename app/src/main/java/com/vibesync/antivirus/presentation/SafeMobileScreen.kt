@@ -1,4 +1,6 @@
 package com.vibesync.antivirus.presentation
+import com.vibesync.antivirus.core.locale.SecurityText
+import androidx.compose.ui.res.pluralStringResource
 import android.app.Activity
 import android.Manifest
 import android.app.ActivityManager
@@ -570,9 +572,9 @@ import kotlinx.coroutines.launch
          contentDescription=null,tint=if(audit.verdict==ScanVerdict.THREAT.name) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary)
         Column(Modifier.weight(1f)) {
          Text(audit.packageOrPath,style=MaterialTheme.typography.titleSmall)
-         Text(audit.verdict.replace('_',' ').lowercase(),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+         Text(stringResource(SecurityText.verdict(audit.verdict)),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
         }
-        Text(DateFormat.getTimeInstance(DateFormat.SHORT).format(Date(audit.scanTimestamp)),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(localizedDate(audit.scanTimestamp, timeOnly = true),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
        }
       }
      }
@@ -636,7 +638,7 @@ import kotlinx.coroutines.launch
       }
       if (state.inventoryLoading) CircularProgressIndicator()
       if (apps.isEmpty() && state.installedApps.isNotEmpty()) {
-       Text(stringResource(R.string.apps_inventory_count, state.installedApps.size), style=MaterialTheme.typography.bodyMedium)
+       Text(pluralStringResource(R.plurals.l10n_apps, state.installedApps.size, state.installedApps.size), style=MaterialTheme.typography.bodyMedium)
        state.installedApps.take(80).forEach { item ->
         Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surface), modifier=Modifier.fillMaxWidth()) {
          Row(Modifier.fillMaxWidth().padding(12.dp), verticalAlignment=Alignment.CenterVertically, horizontalArrangement=Arrangement.spacedBy(8.dp)) {
@@ -654,7 +656,7 @@ import kotlinx.coroutines.launch
       } else if (apps.isEmpty()) EmptyState(title=stringResource(R.string.apps_inventory_empty),description=stringResource(if(state.inventoryLoaded) R.string.apps_no_user_installed else R.string.apps_inventory_empty_body),
       actionLabel=stringResource(R.string.security_scan_now),onAction={ requestPrivacyAcknowledgement { vm.scanInstalled() } })
      else {
-      Text(stringResource(R.string.apps_inventory_count,apps.size),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+      Text(pluralStringResource(R.plurals.l10n_apps, apps.size, apps.size),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
       apps.take(80).forEach { result ->
        ScanResultCard(
         result,
@@ -729,13 +731,13 @@ import kotlinx.coroutines.launch
     if (selectedDestination == "phishing") PhishingPanel(sharedText, repository) { onSharedTextConsumed() }
     if (selectedDestination == "cleaner") StorageCleanerPanel()
     state.messageResource?.takeUnless { it == R.string.scan_complete && selectedDestination in listOf("home", "scan") }?.let { message -> Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant)) { Text(stringResource(message),Modifier.padding(14.dp),color=MaterialTheme.colorScheme.onSurface,style=MaterialTheme.typography.bodySmall) } }
-    state.messageText?.let { message -> Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant)) { Text(message,Modifier.padding(14.dp),color=MaterialTheme.colorScheme.onSurface,style=MaterialTheme.typography.bodySmall) } }
+    state.messageText?.let { message -> Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant)) { Text(message.resolve(context),Modifier.padding(14.dp),color=MaterialTheme.colorScheme.onSurface,style=MaterialTheme.typography.bodySmall) } }
     if(selectedDestination == "scan" && state.results.isNotEmpty()) {
      Column(verticalArrangement=Arrangement.spacedBy(10.dp)) {
       Text(stringResource(R.string.latest_results),style=MaterialTheme.typography.titleLarge,fontWeight=FontWeight.Bold)
-      Text(stringResource(R.string.results_summary,state.results.count{it.verdict==ScanVerdict.THREAT},state.results.count{it.verdict==ScanVerdict.SUSPICIOUS},state.results.count{it.verdict==ScanVerdict.NO_MATCH}),color=MaterialTheme.colorScheme.onSurfaceVariant,style=MaterialTheme.typography.bodySmall)
+      Text(listOf(pluralStringResource(R.plurals.l10n_threats, state.threatCount, state.threatCount), pluralStringResource(R.plurals.l10n_review, state.suspiciousCount, state.suspiciousCount), state.results.count { it.verdict == ScanVerdict.NO_MATCH }.let { pluralStringResource(R.plurals.l10n_no_match, it, it) }).joinToString(" · "),color=MaterialTheme.colorScheme.onSurfaceVariant,style=MaterialTheme.typography.bodySmall)
       val notScannedCount = state.results.count { it.verdict == ScanVerdict.NOT_SCANNED }
-      if (notScannedCount > 0) Text("${stringResource(R.string.verdict_not_scanned)}: $notScannedCount", color=MaterialTheme.colorScheme.onSurfaceVariant, style=MaterialTheme.typography.bodySmall)
+      if (notScannedCount > 0) Text(pluralStringResource(R.plurals.l10n_unreadable, notScannedCount, notScannedCount), color=MaterialTheme.colorScheme.onSurfaceVariant, style=MaterialTheme.typography.bodySmall)
       state.results.take(80).forEach { result ->
        ScanResultCard(
         result,
@@ -788,7 +790,8 @@ import kotlinx.coroutines.launch
           text=runCatching { quarantineManager.displayName(file) }.getOrDefault(file.name),
           style=MaterialTheme.typography.titleSmall,fontWeight=FontWeight.SemiBold,color=MaterialTheme.colorScheme.onSurface
          )
-         Text(stringResource(R.string.quarantine_item_size,runCatching { quarantineManager.displaySize(file) }.getOrDefault(0L)),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+         val byteSize = runCatching { quarantineManager.displaySize(file) }.getOrDefault(0L)
+         Text(pluralStringResource(R.plurals.l10n_bytes, byteSize.coerceAtMost(Int.MAX_VALUE.toLong()).toInt(), byteSize),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
          if (!quarantineManager.isEncrypted(file)) Text(stringResource(R.string.quarantine_legacy_warning),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.tertiary)
          OutlinedButton(
           onClick={ pendingRestoreFile=file; showRestoreWarning=true },

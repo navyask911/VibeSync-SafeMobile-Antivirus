@@ -558,5 +558,108 @@
 <string name="locale_th">ไทย</string>
 <string name="locale_uk">Українська</string>
 <string name="locale_uz">O‘zbekcha</string>
+<string name="format_label_value">%1$s：%2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s 至 %2$s</string>
+<string name="format_version">%1$s · 版本 %2$s（%3$s）</string>
+<string name="format_package_version">%1$s · 版本 %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">请输入安全的数据源地址</string>
+<string name="storage_size_unavailable">无法获取大小</string>
+<string name="blocked_reason_hash">匹配到本地威胁特征。</string>
+<string name="blocked_reason_action">已在系统允许的范围内尝试执行本地安全操作。</string>
+<string name="signed_import_success">已接受签名数据库：版本 %1$s · %2$s。</string>
+<string name="signed_import_failed">签名数据库未激活。请检查签名、版本和文件格式。</string>
+<string name="rule_import_pending">已保存 %1$s 供审核。导入的规则仍处于停用状态，不会执行此文件。</string>
+<string name="rule_import_failed">无法导入规则。导入的规则仍处于停用状态。</string>
+<string name="restore_result_localized">已还原 %1$s 的副本（%2$s）。隔离区中的原件仍会保留。</string>
+<string name="cleaner_confirm_localized">永久删除 %1$s（%2$s）？此操作无法撤销。SafeMobile 将重新检查名称和元数据。</string>
+<string name="cleaner_result_localized">已删除：%1$s · 释放空间：%2$s · 失败或已更改：%3$s</string>
+<string name="about_localized_notices">第三方组件仍适用各自的许可证。原始声明仅记录审核进展，不代表许可证审核已经完成。请打开原始文档查看来源声明和许可条款。</string>
+<string name="about_open_original">打开原始文档</string>
+<string name="about_localized_privacy">扫描的文件、哈希值、软件包名称和结果均保留在此设备上。审计元数据和隔离副本使用加密的私有存储空间。签名定义更新会访问本项目的发布服务；单独的数据源仅在您同意后访问配置的地址。监控仅针对您选择的文件夹，且可随时停止。Android 权限由您控制。本版本不包含广告、云端扫描或链接信誉查询服务。</string>
+<string name="coverage_local_title">本地测试定义</string>
+<string name="coverage_local_body">内置的旧版定义只包含无害的防病毒测试标记，无法覆盖真实恶意软件。</string>
+<string name="coverage_signed_title">签名哈希数据库</string>
+<string name="coverage_signed_body">精确哈希匹配需要可信签名密钥和已接受的签名数据库。应用未内置生产数据库。</string>
+<string name="coverage_static_title">应用静态分析</string>
+<string name="coverage_static_body">有限的软件包分析提供参考性线索。单个线索不能证明存在恶意软件；已知恶意签名者列表已停用。</string>
+<string name="coverage_permissions_title">权限和清单</string>
+<string name="coverage_permissions_body">权限组合和可见的软件包声明用于辅助人工审核，不属于经过训练的分类模型。</string>
+<string name="coverage_integrity_title">设备完整性指标</string>
+<string name="coverage_integrity_body">超级用户访问、函数拦截、系统属性、安全强制执行、调试器和模拟器均通过本地启发式方法检查，并非安全认证。</string>
+<string name="coverage_bloom_title">概率哈希索引</string>
+<string name="coverage_bloom_body">未内置经过验证的非空概率索引及其清单。此可选层不可用。</string>
+<string name="coverage_rules_title">内置代码特征</string>
+<string name="coverage_rules_body">经过验证的内置规则检查有限的代码字面模式。匹配结果仅供参考，不能确认恶意软件。</string>
+<string name="coverage_rules_unavailable">内置规则未能加载或未通过验证，因此不声称已执行代码特征扫描。</string>
+<string name="coverage_model_title">权限分类模型</string>
+<string name="coverage_model_body">未内置经过训练、验证且允许分发的分类模型。机器学习已停用。</string>
+<string name="coverage_signer_title">离线签名者认证</string>
+<string name="coverage_signer_body">尚未独立固定预期的签名证书指纹。</string>
+<string name="coverage_feed_title">签名数据源验证</string>
+<string name="coverage_feed_body">分离式签名验证和防回滚保护需要构建时的可信密钥以及已配置的签名数据源。</string>
+<string name="hash_status_active">本地签名哈希数据库已启用。</string>
+<string name="hash_status_missing">接受签名数据库之前，哈希匹配处于停用状态。</string>
+<string name="hash_status_key">由于没有可用的可信签名密钥，哈希匹配已停用。</string>
+<string name="hash_status_invalid">已存储的定义未通过完整性、版本或格式检查。哈希匹配将保持停用。</string>
+<string name="hash_status_activation">数据库激活未完成。哈希匹配将保持停用。</string>
+<string name="finding_confidence">%1$s · 置信度：%2$d%%</string>
+<string name="finding_exported">某个导出组件在清单中没有可见的权限保护。代码中可能仍有访问检查。</string>
+<string name="finding_admin">应用声明了设备管理接收器。这是一项敏感能力，但不能证明滥用。</string>
+<string name="finding_accessibility">应用声明了无障碍服务。正规的辅助应用可能需要此权限。</string>
+<string name="finding_overlay">应用请求悬浮窗权限。悬浮窗可能有正当用途，但也可能遮挡其他界面。</string>
+<string name="finding_combined">无障碍服务与悬浮窗、短信或通话记录访问相结合。请审核应用用途。</string>
+<string name="finding_sms_calls">应用同时请求短信和通话记录权限。</string>
+<string name="finding_sms_network">短信访问与互联网访问相结合，需要结合使用场景审核。</string>
+<string name="finding_signer">签名证书元数据缺失或无法读取。</string>
+<string name="finding_archive">无法完整检查软件包容器。静态分析未完成。</string>
+<string name="finding_packer">软件包中的路径类似于已知的加壳或保护工具。正规应用也可能使用这些工具。</string>
+<string name="finding_dex_header">代码头的格式或大小字段不一致。这不能证明存在恶意软件。</string>
+<string name="finding_dex_short">某个代码条目比有效的头部更短，无法完整检查。</string>
+<string name="finding_entropy">代码样本具有较高的字节熵。加密、加壳或正常的压缩内容都可能造成此现象。</string>
+<string name="finding_api">未找到所请求权限的预期静态引用。反射、库或动态加载的代码可能导致此情况。</string>
+<string name="finding_rules">匹配到有限的内置代码特征。该结果仅供参考，并非恶意软件的证据。</string>
+<string name="finding_other">其他本地指标需要人工审核，不能据此确认恶意软件。</string>
+<string name="integrity_manager">检测到可见的超级用户权限或函数拦截管理器：%1$s</string>
+<string name="integrity_test_keys">设备系统使用测试签名密钥。</string>
+<string name="integrity_debug_build">系统属性表明这是可调试或非生产版本。</string>
+<string name="integrity_selinux">可读取的本地状态显示，强制安全策略未启用。</string>
+<string name="integrity_debugger">此进程已连接调试器。</string>
+<string name="integrity_emulator">系统属性类似于模拟器或测试设备。</string>
+<string name="audit_scan_pending">已记录安装事件，等待本地分析。</string>
+<string name="audit_scan_complete">本地分析已完成，未确认特征匹配。这不保证安全。</string>
+<string name="audit_scan_unavailable">进行分析时，软件包不可见。</string>
+<string name="audit_scan_threat">精确匹配到本地威胁特征。</string>
+<string name="audit_scan_review">本地指标需要审核，但不能确认恶意软件。</string>
+<string name="audit_source_recorded">已记录安装来源。</string>
+<string name="audit_uninstall_requested">已请求 Android 显示卸载确认。</string>
+<string name="audit_uninstall_success">Android 报告卸载成功。</string>
+<string name="audit_uninstall_failed">Android 无法完成卸载请求。</string>
+<string name="severity_test">无害测试标记</string>
+<string name="severity_low">低严重性</string>
+<string name="severity_medium">中等严重性</string>
+<string name="severity_high">高严重性</string>
+<string name="severity_critical">极高严重性</string>
+<string name="severity_unknown">未指定严重性</string>
+<plurals name="l10n_scanned_apps"><item quantity="other">已扫描 %1$d 个应用</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="other">已扫描 %1$d 个文件</item></plurals>
+<plurals name="l10n_threats"><item quantity="other">发现 %1$d 个威胁</item></plurals>
+<plurals name="l10n_review"><item quantity="other">%1$d 个结果需要审核</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="other">无法扫描 %1$d 个项目</item></plurals>
+<plurals name="l10n_no_match"><item quantity="other">%1$d 个结果无本地匹配</item></plurals>
+<plurals name="l10n_apps"><item quantity="other">%1$d 个应用</item></plurals>
+<plurals name="l10n_files"><item quantity="other">%1$d 个文件</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="other">%1$d 个非系统应用拥有高风险访问权限。</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="other">%1$d 项已观察到的更改等待通知。</item></plurals>
+<plurals name="l10n_rules"><item quantity="other">有限覆盖 · %1$d 条内置规则</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="other">最近扫描：%1$d 项参考性代码匹配。</item></plurals>
+<plurals name="l10n_imported"><item quantity="other">已将 %1$d 个有效特征导入本地存储。</item></plurals>
+<plurals name="l10n_bytes"><item quantity="other">%1$d 字节</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="other">文件系统中存在 %1$d 项超级用户权限指标。</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="other">存在 %1$d 项函数拦截指标。</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="other">已启用 %1$d 个应用</item></plurals>
+<plurals name="l10n_indicators"><item quantity="other">%1$d 个指标</item></plurals>
+<plurals name="l10n_progress"><item quantity="other">已检查 %1$d 个应用，共 %2$d 个</item></plurals>
 </resources>
 

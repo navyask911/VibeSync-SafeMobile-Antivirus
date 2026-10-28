@@ -1,5 +1,7 @@
 package com.vibesync.antivirus.presentation
 
+import androidx.compose.ui.res.stringResource
+import com.vibesync.antivirus.core.locale.SecurityText
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -48,22 +50,22 @@ internal fun ProtectionAnalyticsPanel(
             style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         if (isScanning) StatusChip(androidx.compose.ui.res.stringResource(R.string.analytics_scan_in_progress), kind = StatusKind.ACTIVE)
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
-            MetricCard(androidx.compose.ui.res.stringResource(R.string.analytics_audit_rows), audits.size.toString(), Modifier.weight(1f))
-            MetricCard(androidx.compose.ui.res.stringResource(R.string.analytics_confirmed), confirmed.toString(), Modifier.weight(1f), danger = confirmed > 0)
+            MetricCard(androidx.compose.ui.res.stringResource(R.string.analytics_audit_rows), localizedNumber(audits.size), Modifier.weight(1f))
+            MetricCard(androidx.compose.ui.res.stringResource(R.string.analytics_confirmed), localizedNumber(confirmed), Modifier.weight(1f), danger = confirmed > 0)
         }
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
-            MetricCard(androidx.compose.ui.res.stringResource(R.string.analytics_heuristic), heuristic.toString(), Modifier.weight(1f), warning = heuristic > 0)
-            MetricCard(androidx.compose.ui.res.stringResource(R.string.analytics_not_scanned), incomplete.toString(), Modifier.weight(1f), warning = incomplete > 0)
+            MetricCard(androidx.compose.ui.res.stringResource(R.string.analytics_heuristic), localizedNumber(heuristic), Modifier.weight(1f), warning = heuristic > 0)
+            MetricCard(androidx.compose.ui.res.stringResource(R.string.analytics_not_scanned), localizedNumber(incomplete), Modifier.weight(1f), warning = incomplete > 0)
         }
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
             shape = RoundedCornerShape(16.dp), modifier = Modifier.fillMaxWidth()) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 SectionHeader(title = androidx.compose.ui.res.stringResource(R.string.analytics_protection_health))
-                HealthRow(androidx.compose.ui.res.stringResource(R.string.analytics_definitions), signatureCount.toString(),
+                HealthRow(androidx.compose.ui.res.stringResource(R.string.analytics_definitions), localizedNumber(signatureCount),
                     if (signatureCount > 0) StatusKind.ACTIVE else StatusKind.DANGER)
-                HealthRow(androidx.compose.ui.res.stringResource(R.string.analytics_feed_indicators), activeIndicatorCount.toString(), StatusKind.NEUTRAL)
+                HealthRow(androidx.compose.ui.res.stringResource(R.string.analytics_feed_indicators), localizedNumber(activeIndicatorCount), StatusKind.NEUTRAL)
                 HealthRow(androidx.compose.ui.res.stringResource(R.string.analytics_last_scan),
-                    lastScanAt?.let { DateFormat.getDateTimeInstance().format(Date(it)) }
+                    lastScanAt?.let { localizedDate(it) }
                         ?: androidx.compose.ui.res.stringResource(R.string.security_last_scan_none),
                     if (lastScanAt != null) StatusKind.SAFE else StatusKind.WARNING)
                 HealthRow(androidx.compose.ui.res.stringResource(R.string.analytics_storage),
@@ -75,8 +77,8 @@ internal fun ProtectionAnalyticsPanel(
                 HealthRow(androidx.compose.ui.res.stringResource(R.string.analytics_sentinel),
                     androidx.compose.ui.res.stringResource(if (monitoringRunning) R.string.analytics_sentinel_running else R.string.analytics_sentinel_stopped),
                     if (monitoringRunning) StatusKind.ACTIVE else StatusKind.WARNING)
-                HealthRow(androidx.compose.ui.res.stringResource(R.string.analytics_current_results), results.size.toString(), StatusKind.NEUTRAL)
-                HealthRow(androidx.compose.ui.res.stringResource(R.string.analytics_quarantine), quarantinedCount.toString(), StatusKind.NEUTRAL)
+                HealthRow(androidx.compose.ui.res.stringResource(R.string.analytics_current_results), localizedNumber(results.size), StatusKind.NEUTRAL)
+                HealthRow(androidx.compose.ui.res.stringResource(R.string.analytics_quarantine), localizedNumber(quarantinedCount), StatusKind.NEUTRAL)
                 HealthRow(androidx.compose.ui.res.stringResource(R.string.analytics_connection),
                     androidx.compose.ui.res.stringResource(if (online) R.string.analytics_online_local else R.string.analytics_offline_local), StatusKind.NEUTRAL)
             }
@@ -106,10 +108,10 @@ internal fun ProtectionAnalyticsPanel(
                         )
                         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                             Text(audit.packageOrPath, style = MaterialTheme.typography.bodyMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                            Text(audit.verdict.replace('_', ' ').lowercase().replaceFirstChar { it.uppercase() },
+                            Text(stringResource(SecurityText.verdict(audit.verdict)),
                                 style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
-                        Text(DateFormat.getTimeInstance(DateFormat.SHORT).format(Date(audit.scanTimestamp)),
+                        Text(localizedDate(audit.scanTimestamp, timeOnly = true),
                             style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }

@@ -701,4 +701,108 @@
 <string name="detection_capabilities_save">Save update settings</string>
 <string name="detection_capabilities_sync_privacy">Downloads only. Scan results, files, hashes, and package names are not uploaded.</string>
 <string name="detection_capabilities_sync_unavailable">Automatic updates are unavailable in this offline build or until a trusted signing key is configured.</string>
+
+<string name="format_label_value">%1$s: %2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s – %2$s</string>
+<string name="format_version">%1$s · Weergawe %2$s (%3$s)</string>
+<string name="format_package_version">%1$s · Weergawe %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">Voer ’n veilige voeradres in</string>
+<string name="storage_size_unavailable">Grootte nie beskikbaar nie</string>
+<string name="blocked_reason_hash">’n Plaaslike bedreigingshandtekening het ooreengestem.</string>
+<string name="blocked_reason_action">’n Plaaslike veiligheidsaksie is sover moontlik probeer.</string>
+<string name="signed_import_success">Ondertekende databasis aanvaar: weergawe %1$s · %2$s.</string>
+<string name="signed_import_failed">Die ondertekende databasis is nie geaktiveer nie. Kontroleer die handtekening, weergawe en lêerformaat.</string>
+<string name="rule_import_pending">%1$s vir hersiening gestoor. Ingevoerde reëls bly afgeskakel en hierdie lêer sal nie uitgevoer word nie.</string>
+<string name="rule_import_failed">Reëls kon nie ingevoer word nie. Ingevoerde reëls bly afgeskakel.</string>
+<string name="restore_result_localized">’n Kopie van %1$s (%2$s) is herstel. Die oorspronklike lêer bly in kwarantyn gestoor.</string>
+<string name="cleaner_confirm_localized">Vee %1$s (%2$s) permanent uit? Dit kan nie ongedaan gemaak word nie. SafeMobile sal name en metadata weer kontroleer.</string>
+<string name="cleaner_result_localized">Uitgevee: %1$s · Ruimte vrygestel: %2$s · Misluk of verander: %3$s</string>
+<string name="about_localized_notices">Derdeparty-komponente behou hul eie lisensies. Die oorspronklike kennisgewings is ’n ouditkontrolepunt, nie ’n voltooide lisensiehersiening nie. Maak die oorspronklike dokumente oop vir bronkennisgewings en lisensievoorwaardes.</string>
+<string name="about_open_original">Maak oorspronklike dokumente oop</string>
+<string name="about_localized_privacy">Geskandeerde lêers, hutswaardes, pakketname en resultate bly op hierdie toestel. Plaaslike ouditmetadata en kwarantynkopieë gebruik geënkripteerde privaat berging. Opdaterings van ondertekende definisies kontak hierdie projek se vrystellingsdiens; ’n afsonderlike voer kontak sy ingestelde adres eers ná toestemming. Gidsmonitering gebruik gidse wat jy kies en kan gestop word. Android-toestemmings bly onder jou beheer. Hierdie weergawe bevat geen advertensies, wolkskandering of skakelreputasiediens nie.</string>
+<string name="coverage_local_title">Plaaslike toetsdefinisies</string>
+<string name="coverage_local_body">Die ingeslote ou definisies bevat slegs ’n onskadelike antivirustoetsmerker. Dit bied nie beskerming teen werklike kwaadwillige sagteware nie.</string>
+<string name="coverage_signed_title">Ondertekende hutsdatabasis</string>
+<string name="coverage_signed_body">Presiese hutsvergelyking vereis ’n betroubare ondertekeningsleutel en ’n aanvaarde ondertekende databasis. Geen produksiedatabasis is ingesluit nie.</string>
+<string name="coverage_static_title">Statiese toepassingontleding</string>
+<string name="coverage_static_body">Beperkte pakketontleding lewer raadgewende bevindings. ’n Bevinding alleen bewys nie kwaadwillige sagteware nie; lyste van bekende skadelike ondertekenaars is afgeskakel.</string>
+<string name="coverage_permissions_title">Toestemmings en manifes</string>
+<string name="coverage_permissions_body">Kombinasies van toestemmings en sigbare pakketverklarings ondersteun handmatige hersiening. Dit is nie ’n opgeleide klassifiseerder nie.</string>
+<string name="coverage_integrity_title">Aanwysers van toestelintegriteit</string>
+<string name="coverage_integrity_body">Worteltoegang, hake, bou-eienskappe, veiligheidsafdwinging, ontfouters en emulators word met plaaslike heuristiek gekontroleer, nie met attestering nie.</string>
+<string name="coverage_bloom_title">Waarskynlikheidsgebaseerde hutsindeks</string>
+<string name="coverage_bloom_body">’n Geverifieerde, nieleë waarskynlikheidsindeks en die manifes daarvan is nie ingesluit nie. Hierdie opsionele laag is nie beskikbaar nie.</string>
+<string name="coverage_rules_title">Ingeslote kodehandtekeninge</string>
+<string name="coverage_rules_body">Geldige ingeslote reëls kontroleer ’n beperkte stel letterlike kodepatrone. Ooreenkomste is raadgewend en bevestig nie kwaadwillige sagteware nie.</string>
+<string name="coverage_rules_unavailable">Ingeslote reëls kon nie laai nie of het nie die validering geslaag nie. Geen kodehandtekeningskandering word geëis nie.</string>
+<string name="coverage_model_title">Toestemmingsklassifikasiemodel</string>
+<string name="coverage_model_body">Geen opgeleide, gevalideerde en verspreibare klassifikasiemodel is ingesluit nie. Masjienleer is afgeskakel.</string>
+<string name="coverage_signer_title">Vanlyn ondertekenaarverifikasie</string>
+<string name="coverage_signer_body">’n Onafhanklik vasgestelde verwagte vingerafdruk van die ondertekeningsertifikaat is nie ingestel nie.</string>
+<string name="coverage_feed_title">Verifikasie van ondertekende voer</string>
+<string name="coverage_feed_body">Verifikasie van ’n afsonderlike handtekening en beskerming teen terugrol vereis ’n betroubare sleutel tydens bou en ’n ingestelde ondertekende voer.</string>
+<string name="hash_status_active">Die ondertekende plaaslike hutsdatabasis is aktief.</string>
+<string name="hash_status_missing">Hutsvergelyking is afgeskakel totdat ’n ondertekende databasis aanvaar word.</string>
+<string name="hash_status_key">Hutsvergelyking is afgeskakel omdat ’n betroubare ondertekeningsleutel ontbreek.</string>
+<string name="hash_status_invalid">Gestoorde definisies het integriteits-, weergawe- of formaatkontroles gedruip. Hutsvergelyking bly afgeskakel.</string>
+<string name="hash_status_activation">Databasisaktivering is nie voltooi nie. Hutsvergelyking bly afgeskakel.</string>
+<string name="finding_confidence">%1$s · Vertrouensvlak: %2$d%%</string>
+<string name="finding_exported">’n Uitgevoerde komponent het geen sigbare toestemmingsbeperking in die manifes nie. Kontroles op kodevlak kan steeds bestaan.</string>
+<string name="finding_admin">Die toepassing verklaar ’n ontvanger vir toesteladministrasie. Hierdie sensitiewe vermoë bewys nie misbruik nie.</string>
+<string name="finding_accessibility">Die toepassing verklaar ’n toeganklikheidsdiens. Geldige hulp-toepassings mag dié toegang nodig hê.</string>
+<string name="finding_overlay">Die toepassing vra toestemming om oor ander skerms te verskyn. Oorlegsels kan geldig wees, maar ook ander skerms bedek.</string>
+<string name="finding_combined">Toeganklikheid word gekombineer met oorleg-, teksboodskap- of oproepgeskiedenistoegang. Hersien die doel van die toepassing.</string>
+<string name="finding_sms_calls">Die toepassing vra toestemmings vir beide teksboodskappe en oproepgeskiedenis.</string>
+<string name="finding_sms_network">Teksboodskaptoegang word met internettoegang gekombineer. Dit moet in konteks hersien word.</string>
+<string name="finding_signer">Metadata van die ondertekeningsertifikaat ontbreek of is onleesbaar.</string>
+<string name="finding_archive">Die pakkethouer kon nie volledig ondersoek word nie. Statiese ontleding is onvolledig.</string>
+<string name="finding_packer">’n Pakketpad lyk soos ’n bekende verpakking- of beskermingshulpmiddel. Geldige toepassings kan dit ook gebruik.</string>
+<string name="finding_dex_header">’n Kode-opskrif het teenstrydige formaat- of groottevelde. Dit bewys nie kwaadwillige sagteware nie.</string>
+<string name="finding_dex_short">’n Kode-inskrywing is korter as ’n geldige opskrif en kon nie volledig ondersoek word nie.</string>
+<string name="finding_entropy">’n Kodemonster het hoë greepentropie. Enkripsie, verpakking of onskadelike saamgeperste inhoud kan dit verklaar.</string>
+<string name="finding_api">Geen verwagte statiese verwysing is vir ’n versoekte toestemming gevind nie. Refleksie, biblioteke of dinamies gelaaide kode kan die oorsaak wees.</string>
+<string name="finding_rules">’n Beperkte ingeslote kodehandtekening het ooreengestem. Dit is raadgewend, nie ’n bewys van kwaadwillige sagteware nie.</string>
+<string name="finding_other">Bykomende plaaslike aanwysers vereis handmatige hersiening. Dit bevestig nie kwaadwillige sagteware nie.</string>
+<string name="integrity_manager">’n Bestuurder vir worteltoegang of hake is sigbaar: %1$s</string>
+<string name="integrity_test_keys">Die toestelbou gebruik toetsondertekeningsleutels.</string>
+<string name="integrity_debug_build">Bou-eienskappe dui op ’n ontfoutbare of nieproduksiestelsel.</string>
+<string name="integrity_selinux">Die leesbare plaaslike status sê dat verpligte veiligheidsafdwinging afgeskakel is.</string>
+<string name="integrity_debugger">’n Ontfouter is aan hierdie proses gekoppel.</string>
+<string name="integrity_emulator">Bou-eienskappe lyk soos dié van ’n emulator of toetstoestel.</string>
+<string name="audit_scan_pending">Die installasie is aangeteken. Plaaslike ontleding is hangende.</string>
+<string name="audit_scan_complete">Plaaslike ontleding is sonder ’n bevestigde handtekeningooreenkoms voltooi. Dit waarborg nie veiligheid nie.</string>
+<string name="audit_scan_unavailable">Die pakket was nie tydens ontleding sigbaar nie.</string>
+<string name="audit_scan_threat">’n Presiese plaaslike bedreigingshandtekening het ooreengestem.</string>
+<string name="audit_scan_review">Plaaslike aanwysers moet hersien word; hulle bevestig nie kwaadwillige sagteware nie.</string>
+<string name="audit_source_recorded">Die installasiebron is aangeteken.</string>
+<string name="audit_uninstall_requested">Android se bevestiging vir verwydering is versoek.</string>
+<string name="audit_uninstall_success">Android het bevestig dat die verwydering geslaag het.</string>
+<string name="audit_uninstall_failed">Android kon nie die verwyderingsversoek voltooi nie.</string>
+<string name="severity_test">Onskadelike toetsmerker</string>
+<string name="severity_low">Lae erns</string>
+<string name="severity_medium">Matige erns</string>
+<string name="severity_high">Hoë erns</string>
+<string name="severity_critical">Kritieke erns</string>
+<string name="severity_unknown">Erns nie aangedui nie</string>
+<plurals name="l10n_scanned_apps"><item quantity="one">%1$d toepassing geskandeer</item><item quantity="other">%1$d toepassings geskandeer</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="one">%1$d lêer geskandeer</item><item quantity="other">%1$d lêers geskandeer</item></plurals>
+<plurals name="l10n_threats"><item quantity="one">%1$d bedreiging gevind</item><item quantity="other">%1$d bedreigings gevind</item></plurals>
+<plurals name="l10n_review"><item quantity="one">%1$d resultaat moet hersien word</item><item quantity="other">%1$d resultate moet hersien word</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="one">%1$d item kon nie geskandeer word nie</item><item quantity="other">%1$d items kon nie geskandeer word nie</item></plurals>
+<plurals name="l10n_no_match"><item quantity="one">%1$d resultaat sonder plaaslike ooreenkoms</item><item quantity="other">%1$d resultate sonder plaaslike ooreenkoms</item></plurals>
+<plurals name="l10n_apps"><item quantity="one">%1$d toepassing</item><item quantity="other">%1$d toepassings</item></plurals>
+<plurals name="l10n_files"><item quantity="one">%1$d lêer</item><item quantity="other">%1$d lêers</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="one">%1$d niestelseltoepassing het hoërisikotoegang.</item><item quantity="other">%1$d niestelseltoepassings het hoërisikotoegang.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="one">%1$d waargenome verandering wag op kennisgewing.</item><item quantity="other">%1$d waargenome veranderinge wag op kennisgewing.</item></plurals>
+<plurals name="l10n_rules"><item quantity="one">Beperkte dekking · %1$d ingeslote reël</item><item quantity="other">Beperkte dekking · %1$d ingeslote reëls</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="one">Laaste skandering: %1$d raadgewende kodeooreenkoms.</item><item quantity="other">Laaste skandering: %1$d raadgewende kodeooreenkomste.</item></plurals>
+<plurals name="l10n_imported"><item quantity="one">%1$d geldige handtekening in plaaslike berging ingevoer.</item><item quantity="other">%1$d geldige handtekeninge in plaaslike berging ingevoer.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="one">%1$d greep</item><item quantity="other">%1$d grepe</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="one">%1$d wortelverwante lêerstelselaanwyser is teenwoordig.</item><item quantity="other">%1$d wortelverwante lêerstelselaanwysers is teenwoordig.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="one">%1$d haakaanwyser is teenwoordig.</item><item quantity="other">%1$d haakaanwysers is teenwoordig.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="one">%1$d toepassing aangeskakel</item><item quantity="other">%1$d toepassings aangeskakel</item></plurals>
+<plurals name="l10n_indicators"><item quantity="one">%1$d aanwyser</item><item quantity="other">%1$d aanwysers</item></plurals>
+<plurals name="l10n_progress"><item quantity="one">%1$d van %2$d toepassing gekontroleer</item><item quantity="other">%1$d van %2$d toepassings gekontroleer</item></plurals>
 </resources>

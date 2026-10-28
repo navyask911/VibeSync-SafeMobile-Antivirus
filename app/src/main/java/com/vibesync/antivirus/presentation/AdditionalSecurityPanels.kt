@@ -1,5 +1,6 @@
 package com.vibesync.antivirus.presentation
 
+import androidx.compose.ui.res.pluralStringResource
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInfo
@@ -47,6 +48,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -439,6 +441,7 @@ private data class StorageCandidate(
 @Composable
 internal fun StorageCleanerPanel() {
     val context = LocalContext.current
+    val numberLocale = LocalConfiguration.current.locales[0]
     val preferences = remember(context) { context.getSharedPreferences("safe_mobile_storage_cleaner", Context.MODE_PRIVATE) }
     var treeUriText by remember { mutableStateOf(preferences.getString("tree_uri", null)) }
     var candidates by remember { mutableStateOf<List<StorageCandidate>>(emptyList()) }
@@ -477,7 +480,7 @@ internal fun StorageCleanerPanel() {
             result.onSuccess {
                 candidates = it
                 selectedUris = emptySet()
-                message = context.getString(R.string.cleaner_scan_complete, it.size)
+                message = context.resources.getQuantityString(R.plurals.l10n_files, it.size, it.size)
             }.onFailure {
                 message = context.getString(R.string.cleaner_scan_failed)
             }
@@ -509,7 +512,7 @@ internal fun StorageCleanerPanel() {
         if (candidates.isNotEmpty()) {
             Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text(stringResource(R.string.cleaner_summary, candidates.size, candidates.sumOf { it.sizeBytes }), fontWeight = FontWeight.SemiBold)
+                    Text(stringResource(R.string.format_label_value, pluralStringResource(R.plurals.l10n_files, candidates.size, candidates.size), formatStorageBytes(context, candidates.sumOf { it.sizeBytes })), fontWeight = FontWeight.SemiBold)
                     candidates.take(100).forEach { item ->
                         Row(verticalAlignment = Alignment.Top, modifier = Modifier.fillMaxWidth()) {
                             Checkbox(
@@ -520,10 +523,10 @@ internal fun StorageCleanerPanel() {
                             )
                             Column(Modifier.weight(1f).padding(top = 11.dp), verticalArrangement = Arrangement.spacedBy(3.dp)) {
                                 Text(item.name, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
-                                Text(formatStorageBytes(item.sizeBytes), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Text(formatStorageBytes(context, item.sizeBytes), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                 Text(stringResource(item.categoryResource), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.tertiary)
                                 if (!item.packageName.isNullOrBlank()) {
-                                    Text(item.packageName + (item.apkVersion?.let { " · v" + it } ?: ""), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                    Text(item.apkVersion?.let { stringResource(R.string.format_package_version, item.packageName, localizedNumber(it)) } ?: item.packageName, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                 }
                                 if (item.bulkDeleteEligible) Text(stringResource(R.string.cleaner_bulk_eligible), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
                             }
@@ -548,8 +551,8 @@ internal fun StorageCleanerPanel() {
             title = { Text(stringResource(R.string.cleaner_delete_confirm_title)) },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Text(stringResource(R.string.cleaner_delete_confirm_body, deleteSet.size, deleteSet.sumOf { it.sizeBytes }))
-                    deleteSet.take(8).forEach { Text("• " + it.name, style = MaterialTheme.typography.bodySmall) }
+                    Text(stringResource(R.string.cleaner_confirm_localized, pluralStringResource(R.plurals.l10n_files, deleteSet.size, deleteSet.size), formatStorageBytes(context, deleteSet.sumOf { it.sizeBytes })))
+                    deleteSet.take(8).forEach { Text(stringResource(R.string.format_bullet, it.name), style = MaterialTheme.typography.bodySmall) }
                     if (deleteSet.size > 8) Text(stringResource(R.string.cleaner_more_files, deleteSet.size - 8), style = MaterialTheme.typography.bodySmall)
                 }
             },
@@ -567,7 +570,7 @@ internal fun StorageCleanerPanel() {
                         candidates = candidates.filterNot { current -> deleted.any { it.first.uri == current.uri } }
                         selectedUris = selectedUris - deleted.map { it.first.uri }.toSet()
                         val freed = deleted.sumOf { it.first.sizeBytes }
-                        message = context.getString(R.string.cleaner_delete_result, deleted.size, freed, failed)
+                        message = context.getString(R.string.cleaner_result_localized, java.text.NumberFormat.getIntegerInstance(numberLocale).format(deleted.size), formatStorageBytes(context, freed), java.text.NumberFormat.getIntegerInstance(numberLocale).format(failed))
                         scanning = false
                     }
                 }) { Text(stringResource(R.string.cleaner_delete_confirm_action)) }
@@ -577,13 +580,9 @@ internal fun StorageCleanerPanel() {
     }
 }
 
-private fun formatStorageBytes(bytes: Long): String {
-    if (bytes < 0) return "Size unavailable"
-    if (bytes < 1024) return bytes.toString() + " B"
-    if (bytes < 1024 * 1024) return String.format(Locale.ROOT, "%.1f KB", bytes / 1024.0)
-    if (bytes < 1024L * 1024L * 1024L) return String.format(Locale.ROOT, "%.1f MB", bytes / (1024.0 * 1024.0))
-    return String.format(Locale.ROOT, "%.2f GB", bytes / (1024.0 * 1024.0 * 1024.0))
-}
+private fun formatStorageBytes(context: Context, bytes: Long): String =
+    if (bytes < 0) context.getString(R.string.storage_size_unavailable)
+    else android.text.format.Formatter.formatShortFileSize(context, bytes)
 
 private object StorageCleanerEngine {
     private const val MAX_DOCUMENTS = 1500

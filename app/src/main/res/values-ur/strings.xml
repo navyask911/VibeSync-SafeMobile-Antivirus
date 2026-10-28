@@ -558,5 +558,108 @@
 <string name="locale_th">ไทย</string>
 <string name="locale_uk">Українська</string>
 <string name="locale_uz">O‘zbekcha</string>
-</resources>
 
+<string name="format_label_value">%1$s: %2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s – %2$s</string>
+<string name="format_version">%1$s · ورژن %2$s (%3$s)</string>
+<string name="format_package_version">%1$s · ورژن %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">محفوظ فیڈ کا پتہ درج کریں</string>
+<string name="storage_size_unavailable">حجم دستیاب نہیں</string>
+<string name="blocked_reason_hash">مقامی خطرے کے دستخط سے مطابقت ملی۔</string>
+<string name="blocked_reason_action">ممکنہ حد تک مقامی حفاظتی کارروائی کرنے کی کوشش کی گئی۔</string>
+<string name="signed_import_success">دستخط شدہ ڈیٹابیس قبول ہوگیا: ورژن %1$s · %2$s۔</string>
+<string name="signed_import_failed">دستخط شدہ ڈیٹابیس فعال نہیں ہوا۔ اس کے دستخط، ورژن اور فائل کی ساخت چیک کریں۔</string>
+<string name="rule_import_pending">جائزے کے لیے %1$s محفوظ کیا گیا۔ درآمد کردہ قواعد غیر فعال رہیں گے اور یہ فائل نہیں چلائی جائے گی۔</string>
+<string name="rule_import_failed">قواعد درآمد نہیں ہو سکے۔ درآمد کردہ قواعد غیر فعال رہیں گے۔</string>
+<string name="restore_result_localized">%1$s (%2$s) کی ایک نقل بحال کی گئی۔ قرنطینہ میں اصل فائل اب بھی محفوظ ہے۔</string>
+<string name="cleaner_confirm_localized">کیا %1$s (%2$s) مستقل طور پر حذف کر دیں؟ یہ عمل واپس نہیں ہو سکتا۔ SafeMobile ناموں اور میٹا ڈیٹا کو دوبارہ چیک کرے گا۔</string>
+<string name="cleaner_result_localized">حذف شدہ: %1$s · خالی جگہ: %2$s · ناکام یا تبدیل شدہ: %3$s</string>
+<string name="about_localized_notices">تیسرے فریق کے اجزا پر ان کے اپنے لائسنس لاگو ہوتے ہیں۔ اصل نوٹس آڈٹ کے جائزے کا ایک مرحلہ ہیں، مکمل شدہ لائسنس جائزہ نہیں۔ ماخذ کے نوٹس اور لائسنس کی شرائط دیکھنے کے لیے اصل دستاویزات کھولیں۔</string>
+<string name="about_open_original">اصل دستاویزات کھولیں</string>
+<string name="about_localized_privacy">اسکین کی فائلیں، ہیش، پیکیج کے نام اور نتائج اسی آلے میں رہتے ہیں۔ مقامی آڈٹ میٹا ڈیٹا اور قرنطینہ کی نقول خفیہ کردہ نجی اسٹوریج میں محفوظ ہوتی ہیں۔ دستخط شدہ تعریفوں کی تازہ کاری اس منصوبے کی ریلیز سروس سے رابطہ کرتی ہے؛ علیحدہ فیڈ صرف آپ کی منظوری کے بعد اپنے مقرر کردہ پتے سے رابطہ کرتی ہے۔ فولڈر کی نگرانی صرف آپ کے منتخب فولڈروں پر ہوتی ہے اور اسے روکا جا سکتا ہے۔ Android کی اجازتیں آپ کے اختیار میں ہیں۔ اس ورژن میں اشتہارات، کلاؤڈ اسکیننگ یا لنک کی ساکھ جانچنے والی سروس نہیں ہے۔</string>
+<string name="coverage_local_title">مقامی آزمائشی تعریفیں</string>
+<string name="coverage_local_body">شامل کردہ پرانی تعریفوں میں صرف بے ضرر اینٹی وائرس آزمائشی نشان ہے۔ یہ حقیقی میل ویئر کے خلاف تحفظ فراہم نہیں کرتیں۔</string>
+<string name="coverage_signed_title">دستخط شدہ ہیش ڈیٹابیس</string>
+<string name="coverage_signed_body">بالکل درست ہیش کی مطابقت کے لیے قابل اعتماد دستخطی کلید اور منظور شدہ دستخطی ڈیٹابیس ضروری ہے۔ پیداواری ڈیٹابیس شامل نہیں۔</string>
+<string name="coverage_static_title">ایپ کا جامد تجزیہ</string>
+<string name="coverage_static_body">محدود پیکیج تجزیہ رہنمائی کے لیے نتائج دیتا ہے۔ صرف ایک نتیجہ میل ویئر کا ثبوت نہیں؛ معلوم نقصان دہ دستخط کنندگان کی فہرست غیر فعال ہے۔</string>
+<string name="coverage_permissions_title">اجازتیں اور مینی فیسٹ</string>
+<string name="coverage_permissions_body">اجازتوں کے مجموعے اور نظر آنے والے پیکیج اعلانات دستی جائزے میں مدد دیتے ہیں۔ یہ تربیت یافتہ درجہ بندی نہیں ہیں۔</string>
+<string name="coverage_integrity_title">آلے کی سالمیت کے اشارے</string>
+<string name="coverage_integrity_body">روٹ رسائی، ہکس، بلڈ کی خصوصیات، حفاظتی نفاذ، ڈیبگر اور ایمولیٹر مقامی تخمینی طریقوں سے چیک کیے جاتے ہیں، تصدیقی سند سے نہیں۔</string>
+<string name="coverage_bloom_title">امکانی ہیش اشاریہ</string>
+<string name="coverage_bloom_body">تصدیق شدہ، غیر خالی امکانی اشاریہ اور اس کا مینی فیسٹ شامل نہیں ہیں۔ یہ اختیاری پرت دستیاب نہیں۔</string>
+<string name="coverage_rules_title">شامل کردہ کوڈ دستخط</string>
+<string name="coverage_rules_body">تصدیق شدہ شامل قواعد محدود لفظی کوڈ نمونوں کو چیک کرتے ہیں۔ مطابقتیں صرف رہنمائی ہیں، میل ویئر کی تصدیق نہیں۔</string>
+<string name="coverage_rules_unavailable">شامل قواعد لوڈ نہیں ہوئے یا تصدیقی جانچ میں ناکام رہے۔ کوڈ دستخط اسکین ہونے کا دعویٰ نہیں کیا جاتا۔</string>
+<string name="coverage_model_title">اجازتوں کی درجہ بندی کا ماڈل</string>
+<string name="coverage_model_body">تربیت یافتہ، تصدیق شدہ اور تقسیم کے قابل درجہ بندی ماڈل شامل نہیں ہے۔ مشین لرننگ غیر فعال ہے۔</string>
+<string name="coverage_signer_title">آف لائن دستخط کنندہ کی تصدیق</string>
+<string name="coverage_signer_body">آزادانہ طور پر مقرر کیے گئے متوقع دستخطی سرٹیفکیٹ کا فنگر پرنٹ ترتیب نہیں دیا گیا۔</string>
+<string name="coverage_feed_title">دستخط شدہ فیڈ کی تصدیق</string>
+<string name="coverage_feed_body">الگ دستخط کی تصدیق اور پرانے ورژن کی واپسی روکنے کے لیے بلڈ کے وقت قابل اعتماد کلید اور ترتیب شدہ دستخطی فیڈ درکار ہیں۔</string>
+<string name="hash_status_active">دستخط شدہ مقامی ہیش ڈیٹابیس فعال ہے۔</string>
+<string name="hash_status_missing">دستخط شدہ ڈیٹابیس منظور ہونے تک ہیش ملانے کی سہولت غیر فعال ہے۔</string>
+<string name="hash_status_key">قابل اعتماد دستخطی کلید دستیاب نہ ہونے کی وجہ سے ہیش ملانے کی سہولت بند ہے۔</string>
+<string name="hash_status_invalid">محفوظ تعریفیں سالمیت، ورژن یا ساخت کی جانچ میں ناکام رہیں۔ ہیش ملانے کی سہولت غیر فعال رہے گی۔</string>
+<string name="hash_status_activation">ڈیٹابیس فعال کرنے کا عمل مکمل نہیں ہوا۔ ہیش ملانے کی سہولت غیر فعال رہے گی۔</string>
+<string name="finding_confidence">%1$s · اعتماد کی سطح: %2$d%%</string>
+<string name="finding_exported">بیرونی رسائی والے جزو کے لیے مینی فیسٹ میں اجازت کی واضح پابندی نظر نہیں آتی۔ کوڈ کی سطح پر جانچ پھر بھی ہو سکتی ہے۔</string>
+<string name="finding_admin">ایپ آلے کے انتظام کا ریسیور ظاہر کرتی ہے۔ یہ حساس صلاحیت غلط استعمال کا ثبوت نہیں۔</string>
+<string name="finding_accessibility">ایپ رسائی میں معاون خدمت ظاہر کرتی ہے۔ جائز معاون ایپس کو اس رسائی کی ضرورت ہو سکتی ہے۔</string>
+<string name="finding_overlay">ایپ دوسری اسکرینوں پر ظاہر ہونے کی اجازت مانگتی ہے۔ یہ جائز بھی ہو سکتی ہے مگر دوسری اسکرینوں کو چھپا سکتی ہے۔</string>
+<string name="finding_combined">رسائی میں معاون خدمت کے ساتھ اوورلے، پیغامات یا کال کی تاریخ تک رسائی بھی ہے۔ ایپ کا مقصد جانچیں۔</string>
+<string name="finding_sms_calls">ایپ پیغامات اور کال کی تاریخ دونوں کی اجازتیں مانگتی ہے۔</string>
+<string name="finding_sms_network">پیغامات تک رسائی کے ساتھ انٹرنیٹ رسائی بھی ہے۔ حالات کے مطابق جائزہ درکار ہے۔</string>
+<string name="finding_signer">دستخطی سرٹیفکیٹ کا میٹا ڈیٹا موجود نہیں یا پڑھا نہیں جا سکتا۔</string>
+<string name="finding_archive">پیکیج کی فائل مکمل طور پر نہیں جانچی جا سکی۔ جامد تجزیہ نامکمل ہے۔</string>
+<string name="finding_packer">پیکیج کا راستہ کسی معروف پیکنگ یا حفاظتی آلے جیسا ہے۔ جائز ایپس بھی ایسے آلات استعمال کر سکتی ہیں۔</string>
+<string name="finding_dex_header">کوڈ ہیڈر کی ساخت یا حجم کے خانے غیر مطابقت رکھتے ہیں۔ یہ میل ویئر کا ثبوت نہیں۔</string>
+<string name="finding_dex_short">کوڈ کا حصہ درست ہیڈر سے چھوٹا ہے اور مکمل طور پر جانچا نہیں جا سکا۔</string>
+<string name="finding_entropy">کوڈ کے نمونے میں بائٹ کی غیر یقینی کیفیت زیادہ ہے۔ خفیہ کاری، پیکنگ یا بے ضرر کمپریس شدہ مواد وجہ ہو سکتے ہیں۔</string>
+<string name="finding_api">درخواست کردہ اجازت کے لیے متوقع جامد حوالہ نہیں ملا۔ انعکاس، لائبریریاں یا متحرک طور پر لوڈ ہونے والا کوڈ وجہ ہو سکتے ہیں۔</string>
+<string name="finding_rules">شامل کردہ محدود کوڈ دستخط سے مطابقت ملی۔ یہ صرف رہنمائی ہے، میل ویئر کا ثبوت نہیں۔</string>
+<string name="finding_other">اضافی مقامی اشاروں کا دستی جائزہ ضروری ہے۔ یہ میل ویئر کی تصدیق نہیں کرتے۔</string>
+<string name="integrity_manager">روٹ رسائی یا ہکنگ مینیجر نظر آ رہا ہے: %1$s</string>
+<string name="integrity_test_keys">آلے کی بلڈ آزمائشی دستخطی کلیدیں استعمال کرتی ہے۔</string>
+<string name="integrity_debug_build">بلڈ کی خصوصیات ڈیبگ کے قابل یا غیر پیداواری نظام ظاہر کرتی ہیں۔</string>
+<string name="integrity_selinux">پڑھی جا سکنے والی مقامی صورت حال بتاتی ہے کہ لازمی حفاظتی نفاذ بند ہے۔</string>
+<string name="integrity_debugger">اس عمل کے ساتھ ڈیبگر منسلک ہے۔</string>
+<string name="integrity_emulator">بلڈ کی خصوصیات ایمولیٹر یا آزمائشی آلے جیسی ہیں۔</string>
+<string name="audit_scan_pending">تنصیب درج کر لی گئی۔ مقامی تجزیہ باقی ہے۔</string>
+<string name="audit_scan_complete">مصدقہ دستخطی مطابقت کے بغیر مقامی تجزیہ مکمل ہوا۔ یہ حفاظت کی ضمانت نہیں۔</string>
+<string name="audit_scan_unavailable">تجزیے کے وقت پیکیج نظر نہیں آیا۔</string>
+<string name="audit_scan_threat">بالکل درست مقامی خطرے کے دستخط سے مطابقت ملی۔</string>
+<string name="audit_scan_review">مقامی اشاروں کا جائزہ ضروری ہے؛ یہ میل ویئر کی تصدیق نہیں کرتے۔</string>
+<string name="audit_source_recorded">تنصیب کا ذریعہ درج کر لیا گیا۔</string>
+<string name="audit_uninstall_requested">Android سے ایپ ہٹانے کی تصدیق مانگی گئی۔</string>
+<string name="audit_uninstall_success">Android نے بتایا کہ ایپ کامیابی سے ہٹ گئی۔</string>
+<string name="audit_uninstall_failed">Android ایپ ہٹانے کی درخواست پوری نہیں کر سکا۔</string>
+<string name="severity_test">بے ضرر آزمائشی نشان</string>
+<string name="severity_low">کم شدت</string>
+<string name="severity_medium">درمیانی شدت</string>
+<string name="severity_high">زیادہ شدت</string>
+<string name="severity_critical">انتہائی سنگین</string>
+<string name="severity_unknown">شدت بیان نہیں کی گئی</string>
+<plurals name="l10n_scanned_apps"><item quantity="one">%1$d ایپ اسکین ہوئی</item><item quantity="other">%1$d ایپ اسکین ہوئی</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="one">%1$d فائل اسکین ہوئی</item><item quantity="other">%1$d فائل اسکین ہوئی</item></plurals>
+<plurals name="l10n_threats"><item quantity="one">%1$d خطرہ ملا</item><item quantity="other">%1$d خطرہ ملا</item></plurals>
+<plurals name="l10n_review"><item quantity="one">%1$d نتیجے کا جائزہ درکار ہے</item><item quantity="other">%1$d نتیجے کا جائزہ درکار ہے</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="one">%1$d شے اسکین نہیں ہو سکی</item><item quantity="other">%1$d شے اسکین نہیں ہو سکی</item></plurals>
+<plurals name="l10n_no_match"><item quantity="one">%1$d نتیجے کے لیے مقامی مطابقت نہیں ملی</item><item quantity="other">%1$d نتیجے کے لیے مقامی مطابقت نہیں ملی</item></plurals>
+<plurals name="l10n_apps"><item quantity="one">%1$d ایپ</item><item quantity="other">%1$d ایپ</item></plurals>
+<plurals name="l10n_files"><item quantity="one">%1$d فائل</item><item quantity="other">%1$d فائل</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="one">نظام سے الگ %1$d ایپ کو زیادہ خطرے والی رسائی حاصل ہے۔</item><item quantity="other">نظام سے الگ %1$d ایپ کو زیادہ خطرے والی رسائی حاصل ہے۔</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="one">%1$d درج شدہ تبدیلی کی اطلاع باقی ہے۔</item><item quantity="other">%1$d درج شدہ تبدیلی کی اطلاع باقی ہے۔</item></plurals>
+<plurals name="l10n_rules"><item quantity="one">محدود کوریج · شامل کردہ %1$d قاعدہ</item><item quantity="other">محدود کوریج · شامل کردہ %1$d قاعدہ</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="one">آخری اسکین: رہنمائی کے لیے %1$d کوڈ کی مطابقت۔</item><item quantity="other">آخری اسکین: رہنمائی کے لیے %1$d کوڈ کی مطابقت۔</item></plurals>
+<plurals name="l10n_imported"><item quantity="one">مقامی اسٹوریج میں %1$d درست دستخط درآمد کیے گئے۔</item><item quantity="other">مقامی اسٹوریج میں %1$d درست دستخط درآمد کیے گئے۔</item></plurals>
+<plurals name="l10n_bytes"><item quantity="one">%1$d بائٹ</item><item quantity="other">%1$d بائٹ</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="one">روٹ سے متعلق فائل نظام کے %1$d اشارے موجود ہیں۔</item><item quantity="other">روٹ سے متعلق فائل نظام کے %1$d اشارے موجود ہیں۔</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="one">ہکنگ کے %1$d اشارے موجود ہیں۔</item><item quantity="other">ہکنگ کے %1$d اشارے موجود ہیں۔</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="one">%1$d ایپ فعال ہے</item><item quantity="other">%1$d ایپ فعال ہے</item></plurals>
+<plurals name="l10n_indicators"><item quantity="one">%1$d اشارہ</item><item quantity="other">%1$d اشارہ</item></plurals>
+<plurals name="l10n_progress"><item quantity="one">%2$d ایپس میں سے %1$d چیک کی گئیں</item><item quantity="other">%2$d ایپس میں سے %1$d چیک کی گئیں</item></plurals>
+</resources>

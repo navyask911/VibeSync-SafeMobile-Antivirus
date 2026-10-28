@@ -87,10 +87,10 @@ class ThreatDetectedActivity : ComponentActivity() {
         setContent {
             SafeMobileMaterialTheme {
                 BackHandler { dismissIncident() }
-                val pulse = rememberInfiniteTransition(label = "incident-warning")
+                val pulse = rememberInfiniteTransition()
                 // A slow red pulse, below strobe frequencies; text remains visible throughout.
                 val red by pulse.animateColor(Color(0xFFB91C1C), Color(0xFFEF4444),
-                    infiniteRepeatable(tween(1_000), RepeatMode.Reverse), label = "uninstall-pulse")
+                    infiniteRepeatable(tween(1_000), RepeatMode.Reverse))
                 Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     Column(Modifier.safeDrawingPadding().verticalScroll(rememberScrollState()).padding(24.dp),
                         verticalArrangement = Arrangement.spacedBy(20.dp), horizontalAlignment = Alignment.CenterHorizontally) {

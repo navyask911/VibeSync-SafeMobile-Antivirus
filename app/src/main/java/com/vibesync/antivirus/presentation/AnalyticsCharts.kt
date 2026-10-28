@@ -75,7 +75,7 @@ internal fun AnalyticsChartContent(data: ScanAnalytics, week: AnalyticsWeek) {
     val cleanLabel = stringResource(R.string.verdict_no_match)
     val otherLabel = stringResource(R.string.analytics_other)
     val total = data.totals.threats + data.totals.noMatch + data.totals.other
-    val description = "$threatLabel: ${number.format(data.totals.threats)}; $cleanLabel: ${number.format(data.totals.noMatch)}; $otherLabel: ${number.format(data.totals.other)}"
+    val description = listOf(stringResource(R.string.format_label_value, threatLabel, number.format(data.totals.threats)), stringResource(R.string.format_label_value, cleanLabel, number.format(data.totals.noMatch)), stringResource(R.string.format_label_value, otherLabel, number.format(data.totals.other))).joinToString("; ")
     Column(verticalArrangement = Arrangement.spacedBy(14.dp), modifier = Modifier.fillMaxWidth()) {
         GlassCard(Modifier.fillMaxWidth()) {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -113,14 +113,15 @@ internal fun AnalyticsChartContent(data: ScanAnalytics, week: AnalyticsWeek) {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text(stringResource(R.string.analytics_weekly_scans), style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.SemiBold)
-                val dateFormat = remember(locale) { DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(locale) }
-                Text("${week.monday.format(dateFormat)} – ${week.monday.plusDays(6).format(dateFormat)}", style = MaterialTheme.typography.labelMedium, color = muted)
+                val dateFormat = remember(locale) { DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(locale).withDecimalStyle(java.time.format.DecimalStyle.of(locale)) }
+                Text(stringResource(R.string.format_date_range, week.monday.format(dateFormat), week.monday.plusDays(6).format(dateFormat)), style = MaterialTheme.typography.labelMedium, color = muted)
                 val days = week.days.map { it.dayOfWeek.getDisplayName(TextStyle.SHORT_STANDALONE, locale) }
                 val bars = data.daily.take(7).let { it + List((7 - it.size).coerceAtLeast(0)) { 0L } }
                 val maxCount = (bars.maxOrNull() ?: 0L).coerceAtLeast(1L)
                 val textMeasurer = rememberTextMeasurer()
                 val labelStyle = MaterialTheme.typography.labelSmall.copy(color = muted)
-                val barDescription = days.zip(bars).joinToString("; ") { (day, count) -> "$day: ${number.format(count)}" }
+                val barDescriptions = days.zip(bars).map { (day, count) -> stringResource(R.string.format_label_value, day, number.format(count)) }
+                val barDescription = barDescriptions.joinToString("; ")
                 Canvas(Modifier.fillMaxWidth().height(155.dp).semantics { contentDescription = barDescription }) {
                     val top = 24.dp.toPx()
                     val plotHeight = size.height - top

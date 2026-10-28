@@ -558,5 +558,108 @@
 <string name="locale_th">ไทย</string>
 <string name="locale_uk">Українська</string>
 <string name="locale_uz">O‘zbekcha</string>
-</resources>
 
+<string name="format_label_value">%1$s: %2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s – %2$s</string>
+<string name="format_version">%1$s · Phiên bản %2$s (%3$s)</string>
+<string name="format_package_version">%1$s · Phiên bản %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">Nhập địa chỉ nguồn cấp an toàn</string>
+<string name="storage_size_unavailable">Không có thông tin dung lượng</string>
+<string name="blocked_reason_hash">Phát hiện trùng khớp với chữ ký mối đe dọa cục bộ.</string>
+<string name="blocked_reason_action">Đã cố gắng thực hiện biện pháp bảo mật cục bộ trong phạm vi có thể.</string>
+<string name="signed_import_success">Đã chấp nhận cơ sở dữ liệu có chữ ký: phiên bản %1$s · %2$s.</string>
+<string name="signed_import_failed">Cơ sở dữ liệu có chữ ký chưa được kích hoạt. Hãy kiểm tra chữ ký, phiên bản và định dạng tệp.</string>
+<string name="rule_import_pending">Đã lưu %1$s để xem xét. Các quy tắc đã nhập vẫn bị vô hiệu hóa và tệp này sẽ không được chạy.</string>
+<string name="rule_import_failed">Không thể nhập quy tắc. Các quy tắc đã nhập vẫn bị vô hiệu hóa.</string>
+<string name="restore_result_localized">Đã khôi phục một bản sao của %1$s (%2$s). Bản gốc trong vùng cách ly vẫn được lưu trữ.</string>
+<string name="cleaner_confirm_localized">Xóa vĩnh viễn %1$s (%2$s)? Không thể hoàn tác thao tác này. SafeMobile sẽ kiểm tra lại tên và siêu dữ liệu.</string>
+<string name="cleaner_result_localized">Đã xóa: %1$s · Dung lượng giải phóng: %2$s · Lỗi hoặc đã thay đổi: %3$s</string>
+<string name="about_localized_notices">Các thành phần bên thứ ba vẫn tuân theo giấy phép riêng. Thông báo gốc là điểm kiểm tra trong quá trình đánh giá, không có nghĩa việc rà soát giấy phép đã hoàn tất. Mở tài liệu gốc để xem thông báo nguồn và điều khoản cấp phép.</string>
+<string name="about_open_original">Mở tài liệu gốc</string>
+<string name="about_localized_privacy">Các tệp được quét, mã băm, tên gói và kết quả chỉ được lưu trên thiết bị này. Siêu dữ liệu kiểm tra cục bộ và bản sao cách ly được lưu trong bộ nhớ riêng đã mã hóa. Các bản cập nhật định nghĩa có chữ ký kết nối với dịch vụ phát hành của dự án; nguồn cấp riêng chỉ kết nối đến địa chỉ đã thiết lập sau khi bạn đồng ý. Giám sát thư mục chỉ áp dụng cho các thư mục bạn chọn và có thể dừng. Quyền Android vẫn do bạn kiểm soát. Bản dựng này không có quảng cáo, quét đám mây hoặc dịch vụ đánh giá độ tin cậy của liên kết.</string>
+<string name="coverage_local_title">Định nghĩa thử nghiệm cục bộ</string>
+<string name="coverage_local_body">Các định nghĩa cũ đi kèm chỉ chứa dấu hiệu thử nghiệm chống vi-rút vô hại. Chúng không có khả năng bao phủ phần mềm độc hại trong thực tế.</string>
+<string name="coverage_signed_title">Cơ sở dữ liệu mã băm có chữ ký</string>
+<string name="coverage_signed_body">Đối chiếu chính xác mã băm cần khóa ký đáng tin cậy và cơ sở dữ liệu có chữ ký đã được chấp nhận. Không kèm cơ sở dữ liệu dùng cho môi trường thực tế.</string>
+<string name="coverage_static_title">Phân tích tĩnh ứng dụng</string>
+<string name="coverage_static_body">Phân tích gói có giới hạn đưa ra các phát hiện mang tính tham khảo. Một phát hiện không chứng minh có phần mềm độc hại; danh sách người ký độc hại đã biết bị vô hiệu hóa.</string>
+<string name="coverage_permissions_title">Quyền và bản khai ứng dụng</string>
+<string name="coverage_permissions_body">Tổ hợp quyền và khai báo gói hiển thị hỗ trợ rà soát thủ công. Chúng không phải mô hình phân loại đã huấn luyện.</string>
+<string name="coverage_integrity_title">Dấu hiệu toàn vẹn thiết bị</string>
+<string name="coverage_integrity_body">Quyền root, móc nối, thuộc tính bản dựng, thực thi bảo mật, trình gỡ lỗi và trình giả lập được kiểm tra bằng phương pháp suy đoán cục bộ, không phải chứng thực.</string>
+<string name="coverage_bloom_title">Chỉ mục mã băm xác suất</string>
+<string name="coverage_bloom_body">Không có chỉ mục xác suất đã xác minh, không rỗng và bản khai tương ứng đi kèm. Lớp tùy chọn này không khả dụng.</string>
+<string name="coverage_rules_title">Chữ ký mã đi kèm</string>
+<string name="coverage_rules_body">Các quy tắc đi kèm đã xác thực kiểm tra một nhóm nhỏ mẫu mã theo chuỗi ký tự. Kết quả khớp chỉ mang tính tham khảo, không xác nhận phần mềm độc hại.</string>
+<string name="coverage_rules_unavailable">Không thể tải hoặc xác thực các quy tắc đi kèm. Không khẳng định đã quét chữ ký mã.</string>
+<string name="coverage_model_title">Mô hình phân loại quyền</string>
+<string name="coverage_model_body">Không có mô hình phân loại đã huấn luyện, xác thực và đủ điều kiện phân phối đi kèm. Học máy bị vô hiệu hóa.</string>
+<string name="coverage_signer_title">Chứng thực người ký ngoại tuyến</string>
+<string name="coverage_signer_body">Chưa cấu hình dấu vân tay chứng chỉ ký dự kiến được cố định độc lập.</string>
+<string name="coverage_feed_title">Xác minh nguồn cấp có chữ ký</string>
+<string name="coverage_feed_body">Xác minh chữ ký tách rời và ngăn quay về phiên bản cũ cần khóa đáng tin cậy khi xây dựng và nguồn cấp có chữ ký đã cấu hình.</string>
+<string name="hash_status_active">Cơ sở dữ liệu mã băm cục bộ có chữ ký đang hoạt động.</string>
+<string name="hash_status_missing">Đối chiếu mã băm bị vô hiệu hóa cho đến khi chấp nhận cơ sở dữ liệu có chữ ký.</string>
+<string name="hash_status_key">Đối chiếu mã băm bị vô hiệu hóa vì không có khóa ký đáng tin cậy.</string>
+<string name="hash_status_invalid">Định nghĩa đã lưu không vượt qua kiểm tra tính toàn vẹn, phiên bản hoặc định dạng. Đối chiếu mã băm vẫn bị vô hiệu hóa.</string>
+<string name="hash_status_activation">Chưa hoàn tất kích hoạt cơ sở dữ liệu. Đối chiếu mã băm vẫn bị vô hiệu hóa.</string>
+<string name="finding_confidence">%1$s · Độ tin cậy: %2$d%%</string>
+<string name="finding_exported">Một thành phần được xuất không có rào chắn quyền hiển thị trong bản khai. Có thể vẫn có bước kiểm tra ở cấp mã.</string>
+<string name="finding_admin">Ứng dụng khai báo bộ nhận quản trị thiết bị. Khả năng nhạy cảm này không chứng minh có lạm dụng.</string>
+<string name="finding_accessibility">Ứng dụng khai báo dịch vụ hỗ trợ tiếp cận. Ứng dụng hỗ trợ hợp pháp có thể cần quyền này.</string>
+<string name="finding_overlay">Ứng dụng yêu cầu quyền hiển thị đè. Việc này có thể hợp lệ nhưng cũng có thể che màn hình khác.</string>
+<string name="finding_combined">Quyền hỗ trợ tiếp cận kết hợp với hiển thị đè, tin nhắn hoặc lịch sử cuộc gọi. Hãy xem xét mục đích ứng dụng.</string>
+<string name="finding_sms_calls">Ứng dụng yêu cầu cả quyền đọc tin nhắn và lịch sử cuộc gọi.</string>
+<string name="finding_sms_network">Quyền truy cập tin nhắn kết hợp với quyền Internet. Cần xem xét theo ngữ cảnh.</string>
+<string name="finding_signer">Siêu dữ liệu chứng chỉ ký bị thiếu hoặc không đọc được.</string>
+<string name="finding_archive">Không thể kiểm tra đầy đủ gói chứa ứng dụng. Phân tích tĩnh chưa hoàn tất.</string>
+<string name="finding_packer">Đường dẫn trong gói giống công cụ đóng gói hoặc bảo vệ đã biết. Ứng dụng hợp pháp cũng có thể dùng công cụ này.</string>
+<string name="finding_dex_header">Phần đầu mã có trường định dạng hoặc kích thước không nhất quán. Điều này không chứng minh có phần mềm độc hại.</string>
+<string name="finding_dex_short">Một mục mã ngắn hơn phần đầu hợp lệ nên không thể kiểm tra đầy đủ.</string>
+<string name="finding_entropy">Mẫu mã có độ hỗn loạn byte cao. Nguyên nhân có thể là mã hóa, đóng gói hoặc dữ liệu nén vô hại.</string>
+<string name="finding_api">Không tìm thấy tham chiếu tĩnh dự kiến cho quyền được yêu cầu. Nguyên nhân có thể do phản chiếu, thư viện hoặc mã được tải động.</string>
+<string name="finding_rules">Phát hiện khớp chữ ký mã đi kèm có phạm vi giới hạn. Đây là cảnh báo tham khảo, không phải bằng chứng phần mềm độc hại.</string>
+<string name="finding_other">Các dấu hiệu cục bộ khác cần được rà soát thủ công. Chúng không xác nhận phần mềm độc hại.</string>
+<string name="integrity_manager">Phát hiện trình quản lý quyền root hoặc móc nối: %1$s</string>
+<string name="integrity_test_keys">Bản dựng thiết bị sử dụng khóa ký thử nghiệm.</string>
+<string name="integrity_debug_build">Thuộc tính bản dựng cho thấy hệ thống có thể gỡ lỗi hoặc không dành cho sản xuất.</string>
+<string name="integrity_selinux">Trạng thái cục bộ có thể đọc cho thấy chế độ bắt buộc thực thi bảo mật đang tắt.</string>
+<string name="integrity_debugger">Có trình gỡ lỗi gắn với tiến trình này.</string>
+<string name="integrity_emulator">Thuộc tính bản dựng giống trình giả lập hoặc thiết bị thử nghiệm.</string>
+<string name="audit_scan_pending">Đã ghi nhận lượt cài đặt. Đang chờ phân tích cục bộ.</string>
+<string name="audit_scan_complete">Đã hoàn tất phân tích cục bộ mà không có chữ ký khớp được xác nhận. Đây không phải bảo đảm an toàn.</string>
+<string name="audit_scan_unavailable">Không nhìn thấy gói khi phân tích.</string>
+<string name="audit_scan_threat">Phát hiện khớp chính xác chữ ký mối đe dọa cục bộ.</string>
+<string name="audit_scan_review">Các dấu hiệu cục bộ cần xem xét; chúng không xác nhận phần mềm độc hại.</string>
+<string name="audit_source_recorded">Đã ghi nhận nguồn cài đặt.</string>
+<string name="audit_uninstall_requested">Đã yêu cầu Android xác nhận gỡ cài đặt.</string>
+<string name="audit_uninstall_success">Android thông báo gỡ cài đặt thành công.</string>
+<string name="audit_uninstall_failed">Android không thể hoàn tất yêu cầu gỡ cài đặt.</string>
+<string name="severity_test">Dấu hiệu thử nghiệm vô hại</string>
+<string name="severity_low">Mức độ thấp</string>
+<string name="severity_medium">Mức độ trung bình</string>
+<string name="severity_high">Mức độ cao</string>
+<string name="severity_critical">Mức độ nghiêm trọng nhất</string>
+<string name="severity_unknown">Chưa xác định mức độ</string>
+<plurals name="l10n_scanned_apps"><item quantity="other">Đã quét %1$d ứng dụng</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="other">Đã quét %1$d tệp</item></plurals>
+<plurals name="l10n_threats"><item quantity="other">Tìm thấy %1$d mối đe dọa</item></plurals>
+<plurals name="l10n_review"><item quantity="other">Cần xem xét %1$d kết quả</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="other">Không thể quét %1$d mục</item></plurals>
+<plurals name="l10n_no_match"><item quantity="other">%1$d kết quả không khớp dữ liệu cục bộ</item></plurals>
+<plurals name="l10n_apps"><item quantity="other">%1$d ứng dụng</item></plurals>
+<plurals name="l10n_files"><item quantity="other">%1$d tệp</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="other">Có %1$d ứng dụng ngoài hệ thống có quyền truy cập rủi ro cao.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="other">Có %1$d thay đổi đã ghi nhận đang chờ thông báo.</item></plurals>
+<plurals name="l10n_rules"><item quantity="other">Phạm vi giới hạn · %1$d quy tắc đi kèm</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="other">Lần quét mới nhất: %1$d mẫu mã khớp mang tính tham khảo.</item></plurals>
+<plurals name="l10n_imported"><item quantity="other">Đã nhập %1$d chữ ký hợp lệ vào bộ nhớ cục bộ.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="other">%1$d byte</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="other">Có %1$d dấu hiệu hệ thống tệp liên quan đến root.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="other">Có %1$d dấu hiệu móc nối.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="other">Đã bật %1$d ứng dụng</item></plurals>
+<plurals name="l10n_indicators"><item quantity="other">%1$d dấu hiệu</item></plurals>
+<plurals name="l10n_progress"><item quantity="other">Đã kiểm tra %1$d trong số %2$d ứng dụng</item></plurals>
+</resources>

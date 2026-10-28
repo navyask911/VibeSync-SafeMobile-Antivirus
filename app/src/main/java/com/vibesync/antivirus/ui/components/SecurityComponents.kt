@@ -1,5 +1,9 @@
 package com.vibesync.antivirus.ui.components
 
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalConfiguration
+import com.vibesync.antivirus.core.locale.SecurityText
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
@@ -111,18 +115,20 @@ fun EmptyState(title: String, description: String, modifier: Modifier = Modifier
 @Composable
 fun ScanProgressRing(progress: Float?, scanning: Boolean, label: String, modifier: Modifier = Modifier, size: Dp = 88.dp, success: Boolean = false) {
     val normalized = progress?.takeIf { it.isFinite() }?.coerceIn(0f, 1f)
-    val animatedProgress by animateFloatAsState(normalized ?: 0f, animationSpec = tween(220), label = "scan-progress")
+    val animatedProgress by animateFloatAsState(normalized ?: 0f, animationSpec = tween(220))
     val rotation = if (scanning && normalized == null) {
-        val transition = rememberInfiniteTransition(label = "scan-radar")
+        val transition = rememberInfiniteTransition()
         val animatedRotation by transition.animateFloat(0f, 360f,
-            animationSpec = infiniteRepeatable(tween(1800, easing = LinearEasing)), label = "scan-radar-rotation")
+            animationSpec = infiniteRepeatable(tween(1800, easing = LinearEasing)))
         animatedRotation
     } else 0f
     val trackColor = MaterialTheme.colorScheme.surfaceVariant
     val primaryColor = MaterialTheme.colorScheme.primary
+    val percentText = java.text.NumberFormat.getPercentInstance(LocalConfiguration.current.locales[0]).format(animatedProgress.toDouble())
+    val progressDescription = stringResource(R.string.format_label_value, label, percentText)
     val secondaryColor = MaterialTheme.colorScheme.secondary
     Box(modifier.size(size).semantics {
-        contentDescription = if (normalized != null) label + ", " + (animatedProgress * 100f).roundToInt() + " percent" else label
+        contentDescription = if (normalized != null) progressDescription else label
         progressBarRangeInfo = if (normalized != null) ProgressBarRangeInfo(animatedProgress, 0f..1f)
             else if (scanning) ProgressBarRangeInfo.Indeterminate else ProgressBarRangeInfo(0f, 0f..1f)
     }, contentAlignment = Alignment.Center) {
@@ -142,7 +148,7 @@ fun ScanProgressRing(progress: Float?, scanning: Boolean, label: String, modifie
             }
         }
         Text(
-            if (normalized != null) (animatedProgress * 100f).roundToInt().toString() + "%" else if (scanning) "..." else if (success) "✓" else "—",
+            if (normalized != null) percentText else if (scanning) "..." else if (success) "✓" else "—",
             style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold,
             color = if (normalized == null && !scanning && success) Color(0xFF00A86B)
                 else if (normalized == null && !scanning) MaterialTheme.colorScheme.onSurfaceVariant
@@ -168,7 +174,7 @@ fun SecurityStatusCard(status: String, description: String, lastScanLabel: Strin
                 }
             }
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
-                StatusChip(if (hasScanned) stringResource(R.string.ui_threats_found, threatCount) else stringResource(R.string.history_empty),
+                StatusChip(if (hasScanned) pluralStringResource(R.plurals.l10n_threats, threatCount, threatCount) else stringResource(R.string.history_empty),
                     if (threatCount > 0) StatusKind.DANGER else StatusKind.NEUTRAL, Modifier.weight(1f))
                 StatusChip(stringResource(R.string.threat_feed_active_count, signatureCount), if (signatureCount > 0) StatusKind.ACTIVE else StatusKind.WARNING, Modifier.weight(1f))
             }
@@ -235,7 +241,9 @@ fun ThreatListItem(result: ScanResult, isProtectedSystemApp: Boolean, showUninst
                 }
             }
             StatusChip(verdictLabel, kind)
-            result.reasons.take(3).forEach { Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }
+            val context = LocalContext.current
+            val reasonTexts = result.reasonTexts.ifEmpty { SecurityText.reasons(context, result.reasons, result.riskReport) }
+            reasonTexts.take(3).forEach { Text(it.resolve(context), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }
             if (isProtectedSystemApp) Text(stringResource(R.string.uninstall_protected),
                 style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {

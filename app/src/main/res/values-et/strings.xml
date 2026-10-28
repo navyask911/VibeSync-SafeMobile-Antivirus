@@ -701,4 +701,108 @@
 <string name="detection_capabilities_save">Save update settings</string>
 <string name="detection_capabilities_sync_privacy">Downloads only. Scan results, files, hashes, and package names are not uploaded.</string>
 <string name="detection_capabilities_sync_unavailable">Automatic updates are unavailable in this offline build or until a trusted signing key is configured.</string>
+
+<string name="format_label_value">%1$s: %2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s – %2$s</string>
+<string name="format_version">%1$s · Versioon %2$s (%3$s)</string>
+<string name="format_package_version">%1$s · Versioon %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">Sisestage turvaline voo aadress</string>
+<string name="storage_size_unavailable">Suurus pole saadaval</string>
+<string name="blocked_reason_hash">Leiti vaste kohalikule ohusignatuurile.</string>
+<string name="blocked_reason_action">Võimaluste piires prooviti rakendada kohalikku turvameedet.</string>
+<string name="signed_import_success">Allkirjastatud andmebaas vastu võetud: versioon %1$s · %2$s.</string>
+<string name="signed_import_failed">Allkirjastatud andmebaasi ei aktiveeritud. Kontrollige allkirja, versiooni ja failivormingut.</string>
+<string name="rule_import_pending">%1$s salvestati ülevaatamiseks. Imporditud reeglid jäävad välja lülitatuks ja seda faili ei käivitata.</string>
+<string name="rule_import_failed">Reegleid ei saanud importida. Imporditud reeglid jäävad välja lülitatuks.</string>
+<string name="restore_result_localized">Taastati faili %1$s (%2$s) koopia. Karantiinis olev originaal jääb alles.</string>
+<string name="cleaner_confirm_localized">Kas kustutada %1$s (%2$s) jäädavalt? Toimingut ei saa tagasi võtta. SafeMobile kontrollib nimed ja metaandmed uuesti.</string>
+<string name="cleaner_result_localized">Kustutatud: %1$s · Vabastatud ruum: %2$s · Nurjunud või muutunud: %3$s</string>
+<string name="about_localized_notices">Kolmandate osapoolte komponentidele kehtivad endiselt nende enda litsentsid. Algsed teated on auditi kontrollpunkt, mitte lõpetatud litsentside ülevaatus. Avage algdokumendid, et näha päritoluteateid ja litsentsitingimusi.</string>
+<string name="about_open_original">Ava algdokumendid</string>
+<string name="about_localized_privacy">Skannitud failid, räsid, paketinimed ja tulemused jäävad sellesse seadmesse. Kohalikud auditimetaandmed ja karantiinikoopiad salvestatakse krüpteeritud privaatsesse hoidlasse. Allkirjastatud määratluste uuendused võtavad ühendust selle projekti väljalasketeenusega; eraldi voog pöördub seadistatud aadressi poole alles teie nõusolekul. Kaustaseire kasutab ainult teie valitud kaustu ja selle saab peatada. Androidi õigused jäävad teie kontrolli alla. Selles versioonis pole reklaame, pilveskannimist ega linkide maine hindamise teenust.</string>
+<string name="coverage_local_title">Kohalikud testmääratlused</string>
+<string name="coverage_local_body">Kaasasolevad vanad määratlused sisaldavad ainult ohutut viirusetõrje testmärgist. Need ei kaitse päris pahavara eest.</string>
+<string name="coverage_signed_title">Allkirjastatud räsiandmebaas</string>
+<string name="coverage_signed_body">Räside täpseks võrdlemiseks on vaja usaldusväärset allkirjastamisvõtit ja heakskiidetud allkirjastatud andmebaasi. Tootmisandmebaasi pole kaasas.</string>
+<string name="coverage_static_title">Rakenduse staatiline analüüs</string>
+<string name="coverage_static_body">Piiratud paketianalüüs annab soovituslikke leide. Üks leid ei tõesta pahavara; teadaolevate pahatahtlike allkirjastajate loendid on välja lülitatud.</string>
+<string name="coverage_permissions_title">Load ja manifest</string>
+<string name="coverage_permissions_body">Lubade kombinatsioonid ja nähtavad paketideklaratsioonid toetavad käsitsi ülevaatust. Need ei ole treenitud klassifikaator.</string>
+<string name="coverage_integrity_title">Seadme tervikluse näitajad</string>
+<string name="coverage_integrity_body">Juurdepääsu, haakide, järgu omaduste, turvameetmete jõustamise, silurite ja emulaatorite kontrollimiseks kasutatakse kohalikke heuristikuid, mitte attesteerimist.</string>
+<string name="coverage_bloom_title">Tõenäosuspõhine räsiindeks</string>
+<string name="coverage_bloom_body">Kontrollitud, mittetühja tõenäosusindeksit ja selle manifesti pole kaasas. See valikuline kiht pole saadaval.</string>
+<string name="coverage_rules_title">Kaasasolevad koodisignatuurid</string>
+<string name="coverage_rules_body">Kontrollitud kaasasolevad reeglid otsivad piiratud hulka sõnasõnalisi koodimustreid. Vasted on soovituslikud ega kinnita pahavara.</string>
+<string name="coverage_rules_unavailable">Kaasasolevaid reegleid ei õnnestunud laadida või need ei läbinud kontrolli. Koodisignatuuride skannimist ei väideta toimunuks.</string>
+<string name="coverage_model_title">Lubade klassifitseerimise mudel</string>
+<string name="coverage_model_body">Kaasas pole treenitud, kontrollitud ja levitatavat klassifitseerimismudelit. Masinõpe on välja lülitatud.</string>
+<string name="coverage_signer_title">Allkirjastaja võrguühenduseta tõendamine</string>
+<string name="coverage_signer_body">Sõltumatult kinnitatud eeldatavat allkirjastamissertifikaadi sõrmejälge pole seadistatud.</string>
+<string name="coverage_feed_title">Allkirjastatud voo kontrollimine</string>
+<string name="coverage_feed_body">Eraldi allkirja kontrollimine ja vanemale versioonile tagasimineku kaitse nõuavad järgu loomisel usaldusväärset võtit ning seadistatud allkirjastatud voogu.</string>
+<string name="hash_status_active">Allkirjastatud kohalik räsiandmebaas on aktiivne.</string>
+<string name="hash_status_missing">Räside võrdlemine on välja lülitatud, kuni allkirjastatud andmebaas vastu võetakse.</string>
+<string name="hash_status_key">Räside võrdlemine on välja lülitatud, sest usaldusväärset allkirjastamisvõtit pole.</string>
+<string name="hash_status_invalid">Salvestatud määratlused ei läbinud tervikluse, versiooni või vormingu kontrolli. Räside võrdlemine jääb välja lülitatuks.</string>
+<string name="hash_status_activation">Andmebaasi aktiveerimine ei lõppenud. Räside võrdlemine jääb välja lülitatuks.</string>
+<string name="finding_confidence">%1$s · Usaldusmäär: %2$d%%</string>
+<string name="finding_exported">Eksporditud komponendil puudub manifestis nähtav loapiirang. Kooditaseme kontrollid võivad siiski olemas olla.</string>
+<string name="finding_admin">Rakendus deklareerib seadmehalduse vastuvõtja. See tundlik võime ei tõenda kuritarvitamist.</string>
+<string name="finding_accessibility">Rakendus deklareerib hõlbustusteenuse. Seaduslikud abirakendused võivad seda juurdepääsu vajada.</string>
+<string name="finding_overlay">Rakendus küsib teiste ekraanide peale kuvamise luba. Ülekatted võivad olla õiguspärased, kuid võivad ka muid ekraane varjata.</string>
+<string name="finding_combined">Hõlbustusteenuse juurdepääsuga kaasneb ülekatte, sõnumite või kõneajaloo juurdepääs. Vaadake rakenduse eesmärk üle.</string>
+<string name="finding_sms_calls">Rakendus küsib luba nii sõnumitele kui ka kõneajaloole.</string>
+<string name="finding_sms_network">Sõnumite juurdepääs on ühendatud internetijuurdepääsuga. Vajalik on kontekstipõhine hinnang.</string>
+<string name="finding_signer">Allkirjastamissertifikaadi metaandmed puuduvad või pole loetavad.</string>
+<string name="finding_archive">Paketi konteinerit ei saanud täielikult uurida. Staatiline analüüs on pooleli.</string>
+<string name="finding_packer">Paketitee meenutab tuntud pakkimis- või kaitsetööriista. Ka õiguspärased rakendused võivad selliseid tööriistu kasutada.</string>
+<string name="finding_dex_header">Koodi päises on vastuolulised vormingu- või suuruseväljad. See ei tõenda pahavara.</string>
+<string name="finding_dex_short">Koodikirje on lühem kui kehtiv päis ja seda ei saanud täielikult uurida.</string>
+<string name="finding_entropy">Koodinäidisel on suur baitide entroopia. Selle põhjuseks võib olla krüptimine, pakkimine või kahjutu tihendatud sisu.</string>
+<string name="finding_api">Taotletud loa jaoks ei leitud eeldatud staatilist viidet. Põhjuseks võivad olla refleksioon, teegid või dünaamiliselt laaditud kood.</string>
+<string name="finding_rules">Leiti vaste piiratud kaasasolevale koodisignatuurile. See on vihje, mitte pahavara tõend.</string>
+<string name="finding_other">Täiendavad kohalikud näitajad vajavad käsitsi kontrolli. Need ei kinnita pahavara.</string>
+<string name="integrity_manager">Nähtav on juurdepääsu või haakimise haldur: %1$s</string>
+<string name="integrity_test_keys">Seadme järk kasutab testallkirjastamise võtmeid.</string>
+<string name="integrity_debug_build">Järgu omadused viitavad silutavale või mittetootmissüsteemile.</string>
+<string name="integrity_selinux">Loetav kohalik olek näitab, et kohustuslik turvameetmete jõustamine on välja lülitatud.</string>
+<string name="integrity_debugger">Selle protsessiga on ühendatud silur.</string>
+<string name="integrity_emulator">Järgu omadused meenutavad emulaatorit või testseadet.</string>
+<string name="audit_scan_pending">Paigaldus registreeriti. Kohalik analüüs ootab.</string>
+<string name="audit_scan_complete">Kohalik analüüs lõppes kinnitatud signatuurivasteta. See ei taga ohutust.</string>
+<string name="audit_scan_unavailable">Pakett polnud analüüsi ajal nähtav.</string>
+<string name="audit_scan_threat">Leiti täpne vaste kohalikule ohusignatuurile.</string>
+<string name="audit_scan_review">Kohalikud näitajad vajavad ülevaatust; need ei kinnita pahavara.</string>
+<string name="audit_source_recorded">Paigalduse allikas salvestati.</string>
+<string name="audit_uninstall_requested">Androidilt paluti desinstallimise kinnitust.</string>
+<string name="audit_uninstall_success">Android teatas edukast desinstallimisest.</string>
+<string name="audit_uninstall_failed">Android ei saanud desinstallimistaotlust lõpetada.</string>
+<string name="severity_test">Ohutu testmärgis</string>
+<string name="severity_low">Madal raskusaste</string>
+<string name="severity_medium">Keskmine raskusaste</string>
+<string name="severity_high">Kõrge raskusaste</string>
+<string name="severity_critical">Kriitiline raskusaste</string>
+<string name="severity_unknown">Raskusaste määramata</string>
+<plurals name="l10n_scanned_apps"><item quantity="one">Skannitud %1$d rakendus</item><item quantity="other">Skannitud %1$d rakendust</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="one">Skannitud %1$d fail</item><item quantity="other">Skannitud %1$d faili</item></plurals>
+<plurals name="l10n_threats"><item quantity="one">Leiti %1$d oht</item><item quantity="other">Leiti %1$d ohtu</item></plurals>
+<plurals name="l10n_review"><item quantity="one">%1$d tulemus vajab ülevaatust</item><item quantity="other">%1$d tulemust vajab ülevaatust</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="one">%1$d üksust ei saanud skannida</item><item quantity="other">%1$d üksust ei saanud skannida</item></plurals>
+<plurals name="l10n_no_match"><item quantity="one">%1$d tulemus kohaliku vasteta</item><item quantity="other">%1$d tulemust kohaliku vasteta</item></plurals>
+<plurals name="l10n_apps"><item quantity="one">%1$d rakendus</item><item quantity="other">%1$d rakendust</item></plurals>
+<plurals name="l10n_files"><item quantity="one">%1$d fail</item><item quantity="other">%1$d faili</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="one">%1$d mittesüsteemsel rakendusel on riskantne juurdepääs.</item><item quantity="other">%1$d mittesüsteemsel rakendusel on riskantne juurdepääs.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="one">%1$d märgatud muudatus ootab teavitust.</item><item quantity="other">%1$d märgatud muudatust ootab teavitust.</item></plurals>
+<plurals name="l10n_rules"><item quantity="one">Piiratud katvus · %1$d kaasasolev reegel</item><item quantity="other">Piiratud katvus · %1$d kaasasolevat reeglit</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="one">Viimane skannimine: %1$d soovituslik koodivaste.</item><item quantity="other">Viimane skannimine: %1$d soovituslikku koodivastet.</item></plurals>
+<plurals name="l10n_imported"><item quantity="one">%1$d kehtiv signatuur imporditi kohalikku salvestusse.</item><item quantity="other">%1$d kehtivat signatuuri imporditi kohalikku salvestusse.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="one">%1$d bait</item><item quantity="other">%1$d baiti</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="one">Leiti %1$d juurdepääsuga seotud failisüsteeminäitaja.</item><item quantity="other">Leiti %1$d juurdepääsuga seotud failisüsteeminäitajat.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="one">Leiti %1$d haakimise näitaja.</item><item quantity="other">Leiti %1$d haakimise näitajat.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="one">%1$d rakendus lubatud</item><item quantity="other">%1$d rakendust lubatud</item></plurals>
+<plurals name="l10n_indicators"><item quantity="one">%1$d näitaja</item><item quantity="other">%1$d näitajat</item></plurals>
+<plurals name="l10n_progress"><item quantity="one">Kontrollitud %1$d rakendus %2$d-st</item><item quantity="other">Kontrollitud %1$d rakendust %2$d-st</item></plurals>
 </resources>

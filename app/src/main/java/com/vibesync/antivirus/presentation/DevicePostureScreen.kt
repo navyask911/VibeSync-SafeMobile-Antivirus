@@ -1,5 +1,6 @@
 package com.vibesync.antivirus.presentation
 
+import androidx.compose.ui.res.pluralStringResource
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
@@ -100,7 +101,7 @@ fun DevicePostureScreen(
         state.report?.let { report ->
             Text(stringResource(R.string.posture_checked_at, displayPostureTime(report.checkedAt)),
                 style = MaterialTheme.typography.labelSmall)
-            if (report.highRiskAppCount > 0) Text(stringResource(R.string.posture_high_risk_count, report.highRiskAppCount),
+            if (report.highRiskAppCount > 0) Text(pluralStringResource(R.plurals.l10n_posture_apps, report.highRiskAppCount, report.highRiskAppCount),
                 color = PostureWarning, fontWeight = FontWeight.Bold)
         }
         CyberCard(Modifier.fillMaxWidth()) {
@@ -117,7 +118,7 @@ fun DevicePostureScreen(
                     else stringResource(R.string.posture_monitor_waiting), style = MaterialTheme.typography.bodySmall)
                 if (monitor?.storageError == true) Text(stringResource(R.string.posture_storage_error), color = PostureWarning)
                 if (monitor?.partial == true) Text(stringResource(R.string.posture_monitor_partial), color = PostureWarning)
-                if ((monitor?.pendingChanges ?: 0) > 0) Text(stringResource(R.string.posture_pending, monitor!!.pendingChanges),
+                if ((monitor?.pendingChanges ?: 0) > 0) Text(pluralStringResource(R.plurals.l10n_pending_changes, monitor!!.pendingChanges, monitor.pendingChanges),
                     style = MaterialTheme.typography.bodySmall)
                 if (!alertsAvailable) {
                     Text(stringResource(R.string.posture_alerts_off), style = MaterialTheme.typography.bodySmall)
@@ -179,4 +180,5 @@ private fun PostureFindingRow(finding: PostureFinding, onFix: () -> Unit) {
     }
 }
 
-private fun displayPostureTime(timestamp: Long): String = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(Date(timestamp))
+@Composable
+private fun displayPostureTime(timestamp: Long): String = localizedDate(timestamp)

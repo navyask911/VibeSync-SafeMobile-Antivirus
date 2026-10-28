@@ -701,4 +701,108 @@
 <string name="detection_capabilities_save">Save update settings</string>
 <string name="detection_capabilities_sync_privacy">Downloads only. Scan results, files, hashes, and package names are not uploaded.</string>
 <string name="detection_capabilities_sync_unavailable">Automatic updates are unavailable in this offline build or until a trusted signing key is configured.</string>
+
+<string name="format_label_value">%1$s: %2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s – %2$s</string>
+<string name="format_version">%1$s · Нұсқа %2$s (%3$s)</string>
+<string name="format_package_version">%1$s · Нұсқа %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">Қауіпсіз арна мекенжайын енгізіңіз</string>
+<string name="storage_size_unavailable">Өлшемі қолжетімсіз</string>
+<string name="blocked_reason_hash">Жергілікті қауіп қолтаңбасымен сәйкестік табылды.</string>
+<string name="blocked_reason_action">Мүмкіндік шегінде жергілікті қауіпсіздік әрекетін орындау талпынысы жасалды.</string>
+<string name="signed_import_success">Қол қойылған дерекқор қабылданды: нұсқа %1$s · %2$s.</string>
+<string name="signed_import_failed">Қол қойылған дерекқор іске қосылмады. Қолтаңбаны, нұсқаны және файл пішімін тексеріңіз.</string>
+<string name="rule_import_pending">%1$s тексеру үшін сақталды. Импортталған ережелер өшірулі қалады және бұл файл іске қосылмайды.</string>
+<string name="rule_import_failed">Ережелерді импорттау мүмкін болмады. Импортталған ережелер өшірулі қалады.</string>
+<string name="restore_result_localized">%1$s (%2$s) көшірмесі қалпына келтірілді. Карантиндегі түпнұсқа әлі сақтаулы.</string>
+<string name="cleaner_confirm_localized">%1$s (%2$s) біржола жойылсын ба? Бұл әрекетті қайтару мүмкін емес. SafeMobile атаулар мен метадеректерді қайта тексереді.</string>
+<string name="cleaner_result_localized">Жойылды: %1$s · Босаған орын: %2$s · Сәтсіз немесе өзгерген: %3$s</string>
+<string name="about_localized_notices">Үшінші тарап құрамдастарына олардың өз лицензиялары қолданылады. Түпнұсқа ескертулер аудиттің тексеру кезеңі болып табылады, аяқталған лицензиялық тексеру емес. Дереккөз ескертулері мен лицензия шарттарын көру үшін түпнұсқа құжаттарды ашыңыз.</string>
+<string name="about_open_original">Түпнұсқа құжаттарды ашу</string>
+<string name="about_localized_privacy">Сканерленген файлдар, хештер, бума атаулары және нәтижелер осы құрылғыда қалады. Жергілікті аудит метадеректері мен карантин көшірмелері шифрланған жеке қоймада сақталады. Қол қойылған анықтамалардың жаңартулары жобаның шығарылым қызметіне хабарласады; бөлек арна тек келісіміңізден кейін орнатылған мекенжайға қосылады. Қалталарды бақылау тек таңдаған қалталарыңызға қатысты және оны тоқтатуға болады. Android рұқсаттары өз бақылауыңызда қалады. Бұл нұсқада жарнама, бұлтта сканерлеу немесе сілтеме беделін тексеру қызметі жоқ.</string>
+<string name="coverage_local_title">Жергілікті сынақ анықтамалары</string>
+<string name="coverage_local_body">Қоса берілген ескі анықтамаларда тек зиянсыз антивирус сынақ белгісі бар. Олар нақты зиянды бағдарламалардан қорғамайды.</string>
+<string name="coverage_signed_title">Қол қойылған хеш дерекқоры</string>
+<string name="coverage_signed_body">Хештерді дәл салыстыру үшін сенімді қол қою кілті және қабылданған қол қойылған дерекқор қажет. Өндірістік дерекқор қоса берілмеген.</string>
+<string name="coverage_static_title">Қолданбаларды статикалық талдау</string>
+<string name="coverage_static_body">Шектеулі бума талдауы кеңестік сипаттағы нәтижелер береді. Бір нәтиже зиянды бағдарламаны дәлелдемейді; белгілі зиянды қол қоюшылар тізімі өшірулі.</string>
+<string name="coverage_permissions_title">Рұқсаттар мен манифест</string>
+<string name="coverage_permissions_body">Рұқсаттар комбинациясы мен көрінетін бума мәлімдемелері қолмен тексеруге көмектеседі. Бұл үйретілген жіктеу емес.</string>
+<string name="coverage_integrity_title">Құрылғы тұтастығының көрсеткіштері</string>
+<string name="coverage_integrity_body">Түбірлік қолжетімділік, ұстап алу тетіктері, құрастыру қасиеттері, қауіпсіздікті мәжбүрлеп қолдану, жөндеушілер және эмуляторлар аттестациямен емес, жергілікті эвристикалық тәсілдермен тексеріледі.</string>
+<string name="coverage_bloom_title">Ықтималдық хеш индексі</string>
+<string name="coverage_bloom_body">Тексерілген, бос емес ықтималдық индексі және оның манифесі қоса берілмеген. Бұл қосымша қабат қолжетімсіз.</string>
+<string name="coverage_rules_title">Қоса берілген код қолтаңбалары</string>
+<string name="coverage_rules_body">Тексерілген ішкі ережелер кодтың шектеулі мәтіндік үлгілерін қарайды. Сәйкестіктер кеңес сипатында және зиянды бағдарламаны растамайды.</string>
+<string name="coverage_rules_unavailable">Ішкі ережелер жүктелмеді немесе тексеруден өтпеді. Код қолтаңбаларын сканерлеу орындалды деп айтылмайды.</string>
+<string name="coverage_model_title">Рұқсаттарды жіктеу моделі</string>
+<string name="coverage_model_body">Үйретілген, тексерілген әрі таратуға болатын жіктеу моделі қоса берілмеген. Машиналық оқыту өшірулі.</string>
+<string name="coverage_signer_title">Қол қоюшыны желіден тыс растау</string>
+<string name="coverage_signer_body">Тәуелсіз бекітілген күтілетін қол қою сертификатының саусақ ізі орнатылмаған.</string>
+<string name="coverage_feed_title">Қол қойылған арнаны тексеру</string>
+<string name="coverage_feed_body">Бөлек қолтаңбаны тексеру және ескі нұсқаға қайтудан қорғау үшін құрастыру кезіндегі сенімді кілт пен орнатылған қол қойылған арна қажет.</string>
+<string name="hash_status_active">Қол қойылған жергілікті хеш дерекқоры белсенді.</string>
+<string name="hash_status_missing">Қол қойылған дерекқор қабылданғанша хеш сәйкестігін тексеру өшірулі.</string>
+<string name="hash_status_key">Сенімді қол қою кілті болмағандықтан хеш сәйкестігін тексеру өшірулі.</string>
+<string name="hash_status_invalid">Сақталған анықтамалар тұтастық, нұсқа немесе пішім тексерулерінен өтпеді. Хеш сәйкестігін тексеру өшірулі қалады.</string>
+<string name="hash_status_activation">Дерекқорды белсендіру аяқталмады. Хеш сәйкестігін тексеру өшірулі қалады.</string>
+<string name="finding_confidence">%1$s · Сенімділік деңгейі: %2$d%%</string>
+<string name="finding_exported">Сыртқа ашық құрамдас үшін манифестте айқын рұқсат шектеуі көрінбейді. Код деңгейінде тексерулер болуы мүмкін.</string>
+<string name="finding_admin">Қолданба құрылғыны басқару қабылдағышын жариялайды. Бұл сезімтал мүмкіндік теріс пайдаланудың дәлелі емес.</string>
+<string name="finding_accessibility">Қолданба қолжетімділік қызметін жариялайды. Заңды көмекші қолданбаларға бұл рұқсат қажет болуы мүмкін.</string>
+<string name="finding_overlay">Қолданба басқа экрандардың үстінен көрсету рұқсатын сұрайды. Бұл заңды болуы мүмкін, бірақ басқа экрандарды жабуы мүмкін.</string>
+<string name="finding_combined">Қолжетімділік экран қабатымен, хабарламалармен немесе қоңыраулар тарихымен біріктірілген. Қолданбаның мақсатын тексеріңіз.</string>
+<string name="finding_sms_calls">Қолданба хабарламалар мен қоңыраулар тарихына рұқсат сұрайды.</string>
+<string name="finding_sms_network">Хабарламаларға қолжетімділік интернет қолжетімділігімен біріктірілген. Мәнмәтін бойынша тексеру қажет.</string>
+<string name="finding_signer">Қол қою сертификатының метадеректері жоқ немесе оқылмайды.</string>
+<string name="finding_archive">Бума мазмұнын толық қарау мүмкін болмады. Статикалық талдау толық емес.</string>
+<string name="finding_packer">Бума жолы белгілі орау немесе қорғау құралына ұқсайды. Заңды қолданбалар да мұндай құралдарды қолдана алады.</string>
+<string name="finding_dex_header">Код тақырыбында пішім немесе өлшем өрістері үйлеспейді. Бұл зиянды бағдарламаны дәлелдемейді.</string>
+<string name="finding_dex_short">Код жазбасы жарамды тақырыптан қысқа және толық тексерілмеді.</string>
+<string name="finding_entropy">Код үлгісінің байт энтропиясы жоғары. Шифрлау, орау немесе зиянсыз сығылған мазмұн себеп болуы мүмкін.</string>
+<string name="finding_api">Сұралған рұқсатқа күтілетін статикалық сілтеме табылмады. Рефлексия, кітапханалар немесе динамикалық жүктелетін код себеп болуы мүмкін.</string>
+<string name="finding_rules">Шектеулі ішкі код қолтаңбасымен сәйкестік табылды. Бұл ескерту ғана, зиянды бағдарламаның дәлелі емес.</string>
+<string name="finding_other">Қосымша жергілікті көрсеткіштерді қолмен тексеру қажет. Олар зиянды бағдарламаны растамайды.</string>
+<string name="integrity_manager">Түбірлік қолжетімділік не ұстап алу менеджері көрінеді: %1$s</string>
+<string name="integrity_test_keys">Құрылғы құрастырылымы сынақ қол қою кілттерін пайдаланады.</string>
+<string name="integrity_debug_build">Құрастыру қасиеттері жөндеуге болатын не өндірістік емес жүйені көрсетеді.</string>
+<string name="integrity_selinux">Оқылатын жергілікті күй міндетті қауіпсіздікті қолдану өшірулі екенін көрсетеді.</string>
+<string name="integrity_debugger">Бұл процеске жөндеуші қосылған.</string>
+<string name="integrity_emulator">Құрастыру қасиеттері эмуляторға немесе сынақ құрылғысына ұқсайды.</string>
+<string name="audit_scan_pending">Орнату тіркелді. Жергілікті талдау күтілуде.</string>
+<string name="audit_scan_complete">Жергілікті талдау расталған қолтаңба сәйкестігінсіз аяқталды. Бұл қауіпсіздік кепілдігі емес.</string>
+<string name="audit_scan_unavailable">Талдау кезінде бума көрінбеді.</string>
+<string name="audit_scan_threat">Жергілікті қауіп қолтаңбасымен дәл сәйкестік табылды.</string>
+<string name="audit_scan_review">Жергілікті көрсеткіштерді тексеру қажет; олар зиянды бағдарламаны растамайды.</string>
+<string name="audit_source_recorded">Орнату көзі тіркелді.</string>
+<string name="audit_uninstall_requested">Android қолданбаны жоюды растауды сұрады.</string>
+<string name="audit_uninstall_success">Android қолданба сәтті жойылғанын хабарлады.</string>
+<string name="audit_uninstall_failed">Android жою сұрауын орындай алмады.</string>
+<string name="severity_test">Зиянсыз сынақ белгісі</string>
+<string name="severity_low">Төмен ауырлық</string>
+<string name="severity_medium">Орташа ауырлық</string>
+<string name="severity_high">Жоғары ауырлық</string>
+<string name="severity_critical">Өте ауыр</string>
+<string name="severity_unknown">Ауырлық көрсетілмеген</string>
+<plurals name="l10n_scanned_apps"><item quantity="one">%1$d қолданба сканерленді</item><item quantity="other">%1$d қолданба сканерленді</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="one">%1$d файл сканерленді</item><item quantity="other">%1$d файл сканерленді</item></plurals>
+<plurals name="l10n_threats"><item quantity="one">%1$d қауіп табылды</item><item quantity="other">%1$d қауіп табылды</item></plurals>
+<plurals name="l10n_review"><item quantity="one">%1$d нәтижені тексеру қажет</item><item quantity="other">%1$d нәтижені тексеру қажет</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="one">%1$d нысан сканерленбеді</item><item quantity="other">%1$d нысан сканерленбеді</item></plurals>
+<plurals name="l10n_no_match"><item quantity="one">%1$d нәтижеде жергілікті сәйкестік жоқ</item><item quantity="other">%1$d нәтижеде жергілікті сәйкестік жоқ</item></plurals>
+<plurals name="l10n_apps"><item quantity="one">%1$d қолданба</item><item quantity="other">%1$d қолданба</item></plurals>
+<plurals name="l10n_files"><item quantity="one">%1$d файл</item><item quantity="other">%1$d файл</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="one">%1$d жүйелік емес қолданбада жоғары тәуекелді рұқсат бар.</item><item quantity="other">%1$d жүйелік емес қолданбада жоғары тәуекелді рұқсат бар.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="one">%1$d байқалған өзгеріс туралы хабарлама күтіледі.</item><item quantity="other">%1$d байқалған өзгеріс туралы хабарлама күтіледі.</item></plurals>
+<plurals name="l10n_rules"><item quantity="one">Шектеулі қамту · %1$d ішкі ереже</item><item quantity="other">Шектеулі қамту · %1$d ішкі ереже</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="one">Соңғы сканерлеу: %1$d кеңестік код сәйкестігі.</item><item quantity="other">Соңғы сканерлеу: %1$d кеңестік код сәйкестігі.</item></plurals>
+<plurals name="l10n_imported"><item quantity="one">Жергілікті қоймаға %1$d жарамды қолтаңба импортталды.</item><item quantity="other">Жергілікті қоймаға %1$d жарамды қолтаңба импортталды.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="one">%1$d байт</item><item quantity="other">%1$d байт</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="one">Түбірлік қатынауға қатысты %1$d файл жүйесі көрсеткіші бар.</item><item quantity="other">Түбірлік қатынауға қатысты %1$d файл жүйесі көрсеткіші бар.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="one">%1$d ұстап алу көрсеткіші бар.</item><item quantity="other">%1$d ұстап алу көрсеткіші бар.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="one">%1$d қолданба іске қосылды</item><item quantity="other">%1$d қолданба іске қосылды</item></plurals>
+<plurals name="l10n_indicators"><item quantity="one">%1$d көрсеткіш</item><item quantity="other">%1$d көрсеткіш</item></plurals>
+<plurals name="l10n_progress"><item quantity="one">%2$d қолданбаның %1$d-і тексерілді</item><item quantity="other">%2$d қолданбаның %1$d-і тексерілді</item></plurals>
 </resources>

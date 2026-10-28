@@ -701,4 +701,108 @@
 <string name="detection_capabilities_save">Save update settings</string>
 <string name="detection_capabilities_sync_privacy">Downloads only. Scan results, files, hashes, and package names are not uploaded.</string>
 <string name="detection_capabilities_sync_unavailable">Automatic updates are unavailable in this offline build or until a trusted signing key is configured.</string>
+
+<string name="format_label_value">%1$s: %2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s – %2$s</string>
+<string name="format_version">%1$s · Versjon %2$s (%3$s)</string>
+<string name="format_package_version">%1$s · Versjon %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">Skriv inn en sikker feedadresse</string>
+<string name="storage_size_unavailable">Størrelse er ikke tilgjengelig</string>
+<string name="blocked_reason_hash">Det ble funnet samsvar med en lokal trusselsignatur.</string>
+<string name="blocked_reason_action">Et lokalt sikkerhetstiltak ble forsøkt så langt det var mulig.</string>
+<string name="signed_import_success">Signert database godtatt: versjon %1$s · %2$s.</string>
+<string name="signed_import_failed">Den signerte databasen ble ikke aktivert. Kontroller signatur, versjon og filformat.</string>
+<string name="rule_import_pending">%1$s lagret for gjennomgang. Importerte regler forblir deaktivert, og denne filen blir ikke kjørt.</string>
+<string name="rule_import_failed">Reglene kunne ikke importeres. Importerte regler forblir deaktivert.</string>
+<string name="restore_result_localized">En kopi av %1$s (%2$s) ble gjenopprettet. Originalen i karantene er fortsatt lagret.</string>
+<string name="cleaner_confirm_localized">Slette %1$s (%2$s) permanent? Dette kan ikke angres. SafeMobile kontrollerer navn og metadata på nytt.</string>
+<string name="cleaner_result_localized">Slettet: %1$s · Frigjort plass: %2$s · Mislykket eller endret: %3$s</string>
+<string name="about_localized_notices">Tredjepartskomponenter beholder sine egne lisenser. De opprinnelige merknadene er et kontrollpunkt i revisjonen, ikke en fullført lisensgjennomgang. Åpne originaldokumentene for å se kildemerknader og lisensvilkår.</string>
+<string name="about_open_original">Åpne originaldokumenter</string>
+<string name="about_localized_privacy">Skannede filer, hashverdier, pakkenavn og resultater blir på denne enheten. Lokale revisjonsmetadata og kopier i karantene lagres kryptert i privat lagring. Oppdateringer av signerte definisjoner kontakter prosjektets utgivelsestjeneste; en separat feed kontakter den konfigurerte adressen først etter samtykke. Mappeovervåking gjelder bare mapper du velger, og kan stoppes. Android-tillatelser forblir under din kontroll. Denne versjonen inneholder ingen annonser, skanning i skyen eller tjeneste for lenkeomdømme.</string>
+<string name="coverage_local_title">Lokale testdefinisjoner</string>
+<string name="coverage_local_body">De medfølgende eldre definisjonene inneholder bare en ufarlig antivirustestmarkør. De gir ikke beskyttelse mot reell skadevare.</string>
+<string name="coverage_signed_title">Signert hashdatabase</string>
+<string name="coverage_signed_body">Nøyaktig hashsamsvar krever en pålitelig signeringsnøkkel og en godkjent signert database. Ingen produksjonsdatabase er inkludert.</string>
+<string name="coverage_static_title">Statisk appanalyse</string>
+<string name="coverage_static_body">Begrenset pakkeanalyse gir veiledende funn. Et funn alene beviser ikke skadevare; lister over kjente skadelige signatarer er deaktivert.</string>
+<string name="coverage_permissions_title">Tillatelser og manifest</string>
+<string name="coverage_permissions_body">Kombinasjoner av tillatelser og synlige pakkedeklarasjoner støtter manuell gjennomgang. De er ikke en trent klassifiseringsmodell.</string>
+<string name="coverage_integrity_title">Indikatorer for enhetsintegritet</string>
+<string name="coverage_integrity_body">Rottilgang, hooking, byggegenskaper, sikkerhetshåndheving, feilsøkere og emulatorer kontrolleres med lokale heuristikker, ikke attestering.</string>
+<string name="coverage_bloom_title">Sannsynlighetsbasert hashindeks</string>
+<string name="coverage_bloom_body">En verifisert, ikke-tom sannsynlighetsbasert indeks og tilhørende manifest er ikke inkludert. Dette valgfrie laget er utilgjengelig.</string>
+<string name="coverage_rules_title">Medfølgende kodesignaturer</string>
+<string name="coverage_rules_body">Validerte medfølgende regler kontrollerer et begrenset sett med bokstavelige kodemønstre. Samsvarene er veiledende og bekrefter ikke skadevare.</string>
+<string name="coverage_rules_unavailable">De medfølgende reglene ble ikke lastet eller besto ikke valideringen. Det hevdes ikke at noen kodesignaturskanning er gjennomført.</string>
+<string name="coverage_model_title">Modell for klassifisering av tillatelser</string>
+<string name="coverage_model_body">Ingen trent, validert og distribuerbar klassifiseringsmodell er inkludert. Maskinlæring er deaktivert.</string>
+<string name="coverage_signer_title">Frakoblet attestering av signatar</string>
+<string name="coverage_signer_body">Et uavhengig fastsatt forventet fingeravtrykk for signeringssertifikatet er ikke konfigurert.</string>
+<string name="coverage_feed_title">Verifisering av signert feed</string>
+<string name="coverage_feed_body">Verifisering av separat signatur og beskyttelse mot tilbakerulling krever en pålitelig byggnøkkel og en konfigurert signert feed.</string>
+<string name="hash_status_active">Den signerte lokale hashdatabasen er aktiv.</string>
+<string name="hash_status_missing">Hashsamsvar er deaktivert inntil en signert database blir godkjent.</string>
+<string name="hash_status_key">Hashsamsvar er deaktivert fordi en pålitelig signeringsnøkkel ikke er tilgjengelig.</string>
+<string name="hash_status_invalid">Lagrede definisjoner besto ikke kontrollene for integritet, versjon eller format. Hashsamsvar forblir deaktivert.</string>
+<string name="hash_status_activation">Aktivering av databasen ble ikke fullført. Hashsamsvar forblir deaktivert.</string>
+<string name="finding_confidence">%1$s · Konfidens: %2$d%%</string>
+<string name="finding_exported">En eksportert komponent har ingen synlig tillatelsessperre i manifestet. Kontroller i koden kan likevel finnes.</string>
+<string name="finding_admin">Appen deklarerer en mottaker for enhetsadministrasjon. Denne sensitive funksjonen er ikke bevis for misbruk.</string>
+<string name="finding_accessibility">Appen deklarerer en tilgjengelighetstjeneste. Legitime hjelpeapper kan trenge slik tilgang.</string>
+<string name="finding_overlay">Appen ber om tilgang til skjermoverlegg. Overlegg kan være legitime, men kan også skjule andre skjermbilder.</string>
+<string name="finding_combined">Tilgjengelighet kombineres med tilgang til overlegg, tekstmeldinger eller anropslogg. Vurder formålet med appen.</string>
+<string name="finding_sms_calls">Appen ber om tillatelser til både tekstmeldinger og anropslogg.</string>
+<string name="finding_sms_network">Tilgang til tekstmeldinger kombineres med internettilgang. Dette må vurderes ut fra sammenhengen.</string>
+<string name="finding_signer">Metadata for signeringssertifikatet mangler eller kan ikke leses.</string>
+<string name="finding_archive">Pakkebeholderen kunne ikke undersøkes fullstendig. Den statiske analysen er ufullstendig.</string>
+<string name="finding_packer">En pakkesti ligner et kjent pakke- eller beskyttelsesverktøy. Legitime apper kan også bruke slike verktøy.</string>
+<string name="finding_dex_header">Et kodehode har inkonsekvente format- eller størrelsesfelt. Dette beviser ikke skadevare.</string>
+<string name="finding_dex_short">En kodeoppføring er kortere enn et gyldig hode og kunne ikke undersøkes fullstendig.</string>
+<string name="finding_entropy">En kodeprøve har høy byteentropi. Kryptering, pakking eller ufarlig komprimert innhold kan forklare dette.</string>
+<string name="finding_api">Ingen forventet statisk referanse ble funnet for en forespurt tillatelse. Refleksjon, biblioteker eller dynamisk lastet kode kan forklare fraværet.</string>
+<string name="finding_rules">Det ble funnet samsvar med en begrenset medfølgende kodesignatur. Dette er veiledende, ikke bevis på skadevare.</string>
+<string name="finding_other">Ytterligere lokale indikatorer krever manuell gjennomgang. De bekrefter ikke skadevare.</string>
+<string name="integrity_manager">En administrator for rottilgang eller hooking er synlig: %1$s</string>
+<string name="integrity_test_keys">Enhetens bygg bruker testsigneringsnøkler.</string>
+<string name="integrity_debug_build">Byggegenskaper tyder på et system som kan feilsøkes, eller som ikke er ment for produksjon.</string>
+<string name="integrity_selinux">Den lesbare lokale statusen viser at obligatorisk sikkerhetshåndheving er slått av.</string>
+<string name="integrity_debugger">En feilsøker er koblet til denne prosessen.</string>
+<string name="integrity_emulator">Byggegenskaper ligner en emulator eller testenhet.</string>
+<string name="audit_scan_pending">Installasjonen ble registrert. Lokal analyse venter.</string>
+<string name="audit_scan_complete">Lokal analyse ble fullført uten bekreftet signatursamsvar. Dette er ingen sikkerhetsgaranti.</string>
+<string name="audit_scan_unavailable">Pakken var ikke synlig da analysen kjørte.</string>
+<string name="audit_scan_threat">Det ble funnet nøyaktig samsvar med en lokal trusselsignatur.</string>
+<string name="audit_scan_review">Lokale indikatorer krever gjennomgang; de bekrefter ikke skadevare.</string>
+<string name="audit_source_recorded">Installasjonskilden ble registrert.</string>
+<string name="audit_uninstall_requested">Android ble bedt om bekreftelse på avinstallering.</string>
+<string name="audit_uninstall_success">Android meldte at avinstalleringen var vellykket.</string>
+<string name="audit_uninstall_failed">Android kunne ikke fullføre forespørselen om avinstallering.</string>
+<string name="severity_test">Ufarlig testmarkør</string>
+<string name="severity_low">Lav alvorlighetsgrad</string>
+<string name="severity_medium">Middels alvorlighetsgrad</string>
+<string name="severity_high">Høy alvorlighetsgrad</string>
+<string name="severity_critical">Kritisk alvorlighetsgrad</string>
+<string name="severity_unknown">Alvorlighetsgrad ikke angitt</string>
+<plurals name="l10n_scanned_apps"><item quantity="one">%1$d app skannet</item><item quantity="other">%1$d apper skannet</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="one">%1$d fil skannet</item><item quantity="other">%1$d filer skannet</item></plurals>
+<plurals name="l10n_threats"><item quantity="one">%1$d trussel funnet</item><item quantity="other">%1$d trusler funnet</item></plurals>
+<plurals name="l10n_review"><item quantity="one">%1$d resultat krever gjennomgang</item><item quantity="other">%1$d resultater krever gjennomgang</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="one">%1$d element kunne ikke skannes</item><item quantity="other">%1$d elementer kunne ikke skannes</item></plurals>
+<plurals name="l10n_no_match"><item quantity="one">%1$d resultat uten lokalt samsvar</item><item quantity="other">%1$d resultater uten lokalt samsvar</item></plurals>
+<plurals name="l10n_apps"><item quantity="one">%1$d app</item><item quantity="other">%1$d apper</item></plurals>
+<plurals name="l10n_files"><item quantity="one">%1$d fil</item><item quantity="other">%1$d filer</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="one">%1$d ikke-systemapp har høyrisikotilgang.</item><item quantity="other">%1$d ikke-systemapper har høyrisikotilgang.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="one">%1$d observert endring venter på varsel.</item><item quantity="other">%1$d observerte endringer venter på varsel.</item></plurals>
+<plurals name="l10n_rules"><item quantity="one">Begrenset dekning · %1$d medfølgende regel</item><item quantity="other">Begrenset dekning · %1$d medfølgende regler</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="one">Siste skanning: %1$d veiledende kodetreff.</item><item quantity="other">Siste skanning: %1$d veiledende kodetreff.</item></plurals>
+<plurals name="l10n_imported"><item quantity="one">%1$d gyldig signatur importert til lokal lagring.</item><item quantity="other">%1$d gyldige signaturer importert til lokal lagring.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="one">%1$d byte</item><item quantity="other">%1$d byte</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="one">%1$d rotrelatert filsystemindikator er til stede.</item><item quantity="other">%1$d rotrelaterte filsystemindikatorer er til stede.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="one">%1$d hookingindikator er til stede.</item><item quantity="other">%1$d hookingindikatorer er til stede.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="one">%1$d app aktivert</item><item quantity="other">%1$d apper aktivert</item></plurals>
+<plurals name="l10n_indicators"><item quantity="one">%1$d indikator</item><item quantity="other">%1$d indikatorer</item></plurals>
+<plurals name="l10n_progress"><item quantity="one">Kontrollert %1$d av %2$d app</item><item quantity="other">Kontrollert %1$d av %2$d apper</item></plurals>
 </resources>

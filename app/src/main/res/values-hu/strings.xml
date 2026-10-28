@@ -701,4 +701,108 @@
 <string name="detection_capabilities_save">Save update settings</string>
 <string name="detection_capabilities_sync_privacy">Downloads only. Scan results, files, hashes, and package names are not uploaded.</string>
 <string name="detection_capabilities_sync_unavailable">Automatic updates are unavailable in this offline build or until a trusted signing key is configured.</string>
+
+<string name="format_label_value">%1$s: %2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s – %2$s</string>
+<string name="format_version">%1$s · %2$s verzió (%3$s)</string>
+<string name="format_package_version">%1$s · %2$s verzió</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">Adjon meg biztonságos adatforráscímet</string>
+<string name="storage_size_unavailable">A méret nem érhető el</string>
+<string name="blocked_reason_hash">Egyezés található egy helyi fenyegetésaláírással.</string>
+<string name="blocked_reason_action">A lehetséges mértékben megkíséreltünk egy helyi biztonsági műveletet.</string>
+<string name="signed_import_success">Aláírt adatbázis elfogadva: %1$s verzió · %2$s.</string>
+<string name="signed_import_failed">Az aláírt adatbázis nem lett aktiválva. Ellenőrizze az aláírást, a verziót és a fájlformátumot.</string>
+<string name="rule_import_pending">A(z) %1$s mentve ellenőrzésre. Az importált szabályok letiltva maradnak, és ezt a fájlt nem futtatjuk.</string>
+<string name="rule_import_failed">A szabályok importálása sikertelen. Az importált szabályok letiltva maradnak.</string>
+<string name="restore_result_localized">A(z) %1$s (%2$s) másolatát visszaállítottuk. A karanténban lévő eredeti továbbra is megmarad.</string>
+<string name="cleaner_confirm_localized">Végleg törli a(z) %1$s (%2$s) elemet? Ez nem vonható vissza. A SafeMobile újra ellenőrzi a neveket és a metaadatokat.</string>
+<string name="cleaner_result_localized">Törölve: %1$s · Felszabadított hely: %2$s · Sikertelen vagy módosult: %3$s</string>
+<string name="about_localized_notices">A harmadik féltől származó összetevőkre továbbra is saját licenceik vonatkoznak. Az eredeti közlemények az audit ellenőrzési pontját jelentik, nem a licencvizsgálat lezárását. A forrásközleményeket és licencfeltételeket az eredeti dokumentumokban tekintheti meg.</string>
+<string name="about_open_original">Eredeti dokumentumok megnyitása</string>
+<string name="about_localized_privacy">A vizsgált fájlok, kivonatok, csomagnevek és eredmények ezen az eszközön maradnak. A helyi auditmetaadatok és a karanténmásolatok titkosított privát tárhelyet használnak. Az aláírt definíciók frissítései a projekt kiadási szolgáltatásához kapcsolódnak; külön adatforrás csak hozzájárulás után csatlakozik a beállított címhez. A mappafigyelés kizárólag az Ön által kiválasztott mappákat érinti, és leállítható. Az Android-engedélyek az Ön felügyelete alatt maradnak. Ez a verzió nem tartalmaz hirdetést, felhőalapú vizsgálatot vagy hivatkozáshírnév-szolgáltatást.</string>
+<string name="coverage_local_title">Helyi tesztdefiníciók</string>
+<string name="coverage_local_body">A mellékelt régi definíciók csak egy ártalmatlan vírusvédelmi tesztjelölőt tartalmaznak. Nem biztosítanak védelmet a valós kártevők ellen.</string>
+<string name="coverage_signed_title">Aláírt kivonatadatbázis</string>
+<string name="coverage_signed_body">A pontos kivonategyezéshez megbízható aláírókulcs és elfogadott aláírt adatbázis szükséges. Éles adatbázis nincs mellékelve.</string>
+<string name="coverage_static_title">Alkalmazások statikus elemzése</string>
+<string name="coverage_static_body">A korlátozott csomagelemzés tájékoztató jellegű megállapításokat ad. Egy megállapítás önmagában nem bizonyít kártevőt; az ismert rosszindulatú aláírók listái le vannak tiltva.</string>
+<string name="coverage_permissions_title">Engedélyek és jegyzék</string>
+<string name="coverage_permissions_body">Az engedélykombinációk és a látható csomagdeklarációk segítik a kézi ellenőrzést. Ezek nem betanított osztályozást jelentenek.</string>
+<string name="coverage_integrity_title">Eszközintegritási jelzők</string>
+<string name="coverage_integrity_body">A root-hozzáférés, a hookok, a build tulajdonságai, a biztonsági szabályok érvényesítése, a hibakeresők és az emulátorok ellenőrzése helyi heurisztikákkal, nem tanúsítással történik.</string>
+<string name="coverage_bloom_title">Valószínűségi kivonatindex</string>
+<string name="coverage_bloom_body">Ellenőrzött, nem üres valószínűségi index és annak jegyzéke nincs mellékelve. Ez az opcionális réteg nem érhető el.</string>
+<string name="coverage_rules_title">Mellékelt kódaláírások</string>
+<string name="coverage_rules_body">Az ellenőrzött mellékelt szabályok korlátozott számú szó szerinti kódmintát vizsgálnak. Az egyezések tájékoztató jellegűek, nem igazolnak kártevőt.</string>
+<string name="coverage_rules_unavailable">A mellékelt szabályok nem töltődtek be, vagy nem mentek át az ellenőrzésen. Nem állítjuk, hogy kódaláírás-vizsgálat történt.</string>
+<string name="coverage_model_title">Engedélyosztályozási modell</string>
+<string name="coverage_model_body">Nincs mellékelve betanított, ellenőrzött és terjeszthető osztályozási modell. A gépi tanulás le van tiltva.</string>
+<string name="coverage_signer_title">Aláíró offline hitelesítése</string>
+<string name="coverage_signer_body">Nincs beállítva függetlenül rögzített, várt aláíró tanúsítvány-ujjlenyomat.</string>
+<string name="coverage_feed_title">Aláírt adatforrás ellenőrzése</string>
+<string name="coverage_feed_body">A különálló aláírás ellenőrzéséhez és a korábbi verzióra visszaállítás megakadályozásához megbízható buildkulcs és beállított aláírt adatforrás szükséges.</string>
+<string name="hash_status_active">Az aláírt helyi kivonatadatbázis aktív.</string>
+<string name="hash_status_missing">A kivonategyeztetés az aláírt adatbázis elfogadásáig le van tiltva.</string>
+<string name="hash_status_key">A kivonategyeztetés le van tiltva, mert nincs megbízható aláírókulcs.</string>
+<string name="hash_status_invalid">A tárolt definíciók nem feleltek meg az integritási, verzió- vagy formátumellenőrzésnek. A kivonategyeztetés tiltva marad.</string>
+<string name="hash_status_activation">Az adatbázis aktiválása nem fejeződött be. A kivonategyeztetés tiltva marad.</string>
+<string name="finding_confidence">%1$s · Megbízhatóság: %2$d%%</string>
+<string name="finding_exported">Egy exportált összetevőnél nem látható engedélykorlát a jegyzékben. Kódszintű ellenőrzések ettől még létezhetnek.</string>
+<string name="finding_admin">Az alkalmazás eszközadminisztrációs fogadót deklarál. Ez az érzékeny képesség nem bizonyít visszaélést.</string>
+<string name="finding_accessibility">Az alkalmazás kisegítő lehetőségek szolgáltatását deklarálja. A jogos segédalkalmazásoknak szükségük lehet erre a hozzáférésre.</string>
+<string name="finding_overlay">Az alkalmazás más képernyők fölötti megjelenítési engedélyt kér. Az átfedések jogosak is lehetnek, de eltakarhatnak más képernyőket.</string>
+<string name="finding_combined">A kisegítő hozzáférés képernyőátfedéssel, SMS- vagy híváselőzmény-hozzáféréssel párosul. Ellenőrizze az alkalmazás célját.</string>
+<string name="finding_sms_calls">Az alkalmazás SMS- és híváselőzmény-engedélyt is kér.</string>
+<string name="finding_sms_network">Az SMS-hozzáférés internet-hozzáféréssel párosul. A körülmények szerinti vizsgálat szükséges.</string>
+<string name="finding_signer">Az aláíró tanúsítvány metaadatai hiányoznak vagy nem olvashatók.</string>
+<string name="finding_archive">A csomag tárolóját nem lehetett teljesen megvizsgálni. A statikus elemzés hiányos.</string>
+<string name="finding_packer">A csomag egyik elérési útja ismert csomagoló- vagy védelmi eszközre hasonlít. Jogos alkalmazások is használhatják ezeket.</string>
+<string name="finding_dex_header">Egy kódfejléc formátum- vagy méretmezői ellentmondásosak. Ez nem bizonyít kártevőt.</string>
+<string name="finding_dex_short">Egy kódbejegyzés rövidebb az érvényes fejlécnél, ezért nem lehetett teljesen megvizsgálni.</string>
+<string name="finding_entropy">Egy kódmintának magas a bájtentrópiája. Ezt titkosítás, csomagolás vagy ártalmatlan tömörített tartalom magyarázhatja.</string>
+<string name="finding_api">A kért engedélyhez nem található várt statikus hivatkozás. Ennek oka lehet reflexió, könyvtár vagy dinamikusan betöltött kód.</string>
+<string name="finding_rules">Egyezést találtunk egy korlátozott, mellékelt kódaláírással. Ez tájékoztató jelzés, nem kártevő bizonyítéka.</string>
+<string name="finding_other">További helyi jelzők kézi ellenőrzést igényelnek. Nem igazolják a kártevőt.</string>
+<string name="integrity_manager">Root-hozzáférést vagy hookokat kezelő program látható: %1$s</string>
+<string name="integrity_test_keys">Az eszköz buildje tesztaláíró kulcsokat használ.</string>
+<string name="integrity_debug_build">A build tulajdonságai hibakereshető vagy nem éles rendszert jeleznek.</string>
+<string name="integrity_selinux">Az olvasható helyi állapot szerint a kötelező biztonsági szabályok érvényesítése ki van kapcsolva.</string>
+<string name="integrity_debugger">Hibakereső csatlakozik ehhez a folyamathoz.</string>
+<string name="integrity_emulator">A build tulajdonságai emulátorra vagy teszteszközre emlékeztetnek.</string>
+<string name="audit_scan_pending">A telepítést rögzítettük. A helyi elemzés függőben van.</string>
+<string name="audit_scan_complete">A helyi elemzés megerősített aláírásegyezés nélkül befejeződött. Ez nem jelent biztonsági garanciát.</string>
+<string name="audit_scan_unavailable">A csomag az elemzés során nem volt látható.</string>
+<string name="audit_scan_threat">Pontos egyezést találtunk egy helyi fenyegetésaláírással.</string>
+<string name="audit_scan_review">A helyi jelzők ellenőrzést igényelnek; nem igazolják a kártevőt.</string>
+<string name="audit_source_recorded">A telepítés forrását rögzítettük.</string>
+<string name="audit_uninstall_requested">Az Android eltávolítási megerősítését kértük.</string>
+<string name="audit_uninstall_success">Az Android sikeres eltávolítást jelentett.</string>
+<string name="audit_uninstall_failed">Az Android nem tudta befejezni az eltávolítási kérelmet.</string>
+<string name="severity_test">Ártalmatlan tesztjelölő</string>
+<string name="severity_low">Alacsony súlyosság</string>
+<string name="severity_medium">Közepes súlyosság</string>
+<string name="severity_high">Magas súlyosság</string>
+<string name="severity_critical">Kritikus súlyosság</string>
+<string name="severity_unknown">A súlyosság nincs megadva</string>
+<plurals name="l10n_scanned_apps"><item quantity="one">%1$d alkalmazás átvizsgálva</item><item quantity="other">%1$d alkalmazás átvizsgálva</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="one">%1$d fájl átvizsgálva</item><item quantity="other">%1$d fájl átvizsgálva</item></plurals>
+<plurals name="l10n_threats"><item quantity="one">%1$d fenyegetés található</item><item quantity="other">%1$d fenyegetés található</item></plurals>
+<plurals name="l10n_review"><item quantity="one">%1$d eredmény ellenőrzést igényel</item><item quantity="other">%1$d eredmény ellenőrzést igényel</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="one">%1$d elemet nem lehetett átvizsgálni</item><item quantity="other">%1$d elemet nem lehetett átvizsgálni</item></plurals>
+<plurals name="l10n_no_match"><item quantity="one">%1$d eredmény helyi egyezés nélkül</item><item quantity="other">%1$d eredmény helyi egyezés nélkül</item></plurals>
+<plurals name="l10n_apps"><item quantity="one">%1$d alkalmazás</item><item quantity="other">%1$d alkalmazás</item></plurals>
+<plurals name="l10n_files"><item quantity="one">%1$d fájl</item><item quantity="other">%1$d fájl</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="one">%1$d nem rendszeralkalmazás magas kockázatú hozzáféréssel rendelkezik.</item><item quantity="other">%1$d nem rendszeralkalmazás magas kockázatú hozzáféréssel rendelkezik.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="one">%1$d megfigyelt változás értesítésre vár.</item><item quantity="other">%1$d megfigyelt változás értesítésre vár.</item></plurals>
+<plurals name="l10n_rules"><item quantity="one">Korlátozott lefedettség · %1$d mellékelt szabály</item><item quantity="other">Korlátozott lefedettség · %1$d mellékelt szabály</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="one">Legutóbbi vizsgálat: %1$d tájékoztató kódegyezés.</item><item quantity="other">Legutóbbi vizsgálat: %1$d tájékoztató kódegyezés.</item></plurals>
+<plurals name="l10n_imported"><item quantity="one">%1$d érvényes aláírás importálva a helyi tárhelyre.</item><item quantity="other">%1$d érvényes aláírás importálva a helyi tárhelyre.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="one">%1$d bájt</item><item quantity="other">%1$d bájt</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="one">%1$d roothoz kapcsolódó fájlrendszerjelző található.</item><item quantity="other">%1$d roothoz kapcsolódó fájlrendszerjelző található.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="one">%1$d hookjelző található.</item><item quantity="other">%1$d hookjelző található.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="one">%1$d alkalmazás engedélyezve</item><item quantity="other">%1$d alkalmazás engedélyezve</item></plurals>
+<plurals name="l10n_indicators"><item quantity="one">%1$d jelző</item><item quantity="other">%1$d jelző</item></plurals>
+<plurals name="l10n_progress"><item quantity="one">%1$d / %2$d alkalmazás ellenőrizve</item><item quantity="other">%1$d / %2$d alkalmazás ellenőrizve</item></plurals>
 </resources>

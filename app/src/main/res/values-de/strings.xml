@@ -501,4 +501,108 @@
 <string name="locale_th">ไทย</string>
 <string name="locale_uk">Українська</string>
 <string name="locale_uz">O‘zbekcha</string>
+
+<string name="format_label_value">%1$s: %2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s – %2$s</string>
+<string name="format_version">%1$s · Version %2$s (%3$s)</string>
+<string name="format_package_version">%1$s · Version %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">Sichere Feed-Adresse eingeben</string>
+<string name="storage_size_unavailable">Größe nicht verfügbar</string>
+<string name="blocked_reason_hash">Eine lokale Bedrohungssignatur wurde erkannt.</string>
+<string name="blocked_reason_action">Eine lokale Sicherheitsmaßnahme wurde nach Möglichkeit versucht.</string>
+<string name="signed_import_success">Signierte Datenbank akzeptiert: Version %1$s · %2$s.</string>
+<string name="signed_import_failed">Die signierte Datenbank wurde nicht aktiviert. Signatur, Version und Dateiformat prüfen.</string>
+<string name="rule_import_pending">%1$s zur Prüfung gespeichert. Importierte Regeln bleiben deaktiviert und diese Datei wird nicht ausgeführt.</string>
+<string name="rule_import_failed">Die Regeln konnten nicht importiert werden. Importierte Regeln bleiben deaktiviert.</string>
+<string name="restore_result_localized">Eine Kopie von %1$s (%2$s) wurde wiederhergestellt. Das Original bleibt in Quarantäne gespeichert.</string>
+<string name="cleaner_confirm_localized">%1$s (%2$s) endgültig löschen? Dies kann nicht rückgängig gemacht werden. SafeMobile prüft Namen und Metadaten erneut.</string>
+<string name="cleaner_result_localized">Gelöscht: %1$s · Freigegebener Speicherplatz: %2$s · Fehlgeschlagen oder geändert: %3$s</string>
+<string name="about_localized_notices">Für Komponenten von Drittanbietern gelten weiterhin deren eigene Lizenzen. Die ursprünglichen Hinweise sind ein Prüfpunkt und keine abgeschlossene Lizenzprüfung. Öffnen Sie die Originaldokumente, um Quellhinweise und Lizenzbedingungen einzusehen.</string>
+<string name="about_open_original">Originaldokumente öffnen</string>
+<string name="about_localized_privacy">Scandateien, Hashwerte, Paketnamen und Ergebnisse bleiben auf diesem Gerät. Lokale Prüfmetadaten und Quarantänekopien werden verschlüsselt im privaten Speicher abgelegt. Aktualisierungen signierter Definitionen verbinden sich mit dem Veröffentlichungsdienst dieses Projekts; ein separater Feed verbindet sich erst nach Ihrer Zustimmung mit dem eingestellten Endpunkt. Die Ordnerüberwachung verwendet nur von Ihnen ausgewählte Ordner und kann beendet werden. Android-Berechtigungen bleiben unter Ihrer Kontrolle. Diese Version enthält keine Werbung, Cloud-Scans oder Link-Reputationsdienste.</string>
+<string name="coverage_local_title">Lokale Testdefinitionen</string>
+<string name="coverage_local_body">Die mitgelieferten älteren Definitionen enthalten nur einen harmlosen Antiviren-Testmarker. Sie bieten keine Erkennung realer Schadsoftware.</string>
+<string name="coverage_signed_title">Signierte Hashdatenbank</string>
+<string name="coverage_signed_body">Für einen exakten Hashabgleich werden ein vertrauenswürdiger Signaturschlüssel und eine akzeptierte signierte Datenbank benötigt. Eine produktive Datenbank ist nicht enthalten.</string>
+<string name="coverage_static_title">Statische App-Analyse</string>
+<string name="coverage_static_body">Die begrenzte Paketanalyse liefert Hinweise. Ein Fund allein beweist keine Schadsoftware; Listen bekannter schädlicher Unterzeichner sind deaktiviert.</string>
+<string name="coverage_permissions_title">Berechtigungen und Manifest</string>
+<string name="coverage_permissions_body">Berechtigungskombinationen und sichtbare Paketdeklarationen unterstützen eine manuelle Prüfung. Sie stellen keine trainierte Klassifizierung dar.</string>
+<string name="coverage_integrity_title">Indikatoren für Geräteintegrität</string>
+<string name="coverage_integrity_body">Root-Zugriff, Hooks, Build-Eigenschaften, Sicherheitsdurchsetzung, Debugger und Emulatoren werden durch lokale Heuristiken geprüft, nicht durch eine Attestierung.</string>
+<string name="coverage_bloom_title">Probabilistischer Hashindex</string>
+<string name="coverage_bloom_body">Ein verifizierter, nicht leerer probabilistischer Index und dessen Manifest sind nicht enthalten. Diese optionale Ebene ist nicht verfügbar.</string>
+<string name="coverage_rules_title">Mitgelieferte Codesignaturen</string>
+<string name="coverage_rules_body">Validierte mitgelieferte Regeln prüfen eine begrenzte Anzahl wörtlicher Codemuster. Treffer sind Hinweise und bestätigen keine Schadsoftware.</string>
+<string name="coverage_rules_unavailable">Die mitgelieferten Regeln konnten nicht geladen werden oder haben die Validierung nicht bestanden. Es wird kein Codesignatur-Scan behauptet.</string>
+<string name="coverage_model_title">Modell zur Berechtigungsklassifizierung</string>
+<string name="coverage_model_body">Es ist kein trainiertes, validiertes und verteilbares Klassifizierungsmodell enthalten. Maschinelles Lernen ist deaktiviert.</string>
+<string name="coverage_signer_title">Offline-Verifizierung des Unterzeichners</string>
+<string name="coverage_signer_body">Ein unabhängig festgelegter, erwarteter Fingerabdruck des Signaturzertifikats wurde nicht konfiguriert.</string>
+<string name="coverage_feed_title">Prüfung signierter Feeds</string>
+<string name="coverage_feed_body">Die Prüfung einer separaten Signatur und der Schutz vor Versionsrückschritten erfordern einen vertrauenswürdigen Build-Schlüssel und einen konfigurierten signierten Feed.</string>
+<string name="hash_status_active">Die signierte lokale Hashdatenbank ist aktiv.</string>
+<string name="hash_status_missing">Der Hashabgleich bleibt deaktiviert, bis eine signierte Datenbank akzeptiert wird.</string>
+<string name="hash_status_key">Der Hashabgleich ist deaktiviert, da kein vertrauenswürdiger Signaturschlüssel verfügbar ist.</string>
+<string name="hash_status_invalid">Gespeicherte Definitionen haben Integritäts-, Versions- oder Formatprüfungen nicht bestanden. Der Hashabgleich bleibt deaktiviert.</string>
+<string name="hash_status_activation">Die Datenbankaktivierung wurde nicht abgeschlossen. Der Hashabgleich bleibt deaktiviert.</string>
+<string name="finding_confidence">%1$s · Zuverlässigkeit: %2$d%%</string>
+<string name="finding_exported">Für eine exportierte Komponente ist im Manifest keine sichtbare Berechtigungsschranke vorhanden. Prüfungen im Code können dennoch bestehen.</string>
+<string name="finding_admin">Die App deklariert einen Empfänger für die Geräteverwaltung. Diese sensible Fähigkeit ist kein Beweis für Missbrauch.</string>
+<string name="finding_accessibility">Die App deklariert einen Bedienungshilfendienst. Legitime Hilfsanwendungen können diesen Zugriff benötigen.</string>
+<string name="finding_overlay">Die App fordert die Berechtigung zur Bildschirmüberlagerung an. Überlagerungen können legitim sein, aber auch andere Bildschirme verdecken.</string>
+<string name="finding_combined">Bedienungshilfen werden mit Überlagerungs-, SMS- oder Anruflisten-Zugriff kombiniert. Prüfen Sie den Zweck der App.</string>
+<string name="finding_sms_calls">Die App fordert sowohl SMS- als auch Anruflisten-Berechtigungen an.</string>
+<string name="finding_sms_network">SMS-Zugriff wird mit Internetzugriff kombiniert. Dies muss im Zusammenhang geprüft werden.</string>
+<string name="finding_signer">Metadaten des Signaturzertifikats fehlen oder sind nicht lesbar.</string>
+<string name="finding_archive">Der Paketcontainer konnte nicht vollständig untersucht werden. Die statische Analyse ist unvollständig.</string>
+<string name="finding_packer">Ein Paketpfad ähnelt einem bekannten Pack- oder Schutzwerkzeug. Auch legitime Apps können solche Werkzeuge verwenden.</string>
+<string name="finding_dex_header">Ein Code-Header enthält widersprüchliche Format- oder Größenangaben. Dies beweist keine Schadsoftware.</string>
+<string name="finding_dex_short">Ein Codeeintrag ist kürzer als ein gültiger Header und konnte nicht vollständig untersucht werden.</string>
+<string name="finding_entropy">Eine Codeprobe weist eine hohe Byte-Entropie auf. Verschlüsselung, Packverfahren oder harmlose komprimierte Inhalte können dies erklären.</string>
+<string name="finding_api">Die erwartete statische Referenz für eine angeforderte Berechtigung wurde nicht gefunden. Reflexion, Bibliotheken oder dynamisch geladener Code können die Ursache sein.</string>
+<string name="finding_rules">Eine begrenzte mitgelieferte Codesignatur stimmte überein. Dies ist ein Hinweis, kein Beweis für Schadsoftware.</string>
+<string name="finding_other">Weitere lokale Indikatoren müssen manuell geprüft werden. Sie bestätigen keine Schadsoftware.</string>
+<string name="integrity_manager">Ein Root- oder Hooking-Manager ist sichtbar: %1$s</string>
+<string name="integrity_test_keys">Der Geräte-Build verwendet Testsignaturschlüssel.</string>
+<string name="integrity_debug_build">Build-Eigenschaften weisen auf ein debugfähiges oder nicht produktives System hin.</string>
+<string name="integrity_selinux">Der auslesbare lokale Status meldet, dass die verpflichtende Sicherheitsdurchsetzung ausgeschaltet ist.</string>
+<string name="integrity_debugger">An diesen Prozess ist ein Debugger angehängt.</string>
+<string name="integrity_emulator">Build-Eigenschaften ähneln denen eines Emulators oder Testgeräts.</string>
+<string name="audit_scan_pending">Die Installation wurde erfasst. Die lokale Analyse steht noch aus.</string>
+<string name="audit_scan_complete">Die lokale Analyse wurde ohne bestätigten Signaturtreffer abgeschlossen. Dies ist keine Sicherheitsgarantie.</string>
+<string name="audit_scan_unavailable">Das Paket war zum Analysezeitpunkt nicht sichtbar.</string>
+<string name="audit_scan_threat">Eine exakte lokale Bedrohungssignatur stimmte überein.</string>
+<string name="audit_scan_review">Lokale Indikatoren müssen geprüft werden; sie bestätigen keine Schadsoftware.</string>
+<string name="audit_source_recorded">Die Installationsquelle wurde erfasst.</string>
+<string name="audit_uninstall_requested">Die Android-Bestätigung zur Deinstallation wurde angefordert.</string>
+<string name="audit_uninstall_success">Android meldete eine erfolgreiche Deinstallation.</string>
+<string name="audit_uninstall_failed">Android konnte die Deinstallationsanfrage nicht abschließen.</string>
+<string name="severity_test">Harmloser Testmarker</string>
+<string name="severity_low">Geringer Schweregrad</string>
+<string name="severity_medium">Mittlerer Schweregrad</string>
+<string name="severity_high">Hoher Schweregrad</string>
+<string name="severity_critical">Kritischer Schweregrad</string>
+<string name="severity_unknown">Schweregrad nicht angegeben</string>
+<plurals name="l10n_scanned_apps"><item quantity="one">%1$d App gescannt</item><item quantity="other">%1$d Apps gescannt</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="one">%1$d Datei gescannt</item><item quantity="other">%1$d Dateien gescannt</item></plurals>
+<plurals name="l10n_threats"><item quantity="one">%1$d Bedrohung gefunden</item><item quantity="other">%1$d Bedrohungen gefunden</item></plurals>
+<plurals name="l10n_review"><item quantity="one">%1$d Ergebnis muss geprüft werden</item><item quantity="other">%1$d Ergebnisse müssen geprüft werden</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="one">%1$d Element konnte nicht gescannt werden</item><item quantity="other">%1$d Elemente konnten nicht gescannt werden</item></plurals>
+<plurals name="l10n_no_match"><item quantity="one">%1$d Ergebnis ohne lokalen Treffer</item><item quantity="other">%1$d Ergebnisse ohne lokalen Treffer</item></plurals>
+<plurals name="l10n_apps"><item quantity="one">%1$d App</item><item quantity="other">%1$d Apps</item></plurals>
+<plurals name="l10n_files"><item quantity="one">%1$d Datei</item><item quantity="other">%1$d Dateien</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="one">%1$d Nicht-System-App hat risikoreichen Zugriff.</item><item quantity="other">%1$d Nicht-System-Apps haben risikoreichen Zugriff.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="one">%1$d beobachtete Änderung wartet auf eine Benachrichtigung.</item><item quantity="other">%1$d beobachtete Änderungen warten auf eine Benachrichtigung.</item></plurals>
+<plurals name="l10n_rules"><item quantity="one">Begrenzte Abdeckung · %1$d mitgelieferte Regel</item><item quantity="other">Begrenzte Abdeckung · %1$d mitgelieferte Regeln</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="one">Letzter Scan: %1$d auffälliger Codetreffer.</item><item quantity="other">Letzter Scan: %1$d auffällige Codetreffer.</item></plurals>
+<plurals name="l10n_imported"><item quantity="one">%1$d gültige Signatur in den lokalen Speicher importiert.</item><item quantity="other">%1$d gültige Signaturen in den lokalen Speicher importiert.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="one">%1$d Byte</item><item quantity="other">%1$d Byte</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="one">%1$d Root-bezogener Dateisystemindikator ist vorhanden.</item><item quantity="other">%1$d Root-bezogene Dateisystemindikatoren sind vorhanden.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="one">%1$d Hooking-Indikator ist vorhanden.</item><item quantity="other">%1$d Hooking-Indikatoren sind vorhanden.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="one">%1$d App aktiviert</item><item quantity="other">%1$d Apps aktiviert</item></plurals>
+<plurals name="l10n_indicators"><item quantity="one">%1$d Indikator</item><item quantity="other">%1$d Indikatoren</item></plurals>
+<plurals name="l10n_progress"><item quantity="one">%1$d von %2$d App geprüft</item><item quantity="other">%1$d von %2$d Apps geprüft</item></plurals>
 </resources>

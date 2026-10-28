@@ -558,4 +558,107 @@
 <string name="locale_th">ไทย</string>
 <string name="locale_uk">Українська</string>
 <string name="locale_uz">O‘zbekcha</string>
+<string name="format_label_value">%1$s: %2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">من %1$s إلى %2$s</string>
+<string name="format_version">%1$s · الإصدار %2$s (%3$s)</string>
+<string name="format_package_version">%1$s · الإصدار %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">أدخل عنوانًا آمنًا لمصدر التعريفات</string>
+<string name="storage_size_unavailable">الحجم غير متاح</string>
+<string name="blocked_reason_hash">عُثر على تطابق مع توقيع تهديد محلي.</string>
+<string name="blocked_reason_action">جرت محاولة لاتخاذ إجراء أمني محلي ضمن حدود النظام.</string>
+<string name="signed_import_success">قُبلت قاعدة البيانات الموقّعة: الإصدار %1$s · %2$s.</string>
+<string name="signed_import_failed">لم تُفعّل قاعدة البيانات الموقّعة. تحقق من التوقيع والإصدار وتنسيق الملف.</string>
+<string name="rule_import_pending">حُفظ %1$s للمراجعة. تظل القواعد المستوردة معطّلة ولن يُنفّذ هذا الملف.</string>
+<string name="rule_import_failed">تعذّر استيراد القواعد. تظل القواعد المستوردة معطّلة.</string>
+<string name="restore_result_localized">استُعيدت نسخة من %1$s (%2$s). يبقى الأصل محفوظًا في العزل.</string>
+<string name="cleaner_confirm_localized">هل تريد حذف %1$s (%2$s) نهائيًا؟ لا يمكن التراجع عن ذلك. سيعيد SafeMobile التحقق من الأسماء والبيانات الوصفية.</string>
+<string name="cleaner_result_localized">المحذوف: %1$s · المساحة المحررة: %2$s · الفاشل أو المتغير: %3$s</string>
+<string name="about_localized_notices">تحتفظ مكونات الجهات الخارجية بتراخيصها الخاصة. الإشعارات الأصلية نقطة مراجعة تدقيقية وليست مراجعة مكتملة للتراخيص. افتح المستندات الأصلية للاطلاع على إشعارات المصدر وشروط الترخيص.</string>
+<string name="about_open_original">فتح المستندات الأصلية</string>
+<string name="about_localized_privacy">تبقى الملفات المفحوصة وبصماتها وأسماء الحزم والنتائج على هذا الجهاز. تُحفظ بيانات التدقيق ونسخ العزل في مساحة خاصة مشفّرة. تتصل تحديثات التعريفات الموقّعة بخدمة إصدارات المشروع؛ ولا يتصل المصدر المنفصل بعنوانه المحدد إلا بعد موافقتك. تراقَب المجلدات التي تختارها ويمكنك إيقاف المراقبة. تظل أذونات Android تحت سيطرتك. لا يتضمن هذا الإصدار إعلانات أو فحصًا سحابيًا أو خدمة لسمعة الروابط.</string>
+<string name="coverage_local_title">تعريفات اختبار محلية</string>
+<string name="coverage_local_body">لا تحتوي التعريفات القديمة المضمّنة إلا على علامة اختبار آمنة لمضاد الفيروسات. لا توفر تغطية للبرمجيات الخبيثة الفعلية.</string>
+<string name="coverage_signed_title">قاعدة بصمات موقّعة</string>
+<string name="coverage_signed_body">تتطلب مطابقة البصمات الدقيقة مفتاح توقيع موثوقًا وقاعدة بيانات موقّعة مقبولة. لا توجد قاعدة إنتاج مضمّنة.</string>
+<string name="coverage_static_title">التحليل الثابت للتطبيقات</string>
+<string name="coverage_static_body">يقدّم تحليل الحزمة المحدود مؤشرات استرشادية. لا يثبت مؤشر بمفرده وجود برمجيات خبيثة؛ وقوائم الموقّعين الضارين المعروفة معطّلة.</string>
+<string name="coverage_permissions_title">الأذونات وملف التعريف</string>
+<string name="coverage_permissions_body">تساعد مجموعات الأذونات وتصريحات الحزمة الظاهرة على المراجعة اليدوية. هذا ليس تصنيفًا مدرّبًا.</string>
+<string name="coverage_integrity_title">مؤشرات سلامة الجهاز</string>
+<string name="coverage_integrity_body">يُفحص الوصول الجذري واعتراض الدوال وخصائص النظام وفرض الحماية وأدوات التصحيح والمحاكيات باستدلالات محلية، وليس بإثبات موثّق.</string>
+<string name="coverage_bloom_title">فهرس احتمالي للبصمات</string>
+<string name="coverage_bloom_body">لا يتضمن التطبيق فهرسًا احتماليًا موثّقًا غير فارغ ولا ملف تعريفه. هذه الطبقة الاختيارية غير متاحة.</string>
+<string name="coverage_rules_title">توقيعات الشيفرة المضمّنة</string>
+<string name="coverage_rules_body">تفحص القواعد المضمّنة المتحقق منها مجموعة محدودة من أنماط الشيفرة النصية. التطابقات استرشادية ولا تؤكد البرمجيات الخبيثة.</string>
+<string name="coverage_rules_unavailable">لم تُحمّل القواعد المضمّنة أو لم تجتز التحقق. لا يُدّعى إجراء فحص لتوقيعات الشيفرة.</string>
+<string name="coverage_model_title">نموذج تصنيف الأذونات</string>
+<string name="coverage_model_body">لا يوجد نموذج تصنيف مضمّن مدرّب ومتحقق منه ومسموح بتوزيعه. التعلّم الآلي معطّل.</string>
+<string name="coverage_signer_title">إثبات الموقّع دون اتصال</string>
+<string name="coverage_signer_body">لم تُضبط بصمة شهادة التوقيع المتوقعة والمثبتة بصورة مستقلة.</string>
+<string name="coverage_feed_title">التحقق من المصدر الموقّع</string>
+<string name="coverage_feed_body">يتطلب التحقق من التوقيع المنفصل ومنع الرجوع إلى إصدار أقدم مفتاحًا موثوقًا وقت البناء ومصدرًا موقّعًا مضبوطًا.</string>
+<string name="hash_status_active">قاعدة البصمات المحلية الموقّعة نشطة.</string>
+<string name="hash_status_missing">تظل مطابقة البصمات معطّلة حتى قبول قاعدة بيانات موقّعة.</string>
+<string name="hash_status_key">مطابقة البصمات معطّلة لعدم توفر مفتاح توقيع موثوق.</string>
+<string name="hash_status_invalid">فشلت التعريفات المخزنة في اختبارات السلامة أو الإصدار أو التنسيق. تظل المطابقة معطّلة.</string>
+<string name="hash_status_activation">لم يكتمل تفعيل قاعدة البيانات. تظل مطابقة البصمات معطّلة.</string>
+<string name="finding_confidence">%1$s · درجة الثقة: %2$d%%</string>
+<string name="finding_exported">لا يظهر في ملف التعريف قيد أذونات لمكوّن مُصدّر. قد توجد فحوص وصول داخل الشيفرة.</string>
+<string name="finding_admin">يصرّح التطبيق بمستقبِل لإدارة الجهاز. هذه القدرة الحساسة ليست دليلًا على إساءة الاستخدام.</string>
+<string name="finding_accessibility">يصرّح التطبيق بخدمة لتسهيل الاستخدام. قد تحتاج التطبيقات المساعدة المشروعة إلى هذا الوصول.</string>
+<string name="finding_overlay">يطلب التطبيق الظهور فوق التطبيقات الأخرى. قد يكون ذلك مشروعًا لكنه قد يحجب شاشات أخرى.</string>
+<string name="finding_combined">يجمع التطبيق تسهيل الاستخدام مع الظهور فوق التطبيقات أو الوصول إلى الرسائل أو سجل المكالمات. راجع غرض التطبيق.</string>
+<string name="finding_sms_calls">يطلب التطبيق أذونات الرسائل النصية وسجل المكالمات معًا.</string>
+<string name="finding_sms_network">يجمع التطبيق الوصول إلى الرسائل النصية والإنترنت. يلزم مراجعة سياق الاستخدام.</string>
+<string name="finding_signer">بيانات شهادة التوقيع مفقودة أو غير قابلة للقراءة.</string>
+<string name="finding_archive">تعذّر فحص حاوية الحزمة بالكامل. التحليل الثابت غير مكتمل.</string>
+<string name="finding_packer">يشبه مسار في الحزمة أداة معروفة لتغليف الشيفرة أو حمايتها. قد تستخدم التطبيقات المشروعة هذه الأدوات.</string>
+<string name="finding_dex_header">يتضمن رأس الشيفرة حقول تنسيق أو حجم غير متسقة. لا يثبت ذلك وجود برمجيات خبيثة.</string>
+<string name="finding_dex_short">إدخال الشيفرة أقصر من رأس صالح وتعذّر فحصه بالكامل.</string>
+<string name="finding_entropy">تتسم عينة الشيفرة بعشوائية بايتات مرتفعة. قد يفسر ذلك التشفير أو التغليف أو محتوى مضغوط آمن.</string>
+<string name="finding_api">لم يُعثر على المرجع الثابت المتوقع لإذن مطلوب. قد يكون السبب الاستبطان أو المكتبات أو الشيفرة المحمّلة ديناميكيًا.</string>
+<string name="finding_rules">تطابق توقيع شيفرة مضمّن محدود. هذه إشارة استرشادية وليست دليلًا على برمجيات خبيثة.</string>
+<string name="finding_other">تتطلب مؤشرات محلية إضافية مراجعة يدوية. لا تؤكد وجود برمجيات خبيثة.</string>
+<string name="integrity_manager">يظهر مدير للوصول الجذري أو اعتراض الدوال: %1$s</string>
+<string name="integrity_test_keys">يستخدم نظام الجهاز مفاتيح توقيع اختبارية.</string>
+<string name="integrity_debug_build">تشير خصائص النظام إلى إصدار قابل للتصحيح أو غير مخصص للإنتاج.</string>
+<string name="integrity_selinux">تشير الحالة المحلية المقروءة إلى إيقاف فرض الحماية الإلزامية.</string>
+<string name="integrity_debugger">توجد أداة تصحيح متصلة بهذه العملية.</string>
+<string name="integrity_emulator">تشبه خصائص النظام محاكيًا أو جهاز اختبار.</string>
+<string name="audit_scan_pending">سُجّل التثبيت. التحليل المحلي قيد الانتظار.</string>
+<string name="audit_scan_complete">اكتمل التحليل المحلي دون تطابق توقيع مؤكّد. هذا ليس ضمانًا للأمان.</string>
+<string name="audit_scan_unavailable">لم تكن الحزمة ظاهرة عند إجراء التحليل.</string>
+<string name="audit_scan_threat">عُثر على تطابق دقيق مع توقيع تهديد محلي.</string>
+<string name="audit_scan_review">تحتاج المؤشرات المحلية إلى مراجعة؛ ولا تؤكد برمجيات خبيثة.</string>
+<string name="audit_source_recorded">سُجّل مصدر التثبيت.</string>
+<string name="audit_uninstall_requested">طُلب تأكيد إزالة التثبيت من Android.</string>
+<string name="audit_uninstall_success">أبلغ Android عن نجاح إزالة التثبيت.</string>
+<string name="audit_uninstall_failed">تعذّر على Android إكمال طلب إزالة التثبيت.</string>
+<string name="severity_test">علامة اختبار آمنة</string>
+<string name="severity_low">خطورة منخفضة</string>
+<string name="severity_medium">خطورة متوسطة</string>
+<string name="severity_high">خطورة مرتفعة</string>
+<string name="severity_critical">خطورة حرجة</string>
+<string name="severity_unknown">الخطورة غير محددة</string>
+<plurals name="l10n_scanned_apps"><item quantity="zero">عدد التطبيقات المفحوصة: %1$d</item><item quantity="one">فُحص تطبيق واحد (%1$d)</item><item quantity="two">فُحص تطبيقان (%1$d)</item><item quantity="few">فُحصت %1$d تطبيقات</item><item quantity="many">فُحص %1$d تطبيقًا</item><item quantity="other">عدد التطبيقات المفحوصة: %1$d</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="zero">عدد الملفات المفحوصة: %1$d</item><item quantity="one">فُحص ملف واحد (%1$d)</item><item quantity="two">فُحص ملفان (%1$d)</item><item quantity="few">فُحصت %1$d ملفات</item><item quantity="many">فُحص %1$d ملفًا</item><item quantity="other">عدد الملفات المفحوصة: %1$d</item></plurals>
+<plurals name="l10n_threats"><item quantity="zero">عدد التهديدات المكتشفة: %1$d</item><item quantity="one">اكتُشف تهديد واحد (%1$d)</item><item quantity="two">اكتُشف تهديدان (%1$d)</item><item quantity="few">اكتُشفت %1$d تهديدات</item><item quantity="many">اكتُشف %1$d تهديدًا</item><item quantity="other">عدد التهديدات المكتشفة: %1$d</item></plurals>
+<plurals name="l10n_review"><item quantity="zero">نتائج تحتاج إلى مراجعة: %1$d</item><item quantity="one">نتيجة واحدة تحتاج إلى مراجعة (%1$d)</item><item quantity="two">نتيجتان تحتاجان إلى مراجعة (%1$d)</item><item quantity="few">%1$d نتائج تحتاج إلى مراجعة</item><item quantity="many">%1$d نتيجة تحتاج إلى مراجعة</item><item quantity="other">نتائج تحتاج إلى مراجعة: %1$d</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="zero">عناصر تعذّر فحصها: %1$d</item><item quantity="one">تعذّر فحص عنصر واحد (%1$d)</item><item quantity="two">تعذّر فحص عنصرين (%1$d)</item><item quantity="few">تعذّر فحص %1$d عناصر</item><item quantity="many">تعذّر فحص %1$d عنصرًا</item><item quantity="other">عناصر تعذّر فحصها: %1$d</item></plurals>
+<plurals name="l10n_no_match"><item quantity="zero">نتائج دون تطابق محلي: %1$d</item><item quantity="one">نتيجة واحدة دون تطابق محلي (%1$d)</item><item quantity="two">نتيجتان دون تطابق محلي (%1$d)</item><item quantity="few">%1$d نتائج دون تطابق محلي</item><item quantity="many">%1$d نتيجة دون تطابق محلي</item><item quantity="other">نتائج دون تطابق محلي: %1$d</item></plurals>
+<plurals name="l10n_apps"><item quantity="zero">عدد التطبيقات: %1$d</item><item quantity="one">تطبيق واحد (%1$d)</item><item quantity="two">تطبيقان (%1$d)</item><item quantity="few">%1$d تطبيقات</item><item quantity="many">%1$d تطبيقًا</item><item quantity="other">عدد التطبيقات: %1$d</item></plurals>
+<plurals name="l10n_files"><item quantity="zero">عدد الملفات: %1$d</item><item quantity="one">ملف واحد (%1$d)</item><item quantity="two">ملفان (%1$d)</item><item quantity="few">%1$d ملفات</item><item quantity="many">%1$d ملفًا</item><item quantity="other">عدد الملفات: %1$d</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="zero">تطبيقات غير نظامية ذات وصول عالي الخطورة: %1$d.</item><item quantity="one">تطبيق غير نظامي واحد لديه وصول عالي الخطورة (%1$d).</item><item quantity="two">تطبيقان غير نظاميين لديهما وصول عالي الخطورة (%1$d).</item><item quantity="few">%1$d تطبيقات غير نظامية لديها وصول عالي الخطورة.</item><item quantity="many">%1$d تطبيقًا غير نظامي لديها وصول عالي الخطورة.</item><item quantity="other">تطبيقات غير نظامية ذات وصول عالي الخطورة: %1$d.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="zero">تغييرات تنتظر الإشعار: %1$d.</item><item quantity="one">تغيير واحد ينتظر الإشعار (%1$d).</item><item quantity="two">تغييران ينتظران الإشعار (%1$d).</item><item quantity="few">%1$d تغييرات تنتظر الإشعار.</item><item quantity="many">%1$d تغييرًا ينتظر الإشعار.</item><item quantity="other">تغييرات تنتظر الإشعار: %1$d.</item></plurals>
+<plurals name="l10n_rules"><item quantity="zero">تغطية محدودة · عدد القواعد المضمّنة: %1$d</item><item quantity="one">تغطية محدودة · قاعدة مضمّنة واحدة (%1$d)</item><item quantity="two">تغطية محدودة · قاعدتان مضمّنتان (%1$d)</item><item quantity="few">تغطية محدودة · %1$d قواعد مضمّنة</item><item quantity="many">تغطية محدودة · %1$d قاعدة مضمّنة</item><item quantity="other">تغطية محدودة · عدد القواعد المضمّنة: %1$d</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="zero">الفحص الأخير: تطابقات شيفرة استرشادية: %1$d.</item><item quantity="one">الفحص الأخير: تطابق شيفرة استرشادي واحد (%1$d).</item><item quantity="two">الفحص الأخير: تطابقا شيفرة استرشاديان (%1$d).</item><item quantity="few">الفحص الأخير: %1$d تطابقات شيفرة استرشادية.</item><item quantity="many">الفحص الأخير: %1$d تطابق شيفرة استرشاديًا.</item><item quantity="other">الفحص الأخير: تطابقات شيفرة استرشادية: %1$d.</item></plurals>
+<plurals name="l10n_imported"><item quantity="zero">التوقيعات الصالحة المستوردة محليًا: %1$d.</item><item quantity="one">استُورد توقيع صالح واحد محليًا (%1$d).</item><item quantity="two">استُورد توقيعان صالحان محليًا (%1$d).</item><item quantity="few">استُوردت %1$d توقيعات صالحة محليًا.</item><item quantity="many">استُورد %1$d توقيعًا صالحًا محليًا.</item><item quantity="other">التوقيعات الصالحة المستوردة محليًا: %1$d.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="zero">%1$d بايت</item><item quantity="one">بايت واحد (%1$d)</item><item quantity="two">بايتان (%1$d)</item><item quantity="few">%1$d بايتات</item><item quantity="many">%1$d بايتًا</item><item quantity="other">%1$d بايت</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="zero">مؤشرات الوصول الجذري في الملفات: %1$d.</item><item quantity="one">يوجد مؤشر وصول جذري واحد في الملفات (%1$d).</item><item quantity="two">يوجد مؤشرا وصول جذري في الملفات (%1$d).</item><item quantity="few">توجد %1$d مؤشرات وصول جذري في الملفات.</item><item quantity="many">يوجد %1$d مؤشر وصول جذري في الملفات.</item><item quantity="other">مؤشرات الوصول الجذري في الملفات: %1$d.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="zero">مؤشرات اعتراض الدوال: %1$d.</item><item quantity="one">يوجد مؤشر اعتراض دوال واحد (%1$d).</item><item quantity="two">يوجد مؤشرا اعتراض دوال (%1$d).</item><item quantity="few">توجد %1$d مؤشرات اعتراض دوال.</item><item quantity="many">يوجد %1$d مؤشر اعتراض دوال.</item><item quantity="other">مؤشرات اعتراض الدوال: %1$d.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="zero">التطبيقات المفعّلة: %1$d</item><item quantity="one">تطبيق واحد مفعّل (%1$d)</item><item quantity="two">تطبيقان مفعّلان (%1$d)</item><item quantity="few">%1$d تطبيقات مفعّلة</item><item quantity="many">%1$d تطبيقًا مفعّلًا</item><item quantity="other">التطبيقات المفعّلة: %1$d</item></plurals>
+<plurals name="l10n_indicators"><item quantity="zero">عدد المؤشرات: %1$d</item><item quantity="one">مؤشر واحد (%1$d)</item><item quantity="two">مؤشران (%1$d)</item><item quantity="few">%1$d مؤشرات</item><item quantity="many">%1$d مؤشرًا</item><item quantity="other">عدد المؤشرات: %1$d</item></plurals>
+<plurals name="l10n_progress"><item quantity="zero">فُحص %1$d من أصل %2$d تطبيق</item><item quantity="one">فُحص %1$d من أصل %2$d تطبيق</item><item quantity="two">فُحص %1$d من أصل %2$d تطبيقين</item><item quantity="few">فُحص %1$d من أصل %2$d تطبيقات</item><item quantity="many">فُحص %1$d من أصل %2$d تطبيقًا</item><item quantity="other">فُحص %1$d من أصل %2$d تطبيق</item></plurals>
 </resources>

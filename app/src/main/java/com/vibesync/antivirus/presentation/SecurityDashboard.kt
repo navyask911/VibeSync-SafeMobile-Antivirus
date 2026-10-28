@@ -1,5 +1,6 @@
 package com.vibesync.antivirus.presentation
 
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
@@ -30,8 +31,8 @@ import java.util.Date
 @Composable
 internal fun SecurityDashboard(assessment: DeviceSecurityAssessment?, onCheckPlayProtect: () -> Unit, onSync: () -> Unit) {
     val target = assessment?.score ?: 0
-    val score by animateIntAsState(target, tween(900), label = "device-score-number")
-    val progress by animateFloatAsState(target / 100f, tween(900), label = "device-score-gauge")
+    val score by animateIntAsState(target, tween(900))
+    val progress by animateFloatAsState(target / 100f, tween(900))
     GlassCard(Modifier.fillMaxWidth()) {
         Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(18.dp)) {
@@ -45,7 +46,7 @@ internal fun SecurityDashboard(assessment: DeviceSecurityAssessment?, onCheckPla
                         drawArc(accent, -90f, progress * 360f, false, Offset(inset, inset), arcSize, style = Stroke(stroke, cap = StrokeCap.Round))
                     }
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(if (assessment == null) "—" else score.toString(), style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.Bold)
+                        Text(if (assessment == null) "—" else localizedNumber(score), style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.Bold)
                         Text(stringResource(R.string.ui_score_out_of_100), style = MaterialTheme.typography.labelMedium)
                     }
                 }
@@ -60,8 +61,8 @@ internal fun SecurityDashboard(assessment: DeviceSecurityAssessment?, onCheckPla
                 val signals = assessment.signals
                 ScoreRow(stringResource(R.string.ui_score_play_protect), when(signals.playProtectEnabled) { true -> stringResource(R.string.ui_on); false -> stringResource(R.string.ui_off_20); null -> stringResource(R.string.ui_not_verified) })
                 ScoreRow(stringResource(R.string.ui_score_database), if (assessment.databaseStale) stringResource(R.string.ui_stale_10) else stringResource(R.string.ui_updated_24))
-                ScoreRow(stringResource(R.string.ui_score_accessibility), signals.nonSystemAccessibilityApps?.let { stringResource(R.string.ui_enabled_count, it) + if(it > 0) stringResource(R.string.ui_penalty_20) else "" } ?: stringResource(R.string.ui_unavailable))
-                ScoreRow(stringResource(R.string.ui_score_admin), signals.nonSystemDeviceAdmins?.let { stringResource(R.string.ui_enabled_count, it) + if(it > 0) stringResource(R.string.ui_penalty_20) else "" } ?: stringResource(R.string.ui_unavailable))
+                ScoreRow(stringResource(R.string.ui_score_accessibility), signals.nonSystemAccessibilityApps?.let { pluralStringResource(R.plurals.l10n_enabled_apps, it, it) + if(it > 0) stringResource(R.string.ui_penalty_20) else "" } ?: stringResource(R.string.ui_unavailable))
+                ScoreRow(stringResource(R.string.ui_score_admin), signals.nonSystemDeviceAdmins?.let { pluralStringResource(R.plurals.l10n_enabled_apps, it, it) + if(it > 0) stringResource(R.string.ui_penalty_20) else "" } ?: stringResource(R.string.ui_unavailable))
                 Text(stringResource(R.string.ui_score_explanation),
                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -93,22 +94,22 @@ internal fun ScanFeedbackCard(state: SafeMobileUiState, onResults: () -> Unit, o
                     ScanProgressRing(progress, true, stringResource(R.string.ui_scanning_progress), size = 96.dp)
                     Column(Modifier.weight(1f)) {
                         Text(stringResource(R.string.ui_scanning_title), style = MaterialTheme.typography.titleLarge)
-                        Text(if (state.totalItems > 0) stringResource(R.string.ui_items_checked, state.processedItems, state.totalItems) else stringResource(R.string.ui_preparing_inventory))
+                        Text(if (state.totalItems > 0) pluralStringResource(R.plurals.l10n_progress, state.totalItems, state.processedItems, state.totalItems) else stringResource(R.string.ui_preparing_inventory))
                     }
                 }
                 TextButton(onClick = onCancel) { Text(stringResource(R.string.ui_cancel_scan)) }
             } else if (summary != null) {
                 Text(stringResource(R.string.scan_complete), style = MaterialTheme.typography.headlineSmall,
                     color = if (summary.threats > 0) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary)
-                Text(stringResource(R.string.ui_scanned_summary, summary.appCount, summary.fileCount), style = MaterialTheme.typography.titleMedium)
-                Text(stringResource(R.string.ui_threats_found, summary.threats), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                Text(listOf(pluralStringResource(R.plurals.l10n_scanned_apps, summary.appCount, summary.appCount), pluralStringResource(R.plurals.l10n_scanned_files, summary.fileCount, summary.fileCount)).joinToString(" · "), style = MaterialTheme.typography.titleMedium)
+                Text(pluralStringResource(R.plurals.l10n_threats, summary.threats, summary.threats), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                 if (summary.review > 0 || summary.unreadable > 0) Text(
-                    stringResource(R.string.ui_review_summary, summary.review, summary.unreadable), color = MaterialTheme.colorScheme.tertiary)
+                    listOf(pluralStringResource(R.plurals.l10n_review, summary.review, summary.review), pluralStringResource(R.plurals.l10n_unreadable, summary.unreadable, summary.unreadable)).joinToString(" · "), color = MaterialTheme.colorScheme.tertiary)
                 else if (summary.appCount + summary.fileCount == 0) Text(stringResource(R.string.ui_no_readable_items))
                 else if (summary.threats == 0) Text(stringResource(R.string.system_app_scan_complete))
                 if (!summary.signedDefinitionsUsed) Text(stringResource(R.string.ui_unsigned_definitions_warning), color = MaterialTheme.colorScheme.tertiary)
-                state.results.filter { it.verdict == ScanVerdict.THREAT }.take(3).forEach { Text("• ${it.displayName}", color = MaterialTheme.colorScheme.error) }
-                Text(DateFormat.getDateTimeInstance().format(Date(summary.completedAt)), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                state.results.filter { it.verdict == ScanVerdict.THREAT }.take(3).forEach { Text(stringResource(R.string.format_bullet, it.displayName), color = MaterialTheme.colorScheme.error) }
+                Text(localizedDate(summary.completedAt), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 TextButton(onClick = onResults) { Text(stringResource(R.string.ui_view_scan_results)) }
             }
         }

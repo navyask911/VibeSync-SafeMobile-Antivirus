@@ -37,11 +37,11 @@ internal fun HomeSecurityMetrics(summary: ScanCompletionSummary?, hashDbPublishe
                 fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                 Text(stringResource(R.string.metrics_apps_scanned), color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Text(scanned.toString(), color = MaterialTheme.colorScheme.onSurface)
+                Text(localizedNumber(scanned), color = MaterialTheme.colorScheme.onSurface)
             }
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                 Text(stringResource(R.string.metrics_threats_flagged), color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Text(flagged.toString(), color = MaterialTheme.colorScheme.error)
+                Text(localizedNumber(flagged), color = MaterialTheme.colorScheme.error)
             }
             // Each chart segment is scaled to the known local observed total; never invent metrics.
             Canvas(Modifier.fillMaxWidth().height(38.dp)) {
@@ -60,7 +60,7 @@ internal fun HomeSecurityMetrics(summary: ScanCompletionSummary?, hashDbPublishe
                 drawRoundRect(barTwo, topLeft = Offset(horizontalInset, 24.dp.toPx()),
                     size = Size(width * flaggedRatio, h), cornerRadius = CornerRadius(5.dp.toPx()))
             }
-            val updated = hashDbPublishedAt?.let { DateFormat.getDateTimeInstance().format(Date(it)) }
+            val updated = hashDbPublishedAt?.let { localizedDate(it) }
                 ?: stringResource(R.string.metrics_database_unknown)
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                 Text(stringResource(R.string.metrics_database_updated), color = MaterialTheme.colorScheme.onSurfaceVariant)

@@ -701,4 +701,108 @@
 <string name="detection_capabilities_save">Save update settings</string>
 <string name="detection_capabilities_sync_privacy">Downloads only. Scan results, files, hashes, and package names are not uploaded.</string>
 <string name="detection_capabilities_sync_unavailable">Automatic updates are unavailable in this offline build or until a trusted signing key is configured.</string>
+
+<string name="format_label_value">%1$s: %2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s – %2$s</string>
+<string name="format_version">%1$s · Wersja %2$s (%3$s)</string>
+<string name="format_package_version">%1$s · Wersja %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">Wpisz bezpieczny adres kanału</string>
+<string name="storage_size_unavailable">Rozmiar niedostępny</string>
+<string name="blocked_reason_hash">Wykryto zgodność z lokalną sygnaturą zagrożenia.</string>
+<string name="blocked_reason_action">W miarę możliwości podjęto próbę lokalnego działania ochronnego.</string>
+<string name="signed_import_success">Zaakceptowano podpisaną bazę danych: wersja %1$s · %2$s.</string>
+<string name="signed_import_failed">Podpisana baza danych nie została aktywowana. Sprawdź podpis, wersję i format pliku.</string>
+<string name="rule_import_pending">Zapisano %1$s do sprawdzenia. Zaimportowane reguły pozostają wyłączone, a plik nie zostanie uruchomiony.</string>
+<string name="rule_import_failed">Nie udało się zaimportować reguł. Zaimportowane reguły pozostają wyłączone.</string>
+<string name="restore_result_localized">Przywrócono kopię %1$s (%2$s). Oryginał w kwarantannie nadal jest przechowywany.</string>
+<string name="cleaner_confirm_localized">Trwale usunąć %1$s (%2$s)? Tej operacji nie można cofnąć. SafeMobile ponownie sprawdzi nazwy i metadane.</string>
+<string name="cleaner_result_localized">Usunięto: %1$s · Zwolnione miejsce: %2$s · Niepowodzenia lub zmiany: %3$s</string>
+<string name="about_localized_notices">Elementy innych firm nadal podlegają ich własnym licencjom. Oryginalne informacje stanowią punkt kontrolny audytu, a nie ukończony przegląd licencji. Otwórz oryginalne dokumenty, aby poznać informacje źródłowe i warunki licencji.</string>
+<string name="about_open_original">Otwórz oryginalne dokumenty</string>
+<string name="about_localized_privacy">Skanowane pliki, skróty, nazwy pakietów i wyniki pozostają na tym urządzeniu. Lokalne metadane audytu i kopie z kwarantanny są przechowywane w zaszyfrowanej pamięci prywatnej. Aktualizacje podpisanych definicji łączą się z usługą wydań projektu; osobny kanał łączy się ze skonfigurowanym adresem dopiero po wyrażeniu zgody. Monitorowanie folderów dotyczy tylko wybranych folderów i można je zatrzymać. Uprawnienia Androida pozostają pod Twoją kontrolą. Ta wersja nie zawiera reklam, skanowania w chmurze ani usługi oceny reputacji linków.</string>
+<string name="coverage_local_title">Lokalne definicje testowe</string>
+<string name="coverage_local_body">Dołączone starsze definicje zawierają tylko nieszkodliwy znacznik testowy programu antywirusowego. Nie zapewniają ochrony przed prawdziwym złośliwym oprogramowaniem.</string>
+<string name="coverage_signed_title">Podpisana baza skrótów</string>
+<string name="coverage_signed_body">Dokładne porównanie skrótów wymaga zaufanego klucza podpisu i zaakceptowanej podpisanej bazy danych. Produkcyjna baza nie jest dołączona.</string>
+<string name="coverage_static_title">Statyczna analiza aplikacji</string>
+<string name="coverage_static_body">Ograniczona analiza pakietów przedstawia ustalenia informacyjne. Samo ustalenie nie dowodzi obecności złośliwego oprogramowania; listy znanych szkodliwych podpisujących są wyłączone.</string>
+<string name="coverage_permissions_title">Uprawnienia i manifest</string>
+<string name="coverage_permissions_body">Kombinacje uprawnień i widoczne deklaracje pakietów pomagają w ręcznej ocenie. Nie są wytrenowaną klasyfikacją.</string>
+<string name="coverage_integrity_title">Wskaźniki integralności urządzenia</string>
+<string name="coverage_integrity_body">Dostęp root, mechanizmy przechwytywania, właściwości kompilacji, egzekwowanie zabezpieczeń, debugery i emulatory są sprawdzane lokalnymi heurystykami, a nie atestacją.</string>
+<string name="coverage_bloom_title">Probabilistyczny indeks skrótów</string>
+<string name="coverage_bloom_body">Nie dołączono zweryfikowanego, niepustego indeksu probabilistycznego ani jego manifestu. Ta opcjonalna warstwa jest niedostępna.</string>
+<string name="coverage_rules_title">Dołączone sygnatury kodu</string>
+<string name="coverage_rules_body">Zweryfikowane dołączone reguły sprawdzają ograniczony zestaw dosłownych wzorców kodu. Dopasowania mają charakter informacyjny i nie potwierdzają złośliwego oprogramowania.</string>
+<string name="coverage_rules_unavailable">Dołączone reguły nie zostały wczytane lub nie przeszły walidacji. Nie deklarujemy wykonania skanowania sygnatur kodu.</string>
+<string name="coverage_model_title">Model klasyfikacji uprawnień</string>
+<string name="coverage_model_body">Nie dołączono wytrenowanego, zweryfikowanego modelu klasyfikacji nadającego się do dystrybucji. Uczenie maszynowe jest wyłączone.</string>
+<string name="coverage_signer_title">Weryfikacja podpisującego offline</string>
+<string name="coverage_signer_body">Nie skonfigurowano niezależnie ustalonego oczekiwanego odcisku certyfikatu podpisującego.</string>
+<string name="coverage_feed_title">Weryfikacja podpisanego kanału</string>
+<string name="coverage_feed_body">Sprawdzanie oddzielonego podpisu i ochrona przed powrotem do starszej wersji wymagają zaufanego klucza podczas kompilacji i skonfigurowanego podpisanego kanału.</string>
+<string name="hash_status_active">Podpisana lokalna baza skrótów jest aktywna.</string>
+<string name="hash_status_missing">Porównywanie skrótów jest wyłączone do czasu zaakceptowania podpisanej bazy danych.</string>
+<string name="hash_status_key">Porównywanie skrótów jest wyłączone, ponieważ brakuje zaufanego klucza podpisu.</string>
+<string name="hash_status_invalid">Zapisane definicje nie przeszły kontroli integralności, wersji lub formatu. Porównywanie skrótów pozostaje wyłączone.</string>
+<string name="hash_status_activation">Aktywacja bazy danych nie została ukończona. Porównywanie skrótów pozostaje wyłączone.</string>
+<string name="finding_confidence">%1$s · Pewność: %2$d%%</string>
+<string name="finding_exported">Wyeksportowany komponent nie ma widocznego ograniczenia uprawnień w manifeście. Kontrole w kodzie mogą jednak istnieć.</string>
+<string name="finding_admin">Aplikacja deklaruje odbiornik administracji urządzeniem. Ta wrażliwa funkcja nie dowodzi nadużycia.</string>
+<string name="finding_accessibility">Aplikacja deklaruje usługę ułatwień dostępu. Legalne aplikacje pomocnicze mogą potrzebować tego dostępu.</string>
+<string name="finding_overlay">Aplikacja prosi o uprawnienie do nakładania treści na ekran. Nakładki mogą być uzasadnione, ale mogą też zasłaniać inne ekrany.</string>
+<string name="finding_combined">Ułatwienia dostępu łączą się z nakładką, dostępem do SMS-ów lub historii połączeń. Sprawdź przeznaczenie aplikacji.</string>
+<string name="finding_sms_calls">Aplikacja prosi o uprawnienia zarówno do SMS-ów, jak i historii połączeń.</string>
+<string name="finding_sms_network">Dostęp do SMS-ów jest połączony z dostępem do internetu. Wymaga to oceny kontekstu.</string>
+<string name="finding_signer">Brakuje metadanych certyfikatu podpisu lub nie można ich odczytać.</string>
+<string name="finding_archive">Kontenera pakietu nie udało się w pełni zbadać. Analiza statyczna jest niekompletna.</string>
+<string name="finding_packer">Ścieżka w pakiecie przypomina znane narzędzie do pakowania lub ochrony. Legalne aplikacje też mogą z nich korzystać.</string>
+<string name="finding_dex_header">Nagłówek kodu ma niespójne pola formatu lub rozmiaru. To nie dowodzi obecności złośliwego oprogramowania.</string>
+<string name="finding_dex_short">Element kodu jest krótszy od poprawnego nagłówka i nie można go w pełni sprawdzić.</string>
+<string name="finding_entropy">Próbka kodu ma wysoką entropię bajtów. Przyczyną może być szyfrowanie, pakowanie lub nieszkodliwa skompresowana zawartość.</string>
+<string name="finding_api">Nie znaleziono oczekiwanego statycznego odwołania do żądanego uprawnienia. Przyczyną może być refleksja, biblioteki lub kod ładowany dynamicznie.</string>
+<string name="finding_rules">Wykryto dopasowanie do ograniczonej dołączonej sygnatury kodu. To wskazówka, a nie dowód złośliwego oprogramowania.</string>
+<string name="finding_other">Dodatkowe lokalne wskaźniki wymagają ręcznej oceny. Nie potwierdzają złośliwego oprogramowania.</string>
+<string name="integrity_manager">Widoczny jest menedżer dostępu root lub przechwytywania: %1$s</string>
+<string name="integrity_test_keys">Kompilacja urządzenia korzysta z testowych kluczy podpisu.</string>
+<string name="integrity_debug_build">Właściwości kompilacji wskazują na system debugowalny lub nieprodukcyjny.</string>
+<string name="integrity_selinux">Możliwy do odczytania stan lokalny wskazuje wyłączone obowiązkowe egzekwowanie zabezpieczeń.</string>
+<string name="integrity_debugger">Do tego procesu jest dołączony debugger.</string>
+<string name="integrity_emulator">Właściwości kompilacji przypominają emulator lub urządzenie testowe.</string>
+<string name="audit_scan_pending">Zarejestrowano instalację. Analiza lokalna oczekuje.</string>
+<string name="audit_scan_complete">Analiza lokalna zakończyła się bez potwierdzonego dopasowania sygnatury. To nie gwarantuje bezpieczeństwa.</string>
+<string name="audit_scan_unavailable">Pakiet nie był widoczny podczas analizy.</string>
+<string name="audit_scan_threat">Wykryto dokładne dopasowanie do lokalnej sygnatury zagrożenia.</string>
+<string name="audit_scan_review">Lokalne wskaźniki wymagają sprawdzenia; nie potwierdzają złośliwego oprogramowania.</string>
+<string name="audit_source_recorded">Zarejestrowano źródło instalacji.</string>
+<string name="audit_uninstall_requested">Poproszono system Android o potwierdzenie odinstalowania.</string>
+<string name="audit_uninstall_success">Android zgłosił pomyślne odinstalowanie.</string>
+<string name="audit_uninstall_failed">Android nie mógł dokończyć żądania odinstalowania.</string>
+<string name="severity_test">Nieszkodliwy znacznik testowy</string>
+<string name="severity_low">Niska waga</string>
+<string name="severity_medium">Średnia waga</string>
+<string name="severity_high">Wysoka waga</string>
+<string name="severity_critical">Krytyczna waga</string>
+<string name="severity_unknown">Nie określono wagi</string>
+<plurals name="l10n_scanned_apps"><item quantity="one">Zeskanowano %1$d aplikację</item><item quantity="few">Zeskanowano %1$d aplikacje</item><item quantity="many">Zeskanowano %1$d aplikacji</item><item quantity="other">Zeskanowano %1$d aplikacji</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="one">Zeskanowano %1$d plik</item><item quantity="few">Zeskanowano %1$d pliki</item><item quantity="many">Zeskanowano %1$d plików</item><item quantity="other">Zeskanowano %1$d pliku</item></plurals>
+<plurals name="l10n_threats"><item quantity="one">Znaleziono %1$d zagrożenie</item><item quantity="few">Znaleziono %1$d zagrożenia</item><item quantity="many">Znaleziono %1$d zagrożeń</item><item quantity="other">Znaleziono %1$d zagrożenia</item></plurals>
+<plurals name="l10n_review"><item quantity="one">%1$d wynik wymaga sprawdzenia</item><item quantity="few">%1$d wyniki wymagają sprawdzenia</item><item quantity="many">%1$d wyników wymaga sprawdzenia</item><item quantity="other">%1$d wyniku wymaga sprawdzenia</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="one">Nie można zeskanować %1$d elementu</item><item quantity="few">Nie można zeskanować %1$d elementów</item><item quantity="many">Nie można zeskanować %1$d elementów</item><item quantity="other">Nie można zeskanować %1$d elementu</item></plurals>
+<plurals name="l10n_no_match"><item quantity="one">%1$d wynik bez lokalnego dopasowania</item><item quantity="few">%1$d wyniki bez lokalnego dopasowania</item><item quantity="many">%1$d wyników bez lokalnego dopasowania</item><item quantity="other">%1$d wyniku bez lokalnego dopasowania</item></plurals>
+<plurals name="l10n_apps"><item quantity="one">%1$d aplikacja</item><item quantity="few">%1$d aplikacje</item><item quantity="many">%1$d aplikacji</item><item quantity="other">%1$d aplikacji</item></plurals>
+<plurals name="l10n_files"><item quantity="one">%1$d plik</item><item quantity="few">%1$d pliki</item><item quantity="many">%1$d plików</item><item quantity="other">%1$d pliku</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="one">%1$d aplikacja niesystemowa ma dostęp wysokiego ryzyka.</item><item quantity="few">%1$d aplikacje niesystemowe mają dostęp wysokiego ryzyka.</item><item quantity="many">%1$d aplikacji niesystemowych ma dostęp wysokiego ryzyka.</item><item quantity="other">%1$d aplikacji niesystemowej ma dostęp wysokiego ryzyka.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="one">%1$d zaobserwowana zmiana oczekuje na powiadomienie.</item><item quantity="few">%1$d zaobserwowane zmiany oczekują na powiadomienie.</item><item quantity="many">%1$d zaobserwowanych zmian oczekuje na powiadomienie.</item><item quantity="other">%1$d zaobserwowanej zmiany oczekuje na powiadomienie.</item></plurals>
+<plurals name="l10n_rules"><item quantity="one">Ograniczona ochrona · %1$d dołączona reguła</item><item quantity="few">Ograniczona ochrona · %1$d dołączone reguły</item><item quantity="many">Ograniczona ochrona · %1$d dołączonych reguł</item><item quantity="other">Ograniczona ochrona · %1$d dołączonej reguły</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="one">Ostatni skan: %1$d orientacyjne dopasowanie kodu.</item><item quantity="few">Ostatni skan: %1$d orientacyjne dopasowania kodu.</item><item quantity="many">Ostatni skan: %1$d orientacyjnych dopasowań kodu.</item><item quantity="other">Ostatni skan: %1$d orientacyjnego dopasowania kodu.</item></plurals>
+<plurals name="l10n_imported"><item quantity="one">Zaimportowano %1$d poprawną sygnaturę do pamięci lokalnej.</item><item quantity="few">Zaimportowano %1$d poprawne sygnatury do pamięci lokalnej.</item><item quantity="many">Zaimportowano %1$d poprawnych sygnatur do pamięci lokalnej.</item><item quantity="other">Zaimportowano %1$d poprawnej sygnatury do pamięci lokalnej.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="one">%1$d bajt</item><item quantity="few">%1$d bajty</item><item quantity="many">%1$d bajtów</item><item quantity="other">%1$d bajta</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="one">Występuje %1$d wskaźnik systemu plików związany z rootem.</item><item quantity="few">Występują %1$d wskaźniki systemu plików związane z rootem.</item><item quantity="many">Występuje %1$d wskaźników systemu plików związanych z rootem.</item><item quantity="other">Występuje %1$d wskaźnika systemu plików związanego z rootem.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="one">Występuje %1$d wskaźnik przechwytywania.</item><item quantity="few">Występują %1$d wskaźniki przechwytywania.</item><item quantity="many">Występuje %1$d wskaźników przechwytywania.</item><item quantity="other">Występuje %1$d wskaźnika przechwytywania.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="one">Włączono %1$d aplikację</item><item quantity="few">Włączono %1$d aplikacje</item><item quantity="many">Włączono %1$d aplikacji</item><item quantity="other">Włączono %1$d aplikacji</item></plurals>
+<plurals name="l10n_indicators"><item quantity="one">%1$d wskaźnik</item><item quantity="few">%1$d wskaźniki</item><item quantity="many">%1$d wskaźników</item><item quantity="other">%1$d wskaźnika</item></plurals>
+<plurals name="l10n_progress"><item quantity="one">Sprawdzono %1$d z %2$d aplikacji</item><item quantity="few">Sprawdzono %1$d z %2$d aplikacji</item><item quantity="many">Sprawdzono %1$d z %2$d aplikacji</item><item quantity="other">Sprawdzono %1$d z %2$d aplikacji</item></plurals>
 </resources>

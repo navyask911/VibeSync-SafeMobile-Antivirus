@@ -558,4 +558,107 @@
 <string name="locale_th">ไทย</string>
 <string name="locale_uk">Українська</string>
 <string name="locale_uz">O‘zbekcha</string>
+<string name="format_label_value">%1$s：%2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s ～ %2$s</string>
+<string name="format_version">%1$s · バージョン %2$s（%3$s）</string>
+<string name="format_package_version">%1$s · バージョン %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">安全な配信元のアドレスを入力してください</string>
+<string name="storage_size_unavailable">サイズを取得できません</string>
+<string name="blocked_reason_hash">ローカルの脅威シグネチャと一致しました。</string>
+<string name="blocked_reason_action">システムの制限内でローカルの保護操作を試みました。</string>
+<string name="signed_import_success">署名付きデータベースを受け入れました：バージョン %1$s · %2$s。</string>
+<string name="signed_import_failed">署名付きデータベースを有効化できませんでした。署名、バージョン、ファイル形式を確認してください。</string>
+<string name="rule_import_pending">確認用に %1$s を保存しました。取り込んだルールは無効のままで、このファイルは実行されません。</string>
+<string name="rule_import_failed">ルールを取り込めませんでした。取り込んだルールは無効のままです。</string>
+<string name="restore_result_localized">%1$s のコピーを復元しました（%2$s）。隔離された元のファイルは保存されたままです。</string>
+<string name="cleaner_confirm_localized">%1$s（%2$s）を完全に削除しますか？元に戻せません。SafeMobile が名前とメタデータを再確認します。</string>
+<string name="cleaner_result_localized">削除済み：%1$s · 解放した容量：%2$s · 失敗または変更あり：%3$s</string>
+<string name="about_localized_notices">第三者の構成要素にはそれぞれのライセンスが適用されます。元の通知文書は監査の途中経過であり、ライセンス確認の完了を示すものではありません。元の文書で通知内容とライセンス条項を確認してください。</string>
+<string name="about_open_original">元の文書を開く</string>
+<string name="about_localized_privacy">検査するファイル、ハッシュ、パッケージ名、結果はこの端末内に保存されます。監査メタデータと隔離コピーは暗号化された非公開領域に保存されます。署名付き定義の更新は本プロジェクトのリリースサービスに接続し、別の配信元は同意後にのみ設定された宛先に接続します。監視対象は自分で選んだフォルダで、監視は停止できます。Android の権限は利用者が管理します。このビルドには広告、クラウド検査、リンク評判照会サービスはありません。</string>
+<string name="coverage_local_title">ローカルのテスト定義</string>
+<string name="coverage_local_body">同梱の従来定義には無害なウイルス対策テスト用マーカーしか含まれません。実際のマルウェアに対する検出範囲はありません。</string>
+<string name="coverage_signed_title">署名付きハッシュデータベース</string>
+<string name="coverage_signed_body">ハッシュの完全一致検査には信頼できる署名鍵と受け入れ済みの署名付きデータベースが必要です。実運用データベースは同梱されていません。</string>
+<string name="coverage_static_title">アプリの静的解析</string>
+<string name="coverage_static_body">範囲を限定したパッケージ解析は参考所見を報告します。所見だけではマルウェアと証明できません。既知の悪意ある署名者リストは無効です。</string>
+<string name="coverage_permissions_title">権限とマニフェスト</string>
+<string name="coverage_permissions_body">権限の組み合わせと参照可能なパッケージ宣言は手動確認を補助します。学習済み分類ではありません。</string>
+<string name="coverage_integrity_title">端末の整合性指標</string>
+<string name="coverage_integrity_body">特権アクセス、関数の横取り、システム属性、保護の強制、デバッガ、エミュレータを端末内の推定手法で調べます。証明機能ではありません。</string>
+<string name="coverage_bloom_title">確率的ハッシュ索引</string>
+<string name="coverage_bloom_body">検証済みで空ではない確率的索引とマニフェストは同梱されていません。この任意機能は利用できません。</string>
+<string name="coverage_rules_title">同梱コードシグネチャ</string>
+<string name="coverage_rules_body">検証済みの同梱ルールが、限られたコードの文字列パターンを調べます。一致は参考情報であり、マルウェアを確定しません。</string>
+<string name="coverage_rules_unavailable">同梱ルールを読み込めなかったか、検証に失敗しました。コードシグネチャ検査の実行は主張しません。</string>
+<string name="coverage_model_title">権限分類モデル</string>
+<string name="coverage_model_body">学習・検証済みで配布可能な分類モデルは同梱されていません。機械学習は無効です。</string>
+<string name="coverage_signer_title">オフライン署名者証明</string>
+<string name="coverage_signer_body">独立して固定された、期待する署名証明書の指紋が設定されていません。</string>
+<string name="coverage_feed_title">署名付き配信元の検証</string>
+<string name="coverage_feed_body">分離署名の検証と旧版への巻き戻し防止には、ビルド時の信頼できる鍵と設定済みの署名付き配信元が必要です。</string>
+<string name="hash_status_active">署名付きローカルハッシュデータベースは有効です。</string>
+<string name="hash_status_missing">署名付きデータベースが受け入れられるまでハッシュ照合は無効です。</string>
+<string name="hash_status_key">信頼できる署名鍵がないため、ハッシュ照合は無効です。</string>
+<string name="hash_status_invalid">保存された定義は整合性、バージョン、形式の検証に失敗しました。ハッシュ照合は無効のままです。</string>
+<string name="hash_status_activation">データベースの有効化が完了しませんでした。ハッシュ照合は無効のままです。</string>
+<string name="finding_confidence">%1$s · 確信度：%2$d%%</string>
+<string name="finding_exported">外部公開コンポーネントに、マニフェスト上の権限制限が見当たりません。コード側に確認処理がある可能性はあります。</string>
+<string name="finding_admin">アプリは端末管理の受信機能を宣言しています。機密性の高い能力ですが、不正利用の証明ではありません。</string>
+<string name="finding_accessibility">アプリはユーザー補助サービスを宣言しています。正当な支援アプリでも必要になる場合があります。</string>
+<string name="finding_overlay">アプリは他の画面への重ね表示を要求しています。正当な用途もありますが、別の画面を隠すこともできます。</string>
+<string name="finding_combined">ユーザー補助が、重ね表示、テキストメッセージ、通話履歴へのアクセスと組み合わされています。アプリの用途を確認してください。</string>
+<string name="finding_sms_calls">アプリはテキストメッセージと通話履歴の両方の権限を要求しています。</string>
+<string name="finding_sms_network">テキストメッセージへのアクセスとインターネット接続が組み合わされています。利用状況の確認が必要です。</string>
+<string name="finding_signer">署名証明書のメタデータがないか、読み取れません。</string>
+<string name="finding_archive">パッケージ全体を調べられませんでした。静的解析は不完全です。</string>
+<string name="finding_packer">パッケージ内のパスが既知の圧縮・保護ツールに似ています。正当なアプリでも利用される場合があります。</string>
+<string name="finding_dex_header">コードヘッダーの形式やサイズの項目に矛盾があります。マルウェアの証明ではありません。</string>
+<string name="finding_dex_short">コード項目が有効なヘッダーより短く、全体を調べられませんでした。</string>
+<string name="finding_entropy">コード標本のバイトエントロピーが高い状態です。暗号化、圧縮、無害な圧縮内容が原因の可能性があります。</string>
+<string name="finding_api">要求した権限に対応する静的参照が見つかりません。リフレクション、ライブラリ、動的読込コードが原因の場合があります。</string>
+<string name="finding_rules">限られた同梱コードシグネチャが一致しました。参考情報であり、マルウェアの証明ではありません。</string>
+<string name="finding_other">追加のローカル指標には手動確認が必要です。マルウェアの確定情報ではありません。</string>
+<string name="integrity_manager">特権アクセスまたは関数横取りの管理アプリが見つかりました：%1$s</string>
+<string name="integrity_test_keys">端末のシステムはテスト用の署名鍵を使用しています。</string>
+<string name="integrity_debug_build">システム属性は、デバッグ可能または実運用向けではない構成を示しています。</string>
+<string name="integrity_selinux">読み取れる端末内の状態によると、必須の保護強制が無効です。</string>
+<string name="integrity_debugger">このプロセスにはデバッガが接続されています。</string>
+<string name="integrity_emulator">システム属性がエミュレータやテスト端末に似ています。</string>
+<string name="audit_scan_pending">インストールを記録しました。ローカル解析は待機中です。</string>
+<string name="audit_scan_complete">シグネチャの一致は確認されず、ローカル解析が完了しました。安全を保証するものではありません。</string>
+<string name="audit_scan_unavailable">解析時にパッケージを参照できませんでした。</string>
+<string name="audit_scan_threat">ローカルの脅威シグネチャに完全一致しました。</string>
+<string name="audit_scan_review">ローカル指標の確認が必要です。マルウェアを確定するものではありません。</string>
+<string name="audit_source_recorded">インストール元を記録しました。</string>
+<string name="audit_uninstall_requested">Android のアンインストール確認を要求しました。</string>
+<string name="audit_uninstall_success">Android からアンインストール成功の報告がありました。</string>
+<string name="audit_uninstall_failed">Android がアンインストール要求を完了できませんでした。</string>
+<string name="severity_test">無害なテスト用マーカー</string>
+<string name="severity_low">深刻度：低</string>
+<string name="severity_medium">深刻度：中</string>
+<string name="severity_high">深刻度：高</string>
+<string name="severity_critical">深刻度：重大</string>
+<string name="severity_unknown">深刻度：未指定</string>
+<plurals name="l10n_scanned_apps"><item quantity="other">%1$d 個のアプリを検査済み</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="other">%1$d 個のファイルを検査済み</item></plurals>
+<plurals name="l10n_threats"><item quantity="other">%1$d 件の脅威を検出</item></plurals>
+<plurals name="l10n_review"><item quantity="other">%1$d 件の結果は確認が必要</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="other">%1$d 項目を検査できませんでした</item></plurals>
+<plurals name="l10n_no_match"><item quantity="other">%1$d 件の結果にローカル一致なし</item></plurals>
+<plurals name="l10n_apps"><item quantity="other">%1$d 個のアプリ</item></plurals>
+<plurals name="l10n_files"><item quantity="other">%1$d 個のファイル</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="other">%1$d 個の非システムアプリが高リスクのアクセス権を持っています。</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="other">%1$d 件の検出された変更が通知待ちです。</item></plurals>
+<plurals name="l10n_rules"><item quantity="other">限定的な検出範囲 · 同梱ルール %1$d 件</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="other">最新の検査：参考となるコード一致 %1$d 件。</item></plurals>
+<plurals name="l10n_imported"><item quantity="other">有効なシグネチャ %1$d 件を端末内に取り込みました。</item></plurals>
+<plurals name="l10n_bytes"><item quantity="other">%1$d バイト</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="other">ファイルシステムに特権アクセスの指標が %1$d 件あります。</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="other">関数横取りの指標が %1$d 件あります。</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="other">%1$d 個のアプリが有効</item></plurals>
+<plurals name="l10n_indicators"><item quantity="other">%1$d 件の指標</item></plurals>
+<plurals name="l10n_progress"><item quantity="other">%2$d 個中 %1$d 個のアプリを確認済み</item></plurals>
 </resources>

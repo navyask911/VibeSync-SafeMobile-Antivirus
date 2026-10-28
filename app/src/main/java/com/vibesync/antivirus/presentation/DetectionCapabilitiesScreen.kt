@@ -1,5 +1,8 @@
 package com.vibesync.antivirus.presentation
 
+import androidx.compose.ui.platform.LocalContext
+import com.vibesync.antivirus.core.locale.SecurityText
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -42,8 +45,8 @@ fun DetectionCapabilitiesScreen(
                 Text(stringResource(R.string.hash_database_sync_interval), style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.primary)
                 Text(if (hashDatabaseCapability.enabled) {
-                    stringResource(R.string.ui_yara_database_active, hashDatabaseCapability.indicatorCount, hashDatabaseCapability.version ?: "—")
-                } else hashDatabaseCapability.reason, style = MaterialTheme.typography.bodySmall,
+                    stringResource(R.string.format_package_version, pluralStringResource(R.plurals.l10n_indicators, hashDatabaseCapability.indicatorCount, hashDatabaseCapability.indicatorCount), hashDatabaseCapability.version?.let { localizedNumber(it) } ?: "—")
+                } else SecurityText.hashStatus(hashDatabaseCapability).resolve(LocalContext.current), style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
@@ -54,10 +57,10 @@ fun DetectionCapabilitiesScreen(
             Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
                 Text(stringResource(R.string.ui_yara_title), style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold)
-                Text(if (yaraCapability.active) stringResource(R.string.ui_yara_active, yaraCapability.ruleCount)
+                Text(if (yaraCapability.active) pluralStringResource(R.plurals.l10n_rules, yaraCapability.ruleCount, yaraCapability.ruleCount)
                     else stringResource(R.string.ui_yara_disabled), style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.primary)
-                Text(stringResource(R.string.ui_yara_match_summary, yaraMatchCount),
+                Text(pluralStringResource(R.plurals.l10n_rule_matches, yaraMatchCount, yaraMatchCount),
                     style = MaterialTheme.typography.bodySmall)
                 if (yaraMatchedRuleNames.isNotEmpty()) {
                     Text(yaraMatchedRuleNames.take(8).joinToString(", "),
@@ -80,9 +83,14 @@ fun DetectionCapabilitiesScreen(
             Card(modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)) {
                 Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
-                    Text(layer.id.replace('-', ' ').replaceFirstChar { it.uppercase() }, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                    val copy = SecurityText.coverage.getValue(layer.id)
+                    Text(stringResource(copy.first), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
                     Text(statusText, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
-                    val reason = if (layer.id == "signed-multi-hash-database") hashDatabaseCapability.reason else layer.reason
+                    val reason = when (layer.id) {
+                        "signed-multi-hash-database" -> SecurityText.hashStatus(hashDatabaseCapability).resolve(LocalContext.current)
+                        "yara-dex-and-assets" -> stringResource(if (yaraCapability.active) R.string.coverage_rules_body else R.string.coverage_rules_unavailable)
+                        else -> stringResource(copy.second)
+                    }
                     Text(reason, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }

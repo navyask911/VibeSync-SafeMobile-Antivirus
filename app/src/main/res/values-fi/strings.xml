@@ -701,4 +701,108 @@
 <string name="detection_capabilities_save">Save update settings</string>
 <string name="detection_capabilities_sync_privacy">Downloads only. Scan results, files, hashes, and package names are not uploaded.</string>
 <string name="detection_capabilities_sync_unavailable">Automatic updates are unavailable in this offline build or until a trusted signing key is configured.</string>
+
+<string name="format_label_value">%1$s: %2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s – %2$s</string>
+<string name="format_version">%1$s · Versio %2$s (%3$s)</string>
+<string name="format_package_version">%1$s · Versio %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">Anna turvallinen syöteosoite</string>
+<string name="storage_size_unavailable">Koko ei ole saatavilla</string>
+<string name="blocked_reason_hash">Paikallinen uhka-allekirjoitus täsmäsi.</string>
+<string name="blocked_reason_action">Paikallista turvatoimea yritettiin toteuttaa mahdollisuuksien mukaan.</string>
+<string name="signed_import_success">Allekirjoitettu tietokanta hyväksytty: versio %1$s · %2$s.</string>
+<string name="signed_import_failed">Allekirjoitettua tietokantaa ei aktivoitu. Tarkista allekirjoitus, versio ja tiedostomuoto.</string>
+<string name="rule_import_pending">%1$s tallennettu tarkastettavaksi. Tuodut säännöt pysyvät pois käytöstä, eikä tätä tiedostoa suoriteta.</string>
+<string name="rule_import_failed">Sääntöjä ei voitu tuoda. Tuodut säännöt pysyvät pois käytöstä.</string>
+<string name="restore_result_localized">Kohteen %1$s (%2$s) kopio palautettiin. Karanteeniin siirretty alkuperäinen tiedosto säilytetään.</string>
+<string name="cleaner_confirm_localized">Poistetaanko %1$s (%2$s) pysyvästi? Toimintoa ei voi kumota. SafeMobile tarkistaa nimet ja metatiedot uudelleen.</string>
+<string name="cleaner_result_localized">Poistettu: %1$s · Vapautunut tila: %2$s · Epäonnistuneet tai muuttuneet: %3$s</string>
+<string name="about_localized_notices">Kolmannen osapuolen osiin sovelletaan niiden omia lisenssejä. Alkuperäiset ilmoitukset ovat auditoinnin tarkistuspiste, eivät valmistunut lisenssitarkastus. Avaa alkuperäiset asiakirjat nähdäksesi lähdeilmoitukset ja lisenssiehdot.</string>
+<string name="about_open_original">Avaa alkuperäiset asiakirjat</string>
+<string name="about_localized_privacy">Skannatut tiedostot, tiivisteet, pakettien nimet ja tulokset pysyvät tällä laitteella. Paikalliset auditointimetatiedot ja karanteenikopiot säilytetään salatussa yksityisessä tallennustilassa. Allekirjoitettujen määritysten päivitykset ottavat yhteyden projektin julkaisupalveluun; erillinen syöte ottaa yhteyden määritettyyn osoitteeseen vasta suostumuksesi jälkeen. Kansioiden valvonta koskee vain valitsemiasi kansioita, ja sen voi pysäyttää. Android-käyttöoikeudet pysyvät hallinnassasi. Tämä versio ei sisällä mainoksia, pilviskannausta eikä linkkien mainepalvelua.</string>
+<string name="coverage_local_title">Paikalliset testimääritykset</string>
+<string name="coverage_local_body">Mukana toimitetut vanhat määritykset sisältävät vain harmittoman virustorjunnan testimerkin. Ne eivät tarjoa suojaa todellisia haittaohjelmia vastaan.</string>
+<string name="coverage_signed_title">Allekirjoitettu tiivistetietokanta</string>
+<string name="coverage_signed_body">Tarkka tiivistevertailu edellyttää luotettavaa allekirjoitusavainta ja hyväksyttyä allekirjoitettua tietokantaa. Tuotantotietokantaa ei ole mukana.</string>
+<string name="coverage_static_title">Sovellusten staattinen analyysi</string>
+<string name="coverage_static_body">Rajattu pakettianalyysi tuottaa suuntaa-antavia havaintoja. Yksittäinen havainto ei todista haittaohjelmaa; tunnettujen haitallisten allekirjoittajien luettelot ovat poissa käytöstä.</string>
+<string name="coverage_permissions_title">Käyttöoikeudet ja manifesti</string>
+<string name="coverage_permissions_body">Käyttöoikeuksien yhdistelmät ja näkyvät pakettimääritykset tukevat manuaalista tarkastusta. Kyse ei ole koulutetusta luokittelusta.</string>
+<string name="coverage_integrity_title">Laitteen eheyden ilmaisimet</string>
+<string name="coverage_integrity_body">Root-oikeudet, koukut, koontiversion ominaisuudet, suojauksen pakotus, virheenjäljittimet ja emulaattorit tarkistetaan paikallisilla heuristiikoilla, ei todentamispalvelulla.</string>
+<string name="coverage_bloom_title">Todennäköisyyspohjainen tiivisteindeksi</string>
+<string name="coverage_bloom_body">Varmennettua, ei-tyhjää todennäköisyysindeksiä ja sen manifestia ei ole mukana. Tämä valinnainen kerros ei ole saatavilla.</string>
+<string name="coverage_rules_title">Mukana toimitetut koodiallekirjoitukset</string>
+<string name="coverage_rules_body">Varmennetut mukana toimitetut säännöt tarkistavat rajatun joukon kirjaimellisia koodikuvioita. Osumat ovat suuntaa-antavia eivätkä vahvista haittaohjelmaa.</string>
+<string name="coverage_rules_unavailable">Mukana toimitettuja sääntöjä ei voitu ladata tai ne eivät läpäisseet varmennusta. Koodiallekirjoitusten skannausta ei väitetä tehdyksi.</string>
+<string name="coverage_model_title">Käyttöoikeuksien luokittelumalli</string>
+<string name="coverage_model_body">Koulutettua, varmennettua ja jaettavaa luokittelumallia ei ole mukana. Koneoppiminen on pois käytöstä.</string>
+<string name="coverage_signer_title">Allekirjoittajan offline-varmennus</string>
+<string name="coverage_signer_body">Itsenäisesti kiinnitettyä odotettua allekirjoitusvarmenteen sormenjälkeä ei ole määritetty.</string>
+<string name="coverage_feed_title">Allekirjoitetun syötteen varmennus</string>
+<string name="coverage_feed_body">Erillisen allekirjoituksen varmennus ja vanhempaan versioon palaamisen esto edellyttävät luotettavaa koontiavainta ja määritettyä allekirjoitettua syötettä.</string>
+<string name="hash_status_active">Allekirjoitettu paikallinen tiivistetietokanta on käytössä.</string>
+<string name="hash_status_missing">Tiivistevertailu on pois käytöstä, kunnes allekirjoitettu tietokanta hyväksytään.</string>
+<string name="hash_status_key">Tiivistevertailu on pois käytöstä, koska luotettavaa allekirjoitusavainta ei ole saatavilla.</string>
+<string name="hash_status_invalid">Tallennetut määritykset eivät läpäisseet eheys-, versio- tai muototarkistuksia. Tiivistevertailu pysyy pois käytöstä.</string>
+<string name="hash_status_activation">Tietokannan aktivointi ei valmistunut. Tiivistevertailu pysyy pois käytöstä.</string>
+<string name="finding_confidence">%1$s · Luottamusaste: %2$d%%</string>
+<string name="finding_exported">Viedylle komponentille ei näy manifestissa käyttöoikeusrajoitusta. Kooditason tarkistuksia voi silti olla.</string>
+<string name="finding_admin">Sovellus ilmoittaa laitteen ylläpidon vastaanottimen. Tämä arkaluonteinen ominaisuus ei todista väärinkäyttöä.</string>
+<string name="finding_accessibility">Sovellus ilmoittaa esteettömyyspalvelun. Lailliset apusovellukset voivat tarvita tätä käyttöoikeutta.</string>
+<string name="finding_overlay">Sovellus pyytää oikeutta näyttää sisältöä muiden näyttöjen päällä. Se voi olla perusteltua, mutta se voi myös peittää muita näyttöjä.</string>
+<string name="finding_combined">Esteettömyys yhdistyy peittokuviin, tekstiviesteihin tai puheluhistoriaan pääsyyn. Tarkista sovelluksen tarkoitus.</string>
+<string name="finding_sms_calls">Sovellus pyytää sekä tekstiviestien että puheluhistorian käyttöoikeutta.</string>
+<string name="finding_sms_network">Tekstiviesteihin pääsy yhdistyy internetyhteyteen. Asia on arvioitava asiayhteydessä.</string>
+<string name="finding_signer">Allekirjoitusvarmenteen metatiedot puuttuvat tai niitä ei voi lukea.</string>
+<string name="finding_archive">Pakettisäiliötä ei voitu tarkastaa kokonaan. Staattinen analyysi on keskeneräinen.</string>
+<string name="finding_packer">Paketin polku muistuttaa tunnettua pakkaus- tai suojaustyökalua. Myös lailliset sovellukset voivat käyttää niitä.</string>
+<string name="finding_dex_header">Koodin otsakkeessa on ristiriitaisia muoto- tai kokokenttiä. Tämä ei todista haittaohjelmaa.</string>
+<string name="finding_dex_short">Koodimerkintä on kelvollista otsaketta lyhyempi eikä sitä voitu tutkia täysin.</string>
+<string name="finding_entropy">Koodinäytteessä on suuri tavuentropia. Syynä voi olla salaus, pakkaus tai harmiton pakattu sisältö.</string>
+<string name="finding_api">Pyydetylle käyttöoikeudelle ei löytynyt odotettua staattista viittausta. Reflektio, kirjastot tai dynaamisesti ladattu koodi voivat selittää puuttumisen.</string>
+<string name="finding_rules">Rajattu mukana toimitettu koodiallekirjoitus täsmäsi. Se on vain viite, ei todiste haittaohjelmasta.</string>
+<string name="finding_other">Muut paikalliset ilmaisimet vaativat manuaalista tarkastusta. Ne eivät vahvista haittaohjelmaa.</string>
+<string name="integrity_manager">Root- tai koukutushallinta on näkyvissä: %1$s</string>
+<string name="integrity_test_keys">Laitteen koontiversio käyttää testiallekirjoitusavaimia.</string>
+<string name="integrity_debug_build">Koontiversion ominaisuudet viittaavat virheenjäljitystilassa olevaan tai muuhun kuin tuotantojärjestelmään.</string>
+<string name="integrity_selinux">Luettavissa oleva paikallinen tila kertoo pakollisen suojauksen pakotuksen olevan pois käytöstä.</string>
+<string name="integrity_debugger">Tähän prosessiin on liitetty virheenjäljitin.</string>
+<string name="integrity_emulator">Koontiversion ominaisuudet muistuttavat emulaattoria tai testilaitetta.</string>
+<string name="audit_scan_pending">Asennus kirjattiin. Paikallinen analyysi odottaa.</string>
+<string name="audit_scan_complete">Paikallinen analyysi valmistui ilman vahvistettua allekirjoitusosumaa. Tämä ei takaa turvallisuutta.</string>
+<string name="audit_scan_unavailable">Paketti ei näkynyt analyysin aikana.</string>
+<string name="audit_scan_threat">Löytyi tarkka vastaavuus paikalliseen uhka-allekirjoitukseen.</string>
+<string name="audit_scan_review">Paikalliset ilmaisimet vaativat tarkastusta; ne eivät vahvista haittaohjelmaa.</string>
+<string name="audit_source_recorded">Asennuslähde kirjattiin.</string>
+<string name="audit_uninstall_requested">Androidilta pyydettiin vahvistus asennuksen poistamiseen.</string>
+<string name="audit_uninstall_success">Android ilmoitti asennuksen poiston onnistuneen.</string>
+<string name="audit_uninstall_failed">Android ei voinut viimeistellä poistopyyntöä.</string>
+<string name="severity_test">Harmiton testimerkki</string>
+<string name="severity_low">Vähäinen vakavuus</string>
+<string name="severity_medium">Kohtalainen vakavuus</string>
+<string name="severity_high">Suuri vakavuus</string>
+<string name="severity_critical">Kriittinen vakavuus</string>
+<string name="severity_unknown">Vakavuutta ei määritetty</string>
+<plurals name="l10n_scanned_apps"><item quantity="one">Skannattu %1$d sovellus</item><item quantity="other">Skannattu %1$d sovellusta</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="one">Skannattu %1$d tiedosto</item><item quantity="other">Skannattu %1$d tiedostoa</item></plurals>
+<plurals name="l10n_threats"><item quantity="one">Löytyi %1$d uhka</item><item quantity="other">Löytyi %1$d uhkaa</item></plurals>
+<plurals name="l10n_review"><item quantity="one">%1$d tulos vaatii tarkastuksen</item><item quantity="other">%1$d tulosta vaatii tarkastuksen</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="one">%1$d kohdetta ei voitu skannata</item><item quantity="other">%1$d kohdetta ei voitu skannata</item></plurals>
+<plurals name="l10n_no_match"><item quantity="one">%1$d tulos ilman paikallista osumaa</item><item quantity="other">%1$d tulosta ilman paikallista osumaa</item></plurals>
+<plurals name="l10n_apps"><item quantity="one">%1$d sovellus</item><item quantity="other">%1$d sovellusta</item></plurals>
+<plurals name="l10n_files"><item quantity="one">%1$d tiedosto</item><item quantity="other">%1$d tiedostoa</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="one">%1$d järjestelmään kuulumattomalla sovelluksella on riskialtis käyttöoikeus.</item><item quantity="other">%1$d järjestelmään kuulumattomalla sovelluksella on riskialtis käyttöoikeus.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="one">%1$d havaittu muutos odottaa ilmoitusta.</item><item quantity="other">%1$d havaittua muutosta odottaa ilmoitusta.</item></plurals>
+<plurals name="l10n_rules"><item quantity="one">Rajattu kattavuus · %1$d mukana toimitettu sääntö</item><item quantity="other">Rajattu kattavuus · %1$d mukana toimitettua sääntöä</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="one">Viimeisin skannaus: %1$d suuntaa-antava koodiosuma.</item><item quantity="other">Viimeisin skannaus: %1$d suuntaa-antavaa koodiosumaa.</item></plurals>
+<plurals name="l10n_imported"><item quantity="one">%1$d kelvollinen allekirjoitus tuotu paikalliseen tallennustilaan.</item><item quantity="other">%1$d kelvollista allekirjoitusta tuotu paikalliseen tallennustilaan.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="one">%1$d tavu</item><item quantity="other">%1$d tavua</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="one">%1$d rootiin liittyvä tiedostojärjestelmäilmaisin on havaittu.</item><item quantity="other">%1$d rootiin liittyvää tiedostojärjestelmäilmaisinta on havaittu.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="one">%1$d koukutusilmaisin havaittu.</item><item quantity="other">%1$d koukutusilmaisinta havaittu.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="one">%1$d sovellus käytössä</item><item quantity="other">%1$d sovellusta käytössä</item></plurals>
+<plurals name="l10n_indicators"><item quantity="one">%1$d ilmaisin</item><item quantity="other">%1$d ilmaisinta</item></plurals>
+<plurals name="l10n_progress"><item quantity="one">Tarkistettu %1$d / %2$d sovellus</item><item quantity="other">Tarkistettu %1$d / %2$d sovellusta</item></plurals>
 </resources>
