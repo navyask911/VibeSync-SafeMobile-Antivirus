@@ -786,23 +786,23 @@
 <string name="severity_high">Magas súlyosság</string>
 <string name="severity_critical">Kritikus súlyosság</string>
 <string name="severity_unknown">A súlyosság nincs megadva</string>
-<plurals name="l10n_scanned_apps"><item quantity="other">%1$d alkalmazás átvizsgálva</item></plurals>
-<plurals name="l10n_scanned_files"><item quantity="other">%1$d fájl átvizsgálva</item></plurals>
-<plurals name="l10n_threats"><item quantity="other">%1$d fenyegetés található</item></plurals>
-<plurals name="l10n_review"><item quantity="other">%1$d eredmény ellenőrzést igényel</item></plurals>
-<plurals name="l10n_unreadable"><item quantity="other">%1$d elemet nem lehetett átvizsgálni</item></plurals>
-<plurals name="l10n_no_match"><item quantity="other">%1$d eredmény helyi egyezés nélkül</item></plurals>
-<plurals name="l10n_apps"><item quantity="other">%1$d alkalmazás</item></plurals>
-<plurals name="l10n_files"><item quantity="other">%1$d fájl</item></plurals>
-<plurals name="l10n_posture_apps"><item quantity="other">%1$d nem rendszeralkalmazás magas kockázatú hozzáféréssel rendelkezik.</item></plurals>
-<plurals name="l10n_pending_changes"><item quantity="other">%1$d megfigyelt változás értesítésre vár.</item></plurals>
-<plurals name="l10n_rules"><item quantity="other">Korlátozott lefedettség · %1$d mellékelt szabály</item></plurals>
-<plurals name="l10n_rule_matches"><item quantity="other">Legutóbbi vizsgálat: %1$d tájékoztató kódegyezés.</item></plurals>
-<plurals name="l10n_imported"><item quantity="other">%1$d érvényes aláírás importálva a helyi tárhelyre.</item></plurals>
-<plurals name="l10n_bytes"><item quantity="other">%1$d bájt</item></plurals>
-<plurals name="l10n_root_indicators"><item quantity="other">%1$d roothoz kapcsolódó fájlrendszerjelző található.</item></plurals>
-<plurals name="l10n_hook_indicators"><item quantity="other">%1$d hookjelző található.</item></plurals>
-<plurals name="l10n_enabled_apps"><item quantity="other">%1$d alkalmazás engedélyezve</item></plurals>
-<plurals name="l10n_indicators"><item quantity="other">%1$d jelző</item></plurals>
-<plurals name="l10n_progress"><item quantity="other">%1$d / %2$d alkalmazás ellenőrizve</item></plurals>
+<plurals name="l10n_scanned_apps"><item quantity="one">%1$d alkalmazás átvizsgálva</item><item quantity="other">%1$d alkalmazás átvizsgálva</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="one">%1$d fájl átvizsgálva</item><item quantity="other">%1$d fájl átvizsgálva</item></plurals>
+<plurals name="l10n_threats"><item quantity="one">%1$d fenyegetés található</item><item quantity="other">%1$d fenyegetés található</item></plurals>
+<plurals name="l10n_review"><item quantity="one">%1$d eredmény ellenőrzést igényel</item><item quantity="other">%1$d eredmény ellenőrzést igényel</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="one">%1$d elemet nem lehetett átvizsgálni</item><item quantity="other">%1$d elemet nem lehetett átvizsgálni</item></plurals>
+<plurals name="l10n_no_match"><item quantity="one">%1$d eredmény helyi egyezés nélkül</item><item quantity="other">%1$d eredmény helyi egyezés nélkül</item></plurals>
+<plurals name="l10n_apps"><item quantity="one">%1$d alkalmazás</item><item quantity="other">%1$d alkalmazás</item></plurals>
+<plurals name="l10n_files"><item quantity="one">%1$d fájl</item><item quantity="other">%1$d fájl</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="one">%1$d nem rendszeralkalmazás magas kockázatú hozzáféréssel rendelkezik.</item><item quantity="other">%1$d nem rendszeralkalmazás magas kockázatú hozzáféréssel rendelkezik.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="one">%1$d megfigyelt változás értesítésre vár.</item><item quantity="other">%1$d megfigyelt változás értesítésre vár.</item></plurals>
+<plurals name="l10n_rules"><item quantity="one">Korlátozott lefedettség · %1$d mellékelt szabály</item><item quantity="other">Korlátozott lefedettség · %1$d mellékelt szabály</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="one">Legutóbbi vizsgálat: %1$d tájékoztató kódegyezés.</item><item quantity="other">Legutóbbi vizsgálat: %1$d tájékoztató kódegyezés.</item></plurals>
+<plurals name="l10n_imported"><item quantity="one">%1$d érvényes aláírás importálva a helyi tárhelyre.</item><item quantity="other">%1$d érvényes aláírás importálva a helyi tárhelyre.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="one">%1$d bájt</item><item quantity="other">%1$d bájt</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="one">%1$d roothoz kapcsolódó fájlrendszerjelző található.</item><item quantity="other">%1$d roothoz kapcsolódó fájlrendszerjelző található.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="one">%1$d hookjelző található.</item><item quantity="other">%1$d hookjelző található.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="one">%1$d alkalmazás engedélyezve</item><item quantity="other">%1$d alkalmazás engedélyezve</item></plurals>
+<plurals name="l10n_indicators"><item quantity="one">%1$d jelző</item><item quantity="other">%1$d jelző</item></plurals>
+<plurals name="l10n_progress"><item quantity="one">%1$d / %2$d alkalmazás ellenőrizve</item><item quantity="other">%1$d / %2$d alkalmazás ellenőrizve</item></plurals>
 </resources>
