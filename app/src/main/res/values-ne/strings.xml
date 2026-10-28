@@ -805,4 +805,7 @@
 <plurals name="l10n_enabled_apps"><item quantity="one">%1$d एप सक्रिय गरियो</item><item quantity="other">%1$d एप सक्रिय गरिए</item></plurals>
 <plurals name="l10n_indicators"><item quantity="one">%1$d सूचक</item><item quantity="other">%1$d सूचक</item></plurals>
 <plurals name="l10n_progress"><item quantity="one">%2$d एपमध्ये %1$d जाँच गरियो</item><item quantity="other">%2$d एपमध्ये %1$d जाँच गरिए</item></plurals>
+    <string name="ml_probability">एमएल खतराको सम्भाव्यता: %1$d%%</string>
+    <string name="ml_high_finding">स्थिर एमएल विश्लेषण: अनुमतिहरू र API ढाँचाका आधारमा उच्च अंक; यो सङ्केत मात्र हो, मालवेयरको प्रमाण होइन।</string>
+    <string name="ml_active_body">उपकरणमै प्रमाणित स्थिर एमएल मोडेल उपलब्ध छ। परिणामहरू सुझाव मात्र हुन्, मालवेयरको प्रमाण होइनन्।</string>
 </resources>
