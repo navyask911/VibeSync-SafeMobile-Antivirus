@@ -701,4 +701,108 @@
 <string name="detection_capabilities_save">Save update settings</string>
 <string name="detection_capabilities_sync_privacy">Downloads only. Scan results, files, hashes, and package names are not uploaded.</string>
 <string name="detection_capabilities_sync_unavailable">Automatic updates are unavailable in this offline build or until a trusted signing key is configured.</string>
+
+<string name="format_label_value">%1$s: %2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s – %2$s</string>
+<string name="format_version">%1$s · Versija %2$s (%3$s)</string>
+<string name="format_package_version">%1$s · Versija %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">Ievadiet drošu plūsmas adresi</string>
+<string name="storage_size_unavailable">Izmērs nav pieejams</string>
+<string name="blocked_reason_hash">Atrasta atbilstība vietējam apdraudējuma parakstam.</string>
+<string name="blocked_reason_action">Iespēju robežās mēģināts veikt vietēju drošības darbību.</string>
+<string name="signed_import_success">Parakstītā datubāze pieņemta: versija %1$s · %2$s.</string>
+<string name="signed_import_failed">Parakstītā datubāze netika aktivizēta. Pārbaudiet parakstu, versiju un faila formātu.</string>
+<string name="rule_import_pending">%1$s saglabāts pārbaudei. Importētie noteikumi paliek atspējoti, un šis fails netiks izpildīts.</string>
+<string name="rule_import_failed">Noteikumus neizdevās importēt. Importētie noteikumi paliek atspējoti.</string>
+<string name="restore_result_localized">Atjaunota %1$s (%2$s) kopija. Oriģināls karantīnā joprojām ir saglabāts.</string>
+<string name="cleaner_confirm_localized">Neatgriezeniski dzēst %1$s (%2$s)? Šo darbību nevar atsaukt. SafeMobile vēlreiz pārbaudīs nosaukumus un metadatus.</string>
+<string name="cleaner_result_localized">Dzēsts: %1$s · Atbrīvotā vieta: %2$s · Neizdevās vai mainīts: %3$s</string>
+<string name="about_localized_notices">Uz trešo pušu komponentiem joprojām attiecas to licences. Sākotnējie paziņojumi ir audita pārbaudes punkts, nevis pabeigta licenču pārbaude. Atveriet oriģinālos dokumentus, lai skatītu avotu paziņojumus un licenču noteikumus.</string>
+<string name="about_open_original">Atvērt oriģinālos dokumentus</string>
+<string name="about_localized_privacy">Skenētie faili, jaucējvērtības, pakotņu nosaukumi un rezultāti paliek šajā ierīcē. Vietējie audita metadati un karantīnas kopijas izmanto šifrētu privāto krātuvi. Parakstītu definīciju atjauninājumi sazinās ar projekta laidienu pakalpojumu; atsevišķa plūsma sazinās ar konfigurēto adresi tikai pēc piekrišanas. Mapju uzraudzība attiecas tikai uz izvēlētajām mapēm, un to var apturēt. Android atļaujas paliek jūsu kontrolē. Šajā versijā nav reklāmu, mākoņa skenēšanas vai saišu reputācijas pakalpojuma.</string>
+<string name="coverage_local_title">Vietējās testa definīcijas</string>
+<string name="coverage_local_body">Iekļautajās vecajās definīcijās ir tikai nekaitīgs pretvīrusu testa marķieris. Tās neaizsargā pret reālu ļaunprogrammatūru.</string>
+<string name="coverage_signed_title">Parakstīta jaucējvērtību datubāze</string>
+<string name="coverage_signed_body">Precīzai jaucējvērtību salīdzināšanai nepieciešama uzticama parakstīšanas atslēga un pieņemta parakstīta datubāze. Ražošanas datubāze nav iekļauta.</string>
+<string name="coverage_static_title">Lietotņu statiskā analīze</string>
+<string name="coverage_static_body">Ierobežota pakotņu analīze sniedz informatīvus konstatējumus. Viens konstatējums nepierāda ļaunprogrammatūru; zināmu kaitīgu parakstītāju saraksti ir atspējoti.</string>
+<string name="coverage_permissions_title">Atļaujas un manifests</string>
+<string name="coverage_permissions_body">Atļauju kombinācijas un redzamās pakotņu deklarācijas palīdz manuālā pārbaudē. Tā nav apmācīta klasifikācija.</string>
+<string name="coverage_integrity_title">Ierīces integritātes indikatori</string>
+<string name="coverage_integrity_body">Saknes piekļuve, pārtveršanas mehānismi, būvējuma rekvizīti, drošības piespiedu ievērošana, atkļūdotāji un emulatori tiek pārbaudīti ar vietējām heiristikām, nevis apliecināšanu.</string>
+<string name="coverage_bloom_title">Varbūtisks jaucējvērtību indekss</string>
+<string name="coverage_bloom_body">Pārbaudīts netukšs varbūtiskais indekss un tā manifests nav iekļauti. Šis izvēles slānis nav pieejams.</string>
+<string name="coverage_rules_title">Iekļautie koda paraksti</string>
+<string name="coverage_rules_body">Pārbaudītie iekļautie noteikumi meklē ierobežotu burtisku koda rakstu kopu. Atbilstības ir informatīvas un neapstiprina ļaunprogrammatūru.</string>
+<string name="coverage_rules_unavailable">Iekļautie noteikumi netika ielādēti vai neizturēja validāciju. Netiek apgalvots, ka veikta koda parakstu skenēšana.</string>
+<string name="coverage_model_title">Atļauju klasifikācijas modelis</string>
+<string name="coverage_model_body">Nav iekļauts apmācīts, validēts un izplatāms klasifikācijas modelis. Mašīnmācīšanās ir atspējota.</string>
+<string name="coverage_signer_title">Parakstītāja bezsaistes apliecināšana</string>
+<string name="coverage_signer_body">Nav konfigurēts neatkarīgi fiksēts paredzamais parakstīšanas sertifikāta pirkstu nospiedums.</string>
+<string name="coverage_feed_title">Parakstītas plūsmas pārbaude</string>
+<string name="coverage_feed_body">Atsevišķa paraksta pārbaudei un aizsardzībai pret atgriešanos pie vecākas versijas vajadzīga uzticama būvējuma atslēga un konfigurēta parakstīta plūsma.</string>
+<string name="hash_status_active">Parakstītā vietējā jaucējvērtību datubāze ir aktīva.</string>
+<string name="hash_status_missing">Jaucējvērtību salīdzināšana ir atspējota, līdz tiek pieņemta parakstīta datubāze.</string>
+<string name="hash_status_key">Jaucējvērtību salīdzināšana ir atspējota, jo nav uzticamas parakstīšanas atslēgas.</string>
+<string name="hash_status_invalid">Saglabātās definīcijas neizturēja integritātes, versijas vai formāta pārbaudes. Jaucējvērtību salīdzināšana paliek atspējota.</string>
+<string name="hash_status_activation">Datubāzes aktivizēšana netika pabeigta. Jaucējvērtību salīdzināšana paliek atspējota.</string>
+<string name="finding_confidence">%1$s · Pārliecība: %2$d%%</string>
+<string name="finding_exported">Eksportētam komponentam manifestā nav redzama atļaujas ierobežojuma. Koda līmenī pārbaudes tomēr var pastāvēt.</string>
+<string name="finding_admin">Lietotne deklarē ierīces administrēšanas uztvērēju. Šī sensitīvā iespēja nepierāda ļaunprātīgu izmantošanu.</string>
+<string name="finding_accessibility">Lietotne deklarē pieejamības pakalpojumu. Likumīgām palīglietotnēm šāda piekļuve var būt nepieciešama.</string>
+<string name="finding_overlay">Lietotne pieprasa pārklājuma atļauju. Pārklājums var būt pamatots, bet var arī aizsegt citus ekrānus.</string>
+<string name="finding_combined">Pieejamības piekļuve apvienota ar pārklājumu, īsziņām vai zvanu vēsturi. Pārbaudiet lietotnes mērķi.</string>
+<string name="finding_sms_calls">Lietotne pieprasa gan īsziņu, gan zvanu vēstures atļaujas.</string>
+<string name="finding_sms_network">Īsziņu piekļuve ir apvienota ar interneta piekļuvi. Nepieciešams izvērtējums kontekstā.</string>
+<string name="finding_signer">Parakstīšanas sertifikāta metadati trūkst vai nav nolasāmi.</string>
+<string name="finding_archive">Pakotnes konteineru neizdevās pilnībā pārbaudīt. Statiskā analīze ir nepilnīga.</string>
+<string name="finding_packer">Pakotnes ceļš atgādina zināmu pakošanas vai aizsardzības rīku. To var izmantot arī likumīgas lietotnes.</string>
+<string name="finding_dex_header">Koda galvenē ir nesaderīgi formāta vai lieluma lauki. Tas nepierāda ļaunprogrammatūru.</string>
+<string name="finding_dex_short">Koda ieraksts ir īsāks par derīgu galveni, tāpēc to nevarēja pilnībā pārbaudīt.</string>
+<string name="finding_entropy">Koda paraugam ir augsta baitu entropija. To var izskaidrot šifrēšana, pakošana vai nekaitīgs saspiests saturs.</string>
+<string name="finding_api">Pieprasītajai atļaujai nav atrasta paredzētā statiskā atsauce. Iemesls var būt refleksija, bibliotēkas vai dinamiski ielādēts kods.</string>
+<string name="finding_rules">Atrasta atbilstība ierobežotam iekļautam koda parakstam. Tas ir informatīvi, nevis ļaunprogrammatūras pierādījums.</string>
+<string name="finding_other">Papildu vietējie indikatori jāpārbauda manuāli. Tie neapstiprina ļaunprogrammatūru.</string>
+<string name="integrity_manager">Redzams saknes piekļuves vai pārtveršanas pārvaldnieks: %1$s</string>
+<string name="integrity_test_keys">Ierīces būvējums izmanto testa parakstīšanas atslēgas.</string>
+<string name="integrity_debug_build">Būvējuma rekvizīti norāda uz atkļūdojamu vai neprodukcijas sistēmu.</string>
+<string name="integrity_selinux">Nolasāmais vietējais statuss norāda, ka obligātā drošības ievērošana ir izslēgta.</string>
+<string name="integrity_debugger">Šim procesam ir pievienots atkļūdotājs.</string>
+<string name="integrity_emulator">Būvējuma rekvizīti atgādina emulatoru vai testa ierīci.</string>
+<string name="audit_scan_pending">Instalēšana reģistrēta. Vietējā analīze gaida.</string>
+<string name="audit_scan_complete">Vietējā analīze pabeigta bez apstiprinātas paraksta atbilstības. Tā nav drošības garantija.</string>
+<string name="audit_scan_unavailable">Analīzes laikā pakotne nebija redzama.</string>
+<string name="audit_scan_threat">Atrasta precīza atbilstība vietējam apdraudējuma parakstam.</string>
+<string name="audit_scan_review">Vietējie indikatori jāpārbauda; tie neapstiprina ļaunprogrammatūru.</string>
+<string name="audit_source_recorded">Instalēšanas avots reģistrēts.</string>
+<string name="audit_uninstall_requested">Pieprasīts Android apstiprinājums atinstalēšanai.</string>
+<string name="audit_uninstall_success">Android ziņoja par veiksmīgu atinstalēšanu.</string>
+<string name="audit_uninstall_failed">Android nevarēja pabeigt atinstalēšanas pieprasījumu.</string>
+<string name="severity_test">Nekaitīgs testa marķieris</string>
+<string name="severity_low">Zema nopietnība</string>
+<string name="severity_medium">Vidēja nopietnība</string>
+<string name="severity_high">Augsta nopietnība</string>
+<string name="severity_critical">Kritiska nopietnība</string>
+<string name="severity_unknown">Nopietnība nav norādīta</string>
+<plurals name="l10n_scanned_apps"><item quantity="zero">Skenētas %1$d lietotnes</item><item quantity="one">Skenēta %1$d lietotne</item><item quantity="other">Skenētas %1$d lietotnes</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="zero">Skenēti %1$d faili</item><item quantity="one">Skenēts %1$d fails</item><item quantity="other">Skenēti %1$d faili</item></plurals>
+<plurals name="l10n_threats"><item quantity="zero">Atrasti %1$d apdraudējumi</item><item quantity="one">Atrasts %1$d apdraudējums</item><item quantity="other">Atrasti %1$d apdraudējumi</item></plurals>
+<plurals name="l10n_review"><item quantity="zero">Jāpārbauda %1$d rezultāti</item><item quantity="one">Jāpārbauda %1$d rezultāts</item><item quantity="other">Jāpārbauda %1$d rezultāti</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="zero">Nevar skenēt %1$d vienumus</item><item quantity="one">Nevar skenēt %1$d vienumu</item><item quantity="other">Nevar skenēt %1$d vienumus</item></plurals>
+<plurals name="l10n_no_match"><item quantity="zero">%1$d rezultāti bez vietējas atbilstības</item><item quantity="one">%1$d rezultāts bez vietējas atbilstības</item><item quantity="other">%1$d rezultāti bez vietējas atbilstības</item></plurals>
+<plurals name="l10n_apps"><item quantity="zero">%1$d lietotnes</item><item quantity="one">%1$d lietotne</item><item quantity="other">%1$d lietotnes</item></plurals>
+<plurals name="l10n_files"><item quantity="zero">%1$d faili</item><item quantity="one">%1$d fails</item><item quantity="other">%1$d faili</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="zero">%1$d nesistēmas lietotnēm ir augsta riska piekļuve.</item><item quantity="one">%1$d nesistēmas lietotnei ir augsta riska piekļuve.</item><item quantity="other">%1$d nesistēmas lietotnēm ir augsta riska piekļuve.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="zero">%1$d novērotām izmaiņām gaida paziņojums.</item><item quantity="one">%1$d novērotai izmaiņai gaida paziņojums.</item><item quantity="other">%1$d novērotām izmaiņām gaida paziņojums.</item></plurals>
+<plurals name="l10n_rules"><item quantity="zero">Ierobežots pārklājums · %1$d iekļauti noteikumi</item><item quantity="one">Ierobežots pārklājums · %1$d iekļauts noteikums</item><item quantity="other">Ierobežots pārklājums · %1$d iekļauti noteikumi</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="zero">Pēdējā skenēšana: %1$d informatīvas koda atbilstības.</item><item quantity="one">Pēdējā skenēšana: %1$d informatīva koda atbilstība.</item><item quantity="other">Pēdējā skenēšana: %1$d informatīvas koda atbilstības.</item></plurals>
+<plurals name="l10n_imported"><item quantity="zero">Vietējā krātuvē importēti %1$d derīgi paraksti.</item><item quantity="one">Vietējā krātuvē importēts %1$d derīgs paraksts.</item><item quantity="other">Vietējā krātuvē importēti %1$d derīgi paraksti.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="zero">%1$d baiti</item><item quantity="one">%1$d baits</item><item quantity="other">%1$d baiti</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="zero">Ir %1$d ar sakni saistīti failu sistēmas indikatori.</item><item quantity="one">Ir %1$d ar sakni saistīts failu sistēmas indikators.</item><item quantity="other">Ir %1$d ar sakni saistīti failu sistēmas indikatori.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="zero">Ir %1$d pārtveršanas indikatori.</item><item quantity="one">Ir %1$d pārtveršanas indikators.</item><item quantity="other">Ir %1$d pārtveršanas indikatori.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="zero">Aktivizētas %1$d lietotnes</item><item quantity="one">Aktivizēta %1$d lietotne</item><item quantity="other">Aktivizētas %1$d lietotnes</item></plurals>
+<plurals name="l10n_indicators"><item quantity="zero">%1$d indikatori</item><item quantity="one">%1$d indikators</item><item quantity="other">%1$d indikatori</item></plurals>
+<plurals name="l10n_progress"><item quantity="zero">Pārbaudītas %1$d no %2$d lietotnēm</item><item quantity="one">Pārbaudīta %1$d no %2$d lietotnēm</item><item quantity="other">Pārbaudītas %1$d no %2$d lietotnēm</item></plurals>
 </resources>
