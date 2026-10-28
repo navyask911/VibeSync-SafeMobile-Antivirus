@@ -805,4 +805,7 @@
 <plurals name="l10n_enabled_apps"><item quantity="one">%1$d tətbiq aktivləşdirilib</item><item quantity="other">%1$d tətbiq aktivləşdirilib</item></plurals>
 <plurals name="l10n_indicators"><item quantity="one">%1$d göstərici</item><item quantity="other">%1$d göstərici</item></plurals>
 <plurals name="l10n_progress"><item quantity="one">%2$d tətbiqdən %1$d-i yoxlanılıb</item><item quantity="other">%2$d tətbiqdən %1$d-i yoxlanılıb</item></plurals>
+    <string name="ml_probability">ML təhdid ehtimalı: %1$d%%</string>
+    <string name="ml_high_finding">Statik ML təhlili: icazələr və API nümunələrinə görə yüksək bal; yalnız xəbərdarlıqdır, zərərli proqram sübutu deyil.</string>
+    <string name="ml_active_body">Cihazda təsdiqlənmiş statik ML modeli mövcuddur. Nəticələr yalnız tövsiyə xarakterlidir və zərərli proqramı sübut etmir.</string>
 </resources>
