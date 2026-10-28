@@ -805,4 +805,7 @@
 <plurals name="l10n_enabled_apps"><item quantity="one">Увімкнено %1$d застосунок</item><item quantity="few">Увімкнено %1$d застосунки</item><item quantity="many">Увімкнено %1$d застосунків</item><item quantity="other">Увімкнено %1$d застосунку</item></plurals>
 <plurals name="l10n_indicators"><item quantity="one">%1$d індикатор</item><item quantity="few">%1$d індикатори</item><item quantity="many">%1$d індикаторів</item><item quantity="other">%1$d індикатора</item></plurals>
 <plurals name="l10n_progress"><item quantity="one">Перевірено %1$d із %2$d застосунків</item><item quantity="few">Перевірено %1$d із %2$d застосунків</item><item quantity="many">Перевірено %1$d із %2$d застосунків</item><item quantity="other">Перевірено %1$d із %2$d застосунків</item></plurals>
+    <string name="ml_probability">Імовірність загрози за ML: %1$d%%</string>
+    <string name="ml_high_finding">Статична евристика ML: високий бал за дозволами та шаблонами API; лише ознака, а не доказ шкідливого ПЗ.</string>
+    <string name="ml_active_body">На пристрої доступна перевірена статична модель ML. Результати мають рекомендаційний характер і не доводять наявність шкідливого ПЗ.</string>
 </resources>
