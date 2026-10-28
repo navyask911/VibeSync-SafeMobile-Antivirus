@@ -662,4 +662,7 @@
 <plurals name="l10n_enabled_apps"><item quantity="one">הופעל יישום אחד (%1$d)</item><item quantity="two">הופעלו שני יישומים (%1$d)</item><item quantity="many">הופעלו %1$d יישומים</item><item quantity="other">הופעלו %1$d יישומים</item></plurals>
 <plurals name="l10n_indicators"><item quantity="one">מדד אחד (%1$d)</item><item quantity="two">שני מדדים (%1$d)</item><item quantity="many">%1$d מדדים</item><item quantity="other">%1$d מדדים</item></plurals>
 <plurals name="l10n_progress"><item quantity="one">נבדק יישום אחד מתוך %2$d (%1$d)</item><item quantity="two">נבדקו שני יישומים מתוך %2$d (%1$d)</item><item quantity="many">נבדקו %1$d מתוך %2$d יישומים</item><item quantity="other">נבדקו %1$d מתוך %2$d יישומים</item></plurals>
+    <string name="ml_probability">הסתברות לאיום לפי למידת מכונה: %1$d%%</string>
+    <string name="ml_high_finding">הסקה סטטית בלמידת מכונה: ציון גבוה בשל הרשאות ודפוסי API; זהו סימן בלבד, לא הוכחה לנוזקה.</string>
+    <string name="ml_active_body">מודל סטטי מאומת של למידת מכונה זמין במכשיר. התוצאות הן להכוונה בלבד ואינן מוכיחות קיום נוזקה.</string>
 </resources>
