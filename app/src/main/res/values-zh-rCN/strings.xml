@@ -661,5 +661,8 @@
 <plurals name="l10n_enabled_apps"><item quantity="other">已启用 %1$d 个应用</item></plurals>
 <plurals name="l10n_indicators"><item quantity="other">%1$d 个指标</item></plurals>
 <plurals name="l10n_progress"><item quantity="other">已检查 %1$d 个应用，共 %2$d 个</item></plurals>
+    <string name="ml_probability">机器学习威胁概率：%1$d%%</string>
+    <string name="ml_high_finding">静态机器学习启发式分析：根据权限和 API 模式得分较高；仅供参考，不能证明存在恶意软件。</string>
+    <string name="ml_active_body">设备上已有经过验证的静态机器学习模型。结果仅供参考，不能证明存在恶意软件。</string>
 </resources>
 
