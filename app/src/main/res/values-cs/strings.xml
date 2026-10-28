@@ -701,4 +701,108 @@
 <string name="detection_capabilities_save">Save update settings</string>
 <string name="detection_capabilities_sync_privacy">Downloads only. Scan results, files, hashes, and package names are not uploaded.</string>
 <string name="detection_capabilities_sync_unavailable">Automatic updates are unavailable in this offline build or until a trusted signing key is configured.</string>
+
+<string name="format_label_value">%1$s: %2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s – %2$s</string>
+<string name="format_version">%1$s · Verze %2$s (%3$s)</string>
+<string name="format_package_version">%1$s · Verze %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">Zadejte bezpečnou adresu zdroje</string>
+<string name="storage_size_unavailable">Velikost není dostupná</string>
+<string name="blocked_reason_hash">Byla nalezena shoda s místním podpisem hrozby.</string>
+<string name="blocked_reason_action">Podle možností byl proveden pokus o místní bezpečnostní opatření.</string>
+<string name="signed_import_success">Podepsaná databáze přijata: verze %1$s · %2$s.</string>
+<string name="signed_import_failed">Podepsaná databáze nebyla aktivována. Zkontrolujte podpis, verzi a formát souboru.</string>
+<string name="rule_import_pending">%1$s byl uložen ke kontrole. Importovaná pravidla zůstanou vypnutá a tento soubor nebude spuštěn.</string>
+<string name="rule_import_failed">Pravidla se nepodařilo importovat. Importovaná pravidla zůstanou vypnutá.</string>
+<string name="restore_result_localized">Byla obnovena kopie %1$s (%2$s). Originál v karanténě zůstává uložen.</string>
+<string name="cleaner_confirm_localized">Trvale smazat %1$s (%2$s)? Tuto akci nelze vrátit zpět. SafeMobile znovu zkontroluje názvy a metadata.</string>
+<string name="cleaner_result_localized">Smazáno: %1$s · Uvolněné místo: %2$s · Neúspěšné nebo změněné: %3$s</string>
+<string name="about_localized_notices">Součásti třetích stran nadále podléhají vlastním licencím. Původní oznámení představují kontrolní bod auditu, nikoli dokončenou kontrolu licencí. Zdrojová oznámení a licenční podmínky najdete v původních dokumentech.</string>
+<string name="about_open_original">Otevřít původní dokumenty</string>
+<string name="about_localized_privacy">Skenované soubory, hashe, názvy balíčků a výsledky zůstávají v tomto zařízení. Místní auditní metadata a kopie v karanténě využívají šifrované soukromé úložiště. Aktualizace podepsaných definic kontaktují službu vydání tohoto projektu; samostatný zdroj kontaktuje nastavenou adresu až po vašem souhlasu. Sledování složek se týká pouze složek, které vyberete, a lze je zastavit. Oprávnění Androidu zůstávají pod vaší kontrolou. Toto sestavení neobsahuje reklamy, cloudové skenování ani službu pro hodnocení reputace odkazů.</string>
+<string name="coverage_local_title">Místní testovací definice</string>
+<string name="coverage_local_body">Přibalené starší definice obsahují pouze neškodnou testovací antivirovou značku. Neposkytují ochranu proti skutečnému malwaru.</string>
+<string name="coverage_signed_title">Podepsaná hashová databáze</string>
+<string name="coverage_signed_body">Přesné porovnání hashů vyžaduje důvěryhodný podpisový klíč a přijatou podepsanou databázi. Produkční databáze není součástí aplikace.</string>
+<string name="coverage_static_title">Statická analýza aplikací</string>
+<string name="coverage_static_body">Omezená analýza balíčků poskytuje orientační nálezy. Samotný nález neprokazuje malware; seznamy známých škodlivých podepisovatelů jsou vypnuté.</string>
+<string name="coverage_permissions_title">Oprávnění a manifest</string>
+<string name="coverage_permissions_body">Kombinace oprávnění a viditelná prohlášení balíčků pomáhají při ruční kontrole. Nejde o natrénovanou klasifikaci.</string>
+<string name="coverage_integrity_title">Ukazatele integrity zařízení</string>
+<string name="coverage_integrity_body">Root přístup, hooky, vlastnosti sestavení, vynucování zabezpečení, debuggery a emulátory se kontrolují místními heuristikami, nikoli atestací.</string>
+<string name="coverage_bloom_title">Pravděpodobnostní index hashů</string>
+<string name="coverage_bloom_body">Ověřený neprázdný pravděpodobnostní index ani jeho manifest nejsou přibaleny. Tato volitelná vrstva není dostupná.</string>
+<string name="coverage_rules_title">Přibalené podpisy kódu</string>
+<string name="coverage_rules_body">Ověřená přibalená pravidla kontrolují omezenou sadu doslovných vzorů kódu. Shody jsou orientační a nepotvrzují malware.</string>
+<string name="coverage_rules_unavailable">Přibalená pravidla se nenačetla nebo neprošla ověřením. Netvrdíme, že proběhlo skenování podpisů kódu.</string>
+<string name="coverage_model_title">Model klasifikace oprávnění</string>
+<string name="coverage_model_body">Není přibalen žádný natrénovaný, ověřený a distribuovatelný klasifikační model. Strojové učení je vypnuté.</string>
+<string name="coverage_signer_title">Offline ověření podepisovatele</string>
+<string name="coverage_signer_body">Nebyl nastaven nezávisle pevně určený očekávaný otisk podpisového certifikátu.</string>
+<string name="coverage_feed_title">Ověření podepsaného zdroje</string>
+<string name="coverage_feed_body">Ověření odděleného podpisu a ochrana proti návratu ke starší verzi vyžadují důvěryhodný klíč při sestavení a nakonfigurovaný podepsaný zdroj.</string>
+<string name="hash_status_active">Podepsaná místní hashová databáze je aktivní.</string>
+<string name="hash_status_missing">Porovnávání hashů je vypnuté, dokud není přijata podepsaná databáze.</string>
+<string name="hash_status_key">Porovnávání hashů je vypnuté, protože chybí důvěryhodný podpisový klíč.</string>
+<string name="hash_status_invalid">Uložené definice neprošly kontrolou integrity, verze nebo formátu. Porovnávání hashů zůstává vypnuté.</string>
+<string name="hash_status_activation">Aktivace databáze nebyla dokončena. Porovnávání hashů zůstává vypnuté.</string>
+<string name="finding_confidence">%1$s · Míra jistoty: %2$d%%</string>
+<string name="finding_exported">Exportovaná součást nemá v manifestu viditelné omezení oprávnění. Kontroly na úrovni kódu mohou přesto existovat.</string>
+<string name="finding_admin">Aplikace deklaruje přijímač správy zařízení. Tato citlivá funkce není důkazem zneužití.</string>
+<string name="finding_accessibility">Aplikace deklaruje službu zpřístupnění. Legitimní asistenční aplikace mohou tento přístup potřebovat.</string>
+<string name="finding_overlay">Aplikace žádá o oprávnění k překrývání obrazovek. Překryv může být legitimní, ale také zakrývat jiné obrazovky.</string>
+<string name="finding_combined">Přístup ke zpřístupnění je kombinován s překryvem, textovými zprávami nebo historií hovorů. Prověřte účel aplikace.</string>
+<string name="finding_sms_calls">Aplikace požaduje oprávnění k textovým zprávám i historii hovorů.</string>
+<string name="finding_sms_network">Přístup k textovým zprávám je kombinován s přístupem k internetu. Je nutné posouzení v kontextu.</string>
+<string name="finding_signer">Metadata podpisového certifikátu chybí nebo je nelze přečíst.</string>
+<string name="finding_archive">Kontejner balíčku nebylo možné celý prozkoumat. Statická analýza je neúplná.</string>
+<string name="finding_packer">Cesta v balíčku připomíná známý balicí nebo ochranný nástroj. Mohou jej používat i legitimní aplikace.</string>
+<string name="finding_dex_header">Hlavička kódu obsahuje nesouhlasící pole formátu nebo velikosti. To není důkaz malwaru.</string>
+<string name="finding_dex_short">Položka kódu je kratší než platná hlavička a nebylo možné ji plně prozkoumat.</string>
+<string name="finding_entropy">Vzorek kódu má vysokou entropii bajtů. Důvodem může být šifrování, balení nebo neškodný komprimovaný obsah.</string>
+<string name="finding_api">Nebyl nalezen očekávaný statický odkaz na požadované oprávnění. Vysvětlením může být reflexe, knihovny nebo dynamicky načítaný kód.</string>
+<string name="finding_rules">Byla nalezena shoda s omezeným přibaleným podpisem kódu. Je to upozornění, nikoli důkaz malwaru.</string>
+<string name="finding_other">Další místní ukazatele vyžadují ruční kontrolu. Nepotvrzují malware.</string>
+<string name="integrity_manager">Je viditelný správce root přístupu nebo hookingu: %1$s</string>
+<string name="integrity_test_keys">Sestavení zařízení používá testovací podpisové klíče.</string>
+<string name="integrity_debug_build">Vlastnosti sestavení ukazují na laditelný nebo neprodukční systém.</string>
+<string name="integrity_selinux">Čitelný místní stav hlásí vypnuté povinné vynucování zabezpečení.</string>
+<string name="integrity_debugger">K tomuto procesu je připojen debugger.</string>
+<string name="integrity_emulator">Vlastnosti sestavení připomínají emulátor nebo testovací zařízení.</string>
+<string name="audit_scan_pending">Instalace byla zaznamenána. Místní analýza čeká.</string>
+<string name="audit_scan_complete">Místní analýza skončila bez potvrzené shody podpisu. Není to záruka bezpečnosti.</string>
+<string name="audit_scan_unavailable">Balíček nebyl při analýze viditelný.</string>
+<string name="audit_scan_threat">Byla nalezena přesná shoda s místním podpisem hrozby.</string>
+<string name="audit_scan_review">Místní ukazatele vyžadují kontrolu; nepotvrzují malware.</string>
+<string name="audit_source_recorded">Zdroj instalace byl zaznamenán.</string>
+<string name="audit_uninstall_requested">Bylo vyžádáno potvrzení odinstalace Androidem.</string>
+<string name="audit_uninstall_success">Android oznámil úspěšné odinstalování.</string>
+<string name="audit_uninstall_failed">Android nemohl požadavek na odinstalaci dokončit.</string>
+<string name="severity_test">Neškodná testovací značka</string>
+<string name="severity_low">Nízká závažnost</string>
+<string name="severity_medium">Střední závažnost</string>
+<string name="severity_high">Vysoká závažnost</string>
+<string name="severity_critical">Kritická závažnost</string>
+<string name="severity_unknown">Závažnost není uvedena</string>
+<plurals name="l10n_scanned_apps"><item quantity="one">Naskenována %1$d aplikace</item><item quantity="few">Naskenovány %1$d aplikace</item><item quantity="many">Naskenováno %1$d aplikace</item><item quantity="other">Naskenováno %1$d aplikací</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="one">Naskenován %1$d soubor</item><item quantity="few">Naskenovány %1$d soubory</item><item quantity="many">Naskenováno %1$d souboru</item><item quantity="other">Naskenováno %1$d souborů</item></plurals>
+<plurals name="l10n_threats"><item quantity="one">Nalezena %1$d hrozba</item><item quantity="few">Nalezeny %1$d hrozby</item><item quantity="many">Nalezeno %1$d hrozby</item><item quantity="other">Nalezeno %1$d hrozeb</item></plurals>
+<plurals name="l10n_review"><item quantity="one">%1$d výsledek vyžaduje kontrolu</item><item quantity="few">%1$d výsledky vyžadují kontrolu</item><item quantity="many">%1$d výsledku vyžaduje kontrolu</item><item quantity="other">%1$d výsledků vyžaduje kontrolu</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="one">%1$d položku nelze naskenovat</item><item quantity="few">%1$d položky nelze naskenovat</item><item quantity="many">%1$d položky nelze naskenovat</item><item quantity="other">%1$d položek nelze naskenovat</item></plurals>
+<plurals name="l10n_no_match"><item quantity="one">%1$d výsledek bez místní shody</item><item quantity="few">%1$d výsledky bez místní shody</item><item quantity="many">%1$d výsledku bez místní shody</item><item quantity="other">%1$d výsledků bez místní shody</item></plurals>
+<plurals name="l10n_apps"><item quantity="one">%1$d aplikace</item><item quantity="few">%1$d aplikace</item><item quantity="many">%1$d aplikace</item><item quantity="other">%1$d aplikací</item></plurals>
+<plurals name="l10n_files"><item quantity="one">%1$d soubor</item><item quantity="few">%1$d soubory</item><item quantity="many">%1$d souboru</item><item quantity="other">%1$d souborů</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="one">%1$d nesystémová aplikace má vysoce rizikový přístup.</item><item quantity="few">%1$d nesystémové aplikace mají vysoce rizikový přístup.</item><item quantity="many">%1$d nesystémové aplikace má vysoce rizikový přístup.</item><item quantity="other">%1$d nesystémových aplikací má vysoce rizikový přístup.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="one">%1$d pozorovaná změna čeká na oznámení.</item><item quantity="few">%1$d pozorované změny čekají na oznámení.</item><item quantity="many">%1$d pozorované změny čeká na oznámení.</item><item quantity="other">%1$d pozorovaných změn čeká na oznámení.</item></plurals>
+<plurals name="l10n_rules"><item quantity="one">Omezené pokrytí · %1$d přibalené pravidlo</item><item quantity="few">Omezené pokrytí · %1$d přibalená pravidla</item><item quantity="many">Omezené pokrytí · %1$d přibaleného pravidla</item><item quantity="other">Omezené pokrytí · %1$d přibalených pravidel</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="one">Poslední sken: %1$d orientační shoda kódu.</item><item quantity="few">Poslední sken: %1$d orientační shody kódu.</item><item quantity="many">Poslední sken: %1$d orientační shody kódu.</item><item quantity="other">Poslední sken: %1$d orientačních shod kódu.</item></plurals>
+<plurals name="l10n_imported"><item quantity="one">Do místního úložiště importován %1$d platný podpis.</item><item quantity="few">Do místního úložiště importovány %1$d platné podpisy.</item><item quantity="many">Do místního úložiště importováno %1$d platného podpisu.</item><item quantity="other">Do místního úložiště importováno %1$d platných podpisů.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="one">%1$d bajt</item><item quantity="few">%1$d bajty</item><item quantity="many">%1$d bajtu</item><item quantity="other">%1$d bajtů</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="one">Je přítomen %1$d ukazatel souborového systému související s rootem.</item><item quantity="few">Jsou přítomny %1$d ukazatele souborového systému související s rootem.</item><item quantity="many">Je přítomno %1$d ukazatele souborového systému souvisejícího s rootem.</item><item quantity="other">Je přítomno %1$d ukazatelů souborového systému souvisejících s rootem.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="one">Je přítomen %1$d ukazatel hookingu.</item><item quantity="few">Jsou přítomny %1$d ukazatele hookingu.</item><item quantity="many">Je přítomno %1$d ukazatele hookingu.</item><item quantity="other">Je přítomno %1$d ukazatelů hookingu.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="one">%1$d aplikace aktivována</item><item quantity="few">%1$d aplikace aktivovány</item><item quantity="many">%1$d aplikace aktivováno</item><item quantity="other">%1$d aplikací aktivováno</item></plurals>
+<plurals name="l10n_indicators"><item quantity="one">%1$d ukazatel</item><item quantity="few">%1$d ukazatele</item><item quantity="many">%1$d ukazatele</item><item quantity="other">%1$d ukazatelů</item></plurals>
+<plurals name="l10n_progress"><item quantity="one">Zkontrolována %1$d z %2$d aplikace</item><item quantity="few">Zkontrolovány %1$d z %2$d aplikací</item><item quantity="many">Zkontrolováno %1$d z %2$d aplikací</item><item quantity="other">Zkontrolováno %1$d z %2$d aplikací</item></plurals>
 </resources>
