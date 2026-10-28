@@ -701,4 +701,108 @@
 <string name="detection_capabilities_save">Save update settings</string>
 <string name="detection_capabilities_sync_privacy">Downloads only. Scan results, files, hashes, and package names are not uploaded.</string>
 <string name="detection_capabilities_sync_unavailable">Automatic updates are unavailable in this offline build or until a trusted signing key is configured.</string>
+
+<string name="format_label_value">%1$s: %2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s – %2$s</string>
+<string name="format_version">%1$s · Versiya %2$s (%3$s)</string>
+<string name="format_package_version">%1$s · Versiya %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">Təhlükəsiz mənbə ünvanını daxil edin</string>
+<string name="storage_size_unavailable">Ölçü əlçatan deyil</string>
+<string name="blocked_reason_hash">Yerli təhdid imzası ilə uyğunluq tapıldı.</string>
+<string name="blocked_reason_action">Mümkün olduğu qədər yerli təhlükəsizlik tədbiri görülməyə çalışıldı.</string>
+<string name="signed_import_success">İmzalanmış verilənlər bazası qəbul edildi: versiya %1$s · %2$s.</string>
+<string name="signed_import_failed">İmzalanmış verilənlər bazası aktivləşdirilmədi. İmzanı, versiyanı və fayl formatını yoxlayın.</string>
+<string name="rule_import_pending">%1$s yoxlanış üçün saxlanıldı. İdxal edilmiş qaydalar söndürülmüş qalacaq və bu fayl işə salınmayacaq.</string>
+<string name="rule_import_failed">Qaydalar idxal edilə bilmədi. İdxal edilmiş qaydalar söndürülmüş qalacaq.</string>
+<string name="restore_result_localized">%1$s (%2$s) nüsxəsi bərpa edildi. Karantindəki orijinal fayl saxlanılır.</string>
+<string name="cleaner_confirm_localized">%1$s (%2$s) həmişəlik silinsin? Bu əməliyyatı geri qaytarmaq olmaz. SafeMobile adları və metadatanı yenidən yoxlayacaq.</string>
+<string name="cleaner_result_localized">Silindi: %1$s · Boşaldılan yer: %2$s · Uğursuz və ya dəyişmiş: %3$s</string>
+<string name="about_localized_notices">Üçüncü tərəf komponentlərinə onların öz lisenziyaları tətbiq edilir. Orijinal bildirişlər auditin yoxlama mərhələsidir, tamamlanmış lisenziya yoxlaması deyil. Mənbə bildirişləri və lisenziya şərtləri üçün orijinal sənədləri açın.</string>
+<string name="about_open_original">Orijinal sənədləri açın</string>
+<string name="about_localized_privacy">Yoxlanılan fayllar, heşlər, paket adları və nəticələr bu cihazda qalır. Yerli audit metadatası və karantin nüsxələri şifrələnmiş şəxsi yaddaşdan istifadə edir. İmzalanmış tərif yeniləmələri layihənin buraxılış xidmətinə bağlanır; ayrıca mənbə yalnız razılığınızdan sonra sazlanmış ünvana bağlanır. Qovluq monitorinqi yalnız seçdiyiniz qovluqlara tətbiq edilir və dayandırıla bilər. Android icazələri sizin nəzarətinizdə qalır. Bu versiyada reklam, buludda skan və ya keçid reputasiyası xidməti yoxdur.</string>
+<string name="coverage_local_title">Yerli sınaq tərifləri</string>
+<string name="coverage_local_body">Daxil edilmiş köhnə təriflərdə yalnız zərərsiz antivirus sınaq işarəsi var. Onlar real zərərli proqramlardan qoruma təmin etmir.</string>
+<string name="coverage_signed_title">İmzalanmış heş verilənlər bazası</string>
+<string name="coverage_signed_body">Dəqiq heş uyğunluğu üçün etibarlı imzalama açarı və qəbul edilmiş imzalanmış verilənlər bazası lazımdır. İstehsal verilənlər bazası daxil deyil.</string>
+<string name="coverage_static_title">Tətbiqlərin statik analizi</string>
+<string name="coverage_static_body">Məhdud paket analizi məsləhət xarakterli nəticələr verir. Tək nəticə zərərli proqramı sübut etmir; tanınmış zərərli imza sahiblərinin siyahıları söndürülüb.</string>
+<string name="coverage_permissions_title">İcazələr və manifest</string>
+<string name="coverage_permissions_body">İcazə birləşmələri və görünən paket bəyanları əl ilə yoxlamaya kömək edir. Bunlar öyrədilmiş təsnifat deyil.</string>
+<string name="coverage_integrity_title">Cihaz bütövlüyü göstəriciləri</string>
+<string name="coverage_integrity_body">Root girişi, müdaxilə mexanizmləri, yığım xüsusiyyətləri, təhlükəsizliyin tətbiqi, sazlayıcılar və emulyatorlar attestasiya ilə deyil, yerli evristika ilə yoxlanılır.</string>
+<string name="coverage_bloom_title">Ehtimallı heş indeksi</string>
+<string name="coverage_bloom_body">Yoxlanmış, boş olmayan ehtimallı indeks və onun manifesti daxil edilməyib. Bu əlavə qat əlçatan deyil.</string>
+<string name="coverage_rules_title">Daxil edilmiş kod imzaları</string>
+<string name="coverage_rules_body">Təsdiqlənmiş daxili qaydalar məhdud sayda hərfi kod nümunəsini yoxlayır. Uyğunluqlar yalnız xəbərdarlıqdır, zərərli proqramı təsdiqləmir.</string>
+<string name="coverage_rules_unavailable">Daxili qaydalar yüklənmədi və ya təsdiqdən keçmədi. Kod imzası skanının aparıldığı iddia edilmir.</string>
+<string name="coverage_model_title">İcazə təsnifatı modeli</string>
+<string name="coverage_model_body">Öyrədilmiş, təsdiqlənmiş və paylanıla bilən təsnifat modeli daxil deyil. Maşın öyrənməsi söndürülüb.</string>
+<string name="coverage_signer_title">Oflayn imza sahibinin təsdiqi</string>
+<string name="coverage_signer_body">Müstəqil müəyyən edilmiş gözlənilən imza sertifikatı barmaq izi sazlanmayıb.</string>
+<string name="coverage_feed_title">İmzalanmış mənbənin yoxlanması</string>
+<string name="coverage_feed_body">Ayrı imzanın təsdiqi və köhnə versiyaya qayıdışdan qorunma üçün yığım zamanı etibarlı açar və sazlanmış imzalı mənbə tələb olunur.</string>
+<string name="hash_status_active">İmzalanmış yerli heş bazası aktivdir.</string>
+<string name="hash_status_missing">İmzalanmış baza qəbul olunana qədər heş uyğunluğu söndürülüb.</string>
+<string name="hash_status_key">Etibarlı imzalama açarı olmadığı üçün heş uyğunluğu söndürülüb.</string>
+<string name="hash_status_invalid">Saxlanmış təriflər bütövlük, versiya və ya format yoxlamasından keçmədi. Heş uyğunluğu söndürülmüş qalacaq.</string>
+<string name="hash_status_activation">Baza aktivləşdirilməsi tamamlanmadı. Heş uyğunluğu söndürülmüş qalacaq.</string>
+<string name="finding_confidence">%1$s · Etibarlılıq: %2$d%%</string>
+<string name="finding_exported">Xaricə açılan komponentin manifestində görünən icazə məhdudiyyəti yoxdur. Kod səviyyəsində yoxlamalar yenə də ola bilər.</string>
+<string name="finding_admin">Tətbiq cihaz idarəetmə qəbuledicisini bəyan edir. Bu həssas imkan sui-istifadənin sübutu deyil.</string>
+<string name="finding_accessibility">Tətbiq əlçatanlıq xidmətini bəyan edir. Qanuni köməkçi tətbiqlər bu girişə ehtiyac duya bilər.</string>
+<string name="finding_overlay">Tətbiq başqa ekranların üzərində göstərilmə icazəsi istəyir. Bu qanuni ola bilər, lakin başqa ekranları örtə bilər.</string>
+<string name="finding_combined">Əlçatanlıq ekran üzəri göstərilmə, mesaj və ya zəng tarixçəsinə girişlə birləşir. Tətbiqin məqsədini yoxlayın.</string>
+<string name="finding_sms_calls">Tətbiq həm mesaj, həm də zəng tarixçəsi icazələrini istəyir.</string>
+<string name="finding_sms_network">Mesajlara giriş internetə girişlə birləşir. Kontekstə uyğun yoxlama lazımdır.</string>
+<string name="finding_signer">İmzalama sertifikatının metadatası yoxdur və ya oxunmur.</string>
+<string name="finding_archive">Paket konteyneri tam araşdırıla bilmədi. Statik analiz natamamdır.</string>
+<string name="finding_packer">Paket yolu tanınmış qablaşdırma və ya mühafizə alətinə bənzəyir. Qanuni tətbiqlər də ondan istifadə edə bilər.</string>
+<string name="finding_dex_header">Kod başlığında format və ya ölçü sahələri uyğunsuzdur. Bu zərərli proqramı sübut etmir.</string>
+<string name="finding_dex_short">Kod girişi düzgün başlıqdan qısadır və tam araşdırıla bilmədi.</string>
+<string name="finding_entropy">Kod nümunəsində bayt entropiyası yüksəkdir. Şifrələmə, qablaşdırma və ya zərərsiz sıxılmış məzmun səbəb ola bilər.</string>
+<string name="finding_api">Tələb olunan icazə üçün gözlənilən statik istinad tapılmadı. Refleksiya, kitabxanalar və ya dinamik yüklənən kod səbəb ola bilər.</string>
+<string name="finding_rules">Məhdud daxili kod imzası ilə uyğunluq tapıldı. Bu xəbərdarlıqdır, zərərli proqramın sübutu deyil.</string>
+<string name="finding_other">Əlavə yerli göstəricilər əl ilə yoxlanmalıdır. Onlar zərərli proqramı təsdiqləmir.</string>
+<string name="integrity_manager">Root girişi və ya müdaxilə idarəçisi görünür: %1$s</string>
+<string name="integrity_test_keys">Cihazın yığımı sınaq imzalama açarlarından istifadə edir.</string>
+<string name="integrity_debug_build">Yığım xüsusiyyətləri sazlanabilən və ya istehsal üçün olmayan sistemi göstərir.</string>
+<string name="integrity_selinux">Oxuna bilən yerli vəziyyət məcburi təhlükəsizlik tətbiqinin söndürüldüyünü göstərir.</string>
+<string name="integrity_debugger">Bu prosesə sazlayıcı qoşulub.</string>
+<string name="integrity_emulator">Yığım xüsusiyyətləri emulyator və ya sınaq cihazına bənzəyir.</string>
+<string name="audit_scan_pending">Quraşdırma qeydə alındı. Yerli analiz gözləyir.</string>
+<string name="audit_scan_complete">Yerli analiz təsdiqlənmiş imza uyğunluğu olmadan bitdi. Bu, təhlükəsizlik zəmanəti deyil.</string>
+<string name="audit_scan_unavailable">Analiz zamanı paket görünmürdü.</string>
+<string name="audit_scan_threat">Yerli təhdid imzası ilə dəqiq uyğunluq tapıldı.</string>
+<string name="audit_scan_review">Yerli göstəricilər yoxlanmalıdır; onlar zərərli proqramı təsdiqləmir.</string>
+<string name="audit_source_recorded">Quraşdırma mənbəyi qeydə alındı.</string>
+<string name="audit_uninstall_requested">Android-dən silinməni təsdiqləmək istənildi.</string>
+<string name="audit_uninstall_success">Android silinmənin uğurlu olduğunu bildirdi.</string>
+<string name="audit_uninstall_failed">Android silinmə tələbini tamamlaya bilmədi.</string>
+<string name="severity_test">Zərərsiz sınaq işarəsi</string>
+<string name="severity_low">Aşağı ciddilik</string>
+<string name="severity_medium">Orta ciddilik</string>
+<string name="severity_high">Yüksək ciddilik</string>
+<string name="severity_critical">Kritik ciddilik</string>
+<string name="severity_unknown">Ciddilik göstərilməyib</string>
+<plurals name="l10n_scanned_apps"><item quantity="other">%1$d tətbiq yoxlanılıb</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="other">%1$d fayl yoxlanılıb</item></plurals>
+<plurals name="l10n_threats"><item quantity="other">%1$d təhdid tapılıb</item></plurals>
+<plurals name="l10n_review"><item quantity="other">%1$d nəticə yoxlanmalıdır</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="other">%1$d element yoxlanıla bilmədi</item></plurals>
+<plurals name="l10n_no_match"><item quantity="other">%1$d nəticədə yerli uyğunluq yoxdur</item></plurals>
+<plurals name="l10n_apps"><item quantity="other">%1$d tətbiq</item></plurals>
+<plurals name="l10n_files"><item quantity="other">%1$d fayl</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="other">%1$d qeyri-sistem tətbiqinin yüksək riskli girişi var.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="other">%1$d qeydə alınmış dəyişiklik bildiriş gözləyir.</item></plurals>
+<plurals name="l10n_rules"><item quantity="other">Məhdud əhatə · %1$d daxili qayda</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="other">Son yoxlama: %1$d məsləhət xarakterli kod uyğunluğu.</item></plurals>
+<plurals name="l10n_imported"><item quantity="other">Yerli yaddaşa %1$d etibarlı imza idxal edilib.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="other">%1$d bayt</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="other">%1$d root ilə bağlı fayl sistemi göstəricisi var.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="other">%1$d müdaxilə göstəricisi var.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="other">%1$d tətbiq aktivləşdirilib</item></plurals>
+<plurals name="l10n_indicators"><item quantity="other">%1$d göstərici</item></plurals>
+<plurals name="l10n_progress"><item quantity="other">%2$d tətbiqdən %1$d-i yoxlanılıb</item></plurals>
 </resources>
