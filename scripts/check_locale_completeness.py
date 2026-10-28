@@ -44,7 +44,7 @@ def read_resources(path):
     return strings, plurals
 
 def formats(text):
-    return sorted(FORM.findall(text or ""))
+    return sorted(FORMAT.findall(text or ""))
 
 english, english_plurals = read_resources(BASE / "values" / "strings.xml")
 for locale in LOCALES:
