@@ -663,5 +663,8 @@
 <plurals name="l10n_enabled_apps"><item quantity="one">%1$d ಅನ್ವಯ ಸಕ್ರಿಯವಾಗಿದೆ</item><item quantity="other">%1$d ಅನ್ವಯಗಳು ಸಕ್ರಿಯವಾಗಿವೆ</item></plurals>
 <plurals name="l10n_indicators"><item quantity="one">%1$d ಸೂಚಕ</item><item quantity="other">%1$d ಸೂಚಕಗಳು</item></plurals>
 <plurals name="l10n_progress"><item quantity="one">%2$d ರಲ್ಲಿ %1$d ಅನ್ವಯ ಪರಿಶೀಲಿಸಲಾಗಿದೆ</item><item quantity="other">%2$d ರಲ್ಲಿ %1$d ಅನ್ವಯಗಳನ್ನು ಪರಿಶೀಲಿಸಲಾಗಿದೆ</item></plurals>
+    <string name="ml_probability">ಎಂಎಲ್ ಅಪಾಯದ ಸಾಧ್ಯತೆ: %1$d%%</string>
+    <string name="ml_high_finding">ಸ್ಥಿರ ಎಂಎಲ್ ವಿಶ್ಲೇಷಣೆ: ಅನುಮತಿಗಳು ಮತ್ತು ಎಪಿಐ ಮಾದರಿಗಳ ಆಧಾರದಲ್ಲಿ ಹೆಚ್ಚಿನ ಅಂಕ; ಇದು ಸೂಚನೆ ಮಾತ್ರ, ಮಾಲ್‌ವೇರ್‌ನ ಪುರಾವೆಯಲ್ಲ.</string>
+    <string name="ml_active_body">ಪರಿಶೀಲಿತ ಸಾಧನದಲ್ಲೇ ಕಾರ್ಯನಿರ್ವಹಿಸುವ ಸ್ಥಿರ ಎಂಎಲ್ ಮಾದರಿ ಲಭ್ಯವಿದೆ. ಫಲಿತಾಂಶಗಳು ಸೂಚನೆ ಮಾತ್ರ; ಮಾಲ್‌ವೇರ್‌ನ ಪುರಾವೆಯಲ್ಲ.</string>
 </resources>
 
