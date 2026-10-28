@@ -805,4 +805,7 @@
 <plurals name="l10n_enabled_apps"><item quantity="other">เปิดใช้งานแอป %1$d รายการ</item></plurals>
 <plurals name="l10n_indicators"><item quantity="other">ตัวบ่งชี้ %1$d รายการ</item></plurals>
 <plurals name="l10n_progress"><item quantity="other">ตรวจสอบแอปแล้ว %1$d จาก %2$d รายการ</item></plurals>
+    <string name="ml_probability">ความน่าจะเป็นของภัยคุกคามจาก ML: %1$d%%</string>
+    <string name="ml_high_finding">การประเมิน ML แบบคงที่: คะแนนสูงจากสิทธิ์และรูปแบบ API; เป็นเพียงข้อบ่งชี้ ไม่ใช่หลักฐานว่ามีมัลแวร์</string>
+    <string name="ml_active_body">มีโมเดล ML แบบคงที่ที่ผ่านการตรวจสอบอยู่ในอุปกรณ์ ผลลัพธ์เป็นเพียงคำแนะนำ ไม่ได้ยืนยันว่ามีมัลแวร์</string>
 </resources>
