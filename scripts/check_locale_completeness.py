@@ -10,6 +10,9 @@ LOCALES = (
     "es", "fr", "hi", "kn", "ru", "zh-rCN", "ja", "ar", "pt", "it",
     "ko", "tr", "vi", "id", "bn", "ta", "te", "mr", "gu", "ml",
     "pa", "ur",
+    "af", "az", "bg", "ca", "cs", "da", "de", "el", "et", "fa",
+    "fi", "fil", "b+he", "hr", "hu", "ka", "kk", "lt", "lv", "ms",
+    "nb", "ne", "nl", "pl", "ro", "sk", "sv", "th", "uk",
 )
 FORMAT = re.compile(r"%(?:\d+\$)?[sdif]")
 SOURCE_DIRS = (
