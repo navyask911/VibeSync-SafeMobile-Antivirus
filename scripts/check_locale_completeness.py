@@ -11,15 +11,15 @@ LOCALES = (
     "ko", "tr", "vi", "id", "bn", "ta", "te", "mr", "gu", "ml",
     "pa", "ur",
 )
-FORMAT = re.compile(r"%(?:\\d+\\$)?[sdif]")
+FORMAT = re.compile(r"%(?:\d+\$)?[sdif]")
 SOURCE_DIRS = (
     Path("app/src/main/java/com/vibesync/antivirus/presentation"),
     Path("app/src/main/java/com/vibesync/antivirus/ui"),
 )
 DIRECT_LITERALS = (
-    re.compile(r'\\bText\\s*\\(\\s*(?:text\\s*=\\s*)?"([A-Za-z][^"]*)"'),
-    re.compile(r'\\b(?:contentDescription|label)\\s*=\\s*"([A-Za-z][^"]*)"'),
-    re.compile(r'\\bToast\\.makeText\\s*\\([^,]*,\\s*"([A-Za-z][^"]*)"'),
+    re.compile(r'\bText\s*\(\s*(?:text\s*=\s*)?"([A-Za-z][^"]*)"'),
+    re.compile(r'\b(?:contentDescription|label)\s*=\s*"([A-Za-z][^"]*)"'),
+    re.compile(r'\bToast\.makeText\s*\([^,]*,\s*"([A-Za-z][^"]*)"'),
 )
 errors = []
 
@@ -92,11 +92,11 @@ for folder in SOURCE_DIRS:
                 value = match.group(1)
                 if value == "SafeMobile":
                     continue
-                line = text.count("\\n", 0, match.start()) + 1
+                line = text.count("\n", 0, match.start()) + 1
                 errors.append(f"{source}:{line}: hardcoded user-facing text: {value[:55]}")
 
 if errors:
     print("Localization check FAILED: " + str(len(errors)) + " error(s)")
-    print("\\n".join(errors), file=sys.stderr)
+    print("\n".join(errors), file=sys.stderr)
     sys.exit(1)
 print(f"Localization check passed: {len(LOCALES)} locales, string keys, plural forms, placeholders, voice alerts, and direct Compose literals.")
