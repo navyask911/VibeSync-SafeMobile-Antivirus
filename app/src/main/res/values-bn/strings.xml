@@ -643,23 +643,23 @@
 <string name="severity_high">বেশি তীব্রতা</string>
 <string name="severity_critical">অত্যন্ত গুরুতর</string>
 <string name="severity_unknown">তীব্রতা উল্লেখ করা হয়নি</string>
-<plurals name="l10n_scanned_apps"><item quantity="other">%1$dটি অ্যাপ স্ক্যান হয়েছে</item></plurals>
-<plurals name="l10n_scanned_files"><item quantity="other">%1$dটি ফাইল স্ক্যান হয়েছে</item></plurals>
-<plurals name="l10n_threats"><item quantity="other">%1$dটি হুমকি পাওয়া গেছে</item></plurals>
-<plurals name="l10n_review"><item quantity="other">%1$dটি ফলাফল পর্যালোচনা দরকার</item></plurals>
-<plurals name="l10n_unreadable"><item quantity="other">%1$dটি বস্তু স্ক্যান করা যায়নি</item></plurals>
-<plurals name="l10n_no_match"><item quantity="other">%1$dটি ফলাফলে স্থানীয় মিল নেই</item></plurals>
-<plurals name="l10n_apps"><item quantity="other">%1$dটি অ্যাপ</item></plurals>
-<plurals name="l10n_files"><item quantity="other">%1$dটি ফাইল</item></plurals>
-<plurals name="l10n_posture_apps"><item quantity="other">সিস্টেম-বহির্ভূত %1$dটি অ্যাপে উচ্চ-ঝুঁকির অ্যাক্সেস আছে।</item></plurals>
-<plurals name="l10n_pending_changes"><item quantity="other">নথিবদ্ধ %1$dটি পরিবর্তনের বিজ্ঞপ্তি বাকি।</item></plurals>
-<plurals name="l10n_rules"><item quantity="other">সীমিত আওতা · অন্তর্ভুক্ত %1$dটি নিয়ম</item></plurals>
-<plurals name="l10n_rule_matches"><item quantity="other">সর্বশেষ স্ক্যান: %1$dটি পরামর্শমূলক কোড মিল।</item></plurals>
-<plurals name="l10n_imported"><item quantity="other">%1$dটি বৈধ স্বাক্ষর স্থানীয় সংরক্ষণে আমদানি হয়েছে।</item></plurals>
-<plurals name="l10n_bytes"><item quantity="other">%1$d বাইট</item></plurals>
-<plurals name="l10n_root_indicators"><item quantity="other">রুট-সম্পর্কিত %1$dটি ফাইলসিস্টেম সূচক আছে।</item></plurals>
-<plurals name="l10n_hook_indicators"><item quantity="other">হুকিংয়ের %1$dটি সূচক আছে।</item></plurals>
-<plurals name="l10n_enabled_apps"><item quantity="other">%1$dটি অ্যাপ সক্রিয় হয়েছে</item></plurals>
-<plurals name="l10n_indicators"><item quantity="other">%1$dটি সূচক</item></plurals>
-<plurals name="l10n_progress"><item quantity="other">%2$dটি অ্যাপের মধ্যে %1$dটি পরীক্ষা হয়েছে</item></plurals>
+<plurals name="l10n_scanned_apps"><item quantity="one">%1$dটি অ্যাপ স্ক্যান হয়েছে</item><item quantity="other">%1$dটি অ্যাপ স্ক্যান হয়েছে</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="one">%1$dটি ফাইল স্ক্যান হয়েছে</item><item quantity="other">%1$dটি ফাইল স্ক্যান হয়েছে</item></plurals>
+<plurals name="l10n_threats"><item quantity="one">%1$dটি হুমকি পাওয়া গেছে</item><item quantity="other">%1$dটি হুমকি পাওয়া গেছে</item></plurals>
+<plurals name="l10n_review"><item quantity="one">%1$dটি ফলাফল পর্যালোচনা দরকার</item><item quantity="other">%1$dটি ফলাফল পর্যালোচনা দরকার</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="one">%1$dটি বস্তু স্ক্যান করা যায়নি</item><item quantity="other">%1$dটি বস্তু স্ক্যান করা যায়নি</item></plurals>
+<plurals name="l10n_no_match"><item quantity="one">%1$dটি ফলাফলে স্থানীয় মিল নেই</item><item quantity="other">%1$dটি ফলাফলে স্থানীয় মিল নেই</item></plurals>
+<plurals name="l10n_apps"><item quantity="one">%1$dটি অ্যাপ</item><item quantity="other">%1$dটি অ্যাপ</item></plurals>
+<plurals name="l10n_files"><item quantity="one">%1$dটি ফাইল</item><item quantity="other">%1$dটি ফাইল</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="one">সিস্টেম-বহির্ভূত %1$dটি অ্যাপে উচ্চ-ঝুঁকির অ্যাক্সেস আছে।</item><item quantity="other">সিস্টেম-বহির্ভূত %1$dটি অ্যাপে উচ্চ-ঝুঁকির অ্যাক্সেস আছে।</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="one">নথিবদ্ধ %1$dটি পরিবর্তনের বিজ্ঞপ্তি বাকি।</item><item quantity="other">নথিবদ্ধ %1$dটি পরিবর্তনের বিজ্ঞপ্তি বাকি।</item></plurals>
+<plurals name="l10n_rules"><item quantity="one">সীমিত আওতা · অন্তর্ভুক্ত %1$dটি নিয়ম</item><item quantity="other">সীমিত আওতা · অন্তর্ভুক্ত %1$dটি নিয়ম</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="one">সর্বশেষ স্ক্যান: %1$dটি পরামর্শমূলক কোড মিল।</item><item quantity="other">সর্বশেষ স্ক্যান: %1$dটি পরামর্শমূলক কোড মিল।</item></plurals>
+<plurals name="l10n_imported"><item quantity="one">%1$dটি বৈধ স্বাক্ষর স্থানীয় সংরক্ষণে আমদানি হয়েছে।</item><item quantity="other">%1$dটি বৈধ স্বাক্ষর স্থানীয় সংরক্ষণে আমদানি হয়েছে।</item></plurals>
+<plurals name="l10n_bytes"><item quantity="one">%1$d বাইট</item><item quantity="other">%1$d বাইট</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="one">রুট-সম্পর্কিত %1$dটি ফাইলসিস্টেম সূচক আছে।</item><item quantity="other">রুট-সম্পর্কিত %1$dটি ফাইলসিস্টেম সূচক আছে।</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="one">হুকিংয়ের %1$dটি সূচক আছে।</item><item quantity="other">হুকিংয়ের %1$dটি সূচক আছে।</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="one">%1$dটি অ্যাপ সক্রিয় হয়েছে</item><item quantity="other">%1$dটি অ্যাপ সক্রিয় হয়েছে</item></plurals>
+<plurals name="l10n_indicators"><item quantity="one">%1$dটি সূচক</item><item quantity="other">%1$dটি সূচক</item></plurals>
+<plurals name="l10n_progress"><item quantity="one">%2$dটি অ্যাপের মধ্যে %1$dটি পরীক্ষা হয়েছে</item><item quantity="other">%2$dটি অ্যাপের মধ্যে %1$dটি পরীক্ষা হয়েছে</item></plurals>
 </resources>
