@@ -701,4 +701,108 @@
 <string name="detection_capabilities_save">Save update settings</string>
 <string name="detection_capabilities_sync_privacy">Downloads only. Scan results, files, hashes, and package names are not uploaded.</string>
 <string name="detection_capabilities_sync_unavailable">Automatic updates are unavailable in this offline build or until a trusted signing key is configured.</string>
+
+<string name="format_label_value">%1$s: %2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s – %2$s</string>
+<string name="format_version">%1$s · Versija %2$s (%3$s)</string>
+<string name="format_package_version">%1$s · Versija %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">Įveskite saugų informacijos šaltinio adresą</string>
+<string name="storage_size_unavailable">Dydis nepasiekiamas</string>
+<string name="blocked_reason_hash">Rastas atitikmuo vietiniam grėsmės parašui.</string>
+<string name="blocked_reason_action">Pagal galimybes bandyta atlikti vietinį saugos veiksmą.</string>
+<string name="signed_import_success">Pasirašyta duomenų bazė priimta: versija %1$s · %2$s.</string>
+<string name="signed_import_failed">Pasirašyta duomenų bazė nesuaktyvinta. Patikrinkite parašą, versiją ir failo formatą.</string>
+<string name="rule_import_pending">%1$s išsaugotas peržiūrai. Importuotos taisyklės lieka išjungtos, o failas nebus vykdomas.</string>
+<string name="rule_import_failed">Taisyklių importuoti nepavyko. Importuotos taisyklės lieka išjungtos.</string>
+<string name="restore_result_localized">Atkurta %1$s (%2$s) kopija. Originalas karantine tebėra saugomas.</string>
+<string name="cleaner_confirm_localized">Visam laikui ištrinti %1$s (%2$s)? Šio veiksmo atšaukti negalima. SafeMobile dar kartą patikrins pavadinimus ir metaduomenis.</string>
+<string name="cleaner_result_localized">Ištrinta: %1$s · Atlaisvinta vieta: %2$s · Nepavyko arba pakeista: %3$s</string>
+<string name="about_localized_notices">Trečiųjų šalių komponentams ir toliau taikomos jų pačių licencijos. Originalūs pranešimai yra audito kontrolinis taškas, o ne užbaigta licencijų peržiūra. Atverkite originalius dokumentus, kad peržiūrėtumėte šaltinių pranešimus ir licencijų sąlygas.</string>
+<string name="about_open_original">Atverti originalius dokumentus</string>
+<string name="about_localized_privacy">Nuskaityti failai, maišos reikšmės, paketų pavadinimai ir rezultatai lieka šiame įrenginyje. Vietiniai audito metaduomenys ir karantino kopijos saugomi šifruotoje privačioje saugykloje. Pasirašytų apibrėžimų naujiniai susisiekia su šio projekto leidimų paslauga; atskiras šaltinis į sukonfigūruotą adresą kreipiasi tik gavus sutikimą. Aplankų stebėjimas taikomas tik jūsų pasirinktiems aplankams ir gali būti sustabdytas. Android leidimai lieka jūsų valioje. Šioje versijoje nėra reklamų, nuskaitymo debesyje ar nuorodų reputacijos paslaugos.</string>
+<string name="coverage_local_title">Vietiniai bandomieji apibrėžimai</string>
+<string name="coverage_local_body">Pridėtuose senuose apibrėžimuose yra tik nepavojingas antiviruso bandymo žymeklis. Jie neapsaugo nuo tikros kenkėjiškos programinės įrangos.</string>
+<string name="coverage_signed_title">Pasirašyta maišos reikšmių duomenų bazė</string>
+<string name="coverage_signed_body">Tiksliai maišos atitikčiai reikia patikimo pasirašymo rakto ir priimtos pasirašytos duomenų bazės. Gamybinė duomenų bazė nepridėta.</string>
+<string name="coverage_static_title">Statinė programėlių analizė</string>
+<string name="coverage_static_body">Ribota paketų analizė pateikia rekomendacinio pobūdžio radinius. Vienas radinys neįrodo kenkėjiškos programos; žinomų kenksmingų pasirašiusiųjų sąrašai išjungti.</string>
+<string name="coverage_permissions_title">Leidimai ir manifestas</string>
+<string name="coverage_permissions_body">Leidimų deriniai ir matomos paketų deklaracijos padeda rankinei peržiūrai. Tai nėra apmokytas klasifikatorius.</string>
+<string name="coverage_integrity_title">Įrenginio vientisumo rodikliai</string>
+<string name="coverage_integrity_body">Šakninė prieiga, perėmimo mechanizmai, versijos ypatybės, saugos taisyklių vykdymas, derintuvės ir emuliatoriai tikrinami vietiniais euristiniais metodais, ne atestavimu.</string>
+<string name="coverage_bloom_title">Tikimybinis maišos indeksas</string>
+<string name="coverage_bloom_body">Patikrintas netuščias tikimybinis indeksas ir jo manifestas nepridėti. Šis pasirinktinis sluoksnis nepasiekiamas.</string>
+<string name="coverage_rules_title">Pridėti kodo parašai</string>
+<string name="coverage_rules_body">Patikrintos pridėtos taisyklės ieško riboto pažodinių kodo šablonų rinkinio. Atitiktys yra rekomendacinės ir nepatvirtina kenkėjiškos programos.</string>
+<string name="coverage_rules_unavailable">Pridėtų taisyklių nepavyko įkelti arba jos nepraėjo patikros. Neteigiama, kad kodo parašai buvo nuskaityti.</string>
+<string name="coverage_model_title">Leidimų klasifikavimo modelis</string>
+<string name="coverage_model_body">Nėra pridėto apmokyto, patikrinto ir platintino klasifikavimo modelio. Mašininis mokymasis išjungtas.</string>
+<string name="coverage_signer_title">Pasirašiusiojo patvirtinimas neprisijungus</string>
+<string name="coverage_signer_body">Nepriklausomai nustatytas numatomas pasirašymo sertifikato kontrolinis atspaudas nesukonfigūruotas.</string>
+<string name="coverage_feed_title">Pasirašyto šaltinio tikrinimas</string>
+<string name="coverage_feed_body">Atskiro parašo tikrinimui ir apsaugai nuo grįžimo prie senesnės versijos reikia patikimo kūrimo rakto ir sukonfigūruoto pasirašyto šaltinio.</string>
+<string name="hash_status_active">Pasirašyta vietinė maišos duomenų bazė aktyvi.</string>
+<string name="hash_status_missing">Maišos atitikčių paieška išjungta, kol nepriimta pasirašyta duomenų bazė.</string>
+<string name="hash_status_key">Maišos atitikčių paieška išjungta, nes nėra patikimo pasirašymo rakto.</string>
+<string name="hash_status_invalid">Saugomi apibrėžimai nepraėjo vientisumo, versijos ar formato patikrų. Maišos atitikčių paieška lieka išjungta.</string>
+<string name="hash_status_activation">Duomenų bazės aktyvinimas neužbaigtas. Maišos atitikčių paieška lieka išjungta.</string>
+<string name="finding_confidence">%1$s · Patikimumas: %2$d%%</string>
+<string name="finding_exported">Eksportuotam komponentui manifeste nematyti leidimo apribojimo. Tačiau kodo lygmens patikros gali būti.</string>
+<string name="finding_admin">Programėlė deklaruoja įrenginio administravimo imtuvą. Ši jautri galimybė neįrodo piktnaudžiavimo.</string>
+<string name="finding_accessibility">Programėlė deklaruoja prieinamumo paslaugą. Teisėtoms pagalbinėms programėlėms gali prireikti šios prieigos.</string>
+<string name="finding_overlay">Programėlė prašo leidimo rodyti virš kitų ekranų. Perdangos gali būti teisėtos, bet gali uždengti kitus ekranus.</string>
+<string name="finding_combined">Prieinamumas derinamas su perdanga, žinučių ar skambučių istorijos prieiga. Įvertinkite programėlės paskirtį.</string>
+<string name="finding_sms_calls">Programėlė prašo leidimų ir žinutėms, ir skambučių istorijai.</string>
+<string name="finding_sms_network">Žinučių prieiga derinama su interneto prieiga. Reikia įvertinti atsižvelgiant į aplinkybes.</string>
+<string name="finding_signer">Pasirašymo sertifikato metaduomenų trūksta arba jų neįmanoma nuskaityti.</string>
+<string name="finding_archive">Paketo turinio nepavyko visiškai patikrinti. Statinė analizė nebaigta.</string>
+<string name="finding_packer">Paketo kelias panašus į žinomą pakavimo ar apsaugos įrankį. Teisėtos programėlės taip pat gali jį naudoti.</string>
+<string name="finding_dex_header">Kodo antraštėje yra nesuderinamų formato ar dydžio laukų. Tai neįrodo kenkėjiškos programos.</string>
+<string name="finding_dex_short">Kodo įrašas trumpesnis už galiojančią antraštę, todėl jo nepavyko visiškai patikrinti.</string>
+<string name="finding_entropy">Kodo pavyzdyje didelė baitų entropija. Tai gali paaiškinti šifravimas, pakavimas ar nepavojingas suglaudintas turinys.</string>
+<string name="finding_api">Nerasta tikėtinos statinės nuorodos į prašomą leidimą. Tai gali lemti atspindys, bibliotekos ar dinamiškai įkeliamas kodas.</string>
+<string name="finding_rules">Aptiktas riboto pridėto kodo parašo atitikmuo. Tai įspėjimas, ne kenkėjiškos programos įrodymas.</string>
+<string name="finding_other">Papildomus vietinius rodiklius būtina peržiūrėti rankiniu būdu. Jie nepatvirtina kenkėjiškos programos.</string>
+<string name="integrity_manager">Matoma šakninės prieigos ar perėmimo tvarkyklė: %1$s</string>
+<string name="integrity_test_keys">Įrenginio versijoje naudojami bandomieji pasirašymo raktai.</string>
+<string name="integrity_debug_build">Versijos ypatybės rodo, kad sistema derinama arba nėra skirta produkcijai.</string>
+<string name="integrity_selinux">Perskaitoma vietinė būsena rodo, kad privalomas saugos taisyklių vykdymas išjungtas.</string>
+<string name="integrity_debugger">Prie šio proceso prijungta derintuvė.</string>
+<string name="integrity_emulator">Versijos ypatybės primena emuliatorių ar bandomąjį įrenginį.</string>
+<string name="audit_scan_pending">Diegimas užregistruotas. Vietinė analizė laukia.</string>
+<string name="audit_scan_complete">Vietinė analizė baigta nepatvirtinus parašo atitikties. Tai nėra saugumo garantija.</string>
+<string name="audit_scan_unavailable">Analizės metu paketas nebuvo matomas.</string>
+<string name="audit_scan_threat">Rasta tiksli atitiktis vietiniam grėsmės parašui.</string>
+<string name="audit_scan_review">Vietinius rodiklius reikia peržiūrėti; jie nepatvirtina kenkėjiškos programos.</string>
+<string name="audit_source_recorded">Diegimo šaltinis užregistruotas.</string>
+<string name="audit_uninstall_requested">Paprašyta Android pašalinimo patvirtinimo.</string>
+<string name="audit_uninstall_success">Android pranešė, kad pašalinimas pavyko.</string>
+<string name="audit_uninstall_failed">Android negalėjo užbaigti pašalinimo užklausos.</string>
+<string name="severity_test">Nepavojingas bandymo žymeklis</string>
+<string name="severity_low">Mažas pavojingumas</string>
+<string name="severity_medium">Vidutinis pavojingumas</string>
+<string name="severity_high">Didelis pavojingumas</string>
+<string name="severity_critical">Kritinis pavojingumas</string>
+<string name="severity_unknown">Pavojingumas nenurodytas</string>
+<plurals name="l10n_scanned_apps"><item quantity="one">Nuskaityta %1$d programėlė</item><item quantity="few">Nuskaitytos %1$d programėlės</item><item quantity="many">Nuskaityta %1$d programėlių</item><item quantity="other">Nuskaityta %1$d programėlės</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="one">Nuskaitytas %1$d failas</item><item quantity="few">Nuskaityti %1$d failai</item><item quantity="many">Nuskaityta %1$d failų</item><item quantity="other">Nuskaityta %1$d failo</item></plurals>
+<plurals name="l10n_threats"><item quantity="one">Rasta %1$d grėsmė</item><item quantity="few">Rastos %1$d grėsmės</item><item quantity="many">Rasta %1$d grėsmių</item><item quantity="other">Rasta %1$d grėsmės</item></plurals>
+<plurals name="l10n_review"><item quantity="one">%1$d rezultatą reikia peržiūrėti</item><item quantity="few">%1$d rezultatus reikia peržiūrėti</item><item quantity="many">%1$d rezultatų reikia peržiūrėti</item><item quantity="other">%1$d rezultato reikia peržiūrėti</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="one">Nepavyko nuskaityti %1$d elemento</item><item quantity="few">Nepavyko nuskaityti %1$d elementų</item><item quantity="many">Nepavyko nuskaityti %1$d elementų</item><item quantity="other">Nepavyko nuskaityti %1$d elemento</item></plurals>
+<plurals name="l10n_no_match"><item quantity="one">%1$d rezultatas be vietinės atitikties</item><item quantity="few">%1$d rezultatai be vietinės atitikties</item><item quantity="many">%1$d rezultatų be vietinės atitikties</item><item quantity="other">%1$d rezultato be vietinės atitikties</item></plurals>
+<plurals name="l10n_apps"><item quantity="one">%1$d programėlė</item><item quantity="few">%1$d programėlės</item><item quantity="many">%1$d programėlių</item><item quantity="other">%1$d programėlės</item></plurals>
+<plurals name="l10n_files"><item quantity="one">%1$d failas</item><item quantity="few">%1$d failai</item><item quantity="many">%1$d failų</item><item quantity="other">%1$d failo</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="one">%1$d nesisteminė programėlė turi didelės rizikos prieigą.</item><item quantity="few">%1$d nesisteminės programėlės turi didelės rizikos prieigą.</item><item quantity="many">%1$d nesisteminių programėlių turi didelės rizikos prieigą.</item><item quantity="other">%1$d nesisteminės programėlės turi didelės rizikos prieigą.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="one">%1$d pastebėtas pokytis laukia pranešimo.</item><item quantity="few">%1$d pastebėti pokyčiai laukia pranešimo.</item><item quantity="many">%1$d pastebėtų pokyčių laukia pranešimo.</item><item quantity="other">%1$d pastebėto pokyčio laukia pranešimo.</item></plurals>
+<plurals name="l10n_rules"><item quantity="one">Ribota aprėptis · %1$d pridėta taisyklė</item><item quantity="few">Ribota aprėptis · %1$d pridėtos taisyklės</item><item quantity="many">Ribota aprėptis · %1$d pridėtų taisyklių</item><item quantity="other">Ribota aprėptis · %1$d pridėtos taisyklės</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="one">Paskutinis nuskaitymas: %1$d orientacinė kodo atitiktis.</item><item quantity="few">Paskutinis nuskaitymas: %1$d orientacinės kodo atitiktys.</item><item quantity="many">Paskutinis nuskaitymas: %1$d orientacinių kodo atitikčių.</item><item quantity="other">Paskutinis nuskaitymas: %1$d orientacinės kodo atitikties.</item></plurals>
+<plurals name="l10n_imported"><item quantity="one">Į vietinę saugyklą importuotas %1$d galiojantis parašas.</item><item quantity="few">Į vietinę saugyklą importuoti %1$d galiojantys parašai.</item><item quantity="many">Į vietinę saugyklą importuota %1$d galiojančių parašų.</item><item quantity="other">Į vietinę saugyklą importuota %1$d galiojančio parašo.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="one">%1$d baitas</item><item quantity="few">%1$d baitai</item><item quantity="many">%1$d baitų</item><item quantity="other">%1$d baito</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="one">Yra %1$d su šaknine prieiga susijęs failų sistemos rodiklis.</item><item quantity="few">Yra %1$d su šaknine prieiga susiję failų sistemos rodikliai.</item><item quantity="many">Yra %1$d su šaknine prieiga susijusių failų sistemos rodiklių.</item><item quantity="other">Yra %1$d su šaknine prieiga susijusio failų sistemos rodiklio.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="one">Yra %1$d perėmimo rodiklis.</item><item quantity="few">Yra %1$d perėmimo rodikliai.</item><item quantity="many">Yra %1$d perėmimo rodiklių.</item><item quantity="other">Yra %1$d perėmimo rodiklio.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="one">Įjungta %1$d programėlė</item><item quantity="few">Įjungtos %1$d programėlės</item><item quantity="many">Įjungta %1$d programėlių</item><item quantity="other">Įjungta %1$d programėlės</item></plurals>
+<plurals name="l10n_indicators"><item quantity="one">%1$d rodiklis</item><item quantity="few">%1$d rodikliai</item><item quantity="many">%1$d rodiklių</item><item quantity="other">%1$d rodiklio</item></plurals>
+<plurals name="l10n_progress"><item quantity="one">Patikrinta %1$d iš %2$d programėlių</item><item quantity="few">Patikrintos %1$d iš %2$d programėlių</item><item quantity="many">Patikrinta %1$d iš %2$d programėlių</item><item quantity="other">Patikrinta %1$d iš %2$d programėlių</item></plurals>
 </resources>
