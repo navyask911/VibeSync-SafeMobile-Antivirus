@@ -14,7 +14,6 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
-import kotlinx.coroutines.runInterruptible
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import org.json.JSONObject
@@ -39,9 +38,7 @@ class MachineLearningScanner(private val context: Context) {
             withContext(Dispatchers.IO) {
                 try {
                     val model = validatedModelBytes() ?: return@withContext null
-                    val vector = runInterruptible(Dispatchers.IO) {
-                        extractFeatures(apk, info)
-                    } ?: return@withContext null
+                    val vector = extractFeatures(apk, info) ?: return@withContext null
                     val buffer = ByteBuffer.allocateDirect(model.size).order(ByteOrder.nativeOrder())
                     buffer.put(model)
                     buffer.rewind()
@@ -79,6 +76,8 @@ class MachineLearningScanner(private val context: Context) {
             metadata.optInt("schema_version") != 1 ||
             metadata.optInt("feature_count") != FEATURE_COUNT ||
             metadata.optString("status") != "validated_production") return null
+        val features = metadata.optJSONArray("features") ?: return null
+        if (features.length() != FEATURES.size || FEATURES.indices.any { features.optString(it) != FEATURES[it] }) return null
         val hash = metadata.optString("model_sha256")
         if (!Regex("[0-9a-f]{64}").matches(hash)) return null
         val bytes = appContext.assets.open("malware_model.tflite").use { input ->
