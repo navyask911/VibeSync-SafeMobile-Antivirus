@@ -48,6 +48,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -440,6 +441,7 @@ private data class StorageCandidate(
 @Composable
 internal fun StorageCleanerPanel() {
     val context = LocalContext.current
+    val numberLocale = LocalConfiguration.current.locales[0]
     val preferences = remember(context) { context.getSharedPreferences("safe_mobile_storage_cleaner", Context.MODE_PRIVATE) }
     var treeUriText by remember { mutableStateOf(preferences.getString("tree_uri", null)) }
     var candidates by remember { mutableStateOf<List<StorageCandidate>>(emptyList()) }
@@ -568,7 +570,7 @@ internal fun StorageCleanerPanel() {
                         candidates = candidates.filterNot { current -> deleted.any { it.first.uri == current.uri } }
                         selectedUris = selectedUris - deleted.map { it.first.uri }.toSet()
                         val freed = deleted.sumOf { it.first.sizeBytes }
-                        message = context.getString(R.string.cleaner_result_localized, java.text.NumberFormat.getIntegerInstance(context.resources.configuration.locales[0]).format(deleted.size), formatStorageBytes(context, freed), java.text.NumberFormat.getIntegerInstance(context.resources.configuration.locales[0]).format(failed))
+                        message = context.getString(R.string.cleaner_result_localized, java.text.NumberFormat.getIntegerInstance(numberLocale).format(deleted.size), formatStorageBytes(context, freed), java.text.NumberFormat.getIntegerInstance(numberLocale).format(failed))
                         scanning = false
                     }
                 }) { Text(stringResource(R.string.cleaner_delete_confirm_action)) }
