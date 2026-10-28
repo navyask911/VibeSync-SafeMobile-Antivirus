@@ -701,4 +701,108 @@
 <string name="detection_capabilities_save">Save update settings</string>
 <string name="detection_capabilities_sync_privacy">Downloads only. Scan results, files, hashes, and package names are not uploaded.</string>
 <string name="detection_capabilities_sync_unavailable">Automatic updates are unavailable in this offline build or until a trusted signing key is configured.</string>
+
+<string name="format_label_value">%1$s: %2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s – %2$s</string>
+<string name="format_version">%1$s · Versió %2$s (%3$s)</string>
+<string name="format_package_version">%1$s · Versió %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">Introduïu una adreça de font segura</string>
+<string name="storage_size_unavailable">Mida no disponible</string>
+<string name="blocked_reason_hash">Ha coincidit una signatura local d’amenaça.</string>
+<string name="blocked_reason_action">S’ha intentat una acció de seguretat local en la mesura del possible.</string>
+<string name="signed_import_success">Base de dades signada acceptada: versió %1$s · %2$s.</string>
+<string name="signed_import_failed">La base de dades signada no s’ha activat. Comproveu la signatura, la versió i el format del fitxer.</string>
+<string name="rule_import_pending">S’ha desat %1$s per revisar-lo. Les regles importades continuen desactivades i aquest fitxer no s’executarà.</string>
+<string name="rule_import_failed">No s’han pogut importar les regles. Les regles importades continuen desactivades.</string>
+<string name="restore_result_localized">S’ha restaurat una còpia de %1$s (%2$s). L’original en quarantena continua desat.</string>
+<string name="cleaner_confirm_localized">Voleu suprimir permanentment %1$s (%2$s)? No es pot desfer. SafeMobile tornarà a comprovar els noms i les metadades.</string>
+<string name="cleaner_result_localized">Suprimits: %1$s · Espai alliberat: %2$s · Errors o canvis: %3$s</string>
+<string name="about_localized_notices">Els components de tercers mantenen les seves pròpies llicències. Els avisos originals són un punt de control de l’auditoria, no una revisió de llicències completada. Obriu els documents originals per consultar els avisos de les fonts i les condicions de llicència.</string>
+<string name="about_open_original">Obre els documents originals</string>
+<string name="about_localized_privacy">Els fitxers analitzats, els resums criptogràfics, els noms dels paquets i els resultats es queden en aquest dispositiu. Les metadades locals d’auditoria i les còpies en quarantena es desen en emmagatzematge privat xifrat. Les actualitzacions de definicions signades contacten amb el servei de versions d’aquest projecte; una font independent només contacta amb l’adreça configurada després del consentiment. La supervisió de carpetes només inclou les que trieu i es pot aturar. Manteniu el control dels permisos d’Android. Aquesta versió no conté publicitat, anàlisis al núvol ni cap servei de reputació d’enllaços.</string>
+<string name="coverage_local_title">Definicions de prova locals</string>
+<string name="coverage_local_body">Les definicions antigues incloses només contenen un marcador de prova antivirus inofensiu. No ofereixen cobertura contra programari maliciós real.</string>
+<string name="coverage_signed_title">Base de dades de resums signada</string>
+<string name="coverage_signed_body">La coincidència exacta de resums requereix una clau de signatura fiable i una base de dades signada acceptada. No s’inclou cap base de dades de producció.</string>
+<string name="coverage_static_title">Anàlisi estàtica d’aplicacions</string>
+<string name="coverage_static_body">L’anàlisi limitada dels paquets proporciona troballes orientatives. Una troballa sola no demostra que hi hagi programari maliciós; les llistes de signants maliciosos coneguts estan desactivades.</string>
+<string name="coverage_permissions_title">Permisos i manifest</string>
+<string name="coverage_permissions_body">Les combinacions de permisos i les declaracions visibles dels paquets ajuden a la revisió manual. No són una classificació entrenada.</string>
+<string name="coverage_integrity_title">Indicadors d’integritat del dispositiu</string>
+<string name="coverage_integrity_body">L’accés d’arrel, els ganxos, les propietats de compilació, l’aplicació de la seguretat, els depuradors i els emuladors es comproven amb heurístiques locals, no amb una certificació.</string>
+<string name="coverage_bloom_title">Índex probabilístic de resums</string>
+<string name="coverage_bloom_body">No s’inclouen cap índex probabilístic verificat i no buit ni el seu manifest. Aquesta capa opcional no està disponible.</string>
+<string name="coverage_rules_title">Signatures de codi incloses</string>
+<string name="coverage_rules_body">Les regles incloses i validades comproven un conjunt limitat de patrons literals de codi. Les coincidències són orientatives i no confirmen programari maliciós.</string>
+<string name="coverage_rules_unavailable">Les regles incloses no s’han carregat o no han superat la validació. No s’afirma que s’hagi fet una anàlisi de signatures de codi.</string>
+<string name="coverage_model_title">Model de classificació de permisos</string>
+<string name="coverage_model_body">No s’inclou cap model de classificació entrenat, validat i distribuïble. L’aprenentatge automàtic està desactivat.</string>
+<string name="coverage_signer_title">Atestació sense connexió del signant</string>
+<string name="coverage_signer_body">No s’ha configurat una empremta prevista de certificat de signatura fixada independentment.</string>
+<string name="coverage_feed_title">Verificació de font signada</string>
+<string name="coverage_feed_body">La verificació d’una signatura separada i la protecció contra el retorn a versions antigues requereixen una clau fiable durant la compilació i una font signada configurada.</string>
+<string name="hash_status_active">La base de dades local de resums signada està activa.</string>
+<string name="hash_status_missing">La coincidència de resums està desactivada fins que s’accepti una base de dades signada.</string>
+<string name="hash_status_key">La coincidència de resums està desactivada perquè no hi ha cap clau de signatura fiable disponible.</string>
+<string name="hash_status_invalid">Les definicions desades no han superat les comprovacions d’integritat, versió o format. La coincidència de resums continua desactivada.</string>
+<string name="hash_status_activation">L’activació de la base de dades no s’ha completat. La coincidència de resums continua desactivada.</string>
+<string name="finding_confidence">%1$s · Confiança: %2$d%%</string>
+<string name="finding_exported">Un component exportat no mostra cap barrera de permisos al manifest. Encara hi pot haver comprovacions al codi.</string>
+<string name="finding_admin">L’aplicació declara un receptor d’administració del dispositiu. Aquesta capacitat sensible no demostra un abús.</string>
+<string name="finding_accessibility">L’aplicació declara un servei d’accessibilitat. Les aplicacions d’assistència legítimes poden necessitar aquest accés.</string>
+<string name="finding_overlay">L’aplicació demana accés per superposar-se a altres pantalles. Les superposicions poden ser legítimes, però poden ocultar altres pantalles.</string>
+<string name="finding_combined">L’accessibilitat es combina amb superposicions, missatges de text o accés a l’historial de trucades. Reviseu la finalitat de l’aplicació.</string>
+<string name="finding_sms_calls">L’aplicació demana permisos per als missatges de text i l’historial de trucades.</string>
+<string name="finding_sms_network">L’accés als missatges de text es combina amb l’accés a Internet. Cal revisar-ho segons el context.</string>
+<string name="finding_signer">Falten les metadades del certificat de signatura o no es poden llegir.</string>
+<string name="finding_archive">No s’ha pogut inspeccionar completament el contenidor del paquet. L’anàlisi estàtica és incompleta.</string>
+<string name="finding_packer">Una ruta del paquet s’assembla a una eina coneguda d’empaquetament o protecció. Les aplicacions legítimes també poden utilitzar aquestes eines.</string>
+<string name="finding_dex_header">Una capçalera de codi conté camps de format o mida incoherents. Això no demostra que hi hagi programari maliciós.</string>
+<string name="finding_dex_short">Una entrada de codi és més curta que una capçalera vàlida i no s’ha pogut inspeccionar del tot.</string>
+<string name="finding_entropy">Una mostra de codi té una entropia de bytes elevada. El xifratge, l’empaquetament o contingut comprimit inofensiu poden explicar-ho.</string>
+<string name="finding_api">No s’ha trobat la referència estàtica esperada per a un permís sol·licitat. La reflexió, les biblioteques o el codi carregat dinàmicament en poden explicar l’absència.</string>
+<string name="finding_rules">Ha coincidit una signatura de codi inclosa i limitada. És una indicació, no una prova de programari maliciós.</string>
+<string name="finding_other">Cal revisar manualment altres indicadors locals. No confirmen programari maliciós.</string>
+<string name="integrity_manager">Es veu un gestor d’accés d’arrel o de ganxos: %1$s</string>
+<string name="integrity_test_keys">La compilació del dispositiu utilitza claus de signatura de prova.</string>
+<string name="integrity_debug_build">Les propietats de compilació indiquen un sistema depurable o no destinat a producció.</string>
+<string name="integrity_selinux">L’estat local llegible indica que l’aplicació obligatòria de seguretat està desactivada.</string>
+<string name="integrity_debugger">Hi ha un depurador connectat a aquest procés.</string>
+<string name="integrity_emulator">Les propietats de compilació s’assemblen a les d’un emulador o dispositiu de prova.</string>
+<string name="audit_scan_pending">S’ha registrat la instal·lació. L’anàlisi local està pendent.</string>
+<string name="audit_scan_complete">L’anàlisi local ha acabat sense cap coincidència de signatura confirmada. Això no garanteix la seguretat.</string>
+<string name="audit_scan_unavailable">El paquet no era visible quan es feia l’anàlisi.</string>
+<string name="audit_scan_threat">Ha coincidit una signatura local d’amenaça exacta.</string>
+<string name="audit_scan_review">Cal revisar els indicadors locals; no confirmen programari maliciós.</string>
+<string name="audit_source_recorded">S’ha registrat l’origen de la instal·lació.</string>
+<string name="audit_uninstall_requested">S’ha sol·licitat la confirmació de desinstal·lació d’Android.</string>
+<string name="audit_uninstall_success">Android ha indicat que la desinstal·lació s’ha completat correctament.</string>
+<string name="audit_uninstall_failed">Android no ha pogut completar la sol·licitud de desinstal·lació.</string>
+<string name="severity_test">Marcador de prova inofensiu</string>
+<string name="severity_low">Gravetat baixa</string>
+<string name="severity_medium">Gravetat moderada</string>
+<string name="severity_high">Gravetat alta</string>
+<string name="severity_critical">Gravetat crítica</string>
+<string name="severity_unknown">Gravetat no especificada</string>
+<plurals name="l10n_scanned_apps"><item quantity="one">S’ha analitzat %1$d aplicació</item><item quantity="other">S’han analitzat %1$d aplicacions</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="one">S’ha analitzat %1$d fitxer</item><item quantity="other">S’han analitzat %1$d fitxers</item></plurals>
+<plurals name="l10n_threats"><item quantity="one">S’ha trobat %1$d amenaça</item><item quantity="other">S’han trobat %1$d amenaces</item></plurals>
+<plurals name="l10n_review"><item quantity="one">%1$d resultat necessita revisió</item><item quantity="other">%1$d resultats necessiten revisió</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="one">No s’ha pogut analitzar %1$d element</item><item quantity="other">No s’han pogut analitzar %1$d elements</item></plurals>
+<plurals name="l10n_no_match"><item quantity="one">%1$d resultat sense coincidència local</item><item quantity="other">%1$d resultats sense coincidència local</item></plurals>
+<plurals name="l10n_apps"><item quantity="one">%1$d aplicació</item><item quantity="other">%1$d aplicacions</item></plurals>
+<plurals name="l10n_files"><item quantity="one">%1$d fitxer</item><item quantity="other">%1$d fitxers</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="one">%1$d aplicació no sistèmica té accés d’alt risc.</item><item quantity="other">%1$d aplicacions no sistèmiques tenen accés d’alt risc.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="one">%1$d canvi observat espera una notificació.</item><item quantity="other">%1$d canvis observats esperen una notificació.</item></plurals>
+<plurals name="l10n_rules"><item quantity="one">Cobertura limitada · %1$d regla inclosa</item><item quantity="other">Cobertura limitada · %1$d regles incloses</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="one">Darrera anàlisi: %1$d coincidència orientativa de codi.</item><item quantity="other">Darrera anàlisi: %1$d coincidències orientatives de codi.</item></plurals>
+<plurals name="l10n_imported"><item quantity="one">S’ha importat %1$d signatura vàlida a l’emmagatzematge local.</item><item quantity="other">S’han importat %1$d signatures vàlides a l’emmagatzematge local.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="one">%1$d byte</item><item quantity="other">%1$d bytes</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="one">Hi ha %1$d indicador del sistema de fitxers relacionat amb l’arrel.</item><item quantity="other">Hi ha %1$d indicadors del sistema de fitxers relacionats amb l’arrel.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="one">Hi ha %1$d indicador de ganxo.</item><item quantity="other">Hi ha %1$d indicadors de ganxo.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="one">%1$d aplicació activada</item><item quantity="other">%1$d aplicacions activades</item></plurals>
+<plurals name="l10n_indicators"><item quantity="one">%1$d indicador</item><item quantity="other">%1$d indicadors</item></plurals>
+<plurals name="l10n_progress"><item quantity="one">Comprovada %1$d de %2$d aplicació</item><item quantity="other">Comprovades %1$d de %2$d aplicacions</item></plurals>
 </resources>
