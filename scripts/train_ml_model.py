@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Offline-only training of static Android malware features. NOT for GitHub Actions.
 Install locally: pip install tensorflow==2.17.0 scikit-learn numpy
+For --apk-directory also install androguard>=4,<5 (local research only).
 Supply a licensed local CSV (no downloading or uploading): label (0 benign, 1 malware)
 and every column in FEATURES below. For CICMalDroid static feature exports, create a
 local mapping to the exact feature names/semantics below; missing fields are an
@@ -47,9 +48,81 @@ def read_csv(path):
             data.append([float(float(line[name]) > 0) for name in FEATURES])
     return np.asarray(data, dtype=np.float32), np.asarray(labels, dtype=np.int32)
 
+
+def extract_apk_features(path):
+    """Extract Android permissions, registered intent actions and method references.
+
+    APKs are parsed locally as untrusted data, in a disposable isolated environment.
+    Data must be licensed and malware samples must never be executed.
+    """
+    from androguard.misc import AnalyzeAPK
+    apk, dex_files, _analysis = AnalyzeAPK(str(path))
+    permissions = set(apk.get_permissions())
+    actions = set()
+    for kind, getter in (
+        ("activity", apk.get_activities),
+        ("service", apk.get_services),
+        ("receiver", apk.get_receivers),
+    ):
+        for component in getter():
+            filters = apk.get_intent_filters(kind, component)
+            actions.update(filters.get("action", []))
+    methods = set()
+    for dex in dex_files:
+        for method in dex.get_methods():
+            methods.add((method.get_class_name() + "->" + method.get_name()).lower())
+    api_source = "\n".join(methods)
+    values = [
+        int("android.permission." + key.removeprefix("perm.") in permissions)
+        for key in FEATURES[:20]
+    ]
+    values[19] = int(
+        any("accessibilityservice" in entry for entry in methods)
+        or any("android.permission.BIND_ACCESSIBILITY_SERVICE" in permissions)
+    )
+    intent_actions = [
+        "android.intent.action.BOOT_COMPLETED",
+        "android.provider.Telephony.SMS_RECEIVED",
+        "android.intent.action.PACKAGE_ADDED",
+        "android.app.action.DEVICE_ADMIN_ENABLED",
+        "android.intent.action.MAIN",
+        "android.intent.action.VIEW",
+    ]
+    values += [int(action in actions) for action in intent_actions]
+    api_patterns = [
+        "smsmanager;->sendtextmessage", "telephonymanager;->getdeviceid",
+        "runtime;->exec", "ldalvik/system/dexclassloader;",
+        "class;->forname", "landroid/accessibilityservice/accessibilityservice;"
+    ]
+    values += [int(pattern in api_source) for pattern in api_patterns]
+    if len(values) != len(FEATURES):
+        raise ValueError("Feature schema mismatch")
+    return values
+
+
+def load_apk_directory(directory):
+    import numpy as np
+    vectors, labels = [], []
+    for label, category in ((0, "benign"), (1, "malware")):
+        root = directory / category
+        samples = sorted(root.glob("*.apk"))
+        if not samples:
+            raise ValueError("No licensed APK samples under " + str(root))
+        for path in samples:
+            if path.stat().st_size > 150 * 1024 * 1024:
+                continue
+            try:
+                vectors.append(extract_apk_features(path))
+                labels.append(label)
+            except (ValueError, OSError, KeyError, TypeError) as exc:
+                print("Skipped malformed local APK: " + path.name + " " + type(exc).__name__)
+    return np.asarray(vectors, dtype=np.float32), np.asarray(labels, dtype=np.int32)
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--csv", required=True, type=Path, help="Authorized local Android static-feature export")
+    sources = parser.add_mutually_exclusive_group(required=True)
+    sources.add_argument("--csv", type=Path, help="Authorized local Android static-feature export")
+    sources.add_argument("--apk-directory", type=Path, help="Local benign/ and malware/ APK subfolders")
     parser.add_argument("--dataset-name", required=True)
     parser.add_argument("--license-note", required=True, help="Legal source and permitted intended use")
     parser.add_argument("--output", type=Path, default=OUTPUT)
@@ -59,7 +132,7 @@ def main():
     from sklearn.linear_model import LogisticRegression
     from sklearn.model_selection import train_test_split
     from sklearn.metrics import roc_auc_score, precision_score, recall_score
-    X, y = read_csv(args.csv)
+    X, y = read_csv(args.csv) if args.csv is not None else load_apk_directory(args.apk_directory)
     if len(y) < 100 or set(y) != {0, 1} or min(np.bincount(y)) < 25:
         raise ValueError("Insufficient benign and malware samples")
     X_tr, X_hold, y_tr, y_hold = train_test_split(
