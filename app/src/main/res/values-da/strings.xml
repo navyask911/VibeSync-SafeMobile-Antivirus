@@ -805,4 +805,7 @@
 <plurals name="l10n_enabled_apps"><item quantity="one">%1$d app aktiveret</item><item quantity="other">%1$d apps aktiveret</item></plurals>
 <plurals name="l10n_indicators"><item quantity="one">%1$d indikator</item><item quantity="other">%1$d indikatorer</item></plurals>
 <plurals name="l10n_progress"><item quantity="one">Kontrolleret %1$d af %2$d app</item><item quantity="other">Kontrolleret %1$d af %2$d apps</item></plurals>
+    <string name="ml_probability">ML-sandsynlighed for trussel: %1$d%%</string>
+    <string name="ml_high_finding">Statisk ML-heuristik: høj score baseret på tilladelser og API-mønstre; kun vejledende, ikke bevis for malware.</string>
+    <string name="ml_active_body">En valideret statisk ML-model er tilgængelig på enheden. Resultaterne er vejledende og beviser ikke malware.</string>
 </resources>
