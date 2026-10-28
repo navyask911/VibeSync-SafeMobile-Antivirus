@@ -662,4 +662,7 @@
 <plurals name="l10n_enabled_apps"><item quantity="one">%1$d ایپ فعال ہے</item><item quantity="other">%1$d ایپ فعال ہے</item></plurals>
 <plurals name="l10n_indicators"><item quantity="one">%1$d اشارہ</item><item quantity="other">%1$d اشارہ</item></plurals>
 <plurals name="l10n_progress"><item quantity="one">%2$d ایپس میں سے %1$d چیک کی گئیں</item><item quantity="other">%2$d ایپس میں سے %1$d چیک کی گئیں</item></plurals>
+    <string name="ml_probability">مشین لرننگ سے خطرے کا امکان: %1$d%%</string>
+    <string name="ml_high_finding">جامد مشین لرننگ تجزیہ: اجازتوں اور API نمونوں کی بنیاد پر بلند اسکور؛ یہ صرف اشارہ ہے، میل ویئر کا ثبوت نہیں۔</string>
+    <string name="ml_active_body">آلے پر تصدیق شدہ جامد مشین لرننگ ماڈل دستیاب ہے۔ نتائج صرف رہنمائی ہیں، میل ویئر ثابت نہیں کرتے۔</string>
 </resources>
