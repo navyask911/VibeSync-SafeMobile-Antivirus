@@ -805,4 +805,7 @@
 <plurals name="l10n_enabled_apps"><item quantity="one">%1$d alkalmazás engedélyezve</item><item quantity="other">%1$d alkalmazás engedélyezve</item></plurals>
 <plurals name="l10n_indicators"><item quantity="one">%1$d jelző</item><item quantity="other">%1$d jelző</item></plurals>
 <plurals name="l10n_progress"><item quantity="one">%1$d / %2$d alkalmazás ellenőrizve</item><item quantity="other">%1$d / %2$d alkalmazás ellenőrizve</item></plurals>
+    <string name="ml_probability">ML-fenyegetés valószínűsége: %1$d%%</string>
+    <string name="ml_high_finding">Statikus ML-heurisztika: magas pontszám az engedélyek és API-minták alapján; csak jelzés, nem a kártevő bizonyítéka.</string>
+    <string name="ml_active_body">Ellenőrzött statikus ML-modell érhető el az eszközön. Az eredmények tájékoztató jellegűek, és nem bizonyítják a kártevő jelenlétét.</string>
 </resources>
