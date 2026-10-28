@@ -662,4 +662,7 @@
 <plurals name="l10n_enabled_apps"><item quantity="one">%1$d aplicação ativada</item><item quantity="other">%1$d aplicações ativadas</item></plurals>
 <plurals name="l10n_indicators"><item quantity="one">%1$d indicador</item><item quantity="other">%1$d indicadores</item></plurals>
 <plurals name="l10n_progress"><item quantity="one">Verificada %1$d de %2$d aplicação</item><item quantity="other">Verificadas %1$d de %2$d aplicações</item></plurals>
+    <string name="ml_probability">Probabilidade de ameaça por ML: %1$d%%</string>
+    <string name="ml_high_finding">Heurística ML estática: pontuação elevada com base em permissões e padrões de API; apenas indicativa, não comprova malware.</string>
+    <string name="ml_active_body">Modelo ML estático validado disponível no dispositivo. Os resultados são indicativos e não comprovam malware.</string>
 </resources>
