@@ -661,5 +661,8 @@
 <plurals name="l10n_enabled_apps"><item quantity="one">Включено %1$d приложение</item><item quantity="few">Включено %1$d приложения</item><item quantity="many">Включено %1$d приложений</item><item quantity="other">Включено %1$d приложения</item></plurals>
 <plurals name="l10n_indicators"><item quantity="one">%1$d индикатор</item><item quantity="few">%1$d индикатора</item><item quantity="many">%1$d индикаторов</item><item quantity="other">%1$d индикатора</item></plurals>
 <plurals name="l10n_progress"><item quantity="one">Проверено %1$d из %2$d приложения</item><item quantity="few">Проверено %1$d из %2$d приложений</item><item quantity="many">Проверено %1$d из %2$d приложений</item><item quantity="other">Проверено %1$d из %2$d приложения</item></plurals>
+    <string name="ml_probability">Вероятность угрозы по МО: %1$d%%</string>
+    <string name="ml_high_finding">Статическая эвристика МО: высокая оценка по разрешениям и шаблонам API; это лишь рекомендация, а не доказательство вредоносности.</string>
+    <string name="ml_active_body">На устройстве доступна проверенная статическая модель МО. Результаты носят рекомендательный характер и не доказывают наличие вредоносного ПО.</string>
 </resources>
 
