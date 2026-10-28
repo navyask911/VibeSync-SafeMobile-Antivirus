@@ -805,4 +805,7 @@
 <plurals name="l10n_enabled_apps"><item quantity="one">%1$d ആപ്പ് സജീവമാക്കി</item><item quantity="other">%1$d ആപ്പ് സജീവമാക്കി</item></plurals>
 <plurals name="l10n_indicators"><item quantity="one">%1$d സൂചന</item><item quantity="other">%1$d സൂചന</item></plurals>
 <plurals name="l10n_progress"><item quantity="one">%2$d ആപ്പുകളിൽ %1$d എണ്ണം പരിശോധിച്ചു</item><item quantity="other">%2$d ആപ്പുകളിൽ %1$d എണ്ണം പരിശോധിച്ചു</item></plurals>
+    <string name="ml_probability">എംഎൽ ഭീഷണി സാധ്യത: %1$d%%</string>
+    <string name="ml_high_finding">സ്ഥിര എംഎൽ വിലയിരുത്തൽ: അനുമതികളും API മാതൃകകളും അടിസ്ഥാനമാക്കിയുള്ള ഉയർന്ന സ്കോർ; ഇത് സൂചന മാത്രം, മാൽവെയറിന്റെ തെളിവല്ല.</string>
+    <string name="ml_active_body">ഉപകരണത്തിൽ തന്നെ പരിശോധിച്ച സ്ഥിര എംഎൽ മാതൃക ലഭ്യമാണ്. ഫലങ്ങൾ നിർദേശങ്ങൾ മാത്രമാണ്; മാൽവെയർ സ്ഥിരീകരിക്കുന്നില്ല.</string>
 </resources>

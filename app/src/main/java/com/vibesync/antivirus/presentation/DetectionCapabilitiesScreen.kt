@@ -1,6 +1,12 @@
 package com.vibesync.antivirus.presentation
 
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import com.vibesync.antivirus.core.engine.MachineLearningScanner
 import com.vibesync.antivirus.core.locale.SecurityText
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.foundation.layout.Arrangement
@@ -33,6 +39,9 @@ fun DetectionCapabilitiesScreen(
     yaraMatchedRuleNames: List<String> = emptyList(),
     onImportYaraRulesForReview: () -> Unit
 ) {
+    val context = LocalContext.current
+    var mlAvailable by remember { mutableStateOf(false) }
+    LaunchedEffect(context) { mlAvailable = MachineLearningScanner(context).isAvailable() }
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Text(stringResource(R.string.detection_capabilities_title), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
         Text(stringResource(R.string.detection_capabilities_description), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -73,6 +82,7 @@ fun DetectionCapabilitiesScreen(
             val layer = DetectionCoverage.status(declared.id) ?: declared
             val statusText = when (layer.id) {
                 "signed-multi-hash-database" -> if (hashDatabaseCapability.enabled) stringResource(R.string.detection_capabilities_enabled) else stringResource(R.string.detection_capabilities_disabled)
+                "tflite-permission-model" -> if (mlAvailable) stringResource(R.string.detection_capabilities_enabled) else stringResource(R.string.detection_capabilities_disabled)
                 else -> when (layer.state) {
                     DetectionLayerState.ACTIVE_LIMITED -> stringResource(R.string.detection_capabilities_limited)
                     DetectionLayerState.HEURISTIC -> stringResource(R.string.detection_capabilities_advisory)
@@ -89,6 +99,7 @@ fun DetectionCapabilitiesScreen(
                     val reason = when (layer.id) {
                         "signed-multi-hash-database" -> SecurityText.hashStatus(hashDatabaseCapability).resolve(LocalContext.current)
                         "yara-dex-and-assets" -> stringResource(if (yaraCapability.active) R.string.coverage_rules_body else R.string.coverage_rules_unavailable)
+                        "tflite-permission-model" -> stringResource(if (mlAvailable) R.string.ml_active_body else R.string.coverage_model_body)
                         else -> stringResource(copy.second)
                     }
                     Text(reason, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)

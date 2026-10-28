@@ -1038,6 +1038,11 @@ private fun canOfferUninstall(context: Context, packageName: String): Boolean {
   result.threatEventId?.takeIf { it.isNotBlank() }?.let {
    Text(stringResource(R.string.threat_event_ray_id,it),modifier=Modifier.padding(horizontal=8.dp),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
   }
+  result.mlProbability?.let { p ->
+   Text(stringResource(R.string.ml_probability, (p * 100).toInt().coerceIn(0, 100)),
+    modifier=Modifier.padding(horizontal=8.dp),style=MaterialTheme.typography.labelSmall,
+    color=MaterialTheme.colorScheme.onSurfaceVariant)
+  }
   result.sha256?.let {
    Text(stringResource(R.string.file_hash_label,it.take(24)),modifier=Modifier.padding(horizontal=8.dp),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
   }

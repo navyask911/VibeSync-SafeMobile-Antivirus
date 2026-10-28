@@ -805,4 +805,7 @@
 <plurals name="l10n_enabled_apps"><item quantity="one">ჩართულია %1$d აპლიკაცია</item><item quantity="other">ჩართულია %1$d აპლიკაცია</item></plurals>
 <plurals name="l10n_indicators"><item quantity="one">%1$d მაჩვენებელი</item><item quantity="other">%1$d მაჩვენებელი</item></plurals>
 <plurals name="l10n_progress"><item quantity="one">შემოწმებულია %1$d აპლიკაცია %2$d-დან</item><item quantity="other">შემოწმებულია %1$d აპლიკაცია %2$d-დან</item></plurals>
+    <string name="ml_probability">ML-ის მიხედვით საფრთხის ალბათობა: %1$d%%</string>
+    <string name="ml_high_finding">სტატიკური ML ევრისტიკა: მაღალი შეფასება ნებართვებისა და API-ის შაბლონების საფუძველზე; მხოლოდ მინიშნებაა და არა მავნე პროგრამის მტკიცებულება.</string>
+    <string name="ml_active_body">მოწყობილობაზე ხელმისაწვდომია შემოწმებული სტატიკური ML მოდელი. შედეგები მხოლოდ საინფორმაციოა და მავნე პროგრამას არ ადასტურებს.</string>
 </resources>

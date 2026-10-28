@@ -662,4 +662,7 @@
 <plurals name="l10n_enabled_apps"><item quantity="one">%1$d செயலி செயல்படுத்தப்பட்டது</item><item quantity="other">%1$d செயலிகள் செயல்படுத்தப்பட்டன</item></plurals>
 <plurals name="l10n_indicators"><item quantity="one">%1$d குறிகாட்டி</item><item quantity="other">%1$d குறிகாட்டிகள்</item></plurals>
 <plurals name="l10n_progress"><item quantity="one">%2$d செயலிகளில் %1$d செயலி சரிபார்க்கப்பட்டது</item><item quantity="other">%2$d செயலிகளில் %1$d சரிபார்க்கப்பட்டன</item></plurals>
+    <string name="ml_probability">இயந்திரக் கற்றல் அச்சுறுத்தல் நிகழ்தகவு: %1$d%%</string>
+    <string name="ml_high_finding">நிலையான இயந்திரக் கற்றல் மதிப்பீடு: அனுமதிகள், API வடிவங்களால் அதிக மதிப்பெண்; இது எச்சரிக்கை மட்டுமே, தீம்பொருளுக்கான ஆதாரம் அல்ல.</string>
+    <string name="ml_active_body">சாதனத்திலேயே சரிபார்க்கப்பட்ட நிலையான இயந்திரக் கற்றல் மாதிரி உள்ளது. முடிவுகள் அறிவுறுத்தல் மட்டுமே; தீம்பொருளை உறுதி செய்யாது.</string>
 </resources>

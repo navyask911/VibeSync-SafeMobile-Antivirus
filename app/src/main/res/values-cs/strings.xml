@@ -805,4 +805,7 @@
 <plurals name="l10n_enabled_apps"><item quantity="one">%1$d aplikace aktivována</item><item quantity="few">%1$d aplikace aktivovány</item><item quantity="many">%1$d aplikace aktivováno</item><item quantity="other">%1$d aplikací aktivováno</item></plurals>
 <plurals name="l10n_indicators"><item quantity="one">%1$d ukazatel</item><item quantity="few">%1$d ukazatele</item><item quantity="many">%1$d ukazatele</item><item quantity="other">%1$d ukazatelů</item></plurals>
 <plurals name="l10n_progress"><item quantity="one">Zkontrolována %1$d z %2$d aplikace</item><item quantity="few">Zkontrolovány %1$d z %2$d aplikací</item><item quantity="many">Zkontrolováno %1$d z %2$d aplikací</item><item quantity="other">Zkontrolováno %1$d z %2$d aplikací</item></plurals>
+    <string name="ml_probability">Pravděpodobnost hrozby podle ML: %1$d%%</string>
+    <string name="ml_high_finding">Statická heuristika ML: vysoké skóre podle oprávnění a vzorů API; pouze upozornění, nikoli důkaz malwaru.</string>
+    <string name="ml_active_body">V zařízení je dostupný ověřený statický model ML. Výsledky jsou orientační a neprokazují malware.</string>
 </resources>

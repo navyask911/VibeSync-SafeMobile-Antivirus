@@ -48,6 +48,7 @@ object SecurityText {
         id.startsWith("EXPORTED_") -> R.string.finding_exported
         id.startsWith("PACKER_NAME_") -> R.string.finding_packer
         id.startsWith("YARA_") -> R.string.finding_rules
+        id == "ML_HEURISTIC_HIGH" -> R.string.ml_high_finding
         else -> when (id) {
             "DEVICE_ADMIN_RECEIVER_DECLARED" -> R.string.finding_admin
             "ACCESSIBILITY_SERVICE_DECLARED" -> R.string.finding_accessibility

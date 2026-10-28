@@ -662,4 +662,7 @@
 <plurals name="l10n_enabled_apps"><item quantity="one">%1$d अॅप सक्रिय केले</item><item quantity="other">%1$d अॅप्स सक्रिय केली</item></plurals>
 <plurals name="l10n_indicators"><item quantity="one">%1$d संकेत</item><item quantity="other">%1$d संकेत</item></plurals>
 <plurals name="l10n_progress"><item quantity="one">%2$d अॅप्सपैकी %1$d अॅप तपासले</item><item quantity="other">%2$d अॅप्सपैकी %1$d तपासली</item></plurals>
+    <string name="ml_probability">एमएल धोक्याची शक्यता: %1$d%%</string>
+    <string name="ml_high_finding">स्थिर एमएल विश्लेषण: परवानग्या आणि API नमुन्यांवर आधारित उच्च गुण; हा केवळ इशारा आहे, मालवेअरचा पुरावा नाही.</string>
+    <string name="ml_active_body">उपकरणावर सत्यापित स्थिर एमएल मॉडेल उपलब्ध आहे. निकाल मार्गदर्शक आहेत; ते मालवेअर सिद्ध करत नाहीत.</string>
 </resources>

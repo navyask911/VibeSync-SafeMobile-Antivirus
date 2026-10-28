@@ -805,4 +805,7 @@
 <plurals name="l10n_enabled_apps"><item quantity="one">%1$d sovellus käytössä</item><item quantity="other">%1$d sovellusta käytössä</item></plurals>
 <plurals name="l10n_indicators"><item quantity="one">%1$d ilmaisin</item><item quantity="other">%1$d ilmaisinta</item></plurals>
 <plurals name="l10n_progress"><item quantity="one">Tarkistettu %1$d / %2$d sovellus</item><item quantity="other">Tarkistettu %1$d / %2$d sovellusta</item></plurals>
+    <string name="ml_probability">ML-uhkatodennäköisyys: %1$d%%</string>
+    <string name="ml_high_finding">Staattinen ML-heuristiikka: suuri tulos käyttöoikeuksien ja API-mallien perusteella; vain viite, ei todiste haittaohjelmasta.</string>
+    <string name="ml_active_body">Laitteessa on varmennettu staattinen ML-malli. Tulokset ovat suuntaa-antavia eivätkä todista haittaohjelmaa.</string>
 </resources>

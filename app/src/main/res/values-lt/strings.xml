@@ -805,4 +805,7 @@
 <plurals name="l10n_enabled_apps"><item quantity="one">Įjungta %1$d programėlė</item><item quantity="few">Įjungtos %1$d programėlės</item><item quantity="many">Įjungta %1$d programėlių</item><item quantity="other">Įjungta %1$d programėlės</item></plurals>
 <plurals name="l10n_indicators"><item quantity="one">%1$d rodiklis</item><item quantity="few">%1$d rodikliai</item><item quantity="many">%1$d rodiklių</item><item quantity="other">%1$d rodiklio</item></plurals>
 <plurals name="l10n_progress"><item quantity="one">Patikrinta %1$d iš %2$d programėlių</item><item quantity="few">Patikrintos %1$d iš %2$d programėlių</item><item quantity="many">Patikrinta %1$d iš %2$d programėlių</item><item quantity="other">Patikrinta %1$d iš %2$d programėlių</item></plurals>
+    <string name="ml_probability">ML grėsmės tikimybė: %1$d%%</string>
+    <string name="ml_high_finding">Statinė ML euristika: aukštas balas pagal leidimus ir API šablonus; tik įspėjimas, ne kenkėjiškos programos įrodymas.</string>
+    <string name="ml_active_body">Įrenginyje pasiekiamas patikrintas statinis ML modelis. Rezultatai yra rekomendaciniai ir neįrodo kenkėjiškos programos.</string>
 </resources>

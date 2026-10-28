@@ -805,4 +805,7 @@
 <plurals name="l10n_enabled_apps"><item quantity="one">%1$d aplikacija uključena</item><item quantity="few">%1$d aplikacije uključene</item><item quantity="other">%1$d aplikacija uključeno</item></plurals>
 <plurals name="l10n_indicators"><item quantity="one">%1$d pokazatelj</item><item quantity="few">%1$d pokazatelja</item><item quantity="other">%1$d pokazatelja</item></plurals>
 <plurals name="l10n_progress"><item quantity="one">Provjerena %1$d od %2$d aplikacije</item><item quantity="few">Provjerene %1$d od %2$d aplikacija</item><item quantity="other">Provjereno %1$d od %2$d aplikacija</item></plurals>
+    <string name="ml_probability">ML vjerojatnost prijetnje: %1$d%%</string>
+    <string name="ml_high_finding">Statička ML heuristika: visok rezultat zbog dopuštenja i API obrazaca; samo upozorenje, ne dokaz zlonamjernog softvera.</string>
+    <string name="ml_active_body">Na uređaju je dostupan potvrđeni statički ML model. Rezultati su savjetodavni i ne dokazuju zlonamjerni softver.</string>
 </resources>

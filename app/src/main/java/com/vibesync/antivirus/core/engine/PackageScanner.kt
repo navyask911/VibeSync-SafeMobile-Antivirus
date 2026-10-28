@@ -41,6 +41,20 @@ class PackageScanner(
  private val integrityChecker = IntegrityChecker(context)
  private val trustedAppStore = TrustedAppStore(context)
  private val deepStaticAnalyzer = DeepStaticAnalyzer()
+ private val machineLearningScanner = MachineLearningScanner(context)
+
+ private suspend fun withMachineLearning(report: RiskReport, apk: File, info: PackageInfo?): RiskReport {
+  val prediction = machineLearningScanner.scan(apk, info) ?: return report
+  val percent = (prediction.probability * 100).roundToInt().coerceIn(0, 100)
+  val mlFinding = if (prediction.probability > MachineLearningScanner.THRESHOLD) listOf(
+   RiskFinding("ML_HEURISTIC_HIGH", RiskSeverity.HIGH,
+    "ML static feature heuristic scored $percent%; advisory only, not proof of malware.", percent)
+  ) else emptyList()
+  return report.copy(mlProbability = prediction.probability,
+   findings = report.findings + mlFinding,
+   riskScore = maxOf(report.riskScore, if (mlFinding.isEmpty()) 0 else 65))
+ }
+
  fun installedAppInventory(): List<InstalledAppItem> {
   @Suppress("DEPRECATION")
   val packages = pm.getInstalledPackages(0)
@@ -133,12 +147,12 @@ class PackageScanner(
      }
     } catch (_: Exception) { null }
     archiveInfo?.applicationInfo?.apply { sourceDir = file.absolutePath; publicSourceDir = file.absolutePath }
-    deepStaticAnalyzer.analyze(archiveInfo, file, archiveInfo?.let(::isDebugSigned) == true)
+    withMachineLearning(deepStaticAnalyzer.analyze(archiveInfo, file, archiveInfo?.let(::isDebugSigned) == true), file, archiveInfo)
    } else null
    val staticReasons = staticReport?.findings.orEmpty().map { "[${it.ruleId}] ${it.evidence} (confidence ${it.confidence}%)" }
    val staticScore = staticReport?.riskScore ?: 0
    val output = evaluate(file.name, file.name, hash.sha256, hash.md5, staticReasons, staticScore, sha1 = hash.sha1, fileSize = hash.bytesRead, report = staticReport)
-    .copy(riskReport = staticReport)
+    .copy(riskReport = staticReport, mlProbability = staticReport?.mlProbability)
    if (persistAllAudit || output.verdict == ScanVerdict.THREAT || output.verdict == ScanVerdict.SUSPICIOUS) audit(output, start, scanSessionId)
    output.copy(durationMs = elapsed(start), sourceLocalPath = file.absolutePath, scanSessionId = scanSessionId)
   } catch (cancelled: CancellationException) {
@@ -226,12 +240,12 @@ class PackageScanner(
     auditSafely(failed, start, scanSessionId)
     return failed
    }
-  val deepReport = deepStaticAnalyzer.analyze(info, apk, debugSigned)
+  val deepReport = withMachineLearning(deepStaticAnalyzer.analyze(info, apk, debugSigned), apk, info)
   val deepReasons = deepReport.findings.map { "[${it.ruleId}] ${it.evidence} (confidence ${it.confidence}%)" }
   reasons += deepReasons
   val combinedRiskScore = maxOf(adjustedRiskScore, deepReport.riskScore)
   val assessed = evaluate(info.packageName, label, hashes.sha256, hashes.md5, reasons, combinedRiskScore, sha1 = hashes.sha1, fileSize = hashes.bytesRead, report = deepReport)
-   .copy(riskReport = deepReport)
+   .copy(riskReport = deepReport, mlProbability = deepReport.mlProbability)
   val output = assessed
   audit(output, start, scanSessionId)
   return output.copy(durationMs = elapsed(start), packageName = info.packageName, scanSessionId = scanSessionId)

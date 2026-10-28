@@ -805,4 +805,7 @@
 <plurals name="l10n_enabled_apps"><item quantity="one">Włączono %1$d aplikację</item><item quantity="few">Włączono %1$d aplikacje</item><item quantity="many">Włączono %1$d aplikacji</item><item quantity="other">Włączono %1$d aplikacji</item></plurals>
 <plurals name="l10n_indicators"><item quantity="one">%1$d wskaźnik</item><item quantity="few">%1$d wskaźniki</item><item quantity="many">%1$d wskaźników</item><item quantity="other">%1$d wskaźnika</item></plurals>
 <plurals name="l10n_progress"><item quantity="one">Sprawdzono %1$d z %2$d aplikacji</item><item quantity="few">Sprawdzono %1$d z %2$d aplikacji</item><item quantity="many">Sprawdzono %1$d z %2$d aplikacji</item><item quantity="other">Sprawdzono %1$d z %2$d aplikacji</item></plurals>
+    <string name="ml_probability">Prawdopodobieństwo zagrożenia wg ML: %1$d%%</string>
+    <string name="ml_high_finding">Statyczna heurystyka ML: wysoki wynik na podstawie uprawnień i wzorców API; tylko wskazówka, nie dowód złośliwego oprogramowania.</string>
+    <string name="ml_active_body">Na urządzeniu dostępny jest zweryfikowany statyczny model ML. Wyniki są orientacyjne i nie dowodzą obecności złośliwego oprogramowania.</string>
 </resources>

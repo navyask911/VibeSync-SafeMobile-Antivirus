@@ -805,4 +805,7 @@
 <plurals name="l10n_enabled_apps"><item quantity="one">Naka-enable ang %1$d app</item><item quantity="other">Naka-enable ang %1$d app</item></plurals>
 <plurals name="l10n_indicators"><item quantity="one">%1$d palatandaan</item><item quantity="other">%1$d palatandaan</item></plurals>
 <plurals name="l10n_progress"><item quantity="one">Nasuri ang %1$d sa %2$d app</item><item quantity="other">Nasuri ang %1$d sa %2$d app</item></plurals>
+    <string name="ml_probability">Posibilidad ng banta ayon sa ML: %1$d%%</string>
+    <string name="ml_high_finding">Statikong ML na pagsusuri: mataas na marka dahil sa mga pahintulot at pattern ng API; gabay lamang at hindi patunay ng malware.</string>
+    <string name="ml_active_body">Available sa device ang na-validate na statikong ML model. Gabay lamang ang mga resulta at hindi patunay ng malware.</string>
 </resources>

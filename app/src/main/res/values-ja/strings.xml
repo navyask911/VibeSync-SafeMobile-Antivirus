@@ -661,4 +661,7 @@
 <plurals name="l10n_enabled_apps"><item quantity="other">%1$d 個のアプリが有効</item></plurals>
 <plurals name="l10n_indicators"><item quantity="other">%1$d 件の指標</item></plurals>
 <plurals name="l10n_progress"><item quantity="other">%2$d 個中 %1$d 個のアプリを確認済み</item></plurals>
+    <string name="ml_probability">機械学習による脅威の確率: %1$d%%</string>
+    <string name="ml_high_finding">静的機械学習の推定: 権限と API パターンによる高スコアです。参考情報であり、マルウェアの証拠ではありません。</string>
+    <string name="ml_active_body">検証済みの端末内静的機械学習モデルを利用できます。結果は参考情報であり、マルウェアの存在を証明しません。</string>
 </resources>

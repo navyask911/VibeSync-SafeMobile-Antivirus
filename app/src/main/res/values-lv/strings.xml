@@ -805,4 +805,7 @@
 <plurals name="l10n_enabled_apps"><item quantity="zero">Aktivizētas %1$d lietotnes</item><item quantity="one">Aktivizēta %1$d lietotne</item><item quantity="other">Aktivizētas %1$d lietotnes</item></plurals>
 <plurals name="l10n_indicators"><item quantity="zero">%1$d indikatori</item><item quantity="one">%1$d indikators</item><item quantity="other">%1$d indikatori</item></plurals>
 <plurals name="l10n_progress"><item quantity="zero">Pārbaudītas %1$d no %2$d lietotnēm</item><item quantity="one">Pārbaudīta %1$d no %2$d lietotnēm</item><item quantity="other">Pārbaudītas %1$d no %2$d lietotnēm</item></plurals>
+    <string name="ml_probability">ML apdraudējuma varbūtība: %1$d%%</string>
+    <string name="ml_high_finding">Statiskā ML heiristika: augsts vērtējums pēc atļaujām un API modeļiem; tikai norāde, nevis ļaunatūras pierādījums.</string>
+    <string name="ml_active_body">Ierīcē ir pieejams pārbaudīts statisks ML modelis. Rezultāti ir informatīvi un nepierāda ļaunatūru.</string>
 </resources>

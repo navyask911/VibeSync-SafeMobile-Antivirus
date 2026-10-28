@@ -38,8 +38,8 @@ android {
   applicationId = "com.vibesync.antivirus"
   minSdk = 26
   targetSdk = 36
-  versionCode = 20261107
-  versionName = "1.0.14"
+  versionCode = 20261108
+  versionName = "1.0.15"
   testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   buildConfigField("String", "FEED_MANIFEST_PUBLIC_KEY_B64", cfg(feedManifestPublicKey))
   buildConfigField("Boolean", "FEED_MANIFEST_KEY_CONFIGURED", (!feedManifestPublicKey.isBlank()).toString())
@@ -106,6 +106,7 @@ dependencies {
  implementation("androidx.work:work-runtime-ktx:2.10.2")
  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
  implementation("com.google.crypto.tink:tink-android:1.16.0")
+ // TensorFlow Lite 2.17.0 is local inference only; no model training or network calls.
  implementation("org.tensorflow:tensorflow-lite:2.17.0")
  implementation("com.google.guava:guava:33.4.8-android")
  implementation("org.bouncycastle:bcprov-jdk18on:1.86")

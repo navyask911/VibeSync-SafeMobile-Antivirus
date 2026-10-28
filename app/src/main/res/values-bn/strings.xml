@@ -662,4 +662,7 @@
 <plurals name="l10n_enabled_apps"><item quantity="one">%1$dটি অ্যাপ সক্রিয় হয়েছে</item><item quantity="other">%1$dটি অ্যাপ সক্রিয় হয়েছে</item></plurals>
 <plurals name="l10n_indicators"><item quantity="one">%1$dটি সূচক</item><item quantity="other">%1$dটি সূচক</item></plurals>
 <plurals name="l10n_progress"><item quantity="one">%2$dটি অ্যাপের মধ্যে %1$dটি পরীক্ষা হয়েছে</item><item quantity="other">%2$dটি অ্যাপের মধ্যে %1$dটি পরীক্ষা হয়েছে</item></plurals>
+    <string name="ml_probability">এমএল হুমকির সম্ভাবনা: %1$d%%</string>
+    <string name="ml_high_finding">স্থির এমএল বিশ্লেষণ: অনুমতি ও API প্যাটার্নের ভিত্তিতে উচ্চ স্কোর; এটি শুধু সতর্কসংকেত, ম্যালওয়্যারের প্রমাণ নয়।</string>
+    <string name="ml_active_body">ডিভাইসেই যাচাইকৃত স্থির এমএল মডেল উপলব্ধ। ফলাফল নির্দেশনামূলক, ম্যালওয়্যারের প্রমাণ নয়।</string>
 </resources>

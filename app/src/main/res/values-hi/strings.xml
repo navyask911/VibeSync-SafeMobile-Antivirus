@@ -661,4 +661,7 @@
 <plurals name="l10n_enabled_apps"><item quantity="one">%1$d ऐप सक्षम है</item><item quantity="other">%1$d ऐप सक्षम हैं</item></plurals>
 <plurals name="l10n_indicators"><item quantity="one">%1$d संकेत</item><item quantity="other">%1$d संकेत</item></plurals>
 <plurals name="l10n_progress"><item quantity="one">%2$d में से %1$d ऐप जाँचा गया</item><item quantity="other">%2$d में से %1$d ऐप जाँचे गए</item></plurals>
+    <string name="ml_probability">एमएल खतरे की संभावना: %1$d%%</string>
+    <string name="ml_high_finding">स्थिर एमएल अनुमान: अनुमतियों और एपीआई पैटर्न के आधार पर उच्च स्कोर; यह केवल संकेत है, मैलवेयर का प्रमाण नहीं।</string>
+    <string name="ml_active_body">प्रमाणित ऑन-डिवाइस स्थिर एमएल मॉडल उपलब्ध है। परिणाम केवल संकेत हैं, मैलवेयर का प्रमाण नहीं।</string>
 </resources>

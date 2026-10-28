@@ -805,4 +805,7 @@
 <plurals name="l10n_enabled_apps"><item quantity="one">%1$d برنامه فعال شد</item><item quantity="other">%1$d برنامه فعال شدند</item></plurals>
 <plurals name="l10n_indicators"><item quantity="one">%1$d نشانگر</item><item quantity="other">%1$d نشانگر</item></plurals>
 <plurals name="l10n_progress"><item quantity="one">%1$d از %2$d برنامه بررسی شد</item><item quantity="other">%1$d از %2$d برنامه بررسی شدند</item></plurals>
+    <string name="ml_probability">احتمال تهدید با یادگیری ماشین: %1$d%%</string>
+    <string name="ml_high_finding">ابتکار اکتشافی ایستای یادگیری ماشین: امتیاز بالا بر پایه مجوزها و الگوهای API؛ فقط هشدار است، نه اثبات بدافزار.</string>
+    <string name="ml_active_body">مدل ایستای یادگیری ماشین تأییدشده روی دستگاه موجود است. نتایج صرفاً راهنما هستند و وجود بدافزار را ثابت نمی‌کنند.</string>
 </resources>

@@ -662,4 +662,7 @@
 <plurals name="l10n_enabled_apps"><item quantity="one">%1$d uygulama etkinleştirildi</item><item quantity="other">%1$d uygulama etkinleştirildi</item></plurals>
 <plurals name="l10n_indicators"><item quantity="one">%1$d gösterge</item><item quantity="other">%1$d gösterge</item></plurals>
 <plurals name="l10n_progress"><item quantity="one">%2$d uygulamadan %1$d tanesi kontrol edildi</item><item quantity="other">%2$d uygulamadan %1$d tanesi kontrol edildi</item></plurals>
+    <string name="ml_probability">Makine öğrenimi tehdit olasılığı: %1$d%%</string>
+    <string name="ml_high_finding">Statik makine öğrenimi sezgisi: izinler ve API örüntülerine göre yüksek puan; yalnızca uyarıdır, kötü amaçlı yazılım kanıtı değildir.</string>
+    <string name="ml_active_body">Doğrulanmış cihaz içi statik makine öğrenimi modeli kullanılabilir. Sonuçlar yol göstericidir, kötü amaçlı yazılım kanıtı değildir.</string>
 </resources>

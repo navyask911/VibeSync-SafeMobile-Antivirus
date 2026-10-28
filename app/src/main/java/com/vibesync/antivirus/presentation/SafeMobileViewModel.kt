@@ -170,7 +170,7 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
                         results = state.results.map {
                             if (it.packageName == result.packageName)
                                 it.copy(verdict = ScanVerdict.NO_MATCH, riskScore = 0f, reasons = emptyList(), reasonTexts = emptyList(),
-                                    riskReport = null, threatEventId = null, trustedByUser = true)
+                                    riskReport = null, mlProbability = null, threatEventId = null, trustedByUser = true)
                             else it
                         },
                         messageResource = R.string.trusted_app_saved, messageText = null
@@ -188,7 +188,7 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
                 // Never leave the former override displayed as a measured clean result.
                 mutableState.update { old -> old.copy(results = old.results.map { item ->
                     if (item.packageName == packageName) item.copy(trustedByUser = false,
-                        verdict = ScanVerdict.NOT_SCANNED, reasons = emptyList(), reasonTexts = emptyList(), riskReport = null,
+                        verdict = ScanVerdict.NOT_SCANNED, reasons = emptyList(), reasonTexts = emptyList(), riskReport = null, mlProbability = null,
                         threatEventId = null) else item
                 }, messageResource = R.string.trusted_app_removed, messageText = null) }
                 refreshInstalledPackage(packageName)

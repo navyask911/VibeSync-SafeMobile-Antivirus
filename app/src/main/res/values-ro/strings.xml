@@ -805,4 +805,7 @@
 <plurals name="l10n_enabled_apps"><item quantity="one">%1$d aplicație activată</item><item quantity="few">%1$d aplicații activate</item><item quantity="other">%1$d aplicații activate</item></plurals>
 <plurals name="l10n_indicators"><item quantity="one">%1$d indicator</item><item quantity="few">%1$d indicatori</item><item quantity="other">%1$d indicatori</item></plurals>
 <plurals name="l10n_progress"><item quantity="one">Verificată %1$d din %2$d aplicație</item><item quantity="few">Verificate %1$d din %2$d aplicații</item><item quantity="other">Verificate %1$d din %2$d aplicații</item></plurals>
+    <string name="ml_probability">Probabilitatea amenințării ML: %1$d%%</string>
+    <string name="ml_high_finding">Euristică ML statică: scor ridicat pe baza permisiunilor și modelelor API; doar un indiciu, nu o dovadă de malware.</string>
+    <string name="ml_active_body">Un model ML static validat este disponibil pe dispozitiv. Rezultatele sunt orientative și nu dovedesc existența unui malware.</string>
 </resources>
