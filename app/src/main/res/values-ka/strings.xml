@@ -701,4 +701,108 @@
 <string name="detection_capabilities_save">Save update settings</string>
 <string name="detection_capabilities_sync_privacy">Downloads only. Scan results, files, hashes, and package names are not uploaded.</string>
 <string name="detection_capabilities_sync_unavailable">Automatic updates are unavailable in this offline build or until a trusted signing key is configured.</string>
+
+<string name="format_label_value">%1$s: %2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s – %2$s</string>
+<string name="format_version">%1$s · ვერსია %2$s (%3$s)</string>
+<string name="format_package_version">%1$s · ვერსია %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">შეიყვანეთ უსაფრთხო წყაროს მისამართი</string>
+<string name="storage_size_unavailable">ზომა მიუწვდომელია</string>
+<string name="blocked_reason_hash">ნაპოვნია დამთხვევა ადგილობრივ საფრთხის ხელმოწერასთან.</string>
+<string name="blocked_reason_action">შესაძლებლობის ფარგლებში სცადეს ადგილობრივი უსაფრთხოების მოქმედების შესრულება.</string>
+<string name="signed_import_success">ხელმოწერილი მონაცემთა ბაზა მიღებულია: ვერსია %1$s · %2$s.</string>
+<string name="signed_import_failed">ხელმოწერილი მონაცემთა ბაზა არ გააქტიურებულა. შეამოწმეთ ხელმოწერა, ვერსია და ფაილის ფორმატი.</string>
+<string name="rule_import_pending">%1$s შენახულია განსახილველად. იმპორტირებული წესები გამორთული დარჩება და ეს ფაილი არ გაეშვება.</string>
+<string name="rule_import_failed">წესების იმპორტი ვერ მოხერხდა. იმპორტირებული წესები გამორთული დარჩება.</string>
+<string name="restore_result_localized">აღდგენილია %1$s (%2$s)-ის ასლი. კარანტინში მოთავსებული ორიგინალი კვლავ შენახულია.</string>
+<string name="cleaner_confirm_localized">სამუდამოდ წაიშალოს %1$s (%2$s)? მოქმედების გაუქმება შეუძლებელია. SafeMobile ხელახლა გადაამოწმებს სახელებსა და მეტამონაცემებს.</string>
+<string name="cleaner_result_localized">წაშლილია: %1$s · გათავისუფლებული ადგილი: %2$s · წარუმატებელი ან შეცვლილი: %3$s</string>
+<string name="about_localized_notices">მესამე მხარის კომპონენტებზე ვრცელდება მათი საკუთარი ლიცენზიები. თავდაპირველი შეტყობინებები აუდიტის საკონტროლო ეტაპია და არა დასრულებული ლიცენზიების შემოწმება. წყაროს შეტყობინებებისა და ლიცენზიის პირობებისთვის გახსენით ორიგინალი დოკუმენტები.</string>
+<string name="about_open_original">ორიგინალი დოკუმენტების გახსნა</string>
+<string name="about_localized_privacy">სკანირებული ფაილები, ჰეშები, პაკეტების სახელები და შედეგები რჩება ამ მოწყობილობაზე. ადგილობრივი აუდიტის მეტამონაცემები და კარანტინის ასლები ინახება დაშიფრულ კერძო საცავში. ხელმოწერილი განსაზღვრებების განახლებები უკავშირდება პროექტის გამოშვების სერვისს; ცალკე წყარო კონფიგურირებულ მისამართს მხოლოდ თქვენი თანხმობის შემდეგ უკავშირდება. საქაღალდეების მონიტორინგი ვრცელდება მხოლოდ თქვენს მიერ არჩეულ საქაღალდეებზე და მისი შეჩერება შეიძლება. Android-ის ნებართვები თქვენს კონტროლქვეშ რჩება. ამ ვერსიაში არ არის რეკლამები, ღრუბლოვანი სკანირება ან ბმულების რეპუტაციის სერვისი.</string>
+<string name="coverage_local_title">ადგილობრივი სატესტო განსაზღვრებები</string>
+<string name="coverage_local_body">ჩართული ძველი განსაზღვრებები შეიცავს მხოლოდ უვნებელ ანტივირუსულ სატესტო ნიშნულს. ისინი რეალური მავნე პროგრამებისგან დაცვას არ უზრუნველყოფს.</string>
+<string name="coverage_signed_title">ხელმოწერილი ჰეშების მონაცემთა ბაზა</string>
+<string name="coverage_signed_body">ჰეშების ზუსტი შედარებისთვის საჭიროა სანდო ხელმოწერის გასაღები და მიღებული ხელმოწერილი მონაცემთა ბაზა. საწარმოო მონაცემთა ბაზა არ არის ჩართული.</string>
+<string name="coverage_static_title">აპლიკაციების სტატიკური ანალიზი</string>
+<string name="coverage_static_body">შეზღუდული პაკეტების ანალიზი იძლევა საკონსულტაციო შედეგებს. ერთი შედეგი მავნე პროგრამას არ ამტკიცებს; ცნობილი მავნე ხელმომწერების სიები გამორთულია.</string>
+<string name="coverage_permissions_title">ნებართვები და მანიფესტი</string>
+<string name="coverage_permissions_body">ნებართვების კომბინაციები და პაკეტების ხილული დეკლარაციები ხელით შემოწმებაში გეხმარებათ. ეს არ არის გაწვრთნილი კლასიფიკაცია.</string>
+<string name="coverage_integrity_title">მოწყობილობის მთლიანობის მაჩვენებლები</string>
+<string name="coverage_integrity_body">ძირეული წვდომა, ჩაჭრის მექანიზმები, აგების თვისებები, უსაფრთხოების აღსრულება, გამმართველები და ემულატორები მოწმდება ადგილობრივი ევრისტიკებით და არა ატესტაციით.</string>
+<string name="coverage_bloom_title">ჰეშების ალბათური ინდექსი</string>
+<string name="coverage_bloom_body">შემოწმებული, არაცარიელი ალბათური ინდექსი და მისი მანიფესტი არ არის ჩართული. ეს არასავალდებულო ფენა მიუწვდომელია.</string>
+<string name="coverage_rules_title">ჩართული კოდის ხელმოწერები</string>
+<string name="coverage_rules_body">დადასტურებული ჩართული წესები ამოწმებს კოდის ლიტერალური შაბლონების შეზღუდულ ნაკრებს. დამთხვევები მხოლოდ ინფორმაციულია და მავნე პროგრამას არ ადასტურებს.</string>
+<string name="coverage_rules_unavailable">ჩართული წესები ვერ ჩაიტვირთა ან ვალიდაცია ვერ გაიარა. კოდის ხელმოწერების სკანირება შესრულებულად არ ითვლება.</string>
+<string name="coverage_model_title">ნებართვების კლასიფიკაციის მოდელი</string>
+<string name="coverage_model_body">გაწვრთნილი, დადასტურებული და გასავრცელებელი კლასიფიკაციის მოდელი არ არის ჩართული. მანქანური სწავლება გამორთულია.</string>
+<string name="coverage_signer_title">ხელმომწერის ოფლაინ დადასტურება</string>
+<string name="coverage_signer_body">ხელმოწერის სერტიფიკატის დამოუკიდებლად დაფიქსირებული მოსალოდნელი ანაბეჭდი არ არის კონფიგურირებული.</string>
+<string name="coverage_feed_title">ხელმოწერილი წყაროს შემოწმება</string>
+<string name="coverage_feed_body">ცალკეული ხელმოწერის გადამოწმებასა და ძველ ვერსიაზე დაბრუნებისგან დაცვას სჭირდება აგების დროს სანდო გასაღები და კონფიგურირებული ხელმოწერილი წყარო.</string>
+<string name="hash_status_active">ხელმოწერილი ადგილობრივი ჰეშების ბაზა აქტიურია.</string>
+<string name="hash_status_missing">ჰეშების შედარება გამორთულია, სანამ ხელმოწერილი მონაცემთა ბაზა არ მიიღება.</string>
+<string name="hash_status_key">ჰეშების შედარება გამორთულია, რადგან სანდო ხელმოწერის გასაღები მიუწვდომელია.</string>
+<string name="hash_status_invalid">შენახულმა განსაზღვრებებმა მთლიანობის, ვერსიის ან ფორმატის შემოწმება ვერ გაიარა. ჰეშების შედარება გამორთული დარჩება.</string>
+<string name="hash_status_activation">მონაცემთა ბაზის გააქტიურება არ დასრულდა. ჰეშების შედარება გამორთული დარჩება.</string>
+<string name="finding_confidence">%1$s · სანდოობის დონე: %2$d%%</string>
+<string name="finding_exported">გარედან ხელმისაწვდომ კომპონენტს მანიფესტში ნებართვის ხილული შეზღუდვა არ აქვს. კოდის დონეზე შემოწმებები მაინც შეიძლება არსებობდეს.</string>
+<string name="finding_admin">აპლიკაცია აცხადებს მოწყობილობის ადმინისტრირების მიმღებს. ეს მგრძნობიარე შესაძლებლობა ბოროტად გამოყენების მტკიცებულება არ არის.</string>
+<string name="finding_accessibility">აპლიკაცია აცხადებს ხელმისაწვდომობის სერვისს. კანონიერ დამხმარე აპლიკაციებს შეიძლება ეს წვდომა სჭირდებოდეთ.</string>
+<string name="finding_overlay">აპლიკაცია ითხოვს სხვა ეკრანებზე გადაფარვის ნებართვას. ეს შეიძლება კანონიერი იყოს, მაგრამ სხვა ეკრანებიც დაფაროს.</string>
+<string name="finding_combined">ხელმისაწვდომობა დაკავშირებულია ეკრანის გადაფარვასთან, ტექსტურ შეტყობინებებთან ან ზარების ისტორიასთან. გადაამოწმეთ აპლიკაციის დანიშნულება.</string>
+<string name="finding_sms_calls">აპლიკაცია ითხოვს როგორც ტექსტური შეტყობინებების, ისე ზარების ისტორიის ნებართვებს.</string>
+<string name="finding_sms_network">ტექსტურ შეტყობინებებზე წვდომა ინტერნეტზე წვდომასთანაა შერწყმული. საჭიროა კონტექსტური შეფასება.</string>
+<string name="finding_signer">ხელმოწერის სერტიფიკატის მეტამონაცემები აკლია ან არ იკითხება.</string>
+<string name="finding_archive">პაკეტის კონტეინერის სრულად შემოწმება ვერ მოხერხდა. სტატიკური ანალიზი არასრულია.</string>
+<string name="finding_packer">პაკეტის გზა ცნობილ შეფუთვის ან დაცვის ხელსაწყოს ჰგავს. ასეთ ხელსაწყოებს კანონიერ აპლიკაციებშიც იყენებენ.</string>
+<string name="finding_dex_header">კოდის სათაურში ფორმატის ან ზომის ველები შეუსაბამოა. ეს მავნე პროგრამის მტკიცებულება არ არის.</string>
+<string name="finding_dex_short">კოდის ჩანაწერი სწორ სათაურზე მოკლეა და მისი სრულად შემოწმება ვერ მოხერხდა.</string>
+<string name="finding_entropy">კოდის ნიმუშს ბაიტების მაღალი ენტროპია აქვს. ეს შეიძლება დაშიფვრამ, შეფუთვამ ან უვნებელმა შეკუმშულმა შიგთავსმა გამოიწვიოს.</string>
+<string name="finding_api">მოთხოვნილი ნებართვისთვის მოსალოდნელი სტატიკური მითითება არ მოიძებნა. მიზეზი შეიძლება იყოს რეფლექსია, ბიბლიოთეკები ან დინამიკურად ჩატვირთული კოდი.</string>
+<string name="finding_rules">ჩართული შეზღუდული კოდის ხელმოწერა დაემთხვა. ეს მხოლოდ მინიშნებაა და არა მავნე პროგრამის მტკიცებულება.</string>
+<string name="finding_other">დამატებითი ადგილობრივი მაჩვენებლები ხელით უნდა შემოწმდეს. ისინი მავნე პროგრამას არ ადასტურებს.</string>
+<string name="integrity_manager">ჩანს ძირეული წვდომის ან ჩაჭრის მმართველი: %1$s</string>
+<string name="integrity_test_keys">მოწყობილობის აგება სატესტო ხელმოწერის გასაღებებს იყენებს.</string>
+<string name="integrity_debug_build">აგების თვისებები მიუთითებს გამართვად ან არასაწარმოო სისტემაზე.</string>
+<string name="integrity_selinux">წაკითხვადი ადგილობრივი სტატუსი მიუთითებს, რომ უსაფრთხოების სავალდებულო აღსრულება გამორთულია.</string>
+<string name="integrity_debugger">ამ პროცესს გამმართველი აქვს მიერთებული.</string>
+<string name="integrity_emulator">აგების თვისებები ემულატორს ან სატესტო მოწყობილობას ჰგავს.</string>
+<string name="audit_scan_pending">ინსტალაცია ჩაიწერა. ადგილობრივი ანალიზი მოლოდინშია.</string>
+<string name="audit_scan_complete">ადგილობრივი ანალიზი დასრულდა დადასტურებული ხელმოწერის დამთხვევის გარეშე. ეს უსაფრთხოების გარანტია არ არის.</string>
+<string name="audit_scan_unavailable">ანალიზის დროს პაკეტი არ ჩანდა.</string>
+<string name="audit_scan_threat">ნაპოვნია ზუსტი დამთხვევა ადგილობრივ საფრთხის ხელმოწერასთან.</string>
+<string name="audit_scan_review">ადგილობრივი მაჩვენებლები გადამოწმებას საჭიროებს; ისინი მავნე პროგრამას არ ადასტურებს.</string>
+<string name="audit_source_recorded">ინსტალაციის წყარო ჩაიწერა.</string>
+<string name="audit_uninstall_requested">მოთხოვნილია Android-ის დადასტურება აპლიკაციის წაშლისთვის.</string>
+<string name="audit_uninstall_success">Android-მა აპლიკაციის წარმატებული წაშლა დაადასტურა.</string>
+<string name="audit_uninstall_failed">Android-მა აპლიკაციის წაშლის მოთხოვნის დასრულება ვერ შეძლო.</string>
+<string name="severity_test">უვნებელი სატესტო ნიშნული</string>
+<string name="severity_low">დაბალი სიმძიმე</string>
+<string name="severity_medium">საშუალო სიმძიმე</string>
+<string name="severity_high">მაღალი სიმძიმე</string>
+<string name="severity_critical">კრიტიკული სიმძიმე</string>
+<string name="severity_unknown">სიმძიმე მითითებული არ არის</string>
+<plurals name="l10n_scanned_apps"><item quantity="other">სკანირებულია %1$d აპლიკაცია</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="other">სკანირებულია %1$d ფაილი</item></plurals>
+<plurals name="l10n_threats"><item quantity="other">ნაპოვნია %1$d საფრთხე</item></plurals>
+<plurals name="l10n_review"><item quantity="other">%1$d შედეგი შემოწმებას საჭიროებს</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="other">%1$d ელემენტის სკანირება ვერ მოხერხდა</item></plurals>
+<plurals name="l10n_no_match"><item quantity="other">%1$d შედეგს ადგილობრივი დამთხვევა არ აქვს</item></plurals>
+<plurals name="l10n_apps"><item quantity="other">%1$d აპლიკაცია</item></plurals>
+<plurals name="l10n_files"><item quantity="other">%1$d ფაილი</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="other">%1$d არასისტემურ აპლიკაციას მაღალი რისკის წვდომა აქვს.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="other">%1$d დაფიქსირებული ცვლილების შეტყობინება მოლოდინშია.</item></plurals>
+<plurals name="l10n_rules"><item quantity="other">შეზღუდული დაფარვა · %1$d ჩართული წესი</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="other">ბოლო სკანირება: %1$d ინფორმაციული კოდის დამთხვევა.</item></plurals>
+<plurals name="l10n_imported"><item quantity="other">ადგილობრივ საცავში იმპორტირებულია %1$d სწორი ხელმოწერა.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="other">%1$d ბაიტი</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="other">არსებობს ძირეულ წვდომასთან დაკავშირებული %1$d ფაილური სისტემის მაჩვენებელი.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="other">არსებობს ჩაჭრის %1$d მაჩვენებელი.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="other">ჩართულია %1$d აპლიკაცია</item></plurals>
+<plurals name="l10n_indicators"><item quantity="other">%1$d მაჩვენებელი</item></plurals>
+<plurals name="l10n_progress"><item quantity="other">შემოწმებულია %1$d აპლიკაცია %2$d-დან</item></plurals>
 </resources>
