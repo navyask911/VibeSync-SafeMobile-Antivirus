@@ -805,4 +805,7 @@
 <plurals name="l10n_enabled_apps"><item quantity="one">%1$d rakendus lubatud</item><item quantity="other">%1$d rakendust lubatud</item></plurals>
 <plurals name="l10n_indicators"><item quantity="one">%1$d näitaja</item><item quantity="other">%1$d näitajat</item></plurals>
 <plurals name="l10n_progress"><item quantity="one">Kontrollitud %1$d rakendus %2$d-st</item><item quantity="other">Kontrollitud %1$d rakendust %2$d-st</item></plurals>
+    <string name="ml_probability">ML-i ohutõenäosus: %1$d%%</string>
+    <string name="ml_high_finding">Staatiline ML-heuristika: kõrge skoor lubade ja API-mustrite alusel; ainult viide, mitte pahavara tõend.</string>
+    <string name="ml_active_body">Seadmes on saadaval valideeritud staatiline ML-mudel. Tulemused on soovituslikud ega tõenda pahavara olemasolu.</string>
 </resources>
