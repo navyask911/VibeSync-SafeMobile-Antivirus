@@ -662,4 +662,7 @@
 <plurals name="l10n_enabled_apps"><item quantity="other">앱 %1$d개 활성화됨</item></plurals>
 <plurals name="l10n_indicators"><item quantity="other">지표 %1$d개</item></plurals>
 <plurals name="l10n_progress"><item quantity="other">앱 %2$d개 중 %1$d개 확인함</item></plurals>
+    <string name="ml_probability">머신러닝 위협 확률: %1$d%%</string>
+    <string name="ml_high_finding">정적 머신러닝 휴리스틱: 권한 및 API 패턴에 따른 높은 점수입니다. 참고용이며 악성코드의 증거가 아닙니다.</string>
+    <string name="ml_active_body">검증된 기기 내 정적 머신러닝 모델을 사용할 수 있습니다. 결과는 참고용이며 악성코드를 입증하지 않습니다.</string>
 </resources>
