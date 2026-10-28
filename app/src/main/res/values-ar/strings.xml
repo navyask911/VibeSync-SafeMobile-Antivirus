@@ -661,4 +661,7 @@
 <plurals name="l10n_enabled_apps"><item quantity="zero">التطبيقات المفعّلة: %1$d</item><item quantity="one">تطبيق واحد مفعّل (%1$d)</item><item quantity="two">تطبيقان مفعّلان (%1$d)</item><item quantity="few">%1$d تطبيقات مفعّلة</item><item quantity="many">%1$d تطبيقًا مفعّلًا</item><item quantity="other">التطبيقات المفعّلة: %1$d</item></plurals>
 <plurals name="l10n_indicators"><item quantity="zero">عدد المؤشرات: %1$d</item><item quantity="one">مؤشر واحد (%1$d)</item><item quantity="two">مؤشران (%1$d)</item><item quantity="few">%1$d مؤشرات</item><item quantity="many">%1$d مؤشرًا</item><item quantity="other">عدد المؤشرات: %1$d</item></plurals>
 <plurals name="l10n_progress"><item quantity="zero">فُحص %1$d من أصل %2$d تطبيق</item><item quantity="one">فُحص %1$d من أصل %2$d تطبيق</item><item quantity="two">فُحص %1$d من أصل %2$d تطبيقين</item><item quantity="few">فُحص %1$d من أصل %2$d تطبيقات</item><item quantity="many">فُحص %1$d من أصل %2$d تطبيقًا</item><item quantity="other">فُحص %1$d من أصل %2$d تطبيق</item></plurals>
+    <string name="ml_probability">احتمال التهديد بالتعلم الآلي: %1$d%%</string>
+    <string name="ml_high_finding">استدلال ثابت بالتعلم الآلي: درجة مرتفعة استنادًا إلى الأذونات وأنماط واجهات البرمجة؛ مؤشر استرشادي وليس دليلًا على البرمجيات الخبيثة.</string>
+    <string name="ml_active_body">يتوفر على الجهاز نموذج تعلم آلي ثابت تم التحقق منه. النتائج استرشادية ولا تثبت وجود برمجيات خبيثة.</string>
 </resources>
