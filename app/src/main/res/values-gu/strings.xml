@@ -701,4 +701,108 @@
 <string name="detection_capabilities_save">સુધારા સેટિંગ્સ સાચવો</string>
 <string name="detection_capabilities_sync_privacy">માત્ર ડાઉનલોડ. તપાસ પરિણામો, ફાઇલો, હૅશ કે પૅકેજ નામ અપલોડ થતા નથી.</string>
 <string name="detection_capabilities_sync_unavailable">આ ઑફલાઇન આવૃત્તિમાં અથવા વિશ્વસનીય સહી ચાવી ગોઠવાય ત્યાં સુધી આપમેળે સુધારા નથી.</string>
+
+<string name="format_label_value">%1$s: %2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s – %2$s</string>
+<string name="format_version">%1$s · આવૃત્તિ %2$s (%3$s)</string>
+<string name="format_package_version">%1$s · આવૃત્તિ %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">સુરક્ષિત ફીડનું સરનામું દાખલ કરો</string>
+<string name="storage_size_unavailable">કદ ઉપલબ્ધ નથી</string>
+<string name="blocked_reason_hash">સ્થાનિક જોખમની સહી મેળ ખાતી હતી.</string>
+<string name="blocked_reason_action">શક્ય હોય તેટલી સ્થાનિક સુરક્ષા કાર્યવાહી કરવાનો પ્રયાસ થયો.</string>
+<string name="signed_import_success">સહીવાળો ડેટાબેઝ સ્વીકારાયો: આવૃત્તિ %1$s · %2$s.</string>
+<string name="signed_import_failed">સહીવાળો ડેટાબેઝ સક્રિય થયો નથી. તેની સહી, આવૃત્તિ અને ફાઇલનું સ્વરૂપ તપાસો.</string>
+<string name="rule_import_pending">સમીક્ષા માટે %1$s સાચવ્યું. આયાત કરેલા નિયમો બંધ જ રહેશે અને આ ફાઇલ ચલાવવામાં આવશે નહીં.</string>
+<string name="rule_import_failed">નિયમો આયાત કરી શકાયા નથી. આયાત કરેલા નિયમો બંધ જ રહેશે.</string>
+<string name="restore_result_localized">%1$s (%2$s) ની નકલ પુનઃસ્થાપિત થઈ. ક્વોરન્ટાઇનમાં રહેલી મૂળ ફાઇલ સંગ્રહિત જ છે.</string>
+<string name="cleaner_confirm_localized">%1$s (%2$s) કાયમ માટે કાઢી નાખવું? આ ક્રિયા પાછી ફેરવી શકાતી નથી. SafeMobile નામો અને મેટાડેટા ફરી તપાસશે.</string>
+<string name="cleaner_result_localized">કાઢી નાખ્યું: %1$s · ખાલી થયેલી જગ્યા: %2$s · નિષ્ફળ અથવા બદલાયેલ: %3$s</string>
+<string name="about_localized_notices">તૃતીય-પક્ષ ઘટકોના પોતાના પરવાના લાગુ પડે છે. મૂળ સૂચનાઓ ઓડિટની તપાસનો તબક્કો છે, પૂર્ણ થયેલી પરવાના સમીક્ષા નથી. સ્ત્રોતની સૂચનાઓ અને પરવાનાની શરતો માટે મૂળ દસ્તાવેજો ખોલો.</string>
+<string name="about_open_original">મૂળ દસ્તાવેજો ખોલો</string>
+<string name="about_localized_privacy">તપાસની ફાઇલો, હૅશ, પૅકેજ નામો અને પરિણામો આ ઉપકરણમાં જ રહે છે. સ્થાનિક ઓડિટ મેટાડેટા અને ક્વોરન્ટાઇન નકલો ખાનગી એન્ક્રિપ્ટેડ સંગ્રહ વાપરે છે. સહીવાળી વ્યાખ્યાઓના સુધારા આ પ્રોજેક્ટની રિલીઝ સેવાને સંપર્ક કરે છે; અલગ ફીડ તમારી સંમતિ પછી જ ગોઠવેલા સરનામે સંપર્ક કરે છે. ફોલ્ડર દેખરેખ તમે પસંદ કરેલા ફોલ્ડરોમાં જ થાય છે અને બંધ કરી શકાય છે. Android પરવાનગીઓ તમારા નિયંત્રણમાં રહે છે. આ આવૃત્તિમાં જાહેરાતો, ક્લાઉડ તપાસ કે લિંક પ્રતિષ્ઠા સેવા નથી.</string>
+<string name="coverage_local_title">સ્થાનિક પરીક્ષણ વ્યાખ્યાઓ</string>
+<string name="coverage_local_body">સાથે આપેલી જૂની વ્યાખ્યાઓમાં ફક્ત નિર્દોષ એન્ટિવાયરસ પરીક્ષણ ચિહ્ન છે. તે વાસ્તવિક માલવેર સામે રક્ષણ આપતી નથી.</string>
+<string name="coverage_signed_title">સહીવાળો હૅશ ડેટાબેઝ</string>
+<string name="coverage_signed_body">ચોક્કસ હૅશ મેળવણી માટે વિશ્વસનીય સહી કી અને સ્વીકારાયેલ સહીવાળો ડેટાબેઝ જરૂરી છે. ઉત્પાદન માટેનો ડેટાબેઝ સાથે આપેલો નથી.</string>
+<string name="coverage_static_title">ઍપનું સ્થિર વિશ્લેષણ</string>
+<string name="coverage_static_body">મર્યાદિત પૅકેજ વિશ્લેષણ સલાહરૂપ તારણો આપે છે. એક તારણથી માલવેર સાબિત થતો નથી; જાણીતા ખરાબ સહીકર્તાઓની યાદી બંધ છે.</string>
+<string name="coverage_permissions_title">પરવાનગીઓ અને મેનિફેસ્ટ</string>
+<string name="coverage_permissions_body">પરવાનગીઓના સમૂહ અને દેખાતી પૅકેજ ઘોષણાઓ હાથથી સમીક્ષામાં મદદ કરે છે. તે પ્રશિક્ષિત વર્ગીકરણ નથી.</string>
+<string name="coverage_integrity_title">ઉપકરણ અખંડિતતાના સંકેતો</string>
+<string name="coverage_integrity_body">રૂટ ઍક્સેસ, હૂક, બિલ્ડ ગુણધર્મો, સુરક્ષા અમલીકરણ, ડિબગર અને ઇમ્યુલેટર સ્થાનિક અંદાજી નિયમોથી તપાસાય છે, પ્રમાણિત સાક્ષ્યથી નહીં.</string>
+<string name="coverage_bloom_title">સંભાવ્ય હૅશ સૂચકાંક</string>
+<string name="coverage_bloom_body">ચકાસાયેલો, ખાલી ન હોય એવો સંભાવ્ય સૂચકાંક અને તેનું મેનિફેસ્ટ સાથે આપેલા નથી. આ વૈકલ્પિક સ્તર ઉપલબ્ધ નથી.</string>
+<string name="coverage_rules_title">સાથે આપેલી કોડ સહીઓ</string>
+<string name="coverage_rules_body">માન્ય કરેલા સાથે આપેલા નિયમો મર્યાદિત શાબ્દિક કોડ પેટર્ન તપાસે છે. મળતા પેટર્ન સલાહરૂપ છે અને માલવેરની ખાતરી આપતા નથી.</string>
+<string name="coverage_rules_unavailable">સાથે આપેલા નિયમો લોડ ન થયા અથવા માન્યતા તપાસમાં પસાર ન થયા. કોડ-સહી તપાસનો દાવો કરવામાં આવતો નથી.</string>
+<string name="coverage_model_title">પરવાનગી વર્ગીકરણ મોડેલ</string>
+<string name="coverage_model_body">પ્રશિક્ષિત, માન્ય અને વહેંચી શકાય એવો વર્ગીકરણ મોડેલ સાથે આપેલો નથી. મશીન લર્નિંગ બંધ છે.</string>
+<string name="coverage_signer_title">ઑફલાઇન સહીકર્તા ચકાસણી</string>
+<string name="coverage_signer_body">અલગથી નિશ્ચિત કરેલી અપેક્ષિત સહી પ્રમાણપત્રની ફિંગરપ્રિન્ટ ગોઠવાયેલી નથી.</string>
+<string name="coverage_feed_title">સહીવાળી ફીડની ચકાસણી</string>
+<string name="coverage_feed_body">અલગ સહીની ચકાસણી અને જૂની આવૃત્તિ પર પાછા જવાથી રક્ષણ માટે બિલ્ડ સમયે વિશ્વસનીય કી અને ગોઠવેલી સહીવાળી ફીડ જરૂરી છે.</string>
+<string name="hash_status_active">સહીવાળો સ્થાનિક હૅશ ડેટાબેઝ સક્રિય છે.</string>
+<string name="hash_status_missing">સહીવાળો ડેટાબેઝ સ્વીકારાય ત્યાં સુધી હૅશ મેળવણી બંધ છે.</string>
+<string name="hash_status_key">વિશ્વસનીય સહી કી ઉપલબ્ધ ન હોવાથી હૅશ મેળવણી બંધ છે.</string>
+<string name="hash_status_invalid">સંગ્રહિત વ્યાખ્યાઓ અખંડિતતા, આવૃત્તિ અથવા સ્વરૂપની તપાસમાં નિષ્ફળ ગઈ. હૅશ મેળવણી બંધ જ છે.</string>
+<string name="hash_status_activation">ડેટાબેઝ સક્રિય કરવાની પ્રક્રિયા પૂર્ણ ન થઈ. હૅશ મેળવણી બંધ જ છે.</string>
+<string name="finding_confidence">%1$s · વિશ્વાસનો સ્તર: %2$d%%</string>
+<string name="finding_exported">બહારથી ઍક્સેસ કરી શકાય તેવા ઘટક માટે મેનિફેસ્ટમાં પરવાનગીની સ્પષ્ટ શરત દેખાતી નથી. કોડમાં વધારાની તપાસ હોઈ શકે છે.</string>
+<string name="finding_admin">ઍપ ઉપકરણ વહીવટ માટેનો રિસીવર જાહેર કરે છે. આ સંવેદનશીલ સગવડ દુરુપયોગનો પુરાવો નથી.</string>
+<string name="finding_accessibility">ઍપ ઍક્સેસિબિલિટી સેવા જાહેર કરે છે. માન્ય સહાયક ઍપને આ ઍક્સેસ જરૂરી હોઈ શકે છે.</string>
+<string name="finding_overlay">ઍપ અન્ય ઍપ પર દેખાવાની પરવાનગી માગે છે. તે યોગ્ય હોઈ શકે, પણ બીજી સ્ક્રીન ઢાંકી શકે છે.</string>
+<string name="finding_combined">ઍક્સેસિબિલિટી સાથે અન્ય ઍપ પર દેખાવું, સંદેશા અથવા કૉલ ઇતિહાસની ઍક્સેસ જોડાયેલી છે. ઍપનો હેતુ તપાસો.</string>
+<string name="finding_sms_calls">ઍપ સંદેશા અને કૉલ ઇતિહાસ બંનેની પરવાનગી માગે છે.</string>
+<string name="finding_sms_network">સંદેશાની ઍક્સેસ સાથે ઇન્ટરનેટ ઍક્સેસ જોડાયેલી છે. સંદર્ભ પ્રમાણે સમીક્ષા જરૂરી છે.</string>
+<string name="finding_signer">સહી પ્રમાણપત્રનું મેટાડેટા ગુમ છે અથવા વાંચી શકાય તેમ નથી.</string>
+<string name="finding_archive">પૅકેજની ફાઇલ સંપૂર્ણ રીતે તપાસી શકાઈ નથી. સ્થિર વિશ્લેષણ અધૂરું છે.</string>
+<string name="finding_packer">પૅકેજનો માર્ગ જાણીતા પૅકિંગ અથવા સુરક્ષા સાધન જેવો લાગે છે. માન્ય ઍપ પણ આવા સાધનો વાપરી શકે છે.</string>
+<string name="finding_dex_header">કોડના હેડરમાં સ્વરૂપ અથવા કદના ક્ષેત્રો અસંગત છે. આ માલવેરનો પુરાવો નથી.</string>
+<string name="finding_dex_short">કોડનો વિભાગ માન્ય હેડર કરતાં ટૂંકો છે અને સંપૂર્ણ તપાસી શકાયો નથી.</string>
+<string name="finding_entropy">કોડ નમૂનામાં બાઇટની અનિશ્ચિતતા વધારે છે. એન્ક્રિપ્શન, પૅકિંગ અથવા નિર્દોષ સંકુચિત સામગ્રી તેનું કારણ હોઈ શકે છે.</string>
+<string name="finding_api">માગેલી પરવાનગી માટે અપેક્ષિત સ્થિર સંદર્ભ મળ્યો નથી. પ્રતિબિંબ, લાઇબ્રેરી અથવા ગતિશીલ રીતે લોડ થતો કોડ તેનું કારણ હોઈ શકે છે.</string>
+<string name="finding_rules">સાથે આપેલી મર્યાદિત કોડ સહી મેળ ખાતી હતી. આ માત્ર સૂચન છે, માલવેરનો પુરાવો નથી.</string>
+<string name="finding_other">વધારાના સ્થાનિક સંકેતોની હાથથી સમીક્ષા જરૂરી છે. તે માલવેરની ખાતરી આપતા નથી.</string>
+<string name="integrity_manager">રૂટ ઍક્સેસ અથવા હૂકિંગનું વ્યવસ્થાપક દેખાય છે: %1$s</string>
+<string name="integrity_test_keys">ઉપકરણનું બિલ્ડ પરીક્ષણ સહી કી વાપરે છે.</string>
+<string name="integrity_debug_build">બિલ્ડ ગુણધર્મો ડિબગ કરી શકાય તેવી અથવા ઉત્પાદન માટે ન હોય એવી સિસ્ટમ દર્શાવે છે.</string>
+<string name="integrity_selinux">વાંચી શકાય તેવી સ્થાનિક સ્થિતિ કહે છે કે ફરજિયાત સુરક્ષા અમલીકરણ બંધ છે.</string>
+<string name="integrity_debugger">આ પ્રક્રિયા સાથે ડિબગર જોડાયેલો છે.</string>
+<string name="integrity_emulator">બિલ્ડ ગુણધર્મો ઇમ્યુલેટર અથવા પરીક્ષણ ઉપકરણ જેવા છે.</string>
+<string name="audit_scan_pending">ઇન્સ્ટોલેશન નોંધાયું છે. સ્થાનિક વિશ્લેષણ બાકી છે.</string>
+<string name="audit_scan_complete">ખાતરી થયેલી સહી મેળવણી વગર સ્થાનિક વિશ્લેષણ પૂર્ણ થયું. આ સલામતીની ખાતરી નથી.</string>
+<string name="audit_scan_unavailable">વિશ્લેષણ વખતે પૅકેજ દેખાતું નહોતું.</string>
+<string name="audit_scan_threat">ચોક્કસ સ્થાનિક જોખમની સહી મેળ ખાતી હતી.</string>
+<string name="audit_scan_review">સ્થાનિક સંકેતોને સમીક્ષાની જરૂર છે; તે માલવેરની ખાતરી આપતા નથી.</string>
+<string name="audit_source_recorded">ઇન્સ્ટોલેશનનો સ્ત્રોત નોંધાયો છે.</string>
+<string name="audit_uninstall_requested">Android પર ઍપ દૂર કરવાની પુષ્ટિ માગવામાં આવી.</string>
+<string name="audit_uninstall_success">Android એ ઍપ સફળતાપૂર્વક દૂર થયાની જાણ કરી.</string>
+<string name="audit_uninstall_failed">Android ઍપ દૂર કરવાની વિનંતી પૂર્ણ કરી શક્યું નહીં.</string>
+<string name="severity_test">નિર્દોષ પરીક્ષણ ચિહ્ન</string>
+<string name="severity_low">ઓછી ગંભીરતા</string>
+<string name="severity_medium">મધ્યમ ગંભીરતા</string>
+<string name="severity_high">ઊંચી ગંભીરતા</string>
+<string name="severity_critical">અતિ ગંભીરતા</string>
+<string name="severity_unknown">ગંભીરતા જણાવેલી નથી</string>
+<plurals name="l10n_scanned_apps"><item quantity="one">%1$d ઍપ તપાસાઈ</item><item quantity="other">%1$d ઍપ તપાસાઈ</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="one">%1$d ફાઇલ તપાસાઈ</item><item quantity="other">%1$d ફાઇલ તપાસાઈ</item></plurals>
+<plurals name="l10n_threats"><item quantity="one">%1$d જોખમ મળ્યું</item><item quantity="other">%1$d જોખમ મળ્યું</item></plurals>
+<plurals name="l10n_review"><item quantity="one">%1$d પરિણામની સમીક્ષા જરૂરી છે</item><item quantity="other">%1$d પરિણામની સમીક્ષા જરૂરી છે</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="one">%1$d વસ્તુ તપાસી શકાઈ નથી</item><item quantity="other">%1$d વસ્તુ તપાસી શકાઈ નથી</item></plurals>
+<plurals name="l10n_no_match"><item quantity="one">%1$d પરિણામ માટે સ્થાનિક મેળ મળ્યો નથી</item><item quantity="other">%1$d પરિણામ માટે સ્થાનિક મેળ મળ્યો નથી</item></plurals>
+<plurals name="l10n_apps"><item quantity="one">%1$d ઍપ</item><item quantity="other">%1$d ઍપ</item></plurals>
+<plurals name="l10n_files"><item quantity="one">%1$d ફાઇલ</item><item quantity="other">%1$d ફાઇલ</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="one">%1$d બિન-સિસ્ટમ ઍપ પાસે ઊંચા જોખમવાળી ઍક્સેસ છે.</item><item quantity="other">%1$d બિન-સિસ્ટમ ઍપ પાસે ઊંચા જોખમવાળી ઍક્સેસ છે.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="one">%1$d નોંધાયેલ ફેરફારની સૂચના બાકી છે.</item><item quantity="other">%1$d નોંધાયેલ ફેરફારની સૂચના બાકી છે.</item></plurals>
+<plurals name="l10n_rules"><item quantity="one">મર્યાદિત આવરણ · સાથે આપેલા %1$d નિયમ</item><item quantity="other">મર્યાદિત આવરણ · સાથે આપેલા %1$d નિયમ</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="one">છેલ્લી તપાસ: %1$d સલાહરૂપ કોડ મેળ.</item><item quantity="other">છેલ્લી તપાસ: %1$d સલાહરૂપ કોડ મેળ.</item></plurals>
+<plurals name="l10n_imported"><item quantity="one">સ્થાનિક સંગ્રહમાં %1$d માન્ય સહી આયાત થઈ.</item><item quantity="other">સ્થાનિક સંગ્રહમાં %1$d માન્ય સહી આયાત થઈ.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="one">%1$d બાઇટ</item><item quantity="other">%1$d બાઇટ</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="one">રૂટ સંબંધિત %1$d ફાઇલસિસ્ટમ સંકેત હાજર છે.</item><item quantity="other">રૂટ સંબંધિત %1$d ફાઇલસિસ્ટમ સંકેત હાજર છે.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="one">હૂકિંગના %1$d સંકેત હાજર છે.</item><item quantity="other">હૂકિંગના %1$d સંકેત હાજર છે.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="one">%1$d ઍપ ચાલુ છે</item><item quantity="other">%1$d ઍપ ચાલુ છે</item></plurals>
+<plurals name="l10n_indicators"><item quantity="one">%1$d સંકેત</item><item quantity="other">%1$d સંકેત</item></plurals>
+<plurals name="l10n_progress"><item quantity="one">%2$dમાંથી %1$d ઍપ તપાસાઈ</item><item quantity="other">%2$dમાંથી %1$d ઍપ તપાસાઈ</item></plurals>
 </resources>
