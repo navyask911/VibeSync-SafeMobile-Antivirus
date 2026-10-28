@@ -2,7 +2,9 @@
 
 Version 1.0.13, code 20261106. Application identity, signing configuration,
 existing database schema/migrations and absolute package trust are preserved.
-New UI strings are maintained directly in XML for all 22 translated locales.
+New UI strings are maintained directly in XML for all 51 configured locales.
+The earlier complete localization coverage remains the 22 requested languages;
+the other locales have their new v1.0.13 labels translated as well.
 
 ## Install delivery and alarm diagnostics
 

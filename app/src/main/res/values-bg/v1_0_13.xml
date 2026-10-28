@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="trusted_app_options">Опции</string>
+<string name="trusted_app_remove">Премахване на доверието</string>
+<string name="trusted_app_removed">Доверието е премахнато. Бъдещите проверки и предупреждения за този пакет са включени отново.</string>
+<string name="trusted_app_remove_failed">Доверието не може да бъде премахнато. Опитайте отново.</string>
+<string name="install_sentinel_title">Наблюдение на инсталациите</string>
+<string name="install_sentinel_active">SafeMobile Sentinel: активен и наблюдава</string>
+<string name="install_sentinel_description">Локални проверки след инсталиране с постоянно известие. Без периодични заявки или блокиране на заспиването. Android може да спре услугата.</string>
+<string name="install_sentinel_stop">Спиране на наблюдението на инсталациите</string>
+<string name="install_scan_progress">Анализира се новоинсталираното приложение: %1$s</string>
+<string name="analytics_chart_title">Резултати от проверките</string>
+<string name="analytics_other">Други резултати</string>
+<string name="analytics_total">Резултати</string>
+<string name="analytics_weekly_scans">Седмични проверки</string>
+<string name="analytics_week_note">Записани сесии от понеделник до неделя. Може да включват незавършени проверки.</string>
+<string name="posture_overlay_select_app">На Android 11 или по-нова версия изберете %1$s от списъка с настройки за показване над други приложения.</string>
+<string name="install_scan_received">Получено е събитие за инсталация. Отворете SafeMobile за преглед.</string>
+</resources>

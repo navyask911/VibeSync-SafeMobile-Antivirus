@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="trusted_app_options">Alternativer</string>
+<string name="trusted_app_remove">Fjern tillit</string>
+<string name="trusted_app_removed">Tilliten er fjernet. Fremtidige skanninger og varsler er aktivert igjen for denne pakken.</string>
+<string name="trusted_app_remove_failed">Kunne ikke fjerne tilliten. Prøv igjen.</string>
+<string name="install_sentinel_title">Installasjonsovervåking</string>
+<string name="install_sentinel_active">SafeMobile Sentinel: aktiv og overvåker</string>
+<string name="install_sentinel_description">Lokale kontroller etter installasjon med et vedvarende varsel. Ingen gjentatte forespørsler eller våkenlås. Android kan stoppe tjenesten.</string>
+<string name="install_sentinel_stop">Stopp installasjonsovervåking</string>
+<string name="install_scan_progress">Analyserer nylig installert app: %1$s</string>
+<string name="analytics_chart_title">Skanningsresultater</string>
+<string name="analytics_other">Andre resultater</string>
+<string name="analytics_total">Resultater</string>
+<string name="analytics_weekly_scans">Ukens skanninger</string>
+<string name="analytics_week_note">Registrerte økter fra mandag til søndag. Ufullstendige skanninger kan være med.</string>
+<string name="posture_overlay_select_app">På Android 11 eller nyere velger du %1$s i innstillingslisten for visning over andre apper.</string>
+<string name="install_scan_received">Installasjonshendelse mottatt. Åpne SafeMobile for å se gjennom den.</string>
+</resources>

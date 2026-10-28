@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="trusted_app_options">Mga pagpipilian</string>
+<string name="trusted_app_remove">Alisin ang tiwala</string>
+<string name="trusted_app_removed">Inalis ang tiwala. Muling pinagana ang mga susunod na pagsusuri at babala para sa paketeng ito.</string>
+<string name="trusted_app_remove_failed">Hindi maalis ang tiwala. Subukan muli.</string>
+<string name="install_sentinel_title">Pagsubaybay sa pag-install</string>
+<string name="install_sentinel_active">SafeMobile Sentinel: aktibo at sumusubaybay</string>
+<string name="install_sentinel_description">Lokal na pagsusuri pagkatapos mag-install na may palagiang abiso. Walang paulit-ulit na pagtatanong o pagpigil sa pagtulog ng aparato. Maaaring ihinto ng Android ang serbisyo.</string>
+<string name="install_sentinel_stop">Ihinto ang pagsubaybay sa pag-install</string>
+<string name="install_scan_progress">Sinusuri ang bagong naka-install na app: %1$s</string>
+<string name="analytics_chart_title">Mga resulta ng pagsusuri</string>
+<string name="analytics_other">Iba pang resulta</string>
+<string name="analytics_total">Mga resulta</string>
+<string name="analytics_weekly_scans">Lingguhang pagsusuri</string>
+<string name="analytics_week_note">Mga naitalang sesyon mula Lunes hanggang Linggo. Maaaring kabilang ang mga hindi tapos na pagsusuri.</string>
+<string name="posture_overlay_select_app">Sa Android 11 o mas bago, piliin ang %1$s sa listahan ng mga setting para sa pagpapakita sa ibabaw ng ibang app.</string>
+<string name="install_scan_received">Natanggap ang pangyayari ng pag-install. Buksan ang SafeMobile upang suriin.</string>
+</resources>

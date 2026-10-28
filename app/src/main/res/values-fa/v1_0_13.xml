@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="trusted_app_options">گزینه‌ها</string>
+<string name="trusted_app_remove">لغو اعتماد</string>
+<string name="trusted_app_removed">اعتماد لغو شد. بررسی‌ها و هشدارهای آینده برای این بسته دوباره فعال هستند.</string>
+<string name="trusted_app_remove_failed">لغو اعتماد ممکن نشد. دوباره تلاش کنید.</string>
+<string name="install_sentinel_title">پایش نصب</string>
+<string name="install_sentinel_active">SafeMobile Sentinel: فعال و در حال پایش</string>
+<string name="install_sentinel_description">بررسی محلی پس از نصب با اعلان دائمی. بدون پرس‌وجوی دوره‌ای یا قفل بیدار نگه‌داشتن دستگاه. Android ممکن است سرویس را متوقف کند.</string>
+<string name="install_sentinel_stop">توقف پایش نصب</string>
+<string name="install_scan_progress">در حال بررسی برنامه تازه نصب‌شده: %1$s</string>
+<string name="analytics_chart_title">نتایج بررسی‌ها</string>
+<string name="analytics_other">سایر نتایج</string>
+<string name="analytics_total">نتایج</string>
+<string name="analytics_weekly_scans">بررسی‌های هفتگی</string>
+<string name="analytics_week_note">نشست‌های ثبت‌شده از دوشنبه تا یکشنبه. ممکن است بررسی‌های ناتمام را نیز شامل شود.</string>
+<string name="posture_overlay_select_app">در Android 11 و بالاتر، %1$s را از فهرست تنظیمات نمایش روی برنامه‌های دیگر انتخاب کنید.</string>
+<string name="install_scan_received">رویداد نصب دریافت شد. برای بازبینی SafeMobile را باز کنید.</string>
+</resources>

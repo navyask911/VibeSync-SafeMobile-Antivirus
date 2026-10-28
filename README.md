@@ -236,8 +236,9 @@ still apply; a persistent service cannot guarantee delivery in every device stat
 Compose Canvas donut and weekly bar charts appear on the dashboard and analytics
 screen. Room aggregates all stored audits and counts scan sessions, not individual
 apps, for Monday–Sunday bars. No-match results and detected threats are not claimed
-as guaranteed-safe files or blocked installations. New strings are translated
-directly for all 22 localized languages. See [validation and physical-device checks](docs/V1_0_13_TESTING.md).
+as guaranteed-safe files or blocked installations. New v1.0.13 strings are translated
+directly in all 51 locale folders; earlier full coverage remains the 22 requested
+languages. See [validation and physical-device checks](docs/V1_0_13_TESTING.md).
 
 Overlay remediation passes the flagged app’s package URI and new-task flag. Android
 11+ deliberately opens the global overlay list despite that URI; the app shows a

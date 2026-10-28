@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="trusted_app_options">ตัวเลือก</string>
+<string name="trusted_app_remove">ยกเลิกความเชื่อถือ</string>
+<string name="trusted_app_removed">ยกเลิกความเชื่อถือแล้ว การสแกนและการแจ้งเตือนในอนาคตสำหรับแพ็กเกจนี้กลับมาทำงาน</string>
+<string name="trusted_app_remove_failed">ยกเลิกความเชื่อถือไม่ได้ โปรดลองอีกครั้ง</string>
+<string name="install_sentinel_title">เฝ้าติดตามการติดตั้ง</string>
+<string name="install_sentinel_active">SafeMobile Sentinel: ทำงานและกำลังเฝ้าติดตาม</string>
+<string name="install_sentinel_description">ตรวจสอบภายในเครื่องหลังติดตั้งพร้อมการแจ้งเตือนถาวร ไม่มีการสอบถามเป็นระยะหรือการล็อกให้เครื่องตื่น Android อาจหยุดบริการได้</string>
+<string name="install_sentinel_stop">หยุดเฝ้าติดตามการติดตั้ง</string>
+<string name="install_scan_progress">กำลังวิเคราะห์แอปที่ติดตั้งใหม่: %1$s</string>
+<string name="analytics_chart_title">ผลการสแกน</string>
+<string name="analytics_other">ผลลัพธ์อื่น</string>
+<string name="analytics_total">ผลลัพธ์</string>
+<string name="analytics_weekly_scans">การสแกนรายสัปดาห์</string>
+<string name="analytics_week_note">เซสชันที่บันทึกตั้งแต่วันจันทร์ถึงวันอาทิตย์ อาจรวมการสแกนที่ยังไม่เสร็จ</string>
+<string name="posture_overlay_select_app">บน Android 11 ขึ้นไป ให้เลือก %1$s ในรายการตั้งค่าการแสดงทับแอปอื่น</string>
+<string name="install_scan_received">ได้รับเหตุการณ์ติดตั้งแล้ว เปิด SafeMobile เพื่อตรวจสอบ</string>
+</resources>

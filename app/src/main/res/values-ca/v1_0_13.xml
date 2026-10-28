@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="trusted_app_options">Opcions</string>
+<string name="trusted_app_remove">Retira la confiança</string>
+<string name="trusted_app_removed">S’ha retirat la confiança. Les anàlisis i els avisos futurs d’aquest paquet tornen a estar activats.</string>
+<string name="trusted_app_remove_failed">No s’ha pogut retirar la confiança. Torna-ho a provar.</string>
+<string name="install_sentinel_title">Supervisió d’instal·lacions</string>
+<string name="install_sentinel_active">SafeMobile Sentinel: actiu i supervisant</string>
+<string name="install_sentinel_description">Comprovacions locals després de la instal·lació amb una notificació permanent. Sense consultes periòdiques ni bloqueig de repòs. Android pot aturar el servei.</string>
+<string name="install_sentinel_stop">Atura la supervisió d’instal·lacions</string>
+<string name="install_scan_progress">S’està analitzant l’aplicació acabada d’instal·lar: %1$s</string>
+<string name="analytics_chart_title">Resultats de les anàlisis</string>
+<string name="analytics_other">Altres resultats</string>
+<string name="analytics_total">Resultats</string>
+<string name="analytics_weekly_scans">Anàlisis setmanals</string>
+<string name="analytics_week_note">Sessions registrades de dilluns a diumenge. Poden incloure anàlisis parcials.</string>
+<string name="posture_overlay_select_app">A Android 11 o posterior, selecciona %1$s a la llista de configuració de superposicions.</string>
+<string name="install_scan_received">S’ha rebut l’esdeveniment d’instal·lació. Obre SafeMobile per revisar-lo.</string>
+</resources>
