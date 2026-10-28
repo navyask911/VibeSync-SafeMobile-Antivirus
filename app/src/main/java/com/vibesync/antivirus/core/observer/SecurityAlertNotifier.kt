@@ -95,7 +95,7 @@ object SecurityAlertNotifier {
             .getBoolean(SafeMobileApp.KEY_SECURITY_ALERTS_ENABLED, false)
         if (!enabled && !testMode) return
         InstallScanNotifications.escalated(eventId)
-        if (confirmed) {
+        if (confirmed && InstallScanNotifications.claimAlarm(eventId)) {
             Log.d(TAG, if (testMode) "Manual siren playback start" else "Verified threat siren playback start")
             SecurityIncidentSiren.start(app)
         }

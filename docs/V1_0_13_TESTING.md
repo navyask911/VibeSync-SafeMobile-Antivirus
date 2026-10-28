@@ -31,9 +31,11 @@ startup does not attempt to launch a new foreground service.
 The file `SafeMobile-Siren-Test.apk` has package `com.safemobile.sirentest`;
 hyphens are not legal in Android package identifiers. Installing this reserved
 component-free, no-code fixture triggers a clearly marked diagnostic alarm,
-without importing a database or recording a malware verdict. Release builds
+without requiring a database import or fabricating a malware verdict. Release builds
 verify that the reserved package has no executable application code, activities,
-services, receivers, providers or instrumentation before taking this path.
+services, receivers, providers or instrumentation before sounding its diagnostic.
+All ordinary scan engines still run afterward; a fixture name never exempts an
+APK from analysis.
 Other package names containing a normalized `sirentest` marker trigger this
 diagnostic only in debug builds. User trust takes priority even over diagnostics.
 Real applications retain all ordinary signature, rule and heuristic checks.

@@ -19,6 +19,8 @@ import com.vibesync.antivirus.core.locale.LocalePreferences
 internal object InstallScanNotifications {
     private const val CHANNEL = "install_scan_progress_v1"
     private val alerts = LinkedHashSet<String>()
+    private val alarms = InstallAlarmGate()
+    fun claimAlarm(eventId: String): Boolean = alarms.claim(eventId)
 
     @Synchronized fun escalated(eventId: String) {
         alerts.add(eventId)

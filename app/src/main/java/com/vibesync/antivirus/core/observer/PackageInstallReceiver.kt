@@ -62,7 +62,7 @@ class PackageInstallReceiver(
      if (InstallDiagnosticPolicy.shouldTest(name, BuildConfig.DEBUG) &&
          (BuildConfig.DEBUG || harmlessFixture(app, name))) {
       SecurityAlertNotifier.runInstallSirenDiagnostic(app, eventId)
-      return@withTimeout
+      // Diagnostic audio never exempts this reserved identity from ordinary analysis.
      }
      val request = OneTimeWorkRequestBuilder<MultiLayerScanWorker>().setInputData(
       Data.Builder().putString(MultiLayerScanWorker.KEY_PACKAGE_NAME, name)
