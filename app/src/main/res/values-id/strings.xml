@@ -559,5 +559,108 @@
 <string name="locale_th">ไทย</string>
 <string name="locale_uk">Українська</string>
 <string name="locale_uz">O‘zbekcha</string>
-</resources>
 
+<string name="format_label_value">%1$s: %2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s – %2$s</string>
+<string name="format_version">%1$s · Versi %2$s (%3$s)</string>
+<string name="format_package_version">%1$s · Versi %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">Masukkan alamat umpan yang aman</string>
+<string name="storage_size_unavailable">Ukuran tidak tersedia</string>
+<string name="blocked_reason_hash">Ditemukan kecocokan tanda tangan ancaman lokal.</string>
+<string name="blocked_reason_action">Tindakan keamanan lokal telah dicoba sejauh memungkinkan.</string>
+<string name="signed_import_success">Basis data bertanda tangan diterima: versi %1$s · %2$s.</string>
+<string name="signed_import_failed">Basis data bertanda tangan tidak diaktifkan. Periksa tanda tangan, versi, dan format berkas.</string>
+<string name="rule_import_pending">%1$s disimpan untuk ditinjau. Aturan yang diimpor tetap dinonaktifkan dan berkas ini tidak akan dijalankan.</string>
+<string name="rule_import_failed">Aturan tidak dapat diimpor. Aturan yang diimpor tetap dinonaktifkan.</string>
+<string name="restore_result_localized">Salinan %1$s (%2$s) berhasil dipulihkan. Berkas asli dalam karantina tetap tersimpan.</string>
+<string name="cleaner_confirm_localized">Hapus %1$s (%2$s) secara permanen? Tindakan ini tidak dapat dibatalkan. SafeMobile akan memeriksa ulang nama dan metadata.</string>
+<string name="cleaner_result_localized">Dihapus: %1$s · Ruang dikosongkan: %2$s · Gagal atau berubah: %3$s</string>
+<string name="about_localized_notices">Komponen pihak ketiga tetap tunduk pada lisensi masing-masing. Pemberitahuan asli merupakan tahap pemeriksaan audit, bukan hasil peninjauan lisensi yang selesai. Buka dokumen asli untuk membaca pemberitahuan sumber dan ketentuan lisensi.</string>
+<string name="about_open_original">Buka dokumen asli</string>
+<string name="about_localized_privacy">Berkas yang dipindai, hash, nama paket, dan hasil tetap berada di perangkat ini. Metadata audit lokal serta salinan karantina memakai penyimpanan privat terenkripsi. Pembaruan definisi bertanda tangan menghubungi layanan rilis proyek ini; umpan terpisah hanya menghubungi alamat yang dikonfigurasi setelah Anda menyetujuinya. Pemantauan folder hanya menggunakan folder pilihan Anda dan dapat dihentikan. Izin Android tetap berada dalam kendali Anda. Versi ini tidak berisi iklan, pemindaian awan, atau layanan reputasi tautan.</string>
+<string name="coverage_local_title">Definisi pengujian lokal</string>
+<string name="coverage_local_body">Definisi lama yang disertakan hanya memuat penanda uji antivirus yang tidak berbahaya. Definisi tersebut tidak melindungi terhadap malware di dunia nyata.</string>
+<string name="coverage_signed_title">Basis data hash bertanda tangan</string>
+<string name="coverage_signed_body">Pencocokan hash secara tepat memerlukan kunci penandatanganan tepercaya dan basis data bertanda tangan yang telah diterima. Basis data produksi tidak disertakan.</string>
+<string name="coverage_static_title">Analisis statis aplikasi</string>
+<string name="coverage_static_body">Analisis paket dengan batasan menghasilkan temuan sebagai bahan pertimbangan. Satu temuan saja tidak membuktikan malware; daftar penanda tangan berbahaya yang diketahui dinonaktifkan.</string>
+<string name="coverage_permissions_title">Izin dan manifes</string>
+<string name="coverage_permissions_body">Gabungan izin dan deklarasi paket yang terlihat membantu peninjauan manual. Keduanya bukan klasifikasi berdasarkan model terlatih.</string>
+<string name="coverage_integrity_title">Indikator integritas perangkat</string>
+<string name="coverage_integrity_body">Akses root, kait, properti build, penerapan keamanan, debugger, dan emulator diperiksa dengan heuristik lokal, bukan melalui pengesahan.</string>
+<string name="coverage_bloom_title">Indeks hash probabilistik</string>
+<string name="coverage_bloom_body">Indeks probabilistik terverifikasi yang tidak kosong beserta manifesnya tidak disertakan. Lapisan opsional ini tidak tersedia.</string>
+<string name="coverage_rules_title">Tanda tangan kode bawaan</string>
+<string name="coverage_rules_body">Aturan bawaan yang telah divalidasi memeriksa sekumpulan pola kode literal terbatas. Kecocokan hanya bersifat saran dan tidak mengonfirmasi malware.</string>
+<string name="coverage_rules_unavailable">Aturan bawaan tidak termuat atau tidak lulus validasi. Tidak ada klaim bahwa pemindaian tanda tangan kode dilakukan.</string>
+<string name="coverage_model_title">Model klasifikasi izin</string>
+<string name="coverage_model_body">Tidak ada model klasifikasi terlatih, tervalidasi, dan dapat didistribusikan yang disertakan. Pembelajaran mesin dinonaktifkan.</string>
+<string name="coverage_signer_title">Pengesahan penanda tangan luring</string>
+<string name="coverage_signer_body">Sidik jari sertifikat penandatanganan yang diharapkan dan ditetapkan secara independen belum dikonfigurasi.</string>
+<string name="coverage_feed_title">Verifikasi umpan bertanda tangan</string>
+<string name="coverage_feed_body">Verifikasi tanda tangan terpisah dan perlindungan dari kembali ke versi lama memerlukan kunci tepercaya pada waktu build serta umpan bertanda tangan yang dikonfigurasi.</string>
+<string name="hash_status_active">Basis data hash lokal bertanda tangan aktif.</string>
+<string name="hash_status_missing">Pencocokan hash dinonaktifkan sampai basis data bertanda tangan diterima.</string>
+<string name="hash_status_key">Pencocokan hash dinonaktifkan karena kunci penandatanganan tepercaya tidak tersedia.</string>
+<string name="hash_status_invalid">Definisi tersimpan gagal dalam pemeriksaan integritas, versi, atau format. Pencocokan hash tetap dinonaktifkan.</string>
+<string name="hash_status_activation">Aktivasi basis data tidak selesai. Pencocokan hash tetap dinonaktifkan.</string>
+<string name="finding_confidence">%1$s · Tingkat keyakinan: %2$d%%</string>
+<string name="finding_exported">Komponen yang diekspor tidak memiliki batasan izin yang terlihat dalam manifes. Pemeriksaan pada tingkat kode mungkin tetap ada.</string>
+<string name="finding_admin">Aplikasi mendeklarasikan penerima administrasi perangkat. Kemampuan sensitif ini bukan bukti penyalahgunaan.</string>
+<string name="finding_accessibility">Aplikasi mendeklarasikan layanan aksesibilitas. Aplikasi bantuan yang sah mungkin memerlukan akses ini.</string>
+<string name="finding_overlay">Aplikasi meminta izin tampilan di atas aplikasi lain. Ini bisa sah, tetapi juga dapat menutupi layar lain.</string>
+<string name="finding_combined">Aksesibilitas digabungkan dengan tampilan di atas aplikasi, pesan teks, atau akses riwayat panggilan. Tinjau tujuan aplikasi.</string>
+<string name="finding_sms_calls">Aplikasi meminta izin pesan teks dan riwayat panggilan sekaligus.</string>
+<string name="finding_sms_network">Akses pesan teks digabungkan dengan akses internet. Diperlukan peninjauan sesuai konteks.</string>
+<string name="finding_signer">Metadata sertifikat penandatanganan hilang atau tidak dapat dibaca.</string>
+<string name="finding_archive">Kontainer paket tidak dapat diperiksa sepenuhnya. Analisis statis tidak lengkap.</string>
+<string name="finding_packer">Jalur paket menyerupai alat pengemasan atau perlindungan yang dikenal. Aplikasi sah juga dapat memakai alat tersebut.</string>
+<string name="finding_dex_header">Header kode memiliki kolom format atau ukuran yang tidak konsisten. Ini tidak membuktikan adanya malware.</string>
+<string name="finding_dex_short">Entri kode lebih pendek daripada header yang sah dan tidak dapat diperiksa sepenuhnya.</string>
+<string name="finding_entropy">Sampel kode memiliki entropi byte yang tinggi. Enkripsi, pengemasan, atau konten terkompresi yang tidak berbahaya dapat menjelaskannya.</string>
+<string name="finding_api">Referensi statis yang diharapkan untuk izin yang diminta tidak ditemukan. Refleksi, pustaka, atau kode yang dimuat dinamis dapat menjadi penyebabnya.</string>
+<string name="finding_rules">Ditemukan kecocokan dengan tanda tangan kode bawaan yang terbatas. Ini merupakan petunjuk, bukan bukti malware.</string>
+<string name="finding_other">Indikator lokal tambahan memerlukan peninjauan manual. Indikator ini tidak memastikan adanya malware.</string>
+<string name="integrity_manager">Pengelola akses root atau pengaitan terlihat: %1$s</string>
+<string name="integrity_test_keys">Build perangkat menggunakan kunci penandatanganan pengujian.</string>
+<string name="integrity_debug_build">Properti build menunjukkan sistem yang dapat di-debug atau bukan untuk produksi.</string>
+<string name="integrity_selinux">Status lokal yang terbaca menyatakan penerapan keamanan wajib sedang nonaktif.</string>
+<string name="integrity_debugger">Debugger terhubung ke proses ini.</string>
+<string name="integrity_emulator">Properti build menyerupai emulator atau perangkat pengujian.</string>
+<string name="audit_scan_pending">Pemasangan dicatat. Analisis lokal menunggu.</string>
+<string name="audit_scan_complete">Analisis lokal selesai tanpa kecocokan tanda tangan yang terkonfirmasi. Ini bukan jaminan keamanan.</string>
+<string name="audit_scan_unavailable">Paket tidak terlihat ketika analisis berjalan.</string>
+<string name="audit_scan_threat">Ditemukan kecocokan tepat dengan tanda tangan ancaman lokal.</string>
+<string name="audit_scan_review">Indikator lokal memerlukan peninjauan; indikator ini tidak mengonfirmasi malware.</string>
+<string name="audit_source_recorded">Sumber pemasangan dicatat.</string>
+<string name="audit_uninstall_requested">Konfirmasi pencopotan Android telah diminta.</string>
+<string name="audit_uninstall_success">Android melaporkan pencopotan berhasil.</string>
+<string name="audit_uninstall_failed">Android tidak dapat menyelesaikan permintaan pencopotan.</string>
+<string name="severity_test">Penanda pengujian tidak berbahaya</string>
+<string name="severity_low">Keparahan rendah</string>
+<string name="severity_medium">Keparahan sedang</string>
+<string name="severity_high">Keparahan tinggi</string>
+<string name="severity_critical">Keparahan kritis</string>
+<string name="severity_unknown">Keparahan tidak ditentukan</string>
+<plurals name="l10n_scanned_apps"><item quantity="other">%1$d aplikasi dipindai</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="other">%1$d berkas dipindai</item></plurals>
+<plurals name="l10n_threats"><item quantity="other">%1$d ancaman ditemukan</item></plurals>
+<plurals name="l10n_review"><item quantity="other">%1$d hasil perlu ditinjau</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="other">%1$d item tidak dapat dipindai</item></plurals>
+<plurals name="l10n_no_match"><item quantity="other">%1$d hasil tanpa kecocokan lokal</item></plurals>
+<plurals name="l10n_apps"><item quantity="other">%1$d aplikasi</item></plurals>
+<plurals name="l10n_files"><item quantity="other">%1$d berkas</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="other">%1$d aplikasi non-sistem memiliki akses berisiko tinggi.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="other">%1$d perubahan teramati menunggu pemberitahuan.</item></plurals>
+<plurals name="l10n_rules"><item quantity="other">Cakupan terbatas · %1$d aturan bawaan</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="other">Pemindaian terakhir: %1$d kecocokan kode sebagai petunjuk.</item></plurals>
+<plurals name="l10n_imported"><item quantity="other">%1$d tanda tangan valid diimpor ke penyimpanan lokal.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="other">%1$d bita</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="other">Terdapat %1$d indikator sistem berkas terkait root.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="other">Terdapat %1$d indikator pengaitan.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="other">%1$d aplikasi diaktifkan</item></plurals>
+<plurals name="l10n_indicators"><item quantity="other">%1$d indikator</item></plurals>
+<plurals name="l10n_progress"><item quantity="other">Memeriksa %1$d dari %2$d aplikasi</item></plurals>
+</resources>
