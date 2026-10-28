@@ -560,5 +560,108 @@
 <string name="locale_th">ไทย</string>
 <string name="locale_uk">Українська</string>
 <string name="locale_uz">O‘zbekcha</string>
+<string name="format_label_value">%1$s: %2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s – %2$s</string>
+<string name="format_version">%1$s · ಆವೃತ್ತಿ %2$s (%3$s)</string>
+<string name="format_package_version">%1$s · ಆವೃತ್ತಿ %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">ಮಾಹಿತಿ ಮೂಲದ ಸುರಕ್ಷಿತ ವಿಳಾಸ ನಮೂದಿಸಿ</string>
+<string name="storage_size_unavailable">ಗಾತ್ರ ಲಭ್ಯವಿಲ್ಲ</string>
+<string name="blocked_reason_hash">ಸ್ಥಳೀಯ ಬೆದರಿಕೆ ಸಹಿಯೊಂದಿಗೆ ಹೊಂದಾಣಿಕೆ ಕಂಡುಬಂದಿದೆ.</string>
+<string name="blocked_reason_action">ವ್ಯವಸ್ಥೆಯ ಅವಕಾಶಕ್ಕೆ ಅನುಗುಣವಾಗಿ ಸ್ಥಳೀಯ ಭದ್ರತಾ ಕ್ರಮವನ್ನು ಪ್ರಯತ್ನಿಸಲಾಗಿದೆ.</string>
+<string name="signed_import_success">ಸಹಿ ಮಾಡಿದ ದತ್ತಸಂಚಯ ಸ್ವೀಕರಿಸಲಾಗಿದೆ: ಆವೃತ್ತಿ %1$s · %2$s.</string>
+<string name="signed_import_failed">ಸಹಿ ಮಾಡಿದ ದತ್ತಸಂಚಯ ಸಕ್ರಿಯವಾಗಲಿಲ್ಲ. ಅದರ ಸಹಿ, ಆವೃತ್ತಿ ಮತ್ತು ಕಡತ ಸ್ವರೂಪ ಪರಿಶೀಲಿಸಿ.</string>
+<string name="rule_import_pending">ಪರಿಶೀಲನೆಗಾಗಿ %1$s ಉಳಿಸಲಾಗಿದೆ. ಆಮದು ಮಾಡಿದ ನಿಯಮಗಳು ನಿಷ್ಕ್ರಿಯವಾಗಿಯೇ ಇರುತ್ತವೆ; ಈ ಕಡತವನ್ನು ಚಲಾಯಿಸಲಾಗುವುದಿಲ್ಲ.</string>
+<string name="rule_import_failed">ನಿಯಮಗಳನ್ನು ಆಮದು ಮಾಡಲು ಆಗಲಿಲ್ಲ. ಆಮದು ಮಾಡಿದ ನಿಯಮಗಳು ನಿಷ್ಕ್ರಿಯವಾಗಿಯೇ ಇರುತ್ತವೆ.</string>
+<string name="restore_result_localized">%1$s ನ ಪ್ರತಿಯನ್ನು ಮರುಸ್ಥಾಪಿಸಲಾಗಿದೆ (%2$s). ಮೂಲ ಪ್ರತಿ ಪ್ರತ್ಯೇಕ ಸಂಗ್ರಹದಲ್ಲಿಯೇ ಉಳಿದಿದೆ.</string>
+<string name="cleaner_confirm_localized">%1$s (%2$s) ಶಾಶ್ವತವಾಗಿ ಅಳಿಸಬೇಕೇ? ಇದನ್ನು ಹಿಂತಿರುಗಿಸಲಾಗುವುದಿಲ್ಲ. SafeMobile ಹೆಸರುಗಳು ಮತ್ತು ವಿವರಾಂಶಗಳನ್ನು ಮರುಪರಿಶೀಲಿಸುತ್ತದೆ.</string>
+<string name="cleaner_result_localized">ಅಳಿಸಿದವು: %1$s · ಮುಕ್ತವಾದ ಜಾಗ: %2$s · ವಿಫಲವಾದವು ಅಥವಾ ಬದಲಾದವು: %3$s</string>
+<string name="about_localized_notices">ಮೂರನೇ ಪಕ್ಷದ ಘಟಕಗಳಿಗೆ ಅವುಗಳ ಸ್ವಂತ ಪರವಾನಗಿಗಳೇ ಅನ್ವಯಿಸುತ್ತವೆ. ಮೂಲ ಸೂಚನೆಗಳು ಲೆಕ್ಕಪರಿಶೋಧನೆಯ ಮಧ್ಯಂತರ ಪರಿಶೀಲನೆ; ಪೂರ್ಣ ಪರವಾನಗಿ ಪರಿಶೀಲನೆಯಲ್ಲ. ಮೂಲ ಸೂಚನೆಗಳು ಮತ್ತು ಪರವಾನಗಿ ಷರತ್ತುಗಳಿಗಾಗಿ ಮೂಲ ದಾಖಲೆಗಳನ್ನು ತೆರೆಯಿರಿ.</string>
+<string name="about_open_original">ಮೂಲ ದಾಖಲೆಗಳನ್ನು ತೆರೆಯಿರಿ</string>
+<string name="about_localized_privacy">ಪರಿಶೀಲಿಸಿದ ಕಡತಗಳು, ಹ್ಯಾಶ್‌ಗಳು, ಪ್ಯಾಕೇಜ್ ಹೆಸರುಗಳು ಮತ್ತು ಫಲಿತಾಂಶಗಳು ಈ ಸಾಧನದಲ್ಲಿಯೇ ಉಳಿಯುತ್ತವೆ. ಪರಿಶೋಧನಾ ವಿವರಾಂಶಗಳು ಮತ್ತು ಪ್ರತ್ಯೇಕಿಸಿದ ಪ್ರತಿಗಳು ಗೂಢಲಿಪೀಕರಿಸಿದ ಖಾಸಗಿ ಸಂಗ್ರಹದಲ್ಲಿರುತ್ತವೆ. ಸಹಿ ಮಾಡಿದ ನವೀಕರಣಗಳು ಈ ಯೋಜನೆಯ ಬಿಡುಗಡೆ ಸೇವೆಯನ್ನು ಸಂಪರ್ಕಿಸುತ್ತವೆ; ಪ್ರತ್ಯೇಕ ಮಾಹಿತಿ ಮೂಲವು ನಿಮ್ಮ ಒಪ್ಪಿಗೆಯ ನಂತರವೇ ನಿಗದಿತ ವಿಳಾಸವನ್ನು ಸಂಪರ್ಕಿಸುತ್ತದೆ. ನೀವು ಆಯ್ಕೆ ಮಾಡಿದ ಕಡತಕೋಶಗಳ ಮೇಲ್ವಿಚಾರಣೆಯನ್ನು ನಿಲ್ಲಿಸಬಹುದು. Android ಅನುಮತಿಗಳು ನಿಮ್ಮ ನಿಯಂತ್ರಣದಲ್ಲಿವೆ. ಈ ಆವೃತ್ತಿಯಲ್ಲಿ ಜಾಹೀರಾತು, ಮೇಘಾಧಾರಿತ ಪರಿಶೀಲನೆ ಅಥವಾ ಕೊಂಡಿಯ ಖ್ಯಾತಿ ಸೇವೆಯಿಲ್ಲ.</string>
+<string name="coverage_local_title">ಸ್ಥಳೀಯ ಪರೀಕ್ಷಾ ವ್ಯಾಖ್ಯಾನಗಳು</string>
+<string name="coverage_local_body">ಒಳಗೊಂಡಿರುವ ಹಳೆಯ ವ್ಯಾಖ್ಯಾನಗಳಲ್ಲಿ ಹಾನಿರಹಿತ ವೈರಸ್‌ರೋಧಕ ಪರೀಕ್ಷಾ ಗುರುತು ಮಾತ್ರ ಇದೆ. ಅವು ನೈಜ ದುರುದ್ದೇಶದ ತಂತ್ರಾಂಶದಿಂದ ರಕ್ಷಣೆ ನೀಡುವುದಿಲ್ಲ.</string>
+<string name="coverage_signed_title">ಸಹಿ ಮಾಡಿದ ಹ್ಯಾಶ್ ದತ್ತಸಂಚಯ</string>
+<string name="coverage_signed_body">ನಿಖರ ಹ್ಯಾಶ್ ಹೊಂದಾಣಿಕೆಗೆ ವಿಶ್ವಾಸಾರ್ಹ ಸಹಿ ಕೀಲಿ ಮತ್ತು ಸ್ವೀಕೃತ ಸಹಿ ಮಾಡಿದ ದತ್ತಸಂಚಯ ಬೇಕು. ನೈಜ ಬಳಕೆಯ ದತ್ತಸಂಚಯವನ್ನು ಒಳಗೊಂಡಿಲ್ಲ.</string>
+<string name="coverage_static_title">ಅನ್ವಯದ ಸ್ಥಿರ ವಿಶ್ಲೇಷಣೆ</string>
+<string name="coverage_static_body">ಮಿತಿಯೊಳಗಿನ ಪ್ಯಾಕೇಜ್ ವಿಶ್ಲೇಷಣೆ ಸಲಹಾತ್ಮಕ ಸುಳಿವುಗಳನ್ನು ನೀಡುತ್ತದೆ. ಒಂದೇ ಸುಳಿವು ದುರುದ್ದೇಶದ ತಂತ್ರಾಂಶದ ಪುರಾವೆಯಲ್ಲ; ಹಾನಿಕಾರಕ ಸಹಿದಾರರ ಪಟ್ಟಿಗಳು ನಿಷ್ಕ್ರಿಯವಾಗಿವೆ.</string>
+<string name="coverage_permissions_title">ಅನುಮತಿಗಳು ಮತ್ತು ಘೋಷಣಾಪತ್ರ</string>
+<string name="coverage_permissions_body">ಅನುಮತಿಗಳ ಸಂಯೋಜನೆ ಮತ್ತು ಕಾಣುವ ಪ್ಯಾಕೇಜ್ ಘೋಷಣೆಗಳು ಕೈಯಾರೆ ಪರಿಶೀಲನೆಗೆ ಸಹಾಯಕ. ಇದು ತರಬೇತಿ ಪಡೆದ ವರ್ಗೀಕರಣವಲ್ಲ.</string>
+<string name="coverage_integrity_title">ಸಾಧನದ ಸಮಗ್ರತೆಯ ಸೂಚಕಗಳು</string>
+<string name="coverage_integrity_body">ಮೂಲಾಧಿಕಾರ ಪ್ರವೇಶ, ಕಾರ್ಯ ತಡೆಹಿಡಿಯುವಿಕೆ, ವ್ಯವಸ್ಥೆಯ ಗುಣಗಳು, ಭದ್ರತಾ ಜಾರಿ, ದೋಷಶೋಧಕಗಳು ಮತ್ತು ಅನುಕರಣಿಗಳನ್ನು ಸ್ಥಳೀಯ ಅಂದಾಜುಗಳಿಂದ ಪರಿಶೀಲಿಸಲಾಗುತ್ತದೆ; ಇದು ದೃಢೀಕರಣವಲ್ಲ.</string>
+<string name="coverage_bloom_title">ಸಂಭಾವ್ಯ ಹ್ಯಾಶ್ ಸೂಚ್ಯಂಕ</string>
+<string name="coverage_bloom_body">ಪರಿಶೀಲಿಸಿದ, ಖಾಲಿಯಲ್ಲದ ಸಂಭಾವ್ಯ ಸೂಚ್ಯಂಕ ಮತ್ತು ಅದರ ಘೋಷಣಾಪತ್ರ ಒಳಗೊಂಡಿಲ್ಲ. ಈ ಐಚ್ಛಿಕ ಹಂತ ಲಭ್ಯವಿಲ್ಲ.</string>
+<string name="coverage_rules_title">ಒಳಗೊಂಡಿರುವ ಸಂಕೇತ ಸಹಿಗಳು</string>
+<string name="coverage_rules_body">ಪರಿಶೀಲಿಸಿದ ಅಂತರ್ನಿರ್ಮಿತ ನಿಯಮಗಳು ಸೀಮಿತ ಸಂಕೇತ ಮಾದರಿಗಳನ್ನು ಪರಿಶೀಲಿಸುತ್ತವೆ. ಹೊಂದಾಣಿಕೆಗಳು ಸಲಹಾತ್ಮಕ; ದುರುದ್ದೇಶದ ತಂತ್ರಾಂಶವನ್ನು ಖಚಿತಪಡಿಸುವುದಿಲ್ಲ.</string>
+<string name="coverage_rules_unavailable">ಅಂತರ್ನಿರ್ಮಿತ ನಿಯಮಗಳು ಲೋಡ್ ಆಗಿಲ್ಲ ಅಥವಾ ಪರಿಶೀಲನೆಯಲ್ಲಿ ಉತ್ತೀರ್ಣವಾಗಿಲ್ಲ. ಸಂಕೇತ ಸಹಿ ಪರಿಶೀಲನೆ ನಡೆದಿದೆಯೆಂದು ಹೇಳಲಾಗುವುದಿಲ್ಲ.</string>
+<string name="coverage_model_title">ಅನುಮತಿ ವರ್ಗೀಕರಣ ಮಾದರಿ</string>
+<string name="coverage_model_body">ತರಬೇತಿ ಪಡೆದ, ಪರಿಶೀಲಿಸಿದ ಮತ್ತು ವಿತರಿಸಬಹುದಾದ ಮಾದರಿ ಒಳಗೊಂಡಿಲ್ಲ. ಯಂತ್ರ ಕಲಿಕೆ ನಿಷ್ಕ್ರಿಯವಾಗಿದೆ.</string>
+<string name="coverage_signer_title">ಸಂಪರ್ಕರಹಿತ ಸಹಿದಾರ ದೃಢೀಕರಣ</string>
+<string name="coverage_signer_body">ಸಹಿ ಪ್ರಮಾಣಪತ್ರದ ಸ್ವತಂತ್ರವಾಗಿ ನಿಗದಿಪಡಿಸಿದ ನಿರೀಕ್ಷಿತ ಗುರುತು ಸಂರಚಿಸಲಾಗಿಲ್ಲ.</string>
+<string name="coverage_feed_title">ಸಹಿ ಮಾಡಿದ ಮೂಲದ ಪರಿಶೀಲನೆ</string>
+<string name="coverage_feed_body">ಪ್ರತ್ಯೇಕ ಸಹಿ ಪರಿಶೀಲನೆ ಮತ್ತು ಹಿಂದಿನ ಆವೃತ್ತಿಗೆ ಹಿಂತಿರುಗುವುದನ್ನು ತಡೆಯಲು ನಿರ್ಮಾಣದಲ್ಲಿ ಸೇರಿಸಿದ ವಿಶ್ವಾಸಾರ್ಹ ಕೀಲಿ ಮತ್ತು ಸಹಿ ಮಾಡಿದ ಮಾಹಿತಿ ಮೂಲ ಬೇಕು.</string>
+<string name="hash_status_active">ಸಹಿ ಮಾಡಿದ ಸ್ಥಳೀಯ ಹ್ಯಾಶ್ ದತ್ತಸಂಚಯ ಸಕ್ರಿಯವಾಗಿದೆ.</string>
+<string name="hash_status_missing">ಸಹಿ ಮಾಡಿದ ದತ್ತಸಂಚಯ ಸ್ವೀಕರಿಸುವವರೆಗೆ ಹ್ಯಾಶ್ ಹೊಂದಾಣಿಕೆ ನಿಷ್ಕ್ರಿಯವಾಗಿದೆ.</string>
+<string name="hash_status_key">ವಿಶ್ವಾಸಾರ್ಹ ಸಹಿ ಕೀಲಿ ಲಭ್ಯವಿಲ್ಲದ ಕಾರಣ ಹ್ಯಾಶ್ ಹೊಂದಾಣಿಕೆ ನಿಷ್ಕ್ರಿಯವಾಗಿದೆ.</string>
+<string name="hash_status_invalid">ಉಳಿಸಿದ ವ್ಯಾಖ್ಯಾನಗಳು ಸಮಗ್ರತೆ, ಆವೃತ್ತಿ ಅಥವಾ ಸ್ವರೂಪ ಪರಿಶೀಲನೆಯಲ್ಲಿ ವಿಫಲವಾಗಿವೆ. ಹ್ಯಾಶ್ ಹೊಂದಾಣಿಕೆ ನಿಷ್ಕ್ರಿಯವಾಗಿರುತ್ತದೆ.</string>
+<string name="hash_status_activation">ದತ್ತಸಂಚಯ ಸಕ್ರಿಯಗೊಳಿಸುವಿಕೆ ಪೂರ್ಣಗೊಂಡಿಲ್ಲ. ಹ್ಯಾಶ್ ಹೊಂದಾಣಿಕೆ ನಿಷ್ಕ್ರಿಯವಾಗಿರುತ್ತದೆ.</string>
+<string name="finding_confidence">%1$s · ವಿಶ್ವಾಸ ಮಟ್ಟ: %2$d%%</string>
+<string name="finding_exported">ಹೊರಪ್ರವೇಶ ನೀಡಿದ ಘಟಕಕ್ಕೆ ಘೋಷಣಾಪತ್ರದಲ್ಲಿ ಅನುಮತಿ ರಕ್ಷಣೆ ಕಾಣುವುದಿಲ್ಲ. ಸಂಕೇತದೊಳಗೆ ಪರಿಶೀಲನೆಗಳು ಇರಬಹುದು.</string>
+<string name="finding_admin">ಅನ್ವಯವು ಸಾಧನ ನಿರ್ವಹಣಾ ಸ್ವೀಕರಕವನ್ನು ಘೋಷಿಸುತ್ತದೆ. ಈ ಸೂಕ್ಷ್ಮ ಸಾಮರ್ಥ್ಯ ದುರುಪಯೋಗದ ಪುರಾವೆಯಲ್ಲ.</string>
+<string name="finding_accessibility">ಅನ್ವಯವು ಪ್ರವೇಶಸೌಲಭ್ಯ ಸೇವೆಯನ್ನು ಘೋಷಿಸುತ್ತದೆ. ನ್ಯಾಯಸಮ್ಮತ ಸಹಾಯಕ ಅನ್ವಯಗಳಿಗೆ ಈ ಪ್ರವೇಶ ಬೇಕಾಗಬಹುದು.</string>
+<string name="finding_overlay">ಅನ್ವಯವು ಇತರ ಪರದೆಗಳ ಮೇಲೆ ತೋರಿಸುವ ಪ್ರವೇಶ ಕೇಳುತ್ತದೆ. ಇದು ನ್ಯಾಯಸಮ್ಮತವಾಗಿರಬಹುದು, ಆದರೆ ಇತರ ಪರದೆಗಳನ್ನು ಮರೆಮಾಡಬಹುದು.</string>
+<string name="finding_combined">ಪ್ರವೇಶಸೌಲಭ್ಯದೊಂದಿಗೆ ಮೇಲ್ಹೊದಿಕೆ, ಪಠ್ಯ ಸಂದೇಶ ಅಥವಾ ಕರೆ ಇತಿಹಾಸ ಪ್ರವೇಶವಿದೆ. ಅನ್ವಯದ ಉದ್ದೇಶ ಪರಿಶೀಲಿಸಿ.</string>
+<string name="finding_sms_calls">ಅನ್ವಯವು ಪಠ್ಯ ಸಂದೇಶ ಮತ್ತು ಕರೆ ಇತಿಹಾಸ ಎರಡರ ಅನುಮತಿಗಳನ್ನು ಕೇಳುತ್ತದೆ.</string>
+<string name="finding_sms_network">ಪಠ್ಯ ಸಂದೇಶ ಪ್ರವೇಶದೊಂದಿಗೆ ಅಂತರಜಾಲ ಪ್ರವೇಶವಿದೆ. ಬಳಕೆಯ ಸಂದರ್ಭವನ್ನು ಪರಿಶೀಲಿಸಬೇಕು.</string>
+<string name="finding_signer">ಸಹಿ ಪ್ರಮಾಣಪತ್ರದ ವಿವರಾಂಶಗಳು ಇಲ್ಲ ಅಥವಾ ಓದಲು ಆಗುವುದಿಲ್ಲ.</string>
+<string name="finding_archive">ಪ್ಯಾಕೇಜ್ ಧಾರಕವನ್ನು ಸಂಪೂರ್ಣ ಪರಿಶೀಲಿಸಲಾಗಲಿಲ್ಲ. ಸ್ಥಿರ ವಿಶ್ಲೇಷಣೆ ಅಪೂರ್ಣವಾಗಿದೆ.</string>
+<string name="finding_packer">ಪ್ಯಾಕೇಜ್ ಪಥವು ಪರಿಚಿತ ಪ್ಯಾಕಿಂಗ್ ಅಥವಾ ರಕ್ಷಣಾ ಸಾಧನವನ್ನು ಹೋಲುತ್ತದೆ. ನ್ಯಾಯಸಮ್ಮತ ಅನ್ವಯಗಳೂ ಇವುಗಳನ್ನು ಬಳಸಬಹುದು.</string>
+<string name="finding_dex_header">ಸಂಕೇತ ಶೀರ್ಷಿಕೆಯಲ್ಲಿ ಸ್ವರೂಪ ಅಥವಾ ಗಾತ್ರದ ಅಸಂಗತತೆ ಇದೆ. ಇದು ದುರುದ್ದೇಶದ ತಂತ್ರಾಂಶದ ಪುರಾವೆಯಲ್ಲ.</string>
+<string name="finding_dex_short">ಸಂಕೇತ ನಮೂದು ಮಾನ್ಯ ಶೀರ್ಷಿಕೆಗಿಂತ ಚಿಕ್ಕದಿದ್ದು ಸಂಪೂರ್ಣ ಪರಿಶೀಲಿಸಲಾಗಲಿಲ್ಲ.</string>
+<string name="finding_entropy">ಸಂಕೇತ ಮಾದರಿಯಲ್ಲಿ ಬೈಟ್ ಅನಿಶ್ಚಿತತೆ ಹೆಚ್ಚಿದೆ. ಗೂಢಲಿಪೀಕರಣ, ಪ್ಯಾಕಿಂಗ್ ಅಥವಾ ಹಾನಿರಹಿತ ಸಂಕುಚಿತ ವಿಷಯ ಕಾರಣವಾಗಿರಬಹುದು.</string>
+<string name="finding_api">ಕೇಳಿದ ಅನುಮತಿಗೆ ನಿರೀಕ್ಷಿತ ಸ್ಥಿರ ಉಲ್ಲೇಖ ಸಿಗಲಿಲ್ಲ. ಪ್ರತಿಬಿಂಬನ, ಸಂಗ್ರಹಾಲಯಗಳು ಅಥವಾ ಕ್ರಿಯಾತ್ಮಕವಾಗಿ ಲೋಡ್ ಆಗುವ ಸಂಕೇತ ಇದಕ್ಕೆ ಕಾರಣವಾಗಿರಬಹುದು.</string>
+<string name="finding_rules">ಸೀಮಿತ ಅಂತರ್ನಿರ್ಮಿತ ಸಂಕೇತ ಸಹಿಗೆ ಹೊಂದಾಣಿಕೆ ಸಿಕ್ಕಿದೆ. ಇದು ಸಲಹಾತ್ಮಕ ಸುಳಿವು; ದುರುದ್ದೇಶದ ತಂತ್ರಾಂಶದ ಪುರಾವೆಯಲ್ಲ.</string>
+<string name="finding_other">ಹೆಚ್ಚುವರಿ ಸ್ಥಳೀಯ ಸೂಚಕಗಳನ್ನು ಕೈಯಾರೆ ಪರಿಶೀಲಿಸಬೇಕು. ಅವು ದುರುದ್ದೇಶದ ತಂತ್ರಾಂಶವನ್ನು ಖಚಿತಪಡಿಸುವುದಿಲ್ಲ.</string>
+<string name="integrity_manager">ಮೂಲಾಧಿಕಾರ ಅಥವಾ ಕಾರ್ಯ ತಡೆಹಿಡಿಯುವ ನಿರ್ವಾಹಕ ಕಾಣುತ್ತದೆ: %1$s</string>
+<string name="integrity_test_keys">ಸಾಧನದ ವ್ಯವಸ್ಥೆ ಪರೀಕ್ಷಾ ಸಹಿ ಕೀಲಿಗಳನ್ನು ಬಳಸುತ್ತದೆ.</string>
+<string name="integrity_debug_build">ವ್ಯವಸ್ಥೆಯ ಗುಣಗಳು ದೋಷಶೋಧನೆಗೆ ಅವಕಾಶವಿರುವ ಅಥವಾ ನೈಜ ಬಳಕೆಗೆ ಸಿದ್ಧವಲ್ಲದ ವ್ಯವಸ್ಥೆಯನ್ನು ಸೂಚಿಸುತ್ತವೆ.</string>
+<string name="integrity_selinux">ಓದಬಹುದಾದ ಸ್ಥಳೀಯ ಸ್ಥಿತಿಯ ಪ್ರಕಾರ ಕಡ್ಡಾಯ ಭದ್ರತಾ ಜಾರಿ ನಿಷ್ಕ್ರಿಯವಾಗಿದೆ.</string>
+<string name="integrity_debugger">ಈ ಪ್ರಕ್ರಿಯೆಗೆ ದೋಷಶೋಧಕ ಜೋಡಿಸಲಾಗಿದೆ.</string>
+<string name="integrity_emulator">ವ್ಯವಸ್ಥೆಯ ಗುಣಗಳು ಅನುಕರಣೆ ಅಥವಾ ಪರೀಕ್ಷಾ ಸಾಧನವನ್ನು ಹೋಲುತ್ತವೆ.</string>
+<string name="audit_scan_pending">ಸ್ಥಾಪನೆ ದಾಖಲಿಸಲಾಗಿದೆ. ಸ್ಥಳೀಯ ವಿಶ್ಲೇಷಣೆ ಬಾಕಿಯಿದೆ.</string>
+<string name="audit_scan_complete">ದೃಢೀಕೃತ ಸಹಿ ಹೊಂದಾಣಿಕೆ ಇಲ್ಲದೆ ಸ್ಥಳೀಯ ವಿಶ್ಲೇಷಣೆ ಪೂರ್ಣಗೊಂಡಿದೆ. ಇದು ಸುರಕ್ಷತೆಯ ಖಾತರಿಯಲ್ಲ.</string>
+<string name="audit_scan_unavailable">ವಿಶ್ಲೇಷಣೆ ನಡೆದಾಗ ಪ್ಯಾಕೇಜ್ ಕಾಣಿಸಲಿಲ್ಲ.</string>
+<string name="audit_scan_threat">ಸ್ಥಳೀಯ ಬೆದರಿಕೆ ಸಹಿಗೆ ನಿಖರ ಹೊಂದಾಣಿಕೆ ಸಿಕ್ಕಿದೆ.</string>
+<string name="audit_scan_review">ಸ್ಥಳೀಯ ಸೂಚಕಗಳ ಪರಿಶೀಲನೆ ಬೇಕು; ಅವು ದುರುದ್ದೇಶದ ತಂತ್ರಾಂಶವನ್ನು ಖಚಿತಪಡಿಸುವುದಿಲ್ಲ.</string>
+<string name="audit_source_recorded">ಸ್ಥಾಪನೆಯ ಮೂಲ ದಾಖಲಿಸಲಾಗಿದೆ.</string>
+<string name="audit_uninstall_requested">Android ಅಸ್ಥಾಪನೆ ದೃಢೀಕರಣ ಕೇಳಲಾಗಿದೆ.</string>
+<string name="audit_uninstall_success">ಅಸ್ಥಾಪನೆ ಯಶಸ್ವಿಯಾಗಿದೆ ಎಂದು Android ತಿಳಿಸಿದೆ.</string>
+<string name="audit_uninstall_failed">ಅಸ್ಥಾಪನೆ ವಿನಂತಿಯನ್ನು ಪೂರ್ಣಗೊಳಿಸಲು Android ಗೆ ಆಗಲಿಲ್ಲ.</string>
+<string name="severity_test">ಹಾನಿರಹಿತ ಪರೀಕ್ಷಾ ಗುರುತು</string>
+<string name="severity_low">ಕಡಿಮೆ ತೀವ್ರತೆ</string>
+<string name="severity_medium">ಮಧ್ಯಮ ತೀವ್ರತೆ</string>
+<string name="severity_high">ಹೆಚ್ಚಿನ ತೀವ್ರತೆ</string>
+<string name="severity_critical">ಅತಿ ಗಂಭೀರ ತೀವ್ರತೆ</string>
+<string name="severity_unknown">ತೀವ್ರತೆ ನಿರ್ದಿಷ್ಟಪಡಿಸಿಲ್ಲ</string>
+<plurals name="l10n_scanned_apps"><item quantity="one">%1$d ಅನ್ವಯ ಪರಿಶೀಲಿಸಲಾಗಿದೆ</item><item quantity="other">%1$d ಅನ್ವಯಗಳನ್ನು ಪರಿಶೀಲಿಸಲಾಗಿದೆ</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="one">%1$d ಕಡತ ಪರಿಶೀಲಿಸಲಾಗಿದೆ</item><item quantity="other">%1$d ಕಡತಗಳನ್ನು ಪರಿಶೀಲಿಸಲಾಗಿದೆ</item></plurals>
+<plurals name="l10n_threats"><item quantity="one">%1$d ಬೆದರಿಕೆ ಕಂಡುಬಂದಿದೆ</item><item quantity="other">%1$d ಬೆದರಿಕೆಗಳು ಕಂಡುಬಂದಿವೆ</item></plurals>
+<plurals name="l10n_review"><item quantity="one">%1$d ಫಲಿತಾಂಶದ ಪರಿಶೀಲನೆ ಬೇಕು</item><item quantity="other">%1$d ಫಲಿತಾಂಶಗಳ ಪರಿಶೀಲನೆ ಬೇಕು</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="one">%1$d ಅಂಶವನ್ನು ಪರಿಶೀಲಿಸಲಾಗಲಿಲ್ಲ</item><item quantity="other">%1$d ಅಂಶಗಳನ್ನು ಪರಿಶೀಲಿಸಲಾಗಲಿಲ್ಲ</item></plurals>
+<plurals name="l10n_no_match"><item quantity="one">%1$d ಫಲಿತಾಂಶಕ್ಕೆ ಸ್ಥಳೀಯ ಹೊಂದಾಣಿಕೆ ಇಲ್ಲ</item><item quantity="other">%1$d ಫಲಿತಾಂಶಗಳಿಗೆ ಸ್ಥಳೀಯ ಹೊಂದಾಣಿಕೆ ಇಲ್ಲ</item></plurals>
+<plurals name="l10n_apps"><item quantity="one">%1$d ಅನ್ವಯ</item><item quantity="other">%1$d ಅನ್ವಯಗಳು</item></plurals>
+<plurals name="l10n_files"><item quantity="one">%1$d ಕಡತ</item><item quantity="other">%1$d ಕಡತಗಳು</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="one">%1$d ವ್ಯವಸ್ಥೇತರ ಅನ್ವಯಕ್ಕೆ ಹೆಚ್ಚಿನ ಅಪಾಯದ ಪ್ರವೇಶವಿದೆ.</item><item quantity="other">%1$d ವ್ಯವಸ್ಥೇತರ ಅನ್ವಯಗಳಿಗೆ ಹೆಚ್ಚಿನ ಅಪಾಯದ ಪ್ರವೇಶವಿದೆ.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="one">ಗಮನಿಸಿದ %1$d ಬದಲಾವಣೆ ಸೂಚನೆಗಾಗಿ ಕಾಯುತ್ತಿದೆ.</item><item quantity="other">ಗಮನಿಸಿದ %1$d ಬದಲಾವಣೆಗಳು ಸೂಚನೆಗಾಗಿ ಕಾಯುತ್ತಿವೆ.</item></plurals>
+<plurals name="l10n_rules"><item quantity="one">ಸೀಮಿತ ವ್ಯಾಪ್ತಿ · %1$d ಅಂತರ್ನಿರ್ಮಿತ ನಿಯಮ</item><item quantity="other">ಸೀಮಿತ ವ್ಯಾಪ್ತಿ · %1$d ಅಂತರ್ನಿರ್ಮಿತ ನಿಯಮಗಳು</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="one">ಇತ್ತೀಚಿನ ಪರಿಶೀಲನೆ: %1$d ಸಲಹಾತ್ಮಕ ಸಂಕೇತ ಹೊಂದಾಣಿಕೆ.</item><item quantity="other">ಇತ್ತೀಚಿನ ಪರಿಶೀಲನೆ: %1$d ಸಲಹಾತ್ಮಕ ಸಂಕೇತ ಹೊಂದಾಣಿಕೆಗಳು.</item></plurals>
+<plurals name="l10n_imported"><item quantity="one">%1$d ಮಾನ್ಯ ಸಹಿಯನ್ನು ಸ್ಥಳೀಯವಾಗಿ ಆಮದು ಮಾಡಲಾಗಿದೆ.</item><item quantity="other">%1$d ಮಾನ್ಯ ಸಹಿಗಳನ್ನು ಸ್ಥಳೀಯವಾಗಿ ಆಮದು ಮಾಡಲಾಗಿದೆ.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="one">%1$d ಬೈಟ್</item><item quantity="other">%1$d ಬೈಟ್‌ಗಳು</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="one">ಕಡತ ವ್ಯವಸ್ಥೆಯಲ್ಲಿ %1$d ಮೂಲಾಧಿಕಾರ ಸೂಚಕವಿದೆ.</item><item quantity="other">ಕಡತ ವ್ಯವಸ್ಥೆಯಲ್ಲಿ %1$d ಮೂಲಾಧಿಕಾರ ಸೂಚಕಗಳಿವೆ.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="one">%1$d ಕಾರ್ಯ ತಡೆಹಿಡಿಯುವ ಸೂಚಕವಿದೆ.</item><item quantity="other">%1$d ಕಾರ್ಯ ತಡೆಹಿಡಿಯುವ ಸೂಚಕಗಳಿವೆ.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="one">%1$d ಅನ್ವಯ ಸಕ್ರಿಯವಾಗಿದೆ</item><item quantity="other">%1$d ಅನ್ವಯಗಳು ಸಕ್ರಿಯವಾಗಿವೆ</item></plurals>
+<plurals name="l10n_indicators"><item quantity="one">%1$d ಸೂಚಕ</item><item quantity="other">%1$d ಸೂಚಕಗಳು</item></plurals>
+<plurals name="l10n_progress"><item quantity="one">%2$d ರಲ್ಲಿ %1$d ಅನ್ವಯ ಪರಿಶೀಲಿಸಲಾಗಿದೆ</item><item quantity="other">%2$d ರಲ್ಲಿ %1$d ಅನ್ವಯಗಳನ್ನು ಪರಿಶೀಲಿಸಲಾಗಿದೆ</item></plurals>
 </resources>
 

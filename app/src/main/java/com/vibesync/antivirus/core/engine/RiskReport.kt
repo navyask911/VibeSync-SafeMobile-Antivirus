@@ -6,7 +6,9 @@ data class RiskFinding(
     val ruleId: String,
     val severity: RiskSeverity,
     val evidence: String,
-    val confidence: Int
+    val confidence: Int,
+    /** Original component/file identifiers, kept distinct from explanatory UI copy. */
+    val details: List<String> = emptyList()
 ) {
     init {
         require(ruleId.isNotBlank())

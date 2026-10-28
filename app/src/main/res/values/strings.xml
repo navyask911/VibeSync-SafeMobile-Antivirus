@@ -540,4 +540,108 @@
 <string name="locale_th">ไทย</string>
 <string name="locale_uk">Українська</string>
 <string name="locale_uz">O‘zbekcha</string>
+<!-- v1.0.14: application-owned UI copy; identifiers and original filenames are data. -->
+<string name="format_label_value">%1$s: %2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s – %2$s</string>
+<string name="format_version">%1$s · Version %2$s (%3$s)</string>
+<string name="format_package_version">%1$s · Version %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">Enter a secure feed address</string>
+<string name="storage_size_unavailable">Size unavailable</string>
+<string name="blocked_reason_hash">A local threat signature matched.</string>
+<string name="blocked_reason_action">A best-effort local security action was attempted.</string>
+<string name="signed_import_success">Signed database accepted: version %1$s · %2$s.</string>
+<string name="signed_import_failed">The signed database was not activated. Check its signature, version and file format.</string>
+<string name="rule_import_pending">Saved %1$s for review. Imported rules remain disabled and this file will not be executed.</string>
+<string name="rule_import_failed">Rules could not be imported. Imported rules remain disabled.</string>
+<string name="restore_result_localized">Restored a copy of %1$s (%2$s). The quarantined original remains stored.</string>
+<string name="cleaner_confirm_localized">Permanently delete %1$s (%2$s)? This cannot be undone. SafeMobile will recheck names and metadata.</string>
+<string name="cleaner_result_localized">Deleted: %1$s · Space freed: %2$s · Failed or changed: %3$s</string>
+<string name="about_localized_notices">Third-party components retain their own licences. The original notices are an audit checkpoint, not a completed licence review. Open the original documents for the source notices and licence terms.</string>
+<string name="about_open_original">Open original documents</string>
+<string name="about_localized_privacy">Scan files, hashes, package names and results stay on this device. Local audit metadata and quarantine copies use encrypted private storage. Signed definition updates contact this project’s release service; a separate feed contacts its configured endpoint only after opt-in. Folder monitoring uses folders you choose and can be stopped. Android permissions remain under your control. This build contains no advertising, cloud scanning or link-reputation service.</string>
+<string name="coverage_local_title">Local test definitions</string>
+<string name="coverage_local_body">The bundled legacy definitions contain only a harmless antivirus test marker. They do not provide real-world malware coverage.</string>
+<string name="coverage_signed_title">Signed hash database</string>
+<string name="coverage_signed_body">Exact hash matching requires a trusted signing key and an accepted signed database. No production database is bundled.</string>
+<string name="coverage_static_title">Static application analysis</string>
+<string name="coverage_static_body">Bounded package analysis reports advisory findings. A finding alone does not prove malware; known-bad signer lists are disabled.</string>
+<string name="coverage_permissions_title">Permissions and manifest</string>
+<string name="coverage_permissions_body">Permission combinations and visible package declarations support manual review. They are not trained classification.</string>
+<string name="coverage_integrity_title">Device integrity indicators</string>
+<string name="coverage_integrity_body">Root access, hooks, build properties, security enforcement, debuggers and emulators are checked using local heuristics, not attestation.</string>
+<string name="coverage_bloom_title">Probabilistic hash index</string>
+<string name="coverage_bloom_body">A verified, non-empty probabilistic index and its manifest are not bundled. This optional layer is unavailable.</string>
+<string name="coverage_rules_title">Bundled code signatures</string>
+<string name="coverage_rules_body">Validated bundled rules check a limited set of literal code patterns. Matches are advisory and do not confirm malware.</string>
+<string name="coverage_rules_unavailable">Bundled rules did not load or pass validation. No code-signature scan is claimed.</string>
+<string name="coverage_model_title">Permission classification model</string>
+<string name="coverage_model_body">No trained, validated and distributable classification model is bundled. Machine learning is disabled.</string>
+<string name="coverage_signer_title">Offline signer attestation</string>
+<string name="coverage_signer_body">An independently pinned expected signing-certificate fingerprint has not been configured.</string>
+<string name="coverage_feed_title">Signed feed verification</string>
+<string name="coverage_feed_body">Detached signature verification and rollback protection require a trusted build-time key and a configured signed feed.</string>
+<string name="hash_status_active">The signed local hash database is active.</string>
+<string name="hash_status_missing">Hash matching is disabled until a signed database is accepted.</string>
+<string name="hash_status_key">Hash matching is disabled because a trusted signing key is unavailable.</string>
+<string name="hash_status_invalid">Stored definitions failed integrity, version or format checks. Hash matching remains disabled.</string>
+<string name="hash_status_activation">Database activation did not complete. Hash matching remains disabled.</string>
+<string name="finding_confidence">%1$s · Confidence: %2$d%%</string>
+<string name="finding_exported">An exported component has no visible manifest permission gate. Code-level checks may still exist.</string>
+<string name="finding_admin">The app declares a device-administration receiver. This sensitive capability is not proof of abuse.</string>
+<string name="finding_accessibility">The app declares an accessibility service. Legitimate assistive apps may need this access.</string>
+<string name="finding_overlay">The app requests overlay access. Overlays may be legitimate but can obscure other screens.</string>
+<string name="finding_combined">Accessibility is combined with overlay, text-message or call-history access. Review the app’s purpose.</string>
+<string name="finding_sms_calls">The app requests both text-message and call-history permissions.</string>
+<string name="finding_sms_network">Text-message access is combined with internet access. This needs contextual review.</string>
+<string name="finding_signer">Signing-certificate metadata is missing or unreadable.</string>
+<string name="finding_archive">The package container could not be fully inspected. Static analysis is incomplete.</string>
+<string name="finding_packer">A package path resembles a known packing or protection tool. Legitimate apps can use such tools.</string>
+<string name="finding_dex_header">A code header has inconsistent format or size fields. This does not prove malware.</string>
+<string name="finding_dex_short">A code entry is shorter than a valid header and could not be fully inspected.</string>
+<string name="finding_entropy">A code sample has high byte entropy. Encryption, packing or benign compressed content may explain it.</string>
+<string name="finding_api">No expected static reference was found for a requested permission. Reflection, libraries or dynamically loaded code may explain its absence.</string>
+<string name="finding_rules">A limited bundled code signature matched. This is advisory, not proof of malware.</string>
+<string name="finding_other">Additional local indicators require manual review. They do not confirm malware.</string>
+<string name="integrity_manager">A root-access or hooking manager is visible: %1$s</string>
+<string name="integrity_test_keys">The device build uses test signing keys.</string>
+<string name="integrity_debug_build">Build properties indicate a debuggable or non-production system.</string>
+<string name="integrity_selinux">The readable local status reports that mandatory security enforcement is off.</string>
+<string name="integrity_debugger">A debugger is attached to this process.</string>
+<string name="integrity_emulator">Build properties resemble an emulator or test device.</string>
+<string name="audit_scan_pending">The install was recorded. Local analysis is pending.</string>
+<string name="audit_scan_complete">Local analysis completed without a confirmed signature match. This is not a safety guarantee.</string>
+<string name="audit_scan_unavailable">The package was not visible when analysis ran.</string>
+<string name="audit_scan_threat">An exact local threat signature matched.</string>
+<string name="audit_scan_review">Local indicators require review; they do not confirm malware.</string>
+<string name="audit_source_recorded">The installation source was recorded.</string>
+<string name="audit_uninstall_requested">Android uninstall confirmation was requested.</string>
+<string name="audit_uninstall_success">Android reported that uninstallation succeeded.</string>
+<string name="audit_uninstall_failed">Android could not complete the uninstall request.</string>
+<string name="severity_test">Harmless test marker</string>
+<string name="severity_low">Low severity</string>
+<string name="severity_medium">Medium severity</string>
+<string name="severity_high">High severity</string>
+<string name="severity_critical">Critical severity</string>
+<string name="severity_unknown">Severity not specified</string>
+<plurals name="l10n_scanned_apps"><item quantity="one">Scanned %1$d app</item><item quantity="other">Scanned %1$d apps</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="one">Scanned %1$d file</item><item quantity="other">Scanned %1$d files</item></plurals>
+<plurals name="l10n_threats"><item quantity="one">%1$d threat found</item><item quantity="other">%1$d threats found</item></plurals>
+<plurals name="l10n_review"><item quantity="one">%1$d result needs review</item><item quantity="other">%1$d results need review</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="one">%1$d item could not be scanned</item><item quantity="other">%1$d items could not be scanned</item></plurals>
+<plurals name="l10n_no_match"><item quantity="one">%1$d result with no local match</item><item quantity="other">%1$d results with no local match</item></plurals>
+<plurals name="l10n_apps"><item quantity="one">%1$d app</item><item quantity="other">%1$d apps</item></plurals>
+<plurals name="l10n_files"><item quantity="one">%1$d file</item><item quantity="other">%1$d files</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="one">%1$d non-system app has high-risk access.</item><item quantity="other">%1$d non-system apps have high-risk access.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="one">%1$d observed change awaits notification.</item><item quantity="other">%1$d observed changes await notification.</item></plurals>
+<plurals name="l10n_rules"><item quantity="one">Limited coverage · %1$d bundled rule</item><item quantity="other">Limited coverage · %1$d bundled rules</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="one">Latest scan: %1$d advisory code match.</item><item quantity="other">Latest scan: %1$d advisory code matches.</item></plurals>
+<plurals name="l10n_imported"><item quantity="one">Imported %1$d valid signature into local storage.</item><item quantity="other">Imported %1$d valid signatures into local storage.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="one">%1$d byte</item><item quantity="other">%1$d bytes</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="one">%1$d root-related filesystem indicator is present.</item><item quantity="other">%1$d root-related filesystem indicators are present.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="one">%1$d hooking indicator is present.</item><item quantity="other">%1$d hooking indicators are present.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="one">%1$d app enabled</item><item quantity="other">%1$d apps enabled</item></plurals>
+<plurals name="l10n_indicators"><item quantity="one">%1$d indicator</item><item quantity="other">%1$d indicators</item></plurals>
+<plurals name="l10n_progress"><item quantity="one">Checked %1$d of %2$d app</item><item quantity="other">Checked %1$d of %2$d apps</item></plurals>
 </resources>

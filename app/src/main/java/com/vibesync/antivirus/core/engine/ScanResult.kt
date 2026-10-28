@@ -22,5 +22,7 @@ data class ScanResult(
  /** Structured, local-only static analysis findings; not persisted as an unencrypted database object. */
  val riskReport: RiskReport? = null,
  /** User override; no detection engine was executed. */
- val trustedByUser: Boolean = false
+ val trustedByUser: Boolean = false,
+ /** Resource-backed copy is resolved against the current Activity locale. */
+ val reasonTexts: List<com.vibesync.antivirus.core.locale.UiText> = emptyList()
 )

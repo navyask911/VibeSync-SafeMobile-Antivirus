@@ -4,6 +4,8 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import com.vibesync.antivirus.R
+import com.vibesync.antivirus.core.locale.UiText
+import com.vibesync.antivirus.core.locale.SecurityText
 import com.vibesync.antivirus.core.crypto.EncryptedHashStore
 import com.vibesync.antivirus.core.crypto.HashCalculator
 import com.vibesync.antivirus.core.hashdb.HashDatabaseManager
@@ -135,7 +137,7 @@ class PackageScanner(
    } else null
    val staticReasons = staticReport?.findings.orEmpty().map { "[${it.ruleId}] ${it.evidence} (confidence ${it.confidence}%)" }
    val staticScore = staticReport?.riskScore ?: 0
-   val output = evaluate(file.name, file.name, hash.sha256, hash.md5, staticReasons, staticScore, sha1 = hash.sha1, fileSize = hash.bytesRead)
+   val output = evaluate(file.name, file.name, hash.sha256, hash.md5, staticReasons, staticScore, sha1 = hash.sha1, fileSize = hash.bytesRead, report = staticReport)
     .copy(riskReport = staticReport)
    if (persistAllAudit || output.verdict == ScanVerdict.THREAT || output.verdict == ScanVerdict.SUSPICIOUS) audit(output, start, scanSessionId)
    output.copy(durationMs = elapsed(start), sourceLocalPath = file.absolutePath, scanSessionId = scanSessionId)
@@ -228,7 +230,7 @@ class PackageScanner(
   val deepReasons = deepReport.findings.map { "[${it.ruleId}] ${it.evidence} (confidence ${it.confidence}%)" }
   reasons += deepReasons
   val combinedRiskScore = maxOf(adjustedRiskScore, deepReport.riskScore)
-  val assessed = evaluate(info.packageName, label, hashes.sha256, hashes.md5, reasons, combinedRiskScore, sha1 = hashes.sha1, fileSize = hashes.bytesRead)
+  val assessed = evaluate(info.packageName, label, hashes.sha256, hashes.md5, reasons, combinedRiskScore, sha1 = hashes.sha1, fileSize = hashes.bytesRead, report = deepReport)
    .copy(riskReport = deepReport)
   val output = assessed
   audit(output, start, scanSessionId)
@@ -238,31 +240,31 @@ class PackageScanner(
   result(name, name, null, null, ScanVerdict.NO_MATCH,
    listOf(context.getString(R.string.trusted_app_explanation)), start).copy(
     packageName = name, scanSessionId = session, trustedByUser = true)
- private suspend fun evaluate(key: String, label: String, sha: String, md5: String, heuristic: List<String>, score: Int, sha1: String? = null, fileSize: Long? = null): ScanResult {
+ private suspend fun evaluate(key: String, label: String, sha: String, md5: String, heuristic: List<String>, score: Int, sha1: String? = null, fileSize: Long? = null, report: RiskReport? = null): ScanResult {
   val encrypted = hashStore.protectHash(sha)
   val signedHashMatch = hashDatabaseManager?.lookup(sha, md5, sha1, fileSize)
   if (signedHashMatch != null) {
    return ScanResult(key, label, sha, md5, ScanVerdict.THREAT,
     listOf(context.getString(R.string.hashdb_match, signedHashMatch.algorithm.token.uppercase(), signedHashMatch.threatName)), 0)
-    .copy(threatEventId = UUID.randomUUID().toString(), riskScore = 1f, sha1 = sha1)
+    .copy(threatEventId = UUID.randomUUID().toString(), riskScore = 1f, sha1 = sha1, reasonTexts = listOf(UiText(R.string.hashdb_match, listOf(signedHashMatch.algorithm.token.uppercase(), signedHashMatch.threatName))))
   }
   val threat = dao.findThreatByEncryptedHash(encrypted)
   if (threat != null) {
    val family = revealMetadataOrPlaintext(threat.malwareFamily, "family")
    val level = revealMetadataOrPlaintext(threat.threatLevel, "level")
-   return ScanResult(key, label, sha, md5, ScanVerdict.THREAT, listOf(context.getString(R.string.hash_match, family, level)), 0).copy(threatEventId = UUID.randomUUID().toString(), riskScore = 1f, sha1 = sha1)
+   return ScanResult(key, label, sha, md5, ScanVerdict.THREAT, listOf(context.getString(R.string.hash_match, family, level)), 0).copy(threatEventId = UUID.randomUUID().toString(), riskScore = 1f, sha1 = sha1, reasonTexts = listOf(UiText(R.string.hash_match, listOf(family, UiText(SecurityText.severity(level))))))
   }
   val feedThreat = threatIntelligenceRepository?.lookupHash(sha, md5, sha1, fileSize)
   if (feedThreat != null) {
    return ScanResult(key, label, sha, md5, ScanVerdict.THREAT,
     listOf(context.getString(R.string.threat_feed_hash_match, feedThreat.threatName, feedThreat.source)), 0)
-    .copy(threatEventId = UUID.randomUUID().toString(), riskScore = 1f, sha1 = sha1)
+    .copy(threatEventId = UUID.randomUUID().toString(), riskScore = 1f, sha1 = sha1, reasonTexts = listOf(UiText(R.string.threat_feed_hash_match, listOf(feedThreat.threatName, feedThreat.source))))
   }
   // An allow/dismiss choice can suppress heuristics, never an exact known-malware match.
-  if (dao.isHashWhitelisted(encrypted)) return ScanResult(key, label, sha, md5, ScanVerdict.NO_MATCH, listOf(context.getString(R.string.hash_allowlisted)), 0).copy(sha1 = sha1)
+  if (dao.isHashWhitelisted(encrypted)) return ScanResult(key, label, sha, md5, ScanVerdict.NO_MATCH, listOf(context.getString(R.string.hash_allowlisted)), 0).copy(sha1 = sha1, reasonTexts = listOf(UiText(R.string.hash_allowlisted)))
   val verdict = if (score >= 45) ScanVerdict.SUSPICIOUS else ScanVerdict.NO_MATCH
   val notes = if (heuristic.isEmpty()) listOf(context.getString(R.string.no_match_detail)) else heuristic + context.getString(R.string.risk_review)
-  return ScanResult(key, label, sha, md5, verdict, notes, 0).copy(riskScore = score.coerceIn(0, 100) / 100f, sha1 = sha1)
+  return ScanResult(key, label, sha, md5, verdict, notes, 0).copy(riskScore = score.coerceIn(0, 100) / 100f, sha1 = sha1, reasonTexts = SecurityText.reasons(context, notes, report))
  }
  private suspend fun auditSafely(result: ScanResult, start: Long, scanSessionId: String) {
   try {
@@ -303,7 +305,7 @@ class PackageScanner(
   PackageManager.GET_SIGNATURES
  }
  private fun result(key: String, label: String, sha: String?, md5: String?, verdict: ScanVerdict, reasons: List<String>, start: Long) =
-  ScanResult(key, label, sha, md5, verdict, reasons, elapsed(start))
+  ScanResult(key, label, sha, md5, verdict, reasons, elapsed(start), reasonTexts = SecurityText.reasons(context, reasons))
  private fun elapsed(start: Long) = ((System.nanoTime() - start) / 1_000_000L).coerceAtLeast(0)
 }
 

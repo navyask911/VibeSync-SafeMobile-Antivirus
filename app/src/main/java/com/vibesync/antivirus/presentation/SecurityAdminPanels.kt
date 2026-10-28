@@ -1,5 +1,6 @@
 package com.vibesync.antivirus.presentation
 
+import com.vibesync.antivirus.core.locale.SecurityText
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -85,10 +86,10 @@ internal fun InstallSourceAuditPanel(
      Text(event.sourcePackage ?: stringResource(R.string.unknown_file),style=MaterialTheme.typography.titleSmall,fontWeight=FontWeight.SemiBold)
      Text(stringResource(if(play) R.string.install_source_play_badge else if(external) R.string.install_source_external_badge else R.string.install_source_unknown_badge),
       style=MaterialTheme.typography.labelMedium,color=if(play) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.tertiary)
-     Text(DateFormat.getDateTimeInstance(DateFormat.SHORT,DateFormat.SHORT).format(Date(event.occurredAt)),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
-     Text(event.reason.take(1200),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+     Text(localizedDate(event.occurredAt),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+     Text(stringResource(SecurityText.incidentStatus(event.status)),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
      if(!event.sha256Hash.isNullOrBlank()) Text(stringResource(R.string.file_hash_label,event.sha256Hash.take(24)),style=MaterialTheme.typography.labelSmall)
-     Text(event.actionTaken + " · " + event.status.substringAfter("|","SOURCE_RECORDED"),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+     Text(stringResource(SecurityText.incidentAction(event.actionTaken)),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
      event.sourcePackage?.takeIf { it.isNotBlank() }?.let { packageName ->
       Row(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
        OutlinedButton(onClick={onInspect(packageName)}) { Text(stringResource(R.string.app_info_label)) }
