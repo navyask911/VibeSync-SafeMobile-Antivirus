@@ -805,4 +805,7 @@
 <plurals name="l10n_enabled_apps"><item quantity="one">%1$d ਐਪ ਚਾਲੂ ਹੈ</item><item quantity="other">%1$d ਐਪ ਚਾਲੂ ਹੈ</item></plurals>
 <plurals name="l10n_indicators"><item quantity="one">%1$d ਸੰਕੇਤ</item><item quantity="other">%1$d ਸੰਕੇਤ</item></plurals>
 <plurals name="l10n_progress"><item quantity="one">%2$d ਐਪਾਂ ਵਿੱਚੋਂ %1$d ਜਾਂਚੀਆਂ</item><item quantity="other">%2$d ਐਪਾਂ ਵਿੱਚੋਂ %1$d ਜਾਂਚੀਆਂ</item></plurals>
+    <string name="ml_probability">ਐਮਐਲ ਖਤਰੇ ਦੀ ਸੰਭਾਵਨਾ: %1$d%%</string>
+    <string name="ml_high_finding">ਸਥਿਰ ਐਮਐਲ ਅੰਦਾਜ਼ਾ: ਇਜਾਜ਼ਤਾਂ ਅਤੇ API ਪੈਟਰਨਾਂ ਦੇ ਆਧਾਰ ਉੱਤੇ ਉੱਚ ਸਕੋਰ; ਇਹ ਸਿਰਫ਼ ਸੰਕੇਤ ਹੈ, ਮਾਲਵੇਅਰ ਦਾ ਸਬੂਤ ਨਹੀਂ।</string>
+    <string name="ml_active_body">ਡਿਵਾਈਸ ਵਿੱਚ ਪ੍ਰਮਾਣਿਤ ਸਥਿਰ ਐਮਐਲ ਮਾਡਲ ਉਪਲਬਧ ਹੈ। ਨਤੀਜੇ ਸਿਰਫ਼ ਸੰਕੇਤ ਹਨ, ਮਾਲਵੇਅਰ ਦਾ ਸਬੂਤ ਨਹੀਂ।</string>
 </resources>
