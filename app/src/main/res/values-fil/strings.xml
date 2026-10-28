@@ -744,7 +744,7 @@
 <string name="coverage_feed_title">Pagpapatunay ng nilagdaang feed</string>
 <string name="coverage_feed_body">Kailangan ang mapagkakatiwalaang key sa paggawa ng build at nakatakdang nilagdaang feed para sa hiwalay na pag-verify ng lagda at proteksiyon sa pagbabalik sa lumang bersyon.</string>
 <string name="hash_status_active">Aktibo ang lokal na nilagdaang database ng hash.</string>
-<string name="hash_status_missing">Naka-disable ang pagtutugma ng hash hangga't hindi tinatanggap ang nilagdaang database.</string>
+<string name="hash_status_missing">Naka-disable ang pagtutugma ng hash hangga\'t hindi tinatanggap ang nilagdaang database.</string>
 <string name="hash_status_key">Naka-disable ang pagtutugma ng hash dahil walang mapagkakatiwalaang signing key.</string>
 <string name="hash_status_invalid">Bumagsak sa pagsusuri ng integridad, bersyon, o format ang mga nakaimbak na depinisyon. Mananatiling naka-disable ang pagtutugma ng hash.</string>
 <string name="hash_status_activation">Hindi nakumpleto ang pag-activate ng database. Mananatiling naka-disable ang pagtutugma ng hash.</string>
