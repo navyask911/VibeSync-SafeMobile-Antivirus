@@ -558,5 +558,108 @@
 <string name="locale_th">ไทย</string>
 <string name="locale_uk">Українська</string>
 <string name="locale_uz">O‘zbekcha</string>
-</resources>
 
+<string name="format_label_value">%1$s: %2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s – %2$s</string>
+<string name="format_version">%1$s · גרסה %2$s (%3$s)</string>
+<string name="format_package_version">%1$s · גרסה %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">יש להזין כתובת מקור עדכונים מאובטחת</string>
+<string name="storage_size_unavailable">הגודל אינו זמין</string>
+<string name="blocked_reason_hash">נמצאה התאמה לחתימת איום מקומית.</string>
+<string name="blocked_reason_action">נעשה ניסיון לבצע פעולת אבטחה מקומית ככל שניתן.</string>
+<string name="signed_import_success">מסד הנתונים החתום התקבל: גרסה %1$s · %2$s.</string>
+<string name="signed_import_failed">מסד הנתונים החתום לא הופעל. יש לבדוק את החתימה, הגרסה ותבנית הקובץ.</string>
+<string name="rule_import_pending">%1$s נשמר לבדיקה. כללים שיובאו יישארו מושבתים והקובץ הזה לא יופעל.</string>
+<string name="rule_import_failed">לא ניתן לייבא את הכללים. הכללים שיובאו יישארו מושבתים.</string>
+<string name="restore_result_localized">עותק של %1$s (%2$s) שוחזר. הקובץ המקורי שבהסגר נשאר מאוחסן.</string>
+<string name="cleaner_confirm_localized">למחוק לצמיתות את %1$s (%2$s)? לא ניתן לבטל פעולה זו. SafeMobile יבדוק מחדש שמות ונתוני מטא.</string>
+<string name="cleaner_result_localized">נמחקו: %1$s · שטח שהתפנה: %2$s · כשלו או השתנו: %3$s</string>
+<string name="about_localized_notices">רכיבים של צדדים שלישיים כפופים לרישיונות שלהם. ההודעות המקוריות הן נקודת בקרה בביקורת, ולא סקירת רישיונות שהושלמה. יש לפתוח את המסמכים המקוריים לעיון בהודעות המקור ובתנאי הרישיון.</string>
+<string name="about_open_original">פתיחת המסמכים המקוריים</string>
+<string name="about_localized_privacy">קבצים שנסרקו, ערכי גיבוב, שמות חבילות ותוצאות נשארים במכשיר זה. נתוני מטא של ביקורת מקומית ועותקי הסגר נשמרים באחסון פרטי מוצפן. עדכוני הגדרות חתומות פונים לשירות הגרסאות של הפרויקט; מקור עדכונים נפרד יפנה לכתובת שהוגדרה רק לאחר הסכמתך. ניטור תיקיות פועל רק בתיקיות שבחרת וניתן להפסיק אותו. הרשאות Android נשארות בשליטתך. גרסה זו אינה כוללת פרסומות, סריקה בענן או שירות מוניטין לקישורים.</string>
+<string name="coverage_local_title">הגדרות בדיקה מקומיות</string>
+<string name="coverage_local_body">ההגדרות הישנות המצורפות כוללות רק סימון בדיקה לא מזיק של תוכנת אנטי־וירוס. הן אינן מספקות הגנה מפני נוזקות אמיתיות.</string>
+<string name="coverage_signed_title">מסד נתוני גיבוב חתום</string>
+<string name="coverage_signed_body">התאמה מדויקת של גיבובים מחייבת מפתח חתימה מהימן ומסד נתונים חתום שהתקבל. מסד נתונים לייצור אינו מצורף.</string>
+<string name="coverage_static_title">ניתוח סטטי של יישומים</string>
+<string name="coverage_static_body">ניתוח חבילות מוגבל מפיק ממצאים לצורכי ייעוץ. ממצא בודד אינו מוכיח נוזקה; רשימות של חותמים זדוניים מוכרים מושבתות.</string>
+<string name="coverage_permissions_title">הרשאות ומניפסט</string>
+<string name="coverage_permissions_body">שילובי הרשאות והצהרות חבילה גלויות תומכים בבדיקה ידנית. אלה אינם סיווג המבוסס על מודל מאומן.</string>
+<string name="coverage_integrity_title">מדדי תקינות מכשיר</string>
+<string name="coverage_integrity_body">גישת שורש, מנגנוני יירוט, מאפייני בנייה, אכיפת אבטחה, מנפי שגיאות ואמולטורים נבדקים באמצעות היוריסטיקות מקומיות ולא באמצעות אישור תקינות.</string>
+<string name="coverage_bloom_title">אינדקס גיבוב הסתברותי</string>
+<string name="coverage_bloom_body">אינדקס הסתברותי מאומת שאינו ריק והמניפסט שלו אינם מצורפים. שכבה אופציונלית זו אינה זמינה.</string>
+<string name="coverage_rules_title">חתימות קוד מצורפות</string>
+<string name="coverage_rules_body">כללים מצורפים שעברו אימות בודקים קבוצה מוגבלת של תבניות קוד מילוליות. התאמות נועדו לייעוץ ואינן מאשרות נוזקה.</string>
+<string name="coverage_rules_unavailable">הכללים המצורפים לא נטענו או לא עברו אימות. אין טענה שבוצעה סריקת חתימות קוד.</string>
+<string name="coverage_model_title">מודל לסיווג הרשאות</string>
+<string name="coverage_model_body">לא מצורף מודל סיווג מאומן, מאומת וניתן להפצה. למידת מכונה מושבתת.</string>
+<string name="coverage_signer_title">אימות לא מקוון של החותם</string>
+<string name="coverage_signer_body">לא הוגדרה טביעת אצבע צפויה של אישור חתימה שנקבעה באופן בלתי תלוי.</string>
+<string name="coverage_feed_title">אימות מקור עדכונים חתום</string>
+<string name="coverage_feed_body">אימות חתימה נפרדת והגנה מפני חזרה לגרסה ישנה מחייבים מפתח מהימן בזמן הבנייה ומקור עדכונים חתום שהוגדר.</string>
+<string name="hash_status_active">מסד נתוני הגיבוב המקומי החתום פעיל.</string>
+<string name="hash_status_missing">התאמת גיבובים מושבתת עד לקבלת מסד נתונים חתום.</string>
+<string name="hash_status_key">התאמת גיבובים מושבתת מכיוון שמפתח חתימה מהימן אינו זמין.</string>
+<string name="hash_status_invalid">ההגדרות השמורות נכשלו בבדיקות תקינות, גרסה או תבנית. התאמת גיבובים נשארת מושבתת.</string>
+<string name="hash_status_activation">הפעלת מסד הנתונים לא הושלמה. התאמת גיבובים נשארת מושבתת.</string>
+<string name="finding_confidence">%1$s · רמת ביטחון: %2$d%%</string>
+<string name="finding_exported">לרכיב שנחשף כלפי חוץ אין מגבלת הרשאה גלויה במניפסט. ייתכן שעדיין קיימות בדיקות ברמת הקוד.</string>
+<string name="finding_admin">היישום מצהיר על מקלט לניהול המכשיר. יכולת רגישה זו אינה הוכחה לשימוש לרעה.</string>
+<string name="finding_accessibility">היישום מצהיר על שירות נגישות. יישומי סיוע חוקיים עשויים להזדקק לגישה זו.</string>
+<string name="finding_overlay">היישום מבקש הרשאת הצגה מעל מסכים אחרים. שכבות־על עשויות להיות תקינות אך יכולות להסתיר מסכים אחרים.</string>
+<string name="finding_combined">גישה לנגישות משולבת עם שכבת־על, הודעות טקסט או היסטוריית שיחות. יש לבדוק את מטרת היישום.</string>
+<string name="finding_sms_calls">היישום מבקש הרשאות להודעות טקסט ולהיסטוריית שיחות גם יחד.</string>
+<string name="finding_sms_network">גישה להודעות טקסט משולבת עם גישה לאינטרנט. נדרשת בחינה בהתאם להקשר.</string>
+<string name="finding_signer">נתוני המטא של אישור החתימה חסרים או אינם קריאים.</string>
+<string name="finding_archive">לא ניתן היה לבדוק את כל תוכן החבילה. הניתוח הסטטי אינו מלא.</string>
+<string name="finding_packer">נתיב בחבילה דומה לכלי אריזה או הגנה מוכר. גם יישומים חוקיים עשויים להשתמש בכלים כאלה.</string>
+<string name="finding_dex_header">כותרת קוד מכילה שדות תבנית או גודל שאינם תואמים. הדבר אינו מוכיח נוזקה.</string>
+<string name="finding_dex_short">רשומת קוד קצרה מכותרת תקינה ולכן לא ניתן היה לבדוק אותה במלואה.</string>
+<string name="finding_entropy">לדגימת קוד יש אנטרופיית בתים גבוהה. הצפנה, אריזה או תוכן דחוס לא מזיק עשויים להסביר זאת.</string>
+<string name="finding_api">לא נמצאה הפניה סטטית צפויה להרשאה המבוקשת. השתקפות, ספריות או קוד הנטען באופן דינמי עשויים להסביר זאת.</string>
+<string name="finding_rules">נמצאה התאמה לחתימת קוד מצורפת ומוגבלת. זהו רמז בלבד ולא הוכחה לנוזקה.</string>
+<string name="finding_other">מדדים מקומיים נוספים דורשים בדיקה ידנית. הם אינם מאשרים נוזקה.</string>
+<string name="integrity_manager">מנהל גישת שורש או יירוט נראה: %1$s</string>
+<string name="integrity_test_keys">בניית המכשיר משתמשת במפתחות חתימה לבדיקה.</string>
+<string name="integrity_debug_build">מאפייני הבנייה מצביעים על מערכת הניתנת לניפוי שגיאות או שאינה מיועדת לייצור.</string>
+<string name="integrity_selinux">המצב המקומי הקריא מצביע על כך שאכיפת האבטחה המחייבת כבויה.</string>
+<string name="integrity_debugger">מנפה שגיאות מחובר לתהליך זה.</string>
+<string name="integrity_emulator">מאפייני הבנייה דומים לאמולטור או למכשיר בדיקה.</string>
+<string name="audit_scan_pending">ההתקנה תועדה. הניתוח המקומי ממתין.</string>
+<string name="audit_scan_complete">הניתוח המקומי הסתיים ללא התאמת חתימה מאושרת. זו אינה ערובה לבטיחות.</string>
+<string name="audit_scan_unavailable">החבילה לא הייתה גלויה בזמן הניתוח.</string>
+<string name="audit_scan_threat">נמצאה התאמה מדויקת לחתימת איום מקומית.</string>
+<string name="audit_scan_review">המדדים המקומיים דורשים בדיקה; הם אינם מאשרים נוזקה.</string>
+<string name="audit_source_recorded">מקור ההתקנה תועד.</string>
+<string name="audit_uninstall_requested">נשלחה בקשה לאישור הסרת התקנה ב־Android.</string>
+<string name="audit_uninstall_success">Android דיווח שהסרת ההתקנה הצליחה.</string>
+<string name="audit_uninstall_failed">Android לא הצליח להשלים את בקשת הסרת ההתקנה.</string>
+<string name="severity_test">סימון בדיקה לא מזיק</string>
+<string name="severity_low">חומרה נמוכה</string>
+<string name="severity_medium">חומרה בינונית</string>
+<string name="severity_high">חומרה גבוהה</string>
+<string name="severity_critical">חומרה קריטית</string>
+<string name="severity_unknown">רמת החומרה לא צוינה</string>
+<plurals name="l10n_scanned_apps"><item quantity="one">נסרק יישום אחד (%1$d)</item><item quantity="two">נסרקו שני יישומים (%1$d)</item><item quantity="many">נסרקו %1$d יישומים</item><item quantity="other">נסרקו %1$d יישומים</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="one">נסרק קובץ אחד (%1$d)</item><item quantity="two">נסרקו שני קבצים (%1$d)</item><item quantity="many">נסרקו %1$d קבצים</item><item quantity="other">נסרקו %1$d קבצים</item></plurals>
+<plurals name="l10n_threats"><item quantity="one">נמצא איום אחד (%1$d)</item><item quantity="two">נמצאו שני איומים (%1$d)</item><item quantity="many">נמצאו %1$d איומים</item><item quantity="other">נמצאו %1$d איומים</item></plurals>
+<plurals name="l10n_review"><item quantity="one">תוצאה אחת דורשת בדיקה (%1$d)</item><item quantity="two">שתי תוצאות דורשות בדיקה (%1$d)</item><item quantity="many">%1$d תוצאות דורשות בדיקה</item><item quantity="other">%1$d תוצאות דורשות בדיקה</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="one">לא ניתן לסרוק פריט אחד (%1$d)</item><item quantity="two">לא ניתן לסרוק שני פריטים (%1$d)</item><item quantity="many">לא ניתן לסרוק %1$d פריטים</item><item quantity="other">לא ניתן לסרוק %1$d פריטים</item></plurals>
+<plurals name="l10n_no_match"><item quantity="one">תוצאה אחת ללא התאמה מקומית (%1$d)</item><item quantity="two">שתי תוצאות ללא התאמה מקומית (%1$d)</item><item quantity="many">%1$d תוצאות ללא התאמה מקומית</item><item quantity="other">%1$d תוצאות ללא התאמה מקומית</item></plurals>
+<plurals name="l10n_apps"><item quantity="one">יישום אחד (%1$d)</item><item quantity="two">שני יישומים (%1$d)</item><item quantity="many">%1$d יישומים</item><item quantity="other">%1$d יישומים</item></plurals>
+<plurals name="l10n_files"><item quantity="one">קובץ אחד (%1$d)</item><item quantity="two">שני קבצים (%1$d)</item><item quantity="many">%1$d קבצים</item><item quantity="other">%1$d קבצים</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="one">ליישום אחד שאינו מערכת יש גישה בסיכון גבוה (%1$d).</item><item quantity="two">לשני יישומים שאינם מערכת יש גישה בסיכון גבוה (%1$d).</item><item quantity="many">ל־%1$d יישומים שאינם מערכת יש גישה בסיכון גבוה.</item><item quantity="other">ל־%1$d יישומים שאינם מערכת יש גישה בסיכון גבוה.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="one">שינוי אחד שזוהה ממתין להודעה (%1$d).</item><item quantity="two">שני שינויים שזוהו ממתינים להודעה (%1$d).</item><item quantity="many">%1$d שינויים שזוהו ממתינים להודעה.</item><item quantity="other">%1$d שינויים שזוהו ממתינים להודעה.</item></plurals>
+<plurals name="l10n_rules"><item quantity="one">כיסוי מוגבל · כלל מצורף אחד (%1$d)</item><item quantity="two">כיסוי מוגבל · שני כללים מצורפים (%1$d)</item><item quantity="many">כיסוי מוגבל · %1$d כללים מצורפים</item><item quantity="other">כיסוי מוגבל · %1$d כללים מצורפים</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="one">סריקה אחרונה: התאמת קוד אחת לייעוץ (%1$d).</item><item quantity="two">סריקה אחרונה: שתי התאמות קוד לייעוץ (%1$d).</item><item quantity="many">סריקה אחרונה: %1$d התאמות קוד לייעוץ.</item><item quantity="other">סריקה אחרונה: %1$d התאמות קוד לייעוץ.</item></plurals>
+<plurals name="l10n_imported"><item quantity="one">יובאה חתימה תקינה אחת לאחסון מקומי (%1$d).</item><item quantity="two">יובאו שתי חתימות תקינות לאחסון מקומי (%1$d).</item><item quantity="many">יובאו %1$d חתימות תקינות לאחסון מקומי.</item><item quantity="other">יובאו %1$d חתימות תקינות לאחסון מקומי.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="one">בית אחד (%1$d)</item><item quantity="two">שני בתים (%1$d)</item><item quantity="many">%1$d בתים</item><item quantity="other">%1$d בתים</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="one">קיים מדד מערכת קבצים אחד הקשור לגישת שורש (%1$d).</item><item quantity="two">קיימים שני מדדי מערכת קבצים הקשורים לגישת שורש (%1$d).</item><item quantity="many">קיימים %1$d מדדי מערכת קבצים הקשורים לגישת שורש.</item><item quantity="other">קיימים %1$d מדדי מערכת קבצים הקשורים לגישת שורש.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="one">קיים מדד יירוט אחד (%1$d).</item><item quantity="two">קיימים שני מדדי יירוט (%1$d).</item><item quantity="many">קיימים %1$d מדדי יירוט.</item><item quantity="other">קיימים %1$d מדדי יירוט.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="one">הופעל יישום אחד (%1$d)</item><item quantity="two">הופעלו שני יישומים (%1$d)</item><item quantity="many">הופעלו %1$d יישומים</item><item quantity="other">הופעלו %1$d יישומים</item></plurals>
+<plurals name="l10n_indicators"><item quantity="one">מדד אחד (%1$d)</item><item quantity="two">שני מדדים (%1$d)</item><item quantity="many">%1$d מדדים</item><item quantity="other">%1$d מדדים</item></plurals>
+<plurals name="l10n_progress"><item quantity="one">נבדק יישום אחד מתוך %2$d (%1$d)</item><item quantity="two">נבדקו שני יישומים מתוך %2$d (%1$d)</item><item quantity="many">נבדקו %1$d מתוך %2$d יישומים</item><item quantity="other">נבדקו %1$d מתוך %2$d יישומים</item></plurals>
+</resources>
