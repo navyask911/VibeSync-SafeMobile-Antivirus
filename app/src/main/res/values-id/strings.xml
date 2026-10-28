@@ -663,4 +663,7 @@
 <plurals name="l10n_enabled_apps"><item quantity="other">%1$d aplikasi diaktifkan</item></plurals>
 <plurals name="l10n_indicators"><item quantity="other">%1$d indikator</item></plurals>
 <plurals name="l10n_progress"><item quantity="other">Memeriksa %1$d dari %2$d aplikasi</item></plurals>
+    <string name="ml_probability">Probabilitas ancaman ML: %1$d%%</string>
+    <string name="ml_high_finding">Heuristik ML statis: skor tinggi berdasarkan izin dan pola API; hanya sebagai petunjuk, bukan bukti malware.</string>
+    <string name="ml_active_body">Model ML statis tervalidasi tersedia di perangkat. Hasilnya bersifat indikatif dan bukan bukti malware.</string>
 </resources>
