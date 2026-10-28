@@ -643,23 +643,23 @@
 <string name="severity_high">जास्त गंभीरता</string>
 <string name="severity_critical">अतिगंभीर</string>
 <string name="severity_unknown">गंभीरता नमूद केलेली नाही</string>
-<plurals name="l10n_scanned_apps"><item quantity="other">%1$d अॅप्स स्कॅन केली</item></plurals>
-<plurals name="l10n_scanned_files"><item quantity="other">%1$d फाइल्स स्कॅन केल्या</item></plurals>
-<plurals name="l10n_threats"><item quantity="other">%1$d धोके आढळले</item></plurals>
-<plurals name="l10n_review"><item quantity="other">%1$d निष्कर्ष तपासणे आवश्यक आहे</item></plurals>
-<plurals name="l10n_unreadable"><item quantity="other">%1$d घटक स्कॅन करता आले नाहीत</item></plurals>
-<plurals name="l10n_no_match"><item quantity="other">%1$d निष्कर्षांना स्थानिक जुळणी नाही</item></plurals>
-<plurals name="l10n_apps"><item quantity="other">%1$d अॅप्स</item></plurals>
-<plurals name="l10n_files"><item quantity="other">%1$d फाइल्स</item></plurals>
-<plurals name="l10n_posture_apps"><item quantity="other">प्रणालीबाहेरील %1$d अॅप्सना उच्च जोखमीचा प्रवेश आहे.</item></plurals>
-<plurals name="l10n_pending_changes"><item quantity="other">नोंदलेल्या %1$d बदलांची सूचना बाकी आहे.</item></plurals>
-<plurals name="l10n_rules"><item quantity="other">मर्यादित कव्हरेज · सोबतचे %1$d नियम</item></plurals>
-<plurals name="l10n_rule_matches"><item quantity="other">शेवटचा स्कॅन: %1$d सल्लात्मक कोड जुळण्या.</item></plurals>
-<plurals name="l10n_imported"><item quantity="other">%1$d वैध स्वाक्षऱ्या स्थानिक साठवणीत आयात झाल्या.</item></plurals>
-<plurals name="l10n_bytes"><item quantity="other">%1$d बाइट्स</item></plurals>
-<plurals name="l10n_root_indicators"><item quantity="other">रूटशी संबंधित %1$d फाइल प्रणाली संकेत आहेत.</item></plurals>
-<plurals name="l10n_hook_indicators"><item quantity="other">हुकिंगचे %1$d संकेत आहेत.</item></plurals>
-<plurals name="l10n_enabled_apps"><item quantity="other">%1$d अॅप्स सक्रिय केली</item></plurals>
-<plurals name="l10n_indicators"><item quantity="other">%1$d संकेत</item></plurals>
-<plurals name="l10n_progress"><item quantity="other">%2$d अॅप्सपैकी %1$d तपासली</item></plurals>
+<plurals name="l10n_scanned_apps"><item quantity="one">%1$d अॅप स्कॅन केले</item><item quantity="other">%1$d अॅप्स स्कॅन केली</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="one">%1$d फाइल स्कॅन केली</item><item quantity="other">%1$d फाइल्स स्कॅन केल्या</item></plurals>
+<plurals name="l10n_threats"><item quantity="one">%1$d धोका आढळला</item><item quantity="other">%1$d धोके आढळले</item></plurals>
+<plurals name="l10n_review"><item quantity="one">%1$d निष्कर्ष तपासणे आवश्यक आहे</item><item quantity="other">%1$d निष्कर्ष तपासणे आवश्यक आहे</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="one">%1$d घटक स्कॅन करता आला नाही</item><item quantity="other">%1$d घटक स्कॅन करता आले नाहीत</item></plurals>
+<plurals name="l10n_no_match"><item quantity="one">%1$d निष्कर्षाला स्थानिक जुळणी नाही</item><item quantity="other">%1$d निष्कर्षांना स्थानिक जुळणी नाही</item></plurals>
+<plurals name="l10n_apps"><item quantity="one">%1$d अॅप</item><item quantity="other">%1$d अॅप्स</item></plurals>
+<plurals name="l10n_files"><item quantity="one">%1$d फाइल</item><item quantity="other">%1$d फाइल्स</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="one">प्रणालीबाहेरील %1$d अॅपला उच्च जोखमीचा प्रवेश आहे.</item><item quantity="other">प्रणालीबाहेरील %1$d अॅप्सना उच्च जोखमीचा प्रवेश आहे.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="one">नोंदलेला %1$d बदल सूचनेसाठी प्रलंबित आहे.</item><item quantity="other">नोंदलेल्या %1$d बदलांची सूचना बाकी आहे.</item></plurals>
+<plurals name="l10n_rules"><item quantity="one">मर्यादित कव्हरेज · सोबतचा %1$d नियम</item><item quantity="other">मर्यादित कव्हरेज · सोबतचे %1$d नियम</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="one">शेवटचा स्कॅन: %1$d सल्लात्मक कोड जुळणी.</item><item quantity="other">शेवटचा स्कॅन: %1$d सल्लात्मक कोड जुळण्या.</item></plurals>
+<plurals name="l10n_imported"><item quantity="one">%1$d वैध स्वाक्षरी स्थानिक साठवणीत आयात झाली.</item><item quantity="other">%1$d वैध स्वाक्षऱ्या स्थानिक साठवणीत आयात झाल्या.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="one">%1$d बाइट</item><item quantity="other">%1$d बाइट्स</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="one">रूटशी संबंधित %1$d फाइल प्रणाली संकेत आहे.</item><item quantity="other">रूटशी संबंधित %1$d फाइल प्रणाली संकेत आहेत.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="one">हुकिंगचा %1$d संकेत आहे.</item><item quantity="other">हुकिंगचे %1$d संकेत आहेत.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="one">%1$d अॅप सक्रिय केले</item><item quantity="other">%1$d अॅप्स सक्रिय केली</item></plurals>
+<plurals name="l10n_indicators"><item quantity="one">%1$d संकेत</item><item quantity="other">%1$d संकेत</item></plurals>
+<plurals name="l10n_progress"><item quantity="one">%2$d अॅप्सपैकी %1$d अॅप तपासले</item><item quantity="other">%2$d अॅप्सपैकी %1$d तपासली</item></plurals>
 </resources>
