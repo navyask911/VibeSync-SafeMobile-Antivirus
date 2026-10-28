@@ -71,6 +71,8 @@ for locale in LOCALES:
         quantities = [item.attrib.get("quantity") for item in items]
         if len(quantities) != len(set(quantities)) or "other" not in quantities:
             errors.append(f"{locale}: duplicate quantity or missing other in {key}")
+        if locale in {"az", "bn", "hu", "ka", "mr", "ta", "te", "tr"} and "one" not in quantities:
+            errors.append(f"{locale}: missing required one quantity in {key}")
         english_other = base.find("item[@quantity='other']")
         expected = formats("".join(english_other.itertext())) if english_other is not None else []
         for item in items:
