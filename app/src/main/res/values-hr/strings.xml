@@ -701,4 +701,108 @@
 <string name="detection_capabilities_save">Save update settings</string>
 <string name="detection_capabilities_sync_privacy">Downloads only. Scan results, files, hashes, and package names are not uploaded.</string>
 <string name="detection_capabilities_sync_unavailable">Automatic updates are unavailable in this offline build or until a trusted signing key is configured.</string>
+
+<string name="format_label_value">%1$s: %2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s – %2$s</string>
+<string name="format_version">%1$s · Verzija %2$s (%3$s)</string>
+<string name="format_package_version">%1$s · Verzija %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">Unesite sigurnu adresu izvora</string>
+<string name="storage_size_unavailable">Veličina nije dostupna</string>
+<string name="blocked_reason_hash">Pronađeno je podudaranje s lokalnim potpisom prijetnje.</string>
+<string name="blocked_reason_action">Pokušana je lokalna sigurnosna radnja u okviru mogućnosti.</string>
+<string name="signed_import_success">Potpisana baza podataka prihvaćena: verzija %1$s · %2$s.</string>
+<string name="signed_import_failed">Potpisana baza podataka nije aktivirana. Provjerite potpis, verziju i format datoteke.</string>
+<string name="rule_import_pending">%1$s spremljen je za pregled. Uvezena pravila ostaju isključena i ova se datoteka neće izvršiti.</string>
+<string name="rule_import_failed">Pravila nije moguće uvesti. Uvezena pravila ostaju isključena.</string>
+<string name="restore_result_localized">Vraćena je kopija %1$s (%2$s). Izvornik u karanteni ostaje pohranjen.</string>
+<string name="cleaner_confirm_localized">Trajno izbrisati %1$s (%2$s)? Ova se radnja ne može poništiti. SafeMobile ponovno će provjeriti nazive i metapodatke.</string>
+<string name="cleaner_result_localized">Izbrisano: %1$s · Oslobođen prostor: %2$s · Neuspjelo ili promijenjeno: %3$s</string>
+<string name="about_localized_notices">Komponente trećih strana zadržavaju vlastite licence. Izvorne obavijesti kontrolna su točka revizije, a ne dovršen pregled licenci. Otvorite izvorne dokumente radi obavijesti o izvorima i licencnih uvjeta.</string>
+<string name="about_open_original">Otvori izvorne dokumente</string>
+<string name="about_localized_privacy">Skenirane datoteke, sažeci, nazivi paketa i rezultati ostaju na ovom uređaju. Lokalni revizijski metapodaci i kopije u karanteni pohranjuju se šifrirano u privatnoj pohrani. Ažuriranja potpisanih definicija kontaktiraju uslugu izdanja projekta; zaseban izvor kontaktira postavljenu adresu tek nakon privole. Nadzor mapa obuhvaća samo mape koje odaberete i može se zaustaviti. Dopuštenja Androida ostaju pod vašom kontrolom. Ova verzija ne sadrži oglase, skeniranje u oblaku ni uslugu procjene ugleda poveznica.</string>
+<string name="coverage_local_title">Lokalne testne definicije</string>
+<string name="coverage_local_body">Priložene starije definicije sadrže samo bezopasnu antivirusnu testnu oznaku. Ne pružaju pokrivenost protiv stvarnog zlonamjernog softvera.</string>
+<string name="coverage_signed_title">Potpisana baza sažetaka</string>
+<string name="coverage_signed_body">Točno podudaranje sažetaka zahtijeva pouzdan ključ za potpisivanje i prihvaćenu potpisanu bazu podataka. Produkcijska baza podataka nije priložena.</string>
+<string name="coverage_static_title">Statička analiza aplikacija</string>
+<string name="coverage_static_body">Ograničena analiza paketa daje savjetodavne nalaze. Sam nalaz nije dokaz zlonamjernog softvera; popisi poznatih zlonamjernih potpisnika isključeni su.</string>
+<string name="coverage_permissions_title">Dopuštenja i manifest</string>
+<string name="coverage_permissions_body">Kombinacije dopuštenja i vidljive deklaracije paketa pomažu pri ručnom pregledu. To nije uvježbana klasifikacija.</string>
+<string name="coverage_integrity_title">Pokazatelji integriteta uređaja</string>
+<string name="coverage_integrity_body">Root pristup, presretanja, svojstva izgradnje, provedba sigurnosti, programi za otklanjanje pogrešaka i emulatori provjeravaju se lokalnim heuristikama, ne atestacijom.</string>
+<string name="coverage_bloom_title">Vjerojatnosni indeks sažetaka</string>
+<string name="coverage_bloom_body">Potvrđeni neprazni vjerojatnosni indeks i njegov manifest nisu priloženi. Ovaj neobavezni sloj nije dostupan.</string>
+<string name="coverage_rules_title">Priloženi potpisi koda</string>
+<string name="coverage_rules_body">Potvrđena priložena pravila provjeravaju ograničen skup doslovnih obrazaca koda. Podudaranja su savjetodavna i ne potvrđuju zlonamjerni softver.</string>
+<string name="coverage_rules_unavailable">Priložena pravila nisu učitana ili nisu prošla provjeru. Ne tvrdi se da je provedeno skeniranje potpisa koda.</string>
+<string name="coverage_model_title">Model klasifikacije dopuštenja</string>
+<string name="coverage_model_body">Nije priložen nijedan uvježban, potvrđen i distribuirljiv klasifikacijski model. Strojno učenje je isključeno.</string>
+<string name="coverage_signer_title">Izvanmrežna potvrda potpisnika</string>
+<string name="coverage_signer_body">Nije postavljen neovisno utvrđen očekivani otisak certifikata za potpisivanje.</string>
+<string name="coverage_feed_title">Provjera potpisanog izvora</string>
+<string name="coverage_feed_body">Provjera odvojenog potpisa i zaštita od povratka na stariju verziju zahtijevaju pouzdan ključ pri izgradnji te postavljen potpisani izvor.</string>
+<string name="hash_status_active">Potpisana lokalna baza sažetaka je aktivna.</string>
+<string name="hash_status_missing">Podudaranje sažetaka isključeno je dok se ne prihvati potpisana baza podataka.</string>
+<string name="hash_status_key">Podudaranje sažetaka isključeno je jer nema pouzdanog ključa za potpisivanje.</string>
+<string name="hash_status_invalid">Pohranjene definicije nisu prošle provjere integriteta, verzije ili formata. Podudaranje sažetaka ostaje isključeno.</string>
+<string name="hash_status_activation">Aktivacija baze podataka nije dovršena. Podudaranje sažetaka ostaje isključeno.</string>
+<string name="finding_confidence">%1$s · Pouzdanost: %2$d%%</string>
+<string name="finding_exported">Izvezena komponenta nema vidljivo ograničenje dopuštenja u manifestu. Provjere na razini koda ipak mogu postojati.</string>
+<string name="finding_admin">Aplikacija deklarira prijamnik za administraciju uređaja. Ta osjetljiva mogućnost nije dokaz zlouporabe.</string>
+<string name="finding_accessibility">Aplikacija deklarira uslugu pristupačnosti. Legitne pomoćne aplikacije mogu trebati takav pristup.</string>
+<string name="finding_overlay">Aplikacija traži dopuštenje za prikaz preko drugih zaslona. Takvi prikazi mogu biti legitimni, ali mogu i zakloniti druge zaslone.</string>
+<string name="finding_combined">Pristupačnost je kombinirana s prikazom preko drugih aplikacija, pristupom SMS-ovima ili povijesti poziva. Provjerite svrhu aplikacije.</string>
+<string name="finding_sms_calls">Aplikacija traži dopuštenja za SMS-ove i povijest poziva.</string>
+<string name="finding_sms_network">Pristup SMS-ovima kombiniran je s internetskim pristupom. Potrebna je provjera konteksta.</string>
+<string name="finding_signer">Metapodaci certifikata za potpisivanje nedostaju ili nisu čitljivi.</string>
+<string name="finding_archive">Spremnik paketa nije se mogao potpuno pregledati. Statička analiza nije dovršena.</string>
+<string name="finding_packer">Putanja u paketu podsjeća na poznati alat za pakiranje ili zaštitu. I legitimne aplikacije mogu ga koristiti.</string>
+<string name="finding_dex_header">Zaglavlje koda sadrži nedosljedna polja formata ili veličine. To nije dokaz zlonamjernog softvera.</string>
+<string name="finding_dex_short">Stavka koda kraća je od valjanog zaglavlja pa se nije mogla potpuno pregledati.</string>
+<string name="finding_entropy">Uzorak koda ima visoku entropiju bajtova. Uzrok može biti šifriranje, pakiranje ili bezopasan komprimirani sadržaj.</string>
+<string name="finding_api">Nije pronađena očekivana statička referenca za traženo dopuštenje. To mogu objasniti refleksija, biblioteke ili dinamički učitan kod.</string>
+<string name="finding_rules">Pronađeno je podudaranje s ograničenim priloženim potpisom koda. To je upozorenje, ne dokaz zlonamjernog softvera.</string>
+<string name="finding_other">Dodatni lokalni pokazatelji zahtijevaju ručni pregled. Ne potvrđuju zlonamjerni softver.</string>
+<string name="integrity_manager">Vidljiv je upravitelj root pristupa ili presretanja: %1$s</string>
+<string name="integrity_test_keys">Izgradnja uređaja koristi testne ključeve za potpisivanje.</string>
+<string name="integrity_debug_build">Svojstva izgradnje upućuju na sustav koji se može otklanjati ili nije namijenjen produkciji.</string>
+<string name="integrity_selinux">Čitljiv lokalni status navodi da je obavezna provedba sigurnosti isključena.</string>
+<string name="integrity_debugger">Program za otklanjanje pogrešaka povezan je s ovim procesom.</string>
+<string name="integrity_emulator">Svojstva izgradnje podsjećaju na emulator ili testni uređaj.</string>
+<string name="audit_scan_pending">Instalacija je zabilježena. Lokalna analiza čeka.</string>
+<string name="audit_scan_complete">Lokalna analiza dovršena je bez potvrđenog podudaranja potpisa. To nije jamstvo sigurnosti.</string>
+<string name="audit_scan_unavailable">Paket nije bio vidljiv tijekom analize.</string>
+<string name="audit_scan_threat">Pronađeno je točno podudaranje s lokalnim potpisom prijetnje.</string>
+<string name="audit_scan_review">Lokalni pokazatelji zahtijevaju pregled; ne potvrđuju zlonamjerni softver.</string>
+<string name="audit_source_recorded">Izvor instalacije je zabilježen.</string>
+<string name="audit_uninstall_requested">Zatražena je Androidova potvrda deinstalacije.</string>
+<string name="audit_uninstall_success">Android je prijavio uspješnu deinstalaciju.</string>
+<string name="audit_uninstall_failed">Android nije mogao dovršiti zahtjev za deinstalaciju.</string>
+<string name="severity_test">Bezopasna testna oznaka</string>
+<string name="severity_low">Niska ozbiljnost</string>
+<string name="severity_medium">Srednja ozbiljnost</string>
+<string name="severity_high">Visoka ozbiljnost</string>
+<string name="severity_critical">Kritična ozbiljnost</string>
+<string name="severity_unknown">Ozbiljnost nije navedena</string>
+<plurals name="l10n_scanned_apps"><item quantity="one">Skenirana je %1$d aplikacija</item><item quantity="few">Skenirane su %1$d aplikacije</item><item quantity="other">Skenirano je %1$d aplikacija</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="one">Skenirana je %1$d datoteka</item><item quantity="few">Skenirane su %1$d datoteke</item><item quantity="other">Skenirano je %1$d datoteka</item></plurals>
+<plurals name="l10n_threats"><item quantity="one">Pronađena je %1$d prijetnja</item><item quantity="few">Pronađene su %1$d prijetnje</item><item quantity="other">Pronađeno je %1$d prijetnji</item></plurals>
+<plurals name="l10n_review"><item quantity="one">%1$d rezultat treba pregled</item><item quantity="few">%1$d rezultata trebaju pregled</item><item quantity="other">%1$d rezultata treba pregled</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="one">%1$d stavka nije se mogla skenirati</item><item quantity="few">%1$d stavke nisu se mogle skenirati</item><item quantity="other">%1$d stavki nije se moglo skenirati</item></plurals>
+<plurals name="l10n_no_match"><item quantity="one">%1$d rezultat bez lokalnog podudaranja</item><item quantity="few">%1$d rezultata bez lokalnog podudaranja</item><item quantity="other">%1$d rezultata bez lokalnog podudaranja</item></plurals>
+<plurals name="l10n_apps"><item quantity="one">%1$d aplikacija</item><item quantity="few">%1$d aplikacije</item><item quantity="other">%1$d aplikacija</item></plurals>
+<plurals name="l10n_files"><item quantity="one">%1$d datoteka</item><item quantity="few">%1$d datoteke</item><item quantity="other">%1$d datoteka</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="one">%1$d nesistemska aplikacija ima visokorizičan pristup.</item><item quantity="few">%1$d nesistemske aplikacije imaju visokorizičan pristup.</item><item quantity="other">%1$d nesistemskih aplikacija ima visokorizičan pristup.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="one">%1$d zabilježena promjena čeka obavijest.</item><item quantity="few">%1$d zabilježene promjene čekaju obavijest.</item><item quantity="other">%1$d zabilježenih promjena čeka obavijest.</item></plurals>
+<plurals name="l10n_rules"><item quantity="one">Ograničena pokrivenost · %1$d priloženo pravilo</item><item quantity="few">Ograničena pokrivenost · %1$d priložena pravila</item><item quantity="other">Ograničena pokrivenost · %1$d priloženih pravila</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="one">Zadnje skeniranje: %1$d savjetodavno podudaranje koda.</item><item quantity="few">Zadnje skeniranje: %1$d savjetodavna podudaranja koda.</item><item quantity="other">Zadnje skeniranje: %1$d savjetodavnih podudaranja koda.</item></plurals>
+<plurals name="l10n_imported"><item quantity="one">U lokalnu pohranu uvezen je %1$d valjan potpis.</item><item quantity="few">U lokalnu pohranu uvezena su %1$d valjana potpisa.</item><item quantity="other">U lokalnu pohranu uvezeno je %1$d valjanih potpisa.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="one">%1$d bajt</item><item quantity="few">%1$d bajta</item><item quantity="other">%1$d bajtova</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="one">Prisutan je %1$d pokazatelj datotečnog sustava povezan s rootom.</item><item quantity="few">Prisutna su %1$d pokazatelja datotečnog sustava povezana s rootom.</item><item quantity="other">Prisutno je %1$d pokazatelja datotečnog sustava povezanih s rootom.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="one">Prisutan je %1$d pokazatelj presretanja.</item><item quantity="few">Prisutna su %1$d pokazatelja presretanja.</item><item quantity="other">Prisutno je %1$d pokazatelja presretanja.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="one">%1$d aplikacija uključena</item><item quantity="few">%1$d aplikacije uključene</item><item quantity="other">%1$d aplikacija uključeno</item></plurals>
+<plurals name="l10n_indicators"><item quantity="one">%1$d pokazatelj</item><item quantity="few">%1$d pokazatelja</item><item quantity="other">%1$d pokazatelja</item></plurals>
+<plurals name="l10n_progress"><item quantity="one">Provjerena %1$d od %2$d aplikacije</item><item quantity="few">Provjerene %1$d od %2$d aplikacija</item><item quantity="other">Provjereno %1$d od %2$d aplikacija</item></plurals>
 </resources>
