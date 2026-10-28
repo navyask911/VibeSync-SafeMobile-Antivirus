@@ -786,23 +786,23 @@
 <string name="severity_high">Yüksək ciddilik</string>
 <string name="severity_critical">Kritik ciddilik</string>
 <string name="severity_unknown">Ciddilik göstərilməyib</string>
-<plurals name="l10n_scanned_apps"><item quantity="other">%1$d tətbiq yoxlanılıb</item></plurals>
-<plurals name="l10n_scanned_files"><item quantity="other">%1$d fayl yoxlanılıb</item></plurals>
-<plurals name="l10n_threats"><item quantity="other">%1$d təhdid tapılıb</item></plurals>
-<plurals name="l10n_review"><item quantity="other">%1$d nəticə yoxlanmalıdır</item></plurals>
-<plurals name="l10n_unreadable"><item quantity="other">%1$d element yoxlanıla bilmədi</item></plurals>
-<plurals name="l10n_no_match"><item quantity="other">%1$d nəticədə yerli uyğunluq yoxdur</item></plurals>
-<plurals name="l10n_apps"><item quantity="other">%1$d tətbiq</item></plurals>
-<plurals name="l10n_files"><item quantity="other">%1$d fayl</item></plurals>
-<plurals name="l10n_posture_apps"><item quantity="other">%1$d qeyri-sistem tətbiqinin yüksək riskli girişi var.</item></plurals>
-<plurals name="l10n_pending_changes"><item quantity="other">%1$d qeydə alınmış dəyişiklik bildiriş gözləyir.</item></plurals>
-<plurals name="l10n_rules"><item quantity="other">Məhdud əhatə · %1$d daxili qayda</item></plurals>
-<plurals name="l10n_rule_matches"><item quantity="other">Son yoxlama: %1$d məsləhət xarakterli kod uyğunluğu.</item></plurals>
-<plurals name="l10n_imported"><item quantity="other">Yerli yaddaşa %1$d etibarlı imza idxal edilib.</item></plurals>
-<plurals name="l10n_bytes"><item quantity="other">%1$d bayt</item></plurals>
-<plurals name="l10n_root_indicators"><item quantity="other">%1$d root ilə bağlı fayl sistemi göstəricisi var.</item></plurals>
-<plurals name="l10n_hook_indicators"><item quantity="other">%1$d müdaxilə göstəricisi var.</item></plurals>
-<plurals name="l10n_enabled_apps"><item quantity="other">%1$d tətbiq aktivləşdirilib</item></plurals>
-<plurals name="l10n_indicators"><item quantity="other">%1$d göstərici</item></plurals>
-<plurals name="l10n_progress"><item quantity="other">%2$d tətbiqdən %1$d-i yoxlanılıb</item></plurals>
+<plurals name="l10n_scanned_apps"><item quantity="one">%1$d tətbiq yoxlanılıb</item><item quantity="other">%1$d tətbiq yoxlanılıb</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="one">%1$d fayl yoxlanılıb</item><item quantity="other">%1$d fayl yoxlanılıb</item></plurals>
+<plurals name="l10n_threats"><item quantity="one">%1$d təhdid tapılıb</item><item quantity="other">%1$d təhdid tapılıb</item></plurals>
+<plurals name="l10n_review"><item quantity="one">%1$d nəticə yoxlanmalıdır</item><item quantity="other">%1$d nəticə yoxlanmalıdır</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="one">%1$d element yoxlanıla bilmədi</item><item quantity="other">%1$d element yoxlanıla bilmədi</item></plurals>
+<plurals name="l10n_no_match"><item quantity="one">%1$d nəticədə yerli uyğunluq yoxdur</item><item quantity="other">%1$d nəticədə yerli uyğunluq yoxdur</item></plurals>
+<plurals name="l10n_apps"><item quantity="one">%1$d tətbiq</item><item quantity="other">%1$d tətbiq</item></plurals>
+<plurals name="l10n_files"><item quantity="one">%1$d fayl</item><item quantity="other">%1$d fayl</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="one">%1$d qeyri-sistem tətbiqinin yüksək riskli girişi var.</item><item quantity="other">%1$d qeyri-sistem tətbiqinin yüksək riskli girişi var.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="one">%1$d qeydə alınmış dəyişiklik bildiriş gözləyir.</item><item quantity="other">%1$d qeydə alınmış dəyişiklik bildiriş gözləyir.</item></plurals>
+<plurals name="l10n_rules"><item quantity="one">Məhdud əhatə · %1$d daxili qayda</item><item quantity="other">Məhdud əhatə · %1$d daxili qayda</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="one">Son yoxlama: %1$d məsləhət xarakterli kod uyğunluğu.</item><item quantity="other">Son yoxlama: %1$d məsləhət xarakterli kod uyğunluğu.</item></plurals>
+<plurals name="l10n_imported"><item quantity="one">Yerli yaddaşa %1$d etibarlı imza idxal edilib.</item><item quantity="other">Yerli yaddaşa %1$d etibarlı imza idxal edilib.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="one">%1$d bayt</item><item quantity="other">%1$d bayt</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="one">%1$d root ilə bağlı fayl sistemi göstəricisi var.</item><item quantity="other">%1$d root ilə bağlı fayl sistemi göstəricisi var.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="one">%1$d müdaxilə göstəricisi var.</item><item quantity="other">%1$d müdaxilə göstəricisi var.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="one">%1$d tətbiq aktivləşdirilib</item><item quantity="other">%1$d tətbiq aktivləşdirilib</item></plurals>
+<plurals name="l10n_indicators"><item quantity="one">%1$d göstərici</item><item quantity="other">%1$d göstərici</item></plurals>
+<plurals name="l10n_progress"><item quantity="one">%2$d tətbiqdən %1$d-i yoxlanılıb</item><item quantity="other">%2$d tətbiqdən %1$d-i yoxlanılıb</item></plurals>
 </resources>
