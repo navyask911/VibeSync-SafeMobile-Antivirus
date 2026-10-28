@@ -40,23 +40,7 @@ class InstallSentinelService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        val manager = getSystemService(NotificationManager::class.java)
-        manager.createNotificationChannel(NotificationChannel(CHANNEL,
-            getString(R.string.install_sentinel_title), NotificationManager.IMPORTANCE_LOW).apply {
-            setSound(null, null); enableVibration(false)
-        })
-        val open = PendingIntent.getActivity(this, 0, Intent(this, MainActivity::class.java),
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
-        val stop = PendingIntent.getService(this, 1, Intent(this, InstallSentinelService::class.java).setAction(STOP),
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
-        val notification = NotificationCompat.Builder(this, CHANNEL).setSmallIcon(R.drawable.ic_launcher)
-            .setContentTitle(getString(R.string.install_sentinel_active))
-            .setContentText(getString(R.string.install_sentinel_description)).setContentIntent(open)
-            .setOngoing(true).setSilent(true).setOnlyAlertOnce(true)
-            .setCategory(NotificationCompat.CATEGORY_SERVICE).setPriority(NotificationCompat.PRIORITY_LOW)
-            .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
-            .addAction(0, getString(R.string.install_sentinel_stop), stop).build()
-        ServiceCompat.startForeground(this, ID, notification,
+        ServiceCompat.startForeground(this, ID, foregroundNotification(),
             if (Build.VERSION.SDK_INT >= 34) ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE else 0)
         if (!enabled(this)) { stopSelf(); return }
         val liveReceiver = PackageInstallReceiver { name, eventId, updated ->
@@ -78,10 +62,33 @@ class InstallSentinelService : Service() {
         }
     }
 
+    private fun foregroundNotification(): android.app.Notification {
+        val local = LocalePreferences.wrap(this)
+        val manager = getSystemService(NotificationManager::class.java)
+        manager.createNotificationChannel(NotificationChannel(CHANNEL,
+            local.getString(R.string.install_sentinel_title), NotificationManager.IMPORTANCE_LOW).apply {
+            setSound(null, null); enableVibration(false)
+        })
+        val open = PendingIntent.getActivity(this, 0, Intent(this, MainActivity::class.java),
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+        val stop = PendingIntent.getService(this, 1, Intent(this, InstallSentinelService::class.java).setAction(STOP),
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+        val notification = NotificationCompat.Builder(local, CHANNEL).setSmallIcon(R.drawable.ic_launcher)
+            .setContentTitle(local.getString(R.string.install_sentinel_active))
+            .setContentText(local.getString(R.string.install_sentinel_description)).setContentIntent(open)
+            .setOngoing(true).setSilent(true).setOnlyAlertOnce(true)
+            .setCategory(NotificationCompat.CATEGORY_SERVICE).setPriority(NotificationCompat.PRIORITY_LOW)
+            .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
+            .addAction(0, local.getString(R.string.install_sentinel_stop), stop).build()
+        return notification
+    }
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent?.action == STOP) getSharedPreferences(SafeMobileApp.SECURITY_PREFS, MODE_PRIVATE)
             .edit().putBoolean(SafeMobileApp.KEY_INSTALL_SENTINEL_ENABLED, false).apply()
         if (!enabled(this)) { stopSelf(startId); return START_NOT_STICKY }
+        runCatching { getSystemService(NotificationManager::class.java).notify(ID, foregroundNotification()) }
+            .onFailure { Log.w(TAG, "Unable to refresh localized sentinel notification", it) }
         return START_STICKY
     }
 

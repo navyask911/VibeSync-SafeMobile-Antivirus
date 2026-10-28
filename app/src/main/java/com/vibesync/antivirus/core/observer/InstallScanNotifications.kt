@@ -18,6 +18,13 @@ import com.vibesync.antivirus.core.locale.LocalePreferences
 /** Silent delivery proof; escalation replaces this same event's notification on the alert channel. */
 internal object InstallScanNotifications {
     private const val CHANNEL = "install_scan_progress_v1"
+    private val alerts = LinkedHashSet<String>()
+
+    @Synchronized fun escalated(eventId: String) {
+        alerts.add(eventId)
+        while (alerts.size > 256) alerts.remove(alerts.first())
+    }
+    @Synchronized private fun wasEscalated(eventId: String) = eventId in alerts
 
     fun received(context: Context, label: String, eventId: String, trusted: Boolean = false) {
         val local = LocalePreferences.wrap(context)
@@ -49,6 +56,7 @@ internal object InstallScanNotifications {
 
     /** Keep delivery proof visible briefly, even for fast clean scans. Never overwrite an alert. */
     fun finish(context: Context, eventId: String) {
+        if (wasEscalated(eventId)) return
         val manager = context.getSystemService(NotificationManager::class.java) ?: return
         val id = SecurityAlertNotifier.notificationId(eventId)
         runCatching {
@@ -56,9 +64,9 @@ internal object InstallScanNotifications {
             if (receipt != null) {
                 val local = LocalePreferences.wrap(context)
                 val text = local.getString(R.string.install_scan_received)
-                val notification = NotificationCompat.Builder.recoverBuilder(local, receipt.notification)
-                    .setContentText(text).setStyle(NotificationCompat.BigTextStyle().bigText(text))
-                    .setOnlyAlertOnce(true).setSilent(true).setTimeoutAfter(15_000L).build()
+                val notification = android.app.Notification.Builder.recoverBuilder(local, receipt.notification)
+                    .setContentText(text).setStyle(android.app.Notification.BigTextStyle().bigText(text))
+                    .setOnlyAlertOnce(true).setTimeoutAfter(15_000L).build()
                 manager.notify(id, notification)
             }
         }.onFailure { Log.w("SafeMobileScan", "Unable to clear install progress", it) }
