@@ -3,7 +3,7 @@
     <string name="detection_capabilities_title">शोध क्षमता</string>
     <string name="detection_capabilities_description">या बिल्डमध्ये कोणत्या सुरक्षा तपासण्या सुरू, सल्लागार, अटींवर आधारित किंवा अनुपलब्ध आहेत ते पहा.</string>
     <string name="detection_capabilities_truth_title">महत्त्वाचे: स्कॅन परिणामांचा अर्थ</string>
-    <string name="detection_capabilities_truth_body">स्थानिक जुळणी न मिळणे म्हणजे फाइल सुरक्षित आहे याचा पुरावा नाही. विश्वासार्ह स्वाक्षरी की आणि पडताळलेला उत्पादन डेटाबेस सेट होईपर्यंत स्वाक्षरी हॅश इंजिन बंद राहते. YARA आणि मशीन लर्निंग बंद आहेत. हीयुरिस्टिक्स चुकीचे इशारे देऊ शकतात. खालील मेट्रिक्स मोजलेले नाहीत.</string>
+    <string name="detection_capabilities_truth_body">स्थानिक जुळणी नसणे फाइलच्या सुरक्षिततेचा पुरावा नाही. विश्वस्त स्वाक्षरी कळ व पडताळलेले उत्पादन माहितीभांडार मांडेपर्यंत स्वाक्षरी हॅश यंत्र बंद राहते. पडताळलेले सोबतचे नियम उघडल्यावर मर्यादित ऑफलाइन DEX नियम चालतात; यंत्रशिक्षण बंद राहते. अनुमान चुकीचे इशारे देऊ शकते. खालील मोजमापे मोजलेली नाहीत.</string>
     <string name="detection_capabilities_enabled">सुरू</string>
     <string name="detection_capabilities_disabled">बंद</string>
     <string name="detection_capabilities_limited">मर्यादित कव्हरेज</string>

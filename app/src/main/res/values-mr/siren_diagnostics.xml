@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<!-- Explicit English fallbacks; professionally reviewed translation not yet available. -->
-  <string name="siren_test_settings_title">Siren diagnostics</string>
-  <string name="siren_test_settings_description">Test the five-second siren and alert preview. This does not detect malware, modify your threat database, or request an uninstall.</string>
-  <string name="siren_test_button">Test Threat Siren</string>
-  <string name="siren_test_title">SIREN TEST — NOT A REAL THREAT</string>
-  <string name="siren_test_notification">Manual sound check. No malicious app has been detected.</string>
-  <string name="siren_test_preview">This is a SafeMobile siren test. No installed app was flagged and no uninstall is requested. Tap Dismiss to stop the audio.</string>
-  <string name="voice_siren_test">This is a SafeMobile siren test. No threat has been detected.</string>
-  <string name="battery_review_title">Battery restrictions may delay protection</string>
-  <string name="battery_review_body">Battery saver or app optimization is active. Some Oppo/ColorOS devices restrict background scans and installation alerts. Review the battery settings for SafeMobile; this does not guarantee continuous monitoring.</string>
-  <string name="battery_review_action">Review battery settings</string>
-  <string name="battery_review_unavailable">Android battery settings could not be opened.</string>
-  <string name="full_screen_dashboard_warning">Critical Alerts Disabled: Tap to grant permission for full-screen malware warnings.</string>
-  <string name="full_screen_dashboard_fallback">Full-screen access is optional. When Security Alerts are enabled, the five-second siren and high-priority notification still work without this access, subject to Android notification and sound settings.</string>
-  <string name="full_screen_settings_unavailable">Full-screen alert settings could not be opened. You can continue using SafeMobile.</string>
-  <string name="system_app_protection_badge">System apps protected from review and uninstall</string>
-  <string name="system_app_scan_complete">Scan Complete. No threats found in the items checked. System apps are excluded from review and uninstall; their integrity has not been verified by this scan.</string>
-  <string name="ui_folder_access_not_granted">Folder access was not granted. You can continue with limited protection.</string>
+<string name="siren_test_settings_title">सायरन निदान</string>
+<string name="siren_test_settings_description">पाच सेकंदांचा सायरन व इशाऱ्याचे पूर्वदृश्य तपासा. मालवेअर शोधत नाही, माहितीभांडार बदलत नाही किंवा अॅप काढणे मागत नाही.</string>
+<string name="siren_test_button">धोका सायरन तपासा</string>
+<string name="siren_test_title">सायरन चाचणी — खरा धोका नाही</string>
+<string name="siren_test_notification">हाताने आवाज चाचणी. घातक अॅप आढळले नाही.</string>
+<string name="siren_test_preview">ही SafeMobile सायरन चाचणी आहे. अॅप चिन्हांकित नाही व काढण्याची मागणी नाही. आवाज थांबवण्यासाठी दुर्लक्ष करा निवडा.</string>
+<string name="voice_siren_test">ही SafeMobile सायरन चाचणी आहे. धोका आढळला नाही.</string>
+<string name="battery_review_title">बॅटरी मर्यादांमुळे संरक्षण उशिरा मिळू शकते</string>
+<string name="battery_review_body">बॅटरी बचत किंवा अॅप अनुकूलन सुरू आहे. काही Oppo/ColorOS डिव्हाइस पार्श्वभूमी तपासणी व स्थापना इशारे मर्यादित करतात. SafeMobile बॅटरी सेटिंग्ज पाहा; सतत निरीक्षणाची हमी नाही.</string>
+<string name="battery_review_action">बॅटरी सेटिंग्ज पाहा</string>
+<string name="battery_review_unavailable">Android बॅटरी सेटिंग्ज उघडता आल्या नाहीत.</string>
+<string name="full_screen_dashboard_warning">महत्त्वाचे इशारे बंद: पूर्ण पडद्याच्या मालवेअर इशाऱ्यांची परवानगी देण्यासाठी स्पर्श करा.</string>
+<string name="full_screen_dashboard_fallback">पूर्ण पडद्याचा प्रवेश ऐच्छिक. सुरक्षा इशारे सुरू असल्यास या प्रवेशाशिवायही पाच सेकंदांचा सायरन व उच्च प्राधान्य सूचना Android आवाज व सूचना सेटिंग्जनुसार चालतात.</string>
+<string name="full_screen_settings_unavailable">पूर्ण पडद्याच्या इशाऱ्यांची सेटिंग्ज उघडता आली नाहीत. SafeMobile वापर चालू ठेवू शकता.</string>
+<string name="system_app_protection_badge">प्रणाली अॅप्स पाहणे व काढण्यापासून संरक्षित</string>
+<string name="system_app_scan_complete">तपासणी पूर्ण. तपासलेल्या गोष्टींत धोके नाहीत. प्रणाली अॅप्स पाहणे व काढण्यातून वगळलेली; त्यांची अखंडता या तपासणीत पडताळली नाही.</string>
+<string name="ui_folder_access_not_granted">फोल्डर प्रवेश दिलेला नाही. मर्यादित संरक्षणासह पुढे जाऊ शकता.</string>
 </resources>

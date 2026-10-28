@@ -3,7 +3,7 @@
     <string name="detection_capabilities_title">Capacidades de deteção</string>
     <string name="detection_capabilities_description">Veja quais verificações de segurança estão ativas, são indicativas, condicionais ou indisponíveis nesta compilação.</string>
     <string name="detection_capabilities_truth_title">Importante: significado dos resultados</string>
-    <string name="detection_capabilities_truth_body">Não encontrar correspondência local não prova que um ficheiro é seguro. O motor de hashes assinados permanece desativado até existir uma chave de assinatura fiável e uma base de produção verificada. YARA e aprendizagem automática estão desativados. As heurísticas podem gerar falsos alertas. As métricas abaixo não foram medidas.</string>
+    <string name="detection_capabilities_truth_body">A ausência de correspondência local não prova que um ficheiro seja seguro. O motor de hashes assinados permanece desativado até serem configuradas uma chave de confiança e uma base de produção revista. Um conjunto limitado de regras DEX sem ligação funciona quando as regras incluídas verificadas são carregadas; a aprendizagem automática continua desativada. As heurísticas podem dar falsos alarmes. As métricas abaixo não foram medidas.</string>
     <string name="detection_capabilities_enabled">Ativo</string>
     <string name="detection_capabilities_disabled">Desativado</string>
     <string name="detection_capabilities_limited">Cobertura limitada</string>

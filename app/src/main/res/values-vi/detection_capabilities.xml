@@ -3,7 +3,7 @@
     <string name="detection_capabilities_title">Khả năng phát hiện</string>
     <string name="detection_capabilities_description">Xem các bước kiểm tra bảo mật đang bật, chỉ mang tính tham khảo, có điều kiện hoặc không khả dụng trong bản dựng này.</string>
     <string name="detection_capabilities_truth_title">Quan trọng: ý nghĩa kết quả quét</string>
-    <string name="detection_capabilities_truth_body">Không có kết quả khớp cục bộ không chứng minh tệp an toàn. Công cụ băm có chữ ký vẫn bị tắt cho đến khi cấu hình khóa ký đáng tin cậy và cơ sở dữ liệu phát hành đã được kiểm duyệt. YARA và học máy đang tắt. Phân tích heuristic có thể cảnh báo sai. Các chỉ số dưới đây chưa được đo.</string>
+    <string name="detection_capabilities_truth_body">Không khớp cục bộ không chứng minh tệp an toàn. Công cụ băm có chữ ký vẫn tắt cho đến khi có khóa ký đáng tin và cơ sở dữ liệu đã kiểm duyệt. Một tập quy tắc DEX ngoại tuyến hạn chế chạy khi nạp được quy tắc đi kèm đã xác minh; học máy vẫn tắt. Phân tích theo kinh nghiệm có thể báo sai. Chỉ số bên dưới chưa được đo.</string>
     <string name="detection_capabilities_enabled">Đã bật</string>
     <string name="detection_capabilities_disabled">Đã tắt</string>
     <string name="detection_capabilities_limited">Phạm vi giới hạn</string>

@@ -140,14 +140,15 @@ jobs:
           Built from commit ${GITHUB_SHA}.
           Includes the Phase B bundled on-device Kotlin YARA-compatible DEX scanner, adapted MIT-licensed rules, Detection Capabilities ACTIVE (LIMITED) status, and scan-rule match reporting.
           The YARA engine supports only a bounded subset of the YARA language; findings are advisory SUSPICIOUS indicators, not definitive malware verdicts.
-          v1.0.9 hardening: exclude flagged core system and Oppo/ColorOS packages from Device Posture review; show third-party installed apps only.
+          v1.0.12: absolute local package trust skips all scan engines and package alerts, including future updates. Untrusted packages retain automatic post-install scanning.
+          Includes the battery-optimization exemption request and settings recovery for devices with restrictive background policies, including Oppo/ColorOS.
           Fix post-install scan delivery while SafeMobile runs using a runtime-registered PACKAGE_ADDED receiver; offer Android 13+ notification permission and settings recovery. Android/OEM limits still apply when the app is force-stopped.
           Improve Quarantine Vault confirmation sequencing and error handling: dismiss before asynchronous deletion, preserve Room records if file deletion fails.
-          Full translated resource coverage for Kannada and French, localized scan progress and sentinel/dashboard strings, system-locale TTS wording; 22 language resources retain Android fallback where translations are unavailable.
+          Native translations for all 700 default string keys in 22 requested languages, including navigation, dashboard, permissions, scan results and siren alerts. Translation scripts and external translation dependencies have been removed.
           Bundles pinned SIL OFL 1.1 DM Sans Regular, Medium and Bold for modern Latin typography with platform fallback for other scripts.
           Also includes scan-completion feedback, a transparent configuration score, cyan glass styling, and recursive multi-folder SAF monitoring.
           Optional harmless siren fixture: first import siren-test-definitions.json in Scan > Import definitions, then copy SafeMobile-Siren-Test.apk into a monitored folder or install it to test the post-install receiver. The test APK contains no executable code.
-          Android 11+ blocks the main Download folder in SAF; select a subfolder or WhatsApp Documents. Skip remains available.
+          Android 11+ blocks protected storage roots in SAF; select an accessible subfolder or a chat-document folder. Skip remains available.
           Device test instructions: https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/blob/${GITHUB_SHA}/docs/SIREN_AND_FOLDER_TESTING.md
           EOF
           gh release create "$tag" --target "$GITHUB_SHA" \

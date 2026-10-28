@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<!-- Explicit English fallbacks; professionally reviewed translation not yet available. -->
-  <string name="siren_test_settings_title">Siren diagnostics</string>
-  <string name="siren_test_settings_description">Test the five-second siren and alert preview. This does not detect malware, modify your threat database, or request an uninstall.</string>
-  <string name="siren_test_button">Test Threat Siren</string>
-  <string name="siren_test_title">SIREN TEST — NOT A REAL THREAT</string>
-  <string name="siren_test_notification">Manual sound check. No malicious app has been detected.</string>
-  <string name="siren_test_preview">This is a SafeMobile siren test. No installed app was flagged and no uninstall is requested. Tap Dismiss to stop the audio.</string>
-  <string name="voice_siren_test">This is a SafeMobile siren test. No threat has been detected.</string>
-  <string name="battery_review_title">Battery restrictions may delay protection</string>
-  <string name="battery_review_body">Battery saver or app optimization is active. Some Oppo/ColorOS devices restrict background scans and installation alerts. Review the battery settings for SafeMobile; this does not guarantee continuous monitoring.</string>
-  <string name="battery_review_action">Review battery settings</string>
-  <string name="battery_review_unavailable">Android battery settings could not be opened.</string>
-  <string name="full_screen_dashboard_warning">Critical Alerts Disabled: Tap to grant permission for full-screen malware warnings.</string>
-  <string name="full_screen_dashboard_fallback">Full-screen access is optional. When Security Alerts are enabled, the five-second siren and high-priority notification still work without this access, subject to Android notification and sound settings.</string>
-  <string name="full_screen_settings_unavailable">Full-screen alert settings could not be opened. You can continue using SafeMobile.</string>
-  <string name="system_app_protection_badge">System apps protected from review and uninstall</string>
-  <string name="system_app_scan_complete">Scan Complete. No threats found in the items checked. System apps are excluded from review and uninstall; their integrity has not been verified by this scan.</string>
-  <string name="ui_folder_access_not_granted">Folder access was not granted. You can continue with limited protection.</string>
+<string name="siren_test_settings_title">사이렌 진단</string>
+<string name="siren_test_settings_description">5초 사이렌과 경고 미리보기를 시험합니다. 악성코드를 탐지하거나 위협 데이터베이스를 변경하거나 앱 제거를 요청하지 않습니다.</string>
+<string name="siren_test_button">위협 사이렌 시험</string>
+<string name="siren_test_title">사이렌 시험 — 실제 위협 아님</string>
+<string name="siren_test_notification">수동 소리 확인. 악성 앱이 탐지되지 않았습니다.</string>
+<string name="siren_test_preview">SafeMobile 사이렌 시험입니다. 설치 앱이 신고되지 않았고 제거 요청도 없습니다. 닫기를 누르면 소리가 멈춥니다.</string>
+<string name="voice_siren_test">SafeMobile 사이렌 시험입니다. 위협이 탐지되지 않았습니다.</string>
+<string name="battery_review_title">배터리 제한이 보호를 지연할 수 있음</string>
+<string name="battery_review_body">절전 또는 앱 최적화가 켜져 있습니다. 일부 Oppo/ColorOS 기기는 백그라운드 검사와 설치 경고를 제한합니다. SafeMobile 배터리 설정을 확인하세요. 지속적 감시가 보장되지는 않습니다.</string>
+<string name="battery_review_action">배터리 설정 확인</string>
+<string name="battery_review_unavailable">Android 배터리 설정을 열 수 없습니다.</string>
+<string name="full_screen_dashboard_warning">중요 경고 꺼짐: 눌러 전체 화면 악성코드 경고 권한을 허용하세요.</string>
+<string name="full_screen_dashboard_fallback">전체 화면 접근은 선택 사항입니다. 보안 경고를 켜면 이 권한 없이도 5초 사이렌과 높은 우선순위 알림이 작동하며 Android 알림 및 소리 설정에 영향을 받습니다.</string>
+<string name="full_screen_settings_unavailable">전체 화면 경고 설정을 열 수 없습니다. SafeMobile은 계속 사용할 수 있습니다.</string>
+<string name="system_app_protection_badge">시스템 앱은 검토 및 제거에서 보호됨</string>
+<string name="system_app_scan_complete">검사 완료. 확인한 항목에서 위협이 없습니다. 시스템 앱은 검토와 제거에서 제외되며 이 검사로 무결성을 확인하지 않았습니다.</string>
+<string name="ui_folder_access_not_granted">폴더 접근이 허용되지 않았습니다. 제한된 보호로 계속할 수 있습니다.</string>
 </resources>

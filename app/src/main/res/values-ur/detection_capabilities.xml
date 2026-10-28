@@ -3,7 +3,7 @@
     <string name="detection_capabilities_title">پتہ لگانے کی صلاحیتیں</string>
     <string name="detection_capabilities_description">دیکھیں کہ اس بلڈ میں کون سی حفاظتی جانچیں فعال، مشاورتی، مشروط یا دستیاب نہیں ہیں۔</string>
     <string name="detection_capabilities_truth_title">اہم: اسکین کے نتائج کا مطلب</string>
-    <string name="detection_capabilities_truth_body">مقامی مماثلت نہ ملنا فائل کے محفوظ ہونے کا ثبوت نہیں۔ دستخط شدہ ہیش انجن اس وقت تک غیر فعال رہے گا جب تک قابل اعتماد دستخطی کلید اور تصدیق شدہ پیداواری ڈیٹابیس ترتیب نہ دیے جائیں۔ YARA اور مشین لرننگ غیر فعال ہیں۔ ہیؤرسٹکس غلط انتباہات دے سکتی ہیں۔ ذیل کے اعدادوشمار ناپے نہیں گئے۔</string>
+    <string name="detection_capabilities_truth_body">مقامی مماثلت نہ ہونا حفاظت کا ثبوت نہیں۔ قابلِ اعتماد دستخط کلید اور جانچا پیداواری ڈیٹابیس ترتیب دینے تک دستخط ہیش نظام بند رہتا ہے۔ تصدیق والے شامل اصول لوڈ ہوں تو محدود آف لائن DEX اصول چلتے ہیں؛ مشینی تعلیم بند رہتی ہے۔ قیاسی جانچ غلط انتباہ دے سکتی ہے۔ نیچے پیمانے ناپے نہیں گئے۔</string>
     <string name="detection_capabilities_enabled">فعال</string>
     <string name="detection_capabilities_disabled">غیر فعال</string>
     <string name="detection_capabilities_limited">محدود کوریج</string>

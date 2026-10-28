@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<!-- Explicit English fallbacks; professionally reviewed translation not yet available. -->
-  <string name="siren_test_settings_title">Siren diagnostics</string>
-  <string name="siren_test_settings_description">Test the five-second siren and alert preview. This does not detect malware, modify your threat database, or request an uninstall.</string>
-  <string name="siren_test_button">Test Threat Siren</string>
-  <string name="siren_test_title">SIREN TEST — NOT A REAL THREAT</string>
-  <string name="siren_test_notification">Manual sound check. No malicious app has been detected.</string>
-  <string name="siren_test_preview">This is a SafeMobile siren test. No installed app was flagged and no uninstall is requested. Tap Dismiss to stop the audio.</string>
-  <string name="voice_siren_test">This is a SafeMobile siren test. No threat has been detected.</string>
-  <string name="battery_review_title">Battery restrictions may delay protection</string>
-  <string name="battery_review_body">Battery saver or app optimization is active. Some Oppo/ColorOS devices restrict background scans and installation alerts. Review the battery settings for SafeMobile; this does not guarantee continuous monitoring.</string>
-  <string name="battery_review_action">Review battery settings</string>
-  <string name="battery_review_unavailable">Android battery settings could not be opened.</string>
-  <string name="full_screen_dashboard_warning">Critical Alerts Disabled: Tap to grant permission for full-screen malware warnings.</string>
-  <string name="full_screen_dashboard_fallback">Full-screen access is optional. When Security Alerts are enabled, the five-second siren and high-priority notification still work without this access, subject to Android notification and sound settings.</string>
-  <string name="full_screen_settings_unavailable">Full-screen alert settings could not be opened. You can continue using SafeMobile.</string>
-  <string name="system_app_protection_badge">System apps protected from review and uninstall</string>
-  <string name="system_app_scan_complete">Scan Complete. No threats found in the items checked. System apps are excluded from review and uninstall; their integrity has not been verified by this scan.</string>
-  <string name="ui_folder_access_not_granted">Folder access was not granted. You can continue with limited protection.</string>
+  <string name="siren_test_settings_title">Diagnóstico da sirene</string>
+  <string name="siren_test_settings_description">Teste a sirene de cinco segundos e a pré-visualização do alerta. Não deteta ameaças, não altera a base de dados nem solicita desinstalações.</string>
+  <string name="siren_test_button">Testar sirene de ameaça</string>
+  <string name="siren_test_title">TESTE DE SIRENE — NÃO É UMA AMEAÇA REAL</string>
+  <string name="siren_test_notification">Teste manual do som. Não foi detetada qualquer aplicação maliciosa.</string>
+  <string name="siren_test_preview">Este é um teste da sirene do SafeMobile. Nenhuma aplicação foi sinalizada e não foi pedida qualquer desinstalação. Toque em Dispensar para parar o áudio.</string>
+  <string name="voice_siren_test">Este é um teste da sirene do SafeMobile. Não foi detetada qualquer ameaça.</string>
+  <string name="battery_review_title">As restrições da bateria podem atrasar a proteção</string>
+  <string name="battery_review_body">A poupança de bateria ou a otimização de aplicações está ativa. Alguns dispositivos Oppo/ColorOS limitam análises em segundo plano e alertas de instalação. Reveja as definições de bateria do SafeMobile; isto não garante monitorização contínua.</string>
+  <string name="battery_review_action">Rever definições da bateria</string>
+  <string name="battery_review_unavailable">Não foi possível abrir as definições de bateria do Android.</string>
+  <string name="full_screen_dashboard_warning">Alertas críticos desativados: toque para permitir avisos de ameaças em ecrã inteiro.</string>
+  <string name="full_screen_dashboard_fallback">O acesso ao ecrã inteiro é opcional. Com os Alertas de segurança ativos, a sirene de cinco segundos e a notificação prioritária funcionam sem esse acesso, sujeitos às definições de notificações e som do Android.</string>
+  <string name="full_screen_settings_unavailable">Não foi possível abrir as definições de alertas em ecrã inteiro. Pode continuar a usar o SafeMobile.</string>
+  <string name="system_app_protection_badge">Aplicações de sistema protegidas contra revisão e desinstalação</string>
+  <string name="system_app_scan_complete">Análise concluída. Não foram encontradas ameaças nos itens verificados. As aplicações de sistema são excluídas da revisão e desinstalação; esta análise não verificou a sua integridade.</string>
+  <string name="ui_folder_access_not_granted">O acesso à pasta não foi concedido. Pode continuar com proteção limitada.</string>
 </resources>

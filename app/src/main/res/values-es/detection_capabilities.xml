@@ -3,7 +3,7 @@
     <string name="detection_capabilities_title">Capacidades de detección</string>
     <string name="detection_capabilities_description">Consulta qué comprobaciones están activas, son orientativas, condicionales o no están disponibles en esta compilación.</string>
     <string name="detection_capabilities_truth_title">Importante: significado de los resultados</string>
-    <string name="detection_capabilities_truth_body">No encontrar coincidencias locales no demuestra que un archivo sea seguro. El motor de hashes firmados permanece desactivado hasta configurar una clave de firma de confianza y una base de datos de producción verificada. YARA y el aprendizaje automático están desactivados. Las heurísticas pueden generar falsos avisos. Las métricas siguientes no se han medido.</string>
+    <string name="detection_capabilities_truth_body">La ausencia de coincidencias locales no demuestra que un archivo sea seguro. El motor de huellas firmadas permanece desactivado hasta configurar una clave de firma de confianza y una base de producción verificada. Un conjunto limitado de reglas DEX sin conexión se ejecuta cuando se cargan reglas incluidas verificadas; el aprendizaje automático sigue desactivado. Las heurísticas pueden dar falsas alarmas. Las métricas siguientes no se han medido.</string>
     <string name="detection_capabilities_enabled">Activo</string>
     <string name="detection_capabilities_disabled">Desactivado</string>
     <string name="detection_capabilities_limited">Cobertura limitada</string>

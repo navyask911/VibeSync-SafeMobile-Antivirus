@@ -3,7 +3,7 @@
     <string name="detection_capabilities_title">সনাক্তকরণ সক্ষমতা</string>
     <string name="detection_capabilities_description">এই বিল্ডে কোন নিরাপত্তা পরীক্ষা চালু, পরামর্শমূলক, শর্তসাপেক্ষ বা অনুপলব্ধ তা দেখুন।</string>
     <string name="detection_capabilities_truth_title">গুরুত্বপূর্ণ: স্ক্যান ফলাফলের অর্থ</string>
-    <string name="detection_capabilities_truth_body">স্থানীয় মিল না পাওয়া ফাইল নিরাপদ প্রমাণ করে না। বিশ্বস্ত স্বাক্ষর কী এবং যাচাইকৃত উৎপাদন ডেটাবেস না থাকা পর্যন্ত স্বাক্ষরিত হ্যাশ ইঞ্জিন বন্ধ থাকে। YARA এবং মেশিন লার্নিং বন্ধ। হিউরিস্টিক ভুল সতর্কতা দিতে পারে। নিচের মেট্রিক মাপা হয়নি।</string>
+    <string name="detection_capabilities_truth_body">স্থানীয় মিল না থাকা ফাইলের নিরাপত্তার প্রমাণ নয়। বিশ্বস্ত স্বাক্ষর চাবি ও যাচাইকৃত উৎপাদন তথ্যভান্ডার না থাকলে স্বাক্ষরিত হ্যাশ ইঞ্জিন বন্ধ থাকে। যাচাইকৃত অন্তর্ভুক্ত নিয়ম খুললে সীমিত অফলাইন DEX নিয়ম চলে; যান্ত্রিক শিক্ষণ বন্ধ থাকে। আনুমানিক বিশ্লেষণ ভুল সতর্কতা দিতে পারে। নিচের পরিমাপগুলি মাপা হয়নি।</string>
     <string name="detection_capabilities_enabled">চালু</string>
     <string name="detection_capabilities_disabled">বন্ধ</string>
     <string name="detection_capabilities_limited">সীমিত কভারেজ</string>

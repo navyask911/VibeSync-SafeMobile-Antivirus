@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<!-- Explicit English fallbacks; professionally reviewed translation not yet available. -->
-  <string name="siren_test_settings_title">Siren diagnostics</string>
-  <string name="siren_test_settings_description">Test the five-second siren and alert preview. This does not detect malware, modify your threat database, or request an uninstall.</string>
-  <string name="siren_test_button">Test Threat Siren</string>
-  <string name="siren_test_title">SIREN TEST — NOT A REAL THREAT</string>
-  <string name="siren_test_notification">Manual sound check. No malicious app has been detected.</string>
-  <string name="siren_test_preview">This is a SafeMobile siren test. No installed app was flagged and no uninstall is requested. Tap Dismiss to stop the audio.</string>
-  <string name="voice_siren_test">This is a SafeMobile siren test. No threat has been detected.</string>
-  <string name="battery_review_title">Battery restrictions may delay protection</string>
-  <string name="battery_review_body">Battery saver or app optimization is active. Some Oppo/ColorOS devices restrict background scans and installation alerts. Review the battery settings for SafeMobile; this does not guarantee continuous monitoring.</string>
-  <string name="battery_review_action">Review battery settings</string>
-  <string name="battery_review_unavailable">Android battery settings could not be opened.</string>
-  <string name="full_screen_dashboard_warning">Critical Alerts Disabled: Tap to grant permission for full-screen malware warnings.</string>
-  <string name="full_screen_dashboard_fallback">Full-screen access is optional. When Security Alerts are enabled, the five-second siren and high-priority notification still work without this access, subject to Android notification and sound settings.</string>
-  <string name="full_screen_settings_unavailable">Full-screen alert settings could not be opened. You can continue using SafeMobile.</string>
-  <string name="system_app_protection_badge">System apps protected from review and uninstall</string>
-  <string name="system_app_scan_complete">Scan Complete. No threats found in the items checked. System apps are excluded from review and uninstall; their integrity has not been verified by this scan.</string>
-  <string name="ui_folder_access_not_granted">Folder access was not granted. You can continue with limited protection.</string>
+<string name="siren_test_settings_title">Chẩn đoán còi báo</string>
+<string name="siren_test_settings_description">Thử còi năm giây và xem trước cảnh báo. Không phát hiện mã độc, không sửa cơ sở dữ liệu hay yêu cầu gỡ ứng dụng.</string>
+<string name="siren_test_button">Thử còi cảnh báo</string>
+<string name="siren_test_title">THỬ CÒI — KHÔNG PHẢI ĐE DỌA THẬT</string>
+<string name="siren_test_notification">Kiểm tra âm thanh thủ công. Không phát hiện ứng dụng độc hại.</string>
+<string name="siren_test_preview">Đây là thử còi SafeMobile. Không đánh dấu ứng dụng nào và không yêu cầu gỡ. Nhấn Bỏ qua để dừng âm thanh.</string>
+<string name="voice_siren_test">Đây là thử còi SafeMobile. Không phát hiện mối đe dọa.</string>
+<string name="battery_review_title">Giới hạn pin có thể làm chậm bảo vệ</string>
+<string name="battery_review_body">Tiết kiệm pin hoặc tối ưu ứng dụng đang bật. Một số thiết bị Oppo/ColorOS hạn chế quét nền và cảnh báo cài đặt. Xem cài đặt pin cho SafeMobile; không bảo đảm theo dõi liên tục.</string>
+<string name="battery_review_action">Xem cài đặt pin</string>
+<string name="battery_review_unavailable">Không mở được cài đặt pin Android.</string>
+<string name="full_screen_dashboard_warning">Cảnh báo quan trọng bị tắt: nhấn để cấp quyền cảnh báo mã độc toàn màn hình.</string>
+<string name="full_screen_dashboard_fallback">Quyền toàn màn hình là tùy chọn. Khi bật Cảnh báo bảo mật, còi năm giây và thông báo ưu tiên cao vẫn hoạt động mà không cần quyền này, tùy cài đặt thông báo và âm thanh Android.</string>
+<string name="full_screen_settings_unavailable">Không mở được cài đặt cảnh báo toàn màn hình. Bạn vẫn có thể dùng SafeMobile.</string>
+<string name="system_app_protection_badge">Ứng dụng hệ thống được bảo vệ khỏi xem xét và gỡ</string>
+<string name="system_app_scan_complete">Quét hoàn tất. Không có đe dọa trong mục đã kiểm tra. Ứng dụng hệ thống không thuộc diện xem xét và gỡ; lần quét này chưa xác minh tính toàn vẹn của chúng.</string>
+<string name="ui_folder_access_not_granted">Chưa cấp quyền thư mục. Có thể tiếp tục với bảo vệ hạn chế.</string>
 </resources>

@@ -3,7 +3,7 @@
     <string name="detection_capabilities_title">जाँच क्षमताएँ</string>
     <string name="detection_capabilities_description">देखें कि इस बिल्ड में कौन-सी सुरक्षा जाँच चालू, सलाहकारी, सशर्त या अनुपलब्ध है।</string>
     <string name="detection_capabilities_truth_title">महत्वपूर्ण: स्कैन परिणामों का अर्थ</string>
-    <string name="detection_capabilities_truth_body">स्थानीय मिलान न मिलना फ़ाइल के सुरक्षित होने का प्रमाण नहीं है। विश्वसनीय हस्ताक्षर कुंजी और सत्यापित उत्पादन डेटाबेस मिलने तक हस्ताक्षरित हैश इंजन बंद रहता है। YARA और मशीन लर्निंग बंद हैं। हीयूरिस्टिक्स गलत चेतावनी दे सकती हैं। नीचे के मेट्रिक्स मापे नहीं गए हैं।</string>
+    <string name="detection_capabilities_truth_body">स्थानीय मिलान न मिलना फ़ाइल के सुरक्षित होने का प्रमाण नहीं है। भरोसेमंद हस्ताक्षर कुंजी और जाँचा हुआ उत्पादन डेटाबेस कॉन्फ़िगर होने तक हस्ताक्षरित हैश इंजन बंद रहता है। सत्यापित अंतर्निहित नियम लोड होने पर बिना इंटरनेट काम करने वाले सीमित DEX नियम चलते हैं; मशीन लर्निंग बंद रहती है। अनुमान-आधारित जाँच गलत चेतावनियाँ दे सकती है। नीचे दिए प्रदर्शन आँकड़े मापे नहीं गए हैं।</string>
     <string name="detection_capabilities_enabled">चालू</string>
     <string name="detection_capabilities_disabled">बंद</string>
     <string name="detection_capabilities_limited">सीमित कवरेज</string>
