@@ -643,23 +643,23 @@
 <string name="severity_high">அதிக தீவிரம்</string>
 <string name="severity_critical">மிகக் கடுமையான தீவிரம்</string>
 <string name="severity_unknown">தீவிரம் குறிப்பிடப்படவில்லை</string>
-<plurals name="l10n_scanned_apps"><item quantity="other">%1$d செயலிகள் ஸ்கேன் செய்யப்பட்டன</item></plurals>
-<plurals name="l10n_scanned_files"><item quantity="other">%1$d கோப்புகள் ஸ்கேன் செய்யப்பட்டன</item></plurals>
-<plurals name="l10n_threats"><item quantity="other">%1$d அச்சுறுத்தல்கள் கண்டறியப்பட்டன</item></plurals>
-<plurals name="l10n_review"><item quantity="other">%1$d முடிவுகள் ஆய்வு செய்யப்பட வேண்டும்</item></plurals>
-<plurals name="l10n_unreadable"><item quantity="other">%1$d உருப்படிகளை ஸ்கேன் செய்ய முடியவில்லை</item></plurals>
-<plurals name="l10n_no_match"><item quantity="other">%1$d முடிவுகளுக்கு உள்ளூர் பொருத்தம் இல்லை</item></plurals>
-<plurals name="l10n_apps"><item quantity="other">%1$d செயலிகள்</item></plurals>
-<plurals name="l10n_files"><item quantity="other">%1$d கோப்புகள்</item></plurals>
-<plurals name="l10n_posture_apps"><item quantity="other">அமைப்பு சாராத %1$d செயலிகளுக்கு அதிக ஆபத்துள்ள அணுகல் உள்ளது.</item></plurals>
-<plurals name="l10n_pending_changes"><item quantity="other">கவனிக்கப்பட்ட %1$d மாற்றங்களுக்கு அறிவிப்பு நிலுவையில் உள்ளது.</item></plurals>
-<plurals name="l10n_rules"><item quantity="other">வரையறுக்கப்பட்ட பாதுகாப்பு · சேர்க்கப்பட்ட %1$d விதிகள்</item></plurals>
-<plurals name="l10n_rule_matches"><item quantity="other">சமீபத்திய ஸ்கேன்: %1$d ஆலோசனை நிரல் பொருத்தங்கள்.</item></plurals>
-<plurals name="l10n_imported"><item quantity="other">%1$d செல்லுபடியாகும் கையொப்பங்கள் உள்ளூர் சேமிப்பகத்தில் இறக்குமதி செய்யப்பட்டன.</item></plurals>
-<plurals name="l10n_bytes"><item quantity="other">%1$d பைட்டுகள்</item></plurals>
-<plurals name="l10n_root_indicators"><item quantity="other">ரூட் தொடர்பான %1$d கோப்புமுறை குறிகாட்டிகள் உள்ளன.</item></plurals>
-<plurals name="l10n_hook_indicators"><item quantity="other">குறுக்கீட்டுக்கான %1$d குறிகாட்டிகள் உள்ளன.</item></plurals>
-<plurals name="l10n_enabled_apps"><item quantity="other">%1$d செயலிகள் செயல்படுத்தப்பட்டன</item></plurals>
-<plurals name="l10n_indicators"><item quantity="other">%1$d குறிகாட்டிகள்</item></plurals>
-<plurals name="l10n_progress"><item quantity="other">%2$d செயலிகளில் %1$d சரிபார்க்கப்பட்டன</item></plurals>
+<plurals name="l10n_scanned_apps"><item quantity="one">%1$d செயலி ஸ்கேன் செய்யப்பட்டது</item><item quantity="other">%1$d செயலிகள் ஸ்கேன் செய்யப்பட்டன</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="one">%1$d கோப்பு ஸ்கேன் செய்யப்பட்டது</item><item quantity="other">%1$d கோப்புகள் ஸ்கேன் செய்யப்பட்டன</item></plurals>
+<plurals name="l10n_threats"><item quantity="one">%1$d அச்சுறுத்தல் கண்டறியப்பட்டது</item><item quantity="other">%1$d அச்சுறுத்தல்கள் கண்டறியப்பட்டன</item></plurals>
+<plurals name="l10n_review"><item quantity="one">%1$d முடிவு ஆய்வு செய்யப்பட வேண்டும்</item><item quantity="other">%1$d முடிவுகள் ஆய்வு செய்யப்பட வேண்டும்</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="one">%1$d உருப்படியை ஸ்கேன் செய்ய முடியவில்லை</item><item quantity="other">%1$d உருப்படிகளை ஸ்கேன் செய்ய முடியவில்லை</item></plurals>
+<plurals name="l10n_no_match"><item quantity="one">%1$d முடிவுக்கு உள்ளூர் பொருத்தம் இல்லை</item><item quantity="other">%1$d முடிவுகளுக்கு உள்ளூர் பொருத்தம் இல்லை</item></plurals>
+<plurals name="l10n_apps"><item quantity="one">%1$d செயலி</item><item quantity="other">%1$d செயலிகள்</item></plurals>
+<plurals name="l10n_files"><item quantity="one">%1$d கோப்பு</item><item quantity="other">%1$d கோப்புகள்</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="one">அமைப்பு சாராத %1$d செயலிக்கு அதிக ஆபத்துள்ள அணுகல் உள்ளது.</item><item quantity="other">அமைப்பு சாராத %1$d செயலிகளுக்கு அதிக ஆபத்துள்ள அணுகல் உள்ளது.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="one">கவனிக்கப்பட்ட %1$d மாற்றத்துக்கு அறிவிப்பு நிலுவையில் உள்ளது.</item><item quantity="other">கவனிக்கப்பட்ட %1$d மாற்றங்களுக்கு அறிவிப்பு நிலுவையில் உள்ளது.</item></plurals>
+<plurals name="l10n_rules"><item quantity="one">வரையறுக்கப்பட்ட பாதுகாப்பு · சேர்க்கப்பட்ட %1$d விதி</item><item quantity="other">வரையறுக்கப்பட்ட பாதுகாப்பு · சேர்க்கப்பட்ட %1$d விதிகள்</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="one">சமீபத்திய ஸ்கேன்: %1$d ஆலோசனை நிரல் பொருத்தம்.</item><item quantity="other">சமீபத்திய ஸ்கேன்: %1$d ஆலோசனை நிரல் பொருத்தங்கள்.</item></plurals>
+<plurals name="l10n_imported"><item quantity="one">%1$d செல்லுபடியாகும் கையொப்பம் உள்ளூர் சேமிப்பகத்தில் இறக்குமதி செய்யப்பட்டது.</item><item quantity="other">%1$d செல்லுபடியாகும் கையொப்பங்கள் உள்ளூர் சேமிப்பகத்தில் இறக்குமதி செய்யப்பட்டன.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="one">%1$d பைட்</item><item quantity="other">%1$d பைட்டுகள்</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="one">ரூட் தொடர்பான %1$d கோப்புமுறை குறிகாட்டி உள்ளது.</item><item quantity="other">ரூட் தொடர்பான %1$d கோப்புமுறை குறிகாட்டிகள் உள்ளன.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="one">%1$d குறுக்கீட்டுக் குறிகாட்டி உள்ளது.</item><item quantity="other">குறுக்கீட்டுக்கான %1$d குறிகாட்டிகள் உள்ளன.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="one">%1$d செயலி செயல்படுத்தப்பட்டது</item><item quantity="other">%1$d செயலிகள் செயல்படுத்தப்பட்டன</item></plurals>
+<plurals name="l10n_indicators"><item quantity="one">%1$d குறிகாட்டி</item><item quantity="other">%1$d குறிகாட்டிகள்</item></plurals>
+<plurals name="l10n_progress"><item quantity="one">%2$d செயலிகளில் %1$d செயலி சரிபார்க்கப்பட்டது</item><item quantity="other">%2$d செயலிகளில் %1$d சரிபார்க்கப்பட்டன</item></plurals>
 </resources>
