@@ -701,4 +701,108 @@
 <string name="detection_capabilities_save">Save update settings</string>
 <string name="detection_capabilities_sync_privacy">Downloads only. Scan results, files, hashes, and package names are not uploaded.</string>
 <string name="detection_capabilities_sync_unavailable">Automatic updates are unavailable in this offline build or until a trusted signing key is configured.</string>
+
+<string name="format_label_value">%1$s: %2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s – %2$s</string>
+<string name="format_version">%1$s · Version %2$s (%3$s)</string>
+<string name="format_package_version">%1$s · Version %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">Ange en säker flödesadress</string>
+<string name="storage_size_unavailable">Storlek saknas</string>
+<string name="blocked_reason_hash">En lokal hotsignatur matchade.</string>
+<string name="blocked_reason_action">En lokal säkerhetsåtgärd har försökts i möjligaste mån.</string>
+<string name="signed_import_success">Signerad databas godkänd: version %1$s · %2$s.</string>
+<string name="signed_import_failed">Den signerade databasen aktiverades inte. Kontrollera signatur, version och filformat.</string>
+<string name="rule_import_pending">%1$s sparades för granskning. Importerade regler förblir inaktiverade och filen kommer inte att köras.</string>
+<string name="rule_import_failed">Reglerna kunde inte importeras. Importerade regler förblir inaktiverade.</string>
+<string name="restore_result_localized">En kopia av %1$s (%2$s) har återställts. Originalet i karantän är fortfarande lagrat.</string>
+<string name="cleaner_confirm_localized">Radera %1$s (%2$s) permanent? Detta går inte att ångra. SafeMobile kontrollerar namn och metadata igen.</string>
+<string name="cleaner_result_localized">Raderade: %1$s · Frigjort utrymme: %2$s · Misslyckade eller ändrade: %3$s</string>
+<string name="about_localized_notices">Tredjepartskomponenter omfattas fortfarande av sina egna licenser. De ursprungliga meddelandena är en kontrollpunkt i granskningen, inte en slutförd licensgranskning. Öppna originaldokumenten för källmeddelanden och licensvillkor.</string>
+<string name="about_open_original">Öppna originaldokument</string>
+<string name="about_localized_privacy">Skannade filer, hashvärden, paketnamn och resultat stannar på enheten. Lokala granskningsmetadata och kopior i karantän lagras krypterat i privat lagring. Uppdateringar av signerade definitioner kontaktar projektets publiceringstjänst; ett separat flöde kontaktar sin inställda adress först efter samtycke. Mappövervakning gäller bara mappar du väljer och kan stoppas. Du styr Android-behörigheterna. Den här versionen innehåller inga annonser, molnskanningar eller tjänster för länkrykte.</string>
+<string name="coverage_local_title">Lokala testdefinitioner</string>
+<string name="coverage_local_body">De medföljande äldre definitionerna innehåller bara en ofarlig antivirustestmarkör. De ger inget skydd mot verklig skadlig kod.</string>
+<string name="coverage_signed_title">Signerad hashdatabas</string>
+<string name="coverage_signed_body">Exakt hashmatchning kräver en betrodd signeringsnyckel och en godkänd signerad databas. Ingen produktionsdatabas ingår.</string>
+<string name="coverage_static_title">Statisk appanalys</string>
+<string name="coverage_static_body">Begränsad paketanalys ger vägledande resultat. Ett resultat i sig bevisar inte skadlig kod; listor över kända skadliga signatärer är inaktiverade.</string>
+<string name="coverage_permissions_title">Behörigheter och manifest</string>
+<string name="coverage_permissions_body">Kombinationer av behörigheter och synliga paketdeklarationer underlättar manuell granskning. De utgör inte en tränad klassificering.</string>
+<string name="coverage_integrity_title">Indikatorer för enhetsintegritet</string>
+<string name="coverage_integrity_body">Rootåtkomst, krokar, byggegenskaper, säkerhetstillämpning, felsökare och emulatorer kontrolleras med lokala heuristiker, inte med attestering.</string>
+<string name="coverage_bloom_title">Sannolikhetsbaserat hashindex</string>
+<string name="coverage_bloom_body">Ett verifierat, icke-tomt sannolikhetsbaserat index och dess manifest ingår inte. Det här valfria lagret är inte tillgängligt.</string>
+<string name="coverage_rules_title">Medföljande kodsignaturer</string>
+<string name="coverage_rules_body">Validerade medföljande regler kontrollerar en begränsad uppsättning bokstavliga kodmönster. Matchningar är vägledande och bekräftar inte skadlig kod.</string>
+<string name="coverage_rules_unavailable">De medföljande reglerna kunde inte läsas in eller godkändes inte vid valideringen. Ingen kodsignaturskanning påstås ha utförts.</string>
+<string name="coverage_model_title">Modell för behörighetsklassificering</string>
+<string name="coverage_model_body">Ingen tränad, validerad och distributionsklar klassificeringsmodell ingår. Maskininlärning är inaktiverad.</string>
+<string name="coverage_signer_title">Offlineattestering av signatär</string>
+<string name="coverage_signer_body">Ett oberoende fastställt förväntat fingeravtryck för signeringscertifikatet har inte konfigurerats.</string>
+<string name="coverage_feed_title">Verifiering av signerat flöde</string>
+<string name="coverage_feed_body">Verifiering av separat signatur och skydd mot återgång till äldre version kräver en betrodd byggnyckel och ett konfigurerat signerat flöde.</string>
+<string name="hash_status_active">Den signerade lokala hashdatabasen är aktiv.</string>
+<string name="hash_status_missing">Hashmatchning är inaktiverad tills en signerad databas godkänns.</string>
+<string name="hash_status_key">Hashmatchning är inaktiverad eftersom en betrodd signeringsnyckel saknas.</string>
+<string name="hash_status_invalid">Lagrade definitioner klarade inte kontrollerna av integritet, version eller format. Hashmatchning förblir inaktiverad.</string>
+<string name="hash_status_activation">Databasaktiveringen slutfördes inte. Hashmatchning förblir inaktiverad.</string>
+<string name="finding_confidence">%1$s · Tillförlitlighet: %2$d%%</string>
+<string name="finding_exported">En exporterad komponent saknar en synlig behörighetsbegränsning i manifestet. Kontroller i koden kan ändå finnas.</string>
+<string name="finding_admin">Appen deklarerar en mottagare för enhetsadministration. Den här känsliga funktionen är inget bevis på missbruk.</string>
+<string name="finding_accessibility">Appen deklarerar en tillgänglighetstjänst. Legitima hjälpmedelsappar kan behöva denna åtkomst.</string>
+<string name="finding_overlay">Appen begär behörighet att visas över andra appar. Överlägg kan vara legitima men kan också dölja andra skärmar.</string>
+<string name="finding_combined">Tillgänglighet kombineras med överlägg, sms- eller samtalshistorikåtkomst. Granska appens syfte.</string>
+<string name="finding_sms_calls">Appen begär behörighet till både sms och samtalshistorik.</string>
+<string name="finding_sms_network">Sms-åtkomst kombineras med internetåtkomst. Detta kräver en bedömning i sitt sammanhang.</string>
+<string name="finding_signer">Metadata för signeringscertifikatet saknas eller kan inte läsas.</string>
+<string name="finding_archive">Paketbehållaren kunde inte undersökas fullständigt. Den statiska analysen är ofullständig.</string>
+<string name="finding_packer">En paketsökväg liknar ett känt packnings- eller skyddsverktyg. Legitima appar kan också använda sådana verktyg.</string>
+<string name="finding_dex_header">En kodheader har motsägelsefulla format- eller storleksfält. Det bevisar inte skadlig kod.</string>
+<string name="finding_dex_short">En kodpost är kortare än en giltig header och kunde inte undersökas helt.</string>
+<string name="finding_entropy">Ett kodprov har hög byteentropi. Kryptering, packning eller ofarligt komprimerat innehåll kan förklara detta.</string>
+<string name="finding_api">Ingen förväntad statisk referens hittades för en begärd behörighet. Reflektion, bibliotek eller dynamiskt inläst kod kan förklara frånvaron.</string>
+<string name="finding_rules">En begränsad medföljande kodsignatur matchade. Detta är en indikation, inte bevis på skadlig kod.</string>
+<string name="finding_other">Ytterligare lokala indikatorer kräver manuell granskning. De bekräftar inte skadlig kod.</string>
+<string name="integrity_manager">En hanterare för rootåtkomst eller hooking är synlig: %1$s</string>
+<string name="integrity_test_keys">Enhetens bygge använder testsigneringsnycklar.</string>
+<string name="integrity_debug_build">Byggegenskaper tyder på ett felsökningsbart system eller ett system som inte är avsett för produktion.</string>
+<string name="integrity_selinux">Den läsbara lokala statusen anger att obligatorisk säkerhetstillämpning är avstängd.</string>
+<string name="integrity_debugger">En felsökare är kopplad till processen.</string>
+<string name="integrity_emulator">Byggegenskaperna liknar en emulator eller testenhet.</string>
+<string name="audit_scan_pending">Installationen har registrerats. Lokal analys väntar.</string>
+<string name="audit_scan_complete">Lokal analys slutfördes utan bekräftad signaturmatchning. Det är ingen säkerhetsgaranti.</string>
+<string name="audit_scan_unavailable">Paketet var inte synligt när analysen kördes.</string>
+<string name="audit_scan_threat">En exakt lokal hotsignatur matchade.</string>
+<string name="audit_scan_review">Lokala indikatorer behöver granskas; de bekräftar inte skadlig kod.</string>
+<string name="audit_source_recorded">Installationskällan har registrerats.</string>
+<string name="audit_uninstall_requested">Android har ombetts bekräfta avinstallation.</string>
+<string name="audit_uninstall_success">Android rapporterade att avinstallationen lyckades.</string>
+<string name="audit_uninstall_failed">Android kunde inte slutföra avinstallationsbegäran.</string>
+<string name="severity_test">Ofarlig testmarkör</string>
+<string name="severity_low">Låg allvarlighetsgrad</string>
+<string name="severity_medium">Medelhög allvarlighetsgrad</string>
+<string name="severity_high">Hög allvarlighetsgrad</string>
+<string name="severity_critical">Kritisk allvarlighetsgrad</string>
+<string name="severity_unknown">Allvarlighetsgrad ej angiven</string>
+<plurals name="l10n_scanned_apps"><item quantity="one">%1$d app skannad</item><item quantity="other">%1$d appar skannade</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="one">%1$d fil skannad</item><item quantity="other">%1$d filer skannade</item></plurals>
+<plurals name="l10n_threats"><item quantity="one">%1$d hot hittat</item><item quantity="other">%1$d hot hittade</item></plurals>
+<plurals name="l10n_review"><item quantity="one">%1$d resultat behöver granskas</item><item quantity="other">%1$d resultat behöver granskas</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="one">%1$d objekt kunde inte skannas</item><item quantity="other">%1$d objekt kunde inte skannas</item></plurals>
+<plurals name="l10n_no_match"><item quantity="one">%1$d resultat utan lokal matchning</item><item quantity="other">%1$d resultat utan lokala matchningar</item></plurals>
+<plurals name="l10n_apps"><item quantity="one">%1$d app</item><item quantity="other">%1$d appar</item></plurals>
+<plurals name="l10n_files"><item quantity="one">%1$d fil</item><item quantity="other">%1$d filer</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="one">%1$d icke-systemapp har högriskåtkomst.</item><item quantity="other">%1$d icke-systemappar har högriskåtkomst.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="one">%1$d observerad ändring väntar på avisering.</item><item quantity="other">%1$d observerade ändringar väntar på avisering.</item></plurals>
+<plurals name="l10n_rules"><item quantity="one">Begränsad täckning · %1$d medföljande regel</item><item quantity="other">Begränsad täckning · %1$d medföljande regler</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="one">Senaste skanning: %1$d vägledande kodträff.</item><item quantity="other">Senaste skanning: %1$d vägledande kodträffar.</item></plurals>
+<plurals name="l10n_imported"><item quantity="one">%1$d giltig signatur importerad till lokal lagring.</item><item quantity="other">%1$d giltiga signaturer importerade till lokal lagring.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="one">%1$d byte</item><item quantity="other">%1$d byte</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="one">%1$d rootrelaterad filsystemsindikator finns.</item><item quantity="other">%1$d rootrelaterade filsystemsindikatorer finns.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="one">%1$d hookingindikator finns.</item><item quantity="other">%1$d hookingindikatorer finns.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="one">%1$d app aktiverad</item><item quantity="other">%1$d appar aktiverade</item></plurals>
+<plurals name="l10n_indicators"><item quantity="one">%1$d indikator</item><item quantity="other">%1$d indikatorer</item></plurals>
+<plurals name="l10n_progress"><item quantity="one">Kontrollerat %1$d av %2$d app</item><item quantity="other">Kontrollerat %1$d av %2$d appar</item></plurals>
 </resources>
