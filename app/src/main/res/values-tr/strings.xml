@@ -558,5 +558,108 @@
 <string name="locale_th">ไทย</string>
 <string name="locale_uk">Українська</string>
 <string name="locale_uz">O‘zbekcha</string>
-</resources>
 
+<string name="format_label_value">%1$s: %2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s – %2$s</string>
+<string name="format_version">%1$s · Sürüm %2$s (%3$s)</string>
+<string name="format_package_version">%1$s · Sürüm %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">Güvenli bir akış adresi girin</string>
+<string name="storage_size_unavailable">Boyut kullanılamıyor</string>
+<string name="blocked_reason_hash">Yerel bir tehdit imzasıyla eşleşme bulundu.</string>
+<string name="blocked_reason_action">Mümkün olan yerel güvenlik işlemi denenmiştir.</string>
+<string name="signed_import_success">İmzalı veritabanı kabul edildi: sürüm %1$s · %2$s.</string>
+<string name="signed_import_failed">İmzalı veritabanı etkinleştirilmedi. İmzasını, sürümünü ve dosya biçimini kontrol edin.</string>
+<string name="rule_import_pending">%1$s incelenmek üzere kaydedildi. İçe aktarılan kurallar devre dışı kalır ve bu dosya çalıştırılmaz.</string>
+<string name="rule_import_failed">Kurallar içe aktarılamadı. İçe aktarılan kurallar devre dışı kalır.</string>
+<string name="restore_result_localized">%1$s (%2$s) öğesinin bir kopyası geri yüklendi. Karantinadaki özgün dosya saklanmaya devam ediyor.</string>
+<string name="cleaner_confirm_localized">%1$s (%2$s) kalıcı olarak silinsin mi? Bu işlem geri alınamaz. SafeMobile adları ve üst verileri yeniden kontrol eder.</string>
+<string name="cleaner_result_localized">Silinen: %1$s · Açılan alan: %2$s · Başarısız veya değişen: %3$s</string>
+<string name="about_localized_notices">Üçüncü taraf bileşenlerin kendi lisansları geçerlidir. Özgün bildirimler, tamamlanmış bir lisans incelemesi değil, denetim kontrol noktasıdır. Kaynak bildirimlerini ve lisans koşullarını görmek için özgün belgeleri açın.</string>
+<string name="about_open_original">Özgün belgeleri aç</string>
+<string name="about_localized_privacy">Taranan dosyalar, karmalar, paket adları ve sonuçlar bu cihazda kalır. Yerel denetim üst verileri ve karantina kopyaları şifreli özel depolama kullanır. İmzalı tanım güncellemeleri bu projenin sürüm hizmetine bağlanır; ayrı bir akış yalnızca onayınızdan sonra yapılandırılmış adrese bağlanır. Klasör izleme, seçtiğiniz klasörleri kullanır ve durdurulabilir. Android izinleri sizin denetiminizdedir. Bu derlemede reklam, bulut taraması veya bağlantı itibarı hizmeti yoktur.</string>
+<string name="coverage_local_title">Yerel test tanımları</string>
+<string name="coverage_local_body">Birlikte gelen eski tanımlar yalnızca zararsız bir antivirüs test işareti içerir. Gerçek dünyadaki kötü amaçlı yazılımlara karşı koruma sağlamaz.</string>
+<string name="coverage_signed_title">İmzalı karma veritabanı</string>
+<string name="coverage_signed_body">Tam karma eşleşmesi için güvenilir bir imzalama anahtarı ve kabul edilmiş imzalı veritabanı gerekir. Üretim veritabanı dahil değildir.</string>
+<string name="coverage_static_title">Statik uygulama analizi</string>
+<string name="coverage_static_body">Sınırlı paket analizi, bilgilendirme amaçlı bulgular üretir. Tek bir bulgu kötü amaçlı yazılımı kanıtlamaz; bilinen kötü imzalayan listeleri devre dışıdır.</string>
+<string name="coverage_permissions_title">İzinler ve bildirim dosyası</string>
+<string name="coverage_permissions_body">İzin birleşimleri ve görünen paket bildirimleri elle incelemeyi destekler. Bunlar eğitilmiş bir sınıflandırıcı değildir.</string>
+<string name="coverage_integrity_title">Cihaz bütünlüğü göstergeleri</string>
+<string name="coverage_integrity_body">Kök erişimi, kancalar, derleme özellikleri, güvenlik zorlaması, hata ayıklayıcılar ve öykünücüler doğrulama yerine yerel sezgisel kurallarla kontrol edilir.</string>
+<string name="coverage_bloom_title">Olasılıksal karma dizini</string>
+<string name="coverage_bloom_body">Doğrulanmış, boş olmayan bir olasılıksal dizin ve bildirim dosyası dahil değildir. Bu isteğe bağlı katman kullanılamaz.</string>
+<string name="coverage_rules_title">Paketlenmiş kod imzaları</string>
+<string name="coverage_rules_body">Doğrulanmış paket kuralları sınırlı sayıda düz kod örüntüsünü kontrol eder. Eşleşmeler bilgilendirme amaçlıdır, kötü amaçlı yazılımı doğrulamaz.</string>
+<string name="coverage_rules_unavailable">Paketlenmiş kurallar yüklenemedi veya doğrulamayı geçemedi. Kod imzası taraması yapıldığı iddia edilmez.</string>
+<string name="coverage_model_title">İzin sınıflandırma modeli</string>
+<string name="coverage_model_body">Eğitilmiş, doğrulanmış ve dağıtılabilir bir sınıflandırma modeli dahil değildir. Makine öğrenimi devre dışıdır.</string>
+<string name="coverage_signer_title">Çevrimdışı imzalayan doğrulaması</string>
+<string name="coverage_signer_body">Bağımsız olarak sabitlenmiş beklenen imza sertifikası parmak izi yapılandırılmadı.</string>
+<string name="coverage_feed_title">İmzalı akış doğrulaması</string>
+<string name="coverage_feed_body">Ayrık imza doğrulaması ve eski sürüme dönmeyi önlemek için derleme sırasında güvenilir anahtar ve yapılandırılmış imzalı akış gerekir.</string>
+<string name="hash_status_active">İmzalı yerel karma veritabanı etkin.</string>
+<string name="hash_status_missing">İmzalı bir veritabanı kabul edilene kadar karma eşleştirme devre dışıdır.</string>
+<string name="hash_status_key">Güvenilir imzalama anahtarı bulunmadığından karma eşleştirme devre dışıdır.</string>
+<string name="hash_status_invalid">Kayıtlı tanımlar bütünlük, sürüm veya biçim denetimlerini geçemedi. Karma eşleştirme devre dışı kalır.</string>
+<string name="hash_status_activation">Veritabanı etkinleştirmesi tamamlanmadı. Karma eşleştirme devre dışı kalır.</string>
+<string name="finding_confidence">%1$s · Güven düzeyi: %2$d%%</string>
+<string name="finding_exported">Dışa açılmış bir bileşen için bildirim dosyasında görünür bir izin engeli yok. Kod düzeyinde kontroller yine de bulunabilir.</string>
+<string name="finding_admin">Uygulama bir cihaz yönetimi alıcısı bildiriyor. Bu hassas yetenek kötüye kullanımın kanıtı değildir.</string>
+<string name="finding_accessibility">Uygulama bir erişilebilirlik hizmeti bildiriyor. Meşru yardımcı uygulamalar buna ihtiyaç duyabilir.</string>
+<string name="finding_overlay">Uygulama ekran üstü gösterim izni istiyor. Bu meşru olabilir ancak diğer ekranları örtebilir.</string>
+<string name="finding_combined">Erişilebilirlik, ekran üstü gösterim, kısa mesaj veya arama geçmişi erişimiyle birlikte kullanılıyor. Uygulamanın amacını inceleyin.</string>
+<string name="finding_sms_calls">Uygulama hem kısa mesaj hem arama geçmişi izinlerini istiyor.</string>
+<string name="finding_sms_network">Kısa mesaj erişimi internet erişimiyle birlikte kullanılıyor. Bağlama göre inceleme gerekiyor.</string>
+<string name="finding_signer">İmza sertifikası üst verileri eksik veya okunamıyor.</string>
+<string name="finding_archive">Paket kapsayıcısı bütünüyle incelenemedi. Statik analiz tamamlanmadı.</string>
+<string name="finding_packer">Bir paket yolu bilinen paketleme veya koruma aracına benziyor. Meşru uygulamalar da bunları kullanabilir.</string>
+<string name="finding_dex_header">Kod başlığının biçim veya boyut alanları tutarsız. Bu, kötü amaçlı yazılımı kanıtlamaz.</string>
+<string name="finding_dex_short">Bir kod girdisi geçerli başlıktan kısa olduğu için bütünüyle incelenemedi.</string>
+<string name="finding_entropy">Bir kod örneğinin bayt entropisi yüksek. Şifreleme, paketleme veya zararsız sıkıştırılmış içerik bunu açıklayabilir.</string>
+<string name="finding_api">İstenen bir izin için beklenen statik başvuru bulunamadı. Yansıma, kitaplıklar veya dinamik yüklenen kod buna neden olabilir.</string>
+<string name="finding_rules">Sınırlı bir paketlenmiş kod imzasıyla eşleşildi. Bu uyarı niteliğindedir, kötü amaçlı yazılım kanıtı değildir.</string>
+<string name="finding_other">Ek yerel göstergeler elle incelenmelidir. Kötü amaçlı yazılımı doğrulamaz.</string>
+<string name="integrity_manager">Kök erişimi veya kanca yöneticisi görünüyor: %1$s</string>
+<string name="integrity_test_keys">Cihaz derlemesi test imzalama anahtarları kullanıyor.</string>
+<string name="integrity_debug_build">Derleme özellikleri, hata ayıklanabilir veya üretim dışı bir sistemi gösteriyor.</string>
+<string name="integrity_selinux">Okunabilir yerel durum, zorunlu güvenlik uygulamasının kapalı olduğunu bildiriyor.</string>
+<string name="integrity_debugger">Bu işleme bir hata ayıklayıcı bağlı.</string>
+<string name="integrity_emulator">Derleme özellikleri öykünücüye veya test cihazına benziyor.</string>
+<string name="audit_scan_pending">Kurulum kaydedildi. Yerel analiz bekleniyor.</string>
+<string name="audit_scan_complete">Yerel analiz doğrulanmış imza eşleşmesi olmadan tamamlandı. Bu, güvenlik garantisi değildir.</string>
+<string name="audit_scan_unavailable">Analiz sırasında paket görünür değildi.</string>
+<string name="audit_scan_threat">Yerel tehdit imzasıyla tam eşleşme bulundu.</string>
+<string name="audit_scan_review">Yerel göstergelerin incelenmesi gerekiyor; kötü amaçlı yazılımı doğrulamıyorlar.</string>
+<string name="audit_source_recorded">Kurulum kaynağı kaydedildi.</string>
+<string name="audit_uninstall_requested">Android kaldırma onayı istendi.</string>
+<string name="audit_uninstall_success">Android kaldırma işleminin başarılı olduğunu bildirdi.</string>
+<string name="audit_uninstall_failed">Android kaldırma isteğini tamamlayamadı.</string>
+<string name="severity_test">Zararsız test işareti</string>
+<string name="severity_low">Düşük önem</string>
+<string name="severity_medium">Orta önem</string>
+<string name="severity_high">Yüksek önem</string>
+<string name="severity_critical">Kritik önem</string>
+<string name="severity_unknown">Önem derecesi belirtilmedi</string>
+<plurals name="l10n_scanned_apps"><item quantity="other">%1$d uygulama tarandı</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="other">%1$d dosya tarandı</item></plurals>
+<plurals name="l10n_threats"><item quantity="other">%1$d tehdit bulundu</item></plurals>
+<plurals name="l10n_review"><item quantity="other">%1$d sonuç incelenmeli</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="other">%1$d öğe taranamadı</item></plurals>
+<plurals name="l10n_no_match"><item quantity="other">%1$d sonuçta yerel eşleşme yok</item></plurals>
+<plurals name="l10n_apps"><item quantity="other">%1$d uygulama</item></plurals>
+<plurals name="l10n_files"><item quantity="other">%1$d dosya</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="other">Sistem dışı %1$d uygulamanın yüksek riskli erişimi var.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="other">Gözlenen %1$d değişiklik bildirim bekliyor.</item></plurals>
+<plurals name="l10n_rules"><item quantity="other">Sınırlı kapsama · %1$d paketlenmiş kural</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="other">Son tarama: %1$d bilgilendirici kod eşleşmesi.</item></plurals>
+<plurals name="l10n_imported"><item quantity="other">%1$d geçerli imza yerel depoya aktarıldı.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="other">%1$d bayt</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="other">Kök erişimiyle ilgili %1$d dosya sistemi göstergesi var.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="other">%1$d kanca göstergesi var.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="other">%1$d uygulama etkinleştirildi</item></plurals>
+<plurals name="l10n_indicators"><item quantity="other">%1$d gösterge</item></plurals>
+<plurals name="l10n_progress"><item quantity="other">%2$d uygulamadan %1$d tanesi kontrol edildi</item></plurals>
+</resources>
