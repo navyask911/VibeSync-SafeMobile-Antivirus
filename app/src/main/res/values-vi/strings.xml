@@ -662,4 +662,7 @@
 <plurals name="l10n_enabled_apps"><item quantity="other">Đã bật %1$d ứng dụng</item></plurals>
 <plurals name="l10n_indicators"><item quantity="other">%1$d dấu hiệu</item></plurals>
 <plurals name="l10n_progress"><item quantity="other">Đã kiểm tra %1$d trong số %2$d ứng dụng</item></plurals>
+    <string name="ml_probability">Xác suất đe dọa ML: %1$d%%</string>
+    <string name="ml_high_finding">Phân tích tĩnh ML: điểm cao dựa trên quyền và mẫu API; chỉ mang tính tham khảo, không chứng minh có mã độc.</string>
+    <string name="ml_active_body">Đã có mô hình ML tĩnh được xác thực trên thiết bị. Kết quả chỉ mang tính tham khảo, không chứng minh có mã độc.</string>
 </resources>
