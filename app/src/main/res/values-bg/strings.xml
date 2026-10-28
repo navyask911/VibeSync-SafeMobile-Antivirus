@@ -701,4 +701,108 @@
 <string name="detection_capabilities_save">Save update settings</string>
 <string name="detection_capabilities_sync_privacy">Downloads only. Scan results, files, hashes, and package names are not uploaded.</string>
 <string name="detection_capabilities_sync_unavailable">Automatic updates are unavailable in this offline build or until a trusted signing key is configured.</string>
+
+<string name="format_label_value">%1$s: %2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s – %2$s</string>
+<string name="format_version">%1$s · Версия %2$s (%3$s)</string>
+<string name="format_package_version">%1$s · Версия %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">Въведете защитен адрес на източник</string>
+<string name="storage_size_unavailable">Размерът не е наличен</string>
+<string name="blocked_reason_hash">Открито е съвпадение с локален подпис на заплаха.</string>
+<string name="blocked_reason_action">Направен е опит за локално действие по сигурността според възможностите.</string>
+<string name="signed_import_success">Подписаната база данни е приета: версия %1$s · %2$s.</string>
+<string name="signed_import_failed">Подписаната база данни не е активирана. Проверете подписа, версията и формата на файла.</string>
+<string name="rule_import_pending">%1$s е запазен за преглед. Импортираните правила остават изключени и файлът няма да бъде изпълнен.</string>
+<string name="rule_import_failed">Правилата не можаха да бъдат импортирани. Импортираните правила остават изключени.</string>
+<string name="restore_result_localized">Възстановено е копие на %1$s (%2$s). Оригиналът в карантина остава съхранен.</string>
+<string name="cleaner_confirm_localized">Да се изтрие ли завинаги %1$s (%2$s)? Това действие не може да се отмени. SafeMobile ще провери отново имената и метаданните.</string>
+<string name="cleaner_result_localized">Изтрити: %1$s · Освободено място: %2$s · Неуспешни или променени: %3$s</string>
+<string name="about_localized_notices">Компонентите на трети страни запазват собствените си лицензи. Оригиналните уведомления са контролна точка на одита, а не завършен преглед на лицензите. Отворете оригиналните документи за сведения за източниците и лицензионните условия.</string>
+<string name="about_open_original">Отваряне на оригиналните документи</string>
+<string name="about_localized_privacy">Сканираните файлове, хешовете, имената на пакетите и резултатите остават на това устройство. Локалните одитни метаданни и копията в карантина използват криптирано лично хранилище. Актуализациите на подписаните дефиниции се свързват с услугата за издания на проекта; отделен източник се свързва с конфигурирания адрес само след съгласие. Наблюдението на папки се отнася само до избрани от вас папки и може да се спре. Разрешенията на Android остават под ваш контрол. Тази версия не съдържа реклами, облачно сканиране или услуга за репутация на връзки.</string>
+<string name="coverage_local_title">Локални тестови дефиниции</string>
+<string name="coverage_local_body">Включените стари дефиниции съдържат само безвреден антивирусен тестов маркер. Те не осигуряват защита срещу реален зловреден софтуер.</string>
+<string name="coverage_signed_title">Подписана база данни с хешове</string>
+<string name="coverage_signed_body">Точното сравняване на хешове изисква доверен ключ за подписване и приета подписана база данни. Не е включена производствена база данни.</string>
+<string name="coverage_static_title">Статичен анализ на приложения</string>
+<string name="coverage_static_body">Ограниченият анализ на пакети дава ориентировъчни констатации. Отделна констатация не доказва зловреден софтуер; списъците с известни злонамерени подписващи са изключени.</string>
+<string name="coverage_permissions_title">Разрешения и манифест</string>
+<string name="coverage_permissions_body">Комбинациите от разрешения и видимите декларации в пакетите подпомагат ръчната проверка. Това не е обучена класификация.</string>
+<string name="coverage_integrity_title">Показатели за целостта на устройството</string>
+<string name="coverage_integrity_body">Root достъп, прихващания, свойства на компилацията, прилагане на сигурността, дебъгери и емулатори се проверяват чрез локални евристики, а не чрез атестиране.</string>
+<string name="coverage_bloom_title">Вероятностен индекс на хешове</string>
+<string name="coverage_bloom_body">Не са включени проверен непразен вероятностен индекс и неговият манифест. Този незадължителен слой не е наличен.</string>
+<string name="coverage_rules_title">Включени подписи на код</string>
+<string name="coverage_rules_body">Валидираните включени правила проверяват ограничен набор от буквални шаблони на код. Съвпаденията са ориентировъчни и не потвърждават зловреден софтуер.</string>
+<string name="coverage_rules_unavailable">Включените правила не се заредиха или не преминаха проверката. Не се твърди, че е извършено сканиране на подписи на код.</string>
+<string name="coverage_model_title">Модел за класифициране на разрешения</string>
+<string name="coverage_model_body">Не е включен обучен, валидиран и разпространяем модел за класификация. Машинното обучение е изключено.</string>
+<string name="coverage_signer_title">Офлайн атестиране на подписващия</string>
+<string name="coverage_signer_body">Не е настроен независимо фиксиран очакван отпечатък на сертификата за подписване.</string>
+<string name="coverage_feed_title">Проверка на подписан източник</string>
+<string name="coverage_feed_body">Проверката на отделен подпис и защитата от връщане към стара версия изискват доверен ключ при компилиране и конфигуриран подписан източник.</string>
+<string name="hash_status_active">Подписаната локална база данни с хешове е активна.</string>
+<string name="hash_status_missing">Сравняването на хешове е изключено до приемане на подписана база данни.</string>
+<string name="hash_status_key">Сравняването на хешове е изключено, защото няма доверен ключ за подписване.</string>
+<string name="hash_status_invalid">Запазените дефиниции не издържаха проверките за целостта, версията или формата. Сравняването на хешове остава изключено.</string>
+<string name="hash_status_activation">Активирането на базата данни не завърши. Сравняването на хешове остава изключено.</string>
+<string name="finding_confidence">%1$s · Увереност: %2$d%%</string>
+<string name="finding_exported">Експортиран компонент няма видимо ограничение на разрешенията в манифеста. Възможно е да има проверки на ниво код.</string>
+<string name="finding_admin">Приложението декларира приемник за администриране на устройството. Тази чувствителна възможност не е доказателство за злоупотреба.</string>
+<string name="finding_accessibility">Приложението декларира услуга за достъпност. Законни помощни приложения може да имат нужда от този достъп.</string>
+<string name="finding_overlay">Приложението иска разрешение за наслагване върху екрана. Това може да е законно, но може и да закрива други екрани.</string>
+<string name="finding_combined">Достъпността се комбинира с наслагване, съобщения или достъп до историята на обажданията. Проверете предназначението на приложението.</string>
+<string name="finding_sms_calls">Приложението иска разрешения както за съобщения, така и за историята на обажданията.</string>
+<string name="finding_sms_network">Достъпът до съобщения се комбинира с интернет достъп. Нужна е оценка в контекст.</string>
+<string name="finding_signer">Метаданните на сертификата за подписване липсват или не могат да се прочетат.</string>
+<string name="finding_archive">Контейнерът на пакета не можа да се провери изцяло. Статичният анализ е непълен.</string>
+<string name="finding_packer">Път в пакета наподобява известен инструмент за пакетиране или защита. Законни приложения също могат да го използват.</string>
+<string name="finding_dex_header">Заглавката на кода има несъответстващи полета за формат или размер. Това не доказва зловреден софтуер.</string>
+<string name="finding_dex_short">Запис на код е по-къс от валидна заглавка и не можа да бъде проверен изцяло.</string>
+<string name="finding_entropy">Кодова извадка има висока ентропия на байтовете. Причината може да е шифроване, пакетиране или безвредно компресирано съдържание.</string>
+<string name="finding_api">Не е намерена очакваната статична препратка към поискано разрешение. Причината може да е рефлексия, библиотеки или динамично зареждан код.</string>
+<string name="finding_rules">Открито е съвпадение с ограничен включен подпис на код. Това е сигнал, а не доказателство за зловреден софтуер.</string>
+<string name="finding_other">Допълнителните локални показатели изискват ръчна проверка. Те не потвърждават зловреден софтуер.</string>
+<string name="integrity_manager">Вижда се мениджър за root достъп или прихващане: %1$s</string>
+<string name="integrity_test_keys">Компилацията на устройството използва тестови ключове за подписване.</string>
+<string name="integrity_debug_build">Свойствата на компилацията сочат система за отстраняване на грешки или непроизводствена система.</string>
+<string name="integrity_selinux">Четимият локален статус показва, че задължителното прилагане на сигурността е изключено.</string>
+<string name="integrity_debugger">Към този процес е свързан дебъгер.</string>
+<string name="integrity_emulator">Свойствата на компилацията наподобяват емулатор или тестово устройство.</string>
+<string name="audit_scan_pending">Инсталирането е записано. Локалният анализ предстои.</string>
+<string name="audit_scan_complete">Локалният анализ завърши без потвърдено съвпадение на подпис. Това не е гаранция за безопасност.</string>
+<string name="audit_scan_unavailable">Пакетът не беше видим по време на анализа.</string>
+<string name="audit_scan_threat">Открито е точно съвпадение с локален подпис на заплаха.</string>
+<string name="audit_scan_review">Локалните показатели изискват преглед; не потвърждават зловреден софтуер.</string>
+<string name="audit_source_recorded">Източникът на инсталацията е записан.</string>
+<string name="audit_uninstall_requested">Поискано е потвърждение от Android за деинсталиране.</string>
+<string name="audit_uninstall_success">Android съобщи за успешно деинсталиране.</string>
+<string name="audit_uninstall_failed">Android не можа да завърши заявката за деинсталиране.</string>
+<string name="severity_test">Безвреден тестов маркер</string>
+<string name="severity_low">Ниска тежест</string>
+<string name="severity_medium">Средна тежест</string>
+<string name="severity_high">Висока тежест</string>
+<string name="severity_critical">Критична тежест</string>
+<string name="severity_unknown">Тежестта не е посочена</string>
+<plurals name="l10n_scanned_apps"><item quantity="one">Сканирано е %1$d приложение</item><item quantity="other">Сканирани са %1$d приложения</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="one">Сканиран е %1$d файл</item><item quantity="other">Сканирани са %1$d файла</item></plurals>
+<plurals name="l10n_threats"><item quantity="one">Намерена е %1$d заплаха</item><item quantity="other">Намерени са %1$d заплахи</item></plurals>
+<plurals name="l10n_review"><item quantity="one">%1$d резултат изисква преглед</item><item quantity="other">%1$d резултата изискват преглед</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="one">%1$d елемент не можа да се сканира</item><item quantity="other">%1$d елемента не можаха да се сканират</item></plurals>
+<plurals name="l10n_no_match"><item quantity="one">%1$d резултат без локално съвпадение</item><item quantity="other">%1$d резултата без локално съвпадение</item></plurals>
+<plurals name="l10n_apps"><item quantity="one">%1$d приложение</item><item quantity="other">%1$d приложения</item></plurals>
+<plurals name="l10n_files"><item quantity="one">%1$d файл</item><item quantity="other">%1$d файла</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="one">%1$d несистемно приложение има високорисков достъп.</item><item quantity="other">%1$d несистемни приложения имат високорисков достъп.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="one">%1$d наблюдавана промяна очаква известяване.</item><item quantity="other">%1$d наблюдавани промени очакват известяване.</item></plurals>
+<plurals name="l10n_rules"><item quantity="one">Ограничен обхват · %1$d включено правило</item><item quantity="other">Ограничен обхват · %1$d включени правила</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="one">Последно сканиране: %1$d ориентировъчно съвпадение на код.</item><item quantity="other">Последно сканиране: %1$d ориентировъчни съвпадения на код.</item></plurals>
+<plurals name="l10n_imported"><item quantity="one">В локалното хранилище е импортиран %1$d валиден подпис.</item><item quantity="other">В локалното хранилище са импортирани %1$d валидни подписа.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="one">%1$d байт</item><item quantity="other">%1$d байта</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="one">Има %1$d показател на файловата система, свързан с root.</item><item quantity="other">Има %1$d показателя на файловата система, свързани с root.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="one">Има %1$d показател за прихващане.</item><item quantity="other">Има %1$d показателя за прихващане.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="one">Включено %1$d приложение</item><item quantity="other">Включени %1$d приложения</item></plurals>
+<plurals name="l10n_indicators"><item quantity="one">%1$d показател</item><item quantity="other">%1$d показателя</item></plurals>
+<plurals name="l10n_progress"><item quantity="one">Проверено %1$d от %2$d приложение</item><item quantity="other">Проверени %1$d от %2$d приложения</item></plurals>
 </resources>
