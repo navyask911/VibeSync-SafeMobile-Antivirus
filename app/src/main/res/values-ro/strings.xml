@@ -701,4 +701,108 @@
 <string name="detection_capabilities_save">Save update settings</string>
 <string name="detection_capabilities_sync_privacy">Downloads only. Scan results, files, hashes, and package names are not uploaded.</string>
 <string name="detection_capabilities_sync_unavailable">Automatic updates are unavailable in this offline build or until a trusted signing key is configured.</string>
+
+<string name="format_label_value">%1$s: %2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s – %2$s</string>
+<string name="format_version">%1$s · Versiunea %2$s (%3$s)</string>
+<string name="format_package_version">%1$s · Versiunea %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">Introduceți o adresă sigură pentru flux</string>
+<string name="storage_size_unavailable">Dimensiune indisponibilă</string>
+<string name="blocked_reason_hash">S-a găsit o potrivire cu o semnătură locală de amenințare.</string>
+<string name="blocked_reason_action">S-a încercat o acțiune locală de securitate, în limita posibilităților.</string>
+<string name="signed_import_success">Baza de date semnată a fost acceptată: versiunea %1$s · %2$s.</string>
+<string name="signed_import_failed">Baza de date semnată nu a fost activată. Verificați semnătura, versiunea și formatul fișierului.</string>
+<string name="rule_import_pending">%1$s a fost salvat pentru verificare. Regulile importate rămân dezactivate, iar acest fișier nu va fi executat.</string>
+<string name="rule_import_failed">Regulile nu au putut fi importate. Regulile importate rămân dezactivate.</string>
+<string name="restore_result_localized">A fost restaurată o copie a %1$s (%2$s). Originalul din carantină rămâne stocat.</string>
+<string name="cleaner_confirm_localized">Ștergeți definitiv %1$s (%2$s)? Acțiunea nu poate fi anulată. SafeMobile va verifica din nou numele și metadatele.</string>
+<string name="cleaner_result_localized">Șterse: %1$s · Spațiu eliberat: %2$s · Eșuate sau modificate: %3$s</string>
+<string name="about_localized_notices">Componentele terțe își păstrează propriile licențe. Notificările originale reprezintă un punct de verificare pentru audit, nu o evaluare a licențelor finalizată. Deschideți documentele originale pentru notificările surselor și condițiile de licențiere.</string>
+<string name="about_open_original">Deschideți documentele originale</string>
+<string name="about_localized_privacy">Fișierele scanate, valorile hash, numele pachetelor și rezultatele rămân pe acest dispozitiv. Metadatele auditului local și copiile din carantină folosesc stocare privată criptată. Actualizările definițiilor semnate contactează serviciul de lansări al proiectului; un flux separat contactează adresa configurată numai după consimțământ. Monitorizarea folderelor se aplică numai folderelor alese și poate fi oprită. Permisiunile Android rămân sub controlul dvs. Această versiune nu conține reclame, scanare în cloud sau servicii de reputație a linkurilor.</string>
+<string name="coverage_local_title">Definiții locale de test</string>
+<string name="coverage_local_body">Definițiile vechi incluse conțin doar un marker inofensiv de test antivirus. Nu oferă acoperire împotriva programelor malware reale.</string>
+<string name="coverage_signed_title">Bază de date hash semnată</string>
+<string name="coverage_signed_body">Potrivirea exactă a valorilor hash necesită o cheie de semnare de încredere și o bază de date semnată acceptată. Nu este inclusă o bază de date pentru producție.</string>
+<string name="coverage_static_title">Analiză statică a aplicațiilor</string>
+<string name="coverage_static_body">Analiza limitată a pachetelor oferă constatări orientative. O constatare nu demonstrează singură prezența unui malware; listele semnatarilor rău intenționați cunoscuți sunt dezactivate.</string>
+<string name="coverage_permissions_title">Permisiuni și manifest</string>
+<string name="coverage_permissions_body">Combinațiile de permisiuni și declarațiile vizibile ale pachetelor ajută la verificarea manuală. Nu reprezintă o clasificare antrenată.</string>
+<string name="coverage_integrity_title">Indicatori de integritate a dispozitivului</string>
+<string name="coverage_integrity_body">Accesul root, mecanismele de interceptare, proprietățile versiunii, aplicarea securității, depanatoarele și emulatoarele sunt verificate prin euristici locale, nu prin atestare.</string>
+<string name="coverage_bloom_title">Index probabilistic de hashuri</string>
+<string name="coverage_bloom_body">Nu sunt incluse un index probabilistic verificat și nevid și manifestul aferent. Acest nivel opțional nu este disponibil.</string>
+<string name="coverage_rules_title">Semnături de cod incluse</string>
+<string name="coverage_rules_body">Regulile incluse și validate verifică un set limitat de modele literale de cod. Potrivirile sunt orientative și nu confirmă malware.</string>
+<string name="coverage_rules_unavailable">Regulile incluse nu au fost încărcate sau nu au trecut validarea. Nu se afirmă că s-a efectuat scanarea semnăturilor de cod.</string>
+<string name="coverage_model_title">Model de clasificare a permisiunilor</string>
+<string name="coverage_model_body">Nu este inclus niciun model de clasificare antrenat, validat și distribuibil. Învățarea automată este dezactivată.</string>
+<string name="coverage_signer_title">Atestare offline a semnatarului</string>
+<string name="coverage_signer_body">Nu a fost configurată o amprentă așteptată a certificatului de semnare, fixată independent.</string>
+<string name="coverage_feed_title">Verificarea fluxului semnat</string>
+<string name="coverage_feed_body">Verificarea semnăturii detașate și protecția împotriva revenirii la versiuni vechi necesită o cheie de încredere la compilare și un flux semnat configurat.</string>
+<string name="hash_status_active">Baza de date hash locală semnată este activă.</string>
+<string name="hash_status_missing">Potrivirea hashurilor este dezactivată până când se acceptă o bază de date semnată.</string>
+<string name="hash_status_key">Potrivirea hashurilor este dezactivată deoarece nu este disponibilă o cheie de semnare de încredere.</string>
+<string name="hash_status_invalid">Definițiile stocate nu au trecut verificările de integritate, versiune sau format. Potrivirea hashurilor rămâne dezactivată.</string>
+<string name="hash_status_activation">Activarea bazei de date nu s-a finalizat. Potrivirea hashurilor rămâne dezactivată.</string>
+<string name="finding_confidence">%1$s · Încredere: %2$d%%</string>
+<string name="finding_exported">O componentă exportată nu are o restricție vizibilă de permisiuni în manifest. Pot exista totuși verificări în cod.</string>
+<string name="finding_admin">Aplicația declară un receptor pentru administrarea dispozitivului. Această capacitate sensibilă nu dovedește abuzul.</string>
+<string name="finding_accessibility">Aplicația declară un serviciu de accesibilitate. Aplicațiile legitime de asistență pot avea nevoie de acest acces.</string>
+<string name="finding_overlay">Aplicația solicită permisiunea de suprapunere. Suprapunerile pot fi legitime, dar pot ascunde alte ecrane.</string>
+<string name="finding_combined">Accesibilitatea este combinată cu suprapunerea, accesul la SMS sau la istoricul apelurilor. Verificați scopul aplicației.</string>
+<string name="finding_sms_calls">Aplicația solicită permisiuni atât pentru SMS, cât și pentru istoricul apelurilor.</string>
+<string name="finding_sms_network">Accesul la SMS este combinat cu accesul la internet. Este necesară o analiză contextuală.</string>
+<string name="finding_signer">Metadatele certificatului de semnare lipsesc sau nu pot fi citite.</string>
+<string name="finding_archive">Containerul pachetului nu a putut fi inspectat complet. Analiza statică este incompletă.</string>
+<string name="finding_packer">O cale din pachet seamănă cu un instrument cunoscut de împachetare sau protecție. Și aplicațiile legitime pot folosi asemenea instrumente.</string>
+<string name="finding_dex_header">Un antet de cod are câmpuri de format sau dimensiune inconsistente. Acest lucru nu dovedește existența unui malware.</string>
+<string name="finding_dex_short">O intrare de cod este mai scurtă decât un antet valid și nu a putut fi inspectată complet.</string>
+<string name="finding_entropy">Un eșantion de cod are entropie mare a octeților. Criptarea, împachetarea sau conținutul comprimat inofensiv pot explica acest lucru.</string>
+<string name="finding_api">Nu a fost găsită referința statică așteptată pentru o permisiune solicitată. Reflecția, bibliotecile sau codul încărcat dinamic pot explica absența.</string>
+<string name="finding_rules">S-a găsit o potrivire cu o semnătură de cod inclusă, cu acoperire limitată. Este un indiciu, nu o dovadă de malware.</string>
+<string name="finding_other">Indicatorii locali suplimentari necesită verificare manuală. Nu confirmă malware.</string>
+<string name="integrity_manager">Este vizibil un administrator de acces root sau de interceptare: %1$s</string>
+<string name="integrity_test_keys">Versiunea dispozitivului folosește chei de semnare de test.</string>
+<string name="integrity_debug_build">Proprietățile versiunii indică un sistem depanabil sau care nu este destinat producției.</string>
+<string name="integrity_selinux">Starea locală lizibilă indică faptul că aplicarea obligatorie a securității este oprită.</string>
+<string name="integrity_debugger">Un depanator este atașat acestui proces.</string>
+<string name="integrity_emulator">Proprietățile versiunii seamănă cu cele ale unui emulator sau dispozitiv de test.</string>
+<string name="audit_scan_pending">Instalarea a fost înregistrată. Analiza locală este în așteptare.</string>
+<string name="audit_scan_complete">Analiza locală s-a încheiat fără potrivire confirmată de semnătură. Nu reprezintă o garanție a siguranței.</string>
+<string name="audit_scan_unavailable">Pachetul nu era vizibil în timpul analizei.</string>
+<string name="audit_scan_threat">S-a găsit o potrivire exactă cu o semnătură locală de amenințare.</string>
+<string name="audit_scan_review">Indicatorii locali necesită verificare; nu confirmă malware.</string>
+<string name="audit_source_recorded">Sursa instalării a fost înregistrată.</string>
+<string name="audit_uninstall_requested">S-a solicitat confirmarea Android pentru dezinstalare.</string>
+<string name="audit_uninstall_success">Android a raportat dezinstalarea reușită.</string>
+<string name="audit_uninstall_failed">Android nu a putut finaliza cererea de dezinstalare.</string>
+<string name="severity_test">Marker de test inofensiv</string>
+<string name="severity_low">Severitate redusă</string>
+<string name="severity_medium">Severitate medie</string>
+<string name="severity_high">Severitate ridicată</string>
+<string name="severity_critical">Severitate critică</string>
+<string name="severity_unknown">Severitate nespecificată</string>
+<plurals name="l10n_scanned_apps"><item quantity="one">A fost scanată %1$d aplicație</item><item quantity="few">Au fost scanate %1$d aplicații</item><item quantity="other">Au fost scanate %1$d aplicații</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="one">A fost scanat %1$d fișier</item><item quantity="few">Au fost scanate %1$d fișiere</item><item quantity="other">Au fost scanate %1$d fișiere</item></plurals>
+<plurals name="l10n_threats"><item quantity="one">A fost găsită %1$d amenințare</item><item quantity="few">Au fost găsite %1$d amenințări</item><item quantity="other">Au fost găsite %1$d amenințări</item></plurals>
+<plurals name="l10n_review"><item quantity="one">%1$d rezultat necesită verificare</item><item quantity="few">%1$d rezultate necesită verificare</item><item quantity="other">%1$d rezultate necesită verificare</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="one">%1$d element nu a putut fi scanat</item><item quantity="few">%1$d elemente nu au putut fi scanate</item><item quantity="other">%1$d elemente nu au putut fi scanate</item></plurals>
+<plurals name="l10n_no_match"><item quantity="one">%1$d rezultat fără potrivire locală</item><item quantity="few">%1$d rezultate fără potrivire locală</item><item quantity="other">%1$d rezultate fără potrivire locală</item></plurals>
+<plurals name="l10n_apps"><item quantity="one">%1$d aplicație</item><item quantity="few">%1$d aplicații</item><item quantity="other">%1$d aplicații</item></plurals>
+<plurals name="l10n_files"><item quantity="one">%1$d fișier</item><item quantity="few">%1$d fișiere</item><item quantity="other">%1$d fișiere</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="one">%1$d aplicație non-sistem are acces cu risc ridicat.</item><item quantity="few">%1$d aplicații non-sistem au acces cu risc ridicat.</item><item quantity="other">%1$d aplicații non-sistem au acces cu risc ridicat.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="one">%1$d modificare observată așteaptă notificare.</item><item quantity="few">%1$d modificări observate așteaptă notificare.</item><item quantity="other">%1$d modificări observate așteaptă notificare.</item></plurals>
+<plurals name="l10n_rules"><item quantity="one">Acoperire limitată · %1$d regulă inclusă</item><item quantity="few">Acoperire limitată · %1$d reguli incluse</item><item quantity="other">Acoperire limitată · %1$d reguli incluse</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="one">Ultima scanare: %1$d potrivire orientativă în cod.</item><item quantity="few">Ultima scanare: %1$d potriviri orientative în cod.</item><item quantity="other">Ultima scanare: %1$d potriviri orientative în cod.</item></plurals>
+<plurals name="l10n_imported"><item quantity="one">A fost importată %1$d semnătură validă în stocarea locală.</item><item quantity="few">Au fost importate %1$d semnături valide în stocarea locală.</item><item quantity="other">Au fost importate %1$d semnături valide în stocarea locală.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="one">%1$d octet</item><item quantity="few">%1$d octeți</item><item quantity="other">%1$d octeți</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="one">Există %1$d indicator al sistemului de fișiere legat de root.</item><item quantity="few">Există %1$d indicatori ai sistemului de fișiere legați de root.</item><item quantity="other">Există %1$d indicatori ai sistemului de fișiere legați de root.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="one">Există %1$d indicator de interceptare.</item><item quantity="few">Există %1$d indicatori de interceptare.</item><item quantity="other">Există %1$d indicatori de interceptare.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="one">%1$d aplicație activată</item><item quantity="few">%1$d aplicații activate</item><item quantity="other">%1$d aplicații activate</item></plurals>
+<plurals name="l10n_indicators"><item quantity="one">%1$d indicator</item><item quantity="few">%1$d indicatori</item><item quantity="other">%1$d indicatori</item></plurals>
+<plurals name="l10n_progress"><item quantity="one">Verificată %1$d din %2$d aplicație</item><item quantity="few">Verificate %1$d din %2$d aplicații</item><item quantity="other">Verificate %1$d din %2$d aplicații</item></plurals>
 </resources>
