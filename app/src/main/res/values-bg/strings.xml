@@ -805,4 +805,7 @@
 <plurals name="l10n_enabled_apps"><item quantity="one">Включено %1$d приложение</item><item quantity="other">Включени %1$d приложения</item></plurals>
 <plurals name="l10n_indicators"><item quantity="one">%1$d показател</item><item quantity="other">%1$d показателя</item></plurals>
 <plurals name="l10n_progress"><item quantity="one">Проверено %1$d от %2$d приложение</item><item quantity="other">Проверени %1$d от %2$d приложения</item></plurals>
+    <string name="ml_probability">Вероятност за заплаха според МО: %1$d%%</string>
+    <string name="ml_high_finding">Статична евристика с МО: висок резултат въз основа на разрешения и API модели; само ориентир, не доказателство за злонамерен софтуер.</string>
+    <string name="ml_active_body">На устройството има валидиран статичен модел за МО. Резултатите са ориентировъчни и не доказват наличие на злонамерен софтуер.</string>
 </resources>
