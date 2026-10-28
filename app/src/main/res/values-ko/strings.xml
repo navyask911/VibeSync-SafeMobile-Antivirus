@@ -558,5 +558,108 @@
 <string name="locale_th">ไทย</string>
 <string name="locale_uk">Українська</string>
 <string name="locale_uz">O‘zbekcha</string>
-</resources>
 
+<string name="format_label_value">%1$s: %2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s – %2$s</string>
+<string name="format_version">%1$s · 버전 %2$s (%3$s)</string>
+<string name="format_package_version">%1$s · 버전 %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">안전한 피드 주소를 입력하세요</string>
+<string name="storage_size_unavailable">크기를 확인할 수 없음</string>
+<string name="blocked_reason_hash">로컬 위협 서명과 일치했습니다.</string>
+<string name="blocked_reason_action">가능한 범위에서 로컬 보안 조치를 시도했습니다.</string>
+<string name="signed_import_success">서명된 데이터베이스 수락됨: 버전 %1$s · %2$s.</string>
+<string name="signed_import_failed">서명된 데이터베이스가 활성화되지 않았습니다. 서명, 버전 및 파일 형식을 확인하세요.</string>
+<string name="rule_import_pending">검토를 위해 %1$s을(를) 저장했습니다. 가져온 규칙은 비활성 상태로 유지되며 이 파일은 실행되지 않습니다.</string>
+<string name="rule_import_failed">규칙을 가져오지 못했습니다. 가져온 규칙은 비활성 상태로 유지됩니다.</string>
+<string name="restore_result_localized">%1$s(%2$s)의 사본을 복원했습니다. 격리된 원본은 계속 보관됩니다.</string>
+<string name="cleaner_confirm_localized">%1$s(%2$s)을(를) 영구 삭제하시겠습니까? 되돌릴 수 없습니다. SafeMobile이 이름과 메타데이터를 다시 확인합니다.</string>
+<string name="cleaner_result_localized">삭제됨: %1$s · 확보한 공간: %2$s · 실패 또는 변경됨: %3$s</string>
+<string name="about_localized_notices">타사 구성 요소에는 각각의 라이선스가 적용됩니다. 원본 고지문은 감사 확인 단계이며 라이선스 검토가 완료되었다는 뜻은 아닙니다. 출처 고지와 라이선스 조건은 원본 문서에서 확인하세요.</string>
+<string name="about_open_original">원본 문서 열기</string>
+<string name="about_localized_privacy">검사 파일, 해시, 패키지 이름과 결과는 이 기기에만 남습니다. 로컬 감사 메타데이터와 격리된 사본은 암호화된 전용 저장소를 사용합니다. 서명된 정의 업데이트는 이 프로젝트의 릴리스 서비스에 연결하며, 별도 피드는 사용자가 동의한 뒤에만 설정된 주소로 연결합니다. 폴더 감시는 사용자가 선택한 폴더에만 적용되며 중지할 수 있습니다. Android 권한은 사용자가 제어합니다. 이 빌드에는 광고, 클라우드 검사 또는 링크 평판 서비스가 없습니다.</string>
+<string name="coverage_local_title">로컬 테스트 정의</string>
+<string name="coverage_local_body">포함된 기존 정의에는 무해한 백신 테스트 표식만 있습니다. 실제 악성코드 탐지 범위는 제공하지 않습니다.</string>
+<string name="coverage_signed_title">서명된 해시 데이터베이스</string>
+<string name="coverage_signed_body">정확한 해시 대조에는 신뢰할 수 있는 서명 키와 수락된 서명 데이터베이스가 필요합니다. 운영용 데이터베이스는 포함되어 있지 않습니다.</string>
+<string name="coverage_static_title">앱 정적 분석</string>
+<string name="coverage_static_body">제한된 패키지 분석은 참고용 결과만 제공합니다. 결과만으로 악성코드라고 증명할 수 없으며 알려진 악성 서명자 목록은 비활성화되어 있습니다.</string>
+<string name="coverage_permissions_title">권한 및 매니페스트</string>
+<string name="coverage_permissions_body">권한 조합과 확인 가능한 패키지 선언은 수동 검토에 도움이 됩니다. 학습된 분류 모델은 아닙니다.</string>
+<string name="coverage_integrity_title">기기 무결성 지표</string>
+<string name="coverage_integrity_body">루트 접근, 후킹, 빌드 속성, 보안 강제 적용, 디버거 및 에뮬레이터를 로컬 휴리스틱으로 확인하며 증명 서비스를 사용하지 않습니다.</string>
+<string name="coverage_bloom_title">확률적 해시 색인</string>
+<string name="coverage_bloom_body">검증된 비어 있지 않은 확률적 색인과 해당 매니페스트가 포함되어 있지 않습니다. 이 선택적 기능은 사용할 수 없습니다.</string>
+<string name="coverage_rules_title">포함된 코드 서명</string>
+<string name="coverage_rules_body">검증된 내장 규칙은 제한된 코드 문자열 패턴만 확인합니다. 일치 결과는 참고용이며 악성코드를 확정하지 않습니다.</string>
+<string name="coverage_rules_unavailable">내장 규칙을 불러오지 못했거나 검증에 실패했습니다. 코드 서명 검사를 수행했다고 주장하지 않습니다.</string>
+<string name="coverage_model_title">권한 분류 모델</string>
+<string name="coverage_model_body">학습과 검증을 거치고 배포 가능한 분류 모델이 포함되어 있지 않습니다. 머신러닝은 비활성화되어 있습니다.</string>
+<string name="coverage_signer_title">오프라인 서명자 증명</string>
+<string name="coverage_signer_body">별도로 고정한 예상 서명 인증서 지문이 설정되어 있지 않습니다.</string>
+<string name="coverage_feed_title">서명된 피드 검증</string>
+<string name="coverage_feed_body">분리된 서명 검증과 이전 버전으로의 롤백 방지에는 빌드 시 신뢰할 수 있는 키 및 설정된 서명 피드가 필요합니다.</string>
+<string name="hash_status_active">서명된 로컬 해시 데이터베이스가 활성화되어 있습니다.</string>
+<string name="hash_status_missing">서명된 데이터베이스를 수락할 때까지 해시 대조는 비활성화됩니다.</string>
+<string name="hash_status_key">신뢰할 수 있는 서명 키가 없어 해시 대조가 비활성화되어 있습니다.</string>
+<string name="hash_status_invalid">저장된 정의가 무결성, 버전 또는 형식 검증에 실패했습니다. 해시 대조는 비활성 상태로 유지됩니다.</string>
+<string name="hash_status_activation">데이터베이스 활성화가 완료되지 않았습니다. 해시 대조는 비활성 상태로 유지됩니다.</string>
+<string name="finding_confidence">%1$s · 신뢰도: %2$d%%</string>
+<string name="finding_exported">외부에 공개된 구성 요소에 대해 매니페스트에서 명시적 권한 제한을 찾을 수 없습니다. 코드 수준 검사는 존재할 수 있습니다.</string>
+<string name="finding_admin">앱이 기기 관리자 수신기를 선언합니다. 이 민감한 기능만으로 악용을 증명할 수는 없습니다.</string>
+<string name="finding_accessibility">앱이 접근성 서비스를 선언합니다. 정상적인 보조 앱에 이 권한이 필요할 수 있습니다.</string>
+<string name="finding_overlay">앱이 다른 화면 위에 표시할 권한을 요청합니다. 정상적으로 사용할 수도 있지만 화면을 가릴 수도 있습니다.</string>
+<string name="finding_combined">접근성 권한이 화면 위 표시, 문자 메시지 또는 통화 기록 접근과 결합되어 있습니다. 앱의 목적을 검토하세요.</string>
+<string name="finding_sms_calls">앱이 문자 메시지와 통화 기록 권한을 모두 요청합니다.</string>
+<string name="finding_sms_network">문자 메시지 접근과 인터넷 접근이 결합되어 있습니다. 맥락에 따른 검토가 필요합니다.</string>
+<string name="finding_signer">서명 인증서 메타데이터가 없거나 읽을 수 없습니다.</string>
+<string name="finding_archive">패키지 컨테이너를 모두 검사하지 못했습니다. 정적 분석이 불완전합니다.</string>
+<string name="finding_packer">패키지 경로가 알려진 패킹 또는 보호 도구와 유사합니다. 정상 앱도 이런 도구를 사용할 수 있습니다.</string>
+<string name="finding_dex_header">코드 헤더의 형식 또는 크기 필드가 일치하지 않습니다. 악성코드의 증거는 아닙니다.</string>
+<string name="finding_dex_short">코드 항목이 유효한 헤더보다 짧아 모두 검사할 수 없었습니다.</string>
+<string name="finding_entropy">코드 샘플의 바이트 엔트로피가 높습니다. 암호화, 패킹 또는 무해한 압축 콘텐츠 때문일 수 있습니다.</string>
+<string name="finding_api">요청된 권한에 대해 예상된 정적 참조를 찾지 못했습니다. 리플렉션, 라이브러리 또는 동적 로딩 코드 때문일 수 있습니다.</string>
+<string name="finding_rules">제한된 내장 코드 서명과 일치했습니다. 참고 결과이며 악성코드의 증거는 아닙니다.</string>
+<string name="finding_other">추가 로컬 지표는 수동 검토가 필요합니다. 악성코드를 확정하지 않습니다.</string>
+<string name="integrity_manager">루트 접근 또는 후킹 관리자가 표시됩니다: %1$s</string>
+<string name="integrity_test_keys">기기 빌드에 테스트 서명 키가 사용됩니다.</string>
+<string name="integrity_debug_build">빌드 속성이 디버깅 가능하거나 운영용이 아닌 시스템을 나타냅니다.</string>
+<string name="integrity_selinux">읽을 수 있는 로컬 상태에 필수 보안 강제 적용이 꺼져 있다고 표시됩니다.</string>
+<string name="integrity_debugger">이 프로세스에 디버거가 연결되어 있습니다.</string>
+<string name="integrity_emulator">빌드 속성이 에뮬레이터 또는 테스트 기기와 유사합니다.</string>
+<string name="audit_scan_pending">설치를 기록했습니다. 로컬 분석이 대기 중입니다.</string>
+<string name="audit_scan_complete">확인된 서명 일치 없이 로컬 분석이 끝났습니다. 안전을 보장하지는 않습니다.</string>
+<string name="audit_scan_unavailable">분석 시점에 패키지가 보이지 않았습니다.</string>
+<string name="audit_scan_threat">정확한 로컬 위협 서명과 일치했습니다.</string>
+<string name="audit_scan_review">로컬 지표를 검토해야 하며 악성코드가 확정된 것은 아닙니다.</string>
+<string name="audit_source_recorded">설치 출처를 기록했습니다.</string>
+<string name="audit_uninstall_requested">Android에 삭제 확인을 요청했습니다.</string>
+<string name="audit_uninstall_success">Android에서 앱 삭제 성공을 보고했습니다.</string>
+<string name="audit_uninstall_failed">Android가 앱 삭제 요청을 완료하지 못했습니다.</string>
+<string name="severity_test">무해한 테스트 표식</string>
+<string name="severity_low">낮은 위험도</string>
+<string name="severity_medium">보통 위험도</string>
+<string name="severity_high">높은 위험도</string>
+<string name="severity_critical">매우 심각한 위험도</string>
+<string name="severity_unknown">위험도가 지정되지 않음</string>
+<plurals name="l10n_scanned_apps"><item quantity="other">앱 %1$d개 검사함</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="other">파일 %1$d개 검사함</item></plurals>
+<plurals name="l10n_threats"><item quantity="other">위협 %1$d개 발견됨</item></plurals>
+<plurals name="l10n_review"><item quantity="other">결과 %1$d개 검토 필요</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="other">항목 %1$d개를 검사하지 못함</item></plurals>
+<plurals name="l10n_no_match"><item quantity="other">로컬 일치 항목이 없는 결과 %1$d개</item></plurals>
+<plurals name="l10n_apps"><item quantity="other">앱 %1$d개</item></plurals>
+<plurals name="l10n_files"><item quantity="other">파일 %1$d개</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="other">시스템 앱이 아닌 앱 %1$d개에 고위험 접근 권한이 있습니다.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="other">관찰된 변경 %1$d건의 알림이 대기 중입니다.</item></plurals>
+<plurals name="l10n_rules"><item quantity="other">제한된 탐지 범위 · 내장 규칙 %1$d개</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="other">최근 검사: 참고용 코드 일치 %1$d건.</item></plurals>
+<plurals name="l10n_imported"><item quantity="other">유효한 서명 %1$d개를 로컬 저장소로 가져왔습니다.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="other">%1$d바이트</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="other">루트 관련 파일 시스템 지표 %1$d개가 있습니다.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="other">후킹 지표 %1$d개가 있습니다.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="other">앱 %1$d개 활성화됨</item></plurals>
+<plurals name="l10n_indicators"><item quantity="other">지표 %1$d개</item></plurals>
+<plurals name="l10n_progress"><item quantity="other">앱 %2$d개 중 %1$d개 확인함</item></plurals>
+</resources>
