@@ -662,4 +662,7 @@
 <plurals name="l10n_enabled_apps"><item quantity="one">%1$d యాప్ ప్రారంభించబడింది</item><item quantity="other">%1$d యాప్‌లు ప్రారంభించబడ్డాయి</item></plurals>
 <plurals name="l10n_indicators"><item quantity="one">%1$d సూచిక</item><item quantity="other">%1$d సూచికలు</item></plurals>
 <plurals name="l10n_progress"><item quantity="one">%2$d యాప్‌లలో %1$d యాప్ తనిఖీ అయింది</item><item quantity="other">%2$d యాప్‌లలో %1$d తనిఖీ అయ్యాయి</item></plurals>
+    <string name="ml_probability">ఎంఎల్ ముప్పు సంభావ్యత: %1$d%%</string>
+    <string name="ml_high_finding">స్థిర ఎంఎల్ అంచనా: అనుమతులు, API నమూనాల ఆధారంగా అధిక స్కోరు; ఇది సూచన మాత్రమే, మాల్వేర్‌కు రుజువు కాదు.</string>
+    <string name="ml_active_body">పరికరంలో ధృవీకరించిన స్థిర ఎంఎల్ నమూనా అందుబాటులో ఉంది. ఫలితాలు సూచనలు మాత్రమే; మాల్వేర్‌ను నిర్ధారించవు.</string>
 </resources>
