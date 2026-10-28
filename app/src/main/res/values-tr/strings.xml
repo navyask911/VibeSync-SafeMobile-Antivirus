@@ -643,23 +643,23 @@
 <string name="severity_high">Yüksek önem</string>
 <string name="severity_critical">Kritik önem</string>
 <string name="severity_unknown">Önem derecesi belirtilmedi</string>
-<plurals name="l10n_scanned_apps"><item quantity="other">%1$d uygulama tarandı</item></plurals>
-<plurals name="l10n_scanned_files"><item quantity="other">%1$d dosya tarandı</item></plurals>
-<plurals name="l10n_threats"><item quantity="other">%1$d tehdit bulundu</item></plurals>
-<plurals name="l10n_review"><item quantity="other">%1$d sonuç incelenmeli</item></plurals>
-<plurals name="l10n_unreadable"><item quantity="other">%1$d öğe taranamadı</item></plurals>
-<plurals name="l10n_no_match"><item quantity="other">%1$d sonuçta yerel eşleşme yok</item></plurals>
-<plurals name="l10n_apps"><item quantity="other">%1$d uygulama</item></plurals>
-<plurals name="l10n_files"><item quantity="other">%1$d dosya</item></plurals>
-<plurals name="l10n_posture_apps"><item quantity="other">Sistem dışı %1$d uygulamanın yüksek riskli erişimi var.</item></plurals>
-<plurals name="l10n_pending_changes"><item quantity="other">Gözlenen %1$d değişiklik bildirim bekliyor.</item></plurals>
-<plurals name="l10n_rules"><item quantity="other">Sınırlı kapsama · %1$d paketlenmiş kural</item></plurals>
-<plurals name="l10n_rule_matches"><item quantity="other">Son tarama: %1$d bilgilendirici kod eşleşmesi.</item></plurals>
-<plurals name="l10n_imported"><item quantity="other">%1$d geçerli imza yerel depoya aktarıldı.</item></plurals>
-<plurals name="l10n_bytes"><item quantity="other">%1$d bayt</item></plurals>
-<plurals name="l10n_root_indicators"><item quantity="other">Kök erişimiyle ilgili %1$d dosya sistemi göstergesi var.</item></plurals>
-<plurals name="l10n_hook_indicators"><item quantity="other">%1$d kanca göstergesi var.</item></plurals>
-<plurals name="l10n_enabled_apps"><item quantity="other">%1$d uygulama etkinleştirildi</item></plurals>
-<plurals name="l10n_indicators"><item quantity="other">%1$d gösterge</item></plurals>
-<plurals name="l10n_progress"><item quantity="other">%2$d uygulamadan %1$d tanesi kontrol edildi</item></plurals>
+<plurals name="l10n_scanned_apps"><item quantity="one">%1$d uygulama tarandı</item><item quantity="other">%1$d uygulama tarandı</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="one">%1$d dosya tarandı</item><item quantity="other">%1$d dosya tarandı</item></plurals>
+<plurals name="l10n_threats"><item quantity="one">%1$d tehdit bulundu</item><item quantity="other">%1$d tehdit bulundu</item></plurals>
+<plurals name="l10n_review"><item quantity="one">%1$d sonuç incelenmeli</item><item quantity="other">%1$d sonuç incelenmeli</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="one">%1$d öğe taranamadı</item><item quantity="other">%1$d öğe taranamadı</item></plurals>
+<plurals name="l10n_no_match"><item quantity="one">%1$d sonuçta yerel eşleşme yok</item><item quantity="other">%1$d sonuçta yerel eşleşme yok</item></plurals>
+<plurals name="l10n_apps"><item quantity="one">%1$d uygulama</item><item quantity="other">%1$d uygulama</item></plurals>
+<plurals name="l10n_files"><item quantity="one">%1$d dosya</item><item quantity="other">%1$d dosya</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="one">Sistem dışı %1$d uygulamanın yüksek riskli erişimi var.</item><item quantity="other">Sistem dışı %1$d uygulamanın yüksek riskli erişimi var.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="one">Gözlenen %1$d değişiklik bildirim bekliyor.</item><item quantity="other">Gözlenen %1$d değişiklik bildirim bekliyor.</item></plurals>
+<plurals name="l10n_rules"><item quantity="one">Sınırlı kapsama · %1$d paketlenmiş kural</item><item quantity="other">Sınırlı kapsama · %1$d paketlenmiş kural</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="one">Son tarama: %1$d bilgilendirici kod eşleşmesi.</item><item quantity="other">Son tarama: %1$d bilgilendirici kod eşleşmesi.</item></plurals>
+<plurals name="l10n_imported"><item quantity="one">%1$d geçerli imza yerel depoya aktarıldı.</item><item quantity="other">%1$d geçerli imza yerel depoya aktarıldı.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="one">%1$d bayt</item><item quantity="other">%1$d bayt</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="one">Kök erişimiyle ilgili %1$d dosya sistemi göstergesi var.</item><item quantity="other">Kök erişimiyle ilgili %1$d dosya sistemi göstergesi var.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="one">%1$d kanca göstergesi var.</item><item quantity="other">%1$d kanca göstergesi var.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="one">%1$d uygulama etkinleştirildi</item><item quantity="other">%1$d uygulama etkinleştirildi</item></plurals>
+<plurals name="l10n_indicators"><item quantity="one">%1$d gösterge</item><item quantity="other">%1$d gösterge</item></plurals>
+<plurals name="l10n_progress"><item quantity="one">%2$d uygulamadan %1$d tanesi kontrol edildi</item><item quantity="other">%2$d uygulamadan %1$d tanesi kontrol edildi</item></plurals>
 </resources>
