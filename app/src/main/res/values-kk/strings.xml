@@ -805,4 +805,7 @@
 <plurals name="l10n_enabled_apps"><item quantity="one">%1$d қолданба іске қосылды</item><item quantity="other">%1$d қолданба іске қосылды</item></plurals>
 <plurals name="l10n_indicators"><item quantity="one">%1$d көрсеткіш</item><item quantity="other">%1$d көрсеткіш</item></plurals>
 <plurals name="l10n_progress"><item quantity="one">%2$d қолданбаның %1$d-і тексерілді</item><item quantity="other">%2$d қолданбаның %1$d-і тексерілді</item></plurals>
+    <string name="ml_probability">Машиналық оқыту бойынша қауіп ықтималдығы: %1$d%%</string>
+    <string name="ml_high_finding">Статикалық машиналық оқыту эвристикасы: рұқсаттар мен API үлгілері бойынша жоғары ұпай; бұл тек белгі, зиянды бағдарламаның дәлелі емес.</string>
+    <string name="ml_active_body">Құрылғыда тексерілген статикалық машиналық оқыту моделі бар. Нәтижелер кеңес сипатында және зиянды бағдарламаны дәлелдемейді.</string>
 </resources>
