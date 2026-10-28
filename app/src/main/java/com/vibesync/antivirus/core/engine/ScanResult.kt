@@ -21,6 +21,8 @@ data class ScanResult(
  val sha1: String? = null,
  /** Structured, local-only static analysis findings; not persisted as an unencrypted database object. */
  val riskReport: RiskReport? = null,
+ /** Optional validated on-device model probability. Absent for dummy or missing models. */
+ val mlProbability: Float? = null,
  /** User override; no detection engine was executed. */
  val trustedByUser: Boolean = false,
  /** Resource-backed copy is resolved against the current Activity locale. */
