@@ -786,23 +786,23 @@
 <string name="severity_high">მაღალი სიმძიმე</string>
 <string name="severity_critical">კრიტიკული სიმძიმე</string>
 <string name="severity_unknown">სიმძიმე მითითებული არ არის</string>
-<plurals name="l10n_scanned_apps"><item quantity="other">სკანირებულია %1$d აპლიკაცია</item></plurals>
-<plurals name="l10n_scanned_files"><item quantity="other">სკანირებულია %1$d ფაილი</item></plurals>
-<plurals name="l10n_threats"><item quantity="other">ნაპოვნია %1$d საფრთხე</item></plurals>
-<plurals name="l10n_review"><item quantity="other">%1$d შედეგი შემოწმებას საჭიროებს</item></plurals>
-<plurals name="l10n_unreadable"><item quantity="other">%1$d ელემენტის სკანირება ვერ მოხერხდა</item></plurals>
-<plurals name="l10n_no_match"><item quantity="other">%1$d შედეგს ადგილობრივი დამთხვევა არ აქვს</item></plurals>
-<plurals name="l10n_apps"><item quantity="other">%1$d აპლიკაცია</item></plurals>
-<plurals name="l10n_files"><item quantity="other">%1$d ფაილი</item></plurals>
-<plurals name="l10n_posture_apps"><item quantity="other">%1$d არასისტემურ აპლიკაციას მაღალი რისკის წვდომა აქვს.</item></plurals>
-<plurals name="l10n_pending_changes"><item quantity="other">%1$d დაფიქსირებული ცვლილების შეტყობინება მოლოდინშია.</item></plurals>
-<plurals name="l10n_rules"><item quantity="other">შეზღუდული დაფარვა · %1$d ჩართული წესი</item></plurals>
-<plurals name="l10n_rule_matches"><item quantity="other">ბოლო სკანირება: %1$d ინფორმაციული კოდის დამთხვევა.</item></plurals>
-<plurals name="l10n_imported"><item quantity="other">ადგილობრივ საცავში იმპორტირებულია %1$d სწორი ხელმოწერა.</item></plurals>
-<plurals name="l10n_bytes"><item quantity="other">%1$d ბაიტი</item></plurals>
-<plurals name="l10n_root_indicators"><item quantity="other">არსებობს ძირეულ წვდომასთან დაკავშირებული %1$d ფაილური სისტემის მაჩვენებელი.</item></plurals>
-<plurals name="l10n_hook_indicators"><item quantity="other">არსებობს ჩაჭრის %1$d მაჩვენებელი.</item></plurals>
-<plurals name="l10n_enabled_apps"><item quantity="other">ჩართულია %1$d აპლიკაცია</item></plurals>
-<plurals name="l10n_indicators"><item quantity="other">%1$d მაჩვენებელი</item></plurals>
-<plurals name="l10n_progress"><item quantity="other">შემოწმებულია %1$d აპლიკაცია %2$d-დან</item></plurals>
+<plurals name="l10n_scanned_apps"><item quantity="one">სკანირებულია %1$d აპლიკაცია</item><item quantity="other">სკანირებულია %1$d აპლიკაცია</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="one">სკანირებულია %1$d ფაილი</item><item quantity="other">სკანირებულია %1$d ფაილი</item></plurals>
+<plurals name="l10n_threats"><item quantity="one">ნაპოვნია %1$d საფრთხე</item><item quantity="other">ნაპოვნია %1$d საფრთხე</item></plurals>
+<plurals name="l10n_review"><item quantity="one">%1$d შედეგი შემოწმებას საჭიროებს</item><item quantity="other">%1$d შედეგი შემოწმებას საჭიროებს</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="one">%1$d ელემენტის სკანირება ვერ მოხერხდა</item><item quantity="other">%1$d ელემენტის სკანირება ვერ მოხერხდა</item></plurals>
+<plurals name="l10n_no_match"><item quantity="one">%1$d შედეგს ადგილობრივი დამთხვევა არ აქვს</item><item quantity="other">%1$d შედეგს ადგილობრივი დამთხვევა არ აქვს</item></plurals>
+<plurals name="l10n_apps"><item quantity="one">%1$d აპლიკაცია</item><item quantity="other">%1$d აპლიკაცია</item></plurals>
+<plurals name="l10n_files"><item quantity="one">%1$d ფაილი</item><item quantity="other">%1$d ფაილი</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="one">%1$d არასისტემურ აპლიკაციას მაღალი რისკის წვდომა აქვს.</item><item quantity="other">%1$d არასისტემურ აპლიკაციას მაღალი რისკის წვდომა აქვს.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="one">%1$d დაფიქსირებული ცვლილების შეტყობინება მოლოდინშია.</item><item quantity="other">%1$d დაფიქსირებული ცვლილების შეტყობინება მოლოდინშია.</item></plurals>
+<plurals name="l10n_rules"><item quantity="one">შეზღუდული დაფარვა · %1$d ჩართული წესი</item><item quantity="other">შეზღუდული დაფარვა · %1$d ჩართული წესი</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="one">ბოლო სკანირება: %1$d ინფორმაციული კოდის დამთხვევა.</item><item quantity="other">ბოლო სკანირება: %1$d ინფორმაციული კოდის დამთხვევა.</item></plurals>
+<plurals name="l10n_imported"><item quantity="one">ადგილობრივ საცავში იმპორტირებულია %1$d სწორი ხელმოწერა.</item><item quantity="other">ადგილობრივ საცავში იმპორტირებულია %1$d სწორი ხელმოწერა.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="one">%1$d ბაიტი</item><item quantity="other">%1$d ბაიტი</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="one">არსებობს ძირეულ წვდომასთან დაკავშირებული %1$d ფაილური სისტემის მაჩვენებელი.</item><item quantity="other">არსებობს ძირეულ წვდომასთან დაკავშირებული %1$d ფაილური სისტემის მაჩვენებელი.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="one">არსებობს ჩაჭრის %1$d მაჩვენებელი.</item><item quantity="other">არსებობს ჩაჭრის %1$d მაჩვენებელი.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="one">ჩართულია %1$d აპლიკაცია</item><item quantity="other">ჩართულია %1$d აპლიკაცია</item></plurals>
+<plurals name="l10n_indicators"><item quantity="one">%1$d მაჩვენებელი</item><item quantity="other">%1$d მაჩვენებელი</item></plurals>
+<plurals name="l10n_progress"><item quantity="one">შემოწმებულია %1$d აპლიკაცია %2$d-დან</item><item quantity="other">შემოწმებულია %1$d აპლიკაცია %2$d-დან</item></plurals>
 </resources>
