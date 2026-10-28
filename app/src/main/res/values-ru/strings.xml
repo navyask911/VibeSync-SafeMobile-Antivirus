@@ -558,5 +558,108 @@
 <string name="locale_th">ไทย</string>
 <string name="locale_uk">Українська</string>
 <string name="locale_uz">O‘zbekcha</string>
+<string name="format_label_value">%1$s: %2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s – %2$s</string>
+<string name="format_version">%1$s · Версия %2$s (%3$s)</string>
+<string name="format_package_version">%1$s · Версия %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">Введите защищённый адрес источника</string>
+<string name="storage_size_unavailable">Размер недоступен</string>
+<string name="blocked_reason_hash">Обнаружено совпадение с локальной сигнатурой угрозы.</string>
+<string name="blocked_reason_action">Предпринята попытка локального защитного действия с учётом ограничений системы.</string>
+<string name="signed_import_success">Подписанная база принята: версия %1$s · %2$s.</string>
+<string name="signed_import_failed">Подписанная база не активирована. Проверьте подпись, версию и формат файла.</string>
+<string name="rule_import_pending">Файл %1$s сохранён для проверки. Импортированные правила остаются отключёнными; файл не будет выполняться.</string>
+<string name="rule_import_failed">Не удалось импортировать правила. Импортированные правила остаются отключёнными.</string>
+<string name="restore_result_localized">Восстановлена копия %1$s (%2$s). Оригинал остаётся в карантине.</string>
+<string name="cleaner_confirm_localized">Безвозвратно удалить %1$s (%2$s)? Это действие нельзя отменить. SafeMobile повторно проверит имена и метаданные.</string>
+<string name="cleaner_result_localized">Удалено: %1$s · Освобождено: %2$s · Ошибки или изменения: %3$s</string>
+<string name="about_localized_notices">Сторонние компоненты сохраняют собственные лицензии. Исходные уведомления отражают промежуточную проверку, а не завершённый аудит лицензий. Откройте оригинальные документы для просмотра уведомлений и условий лицензий.</string>
+<string name="about_open_original">Открыть оригинальные документы</string>
+<string name="about_localized_privacy">Проверяемые файлы, хеши, имена пакетов и результаты остаются на устройстве. Метаданные аудита и карантинные копии хранятся в зашифрованном закрытом хранилище. Подписанные обновления обращаются к службе выпусков проекта; отдельный источник обращается к настроенному адресу только с вашего согласия. Вы выбираете отслеживаемые папки и можете остановить наблюдение. Разрешения Android остаются под вашим контролем. В этой сборке нет рекламы, облачного сканирования и службы репутации ссылок.</string>
+<string name="coverage_local_title">Локальные тестовые определения</string>
+<string name="coverage_local_body">Встроенные устаревшие определения содержат только безвредный тестовый антивирусный маркер. Они не обеспечивают обнаружение реальных вредоносных программ.</string>
+<string name="coverage_signed_title">Подписанная база хешей</string>
+<string name="coverage_signed_body">Для точного сравнения хешей нужны доверенный ключ подписи и принятая подписанная база. Рабочая база в приложение не включена.</string>
+<string name="coverage_static_title">Статический анализ приложений</string>
+<string name="coverage_static_body">Ограниченный анализ пакета выдаёт рекомендательные признаки. Один признак не доказывает вредоносность; списки известных вредоносных подписантов отключены.</string>
+<string name="coverage_permissions_title">Разрешения и манифест</string>
+<string name="coverage_permissions_body">Сочетания разрешений и доступные объявления пакета помогают ручной проверке. Это не обученная классификация.</string>
+<string name="coverage_integrity_title">Признаки целостности устройства</string>
+<string name="coverage_integrity_body">Права суперпользователя, перехваты функций, свойства системы, применение защиты, отладчики и эмуляторы проверяются локальными эвристиками, без аттестации.</string>
+<string name="coverage_bloom_title">Вероятностный индекс хешей</string>
+<string name="coverage_bloom_body">Проверенный непустой вероятностный индекс и его манифест не включены. Этот дополнительный уровень недоступен.</string>
+<string name="coverage_rules_title">Встроенные сигнатуры кода</string>
+<string name="coverage_rules_body">Проверенные встроенные правила ищут ограниченный набор буквальных шаблонов кода. Совпадения рекомендательные и не подтверждают вредоносность.</string>
+<string name="coverage_rules_unavailable">Встроенные правила не загрузились или не прошли проверку. Сканирование сигнатур кода не заявляется.</string>
+<string name="coverage_model_title">Модель классификации разрешений</string>
+<string name="coverage_model_body">Обученная, проверенная и разрешённая к распространению модель не включена. Машинное обучение отключено.</string>
+<string name="coverage_signer_title">Автономная аттестация подписанта</string>
+<string name="coverage_signer_body">Независимо закреплённый ожидаемый отпечаток сертификата подписи не настроен.</string>
+<string name="coverage_feed_title">Проверка подписанного источника</string>
+<string name="coverage_feed_body">Проверка отделённой подписи и защита от отката требуют доверенного ключа при сборке и настроенного подписанного источника.</string>
+<string name="hash_status_active">Подписанная локальная база хешей активна.</string>
+<string name="hash_status_missing">Сравнение хешей отключено до принятия подписанной базы.</string>
+<string name="hash_status_key">Сравнение хешей отключено: доверенный ключ подписи недоступен.</string>
+<string name="hash_status_invalid">Сохранённые определения не прошли проверку целостности, версии или формата. Сравнение хешей остаётся отключённым.</string>
+<string name="hash_status_activation">Активация базы не завершена. Сравнение хешей остаётся отключённым.</string>
+<string name="finding_confidence">%1$s · Уверенность: %2$d%%</string>
+<string name="finding_exported">У экспортированного компонента не видно ограничения разрешениями в манифесте. Проверки могут существовать в коде.</string>
+<string name="finding_admin">Приложение объявляет приёмник администрирования устройства. Эта чувствительная возможность не доказывает злоупотребление.</string>
+<string name="finding_accessibility">Приложение объявляет службу специальных возможностей. Она может требоваться законным вспомогательным приложениям.</string>
+<string name="finding_overlay">Приложение запрашивает наложение поверх других окон. Это может быть законно, но способно скрывать другие экраны.</string>
+<string name="finding_combined">Специальные возможности сочетаются с наложением, доступом к сообщениям или журналу звонков. Проверьте назначение приложения.</string>
+<string name="finding_sms_calls">Приложение запрашивает доступ и к текстовым сообщениям, и к журналу звонков.</string>
+<string name="finding_sms_network">Доступ к текстовым сообщениям сочетается с доступом в интернет. Нужна проверка контекста.</string>
+<string name="finding_signer">Метаданные сертификата подписи отсутствуют или недоступны для чтения.</string>
+<string name="finding_archive">Контейнер пакета не удалось полностью проверить. Статический анализ не завершён.</string>
+<string name="finding_packer">Путь в пакете напоминает известное средство упаковки или защиты. Такие средства могут использовать законные приложения.</string>
+<string name="finding_dex_header">Поля формата или размера в заголовке кода противоречивы. Это не доказывает вредоносность.</string>
+<string name="finding_dex_short">Запись кода короче допустимого заголовка и не была полностью проверена.</string>
+<string name="finding_entropy">Образец кода имеет высокую энтропию байтов. Причиной могут быть шифрование, упаковка или безвредное сжатое содержимое.</string>
+<string name="finding_api">Ожидаемая статическая ссылка для запрошенного разрешения не найдена. Причиной могут быть рефлексия, библиотеки или динамически загружаемый код.</string>
+<string name="finding_rules">Обнаружено совпадение с ограниченной сигнатурой кода. Это рекомендация к проверке, а не доказательство вредоносности.</string>
+<string name="finding_other">Дополнительные локальные признаки требуют ручной проверки. Они не подтверждают вредоносность.</string>
+<string name="integrity_manager">Виден диспетчер прав суперпользователя или перехвата функций: %1$s</string>
+<string name="integrity_test_keys">Система устройства использует тестовые ключи подписи.</string>
+<string name="integrity_debug_build">Свойства указывают на отладочную или непроизводственную систему.</string>
+<string name="integrity_selinux">Читаемое локальное состояние сообщает, что обязательное применение защиты отключено.</string>
+<string name="integrity_debugger">К этому процессу подключён отладчик.</string>
+<string name="integrity_emulator">Свойства системы похожи на эмулятор или тестовое устройство.</string>
+<string name="audit_scan_pending">Установка зарегистрирована. Локальный анализ ожидается.</string>
+<string name="audit_scan_complete">Локальный анализ завершён без подтверждённого совпадения сигнатуры. Это не гарантирует безопасность.</string>
+<string name="audit_scan_unavailable">Во время анализа пакет не был виден.</string>
+<string name="audit_scan_threat">Найдено точное совпадение с локальной сигнатурой угрозы.</string>
+<string name="audit_scan_review">Локальные признаки требуют проверки; они не подтверждают вредоносность.</string>
+<string name="audit_source_recorded">Источник установки зарегистрирован.</string>
+<string name="audit_uninstall_requested">Запрошено подтверждение удаления средствами Android.</string>
+<string name="audit_uninstall_success">Android сообщил об успешном удалении.</string>
+<string name="audit_uninstall_failed">Android не удалось завершить запрос на удаление.</string>
+<string name="severity_test">Безвредный тестовый маркер</string>
+<string name="severity_low">Низкая серьёзность</string>
+<string name="severity_medium">Средняя серьёзность</string>
+<string name="severity_high">Высокая серьёзность</string>
+<string name="severity_critical">Критическая серьёзность</string>
+<string name="severity_unknown">Серьёзность не указана</string>
+<plurals name="l10n_scanned_apps"><item quantity="one">Проверено %1$d приложение</item><item quantity="few">Проверено %1$d приложения</item><item quantity="many">Проверено %1$d приложений</item><item quantity="other">Проверено %1$d приложения</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="one">Проверен %1$d файл</item><item quantity="few">Проверено %1$d файла</item><item quantity="many">Проверено %1$d файлов</item><item quantity="other">Проверено %1$d файла</item></plurals>
+<plurals name="l10n_threats"><item quantity="one">Найдена %1$d угроза</item><item quantity="few">Найдено %1$d угрозы</item><item quantity="many">Найдено %1$d угроз</item><item quantity="other">Найдено %1$d угрозы</item></plurals>
+<plurals name="l10n_review"><item quantity="one">%1$d результат требует проверки</item><item quantity="few">%1$d результата требуют проверки</item><item quantity="many">%1$d результатов требуют проверки</item><item quantity="other">%1$d результата требуют проверки</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="one">Не удалось проверить %1$d объект</item><item quantity="few">Не удалось проверить %1$d объекта</item><item quantity="many">Не удалось проверить %1$d объектов</item><item quantity="other">Не удалось проверить %1$d объекта</item></plurals>
+<plurals name="l10n_no_match"><item quantity="one">%1$d результат без локального совпадения</item><item quantity="few">%1$d результата без локального совпадения</item><item quantity="many">%1$d результатов без локального совпадения</item><item quantity="other">%1$d результата без локального совпадения</item></plurals>
+<plurals name="l10n_apps"><item quantity="one">%1$d приложение</item><item quantity="few">%1$d приложения</item><item quantity="many">%1$d приложений</item><item quantity="other">%1$d приложения</item></plurals>
+<plurals name="l10n_files"><item quantity="one">%1$d файл</item><item quantity="few">%1$d файла</item><item quantity="many">%1$d файлов</item><item quantity="other">%1$d файла</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="one">%1$d несистемное приложение имеет доступ высокого риска.</item><item quantity="few">%1$d несистемных приложения имеют доступ высокого риска.</item><item quantity="many">%1$d несистемных приложений имеют доступ высокого риска.</item><item quantity="other">%1$d несистемного приложения имеют доступ высокого риска.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="one">%1$d изменение ожидает уведомления.</item><item quantity="few">%1$d изменения ожидают уведомления.</item><item quantity="many">%1$d изменений ожидают уведомления.</item><item quantity="other">%1$d изменения ожидают уведомления.</item></plurals>
+<plurals name="l10n_rules"><item quantity="one">Ограниченное покрытие · %1$d встроенное правило</item><item quantity="few">Ограниченное покрытие · %1$d встроенных правила</item><item quantity="many">Ограниченное покрытие · %1$d встроенных правил</item><item quantity="other">Ограниченное покрытие · %1$d встроенного правила</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="one">Последнее сканирование: %1$d рекомендательное совпадение кода.</item><item quantity="few">Последнее сканирование: %1$d рекомендательных совпадения кода.</item><item quantity="many">Последнее сканирование: %1$d рекомендательных совпадений кода.</item><item quantity="other">Последнее сканирование: %1$d рекомендательного совпадения кода.</item></plurals>
+<plurals name="l10n_imported"><item quantity="one">Локально импортирована %1$d допустимая сигнатура.</item><item quantity="few">Локально импортировано %1$d допустимые сигнатуры.</item><item quantity="many">Локально импортировано %1$d допустимых сигнатур.</item><item quantity="other">Локально импортировано %1$d допустимой сигнатуры.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="one">%1$d байт</item><item quantity="few">%1$d байта</item><item quantity="many">%1$d байтов</item><item quantity="other">%1$d байта</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="one">В файловой системе найден %1$d признак прав суперпользователя.</item><item quantity="few">В файловой системе найдено %1$d признака прав суперпользователя.</item><item quantity="many">В файловой системе найдено %1$d признаков прав суперпользователя.</item><item quantity="other">В файловой системе найдено %1$d признака прав суперпользователя.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="one">Найден %1$d признак перехвата функций.</item><item quantity="few">Найдено %1$d признака перехвата функций.</item><item quantity="many">Найдено %1$d признаков перехвата функций.</item><item quantity="other">Найдено %1$d признака перехвата функций.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="one">Включено %1$d приложение</item><item quantity="few">Включено %1$d приложения</item><item quantity="many">Включено %1$d приложений</item><item quantity="other">Включено %1$d приложения</item></plurals>
+<plurals name="l10n_indicators"><item quantity="one">%1$d индикатор</item><item quantity="few">%1$d индикатора</item><item quantity="many">%1$d индикаторов</item><item quantity="other">%1$d индикатора</item></plurals>
+<plurals name="l10n_progress"><item quantity="one">Проверено %1$d из %2$d приложения</item><item quantity="few">Проверено %1$d из %2$d приложений</item><item quantity="many">Проверено %1$d из %2$d приложений</item><item quantity="other">Проверено %1$d из %2$d приложения</item></plurals>
 </resources>
 
