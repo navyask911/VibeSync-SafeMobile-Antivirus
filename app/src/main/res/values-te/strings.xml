@@ -643,23 +643,23 @@
 <string name="severity_high">అధిక తీవ్రత</string>
 <string name="severity_critical">అత్యంత తీవ్రమైనది</string>
 <string name="severity_unknown">తీవ్రత పేర్కొనలేదు</string>
-<plurals name="l10n_scanned_apps"><item quantity="other">%1$d యాప్‌లు స్కాన్ అయ్యాయి</item></plurals>
-<plurals name="l10n_scanned_files"><item quantity="other">%1$d ఫైళ్లు స్కాన్ అయ్యాయి</item></plurals>
-<plurals name="l10n_threats"><item quantity="other">%1$d ముప్పులు కనుగొనబడ్డాయి</item></plurals>
-<plurals name="l10n_review"><item quantity="other">%1$d ఫలితాలకు సమీక్ష అవసరం</item></plurals>
-<plurals name="l10n_unreadable"><item quantity="other">%1$d అంశాలను స్కాన్ చేయలేకపోయాము</item></plurals>
-<plurals name="l10n_no_match"><item quantity="other">%1$d ఫలితాలకు స్థానిక సరిపోలిక లేదు</item></plurals>
-<plurals name="l10n_apps"><item quantity="other">%1$d యాప్‌లు</item></plurals>
-<plurals name="l10n_files"><item quantity="other">%1$d ఫైళ్లు</item></plurals>
-<plurals name="l10n_posture_apps"><item quantity="other">వ్యవస్థేతర %1$d యాప్‌లకు అధిక ప్రమాద అనుమతులు ఉన్నాయి.</item></plurals>
-<plurals name="l10n_pending_changes"><item quantity="other">గమనించిన %1$d మార్పులకు నోటిఫికేషన్ పెండింగ్‌లో ఉంది.</item></plurals>
-<plurals name="l10n_rules"><item quantity="other">పరిమిత పరిధి · చేర్చిన %1$d నియమాలు</item></plurals>
-<plurals name="l10n_rule_matches"><item quantity="other">తాజా స్కాన్: %1$d సూచనాత్మక కోడ్ సరిపోలికలు.</item></plurals>
-<plurals name="l10n_imported"><item quantity="other">%1$d చెల్లుబాటు అయ్యే సంతకాలు స్థానిక నిల్వలోకి దిగుమతి అయ్యాయి.</item></plurals>
-<plurals name="l10n_bytes"><item quantity="other">%1$d బైట్లు</item></plurals>
-<plurals name="l10n_root_indicators"><item quantity="other">రూట్ సంబంధిత %1$d ఫైల్‌సిస్టమ్ సూచికలు ఉన్నాయి.</item></plurals>
-<plurals name="l10n_hook_indicators"><item quantity="other">హుకింగ్‌కు సంబంధించిన %1$d సూచికలు ఉన్నాయి.</item></plurals>
-<plurals name="l10n_enabled_apps"><item quantity="other">%1$d యాప్‌లు ప్రారంభించబడ్డాయి</item></plurals>
-<plurals name="l10n_indicators"><item quantity="other">%1$d సూచికలు</item></plurals>
-<plurals name="l10n_progress"><item quantity="other">%2$d యాప్‌లలో %1$d తనిఖీ అయ్యాయి</item></plurals>
+<plurals name="l10n_scanned_apps"><item quantity="one">%1$d యాప్ స్కాన్ అయింది</item><item quantity="other">%1$d యాప్‌లు స్కాన్ అయ్యాయి</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="one">%1$d ఫైల్ స్కాన్ అయింది</item><item quantity="other">%1$d ఫైళ్లు స్కాన్ అయ్యాయి</item></plurals>
+<plurals name="l10n_threats"><item quantity="one">%1$d ముప్పు కనుగొనబడింది</item><item quantity="other">%1$d ముప్పులు కనుగొనబడ్డాయి</item></plurals>
+<plurals name="l10n_review"><item quantity="one">%1$d ఫలితానికి సమీక్ష అవసరం</item><item quantity="other">%1$d ఫలితాలకు సమీక్ష అవసరం</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="one">%1$d అంశాన్ని స్కాన్ చేయలేకపోయాము</item><item quantity="other">%1$d అంశాలను స్కాన్ చేయలేకపోయాము</item></plurals>
+<plurals name="l10n_no_match"><item quantity="one">%1$d ఫలితానికి స్థానిక సరిపోలిక లేదు</item><item quantity="other">%1$d ఫలితాలకు స్థానిక సరిపోలిక లేదు</item></plurals>
+<plurals name="l10n_apps"><item quantity="one">%1$d యాప్</item><item quantity="other">%1$d యాప్‌లు</item></plurals>
+<plurals name="l10n_files"><item quantity="one">%1$d ఫైల్</item><item quantity="other">%1$d ఫైళ్లు</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="one">వ్యవస్థేతర %1$d యాప్‌కు అధిక ప్రమాద అనుమతి ఉంది.</item><item quantity="other">వ్యవస్థేతర %1$d యాప్‌లకు అధిక ప్రమాద అనుమతులు ఉన్నాయి.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="one">గమనించిన %1$d మార్పుకు నోటిఫికేషన్ పెండింగ్‌లో ఉంది.</item><item quantity="other">గమనించిన %1$d మార్పులకు నోటిఫికేషన్ పెండింగ్‌లో ఉంది.</item></plurals>
+<plurals name="l10n_rules"><item quantity="one">పరిమిత పరిధి · చేర్చిన %1$d నియమం</item><item quantity="other">పరిమిత పరిధి · చేర్చిన %1$d నియమాలు</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="one">తాజా స్కాన్: %1$d సూచనాత్మక కోడ్ సరిపోలిక.</item><item quantity="other">తాజా స్కాన్: %1$d సూచనాత్మక కోడ్ సరిపోలికలు.</item></plurals>
+<plurals name="l10n_imported"><item quantity="one">%1$d చెల్లుబాటు అయ్యే సంతకం స్థానిక నిల్వలోకి దిగుమతి అయింది.</item><item quantity="other">%1$d చెల్లుబాటు అయ్యే సంతకాలు స్థానిక నిల్వలోకి దిగుమతి అయ్యాయి.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="one">%1$d బైట్</item><item quantity="other">%1$d బైట్లు</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="one">రూట్ సంబంధిత %1$d ఫైల్‌సిస్టమ్ సూచిక ఉంది.</item><item quantity="other">రూట్ సంబంధిత %1$d ఫైల్‌సిస్టమ్ సూచికలు ఉన్నాయి.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="one">హుకింగ్‌కు సంబంధించిన %1$d సూచిక ఉంది.</item><item quantity="other">హుకింగ్‌కు సంబంధించిన %1$d సూచికలు ఉన్నాయి.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="one">%1$d యాప్ ప్రారంభించబడింది</item><item quantity="other">%1$d యాప్‌లు ప్రారంభించబడ్డాయి</item></plurals>
+<plurals name="l10n_indicators"><item quantity="one">%1$d సూచిక</item><item quantity="other">%1$d సూచికలు</item></plurals>
+<plurals name="l10n_progress"><item quantity="one">%2$d యాప్‌లలో %1$d యాప్ తనిఖీ అయింది</item><item quantity="other">%2$d యాప్‌లలో %1$d తనిఖీ అయ్యాయి</item></plurals>
 </resources>
