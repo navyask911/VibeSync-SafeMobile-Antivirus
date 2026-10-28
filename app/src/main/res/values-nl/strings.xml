@@ -805,4 +805,7 @@
 <plurals name="l10n_enabled_apps"><item quantity="one">%1$d app ingeschakeld</item><item quantity="other">%1$d apps ingeschakeld</item></plurals>
 <plurals name="l10n_indicators"><item quantity="one">%1$d indicator</item><item quantity="other">%1$d indicatoren</item></plurals>
 <plurals name="l10n_progress"><item quantity="one">%1$d van %2$d app gecontroleerd</item><item quantity="other">%1$d van %2$d apps gecontroleerd</item></plurals>
+    <string name="ml_probability">ML-dreigingskans: %1$d%%</string>
+    <string name="ml_high_finding">Statische ML-heuristiek: hoge score op basis van machtigingen en API-patronen; alleen een aanwijzing, geen bewijs van malware.</string>
+    <string name="ml_active_body">Een gevalideerd statisch ML-model is beschikbaar op het apparaat. Resultaten zijn indicatief en bewijzen geen malware.</string>
 </resources>
