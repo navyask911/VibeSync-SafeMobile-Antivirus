@@ -49,25 +49,6 @@ class SafeMobileApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        // Manifest-only implicit PACKAGE_ADDED is not delivered on Android 8+.
-        // Register while SafeMobile is running; OEM process shutdown may still limit delivery.
-        val packageFilter = IntentFilter().apply {
-            addAction(Intent.ACTION_PACKAGE_ADDED)
-            addAction(Intent.ACTION_PACKAGE_REPLACED)
-            addDataScheme("package")
-        }
-        runCatching {
-            val receiver = PackageInstallReceiver()
-            if (Build.VERSION.SDK_INT >= 33) {
-                registerReceiver(receiver, packageFilter, Context.RECEIVER_EXPORTED)
-            } else {
-                @Suppress("DEPRECATION")
-                registerReceiver(receiver, packageFilter)
-            }
-            runtimePackageInstallReceiver = receiver
-            Log.d("SafeMobileScan", "Runtime post-install receiver registered")
-        }.onFailure { Log.w("SafeMobileScan", "Unable to register runtime package receiver", it) }
-
         // Only ~2 KiB of signed-APK text is loaded; all APK scanning stays on Dispatchers.IO.
         BundledYaraEngine.initialize(assets)
         runCatching { DeviceOwnerManager(this).applyEnterpriseDefaults() }
@@ -130,8 +111,6 @@ class SafeMobileApp : Application() {
     }
 
     override fun onTerminate() {
-        runtimePackageInstallReceiver?.let { receiver -> runCatching { unregisterReceiver(receiver) } }
-        runtimePackageInstallReceiver = null
         appScope.cancel()
         super.onTerminate()
     }
@@ -140,6 +119,7 @@ class SafeMobileApp : Application() {
         const val SECURITY_PREFS = "safe_mobile_security_settings"
         const val KEY_VOICE_ALERTS_ENABLED = "voice_alerts_enabled"
         const val KEY_SECURITY_ALERTS_ENABLED = "security_alerts_enabled"
+        const val KEY_INSTALL_SENTINEL_ENABLED = "install_sentinel_enabled"
         const val KEY_DOWNLOAD_SENTINEL_ENABLED = "download_sentinel_enabled"
         const val KEY_STRICT_MODE = "download_sentinel_strict_mode"
         const val PRIVACY_PREFS = "safe_mobile_privacy"

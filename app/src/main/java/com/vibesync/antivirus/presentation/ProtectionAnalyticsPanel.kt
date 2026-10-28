@@ -58,40 +58,6 @@ internal fun ProtectionAnalyticsPanel(
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
             shape = RoundedCornerShape(16.dp), modifier = Modifier.fillMaxWidth()) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                SectionHeader(title = androidx.compose.ui.res.stringResource(R.string.analytics_daily_activity))
-                Text(androidx.compose.ui.res.stringResource(R.string.analytics_recent_window),
-                    style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                val bars = recentDailyBars(audits)
-                if (audits.isEmpty()) {
-                    EmptyState(androidx.compose.ui.res.stringResource(R.string.analytics_no_audits),
-                        androidx.compose.ui.res.stringResource(R.string.analytics_no_audits_body))
-                } else {
-                    val maxCount = (bars.maxOfOrNull { it.second } ?: 0).coerceAtLeast(1)
-                    Canvas(Modifier.fillMaxWidth().height(100.dp)) {
-                        val slot = size.width / bars.size
-                        val barWidth = slot * 0.46f
-                        bars.forEachIndexed { index, entry ->
-                            val barHeight = size.height * entry.second.toFloat() / maxCount.toFloat()
-                            drawRoundRect(chartColor,
-                                topLeft = Offset(index * slot + (slot - barWidth) / 2f, size.height - barHeight),
-                                size = Size(barWidth, barHeight.coerceAtLeast(if (entry.second == 0) 0f else 2.dp.toPx())),
-                                cornerRadius = CornerRadius(4.dp.toPx()))
-                        }
-                    }
-                    Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-                        bars.forEach { (day, count) ->
-                            Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.weight(1f)) {
-                                Text(count.toString(), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                                Text(day, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-            shape = RoundedCornerShape(16.dp), modifier = Modifier.fillMaxWidth()) {
-            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 SectionHeader(title = androidx.compose.ui.res.stringResource(R.string.analytics_protection_health))
                 HealthRow(androidx.compose.ui.res.stringResource(R.string.analytics_definitions), signatureCount.toString(),
                     if (signatureCount > 0) StatusKind.ACTIVE else StatusKind.DANGER)

@@ -188,6 +188,9 @@ import kotlinx.coroutines.launch
  val connected by connectivity.online.collectAsStateWithLifecycle()
  val online = BuildConfig.OPTIONAL_FEED_ENABLED && connected
  var privacyAccepted by remember { mutableStateOf(context.getSharedPreferences(SafeMobileApp.PRIVACY_PREFS,0).getBoolean(SafeMobileApp.PRIVACY_ACKNOWLEDGED,false)) }
+ LaunchedEffect(privacyAccepted) {
+  if (privacyAccepted) com.vibesync.antivirus.core.observer.InstallSentinelService.startFromVisibleUi(context)
+ }
  LaunchedEffect(selectedDestination, privacyAccepted) {
   if (selectedDestination == "apps" && privacyAccepted) vm.refreshInstalledInventory()
  }
@@ -349,6 +352,7 @@ import kotlinx.coroutines.launch
  DisposableEffect(lifecycleOwner, context, privacyAccepted) {
   val observer = LifecycleEventObserver { _, event ->
    if (event == Lifecycle.Event.ON_RESUME) {
+    if (privacyAccepted) vm.refreshTrustOverrides()
     fullScreenAlertsGranted = FullScreenAlertAccess.isGranted(context)
     storageAccessGranted = hasSharedStorageAccess(context)
     folderUris = StorageAccessPreferences.accessibleTreeUris(context)
@@ -556,6 +560,7 @@ import kotlinx.coroutines.launch
       androidx.compose.material3.Icon(Icons.Default.Security, contentDescription = null)
       Text(stringResource(R.string.security_scan_now), Modifier.padding(start = 8.dp))
      }
+     AnalyticsCharts(repository)
      SectionHeader(title=stringResource(R.string.analytics_recent_activity), actionLabel=stringResource(R.string.nav_history), onAction={ selectedDestination="history" })
      if (auditEntries.isEmpty()) EmptyState(title=stringResource(R.string.analytics_no_audits),description=stringResource(R.string.analytics_no_audits_body))
      else auditEntries.take(3).forEach { audit ->
@@ -685,11 +690,12 @@ import kotlinx.coroutines.launch
          catch (e: ActivityNotFoundException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
          catch (e: SecurityException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
         },
-        onQuarantine = {}, onTrust = { vm.trustApp(it) }
+        onQuarantine = {}, onTrust = { vm.trustApp(it) }, onRemoveTrust = vm::removeTrust
        )
       }
      }
     }
+    if (selectedDestination == "analytics") AnalyticsCharts(repository)
     if (selectedDestination == "analytics") ProtectionAnalyticsPanel(
      audits=auditEntries, results=state.results, signatureCount=state.signatureCount,
      activeIndicatorCount=state.activeThreatIndicatorCount, lastScanAt=state.lastScanAt, isScanning=state.isScanning,
@@ -760,7 +766,7 @@ import kotlinx.coroutines.launch
          catch (e: ActivityNotFoundException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
          catch (e: SecurityException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
         },
-        onQuarantine = { pendingQuarantine = result }, onTrust = { vm.trustApp(it) }
+        onQuarantine = { pendingQuarantine = result }, onTrust = { vm.trustApp(it) }, onRemoveTrust = vm::removeTrust
        )
       }
      }
@@ -1010,7 +1016,7 @@ private fun canOfferUninstall(context: Context, packageName: String): Boolean {
 @Composable private fun ScanResultCard(
  result:ScanResult, showUninstall:Boolean, showQuarantine:Boolean, showAppInfo:Boolean,
  onUninstall:(String)->Unit, onAppInfo:(String)->Unit, onQuarantine:()->Unit,
- onTrust:(ScanResult)->Unit = {}
+ onTrust:(ScanResult)->Unit = {}, onRemoveTrust:(String)->Unit = {}
 ) {
  val context=LocalContext.current
  val packageName=result.packageName
@@ -1021,7 +1027,7 @@ private fun canOfferUninstall(context: Context, packageName: String): Boolean {
    result=result,isProtectedSystemApp=protectedSystem,
    showUninstall=showUninstall && guard is PackageGuardResult.Allowed,
    showQuarantine=showQuarantine,showAppInfo=showAppInfo && protectedSystem,
-   onUninstall=onUninstall,onAppInfo=onAppInfo,onQuarantine=onQuarantine,onTrust=onTrust
+   onUninstall=onUninstall,onAppInfo=onAppInfo,onQuarantine=onQuarantine,onTrust=onTrust,onRemoveTrust=onRemoveTrust
   )
   result.scanSessionId?.takeIf { it.isNotBlank() }?.let {
    Text(stringResource(R.string.history_session)+": "+it,modifier=Modifier.padding(horizontal=8.dp),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant)

@@ -24,6 +24,9 @@ import com.vibesync.antivirus.data.local.ScanAudit
 import com.vibesync.antivirus.data.local.ThreatFeedSyncStateEntity
 import com.vibesync.antivirus.core.worker.ThreatFeedSyncScheduler
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import com.vibesync.antivirus.data.local.AnalyticsWeek
+import com.vibesync.antivirus.data.local.ScanAnalytics
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.flowOn
 import com.vibesync.antivirus.core.security.TrustedPackageWhitelist
@@ -57,6 +60,11 @@ class ThreatRepository(
   return trustedAppStore.trust(name)
  }
 
+ suspend fun removeTrust(packageName: String) {
+  trustedAppStore.untrust(packageName)
+ }
+ suspend fun isTrusted(packageName: String): Boolean = trustedAppStore.isTrusted(packageName)
+
  fun currentHashDatabaseCapability() = hashDatabaseManager?.capability
  suspend fun securityAssessment() = withContext(Dispatchers.IO) {
   if (!context.getSharedPreferences(com.vibesync.antivirus.SafeMobileApp.PRIVACY_PREFS, Context.MODE_PRIVATE)
@@ -87,6 +95,11 @@ class ThreatRepository(
   database.threatDao().observeRecentAudits().map { rows ->
    rows.map { row -> row.copy(packageOrPath = revealPrivateTextSafely(row.packageOrPath, "scan-label")) }
   }
+
+ fun observeAnalytics(week: AnalyticsWeek): Flow<ScanAnalytics> = combine(
+  database.threatDao().observeOutcomeTotals(),
+  database.threatDao().observeWeeklySessions(week.startMillis, week.endMillis)
+ ) { totals, days -> ScanAnalytics(totals, week.counts(days)) }.flowOn(Dispatchers.IO)
 
  fun observeRecentSecurityIncidents() =
   database.securityIncidentDao().observeRecent(100).map { rows ->

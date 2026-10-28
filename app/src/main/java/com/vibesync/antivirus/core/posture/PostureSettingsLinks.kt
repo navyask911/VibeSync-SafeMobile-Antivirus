@@ -31,7 +31,12 @@ object PostureSettingsLinks {
                 intents += Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
             }
             PostureAccess.OVERLAY -> {
-                intents += Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.fromParts("package", finding.packageName, null))
+                val packageName = finding.packageName
+                // Package-specific on Android 10 and older; Android 11+ may ignore the URI.
+                intents += Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION).apply {
+                    data = Uri.parse("package:$packageName")
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                }
                 intents += Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
             }
         }
@@ -41,7 +46,15 @@ object PostureSettingsLinks {
 
     fun open(context: Context, finding: PostureFinding): Boolean {
         for (intent in candidates(finding)) {
-            try { context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)); return true }
+            try {
+                context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                if (finding.access == PostureAccess.OVERLAY && Build.VERSION.SDK_INT >= 30) {
+                    android.widget.Toast.makeText(context,
+                        context.getString(com.vibesync.antivirus.R.string.posture_overlay_select_app, finding.appName),
+                        android.widget.Toast.LENGTH_LONG).show()
+                }
+                return true
+            }
             catch (_: Exception) { /* Try the category page when an OEM lacks the detail destination. */ }
         }
         return false

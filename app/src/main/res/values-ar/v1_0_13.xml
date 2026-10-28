@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="trusted_app_options">خيارات</string>
+<string name="trusted_app_remove">إلغاء الثقة</string>
+<string name="trusted_app_removed">أُلغيت الثقة. أُعيد تفعيل الفحوص والتنبيهات المستقبلية لهذه الحزمة.</string>
+<string name="trusted_app_remove_failed">تعذر إلغاء الثقة. حاول مجددًا.</string>
+<string name="install_sentinel_title">مراقبة التثبيت</string>
+<string name="install_sentinel_active">SafeMobile Sentinel: نشط والمراقبة جارية</string>
+<string name="install_sentinel_description">فحوص محلية بعد التثبيت مع إشعار دائم. بلا استطلاع دوري أو قفل يمنع السكون. قد يوقف Android الخدمة.</string>
+<string name="install_sentinel_stop">إيقاف مراقبة التثبيت</string>
+<string name="install_scan_progress">جارٍ تحليل التطبيق المثبت حديثًا: %1$s</string>
+<string name="analytics_chart_title">نتائج الفحص</string>
+<string name="analytics_other">نتائج أخرى</string>
+<string name="analytics_total">النتائج</string>
+<string name="analytics_weekly_scans">الفحوص الأسبوعية</string>
+<string name="analytics_week_note">الجلسات المسجلة من الاثنين إلى الأحد. قد تشمل فحوصًا غير مكتملة.</string>
+<string name="posture_overlay_select_app">في Android 11 والإصدارات الأحدث، اختر %1$s من قائمة إعدادات العرض فوق التطبيقات.</string>
+<string name="install_scan_received">تم استلام حدث التثبيت. افتح SafeMobile للمراجعة.</string>
+</resources>

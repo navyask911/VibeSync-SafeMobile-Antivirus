@@ -75,6 +75,14 @@ object SecurityAlertNotifier {
         return eventId
     }
 
+    internal fun runInstallSirenDiagnostic(context: Context, eventId: String) {
+        val local = com.vibesync.antivirus.core.locale.LocalePreferences.wrap(context)
+        Log.e(TAG, "Install receiver diagnostic: five-second test alarm; no malware verdict event=$eventId")
+        show(local, eventId, local.getString(R.string.siren_test_title),
+            local.getString(R.string.siren_test_notification), null, R.string.voice_siren_test,
+            confirmed = true, testMode = true)
+    }
+
     private fun show(context: Context, eventId: String, title: String, body: String,
                      packageName: String?, voiceResource: Int, confirmed: Boolean,
                      testMode: Boolean = false) {
@@ -115,7 +123,7 @@ object SecurityAlertNotifier {
             .addAction(R.drawable.ic_launcher, app.getString(if (packageName != null)
                 R.string.incident_review_threat else R.string.security_alert_open_vault), content)
             .addAction(0, app.getString(R.string.incident_dismiss), dismiss)
-        if (confirmed && packageName != null && !testMode &&
+        if (confirmed && (packageName != null || testMode) &&
             FullScreenAlertAccess.isGranted(app)) {
             builder.setFullScreenIntent(content, true)
         } else if (confirmed && packageName != null) {
@@ -135,7 +143,7 @@ object SecurityAlertNotifier {
         eventId?.let { NotificationManagerCompat.from(context).cancel(notificationId(it)) }
     }
 
-    private fun notificationId(eventId: String): Int = 710_000 + (eventId.hashCode() and 0x000F_FFFF)
+    internal fun notificationId(eventId: String): Int = 710_000 + (eventId.hashCode() and 0x000F_FFFF)
     private const val TAG = "SafeMobileSecurityAlert"
 }
 

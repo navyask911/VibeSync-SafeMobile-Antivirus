@@ -179,6 +179,40 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
         }
     }
 
+    fun removeTrust(packageName: String) {
+        viewModelScope.launch {
+            try {
+                repository.removeTrust(packageName)
+                // Never leave the former override displayed as a measured clean result.
+                mutableState.update { old -> old.copy(results = old.results.map { item ->
+                    if (item.packageName == packageName) item.copy(trustedByUser = false,
+                        verdict = ScanVerdict.NOT_SCANNED, reasons = emptyList(), riskReport = null,
+                        threatEventId = null) else item
+                }, messageResource = R.string.trusted_app_removed, messageText = null) }
+                refreshInstalledPackage(packageName)
+            } catch (cancelled: CancellationException) { throw cancelled }
+            catch (_: Exception) { mutableState.update { it.copy(messageResource = R.string.trusted_app_remove_failed) } }
+        }
+    }
+
+    fun refreshTrustOverrides() {
+        viewModelScope.launch {
+            val names = mutableState.value.results.filter { it.trustedByUser }.mapNotNull { it.packageName }.distinct()
+            for (name in names) {
+                try {
+                    if (!repository.isTrusted(name)) {
+                        mutableState.update { old -> old.copy(results = old.results.map { item ->
+                            if (item.packageName == name && item.trustedByUser)
+                                item.copy(trustedByUser = false, verdict = ScanVerdict.NOT_SCANNED, reasons = emptyList()) else item
+                        }) }
+                        refreshInstalledPackage(name)
+                    }
+                } catch (cancelled: CancellationException) { throw cancelled }
+                catch (_: Exception) { /* Keep the last displayed state if storage is temporarily unavailable. */ }
+            }
+        }
+    }
+
     fun scanInstalled() {
         refreshInstalledInventory()
         runScan { onProgress -> repository.scanInstalledApps(onProgress) }

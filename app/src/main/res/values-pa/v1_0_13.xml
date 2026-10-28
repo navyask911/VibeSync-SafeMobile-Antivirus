@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="trusted_app_options">ਚੋਣਾਂ</string>
+<string name="trusted_app_remove">ਭਰੋਸਾ ਹਟਾਓ</string>
+<string name="trusted_app_removed">ਭਰੋਸਾ ਹਟਾ ਦਿੱਤਾ। ਇਸ ਪੈਕੇਜ ਲਈ ਅਗਲੀਆਂ ਜਾਂਚਾਂ ਅਤੇ ਚੇਤਾਵਨੀਆਂ ਮੁੜ ਚਾਲੂ ਹਨ।</string>
+<string name="trusted_app_remove_failed">ਭਰੋਸਾ ਹਟਾਇਆ ਨਹੀਂ ਜਾ ਸਕਿਆ। ਮੁੜ ਕੋਸ਼ਿਸ਼ ਕਰੋ।</string>
+<string name="install_sentinel_title">ਸਥਾਪਨਾ ਨਿਗਰਾਨੀ</string>
+<string name="install_sentinel_active">SafeMobile Sentinel: ਸਰਗਰਮ ਅਤੇ ਨਿਗਰਾਨੀ ਜਾਰੀ</string>
+<string name="install_sentinel_description">ਪੱਕੀ ਸੂਚਨਾ ਨਾਲ ਸਥਾਪਨਾ ਤੋਂ ਬਾਅਦ ਸਥਾਨਕ ਜਾਂਚਾਂ। ਵਾਰ-ਵਾਰ ਖੋਜ ਜਾਂ ਯੰਤਰ ਨੂੰ ਜਾਗਦਾ ਰੱਖਣ ਵਾਲਾ ਤਾਲਾ ਨਹੀਂ। Android ਸੇਵਾ ਰੋਕ ਸਕਦਾ ਹੈ।</string>
+<string name="install_sentinel_stop">ਸਥਾਪਨਾ ਨਿਗਰਾਨੀ ਰੋਕੋ</string>
+<string name="install_scan_progress">ਨਵੀਂ ਸਥਾਪਿਤ ਐਪ ਦੀ ਜਾਂਚ ਹੋ ਰਹੀ ਹੈ: %1$s</string>
+<string name="analytics_chart_title">ਜਾਂਚ ਦੇ ਨਤੀਜੇ</string>
+<string name="analytics_other">ਹੋਰ ਨਤੀਜੇ</string>
+<string name="analytics_total">ਨਤੀਜੇ</string>
+<string name="analytics_weekly_scans">ਹਫ਼ਤਾਵਾਰੀ ਜਾਂਚਾਂ</string>
+<string name="analytics_week_note">ਸੋਮਵਾਰ ਤੋਂ ਐਤਵਾਰ ਦੇ ਦਰਜ ਸੈਸ਼ਨ। ਅਧੂਰੀਆਂ ਜਾਂਚਾਂ ਵੀ ਸ਼ਾਮਲ ਹੋ ਸਕਦੀਆਂ ਹਨ।</string>
+<string name="posture_overlay_select_app">Android 11 ਜਾਂ ਅਗਲੇ ਵਰਜਨ ਵਿੱਚ, ਹੋਰ ਐਪਾਂ ਉੱਤੇ ਦਿਖਾਉਣ ਦੀ ਸੈਟਿੰਗਾਂ ਵਾਲੀ ਸੂਚੀ ਵਿੱਚ %1$s ਚੁਣੋ।</string>
+<string name="install_scan_received">ਸਥਾਪਨਾ ਦੀ ਘਟਨਾ ਮਿਲੀ। ਸਮੀਖਿਆ ਲਈ SafeMobile ਖੋਲ੍ਹੋ।</string>
+</resources>

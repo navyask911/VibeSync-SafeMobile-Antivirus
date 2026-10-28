@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="trusted_app_options">ഐച്ഛികങ്ങൾ</string>
+<string name="trusted_app_remove">വിശ്വാസം നീക്കുക</string>
+<string name="trusted_app_removed">വിശ്വാസം നീക്കി. ഈ പാക്കേജിനുള്ള തുടർ പരിശോധനകളും മുന്നറിയിപ്പുകളും വീണ്ടും പ്രവർത്തിക്കും.</string>
+<string name="trusted_app_remove_failed">വിശ്വാസം നീക്കാനായില്ല. വീണ്ടും ശ്രമിക്കുക.</string>
+<string name="install_sentinel_title">ഇൻസ്റ്റലേഷൻ നിരീക്ഷണം</string>
+<string name="install_sentinel_active">SafeMobile Sentinel: സജീവം, നിരീക്ഷണം നടക്കുന്നു</string>
+<string name="install_sentinel_description">സ്ഥിരമായ അറിയിപ്പോടെ ഇൻസ്റ്റലേഷനുശേഷം പ്രാദേശിക പരിശോധനകൾ. ആവർത്തിച്ചുള്ള തിരച്ചിലോ ഉപകരണത്തെ ഉണർത്തി നിർത്തുന്ന പൂട്ടോ ഇല്ല. Android സേവനം നിർത്തിയേക്കാം.</string>
+<string name="install_sentinel_stop">ഇൻസ്റ്റലേഷൻ നിരീക്ഷണം നിർത്തുക</string>
+<string name="install_scan_progress">പുതുതായി ഇൻസ്റ്റാൾ ചെയ്ത ആപ്പ് പരിശോധിക്കുന്നു: %1$s</string>
+<string name="analytics_chart_title">പരിശോധനാഫലങ്ങൾ</string>
+<string name="analytics_other">മറ്റ് ഫലങ്ങൾ</string>
+<string name="analytics_total">ഫലങ്ങൾ</string>
+<string name="analytics_weekly_scans">പ്രതിവാര പരിശോധനകൾ</string>
+<string name="analytics_week_note">തിങ്കൾ മുതൽ ഞായർ വരെ രേഖപ്പെടുത്തിയ പരിശോധനാസെഷനുകൾ. പൂർത്തിയാകാത്ത പരിശോധനകളും ഉൾപ്പെടാം.</string>
+<string name="posture_overlay_select_app">Android 11 അല്ലെങ്കിൽ പുതിയ പതിപ്പിൽ, മറ്റ് ആപ്പുകൾക്കു മുകളിൽ കാണിക്കാനുള്ള ക്രമീകരണപ്പട്ടികയിൽ %1$s തിരഞ്ഞെടുക്കുക.</string>
+<string name="install_scan_received">ഇൻസ്റ്റലേഷൻ വിവരം ലഭിച്ചു. പരിശോധിക്കാൻ SafeMobile തുറക്കുക.</string>
+</resources>

@@ -69,6 +69,7 @@ class MainActivity : ComponentActivity() {
     }
     override fun onResume() {
         super.onResume()
+        com.vibesync.antivirus.core.observer.InstallSentinelService.startFromVisibleUi(this)
         SecurityAlertNotifier.stopIncidentAudio()
     }
     private fun applySystemBars(theme: AppTheme) {
