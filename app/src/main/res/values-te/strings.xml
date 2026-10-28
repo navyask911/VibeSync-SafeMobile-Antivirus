@@ -558,5 +558,108 @@
 <string name="locale_th">ไทย</string>
 <string name="locale_uk">Українська</string>
 <string name="locale_uz">O‘zbekcha</string>
-</resources>
 
+<string name="format_label_value">%1$s: %2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s – %2$s</string>
+<string name="format_version">%1$s · సంచిక %2$s (%3$s)</string>
+<string name="format_package_version">%1$s · సంచిక %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">సురక్షిత ఫీడ్ చిరునామాను నమోదు చేయండి</string>
+<string name="storage_size_unavailable">పరిమాణం అందుబాటులో లేదు</string>
+<string name="blocked_reason_hash">స్థానిక ముప్పు సంతకంతో సరిపోలిక కనుగొనబడింది.</string>
+<string name="blocked_reason_action">సాధ్యమైన మేరకు స్థానిక భద్రతా చర్య తీసుకోవడానికి ప్రయత్నించారు.</string>
+<string name="signed_import_success">సంతకం చేసిన డేటాబేస్ ఆమోదించబడింది: సంచిక %1$s · %2$s.</string>
+<string name="signed_import_failed">సంతకం చేసిన డేటాబేస్ సక్రియం కాలేదు. సంతకం, సంచిక, ఫైల్ ఆకృతిని తనిఖీ చేయండి.</string>
+<string name="rule_import_pending">సమీక్ష కోసం %1$s నిల్వ చేయబడింది. దిగుమతి చేసిన నియమాలు నిలిపివేయబడే ఉంటాయి; ఈ ఫైల్ అమలు చేయబడదు.</string>
+<string name="rule_import_failed">నియమాలను దిగుమతి చేయలేకపోయాము. దిగుమతి చేసిన నియమాలు నిలిపివేయబడే ఉంటాయి.</string>
+<string name="restore_result_localized">%1$s (%2$s) ప్రతిని పునరుద్ధరించాము. క్వారంటైన్‌లోని అసలు ఫైల్ భద్రపరచబడే ఉంటుంది.</string>
+<string name="cleaner_confirm_localized">%1$s (%2$s) శాశ్వతంగా తొలగించాలా? ఈ చర్యను వెనక్కి తీసుకోలేరు. SafeMobile పేర్లు, మెటాడేటాను మళ్లీ తనిఖీ చేస్తుంది.</string>
+<string name="cleaner_result_localized">తొలగించినవి: %1$s · ఖాళీ చేసిన స్థలం: %2$s · విఫలమైనవి లేదా మారినవి: %3$s</string>
+<string name="about_localized_notices">మూడవ పక్ష భాగాలకు వాటి స్వంత లైసెన్సులు వర్తిస్తాయి. అసలు ప్రకటనలు ఆడిట్‌లో తనిఖీ దశ మాత్రమే, పూర్తి చేసిన లైసెన్స్ సమీక్ష కాదు. మూల ప్రకటనలు, లైసెన్స్ నిబంధనలను చూడడానికి అసలు పత్రాలు తెరవండి.</string>
+<string name="about_open_original">అసలు పత్రాలు తెరవండి</string>
+<string name="about_localized_privacy">స్కాన్ చేసిన ఫైళ్లు, హ్యాష్‌లు, ప్యాకేజీ పేర్లు, ఫలితాలు ఈ పరికరంలోనే ఉంటాయి. స్థానిక ఆడిట్ మెటాడేటా, క్వారంటైన్ ప్రతులు గుప్తీకరించిన వ్యక్తిగత నిల్వను ఉపయోగిస్తాయి. సంతకం చేసిన నిర్వచనాల నవీకరణలు ఈ ప్రాజెక్ట్ విడుదల సేవను సంప్రదిస్తాయి; ప్రత్యేక ఫీడ్ మీ సమ్మతి తరువాత మాత్రమే అమర్చిన చిరునామాను సంప్రదిస్తుంది. ఫోల్డర్ పర్యవేక్షణ మీరు ఎంచుకున్న ఫోల్డర్లలోనే జరుగుతుంది; ఆపవచ్చు. Android అనుమతులు మీ నియంత్రణలో ఉంటాయి. ఈ నిర్మాణంలో ప్రకటనలు, క్లౌడ్ స్కానింగ్ లేదా లింక్ విశ్వసనీయత సేవ లేవు.</string>
+<string name="coverage_local_title">స్థానిక పరీక్ష నిర్వచనాలు</string>
+<string name="coverage_local_body">అందించిన పాత నిర్వచనాల్లో హాని కలిగించని యాంటీవైరస్ పరీక్ష గుర్తు మాత్రమే ఉంది. అవి వాస్తవ మాల్వేర్‌ను గుర్తించే రక్షణను ఇవ్వవు.</string>
+<string name="coverage_signed_title">సంతకం చేసిన హ్యాష్ డేటాబేస్</string>
+<string name="coverage_signed_body">ఖచ్చితమైన హ్యాష్ సరిపోలికకు నమ్మదగిన సంతకం కీ, ఆమోదించిన సంతకం డేటాబేస్ అవసరం. ఉత్పత్తి వినియోగ డేటాబేస్ చేర్చలేదు.</string>
+<string name="coverage_static_title">యాప్ స్థిర విశ్లేషణ</string>
+<string name="coverage_static_body">పరిమిత ప్యాకేజీ విశ్లేషణ సూచనాత్మక ఫలితాలను ఇస్తుంది. ఒక ఫలితం మాల్వేర్‌ను నిరూపించదు; తెలిసిన హానికర సంతకదారుల జాబితాలు నిలిపివేయబడ్డాయి.</string>
+<string name="coverage_permissions_title">అనుమతులు మరియు మానిఫెస్ట్</string>
+<string name="coverage_permissions_body">అనుమతుల కలయికలు, కనిపించే ప్యాకేజీ ప్రకటనలు చేతితో సమీక్షించడానికి ఉపయోగపడతాయి. అవి శిక్షణ పొందిన వర్గీకరణ కాదు.</string>
+<string name="coverage_integrity_title">పరికర సమగ్రత సూచికలు</string>
+<string name="coverage_integrity_body">రూట్ యాక్సెస్, హుక్స్, బిల్డ్ లక్షణాలు, భద్రత అమలు, డీబగ్గర్లు, ఎమ్యులేటర్లను స్థానిక అంచనా పద్ధతులతో తనిఖీ చేస్తారు; అధికారిక ధృవీకరణతో కాదు.</string>
+<string name="coverage_bloom_title">సంభావ్యత ఆధారిత హ్యాష్ సూచిక</string>
+<string name="coverage_bloom_body">ధృవీకరించిన, ఖాళీ కాని సంభావ్యత సూచిక మరియు దాని మానిఫెస్ట్ చేర్చలేదు. ఈ ఐచ్ఛిక స్థాయి అందుబాటులో లేదు.</string>
+<string name="coverage_rules_title">చేర్చిన కోడ్ సంతకాలు</string>
+<string name="coverage_rules_body">ధృవీకరించిన చేర్చిన నియమాలు పరిమిత నేరుగా ఉన్న కోడ్ నమూనాలను తనిఖీ చేస్తాయి. సరిపోలికలు సూచనలు మాత్రమే; మాల్వేర్‌ను నిర్ధారించవు.</string>
+<string name="coverage_rules_unavailable">చేర్చిన నియమాలు లోడ్ కాలేదు లేదా ధృవీకరణలో విఫలమయ్యాయి. కోడ్ సంతక స్కాన్ జరిగిందని చెప్పడం లేదు.</string>
+<string name="coverage_model_title">అనుమతి వర్గీకరణ నమూనా</string>
+<string name="coverage_model_body">శిక్షణ పొందిన, ధృవీకరించిన, పంపిణీ చేయగల వర్గీకరణ నమూనా చేర్చలేదు. యంత్ర అభ్యాసం నిలిపివేయబడింది.</string>
+<string name="coverage_signer_title">ఆఫ్‌లైన్ సంతకదారు ధృవీకరణ</string>
+<string name="coverage_signer_body">స్వతంత్రంగా నిర్ధారించిన అంచనా సంతకం ధృవపత్ర వేలిముద్రను అమర్చలేదు.</string>
+<string name="coverage_feed_title">సంతకం చేసిన ఫీడ్ ధృవీకరణ</string>
+<string name="coverage_feed_body">వేరుగా ఉన్న సంతక ధృవీకరణ, పాత సంచికకు వెనక్కి మారకుండా రక్షణ కోసం బిల్డ్ సమయంలో నమ్మదగిన కీ, అమర్చిన సంతకం ఫీడ్ అవసరం.</string>
+<string name="hash_status_active">సంతకం చేసిన స్థానిక హ్యాష్ డేటాబేస్ సక్రియంగా ఉంది.</string>
+<string name="hash_status_missing">సంతకం చేసిన డేటాబేస్ ఆమోదించే వరకు హ్యాష్ సరిపోలిక నిలిపివేయబడింది.</string>
+<string name="hash_status_key">నమ్మదగిన సంతకం కీ లేకపోవడంతో హ్యాష్ సరిపోలిక నిలిపివేయబడింది.</string>
+<string name="hash_status_invalid">నిల్వ చేసిన నిర్వచనాలు సమగ్రత, సంచిక లేదా ఆకృతి తనిఖీల్లో విఫలమయ్యాయి. హ్యాష్ సరిపోలిక నిలిపివేయబడే ఉంటుంది.</string>
+<string name="hash_status_activation">డేటాబేస్ సక్రియం చేయడం పూర్తికాలేదు. హ్యాష్ సరిపోలిక నిలిపివేయబడే ఉంటుంది.</string>
+<string name="finding_confidence">%1$s · విశ్వాస స్థాయి: %2$d%%</string>
+<string name="finding_exported">బయటి నుంచి అందుబాటులో ఉండే భాగానికి మానిఫెస్ట్‌లో స్పష్టమైన అనుమతి నియంత్రణ కనిపించడం లేదు. కోడ్ స్థాయిలో తనిఖీలు ఉండవచ్చు.</string>
+<string name="finding_admin">యాప్ పరికర నిర్వహణ రిసీవర్‌ను ప్రకటిస్తుంది. ఈ సున్నితమైన సామర్థ్యం దుర్వినియోగానికి ఆధారం కాదు.</string>
+<string name="finding_accessibility">యాప్ యాక్సెసిబిలిటీ సేవను ప్రకటిస్తుంది. చట్టబద్ధ సహాయక యాప్‌లకు ఈ అనుమతి అవసరం కావచ్చు.</string>
+<string name="finding_overlay">యాప్ ఇతర స్క్రీన్‌లపై కనిపించే అనుమతి కోరుతుంది. ఇది సముచితమై ఉండవచ్చు, కానీ ఇతర స్క్రీన్‌లను కప్పివేయగలదు.</string>
+<string name="finding_combined">యాక్సెసిబిలిటీతో పాటు స్క్రీన్ ఓవర్‌లే, సందేశాలు లేదా కాల్ చరిత్ర యాక్సెస్ ఉంది. యాప్ ఉద్దేశాన్ని సమీక్షించండి.</string>
+<string name="finding_sms_calls">యాప్ సందేశాలు మరియు కాల్ చరిత్ర రెండింటికీ అనుమతులు కోరుతుంది.</string>
+<string name="finding_sms_network">సందేశాల యాక్సెస్‌తో ఇంటర్నెట్ యాక్సెస్ కూడా ఉంది. సందర్భానుసారం సమీక్ష అవసరం.</string>
+<string name="finding_signer">సంతక ధృవపత్ర మెటాడేటా లేదు లేదా చదవలేము.</string>
+<string name="finding_archive">ప్యాకేజీ ఫైల్‌ను పూర్తిగా పరిశీలించలేకపోయాము. స్థిర విశ్లేషణ అసంపూర్ణం.</string>
+<string name="finding_packer">ప్యాకేజీ మార్గం తెలిసిన ప్యాకింగ్ లేదా రక్షణ సాధనాన్ని పోలి ఉంది. చట్టబద్ధ యాప్‌లు కూడా వాటిని ఉపయోగించవచ్చు.</string>
+<string name="finding_dex_header">కోడ్ హెడర్‌లో ఆకృతి లేదా పరిమాణ భాగాలు అసమంజసంగా ఉన్నాయి. ఇది మాల్వేర్‌కు ఆధారం కాదు.</string>
+<string name="finding_dex_short">కోడ్ భాగం చెల్లుబాటు అయ్యే హెడర్ కంటే చిన్నగా ఉండటంతో పూర్తిగా పరిశీలించలేకపోయాము.</string>
+<string name="finding_entropy">కోడ్ నమూనాలో బైట్ అనిశ్చితి అధికంగా ఉంది. గుప్తీకరణ, ప్యాకింగ్ లేదా హానిలేని సంకుచిత సమాచారం కారణం కావచ్చు.</string>
+<string name="finding_api">కోరిన అనుమతికి ఆశించిన స్థిర సూచన కనిపించలేదు. రిఫ్లెక్షన్, లైబ్రరీలు లేదా తరువాత లోడ్ అయ్యే కోడ్ కారణం కావచ్చు.</string>
+<string name="finding_rules">పరిమిత చేర్చిన కోడ్ సంతకంతో సరిపోలిక ఉంది. ఇది సూచన మాత్రమే, మాల్వేర్‌కు ఆధారం కాదు.</string>
+<string name="finding_other">అదనపు స్థానిక సూచికలను చేతితో సమీక్షించాలి. అవి మాల్వేర్‌ను నిర్ధారించవు.</string>
+<string name="integrity_manager">రూట్ యాక్సెస్ లేదా హుకింగ్ మేనేజర్ కనిపిస్తోంది: %1$s</string>
+<string name="integrity_test_keys">పరికర బిల్డ్ పరీక్ష సంతకం కీలను ఉపయోగిస్తోంది.</string>
+<string name="integrity_debug_build">బిల్డ్ లక్షణాలు డీబగ్ చేయగల లేదా ఉత్పత్తికి కాని వ్యవస్థను సూచిస్తున్నాయి.</string>
+<string name="integrity_selinux">చదవగల స్థానిక స్థితి ప్రకారం తప్పనిసరి భద్రత అమలు నిలిపివేయబడింది.</string>
+<string name="integrity_debugger">ఈ ప్రక్రియకు డీబగ్గర్ అనుసంధానమైంది.</string>
+<string name="integrity_emulator">బిల్డ్ లక్షణాలు ఎమ్యులేటర్ లేదా పరీక్ష పరికరాన్ని పోలి ఉన్నాయి.</string>
+<string name="audit_scan_pending">ఇన్‌స్టాలేషన్ నమోదు అయింది. స్థానిక విశ్లేషణ పెండింగ్‌లో ఉంది.</string>
+<string name="audit_scan_complete">నిర్ధారించిన సంతక సరిపోలిక లేకుండానే స్థానిక విశ్లేషణ పూర్తైంది. ఇది భద్రతకు హామీ కాదు.</string>
+<string name="audit_scan_unavailable">విశ్లేషణ సమయంలో ప్యాకేజీ కనిపించలేదు.</string>
+<string name="audit_scan_threat">ఖచ్చితమైన స్థానిక ముప్పు సంతకంతో సరిపోలింది.</string>
+<string name="audit_scan_review">స్థానిక సూచికలకు సమీక్ష అవసరం; అవి మాల్వేర్‌ను నిర్ధారించవు.</string>
+<string name="audit_source_recorded">ఇన్‌స్టాలేషన్ మూలం నమోదు అయింది.</string>
+<string name="audit_uninstall_requested">Android యాప్ తొలగింపు నిర్ధారణ కోరబడింది.</string>
+<string name="audit_uninstall_success">యాప్ విజయవంతంగా తొలగించబడిందని Android తెలిపింది.</string>
+<string name="audit_uninstall_failed">యాప్ తొలగింపు అభ్యర్థనను Android పూర్తిచేయలేకపోయింది.</string>
+<string name="severity_test">హానిలేని పరీక్ష గుర్తు</string>
+<string name="severity_low">తక్కువ తీవ్రత</string>
+<string name="severity_medium">మధ్యస్థ తీవ్రత</string>
+<string name="severity_high">అధిక తీవ్రత</string>
+<string name="severity_critical">అత్యంత తీవ్రమైనది</string>
+<string name="severity_unknown">తీవ్రత పేర్కొనలేదు</string>
+<plurals name="l10n_scanned_apps"><item quantity="other">%1$d యాప్‌లు స్కాన్ అయ్యాయి</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="other">%1$d ఫైళ్లు స్కాన్ అయ్యాయి</item></plurals>
+<plurals name="l10n_threats"><item quantity="other">%1$d ముప్పులు కనుగొనబడ్డాయి</item></plurals>
+<plurals name="l10n_review"><item quantity="other">%1$d ఫలితాలకు సమీక్ష అవసరం</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="other">%1$d అంశాలను స్కాన్ చేయలేకపోయాము</item></plurals>
+<plurals name="l10n_no_match"><item quantity="other">%1$d ఫలితాలకు స్థానిక సరిపోలిక లేదు</item></plurals>
+<plurals name="l10n_apps"><item quantity="other">%1$d యాప్‌లు</item></plurals>
+<plurals name="l10n_files"><item quantity="other">%1$d ఫైళ్లు</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="other">వ్యవస్థేతర %1$d యాప్‌లకు అధిక ప్రమాద అనుమతులు ఉన్నాయి.</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="other">గమనించిన %1$d మార్పులకు నోటిఫికేషన్ పెండింగ్‌లో ఉంది.</item></plurals>
+<plurals name="l10n_rules"><item quantity="other">పరిమిత పరిధి · చేర్చిన %1$d నియమాలు</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="other">తాజా స్కాన్: %1$d సూచనాత్మక కోడ్ సరిపోలికలు.</item></plurals>
+<plurals name="l10n_imported"><item quantity="other">%1$d చెల్లుబాటు అయ్యే సంతకాలు స్థానిక నిల్వలోకి దిగుమతి అయ్యాయి.</item></plurals>
+<plurals name="l10n_bytes"><item quantity="other">%1$d బైట్లు</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="other">రూట్ సంబంధిత %1$d ఫైల్‌సిస్టమ్ సూచికలు ఉన్నాయి.</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="other">హుకింగ్‌కు సంబంధించిన %1$d సూచికలు ఉన్నాయి.</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="other">%1$d యాప్‌లు ప్రారంభించబడ్డాయి</item></plurals>
+<plurals name="l10n_indicators"><item quantity="other">%1$d సూచికలు</item></plurals>
+<plurals name="l10n_progress"><item quantity="other">%2$d యాప్‌లలో %1$d తనిఖీ అయ్యాయి</item></plurals>
+</resources>
