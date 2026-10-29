@@ -27,7 +27,7 @@ import org.tensorflow.lite.Interpreter
 /**
  * HTTPS-only, opt-in, read-only research distribution channel.
  * Models downloaded here are NEVER used by MachineLearningScanner: that scanner has
- * a separately reviewed 32-feature contract, while the training model needs 215.
+ * a separately reviewed 32-feature contract, while the training model needs a separately approved and validated schema.
  * There is no silent promotion from a loadable model into a trusted malware detector.
  */
 class ModelUpdateWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
@@ -153,23 +153,16 @@ class ModelUpdateWorker(context: Context, params: WorkerParameters) : CoroutineW
     }
 
     private fun getLatestRelease(): JSONObject? {
-        val latest = getApi(API + "/releases/latest")
-        if (latest != null) {
-            val item = JSONObject(String(latest, Charsets.UTF_8))
-            if (ModelReleasePolicy.assets(item) != null) return item
-        }
-        // GitHub /latest excludes prereleases. The current ML training workflow publishes one.
+        // The training workflow publishes a prerelease, which /releases/latest excludes.
+        // GitHub returns /releases in descending publication order. Prefer index 0, but
+        // skip incomplete/draft bundles and never downgrade an installed version.
         val response = getApi(API + "/releases?per_page=20") ?: return null
         val list = JSONArray(String(response, Charsets.UTF_8))
-        val available = (0 until list.length()).mapNotNull { index ->
-            list.optJSONObject(index)?.takeIf { ModelReleasePolicy.assets(it) != null }
+        for (index in 0 until list.length()) {
+            val release = list.optJSONObject(index) ?: continue
+            if (ModelReleasePolicy.assets(release) != null) return release
         }
-        return available.maxWithOrNull(Comparator { first, second ->
-            val a = ModelReleasePolicy.version(first.optString("tag_name"))!!
-            val b = ModelReleasePolicy.version(second.optString("tag_name"))!!
-            for (i in 0..2) if (a[i] != b[i]) return@Comparator a[i].compareTo(b[i])
-            0
-        })
+        return null
     }
 
     private fun getApi(url: String): ByteArray? {
