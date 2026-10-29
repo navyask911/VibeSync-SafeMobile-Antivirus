@@ -20,3 +20,9 @@ Before adding a dependency or dataset, review the exact distributed artifact's l
 - Upstream: https://github.com/googlefonts/dm-fonts (pinned revision `4412393b7d2de9fe7a92064c2dce9b5af5d7fd26`)
 - License: SIL Open Font License 1.1, full license in `docs/licenses/DM_SANS_OFL.txt`
 - Copyright 2014 The DM Sans Project Authors. Original unmodified static fonts; used only for Latin UI typography, with Android font fallback for unsupported scripts.
+
+### Weekly ML research candidate distribution (v1.0.16)
+
+- **OkHttp 4.12.0** by Square, Apache License 2.0, https://github.com/square/okhttp/tree/parent-4.12.0 (review canonical upstream LICENSE); download-only HTTP client, pinned, no inference traffic.
+- **Drebin 215 research model bundle**: source https://github.com/navyask911/safemobile-Antivirus-Trained-ML-Data-of-Android-malware/releases, training code under MIT; dataset attribution under CC BY 4.0 is in its DATASET_NOTICE.md. Source, model SHA-256 and schema are compared with the same release's checksums. Research release is not production-approved and downloaded candidates are never used as a malware detector.
+- No dynamic code loading. The bundled untrained fixture, local YARA/hashes, and existing offline model validation remain untouched.

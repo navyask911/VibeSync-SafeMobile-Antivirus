@@ -260,3 +260,7 @@ Resource checks preserve formatting placeholders and Android escaping. Coverage
 of all 22 requested locales includes every one of the 700 default string keys,
 including permission, incident, siren and download alerts. Other locale folders
 retain Android fallback until separately translated.
+
+### Research ML candidate update channel
+
+With the existing on-device privacy acknowledgement, WorkManager checks the public training repository weekly using a CONNECTED-only network constraint. It queries GitHub's latest release, then checks recent prereleases because the training pipeline currently publishes a prerelease not returned by /latest. Downloads use OkHttp with timeouts, strict HTTPS redirects, a 20MB cap, matching GitHub release asset SHA-256 digests, the matching SHA256SUMS, 215-entry feature schema and research report. The temporary TFLite file is loaded, checked with one bounded inference, closed, and atomically moved to private app storage on success. Bad releases leave the old candidate unchanged. Offline scanning continues using its original bundled guarded 32-feature model, local hash DB and YARA rules. **A 215-feature research candidate is never activated in production, regardless of benchmark scores.** Model upgrades require monotonically increasing vX.Y.Z-model tags; rewriting the same tag does not roll forward. No telemetry, scan data or APKs are sent to the training repository.

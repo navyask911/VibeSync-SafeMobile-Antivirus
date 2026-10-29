@@ -22,6 +22,7 @@ import com.vibesync.antivirus.core.security.DeviceOwnerManager
 import com.vibesync.antivirus.core.posture.DevicePostureMonitor
 import com.vibesync.antivirus.core.posture.DevicePostureRepository
 import com.vibesync.antivirus.core.worker.DeepScanWorker
+import com.vibesync.antivirus.core.worker.ModelUpdateScheduler
 import com.vibesync.antivirus.core.worker.HashDatabaseSyncScheduler
 import com.vibesync.antivirus.core.worker.LocalDefinitionLoader
 import com.vibesync.antivirus.core.worker.ThreatFeedSyncScheduler
@@ -102,6 +103,8 @@ class SafeMobileApp : Application() {
 
     fun scheduleMaintenanceSweep() {
         DevicePostureMonitor.ensureScheduled(this)
+        // The 7-day updater uses network only to stage untrusted research candidates.
+        ModelUpdateScheduler.ensureWeekly(this)
         val request = PeriodicWorkRequestBuilder<DeepScanWorker>(6, TimeUnit.HOURS)
             .setConstraints(Constraints.Builder().setRequiresBatteryNotLow(true).build())
             .build()
