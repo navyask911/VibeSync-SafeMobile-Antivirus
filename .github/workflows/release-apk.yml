@@ -57,7 +57,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Validate version code against tagged releases
-        run: python3 scripts/check_version_code.py
+        run: python3 scripts/check_version_code.py --release
 
       - name: Validate translated resources and offline font provenance
         shell: bash
