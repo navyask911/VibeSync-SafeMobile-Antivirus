@@ -26,3 +26,9 @@ Before adding a dependency or dataset, review the exact distributed artifact's l
 - **OkHttp 4.12.0** by Square, Apache License 2.0, https://github.com/square/okhttp/tree/parent-4.12.0 (review canonical upstream LICENSE); download-only HTTP client, pinned, no inference traffic.
 - **Drebin 215 research model bundle**: source https://github.com/navyask911/safemobile-Antivirus-Trained-ML-Data-of-Android-malware/releases, training code under MIT; dataset attribution under CC BY 4.0 is in its DATASET_NOTICE.md. Source, model SHA-256 and schema are compared with the same release's checksums. Research release is not production-approved and downloaded candidates are never used as a malware detector.
 - No dynamic code loading. The bundled untrained fixture, local YARA/hashes, and existing offline model validation remain untouched.
+
+### Read-only Android DEX parser for 215 features
+
+- `org.smali:dexlib2:2.5.2`, Ben Gruver / smali contributors, **BSD 3-Clause** (Maven Central POM and upstream https://github.com/JesusFreke/smali). Used only to inspect DEX methods, type references, and string pools; it never loads or runs APK code. Keep BSD attribution text in `docs/licenses/DEXLIB2_BSD_3_CLAUSE.txt`. Dependency compatibility with the existing Guava build must pass CI.
+- Schema names and ordering are from `docs/feature_schema.json` of the separately maintained training repository; that repository attributes training material under CC BY 4.0. These names are data identifiers, not copied model weights or a new source-code licence.
+- A populated feature vector does not establish a production-validated model. Research prerelease report remains `production_ready: false`, so the production scanner remains disabled.
