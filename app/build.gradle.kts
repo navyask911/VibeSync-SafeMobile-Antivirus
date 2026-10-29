@@ -108,6 +108,8 @@ dependencies {
  implementation("com.google.crypto.tink:tink-android:1.16.0")
  // TensorFlow Lite 2.17.0 is local inference only; no model training or network calls.
  implementation("org.tensorflow:tensorflow-lite:2.17.0")
+ // Apache-2.0 OkHttp is confined to the opt-in weekly model download worker.
+ implementation("com.squareup.okhttp3:okhttp:4.12.0")
  implementation("com.google.guava:guava:33.4.8-android")
  implementation("org.bouncycastle:bcprov-jdk18on:1.86")
  // The instrumentation APK is separate from the app APK and must carry its own Kotlin runtime.
