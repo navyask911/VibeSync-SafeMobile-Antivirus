@@ -57,7 +57,7 @@ fun DevicePostureDashboardCard(state: DevicePostureUiState, onOpen: () -> Unit) 
         mutableStateOf(preferences.getStringSet("reviewed", emptySet()).orEmpty().toSet())
     }
     val report = state.report
-    val observed = report?.findings.orEmpty().filter { it.highRisk }
+    val observed = report?.findings.orEmpty().filter { it.highRisk && !it.stale }
         .map { it.access.name + ":" + it.packageName }.toSet()
     // Expire an acknowledged grant only when a fresh, successful audit confirms its absence.
     androidx.compose.runtime.LaunchedEffect(report?.checkedAt) {

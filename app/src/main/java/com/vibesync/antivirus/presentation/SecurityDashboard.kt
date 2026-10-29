@@ -34,6 +34,7 @@ import com.vibesync.antivirus.ui.components.ScanProgressRing
 import java.text.DateFormat
 import java.util.Date
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun SecurityDashboard(assessment: DeviceSecurityAssessment?, onCheckPlayProtect: () -> Unit, onSync: () -> Unit) {
     var showScoreInfo by remember { mutableStateOf(false) }
