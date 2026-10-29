@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">ಸ್ಕ್ಯಾನ್ ಪೂರ್ಣಗೊಂಡಿದೆ</string>
+    <string name="v116_scan_local_no_match">ಸ್ಕ್ಯಾನ್ ಪೂರ್ಣಗೊಂಡಿದೆ. ಸ್ಥಳೀಯ ಹೊಂದಾಣಿಕೆ ಸಿಕ್ಕಿಲ್ಲ. ಸದ್ಯ ನಿಮ್ಮ ಸಾಧನ ಸುರಕ್ಷಿತವಾಗಿ ಕಾಣುತ್ತದೆ.</string>
+    <string name="v116_score_meaning">ಈ ಅಂಕವು ಸಾಧನದ ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ಸೂಚಿಸುತ್ತದೆ; ಮಾಲ್‌ವೇರ್ ಇಲ್ಲ ಎಂಬ ಪುರಾವೆಯಲ್ಲ. ಕೆಲವು ಪರಿಶೀಲನೆಗಳು ದೃಢಪಟ್ಟಿಲ್ಲ.</string>
+</resources>

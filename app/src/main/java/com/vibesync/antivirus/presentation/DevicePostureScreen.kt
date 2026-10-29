@@ -22,7 +22,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import android.content.Context
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -44,9 +49,32 @@ private val PostureWarning = Color(0xFFFFD54F)
 
 @Composable
 fun DevicePostureDashboardCard(state: DevicePostureUiState, onOpen: () -> Unit) {
-    // This warning has no dismiss action. Only a fresh audit confirming revocation removes it.
-    if ((state.report?.highRiskAppCount ?: 0) > 0) {
-        CyberCard(Modifier.fillMaxWidth().clickable(onClick = onOpen),
+    val context = LocalContext.current
+    val preferences = remember(context) {
+        context.getSharedPreferences("safemobile_posture_ack_v116", Context.MODE_PRIVATE)
+    }
+    var reviewed by remember(preferences) {
+        mutableStateOf(preferences.getStringSet("reviewed", emptySet()).orEmpty().toSet())
+    }
+    val report = state.report
+    val observed = report?.findings.orEmpty().filter { it.highRisk && !it.stale }
+        .map { it.access.name + ":" + it.packageName }.toSet()
+    // Expire an acknowledged grant only when a fresh, successful audit confirms its absence.
+    androidx.compose.runtime.LaunchedEffect(report?.checkedAt) {
+        if (report != null && report.unavailable.isEmpty()) {
+            val retained = reviewed.intersect(observed)
+            if (retained != reviewed) {
+                reviewed = retained
+                preferences.edit().putStringSet("reviewed", retained).apply()
+            }
+        }
+    }
+    if ((observed - reviewed).isNotEmpty()) {
+        CyberCard(Modifier.fillMaxWidth().clickable(onClick = {
+            reviewed = reviewed + observed
+            preferences.edit().putStringSet("reviewed", reviewed).apply()
+            onOpen()
+        }),
             colors = CardDefaults.cardColors(containerColor = PostureWarning),
             border = BorderStroke(1.dp, PostureWarning)) {
             Row(Modifier.padding(16.dp), horizontalArrangement = Arrangement.spacedBy(10.dp),
@@ -176,7 +204,9 @@ private fun PostureFindingRow(finding: PostureFinding, onFix: () -> Unit) {
             style = MaterialTheme.typography.bodySmall)
         Text(stringResource(PostureText.explanation(finding)), style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant)
-        OutlinedButton(onClick = onFix) { Text(stringResource(R.string.posture_fix)) }
+        if (finding.access != PostureAccess.OVERLAY || (finding.state == PostureGrantState.ENABLED && !finding.stale)) {
+            OutlinedButton(onClick = onFix) { Text(stringResource(R.string.posture_fix)) }
+        }
     }
 }
 

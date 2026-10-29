@@ -1,6 +1,11 @@
 package com.vibesync.antivirus.presentation
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import kotlin.math.atan2
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -44,7 +49,7 @@ import java.time.format.FormatStyle
 
 /** Local Room aggregates, never telemetry. Canvas owns every chart shape; no chart dependency. */
 @Composable
-internal fun AnalyticsCharts(repository: ThreatRepository) {
+internal fun AnalyticsCharts(repository: ThreatRepository, results: List<com.vibesync.antivirus.core.engine.ScanResult> = emptyList()) {
     var week by remember { mutableStateOf(AnalyticsWeek.current()) }
     val owner = LocalLifecycleOwner.current
     LaunchedEffect(owner) {
@@ -59,11 +64,12 @@ internal fun AnalyticsCharts(repository: ThreatRepository) {
     }
     val source = remember(repository, week) { repository.observeAnalytics(week) }
     val data by source.collectAsStateWithLifecycle(initialValue = ScanAnalytics())
-    AnalyticsChartContent(data, week)
+    AnalyticsChartContent(data, week, results)
 }
 
 @Composable
-internal fun AnalyticsChartContent(data: ScanAnalytics, week: AnalyticsWeek) {
+internal fun AnalyticsChartContent(data: ScanAnalytics, week: AnalyticsWeek,
+    results: List<com.vibesync.antivirus.core.engine.ScanResult> = emptyList()) {
     val locale = LocalConfiguration.current.locales[0]
     val rtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     val number = remember(locale) { NumberFormat.getIntegerInstance(locale) }
@@ -74,8 +80,19 @@ internal fun AnalyticsChartContent(data: ScanAnalytics, week: AnalyticsWeek) {
     val threatLabel = stringResource(R.string.metrics_threats_flagged)
     val cleanLabel = stringResource(R.string.verdict_no_match)
     val otherLabel = stringResource(R.string.analytics_other)
-    val total = data.totals.threats + data.totals.noMatch + data.totals.other
-    val description = listOf(stringResource(R.string.format_label_value, threatLabel, number.format(data.totals.threats)), stringResource(R.string.format_label_value, cleanLabel, number.format(data.totals.noMatch)), stringResource(R.string.format_label_value, otherLabel, number.format(data.totals.other))).joinToString("; ")
+    val scannedApps = remember(results) { results.filter { it.packageName != null } }
+    val liveCategories = scannedApps.isNotEmpty()
+    val chartCounts = if (liveCategories) listOf(
+        scannedApps.count { it.verdict == com.vibesync.antivirus.core.engine.ScanVerdict.THREAT }.toLong(),
+        scannedApps.count { it.verdict == com.vibesync.antivirus.core.engine.ScanVerdict.NO_MATCH }.toLong(),
+        scannedApps.count { it.verdict != com.vibesync.antivirus.core.engine.ScanVerdict.THREAT &&
+            it.verdict != com.vibesync.antivirus.core.engine.ScanVerdict.NO_MATCH }.toLong()
+    ) else listOf(data.totals.threats, data.totals.noMatch, data.totals.other)
+    val total = chartCounts.sum()
+    var selectedCategory by remember { mutableStateOf<Int?>(null) }
+    LaunchedEffect(results) { selectedCategory = null }
+    val gradientColors = listOf(Color(0xFF06B6D4), Color(0xFF10B981), Color(0xFFF59E0B), Color(0xFF8B5CF6))
+    val description = listOf(stringResource(R.string.format_label_value, threatLabel, number.format(chartCounts[0])), stringResource(R.string.format_label_value, cleanLabel, number.format(chartCounts[1])), stringResource(R.string.format_label_value, otherLabel, number.format(chartCounts[2]))).joinToString("; ")
     Column(verticalArrangement = Arrangement.spacedBy(14.dp), modifier = Modifier.fillMaxWidth()) {
         GlassCard(Modifier.fillMaxWidth()) {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -83,18 +100,40 @@ internal fun AnalyticsChartContent(data: ScanAnalytics, week: AnalyticsWeek) {
                     fontWeight = FontWeight.SemiBold)
                 Box(Modifier.align(Alignment.CenterHorizontally).size(170.dp).semantics { contentDescription = description },
                     contentAlignment = Alignment.Center) {
-                    Canvas(Modifier.fillMaxSize().padding(8.dp)) {
+                    Canvas(Modifier.fillMaxSize().padding(8.dp).pointerInput(chartCounts, liveCategories) {
+                        detectTapGestures { position ->
+                            if (liveCategories && total > 0) {
+                                val dx = position.x - size.width / 2f
+                                val dy = position.y - size.height / 2f
+                                val distance = kotlin.math.sqrt(dx * dx + dy * dy)
+                                val radius = size.width / 2f
+                                if (distance in radius * 0.62f..radius) {
+                                    val angle = ((Math.toDegrees(atan2(dy.toDouble(), dx.toDouble())) + 450.0) % 360.0)
+                                    val first = chartCounts[0] * 360.0 / total
+                                    val second = chartCounts[1] * 360.0 / total
+                                    selectedCategory = when {
+                                        angle < first -> 0
+                                        angle < first + second -> 1
+                                        else -> 2
+                                    }
+                                }
+                            }
+                        }
+                    }) {
                         val width = 18.dp.toPx()
                         val inset = width / 2
                         val arc = Size(size.width - width, size.height - width)
                         drawArc(track, -90f, 360f, false, Offset(inset, inset), arc, style = Stroke(width))
                         if (total > 0L) {
-                            val threatAngle = (data.totals.threats.toDouble() / total * 360.0).toFloat()
-                            val cleanAngle = (data.totals.noMatch.toDouble() / total * 360.0).toFloat()
-                            if (threatAngle > 0) drawArc(error, -90f, threatAngle, false,
-                                Offset(inset, inset), arc, style = Stroke(width, cap = StrokeCap.Butt))
-                            if (cleanAngle > 0) drawArc(primary, -90f + threatAngle, cleanAngle,
-                                false, Offset(inset, inset), arc, style = Stroke(width, cap = StrokeCap.Butt))
+                            var angle = -90f
+                            chartCounts.forEachIndexed { index, count ->
+                                val sweep = (count.toDouble() / total * 360.0).toFloat()
+                                if (sweep > 0f) drawArc(
+                                    brush = Brush.linearGradient(listOf(gradientColors[index], gradientColors[index + 1])),
+                                    startAngle = angle, sweepAngle = sweep, useCenter = false,
+                                    topLeft = Offset(inset, inset), size = arc, style = Stroke(width, cap = StrokeCap.Butt))
+                                angle += sweep
+                            }
                         }
                     }
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -102,11 +141,24 @@ internal fun AnalyticsChartContent(data: ScanAnalytics, week: AnalyticsWeek) {
                         Text(stringResource(R.string.analytics_total), style = MaterialTheme.typography.labelMedium)
                     }
                 }
-                ChartLegend(threatLabel, number.format(data.totals.threats), error)
-                ChartLegend(cleanLabel, number.format(data.totals.noMatch), primary)
-                ChartLegend(otherLabel, number.format(data.totals.other), muted)
-                Text(stringResource(R.string.metrics_not_blocked_disclaimer), style = MaterialTheme.typography.bodySmall, color = muted)
-                Text(stringResource(R.string.scan_clean_warning), style = MaterialTheme.typography.bodySmall, color = muted)
+                ChartLegend(threatLabel, number.format(chartCounts[0]), gradientColors[0])
+                ChartLegend(cleanLabel, number.format(chartCounts[1]), gradientColors[1])
+                ChartLegend(otherLabel, number.format(chartCounts[2]), gradientColors[3])
+                if (selectedCategory != null && liveCategories) {
+                    val displayed = scannedApps.filter { entry ->
+                        when (selectedCategory) {
+                            0 -> entry.verdict == com.vibesync.antivirus.core.engine.ScanVerdict.THREAT
+                            1 -> entry.verdict == com.vibesync.antivirus.core.engine.ScanVerdict.NO_MATCH
+                            else -> entry.verdict != com.vibesync.antivirus.core.engine.ScanVerdict.THREAT &&
+                                entry.verdict != com.vibesync.antivirus.core.engine.ScanVerdict.NO_MATCH
+                        }
+                    }
+                    Text(listOf(threatLabel, cleanLabel, otherLabel)[selectedCategory!!],
+                        style = MaterialTheme.typography.titleMedium)
+                    displayed.take(15).forEach { entry ->
+                        Text(entry.displayName, style = MaterialTheme.typography.bodySmall)
+                    }
+                }
             }
         }
         GlassCard(Modifier.fillMaxWidth()) {
@@ -134,8 +186,11 @@ internal fun AnalyticsChartContent(data: ScanAnalytics, week: AnalyticsWeek) {
                         val visualIndex = if (rtl) 6 - index else index
                         val barHeight = (plotHeight * count.toDouble() / maxCount).toFloat()
                         val left = slot * visualIndex + slot * 0.23f
-                        if (count > 0) drawRoundRect(primary, Offset(left, size.height - barHeight),
-                            Size(slot * 0.54f, barHeight), CornerRadius(4.dp.toPx()))
+                        if (count > 0) drawRoundRect(
+                            brush = Brush.verticalGradient(listOf(gradientColors[index % 4],
+                                gradientColors[(index + 1) % 4])),
+                            topLeft = Offset(left, size.height - barHeight),
+                            size = Size(slot * 0.54f, barHeight), cornerRadius = CornerRadius(4.dp.toPx()))
                         val label = textMeasurer.measure(AnnotatedString(number.format(count)), labelStyle)
                         drawText(label, topLeft = Offset(slot * (visualIndex + 0.5f) - label.size.width / 2,
                             (size.height - barHeight - label.size.height - 4.dp.toPx()).coerceAtLeast(0f)))

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">Scanare finalizată</string>
+    <string name="v116_scan_local_no_match">Scanare finalizată. Nu există potriviri locale. Dispozitivul pare sigur momentan.</string>
+    <string name="v116_score_meaning">Scorul reflectă setările, nu dovedește absența programelor malware. Unele verificări nu sunt confirmate.</string>
+</resources>

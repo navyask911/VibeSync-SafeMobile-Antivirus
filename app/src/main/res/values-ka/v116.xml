@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">სკანირება დასრულდა</string>
+    <string name="v116_scan_local_no_match">სკანირება დასრულდა. ადგილობრივი დამთხვევა არ მოიძებნა. მოწყობილობა ახლა უსაფრთხოდ ჩანს.</string>
+    <string name="v116_score_meaning">ქულა ასახავს პარამეტრებს და არ ადასტურებს მავნე პროგრამების არარსებობას. ზოგი შემოწმება დაუდასტურებელია.</string>
+</resources>

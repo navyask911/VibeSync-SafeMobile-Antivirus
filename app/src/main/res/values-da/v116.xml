@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">Scanning fuldført</string>
+    <string name="v116_scan_local_no_match">Scanning fuldført. Ingen lokale match fundet. Enheden ser sikker ud lige nu.</string>
+    <string name="v116_score_meaning">Scoren viser enhedsindstillinger, ikke bevis for fravær af malware. Nogle kontroller er ubekræftede.</string>
+</resources>

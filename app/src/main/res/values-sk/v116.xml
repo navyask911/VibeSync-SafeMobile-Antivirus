@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">Skenovanie dokončené</string>
+    <string name="v116_scan_local_no_match">Skenovanie dokončené. Žiadne miestne zhody. Zariadenie zatiaľ vyzerá bezpečne.</string>
+    <string name="v116_score_meaning">Skóre odráža nastavenia zariadenia, nie dôkaz o absencii malvéru. Niektoré kontroly nie sú overené.</string>
+</resources>

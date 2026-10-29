@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">Tapos na ang pag-scan</string>
+    <string name="v116_scan_local_no_match">Tapos na ang pag-scan. Walang lokal na tugma. Mukhang ligtas ang device sa ngayon.</string>
+    <string name="v116_score_meaning">Ang marka ay tungkol sa mga setting, hindi patunay na walang malware. May mga pagsusuring hindi pa napatunayan.</string>
+</resources>

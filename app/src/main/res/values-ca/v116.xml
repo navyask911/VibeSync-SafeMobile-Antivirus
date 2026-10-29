@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">Anàlisi completada</string>
+    <string name="v116_scan_local_no_match">Anàlisi completada. Sense coincidències locals. Ara mateix el dispositiu sembla segur.</string>
+    <string name="v116_score_meaning">La puntuació reflecteix la configuració, no prova que no hi hagi programari maliciós. Algunes comprovacions no estan verificades.</string>
+</resources>

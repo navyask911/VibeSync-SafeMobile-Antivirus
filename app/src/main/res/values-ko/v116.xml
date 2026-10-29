@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">검사 완료</string>
+    <string name="v116_scan_local_no_match">검사가 끝났습니다. 로컬 일치 항목이 없습니다. 현재 기기는 안전해 보입니다.</string>
+    <string name="v116_score_meaning">점수는 기기 설정을 나타내며 악성코드가 없다는 증거는 아닙니다. 일부 검사는 미확인 상태입니다.</string>
+</resources>

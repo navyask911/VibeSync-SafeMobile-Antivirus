@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">স্ক্যান সম্পন্ন</string>
+    <string name="v116_scan_local_no_match">স্ক্যান সম্পন্ন। স্থানীয় কোনো মিল পাওয়া যায়নি। আপাতত ডিভাইস নিরাপদ মনে হচ্ছে।</string>
+    <string name="v116_score_meaning">এই স্কোর ডিভাইসের সেটিংস বোঝায়, ম্যালওয়্যার নেই তার প্রমাণ নয়। কিছু যাচাই নিশ্চিত নয়।</string>
+</resources>

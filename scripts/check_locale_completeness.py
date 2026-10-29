@@ -80,6 +80,31 @@ for locale in LOCALES:
             if formats("".join(item.itertext())) != expected:
                 errors.append(f"{locale}: format mismatch in {key}/{quantity}")
 
+# v1.0.16 uses a separate, small resource file per locale. Verify all 51 translations
+# are present, non-English fallbacks, XML-valid, and placeholder compatible.
+V116_KEYS = ("v116_scan_title", "v116_scan_local_no_match", "v116_score_meaning")
+base_v116, _ = read_resources(BASE / "values" / "v116.xml")
+for key in V116_KEYS:
+    if key not in base_v116:
+        errors.append(f"base v116.xml: missing {key}")
+for locale in LOCALES:
+    localized, _ = read_resources(BASE / f"values-{locale}" / "v116.xml")
+    for key in V116_KEYS:
+        value = localized.get(key)
+        base_value = base_v116.get(key)
+        if value is None:
+            errors.append(f"{locale}: missing v1.0.16 translation {key}")
+            continue
+        text_value = "".join(value.itertext()).strip()
+        if not text_value:
+            errors.append(f"{locale}: empty v1.0.16 translation {key}")
+        if base_value is not None:
+            english_value = "".join(base_value.itertext()).strip()
+            if text_value == english_value:
+                errors.append(f"{locale}: v1.0.16 English fallback {key}")
+            if formats(text_value) != formats(english_value):
+                errors.append(f"{locale}: v1.0.16 placeholder mismatch {key}")
+
 # Preserve previous invariant: every existing locale must provide a voice warning.
 for path in sorted(BASE.glob("values-*/strings.xml")):
     strings, _ = read_resources(path)

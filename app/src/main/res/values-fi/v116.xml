@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">Tarkistus valmis</string>
+    <string name="v116_scan_local_no_match">Tarkistus valmis. Paikallisia osumia ei löytynyt. Laite vaikuttaa nyt turvalliselta.</string>
+    <string name="v116_score_meaning">Pisteet kuvaavat asetuksia, eivät todista haittaohjelmien puuttumista. Osa tarkistuksista on vahvistamatta.</string>
+</resources>

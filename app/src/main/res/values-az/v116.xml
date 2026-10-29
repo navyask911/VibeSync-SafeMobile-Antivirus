@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">Skan tamamlandı</string>
+    <string name="v116_scan_local_no_match">Skan tamamlandı. Yerli uyğunluq tapılmadı. Cihazınız hazırda təhlükəsiz görünür.</string>
+    <string name="v116_score_meaning">Bu bal cihaz parametrlərini göstərir, zərərli proqramın olmadığını sübut etmir. Bəzi yoxlamalar təsdiqlənməyib.</string>
+</resources>

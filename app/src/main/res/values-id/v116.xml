@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">Pemindaian selesai</string>
+    <string name="v116_scan_local_no_match">Pemindaian selesai. Tidak ada kecocokan lokal. Perangkat saat ini tampak aman.</string>
+    <string name="v116_score_meaning">Skor ini menunjukkan pengaturan perangkat, bukan bukti bebas malware. Beberapa pemeriksaan belum diverifikasi.</string>
+</resources>

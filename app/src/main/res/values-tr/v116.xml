@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">Tarama tamamlandı</string>
+    <string name="v116_scan_local_no_match">Tarama tamamlandı. Yerel eşleşme bulunamadı. Cihaz şu anda güvenli görünüyor.</string>
+    <string name="v116_score_meaning">Puan cihaz ayarlarını yansıtır, kötü amaçlı yazılım olmadığını kanıtlamaz. Bazı kontroller doğrulanmamıştır.</string>
+</resources>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">Vizsgálat kész</string>
+    <string name="v116_scan_local_no_match">Vizsgálat kész. Nincs helyi egyezés. Az eszköz jelenleg biztonságosnak tűnik.</string>
+    <string name="v116_score_meaning">A pontszám a beállításokat mutatja, nem bizonyítja a kártevők hiányát. Egyes ellenőrzések nem igazoltak.</string>
+</resources>

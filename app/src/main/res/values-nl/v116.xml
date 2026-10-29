@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">Scan voltooid</string>
+    <string name="v116_scan_local_no_match">Scan voltooid. Geen lokale overeenkomsten. Het apparaat lijkt nu veilig.</string>
+    <string name="v116_score_meaning">De score weerspiegelt apparaatinstellingen, geen bewijs van afwezigheid van malware. Sommige controles zijn onbevestigd.</string>
+</resources>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">Scan completed</string>
+    <string name="v116_scan_local_no_match">Scan completed. A local no-match result is found. At present, your device looks safe.</string>
+    <string name="v116_score_meaning">This score reflects local device settings, not proof of malware-free safety. Some checks may be unverified.</string>
+</resources>

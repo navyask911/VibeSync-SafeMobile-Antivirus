@@ -66,8 +66,6 @@ internal fun HomeSecurityMetrics(summary: ScanCompletionSummary?, hashDbPublishe
                 Text(stringResource(R.string.metrics_database_updated), color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Text(updated, color = MaterialTheme.colorScheme.onSurface, style = MaterialTheme.typography.labelSmall)
             }
-            Text(stringResource(R.string.metrics_not_blocked_disclaimer),
-                style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
 }

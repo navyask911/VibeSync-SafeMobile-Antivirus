@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">スキャン完了</string>
+    <string name="v116_scan_local_no_match">スキャン完了。ローカルで一致はありません。現時点では端末は安全に見えます。</string>
+    <string name="v116_score_meaning">このスコアは端末の設定を示し、マルウェアがない証明ではありません。一部の検査は未確認です。</string>
+</resources>

@@ -20,12 +20,13 @@ import com.vibesync.antivirus.ui.components.CyberCard
 
 /** User-consented system-settings advisory; do not assume OEM power policy can be bypassed. */
 @Composable
-internal fun BatteryOptimizationCard() {
+internal fun BatteryOptimizationCard(resumeEpoch: Int = 0) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val powerManager = remember(context) { context.getSystemService(PowerManager::class.java) }
     fun shouldShow() = powerManager?.let {
-        it.isPowerSaveMode || !it.isIgnoringBatteryOptimizations(context.packageName)
+        // Battery saver is separate from the per-app exemption; do not leave a false red card.
+        !it.isIgnoringBatteryOptimizations(context.packageName)
     } ?: false
     var needsAttention by remember(context) { mutableStateOf(shouldShow()) }
     DisposableEffect(context, lifecycleOwner) {
@@ -35,6 +36,7 @@ internal fun BatteryOptimizationCard() {
         lifecycleOwner.lifecycle.addObserver(observer)
         onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
     }
+    LaunchedEffect(resumeEpoch) { needsAttention = shouldShow() }
     if (!needsAttention) return
     CyberCard(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer)) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(9.dp)) {

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">स्कॅन पूर्ण</string>
+    <string name="v116_scan_local_no_match">स्कॅन पूर्ण झाले. स्थानिक जुळणी नाही. सध्या डिव्हाइस सुरक्षित दिसते.</string>
+    <string name="v116_score_meaning">हा गुण सेटिंग्ज दर्शवतो, मालवेअर नसल्याचा पुरावा नाही. काही तपासण्या अप्रमाणित आहेत.</string>
+</resources>

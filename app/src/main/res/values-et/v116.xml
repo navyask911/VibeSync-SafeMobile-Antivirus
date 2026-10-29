@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">Skannimine lõpetatud</string>
+    <string name="v116_scan_local_no_match">Skannimine lõpetatud. Kohalikku vastet ei leitud. Seade tundub praegu turvaline.</string>
+    <string name="v116_score_meaning">Skoor kajastab seadme seadeid ega tõesta pahavara puudumist. Mõni kontroll on kinnitamata.</string>
+</resources>

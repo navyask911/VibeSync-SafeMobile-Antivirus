@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">Skanning slutförd</string>
+    <string name="v116_scan_local_no_match">Skanning klar. Inga lokala träffar. Enheten verkar säker just nu.</string>
+    <string name="v116_score_meaning">Poängen speglar inställningar, inte bevis på att skadlig kod saknas. Vissa kontroller är inte verifierade.</string>
+</resources>

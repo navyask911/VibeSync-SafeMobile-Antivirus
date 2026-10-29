@@ -606,7 +606,9 @@ internal fun SafeMobileSettingsPanel(
         when (aboutSection) {
             "readme" -> listOf(R.string.scan_explanation, R.string.scan_clean_warning, R.string.monitor_explanation, R.string.quarantine_vault_description, R.string.features_disclaimer).joinToString("\n\n") { context.getString(it) }
             "notices" -> context.getString(R.string.about_localized_notices)
-            "license" -> context.getString(R.string.about_license_missing)
+            "license" -> context.getString(R.string.about_license) + "\n\n" +
+                context.getString(R.string.metrics_not_blocked_disclaimer) + "\n\n" +
+                context.getString(R.string.scan_clean_warning)
             else -> context.getString(R.string.privacy_body) + "\n\n" + context.getString(R.string.about_localized_privacy)
         }
     }
