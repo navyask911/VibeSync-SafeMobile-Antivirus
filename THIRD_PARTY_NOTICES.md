@@ -1,6 +1,6 @@
 # Third-party dependency notices
 
-Generated from the CycloneDX SBOM by `scripts/render_third_party_notices.py`. Components: 359.
+Generated from the CycloneDX SBOM by `scripts/render_third_party_notices.py`. Components: 362.
 
 Regenerate this file with the CI SBOM refresh workflow; do not hand-edit dependency rows.
 
@@ -194,9 +194,11 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | kotlin-stdlib-common | 2.2.0 | Apache-2.0 | https://github.com/JetBrains/kotlin |
 | kotlin-stdlib-common | 2.2.21 | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0) | https://github.com/JetBrains/kotlin |
 | kotlin-stdlib-jdk7 | 1.8.20 | Apache-2.0 | https://github.com/JetBrains/kotlin |
+| kotlin-stdlib-jdk7 | 1.8.21 | Apache-2.0 | https://github.com/JetBrains/kotlin |
 | kotlin-stdlib-jdk7 | 1.9.24 | Apache-2.0 | https://github.com/JetBrains/kotlin |
 | kotlin-stdlib-jdk7 | 2.2.0 | Apache-2.0 | https://github.com/JetBrains/kotlin |
 | kotlin-stdlib-jdk8 | 1.8.20 | Apache-2.0 | https://github.com/JetBrains/kotlin |
+| kotlin-stdlib-jdk8 | 1.8.21 | Apache-2.0 | https://github.com/JetBrains/kotlin |
 | kotlin-stdlib-jdk8 | 1.9.24 | Apache-2.0 | https://github.com/JetBrains/kotlin |
 | kotlin-stdlib-jdk8 | 2.2.0 | Apache-2.0 | https://github.com/JetBrains/kotlin |
 | kotlinpoet | 1.17.0 | Apache-2.0 | https://github.com/square/kotlinpoet |
@@ -288,6 +290,7 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | netty-transport | 4.1.93.Final | Apache-2.0 | Package URL: pkg:maven/io.netty/netty-transport@4.1.93.Final?type=jar |
 | netty-transport-native-unix-common | 4.1.110.Final | Apache-2.0 | Package URL: pkg:maven/io.netty/netty-transport-native-unix-common@4.1.110.Final?type=jar |
 | netty-transport-native-unix-common | 4.1.93.Final | Apache-2.0 | Package URL: pkg:maven/io.netty/netty-transport-native-unix-common@4.1.93.Final?type=jar |
+| okhttp | 4.12.0 | Apache-2.0 | https://github.com/square/okhttp |
 | okio | 3.17.0 | Apache-2.0 | https://github.com/square/okio/ |
 | okio | 3.9.1 | Apache-2.0 | https://github.com/square/okio/ |
 | okio-jvm | 3.17.0 | Apache-2.0 | https://github.com/square/okio/ |
@@ -366,7 +369,7 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | work-runtime | 2.10.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | work-runtime-ktx | 2.10.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 
-Metadata completeness: 357/359 components have both a declared licence and a source/package reference.
+Metadata completeness: 360/362 components have both a declared licence and a source/package reference.
 
 ## Metadata requiring manual review
 

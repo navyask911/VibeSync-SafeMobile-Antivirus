@@ -1,10 +1,10 @@
 {
   "bomFormat" : "CycloneDX",
   "specVersion" : "1.6",
-  "serialNumber" : "urn:uuid:dc5afe6d-b679-4400-96e5-617722f3846b",
+  "serialNumber" : "urn:uuid:f32db461-859b-4401-a1b2-f4a262d69f7c",
   "version" : 1,
   "metadata" : {
-    "timestamp" : "2026-10-26T19:34:57Z",
+    "timestamp" : "2026-10-29T12:11:35Z",
     "tools" : {
       "components" : [
         {
@@ -26,7 +26,7 @@
       "externalReferences" : [
         {
           "type" : "build-system",
-          "url" : "https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/actions/runs/40387865810"
+          "url" : "https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/actions/runs/40871154608"
         },
         {
           "type" : "vcs",
@@ -12942,6 +12942,69 @@
     },
     {
       "type" : "library",
+      "bom-ref" : "pkg:maven/com.squareup.okhttp3/okhttp@4.12.0?type=jar",
+      "group" : "com.squareup.okhttp3",
+      "name" : "okhttp",
+      "version" : "4.12.0",
+      "description" : "Square’s meticulous HTTP client for Java and Kotlin.",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "6acba053af88fed87e710c6c29911d7c"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "2f4525d4a200e97e1b87449c2cd9bd2e25b7e8cd"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "b1050081b14bb7a3a7e55a4d3ef01b5dcfabc453b4573a4fc019767191d5f4e0"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "da63f77c1cae377b40f6fd00cfbbe8177e760e4e622ae2c66860fffd3bbbdf605c8e8e415762e9263445b2289ee834100237c63949f2e01c30b6704315dd8f7b"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "736a6abc2a2128ddcabcf46c9ba70e4656c2bedaeadbe8f9f76bb807db657b05"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "b2a39d9dff52994e78774d628228f7b3959d6070db2b535c70a90de70a7a716ed011d4dc210886314c1ebad8478b2460c652a2bf68094dba30d3593a1a750c75"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "0a8fbe4104c511169232caa90bc52b8a842b6b4cfba525b1c749ca25ede252992c1a3b6c0b6b43143949bc1f1eea742e"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "f41dde0de63dba9c941083a9e9f9681e5e497149cae49988b1a5b36fe2263d351035ee378e06975b5f3145b91393cd75"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/com.squareup.okhttp3/okhttp@4.12.0?type=jar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://github.com/square/okhttp"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
       "bom-ref" : "pkg:maven/com.squareup.okio/okio-jvm@3.17.0?type=jar",
       "group" : "com.squareup.okio",
       "name" : "okio-jvm",
@@ -18995,6 +19058,69 @@
     },
     {
       "type" : "library",
+      "bom-ref" : "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-jdk7@1.8.21?type=jar",
+      "group" : "org.jetbrains.kotlin",
+      "name" : "kotlin-stdlib-jdk7",
+      "version" : "1.8.21",
+      "description" : "Kotlin Standard Library JDK 7 extension",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "0735e3e69d099e8cc8fc03e45be84c46"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "7473b8cd3c0ef9932345baf569bc398e8a717046"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "33d148db0e11debd0d90677d28242bced907f9c77730000fd597867089039d86"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "0ff5d13438c179cfd3a658ae3f6e2535d11651ecf4e89d809882704d111c91af859de9d99eaa3c4b45103524b052614c0a084223aa8bd70ff88b43d503fbdfe3"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "54ec6441ff4010ed4dcae7b06f1fb76163205f1cc2123ecc7c2a9d7f663239cd"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "ae314725c2b9ebf8f15ba7b28b1174550a6ea574491d03a9070477544c7cd022b23e5fc30275b4086de191e28ef3f3b625cda6ab8098ae22bda6e0dcab0aa855"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "3ecfe76c5b8340d6bfa79e423ec8216997ae625ac0c2eb3c2a6a19ab1b4f72ee4aa5ff88fc381252d02b9afddcafc926"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "d7ed1f238d513f8f75e668d4c3453143c029651584f49e2960eccd13d4addacc67f3a0d2c135268882c56681445bd74b"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-jdk7@1.8.21?type=jar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://github.com/JetBrains/kotlin"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
       "bom-ref" : "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-jdk7@1.9.24?type=jar",
       "group" : "org.jetbrains.kotlin",
       "name" : "kotlin-stdlib-jdk7",
@@ -19168,6 +19294,69 @@
         }
       ],
       "purl" : "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-jdk8@1.8.20?type=jar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://github.com/JetBrains/kotlin"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-jdk8@1.8.21?type=jar",
+      "group" : "org.jetbrains.kotlin",
+      "name" : "kotlin-stdlib-jdk8",
+      "version" : "1.8.21",
+      "description" : "Kotlin Standard Library JDK 8 extension",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "59e5a79996f1d856ddea6533a1080f86"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "67f57e154437cd9e6e9cf368394b95814836ff88"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "3db752a30074f06ee6c57984aa6f27da44f4d2bbc7f5442651f6988f1cb2b7d7"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "b1a38d6a9d1d7c4cb18ddeba63201cb3a5de101e5a32fd32edcafc3f0350813ee97fd13d3f81bb61a4c1eefe0c02b0349bd07301d682f342ca5caed17f709f34"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "b2d59cac5f6051cc1ee2f7279150463722c7f42021a2dab331535c2c627ef615"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "349265b4a7a6b519f9fb0435577576c63a064969c10a3ba24b02aaf4b74249ba0ff3182d4a584dca220f4e8cfa890722060860639a3da8ab7a0cd18f5f087525"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "9371ba268f8581565b62e4efeacdf206c5be245e17bc411a078c527a2e2c384e8bd07b69b32a9cbfe9982d82836d281b"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "4b043c3f8d3970ca29d13902159ee28221636018bcc841a79a213844a45885883148a76ff27945fbc98872add51f42f7"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-jdk8@1.8.21?type=jar",
       "modified" : false,
       "externalReferences" : [
         {
@@ -21807,6 +21996,7 @@
         "pkg:maven/com.google.testing.platform/android-test-plugin@0.0.9-alpha03?type=jar",
         "pkg:maven/com.google.testing.platform/core@0.0.9-alpha03?type=jar",
         "pkg:maven/com.google.testing.platform/launcher@0.0.9-alpha03?type=jar",
+        "pkg:maven/com.squareup.okhttp3/okhttp@4.12.0?type=jar",
         "pkg:maven/junit/junit@4.13.2?type=jar",
         "pkg:maven/org.bouncycastle/bcpg-jdk18on@1.80?type=jar",
         "pkg:maven/org.bouncycastle/bcpkix-jdk18on@1.80?type=jar",
@@ -23785,6 +23975,13 @@
       "dependsOn" : [ ]
     },
     {
+      "ref" : "pkg:maven/com.squareup.okhttp3/okhttp@4.12.0?type=jar",
+      "dependsOn" : [
+        "pkg:maven/com.squareup.okio/okio@3.17.0?type=jar",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-jdk8@1.8.21?type=jar"
+      ]
+    },
+    {
       "ref" : "pkg:maven/com.squareup.okio/okio-jvm@3.17.0?type=jar",
       "dependsOn" : [
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar"
@@ -24475,6 +24672,12 @@
       ]
     },
     {
+      "ref" : "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-jdk7@1.8.21?type=jar",
+      "dependsOn" : [
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar"
+      ]
+    },
+    {
       "ref" : "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-jdk7@1.9.24?type=jar",
       "dependsOn" : [
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.1.10?type=jar"
@@ -24492,6 +24695,13 @@
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-jdk7@1.8.20?type=jar",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@1.8.21?type=jar",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@1.9.0?type=jar",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-jdk8@1.8.21?type=jar",
+      "dependsOn" : [
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-jdk7@1.8.21?type=jar",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar"
       ]
     },
