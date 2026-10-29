@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">اكتمل الفحص</string>
+    <string name="v116_scan_local_no_match">اكتمل الفحص. لا توجد مطابقة محلية. يبدو جهازك آمناً حالياً.</string>
+    <string name="v116_score_meaning">تعكس الدرجة إعدادات الجهاز ولا تثبت خلوه من البرمجيات الضارة. بعض الفحوص غير مؤكدة.</string>
+</resources>

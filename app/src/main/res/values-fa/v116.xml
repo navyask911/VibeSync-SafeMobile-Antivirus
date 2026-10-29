@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">اسکن پایان یافت</string>
+    <string name="v116_scan_local_no_match">اسکن پایان یافت. تطابق محلی پیدا نشد. دستگاه فعلاً ایمن به نظر می‌رسد.</string>
+    <string name="v116_score_meaning">امتیاز نشانگر تنظیمات دستگاه است، نه اثبات نبود بدافزار. برخی بررسی‌ها تأیید نشده‌اند.</string>
+</resources>

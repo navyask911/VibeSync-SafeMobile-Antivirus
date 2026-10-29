@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">ஸ்கேன் முடிந்தது</string>
+    <string name="v116_scan_local_no_match">ஸ்கேன் முடிந்தது. உள்ளூர் பொருத்தம் இல்லை. தற்போது சாதனம் பாதுகாப்பாகத் தெரிகிறது.</string>
+    <string name="v116_score_meaning">இந்த மதிப்பெண் அமைப்புகளைக் காட்டுகிறது; மால்வேர் இல்லை என்பதற்கான ஆதாரம் அல்ல. சில சோதனைகள் உறுதிப்படுத்தப்படவில்லை.</string>
+</resources>
