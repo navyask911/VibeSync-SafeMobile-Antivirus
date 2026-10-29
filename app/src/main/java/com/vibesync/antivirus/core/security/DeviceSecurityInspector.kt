@@ -3,6 +3,10 @@ package com.vibesync.antivirus.core.security
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.app.admin.DevicePolicyManager
 import android.content.Context
+import android.os.PowerManager
+import android.provider.Settings
+import com.vibesync.antivirus.core.posture.DevicePostureInspector
+import com.vibesync.antivirus.core.posture.PostureAccess
 import android.content.pm.ApplicationInfo
 import android.view.accessibility.AccessibilityManager
 
@@ -33,7 +37,25 @@ object DeviceSecurityInspector {
                 context.packageManager.getApplicationInfo(component.packageName, 0)
             }.filter { isNonSystem(it.flags) }.map { it.packageName }.distinct().size
         }.getOrNull()
-        return DeviceSecuritySignals(reportedPlayProtect, databaseUpdatedAt, accessibility, admins)
+        val adb = runCatching {
+            Settings.Global.getInt(context.contentResolver, Settings.Global.ADB_ENABLED, -1)
+                .takeIf { it >= 0 }?.let { it != 0 }
+        }.getOrNull()
+        // Android 8+ has per-installer grants; reading our own grant cannot audit every installer.
+        val ownInstallerGrant = runCatching {
+            context.packageManager.canRequestPackageInstalls()
+        }.getOrNull()
+        val backgroundRestricted = runCatching {
+            val power = context.getSystemService(PowerManager::class.java)
+            power?.let { !it.isIgnoringBatteryOptimizations(context.packageName) }
+        }.getOrNull()
+        val overlays = runCatching {
+            val report = DevicePostureInspector(context).inspect(includeOverlay = true)
+            if (PostureAccess.OVERLAY in report.unavailable) null
+            else report.grants(PostureAccess.OVERLAY).map { it.packageName }.distinct().size
+        }.getOrNull()
+        return DeviceSecuritySignals(reportedPlayProtect, databaseUpdatedAt, accessibility, admins,
+            adb, ownInstallerGrant, overlays, backgroundRestricted)
     }
     private fun isNonSystem(flags: Int) = flags and (ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) == 0
 }

@@ -563,7 +563,7 @@ import kotlinx.coroutines.launch
       androidx.compose.material3.Icon(Icons.Default.Security, contentDescription = null)
       Text(stringResource(R.string.security_scan_now), Modifier.padding(start = 8.dp))
      }
-     AnalyticsCharts(repository)
+     AnalyticsCharts(repository, state.results)
      SectionHeader(title=stringResource(R.string.analytics_recent_activity), actionLabel=stringResource(R.string.nav_history), onAction={ selectedDestination="history" })
      if (auditEntries.isEmpty()) EmptyState(title=stringResource(R.string.analytics_no_audits),description=stringResource(R.string.analytics_no_audits_body))
      else auditEntries.take(3).forEach { audit ->
