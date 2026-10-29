@@ -143,6 +143,14 @@ jobs:
           cp "$aab" "$aab_output"
           echo "aab_path=$aab_output" >> "$GITHUB_OUTPUT"
 
+      - name: Upload verified Play Console AAB as GitHub Actions artifact
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: SafeMobile-v1.0.16-Play-AAB-${{ github.run_id }}
+          path: ${{ steps.verify-apk.outputs.aab_path }}
+          if-no-files-found: error
+          retention-days: 30
+
       - name: Build valid harmless siren-test APK and matching local definition
         run: bash scripts/test_siren.sh
 
