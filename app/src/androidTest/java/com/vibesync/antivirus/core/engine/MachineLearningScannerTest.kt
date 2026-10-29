@@ -35,4 +35,26 @@ class MachineLearningScannerTest {
             assertTrue(output[0][0].isFinite())
         }
     }
+
+    @Test fun aStagedResearchCandidateCannotEnableProductionClassification() = runBlocking {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val folder = java.io.File(context.filesDir, "ml-research-candidates")
+        assertTrue(folder.isDirectory || folder.mkdirs())
+        val file = java.io.File(folder, "malware_model.tflite")
+        // A private downloaded file must not circumvent the trusted metadata gate.
+        val model = context.assets.open("malware_model.tflite").use { it.readBytes() }
+        file.writeBytes(model)
+        try {
+            context.getSharedPreferences("safe_mobile_ml_candidate", Context.MODE_PRIVATE)
+                .edit().putString("candidate_version", "v1.0.0-model")
+                .putString("candidate_sha256", "a".repeat(64))
+                .putBoolean("production_active", false).commit()
+            assertFalse(MachineLearningScanner(context).isAvailable())
+        } finally {
+            file.delete()
+            context.getSharedPreferences("safe_mobile_ml_candidate", Context.MODE_PRIVATE)
+                .edit().clear().commit()
+        }
+    }
+
 }
