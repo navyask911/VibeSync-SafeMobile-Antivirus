@@ -1,10 +1,10 @@
 {
   "bomFormat" : "CycloneDX",
   "specVersion" : "1.6",
-  "serialNumber" : "urn:uuid:f32db461-859b-4401-a1b2-f4a262d69f7c",
+  "serialNumber" : "urn:uuid:d7604c65-30ac-4665-83f3-304905e7025f",
   "version" : 1,
   "metadata" : {
-    "timestamp" : "2026-10-29T12:11:35Z",
+    "timestamp" : "2026-10-29T13:21:01Z",
     "tools" : {
       "components" : [
         {
@@ -26,7 +26,7 @@
       "externalReferences" : [
         {
           "type" : "build-system",
-          "url" : "https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/actions/runs/40871154608"
+          "url" : "https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/actions/runs/40881011857"
         },
         {
           "type" : "vcs",
@@ -21863,6 +21863,69 @@
     },
     {
       "type" : "library",
+      "bom-ref" : "pkg:maven/org.smali/dexlib2@2.5.2?type=jar",
+      "group" : "org.smali",
+      "name" : "dexlib2",
+      "version" : "2.5.2",
+      "description" : "dexlib2 is a library for reading/modifying/writing Android dex files",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "4d48139f927c122905613c044dc6e907"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "8b664182af455b0757a7f59a42020fa5608c7d0e"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "5a5c8982d8bd7d6e3bb1a0713049e3c78b719ec32b20f6b619885cec30a0dd61"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "68d0cad34113cad8dca8bc45624bd7dd749b938446f2af47baf9e4ec45b797cac39dbc1b552f2c36ed12e0e151370436d583f5605311d62842465c7d11e0d827"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "43681cebeba8e12da646ffaf23946002b6d76bff74f9f0db2e46b5aa68b7abca"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "ee36018d578503467d3c7d912385351fb07c2d5d1699f456f0d049a467fbeacf5fc3907cc792b07a6d5a8f4594b7a4b675a2f55a64da34a2226546529ad9d85e"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "60f8a8a9024228abc1785a8fa19f92b82dec5b9d04970d5923e015e28ff9fec832a90169b8de5924d7980e0f9e29910d"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "621f315df7a9e3ab319e3c0f2e578ec14b59d0c897e10f952d1c64f14ef8249878948d4d88987c38c6404f02a740fa21"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "BSD-3-Clause"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/org.smali/dexlib2@2.5.2?type=jar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://github.com/JesusFreke/smali/tree/master/dexlib2"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
       "bom-ref" : "pkg:maven/org.tensorflow/tensorflow-lite@2.17.0?type=pom",
       "group" : "org.tensorflow",
       "name" : "tensorflow-lite",
@@ -22012,6 +22075,7 @@
         "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-android@1.10.2?type=jar",
         "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-test@1.10.2?type=jar",
         "pkg:maven/org.json/json@20240303?type=jar",
+        "pkg:maven/org.smali/dexlib2@2.5.2?type=jar",
         "pkg:maven/org.tensorflow/tensorflow-lite@2.17.0?type=pom"
       ]
     },
@@ -25001,6 +25065,13 @@
     {
       "ref" : "pkg:maven/org.jspecify/jspecify@1.0.0?type=jar",
       "dependsOn" : [ ]
+    },
+    {
+      "ref" : "pkg:maven/org.smali/dexlib2@2.5.2?type=jar",
+      "dependsOn" : [
+        "pkg:maven/com.google.code.findbugs/jsr305@3.0.2?type=jar",
+        "pkg:maven/com.google.guava/guava@33.4.8-android?type=jar"
+      ]
     },
     {
       "ref" : "pkg:maven/org.tensorflow/tensorflow-lite@2.17.0?type=pom",

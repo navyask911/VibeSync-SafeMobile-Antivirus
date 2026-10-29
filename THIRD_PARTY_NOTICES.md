@@ -1,6 +1,6 @@
 # Third-party dependency notices
 
-Generated from the CycloneDX SBOM by `scripts/render_third_party_notices.py`. Components: 362.
+Generated from the CycloneDX SBOM by `scripts/render_third_party_notices.py`. Components: 363.
 
 Regenerate this file with the CI SBOM refresh workflow; do not hand-edit dependency rows.
 
@@ -106,6 +106,7 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | datastore-preferences-external-protobuf | 1.3.0 | [BSD-3-Clause](https://opensource.org/licenses/BSD-3-Clause) | https://cs.android.com/androidx/platform/frameworks/support |
 | datastore-preferences-proto | 1.3.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | ddmlib | 31.13.2 | Apache-2.0 | Package URL: pkg:maven/com.android.tools.ddms/ddmlib@31.13.2?type=jar |
+| dexlib2 | 2.5.2 | BSD-3-Clause | https://github.com/JesusFreke/smali/tree/master/dexlib2 |
 | documentfile | 1.0.1 | Apache-2.0 | http://source.android.com |
 | emoji2 | 1.4.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | error_prone_annotations | 2.23.0 | Apache-2.0 | Package URL: pkg:maven/com.google.errorprone/error_prone_annotations@2.23.0?type=jar |
@@ -369,7 +370,7 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | work-runtime | 2.10.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | work-runtime-ktx | 2.10.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 
-Metadata completeness: 360/362 components have both a declared licence and a source/package reference.
+Metadata completeness: 361/363 components have both a declared licence and a source/package reference.
 
 ## Metadata requiring manual review
 
