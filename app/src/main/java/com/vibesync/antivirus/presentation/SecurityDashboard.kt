@@ -106,6 +106,9 @@ internal fun ScanFeedbackCard(state: SafeMobileUiState, onResults: () -> Unit, o
                 if (summary.review > 0 || summary.unreadable > 0) Text(
                     listOf(pluralStringResource(R.plurals.l10n_review, summary.review, summary.review), pluralStringResource(R.plurals.l10n_unreadable, summary.unreadable, summary.unreadable)).joinToString(" · "), color = MaterialTheme.colorScheme.tertiary)
                 else if (summary.appCount + summary.fileCount == 0) Text(stringResource(R.string.ui_no_readable_items))
+                else if (summary.threats == 0 && summary.review == 0 &&
+                    summary.unreadable == 0 && summary.signedDefinitionsUsed)
+                    Text(stringResource(R.string.v116_scan_local_no_match))
                 else if (summary.threats == 0) Text(stringResource(R.string.system_app_scan_complete))
                 if (!summary.signedDefinitionsUsed) Text(stringResource(R.string.ui_unsigned_definitions_warning), color = MaterialTheme.colorScheme.tertiary)
                 state.results.filter { it.verdict == ScanVerdict.THREAT }.take(3).forEach { Text(stringResource(R.string.format_bullet, it.displayName), color = MaterialTheme.colorScheme.error) }

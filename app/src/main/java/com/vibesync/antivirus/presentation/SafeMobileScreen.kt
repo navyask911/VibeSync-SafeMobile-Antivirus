@@ -117,6 +117,7 @@ import kotlinx.coroutines.launch
 ) { com.vibesync.antivirus.ui.theme.SafeMobileMaterialTheme(theme = theme, content = content) }
 @Composable fun SafeMobileScreen(
  repository:ThreatRepository,
+  batteryStatusEpoch: Int = 0,
   appTheme: com.vibesync.antivirus.ui.theme.AppTheme = com.vibesync.antivirus.ui.theme.AppTheme.MIDNIGHT,
   onAppThemeChanged: (com.vibesync.antivirus.ui.theme.AppTheme) -> Unit = {},
  sharedText:String? = null,
@@ -528,7 +529,7 @@ import kotlinx.coroutines.launch
         .onFailure { Toast.makeText(context, R.string.full_screen_settings_unavailable, Toast.LENGTH_LONG).show() }
       })
       SystemAppProtectionBadge()
-      BatteryOptimizationCard()
+      BatteryOptimizationCard(batteryStatusEpoch)
      }
      ScanFeedbackCard(state,
       onResults = { selectedDestination = if (state.results.isEmpty()) "history" else "scan" },

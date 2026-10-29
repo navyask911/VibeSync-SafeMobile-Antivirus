@@ -105,8 +105,6 @@ internal fun AnalyticsChartContent(data: ScanAnalytics, week: AnalyticsWeek) {
                 ChartLegend(threatLabel, number.format(data.totals.threats), error)
                 ChartLegend(cleanLabel, number.format(data.totals.noMatch), primary)
                 ChartLegend(otherLabel, number.format(data.totals.other), muted)
-                Text(stringResource(R.string.metrics_not_blocked_disclaimer), style = MaterialTheme.typography.bodySmall, color = muted)
-                Text(stringResource(R.string.scan_clean_warning), style = MaterialTheme.typography.bodySmall, color = muted)
             }
         }
         GlassCard(Modifier.fillMaxWidth()) {

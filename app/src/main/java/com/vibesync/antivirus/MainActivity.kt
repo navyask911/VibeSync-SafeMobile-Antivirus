@@ -30,6 +30,7 @@ class MainActivity : ComponentActivity() {
     private var sharedText by mutableStateOf<String?>(null)
     private var openQuarantine by mutableStateOf(false)
     private var openDevicePosture by mutableStateOf(false)
+    private var batteryStatusEpoch by mutableStateOf(0)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         applySystemBars(AppTheme.MIDNIGHT)
@@ -41,6 +42,7 @@ class MainActivity : ComponentActivity() {
             SafeMobileTheme(theme = selectedTheme) {
                 SafeMobileScreen(
                     repository = (application as SafeMobileApp).repository,
+                    batteryStatusEpoch = batteryStatusEpoch,
                     appTheme = selectedTheme,
                     onAppThemeChanged = { choice ->
                         selectedTheme = choice
@@ -69,6 +71,7 @@ class MainActivity : ComponentActivity() {
     }
     override fun onResume() {
         super.onResume()
+        batteryStatusEpoch++
         com.vibesync.antivirus.core.observer.InstallSentinelService.startFromVisibleUi(this)
         SecurityAlertNotifier.stopIncidentAudio()
     }

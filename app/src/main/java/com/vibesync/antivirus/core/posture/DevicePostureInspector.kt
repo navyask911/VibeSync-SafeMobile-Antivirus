@@ -58,24 +58,27 @@ class DevicePostureInspector(context: Context) {
             val ops = app.getSystemService(AppOpsManager::class.java) ?: error("Overlay metadata unavailable")
             @Suppress("DEPRECATION")
             val packages = pm.getInstalledPackages(PackageManager.GET_PERMISSIONS)
-            packages.filter { it.requestedPermissions?.contains(Manifest.permission.SYSTEM_ALERT_WINDOW) == true }.map { pkg ->
+            packages.filter { it.requestedPermissions?.contains(Manifest.permission.SYSTEM_ALERT_WINDOW) == true }.mapNotNull { pkg ->
                 val info = pkg.applicationInfo
                 val state = try {
                     if (info == null) PostureGrantState.UNKNOWN else {
                         @Suppress("DEPRECATION")
                         val mode = ops.checkOpNoThrow(AppOpsManager.OPSTR_SYSTEM_ALERT_WINDOW, info.uid, pkg.packageName)
                         when (mode) {
-                            AppOpsManager.MODE_ALLOWED -> PostureGrantState.ENABLED
-                            4 /* MODE_FOREGROUND, introduced in API 29 */ -> PostureGrantState.ENABLED
-                            AppOpsManager.MODE_IGNORED -> PostureGrantState.NOT_GRANTED
-                            AppOpsManager.MODE_DEFAULT -> if (pm.checkPermission(Manifest.permission.SYSTEM_ALERT_WINDOW,
-                                    pkg.packageName) == PackageManager.PERMISSION_GRANTED) PostureGrantState.ENABLED else PostureGrantState.NOT_GRANTED
+                            AppOpsManager.MODE_ALLOWED ->
+                                if (pkg.packageName != app.packageName || Settings.canDrawOverlays(app))
+                                    PostureGrantState.ENABLED else PostureGrantState.NOT_GRANTED
+                            AppOpsManager.MODE_IGNORED, AppOpsManager.MODE_ERRORED,
+                            AppOpsManager.MODE_DEFAULT, AppOpsManager.MODE_FOREGROUND -> PostureGrantState.NOT_GRANTED
                             else -> PostureGrantState.UNKNOWN
                         }
                     }
                 } catch (_: Exception) { PostureGrantState.UNKNOWN }
                 if (state == PostureGrantState.UNKNOWN) unavailable += PostureAccess.OVERLAY
-                finding(PostureAccess.OVERLAY, pkg.packageName, known = info).copy(state = state)
+                // A manifest declaration or ambiguous mode must never create a Fix action.
+                if (state == PostureGrantState.ENABLED)
+                    finding(PostureAccess.OVERLAY, pkg.packageName, known = info).copy(state = state)
+                else null
             }
         }
         return DevicePostureReport(findings.distinctBy { Triple(it.access, it.packageName, it.componentName) }
