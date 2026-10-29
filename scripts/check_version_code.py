@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Ensure app/build.gradle.kts has a versionCode greater than every versioned Git tag."""
+"""Require monotonically increasing Play app codes; ignore hash DB signature release tags."""
 import re
 import subprocess
 import sys
@@ -8,6 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 APP_GRADLE = ROOT / "app" / "build.gradle.kts"
 PATTERN = re.compile(r"\bversionCode\s*=\s*(\d+)")
+APP_RELEASE_TAG = re.compile(r"^safemobile-v\d+\.\d+\.\d+-code(?P<code>\d+)-run\d+$")
 
 def code_from_text(text: str):
     match = PATTERN.search(text)
@@ -33,13 +34,18 @@ except (OSError, subprocess.CalledProcessError):
 
 tagged = []
 for tag in tags:
+    release = APP_RELEASE_TAG.fullmatch(tag)
+    if release is None:
+        continue  # Hash DB signatures, temporary tags and CI tags are not Play app releases.
     try:
         text = run("git", "show", f"{tag}:app/build.gradle.kts")
     except subprocess.CalledProcessError:
         continue
     value = code_from_text(text)
-    if value is not None:
-        tagged.append((value, tag))
+    if value is None or value != int(release.group("code")):
+        print(f"Version-code guard: inconsistent app-release tag {tag}.", file=sys.stderr)
+        sys.exit(2)
+    tagged.append((value, tag))
 
 maximum = max((value for value, _ in tagged), default=0)
 if current <= maximum:
