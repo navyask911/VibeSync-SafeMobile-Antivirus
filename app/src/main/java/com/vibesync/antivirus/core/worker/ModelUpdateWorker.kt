@@ -88,6 +88,9 @@ class ModelUpdateWorker(context: Context, params: WorkerParameters) : CoroutineW
         }
 
         val schemaBytes = verifiedTextAsset(ModelReleasePolicy.SCHEMA, 65536)
+        // A new model cannot silently switch feature meanings on an existing APK.
+        val appSchema = app.assets.open("feature_schema.json").use { it.readBytes() }
+        if (sha256(schemaBytes) != sha256(appSchema)) throw InvalidCandidate()
         val reportBytes = verifiedTextAsset(ModelReleasePolicy.REPORT, 131072)
         // Keep CC BY 4.0 attribution in the update bundle for future owner review.
         val noticeBytes = verifiedTextAsset(ModelReleasePolicy.NOTICE, 32768)
@@ -114,7 +117,7 @@ class ModelUpdateWorker(context: Context, params: WorkerParameters) : CoroutineW
             // Atomic rename occurs within the same app-private filesystem.
             val model = File(directory, "malware_model.tflite")
             Os.rename(tmp.absolutePath, model.absolutePath)
-            // Scanner still reads ONLY its separately gated bundled 32-feature asset.
+            // Scanner still reads ONLY its separately validated APK-signed model asset.
             if (!preferences.edit()
                     .putString("candidate_version", tag)
                     .putString("candidate_sha256", modelSha)

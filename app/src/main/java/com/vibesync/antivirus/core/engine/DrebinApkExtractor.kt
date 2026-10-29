@@ -139,7 +139,8 @@ internal object DrebinApkExtractor {
 internal object BinaryAndroidManifest {
     data class Manifest(val permissions: Set<String>, val actions: Set<String>)
 
-    fun parse(bytes: ByteArray): Manifest? = try {
+    fun parse(bytes: ByteArray): Manifest? {
+        return try {
         if (bytes.size < 16) return null
         val b = ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN)
         if (u16(b, 0) != 0x0003 || u16(b, 2) != 8 ||
@@ -188,7 +189,8 @@ internal object BinaryAndroidManifest {
         }
         if (strings == null || elements == 0 || offset != bytes.size) null
         else Manifest(permissions, actions)
-    } catch (_: Exception) { null }
+        } catch (_: Exception) { null }
+    }
 
     private fun parseStrings(b: ByteBuffer, offset: Int, header: Int, chunkSize: Int): List<String>? {
         if (header < 28) return null
