@@ -7,7 +7,7 @@ from unittest.mock import Mock, patch
 
 from extract_features_ci import (
     SCHEMA_PATH, SampleRejected, feature_vector, recent_apk_digests, schema_features,
-    extract_recent, MAX_APK_BYTES,
+    extract_recent, analyze_android_apk, older_apk_digests, MAX_APK_BYTES,
 )
 from prepare_feature_batches_ci import create_batches
 
@@ -98,6 +98,63 @@ class BatchAndNetworkSafetyTests(unittest.TestCase):
         self.assertNotIn("mock_apk", out.read_text())
         self.assertFalse(any(self.root.glob("*.apk")))
         self.assertLess(MAX_APK_BYTES, 30 * 1024 * 1024)
+
+
+    def test_parses_encoded_class_methods_not_method_id_references(self):
+        """Regression: Androguard DEX.get_methods returns MethodIdItems without code."""
+        class Instruction:
+            def get_name(self): return "invoke-virtual"
+            def get_output(self): return "v0, Ljava/lang/Class;->getCanonicalName()Ljava/lang/String;"
+        class EncodedMethod:
+            def get_name(self): return "onServiceConnected"
+            def get_instructions(self): return iter([Instruction()])
+        class ClassDef:
+            def get_name(self): return "Ldalvik/system/DexClassLoader;"
+            def get_methods(self): return [EncodedMethod()]
+        class Dex:
+            def get_classes(self): return [ClassDef()]
+            def get_strings(self): return ["chmod /system/bin/sh"]
+            def get_methods(self):
+                raise AssertionError("Do not iterate DEX MethodIdItem references")
+        class Apk:
+            def is_valid_APK(self): return True
+            def get_permissions(self): return ["android.permission.SEND_SMS"]
+            def get_activities(self): return []
+            def get_services(self): return []
+            def get_receivers(self): return []
+        row = analyze_android_apk(Path("unused.apk"), schema_features(),
+                                  analyzer=lambda _: (Apk(), [Dex()], object()))
+        self.assertEqual(len(row), 215)
+        for index in (1, 6, 7):
+            self.assertEqual(row[index], 1)
+
+    def test_fallback_older_candidates_are_tried_when_recent_sparse(self):
+        recent = self.root / "recent.json"
+        recent.write_text(json.dumps({"query_status": "ok", "data": []}))
+        output = self.root / "rows.json"
+        with patch.dict("os.environ", {"MALWAREBAZAAR_AUTH_KEY": "test-key"}), (
+            patch("extract_features_ci.older_apk_digests", return_value=["c" * 64] * 10)), (
+            patch("extract_features_ci.download_sample", return_value=b"example_zip")), (
+            patch("extract_features_ci.encrypted_zip_to_apk", return_value=b"example_apk")), (
+            patch("extract_features_ci.analyze_android_apk", return_value=[1] * 215)):
+            rows = extract_recent(recent, output, 10, session=Mock())
+        self.assertGreaterEqual(len(rows), 1)
+        self.assertEqual(len(rows[0]), 215)
+
+    def test_fallback_uses_metadata_only_and_sanitizes_invalid_response(self):
+        from unittest.mock import MagicMock
+        reply = MagicMock()
+        reply.content = b'{"query_status":"ok","data":[]}'
+        reply.json.return_value = {"query_status": "ok", "data": [
+            {"sha256_hash": "c"*64}, {"sha256_hash": "d"*64},
+            {"sha256_hash": "c"*64}, {"sha256_hash": "invalid"},
+        ]}
+        session = MagicMock()
+        session.post.return_value.__enter__.return_value = reply
+        rows = older_apk_digests(session, "test-key")
+        self.assertEqual(rows, ["c"*64, "d"*64])
+        self.assertEqual(session.post.call_args.kwargs["data"]["query"], "get_file_type")
+        self.assertEqual(session.post.call_args.kwargs["data"]["file_type"], "apk")
 
     def test_dispatch_exact_shape_ten_rows_and_empty_no_http(self):
         raw = self.root / "data.json"

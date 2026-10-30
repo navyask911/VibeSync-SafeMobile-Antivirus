@@ -108,7 +108,13 @@ def feature_vector(schema: list[str], *, permissions=(), actions=(), classes=(),
 def analyze_android_apk(path: Path, schema: list[str], analyzer=None) -> list[int]:
     """Parse binary manifest and every DEX with Androguard; never load code."""
     if analyzer is None:
-        from androguard.misc import AnalyzeAPK  # imports only in optional CI job
+        # Androguard uses noisy DEBUG logs by default, including raw manifest
+        # strings. Keep malware sample internals and credentials out of CI logs.
+        from loguru import logger
+        import sys
+        logger.remove()
+        logger.add(sys.stderr, level="ERROR")
+        from androguard.misc import AnalyzeAPK
         analyzer = AnalyzeAPK
     apk, dexes, _ = analyzer(str(path))
     if not apk.is_valid_APK() or not dexes:
@@ -127,29 +133,34 @@ def analyze_android_apk(path: Path, schema: list[str], analyzer=None) -> list[in
     classes, calls, callbacks, literals = set(), set(), set(), set()
     method_count = instruction_count = 0
     for dex in dexes:
-        for cls in dex.get_classes():
+        # DEX.get_methods() is the METHOD-ID reference table, whose entries
+        # are MethodIdItem, NOT EncodedMethod. They have no get_instructions().
+        # ClassDefItem.get_methods() yields actual EncodedMethod code bodies.
+        class_definitions = dex.get_classes()
+        for cls in class_definitions:
             classes.add(cls.get_name())
         for literal in dex.get_strings():
             if len(literals) >= MAX_STRINGS:
                 raise SampleRejected("DEX string limit exceeded")
             literals.add(literal)
-        for method in dex.get_methods():
-            method_count += 1
-            if method_count > MAX_CODE_METHODS:
-                raise SampleRejected("DEX method limit exceeded")
-            name = method.get_name()
-            if name in CALLBACKS:
-                callbacks.add(name)
-            for instruction in method.get_instructions():
-                instruction_count += 1
-                if instruction_count > MAX_CODE_INSTRUCTIONS:
-                    raise SampleRejected("DEX instruction limit exceeded")
-                if instruction.get_name().startswith("invoke-"):
-                    ref = INVOKE.search(instruction.get_output() or "")
-                    if ref:
-                        owner, invoked = ref.groups()
-                        calls.add((owner, invoked))
-                        classes.add(owner)
+        for cls in class_definitions:
+            for method in cls.get_methods():
+                method_count += 1
+                if method_count > MAX_CODE_METHODS:
+                    raise SampleRejected("DEX method limit exceeded")
+                name = method.get_name()
+                if name in CALLBACKS:
+                    callbacks.add(name)
+                for instruction in method.get_instructions():
+                    instruction_count += 1
+                    if instruction_count > MAX_CODE_INSTRUCTIONS:
+                        raise SampleRejected("DEX instruction limit exceeded")
+                    if instruction.get_name().startswith("invoke-"):
+                        ref = INVOKE.search(instruction.get_output() or "")
+                        if ref:
+                            owner, invoked = ref.groups()
+                            calls.add((owner, invoked))
+                            classes.add(owner)
     return feature_vector(schema, permissions=permissions, actions=actions,
                           classes=classes, calls=calls, callbacks=callbacks, literals=literals)
 
@@ -179,6 +190,45 @@ def recent_apk_digests(path: Path) -> list[str]:
         found.append(digest)
     return found
 
+
+
+def older_apk_digests(session, key: str, limit: int = 100) -> list[str]:
+    """Find older APK metadata when the 168-hour detection window is too sparse.
+
+    MalwareBazaar's official get_file_type query is read-only metadata. No
+    binary malware is downloaded until an individual hash is selected.
+    """
+    if not 10 <= limit <= 100:
+        raise ValueError("Fallback query must stay within 10..100 metadata entries")
+    with session.post(
+        MALWAREBAZAAR_URL,
+        headers={"Auth-Key": key, "User-Agent": "SafeMobile-Defensive-Research/1.0"},
+        data={"query": "get_file_type", "file_type": "apk", "limit": str(limit)},
+        timeout=(12, 30), allow_redirects=False,
+    ) as response:
+        response.raise_for_status()
+        if len(response.content) > 1024 * 1024:
+            raise SampleRejected("Fallback metadata exceeds 1 MiB")
+        metadata = response.json()
+    if not isinstance(metadata, dict) or metadata.get("query_status") not in ("ok", "no_results"):
+        raise SampleRejected("Fallback APK metadata API rejected the request")
+    if metadata["query_status"] == "no_results":
+        return []
+    records = metadata.get("data", [])
+    if not isinstance(records, list):
+        raise SampleRejected("Invalid fallback metadata records")
+    found, seen = [], set()
+    for row in records:
+        if not isinstance(row, dict):
+            continue
+        sha = row.get("sha256_hash")
+        if not isinstance(sha, str) or not SHA256.fullmatch(sha.lower()):
+            continue
+        sha = sha.lower()
+        if sha not in seen:
+            seen.add(sha)
+            found.append(sha)
+    return found
 
 def encrypted_zip_to_apk(contents: bytes, digest: str) -> bytes:
     """Read one AES ZIP entry in memory, enforce size/hash; do not extractall."""
@@ -227,36 +277,64 @@ def download_sample(session, api_key: str, digest: str) -> bytes:
 
 
 def extract_recent(path: Path, output: Path, max_samples: int = 20, *, session=None, analyzer=None):
-    """Only 10..20 attempts; sample errors never affect separate signed DB sync."""
+    """Try recent then older APK metadata; allow at most 20 sample downloads."""
     if not 10 <= max_samples <= 20:
         raise ValueError("Sampling budget must be 10..20 APK attempts")
     schema = schema_features()
-    digests = recent_apk_digests(path)[:max_samples]
+    recent = recent_apk_digests(path)
+    print(f"MLOps discovery: {len(recent)} APKs in recent detection metadata.", flush=True)
+    key = os.environ.get("MALWAREBAZAAR_AUTH_KEY", "")
+    if not key:
+        raise ValueError("MalwareBazaar authorization not available")
+    if session is None:
+        import requests
+        session = requests.Session()
+
+    # Expand the candidate pool before downloading: the original workflow
+    # received only four recent APKs, and all reached Androguard but failed.
+    pool = list(dict.fromkeys(recent))
+    if len(pool) < max_samples:
+        try:
+            older = older_apk_digests(session, key, 100)
+            pool.extend(digest for digest in older if digest not in set(pool))
+            print(f"MLOps discovery: {len(older)} older APK metadata entries; "
+                  f"{len(pool)} unique candidates.", flush=True)
+        except Exception as exc:
+            print(f"MLOps optional older-APK lookup unavailable ({type(exc).__name__}); "
+                  "continuing with recent candidates.", flush=True)
+
     rows = []
-    if digests:
-        key = os.environ.get("MALWAREBAZAAR_AUTH_KEY", "")
-        if not key:
-            raise ValueError("MalwareBazaar authorization not available")
-        if session is None:
-            import requests
-            session = requests.Session()
-        for digest in digests:
-            try:
-                zip_bytes = download_sample(session, key, digest)
-                apk = encrypted_zip_to_apk(zip_bytes, digest)
-                del zip_bytes
-                with tempfile.TemporaryDirectory(prefix="safemobile-ml-apk-") as directory:
-                    target = Path(directory) / "sample.apk"
-                    target.write_bytes(apk)
-                    del apk
-                    vector = analyze_android_apk(target, schema, analyzer=analyzer)
-                if len(vector) != 215 or any(type(bit) is not int or bit not in (0, 1) for bit in vector):
-                    raise SampleRejected("Extractor produced an invalid feature vector")
-                rows.append(vector)
-            except Exception as exc:
-                # Log only the exception class, never credentials/sample content/digests.
-                print(f"Skipped unreadable/non-APK candidate ({type(exc).__name__})")
-                continue
+    attempts = 0
+    failures: dict[str, int] = {}
+    target_rows = min(10, max_samples)
+    for digest in pool:
+        if attempts >= max_samples or len(rows) >= target_rows:
+            break
+        attempts += 1
+        stage = "download"
+        try:
+            zip_bytes = download_sample(session, key, digest)
+            stage = "decompress"
+            apk = encrypted_zip_to_apk(zip_bytes, digest)
+            del zip_bytes
+            stage = "parse"
+            with tempfile.TemporaryDirectory(prefix="safemobile-ml-apk-") as directory:
+                target = Path(directory) / "sample.apk"
+                target.write_bytes(apk)
+                del apk
+                vector = analyze_android_apk(target, schema, analyzer=analyzer)
+            stage = "validate"
+            if len(vector) != 215 or any(type(bit) is not int or bit not in (0, 1) for bit in vector):
+                raise SampleRejected("Extractor produced an invalid feature vector")
+            rows.append(vector)
+        except Exception as exc:
+            # Do not print hash/filename/APK contents or uncensored tracebacks.
+            cause = f"{stage}:{type(exc).__name__}"
+            failures[cause] = failures.get(cause, 0) + 1
+            detail = (str(exc).splitlines()[0][:120]
+                      if isinstance(exc, (AttributeError, TypeError)) else "")
+            print(f"MLOps skipped candidate at {cause} {detail}", flush=True)
+            continue
     output.parent.mkdir(parents=True, exist_ok=True)
     tmp = output.with_suffix(".part")
     try:
@@ -264,7 +342,13 @@ def extract_recent(path: Path, output: Path, max_samples: int = 20, *, session=N
         tmp.replace(output)
     finally:
         tmp.unlink(missing_ok=True)
-    print(f"Reviewed {len(digests)} APK candidates; {len(rows)} validated Drebin-215 rows.")
+    print(f"MLOps RESULT: candidates={len(pool)} downloads_attempted={attempts} "
+          f"validated_rows={len(rows)} target_rows={target_rows}; "
+          f"failure_counts={json.dumps(failures, sort_keys=True)}", flush=True)
+    if not rows:
+        # The enclosing workflow already has continue-on-error, so signing
+        # and publishing the independent hash DB are never affected.
+        raise SampleRejected("No validated Android feature rows; dispatch deliberately skipped")
     return rows
 
 
