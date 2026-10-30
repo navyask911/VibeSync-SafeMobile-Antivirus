@@ -106,7 +106,7 @@ dependencies {
  implementation("androidx.work:work-runtime-ktx:2.10.2")
  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
  implementation("com.google.crypto.tink:tink-android:1.16.0")
- // Apache-2.0: Play Billing client only for explicit checkout, never for scanning.
+ // Google Android SDK License: Play Billing is only for explicit checkout, never scanning.
  implementation("com.android.billingclient:billing-ktx:7.1.1")
  // Apache-2.0: KeyStore-backed encrypted local device-bound entitlement.
  implementation("androidx.security:security-crypto:1.1.0")
