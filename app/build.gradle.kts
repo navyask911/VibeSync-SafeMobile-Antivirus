@@ -38,8 +38,8 @@ android {
   applicationId = "com.vibesync.antivirus"
   minSdk = 26
   targetSdk = 36
-  versionCode = 20261109
-  versionName = "1.0.16"
+  versionCode = 20261110
+  versionName = "1.0.17"
   testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   buildConfigField("String", "FEED_MANIFEST_PUBLIC_KEY_B64", cfg(feedManifestPublicKey))
   buildConfigField("Boolean", "FEED_MANIFEST_KEY_CONFIGURED", (!feedManifestPublicKey.isBlank()).toString())
@@ -106,6 +106,10 @@ dependencies {
  implementation("androidx.work:work-runtime-ktx:2.10.2")
  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
  implementation("com.google.crypto.tink:tink-android:1.16.0")
+ // Apache-2.0: Play Billing client only for explicit checkout, never for scanning.
+ implementation("com.android.billingclient:billing-ktx:7.1.1")
+ // Apache-2.0: KeyStore-backed encrypted local device-bound entitlement.
+ implementation("androidx.security:security-crypto:1.1.0")
  // TensorFlow Lite 2.17.0 is local inference only; no model training or network calls.
  implementation("org.tensorflow:tensorflow-lite:2.17.0")
  // Apache-2.0 OkHttp is confined to the opt-in weekly model download worker.
