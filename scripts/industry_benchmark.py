@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Download pinned APKs in ephemeral CI, validate real scanner results, never invent metrics."""
-import argparse, datetime, hashlib, json, os, re, shutil, statistics, sys, time, urllib.parse, urllib.request, zipfile
+import argparse, datetime, hashlib, io, json, os, re, shutil, statistics, sys, time, urllib.parse, urllib.request, zipfile
+import generate_benchmark_manifest as malwarebazaar
 from pathlib import Path
 INDEX="https://f-droid.org/repo/index-v1.json"
 HEX=re.compile(r"^[a-f0-9]{64}$")
@@ -24,55 +25,80 @@ def fetch(url,limit):
     return raw
 
 def prepare(a):
-    url=os.environ.get("INDUSTRY_MALWARE_MANIFEST_URL","")
-    pin=os.environ.get("INDUSTRY_MALWARE_MANIFEST_SHA256","").lower()
-    if not url or not HEX.fullmatch(pin):
-        bad("Set repo variables INDUSTRY_MALWARE_MANIFEST_URL and INDUSTRY_MALWARE_MANIFEST_SHA256 to an owner-approved, licensed 1,000-APK manifest. No public mirror is presumed safe.")
-    raw=fetch(url,4*1024*1024)
-    if digest(raw)!=pin: bad("Malware manifest SHA-256 does not match owner's approval")
-    m=json.loads(raw)
-    if m.get("schema_version")!=1 or len(m.get("samples",[]))!=1000: bad("Malware manifest requires schema_version=1 and exactly 1000 samples")
-    for key in ("name","revision","license","source"):
-        if not isinstance(m.get(key),str) or not m[key].strip(): bad("Missing malware dataset attribution: "+key)
-    mal=[]
-    for i,s in enumerate(m["samples"]):
-        sha=str(s.get("sha256","")).lower()
-        if not HEX.fullmatch(sha): bad("Invalid malware sample digest")
-        fetch_url=s.get("url","")
-        p=urllib.parse.urlsplit(fetch_url)
-        if p.scheme!="https" or not p.hostname: bad("Invalid malware sample URL")
-        mal.append(dict(sample_id="m%04d"%i,label="malicious",sha256=sha,url=fetch_url,relative_path="m%04d.apk"%i))
+    if not a.malware_manifest.is_file():
+        bad("No MalwareBazaar candidate manifest available; refusing a partial benchmark.")
+    raw=a.malware_manifest.read_bytes()
+    manifest=json.loads(raw)
+    if manifest.get("schema_version")!=1 or len(manifest.get("samples",[]))!=100:
+        bad("Expected exactly 100 distinct MalwareBazaar candidate records.")
+    for field in ("name","revision","license","source"):
+        if not isinstance(manifest.get(field),str) or not manifest[field].strip():
+            bad("Missing candidate provenance field "+field)
+    malicious=[]
+    for i,row in enumerate(manifest["samples"]):
+        sha=str(row.get("sha256","")).lower()
+        if row.get("provider")!="malwarebazaar" or not HEX.fullmatch(sha):
+            bad("Malware candidate must have valid provider and SHA-256")
+        malicious.append({"sample_id":"m%04d"%i,"label":"malicious","provider":"malwarebazaar",
+                          "sha256":sha,"relative_path":"m%04d.apk"%i})
     index_raw=fetch(INDEX,125*1024*1024)
-    index=json.loads(index_raw)["packages"]
+    index=json.loads(index_raw).get("packages")
+    if not isinstance(index,dict): bad("F-Droid index format unexpected")
     benign=[]
-    for pkg,versions in sorted(index.items()):
-        versions=[v for v in versions if isinstance(v,dict) and HEX.fullmatch(str(v.get("hash","")).lower())
-           and isinstance(v.get("size"),int) and 0<v["size"]<=MAX_APK
-           and re.fullmatch(r"[A-Za-z0-9_.+-]+\.apk",str(v.get("apkName","")))]
-        if versions:
-            v=max(versions,key=lambda x:int(x.get("versionCode",0)))
-            i=len(benign)
-            benign.append(dict(sample_id="b%04d"%i,label="benign",sha256=v["hash"].lower(),url="https://f-droid.org/repo/"+v["apkName"],relative_path="b%04d.apk"%i))
-    # Deterministic pseudorandom selection avoids selecting only alphabetically first packages.
-    benign.sort(key=lambda s: hashlib.sha256(s["url"].encode("utf8")).hexdigest())
-    benign=benign[:1000]
-    for i,s in enumerate(benign):
-        s["sample_id"]="b%04d"%i
-        s["relative_path"]="b%04d.apk"%i
-    if len(benign)!=1000 or len(set(s["sha256"] for s in benign+mal))!=2000:
-        bad("Not exactly 1000 benign and 1000 distinct malicious SHA-256s")
-    save(a.plan,dict(schema_version=1,samples=benign+mal,provenance=dict(
-        fdroid_index_sha256=digest(index_raw),malware_manifest_sha256=pin,
-        malware_name=m["name"],malware_revision=m["revision"],malware_license=m["license"],
-        malware_source=m["source"],commit=os.environ.get("GITHUB_SHA","unknown"))))
-    print("Approved manifest checked; exactly 2000 pinned APK references prepared")
+    for package,versions in sorted(index.items()):
+        if not isinstance(versions,list): continue
+        valid=[v for v in versions if isinstance(v,dict) and
+               HEX.fullmatch(str(v.get("hash","")).lower()) and
+               isinstance(v.get("size"),int) and 0<v["size"]<=MAX_APK and
+               re.fullmatch(r"[A-Za-z0-9_.+-]+\.apk",str(v.get("apkName","")))]
+        if valid:
+            v=max(valid,key=lambda x:int(x.get("versionCode",0)))
+            benign.append({"label":"benign","sha256":v["hash"].lower(),
+                           "url":"https://f-droid.org/repo/"+v["apkName"]})
+    benign.sort(key=lambda x:hashlib.sha256(x["url"].encode()).hexdigest())
+    benign=benign[:100]
+    for i,row in enumerate(benign):
+        row["sample_id"]="b%04d"%i
+        row["relative_path"]="b%04d.apk"%i
+    if len(benign)!=100 or len(set(x["sha256"] for x in benign+malicious))!=200:
+        bad("Exactly 100 distinct F-Droid APKs and 100 distinct malware candidate hashes required")
+    save(a.plan,{"schema_version":1,"samples":benign+malicious,"provenance":{
+        "fdroid_index_sha256":digest(index_raw),"malware_manifest_sha256":digest(raw),
+        "malware_name":manifest["name"],"malware_revision":manifest["revision"],
+        "malware_license":manifest["license"],"malware_source":manifest["source"],
+        "label_limitations":"MalwareBazaar/F-Droid source labels are not independently validated ground truth",
+        "commit":os.environ.get("GITHUB_SHA","unknown")}})
+    print("Prepared exactly 100 F-Droid + 100 MalwareBazaar-pinned candidate APK hashes")
+
+def download_malware(sha):
+    if not HEX.fullmatch(sha): bad("Invalid malware candidate SHA-256")
+    try:
+        raw=malwarebazaar.post_api({"query":"get_file","sha256_hash":sha},
+            os.environ.get("MALWAREBAZAAR_AUTH_KEY",""),max_bytes=90*1024*1024)
+    except malwarebazaar.DatasetUnavailable as e:
+        bad("Cannot acquire pinned APK: "+str(e))
+    if not raw.startswith(b"PK"):
+        bad("MalwareBazaar returned no encrypted ZIP (sample unavailable or download quota exceeded)")
+    import pyzipper
+    try:
+        with pyzipper.AESZipFile(io.BytesIO(raw)) as z:
+            files=[entry for entry in z.infolist() if not entry.is_dir()]
+            if len(files)!=1 or not 1<=files[0].file_size<=MAX_APK:
+                bad("Unsafe or unexpected MalwareBazaar ZIP content/size")
+            with z.open(files[0],pwd=b"infected") as src:
+                payload=src.read(MAX_APK+1)
+    except (RuntimeError,ValueError,zipfile.BadZipFile,EOFError) as e:
+        bad("Cannot safely unpack encrypted APK ZIP: "+type(e).__name__)
+    if len(payload)>MAX_APK or digest(payload)!=sha:
+        bad("MalwareBazaar sample digest mismatch after encrypted ZIP extraction")
+    return payload
 
 def stage(a):
-    selected=json.loads(a.plan.read_text())["samples"][a.offset:a.offset+25]
-    if len(selected)!=25: bad("Incomplete 25-file batch")
+    selected=json.loads(a.plan.read_text())["samples"][a.offset:a.offset+10]
+    if len(selected)!=10: bad("Incomplete 10-file batch")
     shutil.rmtree(a.root,ignore_errors=True);a.root.mkdir(parents=True)
     for s in selected:
-        raw=fetch(s["url"],MAX_APK)
+        raw=download_malware(s["sha256"]) if s.get("provider")=="malwarebazaar" else fetch(s["url"],MAX_APK)
         if digest(raw)!=s["sha256"]: bad("Downloaded APK digest mismatch: "+s["sample_id"])
         target=a.root/s["relative_path"];target.write_bytes(raw)
         try:
@@ -80,7 +106,7 @@ def stage(a):
                 if "AndroidManifest.xml" not in z.namelist(): bad("Not an APK: "+s["sample_id"])
         except zipfile.BadZipFile: bad("Invalid APK zip: "+s["sample_id"])
     save(a.root/"batch.json",dict(samples=[{k:s[k] for k in ("sample_id","label","sha256")} for s in selected]))
-    print("Staged pinned batch %d..%d" % (a.offset,a.offset+24),flush=True)
+    print("Staged pinned batch %d..%d" % (a.offset,a.offset+9),flush=True)
 
 def summarize(a):
     plan_bytes=a.plan.read_bytes();plan=json.loads(plan_bytes)
@@ -96,7 +122,7 @@ def summarize(a):
                 bad("Unknown verdict")
             if not isinstance(s.get("duration_ms"),(int,float)) or s["duration_ms"]<0:bad("Invalid elapsed time")
             results[sid]=s
-    if len(results)!=2000 or set(results)!=set(refs):bad("Benchmark incomplete: %d/2000 actual scans"%len(results))
+    if len(results)!=200 or set(results)!=set(refs):bad("Benchmark incomplete: %d/200 actual scans"%len(results))
     b=[x for x in results.values() if x["label"]=="benign"]
     m=[x for x in results.values() if x["label"]=="malicious"]
     unread=sum(x["verdict"]=="NOT_SCANNED" for x in results.values())
@@ -104,7 +130,7 @@ def summarize(a):
     pct=lambda xs,flags:round(100*sum(x["verdict"] in flags for x in xs)/len(xs),3)
     output=dict(status="MEASURED" if good else "INCOMPLETE",
         timestamp_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),
-        total_apps=2000,benign_apps=1000,malicious_apps=1000,not_scanned=unread,
+        total_apps=200,benign_apps=100,malicious_apps=100,not_scanned=unread,
         tpr_percent=pct(m,("THREAT",)) if good else None,
         fpr_percent=pct(b,("THREAT",)) if good else None,
         triage_tpr_percent=pct(m,("THREAT","SUSPICIOUS")) if good else None,
@@ -123,11 +149,11 @@ def summarize(a):
     a.output_markdown.parent.mkdir(parents=True,exist_ok=True)
     a.output_markdown.write_text(report)
     if not good: bad("%d actual scans returned NOT_SCANNED; report marked INCOMPLETE"%unread)
-    print("Completed 2000 verified read-only APK scans; aggregate metrics generated")
+    print("Completed 200 verified read-only APK scans; aggregate metrics generated")
 
 def main():
     p=argparse.ArgumentParser();sub=p.add_subparsers(dest="mode",required=True)
-    q=sub.add_parser("prepare");q.add_argument("--plan",type=Path,required=True)
+    q=sub.add_parser("prepare");q.add_argument("--plan",type=Path,required=True);q.add_argument("--malware-manifest",type=Path,required=True)
     q=sub.add_parser("stage");q.add_argument("--plan",type=Path,required=True);q.add_argument("--root",type=Path,required=True);q.add_argument("--offset",type=int,required=True)
     q=sub.add_parser("summarize");q.add_argument("--plan",type=Path,required=True);q.add_argument("--results",type=Path,required=True)
     q.add_argument("--output-json",type=Path,required=True);q.add_argument("--output-markdown",type=Path,required=True)

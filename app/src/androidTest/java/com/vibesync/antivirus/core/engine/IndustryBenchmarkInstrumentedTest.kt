@@ -24,7 +24,7 @@ class IndustryBenchmarkInstrumentedTest {
         val app = ctx.applicationContext as SafeMobileApp
         val dir = File(requireNotNull(ctx.getExternalFilesDir(null)), "industry-benchmark")
         val inputs = JSONObject(File(dir, "batch.json").readText()).getJSONArray("samples")
-        assertEquals(25, inputs.length())
+        assertEquals(10, inputs.length())
         val scanner = PackageScanner(app, app.database.threatDao(), EncryptedHashStore(app),
             threatIntelligenceRepository = ThreatIntelligenceRepository(
                 app.database.malwareHashDao(), app.database.threatFeedSyncStateDao()),

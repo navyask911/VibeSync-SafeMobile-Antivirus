@@ -34,9 +34,9 @@ internal fun BenchmarkResultsPanel() {
         }.getOrNull()
     }
     val measured = document?.optString("status") == "MEASURED" &&
-        document.optInt("total_apps", -1) == 2000 &&
-        document.optInt("benign_apps", -1) == 1000 &&
-        document.optInt("malicious_apps", -1) == 1000 &&
+        document.optInt("total_apps", -1) == 200 &&
+        document.optInt("benign_apps", -1) == 100 &&
+        document.optInt("malicious_apps", -1) == 100 &&
         document.optInt("not_scanned", -1) == 0 &&
         listOf("tpr_percent", "fpr_percent", "mean_latency_ms")
             .all { key -> !document.isNull(key) && document.has(key) && document.optDouble(key, Double.NaN).isFinite() }

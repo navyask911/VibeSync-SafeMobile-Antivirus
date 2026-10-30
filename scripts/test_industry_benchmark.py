@@ -11,8 +11,8 @@ import industry_benchmark as bench
 class IndustryBenchmarkTests(unittest.TestCase):
     def test_unapproved_malware_manifest_fails_without_network(self):
         with tempfile.TemporaryDirectory() as tmp, patch.dict(os.environ, {}, clear=True):
-            with self.assertRaisesRegex(ValueError, "owner-approved"):
-                bench.prepare(types.SimpleNamespace(plan=Path(tmp)/"plan.json"))
+            with self.assertRaisesRegex(ValueError, "No MalwareBazaar"):
+                bench.prepare(types.SimpleNamespace(plan=Path(tmp)/"plan.json", malware_manifest=Path(tmp)/"missing.json"))
 
     def test_missing_device_scans_cannot_generate_metrics(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -30,8 +30,8 @@ class IndustryBenchmarkTests(unittest.TestCase):
             root=Path(tmp);results=root/"results";results.mkdir()
             source=[];out=[]
             for label,prefix in (("benign","b"),("malicious","m")):
-                for i in range(1000):
-                    sid=prefix+("%04d"%i);sha=("%064x"%(i+1+(1000 if prefix=="m" else 0)))
+                for i in range(100):
+                    sid=prefix+("%04d"%i);sha=("%064x"%(i+1+(100 if prefix=="m" else 0)))
                     source.append({"sample_id":sid,"label":label,"sha256":sha})
                     verdict=("THREAT" if (label=="malicious" and i<10) or (label=="benign" and i<5) else "NO_MATCH")
                     out.append(dict(sample_id=sid,label=label,sha256=sha,verdict=verdict,duration_ms=7,ml_scored=False))
@@ -41,8 +41,8 @@ class IndustryBenchmarkTests(unittest.TestCase):
                 output_json=root/"metrics.json",output_markdown=root/"report.md")
             bench.summarize(a)
             result=json.loads(a.output_json.read_text())
-            self.assertEqual(result["tpr_percent"],1.0)
-            self.assertEqual(result["fpr_percent"],0.5)
+            self.assertEqual(result["tpr_percent"],10.0)
+            self.assertEqual(result["fpr_percent"],5.0)
             self.assertEqual(result["mean_latency_ms"],7.0)
             self.assertEqual(result["ml_samples_scored"],0)
             # Temp fixtures are intentionally never committed or published.
