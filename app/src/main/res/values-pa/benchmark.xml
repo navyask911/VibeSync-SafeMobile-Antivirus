@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">ਮਿਆਰੀ ਜਾਂਚ ਦੇ ਨਤੀਜੇ</string>
+    <string name="benchmark_not_measured">ਹਾਲੇ ਕੋਈ ਪ੍ਰਮਾਣਿਤ ਮਾਪ ਉਪਲਬਧ ਨਹੀਂ</string>
+    <string name="benchmark_total_apps">ਜਾਂਚੀਆਂ APK ਫਾਈਲਾਂ</string>
+    <string name="benchmark_tpr">ਪਛਾਣ ਦਰ (TPR)</string>
+    <string name="benchmark_fpr">ਗਲਤ ਸਕਾਰਾਤਮਕ ਦਰ (FPR)</string>
+    <string name="benchmark_latency">ਔਸਤ ਸਕੈਨ ਸਮਾਂ</string>
+    <string name="benchmark_privacy_note">ਕੇਵਲ ਪ੍ਰਮਾਣਿਤ ਨਤੀਜੇ ਦਿਖਾਏ ਜਾਂਦੇ ਹਨ। ਟੈਸਟ APK ਐਪ ਵਿੱਚ ਸਟੋਰ ਨਹੀਂ ਹੁੰਦੇ।</string>
+</resources>

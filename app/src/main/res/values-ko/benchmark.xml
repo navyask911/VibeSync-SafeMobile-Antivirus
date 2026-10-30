@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">벤치마크 결과</string>
+    <string name="benchmark_not_measured">아직 검증된 측정 결과가 없습니다</string>
+    <string name="benchmark_total_apps">검사한 APK 파일</string>
+    <string name="benchmark_tpr">탐지율 (TPR)</string>
+    <string name="benchmark_fpr">오탐율 (FPR)</string>
+    <string name="benchmark_latency">평균 검사 시간</string>
+    <string name="benchmark_privacy_note">검증된 결과만 표시합니다. 테스트 APK는 앱에 저장하지 않습니다.</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">Hasil pengujian</string>
+    <string name="benchmark_not_measured">Belum ada pengukuran terverifikasi</string>
+    <string name="benchmark_total_apps">APK yang diuji</string>
+    <string name="benchmark_tpr">Tingkat deteksi (TPR)</string>
+    <string name="benchmark_fpr">Tingkat positif palsu (FPR)</string>
+    <string name="benchmark_latency">Rata-rata waktu pemindaian</string>
+    <string name="benchmark_privacy_note">Hanya hasil terverifikasi yang ditampilkan. APK pengujian tidak disimpan dalam aplikasi.</string>
+</resources>

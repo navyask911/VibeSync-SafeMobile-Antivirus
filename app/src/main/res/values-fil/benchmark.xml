@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">Mga resulta ng benchmark</string>
+    <string name="benchmark_not_measured">Wala pang napatunayang sukat</string>
+    <string name="benchmark_total_apps">Mga APK na nasubukan</string>
+    <string name="benchmark_tpr">Antas ng pagtuklas (TPR)</string>
+    <string name="benchmark_fpr">Antas ng maling positibo (FPR)</string>
+    <string name="benchmark_latency">Karaniwang oras ng pag-scan</string>
+    <string name="benchmark_privacy_note">Mga napatunayang resulta lang ang ipinapakita. Walang test APK na iniimbak sa app.</string>
+</resources>

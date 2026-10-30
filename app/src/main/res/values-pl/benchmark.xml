@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">Wyniki testu porównawczego</string>
+    <string name="benchmark_not_measured">Brak jeszcze zweryfikowanych pomiarów</string>
+    <string name="benchmark_total_apps">Przetestowane pliki APK</string>
+    <string name="benchmark_tpr">Wskaźnik wykrywania (TPR)</string>
+    <string name="benchmark_fpr">Wskaźnik fałszywych alarmów (FPR)</string>
+    <string name="benchmark_latency">Średni czas skanowania</string>
+    <string name="benchmark_privacy_note">Wyświetlane są tylko zweryfikowane wyniki. Testowe pliki APK nie są przechowywane w aplikacji.</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">ಮಾನದಂಡ ಪರೀಕ್ಷೆಯ ಫಲಿತಾಂಶಗಳು</string>
+    <string name="benchmark_not_measured">ಇನ್ನೂ ಪರಿಶೀಲಿತ ಅಳತೆ ಫಲಿತಾಂಶಗಳಿಲ್ಲ</string>
+    <string name="benchmark_total_apps">ಪರೀಕ್ಷಿಸಿದ APK ಕಡತಗಳು</string>
+    <string name="benchmark_tpr">ಪತ್ತೆ ಪ್ರಮಾಣ (TPR)</string>
+    <string name="benchmark_fpr">ತಪ್ಪು ಪತ್ತೆ ಪ್ರಮಾಣ (FPR)</string>
+    <string name="benchmark_latency">ಸರಾಸರಿ ಸ್ಕ್ಯಾನ್ ಸಮಯ</string>
+    <string name="benchmark_privacy_note">ಪರಿಶೀಲಿತ ಫಲಿತಾಂಶಗಳನ್ನು ಮಾತ್ರ ತೋರಿಸಲಾಗುತ್ತದೆ. ಪರೀಕ್ಷಾ APK ಕಡತಗಳನ್ನು ಆ್ಯಪ್‌ನಲ್ಲಿ ಸಂಗ್ರಹಿಸುವುದಿಲ್ಲ.</string>
+</resources>

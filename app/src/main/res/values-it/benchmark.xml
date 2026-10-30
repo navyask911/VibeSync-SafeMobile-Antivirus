@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">Risultati del benchmark</string>
+    <string name="benchmark_not_measured">Non sono ancora disponibili misurazioni verificate</string>
+    <string name="benchmark_total_apps">APK analizzati</string>
+    <string name="benchmark_tpr">Tasso di rilevamento (TPR)</string>
+    <string name="benchmark_fpr">Tasso di falsi positivi (FPR)</string>
+    <string name="benchmark_latency">Tempo medio di scansione</string>
+    <string name="benchmark_privacy_note">Vengono mostrati solo risultati verificati. Gli APK di test non sono memorizzati nell’app.</string>
+</resources>
