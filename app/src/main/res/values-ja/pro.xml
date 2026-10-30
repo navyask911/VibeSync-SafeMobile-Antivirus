@@ -1,25 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- SafeMobile Pro is the product brand; all purchase copy below is localized. -->
     <string name="pro_title">SafeMobile Pro</string>
-    <string name="pro_truthful_summary">現在の主要なウイルス対策機能はすべて無料のままです。Proでは未検証の機械学習を有効化しません。</string>
-    <string name="pro_feature_free">オフラインのハッシュ照合、YARA、サイドロード検出は無料のままです。</string>
-    <string name="pro_feature_research">実験的な機械学習は未検証で、有効化されていません。</string>
-    <string name="pro_feature_updates">週1回の研究用モデル更新はすでに無料です。Proでは任意の高速更新を利用できます。</string>
-    <string name="pro_feature_adfree">SafeMobileは現在、すべてのユーザーに広告なしで提供されています。</string>
-    <string name="pro_years">年数（1〜10年）</string>
-    <string name="pro_price_preview">見積合計：%1$s（%2$d年分）。Google Playで確認してください。</string>
-    <string name="pro_price_unavailable">Google Playの価格を取得中です。まだ購入できません。</string>
-    <string name="pro_cart_quantity_warning">購入数量はGoogle Playで指定します。見積ではなく実際の購入数量に応じて年数が加算されます。</string>
-    <string name="pro_non_restorable_warning">重要：これは端末に紐づく消費型の購入です。再インストール、端末の変更、暗号鍵の紛失により残存期間が失われる場合があります。Google Playから復元できません。</string>
-    <string name="pro_unlock">SafeMobile Proを購入</string>
-    <string name="pro_restore_check">復元・状態確認（この端末のみ）</string>
-    <string name="pro_active_until">この端末のPro利用期限：%1$s</string>
-    <string name="pro_not_active">この端末には有効なPro利用権がありません。</string>
-    <string name="pro_purchase_unavailable">Google Playを利用できないか、商品が設定されていません。</string>
-    <string name="pro_purchase_canceled">購入がキャンセルされました。このアプリには課金を記録していません。</string>
-    <string name="pro_purchase_pending">決済が保留中です。Google Playの購入確定後にアクセス権を付与します。</string>
-    <string name="pro_purchase_recheck">消費処理を完了するにはGoogle Playへの接続が必要です。</string>
-    <string name="pro_storage_failed">安全なローカル保存に失敗しました。再試行前にサポートへお問い合わせください。</string>
-    <string name="pro_purchase_success">購入を端末に記録し、購入数量に応じた年数を追加しました。</string>
-    <string name="pro_restore_local_only">この端末の暗号化された保存情報を確認しました。消費済みの購入はGoogle Playから復元できません。</string>
+    <string name="pro_truthful_summary">基本的なウイルス対策チェックは無料です。Pro は実験的な機械学習を有効にしません。</string>
+    <string name="pro_feature_free">オフラインのハッシュ、YARA、サイドロードの検出は無料です。</string>
+    <string name="pro_feature_research">実験的な機械学習は検証されておらず、有効になっていません。</string>
+    <string name="pro_feature_updates">Pro では研究用モデルを任意で毎日更新できます。週次更新は無料のままです。</string>
+    <string name="pro_feature_adfree">SafeMobile は現在、すべてのユーザーに広告を表示しません。</string>
+    <string name="pro_years">見積もり用の年数（1–10）</string>
+    <string name="pro_price_preview">見積合計：%1$s。年数：%2$d。Google Play で確認してください。</string>
+    <string name="pro_price_unavailable">Google Play の価格を取得中のため、購入できません。</string>
+    <string name="pro_cart_quantity_warning">Google Play で購入数量を選択してください。確定した数量に応じた年数がこの端末に追加されます。</string>
+    <string name="pro_non_restorable_warning">この端末専用の購入です。再インストール、初期化、暗号鍵の紛失により、残りの Pro 利用権を永久に失う場合があります。</string>
+    <string name="pro_unlock">SafeMobile Pro を有効にする</string>
+    <string name="pro_restore_check">復元 / 状態を確認（この端末のみ）</string>
+    <string name="pro_active_until">この端末の Pro 利用期限：%1$s</string>
+    <string name="pro_not_active">この端末に有効なローカル Pro パスはありません。</string>
+    <string name="pro_purchase_unavailable">Google Play が利用できないか、商品が設定されていません。</string>
+    <string name="pro_purchase_canceled">購入をキャンセルしました。</string>
+    <string name="pro_purchase_pending">お支払いは保留中です。Google Play が購入を確認すると Pro を利用できます。</string>
+    <string name="pro_purchase_recheck">購入処理を完了するには Google Play に再接続してください。</string>
+    <string name="pro_storage_failed">安全なストレージに購入を保存できませんでした。再試行の前にサポートにお問い合わせください。</string>
+    <string name="pro_purchase_success">購入を端末に保存し、購入数量を反映しました。</string>
+    <string name="pro_restore_local_only">端末の状態を確認しました。消費済みパスは Google Play で復元できません。</string>
+    <string name="pro_device_disclaimer" formatted="false">免責事項：Pro パスはこの物理端末に紐付けられます。SafeMobile は 100% オフラインのため、アプリをアンインストールしたりアプリデータを消去したりすると、Google Play で Pro パスを復元することはできません。</string>
+    <string name="pro_network_notice">基本的な保護はオフラインで動作します。Google Play での購入や任意のモデル更新にはインターネット接続が必要です。</string>
+    <string name="pro_fewer_years">年数を減らす</string>
+    <string name="pro_more_years">年数を増やす</string>
 </resources>

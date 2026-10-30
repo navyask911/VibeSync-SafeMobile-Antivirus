@@ -107,7 +107,7 @@ dependencies {
  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
  implementation("com.google.crypto.tink:tink-android:1.16.0")
  // Google Android SDK License: Play Billing is only for explicit checkout, never scanning.
- implementation("com.android.billingclient:billing-ktx:7.1.1")
+ implementation("com.android.billingclient:billing-ktx:8.3.0")
  // Apache-2.0: KeyStore-backed encrypted local device-bound entitlement.
  implementation("androidx.security:security-crypto:1.1.0")
  // TensorFlow Lite 2.17.0 is local inference only; no model training or network calls.

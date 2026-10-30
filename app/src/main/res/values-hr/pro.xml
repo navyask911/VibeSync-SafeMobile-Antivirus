@@ -1,27 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- PROVISIONAL ENGLISH FALLBACK: NOT TRANSLATED. Owner must arrange human review
-         before publishing billing features in this locale. -->
+    <!-- SafeMobile Pro is the product brand; all purchase copy below is localized. -->
     <string name="pro_title">SafeMobile Pro</string>
-    <string name="pro_truthful_summary">All current core antivirus checks remain available for free. This Pro plan does not activate experimental machine learning.</string>
-    <string name="pro_feature_free">Offline hash, YARA and sideload detection stay free.</string>
-    <string name="pro_feature_research">Experimental machine learning is not validated or enabled.</string>
-    <string name="pro_feature_updates">Weekly research-model updates are already free. Pro may offer a faster optional refresh.</string>
-    <string name="pro_feature_adfree">SafeMobile is currently ad-free for everyone.</string>
-    <string name="pro_years">Years (choose 1 to 10)</string>
-    <string name="pro_price_preview">Estimated total: %1$s for %2$d years. Confirm in Google Play.</string>
-    <string name="pro_price_unavailable">Waiting for Google Play pricing; no purchase is available yet.</string>
-    <string name="pro_cart_quantity_warning">Google Play controls cart quantity. The number actually purchased, not this estimate, determines your credited years.</string>
-    <string name="pro_non_restorable_warning">Important: this is a consumed, device-bound purchase. If you reinstall, reset, switch devices or lose encryption keys, the remaining years may be permanently lost and cannot be restored from Google Play.</string>
-    <string name="pro_unlock">Unlock SafeMobile Pro</string>
-    <string name="pro_restore_check">Restore / Check Status (on this device only)</string>
-    <string name="pro_active_until">Local Pro access until %1$s</string>
-    <string name="pro_not_active">No active local Pro entitlement on this device.</string>
-    <string name="pro_purchase_unavailable">Google Play is unavailable, or this product has not been configured.</string>
-    <string name="pro_purchase_canceled">Purchase canceled. No charge was recorded by this app.</string>
-    <string name="pro_purchase_pending">Payment is pending. Access will not be granted until Google Play confirms purchase.</string>
-    <string name="pro_purchase_recheck">The purchase needs a connection to Google Play to complete consumption.</string>
-    <string name="pro_storage_failed">Secure local storage could not save the purchase. Contact support before retrying.</string>
-    <string name="pro_purchase_success">Purchase recorded locally. The purchased quantity was credited.</string>
-    <string name="pro_restore_local_only">Checked encrypted storage on this device. Consumed purchases cannot be restored from Google Play.</string>
+    <string name="pro_truthful_summary">Osnovne antivirusne provjere ostaju besplatne. Pro ne uključuje eksperimentalno strojno učenje.</string>
+    <string name="pro_feature_free">Izvanmrežna provjera sažetaka, YARA i vanjskih instalacija ostaje besplatna.</string>
+    <string name="pro_feature_research">Eksperimentalno strojno učenje nije potvrđeno ni uključeno.</string>
+    <string name="pro_feature_updates">Pro nudi neobavezna dnevna ažuriranja istraživačkog modela. Tjedna ažuriranja ostaju besplatna.</string>
+    <string name="pro_feature_adfree">SafeMobile trenutačno nema oglase ni za koga.</string>
+    <string name="pro_years">Godine za procjenu (1–10)</string>
+    <string name="pro_price_preview">Procijenjeni iznos: %1$s. Godine: %2$d. Potvrdite u trgovini Google Play.</string>
+    <string name="pro_price_unavailable">Čekaju se cijene iz trgovine Google Play; kupnje nisu dostupne.</string>
+    <string name="pro_cart_quantity_warning">Odaberite količinu u trgovini Google Play. Potvrđena količina određuje godine dodane ovom uređaju.</string>
+    <string name="pro_non_restorable_warning">Kupnja samo za ovaj uređaj. Ponovna instalacija, vraćanje na početne postavke ili gubitak ključeva šifriranja može trajno ukloniti preostali pristup Pro.</string>
+    <string name="pro_unlock">Otključaj SafeMobile Pro</string>
+    <string name="pro_restore_check">Vrati / Provjeri status (samo ovaj uređaj)</string>
+    <string name="pro_active_until">Lokalni pristup Pro do %1$s</string>
+    <string name="pro_not_active">Na ovom uređaju nema aktivne lokalne propusnice Pro.</string>
+    <string name="pro_purchase_unavailable">Google Play nije dostupan ili proizvod nije konfiguriran.</string>
+    <string name="pro_purchase_canceled">Kupnja je otkazana.</string>
+    <string name="pro_purchase_pending">Plaćanje je na čekanju. Pristup Pro počinje nakon što Google Play potvrdi kupnju.</string>
+    <string name="pro_purchase_recheck">Ponovno se povežite s trgovinom Google Play da biste dovršili obradu kupnje.</string>
+    <string name="pro_storage_failed">Sigurna pohrana nije mogla spremiti kupnju. Obratite se podršci prije ponovnog pokušaja.</string>
+    <string name="pro_purchase_success">Kupnja je spremljena lokalno. Kupljena količina je dodana.</string>
+    <string name="pro_restore_local_only">Lokalni status je provjeren. Google Play ne može vratiti iskorištene propusnice.</string>
+    <string name="pro_device_disclaimer" formatted="false">Odricanje od odgovornosti: propusnice Pro vezane su uz ovaj fizički uređaj. Budući da SafeMobile radi 100% izvanmrežno, ako deinstalirate aplikaciju ili izbrišete njezine podatke, Google Play ne može vratiti vašu propusnicu Pro.</string>
+    <string name="pro_network_notice">Osnovna zaštita radi izvanmrežno. Kupnje u trgovini Google Play i neobavezna ažuriranja modela zahtijevaju internet.</string>
+    <string name="pro_fewer_years">Manje godina</string>
+    <string name="pro_more_years">Više godina</string>
 </resources>

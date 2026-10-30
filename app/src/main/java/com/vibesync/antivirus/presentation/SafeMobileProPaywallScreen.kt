@@ -1,6 +1,9 @@
 package com.vibesync.antivirus.presentation
 
 import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.WorkspacePremium
@@ -9,14 +12,21 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.vibesync.antivirus.R
 import com.vibesync.antivirus.core.billing.ProEntitlementStore
 import com.vibesync.antivirus.core.billing.SafeMobileBillingManager
 import java.text.DateFormat
+import java.math.BigDecimal
 import java.text.NumberFormat
 import java.util.Currency
 import java.util.Date
@@ -29,16 +39,27 @@ import java.util.Date
 @Composable
 fun SafeMobileProPaywallScreen(onBack: () -> Unit) {
     val context = LocalContext.current
-    val activity = context as? Activity
+    val activity = remember(context) { context.paywallActivity() }
+    val locale = LocalConfiguration.current.locales[0]
+    val numberFormat = remember(locale) { NumberFormat.getIntegerInstance(locale) }
     val manager = remember(context) { SafeMobileBillingManager(context) }
     val state by manager.state.collectAsStateWithLifecycle()
     var years by remember { mutableIntStateOf(1) }
+    val owner = LocalLifecycleOwner.current
+    BackHandler(onBack = onBack)
 
     DisposableEffect(manager) {
         manager.start()
         onDispose { manager.close() }
     }
     LaunchedEffect(manager) { manager.refreshLocalStatus() }
+    DisposableEffect(manager, owner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) manager.start()
+        }
+        owner.lifecycle.addObserver(observer)
+        onDispose { owner.lifecycle.removeObserver(observer) }
+    }
 
     Column(
         modifier = Modifier.fillMaxWidth().padding(18.dp),
@@ -65,24 +86,29 @@ fun SafeMobileProPaywallScreen(onBack: () -> Unit) {
 
         HorizontalDivider()
         Text(stringResource(R.string.pro_years), style = MaterialTheme.typography.titleMedium)
+        val fewerYears = stringResource(R.string.pro_fewer_years)
+        val moreYears = stringResource(R.string.pro_more_years)
         Row(horizontalArrangement = Arrangement.spacedBy(16.dp),
             verticalAlignment = Alignment.CenterVertically) {
-            OutlinedButton(onClick = { years = (years - 1).coerceAtLeast(1) }, enabled = years > 1) {
+            OutlinedButton(onClick = { years = (years - 1).coerceAtLeast(1) }, enabled = years > 1,
+                modifier = Modifier.semantics { contentDescription = fewerYears }) {
                 Text("−")
             }
-            Text(years.toString(), style = MaterialTheme.typography.headlineMedium)
+            Text(numberFormat.format(years), style = MaterialTheme.typography.headlineMedium)
             OutlinedButton(onClick = { years = (years + 1).coerceAtMost(ProEntitlementStore.MAX_YEARS) },
-                enabled = years < ProEntitlementStore.MAX_YEARS) {
+                enabled = years < ProEntitlementStore.MAX_YEARS,
+                modifier = Modifier.semantics { contentDescription = moreYears }) {
                 Text("+")
             }
         }
         Text(
             if (state.playPriceMicros != null && state.playCurrency != null) {
-                val totalMicros = state.playPriceMicros!! * years
+                val total = BigDecimal.valueOf(state.playPriceMicros!!, 6)
+                    .multiply(BigDecimal.valueOf(years.toLong()))
                 val formatted = runCatching {
-                    NumberFormat.getCurrencyInstance().apply {
+                    NumberFormat.getCurrencyInstance(locale).apply {
                         currency = Currency.getInstance(state.playCurrency!!)
-                    }.format(totalMicros / 1_000_000.0)
+                    }.format(total)
                 }.getOrDefault(state.playUnitPrice.orEmpty())
                 stringResource(R.string.pro_price_preview, formatted, years)
             } else stringResource(R.string.pro_price_unavailable),
@@ -113,7 +139,7 @@ fun SafeMobileProPaywallScreen(onBack: () -> Unit) {
         }
         if (state.proActive) {
             Text(stringResource(R.string.pro_active_until,
-                DateFormat.getDateInstance(DateFormat.MEDIUM).format(Date(state.expiresAt))),
+                DateFormat.getDateInstance(DateFormat.MEDIUM, locale).format(Date(state.expiresAt))),
                 color = MaterialTheme.colorScheme.primary)
         } else {
             Text(stringResource(R.string.pro_not_active))
@@ -132,5 +158,16 @@ fun SafeMobileProPaywallScreen(onBack: () -> Unit) {
         if (noticeText != null) {
             Text(stringResource(noticeText), style = MaterialTheme.typography.bodySmall)
         }
+        HorizontalDivider()
+        Text(stringResource(R.string.pro_network_notice), style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(stringResource(R.string.pro_device_disclaimer), style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
+}
+
+private tailrec fun Context.paywallActivity(): Activity? = when (this) {
+    is Activity -> this
+    is ContextWrapper -> baseContext.paywallActivity()
+    else -> null
 }

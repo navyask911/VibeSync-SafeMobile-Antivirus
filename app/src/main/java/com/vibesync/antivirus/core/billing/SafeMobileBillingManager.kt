@@ -13,8 +13,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-/** One-time consumable years, locally delivered. No user identifiers leave the app.
- * NOTE: Consumables cannot be restored after consumption by Google Play.
+/** One-time consumable years, locally delivered. Device binding stays local;
+ * Google Play handles payments and consumption. There is no developer-server entitlement.
+ * Consumed passes cannot be restored after app data or encryption keys are lost.
  */
 class SafeMobileBillingManager(context: Context) : PurchasesUpdatedListener {
     private val app = context.applicationContext
@@ -23,9 +24,11 @@ class SafeMobileBillingManager(context: Context) : PurchasesUpdatedListener {
     private val _state = MutableStateFlow(BillingUiState())
     val state: StateFlow<BillingUiState> = _state.asStateFlow()
     private var closed = false
+    private var connecting = false
     private val billingClient = BillingClient.newBuilder(app)
         .setListener(this)
         .enablePendingPurchases(PendingPurchasesParams.newBuilder().enableOneTimeProducts().build())
+        .enableAutoServiceReconnection()
         .build()
 
     data class BillingUiState(
@@ -51,35 +54,49 @@ class SafeMobileBillingManager(context: Context) : PurchasesUpdatedListener {
     }
 
     fun start() {
-        if (closed || billingClient.isReady) return
+        if (closed || connecting) return
         refreshLocalStatus()
+        if (billingClient.isReady) {
+            _state.value = _state.value.copy(connected = true)
+            queryPrice()
+            recoverUnconsumedPurchases()
+            return
+        }
+        connecting = true
         billingClient.startConnection(object : BillingClientStateListener {
             override fun onBillingServiceDisconnected() {
+                if (closed) return
+                connecting = false
                 _state.value = _state.value.copy(connected = false, processing = false,
                     notice = Notice.UNAVAILABLE)
             }
             override fun onBillingSetupFinished(result: BillingResult) {
                 if (closed) return
+                connecting = false
                 if (result.responseCode != BillingClient.BillingResponseCode.OK) {
                     _state.value = _state.value.copy(connected = false, notice = Notice.UNAVAILABLE)
                     return
                 }
                 _state.value = _state.value.copy(connected = true)
                 queryPrice()
-                // Recover only Play-unconsumed PENDING/PURCHASED transactions, not consumed
-                // entitlements. Restore/Check Status button never queries Google servers.
-                billingClient.queryPurchasesAsync(
-                    QueryPurchasesParams.newBuilder()
-                        .setProductType(BillingClient.ProductType.INAPP).build()
-                ) { status, purchases ->
-                    if (status.responseCode == BillingClient.BillingResponseCode.OK && !closed)
-                        purchases.forEach(::processPurchase)
-                }
+                recoverUnconsumedPurchases()
             }
         })
     }
 
-    private fun queryPrice(callback: ((ProductDetails?) -> Unit)? = null) {
+    private fun recoverUnconsumedPurchases() {
+        // Recover only still-unconsumed transactions. The local status button never queries Play.
+        billingClient.queryPurchasesAsync(QueryPurchasesParams.newBuilder()
+            .setProductType(BillingClient.ProductType.INAPP).build()) { result, purchases ->
+            if (result.responseCode == BillingClient.BillingResponseCode.OK && !closed)
+                purchases.forEach(::processPurchase)
+        }
+    }
+
+    private data class PurchasableProduct(val details: ProductDetails,
+        val offer: ProductDetails.OneTimePurchaseOfferDetails)
+
+    private fun queryPrice(callback: ((PurchasableProduct?) -> Unit)? = null) {
         if (!billingClient.isReady || closed) {
             callback?.invoke(null)
             return
@@ -90,22 +107,33 @@ class SafeMobileBillingManager(context: Context) : PurchasesUpdatedListener {
         billingClient.queryProductDetailsAsync(
             QueryProductDetailsParams.newBuilder().setProductList(listOf(product)).build()
         ) { result, products ->
-            if (closed) return@queryProductDetailsAsync
-            val detail = if (result.responseCode == BillingClient.BillingResponseCode.OK)
-                products.firstOrNull { it.productId == PRODUCT_ID } else null
-            val oneTime = detail?.oneTimePurchaseOfferDetails
-            _state.value = _state.value.copy(
+            // Billing 8 returns QueryProductDetailsResult, including unfetched products.
+            // Complete the UI callback on Main before launchBillingFlow touches an Activity.
+            scope.launch {
+                if (closed) return@launch
+                val detail = if (result.responseCode == BillingClient.BillingResponseCode.OK)
+                    products.productDetailsList.firstOrNull { it.productId == PRODUCT_ID } else null
+                val offers = detail?.oneTimePurchaseOfferDetailsList.orEmpty().ifEmpty {
+                    listOfNotNull(detail?.oneTimePurchaseOfferDetails)
+                }
+                // A yearly pass is a buy product, not a rental or an unfulfilled preorder.
+                val oneTime = offers.firstOrNull { it.rentalDetails == null && it.preorderDetails == null }
+                val selection = if (detail != null && oneTime != null) PurchasableProduct(detail, oneTime) else null
+                val previousNotice = _state.value.notice
+                _state.value = _state.value.copy(
                 playUnitPrice = oneTime?.formattedPrice,
                 playPriceMicros = oneTime?.priceAmountMicros,
                 playCurrency = oneTime?.priceCurrencyCode,
-                notice = if (detail == null) Notice.UNAVAILABLE else _state.value.notice
-            )
-            callback?.invoke(detail)
+                notice = if (selection == null) Notice.UNAVAILABLE
+                    else if (previousNotice == Notice.UNAVAILABLE) Notice.NONE else previousNotice
+                )
+                callback?.invoke(selection)
+            }
         }
     }
 
     /** Quantity is selected in the Google Play cart, NOT settable through
-     * ProductDetailsParams.Builder in Billing 7.1.1. Actual Purchase.quantity wins.
+     * ProductDetailsParams.Builder. Actual Purchase.quantity wins.
      * This argument controls only the suggested years displayed to the user.
      */
     fun launchPurchase(activity: Activity, quantity: Int) {
@@ -115,16 +143,15 @@ class SafeMobileBillingManager(context: Context) : PurchasesUpdatedListener {
             return
         }
         _state.value = _state.value.copy(processing = true, notice = Notice.QUANTITY_IN_PLAY_CART)
-        queryPrice { details ->
-            if (details == null) {
+        queryPrice { selection ->
+            if (selection == null) {
                 _state.value = _state.value.copy(processing = false, notice = Notice.UNAVAILABLE)
                 return@queryPrice
             }
-            val params = BillingFlowParams.newBuilder()
-                .setProductDetailsParamsList(listOf(
-                    BillingFlowParams.ProductDetailsParams.newBuilder()
-                        .setProductDetails(details).build()
-                )).build()
+            val item = BillingFlowParams.ProductDetailsParams.newBuilder()
+                .setProductDetails(selection.details)
+            selection.offer.offerToken?.takeIf { it.isNotBlank() }?.let(item::setOfferToken)
+            val params = BillingFlowParams.newBuilder().setProductDetailsParamsList(listOf(item.build())).build()
             val result = billingClient.launchBillingFlow(activity, params)
             if (result.responseCode != BillingClient.BillingResponseCode.OK)
                 _state.value = _state.value.copy(processing = false, notice = Notice.UNAVAILABLE)
@@ -152,7 +179,7 @@ class SafeMobileBillingManager(context: Context) : PurchasesUpdatedListener {
             return
         }
         val quantity = purchase.quantity
-        if (quantity !in 1..ProEntitlementStore.MAX_YEARS) {
+        if (quantity <= 0) {
             _state.value = _state.value.copy(processing = false, notice = Notice.RECHECK)
             return
         }
@@ -184,6 +211,7 @@ class SafeMobileBillingManager(context: Context) : PurchasesUpdatedListener {
 
     fun close() {
         closed = true
+        connecting = false
         scope.cancel()
         billingClient.endConnection()
     }

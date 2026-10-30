@@ -88,6 +88,12 @@ def check_permissions(apk):
         fail("aapt could not read " + apk.name + ": " + result.stderr.strip())
     if "android.permission.INTERNET" not in result.stdout:
         fail(apk.name + " must declare INTERNET for the GitHub Releases signed-database updater.")
+    if "com.android.vending.BILLING" not in result.stdout:
+        fail(apk.name + " must include Google Play Billing for the optional Pro purchase flow.")
+    if any(permission in result.stdout for permission in (
+            "android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION",
+            "com.google.android.gms.permission.AD_ID")):
+        fail(apk.name + " must not gain location or advertising-ID permissions from billing.")
     manifest = subprocess.run([aapt, "dump", "xmltree", str(apk), "AndroidManifest.xml"],
                               text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
     if manifest.returncode:
@@ -97,6 +103,8 @@ def check_permissions(apk):
             fail(apk.name + " must explicitly set android:" + attribute + "=false.")
     if "android:dataExtractionRules" not in manifest.stdout:
         fail(apk.name + " must reference dataExtractionRules.")
+    if "com.google.android.play.billingclient.version" not in manifest.stdout or "8.3.0" not in manifest.stdout:
+        fail(apk.name + " must contain the supported Play Billing 8.3.0 manifest metadata.")
     if "android.permission.MANAGE_EXTERNAL_STORAGE" in result.stdout or "android.permission.READ_EXTERNAL_STORAGE" in result.stdout:
         fail(apk.name + " declares broad/legacy storage access; use the SAF.")
     inspect_artifact(apk)

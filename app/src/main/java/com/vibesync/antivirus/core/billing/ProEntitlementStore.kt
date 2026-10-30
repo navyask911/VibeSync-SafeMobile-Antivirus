@@ -11,7 +11,8 @@ import java.security.MessageDigest
  * refund/revocation detection or a secure server entitlement. Keystore loss or
  * reinstall may irrecoverably lose paid access: disclose before checkout.
  */
-class ProEntitlementStore(private val context: Context) {
+class ProEntitlementStore(private val context: Context,
+    private val preferencesName: String = PREFS_NAME) {
     private val lock = Any()
     private val preferences: SharedPreferences by lazy {
         @Suppress("DEPRECATION")
@@ -19,7 +20,7 @@ class ProEntitlementStore(private val context: Context) {
             .setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build()
         @Suppress("DEPRECATION")
         EncryptedSharedPreferences.create(
-            context.applicationContext, PREFS_NAME, master,
+            context.applicationContext, preferencesName, master,
             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
         )
@@ -50,7 +51,7 @@ class ProEntitlementStore(private val context: Context) {
      */
     fun grant(purchaseToken: String, quantityFromPlay: Int, nowMs: Long = System.currentTimeMillis()): Boolean =
         synchronized(lock) {
-            if (purchaseToken.isBlank() || quantityFromPlay !in 1..MAX_YEARS) return@synchronized false
+            if (purchaseToken.isBlank() || quantityFromPlay <= 0) return@synchronized false
             val fingerprint = DeviceUtils.fingerprint(context) ?: return@synchronized false
             runCatching {
                 val tokenHash = MessageDigest.getInstance("SHA-256")
@@ -61,7 +62,7 @@ class ProEntitlementStore(private val context: Context) {
                 val oldExpiry = if (preferences.getString(KEY_FINGERPRINT, null) == fingerprint)
                     preferences.getLong(KEY_EXPIRY, 0) else 0L
                 val base = maxOf(oldExpiry, nowMs)
-                val duration = quantityFromPlay * MILLIS_PER_YEAR
+                val duration = Math.multiplyExact(quantityFromPlay.toLong(), MILLIS_PER_YEAR)
                 if (base > Long.MAX_VALUE - duration) return@synchronized false
                 preferences.edit()
                     .putString(KEY_FINGERPRINT, fingerprint)
@@ -73,6 +74,7 @@ class ProEntitlementStore(private val context: Context) {
         }
 
     companion object {
+        // Paywall estimate range only. Google Play's actual paid quantity must be honored.
         const val MAX_YEARS = 10
         const val MILLIS_PER_YEAR = 365L * 24 * 60 * 60 * 1000
         private const val CLOCK_TOLERANCE_MS = 5L * 60 * 1000

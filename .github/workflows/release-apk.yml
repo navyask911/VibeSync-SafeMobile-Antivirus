@@ -127,6 +127,13 @@ jobs:
           aab=sys.argv[1]
           with zipfile.ZipFile(aab) as z:
               names=set(z.namelist())
+              manifest=z.read("base/manifest/AndroidManifest.xml")
+              for required in (b"com.android.vending.BILLING", b"com.google.android.play.billingclient.version", b"8.3.0"):
+                  if required not in manifest:
+                      raise SystemExit("SAFE STOP: supported Google Play billing metadata absent from AAB.")
+              for forbidden in (b"android.permission.ACCESS_FINE_LOCATION", b"android.permission.ACCESS_COARSE_LOCATION", b"com.google.android.gms.permission.AD_ID"):
+                  if forbidden in manifest:
+                      raise SystemExit("SAFE STOP: unexpected location or advertising-ID permission.")
               yara="base/assets/yara/safemobile_android_dex.yar"
               if yara not in names: raise SystemExit("SAFE STOP: reviewed YARA rules absent.")
               rules=z.read(yara).decode("utf-8")
@@ -147,7 +154,7 @@ jobs:
               meta=json.loads(z.read("base/assets/malware_model.json"))
               if meta.get("validated") or meta.get("production_ready") or meta.get("status")!="research_unvalidated":
                   raise SystemExit("SAFE STOP: unvalidated research model falsely promoted.")
-              print("Signed AAB contains pinned 18KB model, 215 schema, reviewed YARA and no hash DB.")
+              print("Signed AAB contains Billing 8.3.0, pinned 18KB model, 215 schema, reviewed YARA and no hash DB.")
           PY
           version_name="$(sed -nE 's/^[[:space:]]*versionName = "([^"]+)".*/\1/p' app/build.gradle.kts | head -n 1)"
           version_code="$(sed -nE 's/^[[:space:]]*versionCode = ([0-9]+).*/\1/p' app/build.gradle.kts | head -n 1)"
@@ -161,7 +168,7 @@ jobs:
       - name: Upload verified Play Console AAB as GitHub Actions artifact
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: SafeMobile-v1.0.16-Play-AAB-${{ github.run_id }}
+          name: SafeMobile-v${{ steps.verify-aab.outputs.version_name }}-Play-AAB-${{ github.run_id }}
           path: ${{ steps.verify-aab.outputs.aab_path }}
           if-no-files-found: error
           retention-days: 30
@@ -183,6 +190,11 @@ jobs:
           APK/AAB version: ${{ steps.verify-aab.outputs.version_name }} (version code ${{ steps.verify-aab.outputs.version_code }}).
           Built from commit ${GITHUB_SHA}.
           Includes pinned 18KB research v1.0.1-model and a 215-feature schema; this unvalidated candidate remains inactive as malware protection. All scanning is on-device.
+          v1.0.17: optional Google Play Billing 8.3.0 consumable Pro passes with locally encrypted, device-bound expiry and actual purchased-quantity credit. Core scanning, YARA, quarantine and siren incident response stay free. No ad SDK is added.
+          Pro purchase copy, quantity controls, status messages and the requested non-restorable device-bound disclaimer are translated across all 51 locale folders. Google Play purchases and optional model downloads need a connection; core protection works offline.
+          Consumed Pro passes cannot be restored after uninstall, app-data clearing, reset or encryption-key loss. The local status button cannot recover consumed orders from Google Play.
+          The Threat Intelligence Engine card reads a verified local stats.json cache; missing upstream statistics show the localized updating state.
+          Google Play SKU safemobile_pro_1_year, its regional pricing and optional multi-quantity setting must be configured in Play Console. Verify live purchases with a license tester on the internal testing track before public rollout. This GitHub workflow does not publish to Google Play or perform a real payment.
           v1.0.13: trusted-app options menus, foreground install monitoring with silent receipt notifications, shared immediate/durable local scan processing, and Compose Canvas donut/weekly session charts.
           The reserved no-code siren fixture triggers a labeled five-second diagnostic without importing a database or recording a malware verdict. Android full-screen permission and OEM background restrictions still apply.
           Overlay remediation passes each flagged package URI; Android 11+ may still show its global overlay list.
