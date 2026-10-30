@@ -91,8 +91,16 @@ val stageBenchmarkReport = tasks.register<Copy>("stageBenchmarkReport") {
     into(benchmarkAssetDirectory)
     rename { "benchmark-report.md" }
 }
-android.sourceSets.getByName("main").assets.srcDir(benchmarkAssetDirectory)
-tasks.matching { it.name.startsWith("merge") && it.name.endsWith("Assets") }.configureEach {
+// Register the producing TaskProvider, not just its build/ path. This propagates
+// Gradle's builtBy dependency to lint model writers and all variant asset consumers.
+android.sourceSets.getByName("main").assets.srcDir(stageBenchmarkReport)
+// AGP's vital lint tasks inspect assets separately from merge<Variant>Assets.
+// Keep an explicit dependency as a belt-and-braces guard across AGP upgrades.
+tasks.matching {
+    (it.name.startsWith("merge") && it.name.endsWith("Assets")) ||
+        (it.name.startsWith("generate") && it.name.endsWith("LintVitalReportModel")) ||
+        (it.name.startsWith("generate") && it.name.endsWith("LintModel"))
+}.configureEach {
     dependsOn(stageBenchmarkReport)
 }
 
