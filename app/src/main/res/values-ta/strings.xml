@@ -665,4 +665,13 @@
     <string name="ml_probability">இயந்திரக் கற்றல் அச்சுறுத்தல் நிகழ்தகவு: %1$d%%</string>
     <string name="ml_high_finding">நிலையான இயந்திரக் கற்றல் மதிப்பீடு: அனுமதிகள், API வடிவங்களால் அதிக மதிப்பெண்; இது எச்சரிக்கை மட்டுமே, தீம்பொருளுக்கான ஆதாரம் அல்ல.</string>
     <string name="ml_active_body">சாதனத்திலேயே சரிபார்க்கப்பட்ட நிலையான இயந்திரக் கற்றல் மாதிரி உள்ளது. முடிவுகள் அறிவுறுத்தல் மட்டுமே; தீம்பொருளை உறுதி செய்யாது.</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">அச்சுறுத்தல் நுண்ணறிவு இயந்திரம்</string>
+    <string name="threat_intelligence_samples">பகுப்பாய்வு செய்த மொத்தத் தீம்பொருள் மாதிரிகள்</string>
+    <string name="threat_intelligence_accuracy">இயந்திரக் கற்றலின் துல்லியம்</string>
+    <string name="threat_intelligence_downloads">உலகளாவிய மாதிரிப் பதிவிறக்கங்கள்</string>
+    <string name="threat_intelligence_updated">கடைசி நுண்ணறிவுப் புதுப்பிப்பு</string>
+    <string name="threat_intelligence_updating">அச்சுறுத்தல் நுண்ணறிவு புதுப்பிக்கப்படுகிறது…</string>
+    <string name="threat_intelligence_training_note">இவை பயிற்சிப் புள்ளிவிவரங்கள். இந்தச் சாதனத்தில் கிடைக்கும் பாதுகாப்பிற்கு கீழேயுள்ள கண்டறிதல் அடுக்குகளைப் பார்க்கவும்.</string>
 </resources>

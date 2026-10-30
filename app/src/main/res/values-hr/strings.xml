@@ -808,4 +808,13 @@
     <string name="ml_probability">ML vjerojatnost prijetnje: %1$d%%</string>
     <string name="ml_high_finding">Statička ML heuristika: visok rezultat zbog dopuštenja i API obrazaca; samo upozorenje, ne dokaz zlonamjernog softvera.</string>
     <string name="ml_active_body">Na uređaju je dostupan potvrđeni statički ML model. Rezultati su savjetodavni i ne dokazuju zlonamjerni softver.</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">Sustav obavještajnih podataka o prijetnjama</string>
+    <string name="threat_intelligence_samples">Ukupno analiziranih uzoraka zlonamjernog softvera</string>
+    <string name="threat_intelligence_accuracy">Točnost strojnog učenja</string>
+    <string name="threat_intelligence_downloads">Preuzimanja modela u svijetu</string>
+    <string name="threat_intelligence_updated">Zadnje ažuriranje podataka o prijetnjama</string>
+    <string name="threat_intelligence_updating">Ažuriranje podataka o prijetnjama…</string>
+    <string name="threat_intelligence_training_note">Statistika treniranja. Dostupna zaštita ovog uređaja opisana je u slojevima otkrivanja u nastavku.</string>
 </resources>

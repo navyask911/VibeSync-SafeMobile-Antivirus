@@ -666,4 +666,13 @@
     <string name="ml_probability">Probabilità di minaccia ML: %1$d%%</string>
     <string name="ml_high_finding">Euristica ML statica: punteggio elevato in base ad autorizzazioni e schemi API; solo indicativo, non prova la presenza di malware.</string>
     <string name="ml_active_body">Modello ML statico convalidato disponibile sul dispositivo. I risultati sono indicativi e non provano la presenza di malware.</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">Motore di intelligence sulle minacce</string>
+    <string name="threat_intelligence_samples">Totale dei campioni di malware analizzati</string>
+    <string name="threat_intelligence_accuracy">Accuratezza dell’apprendimento automatico</string>
+    <string name="threat_intelligence_downloads">Download del modello nel mondo</string>
+    <string name="threat_intelligence_updated">Ultimo aggiornamento dell’intelligence</string>
+    <string name="threat_intelligence_updating">Aggiornamento dell’intelligence…</string>
+    <string name="threat_intelligence_training_note">Statistiche di addestramento. Consulta i livelli di rilevamento qui sotto per conoscere la protezione disponibile su questo dispositivo.</string>
 </resources>

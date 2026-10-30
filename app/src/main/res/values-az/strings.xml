@@ -808,4 +808,13 @@
     <string name="ml_probability">ML təhdid ehtimalı: %1$d%%</string>
     <string name="ml_high_finding">Statik ML təhlili: icazələr və API nümunələrinə görə yüksək bal; yalnız xəbərdarlıqdır, zərərli proqram sübutu deyil.</string>
     <string name="ml_active_body">Cihazda təsdiqlənmiş statik ML modeli mövcuddur. Nəticələr yalnız tövsiyə xarakterlidir və zərərli proqramı sübut etmir.</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">Təhdid məlumatları mühərriki</string>
+    <string name="threat_intelligence_samples">Təhlil edilmiş zərərli proqram nümunələrinin ümumi sayı</string>
+    <string name="threat_intelligence_accuracy">Maşın öyrənməsinin dəqiqliyi</string>
+    <string name="threat_intelligence_downloads">Modelin dünya üzrə endirilmələri</string>
+    <string name="threat_intelligence_updated">Məlumatların son yenilənməsi</string>
+    <string name="threat_intelligence_updating">Təhdid məlumatları yenilənir…</string>
+    <string name="threat_intelligence_training_note">Təlim statistikası. Bu cihazda mövcud qoruma üçün aşağıdakı aşkarlama qatlarına baxın.</string>
 </resources>

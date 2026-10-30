@@ -808,4 +808,13 @@
     <string name="ml_probability">ML-sandsynlighed for trussel: %1$d%%</string>
     <string name="ml_high_finding">Statisk ML-heuristik: høj score baseret på tilladelser og API-mønstre; kun vejledende, ikke bevis for malware.</string>
     <string name="ml_active_body">En valideret statisk ML-model er tilgængelig på enheden. Resultaterne er vejledende og beviser ikke malware.</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">Motor til trusselsinformation</string>
+    <string name="threat_intelligence_samples">Samlet antal analyserede malwareprøver</string>
+    <string name="threat_intelligence_accuracy">Maskinlæringens nøjagtighed</string>
+    <string name="threat_intelligence_downloads">Modeloverførsler på verdensplan</string>
+    <string name="threat_intelligence_updated">Seneste opdatering af trusselsinformation</string>
+    <string name="threat_intelligence_updating">Opdaterer trusselsinformation…</string>
+    <string name="threat_intelligence_training_note">Træningsstatistik. Se registreringslagene nedenfor for tilgængelig beskyttelse på denne enhed.</string>
 </resources>

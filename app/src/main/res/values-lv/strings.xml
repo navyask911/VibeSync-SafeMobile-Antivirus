@@ -808,4 +808,13 @@
     <string name="ml_probability">ML apdraudējuma varbūtība: %1$d%%</string>
     <string name="ml_high_finding">Statiskā ML heiristika: augsts vērtējums pēc atļaujām un API modeļiem; tikai norāde, nevis ļaunatūras pierādījums.</string>
     <string name="ml_active_body">Ierīcē ir pieejams pārbaudīts statisks ML modelis. Rezultāti ir informatīvi un nepierāda ļaunatūru.</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">Apdraudējumu izlūkošanas sistēma</string>
+    <string name="threat_intelligence_samples">Kopā analizēto ļaunprogrammatūras paraugu skaits</string>
+    <string name="threat_intelligence_accuracy">Mašīnmācīšanās precizitāte</string>
+    <string name="threat_intelligence_downloads">Modeļa lejupielādes visā pasaulē</string>
+    <string name="threat_intelligence_updated">Pēdējais izlūkošanas datu atjauninājums</string>
+    <string name="threat_intelligence_updating">Notiek apdraudējumu datu atjaunināšana…</string>
+    <string name="threat_intelligence_training_note">Apmācības statistika. Šajā ierīcē pieejamā aizsardzība ir aprakstīta tālāk norādītajos noteikšanas slāņos.</string>
 </resources>

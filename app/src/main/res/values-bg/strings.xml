@@ -808,4 +808,13 @@
     <string name="ml_probability">Вероятност за заплаха според МО: %1$d%%</string>
     <string name="ml_high_finding">Статична евристика с МО: висок резултат въз основа на разрешения и API модели; само ориентир, не доказателство за злонамерен софтуер.</string>
     <string name="ml_active_body">На устройството има валидиран статичен модел за МО. Резултатите са ориентировъчни и не доказват наличие на злонамерен софтуер.</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">Система за разузнаване на заплахи</string>
+    <string name="threat_intelligence_samples">Общо анализирани зловредни образци</string>
+    <string name="threat_intelligence_accuracy">Точност на машинното обучение</string>
+    <string name="threat_intelligence_downloads">Изтегляния на модела по света</string>
+    <string name="threat_intelligence_updated">Последно обновяване на данните за заплахи</string>
+    <string name="threat_intelligence_updating">Обновяване на данните за заплахи…</string>
+    <string name="threat_intelligence_training_note">Статистика от обучението. Вижте слоевете за откриване по-долу за наличната защита на това устройство.</string>
 </resources>

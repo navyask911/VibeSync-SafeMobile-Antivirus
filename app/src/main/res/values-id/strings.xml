@@ -666,4 +666,13 @@
     <string name="ml_probability">Probabilitas ancaman ML: %1$d%%</string>
     <string name="ml_high_finding">Heuristik ML statis: skor tinggi berdasarkan izin dan pola API; hanya sebagai petunjuk, bukan bukti malware.</string>
     <string name="ml_active_body">Model ML statis tervalidasi tersedia di perangkat. Hasilnya bersifat indikatif dan bukan bukti malware.</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">Mesin intelijen ancaman</string>
+    <string name="threat_intelligence_samples">Total sampel malware yang dianalisis</string>
+    <string name="threat_intelligence_accuracy">Akurasi pembelajaran mesin</string>
+    <string name="threat_intelligence_downloads">Unduhan model di seluruh dunia</string>
+    <string name="threat_intelligence_updated">Pembaruan intelijen terakhir</string>
+    <string name="threat_intelligence_updating">Memperbarui intelijen ancaman…</string>
+    <string name="threat_intelligence_training_note">Statistik pelatihan. Lihat lapisan deteksi di bawah untuk mengetahui perlindungan yang tersedia di perangkat ini.</string>
 </resources>

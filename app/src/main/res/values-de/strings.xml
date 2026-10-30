@@ -608,4 +608,13 @@
     <string name="ml_probability">ML-Bedrohungswahrscheinlichkeit: %1$d%%</string>
     <string name="ml_high_finding">Statische ML-Heuristik: hoher Wert aufgrund von Berechtigungen und API-Mustern; nur ein Hinweis, kein Beweis für Schadsoftware.</string>
     <string name="ml_active_body">Ein validiertes statisches ML-Modell ist auf dem Gerät verfügbar. Ergebnisse sind Hinweise und kein Beweis für Schadsoftware.</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">System für Bedrohungsinformationen</string>
+    <string name="threat_intelligence_samples">Insgesamt analysierte Schadsoftwareproben</string>
+    <string name="threat_intelligence_accuracy">Genauigkeit des maschinellen Lernens</string>
+    <string name="threat_intelligence_downloads">Weltweite Modelldownloads</string>
+    <string name="threat_intelligence_updated">Letzte Aktualisierung der Bedrohungsinformationen</string>
+    <string name="threat_intelligence_updating">Bedrohungsinformationen werden aktualisiert…</string>
+    <string name="threat_intelligence_training_note">Trainingsstatistiken. Die verfügbaren Schutzfunktionen dieses Geräts finden Sie in den Erkennungsebenen unten.</string>
 </resources>

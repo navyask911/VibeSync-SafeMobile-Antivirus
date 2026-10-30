@@ -808,4 +808,13 @@
     <string name="ml_probability">એમએલ જોખમની સંભાવના: %1$d%%</string>
     <string name="ml_high_finding">સ્થિર એમએલ વિશ્લેષણ: પરવાનગીઓ અને API પેટર્નને આધારે ઊંચો સ્કોર; આ માત્ર સંકેત છે, માલવેરનો પુરાવો નથી.</string>
     <string name="ml_active_body">ઉપકરણ પર ચકાસાયેલ સ્થિર એમએલ મોડલ ઉપલબ્ધ છે. પરિણામો માત્ર માર્ગદર્શક છે; માલવેર સાબિત કરતા નથી.</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">જોખમ માહિતી એન્જિન</string>
+    <string name="threat_intelligence_samples">વિશ્લેષણ કરેલા કુલ માલવેર નમૂનાઓ</string>
+    <string name="threat_intelligence_accuracy">મશીન લર્નિંગની ચોકસાઈ</string>
+    <string name="threat_intelligence_downloads">વિશ્વભરમાં મોડેલના ડાઉનલોડ</string>
+    <string name="threat_intelligence_updated">જોખમ માહિતીનું છેલ્લું અપડેટ</string>
+    <string name="threat_intelligence_updating">જોખમ માહિતી અપડેટ થઈ રહી છે…</string>
+    <string name="threat_intelligence_training_note">આ તાલીમના આંકડા છે. આ ઉપકરણ પર ઉપલબ્ધ સુરક્ષા માટે નીચેના શોધ સ્તરો જુઓ.</string>
 </resources>

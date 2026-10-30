@@ -808,4 +808,13 @@
     <string name="ml_probability">Probabilitatea amenințării ML: %1$d%%</string>
     <string name="ml_high_finding">Euristică ML statică: scor ridicat pe baza permisiunilor și modelelor API; doar un indiciu, nu o dovadă de malware.</string>
     <string name="ml_active_body">Un model ML static validat este disponibil pe dispozitiv. Rezultatele sunt orientative și nu dovedesc existența unui malware.</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">Motor de informații despre amenințări</string>
+    <string name="threat_intelligence_samples">Total de mostre malware analizate</string>
+    <string name="threat_intelligence_accuracy">Precizia învățării automate</string>
+    <string name="threat_intelligence_downloads">Descărcări ale modelului la nivel mondial</string>
+    <string name="threat_intelligence_updated">Ultima actualizare a informațiilor</string>
+    <string name="threat_intelligence_updating">Se actualizează informațiile despre amenințări…</string>
+    <string name="threat_intelligence_training_note">Statistici de antrenare. Consultați straturile de detectare de mai jos pentru protecția disponibilă pe acest dispozitiv.</string>
 </resources>

@@ -50,6 +50,9 @@ def formats(text):
     return sorted(FORMAT.findall(text or ""))
 
 english, english_plurals = read_resources(BASE / "values" / "strings.xml")
+INTELLIGENCE_KEYS = tuple("threat_intelligence_" + name for name in (
+    "title", "samples", "accuracy", "downloads", "updated", "updating", "training_note"
+))
 for locale in LOCALES:
     path = BASE / f"values-{locale}" / "strings.xml"
     strings, plurals = read_resources(path)
@@ -63,6 +66,14 @@ for locale in LOCALES:
         actual = formats("".join(strings[key].itertext()))
         if expected != actual:
             errors.append(f"{locale}: placeholder mismatch for {key}: {expected} vs {actual}")
+    for key in INTELLIGENCE_KEYS:
+        source, translated = english.get(key), strings.get(key)
+        if source is None:
+            errors.append(f"base strings.xml: missing intelligence string {key}")
+        elif translated is not None:
+            text_value = "".join(translated.itertext()).strip()
+            if not text_value or text_value == "".join(source.itertext()).strip():
+                errors.append(f"{locale}: empty or English intelligence fallback {key}")
     for key, base in english_plurals.items():
         if key not in plurals:
             errors.append(f"{locale}: missing <plurals> {key}")

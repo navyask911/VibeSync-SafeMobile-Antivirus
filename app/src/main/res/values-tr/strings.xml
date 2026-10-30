@@ -665,4 +665,13 @@
     <string name="ml_probability">Makine öğrenimi tehdit olasılığı: %1$d%%</string>
     <string name="ml_high_finding">Statik makine öğrenimi sezgisi: izinler ve API örüntülerine göre yüksek puan; yalnızca uyarıdır, kötü amaçlı yazılım kanıtı değildir.</string>
     <string name="ml_active_body">Doğrulanmış cihaz içi statik makine öğrenimi modeli kullanılabilir. Sonuçlar yol göstericidir, kötü amaçlı yazılım kanıtı değildir.</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">Tehdit istihbaratı motoru</string>
+    <string name="threat_intelligence_samples">Analiz edilen toplam zararlı yazılım örneği</string>
+    <string name="threat_intelligence_accuracy">Makine öğrenimi doğruluğu</string>
+    <string name="threat_intelligence_downloads">Dünya genelinde model indirmeleri</string>
+    <string name="threat_intelligence_updated">Son istihbarat güncellemesi</string>
+    <string name="threat_intelligence_updating">Tehdit istihbaratı güncelleniyor…</string>
+    <string name="threat_intelligence_training_note">Eğitim istatistikleri. Bu cihazda sunulan koruma için aşağıdaki tespit katmanlarına bakın.</string>
 </resources>

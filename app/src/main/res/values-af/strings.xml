@@ -808,4 +808,13 @@
     <string name="ml_probability">ML-bedreigingswaarskynlikheid: %1$d%%</string>
     <string name="ml_high_finding">Statiese ML-heuristiek: hoë telling gegrond op toestemmings en API-patrone; slegs ’n aanduiding, nie bewys van wanware nie.</string>
     <string name="ml_active_body">’n Gevalideerde statiese ML-model is op die toestel beskikbaar. Resultate is slegs aanduidings en bewys nie wanware nie.</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">Bedreigingsinligting-enjin</string>
+    <string name="threat_intelligence_samples">Totale ontlede wanwaremonsters</string>
+    <string name="threat_intelligence_accuracy">Masjienleerakkuraatheid</string>
+    <string name="threat_intelligence_downloads">Wêreldwye modelaflaaie</string>
+    <string name="threat_intelligence_updated">Laaste inligtingsopdatering</string>
+    <string name="threat_intelligence_updating">Bedreigingsinligting word bygewerk…</string>
+    <string name="threat_intelligence_training_note">Opleidingstatistieke. Sien die opsporingslae hieronder vir beskerming wat op hierdie toestel beskikbaar is.</string>
 </resources>

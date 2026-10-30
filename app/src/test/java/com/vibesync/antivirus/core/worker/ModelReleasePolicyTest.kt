@@ -58,4 +58,22 @@ class ModelReleasePolicyTest {
         model.put("input_shape", JSONArray().put(1).put(32))
         assertFalse(ModelReleasePolicy.validatedResearchBundle(schema, report, "b".repeat(64), "c".repeat(64)))
     }
+
+    @Test fun optionalStatisticsDoNotBreakOlderReleasesOrExtendedChecksums() {
+        val assets = JSONArray()
+        val required = listOf("malware_model.tflite", "feature_schema.json", "model_report.json",
+            "DATASET_NOTICE.md", "SHA256SUMS")
+        required.forEach { assets.put(JSONObject().put("name", it)) }
+        val release = JSONObject().put("draft", false).put("tag_name", "v1.0.1-model").put("assets", assets)
+        assertNull(ModelReleasePolicy.statisticsAsset(release))
+        assertNotNull(ModelReleasePolicy.assets(release))
+        assets.put(JSONObject().put("name", "stats.json"))
+        assertEquals("stats.json", ModelReleasePolicy.statisticsAsset(release)!!.getString("name"))
+        val sums = (required.filter { it != "SHA256SUMS" } + "stats.json")
+            .joinToString("\n") { "a".repeat(64) + "  " + it }
+        assertEquals(5, ModelReleasePolicy.checksums(sums)!!.size)
+        assets.put(JSONObject().put("name", "stats.json"))
+        assertNull(ModelReleasePolicy.statisticsAsset(release))
+        assertNull(ModelReleasePolicy.checksums(sums + "\n" + "a".repeat(64) + "  stats.json"))
+    }
 }

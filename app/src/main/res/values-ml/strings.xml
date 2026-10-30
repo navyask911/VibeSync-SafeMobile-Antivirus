@@ -808,4 +808,13 @@
     <string name="ml_probability">എംഎൽ ഭീഷണി സാധ്യത: %1$d%%</string>
     <string name="ml_high_finding">സ്ഥിര എംഎൽ വിലയിരുത്തൽ: അനുമതികളും API മാതൃകകളും അടിസ്ഥാനമാക്കിയുള്ള ഉയർന്ന സ്കോർ; ഇത് സൂചന മാത്രം, മാൽവെയറിന്റെ തെളിവല്ല.</string>
     <string name="ml_active_body">ഉപകരണത്തിൽ തന്നെ പരിശോധിച്ച സ്ഥിര എംഎൽ മാതൃക ലഭ്യമാണ്. ഫലങ്ങൾ നിർദേശങ്ങൾ മാത്രമാണ്; മാൽവെയർ സ്ഥിരീകരിക്കുന്നില്ല.</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">ഭീഷണി വിവര എൻജിൻ</string>
+    <string name="threat_intelligence_samples">വിശകലനം ചെയ്ത ആകെ മാൽവെയർ സാമ്പിളുകൾ</string>
+    <string name="threat_intelligence_accuracy">മെഷീൻ ലേണിങ്ങിന്റെ കൃത്യത</string>
+    <string name="threat_intelligence_downloads">ലോകമെമ്പാടുമുള്ള മോഡൽ ഡൗൺലോഡുകൾ</string>
+    <string name="threat_intelligence_updated">ഭീഷണി വിവരങ്ങളുടെ അവസാന പുതുക്കൽ</string>
+    <string name="threat_intelligence_updating">ഭീഷണി വിവരങ്ങൾ പുതുക്കുന്നു…</string>
+    <string name="threat_intelligence_training_note">ഇവ പരിശീലന സ്ഥിതിവിവരക്കണക്കുകളാണ്. ഈ ഉപകരണത്തിൽ ലഭ്യമായ സംരക്ഷണത്തിന് താഴെയുള്ള കണ്ടെത്തൽ പാളികൾ കാണുക.</string>
 </resources>

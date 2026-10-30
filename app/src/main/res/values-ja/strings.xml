@@ -664,4 +664,13 @@
     <string name="ml_probability">機械学習による脅威の確率: %1$d%%</string>
     <string name="ml_high_finding">静的機械学習の推定: 権限と API パターンによる高スコアです。参考情報であり、マルウェアの証拠ではありません。</string>
     <string name="ml_active_body">検証済みの端末内静的機械学習モデルを利用できます。結果は参考情報であり、マルウェアの存在を証明しません。</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">脅威インテリジェンスエンジン</string>
+    <string name="threat_intelligence_samples">解析したマルウェア検体の総数</string>
+    <string name="threat_intelligence_accuracy">機械学習の精度</string>
+    <string name="threat_intelligence_downloads">モデルの全世界ダウンロード数</string>
+    <string name="threat_intelligence_updated">インテリジェンスの最終更新</string>
+    <string name="threat_intelligence_updating">脅威インテリジェンスを更新中…</string>
+    <string name="threat_intelligence_training_note">学習の統計情報です。このデバイスで利用できる保護については、下の検出レイヤーをご確認ください。</string>
 </resources>

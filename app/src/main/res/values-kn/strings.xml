@@ -666,5 +666,14 @@
     <string name="ml_probability">ಎಂಎಲ್ ಅಪಾಯದ ಸಾಧ್ಯತೆ: %1$d%%</string>
     <string name="ml_high_finding">ಸ್ಥಿರ ಎಂಎಲ್ ವಿಶ್ಲೇಷಣೆ: ಅನುಮತಿಗಳು ಮತ್ತು ಎಪಿಐ ಮಾದರಿಗಳ ಆಧಾರದಲ್ಲಿ ಹೆಚ್ಚಿನ ಅಂಕ; ಇದು ಸೂಚನೆ ಮಾತ್ರ, ಮಾಲ್‌ವೇರ್‌ನ ಪುರಾವೆಯಲ್ಲ.</string>
     <string name="ml_active_body">ಪರಿಶೀಲಿತ ಸಾಧನದಲ್ಲೇ ಕಾರ್ಯನಿರ್ವಹಿಸುವ ಸ್ಥಿರ ಎಂಎಲ್ ಮಾದರಿ ಲಭ್ಯವಿದೆ. ಫಲಿತಾಂಶಗಳು ಸೂಚನೆ ಮಾತ್ರ; ಮಾಲ್‌ವೇರ್‌ನ ಪುರಾವೆಯಲ್ಲ.</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">ಬೆದರಿಕೆ ಮಾಹಿತಿ ಎಂಜಿನ್</string>
+    <string name="threat_intelligence_samples">ವಿಶ್ಲೇಷಿಸಿದ ಒಟ್ಟು ಮಾಲ್‌ವೇರ್ ಮಾದರಿಗಳು</string>
+    <string name="threat_intelligence_accuracy">ಯಂತ್ರ ಕಲಿಕೆಯ ನಿಖರತೆ</string>
+    <string name="threat_intelligence_downloads">ವಿಶ್ವಾದ್ಯಂತ ಮಾದರಿಯ ಡೌನ್‌ಲೋಡ್‌ಗಳು</string>
+    <string name="threat_intelligence_updated">ಬೆದರಿಕೆ ಮಾಹಿತಿಯ ಕೊನೆಯ ನವೀಕರಣ</string>
+    <string name="threat_intelligence_updating">ಬೆದರಿಕೆ ಮಾಹಿತಿ ನವೀಕರಿಸಲಾಗುತ್ತಿದೆ…</string>
+    <string name="threat_intelligence_training_note">ಇವು ತರಬೇತಿಯ ಅಂಕಿಅಂಶಗಳು. ಈ ಸಾಧನದಲ್ಲಿ ಲಭ್ಯವಿರುವ ರಕ್ಷಣೆಗೆ ಕೆಳಗಿನ ಪತ್ತೆ ಪದರಗಳನ್ನು ನೋಡಿ.</string>
 </resources>
 

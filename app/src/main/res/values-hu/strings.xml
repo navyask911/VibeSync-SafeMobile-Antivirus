@@ -808,4 +808,13 @@
     <string name="ml_probability">ML-fenyegetés valószínűsége: %1$d%%</string>
     <string name="ml_high_finding">Statikus ML-heurisztika: magas pontszám az engedélyek és API-minták alapján; csak jelzés, nem a kártevő bizonyítéka.</string>
     <string name="ml_active_body">Ellenőrzött statikus ML-modell érhető el az eszközön. Az eredmények tájékoztató jellegűek, és nem bizonyítják a kártevő jelenlétét.</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">Fenyegetési információs motor</string>
+    <string name="threat_intelligence_samples">Összes elemzett kártevőminta</string>
+    <string name="threat_intelligence_accuracy">A gépi tanulás pontossága</string>
+    <string name="threat_intelligence_downloads">Modellletöltések világszerte</string>
+    <string name="threat_intelligence_updated">A fenyegetési információk utolsó frissítése</string>
+    <string name="threat_intelligence_updating">Fenyegetési információk frissítése…</string>
+    <string name="threat_intelligence_training_note">Tanítási statisztikák. Az eszközön elérhető védelemről az alábbi észlelési rétegek tájékoztatnak.</string>
 </resources>

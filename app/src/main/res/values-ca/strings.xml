@@ -808,4 +808,13 @@
     <string name="ml_probability">Probabilitat d’amenaça segons l’AA: %1$d%%</string>
     <string name="ml_high_finding">Heurística estàtica d’AA: puntuació alta segons permisos i patrons d’API; només orientativa, no prova programari maliciós.</string>
     <string name="ml_active_body">Hi ha un model estàtic d’AA validat al dispositiu. Els resultats són orientatius i no proven programari maliciós.</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">Motor d’intel·ligència d’amenaces</string>
+    <string name="threat_intelligence_samples">Total de mostres de programari maliciós analitzades</string>
+    <string name="threat_intelligence_accuracy">Precisió de l’aprenentatge automàtic</string>
+    <string name="threat_intelligence_downloads">Baixades del model arreu del món</string>
+    <string name="threat_intelligence_updated">Darrera actualització d’intel·ligència</string>
+    <string name="threat_intelligence_updating">S’està actualitzant la intel·ligència…</string>
+    <string name="threat_intelligence_training_note">Estadístiques d’entrenament. Consulteu les capes de detecció següents per conèixer la protecció disponible en aquest dispositiu.</string>
 </resources>

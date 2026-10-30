@@ -808,4 +808,13 @@
     <string name="ml_probability">ML-sannsynlighet for trussel: %1$d%%</string>
     <string name="ml_high_finding">Statisk ML-heuristikk: høy poengsum basert på tillatelser og API-mønstre; bare en indikasjon, ikke bevis på skadevare.</string>
     <string name="ml_active_body">En validert statisk ML-modell er tilgjengelig på enheten. Resultatene er veiledende og beviser ikke skadevare.</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">Motor for trusseletterretning</string>
+    <string name="threat_intelligence_samples">Totalt antall analyserte skadevareprøver</string>
+    <string name="threat_intelligence_accuracy">Maskinlæringens nøyaktighet</string>
+    <string name="threat_intelligence_downloads">Modellnedlastinger globalt</string>
+    <string name="threat_intelligence_updated">Siste oppdatering av trusselinformasjon</string>
+    <string name="threat_intelligence_updating">Oppdaterer trusselinformasjon…</string>
+    <string name="threat_intelligence_training_note">Treningsstatistikk. Se oppdagelseslagene nedenfor for tilgjengelig beskyttelse på denne enheten.</string>
 </resources>

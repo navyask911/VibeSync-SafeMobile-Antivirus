@@ -808,4 +808,13 @@
     <string name="ml_probability">Імовірність загрози за ML: %1$d%%</string>
     <string name="ml_high_finding">Статична евристика ML: високий бал за дозволами та шаблонами API; лише ознака, а не доказ шкідливого ПЗ.</string>
     <string name="ml_active_body">На пристрої доступна перевірена статична модель ML. Результати мають рекомендаційний характер і не доводять наявність шкідливого ПЗ.</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">Рушій аналізу загроз</string>
+    <string name="threat_intelligence_samples">Усього проаналізовано зразків шкідливого ПЗ</string>
+    <string name="threat_intelligence_accuracy">Точність машинного навчання</string>
+    <string name="threat_intelligence_downloads">Завантаження моделі у світі</string>
+    <string name="threat_intelligence_updated">Останнє оновлення даних про загрози</string>
+    <string name="threat_intelligence_updating">Оновлення даних про загрози…</string>
+    <string name="threat_intelligence_training_note">Статистика навчання. Доступний захист цього пристрою описано в шарах виявлення нижче.</string>
 </resources>

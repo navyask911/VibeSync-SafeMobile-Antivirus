@@ -808,4 +808,13 @@
     <string name="ml_probability">ML-i ohutõenäosus: %1$d%%</string>
     <string name="ml_high_finding">Staatiline ML-heuristika: kõrge skoor lubade ja API-mustrite alusel; ainult viide, mitte pahavara tõend.</string>
     <string name="ml_active_body">Seadmes on saadaval valideeritud staatiline ML-mudel. Tulemused on soovituslikud ega tõenda pahavara olemasolu.</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">Ohuteabe mootor</string>
+    <string name="threat_intelligence_samples">Analüüsitud pahavaranäidiseid kokku</string>
+    <string name="threat_intelligence_accuracy">Masinõppe täpsus</string>
+    <string name="threat_intelligence_downloads">Mudeli allalaadimised kogu maailmas</string>
+    <string name="threat_intelligence_updated">Viimane ohuteabe uuendus</string>
+    <string name="threat_intelligence_updating">Ohuteabe uuendamine…</string>
+    <string name="threat_intelligence_training_note">Treeningu statistika. Seadmes saadaolevat kaitset kirjeldavad allpool olevad tuvastuskihid.</string>
 </resources>

@@ -808,4 +808,13 @@
     <string name="ml_probability">ML-ის მიხედვით საფრთხის ალბათობა: %1$d%%</string>
     <string name="ml_high_finding">სტატიკური ML ევრისტიკა: მაღალი შეფასება ნებართვებისა და API-ის შაბლონების საფუძველზე; მხოლოდ მინიშნებაა და არა მავნე პროგრამის მტკიცებულება.</string>
     <string name="ml_active_body">მოწყობილობაზე ხელმისაწვდომია შემოწმებული სტატიკური ML მოდელი. შედეგები მხოლოდ საინფორმაციოა და მავნე პროგრამას არ ადასტურებს.</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">საფრთხეების ინფორმაციის ძრავა</string>
+    <string name="threat_intelligence_samples">გაანალიზებული მავნე პროგრამის ნიმუშების ჯამი</string>
+    <string name="threat_intelligence_accuracy">მანქანური სწავლების სიზუსტე</string>
+    <string name="threat_intelligence_downloads">მოდელის ჩამოტვირთვები მსოფლიოში</string>
+    <string name="threat_intelligence_updated">ინფორმაციის ბოლო განახლება</string>
+    <string name="threat_intelligence_updating">საფრთხეების ინფორმაცია ახლდება…</string>
+    <string name="threat_intelligence_training_note">სწავლების სტატისტიკა. ამ მოწყობილობაზე ხელმისაწვდომი დაცვისთვის იხილეთ აღმოჩენის ფენები ქვემოთ.</string>
 </resources>

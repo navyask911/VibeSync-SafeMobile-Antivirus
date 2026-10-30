@@ -665,4 +665,13 @@
     <string name="ml_probability">ఎంఎల్ ముప్పు సంభావ్యత: %1$d%%</string>
     <string name="ml_high_finding">స్థిర ఎంఎల్ అంచనా: అనుమతులు, API నమూనాల ఆధారంగా అధిక స్కోరు; ఇది సూచన మాత్రమే, మాల్వేర్‌కు రుజువు కాదు.</string>
     <string name="ml_active_body">పరికరంలో ధృవీకరించిన స్థిర ఎంఎల్ నమూనా అందుబాటులో ఉంది. ఫలితాలు సూచనలు మాత్రమే; మాల్వేర్‌ను నిర్ధారించవు.</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">ముప్పు సమాచార ఇంజిన్</string>
+    <string name="threat_intelligence_samples">విశ్లేషించిన మొత్తం మాల్‌వేర్ నమూనాలు</string>
+    <string name="threat_intelligence_accuracy">యంత్ర అభ్యాస ఖచ్చితత్వం</string>
+    <string name="threat_intelligence_downloads">ప్రపంచవ్యాప్తంగా మోడల్ డౌన్‌లోడ్‌లు</string>
+    <string name="threat_intelligence_updated">ముప్పు సమాచారం చివరిగా నవీకరించిన సమయం</string>
+    <string name="threat_intelligence_updating">ముప్పు సమాచారం నవీకరించబడుతోంది…</string>
+    <string name="threat_intelligence_training_note">ఇవి శిక్షణ గణాంకాలు. ఈ పరికరంలో అందుబాటులో ఉన్న రక్షణ కోసం దిగువ గుర్తింపు పొరలను చూడండి.</string>
 </resources>

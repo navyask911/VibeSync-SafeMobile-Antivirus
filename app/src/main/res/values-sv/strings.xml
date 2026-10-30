@@ -808,4 +808,13 @@
     <string name="ml_probability">ML-sannolikhet för hot: %1$d%%</string>
     <string name="ml_high_finding">Statisk ML-heuristik: hög poäng baserat på behörigheter och API-mönster; endast en indikation, inte bevis för skadlig kod.</string>
     <string name="ml_active_body">En validerad statisk ML-modell finns på enheten. Resultaten är vägledande och bevisar inte skadlig kod.</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">Motor för hotinformation</string>
+    <string name="threat_intelligence_samples">Totalt antal analyserade skadeprogramsprover</string>
+    <string name="threat_intelligence_accuracy">Maskininlärningens noggrannhet</string>
+    <string name="threat_intelligence_downloads">Modellnedladdningar globalt</string>
+    <string name="threat_intelligence_updated">Senaste uppdatering av hotinformation</string>
+    <string name="threat_intelligence_updating">Uppdaterar hotinformation…</string>
+    <string name="threat_intelligence_training_note">Träningsstatistik. Se detekteringslagren nedan för tillgängligt skydd på den här enheten.</string>
 </resources>
