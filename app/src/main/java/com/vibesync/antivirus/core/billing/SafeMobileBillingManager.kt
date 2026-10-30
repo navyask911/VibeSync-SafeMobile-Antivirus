@@ -163,6 +163,7 @@ class SafeMobileBillingManager(context: Context) : PurchasesUpdatedListener {
                 return@launch
             }
             refreshLocalStatus()
+            com.vibesync.antivirus.core.worker.ModelUpdateScheduler.ensureCadence(app, pro = true)
             _state.value = _state.value.copy(processing = false, notice = Notice.SUCCESS)
             if (!closed && billingClient.isReady) {
                 billingClient.consumeAsync(

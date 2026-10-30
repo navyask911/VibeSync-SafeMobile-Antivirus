@@ -2,8 +2,6 @@ package com.vibesync.antivirus.presentation
 
 import android.app.Activity
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.WorkspacePremium
 import androidx.compose.material3.*
@@ -43,7 +41,7 @@ fun SafeMobileProPaywallScreen(onBack: () -> Unit) {
     LaunchedEffect(manager) { manager.refreshLocalStatus() }
 
     Column(
-        modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(18.dp),
+        modifier = Modifier.fillMaxWidth().padding(18.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {

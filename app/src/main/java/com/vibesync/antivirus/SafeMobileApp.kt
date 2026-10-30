@@ -104,7 +104,15 @@ class SafeMobileApp : Application() {
     fun scheduleMaintenanceSweep() {
         DevicePostureMonitor.ensureScheduled(this)
         // The 7-day updater uses network only to stage untrusted research candidates.
-        ModelUpdateScheduler.ensureWeekly(this)
+        // Restore only the locally encrypted, device-bound Pro refresh preference.
+        // KeyStore is opened on IO; failure safely keeps the free seven-day cadence.
+        appScope.launch {
+            val pro = runCatching {
+                com.vibesync.antivirus.core.billing.ProEntitlementStore(this@SafeMobileApp)
+                    .checkProStatusForThisDevice()
+            }.getOrDefault(false)
+            ModelUpdateScheduler.ensureCadence(this@SafeMobileApp, pro)
+        }
         val request = PeriodicWorkRequestBuilder<DeepScanWorker>(6, TimeUnit.HOURS)
             .setConstraints(Constraints.Builder().setRequiresBatteryNotLow(true).build())
             .build()
