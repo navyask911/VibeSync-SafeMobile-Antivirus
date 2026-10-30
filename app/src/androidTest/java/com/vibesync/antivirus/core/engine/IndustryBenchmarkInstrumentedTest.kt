@@ -49,10 +49,13 @@ class IndustryBenchmarkInstrumentedTest {
             val sha256 = sha.digest().joinToString("") { "%02x".format(it) }
             assertEquals(sample.getString("sha256"), sha256)
             val result = scanner.scanFile(apk, persistAllAudit = false)
+            // Trust-list bypasses and missing hashes are unscanned, never counted as clean.
+            val actualVerdict = if (!result.trustedByUser && result.sha256 == sha256)
+                result.verdict.name else "NOT_SCANNED"
             outputs.put(JSONObject().put("sample_id", id)
                 .put("label", sample.getString("label"))
                 .put("sha256", sha256)
-                .put("verdict", result.verdict.name)
+                .put("verdict", actualVerdict)
                 .put("duration_ms", result.durationMs)
                 .put("yara_state", result.riskReport?.yaraResult?.state?.name ?: "NOT_SCANNED")
                 .put("ml_scored", result.mlProbability != null))
