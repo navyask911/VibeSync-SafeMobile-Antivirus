@@ -2,7 +2,7 @@ name: Industry Benchmark (2,000 real APKs)
 on:
   workflow_dispatch:
 permissions:
-  contents: read
+  contents: write
 concurrency:
   group: industry-benchmark
   cancel-in-progress: false
@@ -43,6 +43,22 @@ jobs:
           python3 scripts/industry_benchmark.py summarize --plan "$RUNNER_TEMP/industry/plan.json" \
             --results "$RUNNER_TEMP/industry/results" --output-json build/industry-benchmark.json \
             --output-markdown docs/BENCHMARK_REPORT.md
+      - name: Publish verified aggregate report to main (no APK files)
+        if: success()
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp docs/BENCHMARK_REPORT.md "$RUNNER_TEMP/verified-benchmark-report.md"
+          git fetch origin main
+          git checkout -B main origin/main
+          cp "$RUNNER_TEMP/verified-benchmark-report.md" docs/BENCHMARK_REPORT.md
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/BENCHMARK_REPORT.md
+          if ! git diff --cached --quiet; then
+            git commit -m "docs(phase-f): publish verified 2000-APK cloud benchmark"
+            git push origin HEAD:main
+          fi
       - uses: actions/upload-artifact@v4
         if: always()
         with:

@@ -53,7 +53,12 @@ def prepare(a):
             v=max(versions,key=lambda x:int(x.get("versionCode",0)))
             i=len(benign)
             benign.append(dict(sample_id="b%04d"%i,label="benign",sha256=v["hash"].lower(),url="https://f-droid.org/repo/"+v["apkName"],relative_path="b%04d.apk"%i))
-        if len(benign)==1000: break
+    # Deterministic pseudorandom selection avoids selecting only alphabetically first packages.
+    benign.sort(key=lambda s: hashlib.sha256(s["url"].encode("utf8")).hexdigest())
+    benign=benign[:1000]
+    for i,s in enumerate(benign):
+        s["sample_id"]="b%04d"%i
+        s["relative_path"]="b%04d.apk"%i
     if len(benign)!=1000 or len(set(s["sha256"] for s in benign+mal))!=2000:
         bad("Not exactly 1000 benign and 1000 distinct malicious SHA-256s")
     save(a.plan,dict(schema_version=1,samples=benign+mal,provenance=dict(
