@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pro_title">SafeMobile Pro</string>
+    <string name="pro_truthful_summary">現在の主要なウイルス対策機能はすべて無料のままです。Proでは未検証の機械学習を有効化しません。</string>
+    <string name="pro_feature_free">オフラインのハッシュ照合、YARA、サイドロード検出は無料のままです。</string>
+    <string name="pro_feature_research">実験的な機械学習は未検証で、有効化されていません。</string>
+    <string name="pro_feature_updates">週1回の研究用モデル更新はすでに無料です。Proでは任意の高速更新を利用できます。</string>
+    <string name="pro_feature_adfree">SafeMobileは現在、すべてのユーザーに広告なしで提供されています。</string>
+    <string name="pro_years">年数（1〜10年）</string>
+    <string name="pro_price_preview">見積合計：%1$s（%2$d年分）。Google Playで確認してください。</string>
+    <string name="pro_price_unavailable">Google Playの価格を取得中です。まだ購入できません。</string>
+    <string name="pro_cart_quantity_warning">購入数量はGoogle Playで指定します。見積ではなく実際の購入数量に応じて年数が加算されます。</string>
+    <string name="pro_non_restorable_warning">重要：これは端末に紐づく消費型の購入です。再インストール、端末の変更、暗号鍵の紛失により残存期間が失われる場合があります。Google Playから復元できません。</string>
+    <string name="pro_unlock">SafeMobile Proを購入</string>
+    <string name="pro_restore_check">復元・状態確認（この端末のみ）</string>
+    <string name="pro_active_until">この端末のPro利用期限：%1$s</string>
+    <string name="pro_not_active">この端末には有効なPro利用権がありません。</string>
+    <string name="pro_purchase_unavailable">Google Playを利用できないか、商品が設定されていません。</string>
+    <string name="pro_purchase_canceled">購入がキャンセルされました。このアプリには課金を記録していません。</string>
+    <string name="pro_purchase_pending">決済が保留中です。Google Playの購入確定後にアクセス権を付与します。</string>
+    <string name="pro_purchase_recheck">消費処理を完了するにはGoogle Playへの接続が必要です。</string>
+    <string name="pro_storage_failed">安全なローカル保存に失敗しました。再試行前にサポートへお問い合わせください。</string>
+    <string name="pro_purchase_success">購入を端末に記録し、購入数量に応じた年数を追加しました。</string>
+    <string name="pro_restore_local_only">この端末の暗号化された保存情報を確認しました。消費済みの購入はGoogle Playから復元できません。</string>
+</resources>

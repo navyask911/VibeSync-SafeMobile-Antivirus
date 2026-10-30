@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pro_title">ಸೇಫ್‌ಮೊಬೈಲ್ ಪ್ರೊ</string>
+    <string name="pro_truthful_summary">ಈಗಿನ ಎಲ್ಲಾ ಮುಖ್ಯ ಆಂಟಿವೈರಸ್ ಪರಿಶೀಲನೆಗಳು ಉಚಿತವಾಗಿಯೇ ಇರುತ್ತವೆ. ಪ್ರೊ ಯೋಜನೆಯು ಪರೀಕ್ಷಿಸದ ಯಂತ್ರ ಕಲಿಕೆಯನ್ನು ಸಕ್ರಿಯಗೊಳಿಸುವುದಿಲ್ಲ.</string>
+    <string name="pro_feature_free">ಆಫ್‌ಲೈನ್ ಹ್ಯಾಶ್, YARA ಮತ್ತು ಹೊರಗಿನ ಮೂಲದ ಆ್ಯಪ್ ಪತ್ತೆ ಉಚಿತವಾಗಿಯೇ ಇರುತ್ತದೆ.</string>
+    <string name="pro_feature_research">ಪ್ರಾಯೋಗಿಕ ಯಂತ್ರ ಕಲಿಕೆಯನ್ನು ಇನ್ನೂ ಮೌಲ್ಯಮಾಪನ ಮಾಡಿಲ್ಲ ಮತ್ತು ಸಕ್ರಿಯಗೊಳಿಸಿಲ್ಲ.</string>
+    <string name="pro_feature_updates">ವಾರದ ಸಂಶೋಧನಾ ಮಾದರಿ ನವೀಕರಣಗಳು ಈಗಾಗಲೇ ಉಚಿತ. ಪ್ರೊ ಐಚ್ಛಿಕ ವೇಗದ ನವೀಕರಣ ಒದಗಿಸಬಹುದು.</string>
+    <string name="pro_feature_adfree">ಸೇಫ್‌ಮೊಬೈಲ್ ಈಗ ಎಲ್ಲರಿಗೂ ಜಾಹೀರಾತು ಮುಕ್ತವಾಗಿದೆ.</string>
+    <string name="pro_years">ವರ್ಷಗಳು (1 ರಿಂದ 10 ಆಯ್ಕೆಮಾಡಿ)</string>
+    <string name="pro_price_preview">ಅಂದಾಜು ಮೊತ್ತ: %1$s — %2$d ವರ್ಷಗಳಿಗೆ. ಗೂಗಲ್ ಪ್ಲೇಯಲ್ಲಿ ದೃಢೀಕರಿಸಿ.</string>
+    <string name="pro_price_unavailable">ಗೂಗಲ್ ಪ್ಲೇ ಬೆಲೆ ಲಭ್ಯವಾಗಲು ಕಾಯಲಾಗುತ್ತಿದೆ; ಖರೀದಿ ಇನ್ನೂ ಲಭ್ಯವಿಲ್ಲ.</string>
+    <string name="pro_cart_quantity_warning">ಗೂಗಲ್ ಪ್ಲೇ ಖರೀದಿ ಪ್ರಮಾಣವನ್ನು ನಿರ್ಧರಿಸುತ್ತದೆ. ವಾಸ್ತವವಾಗಿ ಖರೀದಿಸಿದ ಪ್ರಮಾಣದಂತೆ ವರ್ಷಗಳನ್ನು ಸೇರಿಸಲಾಗುತ್ತದೆ.</string>
+    <string name="pro_non_restorable_warning">ಮುಖ್ಯ: ಇದು ಸಾಧನಕ್ಕೆ ಸಂಬಂಧಿಸಿದ ಬಳಕೆಯಾದ ಖರೀದಿ. ಮರುಸ್ಥಾಪನೆ, ಸಾಧನ ಬದಲಾವಣೆ ಅಥವಾ ಕೀ ಕಳೆದುಕೊಂಡರೆ ಉಳಿದ ವರ್ಷಗಳು ಶಾಶ್ವತವಾಗಿ ಕಳೆದುಹೋಗಬಹುದು; ಗೂಗಲ್ ಪ್ಲೇಯಿಂದ ಮರಳಿ ಪಡೆಯಲಾಗುವುದಿಲ್ಲ.</string>
+    <string name="pro_unlock">ಸೇಫ್‌ಮೊಬೈಲ್ ಪ್ರೊ ಸಕ್ರಿಯಗೊಳಿಸಿ</string>
+    <string name="pro_restore_check">ಮರುಪಡೆಯಿರಿ / ಸ್ಥಿತಿ ಪರಿಶೀಲಿಸಿ (ಈ ಸಾಧನದಲ್ಲಿ ಮಾತ್ರ)</string>
+    <string name="pro_active_until">ಸ್ಥಳೀಯ ಪ್ರೊ ಪ್ರವೇಶ %1$s ವರೆಗೆ</string>
+    <string name="pro_not_active">ಈ ಸಾಧನದಲ್ಲಿ ಸಕ್ರಿಯ ಪ್ರೊ ಅನುಮತಿ ಇಲ್ಲ.</string>
+    <string name="pro_purchase_unavailable">ಗೂಗಲ್ ಪ್ಲೇ ಲಭ್ಯವಿಲ್ಲ ಅಥವಾ ಈ ಉತ್ಪನ್ನವನ್ನು ಇನ್ನೂ ಹೊಂದಿಸಿಲ್ಲ.</string>
+    <string name="pro_purchase_canceled">ಖರೀದಿ ರದ್ದಾಗಿದೆ. ಈ ಆ್ಯಪ್‌ನಲ್ಲಿ ಶುಲ್ಕ ದಾಖಲಿಸಿಲ್ಲ.</string>
+    <string name="pro_purchase_pending">ಪಾವತಿ ಬಾಕಿಯಿದೆ. ಗೂಗಲ್ ಪ್ಲೇ ದೃಢಪಡಿಸಿದ ನಂತರವೇ ಪ್ರವೇಶ ನೀಡಲಾಗುತ್ತದೆ.</string>
+    <string name="pro_purchase_recheck">ಖರೀದಿಯನ್ನು ಪೂರ್ಣಗೊಳಿಸಲು ಗೂಗಲ್ ಪ್ಲೇ ಸಂಪರ್ಕ ಅಗತ್ಯವಿದೆ.</string>
+    <string name="pro_storage_failed">ಸುರಕ್ಷಿತ ಸ್ಥಳೀಯ ಸಂಗ್ರಹದಲ್ಲಿ ಖರೀದಿಯನ್ನು ಉಳಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸುವ ಮೊದಲು ಸಹಾಯ ಸಂಪರ್ಕಿಸಿ.</string>
+    <string name="pro_purchase_success">ಖರೀದಿ ಸ್ಥಳೀಯವಾಗಿ ದಾಖಲಾಗಿದೆ. ಖರೀದಿಸಿದ ಪ್ರಮಾಣಕ್ಕೆ ವರ್ಷಗಳು ಸೇರಿವೆ.</string>
+    <string name="pro_restore_local_only">ಈ ಸಾಧನದ ಎನ್‌ಕ್ರಿಪ್ಟ್ ಮಾಡಿದ ಸಂಗ್ರಹವನ್ನು ಪರಿಶೀಲಿಸಲಾಗಿದೆ. ಬಳಸಿದ ಖರೀದಿಗಳನ್ನು ಗೂಗಲ್ ಪ್ಲೇಯಿಂದ ಮರುಪಡೆಯಲಾಗುವುದಿಲ್ಲ.</string>
+</resources>
