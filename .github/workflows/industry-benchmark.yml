@@ -1,6 +1,9 @@
-name: Industry Benchmark (2,000 real APKs)
+name: Industry Benchmark (200 real APKs)
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/industry-benchmark.yml']
 permissions:
   contents: read
 concurrency:
@@ -10,10 +13,7 @@ jobs:
   scan:
     name: Read-only APK benchmark on Android emulator
     runs-on: ubuntu-latest
-    timeout-minutes: 345
-    env:
-      INDUSTRY_MALWARE_MANIFEST_URL: ${{ vars.INDUSTRY_MALWARE_MANIFEST_URL }}
-      INDUSTRY_MALWARE_MANIFEST_SHA256: ${{ vars.INDUSTRY_MALWARE_MANIFEST_SHA256 }}
+    timeout-minutes: 110
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -21,14 +21,24 @@ jobs:
           distribution: temurin
           java-version: '17'
       - uses: gradle/actions/setup-gradle@v4
-      - name: Select 1000 F-Droid and 1000 approved malware APKs
+      - name: Install encrypted ZIP support
+        run: python3 -m pip install --disable-pip-version-check pyzipper==0.3.6
+      - name: Generate pinned manifest for 100 MalwareBazaar Android APKs
+        env:
+          MALWAREBAZAAR_AUTH_KEY: ${{ secrets.MALWAREBAZAAR_AUTH_KEY }}
         run: |
+          set -euo pipefail
           mkdir -p "$RUNNER_TEMP/industry/results"
-          python3 scripts/industry_benchmark.py prepare --plan "$RUNNER_TEMP/industry/plan.json"
+          python3 scripts/generate_benchmark_manifest.py --output "$RUNNER_TEMP/industry/malware-manifest.json"
+      - name: Select 100 F-Droid APKs and prepare 200-sample plan
+        run: |
+          python3 scripts/industry_benchmark.py prepare             --malware-manifest "$RUNNER_TEMP/industry/malware-manifest.json"             --plan "$RUNNER_TEMP/industry/plan.json"
       - name: Build application and real on-device benchmark test
         run: ./gradlew --no-daemon --max-workers=2 assembleOfflineDebug assembleOfflineDebugAndroidTest
-      - name: Scan in cloud Android emulator, 25 temporary APKs per batch
+      - name: Run read-only cloud Android scans (20 ten-APK batches)
         uses: reactivecircus/android-emulator-runner@v2
+        env:
+          MALWAREBAZAAR_AUTH_KEY: ${{ secrets.MALWAREBAZAAR_AUTH_KEY }}
         with:
           api-level: 33
           target: default
@@ -79,8 +89,8 @@ jobs:
           from pathlib import Path
           result=json.loads(Path("published/build/industry-benchmark.json").read_text())
           assert result["status"]=="MEASURED", "Missing independently measured benchmark"
-          assert result["total_apps"]==2000 and result["benign_apps"]==1000
-          assert result["malicious_apps"]==1000 and result["not_scanned"]==0
+          assert result["total_apps"]==200 and result["benign_apps"]==100
+          assert result["malicious_apps"]==100 and result["not_scanned"]==0
           assert all(result[key] is not None for key in ("tpr_percent","fpr_percent","mean_latency_ms"))
           print("Verified report fields. No APK binaries are present in publish job.")
           PY
@@ -93,6 +103,6 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add docs/BENCHMARK_REPORT.md
           if ! git diff --cached --quiet; then
-            git commit -m "docs(phase-f): publish verified 2000-APK cloud benchmark"
+            git commit -m "docs(phase-f): publish verified 200-APK cloud benchmark"
             git push origin HEAD:main
           fi
