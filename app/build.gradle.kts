@@ -98,8 +98,9 @@ android.sourceSets.getByName("main").assets.srcDir(stageBenchmarkReport)
 // Keep an explicit dependency as a belt-and-braces guard across AGP upgrades.
 tasks.matching {
     (it.name.startsWith("merge") && it.name.endsWith("Assets")) ||
-        (it.name.startsWith("generate") && it.name.endsWith("LintVitalReportModel")) ||
-        (it.name.startsWith("generate") && it.name.endsWith("LintModel"))
+        // Lint creates both generate<Variant>LintVitalReportModel and
+        // generate<Variant>LintReportModel; matching only LintModel misses the latter.
+        (it.name.startsWith("generate") && it.name.contains("Lint") && it.name.endsWith("Model"))
 }.configureEach {
     dependsOn(stageBenchmarkReport)
 }
