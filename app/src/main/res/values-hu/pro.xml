@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- SafeMobile Pro is the product brand; all purchase copy below is localized. -->
+    <string name="pro_title">SafeMobile Pro</string>
+    <string name="pro_truthful_summary">Az alapvető vírusellenőrzések ingyenesek maradnak. A Pro nem kapcsolja be a kísérleti gépi tanulást.</string>
+    <string name="pro_feature_free">Az offline kivonat-, YARA- és külső telepítésfelismerés ingyenes marad.</string>
+    <string name="pro_feature_research">A kísérleti gépi tanulás nincs ellenőrizve és nincs bekapcsolva.</string>
+    <string name="pro_feature_updates">A Pro választható napi kutatásimodell-frissítést kínál. A heti frissítések ingyenesek maradnak.</string>
+    <string name="pro_feature_adfree">A SafeMobile jelenleg mindenki számára reklámmentes.</string>
+    <string name="pro_years">Évek a becsléshez (1–10)</string>
+    <string name="pro_price_preview">Becsült végösszeg: %1$s. Évek: %2$d. Erősítse meg a Google Playen.</string>
+    <string name="pro_price_unavailable">Várakozás a Google Play áraira; a vásárlás nem elérhető.</string>
+    <string name="pro_cart_quantity_warning">A Google Playen válassza ki a mennyiséget. A megerősített mennyiség határozza meg az eszközön jóváírt éveket.</string>
+    <string name="pro_non_restorable_warning">A vásárlás csak erre az eszközre érvényes. Újratelepítés, alaphelyzetbe állítás vagy a titkosítási kulcsok elvesztése végleg törölheti a fennmaradó Pro-hozzáférést.</string>
+    <string name="pro_unlock">SafeMobile Pro feloldása</string>
+    <string name="pro_restore_check">Visszaállítás / Állapot ellenőrzése (csak ezen az eszközön)</string>
+    <string name="pro_active_until">Helyi Pro-hozzáférés eddig: %1$s</string>
+    <string name="pro_not_active">Nincs aktív helyi Pro-bérlet ezen az eszközön.</string>
+    <string name="pro_purchase_unavailable">A Google Play nem elérhető, vagy a termék nincs beállítva.</string>
+    <string name="pro_purchase_canceled">Vásárlás megszakítva.</string>
+    <string name="pro_purchase_pending">A fizetés függőben van. A Pro-hozzáférés a vásárlás Google Play általi megerősítése után indul.</string>
+    <string name="pro_purchase_recheck">A vásárlás feldolgozásának befejezéséhez csatlakozzon újra a Google Playhez.</string>
+    <string name="pro_storage_failed">A biztonságos tárhely nem tudta menteni a vásárlást. Újrapróbálkozás előtt lépjen kapcsolatba a támogatással.</string>
+    <string name="pro_purchase_success">A vásárlás helyben mentve. A megvásárolt mennyiség jóváírva.</string>
+    <string name="pro_restore_local_only">Helyi állapot ellenőrizve. A Google Play nem tudja visszaállítani a felhasznált bérleteket.</string>
+    <string name="pro_device_disclaimer" formatted="false">Jogi nyilatkozat: a Pro-bérletek ehhez a fizikai eszközhöz kötődnek. Mivel a SafeMobile 100% offline működik, az alkalmazás eltávolítása vagy adatainak törlése esetén a Google Play nem tudja visszaállítani a Pro-bérletét.</string>
+    <string name="pro_network_notice">Az alapvédelem offline működik. A Google Play-vásárlások és az opcionális modellfrissítések internetkapcsolatot igényelnek.</string>
+    <string name="pro_fewer_years">Kevesebb év</string>
+    <string name="pro_more_years">Több év</string>
+</resources>

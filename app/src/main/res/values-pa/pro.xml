@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- SafeMobile Pro is the product brand; all purchase copy below is localized. -->
+    <string name="pro_title">SafeMobile Pro</string>
+    <string name="pro_truthful_summary">ਮੁੱਖ ਐਂਟੀਵਾਇਰਸ ਜਾਂਚਾਂ ਮੁਫ਼ਤ ਰਹਿਣਗੀਆਂ। Pro ਪ੍ਰਯੋਗਾਤਮਕ ਮਸ਼ੀਨ ਲਰਨਿੰਗ ਚਾਲੂ ਨਹੀਂ ਕਰਦਾ।</string>
+    <string name="pro_feature_free">ਆਫ਼ਲਾਈਨ ਹੈਸ਼, YARA ਅਤੇ ਬਾਹਰੀ ਸਰੋਤ ਤੋਂ ਇੰਸਟਾਲ ਦੀ ਪਛਾਣ ਮੁਫ਼ਤ ਰਹਿੰਦੀ ਹੈ।</string>
+    <string name="pro_feature_research">ਪ੍ਰਯੋਗਾਤਮਕ ਮਸ਼ੀਨ ਲਰਨਿੰਗ ਦੀ ਪੁਸ਼ਟੀ ਨਹੀਂ ਹੋਈ ਅਤੇ ਇਹ ਚਾਲੂ ਨਹੀਂ ਹੈ।</string>
+    <string name="pro_feature_updates">Pro ਖੋਜ ਮਾਡਲ ਦੇ ਚੋਣਵੇਂ ਰੋਜ਼ਾਨਾ ਅੱਪਡੇਟ ਦਿੰਦਾ ਹੈ। ਹਫ਼ਤਾਵਾਰੀ ਅੱਪਡੇਟ ਮੁਫ਼ਤ ਰਹਿੰਦੇ ਹਨ।</string>
+    <string name="pro_feature_adfree">SafeMobile ਇਸ ਵੇਲੇ ਸਭ ਲਈ ਇਸ਼ਤਿਹਾਰਾਂ ਤੋਂ ਮੁਕਤ ਹੈ।</string>
+    <string name="pro_years">ਅੰਦਾਜ਼ੇ ਲਈ ਸਾਲ (1–10)</string>
+    <string name="pro_price_preview">ਅੰਦਾਜ਼ਨ ਕੁੱਲ: %1$s। ਸਾਲ: %2$d। Google Play ਵਿੱਚ ਪੁਸ਼ਟੀ ਕਰੋ।</string>
+    <string name="pro_price_unavailable">Google Play ਦੀ ਕੀਮਤ ਦੀ ਉਡੀਕ ਹੈ; ਖਰੀਦ ਉਪਲਬਧ ਨਹੀਂ ਹੈ।</string>
+    <string name="pro_cart_quantity_warning">Google Play ਵਿੱਚ ਖਰੀਦ ਦੀ ਗਿਣਤੀ ਚੁਣੋ। ਪੁਸ਼ਟੀ ਕੀਤੀ ਗਿਣਤੀ ਮੁਤਾਬਕ ਇਸ ਡਿਵਾਈਸ ਉੱਤੇ ਸਾਲ ਜੋੜੇ ਜਾਂਦੇ ਹਨ।</string>
+    <string name="pro_non_restorable_warning">ਖਰੀਦ ਸਿਰਫ਼ ਇਸ ਡਿਵਾਈਸ ਲਈ ਹੈ। ਮੁੜ ਇੰਸਟਾਲ ਕਰਨ, ਰੀਸੈੱਟ ਕਰਨ ਜਾਂ ਇਨਕ੍ਰਿਪਸ਼ਨ ਕੁੰਜੀਆਂ ਗੁਆਉਣ ਨਾਲ ਬਾਕੀ Pro ਪਹੁੰਚ ਹਮੇਸ਼ਾ ਲਈ ਮਿਟ ਸਕਦੀ ਹੈ।</string>
+    <string name="pro_unlock">SafeMobile Pro ਖੋਲ੍ਹੋ</string>
+    <string name="pro_restore_check">ਬਹਾਲ ਕਰੋ / ਸਥਿਤੀ ਜਾਂਚੋ (ਸਿਰਫ਼ ਇਹ ਡਿਵਾਈਸ)</string>
+    <string name="pro_active_until">ਸਥਾਨਕ Pro ਪਹੁੰਚ %1$s ਤੱਕ</string>
+    <string name="pro_not_active">ਇਸ ਡਿਵਾਈਸ ਉੱਤੇ ਕੋਈ ਸਰਗਰਮ ਸਥਾਨਕ Pro ਪਾਸ ਨਹੀਂ ਹੈ।</string>
+    <string name="pro_purchase_unavailable">Google Play ਉਪਲਬਧ ਨਹੀਂ ਜਾਂ ਉਤਪਾਦ ਦੀ ਸੰਰਚਨਾ ਨਹੀਂ ਕੀਤੀ ਗਈ।</string>
+    <string name="pro_purchase_canceled">ਖਰੀਦ ਰੱਦ ਹੋਈ।</string>
+    <string name="pro_purchase_pending">ਭੁਗਤਾਨ ਬਕਾਇਆ ਹੈ। Google Play ਵੱਲੋਂ ਖਰੀਦ ਦੀ ਪੁਸ਼ਟੀ ਤੋਂ ਬਾਅਦ Pro ਪਹੁੰਚ ਸ਼ੁਰੂ ਹੁੰਦੀ ਹੈ।</string>
+    <string name="pro_purchase_recheck">ਖਰੀਦ ਦੀ ਕਾਰਵਾਈ ਪੂਰੀ ਕਰਨ ਲਈ Google Play ਨਾਲ ਮੁੜ ਜੁੜੋ।</string>
+    <string name="pro_storage_failed">ਸੁਰੱਖਿਅਤ ਸਟੋਰੇਜ ਖਰੀਦ ਸੰਭਾਲ ਨਹੀਂ ਸਕੀ। ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਤੋਂ ਪਹਿਲਾਂ ਸਹਾਇਤਾ ਨਾਲ ਸੰਪਰਕ ਕਰੋ।</string>
+    <string name="pro_purchase_success">ਖਰੀਦ ਸਥਾਨਕ ਤੌਰ ਉੱਤੇ ਸੰਭਾਲੀ ਗਈ। ਖਰੀਦੀ ਗਿਣਤੀ ਜੋੜ ਦਿੱਤੀ ਗਈ ਹੈ।</string>
+    <string name="pro_restore_local_only">ਸਥਾਨਕ ਸਥਿਤੀ ਜਾਂਚੀ ਗਈ। ਵਰਤੇ ਜਾ ਚੁੱਕੇ ਪਾਸ Google Play ਬਹਾਲ ਨਹੀਂ ਕਰ ਸਕਦਾ।</string>
+    <string name="pro_device_disclaimer" formatted="false">ਬੇਦਾਅਵਾ: Pro ਪਾਸ ਇਸ ਭੌਤਿਕ ਡਿਵਾਈਸ ਨਾਲ ਬੱਝੇ ਹਨ। SafeMobile 100% ਆਫ਼ਲਾਈਨ ਹੈ, ਇਸ ਲਈ ਜੇ ਤੁਸੀਂ ਐਪ ਅਣਇੰਸਟਾਲ ਕਰਦੇ ਹੋ ਜਾਂ ਐਪ ਦਾ ਡਾਟਾ ਮਿਟਾਉਂਦੇ ਹੋ, ਤਾਂ Google Play ਤੁਹਾਡਾ Pro ਪਾਸ ਬਹਾਲ ਨਹੀਂ ਕਰ ਸਕਦਾ।</string>
+    <string name="pro_network_notice">ਮੁੱਖ ਸੁਰੱਖਿਆ ਆਫ਼ਲਾਈਨ ਕੰਮ ਕਰਦੀ ਹੈ। Google Play ਖਰੀਦਾਂ ਅਤੇ ਮਾਡਲ ਦੇ ਚੋਣਵੇਂ ਅੱਪਡੇਟਾਂ ਲਈ ਇੰਟਰਨੈੱਟ ਲੋੜੀਂਦਾ ਹੈ।</string>
+    <string name="pro_fewer_years">ਘੱਟ ਸਾਲ</string>
+    <string name="pro_more_years">ਵੱਧ ਸਾਲ</string>
+</resources>

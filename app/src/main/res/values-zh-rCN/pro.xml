@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- SafeMobile Pro is the product brand; all purchase copy below is localized. -->
+    <string name="pro_title">SafeMobile Pro</string>
+    <string name="pro_truthful_summary">核心杀毒检查始终免费。Pro 不会启用实验性机器学习。</string>
+    <string name="pro_feature_free">离线哈希、YARA 和侧载检测始终免费。</string>
+    <string name="pro_feature_research">实验性机器学习尚未验证，也未启用。</string>
+    <string name="pro_feature_updates">Pro 提供可选的每日研究模型更新。每周更新仍然免费。</string>
+    <string name="pro_feature_adfree">SafeMobile 目前对所有用户均无广告。</string>
+    <string name="pro_years">用于估算的年数（1–10）</string>
+    <string name="pro_price_preview">估算总价：%1$s。年数：%2$d。请在 Google Play 中确认。</string>
+    <string name="pro_price_unavailable">正在等待 Google Play 定价；暂时无法购买。</string>
+    <string name="pro_cart_quantity_warning">请在 Google Play 中选择购买数量。确认的数量决定此设备获得的使用年数。</string>
+    <string name="pro_non_restorable_warning">此购买仅限本设备。重新安装、重置或丢失加密密钥可能永久删除剩余的 Pro 使用权限。</string>
+    <string name="pro_unlock">解锁 SafeMobile Pro</string>
+    <string name="pro_restore_check">恢复 / 检查状态（仅限本设备）</string>
+    <string name="pro_active_until">本地 Pro 权限有效至 %1$s</string>
+    <string name="pro_not_active">此设备没有有效的本地 Pro 通行证。</string>
+    <string name="pro_purchase_unavailable">Google Play 不可用，或商品尚未配置。</string>
+    <string name="pro_purchase_canceled">购买已取消。</string>
+    <string name="pro_purchase_pending">付款待处理。Google Play 确认购买后，Pro 权限才会生效。</string>
+    <string name="pro_purchase_recheck">请重新连接 Google Play 以完成购买处理。</string>
+    <string name="pro_storage_failed">安全存储无法保存购买记录。重试前请联系支持团队。</string>
+    <string name="pro_purchase_success">购买记录已保存在本地，购买的数量已计入。</string>
+    <string name="pro_restore_local_only">已检查本地状态。Google Play 无法恢复已消耗的通行证。</string>
+    <string name="pro_device_disclaimer" formatted="false">免责声明：Pro 通行证绑定于此实体设备。由于 SafeMobile 100% 离线运行，如果您卸载应用或清除应用数据，Google Play 将无法恢复您的 Pro 通行证。</string>
+    <string name="pro_network_notice">核心保护可离线运行。Google Play 购买和可选的模型更新需要互联网连接。</string>
+    <string name="pro_fewer_years">减少年数</string>
+    <string name="pro_more_years">增加年数</string>
+</resources>

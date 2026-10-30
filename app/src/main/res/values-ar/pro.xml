@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- SafeMobile Pro is the product brand; all purchase copy below is localized. -->
+    <string name="pro_title">SafeMobile Pro</string>
+    <string name="pro_truthful_summary">تبقى فحوصات مكافحة الفيروسات الأساسية مجانية. لا يفعّل Pro التعلم الآلي التجريبي.</string>
+    <string name="pro_feature_free">يبقى كشف التجزئة وYARA والتثبيت من مصادر خارجية دون اتصال مجانيًا.</string>
+    <string name="pro_feature_research">التعلم الآلي التجريبي غير معتمد وغير مفعّل.</string>
+    <string name="pro_feature_updates">يوفر Pro تحديثات يومية اختيارية لنموذج البحث. تبقى التحديثات الأسبوعية مجانية.</string>
+    <string name="pro_feature_adfree">SafeMobile خالٍ من الإعلانات حاليًا للجميع.</string>
+    <string name="pro_years">عدد السنوات للتقدير (1–10)</string>
+    <string name="pro_price_preview">الإجمالي التقديري: %1$s. السنوات: %2$d. أكّد في Google Play.</string>
+    <string name="pro_price_unavailable">بانتظار أسعار Google Play؛ عمليات الشراء غير متاحة.</string>
+    <string name="pro_cart_quantity_warning">اختر الكمية في Google Play. تحدد الكمية المؤكدة عدد السنوات المضافة إلى هذا الجهاز.</string>
+    <string name="pro_non_restorable_warning">شراء خاص بهذا الجهاز. قد تؤدي إعادة التثبيت أو إعادة الضبط أو فقدان مفاتيح التشفير إلى فقدان وصول Pro المتبقي نهائيًا.</string>
+    <string name="pro_unlock">فتح SafeMobile Pro</string>
+    <string name="pro_restore_check">استعادة / فحص الحالة (هذا الجهاز فقط)</string>
+    <string name="pro_active_until">وصول Pro المحلي حتى %1$s</string>
+    <string name="pro_not_active">لا توجد بطاقة Pro محلية نشطة على هذا الجهاز.</string>
+    <string name="pro_purchase_unavailable">Google Play غير متاح أو المنتج غير مُعدّ.</string>
+    <string name="pro_purchase_canceled">تم إلغاء الشراء.</string>
+    <string name="pro_purchase_pending">الدفع قيد الانتظار. يبدأ وصول Pro بعد تأكيد Google Play للشراء.</string>
+    <string name="pro_purchase_recheck">أعد الاتصال بـ Google Play لإكمال معالجة الشراء.</string>
+    <string name="pro_storage_failed">تعذر على التخزين الآمن حفظ الشراء. تواصل مع الدعم قبل المحاولة مجددًا.</string>
+    <string name="pro_purchase_success">تم حفظ الشراء محليًا وإضافة الكمية المشتراة.</string>
+    <string name="pro_restore_local_only">تم فحص الحالة المحلية. لا يستطيع Google Play استعادة البطاقات المستهلكة.</string>
+    <string name="pro_device_disclaimer" formatted="false">إخلاء مسؤولية: ترتبط بطاقات Pro بهذا الجهاز الفعلي. لأن SafeMobile يعمل 100% دون اتصال، إذا أزلت التطبيق أو مسحت بياناته فلن يتمكن Google Play من استعادة بطاقة Pro الخاصة بك.</string>
+    <string name="pro_network_notice">تعمل الحماية الأساسية دون اتصال. تتطلب مشتريات Google Play وتحديثات النموذج الاختيارية اتصالًا بالإنترنت.</string>
+    <string name="pro_fewer_years">سنوات أقل</string>
+    <string name="pro_more_years">سنوات أكثر</string>
+</resources>

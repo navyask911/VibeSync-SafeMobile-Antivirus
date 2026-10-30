@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- SafeMobile Pro is the product brand; all purchase copy below is localized. -->
+    <string name="pro_title">SafeMobile Pro</string>
+    <string name="pro_truthful_summary">Οι βασικοί έλεγχοι προστασίας από ιούς παραμένουν δωρεάν. Το Pro δεν ενεργοποιεί την πειραματική μηχανική μάθηση.</string>
+    <string name="pro_feature_free">Η ανίχνευση κατακερματισμού, YARA και εξωτερικών εγκαταστάσεων εκτός σύνδεσης παραμένει δωρεάν.</string>
+    <string name="pro_feature_research">Η πειραματική μηχανική μάθηση δεν έχει επικυρωθεί και δεν είναι ενεργή.</string>
+    <string name="pro_feature_updates">Το Pro προσφέρει προαιρετικές καθημερινές ενημερώσεις του ερευνητικού μοντέλου. Οι εβδομαδιαίες παραμένουν δωρεάν.</string>
+    <string name="pro_feature_adfree">Το SafeMobile προς το παρόν δεν έχει διαφημίσεις για κανέναν.</string>
+    <string name="pro_years">Έτη για την εκτίμηση (1–10)</string>
+    <string name="pro_price_preview">Εκτιμώμενο σύνολο: %1$s. Έτη: %2$d. Επιβεβαιώστε στο Google Play.</string>
+    <string name="pro_price_unavailable">Αναμονή τιμών Google Play· οι αγορές δεν είναι διαθέσιμες.</string>
+    <string name="pro_cart_quantity_warning">Επιλέξτε ποσότητα στο Google Play. Η επιβεβαιωμένη ποσότητα καθορίζει τα έτη που πιστώνονται σε αυτή τη συσκευή.</string>
+    <string name="pro_non_restorable_warning">Αγορά μόνο για αυτή τη συσκευή. Επανεγκατάσταση, επαναφορά ή απώλεια κλειδιών κρυπτογράφησης μπορεί να διαγράψει οριστικά την υπόλοιπη πρόσβαση Pro.</string>
+    <string name="pro_unlock">Ξεκλείδωμα SafeMobile Pro</string>
+    <string name="pro_restore_check">Επαναφορά / Έλεγχος κατάστασης (μόνο αυτή η συσκευή)</string>
+    <string name="pro_active_until">Τοπική πρόσβαση Pro έως %1$s</string>
+    <string name="pro_not_active">Δεν υπάρχει ενεργό τοπικό πάσο Pro σε αυτή τη συσκευή.</string>
+    <string name="pro_purchase_unavailable">Το Google Play δεν είναι διαθέσιμο ή το προϊόν δεν έχει ρυθμιστεί.</string>
+    <string name="pro_purchase_canceled">Η αγορά ακυρώθηκε.</string>
+    <string name="pro_purchase_pending">Η πληρωμή εκκρεμεί. Η πρόσβαση Pro ξεκινά όταν το Google Play επιβεβαιώσει την αγορά.</string>
+    <string name="pro_purchase_recheck">Συνδεθείτε ξανά στο Google Play για να ολοκληρωθεί η επεξεργασία της αγοράς.</string>
+    <string name="pro_storage_failed">Ο ασφαλής αποθηκευτικός χώρος δεν μπόρεσε να αποθηκεύσει την αγορά. Επικοινωνήστε με την υποστήριξη πριν δοκιμάσετε ξανά.</string>
+    <string name="pro_purchase_success">Η αγορά αποθηκεύτηκε τοπικά. Η αγορασμένη ποσότητα πιστώθηκε.</string>
+    <string name="pro_restore_local_only">Η τοπική κατάσταση ελέγχθηκε. Το Google Play δεν μπορεί να επαναφέρει καταναλωμένα πάσα.</string>
+    <string name="pro_device_disclaimer" formatted="false">Αποποίηση ευθύνης: τα πάσα Pro συνδέονται με αυτή τη φυσική συσκευή. Επειδή το SafeMobile λειτουργεί 100% εκτός σύνδεσης, αν απεγκαταστήσετε την εφαρμογή ή διαγράψετε τα δεδομένα της, το Google Play δεν μπορεί να επαναφέρει το πάσο Pro σας.</string>
+    <string name="pro_network_notice">Η βασική προστασία λειτουργεί εκτός σύνδεσης. Οι αγορές Google Play και οι προαιρετικές ενημερώσεις μοντέλου απαιτούν internet.</string>
+    <string name="pro_fewer_years">Λιγότερα έτη</string>
+    <string name="pro_more_years">Περισσότερα έτη</string>
+</resources>

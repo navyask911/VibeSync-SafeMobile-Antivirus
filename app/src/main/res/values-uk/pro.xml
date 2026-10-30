@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- SafeMobile Pro is the product brand; all purchase copy below is localized. -->
+    <string name="pro_title">SafeMobile Pro</string>
+    <string name="pro_truthful_summary">Основні антивірусні перевірки залишаються безкоштовними. Pro не вмикає експериментальне машинне навчання.</string>
+    <string name="pro_feature_free">Автономна перевірка хешів, YARA та сторонніх установлень залишається безкоштовною.</string>
+    <string name="pro_feature_research">Експериментальне машинне навчання не перевірене й не ввімкнене.</string>
+    <string name="pro_feature_updates">Pro пропонує необов’язкові щоденні оновлення дослідницької моделі. Щотижневі оновлення залишаються безкоштовними.</string>
+    <string name="pro_feature_adfree">Зараз SafeMobile не показує рекламу нікому.</string>
+    <string name="pro_years">Роки для розрахунку (1–10)</string>
+    <string name="pro_price_preview">Орієнтовна сума: %1$s. Роки: %2$d. Підтвердьте в Google Play.</string>
+    <string name="pro_price_unavailable">Очікування цін Google Play; покупки недоступні.</string>
+    <string name="pro_cart_quantity_warning">Виберіть кількість у Google Play. Підтверджена кількість визначає роки, додані на цей пристрій.</string>
+    <string name="pro_non_restorable_warning">Покупка лише для цього пристрою. Повторне встановлення, скидання або втрата ключів шифрування можуть назавжди видалити решту доступу Pro.</string>
+    <string name="pro_unlock">Відкрити SafeMobile Pro</string>
+    <string name="pro_restore_check">Відновити / Перевірити стан (лише цей пристрій)</string>
+    <string name="pro_active_until">Локальний доступ Pro до %1$s</string>
+    <string name="pro_not_active">На цьому пристрої немає активної локальної перепустки Pro.</string>
+    <string name="pro_purchase_unavailable">Google Play недоступний або продукт не налаштований.</string>
+    <string name="pro_purchase_canceled">Покупку скасовано.</string>
+    <string name="pro_purchase_pending">Платіж очікується. Доступ Pro почнеться після підтвердження покупки Google Play.</string>
+    <string name="pro_purchase_recheck">Знову підключіться до Google Play, щоб завершити обробку покупки.</string>
+    <string name="pro_storage_failed">Захищене сховище не змогло зберегти покупку. Перед повторною спробою зверніться до підтримки.</string>
+    <string name="pro_purchase_success">Покупку збережено локально. Придбану кількість зараховано.</string>
+    <string name="pro_restore_local_only">Локальний стан перевірено. Google Play не може відновити використані перепустки.</string>
+    <string name="pro_device_disclaimer" formatted="false">Застереження: перепустки Pro прив’язані до цього фізичного пристрою. Оскільки SafeMobile працює 100% автономно, після видалення застосунку або очищення його даних Google Play не зможе відновити вашу перепустку Pro.</string>
+    <string name="pro_network_notice">Основний захист працює автономно. Для покупок Google Play та необов’язкових оновлень моделі потрібен інтернет.</string>
+    <string name="pro_fewer_years">Менше років</string>
+    <string name="pro_more_years">Більше років</string>
+</resources>

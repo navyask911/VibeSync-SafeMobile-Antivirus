@@ -808,4 +808,13 @@
     <string name="ml_probability">Kebarangkalian ancaman ML: %1$d%%</string>
     <string name="ml_high_finding">Heuristik ML statik: skor tinggi berdasarkan kebenaran dan corak API; hanya petunjuk, bukan bukti perisian hasad.</string>
     <string name="ml_active_body">Model ML statik yang disahkan tersedia pada peranti. Keputusan hanya sebagai panduan dan bukan bukti perisian hasad.</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">Enjin risikan ancaman</string>
+    <string name="threat_intelligence_samples">Jumlah sampel perisian hasad yang dianalisis</string>
+    <string name="threat_intelligence_accuracy">Ketepatan pembelajaran mesin</string>
+    <string name="threat_intelligence_downloads">Muat turun model di seluruh dunia</string>
+    <string name="threat_intelligence_updated">Kemas kini risikan terakhir</string>
+    <string name="threat_intelligence_updating">Mengemas kini risikan ancaman…</string>
+    <string name="threat_intelligence_training_note">Statistik latihan. Lihat lapisan pengesanan di bawah untuk perlindungan yang tersedia pada peranti ini.</string>
 </resources>

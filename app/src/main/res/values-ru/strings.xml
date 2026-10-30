@@ -664,5 +664,14 @@
     <string name="ml_probability">Вероятность угрозы по МО: %1$d%%</string>
     <string name="ml_high_finding">Статическая эвристика МО: высокая оценка по разрешениям и шаблонам API; это лишь рекомендация, а не доказательство вредоносности.</string>
     <string name="ml_active_body">На устройстве доступна проверенная статическая модель МО. Результаты носят рекомендательный характер и не доказывают наличие вредоносного ПО.</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">Механизм анализа угроз</string>
+    <string name="threat_intelligence_samples">Всего проанализировано вредоносных образцов</string>
+    <string name="threat_intelligence_accuracy">Точность машинного обучения</string>
+    <string name="threat_intelligence_downloads">Загрузки модели по всему миру</string>
+    <string name="threat_intelligence_updated">Последнее обновление данных об угрозах</string>
+    <string name="threat_intelligence_updating">Обновление данных об угрозах…</string>
+    <string name="threat_intelligence_training_note">Статистика обучения. Сведения о доступной защите устройства приведены в слоях обнаружения ниже.</string>
 </resources>
 

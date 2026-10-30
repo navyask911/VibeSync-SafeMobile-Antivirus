@@ -665,4 +665,13 @@
     <string name="ml_probability">এমএল হুমকির সম্ভাবনা: %1$d%%</string>
     <string name="ml_high_finding">স্থির এমএল বিশ্লেষণ: অনুমতি ও API প্যাটার্নের ভিত্তিতে উচ্চ স্কোর; এটি শুধু সতর্কসংকেত, ম্যালওয়্যারের প্রমাণ নয়।</string>
     <string name="ml_active_body">ডিভাইসেই যাচাইকৃত স্থির এমএল মডেল উপলব্ধ। ফলাফল নির্দেশনামূলক, ম্যালওয়্যারের প্রমাণ নয়।</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">হুমকির তথ্য বিশ্লেষণ ইঞ্জিন</string>
+    <string name="threat_intelligence_samples">বিশ্লেষিত ম্যালওয়্যার নমুনার মোট সংখ্যা</string>
+    <string name="threat_intelligence_accuracy">মেশিন লার্নিংয়ের নির্ভুলতা</string>
+    <string name="threat_intelligence_downloads">বিশ্বজুড়ে মডেল ডাউনলোডের সংখ্যা</string>
+    <string name="threat_intelligence_updated">হুমকির তথ্যের সর্বশেষ আপডেট</string>
+    <string name="threat_intelligence_updating">হুমকির তথ্য আপডেট হচ্ছে…</string>
+    <string name="threat_intelligence_training_note">এগুলি প্রশিক্ষণের পরিসংখ্যান। এই ডিভাইসে উপলব্ধ সুরক্ষার জন্য নিচের শনাক্তকরণ স্তরগুলি দেখুন।</string>
 </resources>

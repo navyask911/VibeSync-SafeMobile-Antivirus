@@ -808,4 +808,13 @@
     <string name="ml_probability">Машиналық оқыту бойынша қауіп ықтималдығы: %1$d%%</string>
     <string name="ml_high_finding">Статикалық машиналық оқыту эвристикасы: рұқсаттар мен API үлгілері бойынша жоғары ұпай; бұл тек белгі, зиянды бағдарламаның дәлелі емес.</string>
     <string name="ml_active_body">Құрылғыда тексерілген статикалық машиналық оқыту моделі бар. Нәтижелер кеңес сипатында және зиянды бағдарламаны дәлелдемейді.</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">Қауіптер туралы ақпарат жүйесі</string>
+    <string name="threat_intelligence_samples">Талданған зиянды бағдарлама үлгілерінің жалпы саны</string>
+    <string name="threat_intelligence_accuracy">Машиналық оқытудың дәлдігі</string>
+    <string name="threat_intelligence_downloads">Модельдің әлем бойынша жүктеп алынуы</string>
+    <string name="threat_intelligence_updated">Ақпараттың соңғы жаңартылуы</string>
+    <string name="threat_intelligence_updating">Қауіптер туралы ақпарат жаңартылуда…</string>
+    <string name="threat_intelligence_training_note">Оқыту статистикасы. Осы құрылғыда қолжетімді қорғанысты төмендегі анықтау қабаттарынан қараңыз.</string>
 </resources>

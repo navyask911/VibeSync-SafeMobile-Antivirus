@@ -32,3 +32,18 @@ Before adding a dependency or dataset, review the exact distributed artifact's l
 - `org.smali:dexlib2:2.5.2`, Ben Gruver / smali contributors, **BSD 3-Clause** (Maven Central POM and upstream https://github.com/JesusFreke/smali). Used only to inspect DEX methods, type references, and string pools; it never loads or runs APK code. Keep BSD attribution text in `docs/licenses/DEXLIB2_BSD_3_CLAUSE.txt`. Dependency compatibility with the existing Guava build must pass CI.
 - Schema names and ordering are from `docs/feature_schema.json` of the separately maintained training repository; that repository attributes training material under CC BY 4.0. These names are data identifiers, not copied model weights or a new source-code licence.
 - A populated feature vector does not establish a production-validated model. Research prerelease report remains `production_ready: false`, so the production scanner remains disabled.
+
+### Optional Google Play billing (v1.0.17)
+
+- `com.android.billingclient:billing-ktx:8.3.0` and `billing:8.3.0`, Google LLC,
+  **Android Software Development Kit License** and applicable Google Play Billing terms:
+  https://developer.android.com/studio/terms.html . This is a version upgrade of the
+  owner-requested Google Play checkout client, not a detection dependency or a new ad SDK.
+- Exact upstream metadata: https://dl.google.com/dl/android/maven2/com/android/billingclient/billing/8.3.0/billing-8.3.0.pom .
+  POM SHA-256: `7093e31afe926ef2b208c72c2941e8dc6b5b4b5dc972387e3048eb4ddd91f524`;
+  AAR SHA-256: `9810b5cd47e20bc82b354f3583c9d3bf7c42b33e64e192dce0495d036a85f505`.
+- The resolved Google and AndroidX transitive dependencies are captured in the CI SBOM and
+  generated notices. Release checks require billing permission/version metadata, reject newly
+  introduced location/advertising-ID permissions, and retain the existing no-ad/no-crash-SDK guard.
+- `androidx.security:security-crypto:1.1.0`, Apache-2.0, remains unchanged for device-local encrypted
+  entitlements. No account backend, cloud restore, scan upload, or paid detection layer is added.

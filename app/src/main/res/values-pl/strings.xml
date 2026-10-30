@@ -808,4 +808,13 @@
     <string name="ml_probability">Prawdopodobieństwo zagrożenia wg ML: %1$d%%</string>
     <string name="ml_high_finding">Statyczna heurystyka ML: wysoki wynik na podstawie uprawnień i wzorców API; tylko wskazówka, nie dowód złośliwego oprogramowania.</string>
     <string name="ml_active_body">Na urządzeniu dostępny jest zweryfikowany statyczny model ML. Wyniki są orientacyjne i nie dowodzą obecności złośliwego oprogramowania.</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">Silnik analizy zagrożeń</string>
+    <string name="threat_intelligence_samples">Łączna liczba przeanalizowanych próbek złośliwego oprogramowania</string>
+    <string name="threat_intelligence_accuracy">Dokładność uczenia maszynowego</string>
+    <string name="threat_intelligence_downloads">Pobrania modelu na świecie</string>
+    <string name="threat_intelligence_updated">Ostatnia aktualizacja informacji o zagrożeniach</string>
+    <string name="threat_intelligence_updating">Aktualizowanie informacji o zagrożeniach…</string>
+    <string name="threat_intelligence_training_note">Statystyki treningu. Dostępna ochrona tego urządzenia jest opisana w warstwach wykrywania poniżej.</string>
 </resources>

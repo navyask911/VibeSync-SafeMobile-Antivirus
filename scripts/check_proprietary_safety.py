@@ -124,6 +124,13 @@ for path in POSTURE_SOURCE.glob("*.kt"):
     if any(re.search(pattern, source) for pattern in posture_forbidden):
         errors.append(f"Device Posture must remain a local, read-only metadata audit: {path.relative_to(ROOT)}.")
 
+# All existing on-device security engines and incident response remain free of entitlement gates.
+for area in ("engine", "observer", "posture", "hashdb", "quarantine", "security"):
+    for path in (ROOT / "app/src/main/java/com/vibesync/antivirus/core" / area).glob("*.kt"):
+        if re.search(r"\b(?:ProEntitlementStore|SafeMobileBillingManager|checkProStatusForThisDevice)\b",
+                     path.read_text(encoding="utf-8")):
+            errors.append(f"Core security must remain free of billing gates: {path.relative_to(ROOT)}.")
+
 # Localization resource coverage and placeholder parity. This is a structural check, not a
 # certification of translation quality or native-speaker review.
 RESOURCES = ROOT / "app" / "src" / "main" / "res"

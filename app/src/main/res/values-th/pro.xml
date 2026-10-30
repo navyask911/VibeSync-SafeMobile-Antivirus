@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- SafeMobile Pro is the product brand; all purchase copy below is localized. -->
+    <string name="pro_title">SafeMobile Pro</string>
+    <string name="pro_truthful_summary">การตรวจสอบไวรัสหลักยังคงฟรี Pro ไม่ได้เปิดใช้การเรียนรู้ของเครื่องแบบทดลอง</string>
+    <string name="pro_feature_free">การตรวจจับแฮช YARA และการติดตั้งจากภายนอกแบบออฟไลน์ยังคงฟรี</string>
+    <string name="pro_feature_research">การเรียนรู้ของเครื่องแบบทดลองยังไม่ผ่านการตรวจสอบและไม่ได้เปิดใช้งาน</string>
+    <string name="pro_feature_updates">Pro มีการอัปเดตโมเดลวิจัยรายวันแบบเลือกได้ การอัปเดตรายสัปดาห์ยังคงฟรี</string>
+    <string name="pro_feature_adfree">SafeMobile ปัจจุบันไม่มีโฆษณาสำหรับทุกคน</string>
+    <string name="pro_years">จำนวนปีสำหรับประมาณราคา (1–10)</string>
+    <string name="pro_price_preview">ยอดรวมโดยประมาณ: %1$s จำนวนปี: %2$d โปรดยืนยันใน Google Play</string>
+    <string name="pro_price_unavailable">กำลังรอราคาจาก Google Play ยังไม่สามารถซื้อได้</string>
+    <string name="pro_cart_quantity_warning">เลือกจำนวนซื้อใน Google Play จำนวนที่ยืนยันจะกำหนดจำนวนปีที่เพิ่มให้กับอุปกรณ์นี้</string>
+    <string name="pro_non_restorable_warning">การซื้อนี้ใช้ได้เฉพาะอุปกรณ์นี้ การติดตั้งใหม่ รีเซ็ต หรือสูญเสียคีย์เข้ารหัสอาจทำให้สิทธิ์ Pro ที่เหลือหายไปอย่างถาวร</string>
+    <string name="pro_unlock">ปลดล็อก SafeMobile Pro</string>
+    <string name="pro_restore_check">กู้คืน / ตรวจสอบสถานะ (เฉพาะอุปกรณ์นี้)</string>
+    <string name="pro_active_until">สิทธิ์ Pro ในอุปกรณ์ถึง %1$s</string>
+    <string name="pro_not_active">อุปกรณ์นี้ไม่มีบัตร Pro ในเครื่องที่ใช้งานอยู่</string>
+    <string name="pro_purchase_unavailable">Google Play ไม่พร้อมใช้งานหรือยังไม่ได้ตั้งค่าผลิตภัณฑ์</string>
+    <string name="pro_purchase_canceled">ยกเลิกการซื้อแล้ว</string>
+    <string name="pro_purchase_pending">การชำระเงินอยู่ระหว่างรอ สิทธิ์ Pro จะเริ่มเมื่อ Google Play ยืนยันการซื้อ</string>
+    <string name="pro_purchase_recheck">เชื่อมต่อ Google Play อีกครั้งเพื่อดำเนินการซื้อให้เสร็จ</string>
+    <string name="pro_storage_failed">พื้นที่เก็บข้อมูลที่ปลอดภัยบันทึกการซื้อไม่ได้ โปรดติดต่อฝ่ายสนับสนุนก่อนลองอีกครั้ง</string>
+    <string name="pro_purchase_success">บันทึกการซื้อในเครื่องและเพิ่มจำนวนที่ซื้อแล้ว</string>
+    <string name="pro_restore_local_only">ตรวจสอบสถานะในเครื่องแล้ว Google Play ไม่สามารถกู้คืนบัตรที่ใช้ไปแล้วได้</string>
+    <string name="pro_device_disclaimer" formatted="false">ข้อสงวนสิทธิ์: บัตร Pro ผูกกับอุปกรณ์จริงเครื่องนี้ เนื่องจาก SafeMobile ทำงานแบบออฟไลน์ 100% หากคุณถอนการติดตั้งแอปหรือล้างข้อมูลแอป Google Play จะไม่สามารถกู้คืนบัตร Pro ของคุณได้</string>
+    <string name="pro_network_notice">การป้องกันหลักทำงานแบบออฟไลน์ การซื้อใน Google Play และการอัปเดตโมเดลแบบเลือกได้ต้องใช้อินเทอร์เน็ต</string>
+    <string name="pro_fewer_years">ลดจำนวนปี</string>
+    <string name="pro_more_years">เพิ่มจำนวนปี</string>
+</resources>

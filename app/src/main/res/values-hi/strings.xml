@@ -664,4 +664,13 @@
     <string name="ml_probability">एमएल खतरे की संभावना: %1$d%%</string>
     <string name="ml_high_finding">स्थिर एमएल अनुमान: अनुमतियों और एपीआई पैटर्न के आधार पर उच्च स्कोर; यह केवल संकेत है, मैलवेयर का प्रमाण नहीं।</string>
     <string name="ml_active_body">प्रमाणित ऑन-डिवाइस स्थिर एमएल मॉडल उपलब्ध है। परिणाम केवल संकेत हैं, मैलवेयर का प्रमाण नहीं।</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">खतरे की जानकारी का इंजन</string>
+    <string name="threat_intelligence_samples">विश्लेषित मैलवेयर नमूनों की कुल संख्या</string>
+    <string name="threat_intelligence_accuracy">मशीन लर्निंग की सटीकता</string>
+    <string name="threat_intelligence_downloads">दुनिया भर में मॉडल के डाउनलोड</string>
+    <string name="threat_intelligence_updated">खतरे की जानकारी का अंतिम अपडेट</string>
+    <string name="threat_intelligence_updating">खतरे की जानकारी अपडेट हो रही है…</string>
+    <string name="threat_intelligence_training_note">ये प्रशिक्षण के आँकड़े हैं। इस डिवाइस पर उपलब्ध सुरक्षा के लिए नीचे दी गई पहचान परतें देखें।</string>
 </resources>

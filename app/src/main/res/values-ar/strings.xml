@@ -664,4 +664,13 @@
     <string name="ml_probability">احتمال التهديد بالتعلم الآلي: %1$d%%</string>
     <string name="ml_high_finding">استدلال ثابت بالتعلم الآلي: درجة مرتفعة استنادًا إلى الأذونات وأنماط واجهات البرمجة؛ مؤشر استرشادي وليس دليلًا على البرمجيات الخبيثة.</string>
     <string name="ml_active_body">يتوفر على الجهاز نموذج تعلم آلي ثابت تم التحقق منه. النتائج استرشادية ولا تثبت وجود برمجيات خبيثة.</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">محرك معلومات التهديدات</string>
+    <string name="threat_intelligence_samples">إجمالي عينات البرامج الضارة التي تم تحليلها</string>
+    <string name="threat_intelligence_accuracy">دقة التعلم الآلي</string>
+    <string name="threat_intelligence_downloads">تنزيلات النموذج حول العالم</string>
+    <string name="threat_intelligence_updated">آخر تحديث لمعلومات التهديدات</string>
+    <string name="threat_intelligence_updating">جارٍ تحديث معلومات التهديدات…</string>
+    <string name="threat_intelligence_training_note">إحصاءات التدريب. راجع طبقات الكشف أدناه لمعرفة الحماية المتاحة على هذا الجهاز.</string>
 </resources>

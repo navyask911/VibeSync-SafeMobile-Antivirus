@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- SafeMobile Pro is the product brand; all purchase copy below is localized. -->
+    <string name="pro_title">SafeMobile Pro</string>
+    <string name="pro_truthful_summary">Mananatiling libre ang mga pangunahing pagsusuri ng antivirus. Hindi ina-activate ng Pro ang eksperimental na pagkatuto ng makina.</string>
+    <string name="pro_feature_free">Mananatiling libre ang offline na hash, YARA at pagtukoy ng pag-install mula sa labas.</string>
+    <string name="pro_feature_research">Hindi pa napatutunayan o na-activate ang eksperimental na pagkatuto ng makina.</string>
+    <string name="pro_feature_updates">Nag-aalok ang Pro ng opsyonal na araw-araw na update ng modelong pananaliksik. Libre pa rin ang lingguhang update.</string>
+    <string name="pro_feature_adfree">Kasalukuyang walang patalastas ang SafeMobile para sa lahat.</string>
+    <string name="pro_years">Mga taon para sa pagtatantiya (1–10)</string>
+    <string name="pro_price_preview">Tinatayang kabuuan: %1$s. Mga taon: %2$d. Kumpirmahin sa Google Play.</string>
+    <string name="pro_price_unavailable">Hinihintay ang presyo sa Google Play; hindi pa puwedeng bumili.</string>
+    <string name="pro_cart_quantity_warning">Piliin ang dami ng bibilhin sa Google Play. Ang nakumpirmang dami ang batayan ng mga taong idaragdag sa device na ito.</string>
+    <string name="pro_non_restorable_warning">Para lang sa device na ito ang pagbili. Maaaring tuluyang mawala ang natitirang Pro access kapag muling nag-install, nag-reset o nawala ang mga encryption key.</string>
+    <string name="pro_unlock">Buksan ang SafeMobile Pro</string>
+    <string name="pro_restore_check">Ibalik / Suriin ang katayuan (device na ito lang)</string>
+    <string name="pro_active_until">Lokal na Pro access hanggang %1$s</string>
+    <string name="pro_not_active">Walang aktibong lokal na Pro pass sa device na ito.</string>
+    <string name="pro_purchase_unavailable">Hindi available ang Google Play o hindi nakaayos ang produkto.</string>
+    <string name="pro_purchase_canceled">Kinansela ang pagbili.</string>
+    <string name="pro_purchase_pending">Nakabinbin ang bayad. Magsisimula ang Pro access kapag nakumpirma ng Google Play ang pagbili.</string>
+    <string name="pro_purchase_recheck">Kumonekta muli sa Google Play para matapos ang pagproseso ng pagbili.</string>
+    <string name="pro_storage_failed">Hindi nai-save ng ligtas na imbakan ang pagbili. Makipag-ugnayan muna sa suporta bago subukang muli.</string>
+    <string name="pro_purchase_success">Nai-save ang pagbili sa device at naidagdag ang biniling dami.</string>
+    <string name="pro_restore_local_only">Nasuri ang lokal na katayuan. Hindi maibabalik ng Google Play ang nagamit nang mga pass.</string>
+    <string name="pro_device_disclaimer" formatted="false">Paunawa: Nakatali ang mga Pro pass sa pisikal na device na ito. Dahil 100% offline ang SafeMobile, kung aalisin mo ang app o buburahin ang data nito, hindi maibabalik ng Google Play ang iyong Pro pass.</string>
+    <string name="pro_network_notice">Gumagana offline ang pangunahing proteksiyon. Kailangan ng internet para sa mga pagbili sa Google Play at opsyonal na mga update ng modelo.</string>
+    <string name="pro_fewer_years">Mas kaunting taon</string>
+    <string name="pro_more_years">Mas maraming taon</string>
+</resources>

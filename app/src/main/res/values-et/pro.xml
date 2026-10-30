@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- SafeMobile Pro is the product brand; all purchase copy below is localized. -->
+    <string name="pro_title">SafeMobile Pro</string>
+    <string name="pro_truthful_summary">Peamised viirusetõrjekontrollid jäävad tasuta. Pro ei lülita sisse katselist masinõpet.</string>
+    <string name="pro_feature_free">Võrguühenduseta räsi-, YARA- ja väliste paigalduste tuvastamine jääb tasuta.</string>
+    <string name="pro_feature_research">Katseline masinõpe on valideerimata ja välja lülitatud.</string>
+    <string name="pro_feature_updates">Pro pakub valikulisi igapäevaseid uurimismudeli uuendusi. Iganädalased uuendused jäävad tasuta.</string>
+    <string name="pro_feature_adfree">SafeMobile on praegu kõigile reklaamivaba.</string>
+    <string name="pro_years">Aastad hinnangu jaoks (1–10)</string>
+    <string name="pro_price_preview">Hinnanguline kogusumma: %1$s. Aastad: %2$d. Kinnitage Google Plays.</string>
+    <string name="pro_price_unavailable">Oodatakse Google Play hindu; ostmine pole saadaval.</string>
+    <string name="pro_cart_quantity_warning">Valige ostukogus Google Plays. Kinnitatud kogus määrab sellele seadmele lisatavad aastad.</string>
+    <string name="pro_non_restorable_warning">Ost ainult sellele seadmele. Uuesti paigaldamine, lähtestamine või krüptovõtmete kaotus võib ülejäänud Pro-juurdepääsu jäädavalt kustutada.</string>
+    <string name="pro_unlock">Ava SafeMobile Pro</string>
+    <string name="pro_restore_check">Taasta / Kontrolli olekut (ainult see seade)</string>
+    <string name="pro_active_until">Kohalik Pro-juurdepääs kuni %1$s</string>
+    <string name="pro_not_active">Selles seadmes pole aktiivset kohalikku Pro-pääset.</string>
+    <string name="pro_purchase_unavailable">Google Play pole saadaval või toode pole seadistatud.</string>
+    <string name="pro_purchase_canceled">Ost tühistati.</string>
+    <string name="pro_purchase_pending">Makse on ootel. Pro-juurdepääs algab pärast ostu kinnitamist Google Play poolt.</string>
+    <string name="pro_purchase_recheck">Ostu töötlemise lõpetamiseks ühenduge uuesti Google Playga.</string>
+    <string name="pro_storage_failed">Turvaline salvestus ei saanud ostu salvestada. Enne uut katset võtke ühendust toega.</string>
+    <string name="pro_purchase_success">Ost salvestati kohalikult. Ostetud kogus lisati.</string>
+    <string name="pro_restore_local_only">Kohalik olek on kontrollitud. Google Play ei saa tarbitud pääsmeid taastada.</string>
+    <string name="pro_device_disclaimer" formatted="false">Lahtiütlus: Pro-pääsmed on seotud selle füüsilise seadmega. Kuna SafeMobile töötab 100% võrguühenduseta, ei saa Google Play teie Pro-pääset taastada, kui eemaldate rakenduse või kustutate selle andmed.</string>
+    <string name="pro_network_notice">Põhikaitse töötab võrguühenduseta. Google Play ostud ja valikulised mudeliuuendused vajavad internetti.</string>
+    <string name="pro_fewer_years">Vähem aastaid</string>
+    <string name="pro_more_years">Rohkem aastaid</string>
+</resources>

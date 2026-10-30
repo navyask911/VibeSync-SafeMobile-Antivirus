@@ -808,4 +808,13 @@
     <string name="ml_probability">ML-dreigingskans: %1$d%%</string>
     <string name="ml_high_finding">Statische ML-heuristiek: hoge score op basis van machtigingen en API-patronen; alleen een aanwijzing, geen bewijs van malware.</string>
     <string name="ml_active_body">Een gevalideerd statisch ML-model is beschikbaar op het apparaat. Resultaten zijn indicatief en bewijzen geen malware.</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">Engine voor dreigingsinformatie</string>
+    <string name="threat_intelligence_samples">Totaal geanalyseerde malwaremonsters</string>
+    <string name="threat_intelligence_accuracy">Nauwkeurigheid van machine learning</string>
+    <string name="threat_intelligence_downloads">Wereldwijde modeldownloads</string>
+    <string name="threat_intelligence_updated">Laatste update van dreigingsinformatie</string>
+    <string name="threat_intelligence_updating">Dreigingsinformatie bijwerken…</string>
+    <string name="threat_intelligence_training_note">Trainingsstatistieken. Bekijk de detectielagen hieronder voor de beschikbare bescherming op dit apparaat.</string>
 </resources>

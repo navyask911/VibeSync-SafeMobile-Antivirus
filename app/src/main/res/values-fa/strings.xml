@@ -808,4 +808,13 @@
     <string name="ml_probability">احتمال تهدید با یادگیری ماشین: %1$d%%</string>
     <string name="ml_high_finding">ابتکار اکتشافی ایستای یادگیری ماشین: امتیاز بالا بر پایه مجوزها و الگوهای API؛ فقط هشدار است، نه اثبات بدافزار.</string>
     <string name="ml_active_body">مدل ایستای یادگیری ماشین تأییدشده روی دستگاه موجود است. نتایج صرفاً راهنما هستند و وجود بدافزار را ثابت نمی‌کنند.</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">موتور اطلاعات تهدید</string>
+    <string name="threat_intelligence_samples">مجموع نمونه‌های بدافزار تحلیل‌شده</string>
+    <string name="threat_intelligence_accuracy">دقت یادگیری ماشین</string>
+    <string name="threat_intelligence_downloads">بارگیری‌های مدل در سراسر جهان</string>
+    <string name="threat_intelligence_updated">آخرین به‌روزرسانی اطلاعات تهدید</string>
+    <string name="threat_intelligence_updating">در حال به‌روزرسانی اطلاعات تهدید…</string>
+    <string name="threat_intelligence_training_note">آمار آموزش. برای آگاهی از حفاظت موجود در این دستگاه، لایه‌های شناسایی زیر را ببینید.</string>
 </resources>

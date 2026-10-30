@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- SafeMobile Pro is the product brand; all purchase copy below is localized. -->
+    <string name="pro_title">SafeMobile Pro</string>
+    <string name="pro_truthful_summary">Virustorjunnan perustarkistukset pysyvät maksuttomina. Pro ei ota käyttöön kokeellista koneoppimista.</string>
+    <string name="pro_feature_free">Verkoton tiiviste-, YARA- ja ulkoisten asennusten tunnistus pysyy maksuttomana.</string>
+    <string name="pro_feature_research">Kokeellista koneoppimista ei ole validoitu eikä otettu käyttöön.</string>
+    <string name="pro_feature_updates">Pro tarjoaa valinnaiset päivittäiset tutkimusmallin päivitykset. Viikoittaiset päivitykset pysyvät maksuttomina.</string>
+    <string name="pro_feature_adfree">SafeMobile on tällä hetkellä mainokseton kaikille.</string>
+    <string name="pro_years">Vuodet arviota varten (1–10)</string>
+    <string name="pro_price_preview">Arvioitu yhteensä: %1$s. Vuodet: %2$d. Vahvista Google Playssa.</string>
+    <string name="pro_price_unavailable">Odotetaan Google Playn hintoja; ostaminen ei ole käytettävissä.</string>
+    <string name="pro_cart_quantity_warning">Valitse ostomäärä Google Playssa. Vahvistettu määrä määrittää tälle laitteelle lisättävät vuodet.</string>
+    <string name="pro_non_restorable_warning">Osto vain tälle laitteelle. Uudelleenasennus, nollaus tai salausavainten menetys voi poistaa jäljellä olevan Pro-käyttöoikeuden pysyvästi.</string>
+    <string name="pro_unlock">Avaa SafeMobile Pro</string>
+    <string name="pro_restore_check">Palauta / Tarkista tila (vain tämä laite)</string>
+    <string name="pro_active_until">Paikallinen Pro-käyttöoikeus päättyy %1$s</string>
+    <string name="pro_not_active">Tällä laitteella ei ole aktiivista paikallista Pro-passia.</string>
+    <string name="pro_purchase_unavailable">Google Play ei ole käytettävissä tai tuotetta ei ole määritetty.</string>
+    <string name="pro_purchase_canceled">Osto peruutettu.</string>
+    <string name="pro_purchase_pending">Maksu odottaa. Pro-käyttöoikeus alkaa Google Playn vahvistettua oston.</string>
+    <string name="pro_purchase_recheck">Yhdistä uudelleen Google Playhin oston käsittelyn viimeistelemiseksi.</string>
+    <string name="pro_storage_failed">Suojattu tallennustila ei voinut tallentaa ostoa. Ota yhteys tukeen ennen uutta yritystä.</string>
+    <string name="pro_purchase_success">Osto tallennettiin paikallisesti. Ostettu määrä hyvitettiin.</string>
+    <string name="pro_restore_local_only">Paikallinen tila tarkistettu. Google Play ei voi palauttaa käytettyjä passeja.</string>
+    <string name="pro_device_disclaimer" formatted="false">Vastuuvapauslauseke: Pro-passit on sidottu tähän fyysiseen laitteeseen. Koska SafeMobile toimii 100% ilman verkkoyhteyttä, Google Play ei voi palauttaa Pro-passiasi, jos poistat sovelluksen tai tyhjennät sen tiedot.</string>
+    <string name="pro_network_notice">Perussuojaus toimii ilman verkkoyhteyttä. Google Play -ostot ja valinnaiset mallipäivitykset vaativat internetyhteyden.</string>
+    <string name="pro_fewer_years">Vähemmän vuosia</string>
+    <string name="pro_more_years">Enemmän vuosia</string>
+</resources>

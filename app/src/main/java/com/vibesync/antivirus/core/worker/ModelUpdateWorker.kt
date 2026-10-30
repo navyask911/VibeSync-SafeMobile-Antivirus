@@ -68,7 +68,12 @@ class ModelUpdateWorker(context: Context, params: WorkerParameters) : CoroutineW
     private fun stageIfNewer() {
         val release = getLatestRelease() ?: return
         val tag = release.getString("tag_name")
-        if (!ModelReleasePolicy.isNewer(tag, preferences.getString("candidate_version", null))) return
+        // Download counts/statistics can change without a new model version. Refresh first.
+        val retryStats = refreshStatistics(release)
+        if (!ModelReleasePolicy.isNewer(tag, preferences.getString("candidate_version", null))) {
+            if (retryStats) throw IOException("Statistics refresh temporarily unavailable")
+            return
+        }
         val assets = ModelReleasePolicy.assets(release) ?: return
 
         val checksumAsset = assets.getValue(ModelReleasePolicy.SUMS)
@@ -128,6 +133,27 @@ class ModelUpdateWorker(context: Context, params: WorkerParameters) : CoroutineW
         } finally {
             if (tmp.exists()) tmp.delete()
         }
+        if (retryStats) throw IOException("Statistics refresh temporarily unavailable")
+    }
+
+    /** Optional metadata must never block a valid model or replace good cached data with zeros. */
+    private fun refreshStatistics(release: JSONObject): Boolean = try {
+        val asset = ModelReleasePolicy.statisticsAsset(release)
+        if (asset != null) {
+            val size = asset.optLong("size", -1)
+            if (size !in 1..ThreatIntelligenceStats.MAX_BYTES.toLong()) throw InvalidCandidate()
+            val bytes = getBytes(assetUrl(asset), ThreatIntelligenceStats.MAX_BYTES)
+            if (bytes.size.toLong() != size) throw InvalidCandidate()
+            verifyGitHubDigest(asset, sha256(bytes))
+            ThreatIntelligenceStore(app.filesDir).write(bytes)
+        }
+        false
+    } catch (cancelled: CancellationException) {
+        throw cancelled
+    } catch (_: IOException) {
+        true // Keep the previous snapshot and let WorkManager retry transport/storage failures.
+    } catch (_: Exception) {
+        false // Missing, malformed or unverified statistics leave the existing cache untouched.
     }
 
     private fun inspectAndClose(file: File) {

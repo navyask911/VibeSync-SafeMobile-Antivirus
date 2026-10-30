@@ -33,7 +33,8 @@ internal object ModelReleasePolicy {
         return found.takeIf { it.keys == names }
     }
     fun checksums(text: String): Map<String, String>? {
-        val names = setOf(MODEL, SCHEMA, REPORT, NOTICE)
+        val required = setOf(MODEL, SCHEMA, REPORT, NOTICE)
+        val names = required + ThreatIntelligenceStats.FILE_NAME
         val pattern = Regex("^([0-9a-f]{64})  ([A-Za-z0-9_.-]+)$")
         val result = mutableMapOf<String, String>()
         for (line in text.trim().lines()) {
@@ -41,7 +42,15 @@ internal object ModelReleasePolicy {
             if (match.groupValues[2] !in names ||
                 result.put(match.groupValues[2], match.groupValues[1]) != null) return null
         }
-        return result.takeIf { it.keys == names }
+        return result.takeIf { it.keys.containsAll(required) }
+    }
+    /** Stats are optional on older releases; duplicates are not an authoritative snapshot. */
+    fun statisticsAsset(release: JSONObject): JSONObject? {
+        if (release.optBoolean("draft", true) || version(release.optString("tag_name")) == null) return null
+        val assets = release.optJSONArray("assets") ?: return null
+        val found = (0 until assets.length()).mapNotNull { assets.optJSONObject(it) }
+            .filter { it.optString("name") == ThreatIntelligenceStats.FILE_NAME }
+        return found.singleOrNull()
     }
     fun validatedResearchBundle(schema: JSONObject, report: JSONObject, modelSha: String, schemaSha: String): Boolean {
         if (report.optBoolean("is_synthetic", true) || report.optInt("feature_count") != FEATURES ||

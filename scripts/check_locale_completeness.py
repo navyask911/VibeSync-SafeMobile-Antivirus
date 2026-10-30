@@ -50,6 +50,9 @@ def formats(text):
     return sorted(FORMAT.findall(text or ""))
 
 english, english_plurals = read_resources(BASE / "values" / "strings.xml")
+INTELLIGENCE_KEYS = tuple("threat_intelligence_" + name for name in (
+    "title", "samples", "accuracy", "downloads", "updated", "updating", "training_note"
+))
 for locale in LOCALES:
     path = BASE / f"values-{locale}" / "strings.xml"
     strings, plurals = read_resources(path)
@@ -63,6 +66,14 @@ for locale in LOCALES:
         actual = formats("".join(strings[key].itertext()))
         if expected != actual:
             errors.append(f"{locale}: placeholder mismatch for {key}: {expected} vs {actual}")
+    for key in INTELLIGENCE_KEYS:
+        source, translated = english.get(key), strings.get(key)
+        if source is None:
+            errors.append(f"base strings.xml: missing intelligence string {key}")
+        elif translated is not None:
+            text_value = "".join(translated.itertext()).strip()
+            if not text_value or text_value == "".join(source.itertext()).strip():
+                errors.append(f"{locale}: empty or English intelligence fallback {key}")
     for key, base in english_plurals.items():
         if key not in plurals:
             errors.append(f"{locale}: missing <plurals> {key}")
@@ -106,6 +117,26 @@ for locale in LOCALES:
                 errors.append(f"{locale}: v1.0.16 placeholder mismatch {key}")
 
 # Preserve previous invariant: every existing locale must provide a voice warning.
+# Paid purchase disclosures must never fall back to English in any supported locale.
+# SafeMobile Pro and Google Play are product brands, not untranslated sentences.
+base_pro, _ = read_resources(BASE / "values" / "pro.xml")
+for locale in LOCALES:
+    pro, _ = read_resources(BASE / f"values-{locale}" / "pro.xml")
+    if set(pro) != set(base_pro):
+        errors.append(f"{locale}: paywall key set differs from base pro.xml")
+    for key, source in base_pro.items():
+        target = pro.get(key)
+        if target is None:
+            continue
+        value = "".join(target.itertext()).strip()
+        original = "".join(source.itertext()).strip()
+        if not value or (key != "pro_title" and value == original):
+            errors.append(f"{locale}: empty or English paywall fallback {key}")
+        if formats(value) != formats(original):
+            errors.append(f"{locale}: paywall placeholder mismatch {key}")
+        if key == "pro_device_disclaimer" and target.attrib.get("formatted") != "false":
+            errors.append(f"{locale}: disclaimer literal percentage must disable formatting")
+
 for path in sorted(BASE.glob("values-*/strings.xml")):
     strings, _ = read_resources(path)
     item = strings.get("voice_alert_malware_detected")

@@ -665,4 +665,13 @@
     <string name="ml_probability">הסתברות לאיום לפי למידת מכונה: %1$d%%</string>
     <string name="ml_high_finding">הסקה סטטית בלמידת מכונה: ציון גבוה בשל הרשאות ודפוסי API; זהו סימן בלבד, לא הוכחה לנוזקה.</string>
     <string name="ml_active_body">מודל סטטי מאומת של למידת מכונה זמין במכשיר. התוצאות הן להכוונה בלבד ואינן מוכיחות קיום נוזקה.</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">מנוע מודיעין איומים</string>
+    <string name="threat_intelligence_samples">סך דגימות התוכנה הזדונית שנותחו</string>
+    <string name="threat_intelligence_accuracy">דיוק למידת המכונה</string>
+    <string name="threat_intelligence_downloads">הורדות המודל ברחבי העולם</string>
+    <string name="threat_intelligence_updated">עדכון המודיעין האחרון</string>
+    <string name="threat_intelligence_updating">מעדכן את מודיעין האיומים…</string>
+    <string name="threat_intelligence_training_note">נתוני אימון. שכבות הזיהוי בהמשך מציגות את ההגנה הזמינה במכשיר הזה.</string>
 </resources>

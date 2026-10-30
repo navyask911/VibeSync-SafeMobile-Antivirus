@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- SafeMobile Pro is the product brand; all purchase copy below is localized. -->
+    <string name="pro_title">SafeMobile Pro</string>
+    <string name="pro_truthful_summary">Kern-antiviruskontroles bly gratis. Pro aktiveer nie eksperimentele masjienleer nie.</string>
+    <string name="pro_feature_free">Vanlyn hutswaarde-, YARA- en eksterne-installasieopsporing bly gratis.</string>
+    <string name="pro_feature_research">Eksperimentele masjienleer is nie gevalideer of geaktiveer nie.</string>
+    <string name="pro_feature_updates">Pro bied opsionele daaglikse navorsingsmodelopdaterings. Weeklikse opdaterings bly gratis.</string>
+    <string name="pro_feature_adfree">SafeMobile is tans advertensievry vir almal.</string>
+    <string name="pro_years">Jare vir die skatting (1–10)</string>
+    <string name="pro_price_preview">Geskatte totaal: %1$s. Jare: %2$d. Bevestig in Google Play.</string>
+    <string name="pro_price_unavailable">Wag vir Google Play-pryse; aankope is nie beskikbaar nie.</string>
+    <string name="pro_cart_quantity_warning">Kies die aankoophoeveelheid in Google Play. Die bevestigde hoeveelheid bepaal die jare wat op hierdie toestel bygevoeg word.</string>
+    <string name="pro_non_restorable_warning">Aankoop slegs vir hierdie toestel. Herinstallering, terugstelling of verlies van enkripsiesleutels kan jou oorblywende Pro-toegang permanent uitwis.</string>
+    <string name="pro_unlock">Ontsluit SafeMobile Pro</string>
+    <string name="pro_restore_check">Herstel / Kontroleer status (slegs hierdie toestel)</string>
+    <string name="pro_active_until">Plaaslike Pro-toegang tot %1$s</string>
+    <string name="pro_not_active">Geen aktiewe plaaslike Pro-pas op hierdie toestel nie.</string>
+    <string name="pro_purchase_unavailable">Google Play is nie beskikbaar nie of die produk is nie opgestel nie.</string>
+    <string name="pro_purchase_canceled">Aankoop gekanselleer.</string>
+    <string name="pro_purchase_pending">Betaling is hangende. Pro-toegang begin nadat Google Play die aankoop bevestig het.</string>
+    <string name="pro_purchase_recheck">Koppel weer aan Google Play om jou aankoop klaar te verwerk.</string>
+    <string name="pro_storage_failed">Veilige berging kon nie die aankoop stoor nie. Kontak ondersteuning voordat jy weer probeer.</string>
+    <string name="pro_purchase_success">Aankoop plaaslik gestoor. Die aangekoopte hoeveelheid is bygevoeg.</string>
+    <string name="pro_restore_local_only">Plaaslike status nagegaan. Google Play kan nie verbruikte passe herstel nie.</string>
+    <string name="pro_device_disclaimer" formatted="false">Vrywaring: Pro-passe is aan hierdie fisiese toestel gebind. Omdat SafeMobile 100% vanlyn werk, kan Google Play jou Pro-pas nie herstel as jy die toepassing deïnstalleer of die toepassingdata uitvee nie.</string>
+    <string name="pro_network_notice">Kernbeskerming werk vanlyn. Google Play-aankope en opsionele modelopdaterings vereis internet.</string>
+    <string name="pro_fewer_years">Minder jare</string>
+    <string name="pro_more_years">Meer jare</string>
+</resources>

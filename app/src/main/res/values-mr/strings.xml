@@ -665,4 +665,13 @@
     <string name="ml_probability">एमएल धोक्याची शक्यता: %1$d%%</string>
     <string name="ml_high_finding">स्थिर एमएल विश्लेषण: परवानग्या आणि API नमुन्यांवर आधारित उच्च गुण; हा केवळ इशारा आहे, मालवेअरचा पुरावा नाही.</string>
     <string name="ml_active_body">उपकरणावर सत्यापित स्थिर एमएल मॉडेल उपलब्ध आहे. निकाल मार्गदर्शक आहेत; ते मालवेअर सिद्ध करत नाहीत.</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">धोक्याची माहिती देणारे इंजिन</string>
+    <string name="threat_intelligence_samples">विश्लेषण केलेले एकूण मालवेअर नमुने</string>
+    <string name="threat_intelligence_accuracy">मशीन लर्निंगची अचूकता</string>
+    <string name="threat_intelligence_downloads">जगभरातील मॉडेल डाउनलोड</string>
+    <string name="threat_intelligence_updated">धोक्याच्या माहितीचे शेवटचे अपडेट</string>
+    <string name="threat_intelligence_updating">धोक्याची माहिती अपडेट होत आहे…</string>
+    <string name="threat_intelligence_training_note">ही प्रशिक्षणाची आकडेवारी आहे. या उपकरणावर उपलब्ध संरक्षणासाठी खालील शोध स्तर पाहा.</string>
 </resources>

@@ -808,4 +808,13 @@
     <string name="ml_probability">Pravdepodobnosť hrozby podľa ML: %1$d%%</string>
     <string name="ml_high_finding">Statická heuristika ML: vysoké skóre podľa povolení a vzorov API; iba upozornenie, nie dôkaz malvéru.</string>
     <string name="ml_active_body">V zariadení je dostupný overený statický model ML. Výsledky sú orientačné a nedokazujú malvér.</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">Systém informácií o hrozbách</string>
+    <string name="threat_intelligence_samples">Celkový počet analyzovaných vzoriek malvéru</string>
+    <string name="threat_intelligence_accuracy">Presnosť strojového učenia</string>
+    <string name="threat_intelligence_downloads">Stiahnutia modelu na celom svete</string>
+    <string name="threat_intelligence_updated">Posledná aktualizácia informácií</string>
+    <string name="threat_intelligence_updating">Aktualizujú sa informácie o hrozbách…</string>
+    <string name="threat_intelligence_training_note">Štatistiky trénovania. Dostupnú ochranu tohto zariadenia nájdete vo vrstvách detekcie nižšie.</string>
 </resources>

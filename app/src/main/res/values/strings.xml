@@ -647,4 +647,13 @@
     <string name="ml_probability">ML threat probability: %1$d%%</string>
     <string name="ml_high_finding">ML static heuristic: high score from permissions and API patterns; advisory only, not proof of malware.</string>
     <string name="ml_active_body">Validated on-device static ML model available. Results are advisory and do not prove malware.</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">Threat Intelligence Engine</string>
+    <string name="threat_intelligence_samples">Total Malware Samples Analyzed</string>
+    <string name="threat_intelligence_accuracy">Machine Learning Accuracy</string>
+    <string name="threat_intelligence_downloads">Global Model Downloads</string>
+    <string name="threat_intelligence_updated">Last Intelligence Update</string>
+    <string name="threat_intelligence_updating">Updating Intelligence…</string>
+    <string name="threat_intelligence_training_note">Training statistics. See the detection layers below for protection available on this device.</string>
 </resources>

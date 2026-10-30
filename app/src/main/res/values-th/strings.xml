@@ -808,4 +808,13 @@
     <string name="ml_probability">ความน่าจะเป็นของภัยคุกคามจาก ML: %1$d%%</string>
     <string name="ml_high_finding">การประเมิน ML แบบคงที่: คะแนนสูงจากสิทธิ์และรูปแบบ API; เป็นเพียงข้อบ่งชี้ ไม่ใช่หลักฐานว่ามีมัลแวร์</string>
     <string name="ml_active_body">มีโมเดล ML แบบคงที่ที่ผ่านการตรวจสอบอยู่ในอุปกรณ์ ผลลัพธ์เป็นเพียงคำแนะนำ ไม่ได้ยืนยันว่ามีมัลแวร์</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">ระบบข้อมูลภัยคุกคาม</string>
+    <string name="threat_intelligence_samples">จำนวนตัวอย่างมัลแวร์ที่วิเคราะห์ทั้งหมด</string>
+    <string name="threat_intelligence_accuracy">ความแม่นยำของการเรียนรู้ของเครื่อง</string>
+    <string name="threat_intelligence_downloads">ยอดดาวน์โหลดโมเดลทั่วโลก</string>
+    <string name="threat_intelligence_updated">การอัปเดตข้อมูลภัยคุกคามล่าสุด</string>
+    <string name="threat_intelligence_updating">กำลังอัปเดตข้อมูลภัยคุกคาม…</string>
+    <string name="threat_intelligence_training_note">สถิติการฝึกโมเดล ดูชั้นการตรวจจับด้านล่างเพื่อทราบการป้องกันที่มีในอุปกรณ์นี้</string>
 </resources>

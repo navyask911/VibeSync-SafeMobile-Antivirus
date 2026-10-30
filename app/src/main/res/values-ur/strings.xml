@@ -665,4 +665,13 @@
     <string name="ml_probability">مشین لرننگ سے خطرے کا امکان: %1$d%%</string>
     <string name="ml_high_finding">جامد مشین لرننگ تجزیہ: اجازتوں اور API نمونوں کی بنیاد پر بلند اسکور؛ یہ صرف اشارہ ہے، میل ویئر کا ثبوت نہیں۔</string>
     <string name="ml_active_body">آلے پر تصدیق شدہ جامد مشین لرننگ ماڈل دستیاب ہے۔ نتائج صرف رہنمائی ہیں، میل ویئر ثابت نہیں کرتے۔</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">خطرات کی معلومات کا انجن</string>
+    <string name="threat_intelligence_samples">تجزیہ کیے گئے میل ویئر نمونوں کی کل تعداد</string>
+    <string name="threat_intelligence_accuracy">مشین لرننگ کی درستگی</string>
+    <string name="threat_intelligence_downloads">دنیا بھر میں ماڈل کے ڈاؤن لوڈز</string>
+    <string name="threat_intelligence_updated">خطرات کی معلومات کی آخری تازہ کاری</string>
+    <string name="threat_intelligence_updating">خطرات کی معلومات تازہ کی جا رہی ہیں…</string>
+    <string name="threat_intelligence_training_note">یہ تربیت کے اعداد و شمار ہیں۔ اس آلے پر دستیاب تحفظ کے لیے ذیل میں شناخت کی تہیں دیکھیں۔</string>
 </resources>

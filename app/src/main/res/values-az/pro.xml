@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- SafeMobile Pro is the product brand; all purchase copy below is localized. -->
+    <string name="pro_title">SafeMobile Pro</string>
+    <string name="pro_truthful_summary">Əsas antivirus yoxlamaları pulsuz qalır. Pro eksperimental maşın öyrənməsini aktivləşdirmir.</string>
+    <string name="pro_feature_free">Oflayn heş, YARA və kənar mənbədən quraşdırma aşkarlanması pulsuz qalır.</string>
+    <string name="pro_feature_research">Eksperimental maşın öyrənməsi təsdiqlənməyib və aktiv deyil.</string>
+    <string name="pro_feature_updates">Pro gündəlik, könüllü tədqiqat modeli yeniləmələri təklif edir. Həftəlik yeniləmələr pulsuz qalır.</string>
+    <string name="pro_feature_adfree">SafeMobile hazırda hamı üçün reklamsızdır.</string>
+    <string name="pro_years">Təxmin üçün il sayı (1–10)</string>
+    <string name="pro_price_preview">Təxmini cəm: %1$s. İl: %2$d. Google Play-də təsdiqləyin.</string>
+    <string name="pro_price_unavailable">Google Play qiymətləri gözlənilir; alışlar mümkün deyil.</string>
+    <string name="pro_cart_quantity_warning">Alış miqdarını Google Play-də seçin. Təsdiqlənmiş miqdar bu cihaza əlavə edilən illəri müəyyən edir.</string>
+    <string name="pro_non_restorable_warning">Alış yalnız bu cihaz üçündür. Yenidən quraşdırma, sıfırlama və ya şifrələmə açarlarının itməsi qalan Pro girişini həmişəlik silə bilər.</string>
+    <string name="pro_unlock">SafeMobile Pro-nu açın</string>
+    <string name="pro_restore_check">Bərpa et / Statusu yoxla (yalnız bu cihaz)</string>
+    <string name="pro_active_until">Yerli Pro girişi %1$s tarixinədək</string>
+    <string name="pro_not_active">Bu cihazda aktiv yerli Pro keçidi yoxdur.</string>
+    <string name="pro_purchase_unavailable">Google Play mövcud deyil və ya məhsul sazlanmayıb.</string>
+    <string name="pro_purchase_canceled">Alış ləğv edildi.</string>
+    <string name="pro_purchase_pending">Ödəniş gözlənilir. Pro girişi Google Play alışı təsdiqlədikdən sonra başlayır.</string>
+    <string name="pro_purchase_recheck">Alışın emalını tamamlamaq üçün Google Play-ə yenidən qoşulun.</string>
+    <string name="pro_storage_failed">Təhlükəsiz yaddaş alışı saxlaya bilmədi. Yenidən cəhddən əvvəl dəstəyə müraciət edin.</string>
+    <string name="pro_purchase_success">Alış yerli saxlanıldı. Alınmış miqdar əlavə edildi.</string>
+    <string name="pro_restore_local_only">Yerli status yoxlanıldı. Google Play istifadə edilmiş keçidləri bərpa edə bilməz.</string>
+    <string name="pro_device_disclaimer" formatted="false">İmtina: Pro keçidləri bu fiziki cihaza bağlıdır. SafeMobile 100% oflayn işlədiyindən tətbiqi silsəniz və ya tətbiq məlumatlarını təmizləsəniz, Google Play Pro keçidinizi bərpa edə bilməz.</string>
+    <string name="pro_network_notice">Əsas qoruma oflayn işləyir. Google Play alışları və könüllü model yeniləmələri internet tələb edir.</string>
+    <string name="pro_fewer_years">Daha az il</string>
+    <string name="pro_more_years">Daha çox il</string>
+</resources>

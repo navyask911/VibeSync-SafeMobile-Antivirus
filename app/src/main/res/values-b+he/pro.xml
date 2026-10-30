@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- SafeMobile Pro is the product brand; all purchase copy below is localized. -->
+    <string name="pro_title">SafeMobile Pro</string>
+    <string name="pro_truthful_summary">בדיקות האנטי־וירוס הבסיסיות נשארות בחינם. Pro אינו מפעיל למידת מכונה ניסיונית.</string>
+    <string name="pro_feature_free">זיהוי גיבוב, YARA והתקנות חיצוניות ללא חיבור נשאר בחינם.</string>
+    <string name="pro_feature_research">למידת המכונה הניסיונית לא אומתה ואינה פעילה.</string>
+    <string name="pro_feature_updates">Pro מציע עדכונים יומיים אופציונליים של מודל המחקר. העדכונים השבועיים נשארים בחינם.</string>
+    <string name="pro_feature_adfree">SafeMobile כרגע ללא פרסומות לכולם.</string>
+    <string name="pro_years">שנים לחישוב המשוער (1–10)</string>
+    <string name="pro_price_preview">סכום משוער: %1$s. שנים: %2$d. יש לאשר ב־Google Play.</string>
+    <string name="pro_price_unavailable">ממתין למחירי Google Play; רכישות אינן זמינות.</string>
+    <string name="pro_cart_quantity_warning">יש לבחור כמות ב־Google Play. הכמות המאושרת קובעת את מספר השנים שיתווספו למכשיר הזה.</string>
+    <string name="pro_non_restorable_warning">רכישה למכשיר הזה בלבד. התקנה מחדש, איפוס או אובדן מפתחות ההצפנה עלולים למחוק לצמיתות את גישת Pro שנותרה.</string>
+    <string name="pro_unlock">פתיחת SafeMobile Pro</string>
+    <string name="pro_restore_check">שחזור / בדיקת מצב (המכשיר הזה בלבד)</string>
+    <string name="pro_active_until">גישת Pro מקומית עד %1$s</string>
+    <string name="pro_not_active">אין במכשיר הזה כרטיס Pro מקומי פעיל.</string>
+    <string name="pro_purchase_unavailable">Google Play אינו זמין או שהמוצר לא הוגדר.</string>
+    <string name="pro_purchase_canceled">הרכישה בוטלה.</string>
+    <string name="pro_purchase_pending">התשלום ממתין. גישת Pro מתחילה לאחר אישור הרכישה ב־Google Play.</string>
+    <string name="pro_purchase_recheck">יש להתחבר שוב ל־Google Play כדי להשלים את עיבוד הרכישה.</string>
+    <string name="pro_storage_failed">האחסון המאובטח לא הצליח לשמור את הרכישה. יש לפנות לתמיכה לפני ניסיון נוסף.</string>
+    <string name="pro_purchase_success">הרכישה נשמרה מקומית והכמות שנרכשה נוספה.</string>
+    <string name="pro_restore_local_only">המצב המקומי נבדק. Google Play אינו יכול לשחזר כרטיסים שנצרכו.</string>
+    <string name="pro_device_disclaimer" formatted="false">כתב ויתור: כרטיסי Pro קשורים למכשיר הפיזי הזה. מאחר ש־SafeMobile פועל 100% ללא חיבור, אם תסירו את האפליקציה או תמחקו את נתוניה, Google Play לא יוכל לשחזר את כרטיס Pro שלכם.</string>
+    <string name="pro_network_notice">ההגנה הבסיסית פועלת ללא חיבור. רכישות Google Play ועדכוני מודל אופציונליים דורשים חיבור לאינטרנט.</string>
+    <string name="pro_fewer_years">פחות שנים</string>
+    <string name="pro_more_years">יותר שנים</string>
+</resources>

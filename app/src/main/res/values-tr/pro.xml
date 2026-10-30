@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- SafeMobile Pro is the product brand; all purchase copy below is localized. -->
+    <string name="pro_title">SafeMobile Pro</string>
+    <string name="pro_truthful_summary">Temel antivirüs kontrolleri ücretsiz kalır. Pro, deneysel makine öğrenimini etkinleştirmez.</string>
+    <string name="pro_feature_free">Çevrimdışı özet, YARA ve dış kaynaklı yükleme tespiti ücretsiz kalır.</string>
+    <string name="pro_feature_research">Deneysel makine öğrenimi doğrulanmamış ve etkinleştirilmemiştir.</string>
+    <string name="pro_feature_updates">Pro, isteğe bağlı günlük araştırma modeli güncellemeleri sunar. Haftalık güncellemeler ücretsiz kalır.</string>
+    <string name="pro_feature_adfree">SafeMobile şu anda herkes için reklamsızdır.</string>
+    <string name="pro_years">Tahmin için yıl sayısı (1–10)</string>
+    <string name="pro_price_preview">Tahmini toplam: %1$s. Yıl: %2$d. Google Play’de onaylayın.</string>
+    <string name="pro_price_unavailable">Google Play fiyatları bekleniyor; satın alma kullanılamıyor.</string>
+    <string name="pro_cart_quantity_warning">Satın alma miktarını Google Play’de seçin. Onaylanan miktar bu cihaza eklenecek yılları belirler.</string>
+    <string name="pro_non_restorable_warning">Yalnızca bu cihaza bağlı satın alma. Yeniden yükleme, sıfırlama veya şifreleme anahtarlarının kaybı kalan Pro erişimini kalıcı olarak silebilir.</string>
+    <string name="pro_unlock">SafeMobile Pro’yu aç</string>
+    <string name="pro_restore_check">Geri yükle / Durumu kontrol et (yalnızca bu cihaz)</string>
+    <string name="pro_active_until">Yerel Pro erişimi bitişi: %1$s</string>
+    <string name="pro_not_active">Bu cihazda etkin bir yerel Pro geçişi yok.</string>
+    <string name="pro_purchase_unavailable">Google Play kullanılamıyor veya ürün yapılandırılmamış.</string>
+    <string name="pro_purchase_canceled">Satın alma iptal edildi.</string>
+    <string name="pro_purchase_pending">Ödeme bekleniyor. Pro erişimi Google Play satın almayı onayladıktan sonra başlar.</string>
+    <string name="pro_purchase_recheck">Satın alma işlemini tamamlamak için Google Play’e yeniden bağlanın.</string>
+    <string name="pro_storage_failed">Güvenli depolama satın almayı kaydedemedi. Yeniden denemeden önce destekle iletişime geçin.</string>
+    <string name="pro_purchase_success">Satın alma yerel olarak kaydedildi. Satın alınan miktar eklendi.</string>
+    <string name="pro_restore_local_only">Yerel durum kontrol edildi. Google Play tüketilmiş geçişleri geri yükleyemez.</string>
+    <string name="pro_device_disclaimer" formatted="false">Sorumluluk reddi: Pro geçişleri bu fiziksel cihaza bağlıdır. SafeMobile 100% çevrimdışı çalıştığından, uygulamayı kaldırır veya uygulama verilerini temizlerseniz Google Play Pro geçişinizi geri yükleyemez.</string>
+    <string name="pro_network_notice">Temel koruma çevrimdışı çalışır. Google Play satın almaları ve isteğe bağlı model güncellemeleri internet bağlantısı gerektirir.</string>
+    <string name="pro_fewer_years">Daha az yıl</string>
+    <string name="pro_more_years">Daha fazla yıl</string>
+</resources>

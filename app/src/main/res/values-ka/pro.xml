@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- SafeMobile Pro is the product brand; all purchase copy below is localized. -->
+    <string name="pro_title">SafeMobile Pro</string>
+    <string name="pro_truthful_summary">ძირითადი ანტივირუსული შემოწმებები უფასო რჩება. Pro ექსპერიმენტულ მანქანურ სწავლებას არ ააქტიურებს.</string>
+    <string name="pro_feature_free">ოფლაინ ჰეშის, YARA-სა და გარე წყაროდან დაყენების აღმოჩენა უფასო რჩება.</string>
+    <string name="pro_feature_research">ექსპერიმენტული მანქანური სწავლება გადამოწმებული და ჩართული არ არის.</string>
+    <string name="pro_feature_updates">Pro გთავაზობთ კვლევითი მოდელის არჩევით ყოველდღიურ განახლებებს. ყოველკვირეული განახლებები უფასო რჩება.</string>
+    <string name="pro_feature_adfree">SafeMobile ამჟამად ყველასთვის რეკლამის გარეშეა.</string>
+    <string name="pro_years">წლები სავარაუდო ღირებულებისთვის (1–10)</string>
+    <string name="pro_price_preview">სავარაუდო ჯამი: %1$s. წლები: %2$d. დაადასტურეთ Google Play-ში.</string>
+    <string name="pro_price_unavailable">ველოდებით Google Play-ის ფასებს; შეძენა მიუწვდომელია.</string>
+    <string name="pro_cart_quantity_warning">შეძენის რაოდენობა აირჩიეთ Google Play-ში. დადასტურებული რაოდენობა განსაზღვრავს ამ მოწყობილობაზე დასამატებელ წლებს.</string>
+    <string name="pro_non_restorable_warning">შეძენა მხოლოდ ამ მოწყობილობისთვისაა. ხელახალმა დაყენებამ, განულებამ ან დაშიფვრის გასაღებების დაკარგვამ შეიძლება დარჩენილი Pro წვდომა სამუდამოდ წაშალოს.</string>
+    <string name="pro_unlock">SafeMobile Pro-ს გახსნა</string>
+    <string name="pro_restore_check">აღდგენა / სტატუსის შემოწმება (მხოლოდ ეს მოწყობილობა)</string>
+    <string name="pro_active_until">ლოკალური Pro წვდომა %1$s-მდე</string>
+    <string name="pro_not_active">ამ მოწყობილობაზე აქტიური ლოკალური Pro საშვი არ არის.</string>
+    <string name="pro_purchase_unavailable">Google Play მიუწვდომელია ან პროდუქტი გამართული არ არის.</string>
+    <string name="pro_purchase_canceled">შეძენა გაუქმდა.</string>
+    <string name="pro_purchase_pending">გადახდა მოლოდინშია. Pro წვდომა დაიწყება Google Play-ის მიერ შეძენის დადასტურების შემდეგ.</string>
+    <string name="pro_purchase_recheck">შეძენის დამუშავების დასასრულებლად კვლავ დაუკავშირდით Google Play-ს.</string>
+    <string name="pro_storage_failed">დაცულმა საცავმა შეძენა ვერ შეინახა. ხელახლა ცდამდე დაუკავშირდით მხარდაჭერას.</string>
+    <string name="pro_purchase_success">შეძენა ლოკალურად შეინახა. შეძენილი რაოდენობა დაემატა.</string>
+    <string name="pro_restore_local_only">ლოკალური სტატუსი შემოწმდა. Google Play გამოყენებულ საშვებს ვერ აღადგენს.</string>
+    <string name="pro_device_disclaimer" formatted="false">პასუხისმგებლობის უარყოფა: Pro საშვები ამ ფიზიკურ მოწყობილობას უკავშირდება. რადგან SafeMobile 100% ოფლაინ მუშაობს, აპის წაშლის ან მისი მონაცემების გასუფთავების შემთხვევაში Google Play თქვენს Pro საშვს ვერ აღადგენს.</string>
+    <string name="pro_network_notice">ძირითადი დაცვა ოფლაინ მუშაობს. Google Play-ის შესყიდვებსა და მოდელის არჩევით განახლებებს ინტერნეტი სჭირდება.</string>
+    <string name="pro_fewer_years">ნაკლები წელი</string>
+    <string name="pro_more_years">მეტი წელი</string>
+</resources>

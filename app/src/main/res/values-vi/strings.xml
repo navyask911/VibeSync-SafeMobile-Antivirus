@@ -665,4 +665,13 @@
     <string name="ml_probability">Xác suất đe dọa ML: %1$d%%</string>
     <string name="ml_high_finding">Phân tích tĩnh ML: điểm cao dựa trên quyền và mẫu API; chỉ mang tính tham khảo, không chứng minh có mã độc.</string>
     <string name="ml_active_body">Đã có mô hình ML tĩnh được xác thực trên thiết bị. Kết quả chỉ mang tính tham khảo, không chứng minh có mã độc.</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">Bộ máy thông tin về mối đe dọa</string>
+    <string name="threat_intelligence_samples">Tổng số mẫu mã độc đã phân tích</string>
+    <string name="threat_intelligence_accuracy">Độ chính xác của học máy</string>
+    <string name="threat_intelligence_downloads">Lượt tải mô hình trên toàn cầu</string>
+    <string name="threat_intelligence_updated">Lần cập nhật thông tin gần nhất</string>
+    <string name="threat_intelligence_updating">Đang cập nhật thông tin về mối đe dọa…</string>
+    <string name="threat_intelligence_training_note">Số liệu thống kê huấn luyện. Xem các lớp phát hiện bên dưới để biết khả năng bảo vệ có trên thiết bị này.</string>
 </resources>

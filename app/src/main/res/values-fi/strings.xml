@@ -808,4 +808,13 @@
     <string name="ml_probability">ML-uhkatodennäköisyys: %1$d%%</string>
     <string name="ml_high_finding">Staattinen ML-heuristiikka: suuri tulos käyttöoikeuksien ja API-mallien perusteella; vain viite, ei todiste haittaohjelmasta.</string>
     <string name="ml_active_body">Laitteessa on varmennettu staattinen ML-malli. Tulokset ovat suuntaa-antavia eivätkä todista haittaohjelmaa.</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">Uhkatietomoottori</string>
+    <string name="threat_intelligence_samples">Analysoituja haittaohjelmanäytteitä yhteensä</string>
+    <string name="threat_intelligence_accuracy">Koneoppimisen tarkkuus</string>
+    <string name="threat_intelligence_downloads">Mallin lataukset maailmanlaajuisesti</string>
+    <string name="threat_intelligence_updated">Viimeisin uhkatietojen päivitys</string>
+    <string name="threat_intelligence_updating">Päivitetään uhkatietoja…</string>
+    <string name="threat_intelligence_training_note">Koulutustilastot. Tämän laitteen käytettävissä oleva suojaus kuvataan alla olevissa tunnistuskerroksissa.</string>
 </resources>

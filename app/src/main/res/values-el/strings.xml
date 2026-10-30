@@ -808,4 +808,13 @@
     <string name="ml_probability">Πιθανότητα απειλής από μηχανική μάθηση: %1$d%%</string>
     <string name="ml_high_finding">Στατική ευρετική μηχανικής μάθησης: υψηλή βαθμολογία από άδειες και μοτίβα API· μόνο ένδειξη, όχι απόδειξη κακόβουλου λογισμικού.</string>
     <string name="ml_active_body">Διατίθεται επικυρωμένο στατικό μοντέλο μηχανικής μάθησης στη συσκευή. Τα αποτελέσματα είναι ενδεικτικά και δεν αποδεικνύουν κακόβουλο λογισμικό.</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">Μηχανή πληροφοριών απειλών</string>
+    <string name="threat_intelligence_samples">Σύνολο αναλυμένων δειγμάτων κακόβουλου λογισμικού</string>
+    <string name="threat_intelligence_accuracy">Ακρίβεια μηχανικής μάθησης</string>
+    <string name="threat_intelligence_downloads">Λήψεις μοντέλου παγκοσμίως</string>
+    <string name="threat_intelligence_updated">Τελευταία ενημέρωση πληροφοριών</string>
+    <string name="threat_intelligence_updating">Ενημέρωση πληροφοριών απειλών…</string>
+    <string name="threat_intelligence_training_note">Στατιστικά εκπαίδευσης. Δείτε τα επίπεδα ανίχνευσης παρακάτω για τη διαθέσιμη προστασία αυτής της συσκευής.</string>
 </resources>

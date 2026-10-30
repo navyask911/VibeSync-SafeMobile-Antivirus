@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- SafeMobile Pro is the product brand; all purchase copy below is localized. -->
+    <string name="pro_title">SafeMobile Pro</string>
+    <string name="pro_truthful_summary">De grundläggande antiviruskontrollerna förblir gratis. Pro aktiverar inte experimentell maskininlärning.</string>
+    <string name="pro_feature_free">Offlinekontroll av hashvärden, YARA och externa installationer förblir gratis.</string>
+    <string name="pro_feature_research">Experimentell maskininlärning är inte validerad eller aktiverad.</string>
+    <string name="pro_feature_updates">Pro erbjuder valfria dagliga uppdateringar av forskningsmodellen. Veckovisa uppdateringar förblir gratis.</string>
+    <string name="pro_feature_adfree">SafeMobile är för närvarande reklamfritt för alla.</string>
+    <string name="pro_years">År för uppskattningen (1–10)</string>
+    <string name="pro_price_preview">Uppskattad totalsumma: %1$s. År: %2$d. Bekräfta i Google Play.</string>
+    <string name="pro_price_unavailable">Väntar på Google Play-priser; köp är inte tillgängliga.</string>
+    <string name="pro_cart_quantity_warning">Välj antal i Google Play. Det bekräftade antalet avgör hur många år som läggs till på den här enheten.</string>
+    <string name="pro_non_restorable_warning">Köp endast för den här enheten. Ominstallation, återställning eller förlust av krypteringsnycklar kan permanent ta bort återstående Pro-åtkomst.</string>
+    <string name="pro_unlock">Lås upp SafeMobile Pro</string>
+    <string name="pro_restore_check">Återställ / Kontrollera status (endast den här enheten)</string>
+    <string name="pro_active_until">Lokal Pro-åtkomst till %1$s</string>
+    <string name="pro_not_active">Inget aktivt lokalt Pro-pass på den här enheten.</string>
+    <string name="pro_purchase_unavailable">Google Play är inte tillgängligt eller produkten är inte konfigurerad.</string>
+    <string name="pro_purchase_canceled">Köpet avbröts.</string>
+    <string name="pro_purchase_pending">Betalning väntar. Pro-åtkomsten börjar när Google Play har bekräftat köpet.</string>
+    <string name="pro_purchase_recheck">Anslut till Google Play igen för att slutföra behandlingen av köpet.</string>
+    <string name="pro_storage_failed">Den säkra lagringen kunde inte spara köpet. Kontakta supporten innan du försöker igen.</string>
+    <string name="pro_purchase_success">Köpet sparades lokalt. Det köpta antalet har lagts till.</string>
+    <string name="pro_restore_local_only">Lokal status kontrollerad. Google Play kan inte återställa förbrukade pass.</string>
+    <string name="pro_device_disclaimer" formatted="false">Ansvarsfriskrivning: Pro-pass är bundna till den här fysiska enheten. Eftersom SafeMobile fungerar 100% offline kan Google Play inte återställa ditt Pro-pass om du avinstallerar appen eller rensar appdata.</string>
+    <string name="pro_network_notice">Grundskyddet fungerar offline. Google Play-köp och valfria modelluppdateringar kräver internet.</string>
+    <string name="pro_fewer_years">Färre år</string>
+    <string name="pro_more_years">Fler år</string>
+</resources>

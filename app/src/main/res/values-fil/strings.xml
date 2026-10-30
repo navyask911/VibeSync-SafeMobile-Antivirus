@@ -808,4 +808,13 @@
     <string name="ml_probability">Posibilidad ng banta ayon sa ML: %1$d%%</string>
     <string name="ml_high_finding">Statikong ML na pagsusuri: mataas na marka dahil sa mga pahintulot at pattern ng API; gabay lamang at hindi patunay ng malware.</string>
     <string name="ml_active_body">Available sa device ang na-validate na statikong ML model. Gabay lamang ang mga resulta at hindi patunay ng malware.</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">Makina ng impormasyon sa mga banta</string>
+    <string name="threat_intelligence_samples">Kabuuang nasuring sample ng malware</string>
+    <string name="threat_intelligence_accuracy">Katumpakan ng pagkatuto ng makina</string>
+    <string name="threat_intelligence_downloads">Mga pag-download ng modelo sa buong mundo</string>
+    <string name="threat_intelligence_updated">Huling pag-update ng impormasyon</string>
+    <string name="threat_intelligence_updating">Ina-update ang impormasyon sa mga banta…</string>
+    <string name="threat_intelligence_training_note">Mga istatistika ng pagsasanay. Tingnan ang mga layer ng pagtukoy sa ibaba para sa proteksiyong available sa device na ito.</string>
 </resources>

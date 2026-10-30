@@ -37,6 +37,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Language
+import androidx.compose.material.icons.filled.WorkspacePremium
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Settings as SettingsIcon
 import androidx.compose.material.icons.filled.Security
@@ -455,6 +456,10 @@ import kotlinx.coroutines.launch
       Text(stringResource(R.string.brand_title),style=MaterialTheme.typography.titleLarge,fontWeight=FontWeight.Black,color=MaterialTheme.colorScheme.onSurface)
       Text(stringResource(R.string.brand_subtitle),style=MaterialTheme.typography.labelMedium,color=MaterialTheme.colorScheme.primary)
      }
+     IconButton(onClick = { selectedDestination = "pro" }) {
+      androidx.compose.material3.Icon(Icons.Default.WorkspacePremium,
+       contentDescription = stringResource(R.string.pro_title), tint = MaterialTheme.colorScheme.primary)
+     }
      Box {
       IconButton(onClick = { languageMenuExpanded = true }) {
        androidx.compose.material3.Icon(Icons.Default.Language, contentDescription = stringResource(R.string.language_settings), tint = MaterialTheme.colorScheme.primary)
@@ -498,7 +503,8 @@ import kotlinx.coroutines.launch
         "guardian" to R.string.nav_guardian,
         "phishing" to R.string.nav_phishing,
         "cleaner" to R.string.nav_cleaner,
-         "capabilities" to R.string.detection_capabilities_title
+         "capabilities" to R.string.detection_capabilities_title,
+         "pro" to R.string.pro_title
        ).forEach { (destination, label) ->
         DropdownMenuItem(
          text = { Text(stringResource(label)) },
@@ -821,6 +827,9 @@ import kotlinx.coroutines.launch
       onToggleProtection = toggleProtection, onStrictModeChanged = updateStrictMode,
        appTheme = appTheme, onAppThemeChanged = onAppThemeChanged
      )
+    }
+    if (selectedDestination == "pro") {
+     SafeMobileProPaywallScreen(onBack = { selectedDestination = "home" })
     }
     if (selectedDestination == "capabilities") {
      DetectionCapabilitiesScreen(

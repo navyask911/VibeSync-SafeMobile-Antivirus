@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- SafeMobile Pro is the product brand; all purchase copy below is localized. -->
+    <string name="pro_title">SafeMobile Pro</string>
+    <string name="pro_truthful_summary">Pagrindinės antivirusinės patikros lieka nemokamos. Pro neįjungia eksperimentinio mašininio mokymosi.</string>
+    <string name="pro_feature_free">Autonominis maišos, YARA ir išorinių diegimų aptikimas lieka nemokamas.</string>
+    <string name="pro_feature_research">Eksperimentinis mašininis mokymasis nepatvirtintas ir neįjungtas.</string>
+    <string name="pro_feature_updates">Pro siūlo pasirenkamus kasdienius tyrimų modelio atnaujinimus. Savaitiniai atnaujinimai lieka nemokami.</string>
+    <string name="pro_feature_adfree">SafeMobile šiuo metu visiems veikia be reklamų.</string>
+    <string name="pro_years">Metai kainos įverčiui (1–10)</string>
+    <string name="pro_price_preview">Numatoma suma: %1$s. Metai: %2$d. Patvirtinkite Google Play.</string>
+    <string name="pro_price_unavailable">Laukiama Google Play kainų; pirkti negalima.</string>
+    <string name="pro_cart_quantity_warning">Pirkimo kiekį pasirinkite Google Play. Patvirtintas kiekis nustato šiam įrenginiui pridedamus metus.</string>
+    <string name="pro_non_restorable_warning">Pirkinys skirtas tik šiam įrenginiui. Įdiegus iš naujo, atkūrus gamyklinius nustatymus ar praradus šifravimo raktus, likusi Pro prieiga gali būti prarasta visam laikui.</string>
+    <string name="pro_unlock">Atrakinti SafeMobile Pro</string>
+    <string name="pro_restore_check">Atkurti / Tikrinti būseną (tik šis įrenginys)</string>
+    <string name="pro_active_until">Vietinė Pro prieiga iki %1$s</string>
+    <string name="pro_not_active">Šiame įrenginyje nėra aktyvaus vietinio Pro leidimo.</string>
+    <string name="pro_purchase_unavailable">Google Play nepasiekiama arba produktas nesukonfigūruotas.</string>
+    <string name="pro_purchase_canceled">Pirkimas atšauktas.</string>
+    <string name="pro_purchase_pending">Laukiama mokėjimo. Pro prieiga prasideda Google Play patvirtinus pirkimą.</string>
+    <string name="pro_purchase_recheck">Prisijunkite prie Google Play, kad užbaigtumėte pirkimo apdorojimą.</string>
+    <string name="pro_storage_failed">Saugi saugykla negalėjo išsaugoti pirkimo. Prieš bandydami vėl kreipkitės į pagalbą.</string>
+    <string name="pro_purchase_success">Pirkimas išsaugotas vietoje. Nupirktas kiekis pridėtas.</string>
+    <string name="pro_restore_local_only">Vietinė būsena patikrinta. Google Play negali atkurti sunaudotų leidimų.</string>
+    <string name="pro_device_disclaimer" formatted="false">Atsakomybės apribojimas: Pro leidimai susieti su šiuo fiziniu įrenginiu. Kadangi SafeMobile veikia 100% neprisijungus, pašalinus programėlę ar išvalius jos duomenis Google Play negalės atkurti jūsų Pro leidimo.</string>
+    <string name="pro_network_notice">Pagrindinė apsauga veikia neprisijungus. Google Play pirkimams ir pasirenkamiems modelio atnaujinimams reikalingas internetas.</string>
+    <string name="pro_fewer_years">Mažiau metų</string>
+    <string name="pro_more_years">Daugiau metų</string>
+</resources>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- SafeMobile Pro is the product brand; all purchase copy below is localized. -->
+    <string name="pro_title">SafeMobile Pro</string>
+    <string name="pro_truthful_summary">Pemeriksaan antivirus inti tetap gratis. Pro tidak mengaktifkan pembelajaran mesin eksperimental.</string>
+    <string name="pro_feature_free">Deteksi hash, YARA, dan instalasi dari luar toko secara luring tetap gratis.</string>
+    <string name="pro_feature_research">Pembelajaran mesin eksperimental belum divalidasi dan belum diaktifkan.</string>
+    <string name="pro_feature_updates">Pro menawarkan pembaruan model riset harian opsional. Pembaruan mingguan tetap gratis.</string>
+    <string name="pro_feature_adfree">SafeMobile saat ini bebas iklan untuk semua orang.</string>
+    <string name="pro_years">Tahun untuk perkiraan (1–10)</string>
+    <string name="pro_price_preview">Perkiraan total: %1$s. Tahun: %2$d. Konfirmasikan di Google Play.</string>
+    <string name="pro_price_unavailable">Menunggu harga Google Play; pembelian belum tersedia.</string>
+    <string name="pro_cart_quantity_warning">Pilih jumlah pembelian di Google Play. Jumlah yang dikonfirmasi menentukan tahun yang ditambahkan ke perangkat ini.</string>
+    <string name="pro_non_restorable_warning">Pembelian khusus perangkat ini. Instal ulang, penyetelan ulang, atau hilangnya kunci enkripsi dapat menghapus sisa akses Pro secara permanen.</string>
+    <string name="pro_unlock">Buka SafeMobile Pro</string>
+    <string name="pro_restore_check">Pulihkan / Periksa Status (hanya perangkat ini)</string>
+    <string name="pro_active_until">Akses Pro lokal hingga %1$s</string>
+    <string name="pro_not_active">Tidak ada pas Pro lokal aktif di perangkat ini.</string>
+    <string name="pro_purchase_unavailable">Google Play tidak tersedia atau produk belum dikonfigurasi.</string>
+    <string name="pro_purchase_canceled">Pembelian dibatalkan.</string>
+    <string name="pro_purchase_pending">Pembayaran tertunda. Akses Pro dimulai setelah Google Play mengonfirmasi pembelian.</string>
+    <string name="pro_purchase_recheck">Hubungkan kembali ke Google Play untuk menyelesaikan pemrosesan pembelian.</string>
+    <string name="pro_storage_failed">Penyimpanan aman tidak dapat menyimpan pembelian. Hubungi dukungan sebelum mencoba lagi.</string>
+    <string name="pro_purchase_success">Pembelian disimpan secara lokal. Jumlah yang dibeli telah ditambahkan.</string>
+    <string name="pro_restore_local_only">Status lokal diperiksa. Google Play tidak dapat memulihkan pas yang sudah dikonsumsi.</string>
+    <string name="pro_device_disclaimer" formatted="false">Penafian: Pas Pro terikat pada perangkat fisik ini. Karena SafeMobile bekerja 100% luring, jika Anda menghapus aplikasi atau menghapus data aplikasi, Google Play tidak dapat memulihkan pas Pro Anda.</string>
+    <string name="pro_network_notice">Perlindungan inti bekerja secara luring. Pembelian Google Play dan pembaruan model opsional memerlukan koneksi internet.</string>
+    <string name="pro_fewer_years">Lebih sedikit tahun</string>
+    <string name="pro_more_years">Lebih banyak tahun</string>
+</resources>

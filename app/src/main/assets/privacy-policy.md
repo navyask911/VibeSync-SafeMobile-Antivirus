@@ -29,6 +29,19 @@ The separate `feed` flavor supports optional HTTPS threat-feed synchronization. 
 
 There is no automatic link-reputation lookup, cloud scanning, Google Play update client, mobile-ad SDK, or in-app sponsorship request in these application variants.
 
+### Optional SafeMobile Pro purchases
+
+Opening the Pro paywall connects to Google Play to retrieve its current price and process
+pending purchases. Google Play handles payment and purchase consumption under its own terms
+and privacy policy. Core antivirus checks remain free and run on-device. Optional model
+downloads use a network connection and do not upload scan files or results.
+
+The Pro entitlement is stored locally in Keystore-encrypted preferences, bound to a hash of
+the app-scoped Android ID. SafeMobile does not send that binding, scan files, scan history,
+or purchase tokens to a developer-operated server. Consumed passes cannot be restored by
+Google Play after uninstalling, clearing app data, device reset or encryption-key loss.
+The paywall discloses these limitations before purchase and provides a local-only status check.
+
 ## Permissions and controls
 The base manifest declares package and network-state visibility, INTERNET for definition synchronization, foreground-service and notification permissions, and optional alert/device-administration integrations. File access uses the system picker and persisted grants to selected folders. Android settings and runtime permission prompts remain controlled by the operating system. SafeMobile cannot universally block sideloads, force-stop other apps, disable global Developer Options/ADB, intercept all links in other browsers, or guarantee malware detection.
 

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- SafeMobile Pro is the product brand; all purchase copy below is localized. -->
+    <string name="pro_title">SafeMobile Pro</string>
+    <string name="pro_truthful_summary">Pamata pretvīrusu pārbaudes paliek bez maksas. Pro neieslēdz eksperimentālo mašīnmācīšanos.</string>
+    <string name="pro_feature_free">Bezsaistes jaucējvērtību, YARA un ārējo instalāciju noteikšana paliek bez maksas.</string>
+    <string name="pro_feature_research">Eksperimentālā mašīnmācīšanās nav apstiprināta un nav ieslēgta.</string>
+    <string name="pro_feature_updates">Pro piedāvā izvēles ikdienas pētniecības modeļa atjauninājumus. Iknedēļas atjauninājumi paliek bez maksas.</string>
+    <string name="pro_feature_adfree">SafeMobile pašlaik visiem ir bez reklāmām.</string>
+    <string name="pro_years">Gadi aprēķinam (1–10)</string>
+    <string name="pro_price_preview">Aptuvenā kopsumma: %1$s. Gadi: %2$d. Apstipriniet Google Play.</string>
+    <string name="pro_price_unavailable">Gaida Google Play cenas; pirkumi nav pieejami.</string>
+    <string name="pro_cart_quantity_warning">Izvēlieties pirkuma daudzumu Google Play. Apstiprinātais daudzums nosaka šai ierīcei pievienotos gadus.</string>
+    <string name="pro_non_restorable_warning">Pirkums paredzēts tikai šai ierīcei. Pārinstalēšana, atiestatīšana vai šifrēšanas atslēgu zaudēšana var neatgriezeniski dzēst atlikušo Pro piekļuvi.</string>
+    <string name="pro_unlock">Atbloķēt SafeMobile Pro</string>
+    <string name="pro_restore_check">Atjaunot / Pārbaudīt statusu (tikai šī ierīce)</string>
+    <string name="pro_active_until">Vietējā Pro piekļuve līdz %1$s</string>
+    <string name="pro_not_active">Šajā ierīcē nav aktīvas vietējās Pro caurlaides.</string>
+    <string name="pro_purchase_unavailable">Google Play nav pieejams vai produkts nav konfigurēts.</string>
+    <string name="pro_purchase_canceled">Pirkums atcelts.</string>
+    <string name="pro_purchase_pending">Maksājums gaida apstiprinājumu. Pro piekļuve sākas pēc Google Play pirkuma apstiprinājuma.</string>
+    <string name="pro_purchase_recheck">Vēlreiz izveidojiet savienojumu ar Google Play, lai pabeigtu pirkuma apstrādi.</string>
+    <string name="pro_storage_failed">Drošā krātuve nevarēja saglabāt pirkumu. Pirms atkārtota mēģinājuma sazinieties ar atbalstu.</string>
+    <string name="pro_purchase_success">Pirkums saglabāts lokāli. Iegādātais daudzums ir pievienots.</string>
+    <string name="pro_restore_local_only">Vietējais statuss pārbaudīts. Google Play nevar atjaunot izlietotas caurlaides.</string>
+    <string name="pro_device_disclaimer" formatted="false">Atruna: Pro caurlaides ir piesaistītas šai fiziskajai ierīcei. Tā kā SafeMobile darbojas 100% bezsaistē, ja atinstalēsiet lietotni vai notīrīsiet tās datus, Google Play nevarēs atjaunot jūsu Pro caurlaidi.</string>
+    <string name="pro_network_notice">Pamata aizsardzība darbojas bezsaistē. Google Play pirkumiem un izvēles modeļa atjauninājumiem nepieciešams internets.</string>
+    <string name="pro_fewer_years">Mazāk gadu</string>
+    <string name="pro_more_years">Vairāk gadu</string>
+</resources>

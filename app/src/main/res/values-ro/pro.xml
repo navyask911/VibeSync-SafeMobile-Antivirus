@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- SafeMobile Pro is the product brand; all purchase copy below is localized. -->
+    <string name="pro_title">SafeMobile Pro</string>
+    <string name="pro_truthful_summary">Verificările antivirus esențiale rămân gratuite. Pro nu activează învățarea automată experimentală.</string>
+    <string name="pro_feature_free">Detectarea offline prin hash, YARA și a instalărilor externe rămâne gratuită.</string>
+    <string name="pro_feature_research">Învățarea automată experimentală nu este validată sau activată.</string>
+    <string name="pro_feature_updates">Pro oferă actualizări zilnice opționale ale modelului de cercetare. Cele săptămânale rămân gratuite.</string>
+    <string name="pro_feature_adfree">SafeMobile este în prezent fără reclame pentru toți utilizatorii.</string>
+    <string name="pro_years">Ani pentru estimare (1–10)</string>
+    <string name="pro_price_preview">Total estimat: %1$s. Ani: %2$d. Confirmați în Google Play.</string>
+    <string name="pro_price_unavailable">Se așteaptă prețurile Google Play; achizițiile nu sunt disponibile.</string>
+    <string name="pro_cart_quantity_warning">Alegeți cantitatea în Google Play. Cantitatea confirmată stabilește anii adăugați pe acest dispozitiv.</string>
+    <string name="pro_non_restorable_warning">Achiziție doar pentru acest dispozitiv. Reinstalarea, resetarea sau pierderea cheilor de criptare pot elimina definitiv accesul Pro rămas.</string>
+    <string name="pro_unlock">Deblocați SafeMobile Pro</string>
+    <string name="pro_restore_check">Restaurare / Verificare stare (doar acest dispozitiv)</string>
+    <string name="pro_active_until">Acces Pro local până la %1$s</string>
+    <string name="pro_not_active">Niciun permis Pro local activ pe acest dispozitiv.</string>
+    <string name="pro_purchase_unavailable">Google Play nu este disponibil sau produsul nu este configurat.</string>
+    <string name="pro_purchase_canceled">Achiziție anulată.</string>
+    <string name="pro_purchase_pending">Plata este în așteptare. Accesul Pro începe după confirmarea achiziției de către Google Play.</string>
+    <string name="pro_purchase_recheck">Reconectați-vă la Google Play pentru a finaliza procesarea achiziției.</string>
+    <string name="pro_storage_failed">Stocarea securizată nu a putut salva achiziția. Contactați asistența înainte de a reîncerca.</string>
+    <string name="pro_purchase_success">Achiziție salvată local. Cantitatea cumpărată a fost adăugată.</string>
+    <string name="pro_restore_local_only">Starea locală a fost verificată. Google Play nu poate restaura permise consumate.</string>
+    <string name="pro_device_disclaimer" formatted="false">Declinare a răspunderii: permisele Pro sunt legate de acest dispozitiv fizic. Deoarece SafeMobile funcționează 100% offline, dacă dezinstalați aplicația sau ștergeți datele acesteia, Google Play nu vă poate restaura permisul Pro.</string>
+    <string name="pro_network_notice">Protecția esențială funcționează offline. Achizițiile Google Play și actualizările opționale ale modelului necesită internet.</string>
+    <string name="pro_fewer_years">Mai puțini ani</string>
+    <string name="pro_more_years">Mai mulți ani</string>
+</resources>

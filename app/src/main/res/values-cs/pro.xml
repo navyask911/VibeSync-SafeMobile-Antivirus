@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- SafeMobile Pro is the product brand; all purchase copy below is localized. -->
+    <string name="pro_title">SafeMobile Pro</string>
+    <string name="pro_truthful_summary">Základní antivirové kontroly zůstávají zdarma. Pro neaktivuje experimentální strojové učení.</string>
+    <string name="pro_feature_free">Offline kontrola hashů, YARA a instalací z externích zdrojů zůstává zdarma.</string>
+    <string name="pro_feature_research">Experimentální strojové učení není ověřeno ani aktivováno.</string>
+    <string name="pro_feature_updates">Pro nabízí volitelné denní aktualizace výzkumného modelu. Týdenní aktualizace zůstávají zdarma.</string>
+    <string name="pro_feature_adfree">SafeMobile je nyní bez reklam pro všechny.</string>
+    <string name="pro_years">Počet let pro odhad (1–10)</string>
+    <string name="pro_price_preview">Odhad celkem: %1$s. Počet let: %2$d. Potvrďte v Google Play.</string>
+    <string name="pro_price_unavailable">Čeká se na ceny z Google Play; nákupy nejsou dostupné.</string>
+    <string name="pro_cart_quantity_warning">Vyberte množství v Google Play. Potvrzené množství určuje počet let připsaných tomuto zařízení.</string>
+    <string name="pro_non_restorable_warning">Nákup pouze pro toto zařízení. Přeinstalace, reset nebo ztráta šifrovacích klíčů mohou trvale odstranit zbývající přístup Pro.</string>
+    <string name="pro_unlock">Odemknout SafeMobile Pro</string>
+    <string name="pro_restore_check">Obnovit / Zkontrolovat stav (pouze toto zařízení)</string>
+    <string name="pro_active_until">Místní přístup Pro do %1$s</string>
+    <string name="pro_not_active">Na tomto zařízení není aktivní místní průkaz Pro.</string>
+    <string name="pro_purchase_unavailable">Google Play není dostupný nebo produkt není nakonfigurován.</string>
+    <string name="pro_purchase_canceled">Nákup zrušen.</string>
+    <string name="pro_purchase_pending">Platba čeká na vyřízení. Přístup Pro začne po potvrzení nákupu službou Google Play.</string>
+    <string name="pro_purchase_recheck">Dokončete zpracování nákupu opětovným připojením ke Google Play.</string>
+    <string name="pro_storage_failed">Zabezpečené úložiště nemohlo nákup uložit. Před dalším pokusem kontaktujte podporu.</string>
+    <string name="pro_purchase_success">Nákup uložen místně. Zakoupené množství bylo připsáno.</string>
+    <string name="pro_restore_local_only">Místní stav zkontrolován. Google Play nemůže obnovit spotřebované průkazy.</string>
+    <string name="pro_device_disclaimer" formatted="false">Upozornění: průkazy Pro jsou vázány na toto fyzické zařízení. Protože SafeMobile funguje 100% offline, při odinstalaci aplikace nebo vymazání jejích dat nemůže Google Play váš průkaz Pro obnovit.</string>
+    <string name="pro_network_notice">Základní ochrana funguje offline. Nákupy Google Play a volitelné aktualizace modelu vyžadují internet.</string>
+    <string name="pro_fewer_years">Méně let</string>
+    <string name="pro_more_years">Více let</string>
+</resources>

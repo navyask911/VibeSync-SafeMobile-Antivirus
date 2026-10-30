@@ -808,4 +808,13 @@
     <string name="ml_probability">ML grėsmės tikimybė: %1$d%%</string>
     <string name="ml_high_finding">Statinė ML euristika: aukštas balas pagal leidimus ir API šablonus; tik įspėjimas, ne kenkėjiškos programos įrodymas.</string>
     <string name="ml_active_body">Įrenginyje pasiekiamas patikrintas statinis ML modelis. Rezultatai yra rekomendaciniai ir neįrodo kenkėjiškos programos.</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">Grėsmių žvalgybos sistema</string>
+    <string name="threat_intelligence_samples">Iš viso išanalizuota kenkėjiškų programų pavyzdžių</string>
+    <string name="threat_intelligence_accuracy">Mašininio mokymosi tikslumas</string>
+    <string name="threat_intelligence_downloads">Modelio atsisiuntimai visame pasaulyje</string>
+    <string name="threat_intelligence_updated">Paskutinis žvalgybos duomenų atnaujinimas</string>
+    <string name="threat_intelligence_updating">Atnaujinami grėsmių duomenys…</string>
+    <string name="threat_intelligence_training_note">Mokymo statistika. Šiame įrenginyje prieinamą apsaugą aprašo toliau pateikti aptikimo sluoksniai.</string>
 </resources>

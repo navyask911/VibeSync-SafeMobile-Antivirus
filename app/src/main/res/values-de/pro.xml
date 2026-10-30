@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- SafeMobile Pro is the product brand; all purchase copy below is localized. -->
+    <string name="pro_title">SafeMobile Pro</string>
+    <string name="pro_truthful_summary">Die grundlegenden Virenschutzprüfungen bleiben kostenlos. Pro aktiviert kein experimentelles maschinelles Lernen.</string>
+    <string name="pro_feature_free">Offline-Hash-, YARA- und Fremdinstallationserkennung bleiben kostenlos.</string>
+    <string name="pro_feature_research">Experimentelles maschinelles Lernen ist weder validiert noch aktiviert.</string>
+    <string name="pro_feature_updates">Pro bietet optionale tägliche Aktualisierungen des Forschungsmodells. Wöchentliche Aktualisierungen bleiben kostenlos.</string>
+    <string name="pro_feature_adfree">SafeMobile ist derzeit für alle werbefrei.</string>
+    <string name="pro_years">Jahre für die Schätzung (1–10)</string>
+    <string name="pro_price_preview">Geschätzter Gesamtpreis: %1$s. Jahre: %2$d. In Google Play bestätigen.</string>
+    <string name="pro_price_unavailable">Preise von Google Play werden abgerufen; Käufe sind nicht verfügbar.</string>
+    <string name="pro_cart_quantity_warning">Wählen Sie die Kaufmenge in Google Play. Die bestätigte Menge bestimmt die diesem Gerät gutgeschriebenen Jahre.</string>
+    <string name="pro_non_restorable_warning">Kauf nur für dieses Gerät. Neuinstallation, Zurücksetzen oder Verlust der Verschlüsselungsschlüssel kann den verbleibenden Pro-Zugang dauerhaft löschen.</string>
+    <string name="pro_unlock">SafeMobile Pro freischalten</string>
+    <string name="pro_restore_check">Wiederherstellen / Status prüfen (nur dieses Gerät)</string>
+    <string name="pro_active_until">Lokaler Pro-Zugang bis %1$s</string>
+    <string name="pro_not_active">Auf diesem Gerät ist kein lokaler Pro-Pass aktiv.</string>
+    <string name="pro_purchase_unavailable">Google Play ist nicht verfügbar oder das Produkt ist nicht eingerichtet.</string>
+    <string name="pro_purchase_canceled">Kauf abgebrochen.</string>
+    <string name="pro_purchase_pending">Zahlung ausstehend. Der Pro-Zugang beginnt, sobald Google Play den Kauf bestätigt.</string>
+    <string name="pro_purchase_recheck">Verbinden Sie sich erneut mit Google Play, um den Kauf fertig zu verarbeiten.</string>
+    <string name="pro_storage_failed">Der sichere Speicher konnte den Kauf nicht speichern. Wenden Sie sich vor einem erneuten Versuch an den Support.</string>
+    <string name="pro_purchase_success">Kauf lokal gespeichert. Die gekaufte Menge wurde gutgeschrieben.</string>
+    <string name="pro_restore_local_only">Lokaler Status geprüft. Google Play kann verbrauchte Pässe nicht wiederherstellen.</string>
+    <string name="pro_device_disclaimer" formatted="false">Haftungsausschluss: Pro-Pässe sind an dieses physische Gerät gebunden. Da SafeMobile 100% offline arbeitet, kann Google Play Ihren Pro-Pass nicht wiederherstellen, wenn Sie die App deinstallieren oder ihre Daten löschen.</string>
+    <string name="pro_network_notice">Der grundlegende Schutz funktioniert offline. Google Play-Käufe und optionale Modellaktualisierungen benötigen eine Internetverbindung.</string>
+    <string name="pro_fewer_years">Weniger Jahre</string>
+    <string name="pro_more_years">Mehr Jahre</string>
+</resources>

@@ -121,6 +121,24 @@ jobs:
         run: bash scripts/test_siren.sh
       - name: Verify release artifact privacy boundary
         run: python3 scripts/check_release_artifact_privacy.py
+      - name: Verify configured release APK and AAB signatures
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -z "${KEYSTORE_BASE64:-}" ]]; then
+            echo "Signing secrets unavailable for this CI context; outputs are test artifacts only."
+            exit 0
+          fi
+          apksigner="$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -n 1)"
+          test -x "$apksigner"
+          for flavor in offline feed; do
+            "$apksigner" verify --verbose --print-certs "app/build/outputs/apk/$flavor/release/app-$flavor-release.apk"
+            jarsigner -verify "app/build/outputs/bundle/${flavor}Release/app-$flavor-release.aab" | grep -qi 'jar verified'
+          done
+          sha256sum app/build/outputs/apk/{offline,feed}/release/*.apk \
+            app/build/outputs/bundle/{offline,feed}Release/*.aab > build/release-artifact-sha256.txt
       - name: Report release signing configuration
         if: always()
         env:
@@ -150,6 +168,7 @@ jobs:
             build/reports/cyclonedx/bom.json
             build/generated-third-party-notices.md
             build/detection-benchmark.json
+            build/release-artifact-sha256.txt
           if-no-files-found: warn
           retention-days: 14
 
