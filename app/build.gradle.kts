@@ -82,6 +82,20 @@ android {
  kotlin { compilerOptions { jvmTarget.set(JvmTarget.JVM_17) } }
  packaging { resources.excludes += setOf("META-INF/AL2.0", "META-INF/LGPL2.1") }
 }
+
+// docs/BENCHMARK_REPORT.md is canonical: the hidden card reads its build-time asset copy.
+// Generated assets are not committed and never contain APK samples.
+val benchmarkAssetDirectory = layout.buildDirectory.dir("generated/benchmark-report/assets")
+val stageBenchmarkReport = tasks.register<Copy>("stageBenchmarkReport") {
+    from(rootProject.file("docs/BENCHMARK_REPORT.md"))
+    into(benchmarkAssetDirectory)
+    rename { "benchmark-report.md" }
+}
+android.sourceSets.getByName("main").assets.srcDir(benchmarkAssetDirectory)
+tasks.matching { it.name.startsWith("merge") && it.name.endsWith("Assets") }.configureEach {
+    dependsOn(stageBenchmarkReport)
+}
+
 kapt { correctErrorTypes = true }
 dependencies {
  implementation("androidx.core:core-ktx:1.16.0")
