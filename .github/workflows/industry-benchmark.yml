@@ -1,0 +1,57 @@
+name: Industry Benchmark (2,000 real APKs)
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: industry-benchmark
+  cancel-in-progress: false
+jobs:
+  scan:
+    name: Read-only APK benchmark on Android emulator
+    runs-on: ubuntu-latest
+    timeout-minutes: 345
+    env:
+      INDUSTRY_MALWARE_MANIFEST_URL: ${{ vars.INDUSTRY_MALWARE_MANIFEST_URL }}
+      INDUSTRY_MALWARE_MANIFEST_SHA256: ${{ vars.INDUSTRY_MALWARE_MANIFEST_SHA256 }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Select 1000 F-Droid and 1000 approved malware APKs
+        run: |
+          mkdir -p "$RUNNER_TEMP/industry/results"
+          python3 scripts/industry_benchmark.py prepare --plan "$RUNNER_TEMP/industry/plan.json"
+      - name: Build application and real on-device benchmark test
+        run: ./gradlew --no-daemon --max-workers=2 assembleOfflineDebug assembleOfflineDebugAndroidTest
+      - name: Scan in cloud Android emulator, 25 temporary APKs per batch
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 33
+          target: default
+          arch: x86_64
+          profile: pixel_2
+          emulator-boot-timeout: 1200
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot
+          disable-linux-hw-accel: auto
+          script: bash scripts/run_industry_benchmark.sh
+      - name: Report verified results
+        run: |
+          python3 scripts/industry_benchmark.py summarize --plan "$RUNNER_TEMP/industry/plan.json" \
+            --results "$RUNNER_TEMP/industry/results" --output-json build/industry-benchmark.json \
+            --output-markdown docs/BENCHMARK_REPORT.md
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: industry-benchmark-report-${{ github.run_number }}
+          path: |
+            docs/BENCHMARK_REPORT.md
+            build/industry-benchmark.json
+          if-no-files-found: ignore
+          retention-days: 14
+      - name: Remove temporary APKs
+        if: always()
+        run: rm -rf "$RUNNER_TEMP/industry/corpus"
