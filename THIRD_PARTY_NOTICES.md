@@ -1,6 +1,6 @@
 # Third-party dependency notices
 
-Generated from the CycloneDX SBOM by `scripts/render_third_party_notices.py`. Components: 363.
+Generated from the CycloneDX SBOM by `scripts/render_third_party_notices.py`. Components: 377.
 
 Regenerate this file with the CI SBOM refresh workflow; do not hand-edit dependency rows.
 
@@ -66,6 +66,8 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | bcprov-jdk18on | 1.80.2 | [Bouncy Castle Licence](https://www.bouncycastle.org/licence.html) | https://github.com/bcgit/bc-java |
 | bcprov-jdk18on | 1.86 | [Bouncy Castle Licence](https://www.bouncycastle.org/licence.html) | https://github.com/bcgit/bc-java |
 | bcutil-jdk18on | 1.80.2 | [Bouncy Castle Licence](https://www.bouncycastle.org/licence.html) | https://github.com/bcgit/bc-java |
+| billing | 8.3.0 | [Android Software Development Kit License](https://developer.android.com/studio/terms.html) | Package URL: pkg:maven/com.android.billingclient/billing@8.3.0?type=aar |
+| billing-ktx | 8.3.0 | [Android Software Development Kit License](https://developer.android.com/studio/terms.html) | Package URL: pkg:maven/com.android.billingclient/billing-ktx@8.3.0?type=aar |
 | caffeine | 2.9.3 | Apache-2.0 | https://github.com/ben-manes/caffeine |
 | checker-qual | 3.33.0 | MIT | https://github.com/typetools/checker-framework.git |
 | checker-qual | 3.42.0 | MIT | https://github.com/typetools/checker-framework.git |
@@ -117,6 +119,9 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | failureaccess | 1.0.1 | Apache-2.0 | Package URL: pkg:maven/com.google.guava/failureaccess@1.0.1?type=jar |
 | failureaccess | 1.0.2 | Apache-2.0 | Package URL: pkg:maven/com.google.guava/failureaccess@1.0.2?type=jar |
 | failureaccess | 1.0.3 | Apache-2.0 | Package URL: pkg:maven/com.google.guava/failureaccess@1.0.3?type=jar |
+| firebase-encoders | 17.0.0 | Apache-2.0 | Package URL: pkg:maven/com.google.firebase/firebase-encoders@17.0.0?type=jar |
+| firebase-encoders-json | 18.0.0 | Apache-2.0 | Package URL: pkg:maven/com.google.firebase/firebase-encoders-json@18.0.0?type=aar |
+| firebase-encoders-proto | 16.0.0 | Apache-2.0 | Package URL: pkg:maven/com.google.firebase/firebase-encoders-proto@16.0.0?type=jar |
 | foundation | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | foundation-android | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | foundation-layout | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
@@ -301,6 +306,11 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | opentelemetry-context | 1.41.0 | Apache-2.0 | Package URL: pkg:maven/io.opentelemetry/opentelemetry-context@1.41.0?type=jar |
 | perfmark-api | 0.26.0 | Apache-2.0 | https://github.com/perfmark/perfmark |
 | perfmark-api | 0.27.0 | Apache-2.0 | https://github.com/perfmark/perfmark |
+| play-services-base | 18.5.0 | [Android Software Development Kit License](https://developer.android.com/studio/terms.html) | Package URL: pkg:maven/com.google.android.gms/play-services-base@18.5.0?type=aar |
+| play-services-basement | 18.9.0 | [Android Software Development Kit License](https://developer.android.com/studio/terms.html) | Package URL: pkg:maven/com.google.android.gms/play-services-basement@18.9.0?type=aar |
+| play-services-location | 19.0.0 | [Android Software Development Kit License](https://developer.android.com/studio/terms.html) | Package URL: pkg:maven/com.google.android.gms/play-services-location@19.0.0?type=aar |
+| play-services-places-placereport | 17.0.0 | [Android Software Development Kit License](https://developer.android.com/studio/terms.html) | Package URL: pkg:maven/com.google.android.gms/play-services-places-placereport@17.0.0?type=aar |
+| play-services-tasks | 18.2.0 | [Android Software Development Kit License](https://developer.android.com/studio/terms.html) | Package URL: pkg:maven/com.google.android.gms/play-services-tasks@18.2.0?type=aar |
 | profileinstaller | 1.4.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | proto | 31.13.2 | Apache-2.0 | Package URL: pkg:maven/com.android.tools.emulator/proto@31.13.2?type=jar |
 | proto-google-common-protos | 2.17.0 | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0) | https://github.com/googleapis/gapic-generator-java |
@@ -330,6 +340,7 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | savedstate | 1.3.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | savedstate-android | 1.3.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | savedstate-ktx | 1.3.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| security-crypto | 1.1.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | sqlite | 2.5.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | sqlite-android | 2.5.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | sqlite-framework | 2.5.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
@@ -346,6 +357,9 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | tracing | 2.0.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | tracing-android | 2.0.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | tracing-ktx | 2.0.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| transport-api | 3.0.0 | Apache-2.0 | Package URL: pkg:maven/com.google.android.datatransport/transport-api@3.0.0?type=aar |
+| transport-backend-cct | 3.1.8 | Apache-2.0 | Package URL: pkg:maven/com.google.android.datatransport/transport-backend-cct@3.1.8?type=aar |
+| transport-runtime | 3.1.8 | Apache-2.0 | Package URL: pkg:maven/com.google.android.datatransport/transport-runtime@3.1.8?type=aar |
 | ui | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | ui-android | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | ui-geometry | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
@@ -370,7 +384,7 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | work-runtime | 2.10.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | work-runtime-ktx | 2.10.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 
-Metadata completeness: 361/363 components have both a declared licence and a source/package reference.
+Metadata completeness: 375/377 components have both a declared licence and a source/package reference.
 
 ## Metadata requiring manual review
 

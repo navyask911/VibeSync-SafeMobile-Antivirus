@@ -1,10 +1,10 @@
 {
   "bomFormat" : "CycloneDX",
   "specVersion" : "1.6",
-  "serialNumber" : "urn:uuid:d7604c65-30ac-4665-83f3-304905e7025f",
+  "serialNumber" : "urn:uuid:9b61a5fa-3405-47c7-8e82-f84d8bfb1ce2",
   "version" : 1,
   "metadata" : {
-    "timestamp" : "2026-10-29T13:21:01Z",
+    "timestamp" : "2026-10-30T21:37:16Z",
     "tools" : {
       "components" : [
         {
@@ -26,7 +26,7 @@
       "externalReferences" : [
         {
           "type" : "build-system",
-          "url" : "https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/actions/runs/40881011857"
+          "url" : "https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/actions/runs/41132289158"
         },
         {
           "type" : "vcs",
@@ -7704,6 +7704,70 @@
     },
     {
       "type" : "library",
+      "bom-ref" : "pkg:maven/androidx.security/security-crypto@1.1.0?type=aar",
+      "publisher" : "The Android Open Source Project",
+      "group" : "androidx.security",
+      "name" : "security-crypto",
+      "version" : "1.1.0",
+      "description" : "AndroidX Security",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "99a1446257007c45de518ba56f560be1"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "5d365bae94860dd309664a61347000401dcb44e6"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "2831ec1b455e8cc2ff861e8384d7893b42b3307c00f3be843feb02af8ac04b56"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "74e94a674d66fbefe635ee00418b104f25c3fb4614fb86572642feaef1b7c5c571c1e4ceb7e289e1b410b75e7d20116bd0bddbe99fc2108abfbdc3c1b4188716"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "f7baebf2e91b6c44b2466702141f50d77480f5a4d100c13fe7b4889ad3759bab"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "eac16359d07bbdf57b4047428f593a5ee2814a6ba1eabe1c16afcc9d127311a3b0231a405a40747dea35047b79a1170e54caf17b58b54cddade6b55921c9425d"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "4497f322abe13d448d352bf9e01aec1604982cec925a8a286835f367501b9358b528853a2e5751d13fd86c09eca089bb"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "76378b53c6e42f806f70bfc80f8194c6caa30cab25a35caf49e0eff3f5a0cfac1906016145bd8297b654459721dba2b9"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/androidx.security/security-crypto@1.1.0?type=aar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://cs.android.com/androidx/platform/frameworks/support"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
       "bom-ref" : "pkg:maven/androidx.sqlite/sqlite-android@2.5.1?type=aar",
       "publisher" : "The Android Open Source Project",
       "group" : "androidx.sqlite",
@@ -8774,6 +8838,120 @@
           "url" : "https://cs.android.com/androidx/platform/frameworks/support"
         }
       ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/com.android.billingclient/billing-ktx@8.3.0?type=aar",
+      "group" : "com.android.billingclient",
+      "name" : "billing-ktx",
+      "version" : "8.3.0",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "717ddab3c7157c48632a719b8da5df5c"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "92ae726bad252ea9819216d0ec9d9721193d40a0"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "2a8b1c7ad98429b4245ffaba1db48f1bdc78f6cd097aec256d3d6e0baf1b7cae"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "70a1e8d67724846a1877b7f91859603e4563a555ce36792586766a37c539a3e3f0c0e968288eca3546c4de163e0d6e7ffde76505b9c4c11c83483881f3301e5f"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "06aff53124e1a6f98950382199f57e7b43ad8529742adec04c39df79c356ad8c"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "84345d797c2403fcd8da723ab4e3520aa6460f1638b84e1e31fe1aa649a2bd1a90f05b2261f66a3f49372888f0a48e78c7b5542992c5a6f6671b39867d39e6a0"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "f97e6f0eff0060b3deef7995793ad2d2577e6fdf222219454bd69402a4d818ae2f519c53f9c29af0f6329502022dd1d7"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "bd4650ca045d339cbcf0f80700050e5878a2e7e2b111d0c8953c6ecaf24f1481511a2c8ad62211531eb9603dbc9c994a"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "name" : "Android Software Development Kit License",
+            "url" : "https://developer.android.com/studio/terms.html"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/com.android.billingclient/billing-ktx@8.3.0?type=aar",
+      "modified" : false,
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/com.android.billingclient/billing@8.3.0?type=aar",
+      "group" : "com.android.billingclient",
+      "name" : "billing",
+      "version" : "8.3.0",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "851ba0281ecf72635dae34fac0fd9a57"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "db89e11a0b3b2929b37eabcb6fd14beaefda1702"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "9810b5cd47e20bc82b354f3583c9d3bf7c42b33e64e192dce0495d036a85f505"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "e364c3e23de039dbd5d1ecfd2abbc7481fa1d39272b660288fa25ce006fd63298692e7e89f9b5c5d1c10d60535de651a505d0889d13e6f59567e9872eef6e995"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "16b0649c634315092ea66cd5937487b5b1fa4366473b9b63e3e03c1261f37c52"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "d3db8ff404e9381376c22fb540feb524724a2e20ba047d2f5cfc4a54c4a6656cd405bd5d04e872e4258e357295565c81daac88356889d82ee741030735086b17"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "fdafe730ac1f33245cdc77abc356ac717b90e2667c0b8df4a0ee0f066c1ff22fde41ea7a41f404512038b756f9f3a294"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "92a4b4eb13c1a9c06c06f2ec0ec6d55ae08687ac5d89a3e1c8737a61e56f87cbcbf674a5884f9554f12f1f3313016723"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "name" : "Android Software Development Kit License",
+            "url" : "https://developer.android.com/studio/terms.html"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/com.android.billingclient/billing@8.3.0?type=aar",
+      "modified" : false,
       "properties" : [
         {
           "name" : "cdx:maven:package:test",
@@ -10335,6 +10513,459 @@
     },
     {
       "type" : "library",
+      "bom-ref" : "pkg:maven/com.google.android.datatransport/transport-api@3.0.0?type=aar",
+      "group" : "com.google.android.datatransport",
+      "name" : "transport-api",
+      "version" : "3.0.0",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "028241994852b3b48e095de368cb2fe6"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "7421bab19ed712c5592694e807ba72ccf39d42d4"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "4e6983c0703b357df6f1c6ceacb1b5dfc2c5006a789c799fec2298b2b5337466"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "7e7dc9ce998e65515a616cd0866258699368b31f5fdd1f9fe316e5665967fc9bf106f4207cf496063313e729ac13d2d7ef280b0bd401203f4813f1f7843d8fee"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "6d6ced297f996ad73fc434ca16896ec7761015872e16df1e8dbf582cd9d968a7"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "0468038fe8c7d4f42d8e2c2fde55e31a5c8e90ad64b5a2bcfff40de71fb7f34201c8712f5c3a6ec54722a7c909f99860bddb97c75ef30f75bb52c0004839b6c9"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "b64034294e3287b4cb02d4b18e870e1447da91638bd1e1c53fda72a422b110cef91aa8ecf28934291d6656cf22dd65f5"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "656cba4fecfda87659b6e525feacfb362b64cbeb404dc1a3f57a06ae728e1e4440c0aa1a07e4edeb616a0a0e16f9c7fd"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/com.google.android.datatransport/transport-api@3.0.0?type=aar",
+      "modified" : false,
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/com.google.android.datatransport/transport-backend-cct@3.1.8?type=aar",
+      "group" : "com.google.android.datatransport",
+      "name" : "transport-backend-cct",
+      "version" : "3.1.8",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "3dfef8789a10437525e61dad68d3bae1"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "0cfd0b63e154b80207d36ef3199ae06c8fe088e5"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "e17edd1ef7fd475c90baa4e39422332f27087d34bcb46cb48ce86af9a54a612e"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "6c36297504f858ea63e15643fe28cf9d820bdcf6cb2050d394149cc69cc5ea79dd7016bda6204ee62ac51a73bee2efdb3c80603014acf2fd29773885ab5c4c08"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "f1ad60b02a4288ae829648ab9ffe9a8c583e96e8245ba42fbd89e2f9d61958c0"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "afec6d100a35ab3453f65159a5d16ac7608348d2757e81710aae8d56928d059bdd156bd9b9242b999657566e23d1ebb53b2317544ecf50887dfb4a1495ac32fe"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "7b75709d62efcafe32d25b90264f1999a3ced4674ac81daed89d95d5ffdc6c8b88f25016c0402dd27120d3abed9754c7"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "1d84258ef92d2f2a090ecaf6599027c49e6e06ea4020307d5bada17449dbc0cd1f9733f960af4a9c7025cad712d43501"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/com.google.android.datatransport/transport-backend-cct@3.1.8?type=aar",
+      "modified" : false,
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/com.google.android.datatransport/transport-runtime@3.1.8?type=aar",
+      "group" : "com.google.android.datatransport",
+      "name" : "transport-runtime",
+      "version" : "3.1.8",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "c8e2bbae3b3790e3591473758490c026"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "5632cd0e73a5e28a50761beae0b999ca8a3d69ce"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "cb9353ef1791ae17097d878ca711e25a9c32cec9042adc49b00cadfee1a7290b"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "f02025aae6cc32630ca30484b5fab806ead53d1a33337c0a9631141febc5ab49859deccab995040f127cae92870337a4d0c20b217d2afe5ff18bba420f54fac3"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "56bb20bacde6a05441c55bf6f00a483f8940f0bc09f6e4e7e01aef4d7c4c849f"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "9b4b8bac14da9bbd46a59849b60f47760da76d81693f7279e65359ffacae77ffeb039078785ee684353144590efe1ae628a74b4c4862c5c13e96d0349852e69f"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "5e268d4008121b444a4c8dbf7b4861b5baaf122b2e47d6a5a4280a71e1c87887aedadf42b9cef18bde7de8a2ad241729"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "b00397ecd86f7e52f215844f5d1062066e7b9a61f89203263bbfca516b606402c8ccbb4112b6e04ff285a2b957a6e53b"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/com.google.android.datatransport/transport-runtime@3.1.8?type=aar",
+      "modified" : false,
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/com.google.android.gms/play-services-base@18.5.0?type=aar",
+      "group" : "com.google.android.gms",
+      "name" : "play-services-base",
+      "version" : "18.5.0",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "2575eef1b04c8d00ca47f5e802897309"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "9b3fc5c98a0a082ce2804aa97d1f1bf39b01ce76"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "59a5c0c2da12311d75d965ce1f419498536b1a167fb28ff7dfc2dfd9cefa4157"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "fa9d6480d549cc2d335568495f420857c137a859f6665dd8bada47eab3f6542b729eaafe61596f60217c73ea669d1d5eee4c24706f5f9243a7953af8efc682bc"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "a0a6f92ceceac8ffb2a41f65cce91067b00331216916ea5f093318c50e783fff"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "eec2778b752b283a48700173069c9ae0de2f108198ce0b6d3bff0187e3017245c9d2d0f9bc1f0b2ce7527de0579beaba6e71047c6e2bd4a9e3e24eaeb13cc3ee"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "7ec58b0a5ffe427c998e5ffd613657d258710d054045366dbdcd94bdaf67d6c693232730eda32a61a2c1f5aeaa8f6194"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "4640a56339f1faee636a6170d5f966362bdad7c29feecd0ad5afc826a9e3c3d8ccf68729f99ec10c36aca6eab033135d"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "name" : "Android Software Development Kit License",
+            "url" : "https://developer.android.com/studio/terms.html"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/com.google.android.gms/play-services-base@18.5.0?type=aar",
+      "modified" : false,
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/com.google.android.gms/play-services-basement@18.9.0?type=aar",
+      "group" : "com.google.android.gms",
+      "name" : "play-services-basement",
+      "version" : "18.9.0",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "e268b48dbf493046838f1698c92b53cf"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "19b02720db5a39461ccf479053b5dbc10e65b09f"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "c6ed7236b1b3ce0296b508a5c0a09108fd52d83559d35cad2639505cd04ab255"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "1bbffe98ec95803010411df699352f9c18e52c79237d78124606cd6c3f3a23772614194a39fbea4e234c9228ba7414c23bf83712d17a71b665bf18ab63240faf"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "762603e419d75a939223f7b21e419e1cf32e5282ab4bc435ee58e11363ddc648"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "747df25f416742d08f74d068c0ce77f9497137fab4817b4f1c0f259d2b12bbcf4f127162506fd64a272bb215d19e641c42d6356c3ed35e1bca5d78999a3d7198"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "f72ecafbf5c39ab1f82c4688a67d43e2221b422bf4e295bdde5b643804bf50d6640a0486f7e1d6603ad242971d546ad5"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "c145eb623c6b6e3f3461acb76cd79d100e1492dcd32b37a65ec352d69db7e9e2c7cd8faf03178a71513bee7b7cc974d6"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "name" : "Android Software Development Kit License",
+            "url" : "https://developer.android.com/studio/terms.html"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/com.google.android.gms/play-services-basement@18.9.0?type=aar",
+      "modified" : false,
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/com.google.android.gms/play-services-location@19.0.0?type=aar",
+      "group" : "com.google.android.gms",
+      "name" : "play-services-location",
+      "version" : "19.0.0",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "217fd679346b3e59e5b4bc4c62838cc6"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "ebe2c9a380472c149a0fbd982474bc93792057e0"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "6b205c43ba5df751eca8ce9dae7a58effafac7d637fb4fc708a7522d1b99cf80"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "35e96048ac3e9e80ef7a6822d00220e4c6372cdda97126997aaa5b7cf8469776abd830933e052407f249630fda617b98b54cecccf3467ff15b83aaca5c765025"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "663202f5609b2d50e50b3421b515805b9dc74f0b6c5c6794e4fb6b7c1d9f42d2"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "e169991a39d2446f4d625910a079ebc09dcd49526b20580e712c8e71b69f0bbc785d74be15111fe770506a0a3c22eb2fdbf0153f81af8bc585c3645e2146c03b"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "d4fa407c72bcb724d670063c1ba01f228538b89326a95e398ea8f44db74f147a10be9165feed03875ee1a09b36a35944"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "07c16d0286764d10238a2079e79fe67fdea2a7e0e29e0d9df22ff1107c11d304283f31c1857db9e7a3ec185a5a74157e"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "name" : "Android Software Development Kit License",
+            "url" : "https://developer.android.com/studio/terms.html"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/com.google.android.gms/play-services-location@19.0.0?type=aar",
+      "modified" : false,
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/com.google.android.gms/play-services-places-placereport@17.0.0?type=aar",
+      "group" : "com.google.android.gms",
+      "name" : "play-services-places-placereport",
+      "version" : "17.0.0",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "a816fef956f19a6bb7b2ec469bde1a5d"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "6fd0e52de8c47b7228223bf3a7fe53d075b6b0b2"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "2c7fd63ad02f28150ae4ffe4615dac7d694d790e2c4667f777aedc8ee054e929"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "523ef3eec18c00fa668f05ccacfc0200d103cfe6ef0ccd9eab9261fec03992f6160276b29916fb664c76f94e0ade2130bd2a5c1b924bf4867e6cde3bce0fcdfc"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "8c5c4a388bc81b876d3a8ab43b243bf9121d25bdb85d01b994eb5fbee6fb6ea1"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "d5d93f46fd15e3e07aff5129f93f1f0df31902232ee2409400d25e395a95e859dfc40e5dc794fc800ab49f4c8e4f5d6066966cb93d22216f2b099e0e0b859140"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "0c5322d4f226fb8a2f35d6e442b2dc8925346f800d838df3e123d408a672989ef1a5aeb92ded758f9d4b0adcfd7cc486"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "a5734c6abf6d119dc89267eb9a7e5c12df39e60f26de04f618e8f2ee09c81fd9d602aa8da2326e998481452dc415ef99"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "name" : "Android Software Development Kit License",
+            "url" : "https://developer.android.com/studio/terms.html"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/com.google.android.gms/play-services-places-placereport@17.0.0?type=aar",
+      "modified" : false,
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/com.google.android.gms/play-services-tasks@18.2.0?type=aar",
+      "group" : "com.google.android.gms",
+      "name" : "play-services-tasks",
+      "version" : "18.2.0",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "a4f08be53b9f2c1e68be610c6d03380d"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "75cd01884bac2768b8ab1b530c6510334bb2330c"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "7f2aaa8f502068eaf54356ca92aec04271d6e7c416c52c45c0d23440fcbd1654"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "b549b84936b50598bb8c3c33b0bf2367f7ad2e8ca9e4e81ee7a19101063efe6b61befd26312ee30b990ac19bf5b528e275b473b388e2557f6b9d129bb7f9cba2"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "fd7224681355df3ffdc8b543969288c9afab76768ba0306a0a0d16e046a63da1"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "ff16e4bc092874b3151f9b4a39ba5e8d26da81a7e450b29be90657ac727f01a07256a035a020848c7bf77c03b21fa78374b3b6bd6cead6fe0b28fddfe1b70069"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "a2ac5693b37baf1b14337779697a76a22f1bc8463222c055799ee2d77ed0c785265a951c0c7b1d8a05412b73b619b0bc"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "af4404d5b69ec234970a58537594b2155b7508135754e2353d523e9334bc803db1be22e5f807654e33dafb5d819650ba"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "name" : "Android Software Development Kit License",
+            "url" : "https://developer.android.com/studio/terms.html"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/com.google.android.gms/play-services-tasks@18.2.0?type=aar",
+      "modified" : false,
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
       "bom-ref" : "pkg:maven/com.google.android/annotations@4.1.1.4?type=jar",
       "group" : "com.google.android",
       "name" : "annotations",
@@ -11594,6 +12225,174 @@
         }
       ],
       "purl" : "pkg:maven/com.google.errorprone/error_prone_annotations@2.36.0?type=jar",
+      "modified" : false,
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/com.google.firebase/firebase-encoders-json@18.0.0?type=aar",
+      "group" : "com.google.firebase",
+      "name" : "firebase-encoders-json",
+      "version" : "18.0.0",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "f11bb6c9ccdfe5ed3e5af8ad32175d58"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "96bb325983a231881f1e195ed9d713189f421dea"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "80aece7e1ef58957ca2fc1957bc9208ec92a3a9528201331d3c63e3182570f97"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "438a067a5f1fa0e25ed9824169707b6d95ef19d1ad228d996e84be1d490d212f5293d0e5f9a4eeacf28a180b9e08f8e76f280d6e849d475aa0c1c7b9ba3182b0"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "2fcdf1021496acd39b558768091c12466b580bed7556dc48fe4e51b7ffd93df3"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "0bfeec40b5d84396611bd189f72727dca1f5810c5d3ba0695f48e3f01d3208f46136fa59deb52a3a8bba6bb06af086f09dcfc71c47a676d048e3102b16c9ee55"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "99c1085cfc2b087d6f3a398ce2b56771b84d7d8dacf6d6a41ac428db333c65be78644932266bd9f61721f88e69f5b962"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "c667bec4a13d0b788934ef753d7e21ba3836fa0e996122f02be3ab392a9361d0ca7a8dd48136d8c19508a1a6e2991413"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/com.google.firebase/firebase-encoders-json@18.0.0?type=aar",
+      "modified" : false,
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/com.google.firebase/firebase-encoders-proto@16.0.0?type=jar",
+      "group" : "com.google.firebase",
+      "name" : "firebase-encoders-proto",
+      "version" : "16.0.0",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "f5e8e5cd18e85e8f4aa87961c0a01d4c"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "a42d5fd83b96ae7b73a8617d29c94703e18c9992"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "293db96a0d1d43f033167881b638d8fde844e4e5495f5101cf52295765295e0e"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "7a6b8ab16413fb5ef3676feca87cafe1b5c96696ac301a44689a06719d1b58998b2721b7f102c34b6a4d431ca7f26fcb5d1a07b292bc8d3062b1d10aeba5e97c"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "a73ccaef98e6633c763e3cbb90659fd0ff1dfdc5cc080a52f53eb4c48e2a643d"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "b643967d42fba2c553420d3a360c7fd4f2a8ae23b69e41b432da4251e6681bb2689e7e104a4ee8ee7361437d33c27fd32cf41a0ca44b09925f3d6d7545b675ea"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "9db3832d1c5e38d5a92fb3c180a9c5f699aea8bef2f937015af3f6a903946b3cecec5934cefe35bb3e7f93c7312165fe"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "228fcd30d984073e1d84cb5c9abae19cdf907032001f8849b8bf57c8f32a70b84f6d0727bb418d548698378fe6acdba2"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/com.google.firebase/firebase-encoders-proto@16.0.0?type=jar",
+      "modified" : false,
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/com.google.firebase/firebase-encoders@17.0.0?type=jar",
+      "group" : "com.google.firebase",
+      "name" : "firebase-encoders",
+      "version" : "17.0.0",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "c3329024fc626b7f29a3dd008ee87bdb"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "26f52dc549c42575b155f8c720e84059ee600a85"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "282a5a703f9b7eb56508dde97ea918e95d73318b157050f457f7a86dca750150"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "e8a61a6ad61faafd38f82b94323baea45295dde354896fb5f8266b27d2ed64d107438c58524b91af31a6a37c2bbd71f81a49178b8f2784cf81b06d5271ffa350"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "4e7a687300bb54216ded1c2ae95fdee99c5527832f160703ce3d0a6fda16fb3c"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "69bc86d56ad0952c004dae1a125aaecdec134968824bd973826c280a66be7a854500263ff3196863bf8f3329d7b37b390abd038d8934a7cb58096dba7b863fa0"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "be87c297924800fce0d03467505585643bbbb76b8a43b5aefeccbdde9016559c960f36d0022b85115acc97e9a567bfa2"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "58e29330425f6006c7319419652886d3ffa53d7383a193ea629eac0b72e0c378d8486fd9d5a50b6099de8ce8cc8fd476"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/com.google.firebase/firebase-encoders@17.0.0?type=jar",
       "modified" : false,
       "properties" : [
         {
@@ -22041,10 +22840,12 @@
         "pkg:maven/androidx.room/room-ktx@2.7.2?type=aar",
         "pkg:maven/androidx.room/room-runtime@2.7.2?type=jar",
         "pkg:maven/androidx.room/room-testing@2.7.2?type=jar",
+        "pkg:maven/androidx.security/security-crypto@1.1.0?type=aar",
         "pkg:maven/androidx.test.ext/junit@1.2.1?type=aar",
         "pkg:maven/androidx.test/core@1.6.1?type=aar",
         "pkg:maven/androidx.test/runner@1.6.2?type=aar",
         "pkg:maven/androidx.work/work-runtime-ktx@2.10.2?type=aar",
+        "pkg:maven/com.android.billingclient/billing-ktx@8.3.0?type=aar",
         "pkg:maven/com.android.tools.utp/android-device-provider-ddmlib@31.13.2?type=jar",
         "pkg:maven/com.android.tools.utp/android-test-plugin-host-additional-test-output@31.13.2?type=jar",
         "pkg:maven/com.android.tools.utp/android-test-plugin-host-apk-installer@31.13.2?type=jar",
@@ -23308,6 +24109,16 @@
       ]
     },
     {
+      "ref" : "pkg:maven/androidx.security/security-crypto@1.1.0?type=aar",
+      "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
+        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
+        "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
+        "pkg:maven/com.google.crypto.tink/tink-android@1.16.0?type=jar",
+        "pkg:maven/org.jspecify/jspecify@1.0.0?type=jar"
+      ]
+    },
+    {
       "ref" : "pkg:maven/androidx.sqlite/sqlite-android@2.5.1?type=aar",
       "dependsOn" : [
         "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
@@ -23470,6 +24281,27 @@
         "pkg:maven/com.google.guava/listenablefuture@9999.0-empty-to-avoid-conflict-with-guava?type=jar",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
         "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-android@1.10.2?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/com.android.billingclient/billing-ktx@8.3.0?type=aar",
+      "dependsOn" : [
+        "pkg:maven/com.android.billingclient/billing@8.3.0?type=aar",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.10.2?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/com.android.billingclient/billing@8.3.0?type=aar",
+      "dependsOn" : [
+        "pkg:maven/androidx.activity/activity@1.10.1?type=aar",
+        "pkg:maven/com.google.android.datatransport/transport-api@3.0.0?type=aar",
+        "pkg:maven/com.google.android.datatransport/transport-backend-cct@3.1.8?type=aar",
+        "pkg:maven/com.google.android.datatransport/transport-runtime@3.1.8?type=aar",
+        "pkg:maven/com.google.android.gms/play-services-base@18.5.0?type=aar",
+        "pkg:maven/com.google.android.gms/play-services-basement@18.9.0?type=aar",
+        "pkg:maven/com.google.android.gms/play-services-location@19.0.0?type=aar",
+        "pkg:maven/com.google.android.gms/play-services-tasks@18.2.0?type=aar"
       ]
     },
     {
@@ -23709,6 +24541,76 @@
       ]
     },
     {
+      "ref" : "pkg:maven/com.google.android.datatransport/transport-api@3.0.0?type=aar",
+      "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
+        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/com.google.android.datatransport/transport-backend-cct@3.1.8?type=aar",
+      "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
+        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
+        "pkg:maven/com.google.android.datatransport/transport-api@3.0.0?type=aar",
+        "pkg:maven/com.google.android.datatransport/transport-runtime@3.1.8?type=aar",
+        "pkg:maven/com.google.firebase/firebase-encoders-json@18.0.0?type=aar",
+        "pkg:maven/com.google.firebase/firebase-encoders@17.0.0?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/com.google.android.datatransport/transport-runtime@3.1.8?type=aar",
+      "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
+        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
+        "pkg:maven/com.google.android.datatransport/transport-api@3.0.0?type=aar",
+        "pkg:maven/com.google.firebase/firebase-encoders-proto@16.0.0?type=jar",
+        "pkg:maven/com.google.firebase/firebase-encoders@17.0.0?type=jar",
+        "pkg:maven/javax.inject/javax.inject@1?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/com.google.android.gms/play-services-base@18.5.0?type=aar",
+      "dependsOn" : [
+        "pkg:maven/androidx.collection/collection@1.5.0?type=jar",
+        "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
+        "pkg:maven/androidx.core/core@1.16.0?type=aar",
+        "pkg:maven/androidx.fragment/fragment@1.8.9?type=aar",
+        "pkg:maven/com.google.android.gms/play-services-basement@18.9.0?type=aar",
+        "pkg:maven/com.google.android.gms/play-services-tasks@18.2.0?type=aar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/com.google.android.gms/play-services-basement@18.9.0?type=aar",
+      "dependsOn" : [
+        "pkg:maven/androidx.collection/collection@1.5.0?type=jar",
+        "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
+        "pkg:maven/androidx.core/core@1.16.0?type=aar",
+        "pkg:maven/androidx.fragment/fragment@1.8.9?type=aar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/com.google.android.gms/play-services-location@19.0.0?type=aar",
+      "dependsOn" : [
+        "pkg:maven/com.google.android.gms/play-services-base@18.5.0?type=aar",
+        "pkg:maven/com.google.android.gms/play-services-basement@18.9.0?type=aar",
+        "pkg:maven/com.google.android.gms/play-services-places-placereport@17.0.0?type=aar",
+        "pkg:maven/com.google.android.gms/play-services-tasks@18.2.0?type=aar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/com.google.android.gms/play-services-places-placereport@17.0.0?type=aar",
+      "dependsOn" : [
+        "pkg:maven/com.google.android.gms/play-services-basement@18.9.0?type=aar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/com.google.android.gms/play-services-tasks@18.2.0?type=aar",
+      "dependsOn" : [
+        "pkg:maven/com.google.android.gms/play-services-basement@18.9.0?type=aar"
+      ]
+    },
+    {
       "ref" : "pkg:maven/com.google.android/annotations@4.1.1.4?type=jar",
       "dependsOn" : [ ]
     },
@@ -23816,6 +24718,29 @@
     {
       "ref" : "pkg:maven/com.google.errorprone/error_prone_annotations@2.36.0?type=jar",
       "dependsOn" : [ ]
+    },
+    {
+      "ref" : "pkg:maven/com.google.firebase/firebase-encoders-json@18.0.0?type=aar",
+      "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
+        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
+        "pkg:maven/com.google.firebase/firebase-encoders@17.0.0?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/com.google.firebase/firebase-encoders-proto@16.0.0?type=jar",
+      "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
+        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
+        "pkg:maven/com.google.firebase/firebase-encoders@17.0.0?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/com.google.firebase/firebase-encoders@17.0.0?type=jar",
+      "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
+        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar"
+      ]
     },
     {
       "ref" : "pkg:maven/com.google.guava/failureaccess@1.0.1?type=jar",
