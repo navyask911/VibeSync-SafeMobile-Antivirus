@@ -102,6 +102,8 @@ import com.vibesync.antivirus.core.security.DeviceOwnerManager
 import com.vibesync.antivirus.core.engine.ScanResult
 import com.vibesync.antivirus.core.quarantine.LocalQuarantineManager
 import com.vibesync.antivirus.core.engine.ScanVerdict
+import com.vibesync.antivirus.core.security.GlobalThreatIntelligenceConsent
+import com.vibesync.antivirus.core.security.GlobalThreatIntelligenceDonor
 import com.vibesync.antivirus.data.repository.ThreatRepository
 import com.vibesync.antivirus.ui.components.EmptyState
 import com.vibesync.antivirus.ui.components.SecurityStatusCard
@@ -216,6 +218,20 @@ import kotlinx.coroutines.launch
  var securityAlertsEnabled by remember(context) { mutableStateOf(securityPrefs.getBoolean(SafeMobileApp.KEY_SECURITY_ALERTS_ENABLED, false)) }
  val snackbarHostState = remember { SnackbarHostState() }
  val uiScope = rememberCoroutineScope()
+ var pendingGlobalDonationResults by remember { mutableStateOf<List<ScanResult>>(emptyList()) }
+ val promptedGlobalDonationEvents = remember { mutableSetOf<String>() }
+ LaunchedEffect(state.results) {
+  if (!GlobalThreatIntelligenceConsent.isEnabled(context) ||
+      selectedDestination !in setOf("home", "scan", "apps")) return@LaunchedEffect
+  val additions = state.results.filter { result ->
+   result.verdict == ScanVerdict.THREAT &&
+    result.sha256?.matches(Regex("[0-9a-f]{64}")) == true &&
+    (result.sourceLocalPath != null || result.sourceUri != null || result.packageName != null) &&
+    result.threatEventId?.let { it !in promptedGlobalDonationEvents } == true
+  }
+  additions.forEach { it.threatEventId?.let(promptedGlobalDonationEvents::add) }
+  if (additions.isNotEmpty()) pendingGlobalDonationResults = pendingGlobalDonationResults + additions
+ }
  var lastUninstallPackage by remember { mutableStateOf<String?>(null) }
  val showUninstallSnackbar: (String, String?) -> Unit = { message, appInfoPackage ->
   uiScope.launch {
@@ -918,6 +934,26 @@ pendingQuarantine?.let { flagged ->
     pendingQuarantine = null
    }) { Text(stringResource(R.string.quarantine_confirm_action)) } },
    dismissButton={ TextButton(onClick={ pendingQuarantine = null }) { Text(stringResource(R.string.close)) } }
+  )
+ }
+ pendingGlobalDonationResults.firstOrNull()?.let { detectedThreat ->
+  AlertDialog(
+   onDismissRequest = { pendingGlobalDonationResults = pendingGlobalDonationResults.drop(1) },
+   title = { Text(stringResource(R.string.global_threat_intelligence_title)) },
+   text = { Text(stringResource(R.string.global_threat_intelligence_donate_message)) },
+   confirmButton = {
+    TextButton(onClick = {
+     pendingGlobalDonationResults = pendingGlobalDonationResults.drop(1)
+     if (GlobalThreatIntelligenceConsent.isEnabled(context)) {
+      uiScope.launch { GlobalThreatIntelligenceDonor(context).donateScanResult(detectedThreat) }
+     }
+    }) { Text(stringResource(R.string.global_threat_intelligence_donate)) }
+   },
+   dismissButton = {
+    TextButton(onClick = { pendingGlobalDonationResults = pendingGlobalDonationResults.drop(1) }) {
+     Text(stringResource(R.string.global_threat_intelligence_decline))
+    }
+   }
   )
  }
  if (showNotificationPermissionPrompt) AlertDialog(
