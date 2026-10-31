@@ -1,5 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.util.Base64
+import java.net.URL
+import java.security.MessageDigest
 plugins {
  id("com.android.application")
  id("org.jetbrains.kotlin.android")
@@ -111,13 +113,16 @@ val stageResearchModel = tasks.register("stageResearchModel") {
     outputs.dir(researchModelAssetDirectory)
     doLast {
         val modelUrl = "https://github.com/navyask911/safemobile-Antivirus-Trained-ML-Data-of-Android-malware/releases/download/v1.0.1-model/malware_model.tflite"
-        val connection = java.net.URL(modelUrl).openConnection().apply {
+        val connection = URL(modelUrl).openConnection().apply {
             connectTimeout = 30000
             readTimeout = 60000
         }
-        val bytes = connection.getInputStream().use { it.readNBytes(18585) }
-        fun sha256(data: ByteArray) = java.security.MessageDigest.getInstance("SHA-256")
-            .digest(data).joinToString("") { "%02x".format(it) }
+        val bytes = connection.getInputStream().use { input ->
+            input.readNBytes(18585)
+        }
+        fun sha256(data: ByteArray): String =
+            MessageDigest.getInstance("SHA-256").digest(data)
+                .joinToString("") { byte -> "%02x".format(byte.toInt() and 0xff) }
         require(bytes.size == 18584 && sha256(bytes) == researchModelSha) {
             "Rejected research ML release artifact: size/SHA256 did not match pin"
         }
