@@ -70,3 +70,17 @@ The following public websites provide company and product information:
 - **About VibeSyncro:** https://vibesyncro.com/about.html
 
 These links are opened only after a user chooses them in the app or visits them independently. The browser and website infrastructure may receive ordinary connection metadata, such as an IP address. SafeMobile does not append or transmit scanned APKs, file hashes, scan history, device identifiers or security findings to these websites.
+
+## 9. Optional Global Threat Intelligence contributions
+
+SafeMobile's Global Threat Intelligence contribution flow is **zero-telemetry by default**. It is designed so the contribution service does not receive personal user data, account details, device identifiers or location information in the contribution JSON. The app does not send a contribution unless the user explicitly enables **“Contribute to Global Threat Intelligence (Optional)”** in Settings and separately taps **Donate** for a confirmed malicious APK. Enabling the Settings switch alone sends nothing. **Decline**, leaving the switch OFF, or turning it OFF before submission means no contribution is sent.
+
+After the two explicit consent actions, SafeMobile uses its bounded, on-device Drebin-215 extractor and sends only:
+- the detected malicious APK's SHA-256 cryptographic hash; and
+- the corresponding 215-value binary behavioral feature vector.
+
+The request is an HTTPS POST to the VibeSync Cloudflare Worker. **The APK itself is never uploaded.** The JSON does not contain an APK filename, file contents, filesystem path, app/package name, scan history, account or user identity, Android ID, device fingerprint, contacts, messages or location. No GitHub access token, repository token or GitHub credential is embedded in the Android app. The app checks that the APK still has the detected SHA-256 before and after feature extraction; invalid, changed or unscannable files are not submitted. Upload or extraction failures do not interrupt scanning.
+
+This is a zero-telemetry-by-default, data-minimised contribution flow; it is not a claim that the entire app performs no local data processing. Other app functions retain local records as described above (including scan history and the local, app-scoped Pro entitlement binding). Those local values are not included in threat contribution requests.
+
+**Network metadata:** Cloudflare and internet infrastructure necessarily receive ordinary connection metadata, which may include an IP address and request timing. This connection metadata is separate from the contribution JSON. Worker-side logging, access controls and retention are configured by the Worker operator and are not independently audited by this Android client. The Worker is expected to retain only the threat intelligence needed for its stated purpose.
