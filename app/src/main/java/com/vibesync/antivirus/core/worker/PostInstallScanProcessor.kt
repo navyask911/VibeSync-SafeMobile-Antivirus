@@ -67,7 +67,7 @@ internal object PostInstallScanProcessor {
    }
    if (scan.trustedByUser) return@withLock
    // Exact threats must alert even if a later optional heuristic/audit step fails.
-   if (scan.verdict == ScanVerdict.THREAT) SecurityAlertNotifier.notifyMaliciousApp(context,name,eventId)
+   if (scan.verdict == ScanVerdict.THREAT) SecurityAlertNotifier.notifyMaliciousApp(context,name,eventId,scan.sha256)
    val static = StaticAnalyzer(context).analyze(name)
    val apk = static?.apkPath?.let(::File)
    val dex = apk?.let { DexPatternScanner().scan(it) }.orEmpty()
