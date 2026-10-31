@@ -35,7 +35,7 @@ jobs:
           python3 scripts/industry_benchmark.py prepare             --malware-manifest "$RUNNER_TEMP/industry/malware-manifest.json"             --plan "$RUNNER_TEMP/industry/plan.json"
       - name: Build application and real on-device benchmark test
         run: ./gradlew --no-daemon --max-workers=2 assembleOfflineDebug assembleOfflineDebugAndroidTest
-      - name: Run read-only cloud Android scans (20 ten-APK batches)
+      # Data handoff uses the debug app UID via adb run-as, avoiding scoped-storage\n      # EACCES without broad MANAGE_EXTERNAL_STORAGE / READ_EXTERNAL_STORAGE grants.\n      # Never change the Play AAB permissions to accommodate instrumentation.\n      - name: Run read-only cloud Android scans (20 ten-APK batches)
         uses: reactivecircus/android-emulator-runner@v2
         env:
           MALWAREBAZAAR_AUTH_KEY: ${{ secrets.MALWAREBAZAAR_AUTH_KEY }}
