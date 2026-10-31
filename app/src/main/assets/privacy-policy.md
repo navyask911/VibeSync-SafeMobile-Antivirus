@@ -1,6 +1,6 @@
 # SafeMobile Antivirus — Privacy Notice
 
-Last reviewed: 31 October 2026.
+Last reviewed: 26 October 2026.
 
 ## Local scanning and data
 SafeMobile hashes readable installed APKs and files you explicitly select, then compares hashes against definitions stored in the app's local database. Scan contents and hashes are not uploaded by the scanner. When connected, WorkManager may request the latest signed database from this project's GitHub Releases API; the bundle is signature-verified before activation. The app never queries MalwareBazaar directly. A no-match result is not proof that a file is safe. Production APK/AAB artifacts do not bundle the signed threat database.
@@ -31,8 +31,6 @@ There is no automatic link-reputation lookup, cloud scanning, Google Play update
 
 ### Optional SafeMobile Pro purchases
 
-The planned India Pro price is ₹299 per one-year pass, but the only authoritative charge is the amount shown by Google Play at checkout. These are locally stackable consumable passes, not recurring subscriptions. Google Play may process network/IP and transaction metadata under its own privacy policy. SafeMobile does not store payment-card or bank details or persist raw Google Play purchase tokens; it retains only SHA-256 hashes of redeemed tokens in its encrypted ledger.
-
 Opening the Pro paywall connects to Google Play to retrieve its current price and process
 pending purchases. Google Play handles payment and purchase consumption under its own terms
 and privacy policy. Core antivirus checks remain free and run on-device. Optional model
@@ -48,6 +46,4 @@ The paywall discloses these limitations before purchase and provides a local-onl
 The base manifest declares package and network-state visibility, INTERNET for definition synchronization, foreground-service and notification permissions, and optional alert/device-administration integrations. File access uses the system picker and persisted grants to selected folders. Android settings and runtime permission prompts remain controlled by the operating system. SafeMobile cannot universally block sideloads, force-stop other apps, disable global Developer Options/ADB, intercept all links in other browsers, or guarantee malware detection.
 
 ## Third-party licences
-The full, publicly accessible policy is https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/blob/main/docs/PRIVACY_POLICY.md. No developer-operated telemetry/scan-upload service is used. Public GitHub and Google Play may independently log ordinary HTTPS connection data. User data remains local unless the user directly engages those third-party services as disclosed above.
-
 THIRD_PARTY_NOTICES.md is an audit checkpoint, not a complete set of all dependency licence texts. The repository root LICENSE describes the project's licence. The maintainer must complete the direct and transitive dependency licence audit before commercial distribution.
