@@ -16,6 +16,8 @@ import org.jf.dexlib2.iface.reference.MethodReference
 /**
  * Offline AndroidManifest / DEX inspection. No APK code executes. A malformed or
  * unparseable file is UNSCANNABLE, never an all-zero "benign" feature vector.
+ * ZipFile streams bounded entries; dexlib2 needs complete DEX offsets, so entries
+ * over 4 MiB are explicitly UNSCANNABLE rather than partially parsed.
  */
 internal object DrebinApkExtractor {
     sealed interface Outcome {
@@ -27,8 +29,8 @@ internal object DrebinApkExtractor {
     private const val MAX_APK_BYTES = 512L * 1024 * 1024
     private const val MAX_ENTRIES = 1800
     private const val MAX_MANIFEST = 2 * 1024 * 1024
-    private const val MAX_DEX_ENTRY = 12 * 1024 * 1024
-    private const val MAX_TOTAL_DEX = 32 * 1024 * 1024
+    private const val MAX_DEX_ENTRY = 4 * 1024 * 1024
+    private const val MAX_TOTAL_DEX = 12 * 1024 * 1024
     private const val MAX_STRINGS = 300_000
     private const val MAX_METHODS = 150_000
     private const val MAX_INSTRUCTIONS = 1_500_000

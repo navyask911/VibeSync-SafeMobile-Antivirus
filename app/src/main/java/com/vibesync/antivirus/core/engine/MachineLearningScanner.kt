@@ -19,6 +19,8 @@ import org.tensorflow.lite.Interpreter
  * Fully offline, typed 215-feature extraction. The downloadable research model is never
  * promoted to a production detector; an independently validated, APK-signed metadata
  * manifest is required before ANY ML result can contribute to risk scoring.
+ * APKs are not read into memory in their entirety: feature extraction streams
+ * bounded ZIP/DEX entries, and the production model gate skips inactive models.
  */
 class MachineLearningScanner(context: Context) {
     data class Prediction(val probability: Float)

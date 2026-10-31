@@ -136,7 +136,16 @@ class PackageScanner(
     return trustedResult(identity, scanSessionId, start).copy(sourceLocalPath = file.absolutePath)
    }
    val hash = calculator.calculate(file)
-   val staticReport = if (file.extension.equals("apk", ignoreCase = true)) {
+   // Skip ZIP/DEX, bundled YARA and ML when any exact local threat hash matches.
+  // The conclusive signature verdict is still recorded in the normal audit.
+  val exactThreat = findExactHashThreat(file.name, file.name,
+   hash.sha256, hash.md5, hash.sha1, hash.bytesRead)
+  if (exactThreat != null) {
+   audit(exactThreat, start, scanSessionId)
+   return exactThreat.copy(durationMs = elapsed(start),
+    sourceLocalPath = file.absolutePath, scanSessionId = scanSessionId)
+  }
+  val staticReport = if (file.extension.equals("apk", ignoreCase = true)) {
     val archiveInfo = try {
      val flags = PackageManager.GET_PERMISSIONS or PackageManager.GET_SERVICES or PackageManager.GET_ACTIVITIES or PackageManager.GET_RECEIVERS or PackageManager.GET_PROVIDERS or signingFlags()
      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -151,7 +160,7 @@ class PackageScanner(
    } else null
    val staticReasons = staticReport?.findings.orEmpty().map { "[${it.ruleId}] ${it.evidence} (confidence ${it.confidence}%)" }
    val staticScore = staticReport?.riskScore ?: 0
-   val output = evaluate(file.name, file.name, hash.sha256, hash.md5, staticReasons, staticScore, sha1 = hash.sha1, fileSize = hash.bytesRead, report = staticReport)
+   val output = evaluateUnmatched(file.name, file.name, hash.sha256, hash.md5, staticReasons, staticScore, sha1 = hash.sha1, report = staticReport)
     .copy(riskReport = staticReport, mlProbability = staticReport?.mlProbability)
    if (persistAllAudit || output.verdict == ScanVerdict.THREAT || output.verdict == ScanVerdict.SUSPICIOUS) audit(output, start, scanSessionId)
    output.copy(durationMs = elapsed(start), sourceLocalPath = file.absolutePath, scanSessionId = scanSessionId)
@@ -240,11 +249,20 @@ class PackageScanner(
     auditSafely(failed, start, scanSessionId)
     return failed
    }
+  // The hash engine must run before expensive DEX/YARA/ML work. Preserve the
+  // existing signed DB, local DB and optional feed ordering and threat evidence.
+  val exactThreat = findExactHashThreat(info.packageName, label,
+   hashes.sha256, hashes.md5, hashes.sha1, hashes.bytesRead)
+  if (exactThreat != null) {
+   audit(exactThreat, start, scanSessionId)
+   return exactThreat.copy(durationMs = elapsed(start),
+    packageName = info.packageName, scanSessionId = scanSessionId)
+  }
   val deepReport = withMachineLearning(deepStaticAnalyzer.analyze(info, apk, debugSigned), apk, info)
   val deepReasons = deepReport.findings.map { "[${it.ruleId}] ${it.evidence} (confidence ${it.confidence}%)" }
   reasons += deepReasons
   val combinedRiskScore = maxOf(adjustedRiskScore, deepReport.riskScore)
-  val assessed = evaluate(info.packageName, label, hashes.sha256, hashes.md5, reasons, combinedRiskScore, sha1 = hashes.sha1, fileSize = hashes.bytesRead, report = deepReport)
+  val assessed = evaluateUnmatched(info.packageName, label, hashes.sha256, hashes.md5, reasons, combinedRiskScore, sha1 = hashes.sha1, report = deepReport)
    .copy(riskReport = deepReport, mlProbability = deepReport.mlProbability)
   val output = assessed
   audit(output, start, scanSessionId)
@@ -254,7 +272,9 @@ class PackageScanner(
   result(name, name, null, null, ScanVerdict.NO_MATCH,
    listOf(context.getString(R.string.trusted_app_explanation)), start).copy(
     packageName = name, scanSessionId = session, trustedByUser = true)
- private suspend fun evaluate(key: String, label: String, sha: String, md5: String, heuristic: List<String>, score: Int, sha1: String? = null, fileSize: Long? = null, report: RiskReport? = null): ScanResult {
+ private suspend fun findExactHashThreat(
+  key: String, label: String, sha: String, md5: String, sha1: String?, fileSize: Long?
+ ): ScanResult? {
   val encrypted = hashStore.protectHash(sha)
   val signedHashMatch = hashDatabaseManager?.lookup(sha, md5, sha1, fileSize)
   if (signedHashMatch != null) {
@@ -274,12 +294,26 @@ class PackageScanner(
     listOf(context.getString(R.string.threat_feed_hash_match, feedThreat.threatName, feedThreat.source)), 0)
     .copy(threatEventId = UUID.randomUUID().toString(), riskScore = 1f, sha1 = sha1, reasonTexts = listOf(UiText(R.string.threat_feed_hash_match, listOf(feedThreat.threatName, feedThreat.source))))
   }
+  return null
+ }
+ // Invoked only after all exact-hash engines return no match.
+ private suspend fun evaluateUnmatched(
+  key: String, label: String, sha: String, md5: String, heuristic: List<String>,
+  score: Int, sha1: String? = null, report: RiskReport? = null
+ ): ScanResult {
+  val encrypted = hashStore.protectHash(sha)
   // An allow/dismiss choice can suppress heuristics, never an exact known-malware match.
   if (dao.isHashWhitelisted(encrypted)) return ScanResult(key, label, sha, md5, ScanVerdict.NO_MATCH, listOf(context.getString(R.string.hash_allowlisted)), 0).copy(sha1 = sha1, reasonTexts = listOf(UiText(R.string.hash_allowlisted)))
   val verdict = if (score >= 45) ScanVerdict.SUSPICIOUS else ScanVerdict.NO_MATCH
   val notes = if (heuristic.isEmpty()) listOf(context.getString(R.string.no_match_detail)) else heuristic + context.getString(R.string.risk_review)
   return ScanResult(key, label, sha, md5, verdict, notes, 0).copy(riskScore = score.coerceIn(0, 100) / 100f, sha1 = sha1, reasonTexts = SecurityText.reasons(context, notes, report))
  }
+ // Stream-only scans still check exact hashes before allowing heuristic verdicts.
+ private suspend fun evaluate(
+  key: String, label: String, sha: String, md5: String, heuristic: List<String>,
+  score: Int, sha1: String? = null, fileSize: Long? = null, report: RiskReport? = null
+ ): ScanResult = findExactHashThreat(key, label, sha, md5, sha1, fileSize)
+  ?: evaluateUnmatched(key, label, sha, md5, heuristic, score, sha1, report)
  private suspend fun auditSafely(result: ScanResult, start: Long, scanSessionId: String) {
   try {
    audit(result, start, scanSessionId)
