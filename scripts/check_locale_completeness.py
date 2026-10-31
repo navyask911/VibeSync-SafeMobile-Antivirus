@@ -136,6 +136,33 @@ for locale in LOCALES:
             if formats(text_value) != formats(english_value):
                 errors.append(f"{locale}: v1.0.16 placeholder mismatch {key}")
 
+# v1.1.0: dedicated Global Threat Intelligence contribution copy must be
+# present and genuinely translated in the base locale plus all 51 translations.
+GLOBAL_TI_KEYS = (
+    "global_threat_intelligence_title",
+    "global_threat_intelligence_description",
+    "global_threat_intelligence_donate_message",
+    "global_threat_intelligence_donate",
+    "global_threat_intelligence_decline",
+)
+base_global_ti, _ = read_resources(BASE / "values" / "global_threat_intelligence.xml")
+for key in GLOBAL_TI_KEYS:
+    if key not in base_global_ti:
+        errors.append(f"base global_threat_intelligence.xml: missing {key}")
+for locale in LOCALES:
+    translated, _ = read_resources(BASE / f"values-{locale}" / "global_threat_intelligence.xml")
+    for key in GLOBAL_TI_KEYS:
+        source, target = base_global_ti.get(key), translated.get(key)
+        if target is None:
+            errors.append(f"{locale}: missing Global Threat Intelligence string {key}")
+            continue
+        value = "".join(target.itertext()).strip()
+        original = "".join(source.itertext()).strip() if source is not None else ""
+        if not value or value == original:
+            errors.append(f"{locale}: empty or English Global Threat Intelligence fallback {key}")
+        if formats(value) != formats(original):
+            errors.append(f"{locale}: Global Threat Intelligence placeholder mismatch {key}")
+
 # Preserve previous invariant: every existing locale must provide a voice warning.
 # Paid purchase disclosures must never fall back to English in any supported locale.
 # SafeMobile Pro and Google Play are product brands, not untranslated sentences.
