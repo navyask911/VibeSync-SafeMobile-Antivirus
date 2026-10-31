@@ -97,6 +97,7 @@ Its **Zero-Binary Repository** rule keeps raw malware samples outside the Git tr
 | 🛡️ [Detection Coverage](docs/DETECTION_COVERAGE.md) | Supported security checks and known gaps |
 | ⚙️ [Benchmark Methodology](docs/INDUSTRY_BENCHMARK_SETUP.md) | Emulator matrix, validation and ephemeral file-handling rules |
 | 📜 [License](LICENSE) & [Third-Party Notices](NOTICE) | Apache License 2.0 and third-party attribution |
+| 🖼️ [Branding Assets](docs/BRANDING_ASSETS.md) | Official launcher icons and 512×512 Google Play listing artwork |
 
 ## Links
 
