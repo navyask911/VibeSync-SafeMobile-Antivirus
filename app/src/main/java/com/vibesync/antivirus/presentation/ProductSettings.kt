@@ -141,6 +141,13 @@ internal fun ScanHistoryPanel(audits: List<ScanAudit>) {
 @Composable
 internal fun OverlayRiskReviewPanel() {
     val context = LocalContext.current
+    fun openOfficialWebsite(url: String) {
+        runCatching {
+            context.startActivity(Intent(Intent.ACTION_VIEW, android.net.Uri.parse(url)))
+        }.onFailure {
+            Toast.makeText(context, R.string.uninstall_no_settings, Toast.LENGTH_LONG).show()
+        }
+    }
     val prefs = remember(context) {
         context.getSharedPreferences(OverlayRiskReviewManager.PREFS_NAME, Context.MODE_PRIVATE)
     }
@@ -552,6 +559,20 @@ internal fun SafeMobileSettingsPanel(
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(stringResource(R.string.settings_privacy), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
                 Text(stringResource(R.string.privacy_body), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+        }
+        Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
+            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                Text(stringResource(R.string.official_website_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                TextButton(onClick = { openOfficialWebsite("https://vibesyncro.com/") }) {
+                    Text(stringResource(R.string.official_website_visit))
+                }
+                TextButton(onClick = { openOfficialWebsite("https://vibesyncro.com/safemobile.html") }) {
+                    Text(stringResource(R.string.official_website_product))
+                }
+                TextButton(onClick = { openOfficialWebsite("https://vibesyncro.com/about.html") }) {
+                    Text(stringResource(R.string.official_website_about))
+                }
             }
         }
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {

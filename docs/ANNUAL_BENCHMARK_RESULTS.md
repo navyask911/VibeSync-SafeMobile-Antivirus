@@ -1,5 +1,7 @@
 # SafeMobile Annual Security Benchmark Results
 
+**For the latest product information and development updates, visit https://vibesyncro.com/safemobile.html.**
+
 **For live metrics and model details, see the Live Threat Intelligence Dashboard:** [Link](https://navyask911.github.io/safemobile-Antivirus-Trained-ML-Data-of-Android-malware/). The live research dashboard is separate from the independently verified annual APK-scanning ledger below.
 
 This permanent historical ledger records SafeMobile's year-by-year **measured** Android threat-detection benchmark results. Entries must retain their execution date, immutable source provenance, sample counts, actual device scan results and GitHub Actions run identifier. An attempted run is not a measured result.

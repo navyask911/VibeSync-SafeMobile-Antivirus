@@ -40,8 +40,8 @@ android {
   applicationId = "com.vibesync.antivirus"
   minSdk = 26
   targetSdk = 36
-  versionCode = 20261113
-  versionName = "1.0.20"
+  versionCode = 20261114
+  versionName = "1.0.21"
   testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   buildConfigField("String", "FEED_MANIFEST_PUBLIC_KEY_B64", cfg(feedManifestPublicKey))
   buildConfigField("Boolean", "FEED_MANIFEST_KEY_CONFIGURED", (!feedManifestPublicKey.isBlank()).toString())

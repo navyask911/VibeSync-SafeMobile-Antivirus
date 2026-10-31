@@ -98,6 +98,12 @@ Its **Zero-Binary Repository** rule keeps raw malware samples outside the Git tr
 | ⚙️ [Benchmark Methodology](docs/INDUSTRY_BENCHMARK_SETUP.md) | Emulator matrix, validation and ephemeral file-handling rules |
 | 📜 [License](LICENSE) & [Third-Party Notices](NOTICE) | Apache License 2.0 and third-party attribution |
 
+## Links
+
+- **Official Website:** [VibeSyncro.com](https://vibesyncro.com/)
+- **SafeMobile Product Page:** [SafeMobile](https://vibesyncro.com/safemobile.html)
+- **Company About:** [About VibeSyncro](https://vibesyncro.com/about.html)
+
 ## Build & Verification
 
 **Requirements:** JDK 17 and Android SDK 36.
@@ -112,7 +118,7 @@ Its **Zero-Binary Repository** rule keeps raw malware samples outside the Git tr
 
 CI includes version guards, localization checks, offline tooling tests, lint, builds, and Android instrumented tests. Signed releases use private signing credentials and an independent release workflow.
 
-**Package:** `com.vibesync.antivirus` · **Version:** `1.0.20` · **Version code:** `20261113` · **Android:** minSdk 26 / targetSdk 36.
+**Package:** `com.vibesync.antivirus` · **Version:** `1.0.21` · **Version code:** `20261114` · **Android:** minSdk 26 / targetSdk 36.
 
 ## Responsible Security Disclosure
 
