@@ -118,6 +118,13 @@ posture_forbidden = (
     r"\b(?:HttpURLConnection|HttpsURLConnection|OkHttpClient|Retrofit|Socket|WebView)\b",
     r"\bURL\s*\(",
 )
+for path in (ROOT / "app" / "src" / "main" / "java").rglob("*.kt"):
+    source = path.read_text(encoding="utf-8")
+    if re.search(r"Settings\\.Secure\\.ENABLED_ACCESSIBILITY_SERVICES", source):
+        errors.append(
+            f"Enabled accessibility services must be read via AccessibilityManager, not Settings.Secure: {path.relative_to(ROOT)}."
+        )
+
 for path in POSTURE_SOURCE.glob("*.kt"):
     source = path.read_text(encoding="utf-8")
     if any(re.search(pattern, source) for pattern in posture_forbidden):
