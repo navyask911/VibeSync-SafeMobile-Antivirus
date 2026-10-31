@@ -1,6 +1,7 @@
 package com.vibesync.antivirus.core.worker
 
 import android.Manifest
+import android.accessibilityservice.AccessibilityServiceInfo
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -8,7 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
-import android.provider.Settings
+import android.view.accessibility.AccessibilityManager
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
@@ -55,12 +56,14 @@ class OverlayRiskReviewWorker(
     }
    }
    val reviewablePackageNames = packages.mapTo(hashSetOf()) { it.packageName }
-   val enabledAccessibilityServices = Settings.Secure.getString(
-    applicationContext.contentResolver,
-    Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
-   ).orEmpty().split(':').count { component ->
-    android.content.ComponentName.unflattenFromString(component)?.packageName?.let(reviewablePackageNames::contains) == true
-   }
+   val accessibilityManager = applicationContext.getSystemService(AccessibilityManager::class.java)
+    ?: throw IllegalStateException("Accessibility service metadata unavailable")
+   val enabledAccessibilityServices = accessibilityManager
+    .getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK)
+    .mapNotNull { it.resolveInfo?.serviceInfo?.packageName }
+    .filter(reviewablePackageNames::contains)
+    .distinct()
+    .size
 
    val now = System.currentTimeMillis()
    prefs.edit()
