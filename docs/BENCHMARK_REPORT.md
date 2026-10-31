@@ -1,28 +1,46 @@
 # SafeMobile Industry Benchmark Report
 
-**Annual historical results:** [ANNUAL_BENCHMARK_RESULTS.md](ANNUAL_BENCHMARK_RESULTS.md). The active report covers only verified current results; the annual ledger keeps the year-by-year record.
-
-**Status: NOT MEASURED (31 October 2026).** [Cloud benchmark run #1](https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/actions/runs/41171013990) **failed** during actual instrumented scanning: Android reported `EACCES (Permission denied)` when opening `/storage/emulated/0/Android/data/com.vibesync.antivirus.debug/files/industry-benchmark/batch.json`. The SHA-256 manifest and 200-sample plan were generated, but no verified complete 200-sample result was published. TPR, FPR and latency therefore remain unavailable.
-
-**2026 annual baseline: PENDING — Benchmark #11 in progress.** [Manually dispatched run #11](https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/actions/runs/41224653496). Do not enter TPR, FPR or latency before the complete, independently verified 200-APK aggregate is available and confirmed by the owner.
+Read-only Android emulator APK scans (samples NEVER installed/executed). THREAT counts as a confirmed detection; SUSPICIOUS counts only for triage.
 
 ## Benchmark result
 
 ~~~json
 {
-  "status": "NOT_MEASURED",
-  "timestamp_utc": null,
-  "total_apps": 0,
-  "malicious_apps": 0,
-  "benign_apps": 0,
-  "tpr_percent": null,
-  "fpr_percent": null,
-  "mean_latency_ms": null
+  "benign_apps": 100,
+  "fpr_percent": 0.0,
+  "malicious_apps": 100,
+  "mean_latency_ms": 4109.48,
+  "ml_samples_scored": 0,
+  "not_scanned": 0,
+  "plan_sha256": "c17d37ff4019e80ac6aa3ddf2a43a3f9e68c11f1c96e3ae2ce58dcbda3e0e4f0",
+  "provenance": {
+    "byte_validated_malware_apks": 100,
+    "commit": "cab8b3e1cf1c490f3e299944240171e438f000d6",
+    "fdroid_index_sha256": "125a809fc8ce055b87f68e53b4a1ea6cba8888bce70b40b382ee50c76a0bd105",
+    "label_limitations": "GitHub malware corpus/F-Droid source labels are not independently validated ground truth",
+    "malware_license": "Research-only, source-derived labels; binary redistribution prohibited",
+    "malware_manifest_sha256": "4c72957364ad30afbe56bf7138deaff5dbfbbd6de751da00d6f8013f24669d49",
+    "malware_name": "500 GitHub-hosted Android malware research candidates",
+    "malware_revision": "Pinned source commit cf802c63baf8d435e8d4e663a24187056be3918a",
+    "malware_source": "https://github.com/MalwareSamples/Android-Malware-Samples",
+    "malware_source_commit": "cf802c63baf8d435e8d4e663a24187056be3918a",
+    "rejected_malware_candidates": 0
+  },
+  "research_ml_fpr_percent": null,
+  "research_ml_samples_scored": 0,
+  "research_ml_threshold": 0.5,
+  "research_ml_tpr_percent": null,
+  "status": "MEASURED",
+  "timestamp_utc": "2026-10-31T18:32:34.557824+00:00",
+  "total_apps": 200,
+  "tpr_percent": 0.0,
+  "triage_fpr_percent": 8.0,
+  "triage_tpr_percent": 12.0,
+  "yara_states": [
+    "MATCHES",
+    "NO_MATCH"
+  ]
 }
 ~~~
 
-The 200-APK pilot uses 100 source-labeled malicious Android APKs and 100 F-Droid APKs, split across 10 emulator shards (10 malicious + 10 benign each). Malware candidate filenames come from a text-only 500-SHA-256 manifest pinned to upstream commit `cf802c63`. APK binaries are downloaded and strictly validated only in temporary GitHub Actions runner storage, then deleted. The scanner inspects the files read-only; sample APKs are never installed, executed, committed to Git or uploaded as artifacts. Incomplete scans and insufficient valid samples fail closed.
-
-These are **source-derived labels**, not independently adjudicated ground truth. The app now packages a trained, SHA-256-pinned 18,584-byte Drebin **215-feature research model**, but it is **NOT activated for production malware scoring** (`validated=false`, `production_ready=false`). Its historical 97.45% research holdout cannot be used as this benchmark's TPR. The bundled YARA layer is a limited DEX literal matcher, not full libyara.
-
-See [INDUSTRY_BENCHMARK_SETUP.md](INDUSTRY_BENCHMARK_SETUP.md) and [BENCHMARK_EVALUATION.md](BENCHMARK_EVALUATION.md).
+Research ML scores are independent of production threat verdicts; ML-only rates are shown only if all 200 samples were scored. Models/definitions not active in the scanned build cannot contribute to measured efficacy. Results apply only to this corpus, emulator and commit.
