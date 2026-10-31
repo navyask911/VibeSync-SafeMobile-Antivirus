@@ -39,13 +39,25 @@ class MachineLearningScanner(context: Context) {
         return DrebinApkExtractor.extract(apk, schema)
     }
 
+    // Experimental research scoring for the provenance-gated cloud benchmark only.
+    // Production PackageScanner continues using scan(), which requires validated production metadata.
+    internal suspend fun scanResearchCandidate(apk: File): Prediction? = score(apk, allowResearch = true)
+
+    suspend fun isResearchCandidateAvailable(): Boolean = withContext(Dispatchers.IO) {
+        val schema = DrebinFeatureContract.loadSchema(app.assets)
+        schema != null && runCatching { validatedModelBytes(schema, allowResearch = true) != null }.getOrDefault(false)
+    }
+
     suspend fun scan(apk: File, @Suppress("UNUSED_PARAMETER") info: PackageInfo?): Prediction? =
+        score(apk, allowResearch = false)
+
+    private suspend fun score(apk: File, allowResearch: Boolean): Prediction? =
         withTimeoutOrNull(TOTAL_TIMEOUT_MS) {
             withContext(Dispatchers.IO) {
                 try {
                     val schema = DrebinFeatureContract.loadSchema(app.assets)
                         ?: return@withContext null
-                    val model = validatedModelBytes(schema) ?: return@withContext null
+                    val model = validatedModelBytes(schema, allowResearch) ?: return@withContext null
                     val extracted = DrebinApkExtractor.extract(apk, schema)
                     val vector = (extracted as? DrebinApkExtractor.Outcome.Features)?.vector
                         ?: return@withContext null // Explicit UNSCANNABLE never becomes benign.
@@ -78,14 +90,19 @@ class MachineLearningScanner(context: Context) {
             }
         }
 
-    private fun validatedModelBytes(schema: List<String>): ByteArray? {
+    private fun validatedModelBytes(schema: List<String>, allowResearch: Boolean = false): ByteArray? {
         val metadata = app.assets.open("malware_model.json").bufferedReader().use {
             JSONObject(it.readText())
         }
-        if (!metadata.optBoolean("trained") || !metadata.optBoolean("validated") ||
-            !metadata.optBoolean("production_ready") ||
+        val approvedProduction = metadata.optBoolean("trained") &&
+            metadata.optBoolean("validated") && metadata.optBoolean("production_ready") &&
+            metadata.optString("status") == "validated_production"
+        val approvedResearch = allowResearch && metadata.optBoolean("trained") &&
+            !metadata.optBoolean("validated") && !metadata.optBoolean("production_ready") &&
+            !metadata.optBoolean("dummy_untrained", true) &&
+            metadata.optString("status") == "research_candidate"
+        if ((!approvedProduction && !approvedResearch) ||
             metadata.optInt("schema_version") != 1 ||
-            metadata.optString("status") != "validated_production" ||
             metadata.optInt("feature_count") != schema.size) return null
         val named = metadata.optJSONArray("features") ?: return null
         if (named.length() != schema.size ||

@@ -1,5 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.util.Base64
+import java.net.URL
+import java.security.MessageDigest
 plugins {
  id("com.android.application")
  id("org.jetbrains.kotlin.android")
@@ -38,8 +40,8 @@ android {
   applicationId = "com.vibesync.antivirus"
   minSdk = 26
   targetSdk = 36
-  versionCode = 20261110
-  versionName = "1.0.17"
+  versionCode = 20261111
+  versionName = "1.0.18"
   testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   buildConfigField("String", "FEED_MANIFEST_PUBLIC_KEY_B64", cfg(feedManifestPublicKey))
   buildConfigField("Boolean", "FEED_MANIFEST_KEY_CONFIGURED", (!feedManifestPublicKey.isBlank()).toString())
@@ -82,6 +84,70 @@ android {
  kotlin { compilerOptions { jvmTarget.set(JvmTarget.JVM_17) } }
  packaging { resources.excludes += setOf("META-INF/AL2.0", "META-INF/LGPL2.1") }
 }
+
+// docs/BENCHMARK_REPORT.md is canonical: the hidden card reads its build-time asset copy.
+// Generated assets are not committed and never contain APK samples.
+val benchmarkAssetDirectory = layout.buildDirectory.dir("generated/benchmark-report/assets")
+val stageBenchmarkReport = tasks.register<Copy>("stageBenchmarkReport") {
+    from(rootProject.file("docs/BENCHMARK_REPORT.md"))
+    into(benchmarkAssetDirectory)
+    rename { "benchmark-report.md" }
+}
+// Register the producing TaskProvider, not just its build/ path. This propagates
+// Gradle's builtBy dependency to lint model writers and all variant asset consumers.
+android.sourceSets.getByName("main").assets.srcDir(stageBenchmarkReport)
+// AGP's vital lint tasks inspect assets separately from merge<Variant>Assets.
+// Keep an explicit dependency as a belt-and-braces guard across AGP upgrades.
+
+// The 18,584-byte, SHA-pinned Drebin 215 research model is staged into the APK at
+// BUILD time. No network is used by inference, and no downloaded model is trusted
+// without exact checksum verification. No untrained fixture is shipped.
+val researchModelAssetDirectory = layout.buildDirectory.dir("generated/research-ml/assets")
+val researchModelSha = "8b66adaf01a939c26d5a756e66f53fe0d6e85e1a06ec97166579138c6ce47061"
+val researchSchemaSha = "ffb386be14adf8c0af1bb96032e5485fcc8fd5b401a24488c5896e2d5ea425ac"
+val stageResearchModel = tasks.register("stageResearchModel") {
+    inputs.property("release", "v1.0.1-model")
+    inputs.property("modelSha256", researchModelSha)
+    inputs.property("schemaSha256", researchSchemaSha)
+    inputs.file("src/main/assets/feature_schema.json")
+    outputs.dir(researchModelAssetDirectory)
+    doLast {
+        val modelUrl = "https://github.com/navyask911/safemobile-Antivirus-Trained-ML-Data-of-Android-malware/releases/download/v1.0.1-model/malware_model.tflite"
+        val connection = URL(modelUrl).openConnection().apply {
+            connectTimeout = 30000
+            readTimeout = 60000
+        }
+        val bytes = connection.getInputStream().use { input ->
+            input.readNBytes(18585)
+        }
+        fun sha256(data: ByteArray): String =
+            MessageDigest.getInstance("SHA-256").digest(data)
+                .joinToString("") { byte -> "%02x".format(byte.toInt() and 0xff) }
+        require(bytes.size == 18584 && sha256(bytes) == researchModelSha) {
+            "Rejected research ML release artifact: size/SHA256 did not match pin"
+        }
+        require(String(bytes, 4, 4, Charsets.US_ASCII) == "TFL3") {
+            "Rejected research ML artifact: invalid TensorFlow Lite header"
+        }
+        val schemaBytes = file("src/main/assets/feature_schema.json").readBytes()
+        require(sha256(schemaBytes) == researchSchemaSha) {
+            "Rejected research ML release: 215-feature schema SHA256 mismatch"
+        }
+        val dest = researchModelAssetDirectory.get().asFile.apply { mkdirs() }
+        dest.resolve("malware_model.tflite").writeBytes(bytes)
+    }
+}
+android.sourceSets.getByName("main").assets.srcDir(stageResearchModel)
+
+// All AGP model writers, analyzers, lint report and asset merger tasks must
+// wait for generated inputs; never disable Android lint or Gradle validation.
+tasks.matching {
+    (it.name.startsWith("merge") && it.name.endsWith("Assets")) ||
+        it.name.contains("Lint") || it.name.startsWith("lint")
+}.configureEach {
+    dependsOn(stageBenchmarkReport, stageResearchModel)
+}
+
 kapt { correctErrorTypes = true }
 dependencies {
  implementation("androidx.core:core-ktx:1.16.0")

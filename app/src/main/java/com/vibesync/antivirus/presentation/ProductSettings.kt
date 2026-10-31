@@ -49,6 +49,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.foundation.clickable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -316,6 +318,8 @@ internal fun SafeMobileSettingsPanel(
     var languageMenuExpanded by remember { mutableStateOf(false) }
     var localeOverrideTag by remember { mutableStateOf(LocalePreferences.overrideTag(context)) }
     var showAbout by remember { mutableStateOf(false) }
+    var benchmarkUnlockCount by remember { mutableIntStateOf(0) }
+    var showBenchmarkResults by remember { mutableStateOf(false) }
     var aboutSection by remember { mutableStateOf("privacy") }
     val rayId = remember(context) { InstallRayId.getOrCreate(context) }
     val feedStore = remember(context) { ThreatFeedConfigStore(context) }
@@ -553,10 +557,16 @@ internal fun SafeMobileSettingsPanel(
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(stringResource(R.string.about_legal), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                Text(stringResource(R.string.format_version, stringResource(R.string.app_name), BuildConfig.VERSION_NAME, localizedNumber(BuildConfig.VERSION_CODE)), style = MaterialTheme.typography.bodySmall)
+                Text(stringResource(R.string.format_version, stringResource(R.string.app_name), BuildConfig.VERSION_NAME, localizedNumber(BuildConfig.VERSION_CODE)),
+                    modifier = Modifier.clickable {
+                        benchmarkUnlockCount++
+                        if (benchmarkUnlockCount >= 7) showBenchmarkResults = true
+                    }, style = MaterialTheme.typography.bodySmall)
                 TextButton(onClick = { showAbout = true }) { Text(stringResource(R.string.about_legal)) }
             }
         }
+        // Hidden developer-only readout: tap the version line seven times to reveal it.
+        if (showBenchmarkResults) BenchmarkResultsPanel()
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant), shape = RoundedCornerShape(16.dp)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(stringResource(R.string.family_dedication_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">मानक परीक्षण परिणाम</string>
+    <string name="benchmark_not_measured">अहिलेसम्म प्रमाणित मापन छैन</string>
+    <string name="benchmark_total_apps">परीक्षण गरिएका APK फाइल</string>
+    <string name="benchmark_tpr">पत्ता लगाउने दर (TPR)</string>
+    <string name="benchmark_fpr">गलत सकारात्मक दर (FPR)</string>
+    <string name="benchmark_latency">औसत स्क्यान समय</string>
+    <string name="benchmark_privacy_note">प्रमाणित नतिजा मात्र देखाइन्छ। परीक्षण APK एपमा भण्डारण गरिँदैन।</string>
+</resources>

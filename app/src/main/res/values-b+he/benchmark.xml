@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">תוצאות מבחן ביצועים</string>
+    <string name="benchmark_not_measured">עדיין אין מדידה מאומתת</string>
+    <string name="benchmark_total_apps">קובצי APK שנבדקו</string>
+    <string name="benchmark_tpr">שיעור זיהוי (TPR)</string>
+    <string name="benchmark_fpr">שיעור התראות שווא (FPR)</string>
+    <string name="benchmark_latency">זמן סריקה ממוצע</string>
+    <string name="benchmark_privacy_note">מוצגות רק תוצאות מאומתות. קובצי APK לבדיקה אינם נשמרים ביישום.</string>
+</resources>

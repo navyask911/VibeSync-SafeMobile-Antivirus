@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">نتایج آزمون معیار</string>
+    <string name="benchmark_not_measured">هنوز اندازه‌گیری تأییدشده‌ای وجود ندارد</string>
+    <string name="benchmark_total_apps">فایل‌های APK آزمایش‌شده</string>
+    <string name="benchmark_tpr">نرخ شناسایی (TPR)</string>
+    <string name="benchmark_fpr">نرخ تشخیص اشتباه (FPR)</string>
+    <string name="benchmark_latency">میانگین زمان اسکن</string>
+    <string name="benchmark_privacy_note">فقط نتایج تأییدشده نمایش داده می‌شود. فایل‌های APK آزمایشی در برنامه ذخیره نمی‌شوند.</string>
+</resources>

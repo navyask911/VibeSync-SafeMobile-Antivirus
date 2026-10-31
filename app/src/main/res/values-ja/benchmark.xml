@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">ベンチマーク結果</string>
+    <string name="benchmark_not_measured">検証済みの測定結果はまだありません</string>
+    <string name="benchmark_total_apps">検査したAPK数</string>
+    <string name="benchmark_tpr">検出率（TPR）</string>
+    <string name="benchmark_fpr">誤検出率（FPR）</string>
+    <string name="benchmark_latency">平均スキャン時間</string>
+    <string name="benchmark_privacy_note">検証済みの結果のみ表示します。テスト用APKはアプリ内に保存されません。</string>
+</resources>

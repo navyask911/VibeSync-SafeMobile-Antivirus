@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">Salīdzinošā testa rezultāti</string>
+    <string name="benchmark_not_measured">Vēl nav pārbaudītu mērījumu</string>
+    <string name="benchmark_total_apps">Pārbaudītie APK faili</string>
+    <string name="benchmark_tpr">Atklāšanas rādītājs (TPR)</string>
+    <string name="benchmark_fpr">Kļūdaini pozitīvo rādītājs (FPR)</string>
+    <string name="benchmark_latency">Vidējais skenēšanas laiks</string>
+    <string name="benchmark_privacy_note">Tiek rādīti tikai pārbaudīti rezultāti. Testa APK lietotnē netiek glabāti.</string>
+</resources>

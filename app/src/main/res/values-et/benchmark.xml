@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">Võrdlustesti tulemused</string>
+    <string name="benchmark_not_measured">Kontrollitud mõõtmistulemused veel puuduvad</string>
+    <string name="benchmark_total_apps">Testitud APK-failid</string>
+    <string name="benchmark_tpr">Tuvastamise määr (TPR)</string>
+    <string name="benchmark_fpr">Valepositiivsete määr (FPR)</string>
+    <string name="benchmark_latency">Keskmine skannimisaeg</string>
+    <string name="benchmark_privacy_note">Kuvatakse ainult kontrollitud tulemusi. Test-APK-sid rakenduses ei salvestata.</string>
+</resources>

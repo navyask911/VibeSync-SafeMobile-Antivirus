@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">Karşılaştırma testi sonuçları</string>
+    <string name="benchmark_not_measured">Henüz doğrulanmış ölçüm yok</string>
+    <string name="benchmark_total_apps">Test edilen APK dosyaları</string>
+    <string name="benchmark_tpr">Tespit oranı (TPR)</string>
+    <string name="benchmark_fpr">Yanlış pozitif oranı (FPR)</string>
+    <string name="benchmark_latency">Ortalama tarama süresi</string>
+    <string name="benchmark_privacy_note">Yalnızca doğrulanmış sonuçlar gösterilir. Test APK dosyaları uygulamada saklanmaz.</string>
+</resources>

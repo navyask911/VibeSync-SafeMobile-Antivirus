@@ -1,0 +1,108 @@
+name: Industry Benchmark (200 real APKs)
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/industry-benchmark.yml']
+permissions:
+  contents: read
+concurrency:
+  group: industry-benchmark
+  cancel-in-progress: false
+jobs:
+  scan:
+    name: Read-only APK benchmark on Android emulator
+    runs-on: ubuntu-latest
+    timeout-minutes: 110
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Install encrypted ZIP support
+        run: python3 -m pip install --disable-pip-version-check pyzipper==0.3.6
+      - name: Generate pinned manifest for 100 MalwareBazaar Android APKs
+        env:
+          MALWAREBAZAAR_AUTH_KEY: ${{ secrets.MALWAREBAZAAR_AUTH_KEY }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/industry/results"
+          python3 scripts/generate_benchmark_manifest.py --output "$RUNNER_TEMP/industry/malware-manifest.json"
+      - name: Select 100 F-Droid APKs and prepare 200-sample plan
+        run: |
+          python3 scripts/industry_benchmark.py prepare             --malware-manifest "$RUNNER_TEMP/industry/malware-manifest.json"             --plan "$RUNNER_TEMP/industry/plan.json"
+      - name: Build application and real on-device benchmark test
+        run: ./gradlew --no-daemon --max-workers=2 assembleOfflineDebug assembleOfflineDebugAndroidTest
+      - name: Run read-only cloud Android scans (20 ten-APK batches)
+        uses: reactivecircus/android-emulator-runner@v2
+        env:
+          MALWAREBAZAAR_AUTH_KEY: ${{ secrets.MALWAREBAZAAR_AUTH_KEY }}
+        with:
+          api-level: 33
+          target: default
+          arch: x86_64
+          profile: pixel_2
+          emulator-boot-timeout: 1200
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot
+          disable-linux-hw-accel: auto
+          script: bash scripts/run_industry_benchmark.sh
+      - name: Report verified results
+        run: |
+          python3 scripts/industry_benchmark.py summarize --plan "$RUNNER_TEMP/industry/plan.json" \
+            --results "$RUNNER_TEMP/industry/results" --output-json build/industry-benchmark.json \
+            --output-markdown docs/BENCHMARK_REPORT.md
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: industry-benchmark-report-${{ github.run_number }}
+          path: |
+            docs/BENCHMARK_REPORT.md
+            build/industry-benchmark.json
+          if-no-files-found: ignore
+          retention-days: 14
+      - name: Remove temporary APKs
+        if: always()
+        run: rm -rf "$RUNNER_TEMP/industry/corpus"
+
+  publish:
+    name: Publish verified aggregate report to main
+    needs: scan
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/download-artifact@v4
+        with:
+          name: industry-benchmark-report-${{ github.run_number }}
+          path: published
+      - name: Validate actual measured result before publishing
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          result=json.loads(Path("published/build/industry-benchmark.json").read_text())
+          assert result["status"]=="MEASURED", "Missing independently measured benchmark"
+          assert result["total_apps"]==200 and result["benign_apps"]==100
+          assert result["malicious_apps"]==100 and result["not_scanned"]==0
+          assert all(result[key] is not None for key in ("tpr_percent","fpr_percent","mean_latency_ms"))
+          print("Verified report fields. No APK binaries are present in publish job.")
+          PY
+      - name: Commit report to main
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp published/docs/BENCHMARK_REPORT.md docs/BENCHMARK_REPORT.md
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/BENCHMARK_REPORT.md
+          if ! git diff --cached --quiet; then
+            git commit -m "docs(phase-f): publish verified 200-APK cloud benchmark"
+            git push origin HEAD:main
+          fi

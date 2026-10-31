@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">Résultats du banc d’essai</string>
+    <string name="benchmark_not_measured">Aucune mesure vérifiée pour le moment</string>
+    <string name="benchmark_total_apps">Fichiers APK testés</string>
+    <string name="benchmark_tpr">Taux de détection (TPR)</string>
+    <string name="benchmark_fpr">Taux de faux positifs (FPR)</string>
+    <string name="benchmark_latency">Durée moyenne de l’analyse</string>
+    <string name="benchmark_privacy_note">Seuls les résultats vérifiés sont affichés. Aucun APK de test ne reste dans l’application.</string>
+</resources>

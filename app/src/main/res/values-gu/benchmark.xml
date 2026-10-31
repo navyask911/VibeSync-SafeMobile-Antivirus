@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">બેન્ચમાર્ક પરિણામો</string>
+    <string name="benchmark_not_measured">હજી સુધી ચકાસાયેલા માપન મળ્યાં નથી</string>
+    <string name="benchmark_total_apps">તપાસેલી APK ફાઇલો</string>
+    <string name="benchmark_tpr">શોધ દર (TPR)</string>
+    <string name="benchmark_fpr">ખોટા સકારાત્મકનો દર (FPR)</string>
+    <string name="benchmark_latency">સરેરાશ સ્કેન સમય</string>
+    <string name="benchmark_privacy_note">માત્ર ચકાસાયેલાં પરિણામો બતાવાય છે. પરીક્ષણ APK એપમાં સંગ્રહાતી નથી.</string>
+</resources>

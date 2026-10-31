@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">Vertailutestin tulokset</string>
+    <string name="benchmark_not_measured">Vahvistettuja mittaustuloksia ei vielä ole</string>
+    <string name="benchmark_total_apps">Testatut APK-tiedostot</string>
+    <string name="benchmark_tpr">Tunnistusaste (TPR)</string>
+    <string name="benchmark_fpr">Väärien hälytysten osuus (FPR)</string>
+    <string name="benchmark_latency">Keskimääräinen tarkistusaika</string>
+    <string name="benchmark_privacy_note">Vain vahvistetut tulokset näytetään. Testi-APK-tiedostoja ei tallenneta sovellukseen.</string>
+</resources>

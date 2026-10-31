@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">बेंचमार्क परिणाम</string>
+    <string name="benchmark_not_measured">अभी तक सत्यापित माप उपलब्ध नहीं हैं</string>
+    <string name="benchmark_total_apps">जाँची गई APK फ़ाइलें</string>
+    <string name="benchmark_tpr">पहचान दर (TPR)</string>
+    <string name="benchmark_fpr">गलत सकारात्मक दर (FPR)</string>
+    <string name="benchmark_latency">औसत स्कैन समय</string>
+    <string name="benchmark_privacy_note">केवल सत्यापित परिणाम दिखाए जाते हैं। परीक्षण APK ऐप में सहेजे नहीं जाते।</string>
+</resources>

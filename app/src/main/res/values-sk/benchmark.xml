@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">Výsledky porovnávacieho testu</string>
+    <string name="benchmark_not_measured">Zatiaľ nie sú dostupné overené merania</string>
+    <string name="benchmark_total_apps">Testované súbory APK</string>
+    <string name="benchmark_tpr">Miera odhalenia (TPR)</string>
+    <string name="benchmark_fpr">Miera falošných poplachov (FPR)</string>
+    <string name="benchmark_latency">Priemerný čas skenovania</string>
+    <string name="benchmark_privacy_note">Zobrazujú sa len overené výsledky. Testovacie APK sa v aplikácii neukladajú.</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">Lyginamojo testo rezultatai</string>
+    <string name="benchmark_not_measured">Patvirtintų matavimų kol kas nėra</string>
+    <string name="benchmark_total_apps">Patikrinti APK failai</string>
+    <string name="benchmark_tpr">Aptikimo rodiklis (TPR)</string>
+    <string name="benchmark_fpr">Klaidingų teigiamų rodiklis (FPR)</string>
+    <string name="benchmark_latency">Vidutinė nuskaitymo trukmė</string>
+    <string name="benchmark_privacy_note">Rodomi tik patvirtinti rezultatai. Bandomieji APK programoje nesaugomi.</string>
+</resources>
