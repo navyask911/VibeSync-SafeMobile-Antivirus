@@ -1,4 +1,4 @@
-name: Build and publish signed SafeMobile Play AAB
+name: Build and publish signed SafeMobile APK and Play AAB
 
 on:
   workflow_dispatch:
@@ -73,44 +73,18 @@ jobs:
       - name: Test bundled YARA rules before production build
         run: ./gradlew --no-daemon testOfflineDebugUnitTest
 
-      - name: Stage SHA-256-pinned research model for offline bundling
-        shell: bash
-        run: |
-          set -euo pipefail
-          model_url="https://github.com/navyask911/safemobile-Antivirus-Trained-ML-Data-of-Android-malware/releases/download/v1.0.1-model/malware_model.tflite"
-          curl -fL --proto '=https' --tlsv1.2 --retry 3 --max-time 90 -o app/src/main/assets/malware_model.tflite "$model_url"
-          echo "8b66adaf01a939c26d5a756e66f53fe0d6e85e1a06ec97166579138c6ce47061  app/src/main/assets/malware_model.tflite" | sha256sum -c -
-          test "$(wc -c < app/src/main/assets/malware_model.tflite)" -eq 18584
-          python3 - <<'PY'
-          import hashlib,json
-          from pathlib import Path
-          root=Path("app/src/main/assets")
-          schema_bytes=(root/"feature_schema.json").read_bytes()
-          assert hashlib.sha256(schema_bytes).hexdigest()=="ffb386be14adf8c0af1bb96032e5485fcc8fd5b401a24488c5896e2d5ea425ac"
-          schema=json.loads(schema_bytes)
-          assert list(schema)==[str(i) for i in range(215)]
-          meta={
-            "schema_version":1,"feature_count":215,
-            "features":[schema[str(i)] for i in range(215)],
-            "model_sha256":"8b66adaf01a939c26d5a756e66f53fe0d6e85e1a06ec97166579138c6ce47061",
-            "status":"research_unvalidated","trained":True,"validated":False,
-            "production_ready":False,"threshold":0.5,"source_model_tag":"v1.0.1-model",
-            "warning":"Research-only Drebin model; historical test metrics do not establish modern malware efficacy. Inference remains inactive pending independent validation."
-          }
-          (root/"malware_model.json").write_text(json.dumps(meta,indent=2)+"\n",encoding="utf-8")
-          print("Pinned 215-feature research model staged without enabling production inference.")
-          PY
-
-      - name: Build production offline AAB
+      # Gradle already stages the SHA-pinned research model into generated assets.
+      # Do not also download into src/main/assets (duplicate merge entry).
+      - name: Build signed offline APK and Play AAB
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           SAFE_MOBILE_HASHDB_ED25519_PUBLIC_KEY_B64: ${{ secrets.DB_SIGNING_PUBLIC_KEY }}
-        run: ./gradlew --no-daemon bundleOfflineRelease
+        run: ./gradlew --no-daemon assembleOfflineRelease bundleOfflineRelease
 
-      - name: Verify signed AAB, model schema, YARA and no bundled MalwareBazaar database
+      - name: Verify signed AAB and APK, model schema, YARA and no bundled malware databases
         id: verify-aab
         shell: bash
         run: |
@@ -152,7 +126,7 @@ jobs:
                   "8b66adaf01a939c26d5a756e66f53fe0d6e85e1a06ec97166579138c6ce47061"):
                   raise SystemExit("SAFE STOP: bundled model differs from pinned v1.0.1.")
               meta=json.loads(z.read("base/assets/malware_model.json"))
-              if meta.get("validated") or meta.get("production_ready") or meta.get("status")!="research_unvalidated":
+              if meta.get("validated") or meta.get("production_ready") or meta.get("status")!="research_candidate":
                   raise SystemExit("SAFE STOP: unvalidated research model falsely promoted.")
               print("Signed AAB contains Billing 8.3.0, pinned 18KB model, 215 schema, reviewed YARA and no hash DB.")
           PY
@@ -165,6 +139,40 @@ jobs:
           echo "version_name=$version_name" >> "$GITHUB_OUTPUT"
           echo "version_code=$version_code" >> "$GITHUB_OUTPUT"
 
+          # Verify the actual installable release APK (not a harmless siren fixture).
+          mapfile -t apks < <(find app/build/outputs/apk/offline/release -maxdepth 1 -type f -name '*.apk' -print)
+          if [[ "${#apks[@]}" -ne 1 ]]; then
+            echo "SAFE STOP: Expected one signed production APK; found ${#apks[@]}." >&2
+            exit 1
+          fi
+          apk="${apks[0]}"
+          apksigner="$(find "$ANDROID_HOME/build-tools" -maxdepth 2 -type f -name apksigner | sort -V | tail -n 1)"
+          test -n "$apksigner" && test -x "$apksigner"
+          "$apksigner" verify --min-sdk-version 26 --verbose --print-certs "$apk"
+          python3 - "$apk" <<'PY'
+          import hashlib,json,sys,zipfile
+          with zipfile.ZipFile(sys.argv[1]) as z:
+              files=set(z.namelist())
+              for required in ("AndroidManifest.xml","assets/yara/safemobile_android_dex.yar",
+                               "assets/malware_model.tflite","assets/malware_model.json"):
+                  if required not in files:
+                      raise SystemExit("SAFE STOP: Signed APK missing "+required)
+              model=z.read("assets/malware_model.tflite")
+              if len(model)!=18584 or hashlib.sha256(model).hexdigest()!="8b66adaf01a939c26d5a756e66f53fe0d6e85e1a06ec97166579138c6ce47061":
+                  raise SystemExit("SAFE STOP: Signed APK model failed SHA-256 pin")
+              meta=json.loads(z.read("assets/malware_model.json"))
+              if meta.get("validated") or meta.get("production_ready") or meta.get("status")!="research_candidate":
+                  raise SystemExit("SAFE STOP: Signed APK falsely promotes research model")
+              bad=[n for n in files if n.startswith("assets/") and
+                   ("safe-mobile-hashdb.bundle.zip" in n or
+                    n.rsplit("/",1)[-1].startswith(("hashes.hsb","hashes.hdb","hashes.sdb","hashes.s1b")))]
+              if bad:
+                  raise SystemExit("SAFE STOP: Hash DB bundled in APK: "+repr(bad))
+          PY
+          apk_output="SafeMobile-Antivirus-v${version_name}-code${version_code}.apk"
+          cp "$apk" "$apk_output"
+          echo "apk_path=$apk_output" >> "$GITHUB_OUTPUT"
+
       - name: Upload verified Play Console AAB as GitHub Actions artifact
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
@@ -173,10 +181,18 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
+      - name: Upload signed installable test APK as GitHub Actions artifact
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: SafeMobile-v${{ steps.verify-aab.outputs.version_name }}-Signed-APK-${{ github.run_id }}
+          path: ${{ steps.verify-aab.outputs.apk_path }}
+          if-no-files-found: error
+          retention-days: 30
+
       - name: Build valid harmless siren-test APK and matching local definition
         run: bash scripts/test_siren.sh
 
-      - name: Publish signed AAB to a new GitHub Release
+      - name: Publish signed APK and AAB to a new GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -184,7 +200,7 @@ jobs:
           set -euo pipefail
           tag="safemobile-v${{ steps.verify-aab.outputs.version_name }}-code${{ steps.verify-aab.outputs.version_code }}-run${GITHUB_RUN_NUMBER}"
           cat > release-notes.txt <<EOF
-          Production SafeMobile Antivirus signed offline Android App Bundle (AAB) for Play Console.
+          Production SafeMobile Antivirus signed offline APK for manual testing and Android App Bundle (AAB) for Play Console.
           The signed SHA-256 database is downloaded only from this repository's GitHub Releases, verified with the embedded Ed25519 trust root before activation, and never packaged in the APK/AAB.
           The first launch queues a network-constrained WorkManager sync; scanning stays on-device.
           APK/AAB version: ${{ steps.verify-aab.outputs.version_name }} (version code ${{ steps.verify-aab.outputs.version_code }}).
@@ -215,6 +231,7 @@ jobs:
             --title "SafeMobile Antivirus ${{ steps.verify-aab.outputs.version_name }} (build ${GITHUB_RUN_NUMBER})" \
             --notes-file release-notes.txt \
             "${{ steps.verify-aab.outputs.aab_path }}" \
+            "${{ steps.verify-aab.outputs.apk_path }}" \
             "build/siren-test/SafeMobile-Siren-Test.apk" \
             "build/siren-test/siren-test-definitions.json" \
             "build/siren-test/SHA256SUMS.txt"
