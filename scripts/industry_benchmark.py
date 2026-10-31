@@ -93,8 +93,37 @@ def download_malware(sha):
         bad("MalwareBazaar sample digest mismatch after encrypted ZIP extraction")
     return payload
 
+
+def shard_samples(plan, shard, label):
+    """Fixed disjoint split: shard i gets b[10*i:10*i+10] or m[...]."""
+    if not isinstance(shard,int) or not 0<=shard<10:
+        bad("Shard index must be 0..9")
+    if label not in ("benign","malicious"):
+        bad("Shard label must be benign or malicious")
+    samples=plan.get("samples")
+    if not isinstance(samples,list) or len(samples)!=200:
+        bad("Shard plan must contain exactly 200 samples")
+    ordered=[s for s in samples if s.get("label")==label]
+    if len(ordered)!=100:
+        bad("Shard requires exactly 100 samples in each label class")
+    expected_prefix="b" if label=="benign" else "m"
+    if any(s.get("sample_id")!=f"{expected_prefix}{i:04d}" for i,s in enumerate(ordered)):
+        bad("Shard expected deterministic sample ID order")
+    return ordered[shard*10:(shard+1)*10]
+
+
 def stage(a):
-    selected=json.loads(a.plan.read_text())["samples"][a.offset:a.offset+10]
+    plan=json.loads(a.plan.read_text(encoding="utf8"))
+    if a.shard is not None:
+        if a.offset is not None:
+            bad("Use either --shard/--label or --offset")
+        selected=shard_samples(plan,a.shard,a.label)
+        description=f"shard {a.shard} {a.label}"
+    else:
+        if a.offset is None or a.label is not None:
+            bad("Require --offset or the paired --shard and --label arguments")
+        selected=plan["samples"][a.offset:a.offset+10]
+        description=f"offset {a.offset}"
     if len(selected)!=10: bad("Incomplete 10-file batch")
     shutil.rmtree(a.root,ignore_errors=True);a.root.mkdir(parents=True)
     for s in selected:
@@ -106,7 +135,47 @@ def stage(a):
                 if "AndroidManifest.xml" not in z.namelist(): bad("Not an APK: "+s["sample_id"])
         except zipfile.BadZipFile: bad("Invalid APK zip: "+s["sample_id"])
     save(a.root/"batch.json",dict(samples=[{k:s[k] for k in ("sample_id","label","sha256")} for s in selected]))
-    print("Staged pinned batch %d..%d" % (a.offset,a.offset+9),flush=True)
+    print("Staged ten pinned APKs for "+description,flush=True)
+
+
+def merge(a):
+    """Fail closed if any artifact, class, sample, digest or scan is absent."""
+    plan=json.loads(a.plan.read_text(encoding="utf8"))
+    if not isinstance(a.run_id,str) or not a.run_id.isdigit():
+        bad("Missing numeric GitHub run ID for shard artifact provenance")
+    a.results.mkdir(parents=True,exist_ok=True)
+    expected_dirs={f"industry-benchmark-shard-{i}-{a.run_id}" for i in range(10)}
+    found_dirs={p.name for p in a.shards.iterdir() if p.is_dir()}
+    if found_dirs!=expected_dirs:
+        bad("Expected exactly ten shard artifact directories, found: "+repr(sorted(found_dirs)))
+    if list(a.results.iterdir()):
+        bad("Aggregator destination must start empty (never merge with stale output)")
+    for shard in range(10):
+        folder=a.shards/f"industry-benchmark-shard-{shard}-{a.run_id}"
+        expected_files={"batch-benign.json","batch-malicious.json"}
+        actual_files={p.name for p in folder.iterdir() if p.is_file()}
+        if actual_files!=expected_files:
+            bad(f"Shard {shard} missing/extra results: {sorted(actual_files)}")
+        for label in ("benign","malicious"):
+            expected=shard_samples(plan,shard,label)
+            path=folder/f"batch-{label}.json"
+            batch=json.loads(path.read_text(encoding="utf8"))
+            actual=batch.get("samples") if isinstance(batch,dict) else None
+            if not isinstance(actual,list) or len(actual)!=10:
+                bad(f"Shard {shard} {label}: expected exactly ten scan records")
+            for recorded,planned in zip(actual,expected):
+                if not isinstance(recorded,dict) or any(recorded.get(k)!=planned.get(k)
+                    for k in ("sample_id","label","sha256")):
+                    bad(f"Shard {shard} {label}: unexpected or out-of-order sample")
+                if recorded.get("verdict") not in ("THREAT","SUSPICIOUS","NO_MATCH","NOT_SCANNED"):
+                    bad("Unrecognized real-device scan verdict")
+                duration=recorded.get("duration_ms")
+                if isinstance(duration,bool) or not isinstance(duration,(int,float)) or (
+                    not __import__("math").isfinite(duration)) or duration<0:
+                    bad("Invalid real-device scan time")
+            shutil.copyfile(path,a.results/f"batch-{shard}-{label}.json")
+        print(f"Verified shard {shard}: 10 benign + 10 malicious Android scan records",flush=True)
+    print("Strict merge complete: 10 artifacts, 20 batches, 200 recorded APKs",flush=True)
 
 def summarize(a):
     plan_bytes=a.plan.read_bytes();plan=json.loads(plan_bytes)
@@ -122,7 +191,11 @@ def summarize(a):
                 bad("Unknown verdict")
             if not isinstance(s.get("duration_ms"),(int,float)) or s["duration_ms"]<0:bad("Invalid elapsed time")
             results[sid]=s
-    if len(results)!=200 or set(results)!=set(refs):bad("Benchmark incomplete: %d/200 actual scans"%len(results))
+    if len(results)!=200 or len(refs)!=200 or set(results)!=set(refs):
+        bad("Benchmark incomplete: %d/200 actual scans"%len(results))
+    if sum(s.get("label")=="benign" for s in results.values())!=100 or sum(
+            s.get("label")=="malicious" for s in results.values())!=100:
+        bad("Unexpected counts: require exactly 100 benign and 100 malicious scans")
     b=[x for x in results.values() if x["label"]=="benign"]
     m=[x for x in results.values() if x["label"]=="malicious"]
     unread=sum(x["verdict"]=="NOT_SCANNED" for x in results.values())
@@ -164,7 +237,8 @@ def summarize(a):
 def main():
     p=argparse.ArgumentParser();sub=p.add_subparsers(dest="mode",required=True)
     q=sub.add_parser("prepare");q.add_argument("--plan",type=Path,required=True);q.add_argument("--malware-manifest",type=Path,required=True)
-    q=sub.add_parser("stage");q.add_argument("--plan",type=Path,required=True);q.add_argument("--root",type=Path,required=True);q.add_argument("--offset",type=int,required=True)
+    q=sub.add_parser("stage");q.add_argument("--plan",type=Path,required=True);q.add_argument("--root",type=Path,required=True);q.add_argument("--offset",type=int);q.add_argument("--shard",type=int);q.add_argument("--label",choices=("benign","malicious"))
+    q=sub.add_parser("merge");q.add_argument("--plan",type=Path,required=True);q.add_argument("--shards",type=Path,required=True);q.add_argument("--results",type=Path,required=True);q.add_argument("--run-id",required=True)
     q=sub.add_parser("summarize");q.add_argument("--plan",type=Path,required=True);q.add_argument("--results",type=Path,required=True)
     q.add_argument("--output-json",type=Path,required=True);q.add_argument("--output-markdown",type=Path,required=True)
     a=p.parse_args()

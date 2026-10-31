@@ -1,19 +1,59 @@
 name: Industry Benchmark (200 real APKs)
+
 on:
   workflow_dispatch:
   push:
     branches: [main]
     paths: ['.github/workflows/industry-benchmark.yml']
+
 permissions:
   contents: read
+
 concurrency:
-  group: industry-benchmark
+  group: industry-benchmark-${{ github.ref }}
   cancel-in-progress: false
+
 jobs:
-  scan:
-    name: Read-only APK benchmark on Android emulator
+  prepare:
+    name: Pin 100 benign + 100 malware-candidate APKs
     runs-on: ubuntu-latest
-    timeout-minutes: 110
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install manifest tooling
+        run: python3 -m pip install --disable-pip-version-check pyzipper==0.3.6
+      - name: Generate exactly 100 candidate malware hashes
+        env:
+          MALWAREBAZAAR_AUTH_KEY: ${{ secrets.MALWAREBAZAAR_AUTH_KEY }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/industry"
+          python3 scripts/generate_benchmark_manifest.py \
+            --output "$RUNNER_TEMP/industry/malware-manifest.json"
+      - name: Pin one immutable, disjoint 200-APK plan
+        run: |
+          python3 scripts/industry_benchmark.py prepare \
+            --malware-manifest "$RUNNER_TEMP/industry/malware-manifest.json" \
+            --plan "$RUNNER_TEMP/industry/plan.json"
+      - name: Upload SHA-256-only plan, NEVER APK binaries
+        uses: actions/upload-artifact@v4
+        with:
+          name: industry-benchmark-plan-${{ github.run_id }}
+          path: ${{ runner.temp }}/industry/plan.json
+          if-no-files-found: error
+          retention-days: 14
+
+  scan:
+    name: Android emulator shard ${{ matrix.shard }} (10 benign + 10 malicious)
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        shard: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -23,24 +63,17 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
       - name: Install encrypted ZIP support
         run: python3 -m pip install --disable-pip-version-check pyzipper==0.3.6
-      - name: Generate pinned manifest for 100 MalwareBazaar Android APKs
-        env:
-          MALWAREBAZAAR_AUTH_KEY: ${{ secrets.MALWAREBAZAAR_AUTH_KEY }}
-        run: |
-          set -euo pipefail
-          mkdir -p "$RUNNER_TEMP/industry/results"
-          python3 scripts/generate_benchmark_manifest.py --output "$RUNNER_TEMP/industry/malware-manifest.json"
-      - name: Select 100 F-Droid APKs and prepare 200-sample plan
-        run: |
-          python3 scripts/industry_benchmark.py prepare             --malware-manifest "$RUNNER_TEMP/industry/malware-manifest.json"             --plan "$RUNNER_TEMP/industry/plan.json"
-      - name: Build application and real on-device benchmark test
+      - name: Retrieve pinned 200-sample manifest
+        uses: actions/download-artifact@v4
+        with:
+          name: industry-benchmark-plan-${{ github.run_id }}
+          path: ${{ runner.temp }}/industry
+      - name: Build offline debug app and real instrumented APK
         run: ./gradlew --no-daemon --max-workers=2 assembleOfflineDebug assembleOfflineDebugAndroidTest
-      # Stage host-downloaded verified APKs through /data/local/tmp, then stream
-      # into debuggable app-private files using run-as. No broad storage permissions.
-      # Changes to app/src/androidTest never ship in the signed Play Store AAB.
-      - name: Run read-only cloud Android scans (20 ten-APK batches)
+      - name: Run 20 on-device APK scans (private app UID; no broad storage permission)
         uses: reactivecircus/android-emulator-runner@v2
         env:
+          BENCHMARK_SHARD: ${{ matrix.shard }}
           MALWAREBAZAAR_AUTH_KEY: ${{ secrets.MALWAREBAZAAR_AUTH_KEY }}
         with:
           api-level: 33
@@ -51,61 +84,92 @@ jobs:
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot
           disable-linux-hw-accel: auto
           script: bash scripts/run_industry_benchmark.sh
-      - name: Report verified results
-        run: |
-          python3 scripts/industry_benchmark.py summarize --plan "$RUNNER_TEMP/industry/plan.json" \
-            --results "$RUNNER_TEMP/industry/results" --output-json build/industry-benchmark.json \
-            --output-markdown docs/BENCHMARK_REPORT.md
-      - uses: actions/upload-artifact@v4
-        if: always()
+      - name: Upload ONLY the two actual device scan batches
+        uses: actions/upload-artifact@v4
         with:
-          name: industry-benchmark-report-${{ github.run_number }}
-          path: |
-            docs/BENCHMARK_REPORT.md
-            build/industry-benchmark.json
-          if-no-files-found: ignore
+          name: industry-benchmark-shard-${{ matrix.shard }}-${{ github.run_id }}
+          path: ${{ runner.temp }}/industry/results/batch-*.json
+          if-no-files-found: error
           retention-days: 14
-      - name: Remove temporary APKs
+      - name: Delete temporary APKs even on failure
         if: always()
         run: rm -rf "$RUNNER_TEMP/industry/corpus"
 
-  publish:
-    name: Publish verified aggregate report to main
-    needs: scan
+  aggregator:
+    name: Verify all 10 shards, calculate metrics and publish report
+    needs: [prepare, scan]
+    if: ${{ success() }}
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     permissions:
+      actions: read
       contents: write
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: main
           fetch-depth: 0
-      - uses: actions/download-artifact@v4
+      - name: Download the same pinned input plan
+        uses: actions/download-artifact@v4
         with:
-          name: industry-benchmark-report-${{ github.run_number }}
-          path: published
-      - name: Validate actual measured result before publishing
-        shell: bash
+          name: industry-benchmark-plan-${{ github.run_id }}
+          path: ${{ runner.temp }}/industry
+      - name: Download every matrix artifact separately
+        uses: actions/download-artifact@v4
+        with:
+          pattern: industry-benchmark-shard-*-${{ github.run_id }}
+          path: ${{ runner.temp }}/industry/shards
+          merge-multiple: false
+      - name: Verify 10 artifacts, each with 10 benign + 10 malicious APK scans
         run: |
+          set -euo pipefail
+          python3 scripts/industry_benchmark.py merge \
+            --plan "$RUNNER_TEMP/industry/plan.json" \
+            --shards "$RUNNER_TEMP/industry/shards" \
+            --run-id "$GITHUB_RUN_ID" \
+            --results "$RUNNER_TEMP/industry/verified-results"
+      - name: Calculate ACTUAL 200-APK TPR, FPR, triage rates and mean latency
+        run: |
+          set -euo pipefail
+          python3 scripts/industry_benchmark.py summarize \
+            --plan "$RUNNER_TEMP/industry/plan.json" \
+            --results "$RUNNER_TEMP/industry/verified-results" \
+            --output-json "$RUNNER_TEMP/industry/industry-benchmark.json" \
+            --output-markdown "$RUNNER_TEMP/industry/BENCHMARK_REPORT.md"
           python3 - <<'PY'
-          import json
-          from pathlib import Path
-          result=json.loads(Path("published/build/industry-benchmark.json").read_text())
-          assert result["status"]=="MEASURED", "Missing independently measured benchmark"
-          assert result["total_apps"]==200 and result["benign_apps"]==100
-          assert result["malicious_apps"]==100 and result["not_scanned"]==0
-          assert all(result[key] is not None for key in ("tpr_percent","fpr_percent","mean_latency_ms"))
-          print("Verified report fields. No APK binaries are present in publish job.")
+          import json,os,pathlib
+          p=pathlib.Path(os.environ["RUNNER_TEMP"])/"industry/industry-benchmark.json"
+          data=json.loads(p.read_text())
+          assert data["status"]=="MEASURED"
+          assert data["total_apps"]==200 and data["not_scanned"]==0
+          assert data["benign_apps"]==data["malicious_apps"]==100
+          assert all(data[k] is not None for k in ("tpr_percent","fpr_percent","mean_latency_ms"))
+          print("Verified 200-APK benchmark:")
+          for k in ("tpr_percent","fpr_percent","mean_latency_ms",
+                    "ml_samples_scored","research_ml_samples_scored",
+                    "research_ml_tpr_percent","research_ml_fpr_percent"):
+              print(f"{k}: {data.get(k)}")
           PY
-      - name: Commit report to main
+      - name: Upload signed-off aggregate metrics and report
+        uses: actions/upload-artifact@v4
+        with:
+          name: industry-benchmark-verified-200-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/industry/industry-benchmark.json
+            ${{ runner.temp }}/industry/BENCHMARK_REPORT.md
+          if-no-files-found: error
+          retention-days: 30
+      - name: Publish verified aggregate report to main (no APK files)
         shell: bash
         run: |
           set -euo pipefail
-          cp published/docs/BENCHMARK_REPORT.md docs/BENCHMARK_REPORT.md
+          git fetch origin main
+          git checkout main
+          git pull --ff-only origin main
+          cp "$RUNNER_TEMP/industry/BENCHMARK_REPORT.md" docs/BENCHMARK_REPORT.md
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add docs/BENCHMARK_REPORT.md
           if ! git diff --cached --quiet; then
-            git commit -m "docs(phase-f): publish verified 200-APK cloud benchmark"
+            git commit -m "docs(benchmark): publish verified 200-APK 10-shard results"
             git push origin HEAD:main
           fi

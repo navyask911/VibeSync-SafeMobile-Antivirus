@@ -58,8 +58,16 @@ stage_as_app_uid() {
 adb shell svc wifi disable || true
 adb shell svc data disable || true
 
-for offset in $(seq 0 10 190); do
-  python3 scripts/industry_benchmark.py stage --plan "$root/plan.json" --root "$root/corpus" --offset "$offset"
+# Each matrix job evaluates exactly 20 APKs across two disjoint 10-APK
+# batches, and never processes any other matrix shard's APKs.
+: "${BENCHMARK_SHARD:?BENCHMARK_SHARD must be set from the GitHub Actions matrix}"
+[[ "$BENCHMARK_SHARD" =~ ^([0-9])$ ]] || {
+  echo "SAFE STOP: BENCHMARK_SHARD must be an integer from 0 to 9" >&2
+  exit 1
+}
+for label in benign malicious; do
+  python3 scripts/industry_benchmark.py stage --plan "$root/plan.json" --root "$root/corpus" \
+    --shard "$BENCHMARK_SHARD" --label "$label"
   adb shell mkdir -p "$handoff"
   adb shell run-as "$app_id" mkdir -p "$private"
   for file in "$root/corpus/"*; do
@@ -76,20 +84,25 @@ for offset in $(seq 0 10 190); do
     echo "SAFE STOP: Benchmark instrumentation failed." >&2
     exit 1
   fi
-
-  adb exec-out run-as "$app_id" cat "$private/batch-results.json" > "$root/results/batch-$offset.json"
-  python3 - "$root/results/batch-$offset.json" <<'PY'
+  adb exec-out run-as "$app_id" cat "$private/batch-results.json" > "$root/results/batch-$label.json"
+  python3 - "$root/results/batch-$label.json" "$label" "$BENCHMARK_SHARD" <<'PY'
 import json,sys
 from pathlib import Path
 rows=json.loads(Path(sys.argv[1]).read_text(encoding="utf-8")).get("samples")
+label,shard=sys.argv[2],int(sys.argv[3])
+prefix="b" if label=="benign" else "m"
+expected=[f"{prefix}{i:04d}" for i in range(shard*10,(shard+1)*10)]
 assert isinstance(rows,list) and len(rows)==10, "Incomplete on-device batch"
-assert all(isinstance(x,dict) and x.get("sha256") and x.get("verdict") and
-           isinstance(x.get("duration_ms"),(int,float)) for x in rows), "Invalid device scan records"
-print("10 real read-only APK scans verified", flush=True)
+assert [r.get("sample_id") for r in rows]==expected, "Unexpected shard or APK order"
+assert all(isinstance(x,dict) and x.get("sha256") and
+           x.get("verdict") in ("THREAT","SUSPICIOUS","NO_MATCH","NOT_SCANNED") and
+           isinstance(x.get("duration_ms"),(int,float)) and x["duration_ms"]>=0
+           for x in rows), "Invalid on-device scan records"
+print(f"Verified 10 on-device {label} scans in shard {shard}",flush=True)
 PY
-
   rm -rf "$root/corpus"
   adb shell rm -rf "$handoff"
   adb shell run-as "$app_id" rm -rf "$private"
-  echo "Actual read-only scans completed: $((offset+10))/200"
 done
+test "$(find "$root/results" -maxdepth 1 -name 'batch-*.json' -type f | wc -l)" -eq 2
+echo "Verified shard $BENCHMARK_SHARD: 10 benign + 10 malicious actual Android scans"
