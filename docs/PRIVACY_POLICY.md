@@ -61,4 +61,12 @@ For privacy questions, use the repository's [Issues](https://github.com/navyask9
 
 **Play Console requirement:** This policy should be made available at an accessible public HTTPS **rendered webpage** (not only a downloadable Markdown file), linked in the app and Play Console. Review the **Data safety** declaration and restricted-permission disclosures against the exact final signed AAB and third-party SDK behavior. This documentation is not a Play approval or independent legal review.
 
-For more information about VibeSyncro Technologies Pvt Ltd, visit https://vibesyncro.com/.
+## 8. Official company and product websites
+
+The following public websites provide company and product information:
+
+- **Official company website:** https://vibesyncro.com/
+- **SafeMobile product page:** https://vibesyncro.com/safemobile.html
+- **About VibeSyncro:** https://vibesyncro.com/about.html
+
+These links are opened only after a user chooses them in the app or visits them independently. The browser and website infrastructure may receive ordinary connection metadata, such as an IP address. SafeMobile does not append or transmit scanned APKs, file hashes, scan history, device identifiers or security findings to these websites.
