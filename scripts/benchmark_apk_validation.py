@@ -69,6 +69,9 @@ def unpack_malwarebazaar_apk(archive, sha256, source_filename):
                 raise InvalidAndroidAPK("extracted member violates the size limit")
             with container.open(member, pwd=b"infected") as stream:
                 payload = stream.read(APK_LIMIT + 1)
-    except (zipfile.BadZipFile, RuntimeError, EOFError, OSError, NotImplementedError, OverflowError) as exc:
+    except InvalidAndroidAPK:
+        raise
+    except (zipfile.BadZipFile, pyzipper.zipfile.BadZipFile, RuntimeError, EOFError,
+            OSError, KeyError, NotImplementedError, OverflowError) as exc:
         raise InvalidAndroidAPK("cannot decrypt or decompress infected ZIP") from exc
     return validate_apk_bytes(payload, sha256)
