@@ -2,7 +2,7 @@
 <resources>
     <string name="global_threat_intelligence_title">Contribute to Global Threat Intelligence (Optional)</string>
     <string name="global_threat_intelligence_description">Off by default. When enabled, SafeMobile asks before each contribution. Nothing is sent unless you tap Donate. Only a malware SHA-256 hash and 215 behavioral features are shared.</string>
-    <string name="global_threat_intelligence_donate_message">Help protect others by anonymously donating this malicious file's signature to our AI training network.</string>
+    <string name="global_threat_intelligence_donate_message">Help protect others by anonymously donating this malicious file\'s signature to our AI training network.</string>
     <string name="global_threat_intelligence_donate">Donate</string>
     <string name="global_threat_intelligence_decline">Decline</string>
 </resources>
