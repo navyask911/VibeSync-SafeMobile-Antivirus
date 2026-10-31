@@ -15,10 +15,11 @@ import org.tensorflow.lite.Interpreter
 
 @RunWith(AndroidJUnit4::class)
 class MachineLearningScannerTest {
-    @Test fun bundledDummyIsShapeCorrectButNeverActivated() = runBlocking {
+    @Test fun bundledResearchModelHas215InputsButIsNotProductionActivated() = runBlocking {
         val context = ApplicationProvider.getApplicationContext<Context>()
-        // No untrained score can change a real scan result.
+        // Historical Drebin holdout is research only; not enabled in production risk scoring.
         assertFalse(MachineLearningScanner(context).isAvailable())
+        assertTrue(MachineLearningScanner(context).isResearchCandidateAvailable())
         val model = context.assets.open("malware_model.tflite").use { it.readBytes() }
         assertTrue(model.size < 50 * 1024 * 1024)
         assertTrue(model.size > 64)
@@ -28,10 +29,10 @@ class MachineLearningScannerTest {
         input.rewind()
         Interpreter(input, Interpreter.Options().setNumThreads(1)).use { interpreter ->
             interpreter.allocateTensors()
-            assertArrayEquals(intArrayOf(1, 32), interpreter.getInputTensor(0).shape())
+            assertArrayEquals(intArrayOf(1, 215), interpreter.getInputTensor(0).shape())
             assertArrayEquals(intArrayOf(1, 1), interpreter.getOutputTensor(0).shape())
             val output = Array(1) { FloatArray(1) }
-            interpreter.run(arrayOf(FloatArray(32)), output)
+            interpreter.run(arrayOf(FloatArray(215)), output)
             assertTrue(output[0][0].isFinite())
         }
     }

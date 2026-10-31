@@ -96,13 +96,51 @@ val stageBenchmarkReport = tasks.register<Copy>("stageBenchmarkReport") {
 android.sourceSets.getByName("main").assets.srcDir(stageBenchmarkReport)
 // AGP's vital lint tasks inspect assets separately from merge<Variant>Assets.
 // Keep an explicit dependency as a belt-and-braces guard across AGP upgrades.
+
+// The 18,584-byte, SHA-pinned Drebin 215 research model is staged into the APK at
+// BUILD time. No network is used by inference, and no downloaded model is trusted
+// without exact checksum verification. No untrained fixture is shipped.
+val researchModelAssetDirectory = layout.buildDirectory.dir("generated/research-ml/assets")
+val researchModelSha = "8b66adaf01a939c26d5a756e66f53fe0d6e85e1a06ec97166579138c6ce47061"
+val researchSchemaSha = "ffb386be14adf8c0af1bb96032e5485fcc8fd5b401a24488c5896e2d5ea425ac"
+val stageResearchModel = tasks.register("stageResearchModel") {
+    inputs.property("release", "v1.0.1-model")
+    inputs.property("modelSha256", researchModelSha)
+    inputs.property("schemaSha256", researchSchemaSha)
+    inputs.file("src/main/assets/feature_schema.json")
+    outputs.dir(researchModelAssetDirectory)
+    doLast {
+        val modelUrl = "https://github.com/navyask911/safemobile-Antivirus-Trained-ML-Data-of-Android-malware/releases/download/v1.0.1-model/malware_model.tflite"
+        val connection = java.net.URL(modelUrl).openConnection().apply {
+            connectTimeout = 30000
+            readTimeout = 60000
+        }
+        val bytes = connection.getInputStream().use { it.readNBytes(18585) }
+        fun sha256(data: ByteArray) = java.security.MessageDigest.getInstance("SHA-256")
+            .digest(data).joinToString("") { "%02x".format(it) }
+        require(bytes.size == 18584 && sha256(bytes) == researchModelSha) {
+            "Rejected research ML release artifact: size/SHA256 did not match pin"
+        }
+        require(String(bytes, 4, 4, Charsets.US_ASCII) == "TFL3") {
+            "Rejected research ML artifact: invalid TensorFlow Lite header"
+        }
+        val schemaBytes = file("src/main/assets/feature_schema.json").readBytes()
+        require(sha256(schemaBytes) == researchSchemaSha) {
+            "Rejected research ML release: 215-feature schema SHA256 mismatch"
+        }
+        val dest = researchModelAssetDirectory.get().asFile.apply { mkdirs() }
+        dest.resolve("malware_model.tflite").writeBytes(bytes)
+    }
+}
+android.sourceSets.getByName("main").assets.srcDir(stageResearchModel)
+
+// All AGP model writers, analyzers, lint report and asset merger tasks must
+// wait for generated inputs; never disable Android lint or Gradle validation.
 tasks.matching {
     (it.name.startsWith("merge") && it.name.endsWith("Assets")) ||
-        // Lint creates both generate<Variant>LintVitalReportModel and
-        // generate<Variant>LintReportModel; matching only LintModel misses the latter.
-        (it.name.startsWith("generate") && it.name.contains("Lint") && it.name.endsWith("Model"))
+        it.name.contains("Lint") || it.name.startsWith("lint")
 }.configureEach {
-    dependsOn(stageBenchmarkReport)
+    dependsOn(stageBenchmarkReport, stageResearchModel)
 }
 
 kapt { correctErrorTypes = true }
