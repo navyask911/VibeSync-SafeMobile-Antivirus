@@ -120,7 +120,7 @@ posture_forbidden = (
 )
 for path in (ROOT / "app" / "src" / "main" / "java").rglob("*.kt"):
     source = path.read_text(encoding="utf-8")
-    if re.search(r"Settings\\.Secure\\.ENABLED_ACCESSIBILITY_SERVICES", source):
+    if re.search(r"Settings\.Secure\.ENABLED_ACCESSIBILITY_SERVICES", source):
         errors.append(
             f"Enabled accessibility services must be read via AccessibilityManager, not Settings.Secure: {path.relative_to(ROOT)}."
         )
