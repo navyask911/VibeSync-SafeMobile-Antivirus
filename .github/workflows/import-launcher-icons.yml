@@ -50,7 +50,7 @@ jobs:
           import xml.etree.ElementTree as ET
 
           root = Path(".")
-          signature = b"\\x89PNG\\r\\n\\x1a\\n"
+          signature = bytes((137, 80, 78, 71, 13, 10, 26, 10))
           densities = {"mdpi": 48, "hdpi": 72, "xhdpi": 96, "xxhdpi": 144, "xxxhdpi": 192}
 
           def check_png(path: Path, expected: int) -> None:
