@@ -2,8 +2,10 @@
 """Guard Play release version codes without blocking CI-only maintenance.
 
 - A signed Play release must strictly exceed every previous Play app release.
-- CI-only changes may reuse the already-published app code IF the *entire app/*
-  source tree is byte-for-byte the same as its tagged release.
+- CI-only changes may reuse an already-published app version ONLY when every
+  release-relevant app/* file is byte-for-byte identical to a signed tag.
+  JVM/instrumented test source changes (app/src/test/ and app/src/androidTest/)
+  are explicitly excluded because they never ship in the Play AAB.
 - Signed malware-hash-database tags never count as Android app releases.
 """
 import argparse
@@ -56,17 +58,25 @@ def validate(release: bool = False) -> None:
         print(f"Version-code guard passed: current={current}, prior Play max={maximum}.")
         return
     if current == maximum and not release:
-        # CI-only changes need not bump Play versionCode, but this is allowed
-        # exclusively when the *whole app/* tree matches an already signed
-        # app release. Any changed Android resource or binary source fails.
+        # Only source sets that Android excludes from the signed APK/AAB may
+        # change without incrementing the already-published versionCode.
+        # All production code, resources, assets, Gradle config and manifests
+        # MUST continue matching a signed release tag byte-for-byte.
         try:
-            working_app_tree = run("git", "rev-parse", "HEAD:app")
             for code, tag in tagged:
-                if code == maximum and run("git", "rev-parse", f"{tag}:app") == working_app_tree:
-                    print(f"Version-code guard passed: unchanged app tree at published version {current}.")
+                if code != maximum:
+                    continue
+                differences = run("git", "diff", "--name-only", "HEAD", tag, "--", "app")
+                changed_files = differences.splitlines()
+                shipped = [path for path in changed_files if not (
+                    path.startswith("app/src/androidTest/") or
+                    path.startswith("app/src/test/")
+                )]
+                if not shipped:
+                    print(f"Version-code guard passed: signed app assets unchanged at published version {current}; only non-shipping tests may differ.")
                     return
         except (OSError, subprocess.CalledProcessError) as error:
-            raise ValueError("Unable to verify unchanged Android application tree") from error
+            raise ValueError("Unable to compare shipping app sources with published release") from error
     owner = next((tag for code, tag in tagged if code == maximum), "none")
     requirement = "must exceed" if release or current < maximum else "must exceed, or keep identical app tree as"
     raise ValueError(

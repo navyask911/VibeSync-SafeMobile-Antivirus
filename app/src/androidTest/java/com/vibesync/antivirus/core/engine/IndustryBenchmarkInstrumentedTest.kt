@@ -22,7 +22,9 @@ class IndustryBenchmarkInstrumentedTest {
     @Test fun scanBatch() = runBlocking {
         val ctx = ApplicationProvider.getApplicationContext<Context>()
         val app = ctx.applicationContext as SafeMobileApp
-        val dir = File(requireNotNull(ctx.getExternalFilesDir(null)), "industry-benchmark")
+        // The runner stages each real APK into app-private storage using adb run-as.
+        // Never rely on the emulator's scoped external-storage permissions.
+        val dir = File(ctx.filesDir, "industry-benchmark")
         val inputs = JSONObject(File(dir, "batch.json").readText()).getJSONArray("samples")
         assertEquals(10, inputs.length())
         val scanner = PackageScanner(app, app.database.threatDao(), EncryptedHashStore(app),
