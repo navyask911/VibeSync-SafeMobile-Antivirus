@@ -59,51 +59,38 @@ for base in scan_roots:
             if pattern.search(source):
                 errors.append(f"Possible {label} found in {path.relative_to(ROOT)}; review without printing secret values.")
 
-# Permission-audit strings are allowed. App-screen, credential, and OTP surveillance is prohibited.
-# A single explicit exception permits the requested installer-window advisory, provided it cannot
-# read the accessibility tree or capture/interfere with touch input. Keep this gate restrictive.
-ALLOWED_INSTALLER_ADVISORY = Path(
-    "app/src/main/java/com/vibesync/antivirus/core/observer/InstallerAccessibilityService.kt"
-)
-ADVISORY_CONFIG = ROOT / "app" / "src" / "main" / "res" / "xml" / "installer_accessibility_service.xml"
+# Permission-audit strings are allowed, but SafeMobile must not implement or register an
+# AccessibilityService. The Device Posture feature reads enabled-service metadata through the
+# public AccessibilityManager list API; it must never bind to a service or inspect screen content.
 MANIFEST = ROOT / "app" / "src" / "main" / "AndroidManifest.xml"
-FORBIDDEN_ACCESSIBILITY_APIS = (
-    "rootInActiveWindow", "getRootInActiveWindow", "AccessibilityNodeInfo",
-    "findAccessibilityNodeInfos", "performGlobalAction", "dispatchGesture",
-    "TYPE_WINDOW_CONTENT_CHANGED", "TYPE_VIEW_TEXT_CHANGED", "onKeyEvent",
-)
+ANDROID_NS = "{http://schemas.android.com/apk/res/android}"
+ACCESSIBILITY_ACTION = "android.accessibilityservice.AccessibilityService"
+ACCESSIBILITY_BIND_PERMISSION = "android.permission.BIND_ACCESSIBILITY_SERVICE"
+
+try:
+    manifest_root = ET.parse(MANIFEST).getroot()
+except (ET.ParseError, OSError) as exc:
+    errors.append(f"AndroidManifest.xml could not be parsed: {type(exc).__name__}.")
+    manifest_root = None
+
+if manifest_root is not None:
+    for permission in manifest_root.findall("uses-permission"):
+        if permission.get(ANDROID_NS + "name") == ACCESSIBILITY_BIND_PERMISSION:
+            errors.append("SafeMobile must not request BIND_ACCESSIBILITY_SERVICE.")
+    for service in manifest_root.findall("./application/service"):
+        has_accessibility_action = any(
+            action.get(ANDROID_NS + "name") == ACCESSIBILITY_ACTION
+            for action in service.findall("./intent-filter/action")
+        )
+        has_accessibility_binding = service.get(ANDROID_NS + "permission") == ACCESSIBILITY_BIND_PERMISSION
+        if has_accessibility_action or has_accessibility_binding:
+            errors.append("SafeMobile must not declare an AccessibilityService in AndroidManifest.xml.")
+
 for path in (ROOT / "app" / "src" / "main").rglob("*.kt"):
     source = path.read_text(encoding="utf-8")
-    if not re.search(r':\s*(?:android\.accessibilityservice\.)?AccessibilityService\b', source):
-        continue
-    relative = path.relative_to(ROOT)
-    if relative != ALLOWED_INSTALLER_ADVISORY:
+    if re.search(r":\\s*(?:android\\.accessibilityservice\\.)?AccessibilityService\\b", source):
         errors.append(
-            f"Unapproved AccessibilityService implementation in {relative}; "
-            "only the constrained, non-reading installer advisory is permitted."
-        )
-        continue
-    config = ADVISORY_CONFIG.read_text(encoding="utf-8") if ADVISORY_CONFIG.exists() else ""
-    manifest = MANIFEST.read_text(encoding="utf-8") if MANIFEST.exists() else ""
-    safe_source = (
-        "WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE" in source
-        and "WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE" in source
-        and "AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED" in source
-        and "WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY" in source
-        and not any(api in source for api in FORBIDDEN_ACCESSIBILITY_APIS)
-    )
-    safe_config = (
-        'android:canRetrieveWindowContent="false"' in config
-        and 'android:accessibilityEventTypes="typeWindowStateChanged"' in config
-    )
-    safe_manifest = (
-        '.core.observer.InstallerAccessibilityService' in manifest
-        and 'android.permission.BIND_ACCESSIBILITY_SERVICE' in manifest
-    )
-    if not (safe_source and safe_config and safe_manifest):
-        errors.append(
-            f"Installer advisory {relative} violates its non-reading/non-interfering contract; "
-            "do not read app contents or capture/interfere with touch input."
+            f"SafeMobile must not implement AccessibilityService: {path.relative_to(ROOT)}."
         )
 
 
