@@ -67,6 +67,7 @@ import android.content.Intent
 import android.util.Log
 import com.vibesync.antivirus.R
 import com.vibesync.antivirus.core.locale.LocalePreferences
+import com.vibesync.antivirus.core.security.GlobalThreatIntelligenceConsent
 import com.vibesync.antivirus.data.local.ScanAudit
 import java.text.DateFormat
 import java.util.Date
@@ -337,6 +338,7 @@ internal fun SafeMobileSettingsPanel(
     var feedConfigMessage by remember { mutableStateOf<String?>(null) }
     var showFeedConsentDialog by remember { mutableStateOf(false) }
     var showFullScreenPrompt by remember { mutableStateOf(false) }
+    var globalThreatIntelligenceEnabled by remember(context) { mutableStateOf(GlobalThreatIntelligenceConsent.isEnabled(context)) }
     val voicePrefs = remember(context) { context.getSharedPreferences(SafeMobileApp.SECURITY_PREFS, Context.MODE_PRIVATE) }
     var voiceAlertsEnabled by remember(context) { mutableStateOf(voicePrefs.getBoolean(SafeMobileApp.KEY_VOICE_ALERTS_ENABLED, false)) }
 
@@ -382,6 +384,24 @@ internal fun SafeMobileSettingsPanel(
                     runCatching { context.startActivity(preview) }
                         .onFailure { Log.w("SafeMobileSiren", "Manual siren preview unavailable", it) }
                 }) { Text(stringResource(R.string.siren_test_button)) }
+            }
+        }
+        Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
+            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(stringResource(R.string.global_threat_intelligence_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                Text(stringResource(R.string.global_threat_intelligence_description), style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                    Text(stringResource(R.string.global_threat_intelligence_title),
+                        modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium)
+                    Switch(
+                        checked = globalThreatIntelligenceEnabled,
+                        onCheckedChange = { enabled ->
+                            GlobalThreatIntelligenceConsent.setEnabled(context, enabled)
+                            globalThreatIntelligenceEnabled = enabled
+                        }
+                    )
+                }
             }
         }
         InstallSentinelSettings()
