@@ -88,7 +88,7 @@ if manifest_root is not None:
 
 for path in (ROOT / "app" / "src" / "main").rglob("*.kt"):
     source = path.read_text(encoding="utf-8")
-    if re.search(r":\\s*(?:android\\.accessibilityservice\\.)?AccessibilityService\\b", source):
+    if re.search(r":\s*(?:android\.accessibilityservice\.)?AccessibilityService\b", source):
         errors.append(
             f"SafeMobile must not implement AccessibilityService: {path.relative_to(ROOT)}."
         )
@@ -97,6 +97,18 @@ for path in (ROOT / "app" / "src" / "main").rglob("*.kt"):
 # Device Posture may audit metadata and open Settings, but must never automate settings,
 # inspect screen/notification content, change another app's policy, or contact a server.
 POSTURE_SOURCE = ROOT / "app/src/main/java/com/vibesync/antivirus/core/posture"
+POSTURE_INSPECTOR = POSTURE_SOURCE / "DevicePostureInspector.kt"
+if not POSTURE_INSPECTOR.is_file():
+    errors.append("Device Posture must include its metadata-only AccessibilityManager inspector.")
+else:
+    posture_inspector_source = POSTURE_INSPECTOR.read_text(encoding="utf-8")
+    if not re.search(r"\bAccessibilityManager\b", posture_inspector_source) or not re.search(
+        r"\bgetEnabledAccessibilityServiceList\s*\(", posture_inspector_source
+    ):
+        errors.append(
+            "Device Posture must read enabled accessibility services using "
+            "AccessibilityManager.getEnabledAccessibilityServiceList()."
+        )
 posture_forbidden = (
     r"\b(?:rootInActiveWindow|AccessibilityNodeInfo|NotificationListenerService)\b",
     r"\b(?:performGlobalAction|dispatchGesture|performAction|getRootInActiveWindow|bindService)\s*\(",
