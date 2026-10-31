@@ -141,13 +141,6 @@ internal fun ScanHistoryPanel(audits: List<ScanAudit>) {
 @Composable
 internal fun OverlayRiskReviewPanel() {
     val context = LocalContext.current
-    fun openOfficialWebsite(url: String) {
-        runCatching {
-            context.startActivity(Intent(Intent.ACTION_VIEW, android.net.Uri.parse(url)))
-        }.onFailure {
-            Toast.makeText(context, R.string.uninstall_no_settings, Toast.LENGTH_LONG).show()
-        }
-    }
     val prefs = remember(context) {
         context.getSharedPreferences(OverlayRiskReviewManager.PREFS_NAME, Context.MODE_PRIVATE)
     }
@@ -321,6 +314,13 @@ internal fun SafeMobileSettingsPanel(
     onAppThemeChanged: (AppTheme) -> Unit = {}
 ) {
     val context = LocalContext.current
+    fun openOfficialWebsite(url: String) {
+        runCatching {
+            context.startActivity(Intent(Intent.ACTION_VIEW, android.net.Uri.parse(url)))
+        }.onFailure {
+            Toast.makeText(context, R.string.uninstall_no_settings, Toast.LENGTH_LONG).show()
+        }
+    }
     val activity = context as? Activity
     var languageMenuExpanded by remember { mutableStateOf(false) }
     var localeOverrideTag by remember { mutableStateOf(LocalePreferences.overrideTag(context)) }
