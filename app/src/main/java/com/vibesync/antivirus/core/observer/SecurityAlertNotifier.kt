@@ -53,9 +53,11 @@ object SecurityAlertNotifier {
         if (com.vibesync.antivirus.core.security.TrustedAppStore(context).isTrusted(packageName)) return
         if (!runCatching { SystemPackageGuard.isUserInstalled(context, packageName) }.getOrDefault(false)) return
         val local = com.vibesync.antivirus.core.locale.LocalePreferences.wrap(context)
+        val contributionPromptOnly = com.vibesync.antivirus.core.security.GlobalThreatIntelligenceConsent.isEnabled(context) &&
+            sha256?.matches(Regex("[0-9a-fA-F]{64}")) == true
         show(local, eventId, local.getString(R.string.security_alert_malware_title),
             local.getString(R.string.security_alert_malware_body), packageName, R.string.voice_alert_malware_detected, true,
-            sha256 = sha256)
+            sha256 = sha256, contributionPromptOnly = contributionPromptOnly)
     }
 
     suspend fun notifySuspiciousApp(context: Context, packageName: String, eventId: String) {
@@ -90,14 +92,15 @@ object SecurityAlertNotifier {
 
     private fun show(context: Context, eventId: String, title: String, body: String,
                      packageName: String?, voiceResource: Int, confirmed: Boolean,
-                     testMode: Boolean = false, sha256: String? = null) {
+                     testMode: Boolean = false, sha256: String? = null,
+                     contributionPromptOnly: Boolean = false) {
         val app = context.applicationContext
         SecurityVoiceAlert.speakIfEnabled(app, voiceResource)
         val enabled = app.getSharedPreferences(SafeMobileApp.SECURITY_PREFS, Context.MODE_PRIVATE)
             .getBoolean(SafeMobileApp.KEY_SECURITY_ALERTS_ENABLED, false)
-        if (!enabled && !testMode) return
+        if (!enabled && !testMode && !contributionPromptOnly) return
         InstallScanNotifications.escalated(eventId)
-        if (confirmed && InstallScanNotifications.claimAlarm(eventId)) {
+        if (confirmed && enabled && InstallScanNotifications.claimAlarm(eventId)) {
             Log.d(TAG, if (testMode) "Manual siren playback start" else "Verified threat siren playback start")
             SecurityIncidentSiren.start(app)
         }
