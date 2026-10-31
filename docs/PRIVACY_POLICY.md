@@ -8,7 +8,7 @@
 
 ## 1. Overview: scanning stays on your device
 
-SafeMobile's **core scanning works 100% offline**. Readable APKs, installed-app information, user-selected files, hashes, local signature checks, scan verdicts and scan history are processed on the device. **SafeMobile does not transmit scan data, scanned file contents, file hashes, file paths, Android ID, device fingerprints, permission/posture snapshots, or telemetry to a developer-operated server.** No developer analytics, advertisements or crash-reporting SDK is intentionally integrated in the v1.0.18 release.
+SafeMobile's **core scanning works 100% offline**. Readable APKs, installed-app information, user-selected files, hashes, local signature checks, scan verdicts and scan history are processed on the device. **SafeMobile does not transmit scan data, scanned file contents, file hashes, file paths, Android ID, device fingerprints, permission/posture snapshots, or telemetry to a developer-operated server.** No developer analytics, advertisements or crash-reporting SDK is intentionally integrated in the v1.0.20 release.
 
 **The whole app is not completely offline.** Optional signed threat-definition downloads and research ML-candidate updates use HTTPS to public GitHub-hosted services. User-initiated purchases use **Google Play Billing**. Those third parties and network infrastructure can receive ordinary connection data, including network/IP metadata. SafeMobile does not control their independent retention practices. Core scans do not depend on these connections.
 

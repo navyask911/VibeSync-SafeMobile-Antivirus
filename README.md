@@ -112,7 +112,7 @@ Its **Zero-Binary Repository** rule keeps raw malware samples outside the Git tr
 
 CI includes version guards, localization checks, offline tooling tests, lint, builds, and Android instrumented tests. Signed releases use private signing credentials and an independent release workflow.
 
-**Package:** `com.vibesync.antivirus` · **Version:** `1.0.18` · **Version code:** `20261111` · **Android:** minSdk 26 / targetSdk 36.
+**Package:** `com.vibesync.antivirus` · **Version:** `1.0.20` · **Version code:** `20261113` · **Android:** minSdk 26 / targetSdk 36.
 
 ## Responsible Security Disclosure
 
