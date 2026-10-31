@@ -73,33 +73,28 @@ jobs:
       - name: Test bundled YARA rules before production build
         run: ./gradlew --no-daemon testOfflineDebugUnitTest
 
-      - name: Stage SHA-256-pinned research model for offline bundling
+      - name: Validate 215-feature model provenance and production gating
         shell: bash
         run: |
           set -euo pipefail
-          model_url="https://github.com/navyask911/safemobile-Antivirus-Trained-ML-Data-of-Android-malware/releases/download/v1.0.1-model/malware_model.tflite"
-          curl -fL --proto '=https' --tlsv1.2 --retry 3 --max-time 90 -o app/src/main/assets/malware_model.tflite "$model_url"
-          echo "8b66adaf01a939c26d5a756e66f53fe0d6e85e1a06ec97166579138c6ce47061  app/src/main/assets/malware_model.tflite" | sha256sum -c -
-          test "$(wc -c < app/src/main/assets/malware_model.tflite)" -eq 18584
           python3 - <<'PY'
-          import hashlib,json
+          import hashlib, json
           from pathlib import Path
           root=Path("app/src/main/assets")
           schema_bytes=(root/"feature_schema.json").read_bytes()
           assert hashlib.sha256(schema_bytes).hexdigest()=="ffb386be14adf8c0af1bb96032e5485fcc8fd5b401a24488c5896e2d5ea425ac"
           schema=json.loads(schema_bytes)
           assert list(schema)==[str(i) for i in range(215)]
-          meta={
-            "schema_version":1,"feature_count":215,
-            "features":[schema[str(i)] for i in range(215)],
-            "model_sha256":"8b66adaf01a939c26d5a756e66f53fe0d6e85e1a06ec97166579138c6ce47061",
-            "status":"research_unvalidated","trained":True,"validated":False,
-            "production_ready":False,"threshold":0.5,"source_model_tag":"v1.0.1-model",
-            "warning":"Research-only Drebin model; historical test metrics do not establish modern malware efficacy. Inference remains inactive pending independent validation."
-          }
-          (root/"malware_model.json").write_text(json.dumps(meta,indent=2)+"\n",encoding="utf-8")
-          print("Pinned 215-feature research model staged without enabling production inference.")
+          meta=json.loads((root/"malware_model.json").read_text(encoding="utf-8"))
+          assert meta["features"]==[schema[str(i)] for i in range(215)]
+          assert meta["feature_count"]==215 and meta["model_sha256"]=="8b66adaf01a939c26d5a756e66f53fe0d6e85e1a06ec97166579138c6ce47061"
+          assert meta["trained"] and not meta["dummy_untrained"]
+          assert meta["status"]=="research_candidate" and not meta["validated"] and not meta["production_ready"]
+          assert not (root/"malware_model.tflite").exists(), "Legacy source model must not shadow generated asset"
+          print("Verified source: 215-feature trained research model with production risk scoring disabled.")
           PY
+          # app/build.gradle.kts stages the exact SHA-256-pinned 18,584-byte
+          # release model as a generated asset during the following Gradle build.
 
       - name: Build production offline AAB
         env:
@@ -152,8 +147,11 @@ jobs:
                   "8b66adaf01a939c26d5a756e66f53fe0d6e85e1a06ec97166579138c6ce47061"):
                   raise SystemExit("SAFE STOP: bundled model differs from pinned v1.0.1.")
               meta=json.loads(z.read("base/assets/malware_model.json"))
-              if meta.get("validated") or meta.get("production_ready") or meta.get("status")!="research_unvalidated":
-                  raise SystemExit("SAFE STOP: unvalidated research model falsely promoted.")
+              if (meta.get("validated") or meta.get("production_ready") or
+                  meta.get("status")!="research_candidate" or
+                  meta.get("dummy_untrained") is not False or meta.get("feature_count")!=215 or
+                  meta.get("model_sha256")!="8b66adaf01a939c26d5a756e66f53fe0d6e85e1a06ec97166579138c6ce47061"):
+                  raise SystemExit("SAFE STOP: unexpected ML metadata or unvalidated research model falsely promoted.")
               print("Signed AAB contains Billing 8.3.0, pinned 18KB model, 215 schema, reviewed YARA and no hash DB.")
           PY
           version_name="$(sed -nE 's/^[[:space:]]*versionName = "([^"]+)".*/\1/p' app/build.gradle.kts | head -n 1)"
