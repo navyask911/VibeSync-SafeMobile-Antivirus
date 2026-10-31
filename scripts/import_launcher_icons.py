@@ -132,13 +132,13 @@ def import_adaptive(z: zipfile.ZipFile, entries, root: Path, staged: Path) -> li
         resources = []
         all_ok = True
         for kind, name in refs:
-            if existing_resource(root, kind, name):
-                continue
             if kind in ("drawable", "mipmap"):
                 candidates = [e for e in entries if not e.is_dir()
                               and PurePosixPath(e.filename).name.rsplit(".", 1)[0] == name
                               and any(part == kind or part.startswith(kind + "-") for part in safe_parts(e.filename))]
                 if not candidates:
+                    if existing_resource(root, kind, name):
+                        continue
                     all_ok = False
                     break
                 for res in candidates:
@@ -159,13 +159,14 @@ def import_adaptive(z: zipfile.ZipFile, entries, root: Path, staged: Path) -> li
                     except ET.ParseError:
                         continue
                     color_nodes.extend(c for c in values if c.tag == "color" and c.attrib.get("name") == name)
-                if not color_nodes:
+                if color_nodes:
+                    values_root = ET.Element("resources")
+                    values_root.append(color_nodes[0])
+                    payload = ET.tostring(values_root, encoding="utf-8", xml_declaration=True)
+                    resources.append((f"app/src/main/res/values/launcher_imported_{name}.xml", payload))
+                elif not existing_resource(root, kind, name):
                     all_ok = False
                     break
-                values_root = ET.Element("resources")
-                values_root.append(color_nodes[0])
-                payload = ET.tostring(values_root, encoding="utf-8", xml_declaration=True)
-                resources.append((f"app/src/main/res/values/launcher_imported_{name}.xml", payload))
         if not all_ok:
             print(f"WARNING: unresolved resources in {info.filename}; retained existing adaptive icon.")
             continue
