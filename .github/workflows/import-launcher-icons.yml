@@ -1,0 +1,95 @@
+name: Import official SafeMobile launcher icons
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "app_icons.zip"
+      - "app_icons.zip.zip"
+      - "scripts/import_launcher_icons.py"
+      - ".github/workflows/import-launcher-icons.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: safemobile-official-icon-import
+  cancel-in-progress: false
+
+jobs:
+  import-icons:
+    if: github.repository == 'navyask911/VibeSync-SafeMobile-Antivirus'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate and import icons in temporary scratch space
+        id: import
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/safemobile-icons"
+          python3 scripts/import_launcher_icons.py \
+            --root . \
+            --scratch "$RUNNER_TEMP/safemobile-icons" \
+            --report "$RUNNER_TEMP/icon-import-report.json" \
+            | tee "$RUNNER_TEMP/icon-import.log"
+          archive="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["archive_path"])' "$RUNNER_TEMP/icon-import-report.json")"
+          echo "archive=$archive" >> "$GITHUB_OUTPUT"
+          python3 - "$RUNNER_TEMP/icon-import-report.json" <<'PY'
+          import json,sys
+          report=json.load(open(sys.argv[1],encoding="utf-8"))
+          density_files=[p for p in report["copied_files"]
+                         if "/mipmap-" in p and p.endswith(".png")]
+          if len(density_files) != 10:
+              raise SystemExit(f"SAFE STOP: expected 10 launcher density PNGs, got {len(density_files)}")
+          if report["play_store_icon"] != "docs/assets/safemobile-playstore-icon.png":
+              raise SystemExit("SAFE STOP: Play Store artwork missing")
+          print("Validated 5 density pairs and the 512x512 Play Store icon.")
+          print("Adaptive resources updated:", report["adaptive_icons_updated"])
+          PY
+
+      - name: Commit launcher assets and delete uploaded archive
+        env:
+          ARCHIVE: ${{ steps.import.outputs.archive }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            app/src/main/res/mipmap-mdpi/ic_launcher.png app/src/main/res/mipmap-mdpi/ic_launcher_round.png \
+            app/src/main/res/mipmap-hdpi/ic_launcher.png app/src/main/res/mipmap-hdpi/ic_launcher_round.png \
+            app/src/main/res/mipmap-xhdpi/ic_launcher.png app/src/main/res/mipmap-xhdpi/ic_launcher_round.png \
+            app/src/main/res/mipmap-xxhdpi/ic_launcher.png app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png \
+            app/src/main/res/mipmap-xxxhdpi/ic_launcher.png app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png \
+            docs/assets/safemobile-playstore-icon.png
+          if [[ -d app/src/main/res/mipmap-anydpi-v26 ]]; then
+            git add app/src/main/res/mipmap-anydpi-v26/*.xml || true
+          fi
+          git add app/src/main/res/drawable* app/src/main/res/values/launcher_imported_*.xml 2>/dev/null || true
+          git rm -- "$ARCHIVE"
+          git diff --cached --check
+          git commit -m "chore(branding): import official SafeMobile launcher icons"
+          git push origin HEAD:main
+
+      - name: Dispatch Android CI for final icon commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run android-ci.yml --ref main
+
+      - name: Clean up ephemeral staging
+        if: always()
+        run: rm -rf "$RUNNER_TEMP/safemobile-icons" "$RUNNER_TEMP/icon-import-report.json" "$RUNNER_TEMP/icon-import.log"
