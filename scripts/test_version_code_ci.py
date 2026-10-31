@@ -20,7 +20,7 @@ class VersionGuardTests(unittest.TestCase):
             if args == ("git", "show", tag + ":app/build.gradle.kts"):
                 return "versionCode = 20261109"
             if args == ("git", "diff", "--name-only", "HEAD", tag, "--", "app"):
-                return "app/src/androidTest/java/FooTest.kt\\napp/src/test/java/BarTest.kt"
+                return "app/src/androidTest/java/FooTest.kt\napp/src/test/java/BarTest.kt"
             raise AssertionError(f"Unexpected Git query: {args}")
         with patch.object(subject, "run", side_effect=fake_git), (
                 patch.object(subject.Path, "read_text", return_value="versionCode = 20261109")):
@@ -36,7 +36,7 @@ class VersionGuardTests(unittest.TestCase):
             if args == ("git", "show", tag + ":app/build.gradle.kts"):
                 return "versionCode = 20261109"
             if args == ("git", "diff", "--name-only", "HEAD", tag, "--", "app"):
-                return "app/src/androidTest/Foo.kt\\napp/src/main/assets/malware_model.json"
+                return "app/src/androidTest/Foo.kt\napp/src/main/assets/malware_model.json"
             raise AssertionError(args)
         with patch.object(subject, "run", side_effect=fake_git), (
                 patch.object(subject.Path, "read_text", return_value="versionCode = 20261109")):
