@@ -27,7 +27,7 @@ if '.put("sha256", sha256)' not in donor or '.put("features", features)' not in 
     errors.append("The JSON payload must contain the malware hash and feature vector.")
 if ".followRedirects(false)" not in donor or ".followSslRedirects(false)" not in donor:
     errors.append("Contribution requests must not forward the payload through redirects.")
-for pattern in (r"ghp_[A-Za-z0-9]{20,}", r"github_pat_[A-Za-z0-9_]{20,}", r"Authorization\\s*[:=]"):
+for pattern in (r"ghp_[A-Za-z0-9]{20,}", r"github_pat_[A-Za-z0-9_]{20,}", r"Authorization\s*[:=]"):
     if re.search(pattern, donor, re.IGNORECASE):
         errors.append("A GitHub token or authorization credential was found in the Android client.")
 for field in ('"packageName"', '"deviceId"', '"androidId"', '"location"'):
@@ -44,6 +44,6 @@ if "EXTRA_SHA256" not in notifier:
 
 if errors:
     print("Global Threat Intelligence privacy guard FAILED:", file=sys.stderr)
-    print("\\n".join("- " + item for item in errors), file=sys.stderr)
+    print("\n".join("- " + item for item in errors), file=sys.stderr)
     raise SystemExit(1)
 print("Global Threat Intelligence guard passed: OFF by default, per-sample consent, fixed HTTPS Worker, 215 binary features, no Android GitHub credentials.")
