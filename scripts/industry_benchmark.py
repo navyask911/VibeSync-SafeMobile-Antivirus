@@ -128,6 +128,11 @@ def summarize(a):
     unread=sum(x["verdict"]=="NOT_SCANNED" for x in results.values())
     good=unread==0
     pct=lambda xs,flags:round(100*sum(x["verdict"] in flags for x in xs)/len(xs),3)
+    research=[x for x in results.values() if isinstance(x.get("research_ml_probability"),(int,float))
+        and not isinstance(x.get("research_ml_probability"),bool)
+        and 0<=x["research_ml_probability"]<=1]
+    research_valid=len(research)==len(results)
+    research_detected=lambda subset:round(100*sum(x["research_ml_probability"]>=0.5 for x in subset)/len(subset),3)
     output=dict(status="MEASURED" if good else "INCOMPLETE",
         timestamp_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),
         total_apps=200,benign_apps=100,malicious_apps=100,not_scanned=unread,
@@ -137,6 +142,10 @@ def summarize(a):
         triage_fpr_percent=pct(b,("THREAT","SUSPICIOUS")) if good else None,
         mean_latency_ms=round(statistics.fmean(x["duration_ms"] for x in results.values()),2) if good else None,
         ml_samples_scored=sum(x.get("ml_scored",False) for x in results.values()),
+        research_ml_samples_scored=len(research),
+        research_ml_tpr_percent=research_detected([x for x in research if x["label"]=="malicious"]) if research_valid else None,
+        research_ml_fpr_percent=research_detected([x for x in research if x["label"]=="benign"]) if research_valid else None,
+        research_ml_threshold=0.5,
         yara_states=sorted(set(x.get("yara_state","UNKNOWN") for x in results.values())),
         plan_sha256=digest(plan_bytes),provenance=plan["provenance"])
     save(a.output_json,output)
@@ -144,6 +153,7 @@ def summarize(a):
     report+="Read-only Android emulator APK scans (samples NEVER installed/executed). "
     report+="THREAT counts as a confirmed detection; SUSPICIOUS counts only for triage.\n\n"
     report+="## Benchmark result\n\n~~~json\n"+json.dumps(output,indent=2,sort_keys=True)+"\n~~~\n\n"
+    report+="Research ML scores are independent of production threat verdicts; ML-only rates are shown only if all 200 samples were scored. "
     report+="Models/definitions not active in the scanned build cannot contribute to measured efficacy. "
     report+="Results apply only to this corpus, emulator and commit.\n"
     a.output_markdown.parent.mkdir(parents=True,exist_ok=True)

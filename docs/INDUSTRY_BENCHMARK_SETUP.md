@@ -28,3 +28,7 @@ Confirmed TPR = 100 malware candidates with THREAT / 100. Confirmed FPR = benign
 An external research model with 215 Drebin features is available from the separate ML repository. The app currently bundles an untrained 32-input model; its ML inference is disabled. Real on-device deployment requires independent validation of the exact model, feature schema and operating threshold before changing the production readiness metadata. A reported 97.45% research holdout figure is not a SafeMobile detection benchmark measurement.
 
 The hidden Settings card is available after seven taps on the version label. It reads a report embedded at build time; install a later version to display subsequently published benchmark results.
+
+## Experimental 215-feature model in this pilot
+
+The 18,584-byte Drebin research model is fetched and checksum verified **at build time**; no network is used for device inference. The app's 215-feature extractor runs on the archived APK, and research-only probabilities are recorded separately. This does **not** activate research predictions in production threat verdicts. The published TPR/FPR from PackageScanner are the current scanner's live results; the report also includes research-only ML coverage and, only if every sample gets a valid research probability, separate ML-only sensitivity/false-positive values. A partial research model evaluation cannot be misrepresented as 200-scanned ML efficacy.

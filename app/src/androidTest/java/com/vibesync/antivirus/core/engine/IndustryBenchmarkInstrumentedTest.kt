@@ -30,6 +30,7 @@ class IndustryBenchmarkInstrumentedTest {
                 app.database.malwareHashDao(), app.database.threatFeedSyncStateDao()),
             hashDatabaseManager = app.hashDatabaseManager)
         val outputs = JSONArray()
+        val researchScanner = MachineLearningScanner(app)
         for (i in 0 until inputs.length()) {
             val sample = inputs.getJSONObject(i)
             val id = sample.getString("sample_id")
@@ -49,6 +50,9 @@ class IndustryBenchmarkInstrumentedTest {
             val sha256 = sha.digest().joinToString("") { "%02x".format(it) }
             assertEquals(sample.getString("sha256"), sha256)
             val result = scanner.scanFile(apk, persistAllAudit = false)
+            // Independently score the pinned 215-feature research model. This score
+            // is never passed into PackageScanner's production verdict.
+            val research = researchScanner.scanResearchCandidate(apk)
             // Trust-list bypasses and missing hashes are unscanned, never counted as clean.
             val actualVerdict = if (!result.trustedByUser && result.sha256 == sha256)
                 result.verdict.name else "NOT_SCANNED"
@@ -58,7 +62,8 @@ class IndustryBenchmarkInstrumentedTest {
                 .put("verdict", actualVerdict)
                 .put("duration_ms", result.durationMs)
                 .put("yara_state", result.riskReport?.yaraResult?.state?.name ?: "NOT_SCANNED")
-                .put("ml_scored", result.mlProbability != null))
+                .put("ml_scored", result.mlProbability != null)
+                .put("research_ml_probability", research?.probability?.toDouble() ?: JSONObject.NULL))
         }
         File(dir, "batch-results.json").writeText(JSONObject().put("samples", outputs).toString())
     }
