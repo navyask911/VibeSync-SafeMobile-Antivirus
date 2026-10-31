@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="official_website_title">Resmî web sitesi</string>
-    <string name="official_website_visit">VibeSyncro.com'u ziyaret edin</string>
+    <string name="official_website_visit">VibeSyncro.com adresini ziyaret edin</string>
     <string name="official_website_product">SafeMobile ürün sayfası</string>
     <string name="official_website_about">VibeSyncro hakkında</string>
 </resources>
