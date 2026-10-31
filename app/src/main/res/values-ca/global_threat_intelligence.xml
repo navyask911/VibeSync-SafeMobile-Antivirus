@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="global_threat_intelligence_title">Contribueix a la intel·ligència global d'amenaces (opcional)</string>
+    <string name="global_threat_intelligence_description">Desactivat de manera predeterminada. Quan s'activa, SafeMobile demana confirmació abans de cada aportació. No s'envia res fins que toques Dona. Només es comparteixen el hash SHA-256 del programari maliciós i 215 característiques de comportament.</string>
+    <string name="global_threat_intelligence_donate_message">Ajuda a protegir altres persones donant anònimament la signatura d'aquest fitxer maliciós a la nostra xarxa d'entrenament d'IA.</string>
+    <string name="global_threat_intelligence_donate">Dona</string>
+    <string name="global_threat_intelligence_decline">Rebutja</string>
+</resources>

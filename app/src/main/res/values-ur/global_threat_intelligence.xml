@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="global_threat_intelligence_title">عالمی خطرات کی معلومات میں تعاون کریں (اختیاری)</string>
+    <string name="global_threat_intelligence_description">یہ پہلے سے بند ہے۔ فعال کرنے پر بھی SafeMobile ہر تعاون سے پہلے اجازت مانگے گا۔ عطیہ کریں دبانے تک کچھ بھی نہیں بھیجا جائے گا۔ صرف میلویئر کا SHA-256 ہیش اور 215 رویّاتی خصوصیات شیئر کی جائیں گی۔</string>
+    <string name="global_threat_intelligence_donate_message">اس نقصان دہ فائل کے دستخط کو ہمارے AI تربیتی نیٹ ورک میں گمنام طور پر عطیہ کرکے دوسروں کے تحفظ میں مدد کریں۔</string>
+    <string name="global_threat_intelligence_donate">عطیہ کریں</string>
+    <string name="global_threat_intelligence_decline">انکار کریں</string>
+</resources>

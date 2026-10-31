@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="global_threat_intelligence_title">Doprinesite globalnim obavještajnim podacima o prijetnjama (neobavezno)</string>
+    <string name="global_threat_intelligence_description">Zadano je isključeno. Kada se uključi, SafeMobile traži potvrdu prije svakog doprinosa. Ništa se ne šalje dok ne dodirnete Doniraj. Dijele se samo SHA-256 sažetak zlonamjernog softvera i 215 značajki ponašanja.</string>
+    <string name="global_threat_intelligence_donate_message">Pomozite zaštititi druge anonimnim doniranjem potpisa ove zlonamjerne datoteke našoj AI mreži za treniranje.</string>
+    <string name="global_threat_intelligence_donate">Doniraj</string>
+    <string name="global_threat_intelligence_decline">Odbij</string>
+</resources>

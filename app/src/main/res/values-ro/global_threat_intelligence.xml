@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="global_threat_intelligence_title">Contribuie la informațiile globale despre amenințări (opțional)</string>
+    <string name="global_threat_intelligence_description">Dezactivat implicit. Când este activat, SafeMobile cere confirmarea înaintea fiecărei contribuții. Nu se trimite nimic până când apeși Donează. Se partajează doar hash-ul SHA-256 al programului malware și 215 caracteristici comportamentale.</string>
+    <string name="global_threat_intelligence_donate_message">Ajută la protejarea altora donând anonim semnătura acestui fișier malițios către rețeaua noastră de antrenare AI.</string>
+    <string name="global_threat_intelligence_donate">Donează</string>
+    <string name="global_threat_intelligence_decline">Refuză</string>
+</resources>

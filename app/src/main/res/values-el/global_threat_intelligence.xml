@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="global_threat_intelligence_title">Συνεισφορά στις παγκόσμιες πληροφορίες απειλών (προαιρετικό)</string>
+    <string name="global_threat_intelligence_description">Απενεργοποιημένο από προεπιλογή. Όταν ενεργοποιηθεί, το SafeMobile ζητά επιβεβαίωση πριν από κάθε συνεισφορά. Δεν αποστέλλεται τίποτα μέχρι να πατήσετε Δωρεά. Κοινοποιούνται μόνο το SHA-256 hash του κακόβουλου λογισμικού και 215 χαρακτηριστικά συμπεριφοράς.</string>
+    <string name="global_threat_intelligence_donate_message">Βοηθήστε στην προστασία άλλων προσφέροντας ανώνυμα την υπογραφή αυτού του κακόβουλου αρχείου στο δίκτυο εκπαίδευσης AI.</string>
+    <string name="global_threat_intelligence_donate">Δωρεά</string>
+    <string name="global_threat_intelligence_decline">Απόρριψη</string>
+</resources>

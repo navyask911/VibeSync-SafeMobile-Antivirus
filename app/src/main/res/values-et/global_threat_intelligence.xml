@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="global_threat_intelligence_title">Panusta ülemaailmsesse ohuteabesse (valikuline)</string>
+    <string name="global_threat_intelligence_description">Vaikimisi välja lülitatud. Sisselülitamisel küsib SafeMobile enne iga panustamist kinnitust. Midagi ei saadeta enne, kui vajutad Anneta. Jagatakse ainult pahavara SHA-256 räsi ja 215 käitumistunnust.</string>
+    <string name="global_threat_intelligence_donate_message">Aita teisi kaitsta, annetades selle pahatahtliku faili signatuuri anonüümselt meie tehisintellekti treeningvõrgule.</string>
+    <string name="global_threat_intelligence_donate">Anneta</string>
+    <string name="global_threat_intelligence_decline">Keeldu</string>
+</resources>

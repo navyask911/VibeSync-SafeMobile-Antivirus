@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="global_threat_intelligence_title">जागतिक धोका माहितीसाठी योगदान द्या (ऐच्छिक)</string>
+    <string name="global_threat_intelligence_description">डीफॉल्टनुसार बंद. सुरू केल्यावर प्रत्येक योगदानापूर्वी SafeMobile तुमची परवानगी मागेल. दान करा दाबेपर्यंत काहीही पाठवले जाणार नाही. केवळ मालवेअरचा SHA-256 हॅश आणि 215 वर्तनात्मक वैशिष्ट्ये सामायिक केली जातात.</string>
+    <string name="global_threat_intelligence_donate_message">या हानिकारक फाइलची स्वाक्षरी आमच्या AI प्रशिक्षण नेटवर्कला अनामिकपणे दान करून इतरांचे संरक्षण करण्यात मदत करा.</string>
+    <string name="global_threat_intelligence_donate">दान करा</string>
+    <string name="global_threat_intelligence_decline">नकार द्या</string>
+</resources>

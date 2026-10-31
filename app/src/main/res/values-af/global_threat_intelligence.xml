@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="global_threat_intelligence_title">Dra by tot globale bedreigingsintelligensie (opsioneel)</string>
+    <string name="global_threat_intelligence_description">Dit is by verstek af. Wanneer dit aangeskakel is, vra SafeMobile voor elke bydrae. Niks word gestuur voordat jy Skenk tik nie. Slegs die wanware se SHA-256-hash en 215 gedragskenmerke word gedeel.</string>
+    <string name="global_threat_intelligence_donate_message">Help om ander te beskerm deur die handtekening van hierdie kwaadwillige lêer anoniem aan ons KI-opleidingsnetwerk te skenk.</string>
+    <string name="global_threat_intelligence_donate">Skenk</string>
+    <string name="global_threat_intelligence_decline">Weier</string>
+</resources>

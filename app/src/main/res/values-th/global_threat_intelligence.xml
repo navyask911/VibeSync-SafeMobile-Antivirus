@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="global_threat_intelligence_title">ร่วมแบ่งปันข่าวกรองภัยคุกคามทั่วโลก (ไม่บังคับ)</string>
+    <string name="global_threat_intelligence_description">ปิดอยู่ตามค่าเริ่มต้น เมื่อเปิดใช้งาน SafeMobile จะขออนุญาตก่อนการส่งทุกครั้ง จะไม่มีการส่งข้อมูลจนกว่าคุณจะแตะบริจาค โดยจะแชร์เฉพาะค่าแฮช SHA-256 ของมัลแวร์และคุณลักษณะพฤติกรรม 215 รายการเท่านั้น</string>
+    <string name="global_threat_intelligence_donate_message">ช่วยปกป้องผู้อื่นด้วยการบริจาคลายเซ็นของไฟล์อันตรายนี้ให้เครือข่ายฝึก AI ของเราโดยไม่ระบุตัวตน</string>
+    <string name="global_threat_intelligence_donate">บริจาค</string>
+    <string name="global_threat_intelligence_decline">ปฏิเสธ</string>
+</resources>

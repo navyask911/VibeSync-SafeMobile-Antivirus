@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="global_threat_intelligence_title">ആഗോള ഭീഷണി വിവരങ്ങളിലേക്ക് സംഭാവന ചെയ്യുക (ഐച്ഛികം)</string>
+    <string name="global_threat_intelligence_description">സ്ഥിരമായി ഓഫാണ്. ഓൺ ചെയ്താലും ഓരോ സംഭാവനയ്ക്കും മുമ്പ് SafeMobile അനുമതി ചോദിക്കും. സംഭാവന ചെയ്യുക അമർത്തുന്നതുവരെ ഒന്നും അയയ്ക്കില്ല. മാൽവെയറിന്റെ SHA-256 ഹാഷും 215 പെരുമാറ്റ സവിശേഷതകളും മാത്രമാണ് പങ്കിടുന്നത്.</string>
+    <string name="global_threat_intelligence_donate_message">ഈ ദോഷകരമായ ഫയലിന്റെ സിഗ്നേച്ചർ ഞങ്ങളുടെ AI പരിശീലന ശൃംഖലയിലേക്ക് അജ്ഞാതമായി സംഭാവന ചെയ്ത് മറ്റുള്ളവരെ സംരക്ഷിക്കാൻ സഹായിക്കുക.</string>
+    <string name="global_threat_intelligence_donate">സംഭാവന ചെയ്യുക</string>
+    <string name="global_threat_intelligence_decline">നിരസിക്കുക</string>
+</resources>
