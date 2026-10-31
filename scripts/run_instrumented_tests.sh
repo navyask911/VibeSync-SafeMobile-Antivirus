@@ -107,8 +107,14 @@ if [[ "$EXPECTED_API" == "36" ]]; then
   heap=1024m
 fi
 
-fixture_args=()
-instrument_fixture_args=()
+# The 200-real-APK benchmark uses a separately staged batch.json and runs
+# IndustryBenchmarkInstrumentedTest explicitly in industry-benchmark.yml.
+# Normal emulator CI must run every other instrumentation test, but must not
+# invoke the corpus-only benchmark without its verified input set.
+# Never skip or ignore a failing ordinary test or synthesize benchmark data.
+benchmark_class="com.vibesync.antivirus.core.engine.IndustryBenchmarkInstrumentedTest"
+fixture_args=("-Pandroid.testInstrumentationRunnerArguments.notClass=$benchmark_class")
+instrument_fixture_args=(-e notClass "$benchmark_class")
 if [[ -f build/siren-test/SafeMobile-Siren-Test.apk ]]; then
   adb push build/siren-test/SafeMobile-Siren-Test.apk /data/local/tmp/SafeMobile-Siren-Test.apk
   fixture_args+=("-Pandroid.testInstrumentationRunnerArguments.sirenFixturePath=/data/local/tmp/SafeMobile-Siren-Test.apk")
