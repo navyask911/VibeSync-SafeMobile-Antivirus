@@ -58,7 +58,19 @@ Approved purchases credit **365-day device-local entitlements**, and multiple pu
 
 - [Signed hash update workflow](.github/workflows/update-malware-db.yml) is scheduled **every six hours**. It can optionally extract a limited batch of static research features and send them to the separate [MLOps repository](https://github.com/navyask911/safemobile-Antivirus-Trained-ML-Data-of-Android-malware), with credentials and API access supplied by the owner.
 - Receiving a batch **does not guarantee successful retraining or promotion every six hours**. Trained candidates must meet upstream evaluation gates and separately pass Android/modern-sample validation; a published research candidate is not active production protection.
-- [200-APK pilot](docs/BENCHMARK_REPORT.md): **NOT MEASURED** as of 31 October 2026. GitHub run [#1](https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/actions/runs/41171013990) failed on Android external-files access (`EACCES` opening `batch.json`) before report publication. There are **no verified TPR, FPR or scan-latency figures**. No independent certification or universal detection claim is made.
+- [200-APK pilot](docs/BENCHMARK_REPORT.md): **NOT MEASURED** pending a fully verified 200-APK run. The manually dispatched [Industry Benchmark #11](https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/actions/runs/41224653496) uses a pinned text-only malware manifest and ephemeral APK acquisition. Earlier runs failed before complete aggregation; **no TPR, FPR or mean scan-latency result is published**. Historical tracking is in the [annual benchmark ledger](docs/ANNUAL_BENCHMARK_RESULTS.md).
+
+## Security Validation & Annual Benchmarking
+
+SafeMobile's industry benchmark is designed to **scan 200 real Android APKs: 100 malicious-source samples and 100 benign F-Droid samples**. The workflow selects 100 validated Android packages from an immutable **500-SHA-256 text manifest** pinned to the `MalwareSamples/Android-Malware-Samples` upstream commit `cf802c63`. It uses **10 Android emulator matrix shards**, each processing 10 malicious and 10 benign APKs through the real on-device scanner. These are source-derived labels, not independent ground truth.
+
+**Zero-Binary Repository:** Only SHA-256 filenames, code and aggregate, nonbinary benchmark records belong in Git. Malware APKs are downloaded into temporary GitHub Actions runner storage, checked for `PK\\x03\\x04` ZIP magic, compiled `AndroidManifest.xml` and SHA-256 integrity, and deleted after the job. Encrypted ZIP containers, when encountered, are handled with `pyzipper` and the `infected` password in runner memory; sample APKs are never installed or executed. Raw sample binaries are **not** uploaded as GitHub artifacts.
+
+**2026 baseline: PENDING — Benchmark #11 in progress.** Actual TPR, FPR and average scan latency will be recorded only after all **10/10 shards** finish and the aggregator verifies **200/200 scans** without missing results. Research-model holdout accuracy is not a substitute for benchmark detection rates.
+
+- [Annual Benchmark Results — permanent year-by-year ledger](docs/ANNUAL_BENCHMARK_RESULTS.md)
+- [Current in-app Benchmark Report](docs/BENCHMARK_REPORT.md)
+- [Benchmark methodology and safeguards](docs/INDUSTRY_BENCHMARK_SETUP.md)
 
 ## Build and verify
 
