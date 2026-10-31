@@ -1,5 +1,7 @@
 package com.vibesync.antivirus.presentation
 
+import android.content.Intent
+import android.net.Uri
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -21,6 +23,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -47,6 +50,8 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
+private const val LIVE_DASHBOARD_URL = "https://navyask911.github.io/safemobile-Antivirus-Trained-ML-Data-of-Android-malware/"
+
 @Composable
 internal fun ThreatIntelligenceCard() {
     val app = LocalContext.current.applicationContext
@@ -58,6 +63,7 @@ internal fun ThreatIntelligenceCard() {
 /** Stacked metrics accommodate large fonts, RTL, and long translated labels without clipping. */
 @Composable
 internal fun ThreatIntelligenceCardContent(stats: ThreatIntelligenceStats?) {
+    val context = LocalContext.current
     val colors = MaterialTheme.colorScheme
     val locale = LocalConfiguration.current.locales[0]
     val integers = remember(locale) { NumberFormat.getIntegerInstance(locale) }
@@ -98,6 +104,16 @@ internal fun ThreatIntelligenceCardContent(stats: ThreatIntelligenceStats?) {
                 IntelligenceMetric(R.string.threat_intelligence_updated, updated, Icons.Outlined.Update)
             }
             HorizontalDivider(color = colors.primary.copy(alpha = 0.15f))
+            TextButton(onClick = {
+                // Informational and user-initiated only; scanning stays offline.
+                // The OS opens the external browser, not an in-app WebView.
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(LIVE_DASHBOARD_URL))
+                    .addCategory(Intent.CATEGORY_BROWSABLE)
+                runCatching { context.startActivity(intent) }
+            }, modifier = Modifier.align(Alignment.Start)) {
+                Text(stringResource(R.string.threat_intelligence_live_dashboard_link),
+                    style = MaterialTheme.typography.labelMedium)
+            }
             Text(stringResource(R.string.threat_intelligence_training_note),
                 style = MaterialTheme.typography.bodySmall, color = colors.onSurfaceVariant)
         }

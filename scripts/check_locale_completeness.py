@@ -91,6 +91,26 @@ for locale in LOCALES:
             if formats("".join(item.itertext())) != expected:
                 errors.append(f"{locale}: format mismatch in {key}/{quantity}")
 
+# v1.0.20: English and all 51 translated resource folders must expose a
+# genuinely localized dashboard label. The hardcoded HTTPS URL is not translatable.
+DASHBOARD_LABEL = "threat_intelligence_live_dashboard_link"
+dashboard_base, _ = read_resources(BASE / "values" / "live_dashboard.xml")
+dashboard_source = dashboard_base.get(DASHBOARD_LABEL)
+if dashboard_source is None:
+    errors.append("base live_dashboard.xml: missing label")
+for locale in LOCALES:
+    dashboard_labels, _ = read_resources(BASE / f"values-{locale}" / "live_dashboard.xml")
+    target = dashboard_labels.get(DASHBOARD_LABEL)
+    if target is None:
+        errors.append(f"{locale}: missing dashboard label")
+        continue
+    localized = "".join(target.itertext()).strip()
+    source_value = "".join(dashboard_source.itertext()).strip() if dashboard_source is not None else ""
+    if not localized or localized == source_value:
+        errors.append(f"{locale}: empty or English dashboard label fallback")
+    if formats(localized) != formats(source_value):
+        errors.append(f"{locale}: dashboard label format mismatch")
+
 # v1.0.16 uses a separate, small resource file per locale. Verify all 51 translations
 # are present, non-English fallbacks, XML-valid, and placeholder compatible.
 V116_KEYS = ("v116_scan_title", "v116_scan_local_no_match", "v116_score_meaning")

@@ -1,6 +1,6 @@
 # SafeMobile Antivirus — Privacy Policy
 
-**Effective / last reviewed: 31 October 2026**  
+**Effective / last reviewed: 1 November 2026**  
 **App:** SafeMobile Antivirus (`com.vibesync.antivirus`)  
 **Developer:** Navyask911 / VibeSync  
 **Privacy contact:** [Open a GitHub repository issue](https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/issues) (do not include private files, account details or malware samples).  
@@ -8,9 +8,11 @@
 
 ## 1. Overview: scanning stays on your device
 
-SafeMobile's **core scanning works 100% offline**. Readable APKs, installed-app information, user-selected files, hashes, local signature checks, scan verdicts and scan history are processed on the device. **SafeMobile does not transmit scan data, scanned file contents, file hashes, file paths, Android ID, device fingerprints, permission/posture snapshots, or telemetry to a developer-operated server.** No developer analytics, advertisements or crash-reporting SDK is intentionally integrated in the v1.0.18 release.
+SafeMobile's **core scanning works 100% offline**. Readable APKs, installed-app information, user-selected files, hashes, local signature checks, scan verdicts and scan history are processed on the device. **SafeMobile does not transmit scan data, scanned file contents, file hashes, file paths, Android ID, device fingerprints, permission/posture snapshots, or telemetry to a developer-operated server.** No developer analytics, advertisements or crash-reporting SDK is intentionally integrated in the v1.0.20 release.
 
 **The whole app is not completely offline.** Optional signed threat-definition downloads and research ML-candidate updates use HTTPS to public GitHub-hosted services. User-initiated purchases use **Google Play Billing**. Those third parties and network infrastructure can receive ordinary connection data, including network/IP metadata. SafeMobile does not control their independent retention practices. Core scans do not depend on these connections.
+
+**Live Threat Intelligence Dashboard:** [Open the public dashboard](https://navyask911.github.io/safemobile-Antivirus-Trained-ML-Data-of-Android-malware/). The Live Threat Intelligence Dashboard is a public website that displays aggregated, anonymous ML training statistics. It is not part of the Android app and collects no data from SafeMobile users' on-device scans. The app sends no APK bytes, scan history, hashes, local analytics or identifiers to this dashboard; tapping the link opens the device's external browser. Visiting a public GitHub Pages website can expose ordinary browser/network metadata (such as IP address) to GitHub and its infrastructure, independently of the app.
 
 ## 2. Data accessed and retained locally
 
