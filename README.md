@@ -1,103 +1,128 @@
-<div align="center">
+<p align="center">
+  <img src="docs/assets/safemobile-shield.svg" alt="SafeMobile Antivirus shield logo" width="116" height="116">
+</p>
 
-# 🛡️ SafeMobile Antivirus
+<h1 align="center">SafeMobile Antivirus</h1>
 
-### Local-first Android security. Your scans stay on your device.
+<p align="center">
+  <strong>Cybersecurity that stays on your device.</strong><br>
+  <em>100% offline core scanning. Zero scan telemetry. No cloud required for protection.</em>
+</p>
 
-**APK inspection · Signed threat definitions · DEX rules · Device posture · Incident response · 51 locale resource folders**
+<p align="center">
+  <a href="https://developer.android.com/about/versions/oreo"><img src="https://img.shields.io/badge/Android-8.0%2B-3DDC84?logo=android&amp;logoColor=white" alt="Android 8.0+"></a>
+  <a href="https://kotlinlang.org/"><img src="https://img.shields.io/badge/Language-Kotlin-7F52FF?logo=kotlin&amp;logoColor=white" alt="Kotlin"></a>
+  <a href="https://developer.android.com/compose"><img src="https://img.shields.io/badge/UI-Jetpack%20Compose-4285F4?logo=jetpackcompose&amp;logoColor=white" alt="Jetpack Compose"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0-2563EB" alt="Apache 2.0 License"></a>
+  <a href="docs/PRIVACY_POLICY.md"><img src="https://img.shields.io/badge/Privacy-100%25%20Offline%20Core-078B79?logo=shield&amp;logoColor=white" alt="Privacy: 100% offline core scanning"></a>
+  <a href=".github/workflows/android-ci.yml"><img src="https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/actions/workflows/android-ci.yml/badge.svg" alt="Android CI"></a>
+</p>
 
-[![Android](https://img.shields.io/badge/Android-API%2026%E2%80%9336-3DDC84?logo=android)](https://developer.android.com/)
-[![Kotlin](https://img.shields.io/badge/Kotlin-Jetpack%20Compose-7F52FF?logo=kotlin)](https://kotlinlang.org/)
-[![Privacy](https://img.shields.io/badge/Scanning-100%25%20on%20device-1FA67A)](docs/PRIVACY_POLICY.md)
-[![License](https://img.shields.io/badge/License-Apache--2.0-blue)](LICENSE)
-
-**v1.0.18 · versionCode 20261111 · Android 8.0+ · package `com.vibesync.antivirus`**
-
-[Verified signed AAB](https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/releases/tag/safemobile-v1.0.18-code20261111-run12) · [Privacy policy](docs/PRIVACY_POLICY.md) · [Report issues](https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/issues)
-
-</div>
+<p align="center">
+  <strong>Android 8.0+ · Kotlin · Jetpack Compose · Privacy-first security</strong><br>
+  <a href="docs/PRIVACY_POLICY.md">Privacy</a> ·
+  <a href="docs/BENCHMARK_REPORT.md">Measured results</a> ·
+  <a href="docs/ANNUAL_BENCHMARK_RESULTS.md">Annual benchmarks</a> ·
+  <a href="https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/issues">Report a problem</a>
+</p>
 
 ---
 
-## Privacy-first by design
+## Why SafeMobile?
 
-**100% offline scanning. Zero scan telemetry. No cloud malware scanning.** SafeMobile performs readable APK and file inspection, hash matching, DEX signature checks and device posture review locally. It does not upload APK bytes, file hashes, scan verdicts, scan history, permission snapshots or Android-ID-derived Pro bindings to a developer server. Room stores scan history on device; sensitive stored data uses Android Keystore-backed encryption where described in the [privacy policy](docs/PRIVACY_POLICY.md).
+**Powerful security should not come at the price of your privacy.**
 
-**Important distinction:** offline scanning does not mean the entire app never uses the internet. The app needs connectivity for **optional cryptographically verified threat-intelligence updates**, **optional research model downloads**, and **user-initiated Google Play Billing**. These services can expose ordinary request metadata (such as IP addresses) to GitHub, network intermediaries or Google according to their own policies. Core scanning remains usable without connectivity using already available local indicators.
+Some mobile security tools depend on remote lookups, user accounts or analytics. SafeMobile takes a different approach: **inspect accessible files and apps locally, retain scan history on the device, and keep core protection working without an internet connection.**
 
-## Security capabilities
+SafeMobile does **not** send your APK contents, local file hashes, scan verdicts or device-posture snapshots to a developer-operated server. No developer analytics, ad SDK or crash-reporting telemetry is intentionally integrated into the documented release.
 
-| Layer | What v1.0.18 actually does |
-|---|---|
-| 🔎 **Local hash intelligence** | Computes file digests on device and compares with approved local indicators. SHA-256-only MalwareBazaar-derived database releases are prepared approximately every **6 hours by GitHub Actions**, subject to authorization, API availability and successful signing. The phone checks for signed releases and validates their Ed25519 signature before use; updates are not guaranteed every six hours. No malware samples ship in the AAB. |
-| 🧬 **DEX/YARA-compatible rules** | Inspects APK DEX content with a **bounded Kotlin YARA-compatible literal/Boolean subset**, including adapted MIT-attributed rules. **Not** the full native libyara engine; findings are advisory, not conclusive malware verdicts. |
-| 🧠 **On-device Drebin ML** | Packages an **18,584-byte, SHA-256-pinned trained research TensorFlow Lite model with exactly 215 static features**, with APK feature extraction done locally. **Not activated for production malware classification**: `validated=false` and `production_ready=false`. Only a separately gated research benchmark may score the candidate; the published research holdout is not a claim about live malware detection. |
-| 🕵️ **Install and sideload review** | Monitors supported new-package events, flags risky permissions and installation sources and allows inspection of evidence before making a decision. Android and OEM restrictions may limit delivery. |
-| 🛡️ **Device Posture audit** | Reviews visible **Accessibility services, Device Administrators, notification listeners and overlay capabilities**, and provides Android settings routes. Elevated privilege is not itself proof of malware. |
-| 🧊 **Local quarantine** | Supports encrypted app-private quarantine where available, guided restoration and user-controlled removal. No automatic deletion of user files. |
+> **Offline-first, not network-free:** optional signed threat-intelligence updates, optional research model downloads and user-initiated Google Play Billing use network services. Their providers can receive ordinary request/IP metadata. None is required for core offline scanning. [Read the privacy policy](docs/PRIVACY_POLICY.md).
 
-### Incident response
+## Security Capabilities
 
-A detected security incident may trigger a **five-second alarm-stream siren**, an Android notification and an optional **full-screen alert** with a user-directed uninstall action. Audio routing, volume, notification delivery, full-screen intent eligibility and uninstall confirmation remain controlled by Android and the device manufacturer. SafeMobile **does not silently uninstall apps or override Android permissions**.
+- 🛡️ **Multi-Engine Inspection — defense in depth.** **Local SHA-256 threat indicators** and **DEX static analysis** using a bounded Kotlin YARA-compatible rule subset. The signed hash database pipeline is scheduled about **every 6 hours**; actual releases depend on API access, validation and signing. A **215-feature TensorFlow Lite Drebin research model** is bundled, but **not active for production malware verdicts**. Its historical **97.45% Drebin holdout accuracy** is a research result, *not* SafeMobile's measured detection rate. [ML activation gates](docs/ML_MODEL_ACTIVATION.md).
+- 🚨 **Incident Response — alert fast, act deliberately.** A **five-second alarm-stream siren**, security notification, **eligible full-screen alert**, and **user-confirmed uninstall prompt** can accompany detected incidents. Android and OEM restrictions govern audio, alert delivery and uninstall permissions; there is no forced takeover or silent removal.
+- 🔍 **Device Posture Audit — visibility into risky privileges.** Inspect available **Accessibility services, Device Administrators, notification listeners and overlay permissions**, with installation-source and permission-risk signals. These are advisory indicators, **not proof of spyware**.
+- 🌍 **Global & Accessible — designed for more users.** **51 bundled locale resource folders**, **Midnight / Light / OLED** themes, Material 3 Compose screens, adaptable typography and screen-reader support. CI checks resource completeness; individual translations and screen layouts still require human review.
+- 🤖 **Research MLOps — improvement with validation gates.** GitHub Actions can extract limited static research features from available MalwareBazaar samples and dispatch them to the separate [ML research repository](https://github.com/navyask911/safemobile-Antivirus-Trained-ML-Data-of-Android-malware). **Retraining and deployment are conditional**, not automatic promises; research candidates do not become active production classifiers without independent validation.
+- 💎 **SafeMobile Pro — optional, private and device-bound.** A **365-day local entitlement** with an **intended ₹299 India list price**, subject to the actual Google Play checkout price. No developer cloud entitlement account or backup; a consumed pass **cannot be restored** after uninstall, clearing app data or loss of local keys. Pro changes optional research-model update cadence, **not** the active detection engine.
+- 🧊 **Private Quarantine — your files, your decision.** App-private encrypted quarantine where supported, guided restore and user-controlled removal. No automatic deletion of personal files.
 
-### Accessible and adaptable
+### Engineering architecture
 
-- **51 bundled locale folders** with format/placeholder completeness checks in CI. Localization resources span scripts including Kannada, Hindi, Tamil, Telugu, Japanese, Arabic and others; device-specific translation quality and layouts still need human QA.
-- **Three interface themes:** Midnight, Light and OLED, using Jetpack Compose Material 3.
-- Screen-reader descriptions, scalable typography and locally rendered analytics; actual accessibility varies by Android version and configuration.
-
-## SafeMobile Pro
-
-**Optional, not required for core protection.** `safemobile_pro_1_year` is a Google Play Billing **consumable**, not a recurring subscription. The intended **India list price is ₹299 per one-year pass**, but the authoritative local price, taxes, currency and availability are **whatever Google Play displays at checkout**. Do not advertise ₹299 as a guaranteed global price without confirming the active Play Console configuration.
-
-Approved purchases credit **365-day device-local entitlements**, and multiple purchased quantities can extend the local expiry. The SHA-256 hash of an app-scoped Android ID ties the entitlement to the current Android installation. Sensitive entitlement details are stored in Keystore-protected encrypted preferences. Google Play processes payments; SafeMobile does not store card numbers, bank details or raw purchase tokens as a persistent record.
-
-**Important:** consumed Pro passes cannot be restored after uninstalling, clearing app data, device reset or encryption-key loss. No cloud entitlement sync or account recovery is provided. The paywall explains this before purchase. Pro changes optional **research model download cadence** (weekly by default; daily for Pro), **not** live malware-classification capabilities.
-
-## Transparent automated research
-
-- [Signed hash update workflow](.github/workflows/update-malware-db.yml) is scheduled **every six hours**. It can optionally extract a limited batch of static research features and send them to the separate [MLOps repository](https://github.com/navyask911/safemobile-Antivirus-Trained-ML-Data-of-Android-malware), with credentials and API access supplied by the owner.
-- Receiving a batch **does not guarantee successful retraining or promotion every six hours**. Trained candidates must meet upstream evaluation gates and separately pass Android/modern-sample validation; a published research candidate is not active production protection.
-- [200-APK pilot](docs/BENCHMARK_REPORT.md): **NOT MEASURED** pending a fully verified 200-APK run. The manually dispatched [Industry Benchmark #11](https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/actions/runs/41224653496) uses a pinned text-only malware manifest and ephemeral APK acquisition. Earlier runs failed before complete aggregation; **no TPR, FPR or mean scan-latency result is published**. Historical tracking is in the [annual benchmark ledger](docs/ANNUAL_BENCHMARK_RESULTS.md).
+| Security layer | Available capability | Important limitation |
+|---|---|---|
+| **On-device detection** | Local hash matching, limited DEX/YARA-compatible signatures, accessible APK inspection | No kernel privilege or guaranteed coverage of every installed app |
+| **Signed intelligence** | Optional cryptographically verified hash-definition updates | Online retrieval is optional and fresh updates are not guaranteed |
+| **ML research** | SHA-pinned, 215-feature TFLite trained candidate | `validated=false` and `production_ready=false`: no production ML classifications |
+| **Privacy & persistence** | Local scan history, Room/DataStore and Keystore-backed sensitive records | Third-party update/billing requests expose normal connection metadata |
+| **Incident handling** | Siren, notification, user-directed follow-up | Android controls full-screen eligibility, permissions and uninstall confirmation |
 
 ## Security Validation & Annual Benchmarking
 
-SafeMobile's industry benchmark is designed to **scan 200 real Android APKs: 100 malicious-source samples and 100 benign F-Droid samples**. The workflow selects 100 validated Android packages from an immutable **500-SHA-256 text manifest** pinned to the `MalwareSamples/Android-Malware-Samples` upstream commit `cf802c63`. It uses **10 Android emulator matrix shards**, each processing 10 malicious and 10 benign APKs through the real on-device scanner. These are source-derived labels, not independent ground truth.
+**Evidence before advertising performance.** The benchmark uses **200 real Android APKs**: **100 source-labeled malicious samples** and **100 F-Droid benign apps**. Ten Android emulator shards each process 10 malware-source and 10 benign APKs.
 
-**Zero-Binary Repository:** Only SHA-256 filenames, code and aggregate, nonbinary benchmark records belong in Git. Malware APKs are downloaded into temporary GitHub Actions runner storage, checked for `PK\\x03\\x04` ZIP magic, compiled `AndroidManifest.xml` and SHA-256 integrity, and deleted after the job. Encrypted ZIP containers, when encountered, are handled with `pyzipper` and the `infected` password in runner memory; sample APKs are never installed or executed. Raw sample binaries are **not** uploaded as GitHub artifacts.
+Its **Zero-Binary Repository** rule keeps raw malware samples outside the Git tree and GitHub artifacts. The test downloads samples to temporary CI runner scratch space, validates `PK\x03\x04` ZIP magic, compiled `AndroidManifest.xml` and SHA-256, then deletes the files. Password-protected archives use `pyzipper` with password `infected` when required. The sample APKs are inspected, **never installed or executed**.
 
-**2026 baseline: PENDING — Benchmark #11 in progress.** Actual TPR, FPR and average scan latency will be recorded only after all **10/10 shards** finish and the aggregator verifies **200/200 scans** without missing results. Research-model holdout accuracy is not a substitute for benchmark detection rates.
+**Industry Benchmark #11 — verified 31 October 2026** ([run](https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/actions/runs/41224653496) · [generated report](docs/BENCHMARK_REPORT.md)):
 
-- [Annual Benchmark Results — permanent year-by-year ledger](docs/ANNUAL_BENCHMARK_RESULTS.md)
-- [Current in-app Benchmark Report](docs/BENCHMARK_REPORT.md)
-- [Benchmark methodology and safeguards](docs/INDUSTRY_BENCHMARK_SETUP.md)
+| Actual measured metric | Result |
+|---|---:|
+| Scanned APKs | **200/200** (100 malicious-source, 100 benign) |
+| Emulator shard health | **10/10 succeeded** |
+| Confirmed-detection TPR | **0.0%** |
+| Confirmed-detection FPR | **0.0%** |
+| Advisory triage TPR / FPR | 12.0% / 8.0% |
+| Average scan latency | **4,109.48 ms / APK** |
+| Research ML samples scored | **0** |
 
-## Build and verify
+**Interpretation:** The active scanner did not return confirmed detections for this particular malicious-source cohort. `SUSPICIOUS` is triage, not a confirmed threat. Labels originate from the corpus providers and are **not independently adjudicated ground truth**. This run is not third-party antivirus certification; the historic research-model holdout figure is not a substitute for these measurements. The [annual ledger](docs/ANNUAL_BENCHMARK_RESULTS.md) preserves its separately managed historical and sign-off records.
 
-```bash
-# Java 17 and Android SDK 36
+## SafeMobile Pro
+
+**Core protection is not behind a paywall.** `safemobile_pro_1_year` is a Google Play Billing **consumable**, **not a recurring subscription**. Eligible purchases grant or extend locally stored 365-day Pro access. ₹299 is an intended India price, **not a guaranteed charge**; Google Play determines the price, currency and taxes shown at purchase.
+
+**Read before buying:** There is no developer cloud entitlement recovery. Uninstalling, clearing app data, resetting the device or losing the encryption key can permanently prevent recovery of a consumed Pro pass.
+
+## Documentation
+
+| Resource | Description |
+|---|---|
+| 🔒 [Privacy Policy](docs/PRIVACY_POLICY.md) | **No developer collection of scan data**; local retention and optional network use |
+| 📊 [Annual Benchmark Results](docs/ANNUAL_BENCHMARK_RESULTS.md) | Permanent ledger for rigorous **200-APK testing** |
+| 🧪 [Current Benchmark Report](docs/BENCHMARK_REPORT.md) | Actual TPR, FPR and latency with provenance and caveats |
+| 🧠 [Research Model Activation](docs/ML_MODEL_ACTIVATION.md) | 215-feature model, holdout context and activation restrictions |
+| 🛡️ [Detection Coverage](docs/DETECTION_COVERAGE.md) | Supported security checks and known gaps |
+| ⚙️ [Benchmark Methodology](docs/INDUSTRY_BENCHMARK_SETUP.md) | Emulator matrix, validation and ephemeral file-handling rules |
+| 📜 [License](LICENSE) & [Third-Party Notices](NOTICE) | Apache License 2.0 and third-party attribution |
+
+## Build & Verification
+
+**Requirements:** JDK 17 and Android SDK 36.
+
+~~~bash
+# Unit tests and Android lint
 ./gradlew --no-daemon testOfflineDebugUnitTest lintOfflineDebug
+
+# Assemble offline flavor for local testing
 ./gradlew --no-daemon assembleOfflineDebug
+~~~
 
-# Release signing needs KEYSTORE_BASE64, KEYSTORE_PASSWORD,
-# KEY_ALIAS and KEY_PASSWORD from private CI secrets.
-./gradlew --no-daemon bundleOfflineRelease
-```
+CI includes version guards, localization checks, offline tooling tests, lint, builds, and Android instrumented tests. Signed releases use private signing credentials and an independent release workflow.
 
-Build-time staging verifies the research model size and SHA-256 against an immutable GitHub Release. For the trusted hash feed, configure the signing trust root. The product has separate `offline` and opt-in `feed` flavors; the `offline` flavor still requires the INTERNET permission for signed updates and Google Play purchases.
+**Package:** `com.vibesync.antivirus` · **Version:** `1.0.18` · **Version code:** `20261111` · **Android:** minSdk 26 / targetSdk 36.
 
-## Real-world limitations and responsible disclosure
+## Responsible Security Disclosure
 
-SafeMobile does not have kernel privileges, cannot inspect all apps and private files on every Android device, cannot guarantee installation-interception or full-screen prompts, and cannot guarantee detection of unknown threats. User-trusted apps are intentionally excluded from applicable checks. Limited YARA patterns can produce false positives. Do not describe the experimental 215-feature model as active protection. Before claiming performance publicly, publish independently verified TPR/FPR and sample provenance.
+SafeMobile is **not a kernel-level security product** and cannot inspect every private file or guarantee detection of every malware family. OEM behavior, Android permissions, signature coverage and update timing affect results. The trained research model is **not** enabled for production detection.
 
-For permissions and Play review, see [privacy policy](docs/PRIVACY_POLICY.md), [Play permissions](docs/PLAY_PERMISSIONS.md), [ML research gates](docs/ML_MODEL_ACTIVATION.md), [detection coverage](docs/DETECTION_COVERAGE.md) and [benchmark methodology](docs/INDUSTRY_BENCHMARK_SETUP.md).
+Report vulnerabilities or reliability problems via [GitHub Issues](https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/issues). **Do not attach malware binaries, credentials or personal scan data to public issues.**
 
-## License, attribution and contact
+## License & Attribution
 
-Project-owned source is under **Apache License 2.0**: [LICENSE](LICENSE). Third parties retain their own licences. See [NOTICE](NOTICE), [third-party inventory](docs/THIRD_PARTY_LICENSES.md), [generated dependency notices](THIRD_PARTY_NOTICES.md) and [CycloneDX SBOM](docs/sbom.json). TensorFlow Lite is Apache-2.0; the bundled rule subset includes MIT-licensed third-party adaptations; **native libyara is not included**. Data/model attribution is documented separately.
+SafeMobile project-owned source is licensed under **[Apache License 2.0](LICENSE)**. Third-party components keep their original licenses; consult [NOTICE](NOTICE), [third-party inventory](docs/THIRD_PARTY_LICENSES.md), [generated notices](THIRD_PARTY_NOTICES.md) and the [SBOM](docs/sbom.json).
 
-**Developer:** Navyask911 / VibeSync. Contact for privacy, responsible security disclosure and accessibility issues: [GitHub Issues](https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/issues). Do not attach malware samples or sensitive personal data to a public issue.
-
----
-
-<div align="center"><strong>SafeMobile — private-by-design scanning, with transparent limits.</strong></div>
+<p align="center">
+  <strong>SafeMobile Antivirus</strong><br>
+  <em>Privacy by design. Security through evidence. Control stays with you.</em>
+</p>

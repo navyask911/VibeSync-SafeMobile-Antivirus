@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 108 108" role="img" aria-labelledby="title desc">
+  <title id="title">SafeMobile Antivirus shield logo</title>
+  <desc id="desc">Original SafeMobile launcher shield artwork, adapted from the Android vector for README display.</desc>
+  <path fill="#123E61" stroke="#4A9FCB" stroke-width="2" d="M54,7 L88,20 L86,55 C83,76 68,91 54,100 C40,91 25,76 22,55 L20,20 Z"/>
+  <path fill="#071A2C" d="M54,15 L81,25 L79,54 C76,71 65,83 54,91 C43,83 32,71 29,54 L27,25 Z"/>
+  <path fill="#DA3855" d="M31,37 L41,37 L49,54 L62,38 L73,35 L54,63 L45,63 Z"/>
+  <path fill="#38C8F4" d="M62,55 C68,45 75,42 81,46 C88,51 83,62 73,67 C63,73 52,72 46,67 L52,61 C58,66 66,65 72,61 C77,58 79,53 76,52 C73,50 69,54 66,60 Z"/>
+</svg>
