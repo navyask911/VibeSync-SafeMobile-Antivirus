@@ -47,3 +47,12 @@ Before adding a dependency or dataset, review the exact distributed artifact's l
   introduced location/advertising-ID permissions, and retain the existing no-ad/no-crash-SDK guard.
 - `androidx.security:security-crypto:1.1.0`, Apache-2.0, remains unchanged for device-local encrypted
   entitlements. No account backend, cloud restore, scan upload, or paid detection layer is added.
+
+
+### Phase F / v1.0.18 release provenance and mandatory accuracy notes
+
+- **TensorFlow Lite 2.17.0**, TensorFlow authors and Google, Apache-2.0, [upstream LICENSE](https://github.com/tensorflow/tensorflow/blob/master/LICENSE); its runtime executes in the local process without cloud inference. The SHA-256-pinned 18,584-byte model is separately attributed and is NOT production-validated.
+- **Drebin 215 research candidate** `v1.0.1-model`: [training repo release](https://github.com/navyask911/safemobile-Antivirus-Trained-ML-Data-of-Android-malware/releases/tag/v1.0.1-model), see release's `DATASET_NOTICE.md` and [docs/ML_MODEL_ACTIVATION.md](ML_MODEL_ACTIVATION.md). Historical 97.45% research holdout is not independent production efficacy. `validated=false` / `production_ready=false` gates remain enforced.
+- **YARA**: NOT redistributed as native libyara; bundled limited Kotlin rules are adapted MIT Takopii sources with the full permission notice retained in root `NOTICE`. Do not attribute this rule engine to the libyara authors as if libyara code were bundled.
+- **Google Play Billing 8.3.0** uses Google licensing/Play terms. User payment details are processed by Google, while SafeMobile stores only locally encrypted expiry/binding/token hashes.
+- **Known notice-generation metadata gaps:** `THIRD_PARTY_NOTICES.md` most recently flags the app and `javax.annotation-api` fields; verify their full licence details and generated SBOM before final distribution. This document is an attribution index, not an assertion of legal clearance of every third-party artifact.

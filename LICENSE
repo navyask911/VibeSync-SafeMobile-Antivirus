@@ -177,3 +177,32 @@ third-party archives.
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
+
+
+-----------------------------------------------------------------------
+THIRD-PARTY ATTRIBUTION INDEX (informational; not an Apache licence term)
+-----------------------------------------------------------------------
+This Apache-2.0 grant applies only to material for which Navyask911/
+VibeSync owns or controls the necessary rights. Third-party components
+retain their own licences; this file does not relicense them.
+
+* TensorFlow Lite 2.17.0: TensorFlow authors / Google, Apache-2.0.
+  https://github.com/tensorflow/tensorflow/blob/master/LICENSE
+* Adapted Takopii DEX signature rules: Takopii Project Contributors,
+  MIT, full copyright and permission notice in root NOTICE.
+  No native YARA/libyara implementation is included in the APK.
+* dexlib2 2.5.2: smali contributors, BSD-3-Clause; license text at
+  docs/licenses/DEXLIB2_BSD_3_CLAUSE.txt.
+* Google Tink 1.16.0, OkHttp 4.12.0, AndroidX and Kotlin: their own
+  Apache-2.0 or separately documented component licences.
+* DM Sans static fonts: SIL Open Font License 1.1, at
+  docs/licenses/DM_SANS_OFL.txt.
+* Google Play Billing 8.3.0: Android SDK and applicable Play Billing
+  license/terms; NOT covered by Apache-2.0.
+* Research Drebin model v1.0.1-model: model/data attribution, terms
+  and redistribution permissions must be reviewed separately; see
+  docs/ML_MODEL_ACTIVATION.md and upstream release DATASET_NOTICE.md.
+
+See root NOTICE, docs/THIRD_PARTY_LICENSES.md, THIRD_PARTY_NOTICES.md,
+and docs/sbom.json. No dataset, trained-model or third-party-rule rights
+are granted by the project license beyond their actual source licences.
