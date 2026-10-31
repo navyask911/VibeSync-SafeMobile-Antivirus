@@ -11,7 +11,9 @@ permissions:
 
 concurrency:
   group: industry-benchmark-${{ github.ref }}
-  cancel-in-progress: false
+  # A new audited corpus-validation commit supersedes any in-flight stale run.
+  # Do not spend GitHub minutes finishing known-bad shards from an older commit.
+  cancel-in-progress: true
 
 jobs:
   prepare:
