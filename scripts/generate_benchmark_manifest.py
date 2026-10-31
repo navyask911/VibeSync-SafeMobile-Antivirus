@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Prepare exactly 100 verified malware APK hashes from ONE recent API query.
+"""Read-only benchmark preflight for 500 pinned SHA-named GitHub-hosted samples.
 
-One recent_detections(hours=168) discovery call, then get_file by SHA-256. No malware payloads are
-committed, installed, executed, shared as GitHub artifacts, or redistributed.
+Read only data/benchmark-malware-hashes.txt from the Git tree. Download bytes
+exclusively into $RUNNER_TEMP at runtime, never into source checkout. No
+MalwareBazaar dependency, no executable malware, and no binary artifacts.
 """
 import argparse
 import datetime
@@ -11,186 +12,115 @@ import json
 import os
 import re
 import sys
-import time
 import urllib.error
-import urllib.parse
 import urllib.request
 from pathlib import Path
 
-from benchmark_apk_validation import InvalidAndroidAPK, unpack_malwarebazaar_apk
+from benchmark_apk_validation import InvalidAndroidAPK, validate_apk_bytes, unpack_malwarebazaar_apk
 
-API = "https://mb-api.abuse.ch/api/v1/"
-SHA256 = re.compile(r"^[0-9a-f]{64}$")
-APK_ARCHIVE_LIMIT = 90 * 1024 * 1024
+SOURCE_COMMIT = "cf802c63baf8d435e8d4e663a24187056be3918a"
+SOURCE_REPO = "MalwareSamples/Android-Malware-Samples"
+LIST_PATH = Path(__file__).resolve().parent.parent / "data/benchmark-malware-hashes.txt"
+HEX = re.compile(r"^[a-f0-9]{64}$")
+MAX_DOWNLOAD = 90 * 1024 * 1024
+
 
 class DatasetUnavailable(Exception):
     pass
 
 
+class InvalidSample(Exception):
+    pass
 
-class SampleUnavailable(DatasetUnavailable):
-    """Individual sample not available; caller may skip to the next candidate."""
+
+def sample_url(sha256):
+    if not HEX.fullmatch(str(sha256)):
+        raise DatasetUnavailable("Invalid pinned SHA-256 hash")
+    return f"https://raw.githubusercontent.com/{SOURCE_REPO}/{SOURCE_COMMIT}/{sha256}"
 
 
-def parse_api_json(raw, http_status, query):
+def read_hashes(path=LIST_PATH):
+    lines=Path(path).read_text(encoding="ascii").splitlines()
+    if len(lines)!=500 or any(not HEX.fullmatch(s) for s in lines) or len(set(lines))!=500:
+        raise DatasetUnavailable("Expected exactly 500 distinct SHA-256 filename entries")
+    return lines
+
+
+def download_and_validate(sha256):
+    """Pinned HTTPS download -> APK validation or infected ZIP extraction in memory."""
+    req=urllib.request.Request(sample_url(sha256),headers={
+        "User-Agent":"SafeMobileReadOnlyBenchmark/1.4"})
     try:
-        data=json.loads(raw.decode("utf-8"))
-    except (UnicodeError,ValueError) as exc:
-        raise DatasetUnavailable(f"MalwareBazaar {query} HTTP {http_status}: invalid JSON") from exc
-    if not isinstance(data,dict):
-        raise DatasetUnavailable("MalwareBazaar expected JSON object")
-    state=str(data.get("query_status","unknown")).lower()
-    if query=="recent_detections" and state=="ok" and http_status==200:
-        return data
-    # Exact error fields only; never expose credentials or entire detection data.
-    fields={"query_status":data.get("query_status","unknown")}
-    for name in ("message","error","reason"):
-        if name in data:fields[name]=str(data[name])[:200]
-    detail=json.dumps(fields,sort_keys=True)
-    message=f"MalwareBazaar {query} HTTP {http_status} JSON: {detail}"
-    if http_status in (401,403,429) or state in (
-            "rate_limit","too_many_requests","no_api_key","user_blacklisted",
-            "quota_exceeded","daily_limit_reached","unauthorized","forbidden"):
-        raise DatasetUnavailable(message)
-    if query=="get_file" and state in ("file_not_found","no_results","illegal_sha256_hash"):
-        raise SampleUnavailable(message)
-    raise DatasetUnavailable(message)
-
-
-def post_api(fields, key, max_bytes=4*1024*1024):
-    """Authenticated discovery JSON or authenticated per-SHA encrypted ZIP bytes."""
-    query=fields.get("query")
-    if query=="recent_detections":
-        if fields!={"query":"recent_detections","hours":"168"}:
-            raise DatasetUnavailable("Only recent_detections hours=168 discovery is allowed")
-    elif query=="get_file":
-        if set(fields)!={"query","sha256_hash"} or not SHA256.fullmatch(
-                str(fields.get("sha256_hash",""))):
-            raise DatasetUnavailable("get_file requires valid pinned SHA-256")
-    else:
-        raise DatasetUnavailable("Historical/bulk discovery query prohibited")
-    if not key or len(key)<8:
-        raise DatasetUnavailable("MALWAREBAZAAR_AUTH_KEY is missing")
-    request=urllib.request.Request(API,method="POST",
-        data=urllib.parse.urlencode(fields).encode("ascii"),
-        headers={"Auth-Key":key,"Content-Type":"application/x-www-form-urlencoded",
-                 "Accept":"application/json" if query=="recent_detections" else "*/*",
-                 "User-Agent":"SafeMobileIndustryBenchmark/1.3"})
+        with urllib.request.urlopen(req,timeout=100) as response:
+            if response.status!=200:
+                raise InvalidSample(f"GitHub sample HTTP {response.status}")
+            mime=response.headers.get("Content-Type","").lower().split(";",1)[0].strip()
+            if mime in ("text/html","application/json"):
+                raise InvalidSample(f"Not binary; Content-Type={mime}")
+            data=response.read(MAX_DOWNLOAD+1)
+    except urllib.error.HTTPError as error:
+        if error.code in (403,429):
+            raise DatasetUnavailable(f"Upstream GitHub HTTP {error.code}; halt instead of hammering source") from error
+        raise InvalidSample(f"GitHub HTTP {error.code}") from error
+    except (urllib.error.URLError,TimeoutError,OSError) as error:
+        raise InvalidSample("Upstream download unavailable") from error
+    if not data or len(data)>MAX_DOWNLOAD:
+        raise InvalidSample("Missing or oversized sample")
+    if data.lstrip().startswith((b"{",b"[",b"<html",b"<!DOCTYPE")):
+        raise InvalidSample("HTML/JSON error body is not a malware APK")
+    if not data.startswith(b"PK\x03\x04"):
+        raise InvalidSample("Not ZIP magic PK-03-04")
     try:
-        with urllib.request.urlopen(request,timeout=90) as response:
-            status=response.status
-            content_type=response.headers.get("Content-Type","").lower().split(";",1)[0].strip()
-            raw=response.read(max_bytes+1)
-    except urllib.error.HTTPError as exc:
-        status=exc.code
-        content_type=exc.headers.get("Content-Type","").lower() if exc.headers else ""
-        raw=exc.read(4096)
-        if "json" in content_type or raw.lstrip().startswith(b"{"):
-            return parse_api_json(raw,status,query)
-        if status in (401,403,429):
-            raise DatasetUnavailable(f"MalwareBazaar {query} HTTP {status}: auth/quota/rate limit")
-        if query=="get_file" and status==404:
-            raise SampleUnavailable("MalwareBazaar get_file HTTP 404 file_not_found")
-        raise DatasetUnavailable(f"MalwareBazaar {query} HTTP {status}")
-    except (urllib.error.URLError,TimeoutError,OSError) as exc:
-        raise DatasetUnavailable(f"MalwareBazaar {query}: network failure") from exc
-    if len(raw)>max_bytes:
-        if query=="get_file":
-            raise SampleUnavailable("MalwareBazaar get_file: response exceeds size cap")
-        raise DatasetUnavailable("MalwareBazaar recent response exceeds size cap")
-    if status!=200:
-        raise DatasetUnavailable(f"MalwareBazaar {query} HTTP {status}")
-    if content_type=="application/json" or content_type.endswith("+json") or raw.lstrip().startswith((b"{",b"[")):
-        return parse_api_json(raw,status,query)
-    if query=="recent_detections":
-        raise DatasetUnavailable(f"recent_detections returned non-JSON Content-Type {content_type}")
-    if content_type and content_type not in ("application/zip","application/octet-stream",
-                                            "application/x-zip-compressed","application/x-zip"):
-        raise SampleUnavailable(f"MalwareBazaar get_file non-ZIP Content-Type {content_type}")
-    if not raw.startswith(b"PK\x03\x04"):
-        raise SampleUnavailable(f"MalwareBazaar get_file HTTP 200 Content-Type {content_type or 'unknown'}: not ZIP magic")
-    return raw
-
-
-def is_global_api_error(error):
-    value=str(error).lower()
-    return any(s in value for s in ("rate limit","429","quota","auth/","missing","401","403","api unreachable","timed out"))
-
-
-def parse_recent_candidates(payload):
-    if not isinstance(payload,dict) or payload.get("query_status")!="ok":
-        raise DatasetUnavailable("Recent API returned invalid query_status")
-    rows=payload.get("data")
-    if not isinstance(rows,list):
-        raise DatasetUnavailable("Recent API has no data list")
-    candidates=[];seen=set()
-    for row in rows:
-        if not isinstance(row,dict):continue
-        sha=str(row.get("sha256_hash","")).lower()
-        if not SHA256.fullmatch(sha) or sha in seen:continue
-        kind=str(row.get("file_type","")).lower()
-        name=str(row.get("file_name","")).lower()
-        mime=str(row.get("file_type_mime","")).lower()
-        if kind in ("exe","elf","dll","dex","jar","pdf","js","doc"):continue
-        if not (kind=="apk" or name.endswith(".apk") or
-                mime=="application/vnd.android.package-archive"):continue
-        seen.add(sha)
-        candidates.append({"sha256":sha,"provider":"malwarebazaar",
-                           "label":"malicious","source_filename":sha+".apk"})
-        if len(candidates)==300:break
-    print(f"One recent_detections query: {len(rows)} detections, "
-          f"{len(candidates)} Android APK candidates (cap 300)",flush=True)
-    return candidates
-
-
-def manifest_from_recent(payload,validator):
-    candidates=parse_recent_candidates(payload)
-    valid=[];skipped=0
-    for i,row in enumerate(candidates,1):
+        return validate_apk_bytes(data,sha256)
+    except InvalidAndroidAPK:
         try:
-            validator(row)
-        except (SampleUnavailable,InvalidAndroidAPK) as error:
-            skipped+=1
-            print(f"WARNING: skip {row['sha256'][:12]}: {error}",file=sys.stderr,flush=True)
+            return unpack_malwarebazaar_apk(data,sha256,sha256+".apk")
+        except InvalidAndroidAPK as error:
+            raise InvalidSample(f"Neither installable APK nor infected ZIP: {error}") from error
+
+
+def select_verified(hashes, scratch, fetcher=download_and_validate):
+    if len(hashes)!=500 or len(set(hashes))!=500:
+        raise DatasetUnavailable("Exactly 500 unique candidate hashes required")
+    Path(scratch).mkdir(parents=True,exist_ok=True)
+    chosen=[]
+    for i,sha in enumerate(hashes,1):
+        try:
+            apk=fetcher(sha)
+            validate_apk_bytes(apk,sha)
+        except (InvalidSample,InvalidAndroidAPK) as error:
+            print(f"WARNING: skip candidate {sha[:12]}: {error}",file=sys.stderr,flush=True)
             continue
-        # Auth, quota, HTTP 429/403 must propagate; never keep hammering provider.
-        valid.append(row)
-        print(f"Validated recent APK {len(valid)}/100 at candidate {i}",flush=True)
-        if len(valid)==100:break
-    if len(valid)!=100:
-        raise DatasetUnavailable(f"Only {len(valid)}/100 valid malicious APKs among "
-                                 f"{len(candidates)} recent candidates, {skipped} skipped; no metrics published")
-    return {"schema_version":1,"name":"MalwareBazaar recent verified Android APKs",
-        "revision":"recent_detections hours=168; one discovery query; get_file byte validation",
-        "license":"MalwareBazaar Community API research terms; no binary redistribution",
-        "source":"https://bazaar.abuse.ch/api/",
-        "generated_utc":datetime.datetime.now(datetime.timezone.utc).isoformat(),
-        "verified_apk_count":100,"rejected_candidate_count":skipped,
-        "candidate_limit":300,"discovered_apk_candidates":len(candidates),
-        "samples":valid}
+        # Only ephemeral runner scratch; never Git checkout or GitHub artifacts.
+        (Path(scratch)/(sha+".apk")).write_bytes(apk)
+        chosen.append({"sha256":sha,"provider":"github-malware-samples",
+                       "label":"malicious","source_filename":sha+".apk",
+                       "url":sample_url(sha)})
+        print(f"Verified real Android APK {len(chosen)}/100, candidate {i}/500",flush=True)
+        if len(chosen)==100:break
+    if len(chosen)!=100:
+        raise DatasetUnavailable(f"Only {len(chosen)} valid Android APKs out of 500 source files; no metrics published")
+    return {"schema_version":1,"name":"500 GitHub-hosted Android malware research candidates",
+            "revision":"Pinned source commit "+SOURCE_COMMIT,
+            "license":"Research-only, source-derived labels; binary redistribution prohibited",
+            "source":"https://github.com/"+SOURCE_REPO,
+            "source_commit":SOURCE_COMMIT,
+            "generated_utc":datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            "verified_apk_count":100,"samples":chosen}
 
 
 def main():
     parser=argparse.ArgumentParser()
-    parser.add_argument("--output",required=True,type=Path)
+    parser.add_argument("--output",type=Path,required=True)
     args=parser.parse_args()
     try:
-        key=os.environ.get("MALWAREBAZAAR_AUTH_KEY","")
-        response=post_api({"query":"recent_detections","hours":"168"},key,
-                          max_bytes=32*1024*1024)
-        print("Exactly one recent_detections(hours=168) discovery request completed",flush=True)
-        def verify(row):
-            try:
-                zip_bytes=post_api({"query":"get_file","sha256_hash":row["sha256"]},
-                                   key,max_bytes=APK_ARCHIVE_LIMIT)
-                unpack_malwarebazaar_apk(zip_bytes,row["sha256"],row["source_filename"])
-            finally:
-                time.sleep(0.75)
-        manifest=manifest_from_recent(response,verify)
+        tmp=Path(os.environ["RUNNER_TEMP"]).resolve()
+        scratch=tmp/"industry"/"verified-malware"
+        result=select_verified(read_hashes(),scratch)
         args.output.parent.mkdir(parents=True,exist_ok=True)
-        args.output.write_text(json.dumps(manifest,sort_keys=True,indent=2)+"\n")
-        print(f"Pinned 100 validated recent APKs; skipped {manifest['rejected_candidate_count']}")
-    except (DatasetUnavailable,ValueError,TypeError,OSError) as error:
+        args.output.write_text(json.dumps(result,indent=2,sort_keys=True)+"\n")
+        print("Pinned 100 real byte-verified APK SHA-256s; metadata only will be uploaded")
+    except (DatasetUnavailable,OSError,ValueError,TypeError) as error:
         sys.exit("BENCHMARK UNAVAILABLE: "+str(error)+" No metrics published.")
 
 if __name__=="__main__":main()

@@ -2,7 +2,7 @@
 """Download pinned APKs in ephemeral CI, validate real scanner results, never invent metrics."""
 import argparse, datetime, hashlib, io, json, os, re, shutil, statistics, sys, time, urllib.parse, urllib.request, zipfile
 import generate_benchmark_manifest as malwarebazaar
-from benchmark_apk_validation import InvalidAndroidAPK, unpack_malwarebazaar_apk, validate_apk_bytes
+from benchmark_apk_validation import InvalidAndroidAPK, validate_apk_bytes
 from pathlib import Path
 INDEX="https://f-droid.org/repo/index-v1.json"
 HEX=re.compile(r"^[a-f0-9]{64}$")
@@ -39,11 +39,13 @@ def prepare(a):
     malicious=[]
     for i,row in enumerate(manifest["samples"]):
         sha=str(row.get("sha256","")).lower()
-        if row.get("provider")!="malwarebazaar" or not HEX.fullmatch(sha):
+        if (row.get("provider")!="github-malware-samples" or not HEX.fullmatch(sha)
+                or row.get("url")!=malwarebazaar.sample_url(sha)
+                or manifest.get("source_commit")!=malwarebazaar.SOURCE_COMMIT):
             bad("Malware candidate must have valid provider and SHA-256")
         malicious.append({"sample_id":"m%04d"%i,"label":"malicious","provider":"malwarebazaar",
                           "sha256":sha,"source_filename":row.get("source_filename",""),
-                          "relative_path":"m%04d.apk"%i})
+                          "url":row["url"],"relative_path":"m%04d.apk"%i})
     index_raw=fetch(INDEX,125*1024*1024)
     index=json.loads(index_raw).get("packages")
     if not isinstance(index,dict): bad("F-Droid index format unexpected")
@@ -70,26 +72,11 @@ def prepare(a):
         "malware_name":manifest["name"],"malware_revision":manifest["revision"],
         "malware_license":manifest["license"],"malware_source":manifest["source"],
         "byte_validated_malware_apks":manifest["verified_apk_count"],
+        "malware_source_commit":manifest["source_commit"],
         "rejected_malware_candidates":manifest.get("rejected_candidate_count",0),
-        "label_limitations":"MalwareBazaar/F-Droid source labels are not independently validated ground truth",
+        "label_limitations":"GitHub malware corpus/F-Droid source labels are not independently validated ground truth",
         "commit":os.environ.get("GITHUB_SHA","unknown")}})
     print("Prepared exactly 100 F-Droid + 100 MalwareBazaar-pinned candidate APK hashes")
-
-def download_malware(sha, source_filename):
-    """Retry transient file retrieval but never alter a pinned shard SHA."""
-    if not HEX.fullmatch(sha): bad("Invalid malware candidate SHA-256")
-    for attempt in range(1,4):
-        try:
-            archive=malwarebazaar.post_api({"query":"get_file","sha256_hash":sha},
-                os.environ.get("MALWAREBAZAAR_AUTH_KEY",""),max_bytes=90*1024*1024)
-            return unpack_malwarebazaar_apk(archive,sha,source_filename)
-        except (malwarebazaar.DatasetUnavailable,InvalidAndroidAPK) as exc:
-            print(f"WARNING: pinned candidate {sha[:12]}, retry {attempt}/3: {exc}",
-                  file=sys.stderr,flush=True)
-            if attempt==3:
-                bad(f"Pinned APK {sha[:12]} unavailable or invalid on retry; fail closed, no silent replacement in a locked shard")
-            time.sleep(attempt*2)
-
 
 
 def shard_samples(plan, shard, label):
@@ -125,11 +112,13 @@ def stage(a):
     if len(selected)!=10: bad("Incomplete 10-file batch")
     shutil.rmtree(a.root,ignore_errors=True);a.root.mkdir(parents=True)
     for s in selected:
-        if s.get("provider")=="malwarebazaar":
-            raw=download_malware(s["sha256"],s["source_filename"])
+        if s.get("provider")=="github-malware-samples":
+            if s["url"]!=malwarebazaar.sample_url(s["sha256"]):
+                bad("Pinned malware source URL changed")
+            raw=malwarebazaar.download_and_validate(s["sha256"])
         else:
             raw=fetch(s["url"],MAX_APK)
-            validate_apk_bytes(raw,s["sha256"])
+        validate_apk_bytes(raw,s["sha256"])
         target=a.root/s["relative_path"];target.write_bytes(raw)
     save(a.root/"batch.json",dict(samples=[{k:s[k] for k in ("sample_id","label","sha256")} for s in selected]))
     print("Staged ten pinned APKs for "+description,flush=True)
