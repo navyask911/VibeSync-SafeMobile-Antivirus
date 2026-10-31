@@ -49,7 +49,7 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | annotations | 23.0.0 | Apache-2.0 | https://github.com/JetBrains/java-annotations |
 | annotations | 31.13.2 | Apache-2.0 | Package URL: pkg:maven/com.android.tools/annotations@31.13.2?type=jar |
 | annotations | 4.1.1.4 | Apache-2.0 | https://android.git.kernel.org/ |
-| app | unspecified | UNKNOWN — review required | Package URL: pkg:maven/VibeSync-SafeMobile-Antivirus/app@unspecified?project_path=%3Aapp |
+| app | 1.0.18 | UNKNOWN — review required | Package URL: pkg:maven/com.vibesync.antivirus/app@1.0.18?project_path=%3Aapp |
 | atomicfu | 0.21.0 | Apache-2.0 | https://github.com/Kotlin/kotlinx.atomicfu |
 | atomicfu | 0.22.0 | Apache-2.0 | https://github.com/Kotlin/kotlinx.atomicfu |
 | atomicfu | 0.23.1 | Apache-2.0 | https://github.com/Kotlin/kotlinx.atomicfu |
@@ -388,5 +388,5 @@ Metadata completeness: 375/377 components have both a declared licence and a sou
 
 ## Metadata requiring manual review
 
-- app@unspecified: licence=UNKNOWN — review required; source=Package URL: pkg:maven/VibeSync-SafeMobile-Antivirus/app@unspecified?project_path=%3Aapp
+- app@1.0.18: licence=UNKNOWN — review required; source=Package URL: pkg:maven/com.vibesync.antivirus/app@1.0.18?project_path=%3Aapp
 - javax.annotation-api@1.3.2: licence=UNKNOWN — review required; source=https://github.com/javaee/javax.annotation

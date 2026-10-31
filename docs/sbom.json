@@ -1,10 +1,10 @@
 {
   "bomFormat" : "CycloneDX",
   "specVersion" : "1.6",
-  "serialNumber" : "urn:uuid:9b61a5fa-3405-47c7-8e82-f84d8bfb1ce2",
+  "serialNumber" : "urn:uuid:80bdb268-93e0-40cc-a5f2-0a46fa2d7d6b",
   "version" : 1,
   "metadata" : {
-    "timestamp" : "2026-10-30T21:37:16Z",
+    "timestamp" : "2026-10-31T05:03:41Z",
     "tools" : {
       "components" : [
         {
@@ -17,16 +17,16 @@
     },
     "component" : {
       "type" : "library",
-      "bom-ref" : "pkg:maven/unspecified/VibeSync-SafeMobile-Antivirus@unspecified?project_path=%3A",
-      "group" : "",
+      "bom-ref" : "pkg:maven/com.vibesync.antivirus/VibeSync-SafeMobile-Antivirus@1.0.18?project_path=%3A",
+      "group" : "com.vibesync.antivirus",
       "name" : "VibeSync-SafeMobile-Antivirus",
-      "version" : "unspecified",
-      "purl" : "pkg:maven/unspecified/VibeSync-SafeMobile-Antivirus@unspecified?project_path=%3A",
+      "version" : "1.0.18",
+      "purl" : "pkg:maven/com.vibesync.antivirus/VibeSync-SafeMobile-Antivirus@1.0.18?project_path=%3A",
       "modified" : false,
       "externalReferences" : [
         {
           "type" : "build-system",
-          "url" : "https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/actions/runs/41132289158"
+          "url" : "https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/actions/runs/41171013864"
         },
         {
           "type" : "vcs",
@@ -36,21 +36,6 @@
     }
   },
   "components" : [
-    {
-      "type" : "library",
-      "bom-ref" : "pkg:maven/VibeSync-SafeMobile-Antivirus/app@unspecified?project_path=%3Aapp",
-      "group" : "VibeSync-SafeMobile-Antivirus",
-      "name" : "app",
-      "version" : "unspecified",
-      "purl" : "pkg:maven/VibeSync-SafeMobile-Antivirus/app@unspecified?project_path=%3Aapp",
-      "modified" : false,
-      "properties" : [
-        {
-          "name" : "cdx:maven:package:test",
-          "value" : "false"
-        }
-      ]
-    },
     {
       "type" : "library",
       "bom-ref" : "pkg:maven/androidx.activity/activity-compose@1.10.1?type=aar",
@@ -14220,6 +14205,21 @@
     },
     {
       "type" : "library",
+      "bom-ref" : "pkg:maven/com.vibesync.antivirus/app@1.0.18?project_path=%3Aapp",
+      "group" : "com.vibesync.antivirus",
+      "name" : "app",
+      "version" : "1.0.18",
+      "purl" : "pkg:maven/com.vibesync.antivirus/app@1.0.18?project_path=%3Aapp",
+      "modified" : false,
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
       "bom-ref" : "pkg:maven/commons-codec/commons-codec@1.15?type=jar",
       "group" : "commons-codec",
       "name" : "commons-codec",
@@ -22818,69 +22818,6 @@
   ],
   "dependencies" : [
     {
-      "ref" : "pkg:maven/VibeSync-SafeMobile-Antivirus/app@unspecified?project_path=%3Aapp",
-      "dependsOn" : [
-        "pkg:maven/androidx.activity/activity-compose@1.10.1?type=aar",
-        "pkg:maven/androidx.compose.foundation/foundation@1.8.2?type=jar",
-        "pkg:maven/androidx.compose.material/material-icons-extended@1.7.8?type=jar",
-        "pkg:maven/androidx.compose.material3/material3@1.3.2?type=jar",
-        "pkg:maven/androidx.compose.ui/ui-tooling-preview@1.8.2?type=jar",
-        "pkg:maven/androidx.compose.ui/ui-tooling@1.8.2?type=pom",
-        "pkg:maven/androidx.compose.ui/ui@1.8.2?type=jar",
-        "pkg:maven/androidx.compose/compose-bom@2025.05.01?type=pom",
-        "pkg:maven/androidx.core/core-ktx@1.16.0?type=aar",
-        "pkg:maven/androidx.datastore/datastore-preferences@1.3.0?type=jar",
-        "pkg:maven/androidx.documentfile/documentfile@1.0.1?type=aar",
-        "pkg:maven/androidx.fragment/fragment-ktx@1.8.9?type=aar",
-        "pkg:maven/androidx.lifecycle/lifecycle-runtime-compose@2.9.1?type=jar",
-        "pkg:maven/androidx.lifecycle/lifecycle-runtime-ktx@2.9.1?type=jar",
-        "pkg:maven/androidx.lifecycle/lifecycle-viewmodel-compose@2.9.1?type=jar",
-        "pkg:maven/androidx.lifecycle/lifecycle-viewmodel-ktx@2.9.1?type=aar",
-        "pkg:maven/androidx.room/room-compiler@2.7.2?type=jar",
-        "pkg:maven/androidx.room/room-ktx@2.7.2?type=aar",
-        "pkg:maven/androidx.room/room-runtime@2.7.2?type=jar",
-        "pkg:maven/androidx.room/room-testing@2.7.2?type=jar",
-        "pkg:maven/androidx.security/security-crypto@1.1.0?type=aar",
-        "pkg:maven/androidx.test.ext/junit@1.2.1?type=aar",
-        "pkg:maven/androidx.test/core@1.6.1?type=aar",
-        "pkg:maven/androidx.test/runner@1.6.2?type=aar",
-        "pkg:maven/androidx.work/work-runtime-ktx@2.10.2?type=aar",
-        "pkg:maven/com.android.billingclient/billing-ktx@8.3.0?type=aar",
-        "pkg:maven/com.android.tools.utp/android-device-provider-ddmlib@31.13.2?type=jar",
-        "pkg:maven/com.android.tools.utp/android-test-plugin-host-additional-test-output@31.13.2?type=jar",
-        "pkg:maven/com.android.tools.utp/android-test-plugin-host-apk-installer@31.13.2?type=jar",
-        "pkg:maven/com.android.tools.utp/android-test-plugin-host-coverage@31.13.2?type=jar",
-        "pkg:maven/com.android.tools.utp/android-test-plugin-host-device-info@31.13.2?type=jar",
-        "pkg:maven/com.android.tools.utp/android-test-plugin-host-emulator-control@31.13.2?type=jar",
-        "pkg:maven/com.android.tools.utp/android-test-plugin-host-logcat@31.13.2?type=jar",
-        "pkg:maven/com.android.tools.utp/android-test-plugin-result-listener-gradle@31.13.2?type=jar",
-        "pkg:maven/com.google.crypto.tink/tink-android@1.16.0?type=jar",
-        "pkg:maven/com.google.guava/guava@33.4.8-android?type=jar",
-        "pkg:maven/com.google.testing.platform/android-driver-instrumentation@0.0.9-alpha03?type=jar",
-        "pkg:maven/com.google.testing.platform/android-test-plugin@0.0.9-alpha03?type=jar",
-        "pkg:maven/com.google.testing.platform/core@0.0.9-alpha03?type=jar",
-        "pkg:maven/com.google.testing.platform/launcher@0.0.9-alpha03?type=jar",
-        "pkg:maven/com.squareup.okhttp3/okhttp@4.12.0?type=jar",
-        "pkg:maven/junit/junit@4.13.2?type=jar",
-        "pkg:maven/org.bouncycastle/bcpg-jdk18on@1.80?type=jar",
-        "pkg:maven/org.bouncycastle/bcpkix-jdk18on@1.80?type=jar",
-        "pkg:maven/org.bouncycastle/bcprov-jdk18on@1.86?type=jar",
-        "pkg:maven/org.jetbrains.kotlin/abi-tools@2.2.21?type=jar",
-        "pkg:maven/org.jetbrains.kotlin/kotlin-annotation-processing-gradle@2.2.21?type=jar",
-        "pkg:maven/org.jetbrains.kotlin/kotlin-build-tools-impl@2.2.21?type=jar",
-        "pkg:maven/org.jetbrains.kotlin/kotlin-compiler-embeddable@2.2.21?type=jar",
-        "pkg:maven/org.jetbrains.kotlin/kotlin-compose-compiler-plugin-embeddable@2.2.21?type=jar",
-        "pkg:maven/org.jetbrains.kotlin/kotlin-klib-commonizer-embeddable@2.2.21?type=jar",
-        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
-        "pkg:maven/org.jetbrains.kotlin/swift-export-embeddable@2.2.21?type=jar",
-        "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-android@1.10.2?type=jar",
-        "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-test@1.10.2?type=jar",
-        "pkg:maven/org.json/json@20240303?type=jar",
-        "pkg:maven/org.smali/dexlib2@2.5.2?type=jar",
-        "pkg:maven/org.tensorflow/tensorflow-lite@2.17.0?type=pom"
-      ]
-    },
-    {
       "ref" : "pkg:maven/androidx.activity/activity-compose@1.10.1?type=aar",
       "dependsOn" : [
         "pkg:maven/androidx.activity/activity-ktx@1.10.1?type=aar",
@@ -25015,6 +24952,75 @@
       ]
     },
     {
+      "ref" : "pkg:maven/com.vibesync.antivirus/VibeSync-SafeMobile-Antivirus@1.0.18?project_path=%3A",
+      "dependsOn" : [
+        "pkg:maven/com.vibesync.antivirus/app@1.0.18?project_path=%3Aapp"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/com.vibesync.antivirus/app@1.0.18?project_path=%3Aapp",
+      "dependsOn" : [
+        "pkg:maven/androidx.activity/activity-compose@1.10.1?type=aar",
+        "pkg:maven/androidx.compose.foundation/foundation@1.8.2?type=jar",
+        "pkg:maven/androidx.compose.material/material-icons-extended@1.7.8?type=jar",
+        "pkg:maven/androidx.compose.material3/material3@1.3.2?type=jar",
+        "pkg:maven/androidx.compose.ui/ui-tooling-preview@1.8.2?type=jar",
+        "pkg:maven/androidx.compose.ui/ui-tooling@1.8.2?type=pom",
+        "pkg:maven/androidx.compose.ui/ui@1.8.2?type=jar",
+        "pkg:maven/androidx.compose/compose-bom@2025.05.01?type=pom",
+        "pkg:maven/androidx.core/core-ktx@1.16.0?type=aar",
+        "pkg:maven/androidx.datastore/datastore-preferences@1.3.0?type=jar",
+        "pkg:maven/androidx.documentfile/documentfile@1.0.1?type=aar",
+        "pkg:maven/androidx.fragment/fragment-ktx@1.8.9?type=aar",
+        "pkg:maven/androidx.lifecycle/lifecycle-runtime-compose@2.9.1?type=jar",
+        "pkg:maven/androidx.lifecycle/lifecycle-runtime-ktx@2.9.1?type=jar",
+        "pkg:maven/androidx.lifecycle/lifecycle-viewmodel-compose@2.9.1?type=jar",
+        "pkg:maven/androidx.lifecycle/lifecycle-viewmodel-ktx@2.9.1?type=aar",
+        "pkg:maven/androidx.room/room-compiler@2.7.2?type=jar",
+        "pkg:maven/androidx.room/room-ktx@2.7.2?type=aar",
+        "pkg:maven/androidx.room/room-runtime@2.7.2?type=jar",
+        "pkg:maven/androidx.room/room-testing@2.7.2?type=jar",
+        "pkg:maven/androidx.security/security-crypto@1.1.0?type=aar",
+        "pkg:maven/androidx.test.ext/junit@1.2.1?type=aar",
+        "pkg:maven/androidx.test/core@1.6.1?type=aar",
+        "pkg:maven/androidx.test/runner@1.6.2?type=aar",
+        "pkg:maven/androidx.work/work-runtime-ktx@2.10.2?type=aar",
+        "pkg:maven/com.android.billingclient/billing-ktx@8.3.0?type=aar",
+        "pkg:maven/com.android.tools.utp/android-device-provider-ddmlib@31.13.2?type=jar",
+        "pkg:maven/com.android.tools.utp/android-test-plugin-host-additional-test-output@31.13.2?type=jar",
+        "pkg:maven/com.android.tools.utp/android-test-plugin-host-apk-installer@31.13.2?type=jar",
+        "pkg:maven/com.android.tools.utp/android-test-plugin-host-coverage@31.13.2?type=jar",
+        "pkg:maven/com.android.tools.utp/android-test-plugin-host-device-info@31.13.2?type=jar",
+        "pkg:maven/com.android.tools.utp/android-test-plugin-host-emulator-control@31.13.2?type=jar",
+        "pkg:maven/com.android.tools.utp/android-test-plugin-host-logcat@31.13.2?type=jar",
+        "pkg:maven/com.android.tools.utp/android-test-plugin-result-listener-gradle@31.13.2?type=jar",
+        "pkg:maven/com.google.crypto.tink/tink-android@1.16.0?type=jar",
+        "pkg:maven/com.google.guava/guava@33.4.8-android?type=jar",
+        "pkg:maven/com.google.testing.platform/android-driver-instrumentation@0.0.9-alpha03?type=jar",
+        "pkg:maven/com.google.testing.platform/android-test-plugin@0.0.9-alpha03?type=jar",
+        "pkg:maven/com.google.testing.platform/core@0.0.9-alpha03?type=jar",
+        "pkg:maven/com.google.testing.platform/launcher@0.0.9-alpha03?type=jar",
+        "pkg:maven/com.squareup.okhttp3/okhttp@4.12.0?type=jar",
+        "pkg:maven/junit/junit@4.13.2?type=jar",
+        "pkg:maven/org.bouncycastle/bcpg-jdk18on@1.80?type=jar",
+        "pkg:maven/org.bouncycastle/bcpkix-jdk18on@1.80?type=jar",
+        "pkg:maven/org.bouncycastle/bcprov-jdk18on@1.86?type=jar",
+        "pkg:maven/org.jetbrains.kotlin/abi-tools@2.2.21?type=jar",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-annotation-processing-gradle@2.2.21?type=jar",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-build-tools-impl@2.2.21?type=jar",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-compiler-embeddable@2.2.21?type=jar",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-compose-compiler-plugin-embeddable@2.2.21?type=jar",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-klib-commonizer-embeddable@2.2.21?type=jar",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
+        "pkg:maven/org.jetbrains.kotlin/swift-export-embeddable@2.2.21?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-android@1.10.2?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-test@1.10.2?type=jar",
+        "pkg:maven/org.json/json@20240303?type=jar",
+        "pkg:maven/org.smali/dexlib2@2.5.2?type=jar",
+        "pkg:maven/org.tensorflow/tensorflow-lite@2.17.0?type=pom"
+      ]
+    },
+    {
       "ref" : "pkg:maven/commons-codec/commons-codec@1.15?type=jar",
       "dependsOn" : [ ]
     },
@@ -26007,12 +26013,6 @@
     {
       "ref" : "pkg:maven/org.xerial/sqlite-jdbc@3.41.2.2?type=jar",
       "dependsOn" : [ ]
-    },
-    {
-      "ref" : "pkg:maven/unspecified/VibeSync-SafeMobile-Antivirus@unspecified?project_path=%3A",
-      "dependsOn" : [
-        "pkg:maven/VibeSync-SafeMobile-Antivirus/app@unspecified?project_path=%3Aapp"
-      ]
     }
   ]
 }
