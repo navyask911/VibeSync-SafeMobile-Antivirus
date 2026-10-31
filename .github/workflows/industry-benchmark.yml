@@ -17,12 +17,12 @@ jobs:
   prepare:
     name: Pin 100 benign + 100 malware-candidate APKs
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 50
     steps:
       - uses: actions/checkout@v4
       - name: Install manifest tooling
         run: python3 -m pip install --disable-pip-version-check pyzipper==0.3.6
-      - name: Generate exactly 100 candidate malware hashes
+      - name: Decrypt and byte-validate 100 APKs, replacing bad candidates
         env:
           MALWAREBAZAAR_AUTH_KEY: ${{ secrets.MALWAREBAZAAR_AUTH_KEY }}
         shell: bash
@@ -36,7 +36,7 @@ jobs:
           python3 scripts/industry_benchmark.py prepare \
             --malware-manifest "$RUNNER_TEMP/industry/malware-manifest.json" \
             --plan "$RUNNER_TEMP/industry/plan.json"
-      - name: Upload SHA-256-only plan, NEVER APK binaries
+      - name: Upload byte-verified SHA-256-only plan, NEVER APK binaries
         uses: actions/upload-artifact@v4
         with:
           name: industry-benchmark-plan-${{ github.run_id }}

@@ -11,6 +11,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from pathlib import Path
+from benchmark_apk_validation import InvalidAndroidAPK, unpack_malwarebazaar_apk
 
 API = "https://mb-api.abuse.ch/api/v1/"
 SHA256 = re.compile(r"^[0-9a-f]{64}$")
@@ -39,7 +40,8 @@ def post_api(fields, key, max_bytes=4*1024*1024):
     if len(raw)>max_bytes: raise DatasetUnavailable("MalwareBazaar API payload exceeds download limit.")
     return raw
 
-def manifest_from_response(payload,count=100):
+def manifest_from_response(payload, count=100, validator=None):
+    """Skip invalid payloads and refill the pinned 100 from unused candidates."""
     status=payload.get("query_status")
     if status!="ok": raise DatasetUnavailable(f"MalwareBazaar query_status={status}; no numbers published.")
     data=payload.get("data")
@@ -48,20 +50,44 @@ def manifest_from_response(payload,count=100):
     for row in data:
         if not isinstance(row,dict): continue
         sha=str(row.get("sha256_hash","")).lower()
-        is_apk=(str(row.get("file_type","")).lower()=="apk" or
-                str(row.get("file_name","")).lower().endswith(".apk"))
-        if not SHA256.fullmatch(sha) or sha in seen or not is_apk: continue
+        name=str(row.get("file_name",""))
+        kind=str(row.get("file_type","")).lower()
+        if not SHA256.fullmatch(sha) or sha in seen or kind!="apk" or not name.lower().endswith(".apk"):
+            continue
         seen.add(sha)
-        candidates.append({"sha256":sha,"provider":"malwarebazaar","label":"malicious"})
+        candidates.append({"sha256":sha,"provider":"malwarebazaar",
+                           "label":"malicious","source_filename":name})
     candidates.sort(key=lambda sample:hashlib.sha256(sample["sha256"].encode()).hexdigest())
-    if len(candidates)<count:
-        raise DatasetUnavailable(f"Only {len(candidates)} APK candidates; {count} required.")
-    return {"schema_version":1,"name":"MalwareBazaar Android APK candidates",
-        "revision":"get_file_type apk API snapshot",
+    selected=[]; rejected=0
+    for candidate in candidates:
+        if validator is not None:
+            try:
+                validator(candidate)
+            except InvalidAndroidAPK as err:
+                rejected+=1
+                print(f"WARNING: reject non-APK/corrupt candidate {candidate['sha256'][:12]}: {err}",
+                      file=sys.stderr,flush=True)
+                continue
+            except DatasetUnavailable as err:
+                if any(flag in str(err).lower() for flag in ("rate limit","429","auth","quota","missing","401","403")):
+                    raise
+                rejected+=1
+                print(f"WARNING: unavailable candidate {candidate['sha256'][:12]}: {err}",
+                      file=sys.stderr,flush=True)
+                continue
+        selected.append(candidate)
+        if len(selected)==count: break
+    if len(selected)<count:
+        raise DatasetUnavailable(f"Only {len(selected)} verified APKs among {len(candidates)} candidates; "
+                                 f"{count} required; skipped {rejected}; no incomplete report published.")
+    return {"schema_version":1,"name":"Byte-verified MalwareBazaar Android APKs",
+        "revision":"get_file_type + infected ZIP extraction + compiled manifest verification",
         "license":"abuse.ch MalwareBazaar Community API fair-use terms; no redistribution",
         "source":"https://bazaar.abuse.ch/api/",
         "generated_utc":datetime.datetime.now(datetime.timezone.utc).isoformat(),
-        "samples":candidates[:count]}
+        "verified_apk_count":count if validator is not None else 0,
+        "rejected_candidate_count":rejected,"samples":selected}
+
 
 def main():
     parser=argparse.ArgumentParser()
@@ -70,10 +96,15 @@ def main():
     try:
         payload=json.loads(post_api({"query":"get_file_type","file_type":"apk","limit":"1000"},
                                     os.getenv("MALWAREBAZAAR_AUTH_KEY","")))
-        manifest=manifest_from_response(payload)
+        key=os.getenv("MALWAREBAZAAR_AUTH_KEY","")
+        def verify(candidate):
+            container=post_api({"query":"get_file","sha256_hash":candidate["sha256"]},
+                               key,max_bytes=90*1024*1024)
+            unpack_malwarebazaar_apk(container,candidate["sha256"],candidate["source_filename"])
+        manifest=manifest_from_response(payload,validator=verify)
         args.output.parent.mkdir(parents=True,exist_ok=True)
         args.output.write_text(json.dumps(manifest,sort_keys=True,indent=2)+"\n")
-        print("Selected 100 pinned APK candidates; labels are not independently audited.")
+        print(f"Byte-verified and pinned exactly 100 APKs; skipped and replaced {manifest['rejected_candidate_count']} rejected candidates. Source labels are not independently adjudicated.")
     except (DatasetUnavailable,ValueError,TypeError) as error:
         sys.exit("BENCHMARK UNAVAILABLE: "+str(error)+" No metrics published.")
 

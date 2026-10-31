@@ -2,6 +2,7 @@
 """Download pinned APKs in ephemeral CI, validate real scanner results, never invent metrics."""
 import argparse, datetime, hashlib, io, json, os, re, shutil, statistics, sys, time, urllib.parse, urllib.request, zipfile
 import generate_benchmark_manifest as malwarebazaar
+from benchmark_apk_validation import InvalidAndroidAPK, unpack_malwarebazaar_apk, validate_apk_bytes
 from pathlib import Path
 INDEX="https://f-droid.org/repo/index-v1.json"
 HEX=re.compile(r"^[a-f0-9]{64}$")
@@ -29,8 +30,9 @@ def prepare(a):
         bad("No MalwareBazaar candidate manifest available; refusing a partial benchmark.")
     raw=a.malware_manifest.read_bytes()
     manifest=json.loads(raw)
-    if manifest.get("schema_version")!=1 or len(manifest.get("samples",[]))!=100:
-        bad("Expected exactly 100 distinct MalwareBazaar candidate records.")
+    if (manifest.get("schema_version")!=1 or len(manifest.get("samples",[]))!=100
+            or manifest.get("verified_apk_count")!=100):
+        bad("Expected exactly 100 byte-verified APK candidates.")
     for field in ("name","revision","license","source"):
         if not isinstance(manifest.get(field),str) or not manifest[field].strip():
             bad("Missing candidate provenance field "+field)
@@ -40,7 +42,8 @@ def prepare(a):
         if row.get("provider")!="malwarebazaar" or not HEX.fullmatch(sha):
             bad("Malware candidate must have valid provider and SHA-256")
         malicious.append({"sample_id":"m%04d"%i,"label":"malicious","provider":"malwarebazaar",
-                          "sha256":sha,"relative_path":"m%04d.apk"%i})
+                          "sha256":sha,"source_filename":row.get("source_filename",""),
+                          "relative_path":"m%04d.apk"%i})
     index_raw=fetch(INDEX,125*1024*1024)
     index=json.loads(index_raw).get("packages")
     if not isinstance(index,dict): bad("F-Droid index format unexpected")
@@ -66,32 +69,27 @@ def prepare(a):
         "fdroid_index_sha256":digest(index_raw),"malware_manifest_sha256":digest(raw),
         "malware_name":manifest["name"],"malware_revision":manifest["revision"],
         "malware_license":manifest["license"],"malware_source":manifest["source"],
+        "byte_validated_malware_apks":manifest["verified_apk_count"],
+        "rejected_malware_candidates":manifest.get("rejected_candidate_count",0),
         "label_limitations":"MalwareBazaar/F-Droid source labels are not independently validated ground truth",
         "commit":os.environ.get("GITHUB_SHA","unknown")}})
     print("Prepared exactly 100 F-Droid + 100 MalwareBazaar-pinned candidate APK hashes")
 
-def download_malware(sha):
+def download_malware(sha, source_filename):
+    """Retry transient file retrieval but never alter a pinned shard SHA."""
     if not HEX.fullmatch(sha): bad("Invalid malware candidate SHA-256")
-    try:
-        raw=malwarebazaar.post_api({"query":"get_file","sha256_hash":sha},
-            os.environ.get("MALWAREBAZAAR_AUTH_KEY",""),max_bytes=90*1024*1024)
-    except malwarebazaar.DatasetUnavailable as e:
-        bad("Cannot acquire pinned APK: "+str(e))
-    if not raw.startswith(b"PK"):
-        bad("MalwareBazaar returned no encrypted ZIP (sample unavailable or download quota exceeded)")
-    import pyzipper
-    try:
-        with pyzipper.AESZipFile(io.BytesIO(raw)) as z:
-            files=[entry for entry in z.infolist() if not entry.is_dir()]
-            if len(files)!=1 or not 1<=files[0].file_size<=MAX_APK:
-                bad("Unsafe or unexpected MalwareBazaar ZIP content/size")
-            with z.open(files[0],pwd=b"infected") as src:
-                payload=src.read(MAX_APK+1)
-    except (RuntimeError,ValueError,zipfile.BadZipFile,EOFError) as e:
-        bad("Cannot safely unpack encrypted APK ZIP: "+type(e).__name__)
-    if len(payload)>MAX_APK or digest(payload)!=sha:
-        bad("MalwareBazaar sample digest mismatch after encrypted ZIP extraction")
-    return payload
+    for attempt in range(1,4):
+        try:
+            archive=malwarebazaar.post_api({"query":"get_file","sha256_hash":sha},
+                os.environ.get("MALWAREBAZAAR_AUTH_KEY",""),max_bytes=90*1024*1024)
+            return unpack_malwarebazaar_apk(archive,sha,source_filename)
+        except (malwarebazaar.DatasetUnavailable,InvalidAndroidAPK) as exc:
+            print(f"WARNING: pinned candidate {sha[:12]}, retry {attempt}/3: {exc}",
+                  file=sys.stderr,flush=True)
+            if attempt==3:
+                bad(f"Pinned APK {sha[:12]} unavailable or invalid on retry; fail closed, no silent replacement in a locked shard")
+            time.sleep(attempt*2)
+
 
 
 def shard_samples(plan, shard, label):
@@ -127,13 +125,12 @@ def stage(a):
     if len(selected)!=10: bad("Incomplete 10-file batch")
     shutil.rmtree(a.root,ignore_errors=True);a.root.mkdir(parents=True)
     for s in selected:
-        raw=download_malware(s["sha256"]) if s.get("provider")=="malwarebazaar" else fetch(s["url"],MAX_APK)
-        if digest(raw)!=s["sha256"]: bad("Downloaded APK digest mismatch: "+s["sample_id"])
+        if s.get("provider")=="malwarebazaar":
+            raw=download_malware(s["sha256"],s["source_filename"])
+        else:
+            raw=fetch(s["url"],MAX_APK)
+            validate_apk_bytes(raw,s["sha256"])
         target=a.root/s["relative_path"];target.write_bytes(raw)
-        try:
-            with zipfile.ZipFile(target) as z:
-                if "AndroidManifest.xml" not in z.namelist(): bad("Not an APK: "+s["sample_id"])
-        except zipfile.BadZipFile: bad("Invalid APK zip: "+s["sample_id"])
     save(a.root/"batch.json",dict(samples=[{k:s[k] for k in ("sample_id","label","sha256")} for s in selected]))
     print("Staged ten pinned APKs for "+description,flush=True)
 
