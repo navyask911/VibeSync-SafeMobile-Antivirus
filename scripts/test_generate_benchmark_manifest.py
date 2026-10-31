@@ -1,88 +1,76 @@
-"""Offline tests: no live MalwareBazaar or GitHub network requests."""
-import hashlib
-import unittest
+"""Offline regression tests for recent discovery and MalwareBazaar JSON responses."""
+import io,json,unittest,urllib.error
 from unittest.mock import patch
-
 import generate_benchmark_manifest as m
 from benchmark_apk_validation import InvalidAndroidAPK
 
+class Response:
+    def __init__(self,raw,mime="application/json"):
+        self.status=200;self.headers={"Content-Type":mime};self.raw=raw
+    def __enter__(self):return self
+    def __exit__(self,*args):return False
+    def read(self,n):return self.raw[:n]
 
-class StaticManifestTests(unittest.TestCase):
-    def example_list(self, extra=0):
-        values=[f"{i:064x}" for i in range(300+extra)]
-        return ("\n".join(values)+"\n").encode("utf8")
-
-    def test_first_300_deduplicated(self):
-        values=["0"*64,"0"*64]+[f"{i:064x}" for i in range(1,301)]
-        selected=m.parse_static_hash_list(("\n".join(values)).encode("utf8"))
-        self.assertEqual(len(selected),300)
-        self.assertEqual(len(set(selected)),300)
-        self.assertEqual(selected[0],"0"*64)
-        self.assertEqual(selected[-1],f"{299:064x}")
-
-    def test_missing_source_fails_closed(self):
-        with self.assertRaisesRegex(m.DatasetUnavailable,"only 3"):
-            m.parse_static_hash_list(b"0"*64+b"\n"+b"1"*64+b"\n"+b"2"*64+b"\n")
-
-    def test_invalid_or_non_hash_cannot_enter_plan(self):
-        with self.assertRaisesRegex(m.DatasetUnavailable,"Malformed"):
-            m.parse_static_hash_list(b"hello world\n"+self.example_list())
-        with self.assertRaisesRegex(m.DatasetUnavailable,"300"):
-            m.manifest_from_static_hashes(["0"*64]*300,lambda sha:None,"a"*64)
-
-    def test_fresh_manifest_refills_after_bad_apks(self):
-        hashes=m.parse_static_hash_list(self.example_list())
-        observed=[]
-        def verifier(sha):
-            observed.append(sha)
-            if len(observed) in (1,5,8):
-                raise InvalidAndroidAPK("bad APK")
+class Tests(unittest.TestCase):
+    key="test-credential-012345"
+    def row(self,i,kind="apk"):
+        return {"sha256_hash":f"{i:064x}","file_type":kind,"file_name":f"sample.{kind}"}
+    def test_recent_request_once_auth_key(self):
+        raw=json.dumps({"query_status":"ok","data":[self.row(i) for i in range(320)]}).encode()
+        with patch("urllib.request.urlopen",return_value=Response(raw)) as mock:
+            result=m.post_api({"query":"recent_detections","hours":"168"},self.key)
+        self.assertEqual(len(result["data"]),320)
+        mock.assert_called_once()
+        req=mock.call_args.args[0]
+        self.assertEqual(dict((k.lower(),v) for k,v in req.header_items())["auth-key"],self.key)
+        self.assertEqual(req.data,b"query=recent_detections&hours=168")
+    def test_up_to_300_unique_android_hashes(self):
+        rows=[self.row(i) for i in range(320)]+[self.row(0),self.row(1000,"exe")]
+        result=m.parse_recent_candidates({"query_status":"ok","data":rows})
+        self.assertEqual(len(result),300)
+        self.assertEqual(len(set(r["sha256"] for r in result)),300)
+    def test_skip_not_found_and_bad_apk(self):
+        seen=[]
+        def verify(row):
+            seen.append(row["sha256"])
+            if len(seen)==1:raise m.SampleUnavailable('{"query_status":"file_not_found"}')
+            if len(seen)==2:raise InvalidAndroidAPK("missing AndroidManifest.xml")
         with patch("sys.stderr"):
-            output=m.manifest_from_static_hashes(hashes,verifier,"b"*64)
-        self.assertEqual(len(output["samples"]),100)
-        self.assertEqual(output["rejected_candidate_count"],3)
-        self.assertEqual(output["candidate_limit"],300)
-        self.assertEqual(len(observed),103)
-        self.assertEqual(output["samples"][-1]["sha256"],hashes[102])
-
-    def test_rate_limit_is_global_and_ends_run(self):
-        hashes=m.parse_static_hash_list(self.example_list())
-        def verifier(sha):
-            raise m.DatasetUnavailable("MalwareBazaar HTTP 429 rate limit; stop this run")
+            result=m.manifest_from_recent({"query_status":"ok","data":[self.row(i) for i in range(130)]},verify)
+        self.assertEqual(result["verified_apk_count"],100)
+        self.assertEqual(result["rejected_candidate_count"],2)
+        self.assertEqual(len(seen),102)
+    def test_insufficient_recent_apks_cannot_publish(self):
+        with self.assertRaisesRegex(m.DatasetUnavailable,"Only 20/100"):
+            m.manifest_from_recent({"query_status":"ok","data":[self.row(i) for i in range(20)]},lambda _:None)
+    def test_json_file_not_found_detected_even_as_octet_stream(self):
+        for mime in ("application/json","application/octet-stream"):
+            with patch("urllib.request.urlopen",return_value=Response(b'{"query_status":"file_not_found"}',mime)):
+                with self.assertRaisesRegex(m.SampleUnavailable,"file_not_found"):
+                    m.post_api({"query":"get_file","sha256_hash":"a"*64},self.key)
+    def test_http_403_and_429_fail_globally(self):
+        for status in (403,429):
+            err=urllib.error.HTTPError(m.API,status,"err",{"Content-Type":"application/json"},
+                                      io.BytesIO(b'{"query_status":"rate_limit"}'))
+            with patch("urllib.request.urlopen",side_effect=err):
+                with self.assertRaisesRegex(m.DatasetUnavailable,"rate_limit"):
+                    m.post_api({"query":"get_file","sha256_hash":"a"*64},self.key)
+    def test_auth_header_for_zip_download(self):
+        with patch("urllib.request.urlopen",return_value=Response(b"PK\x03\x04body","application/zip")) as mock:
+            self.assertEqual(m.post_api({"query":"get_file","sha256_hash":"a"*64},self.key),b"PK\x03\x04body")
+        self.assertEqual(dict((k.lower(),v) for k,v in mock.call_args.args[0].header_items())["auth-key"],self.key)
+    def test_429_never_skipped(self):
+        seen=[]
+        def verify(row):
+            seen.append(row)
+            raise m.DatasetUnavailable("HTTP 429 quota")
         with self.assertRaisesRegex(m.DatasetUnavailable,"429"):
-            m.manifest_from_static_hashes(hashes,verifier,"b"*64)
+            m.manifest_from_recent({"query_status":"ok","data":[self.row(i) for i in range(130)]},verify)
+        self.assertEqual(len(seen),1)
+    def test_bulk_discovery_rejected(self):
+        with patch("urllib.request.urlopen") as mock:
+            with self.assertRaisesRegex(m.DatasetUnavailable,"Historical/bulk"):
+                m.post_api({"query":"get_file_type","file_type":"apk"},self.key)
+            mock.assert_not_called()
 
-    def test_all_unavailable_fail_closed(self):
-        hashes=m.parse_static_hash_list(self.example_list())
-        def verifier(sha):
-            raise InvalidAndroidAPK("non Android")
-        with patch("sys.stderr"):
-            with self.assertRaisesRegex(m.DatasetUnavailable,"Only 0 valid APKs"):
-                m.manifest_from_static_hashes(hashes,verifier,"b"*64)
-
-    def test_reject_bulk_api_discovery_without_network(self):
-        with patch("urllib.request.urlopen") as network:
-            with self.assertRaisesRegex(m.DatasetUnavailable,"Only individual get_file"):
-                m.post_api({"query":"get_file_type","file_type":"apk","limit":"1000"},"token1234567")
-            network.assert_not_called()
-
-    def test_pinned_source_exact_url_only(self):
-        with patch("urllib.request.urlopen") as network:
-            with self.assertRaisesRegex(m.DatasetUnavailable,"Unapproved"):
-                m.get_static_hashes_once("https://example.com/untrusted.txt")
-            network.assert_not_called()
-
-    def test_static_list_download_once_mocked(self):
-        class Response:
-            status=200
-            url=m.STATIC_LIST_URL
-            def __enter__(self):return self
-            def __exit__(self,*args):pass
-            def read(self,count):return b"0"*64+b"\n"
-        with patch("urllib.request.urlopen",return_value=Response()) as network:
-            self.assertEqual(m.get_static_hashes_once(),b"0"*64+b"\n")
-            network.assert_called_once()
-
-
-if __name__=="__main__":
-    unittest.main()
+if __name__=="__main__":unittest.main()
