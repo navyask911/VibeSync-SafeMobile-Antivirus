@@ -29,7 +29,9 @@ FEATURES = [
     "api.Runtime.exec", "api.DexClassLoader", "api.Class.forName",
     "api.AccessibilityService"
 ]
-OUTPUT = Path("app/src/main/assets/malware_model.tflite")
+# The 32-feature legacy trainer is retained for research only. Never overwrite the
+# bundled 215-feature model staged from a SHA-256-pinned release at build time.
+OUTPUT = Path("build/research/legacy32/malware_model.tflite")
 MAX_MODEL_BYTES = 50 * 1024 * 1024
 
 def read_csv(path):
