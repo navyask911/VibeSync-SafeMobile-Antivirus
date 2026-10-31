@@ -8,9 +8,9 @@ For current scan status and the app's Settings-screen summary, see the [active B
 
 | Year & Benchmark ID | Execution Date | Corpus Size | Corpus Source | True Positive Rate (TPR) | False Positive Rate (FPR) | Average Scan Latency | Shard Matrix Health |
 |---|---|---|---|---|---|---|---|
-| **2026 Baseline · [Industry Benchmark #11](https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/actions/runs/41224653496)** | 31 Oct 2026 (dispatched; final completion date pending) | **200 planned**: 100 benign + 100 malicious; final verified totals pending | **Malware:** static 500-SHA-256 text manifest, `MalwareSamples/Android-Malware-Samples` commit `cf802c63` (100 validated APKs required). **Benign:** F-Droid | **PENDING — Benchmark #11 in progress** | **PENDING — Benchmark #11 in progress** | **PENDING — Benchmark #11 in progress** | **PENDING — require 10/10 completed** |
+| **2026 Baseline · [Industry Benchmark #11](https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/actions/runs/41224653496)** | **31 Oct 2026, 18:32:34 UTC** | **200 scanned**: 100 benign + 100 malicious-source APKs | **Malware:** pinned 500-SHA-256 text manifest, `MalwareSamples/Android-Malware-Samples` commit `cf802c63`; 100 byte-validated malicious-source APKs. **Benign:** F-Droid | **0.0%** | **0.0%** | **4,109.48 ms / APK** | **10/10 passed**; 200/200 scanned; 0 NOT_SCANNED |
 
-**2026 baseline status:** PENDING — Benchmark #11 in progress. The row is a record of the planned benchmark, **not** a statement that 200 APKs have been scanned or that the shard matrix passed. No detection or timing metric is published until the owner provides the final verified results. Historical model research accuracy (including a separate 97.45% holdout figure) is not TPR for this benchmark.
+**2026 baseline status: MEASURED.** [Benchmark #11](https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/actions/runs/41224653496) passed all 10 emulator shards and the aggregator verified 100 malicious-source and 100 benign APK scans with `not_scanned=0`. Confirmed-threat **TPR was 0.0%**, meaning **zero of the 100 source-labeled malicious APKs received a confirmed THREAT verdict**; confirmed-threat FPR was **0.0%**. The **advisory** `SUSPICIOUS` triage rates were **12.0% TPR** and **8.0% FPR**, and are not confirmed malware detection. **Mean latency was 4,109.48 ms per APK.** The separate Drebin 97.45% research holdout is not this benchmark's TPR; `research_ml_samples_scored=0` in this run. Source labels are not independently adjudicated ground truth.
 
 ## Zero-Binary Repository methodology
 
@@ -26,7 +26,7 @@ For current scan status and the app's Settings-screen summary, see the [active B
 - **Evidence:** Record the execution date, run URL/ID, source commit, class sizes, shard completion, measured TPR, FPR and mean scan latency from the verified aggregator output.
 - **Pending or failed runs:** Use **PENDING** or **NOT MEASURED** as appropriate; never guess, extrapolate, use fixture results or substitute research-model holdout accuracy.
 - **Scope:** These figures characterize the specific APK corpus, SafeMobile build, emulator configuration and test date, not a guarantee of universal malware detection or independent certification.
-- **2026 freeze:** Leave every 2026 numeric result as **PENDING** until the owner supplies or authorizes the confirmed Benchmark #11 results.
+- **2026 verified baseline:** Recorded from the successful Benchmark #11 aggregator. Keep its measurements immutable as a historical snapshot; corrections require a linked reproducible run and an explicit note, not silent replacement.
 
 ## Supporting references
 

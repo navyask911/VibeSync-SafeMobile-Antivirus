@@ -1,5 +1,7 @@
 # SafeMobile Industry Benchmark Report
 
+**Final status: MEASURED — Benchmark #11 verified.** [2026 Annual Benchmark Results](ANNUAL_BENCHMARK_RESULTS.md) · [Successful 10-shard execution](https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/actions/runs/41224653496).
+
 Read-only Android emulator APK scans (samples NEVER installed/executed). THREAT counts as a confirmed detection; SUSPICIOUS counts only for triage.
 
 ## Benchmark result
@@ -44,3 +46,20 @@ Read-only Android emulator APK scans (samples NEVER installed/executed). THREAT 
 ~~~
 
 Research ML scores are independent of production threat verdicts; ML-only rates are shown only if all 200 samples were scored. Models/definitions not active in the scanned build cannot contribute to measured efficacy. Results apply only to this corpus, emulator and commit.
+
+## Verified 2026 baseline
+
+| Measurement | Verified value |
+|---|---:|
+| Confirmed-detection TPR | **0.0%** |
+| Confirmed-detection FPR | **0.0%** |
+| Average scan latency | **4,109.48 ms per APK** |
+| Corpus | **200/200 APKs**: 100 malicious-source + 100 benign |
+| Emulator shards | **10/10 passed** |
+| NOT_SCANNED | **0** |
+| Advisory triage TPR / FPR | **12.0% / 8.0%** |
+| Research ML samples scored | **0** |
+
+**Interpretation:** Zero confirmed-detection TPR means no source-labeled malicious APK received a confirmed `THREAT` verdict in this run. Advisory triage is not confirmed detection, and the research-only ML model was not evaluated. This is a corpus-specific result, not independent certification or evidence of universal protection.
+
+Historical results and annual methodology: [ANNUAL_BENCHMARK_RESULTS.md](ANNUAL_BENCHMARK_RESULTS.md).
