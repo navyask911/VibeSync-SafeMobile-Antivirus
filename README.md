@@ -60,6 +60,8 @@ SafeMobile does **not** send your APK contents, local file hashes, scan verdicts
 
 ## Security Validation & Annual Benchmarking
 
+**Live intelligence:** View our Live Threat Intelligence Dashboard in real-time: [Link](https://navyask911.github.io/safemobile-Antivirus-Trained-ML-Data-of-Android-malware/). This public research website is separate from the app; core scanning stays offline.
+
 **Evidence before advertising performance.** The benchmark uses **200 real Android APKs**: **100 source-labeled malicious samples** and **100 F-Droid benign apps**. Ten Android emulator shards each process 10 malware-source and 10 benign APKs.
 
 Its **Zero-Binary Repository** rule keeps raw malware samples outside the Git tree and GitHub artifacts. The test downloads samples to temporary CI runner scratch space, validates `PK\x03\x04` ZIP magic, compiled `AndroidManifest.xml` and SHA-256, then deletes the files. Password-protected archives use `pyzipper` with password `infected` when required. The sample APKs are inspected, **never installed or executed**.
