@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ad_privacy_intro">Podstawowe skanowanie w poszukiwaniu złośliwego oprogramowania odbywa się na tym urządzeniu. Bezpłatny plan korzysta z Google AdMob; Google może przetwarzać identyfikator reklamowy i adres IP w celu wyświetlania reklam i zapobiegania oszustwom. Gdy SafeMobile Pro jest aktywny, AdMob nie jest inicjowany, a reklamy nie są zamawiane ani wyświetlane.</string>
+    <string name="ad_privacy_options">Prywatność i wybory reklamowe</string>
+</resources>
