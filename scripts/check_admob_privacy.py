@@ -90,6 +90,18 @@ for path, text in (
     if "does not initialize" not in text and "does not initialise" not in text:
         errors.append(f"{path} must state the Pro AdMob exemption.")
 
+for path, text in (
+    ("docs/PRIVACY_POLICY.md", privacy),
+    ("app/src/main/assets/privacy-policy.md", asset_privacy),
+    ("README.md", readme),
+    ("docs/PLAY_STORE_DESCRIPTION.md", store),
+    ("app/src/main/assets/README.md", about_readme),
+):
+    lowered = text.lower()
+    for value in ("user product interactions", "diagnostic information", "app set id", "tls"):
+        if value not in lowered:
+            errors.append(f"{path} is missing the complete Google Mobile Ads SDK disclosure: {value}.")
+
 if 'versionCode = 20261116' not in gradle or 'versionName = "1.2.0"' not in gradle:
     errors.append("The Android app must be version 1.2.0 with versionCode 20261116.")
 if "On-device Malware Scanning. Ad-supported Free Tier. No AdMob Ads with Pro." not in readme:
