@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ad_privacy_intro">Việc quét phần mềm độc hại cốt lõi vẫn diễn ra trên thiết bị này. Gói miễn phí sử dụng Google AdMob; Google có thể xử lý Mã quảng cáo và địa chỉ IP để phân phối quảng cáo và ngăn chặn gian lận. Khi SafeMobile Pro còn hoạt động, AdMob không được khởi tạo và không có quảng cáo nào được yêu cầu hoặc hiển thị.</string>
+    <string name="ad_privacy_options">Quyền riêng tư và lựa chọn quảng cáo</string>
+</resources>
