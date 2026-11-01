@@ -89,6 +89,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vibesync.antivirus.BuildConfig
 import com.vibesync.antivirus.SafeMobileApp
+import com.vibesync.antivirus.core.ads.AdMobManager
 import com.vibesync.antivirus.R
 import com.vibesync.antivirus.core.connectivity.ConnectivityMonitor
 import com.vibesync.antivirus.core.worker.HashDatabaseSyncScheduler
@@ -132,6 +133,8 @@ import kotlinx.coroutines.launch
 ) {
  val context=LocalContext.current
  val safeMobileApp=context.applicationContext as SafeMobileApp
+ val adMobManager = remember(safeMobileApp) { safeMobileApp.adMobManager }
+ val adMobState by adMobManager.state.collectAsStateWithLifecycle()
  var fullScreenAlertsGranted by remember(context) { mutableStateOf(FullScreenAlertAccess.isGranted(context)) }
  val activity=context as? Activity
  val vm:SafeMobileViewModel=viewModel(factory=SafeMobileViewModel.Factory(repository))
@@ -218,6 +221,34 @@ import kotlinx.coroutines.launch
  var securityAlertsEnabled by remember(context) { mutableStateOf(securityPrefs.getBoolean(SafeMobileApp.KEY_SECURITY_ALERTS_ENABLED, false)) }
  val snackbarHostState = remember { SnackbarHostState() }
  val uiScope = rememberCoroutineScope()
+ var lastHandledManualScanSequence by remember { mutableStateOf(0L) }
+ LaunchedEffect(privacyAccepted, activity) {
+  if (privacyAccepted && activity != null) adMobManager.refresh(activity)
+ }
+ LaunchedEffect(selectedDestination, privacyAccepted) {
+  if (selectedDestination == "home" && privacyAccepted && activity != null)
+   adMobManager.refresh(activity)
+ }
+ DisposableEffect(lifecycleOwner, privacyAccepted, activity) {
+  val observer = LifecycleEventObserver { _, event ->
+   if (event == Lifecycle.Event.ON_RESUME && privacyAccepted && activity != null) {
+    uiScope.launch { adMobManager.refresh(activity) }
+   }
+  }
+  lifecycleOwner.lifecycle.addObserver(observer)
+  onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+ }
+ LaunchedEffect(state.manualScanCompletionSequence) {
+  val completed = state.manualScanCompletionSequence
+  if (completed > lastHandledManualScanSequence) {
+   lastHandledManualScanSequence = completed
+   if (activity != null) adMobManager.showInterstitialAfterManualScan(
+    activity = activity,
+    manualScanCompleted = true,
+    hasConfirmedThreats = state.threatCount > 0
+   )
+  }
+ }
  var pendingGlobalDonationResults by remember { mutableStateOf<List<ScanResult>>(emptyList()) }
  val promptedGlobalDonationEvents = remember { mutableSetOf<String>() }
  LaunchedEffect(state.results) {
@@ -416,7 +447,7 @@ import kotlinx.coroutines.launch
   if (onboardingComplete && privacyAccepted &&
       !onboardingPrefs.getBoolean(OnboardingPrefs.FIRST_SCAN_REQUESTED, false)) {
    onboardingPrefs.edit().putBoolean(OnboardingPrefs.FIRST_SCAN_REQUESTED, true).apply()
-   vm.scanFull()
+   vm.scanFull(manualScan = false)
   }
  }
  LaunchedEffect(initialHashSyncPending) {
@@ -841,11 +872,19 @@ import kotlinx.coroutines.launch
       securityAlertsEnabled = securityAlertsEnabled,
       onSecurityAlertsChanged = changeSecurityAlerts,
       onToggleProtection = toggleProtection, onStrictModeChanged = updateStrictMode,
-       appTheme = appTheme, onAppThemeChanged = onAppThemeChanged
+       appTheme = appTheme, onAppThemeChanged = onAppThemeChanged,
+       adPrivacyOptionsRequired = adMobState.privacyOptionsRequired,
+       isProForAds = adMobState.isPro,
+       onShowAdPrivacyOptions = {
+        activity?.let { host -> uiScope.launch { adMobManager.showPrivacyOptions(host) } }
+       }
      )
     }
     if (selectedDestination == "pro") {
-     SafeMobileProPaywallScreen(onBack = { selectedDestination = "home" })
+     SafeMobileProPaywallScreen(
+      onBack = { selectedDestination = "home" },
+      onProStatusChanged = { isPro -> if (isPro) adMobManager.disableForPro() }
+     )
     }
     if (selectedDestination == "capabilities") {
      DetectionCapabilitiesScreen(
@@ -857,6 +896,9 @@ import kotlinx.coroutines.launch
      )
     }
     Spacer(Modifier.height(8.dp))
+    if (selectedDestination == "home" && adMobState.adsReady && !adMobState.isPro) {
+     AdMobBanner(adMobManager)
+    }
    }
    SnackbarHost(hostState = snackbarHostState)
    NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
@@ -1024,7 +1066,7 @@ pendingQuarantine?.let { flagged ->
  if(showPrivacyDisclosure) AlertDialog(
   onDismissRequest={ showPrivacyDisclosure=false; pendingSensitiveAction=null },
   title={ Text(stringResource(R.string.privacy_title)) },
-  text={ Text(stringResource(R.string.privacy_body)) },
+  text={ Text(stringResource(R.string.ad_privacy_intro)) },
   confirmButton={ TextButton(onClick={
    context.getSharedPreferences(SafeMobileApp.PRIVACY_PREFS,0).edit().putBoolean(SafeMobileApp.PRIVACY_ACKNOWLEDGED,true).apply()
    privacyAccepted=true
