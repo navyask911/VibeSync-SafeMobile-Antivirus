@@ -92,7 +92,7 @@ for path, text in (
 
 if 'versionCode = 20261116' not in gradle or 'versionName = "1.2.0"' not in gradle:
     errors.append("The Android app must be version 1.2.0 with versionCode 20261116.")
-if "100% Offline Malware Scanning. Ad-supported Free Tier. No Ads or Tracking with Pro." not in readme:
+if "On-device Malware Scanning. Ad-supported Free Tier. No AdMob Ads with Pro." not in readme:
     errors.append("README must use the requested Free/Pro advertising tagline.")
 if "Ad-supported Free Tier" not in store or "Advertising ID" not in store or "IP addresses" not in store or "analytics" not in store:
     errors.append("Google Play Store description must disclose ads and identifier/IP processing.")
