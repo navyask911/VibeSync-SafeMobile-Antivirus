@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ad_privacy_intro">মূল ম্যালওয়্যার স্ক্যান এই ডিভাইসেই থাকে। ফ্রি স্তরে Google AdMob ব্যবহৃত হয়; বিজ্ঞাপন সরবরাহ ও প্রতারণা প্রতিরোধে Google Advertising ID এবং IP ঠিকানা প্রক্রিয়া করতে পারে। SafeMobile Pro সক্রিয় থাকলে AdMob চালু হয় না এবং কোনো বিজ্ঞাপন অনুরোধ বা প্রদর্শন করা হয় না।</string>
+    <string name="ad_privacy_options">গোপনীয়তা ও বিজ্ঞাপন পছন্দ</string>
+</resources>
