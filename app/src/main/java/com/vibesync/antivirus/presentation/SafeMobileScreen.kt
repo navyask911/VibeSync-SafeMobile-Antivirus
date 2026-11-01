@@ -892,6 +892,12 @@ import kotlinx.coroutines.launch
        adPrivacyOptionsRequired = adMobState.privacyOptionsRequired,
        isProForAds = adMobState.isPro,
        onManageFolders = { selectedDestination = "sentinel" },
+       onAddCustomFolder = { requestPrivacyAcknowledgement {
+        selectedDestination = "sentinel"
+        pendingFolderRole = StorageAccessPreferences.CUSTOM
+        pendingSentinelEnable = true
+        showStoragePermissionPrompt = true
+       } },
        onShowAdPrivacyOptions = {
         activity?.let { host -> uiScope.launch { adMobManager.showPrivacyOptions(host) } }
        }
