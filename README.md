@@ -34,7 +34,7 @@
 
 Some mobile security tools depend on remote lookups, user accounts or analytics. SafeMobile takes a different approach: **inspect accessible files and apps locally, retain scan history on the device, and keep core protection working without an internet connection.**
 
-SafeMobile keeps core malware scanning on the device and does not send scanned APK contents, scan verdicts or device-posture snapshots to a developer-operated server. The Free tier is ad-supported by Google AdMob; Google may process the Advertising ID and IP addresses for ad delivery and fraud prevention. While SafeMobile Pro is active, the app does not initialize AdMob or make ad requests. This is not a claim of zero telemetry or no third-party processing; see the [privacy policy](docs/PRIVACY_POLICY.md) for details.
+SafeMobile keeps core malware scanning on the device and does not send scanned APK contents, scan verdicts or device-posture snapshots to a developer-operated server. The Free tier is ad-supported by Google AdMob; Google may process the Advertising ID and IP addresses for ad delivery and fraud prevention. While SafeMobile Pro is active, the app does not initialize AdMob or make ad requests. These advertising-related data flows are separate from locally processed malware scan content; see the [privacy policy](docs/PRIVACY_POLICY.md) for details.
 
 > **Offline-first, not network-free:** optional signed threat-intelligence updates, optional research model downloads and user-initiated Google Play Billing use network services. Their providers can receive ordinary request/IP metadata. None is required for core offline scanning. [Read the privacy policy](docs/PRIVACY_POLICY.md).
 
