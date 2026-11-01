@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ad_privacy_intro">マルウェアの基本スキャンはこの端末内で行われます。無料版では Google AdMob を使用し、Google は広告配信と不正防止のため広告 ID と IP アドレスを処理する場合があります。SafeMobile Pro が有効な間、AdMob は初期化されず、広告のリクエストや表示も行われません。</string>
+    <string name="ad_privacy_options">プライバシーと広告の設定</string>
+</resources>
