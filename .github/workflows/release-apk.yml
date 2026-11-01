@@ -185,7 +185,7 @@ jobs:
 
               def blocks(element_name):
                   found=[]
-                  pattern=re.compile(r"^(\\s*)E:\\s+"+re.escape(element_name)+r"(?:\\s|$)")
+                  pattern=re.compile(r"^(\s*)E:\s+"+re.escape(element_name)+r"(?:\s|$)")
                   for index,line in enumerate(lines):
                       match=pattern.match(line)
                       if not match:
@@ -193,11 +193,11 @@ jobs:
                       indent=len(match.group(1))
                       end=len(lines)
                       for next_index in range(index+1,len(lines)):
-                          nested=re.match(r"^(\\s*)E:\\s+",lines[next_index])
+                          nested=re.match(r"^(\s*)E:\s+",lines[next_index])
                           if nested and len(nested.group(1))<=indent:
                               end=next_index
                               break
-                      found.append((index,indent,"\\n".join(lines[index+1:end])))
+                      found.append((index,indent,"\n".join(lines[index+1:end])))
                   return found
 
               applications=blocks("application")
@@ -221,7 +221,7 @@ jobs:
               if not permission_found:
                   raise SystemExit("SAFE STOP: Signed APK AD_ID permission is missing.")
 
-              manifest_tree="\\n".join(lines)
+              manifest_tree="\n".join(lines)
               for forbidden in ("android.permission.BIND_ACCESSIBILITY_SERVICE",
                                 "android.accessibilityservice.AccessibilityService"):
                   if forbidden in manifest_tree:
