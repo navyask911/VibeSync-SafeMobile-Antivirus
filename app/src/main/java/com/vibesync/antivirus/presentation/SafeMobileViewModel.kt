@@ -31,6 +31,7 @@ data class SafeMobileUiState(
     val inventoryLoading: Boolean = false,
     val inventoryLoaded: Boolean = false,
     val completedScans: Int = 0,
+    val manualScanCompletionSequence: Long = 0L,
     val lastScanAt: Long? = null,
     val messageResource: Int? = null,
     val messageText: UiText? = null,
@@ -217,10 +218,10 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
 
     fun scanInstalled() {
         refreshInstalledInventory()
-        runScan { onProgress -> repository.scanInstalledApps(onProgress) }
+        runScan(manualScan = true) { onProgress -> repository.scanInstalledApps(onProgress) }
     }
 
-    fun scanFull() = runScan { onProgress ->
+    fun scanFull(manualScan: Boolean = true) = runScan(manualScan) { onProgress ->
         repository.scanFull(onProgress)
     }
 
@@ -320,7 +321,10 @@ fun importOfflineDefinitions(uri: Uri) {
         }
     }
 
-    private fun runScan(task: suspend (suspend (Int, Int) -> Unit) -> List<ScanResult>) {
+    private fun runScan(
+        manualScan: Boolean = true,
+        task: suspend (suspend (Int, Int) -> Unit) -> List<ScanResult>
+    ) {
         if (mutableState.value.isScanning || scanJob?.isActive == true) return
         scanJob = viewModelScope.launch {
             mutableState.update {
@@ -356,6 +360,8 @@ fun importOfflineDefinitions(uri: Uri) {
                         isScanning = false,
                         results = results,
                         completedScans = state.completedScans + 1,
+                        manualScanCompletionSequence = state.manualScanCompletionSequence +
+                            if (manualScan) 1L else 0L,
                         lastScanAt = System.currentTimeMillis(),
                         messageResource = R.string.scan_complete,
                         messageText = null,
