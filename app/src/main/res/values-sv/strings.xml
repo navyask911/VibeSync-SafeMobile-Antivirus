@@ -817,4 +817,11 @@
     <string name="threat_intelligence_updated">Senaste uppdatering av hotinformation</string>
     <string name="threat_intelligence_updating">Uppdaterar hotinformation…</string>
     <string name="threat_intelligence_training_note">Träningsstatistik. Se detekteringslagren nedan för tillgängligt skydd på den här enheten.</string>
+    <string name="ui_sentinel_add_custom_folder">+ Lägg till anpassad mapp</string>
+    <string name="ui_sentinel_custom_folders">Anpassade mappar</string>
+    <string name="ui_sentinel_folder_limit">Du kan lägga till upp till 10 anpassade mappar.</string>
+    <string name="ui_read_more">Läs mer</string>
+    <string name="ui_read_less">Visa mindre</string>
+    <string name="ui_status_safe">Säkert</string>
+    <string name="ui_status_at_risk">I riskzonen</string>
 </resources>

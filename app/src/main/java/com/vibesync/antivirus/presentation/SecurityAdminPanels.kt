@@ -1,6 +1,7 @@
 package com.vibesync.antivirus.presentation
 
 import com.vibesync.antivirus.core.locale.SecurityText
+import androidx.compose.ui.window.DialogProperties
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -57,7 +58,8 @@ internal fun EnterpriseProtectionCard(manager: DeviceOwnerManager, modifier: Mod
    OutlinedButton(onClick={guide=true},modifier=Modifier.fillMaxWidth()) { Text(stringResource(R.string.enterprise_setup_guide)) }
   }
  }
- if(guide) AlertDialog(onDismissRequest={guide=false},title={Text(stringResource(R.string.enterprise_setup_guide))},
+ if(guide) AlertDialog(
+        properties = DialogProperties(dismissOnClickOutside = true, dismissOnBackPress = true),onDismissRequest={guide=false},title={Text(stringResource(R.string.enterprise_setup_guide))},
   text={Text(stringResource(R.string.enterprise_setup_instructions))},
   confirmButton={TextButton(onClick={guide=false}) { Text(stringResource(R.string.close)) }})
 
@@ -125,7 +127,8 @@ internal fun EnterpriseOnboardingNotice(manager: DeviceOwnerManager) {
    TextButton(onClick={guide=true}) { Text(stringResource(R.string.enterprise_setup_guide)) }
   }
  }
- if(guide) AlertDialog(onDismissRequest={guide=false},title={Text(stringResource(R.string.enterprise_setup_guide))},
+ if(guide) AlertDialog(
+        properties = DialogProperties(dismissOnClickOutside = true, dismissOnBackPress = true),onDismissRequest={guide=false},title={Text(stringResource(R.string.enterprise_setup_guide))},
   text={Text(stringResource(R.string.enterprise_setup_instructions))},
   confirmButton={TextButton(onClick={guide=false}) { Text(stringResource(R.string.close)) }})
 }

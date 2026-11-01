@@ -1,6 +1,7 @@
 package com.vibesync.antivirus.presentation
 
 import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.window.DialogProperties
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInfo
@@ -547,6 +548,7 @@ internal fun StorageCleanerPanel() {
 
     pendingDelete?.let { deleteSet ->
         AlertDialog(
+        properties = DialogProperties(dismissOnClickOutside = true, dismissOnBackPress = true),
             onDismissRequest = { pendingDelete = null },
             title = { Text(stringResource(R.string.cleaner_delete_confirm_title)) },
             text = {

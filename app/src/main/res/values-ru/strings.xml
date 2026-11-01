@@ -673,5 +673,12 @@
     <string name="threat_intelligence_updated">Последнее обновление данных об угрозах</string>
     <string name="threat_intelligence_updating">Обновление данных об угрозах…</string>
     <string name="threat_intelligence_training_note">Статистика обучения. Сведения о доступной защите устройства приведены в слоях обнаружения ниже.</string>
+    <string name="ui_sentinel_add_custom_folder">+ Добавить пользовательскую папку</string>
+    <string name="ui_sentinel_custom_folders">Пользовательские папки</string>
+    <string name="ui_sentinel_folder_limit">Можно добавить до 10 пользовательских папок.</string>
+    <string name="ui_read_more">Подробнее</string>
+    <string name="ui_read_less">Свернуть</string>
+    <string name="ui_status_safe">Безопасно</string>
+    <string name="ui_status_at_risk">Под угрозой</string>
 </resources>
 

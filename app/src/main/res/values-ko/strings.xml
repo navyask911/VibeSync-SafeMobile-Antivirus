@@ -674,4 +674,11 @@
     <string name="threat_intelligence_updated">최근 인텔리전스 업데이트</string>
     <string name="threat_intelligence_updating">위협 인텔리전스 업데이트 중…</string>
     <string name="threat_intelligence_training_note">학습 통계입니다. 이 기기에서 사용할 수 있는 보호 기능은 아래 탐지 계층을 확인하세요.</string>
+    <string name="ui_sentinel_add_custom_folder">+ 사용자 지정 폴더 추가</string>
+    <string name="ui_sentinel_custom_folders">사용자 지정 폴더</string>
+    <string name="ui_sentinel_folder_limit">사용자 지정 폴더를 최대 10개까지 추가할 수 있습니다.</string>
+    <string name="ui_read_more">더 보기</string>
+    <string name="ui_read_less">간략히 보기</string>
+    <string name="ui_status_safe">안전</string>
+    <string name="ui_status_at_risk">위험</string>
 </resources>

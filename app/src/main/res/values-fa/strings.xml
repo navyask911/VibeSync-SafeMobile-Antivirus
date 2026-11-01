@@ -817,4 +817,11 @@
     <string name="threat_intelligence_updated">آخرین به‌روزرسانی اطلاعات تهدید</string>
     <string name="threat_intelligence_updating">در حال به‌روزرسانی اطلاعات تهدید…</string>
     <string name="threat_intelligence_training_note">آمار آموزش. برای آگاهی از حفاظت موجود در این دستگاه، لایه‌های شناسایی زیر را ببینید.</string>
+    <string name="ui_sentinel_add_custom_folder">+ افزودن پوشه سفارشی</string>
+    <string name="ui_sentinel_custom_folders">پوشه‌های سفارشی</string>
+    <string name="ui_sentinel_folder_limit">می‌توانید حداکثر ۱۰ پوشه سفارشی اضافه کنید.</string>
+    <string name="ui_read_more">بیشتر بخوانید</string>
+    <string name="ui_read_less">نمایش کمتر</string>
+    <string name="ui_status_safe">ایمن</string>
+    <string name="ui_status_at_risk">در معرض خطر</string>
 </resources>

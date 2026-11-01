@@ -817,4 +817,11 @@
     <string name="threat_intelligence_updated">Ultima actualizare a informațiilor</string>
     <string name="threat_intelligence_updating">Se actualizează informațiile despre amenințări…</string>
     <string name="threat_intelligence_training_note">Statistici de antrenare. Consultați straturile de detectare de mai jos pentru protecția disponibilă pe acest dispozitiv.</string>
+    <string name="ui_sentinel_add_custom_folder">+ Adaugă dosar personalizat</string>
+    <string name="ui_sentinel_custom_folders">Dosare personalizate</string>
+    <string name="ui_sentinel_folder_limit">Poți adăuga până la 10 dosare personalizate.</string>
+    <string name="ui_read_more">Citește mai mult</string>
+    <string name="ui_read_less">Afișează mai puțin</string>
+    <string name="ui_status_safe">Sigur</string>
+    <string name="ui_status_at_risk">În pericol</string>
 </resources>

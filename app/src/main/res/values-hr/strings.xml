@@ -817,4 +817,11 @@
     <string name="threat_intelligence_updated">Zadnje ažuriranje podataka o prijetnjama</string>
     <string name="threat_intelligence_updating">Ažuriranje podataka o prijetnjama…</string>
     <string name="threat_intelligence_training_note">Statistika treniranja. Dostupna zaštita ovog uređaja opisana je u slojevima otkrivanja u nastavku.</string>
+    <string name="ui_sentinel_add_custom_folder">+ Dodaj prilagođenu mapu</string>
+    <string name="ui_sentinel_custom_folders">Prilagođene mape</string>
+    <string name="ui_sentinel_folder_limit">Možete dodati do 10 prilagođenih mapa.</string>
+    <string name="ui_read_more">Pročitaj više</string>
+    <string name="ui_read_less">Prikaži manje</string>
+    <string name="ui_status_safe">Sigurno</string>
+    <string name="ui_status_at_risk">U riziku</string>
 </resources>

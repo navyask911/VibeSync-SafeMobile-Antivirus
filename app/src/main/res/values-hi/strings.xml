@@ -673,4 +673,11 @@
     <string name="threat_intelligence_updated">खतरे की जानकारी का अंतिम अपडेट</string>
     <string name="threat_intelligence_updating">खतरे की जानकारी अपडेट हो रही है…</string>
     <string name="threat_intelligence_training_note">ये प्रशिक्षण के आँकड़े हैं। इस डिवाइस पर उपलब्ध सुरक्षा के लिए नीचे दी गई पहचान परतें देखें।</string>
+    <string name="ui_sentinel_add_custom_folder">+ कस्टम फ़ोल्डर जोड़ें</string>
+    <string name="ui_sentinel_custom_folders">कस्टम फ़ोल्डर</string>
+    <string name="ui_sentinel_folder_limit">आप अधिकतम 10 कस्टम फ़ोल्डर जोड़ सकते हैं।</string>
+    <string name="ui_read_more">और पढ़ें</string>
+    <string name="ui_read_less">कम दिखाएँ</string>
+    <string name="ui_status_safe">सुरक्षित</string>
+    <string name="ui_status_at_risk">जोखिम में</string>
 </resources>

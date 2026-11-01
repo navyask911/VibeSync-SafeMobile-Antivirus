@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.animation.animateContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.filled.Warning
@@ -115,12 +116,11 @@ fun DevicePostureScreen(
     onEnableAlerts: () -> Unit
 ) {
     val context = LocalContext.current
-    Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
+    Column(Modifier.animateContentSize(), verticalArrangement = Arrangement.spacedBy(14.dp)) {
         Text(stringResource(R.string.posture_title), style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold)
-        Text(stringResource(R.string.posture_intro), style = MaterialTheme.typography.bodyMedium)
-        Text(stringResource(R.string.posture_risk_note), style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant)
+        ExpandableText(stringResource(R.string.posture_intro), maxLines = 3)
+        ExpandableText(stringResource(R.string.posture_risk_note), maxLines = 3)
         Button(onClick = onRefresh, enabled = !state.refreshing, modifier = Modifier.fillMaxWidth()) {
             if (state.refreshing) CircularProgressIndicator(Modifier.size(18.dp).padding(end = 4.dp), strokeWidth = 2.dp)
             Text(stringResource(if (state.refreshing) R.string.posture_checking else R.string.posture_refresh))
@@ -135,7 +135,7 @@ fun DevicePostureScreen(
         CyberCard(Modifier.fillMaxWidth()) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text(stringResource(R.string.posture_monitor_title), style = MaterialTheme.typography.titleMedium)
-                Text(stringResource(R.string.posture_monitor_description), style = MaterialTheme.typography.bodySmall)
+                ExpandableText(stringResource(R.string.posture_monitor_description), maxLines = 3)
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(stringResource(R.string.posture_monitor_toggle), modifier = Modifier.weight(1f))
                     Switch(checked = state.monitor?.enabled ?: true, onCheckedChange = onMonitoringChanged)
@@ -160,8 +160,7 @@ fun DevicePostureScreen(
             CyberCard(Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Text(stringResource(PostureText.title(access)), style = MaterialTheme.typography.titleMedium)
-                    if (access == PostureAccess.OVERLAY) Text(stringResource(R.string.posture_overlay_limit),
-                        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    if (access == PostureAccess.OVERLAY) ExpandableText(stringResource(R.string.posture_overlay_limit), maxLines = 3)
                     val report = state.report
                     if (report == null) Text(stringResource(R.string.posture_not_checked), style = MaterialTheme.typography.bodySmall)
                     else {
@@ -202,8 +201,7 @@ private fun PostureFindingRow(finding: PostureFinding, onFix: () -> Unit) {
         }), style = MaterialTheme.typography.bodySmall)
         if (finding.stale) Text(stringResource(R.string.posture_stale), color = PostureWarning,
             style = MaterialTheme.typography.bodySmall)
-        Text(stringResource(PostureText.explanation(finding)), style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant)
+        ExpandableText(stringResource(PostureText.explanation(finding)), maxLines = 3)
         if (finding.access != PostureAccess.OVERLAY || (finding.state == PostureGrantState.ENABLED && !finding.stale)) {
             OutlinedButton(onClick = onFix) { Text(stringResource(R.string.posture_fix)) }
         }

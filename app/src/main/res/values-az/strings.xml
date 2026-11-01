@@ -817,4 +817,11 @@
     <string name="threat_intelligence_updated">Məlumatların son yenilənməsi</string>
     <string name="threat_intelligence_updating">Təhdid məlumatları yenilənir…</string>
     <string name="threat_intelligence_training_note">Təlim statistikası. Bu cihazda mövcud qoruma üçün aşağıdakı aşkarlama qatlarına baxın.</string>
+    <string name="ui_sentinel_add_custom_folder">+ Fərdi qovluq əlavə et</string>
+    <string name="ui_sentinel_custom_folders">Fərdi qovluqlar</string>
+    <string name="ui_sentinel_folder_limit">10-a qədər fərdi qovluq əlavə edə bilərsiniz.</string>
+    <string name="ui_read_more">Daha çox oxu</string>
+    <string name="ui_read_less">Daha az göstər</string>
+    <string name="ui_status_safe">Təhlükəsiz</string>
+    <string name="ui_status_at_risk">Risk altındadır</string>
 </resources>

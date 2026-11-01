@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -34,10 +35,20 @@ internal fun FullScreenAlertPermissionCard(onOpenSettings: () -> Unit) {
             horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             Icon(Icons.Default.NotificationsActive, null, tint = MaterialTheme.colorScheme.onErrorContainer)
             Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                Text(stringResource(R.string.full_screen_dashboard_warning), fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onErrorContainer)
-                Text(stringResource(R.string.full_screen_dashboard_fallback), style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onErrorContainer)
+                Text(
+                    stringResource(R.string.full_screen_dashboard_warning),
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onErrorContainer,
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Text(
+                    stringResource(R.string.full_screen_dashboard_fallback),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onErrorContainer,
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis
+                )
             }
         }
     }

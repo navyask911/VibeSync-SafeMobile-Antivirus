@@ -675,4 +675,11 @@
     <string name="threat_intelligence_updated">Ultimo aggiornamento dell’intelligence</string>
     <string name="threat_intelligence_updating">Aggiornamento dell’intelligence…</string>
     <string name="threat_intelligence_training_note">Statistiche di addestramento. Consulta i livelli di rilevamento qui sotto per conoscere la protezione disponibile su questo dispositivo.</string>
+    <string name="ui_sentinel_add_custom_folder">+ Aggiungi cartella personalizzata</string>
+    <string name="ui_sentinel_custom_folders">Cartelle personalizzate</string>
+    <string name="ui_sentinel_folder_limit">Puoi aggiungere fino a 10 cartelle personalizzate.</string>
+    <string name="ui_read_more">Leggi altro</string>
+    <string name="ui_read_less">Mostra meno</string>
+    <string name="ui_status_safe">Sicuro</string>
+    <string name="ui_status_at_risk">A rischio</string>
 </resources>

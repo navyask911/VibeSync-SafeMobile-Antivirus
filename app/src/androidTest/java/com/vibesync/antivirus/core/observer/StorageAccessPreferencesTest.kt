@@ -18,6 +18,14 @@ class StorageAccessPreferencesTest {
         assertFalse(StorageAccessPreferences.persistSelectedFolder(context, root))
         assertEquals(Intent.ACTION_OPEN_DOCUMENT_TREE, StorageAccessPreferences.pickerIntent(StorageAccessPreferences.DOWNLOADS).action)
     }
+    @Test fun customFolderPickerUsesPersistableSafReadGrantAndEnforcesTenFolderLimit() {
+        val picker = StorageAccessPreferences.pickerIntent(StorageAccessPreferences.CUSTOM)
+        assertEquals(Intent.ACTION_OPEN_DOCUMENT_TREE, picker.action)
+        assertTrue(picker.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION != 0)
+        assertTrue(picker.flags and Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION != 0)
+        assertFalse(picker.hasExtra(android.provider.DocumentsContract.EXTRA_INITIAL_URI))
+        assertEquals(10, StorageAccessPreferences.MAX_CUSTOM_FOLDERS)
+    }
     @Test fun oldGrantIsRetainedAndRevokedGrantsDoNotCountAsCoverage() {
         val prefs = context.getSharedPreferences(SafeMobileApp.SECURITY_PREFS, Context.MODE_PRIVATE)
         val old = prefs.getString("downloads_sentinel_tree_uri", null)

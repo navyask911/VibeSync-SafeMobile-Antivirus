@@ -674,4 +674,11 @@
     <string name="threat_intelligence_updated">خطرات کی معلومات کی آخری تازہ کاری</string>
     <string name="threat_intelligence_updating">خطرات کی معلومات تازہ کی جا رہی ہیں…</string>
     <string name="threat_intelligence_training_note">یہ تربیت کے اعداد و شمار ہیں۔ اس آلے پر دستیاب تحفظ کے لیے ذیل میں شناخت کی تہیں دیکھیں۔</string>
+    <string name="ui_sentinel_add_custom_folder">+ حسب ضرورت فولڈر شامل کریں</string>
+    <string name="ui_sentinel_custom_folders">حسب ضرورت فولڈرز</string>
+    <string name="ui_sentinel_folder_limit">آپ زیادہ سے زیادہ 10 حسب ضرورت فولڈرز شامل کر سکتے ہیں۔</string>
+    <string name="ui_read_more">مزید پڑھیں</string>
+    <string name="ui_read_less">کم دکھائیں</string>
+    <string name="ui_status_safe">محفوظ</string>
+    <string name="ui_status_at_risk">خطرے میں</string>
 </resources>

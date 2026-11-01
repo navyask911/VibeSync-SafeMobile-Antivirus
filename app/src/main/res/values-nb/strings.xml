@@ -817,4 +817,11 @@
     <string name="threat_intelligence_updated">Siste oppdatering av trusselinformasjon</string>
     <string name="threat_intelligence_updating">Oppdaterer trusselinformasjon…</string>
     <string name="threat_intelligence_training_note">Treningsstatistikk. Se oppdagelseslagene nedenfor for tilgjengelig beskyttelse på denne enheten.</string>
+    <string name="ui_sentinel_add_custom_folder">+ Legg til egendefinert mappe</string>
+    <string name="ui_sentinel_custom_folders">Egendefinerte mapper</string>
+    <string name="ui_sentinel_folder_limit">Du kan legge til opptil 10 egendefinerte mapper.</string>
+    <string name="ui_read_more">Les mer</string>
+    <string name="ui_read_less">Vis mindre</string>
+    <string name="ui_status_safe">Trygg</string>
+    <string name="ui_status_at_risk">I fare</string>
 </resources>

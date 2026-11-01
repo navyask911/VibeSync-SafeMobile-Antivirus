@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.compose.material3.Button
 import com.vibesync.antivirus.ui.components.CyberCard as Card
 import androidx.compose.material3.CardDefaults
@@ -280,6 +281,7 @@ internal fun OverlayRiskReviewPanel() {
         }
     }
     if (showNotificationPermissionPrompt) AlertDialog(
+        properties = DialogProperties(dismissOnClickOutside = true, dismissOnBackPress = true),
         onDismissRequest = {
             showNotificationPermissionPrompt = false
             pendingReviewEnable = false
@@ -315,7 +317,9 @@ internal fun SafeMobileSettingsPanel(
     onAppThemeChanged: (AppTheme) -> Unit = {},
     adPrivacyOptionsRequired: Boolean = false,
     isProForAds: Boolean = true,
-    onShowAdPrivacyOptions: () -> Unit = {}
+    onShowAdPrivacyOptions: () -> Unit = {},
+    onManageFolders: () -> Unit = {},
+    onAddCustomFolder: () -> Unit = {}
 ) {
     val context = LocalContext.current
     fun openOfficialWebsite(url: String) {
@@ -350,8 +354,7 @@ internal fun SafeMobileSettingsPanel(
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text(stringResource(R.string.appearance_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                Text(stringResource(R.string.theme_appearance_description),
-                    style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                ExpandableText(stringResource(R.string.theme_appearance_description), maxLines = 3)
                 for (option in AppTheme.entries) {
                     val label = when (option) {
                         AppTheme.MIDNIGHT -> R.string.theme_midnight
@@ -376,8 +379,7 @@ internal fun SafeMobileSettingsPanel(
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text(stringResource(R.string.siren_test_settings_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                Text(stringResource(R.string.siren_test_settings_description), style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant)
+                ExpandableText(stringResource(R.string.siren_test_settings_description), maxLines = 3)
                 Button(onClick = {
                     // Explicit user-initiated demo; never inserts a fabricated malware record.
                     val eventId = SecurityAlertNotifier.runManualSirenTest(context)
@@ -392,8 +394,7 @@ internal fun SafeMobileSettingsPanel(
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(stringResource(R.string.global_threat_intelligence_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                Text(stringResource(R.string.global_threat_intelligence_description), style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant)
+                ExpandableText(stringResource(R.string.global_threat_intelligence_description), maxLines = 3)
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                     Text(stringResource(R.string.global_threat_intelligence_title),
                         modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium)
@@ -414,7 +415,7 @@ internal fun SafeMobileSettingsPanel(
             Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Text(stringResource(R.string.feed_settings_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                    Text(stringResource(R.string.feed_settings_description), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    ExpandableText(stringResource(R.string.feed_settings_description), maxLines = 3)
                     OutlinedTextField(
                         value = feedUrl,
                         onValueChange = { feedUrl = it; feedConfigSaved = false },
@@ -454,7 +455,7 @@ internal fun SafeMobileSettingsPanel(
                     Row(Modifier.fillMaxWidth(), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
                         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                             Text(stringResource(R.string.feed_settings_opt_in_title), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
-                            Text(stringResource(R.string.feed_settings_opt_in_description), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            ExpandableText(stringResource(R.string.feed_settings_opt_in_description), maxLines = 3)
                         }
                         Switch(
                             checked = feedConsentEnabled,
@@ -477,8 +478,7 @@ internal fun SafeMobileSettingsPanel(
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text(stringResource(R.string.download_interceptor_label), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                Text(stringResource(R.string.download_interceptor_description), style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant)
+                ExpandableText(stringResource(R.string.download_interceptor_description), maxLines = 3)
                 Text(
                     stringResource(if (sentinelEnabled) R.string.download_interceptor_status_enabled else R.string.download_interceptor_status_setup),
                     style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -490,9 +490,16 @@ internal fun SafeMobileSettingsPanel(
                         else if (enabled) onEnableSentinel() else onDisableSentinel()
                     })
                 }
+                OutlinedButton(
+                    onClick = onManageFolders,
+                    modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)
+                ) { Text(stringResource(R.string.ui_sentinel_setup)) }
+                Button(
+                    onClick = onAddCustomFolder,
+                    modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp)
+                ) { Text(stringResource(R.string.ui_sentinel_add_custom_folder)) }
                 Text(stringResource(R.string.security_alerts_title), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
-                Text(stringResource(R.string.incident_alerts_explanation), style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant)
+                ExpandableText(stringResource(R.string.incident_alerts_explanation), maxLines = 3)
                 Row(Modifier.fillMaxWidth(), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
                     Text(stringResource(if (securityAlertsEnabled) R.string.security_alerts_enabled else R.string.security_alerts_disabled),
                         modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium)
@@ -503,8 +510,7 @@ internal fun SafeMobileSettingsPanel(
                         Text(stringResource(R.string.incident_full_screen_settings))
                     }
                 }
-                Text(stringResource(R.string.strict_mode_description), style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant)
+                ExpandableText(stringResource(R.string.strict_mode_description), maxLines = 3)
                 Row(Modifier.fillMaxWidth(), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
                     Text(stringResource(R.string.strict_mode_label), modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium)
                     Switch(checked = strictMode, onCheckedChange = { onStrictModeChanged?.invoke(it) })
@@ -515,8 +521,7 @@ internal fun SafeMobileSettingsPanel(
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(stringResource(R.string.voice_alerts_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                Text(stringResource(R.string.voice_alerts_description), style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant)
+                ExpandableText(stringResource(R.string.voice_alerts_description), maxLines = 3)
                 Row(Modifier.fillMaxWidth(), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
                     Text(
                         stringResource(if (voiceAlertsEnabled) R.string.voice_alerts_enabled else R.string.voice_alerts_disabled),
@@ -581,7 +586,7 @@ internal fun SafeMobileSettingsPanel(
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(stringResource(R.string.settings_privacy), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                Text(stringResource(R.string.ad_privacy_intro), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                ExpandableText(stringResource(R.string.ad_privacy_intro), maxLines = 3)
                 if (adPrivacyOptionsRequired && !isProForAds) {
                     OutlinedButton(onClick = onShowAdPrivacyOptions, modifier = Modifier.fillMaxWidth()) {
                         Text(stringResource(R.string.ad_privacy_options))
@@ -619,12 +624,13 @@ internal fun SafeMobileSettingsPanel(
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant), shape = RoundedCornerShape(16.dp)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(stringResource(R.string.family_dedication_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                Text(stringResource(R.string.family_dedication), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                ExpandableText(stringResource(R.string.family_dedication), maxLines = 3)
             }
         }
     }
 
     if (showFullScreenPrompt && Build.VERSION.SDK_INT >= 34) AlertDialog(
+        properties = DialogProperties(dismissOnClickOutside = true, dismissOnBackPress = true),
         onDismissRequest = { showFullScreenPrompt = false },
         title = { Text(stringResource(R.string.incident_full_screen_settings)) },
         text = { Text(stringResource(R.string.incident_full_screen_explanation)) },
@@ -641,6 +647,7 @@ internal fun SafeMobileSettingsPanel(
     )
 
     if (showFeedConsentDialog) AlertDialog(
+        properties = DialogProperties(dismissOnClickOutside = true, dismissOnBackPress = true),
         onDismissRequest = { showFeedConsentDialog = false },
         title = { Text(stringResource(R.string.feed_settings_consent_title)) },
         text = { Text(stringResource(R.string.feed_settings_consent_body)) },
@@ -672,6 +679,7 @@ internal fun SafeMobileSettingsPanel(
         }
     }
     if (showAbout) AlertDialog(
+        properties = DialogProperties(dismissOnClickOutside = true, dismissOnBackPress = true),
         onDismissRequest = { showAbout = false },
         title = { Text(stringResource(R.string.about_legal)) },
         text = {

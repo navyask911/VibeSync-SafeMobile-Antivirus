@@ -817,4 +817,11 @@
     <string name="threat_intelligence_updated">ინფორმაციის ბოლო განახლება</string>
     <string name="threat_intelligence_updating">საფრთხეების ინფორმაცია ახლდება…</string>
     <string name="threat_intelligence_training_note">სწავლების სტატისტიკა. ამ მოწყობილობაზე ხელმისაწვდომი დაცვისთვის იხილეთ აღმოჩენის ფენები ქვემოთ.</string>
+    <string name="ui_sentinel_add_custom_folder">+ მორგებული საქაღალდის დამატება</string>
+    <string name="ui_sentinel_custom_folders">მორგებული საქაღალდეები</string>
+    <string name="ui_sentinel_folder_limit">შეგიძლიათ დაამატოთ მაქსიმუმ 10 მორგებული საქაღალდე.</string>
+    <string name="ui_read_more">მეტის წაკითხვა</string>
+    <string name="ui_read_less">ნაკლების ჩვენება</string>
+    <string name="ui_status_safe">უსაფრთხო</string>
+    <string name="ui_status_at_risk">რისკის ქვეშ</string>
 </resources>
