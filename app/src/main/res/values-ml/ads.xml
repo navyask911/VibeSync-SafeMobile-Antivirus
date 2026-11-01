@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ad_privacy_intro">പ്രധാന മാൽവെയർ സ്കാനിംഗ് ഈ ഉപകരണത്തിൽ തന്നെ നടക്കുന്നു. സൗജന്യ പതിപ്പ് Google AdMob ഉപയോഗിക്കുന്നു; പരസ്യ വിതരണം, തട്ടിപ്പ് തടയൽ എന്നിവയ്ക്കായി Google Advertising ID-യും IP വിലാസവും പ്രോസസ്സ് ചെയ്തേക്കാം. SafeMobile Pro സജീവമായിരിക്കുമ്പോൾ AdMob ആരംഭിക്കില്ല; പരസ്യങ്ങൾ അഭ്യർത്ഥിക്കുകയോ പ്രദർശിപ്പിക്കുകയോ ചെയ്യില്ല.</string>
+    <string name="ad_privacy_options">സ്വകാര്യതയും പരസ്യ തിരഞ്ഞെടുപ്പുകളും</string>
+</resources>
