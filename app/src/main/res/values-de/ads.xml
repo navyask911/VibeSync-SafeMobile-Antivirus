@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="ad_privacy_intro">Die grundlegende Malware-Prüfung bleibt auf diesem Gerät. Die kostenlose Version verwendet Google AdMob; Google kann die Werbe-ID und IP-Adresse zur Anzeigenauslieferung und Betrugsprävention verarbeiten. Solange SafeMobile Pro aktiv ist, wird AdMob nicht initialisiert und es werden keine Anzeigen angefordert oder angezeigt.</string>
+    <string name="ad_privacy_intro">Die grundlegende Malware-Prüfung bleibt auf diesem Gerät. Die kostenlose Version verwendet Google AdMob; Google kann die Werbe-ID und IP-Adresse zur Anzeigenauslieferung und Betrugsprävention verarbeiten. Solange SafeMobile Pro aktiv ist, wird AdMob nicht initialisiert und es werden keine Anzeigen angefordert oder angezeigt. Für Anzeigen der kostenlosen Version kann Google die Werbe-ID und IP-Adresse auch zur Anzeigenmessung und für Analysen verwenden.</string>
     <string name="ad_privacy_options">Datenschutz und Werbeoptionen</string>
 </resources>
