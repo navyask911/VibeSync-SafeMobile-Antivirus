@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="ad_privacy_intro">Scanarea principală pentru malware rămâne pe acest dispozitiv. Nivelul gratuit folosește Google AdMob; Google poate procesa ID-ul de publicitate și adresa IP pentru difuzarea anunțurilor și prevenirea fraudei. Cât timp SafeMobile Pro este activ, AdMob nu este inițializat și nu sunt solicitate sau afișate reclame.</string>
+    <string name="ad_privacy_intro">Scanarea principală pentru malware rămâne pe acest dispozitiv. Nivelul gratuit folosește Google AdMob; Google poate procesa ID-ul de publicitate și adresa IP pentru difuzarea anunțurilor și prevenirea fraudei. Cât timp SafeMobile Pro este activ, AdMob nu este inițializat și nu sunt solicitate sau afișate reclame. Pentru reclamele nivelului gratuit, Google poate utiliza ID-ul de publicitate și adresa IP și pentru măsurarea reclamelor și analiză.</string>
     <string name="ad_privacy_options">Confidențialitate și opțiuni publicitare</string>
 </resources>
