@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="ad_privacy_intro">Varsinainen haittaohjelmien tarkistus pysyy tällä laitteella. Ilmaisversio käyttää Google AdMobia; Google voi käsitellä mainostunnusta ja IP-osoitetta mainosten näyttämistä ja petosten torjuntaa varten. Kun SafeMobile Pro on aktiivinen, AdMobia ei alusteta eikä mainoksia pyydetä tai näytetä.</string>
+    <string name="ad_privacy_intro">Varsinainen haittaohjelmien tarkistus pysyy tällä laitteella. Ilmaisversio käyttää Google AdMobia; Google voi käsitellä mainostunnusta ja IP-osoitetta mainosten näyttämistä ja petosten torjuntaa varten. Kun SafeMobile Pro on aktiivinen, AdMobia ei alusteta eikä mainoksia pyydetä tai näytetä. Ilmaistason mainoksia varten Google voi käyttää mainostunnusta ja IP-osoitetta myös mainosten mittaamiseen ja analytiikkaan.</string>
     <string name="ad_privacy_options">Tietosuoja ja mainosvalinnat</string>
 </resources>
