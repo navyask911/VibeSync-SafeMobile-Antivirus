@@ -15,6 +15,7 @@ def read(relative):
         return ""
 
 gradle = read("app/build.gradle.kts")
+main_activity = read("app/src/main/java/com/vibesync/antivirus/MainActivity.kt")
 manifest = read("app/src/main/AndroidManifest.xml")
 app = read("app/src/main/java/com/vibesync/antivirus/SafeMobileApp.kt")
 manager = read("app/src/main/java/com/vibesync/antivirus/core/ads/AdMobManager.kt")
@@ -56,6 +57,8 @@ if app.count("getOrDefault(true)") < 2:
     errors.append("AdMob Pro lookup must fail closed when entitlement storage is unavailable.")
 if "app.isProForAdMob()" not in manager or manager.count("app.isProForAdMob()") < 3:
     errors.append("Pro status must be rechecked before consent, banner/interstitial requests and display.")
+if "adMobManager.refresh(this@MainActivity)" not in main_activity:
+    errors.append("MainActivity must refresh UMP consent on every app launch.")
 if "MobileAds.initialize" not in app or "initializeMobileAdsForFreeTier" not in manager:
     errors.append("Mobile Ads initialization must be owned by SafeMobileApp and called only by AdMobManager.")
 if "requestConsentInfoUpdate" not in manager or "loadAndShowConsentFormIfRequired" not in manager:
@@ -81,15 +84,17 @@ for path, text in (
     ("docs/PRIVACY_POLICY.md", privacy),
     ("app/src/main/assets/privacy-policy.md", asset_privacy),
 ):
-    for value in ("Google AdMob", "Advertising ID", "IP address", "SafeMobile Pro"):
+    for value in ("Google AdMob", "Advertising ID", "IP address", "analytics", "SafeMobile Pro"):
         if value not in text:
             errors.append(f"{path} is missing the advertising disclosure: {value}.")
     if "does not initialize" not in text and "does not initialise" not in text:
         errors.append(f"{path} must state the Pro AdMob exemption.")
 
-if "100% Offline Scanning. Ad-supported Free Tier. No Ads or Tracking with Pro." not in readme:
+if 'versionCode = 20261116' not in gradle or 'versionName = "1.2.0"' not in gradle:
+    errors.append("The Android app must be version 1.2.0 with versionCode 20261116.")
+if "100% Offline Malware Scanning. Ad-supported Free Tier. No Ads or Tracking with Pro." not in readme:
     errors.append("README must use the requested Free/Pro advertising tagline.")
-if "Ad-supported Free Tier" not in store or "Advertising ID" not in store or "IP address" not in store:
+if "Ad-supported Free Tier" not in store or "Advertising ID" not in store or "IP addresses" not in store or "analytics" not in store:
     errors.append("Google Play Store description must disclose ads and identifier/IP processing.")
 
 for path, text in (
