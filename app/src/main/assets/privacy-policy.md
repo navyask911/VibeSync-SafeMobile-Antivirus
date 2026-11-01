@@ -23,11 +23,17 @@ The monitor stores package/capability identifiers, initialized categories, compa
 New quarantine items are stored in app-private no-backup storage using Tink Streaming AEAD with an Android Keystore-wrapped keyset. The app verifies source hashes and decrypted content before reporting success. The original file is intentionally retained; restoring writes a verified copy to a location the user chooses. Legacy pre-hardening quarantine entries may be unencrypted and are labelled accordingly.
 
 ## Network access and privacy boundary
-The scanner does not submit file contents, hashes, filesystem paths, permission snapshots or scan history to a server. This project removes ad/consent SDKs, analytics, telemetry and crash-reporting clients from all application variants. Both variants use INTERNET for signed definition downloads from this project's GitHub Releases. Existing local definitions can be used without a network connection.
+The scanner does not submit file contents, hashes, filesystem paths, permission snapshots or scan history to a server by default. SafeMobile performs zero telemetry by default. Both variants use INTERNET for signed definition downloads from this project's GitHub Releases. Existing local definitions can be used without a network connection.
 
 The separate `feed` flavor supports optional HTTPS threat-feed synchronization. That optional feed does not make requests unless the user saves an endpoint, enables the explicit in-app network-consent switch, and a trusted Ed25519 public verification key was configured at build time. Every successful response requires a detached Ed25519 signature binding the configured source, a strictly newer version, and the response body's SHA-256. Scan results and files are not uploaded by feed synchronization.
 
 There is no automatic link-reputation lookup, cloud scanning, Google Play update client, mobile-ad SDK, or in-app sponsorship request in these application variants.
+
+### Optional Global Threat Intelligence contributions
+
+Global Threat Intelligence is **OFF by default**. Enabling its Settings switch does not send data. For each confirmed malicious APK, SafeMobile asks separately; only a Donate tap while the master switch remains enabled starts an HTTPS request to the VibeSync Cloudflare Worker. The JSON contains only the detected malware SHA-256 hash and its exact 215-value binary behavioral feature vector. The APK itself is never uploaded. No filename, filesystem path, package/app name, scan history, account identity, Android ID, device fingerprint, contacts, messages or location is included. No GitHub token or other GitHub credential is embedded in the Android app.
+
+The client checks that the APK still matches its locally detected hash before and after feature extraction. Unscannable, changed or invalid APKs are not submitted. Failures are non-blocking and do not interrupt scanning. Cloudflare and network infrastructure may process ordinary connection metadata such as IP address; that metadata is separate from the JSON payload. Worker-side logging and retention are controlled by the Worker operator and are not independently audited by this client.
 
 ### Optional SafeMobile Pro purchases
 

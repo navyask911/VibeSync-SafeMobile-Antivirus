@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="global_threat_intelligence_title">글로벌 위협 인텔리전스에 기여(선택 사항)</string>
+    <string name="global_threat_intelligence_description">기본값은 꺼짐입니다. 켜도 SafeMobile은 기여할 때마다 확인을 요청합니다. 기부를 누르기 전에는 아무것도 전송되지 않습니다. 악성코드의 SHA-256 해시와 215개 행동 특징만 공유됩니다.</string>
+    <string name="global_threat_intelligence_donate_message">이 악성 파일의 시그니처를 AI 학습 네트워크에 익명으로 기부하여 다른 사용자를 보호하는 데 도움을 주세요.</string>
+    <string name="global_threat_intelligence_donate">기부</string>
+    <string name="global_threat_intelligence_decline">거부</string>
+</resources>

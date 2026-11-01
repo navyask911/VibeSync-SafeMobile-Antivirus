@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="global_threat_intelligence_title">Contribuir para a inteligência global de ameaças (opcional)</string>
+    <string name="global_threat_intelligence_description">Desativado por padrão. Quando ativado, o SafeMobile pede confirmação antes de cada contribuição. Nada é enviado até tocar em Doar. Apenas o hash SHA-256 do malware e 215 características comportamentais são compartilhados.</string>
+    <string name="global_threat_intelligence_donate_message">Ajude a proteger outras pessoas doando anonimamente a assinatura deste arquivo malicioso para nossa rede de treinamento de IA.</string>
+    <string name="global_threat_intelligence_donate">Doar</string>
+    <string name="global_threat_intelligence_decline">Recusar</string>
+</resources>

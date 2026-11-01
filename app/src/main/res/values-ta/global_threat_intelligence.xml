@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="global_threat_intelligence_title">உலகளாவிய அச்சுறுத்தல் நுண்ணறிவுக்கு பங்களிக்கவும் (விருப்பத்தேர்வு)</string>
+    <string name="global_threat_intelligence_description">இயல்பாக முடக்கப்பட்டுள்ளது. இயக்கப்பட்டாலும், ஒவ்வொரு பங்களிப்புக்கும் முன் SafeMobile அனுமதி கேட்கும். நன்கொடை அளி என்பதைத் தட்டும் வரை எதுவும் அனுப்பப்படாது. தீம்பொருளின் SHA-256 ஹாஷும் 215 நடத்தை அம்சங்களும் மட்டுமே பகிரப்படும்.</string>
+    <string name="global_threat_intelligence_donate_message">இந்த தீங்கிழைக்கும் கோப்பின் கையொப்பத்தை எங்கள் AI பயிற்சி வலையமைப்பிற்கு பெயரில்லாமல் நன்கொடையாக வழங்கி மற்றவர்களைப் பாதுகாக்க உதவுங்கள்.</string>
+    <string name="global_threat_intelligence_donate">நன்கொடை அளி</string>
+    <string name="global_threat_intelligence_decline">மறுக்கவும்</string>
+</resources>

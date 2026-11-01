@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="global_threat_intelligence_title">Долучитися до глобальної розвідки загроз (необов’язково)</string>
+    <string name="global_threat_intelligence_description">За замовчуванням вимкнено. Після ввімкнення SafeMobile запитуватиме підтвердження перед кожним внеском. Нічого не надсилається, доки ви не натиснете «Пожертвувати». Передаються лише SHA-256 хеш шкідливого ПЗ та 215 поведінкових ознак.</string>
+    <string name="global_threat_intelligence_donate_message">Допоможіть захистити інших, анонімно передавши сигнатуру цього шкідливого файла до нашої мережі навчання ШІ.</string>
+    <string name="global_threat_intelligence_donate">Пожертвувати</string>
+    <string name="global_threat_intelligence_decline">Відхилити</string>
+</resources>

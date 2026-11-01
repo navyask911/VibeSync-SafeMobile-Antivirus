@@ -44,6 +44,7 @@ SafeMobile does **not** send your APK contents, local file hashes, scan verdicts
 - 🚨 **Incident Response — alert fast, act deliberately.** A **five-second alarm-stream siren**, security notification, **eligible full-screen alert**, and **user-confirmed uninstall prompt** can accompany detected incidents. Android and OEM restrictions govern audio, alert delivery and uninstall permissions; there is no forced takeover or silent removal.
 - 🔍 **Device Posture Audit — visibility into risky privileges.** Inspect available **Accessibility services, Device Administrators, notification listeners and overlay permissions**, with installation-source and permission-risk signals. These are advisory indicators, **not proof of spyware**.
 - 🌍 **Global & Accessible — designed for more users.** **51 bundled locale resource folders**, **Midnight / Light / OLED** themes, Material 3 Compose screens, adaptable typography and screen-reader support. CI checks resource completeness; individual translations and screen layouts still require human review.
+- 🌐 **Global Threat Intelligence — optional and anonymous.** OFF by default; requires both a Settings opt-in and a separate Donate tap for each confirmed malicious APK. The Android client sends only the detected malware SHA-256 hash and 215 binary behavioral features to the VibeSync Cloudflare Worker. It never uploads APK bytes, file paths, package names, scan history or device identifiers, and contains no GitHub token. Network providers may still process ordinary connection metadata.
 - 🤖 **Research MLOps — improvement with validation gates.** GitHub Actions can extract limited static research features from available MalwareBazaar samples and dispatch them to the separate [ML research repository](https://github.com/navyask911/safemobile-Antivirus-Trained-ML-Data-of-Android-malware). **Retraining and deployment are conditional**, not automatic promises; research candidates do not become active production classifiers without independent validation.
 - 💎 **SafeMobile Pro — optional, private and device-bound.** A **365-day local entitlement** with an **intended ₹299 India list price**, subject to the actual Google Play checkout price. No developer cloud entitlement account or backup; a consumed pass **cannot be restored** after uninstall, clearing app data or loss of local keys. Pro changes optional research-model update cadence, **not** the active detection engine.
 - 🧊 **Private Quarantine — your files, your decision.** App-private encrypted quarantine where supported, guided restore and user-controlled removal. No automatic deletion of personal files.
@@ -119,7 +120,7 @@ Its **Zero-Binary Repository** rule keeps raw malware samples outside the Git tr
 
 CI includes version guards, localization checks, offline tooling tests, lint, builds, and Android instrumented tests. Signed releases use private signing credentials and an independent release workflow.
 
-**Package:** `com.vibesync.antivirus` · **Version:** `1.0.21` · **Version code:** `20261114` · **Android:** minSdk 26 / targetSdk 36.
+**Package:** `com.vibesync.antivirus` · **Version:** `1.1.0` · **Version code:** `20261115` · **Android:** minSdk 26 / targetSdk 36.
 
 ## Responsible Security Disclosure
 

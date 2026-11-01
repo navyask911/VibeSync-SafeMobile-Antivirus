@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="global_threat_intelligence_title">Prisidėti prie pasaulinės grėsmių žvalgybos (pasirinktinai)</string>
+    <string name="global_threat_intelligence_description">Pagal numatytuosius nustatymus išjungta. Įjungus „SafeMobile“ prieš kiekvieną indėlį paprašys patvirtinimo. Nieko nesiunčiama, kol nepaspaudžiate Aukoti. Bendrinama tik kenkėjiškos programos SHA-256 maiša ir 215 elgsenos požymių.</string>
+    <string name="global_threat_intelligence_donate_message">Padėkite apsaugoti kitus anonimiškai paaukodami šio kenkėjiško failo parašą mūsų DI mokymo tinklui.</string>
+    <string name="global_threat_intelligence_donate">Aukoti</string>
+    <string name="global_threat_intelligence_decline">Atsisakyti</string>
+</resources>

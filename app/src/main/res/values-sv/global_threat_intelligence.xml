@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="global_threat_intelligence_title">Bidra till global hotinformation (valfritt)</string>
+    <string name="global_threat_intelligence_description">Av som standard. När det aktiveras frågar SafeMobile före varje bidrag. Inget skickas förrän du trycker på Donera. Endast skadlig programvaras SHA-256-hash och 215 beteendefunktioner delas.</string>
+    <string name="global_threat_intelligence_donate_message">Hjälp till att skydda andra genom att anonymt donera signaturen för den här skadliga filen till vårt AI-träningsnätverk.</string>
+    <string name="global_threat_intelligence_donate">Donera</string>
+    <string name="global_threat_intelligence_decline">Avböj</string>
+</resources>

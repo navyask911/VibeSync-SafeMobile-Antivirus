@@ -29,6 +29,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Icon
 import androidx.compose.material.icons.Icons
@@ -51,6 +53,8 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.lifecycleScope
 import com.vibesync.antivirus.R
 import com.vibesync.antivirus.core.locale.LocalePreferences
+import com.vibesync.antivirus.core.security.GlobalThreatIntelligenceConsent
+import com.vibesync.antivirus.core.security.GlobalThreatIntelligenceDonor
 import com.vibesync.antivirus.presentation.SystemPackageGuard
 import com.vibesync.antivirus.presentation.UninstallHandler
 import com.vibesync.antivirus.presentation.UninstallResult
@@ -68,6 +72,8 @@ class ThreatDetectedActivity : ComponentActivity() {
     private var eventId: String? = null
     private var manualTest by mutableStateOf(false)
     private var trusted by mutableStateOf(false)
+    private var showGlobalDonationPrompt by mutableStateOf(false)
+    private var expectedSha256: String? = null
     private var requestGeneration = 0
 
     override fun attachBaseContext(newBase: Context) { super.attachBaseContext(LocalePreferences.wrap(newBase)) }
@@ -124,6 +130,32 @@ class ThreatDetectedActivity : ComponentActivity() {
                             Text(stringResource(R.string.incident_dismiss))
                         }
                     }
+                    if (showGlobalDonationPrompt) AlertDialog(
+                        onDismissRequest = { showGlobalDonationPrompt = false },
+                        title = { Text(stringResource(R.string.global_threat_intelligence_title)) },
+                        text = { Text(stringResource(R.string.global_threat_intelligence_donate_message)) },
+                        confirmButton = {
+                            TextButton(onClick = {
+                                showGlobalDonationPrompt = false
+                                val packageName = target?.packageName
+                                val sha256 = expectedSha256
+                                if (packageName != null && sha256 != null &&
+                                    GlobalThreatIntelligenceConsent.isEnabled(this@ThreatDetectedActivity)) {
+                                    lifecycleScope.launch {
+                                        withContext(Dispatchers.IO) {
+                                            GlobalThreatIntelligenceDonor(this@ThreatDetectedActivity)
+                                                .donateInstalledPackage(packageName, sha256)
+                                        }
+                                    }
+                                }
+                            }) { Text(stringResource(R.string.global_threat_intelligence_donate)) }
+                        },
+                        dismissButton = {
+                            TextButton(onClick = { showGlobalDonationPrompt = false }) {
+                                Text(stringResource(R.string.global_threat_intelligence_decline))
+                            }
+                        }
+                    )
                 }
             }
         }
@@ -139,7 +171,10 @@ class ThreatDetectedActivity : ComponentActivity() {
         eventId = intent.getStringExtra(SecurityAlertNotifier.EXTRA_EVENT_ID)
         manualTest = intent.getBooleanExtra(SecurityAlertNotifier.EXTRA_TEST_MODE, false)
         trusted = false
-        if (manualTest) { target = null; loading = false; return }
+        showGlobalDonationPrompt = false
+        expectedSha256 = intent.getStringExtra(SecurityAlertNotifier.EXTRA_SHA256)
+            ?.lowercase()?.takeIf { it.matches(Regex("[0-9a-f]{64}")) }
+        if (manualTest) { target = null; loading = false; expectedSha256 = null; return }
         val name = SystemPackageGuard.normalizePackageName(intent.getStringExtra(EXTRA_PACKAGE))
         val generation = ++requestGeneration
         target = null
@@ -157,7 +192,13 @@ class ThreatDetectedActivity : ComponentActivity() {
             val trustedNow = withContext(Dispatchers.IO) {
                 name?.let { com.vibesync.antivirus.core.security.TrustedAppStore(this@ThreatDetectedActivity).isTrusted(it) } == true
             }
-            if (generation == requestGeneration) { target = app; trusted = trustedNow; loading = false }
+            if (generation == requestGeneration) {
+                target = app
+                trusted = trustedNow
+                loading = false
+                showGlobalDonationPrompt = app != null && !trustedNow && expectedSha256 != null &&
+                    GlobalThreatIntelligenceConsent.isEnabled(this@ThreatDetectedActivity)
+            }
         }
     }
 

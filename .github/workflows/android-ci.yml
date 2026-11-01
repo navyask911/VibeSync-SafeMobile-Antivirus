@@ -50,6 +50,8 @@ jobs:
           PY
       - name: Proprietary safety policy guard
         run: python3 scripts/check_proprietary_safety.py
+      - name: Verify optional threat contribution privacy boundary
+        run: python3 scripts/check_global_threat_intelligence.py
       - name: Generate CycloneDX dependency SBOM (retry transient repository failures)
         run: |
           set -e

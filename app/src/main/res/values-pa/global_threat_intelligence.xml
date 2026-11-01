@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="global_threat_intelligence_title">ਗਲੋਬਲ ਖ਼ਤਰਾ ਜਾਣਕਾਰੀ ਵਿੱਚ ਯੋਗਦਾਨ ਪਾਓ (ਵਿਕਲਪਿਕ)</string>
+    <string name="global_threat_intelligence_description">ਮੂਲ ਰੂਪ ਵਿੱਚ ਬੰਦ। ਚਾਲੂ ਕਰਨ \'ਤੇ ਵੀ ਹਰ ਯੋਗਦਾਨ ਤੋਂ ਪਹਿਲਾਂ SafeMobile ਪੁੱਛੇਗਾ। ਦਾਨ ਕਰੋ ਦਬਾਉਣ ਤੱਕ ਕੁਝ ਵੀ ਨਹੀਂ ਭੇਜਿਆ ਜਾਵੇਗਾ। ਸਿਰਫ਼ ਮਾਲਵੇਅਰ ਦਾ SHA-256 ਹੈਸ਼ ਅਤੇ 215 ਵਿਹਾਰਕ ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ਸਾਂਝੀਆਂ ਕੀਤੀਆਂ ਜਾਣਗੀਆਂ।</string>
+    <string name="global_threat_intelligence_donate_message">ਇਸ ਖਤਰਨਾਕ ਫਾਈਲ ਦੇ ਦਸਤਖਤ ਨੂੰ ਸਾਡੇ AI ਸਿਖਲਾਈ ਨੈੱਟਵਰਕ ਨੂੰ ਗੁਮਨਾਮ ਤੌਰ \'ਤੇ ਦਾਨ ਕਰਕੇ ਹੋਰਾਂ ਦੀ ਰੱਖਿਆ ਕਰਨ ਵਿੱਚ ਮਦਦ ਕਰੋ।</string>
+    <string name="global_threat_intelligence_donate">ਦਾਨ ਕਰੋ</string>
+    <string name="global_threat_intelligence_decline">ਇਨਕਾਰ ਕਰੋ</string>
+</resources>

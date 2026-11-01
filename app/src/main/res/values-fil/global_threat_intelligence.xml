@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="global_threat_intelligence_title">Mag-ambag sa Pandaigdigang Impormasyon sa Banta (Opsyonal)</string>
+    <string name="global_threat_intelligence_description">Naka-off bilang default. Kapag pinagana, magtatanong ang SafeMobile bago ang bawat ambag. Walang ipapadala hangga\'t hindi mo tina-tap ang Mag-donate. Ang SHA-256 hash ng malware at 215 behavioral feature lang ang ibinabahagi.</string>
+    <string name="global_threat_intelligence_donate_message">Tulungan ang iba na manatiling ligtas sa pamamagitan ng hindi nagpapakilalang pagbibigay ng signature ng mapaminsalang file na ito sa aming AI training network.</string>
+    <string name="global_threat_intelligence_donate">Mag-donate</string>
+    <string name="global_threat_intelligence_decline">Tanggihan</string>
+</resources>

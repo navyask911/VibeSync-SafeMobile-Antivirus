@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="global_threat_intelligence_title">Bijdragen aan wereldwijde dreigingsinformatie (optioneel)</string>
+    <string name="global_threat_intelligence_description">Staat standaard uit. Na inschakelen vraagt SafeMobile toestemming voor elke bijdrage. Er wordt niets verzonden totdat je op Doneren tikt. Alleen de SHA-256-hash van de malware en 215 gedragskenmerken worden gedeeld.</string>
+    <string name="global_threat_intelligence_donate_message">Help anderen beschermen door de handtekening van dit schadelijke bestand anoniem aan ons AI-trainingsnetwerk te doneren.</string>
+    <string name="global_threat_intelligence_donate">Doneren</string>
+    <string name="global_threat_intelligence_decline">Weigeren</string>
+</resources>

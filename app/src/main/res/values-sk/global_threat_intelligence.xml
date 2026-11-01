@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="global_threat_intelligence_title">Prispievať do globálnych informácií o hrozbách (voliteľné)</string>
+    <string name="global_threat_intelligence_description">V predvolenom nastavení je vypnuté. Po zapnutí sa SafeMobile pred každým príspevkom opýta. Kým nestlačíte Darovať, nič sa neodošle. Zdieľa sa iba hash SHA-256 škodlivého softvéru a 215 behaviorálnych znakov.</string>
+    <string name="global_threat_intelligence_donate_message">Pomôžte chrániť ostatných anonymným darovaním podpisu tohto škodlivého súboru do našej siete na trénovanie AI.</string>
+    <string name="global_threat_intelligence_donate">Darovať</string>
+    <string name="global_threat_intelligence_decline">Odmietnuť</string>
+</resources>

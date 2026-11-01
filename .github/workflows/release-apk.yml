@@ -65,6 +65,8 @@ jobs:
           set -euo pipefail
           python3 scripts/check_locale_completeness.py
           python3 scripts/check_ja_kn_and_siren.py
+          python3 scripts/check_global_threat_intelligence.py
+          python3 scripts/check_proprietary_safety.py
           test "$(git hash-object app/src/main/res/font/dm_sans_regular.ttf)" = 9b1d3099a7b431b026c597c5b41be79a155adc62
           test "$(git hash-object app/src/main/res/font/dm_sans_medium.ttf)" = 39ddfe4c3612291a39c17dced309093f7241fc9c
           test "$(git hash-object app/src/main/res/font/dm_sans_bold.ttf)" = db8d71a1c74e4bfdd2c6360f55b48c4f25f626ff
@@ -105,9 +107,15 @@ jobs:
               for required in (b"com.android.vending.BILLING", b"com.google.android.play.billingclient.version", b"8.3.0"):
                   if required not in manifest:
                       raise SystemExit("SAFE STOP: supported Google Play billing metadata absent from AAB.")
-              for forbidden in (b"android.permission.ACCESS_FINE_LOCATION", b"android.permission.ACCESS_COARSE_LOCATION", b"com.google.android.gms.permission.AD_ID"):
+              for forbidden in (
+                  b"android.permission.ACCESS_FINE_LOCATION",
+                  b"android.permission.ACCESS_COARSE_LOCATION",
+                  b"com.google.android.gms.permission.AD_ID",
+                  b"android.permission.BIND_ACCESSIBILITY_SERVICE",
+                  b"android.accessibilityservice.AccessibilityService",
+              ):
                   if forbidden in manifest:
-                      raise SystemExit("SAFE STOP: unexpected location or advertising-ID permission.")
+                      raise SystemExit("SAFE STOP: unexpected location/ad-ID permission or AccessibilityService declaration.")
               yara="base/assets/yara/safemobile_android_dex.yar"
               if yara not in names: raise SystemExit("SAFE STOP: reviewed YARA rules absent.")
               rules=z.read(yara).decode("utf-8")
@@ -157,6 +165,11 @@ jobs:
                                "assets/malware_model.tflite","assets/malware_model.json"):
                   if required not in files:
                       raise SystemExit("SAFE STOP: Signed APK missing "+required)
+              manifest=z.read("AndroidManifest.xml")
+              for forbidden in (b"android.permission.BIND_ACCESSIBILITY_SERVICE",
+                                b"android.accessibilityservice.AccessibilityService"):
+                  if forbidden in manifest:
+                      raise SystemExit("SAFE STOP: Signed APK declares an AccessibilityService.")
               model=z.read("assets/malware_model.tflite")
               if len(model)!=18584 or hashlib.sha256(model).hexdigest()!="8b66adaf01a939c26d5a756e66f53fe0d6e85e1a06ec97166579138c6ce47061":
                   raise SystemExit("SAFE STOP: Signed APK model failed SHA-256 pin")

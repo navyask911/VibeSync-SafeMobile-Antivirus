@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="global_threat_intelligence_title">Жаһандық қауіптер туралы ақпаратқа үлес қосу (міндетті емес)</string>
+    <string name="global_threat_intelligence_description">Әдепкіде өшірулі. Қосылған кезде SafeMobile әр үлес алдында растауды сұрайды. «Қайырымдылық жасау» түймесін баспайынша ештеңе жіберілмейді. Тек зиянды бағдарламаның SHA-256 хэші мен 215 мінез-құлық белгісі бөлісіледі.</string>
+    <string name="global_threat_intelligence_donate_message">Осы зиянды файлдың қолтаңбасын AI оқыту желімізге анонимді түрде жіберіп, басқаларды қорғауға көмектесіңіз.</string>
+    <string name="global_threat_intelligence_donate">Қайырымдылық жасау</string>
+    <string name="global_threat_intelligence_decline">Бас тарту</string>
+</resources>

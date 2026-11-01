@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="global_threat_intelligence_title">वैश्विक खतरा खुफिया जानकारी में योगदान दें (वैकल्पिक)</string>
+    <string name="global_threat_intelligence_description">यह डिफ़ॉल्ट रूप से बंद है। इसे चालू करने पर SafeMobile हर योगदान से पहले पूछेगा। आपके दान करें दबाने तक कुछ भी नहीं भेजा जाएगा। केवल मैलवेयर का SHA-256 हैश और 215 व्यवहार संबंधी विशेषताएँ साझा की जाती हैं।</string>
+    <string name="global_threat_intelligence_donate_message">इस दुर्भावनापूर्ण फ़ाइल के हस्ताक्षर को हमारे AI प्रशिक्षण नेटवर्क को गुमनाम रूप से दान करके दूसरों की सुरक्षा में मदद करें।</string>
+    <string name="global_threat_intelligence_donate">दान करें</string>
+    <string name="global_threat_intelligence_decline">अस्वीकार करें</string>
+</resources>

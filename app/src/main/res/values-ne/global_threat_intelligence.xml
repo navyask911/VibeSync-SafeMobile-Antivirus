@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="global_threat_intelligence_title">विश्वव्यापी खतरा जानकारीमा योगदान गर्नुहोस् (ऐच्छिक)</string>
+    <string name="global_threat_intelligence_description">पूर्वनिर्धारित रूपमा बन्द हुन्छ। सक्रिय गर्दा, SafeMobile ले प्रत्येक योगदानअघि अनुमति माग्छ। दान गर्नुहोस् नथिचेसम्म केही पठाइँदैन। मालवेयरको SHA-256 ह्यास र २१५ व्यवहारगत विशेषताहरू मात्र साझा गरिन्छ।</string>
+    <string name="global_threat_intelligence_donate_message">यस हानिकारक फाइलको हस्ताक्षर हाम्रो AI प्रशिक्षण नेटवर्कलाई बेनाम रूपमा दान गरेर अरूलाई सुरक्षित राख्न मद्दत गर्नुहोस्।</string>
+    <string name="global_threat_intelligence_donate">दान गर्नुहोस्</string>
+    <string name="global_threat_intelligence_decline">अस्वीकार गर्नुहोस्</string>
+</resources>
