@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ad_privacy_intro">L\'analyse principale des logiciels malveillants est effectuée sur cet appareil. L\'offre gratuite utilise Google AdMob ; Google peut traiter l\'identifiant publicitaire et l\'adresse IP pour diffuser des annonces et prévenir la fraude. Tant que SafeMobile Pro est actif, AdMob n\'est pas initialisé et aucune publicité n\'est demandée ni affichée.</string>
+    <string name="ad_privacy_options">Confidentialité et choix publicitaires</string>
+</resources>
