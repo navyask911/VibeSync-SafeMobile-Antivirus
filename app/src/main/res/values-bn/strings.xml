@@ -674,4 +674,11 @@
     <string name="threat_intelligence_updated">হুমকির তথ্যের সর্বশেষ আপডেট</string>
     <string name="threat_intelligence_updating">হুমকির তথ্য আপডেট হচ্ছে…</string>
     <string name="threat_intelligence_training_note">এগুলি প্রশিক্ষণের পরিসংখ্যান। এই ডিভাইসে উপলব্ধ সুরক্ষার জন্য নিচের শনাক্তকরণ স্তরগুলি দেখুন।</string>
+    <string name="ui_sentinel_add_custom_folder">+ কাস্টম ফোল্ডার যোগ করুন</string>
+    <string name="ui_sentinel_custom_folders">কাস্টম ফোল্ডার</string>
+    <string name="ui_sentinel_folder_limit">আপনি সর্বোচ্চ ১০টি কাস্টম ফোল্ডার যোগ করতে পারেন।</string>
+    <string name="ui_read_more">আরও পড়ুন</string>
+    <string name="ui_read_less">কম দেখান</string>
+    <string name="ui_status_safe">নিরাপদ</string>
+    <string name="ui_status_at_risk">ঝুঁকিতে</string>
 </resources>
