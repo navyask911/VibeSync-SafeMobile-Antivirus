@@ -7,6 +7,10 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
 import com.vibesync.antivirus.core.observer.PackageInstallReceiver
+import com.google.android.libraries.ads.mobile.sdk.MobileAds
+import com.google.android.libraries.ads.mobile.sdk.initialization.InitializationConfig
+import com.vibesync.antivirus.core.ads.AdMobManager
+import com.vibesync.antivirus.core.billing.ProEntitlementStore
 import android.util.Log
 import androidx.room.Room
 import androidx.work.Constraints
@@ -34,6 +38,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
 
 class SafeMobileApp : Application() {
@@ -47,6 +54,39 @@ class SafeMobileApp : Application() {
     private val appScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private var runtimePackageInstallReceiver: BroadcastReceiver? = null
     val devicePostureRepository by lazy { DevicePostureRepository(this) }
+
+    val adMobManager by lazy { AdMobManager(this) }
+    private val mobileAdsInitializationMutex = Mutex()
+    @Volatile private var mobileAdsInitialized = false
+
+    /** An unreadable Pro ledger fails closed: advertising stays disabled. */
+    suspend fun isProForAdMob(): Boolean = withContext(Dispatchers.IO) {
+        runCatching { ProEntitlementStore(this@SafeMobileApp).checkProStatusForThisDevice() }
+            .getOrDefault(true)
+    }
+
+    /** Called only after UMP permits ads; Pro is checked immediately before SDK initialization. */
+    suspend fun initializeMobileAdsForFreeTier(): Boolean = withContext(Dispatchers.IO) {
+        mobileAdsInitializationMutex.withLock {
+            val pro = runCatching {
+                ProEntitlementStore(this@SafeMobileApp).checkProStatusForThisDevice()
+            }.getOrDefault(true)
+            if (pro) return@withLock false
+            if (!mobileAdsInitialized) {
+                try {
+                    MobileAds.initialize(
+                        this@SafeMobileApp,
+                        InitializationConfig.Builder(ADMOB_APP_ID).build(),
+                        null
+                    )
+                    mobileAdsInitialized = true
+                } catch (_: Exception) {
+                    mobileAdsInitialized = false
+                }
+            }
+            mobileAdsInitialized
+        }
+    }
 
     override fun onCreate() {
         super.onCreate()
@@ -137,6 +177,7 @@ class SafeMobileApp : Application() {
         const val PRIVACY_ACKNOWLEDGED = "acknowledged"
         const val HASH_DATABASE_SYNC_PREFS = "safe_mobile_hash_sync_bootstrap"
         const val KEY_INITIAL_HASH_SYNC_REQUESTED = "initial_hash_sync_requested"
+        const val ADMOB_APP_ID = "ca-app-pub-4783826505860771~8485727119"
     }
 }
 
