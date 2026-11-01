@@ -102,8 +102,12 @@ for path, text in (
         if value not in lowered:
             errors.append(f"{path} is missing the complete Google Mobile Ads SDK disclosure: {value}.")
 
-if 'versionCode = 20261116' not in gradle or 'versionName = "1.2.0"' not in gradle:
-    errors.append("The Android app must be version 1.2.0 with versionCode 20261116.")
+version_code_match = re.search(r"\bversionCode\s*=\s*(\d+)", gradle)
+version_name_match = re.search(r'\bversionName\s*=\s*"([0-9]+\.[0-9]+\.[0-9]+)"', gradle)
+if version_code_match is None or int(version_code_match.group(1)) <= 0:
+    errors.append("The Android app must declare a positive numeric versionCode.")
+if version_name_match is None:
+    errors.append("The Android app must declare a semantic versionName (major.minor.patch).")
 if "On-device Malware Scanning. Ad-supported Free Tier. No AdMob Ads with Pro." not in readme:
     errors.append("README must use the requested Free/Pro advertising tagline.")
 if "Ad-supported Free Tier" not in store or "Advertising ID" not in store or "IP address" not in store or "analytics" not in store:

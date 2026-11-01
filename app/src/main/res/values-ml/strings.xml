@@ -817,4 +817,11 @@
     <string name="threat_intelligence_updated">ഭീഷണി വിവരങ്ങളുടെ അവസാന പുതുക്കൽ</string>
     <string name="threat_intelligence_updating">ഭീഷണി വിവരങ്ങൾ പുതുക്കുന്നു…</string>
     <string name="threat_intelligence_training_note">ഇവ പരിശീലന സ്ഥിതിവിവരക്കണക്കുകളാണ്. ഈ ഉപകരണത്തിൽ ലഭ്യമായ സംരക്ഷണത്തിന് താഴെയുള്ള കണ്ടെത്തൽ പാളികൾ കാണുക.</string>
+    <string name="ui_sentinel_add_custom_folder">+ ഇഷ്ടാനുസൃത ഫോൾഡർ ചേർക്കുക</string>
+    <string name="ui_sentinel_custom_folders">ഇഷ്ടാനുസൃത ഫോൾഡറുകൾ</string>
+    <string name="ui_sentinel_folder_limit">പരമാവധി 10 ഇഷ്ടാനുസൃത ഫോൾഡറുകൾ ചേർക്കാം.</string>
+    <string name="ui_read_more">കൂടുതൽ വായിക്കുക</string>
+    <string name="ui_read_less">കുറച്ച് മാത്രം കാണിക്കുക</string>
+    <string name="ui_status_safe">സുരക്ഷിതം</string>
+    <string name="ui_status_at_risk">അപകടസാധ്യത</string>
 </resources>

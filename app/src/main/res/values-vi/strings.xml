@@ -674,4 +674,11 @@
     <string name="threat_intelligence_updated">Lần cập nhật thông tin gần nhất</string>
     <string name="threat_intelligence_updating">Đang cập nhật thông tin về mối đe dọa…</string>
     <string name="threat_intelligence_training_note">Số liệu thống kê huấn luyện. Xem các lớp phát hiện bên dưới để biết khả năng bảo vệ có trên thiết bị này.</string>
+    <string name="ui_sentinel_add_custom_folder">+ Thêm thư mục tùy chỉnh</string>
+    <string name="ui_sentinel_custom_folders">Thư mục tùy chỉnh</string>
+    <string name="ui_sentinel_folder_limit">Bạn có thể thêm tối đa 10 thư mục tùy chỉnh.</string>
+    <string name="ui_read_more">Đọc thêm</string>
+    <string name="ui_read_less">Thu gọn</string>
+    <string name="ui_status_safe">An toàn</string>
+    <string name="ui_status_at_risk">Có rủi ro</string>
 </resources>

@@ -817,4 +817,11 @@
     <string name="threat_intelligence_updated">Laatste update van dreigingsinformatie</string>
     <string name="threat_intelligence_updating">Dreigingsinformatie bijwerken…</string>
     <string name="threat_intelligence_training_note">Trainingsstatistieken. Bekijk de detectielagen hieronder voor de beschikbare bescherming op dit apparaat.</string>
+    <string name="ui_sentinel_add_custom_folder">+ Aangepaste map toevoegen</string>
+    <string name="ui_sentinel_custom_folders">Aangepaste mappen</string>
+    <string name="ui_sentinel_folder_limit">Je kunt maximaal 10 aangepaste mappen toevoegen.</string>
+    <string name="ui_read_more">Lees meer</string>
+    <string name="ui_read_less">Minder weergeven</string>
+    <string name="ui_status_safe">Veilig</string>
+    <string name="ui_status_at_risk">Risico</string>
 </resources>

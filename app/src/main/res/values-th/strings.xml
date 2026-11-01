@@ -817,4 +817,11 @@
     <string name="threat_intelligence_updated">การอัปเดตข้อมูลภัยคุกคามล่าสุด</string>
     <string name="threat_intelligence_updating">กำลังอัปเดตข้อมูลภัยคุกคาม…</string>
     <string name="threat_intelligence_training_note">สถิติการฝึกโมเดล ดูชั้นการตรวจจับด้านล่างเพื่อทราบการป้องกันที่มีในอุปกรณ์นี้</string>
+    <string name="ui_sentinel_add_custom_folder">+ เพิ่มโฟลเดอร์กำหนดเอง</string>
+    <string name="ui_sentinel_custom_folders">โฟลเดอร์กำหนดเอง</string>
+    <string name="ui_sentinel_folder_limit">คุณเพิ่มโฟลเดอร์กำหนดเองได้สูงสุด 10 โฟลเดอร์</string>
+    <string name="ui_read_more">อ่านเพิ่มเติม</string>
+    <string name="ui_read_less">แสดงน้อยลง</string>
+    <string name="ui_status_safe">ปลอดภัย</string>
+    <string name="ui_status_at_risk">มีความเสี่ยง</string>
 </resources>

@@ -817,4 +817,11 @@
     <string name="threat_intelligence_updated">Ostatnia aktualizacja informacji o zagrożeniach</string>
     <string name="threat_intelligence_updating">Aktualizowanie informacji o zagrożeniach…</string>
     <string name="threat_intelligence_training_note">Statystyki treningu. Dostępna ochrona tego urządzenia jest opisana w warstwach wykrywania poniżej.</string>
+    <string name="ui_sentinel_add_custom_folder">+ Dodaj folder niestandardowy</string>
+    <string name="ui_sentinel_custom_folders">Foldery niestandardowe</string>
+    <string name="ui_sentinel_folder_limit">Możesz dodać maksymalnie 10 folderów niestandardowych.</string>
+    <string name="ui_read_more">Czytaj więcej</string>
+    <string name="ui_read_less">Pokaż mniej</string>
+    <string name="ui_status_safe">Bezpieczne</string>
+    <string name="ui_status_at_risk">Zagrożone</string>
 </resources>

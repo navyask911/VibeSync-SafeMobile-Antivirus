@@ -80,6 +80,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.window.DialogProperties
 import android.widget.Toast
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
@@ -150,6 +151,7 @@ import kotlinx.coroutines.launch
  var selectedDestination by remember { mutableStateOf("home") }
  val contentScrollState = rememberScrollState()
  var folderUris by remember(context) { mutableStateOf(StorageAccessPreferences.accessibleTreeUris(context)) }
+ val customFolderUris by StorageAccessPreferences.observeCustomTreeUris(context).collectAsStateWithLifecycle(initialValue = emptyList())
  var pendingFolderRole by remember { mutableStateOf(StorageAccessPreferences.DOWNLOADS) }
  var showPlayProtectDialog by remember { mutableStateOf(false) }
  LaunchedEffect(selectedDestination) { contentScrollState.scrollTo(0) }
@@ -322,9 +324,14 @@ import kotlinx.coroutines.launch
   }
   val role = pendingFolderRole
   val grantFlags = result.data?.flags ?: Intent.FLAG_GRANT_READ_URI_PERMISSION
+  val customLimitReached = role == StorageAccessPreferences.CUSTOM &&
+   customFolderUris.size >= StorageAccessPreferences.MAX_CUSTOM_FOLDERS && uri !in customFolderUris
   uiScope.launch {
    val granted = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
-    runCatching { StorageAccessPreferences.persistSelectedFolder(context, uri, role, grantFlags) }.getOrDefault(false)
+    runCatching {
+     if (role == StorageAccessPreferences.CUSTOM) StorageAccessPreferences.persistCustomFolder(context, uri, grantFlags)
+     else StorageAccessPreferences.persistSelectedFolder(context, uri, role, grantFlags)
+    }.getOrDefault(false)
    }
    pendingSentinelEnable = false
    folderUris = StorageAccessPreferences.accessibleTreeUris(context)
@@ -337,7 +344,9 @@ import kotlinx.coroutines.launch
      .onFailure { Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show() }
     Handler(Looper.getMainLooper()).postDelayed({ monitoringRunning = isStorageSentinelRunning(context) && hasSharedStorageAccess(context) }, 900L)
    } else {
-    Toast.makeText(context, R.string.ui_folder_access_not_granted, Toast.LENGTH_LONG).show()
+    Toast.makeText(context,
+     if (customLimitReached) R.string.ui_sentinel_folder_limit else R.string.ui_folder_access_not_granted,
+     Toast.LENGTH_LONG).show()
     selectedDestination = "home"
    }
   }
@@ -669,7 +678,7 @@ import kotlinx.coroutines.launch
         Text(stringResource(R.string.signature_count,state.signatureCount,state.completedScans),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
        }
       }
-      Text(stringResource(R.string.scan_explanation),style=MaterialTheme.typography.bodyMedium,color=MaterialTheme.colorScheme.onSurface)
+      ExpandableText(stringResource(R.string.scan_explanation), maxLines = 3)
       Button(onClick={ requestPrivacyAcknowledgement { vm.scanFull() } },enabled=!state.isScanning,modifier=Modifier.fillMaxWidth()) {
        if(state.isScanning) CircularProgressIndicator(Modifier.size(18.dp),strokeWidth=2.dp,color=MaterialTheme.colorScheme.onPrimary) else androidx.compose.material3.Icon(Icons.Default.Security,contentDescription=null)
        Text(stringResource(if(state.isScanning) R.string.scan_running else R.string.scan_installed),modifier=Modifier.padding(start=8.dp))
@@ -760,11 +769,17 @@ import kotlinx.coroutines.launch
     )
     if (selectedDestination == "sentinel") {
      SentinelFolderPanel(context, folderUris, monitoringRunning,
+      customFolders = customFolderUris,
       onAdd = { role -> requestPrivacyAcknowledgement {
        pendingFolderRole = role; pendingSentinelEnable = true; showStoragePermissionPrompt = true
       } },
+      onAddCustom = { requestPrivacyAcknowledgement {
+       pendingFolderRole = StorageAccessPreferences.CUSTOM
+       pendingSentinelEnable = true
+       showStoragePermissionPrompt = true
+      } },
       onRemove = { uri -> uiScope.launch {
-       kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { StorageAccessPreferences.removeFolder(context, uri) }
+       kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { StorageAccessPreferences.removeSelectedFolder(context, uri) }
        folderUris = StorageAccessPreferences.accessibleTreeUris(context)
        storageAccessGranted = folderUris.isNotEmpty()
        if (!storageAccessGranted) disableSentinel()
@@ -831,7 +846,7 @@ import kotlinx.coroutines.launch
     Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant),shape=RoundedCornerShape(16.dp),modifier=Modifier.fillMaxWidth()) {
      Column(Modifier.padding(16.dp),verticalArrangement=Arrangement.spacedBy(10.dp)) {
       Text(stringResource(R.string.quarantine_vault_title),style=MaterialTheme.typography.titleMedium,fontWeight=FontWeight.Bold)
-      Text(stringResource(R.string.quarantine_vault_description),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+      ExpandableText(stringResource(R.string.quarantine_vault_description), maxLines = 3)
       if (state.quarantinedFiles.isEmpty()) {
        Text(stringResource(R.string.quarantine_vault_empty),style=MaterialTheme.typography.bodyMedium,color=MaterialTheme.colorScheme.onSurfaceVariant)
       } else {
@@ -875,6 +890,7 @@ import kotlinx.coroutines.launch
        appTheme = appTheme, onAppThemeChanged = onAppThemeChanged,
        adPrivacyOptionsRequired = adMobState.privacyOptionsRequired,
        isProForAds = adMobState.isPro,
+       onManageFolders = { selectedDestination = "sentinel" },
        onShowAdPrivacyOptions = {
         activity?.let { host -> uiScope.launch { adMobManager.showPrivacyOptions(host) } }
        }
@@ -922,6 +938,7 @@ import kotlinx.coroutines.launch
   }
  }
  if (showDefinitionImportWarning) AlertDialog(
+  properties = DialogProperties(dismissOnClickOutside = true, dismissOnBackPress = true),
   onDismissRequest = { showDefinitionImportWarning = false },
   title = { Text(stringResource(R.string.import_unverified_title)) },
   text = { Text(stringResource(R.string.import_unverified_body)) },
@@ -936,6 +953,7 @@ import kotlinx.coroutines.launch
   }
  )
  if (showRestoreWarning) AlertDialog(
+  properties = DialogProperties(dismissOnClickOutside = true, dismissOnBackPress = true),
   onDismissRequest = { showRestoreWarning = false; pendingRestoreFile = null },
   title = { Text(stringResource(R.string.quarantine_restore_confirm_title)) },
   text = { Text(stringResource(R.string.quarantine_restore_confirm_body)) },
@@ -967,6 +985,7 @@ import kotlinx.coroutines.launch
  }
 pendingQuarantine?.let { flagged ->
   AlertDialog(
+  properties = DialogProperties(dismissOnClickOutside = true, dismissOnBackPress = true),
    onDismissRequest={ pendingQuarantine = null },
    title={ Text(stringResource(R.string.quarantine_confirm_title)) },
    text={ Text(stringResource(R.string.quarantine_confirm_body)) },
@@ -980,6 +999,7 @@ pendingQuarantine?.let { flagged ->
  }
  pendingGlobalDonationResults.firstOrNull()?.let { detectedThreat ->
   AlertDialog(
+  properties = DialogProperties(dismissOnClickOutside = true, dismissOnBackPress = true),
    onDismissRequest = { pendingGlobalDonationResults = pendingGlobalDonationResults.drop(1) },
    title = { Text(stringResource(R.string.global_threat_intelligence_title)) },
    text = { Text(stringResource(R.string.global_threat_intelligence_donate_message)) },
@@ -999,6 +1019,7 @@ pendingQuarantine?.let { flagged ->
   )
  }
  if (showNotificationPermissionPrompt) AlertDialog(
+  properties = DialogProperties(dismissOnClickOutside = true, dismissOnBackPress = true),
    onDismissRequest = { showNotificationPermissionPrompt = false; pendingAlertEnable = false },
    title = { Text(stringResource(R.string.security_alerts_title)) },
    text = { Text(stringResource(R.string.incident_alerts_explanation)) },
@@ -1022,6 +1043,7 @@ pendingQuarantine?.let { flagged ->
    }
   )
   if (showStoragePermissionPrompt) AlertDialog(
+  properties = DialogProperties(dismissOnClickOutside = true, dismissOnBackPress = true),
    onDismissRequest = { showStoragePermissionPrompt = false; pendingSentinelEnable = false; selectedDestination = "home" },
    title = { Text(stringResource(R.string.setup_sentinel_title)) },
    text = { Text(stringResource(R.string.ui_folder_picker_explanation)) },
@@ -1045,6 +1067,7 @@ pendingQuarantine?.let { flagged ->
    }
   )
   if (showPlayProtectDialog) AlertDialog(
+  properties = DialogProperties(dismissOnClickOutside = true, dismissOnBackPress = true),
   onDismissRequest = { showPlayProtectDialog = false },
   title = { Text(stringResource(R.string.ui_play_protect_title)) },
   text = { Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -1064,6 +1087,7 @@ pendingQuarantine?.let { flagged ->
   } }
  )
  if(showPrivacyDisclosure) AlertDialog(
+  properties = DialogProperties(dismissOnClickOutside = true, dismissOnBackPress = true),
   onDismissRequest={ showPrivacyDisclosure=false; pendingSensitiveAction=null },
   title={ Text(stringResource(R.string.privacy_title)) },
   text={ Text(stringResource(R.string.ad_privacy_intro)) },

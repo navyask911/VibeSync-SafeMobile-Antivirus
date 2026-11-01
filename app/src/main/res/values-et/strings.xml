@@ -817,4 +817,11 @@
     <string name="threat_intelligence_updated">Viimane ohuteabe uuendus</string>
     <string name="threat_intelligence_updating">Ohuteabe uuendamine…</string>
     <string name="threat_intelligence_training_note">Treeningu statistika. Seadmes saadaolevat kaitset kirjeldavad allpool olevad tuvastuskihid.</string>
+    <string name="ui_sentinel_add_custom_folder">+ Lisa kohandatud kaust</string>
+    <string name="ui_sentinel_custom_folders">Kohandatud kaustad</string>
+    <string name="ui_sentinel_folder_limit">Saate lisada kuni 10 kohandatud kausta.</string>
+    <string name="ui_read_more">Loe edasi</string>
+    <string name="ui_read_less">Näita vähem</string>
+    <string name="ui_status_safe">Turvaline</string>
+    <string name="ui_status_at_risk">Ohus</string>
 </resources>

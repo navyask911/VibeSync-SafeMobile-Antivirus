@@ -675,5 +675,12 @@
     <string name="threat_intelligence_updated">ಬೆದರಿಕೆ ಮಾಹಿತಿಯ ಕೊನೆಯ ನವೀಕರಣ</string>
     <string name="threat_intelligence_updating">ಬೆದರಿಕೆ ಮಾಹಿತಿ ನವೀಕರಿಸಲಾಗುತ್ತಿದೆ…</string>
     <string name="threat_intelligence_training_note">ಇವು ತರಬೇತಿಯ ಅಂಕಿಅಂಶಗಳು. ಈ ಸಾಧನದಲ್ಲಿ ಲಭ್ಯವಿರುವ ರಕ್ಷಣೆಗೆ ಕೆಳಗಿನ ಪತ್ತೆ ಪದರಗಳನ್ನು ನೋಡಿ.</string>
+    <string name="ui_sentinel_add_custom_folder">+ ಕಸ್ಟಮ್ ಫೋಲ್ಡರ್ ಸೇರಿಸಿ</string>
+    <string name="ui_sentinel_custom_folders">ಕಸ್ಟಮ್ ಫೋಲ್ಡರ್‌ಗಳು</string>
+    <string name="ui_sentinel_folder_limit">ನೀವು ಗರಿಷ್ಠ 10 ಕಸ್ಟಮ್ ಫೋಲ್ಡರ್‌ಗಳನ್ನು ಸೇರಿಸಬಹುದು.</string>
+    <string name="ui_read_more">ಇನ್ನಷ್ಟು ಓದಿ</string>
+    <string name="ui_read_less">ಕಡಿಮೆ ತೋರಿಸಿ</string>
+    <string name="ui_status_safe">ಸುರಕ್ಷಿತ</string>
+    <string name="ui_status_at_risk">ಅಪಾಯದಲ್ಲಿದೆ</string>
 </resources>
 

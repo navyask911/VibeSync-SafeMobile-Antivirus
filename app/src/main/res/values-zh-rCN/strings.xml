@@ -673,5 +673,12 @@
     <string name="threat_intelligence_updated">上次情报更新</string>
     <string name="threat_intelligence_updating">正在更新威胁情报…</string>
     <string name="threat_intelligence_training_note">此处显示训练统计信息。请参阅下方检测层，了解此设备可用的保护。</string>
+    <string name="ui_sentinel_add_custom_folder">+ 添加自定义文件夹</string>
+    <string name="ui_sentinel_custom_folders">自定义文件夹</string>
+    <string name="ui_sentinel_folder_limit">最多可添加 10 个自定义文件夹。</string>
+    <string name="ui_read_more">阅读更多</string>
+    <string name="ui_read_less">收起</string>
+    <string name="ui_status_safe">安全</string>
+    <string name="ui_status_at_risk">有风险</string>
 </resources>
 

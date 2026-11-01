@@ -675,4 +675,11 @@
     <string name="threat_intelligence_updated">Pembaruan intelijen terakhir</string>
     <string name="threat_intelligence_updating">Memperbarui intelijen ancaman…</string>
     <string name="threat_intelligence_training_note">Statistik pelatihan. Lihat lapisan deteksi di bawah untuk mengetahui perlindungan yang tersedia di perangkat ini.</string>
+    <string name="ui_sentinel_add_custom_folder">+ Tambahkan folder khusus</string>
+    <string name="ui_sentinel_custom_folders">Folder khusus</string>
+    <string name="ui_sentinel_folder_limit">Anda dapat menambahkan hingga 10 folder khusus.</string>
+    <string name="ui_read_more">Baca selengkapnya</string>
+    <string name="ui_read_less">Tampilkan lebih sedikit</string>
+    <string name="ui_status_safe">Aman</string>
+    <string name="ui_status_at_risk">Berisiko</string>
 </resources>

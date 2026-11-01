@@ -674,4 +674,11 @@
     <string name="threat_intelligence_updated">Son istihbarat güncellemesi</string>
     <string name="threat_intelligence_updating">Tehdit istihbaratı güncelleniyor…</string>
     <string name="threat_intelligence_training_note">Eğitim istatistikleri. Bu cihazda sunulan koruma için aşağıdaki tespit katmanlarına bakın.</string>
+    <string name="ui_sentinel_add_custom_folder">+ Özel klasör ekle</string>
+    <string name="ui_sentinel_custom_folders">Özel klasörler</string>
+    <string name="ui_sentinel_folder_limit">En fazla 10 özel klasör ekleyebilirsiniz.</string>
+    <string name="ui_read_more">Daha fazla oku</string>
+    <string name="ui_read_less">Daha az göster</string>
+    <string name="ui_status_safe">Güvenli</string>
+    <string name="ui_status_at_risk">Risk altında</string>
 </resources>

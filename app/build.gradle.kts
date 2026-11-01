@@ -40,8 +40,8 @@ android {
   applicationId = "com.vibesync.antivirus"
   minSdk = 26
   targetSdk = 36
-  versionCode = 20261116
-  versionName = "1.2.0"
+  versionCode = 20261117
+  versionName = "1.3.0"
   testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   buildConfigField("String", "FEED_MANIFEST_PUBLIC_KEY_B64", cfg(feedManifestPublicKey))
   buildConfigField("Boolean", "FEED_MANIFEST_KEY_CONFIGURED", (!feedManifestPublicKey.isBlank()).toString())
@@ -163,6 +163,7 @@ dependencies {
  implementation("androidx.compose.ui:ui")
  implementation("androidx.compose.ui:ui-tooling-preview")
  implementation("androidx.compose.foundation:foundation")
+ implementation("androidx.compose.animation:animation")
  implementation("androidx.compose.material3:material3")
  implementation("androidx.compose.material:material-icons-extended")
  debugImplementation("androidx.compose.ui:ui-tooling")

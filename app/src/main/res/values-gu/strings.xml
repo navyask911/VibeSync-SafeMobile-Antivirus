@@ -817,4 +817,11 @@
     <string name="threat_intelligence_updated">જોખમ માહિતીનું છેલ્લું અપડેટ</string>
     <string name="threat_intelligence_updating">જોખમ માહિતી અપડેટ થઈ રહી છે…</string>
     <string name="threat_intelligence_training_note">આ તાલીમના આંકડા છે. આ ઉપકરણ પર ઉપલબ્ધ સુરક્ષા માટે નીચેના શોધ સ્તરો જુઓ.</string>
+    <string name="ui_sentinel_add_custom_folder">+ કસ્ટમ ફોલ્ડર ઉમેરો</string>
+    <string name="ui_sentinel_custom_folders">કસ્ટમ ફોલ્ડર્સ</string>
+    <string name="ui_sentinel_folder_limit">તમે વધુમાં વધુ ૧૦ કસ્ટમ ફોલ્ડર્સ ઉમેરી શકો છો.</string>
+    <string name="ui_read_more">વધુ વાંચો</string>
+    <string name="ui_read_less">ઓછું બતાવો</string>
+    <string name="ui_status_safe">સુરક્ષિત</string>
+    <string name="ui_status_at_risk">જોખમમાં</string>
 </resources>

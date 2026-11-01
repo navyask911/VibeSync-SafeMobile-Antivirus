@@ -673,4 +673,11 @@
     <string name="threat_intelligence_updated">Última actualización de inteligencia</string>
     <string name="threat_intelligence_updating">Actualizando la inteligencia…</string>
     <string name="threat_intelligence_training_note">Estadísticas de entrenamiento. Consulta las capas de detección siguientes para conocer la protección disponible en este dispositivo.</string>
+    <string name="ui_sentinel_add_custom_folder">+ Añadir carpeta personalizada</string>
+    <string name="ui_sentinel_custom_folders">Carpetas personalizadas</string>
+    <string name="ui_sentinel_folder_limit">Puedes añadir hasta 10 carpetas personalizadas.</string>
+    <string name="ui_read_more">Leer más</string>
+    <string name="ui_read_less">Mostrar menos</string>
+    <string name="ui_status_safe">Seguro</string>
+    <string name="ui_status_at_risk">En riesgo</string>
 </resources>

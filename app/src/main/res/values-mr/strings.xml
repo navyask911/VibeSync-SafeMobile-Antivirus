@@ -674,4 +674,11 @@
     <string name="threat_intelligence_updated">धोक्याच्या माहितीचे शेवटचे अपडेट</string>
     <string name="threat_intelligence_updating">धोक्याची माहिती अपडेट होत आहे…</string>
     <string name="threat_intelligence_training_note">ही प्रशिक्षणाची आकडेवारी आहे. या उपकरणावर उपलब्ध संरक्षणासाठी खालील शोध स्तर पाहा.</string>
+    <string name="ui_sentinel_add_custom_folder">+ सानुकूल फोल्डर जोडा</string>
+    <string name="ui_sentinel_custom_folders">सानुकूल फोल्डर</string>
+    <string name="ui_sentinel_folder_limit">तुम्ही जास्तीत जास्त 10 सानुकूल फोल्डर जोडू शकता.</string>
+    <string name="ui_read_more">अधिक वाचा</string>
+    <string name="ui_read_less">कमी दाखवा</string>
+    <string name="ui_status_safe">सुरक्षित</string>
+    <string name="ui_status_at_risk">धोक्यात</string>
 </resources>

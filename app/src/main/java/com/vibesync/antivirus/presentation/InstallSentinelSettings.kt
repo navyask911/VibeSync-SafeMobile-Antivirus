@@ -35,7 +35,7 @@ internal fun InstallSentinelSettings() {
             }
             Text(stringResource(if (running) R.string.install_sentinel_active else R.string.monitor_inactive),
                 color = if (running) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant)
-            Text(stringResource(R.string.install_sentinel_description), style = MaterialTheme.typography.bodySmall)
+            ExpandableText(stringResource(R.string.install_sentinel_description), maxLines = 3)
         }
     }
 }

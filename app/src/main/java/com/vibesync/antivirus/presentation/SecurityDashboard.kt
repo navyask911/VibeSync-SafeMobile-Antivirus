@@ -1,6 +1,8 @@
 package com.vibesync.antivirus.presentation
 
 import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
@@ -27,6 +29,7 @@ import androidx.compose.ui.semantics.progressBarRangeInfo
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.shape.RoundedCornerShape
 import com.vibesync.antivirus.core.engine.ScanVerdict
 import com.vibesync.antivirus.core.security.DeviceSecurityAssessment
 import com.vibesync.antivirus.ui.components.GlassCard
@@ -38,11 +41,12 @@ import java.util.Date
 @Composable
 internal fun SecurityDashboard(assessment: DeviceSecurityAssessment?, onCheckPlayProtect: () -> Unit, onSync: () -> Unit) {
     var showScoreInfo by remember { mutableStateOf(false) }
+    var showScoreDetails by remember { mutableStateOf(false) }
     val target = assessment?.score ?: 0
     val score by animateIntAsState(target, tween(900))
     val progress by animateFloatAsState(target / 100f, tween(900))
     GlassCard(Modifier.fillMaxWidth()) {
-        Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
+        Column(Modifier.animateContentSize(), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(18.dp)) {
                 val accent = if (target >= 90) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.tertiary
                 val track = MaterialTheme.colorScheme.surfaceVariant
@@ -72,20 +76,41 @@ internal fun SecurityDashboard(assessment: DeviceSecurityAssessment?, onCheckPla
             }
             if (assessment != null) {
                 val signals = assessment.signals
-                ScoreRow(stringResource(R.string.ui_score_play_protect), when(signals.playProtectEnabled) { true -> stringResource(R.string.ui_on); false -> stringResource(R.string.ui_off_20); null -> stringResource(R.string.ui_not_verified) })
-                ScoreRow(stringResource(R.string.ui_score_database), if (assessment.databaseStale) stringResource(R.string.ui_stale_10) else stringResource(R.string.ui_updated_24))
-                ScoreRow(stringResource(R.string.ui_score_accessibility), signals.nonSystemAccessibilityApps?.let { pluralStringResource(R.plurals.l10n_enabled_apps, it, it) } ?: stringResource(R.string.ui_unavailable))
-                ScoreRow(stringResource(R.string.ui_score_admin), signals.nonSystemDeviceAdmins?.let { pluralStringResource(R.plurals.l10n_enabled_apps, it, it) } ?: stringResource(R.string.ui_unavailable))
-                ScoreRow(stringResource(R.string.guardian_adb_state), settingsFlag(signals.usbDebuggingEnabled))
-                ScoreRow(stringResource(R.string.risk_install), settingsFlag(signals.safeMobileUnknownSourcesGrant))
-                ScoreRow(stringResource(R.string.posture_overlays), signals.activeNonSystemOverlays?.let {
-                    pluralStringResource(R.plurals.l10n_enabled_apps, it, it) } ?: stringResource(R.string.ui_not_verified))
-                ScoreRow(stringResource(R.string.battery_review_title), settingsFlag(signals.backgroundRestricted))
-                Text(stringResource(R.string.v116_score_meaning),
-                    style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    TextButton(onClick = onCheckPlayProtect) { Text(stringResource(R.string.ui_check_play_protect)) }
-                    if (assessment.databaseStale) TextButton(onClick = onSync) { Text(stringResource(R.string.ui_update_definitions)) }
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Surface(
+                        shape = RoundedCornerShape(50),
+                        color = if (target >= 90) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.tertiaryContainer
+                    ) {
+                        Text(
+                            stringResource(if (target >= 90) R.string.ui_status_safe else R.string.ui_status_at_risk),
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                            color = if (target >= 90) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onTertiaryContainer,
+                            style = MaterialTheme.typography.labelLarge,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                    Spacer(Modifier.weight(1f))
+                    TextButton(onClick = { showScoreDetails = !showScoreDetails }, modifier = Modifier.heightIn(min = 48.dp)) {
+                        Text(stringResource(if (showScoreDetails) R.string.ui_read_less else R.string.ui_read_more))
+                    }
+                }
+                AnimatedVisibility(visible = showScoreDetails) {
+                    Column(Modifier.animateContentSize(), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                        ScoreRow(stringResource(R.string.ui_score_play_protect), when(signals.playProtectEnabled) { true -> stringResource(R.string.ui_on); false -> stringResource(R.string.ui_off_20); null -> stringResource(R.string.ui_not_verified) })
+                        ScoreRow(stringResource(R.string.ui_score_database), if (assessment.databaseStale) stringResource(R.string.ui_stale_10) else stringResource(R.string.ui_updated_24))
+                        ScoreRow(stringResource(R.string.ui_score_accessibility), signals.nonSystemAccessibilityApps?.let { pluralStringResource(R.plurals.l10n_enabled_apps, it, it) } ?: stringResource(R.string.ui_unavailable))
+                        ScoreRow(stringResource(R.string.ui_score_admin), signals.nonSystemDeviceAdmins?.let { pluralStringResource(R.plurals.l10n_enabled_apps, it, it) } ?: stringResource(R.string.ui_unavailable))
+                        ScoreRow(stringResource(R.string.guardian_adb_state), settingsFlag(signals.usbDebuggingEnabled))
+                        ScoreRow(stringResource(R.string.risk_install), settingsFlag(signals.safeMobileUnknownSourcesGrant))
+                        ScoreRow(stringResource(R.string.posture_overlays), signals.activeNonSystemOverlays?.let {
+                            pluralStringResource(R.plurals.l10n_enabled_apps, it, it) } ?: stringResource(R.string.ui_not_verified))
+                        ScoreRow(stringResource(R.string.battery_review_title), settingsFlag(signals.backgroundRestricted))
+                        ExpandableText(stringResource(R.string.v116_score_meaning), maxLines = 3)
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            TextButton(onClick = onCheckPlayProtect, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.ui_check_play_protect)) }
+                            if (assessment.databaseStale) TextButton(onClick = onSync, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.ui_update_definitions)) }
+                        }
+                    }
                 }
             }
         }

@@ -674,4 +674,11 @@
     <string name="threat_intelligence_updated">עדכון המודיעין האחרון</string>
     <string name="threat_intelligence_updating">מעדכן את מודיעין האיומים…</string>
     <string name="threat_intelligence_training_note">נתוני אימון. שכבות הזיהוי בהמשך מציגות את ההגנה הזמינה במכשיר הזה.</string>
+    <string name="ui_sentinel_add_custom_folder">+ הוספת תיקייה מותאמת אישית</string>
+    <string name="ui_sentinel_custom_folders">תיקיות מותאמות אישית</string>
+    <string name="ui_sentinel_folder_limit">אפשר להוסיף עד 10 תיקיות מותאמות אישית.</string>
+    <string name="ui_read_more">מידע נוסף</string>
+    <string name="ui_read_less">הצג פחות</string>
+    <string name="ui_status_safe">בטוח</string>
+    <string name="ui_status_at_risk">בסיכון</string>
 </resources>

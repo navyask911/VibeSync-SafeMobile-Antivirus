@@ -617,4 +617,11 @@
     <string name="threat_intelligence_updated">Letzte Aktualisierung der Bedrohungsinformationen</string>
     <string name="threat_intelligence_updating">Bedrohungsinformationen werden aktualisiert…</string>
     <string name="threat_intelligence_training_note">Trainingsstatistiken. Die verfügbaren Schutzfunktionen dieses Geräts finden Sie in den Erkennungsebenen unten.</string>
+    <string name="ui_sentinel_add_custom_folder">+ Benutzerdefinierten Ordner hinzufügen</string>
+    <string name="ui_sentinel_custom_folders">Benutzerdefinierte Ordner</string>
+    <string name="ui_sentinel_folder_limit">Sie können bis zu 10 benutzerdefinierte Ordner hinzufügen.</string>
+    <string name="ui_read_more">Mehr lesen</string>
+    <string name="ui_read_less">Weniger anzeigen</string>
+    <string name="ui_status_safe">Sicher</string>
+    <string name="ui_status_at_risk">Gefährdet</string>
 </resources>

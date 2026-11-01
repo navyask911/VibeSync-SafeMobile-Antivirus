@@ -674,4 +674,11 @@
     <string name="threat_intelligence_updated">ముప్పు సమాచారం చివరిగా నవీకరించిన సమయం</string>
     <string name="threat_intelligence_updating">ముప్పు సమాచారం నవీకరించబడుతోంది…</string>
     <string name="threat_intelligence_training_note">ఇవి శిక్షణ గణాంకాలు. ఈ పరికరంలో అందుబాటులో ఉన్న రక్షణ కోసం దిగువ గుర్తింపు పొరలను చూడండి.</string>
+    <string name="ui_sentinel_add_custom_folder">+ అనుకూల ఫోల్డర్‌ను జోడించండి</string>
+    <string name="ui_sentinel_custom_folders">అనుకూల ఫోల్డర్‌లు</string>
+    <string name="ui_sentinel_folder_limit">మీరు గరిష్ఠంగా 10 అనుకూల ఫోల్డర్‌లను జోడించవచ్చు.</string>
+    <string name="ui_read_more">మరింత చదవండి</string>
+    <string name="ui_read_less">తక్కువ చూపించు</string>
+    <string name="ui_status_safe">సురక్షితం</string>
+    <string name="ui_status_at_risk">ప్రమాదంలో ఉంది</string>
 </resources>
