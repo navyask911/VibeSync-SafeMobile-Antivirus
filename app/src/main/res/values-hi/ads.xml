@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ad_privacy_intro">मुख्य मैलवेयर स्कैनिंग इसी डिवाइस पर होती है। मुफ़्त स्तर Google AdMob का उपयोग करता है; विज्ञापन दिखाने और धोखाधड़ी रोकने के लिए Google Advertising ID और IP पते संसाधित कर सकता है। SafeMobile Pro सक्रिय रहने पर AdMob शुरू नहीं होता और विज्ञापनों का अनुरोध या प्रदर्शन नहीं किया जाता।</string>
+    <string name="ad_privacy_options">गोपनीयता और विज्ञापन विकल्प</string>
+</resources>
