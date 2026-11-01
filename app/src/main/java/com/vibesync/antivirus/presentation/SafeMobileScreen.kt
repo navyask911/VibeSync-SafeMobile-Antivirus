@@ -324,8 +324,9 @@ import kotlinx.coroutines.launch
   }
   val role = pendingFolderRole
   val grantFlags = result.data?.flags ?: Intent.FLAG_GRANT_READ_URI_PERMISSION
+  val accessibleCustomFolderUris = customFolderUris.filter { it in StorageAccessPreferences.accessibleTreeUris(context) }
   val customLimitReached = role == StorageAccessPreferences.CUSTOM &&
-   customFolderUris.size >= StorageAccessPreferences.MAX_CUSTOM_FOLDERS && uri !in customFolderUris
+   accessibleCustomFolderUris.size >= StorageAccessPreferences.MAX_CUSTOM_FOLDERS && uri !in accessibleCustomFolderUris
   uiScope.launch {
    val granted = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
     runCatching {
@@ -769,7 +770,7 @@ import kotlinx.coroutines.launch
     )
     if (selectedDestination == "sentinel") {
      SentinelFolderPanel(context, folderUris, monitoringRunning,
-      customFolders = customFolderUris,
+      customFolders = customFolderUris.filter { it in folderUris },
       onAdd = { role -> requestPrivacyAcknowledgement {
        pendingFolderRole = role; pendingSentinelEnable = true; showStoragePermissionPrompt = true
       } },
