@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="ad_privacy_intro">Core malware scanning remains on this device. The Free tier uses Google AdMob; Google may process the Advertising ID and IP address for ad delivery and fraud prevention. While SafeMobile Pro is active, AdMob is not initialized and no ads are requested or displayed.</string>
+    <string name="ad_privacy_intro">Core malware scanning remains on this device. The Free tier uses Google AdMob; Google may collect and process the Android Advertising ID and IP address for ad delivery, ad measurement/reporting and analytics, and fraud prevention. While SafeMobile Pro is active, AdMob is not initialized and no ads are requested or displayed.</string>
     <string name="ad_privacy_options">Privacy and ad choices</string>
 </resources>
