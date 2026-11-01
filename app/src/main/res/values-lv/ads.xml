@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ad_privacy_intro">Galvenā ļaunprogrammatūras skenēšana paliek šajā ierīcē. Bezmaksas līmenī tiek izmantots Google AdMob; Google var apstrādāt reklamēšanas ID un IP adresi reklāmu piegādei un krāpšanas novēršanai. Kamēr SafeMobile Pro ir aktīvs, AdMob netiek inicializēts, un reklāmas netiek pieprasītas vai rādītas.</string>
+    <string name="ad_privacy_options">Privātums un reklāmu izvēles</string>
+</resources>
