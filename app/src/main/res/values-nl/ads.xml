@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="ad_privacy_intro">De belangrijkste malwarescan blijft op dit apparaat. De gratis versie gebruikt Google AdMob; Google kan de advertentie-ID en het IP-adres verwerken voor advertentieweergave en fraudepreventie. Zolang SafeMobile Pro actief is, wordt AdMob niet geïnitialiseerd en worden er geen advertenties aangevraagd of weergegeven.</string>
+    <string name="ad_privacy_intro">De belangrijkste malwarescan blijft op dit apparaat. De gratis versie gebruikt Google AdMob; Google kan de advertentie-ID en het IP-adres verwerken voor advertentieweergave en fraudepreventie. Zolang SafeMobile Pro actief is, wordt AdMob niet geïnitialiseerd en worden er geen advertenties aangevraagd of weergegeven. Voor advertenties in de gratis versie kan Google de advertentie-ID en het IP-adres ook gebruiken voor advertentiemeting en analyses.</string>
     <string name="ad_privacy_options">Privacy en advertentievoorkeuren</string>
 </resources>
