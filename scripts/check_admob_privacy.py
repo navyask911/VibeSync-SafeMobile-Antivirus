@@ -25,6 +25,7 @@ privacy = read("docs/PRIVACY_POLICY.md")
 asset_privacy = read("app/src/main/assets/privacy-policy.md")
 readme = read("README.md")
 store = read("docs/PLAY_STORE_DESCRIPTION.md")
+about_readme = read("app/src/main/assets/README.md")
 
 for coordinate in (
     "com.google.android.libraries.ads.mobile.sdk:ads-mobile-sdk:1.6.0",
@@ -94,6 +95,7 @@ for path, text in (
     ("app/src/main/assets/privacy-policy.md", asset_privacy),
     ("README.md", readme),
     ("docs/PLAY_STORE_DESCRIPTION.md", store),
+    ("app/src/main/assets/README.md", about_readme),
 ):
     if re.search(r"(?i)zero telemetry|zero scan telemetry|no trackers|no mobile advertising sdk|no ad sdk is added", text):
         errors.append(f"{path} still contains an obsolete zero-telemetry/no-ad claim.")
