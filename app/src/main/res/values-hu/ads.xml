@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="ad_privacy_intro">Az alapvető kártevőkeresés ezen az eszközön történik. Az ingyenes csomag a Google AdMobot használja; a Google a hirdetések megjelenítéséhez és a csalások megelőzéséhez feldolgozhatja a hirdetési azonosítót és az IP-címet. Amíg a SafeMobile Pro aktív, az AdMob nincs inicializálva, és nem történik hirdetéskérés vagy -megjelenítés.</string>
+    <string name="ad_privacy_intro">Az alapvető kártevőkeresés ezen az eszközön történik. Az ingyenes csomag a Google AdMobot használja; a Google a hirdetések megjelenítéséhez és a csalások megelőzéséhez feldolgozhatja a hirdetési azonosítót és az IP-címet. Amíg a SafeMobile Pro aktív, az AdMob nincs inicializálva, és nem történik hirdetéskérés vagy -megjelenítés. Az ingyenes csomag hirdetéseihez a Google a hirdetési azonosítót és az IP-címet hirdetésmérésre és elemzésre is felhasználhatja.</string>
     <string name="ad_privacy_options">Adatvédelem és hirdetési beállítások</string>
 </resources>
