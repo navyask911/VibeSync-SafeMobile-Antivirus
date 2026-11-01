@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ad_privacy_intro">Зиянды бағдарламаларды негізгі сканерлеу осы құрылғыда орындалады. Тегін деңгей Google AdMob қызметін пайдаланады; Google жарнаманы жеткізу және алаяқтықтың алдын алу үшін Advertising ID мен IP мекенжайын өңдеуі мүмкін. SafeMobile Pro белсенді болғанда AdMob іске қосылмайды және жарнама сұралмайды немесе көрсетілмейді.</string>
+    <string name="ad_privacy_options">Құпиялық және жарнама таңдаулары</string>
+</resources>
