@@ -817,4 +817,11 @@
     <string name="threat_intelligence_updated">Τελευταία ενημέρωση πληροφοριών</string>
     <string name="threat_intelligence_updating">Ενημέρωση πληροφοριών απειλών…</string>
     <string name="threat_intelligence_training_note">Στατιστικά εκπαίδευσης. Δείτε τα επίπεδα ανίχνευσης παρακάτω για τη διαθέσιμη προστασία αυτής της συσκευής.</string>
+    <string name="ui_sentinel_add_custom_folder">+ Προσθήκη προσαρμοσμένου φακέλου</string>
+    <string name="ui_sentinel_custom_folders">Προσαρμοσμένοι φάκελοι</string>
+    <string name="ui_sentinel_folder_limit">Μπορείτε να προσθέσετε έως 10 προσαρμοσμένους φακέλους.</string>
+    <string name="ui_read_more">Διαβάστε περισσότερα</string>
+    <string name="ui_read_less">Εμφάνιση λιγότερων</string>
+    <string name="ui_status_safe">Ασφαλές</string>
+    <string name="ui_status_at_risk">Σε κίνδυνο</string>
 </resources>
