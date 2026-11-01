@@ -164,6 +164,16 @@ for locale in LOCALES:
             errors.append(f"{locale}: Global Threat Intelligence placeholder mismatch {key}")
 
 # AdMob/UMP privacy copy must exist in English and all 51 supported locales.
+# Android string resources must not contain an escaped apostrophe outside a quoted literal.
+for locale_path in [BASE / "values" / "ads.xml"] + [
+    BASE / f"values-{locale}" / "ads.xml" for locale in LOCALES
+]:
+    try:
+        if "\\'" in locale_path.read_text(encoding="utf-8"):
+            errors.append(f"{locale_path}: remove invalid backslash-escaped apostrophes from XML text resources")
+    except OSError:
+        pass
+
 ADMOB_KEYS = ("ad_privacy_intro", "ad_privacy_options")
 base_ads, _ = read_resources(BASE / "values" / "ads.xml")
 for key in ADMOB_KEYS:
