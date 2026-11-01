@@ -1,10 +1,10 @@
 {
   "bomFormat" : "CycloneDX",
   "specVersion" : "1.6",
-  "serialNumber" : "urn:uuid:80bdb268-93e0-40cc-a5f2-0a46fa2d7d6b",
+  "serialNumber" : "urn:uuid:5546fdcc-965e-40c9-9d17-5a02e104c57d",
   "version" : 1,
   "metadata" : {
-    "timestamp" : "2026-10-31T05:03:41Z",
+    "timestamp" : "2026-11-01T07:35:06Z",
     "tools" : {
       "components" : [
         {
@@ -26,7 +26,7 @@
       "externalReferences" : [
         {
           "type" : "build-system",
-          "url" : "https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/actions/runs/41171013864"
+          "url" : "https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/actions/runs/41285317766"
         },
         {
           "type" : "vcs",
@@ -230,44 +230,44 @@
     },
     {
       "type" : "library",
-      "bom-ref" : "pkg:maven/androidx.annotation/annotation-experimental@1.4.1?type=aar",
+      "bom-ref" : "pkg:maven/androidx.annotation/annotation-experimental@1.5.1?type=aar",
       "publisher" : "The Android Open Source Project",
       "group" : "androidx.annotation",
       "name" : "annotation-experimental",
-      "version" : "1.4.1",
+      "version" : "1.5.1",
       "description" : "Java annotation for use on unstable Android API surfaces. When used in conjunction with the Experimental annotation lint checks, this annotation provides functional parity with Kotlin's Experimental annotation.",
       "hashes" : [
         {
           "alg" : "MD5",
-          "content" : "aca026e4fc7ff8660516af2e207c5c7c"
+          "content" : "782767fd1b6f317d901c4cfac8ca552c"
         },
         {
           "alg" : "SHA-1",
-          "content" : "7851235e2a16ce50270a74b555edaf9209b42864"
+          "content" : "243b1ee5ee99dc40b20eb58f2987a56df3cacd4b"
         },
         {
           "alg" : "SHA-256",
-          "content" : "6bd4c7c7476f8260cd3bdbb81183583e93fc9f790c27dea7dc314181cbf87aa0"
+          "content" : "323a119b32e91d44e932fb97ed28eb568ca2a9d3ba57ec09392074b5c5e24ad4"
         },
         {
           "alg" : "SHA-512",
-          "content" : "44d69a703fde230636b6d61064836d30e09ad651750fd1f2cb68308f2fca522294f8c5d131d0109f8d84fa80bffa18048b19d4ad4bdd75f1b36bd3c719146fc5"
+          "content" : "cb0d2c7c993cb26b75ae693ffd6b18cc7897bfa53a10cf70e6222fe2293183e7e2c1fdccf6d5689d9b24f328ecaec0edd2a06a3ba7209dc05b73fb01bee4c0c1"
         },
         {
           "alg" : "SHA3-256",
-          "content" : "ccd0b3222f00e9f0b29651c71a5a825e58add15a2f5d670d81baeca1252a64f1"
+          "content" : "1c3f6459af265e507cdde5323f20618533bbcff8e7c949ee48513028627d9ca6"
         },
         {
           "alg" : "SHA3-512",
-          "content" : "affd33f513a62951bcb96699c5c4c0ed77271ea45faa289dc681e8da93e0296eaab7e55cd70df8bca511198cc86c25d957b014cb7619edda3e6d770befac3520"
+          "content" : "b02bccc93d6ba8a5d2fc3c7e9ee5853ceb370b1c7bbb69729b21f638ec08b7e25d819df67cc37502f0fd81e1132ff02472e896b9f0a2f48b7065a2dd2365edf1"
         },
         {
           "alg" : "SHA-384",
-          "content" : "8267e737edda72ae800fa8ead19b97e5b344f2a07039228ab7252a546f51ffceec2dd102d7fa9ac10db3b22d797a350f"
+          "content" : "fef0ef93209ca0b6aedffeab2c6c9ba7baced4f28fd6295b39b3936a39dc39dbe90bb1efe631ff94ca0f35dd61ee5bbe"
         },
         {
           "alg" : "SHA3-384",
-          "content" : "373c35b3d3d04ae6b0e85ba3cabe2c598cf781739712f61d865a252b5f287fe5f67ea772ce28289946d39076ce37469d"
+          "content" : "4608cef0b9b653de8257162d8969b5a365b658e04797cb73dc77e4e8cdd726fff5d00a0990f0f9003870a94e0ed2732a"
         }
       ],
       "licenses" : [
@@ -277,7 +277,7 @@
           }
         }
       ],
-      "purl" : "pkg:maven/androidx.annotation/annotation-experimental@1.4.1?type=aar",
+      "purl" : "pkg:maven/androidx.annotation/annotation-experimental@1.5.1?type=aar",
       "modified" : false,
       "externalReferences" : [
         {
@@ -580,6 +580,69 @@
     },
     {
       "type" : "library",
+      "bom-ref" : "pkg:maven/androidx.appcompat/appcompat-resources@1.4.1?type=aar",
+      "group" : "androidx.appcompat",
+      "name" : "appcompat-resources",
+      "version" : "1.4.1",
+      "description" : "The Resources Library is a static library that you can add to your Android application in order to use resource APIs that backport the latest APIs to older versions of the platform. Compatible on devices running API 14 or later.",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "d0c265f75a956920a45e125fde6f1e1d"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "527d93d44bb18bc7dcf5213df8d4d069f0ceff61"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "c324f0a157e3cf2decd8448107de487420cb4f4fb4853cd634d71ec1f2226224"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "dd512ea62da31a6f8f9cef72680a2582c7a5ffaf0ee3e54ffd21a9a0b2ce6c1c4b703f04c92830a37f79babc78440fa214b440ce84aac086bec0d17d3dd117ba"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "3e9b5a6dffc893fc01dc5d7c9f9cf3bee94a10de84a605bd6fb55bf318eec9f7"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "3ac4137b5f4f380b155f4c22eec29f4d20917ea0f3fa9154ddf18bf15373211a2b631d9c0fd8bc539cdd6f476cac5bfdc107d9fffb0e34c86caccbf6a4f39289"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "0881ae800131b16fe6a8b0b87098546fbae8fbf1c161e7ce09181c79b290f89b4bd0db57e9571127e62e0c5ddfb7d1e5"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "01907e3b318dcbfa33fe5c5e41dfab15cb99bf0ff639580ced9cccdc80634d0658d4be0348de87e2b3a2de3a7fa1696d"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/androidx.appcompat/appcompat-resources@1.4.1?type=aar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://cs.android.com/androidx/platform/frameworks/support"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
       "bom-ref" : "pkg:maven/androidx.arch.core/core-common@2.2.0?type=jar",
       "group" : "androidx.arch.core",
       "name" : "core-common",
@@ -758,6 +821,70 @@
         {
           "type" : "vcs",
           "url" : "http://source.android.com"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/androidx.browser/browser@1.8.0?type=aar",
+      "publisher" : "The Android Open Source Project",
+      "group" : "androidx.browser",
+      "name" : "browser",
+      "version" : "1.8.0",
+      "description" : "Provides support for embedding Custom Tabs in an app.",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "dee03759d3c7e4f79cb3300fbe9718d2"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "ba4defb5ed7790335783a908f93dd08d7715d148"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "2d6167b33bf6a064c37501501543702349e850ac62c732d1efa4e71063675456"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "51c1f221d953a9a5570aa0a5853b80b9fd01d97201bee24a57e48d9fa62aef388bfedf02fc2f090e0d0812b8635b10ab318774991261e72ac2a6455026e66923"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "53e33d763763f5f6fc2a67d1710b1c1eb6e36093295d542f06e78a2b6a112fb2"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "3b27986d53d78b0db474211b42d24cf4143d0cdfc24efbc4b465432a8604a16c26d57940e53fe576388d6687d9ffe27c9c1719ce653474ddb92052949c451785"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "cf00bb81bb2e5cfe1036eae04d744e54739c7bb5494f715bf02a20bf97e60d70853d2512dac5aa8caa01f74999fd56ae"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "563f0bcc58c76c96bd9ccb1d9aac8d4ef1d916471515db5c54663437f7d1c43c158458346f4baaa8c70e5dfafdf1ecf9"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/androidx.browser/browser@1.8.0?type=aar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://cs.android.com/androidx/platform/frameworks/support"
         }
       ],
       "properties" : [
@@ -3663,6 +3790,69 @@
     },
     {
       "type" : "library",
+      "bom-ref" : "pkg:maven/androidx.concurrent/concurrent-futures@1.0.0?type=jar",
+      "group" : "androidx.concurrent",
+      "name" : "concurrent-futures",
+      "version" : "1.0.0",
+      "description" : "Androidx implementation of Guava's ListenableFuture",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "c6b289d19ba7cc2118f35cf3192c6418"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "c1e77e3ee6f4643b77496a1ddf7a2eef1aefdaa1"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "5595a40e278a7b39fa78a09490e3d7f3faa95c7b01447148bd38b5ade0605c35"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "34f545e0f723333f304910481f38d90620c963d2c434a1e552f516a0a3a766af9d9fd826a5e4528da9ac0cf351d0d11be55536189b0132f8bc412fd25df45d09"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "26484e0ce3721762a39365ae33c04d4c93491a28a914c8532942f5d842de14f7"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "1bd2bd83510101a556d19ca85ff7a3487a2c66ad3535583845929c61e7d1112614edf790a0b9e8dfaeb9e00352d9cc13df1c50aac197b84991f2964b3c4be95a"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "371512cf14f9940a8e46f75bc86242883d6fc561098bdf737b1636c75760edc84538aa6d325ef4dc3f7585ebf1fd4ac2"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "505eadb823b85c4b1797bdc24615eb026f19950ba6746798c0e848315190c34973ad4d518c58179b97bab827ab25e4e7"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/androidx.concurrent/concurrent-futures@1.0.0?type=jar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "http://source.android.com"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
       "bom-ref" : "pkg:maven/androidx.concurrent/concurrent-futures@1.1.0?type=jar",
       "group" : "androidx.concurrent",
       "name" : "concurrent-futures",
@@ -5183,6 +5373,70 @@
         {
           "type" : "vcs",
           "url" : "http://source.android.com"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/androidx.javascriptengine/javascriptengine@1.1.1?type=aar",
+      "publisher" : "The Android Open Source Project",
+      "group" : "androidx.javascriptengine",
+      "name" : "javascriptengine",
+      "version" : "1.1.1",
+      "description" : "Javascript Engine is a static library you can add to your Android application in order to evaluate JavaScript.",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "0d8e79969b777b4ff3db602e14e4d481"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "8500e5bcafb953ebfa9a99e3dfe2d15529c441bb"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "cd941752c295975f1d405e07b3ca935d4c3b1b7e63c8f1cea1e64375facf31a9"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "626ac5e153ce28e4333813bf9568c14b6c607d324cf9173d6ff2bbb0e4ade9134a4302523f647a68004979d03a7eeb1ddf3d2bbcf2b974a7a18dc22e64e2ccf4"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "254012a45c80acf521e4268944d55076d7f33218d35a6dc540d729ff01d838db"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "133b4ae1d096c6141ca646e55e0048140f3f92389625795f02694c7f7d1b599a30fd1328364dd04daff023b54b2bdf51bdf82198f7f6d8bc87417676a83121f9"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "a1a69442d20bcb05b77f3595020805d66f66d30073d36fe589b2df848eb101edd4a9474459b5e226cf12567409738036"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "dc82ec4979d71266b96645a0d18f26808df4e96c91a760386ced7044872236b6087c863d7db9b5eed1e3593f19aff317"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/androidx.javascriptengine/javascriptengine@1.1.1?type=aar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://cs.android.com/androidx/platform/frameworks/support"
         }
       ],
       "properties" : [
@@ -8578,6 +8832,132 @@
     },
     {
       "type" : "library",
+      "bom-ref" : "pkg:maven/androidx.vectordrawable/vectordrawable-animated@1.1.0?type=aar",
+      "group" : "androidx.vectordrawable",
+      "name" : "vectordrawable-animated",
+      "version" : "1.1.0",
+      "description" : "Android Support AnimatedVectorDrawable",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "aec84ef05b190deb14d134bc5d0ae071"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "fcda1161354501471c30a4e077af6b5c4d4eddc6"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "76da2c502371d9c38054df5e2b248d00da87809ed058f3363eae87ce5e2403f8"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "9f54913e9adbd564c721eb191dec8ea294c68528904db26f119628a48b1dec31a8a11c83311c9e0141549b9bebda70dc3e0f2ec1b6ef50213730aa8f6e25d873"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "63dd7f74b50293d31ffc545a62ba78e3d6329cc3135a570c6a5d3e80cf9e84f4"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "20bc5c0b85ca4301906bebd69c1c3bddb40953a6c00440cfca7afb19a6ca82ba4100ccf8c1e560dccd3175c5ca90d7280500a688272dd56cced04de1e82194fe"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "e95b95590856eb70663656cfb6a12fe037554cd4e0ffc76585fe3b0e2cb8a5a40cc2aeff08e787c461edbcca07725fff"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "3a8af24c0f358dbd0403a4bdbb68dc6418fbb472cc9165b2c2567f1765dc28eaca1fd8b74790ce5b5584437bea51a117"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/androidx.vectordrawable/vectordrawable-animated@1.1.0?type=aar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "http://source.android.com"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/androidx.vectordrawable/vectordrawable@1.1.0?type=aar",
+      "group" : "androidx.vectordrawable",
+      "name" : "vectordrawable",
+      "version" : "1.1.0",
+      "description" : "Android Support VectorDrawable",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "191c1f126c420a27272c141ccf5def8e"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "eac7a364fff534035a2a6cb17770a1288315f69f"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "46fd633ac01b49b7fcabc263bf098c5a8b9e9a69774d234edcca04fb02df8e26"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "bf5efdd7c7c63ffb8d4f0bfbdfc77b3ff1ab91aa65a55826642f857b0d022e174914aaab8c27cdea9522ca02958254144dab4772981c1828c07cb7edbc4db23f"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "5aa9c1f66244750f641b4020a346b081a3e8ceee761b75a3b620fd1440c53dce"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "350521e0d63155f5b2939aeba011992253ed36a7629447daf9a9b66d67708023068b9b9e0d52cce921033fdb3db599cb0d413110d9a66ebdefc9c1737c772c50"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "547dc954e5b08b1e73eddf9e67faa3f9e6bee69c665d0acfaba7bdedb56107adc520837d8475740e9d53a6f0216891ba"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "320e6f3e0933b4ac9711d2bbb417d8399945c594b3dd15bdaca32efd89f48267d3b68100ed214fed048d071011ab5b2b"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/androidx.vectordrawable/vectordrawable@1.1.0?type=aar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "http://source.android.com"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
       "bom-ref" : "pkg:maven/androidx.versionedparcelable/versionedparcelable@1.1.1?type=aar",
       "group" : "androidx.versionedparcelable",
       "name" : "versionedparcelable",
@@ -8693,6 +9073,70 @@
         {
           "type" : "vcs",
           "url" : "http://source.android.com"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/androidx.webkit/webkit@1.17.1?type=aar",
+      "publisher" : "The Android Open Source Project",
+      "group" : "androidx.webkit",
+      "name" : "webkit",
+      "version" : "1.17.1",
+      "description" : "The Jetpack Webkit Library is a static library you can add to your Android application in order to use android.webkit APIs that are not available for older platform versions.",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "89f946437ab77709f956c23ebf769771"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "8ca7a33fc2476fdfbced4672f5dd7962e4232899"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "29dc7a9a32614828c97cf85951eb43c9e455157ab411e5e77d2ca4e72da28a36"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "8264d39930b0472ce65bebafd1f0bd52afb23b5dd1f33d6ac132c959e1b8809c692459bbe68f3145f9b8e91727e67baebb994afb3af77539d8214c7396080743"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "570624c206c6f557b6d373b6b6a164d03730f0d922a05dfacf73c90175ae36ed"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "cf02be7e10e88136b402071c6de7d62a7ccd3c6861c4bdc9835f252dfc618a10894e01be52373df699f1f568d201d99ccf51cf2300fe4e0cbd273237f56b7c04"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "681aa4415e399ef7db8d593f46cc3f1e225ae164b56aedf616513d1ca2a855c682bff276bfe88eac849091b5dcb40a45"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "75b485ce6a8ed1e2812eaef702ad1f0c598087d4f8f73a9009e89499f14fa2f2e521609dff276e80ee4b72faf1b8a1bb"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/androidx.webkit/webkit@1.17.1?type=aar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://cs.android.com/androidx/platform/frameworks/support"
         }
       ],
       "properties" : [
@@ -10666,6 +11110,120 @@
     },
     {
       "type" : "library",
+      "bom-ref" : "pkg:maven/com.google.android.gms/play-services-ads-identifier@18.0.0?type=aar",
+      "group" : "com.google.android.gms",
+      "name" : "play-services-ads-identifier",
+      "version" : "18.0.0",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "41457ac78c45f5fb52442c70ade1566c"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "222380d276fdbf17d80d6cdc9aa26781f99b30f5"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "730c9b67e4f85dbb3849f4f3e42a5047cee1f59c2326469d01d96d0fbd21181a"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "f1757b822dd4b506dde37a9f068f652328f00d1cf1c89b334b0c2e248a6d68a96e6d8b18034b5f4d57e1393869cb3d06d4bbb7d9dde1b54ad34718dc37c0fec9"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "ce25879acea6ddec2f3601a0a516c2a0d0f560ae30b18e10559d3e5cd702313f"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "cb607ebe8027318a02bab44e8288468058eb739e5b9517e48f00f99a639818257a6aa20ff2cb0119e02176f8c507d9057bbf60776c09544e28af06b7dc5772a5"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "660168e0199ae0a6f3027320ecf68b79755d9a0441bafe00d2ebba2e2ba78f32e0d6247639af1b51a3e6a606bcf0861a"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "a35d4667e212fa0e05f8e2f274d96c46556ce515faa7c1054a8c687c413571e99ea32c63e73b586bc795423325debc07"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "name" : "Android Software Development Kit License",
+            "url" : "https://developer.android.com/studio/terms.html"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/com.google.android.gms/play-services-ads-identifier@18.0.0?type=aar",
+      "modified" : false,
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/com.google.android.gms/play-services-appset@16.0.1?type=aar",
+      "group" : "com.google.android.gms",
+      "name" : "play-services-appset",
+      "version" : "16.0.1",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "621ef9c60abc101b2240d552b3ea174c"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "838c5fe9b27980862a8093726121c40a64cb698a"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "e04ecd4f75cf45ca2c37bb53fb20945a9c5a322c15e16c2419706d672fb0100e"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "cb9ae99a8072bfc3e780edecd4e5b561e97f920644e38f03439ca2ebe72c78e707f9e094e86734cc056e909e038e28dafa3d1da1d1f44fb24a3a0bafb135a58b"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "49d6953f0de71f7a9adebd3cfae33190c88149d178ecae498259811fe19170d2"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "790165ab97fa3b5f46f2a5053f38bd66b5ccf440cfa66eed1728ec5bf7bbf37015a7c2630b68bab32cbf4ccd61bde88c413edafcdacdcac72abdaf7e413adc78"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "5eec20c161e415078c7fa5a0a6b1bc12b4ab04f7f8f217d97d3109268dbcc4cdacf850fa4962cb135dd3fa774cecedbd"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "bdca1d3e445ece0edf0c6bb80a97dd11f2870443a0426bf91c2fcbeb6f731660c11ee9bcb20cdd235e9fa0a945446a8c"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "name" : "Android Software Development Kit License",
+            "url" : "https://developer.android.com/studio/terms.html"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/com.google.android.gms/play-services-appset@16.0.1?type=aar",
+      "modified" : false,
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
       "bom-ref" : "pkg:maven/com.google.android.gms/play-services-base@18.5.0?type=aar",
       "group" : "com.google.android.gms",
       "name" : "play-services-base",
@@ -10780,42 +11338,42 @@
     },
     {
       "type" : "library",
-      "bom-ref" : "pkg:maven/com.google.android.gms/play-services-location@19.0.0?type=aar",
+      "bom-ref" : "pkg:maven/com.google.android.gms/play-services-cronet@18.0.1?type=aar",
       "group" : "com.google.android.gms",
-      "name" : "play-services-location",
-      "version" : "19.0.0",
+      "name" : "play-services-cronet",
+      "version" : "18.0.1",
       "hashes" : [
         {
           "alg" : "MD5",
-          "content" : "217fd679346b3e59e5b4bc4c62838cc6"
+          "content" : "22646a48342074956304713954e04ba6"
         },
         {
           "alg" : "SHA-1",
-          "content" : "ebe2c9a380472c149a0fbd982474bc93792057e0"
+          "content" : "494122ee0be02cc71fe79f247b13285dacfe1dbc"
         },
         {
           "alg" : "SHA-256",
-          "content" : "6b205c43ba5df751eca8ce9dae7a58effafac7d637fb4fc708a7522d1b99cf80"
+          "content" : "b5e4c54a3ccb0200c7bf28d769c382c153954135a54096843f54160f89a7ddd0"
         },
         {
           "alg" : "SHA-512",
-          "content" : "35e96048ac3e9e80ef7a6822d00220e4c6372cdda97126997aaa5b7cf8469776abd830933e052407f249630fda617b98b54cecccf3467ff15b83aaca5c765025"
+          "content" : "3480e59b18ee6d3f99574d1c9a7f9958e8331ab015207c7c5877563ce2bc324fd58cf71c22ea44a03cb44c267228a15a15ba754280c221e4c861bee7c8f13124"
         },
         {
           "alg" : "SHA3-256",
-          "content" : "663202f5609b2d50e50b3421b515805b9dc74f0b6c5c6794e4fb6b7c1d9f42d2"
+          "content" : "4040a3024b53e9ffa10d324d1d102a9d80b4fe5d5b414ec2d9b54af99d22687f"
         },
         {
           "alg" : "SHA3-512",
-          "content" : "e169991a39d2446f4d625910a079ebc09dcd49526b20580e712c8e71b69f0bbc785d74be15111fe770506a0a3c22eb2fdbf0153f81af8bc585c3645e2146c03b"
+          "content" : "72413ed238c63d1fa833c454f15a75bd8b6efc96bcfe70eb1165e080633e171b8b0876bef4c8e18dae074d27d2456ba0d1891c1288221b55138ccc0d418c1472"
         },
         {
           "alg" : "SHA-384",
-          "content" : "d4fa407c72bcb724d670063c1ba01f228538b89326a95e398ea8f44db74f147a10be9165feed03875ee1a09b36a35944"
+          "content" : "5e2fe889786acd164d831ac543c97e40fd5d328998e1ffede345da8fc02eeb2eb1fbeb05f5697ab7c5e7e23986c73bf6"
         },
         {
           "alg" : "SHA3-384",
-          "content" : "07c16d0286764d10238a2079e79fe67fdea2a7e0e29e0d9df22ff1107c11d304283f31c1857db9e7a3ec185a5a74157e"
+          "content" : "d3d6dd4877a2cf5c360340edd0051b2096c14f38e725c3e375d438cbd80a211bc11020ebb5f0473cad43ab454c093184"
         }
       ],
       "licenses" : [
@@ -10826,7 +11384,7 @@
           }
         }
       ],
-      "purl" : "pkg:maven/com.google.android.gms/play-services-location@19.0.0?type=aar",
+      "purl" : "pkg:maven/com.google.android.gms/play-services-cronet@18.0.1?type=aar",
       "modified" : false,
       "properties" : [
         {
@@ -10837,42 +11395,42 @@
     },
     {
       "type" : "library",
-      "bom-ref" : "pkg:maven/com.google.android.gms/play-services-places-placereport@17.0.0?type=aar",
+      "bom-ref" : "pkg:maven/com.google.android.gms/play-services-location@21.3.0?type=aar",
       "group" : "com.google.android.gms",
-      "name" : "play-services-places-placereport",
-      "version" : "17.0.0",
+      "name" : "play-services-location",
+      "version" : "21.3.0",
       "hashes" : [
         {
           "alg" : "MD5",
-          "content" : "a816fef956f19a6bb7b2ec469bde1a5d"
+          "content" : "3e80ea11280f8b652c76d10a0d565c2f"
         },
         {
           "alg" : "SHA-1",
-          "content" : "6fd0e52de8c47b7228223bf3a7fe53d075b6b0b2"
+          "content" : "a87b3aa06c7175f4c9442edb272d9212c8410509"
         },
         {
           "alg" : "SHA-256",
-          "content" : "2c7fd63ad02f28150ae4ffe4615dac7d694d790e2c4667f777aedc8ee054e929"
+          "content" : "d5024384d5bf66c75edf353d95eb8e7b5bf64483138474c6e2e93e2c2394f842"
         },
         {
           "alg" : "SHA-512",
-          "content" : "523ef3eec18c00fa668f05ccacfc0200d103cfe6ef0ccd9eab9261fec03992f6160276b29916fb664c76f94e0ade2130bd2a5c1b924bf4867e6cde3bce0fcdfc"
+          "content" : "ac7283ee66c06f74fe2100742d38f65d909a0bd7d822cc9d825f14fdb386b0a117af35f857629cb13c8b8147dc9c0eeda436632a35b435ed2a6870b4270e79fc"
         },
         {
           "alg" : "SHA3-256",
-          "content" : "8c5c4a388bc81b876d3a8ab43b243bf9121d25bdb85d01b994eb5fbee6fb6ea1"
+          "content" : "7e74c24505114b962d65625fbf533e85914d7eeb3f22e402e7d6c7de41ba53d7"
         },
         {
           "alg" : "SHA3-512",
-          "content" : "d5d93f46fd15e3e07aff5129f93f1f0df31902232ee2409400d25e395a95e859dfc40e5dc794fc800ab49f4c8e4f5d6066966cb93d22216f2b099e0e0b859140"
+          "content" : "215abd6993438f0ece6d24161a2ba305abdc2fa58b8e4630fbb64e2879eab6ee4bca0941f0a6965c733e990baf4522d8b570a4a3db82e191d9785c31ebb8ef24"
         },
         {
           "alg" : "SHA-384",
-          "content" : "0c5322d4f226fb8a2f35d6e442b2dc8925346f800d838df3e123d408a672989ef1a5aeb92ded758f9d4b0adcfd7cc486"
+          "content" : "a2ae69070a7ae39cf0bc492a81214aac829c6e5ed00b02cf756664604ba096e7920c8b83ec8fdeaaba34240d72b287e1"
         },
         {
           "alg" : "SHA3-384",
-          "content" : "a5734c6abf6d119dc89267eb9a7e5c12df39e60f26de04f618e8f2ee09c81fd9d602aa8da2326e998481452dc415ef99"
+          "content" : "93e62cda3feb3d3650f92343e8c504b03cc4b6ad963af6d5e577ae8cb1bccaae7f789afdfebca271a39221a96ea13ef7"
         }
       ],
       "licenses" : [
@@ -10883,7 +11441,7 @@
           }
         }
       ],
-      "purl" : "pkg:maven/com.google.android.gms/play-services-places-placereport@17.0.0?type=aar",
+      "purl" : "pkg:maven/com.google.android.gms/play-services-location@21.3.0?type=aar",
       "modified" : false,
       "properties" : [
         {
@@ -10941,6 +11499,177 @@
         }
       ],
       "purl" : "pkg:maven/com.google.android.gms/play-services-tasks@18.2.0?type=aar",
+      "modified" : false,
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/com.google.android.libraries.ads.mobile.sdk/ads-mobile-sdk@1.6.0?type=aar",
+      "group" : "com.google.android.libraries.ads.mobile.sdk",
+      "name" : "ads-mobile-sdk",
+      "version" : "1.6.0",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "0194251bdf0093e385324a23f97b3e35"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "4b72166a4a59ee76053b4b7f15af18cc76691b2e"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "5e60603d3677397b73f17bd7336b119761c73344adc6a58adacc63901f938e6b"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "c8ef7f5340230ad87538b8ad2dd5fd6adc89bcd6d6d2294c4369c3ed00cb721921161177cf93ecc59accda9143835fba3ae906a6f4845befd3e190208a612a4c"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "91ddd438c730a90f18f578861e33e88a0841287085ee711883e474580d6a4bd0"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "d7d5e8f2e806f7368fff8da9a68c2ac4a98f7d79c3582b5f59dfcecb0dd4dc18f5c81d0783169a97bfef8671017bb696ca0ca1d95163dca59a0477ed91c60700"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "a8aa12d98b8a88ba442d20bf133147af056f593122eda6273fcdd7c8bd6df8d35fbd66ea42a471eedbf4227e03da8a63"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "920043544d85295cd1629e21e40aad02e1c55d0844db5ed4de0eb9e1425f4bc8dbc1b5616c86a542a1bfab7e679dd9d9"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "name" : "Android Software Development Kit License",
+            "url" : "https://developer.android.com/studio/terms.html"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/com.google.android.libraries.ads.mobile.sdk/ads-mobile-sdk@1.6.0?type=aar",
+      "modified" : false,
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/com.google.android.play/hsdp@2.2.0?type=aar",
+      "group" : "com.google.android.play",
+      "name" : "hsdp",
+      "version" : "2.2.0",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "b81aadbec867ccf7781534a038022f9e"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "039cd1ea2822e476b77ef6c0041c3885c4cfed14"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "39e1e335b512c66b166fd6c74e360a480564541745c57ad4a89bdb581d0bdcdd"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "76547fda152ecc87acd5aa0ab4f18f908151c93ddade327c0ba42c59aceedc1c420d6d3c422df2967846c73e1f7b61b7e85172c8ca37c973a413803c45031f76"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "2379a3224108d83baa821d70b20314e395ac28c2b0b459f7623c4c3240e7ee37"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "29778bec8cf5c6e7190e6744415d486198cc1aba3b614b2d05673418ecee3c0c5434ca890a55ff54b7c50c40f7599255352121c8b3f83b2e9d854f4d5be0ab4b"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "89fb4ee676dc79c4e56380788ee5877a95509ba51b1e34a2bd521c64ab140b0c0abd10120d3cde87ec82575a03af96fe"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "73ec702e00204c01d9e757dae938f1f6ff0d5a2a3a7af3be5ca44583f5255a63f851d23f27afdfcdc25757fb683f8998"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "name" : "Android Software Development Kit License",
+            "url" : "https://developer.android.com/studio/terms.html"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/com.google.android.play/hsdp@2.2.0?type=aar",
+      "modified" : false,
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/com.google.android.ump/user-messaging-platform@4.0.0?type=aar",
+      "group" : "com.google.android.ump",
+      "name" : "user-messaging-platform",
+      "version" : "4.0.0",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "043333985f40334dd611dc7b1dd885af"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "ec92119130cb90fbc9906f951e1e17334c9e065d"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "429889c7108caf88207d5d078e8fa7655a0ec6aca718399f27455bebe5978621"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "7846cf3afa0d4d04982add373d8c2ac6974c28a239e192d163e3e45546d8906d1a9c1fddd776e11a333621f8c68210fdcef5fdfefe177f324047602e106b017f"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "15aee04b056e8fc1542ce6248f83bbd3b7c956b78136334687095cb278671bc6"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "934a8231f1dab022fa3c21a0f28f74a1c6a018a7faf148468511e70810b97510a50b5b3d27d2ec89c88d5a6dda541b35f05cb795d7c21b24c6cc4469a34fb809"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "4b60caa23711abccf0a315e149fcfe179e885e4799995497b53f6a23d7244a16f4e881437e244df2bf5d5f3ec474ecd5"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "239b22dd00a1a5513e146d8957221079f7dd7cf036ead067196d5f6fb4e6eb5e64dff77311424a0644f7297e34f38fd2"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "name" : "Android Software Development Kit License",
+            "url" : "https://developer.android.com/studio/terms.html"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/com.google.android.ump/user-messaging-platform@4.0.0?type=aar",
       "modified" : false,
       "properties" : [
         {
@@ -11598,6 +12327,63 @@
     },
     {
       "type" : "library",
+      "bom-ref" : "pkg:maven/com.google.code.gson/gson@2.13.2?type=jar",
+      "group" : "com.google.code.gson",
+      "name" : "gson",
+      "version" : "2.13.2",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "a2c47e14ce5e956105458fe455f5d542"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "48b8230771e573b54ce6e867a9001e75977fe78e"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "dd0ce1b55a3ed2080cb70f9c655850cda86c206862310009dcb5e5c95265a5e0"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "8974a052656d2e5ec968b6bac2edf51413ffc62040fdc65f14f00597e738ab544d22487f8579ba90618b5a7f94ef33773510fac67b408fee6ed274b38f3d9947"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "1c051cfe5e630b35d003f96e135de7c5d5cab145b6e1159143570cb246426a0d"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "55ddee7f6c1659ffa82e5c308a0181b459cfeb3442f1f9868ff7e9a3c83376bd2ad527b16d5131df442ffd03d06c35dbd64458df6b02a111c1654f01db381ba5"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "98e8afe5b23c43b84e7a57e0e27f683a182fcf97ee3eeb6a1311582f7fecd846c806ffb092b620088dc03d256d8eaf27"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "d61d6b1cf6997c75287f454e536f855db8404e5fb9d0b8faa4dcc1e7a60ffefc05c2f92f3514e091808a8677b29f3619"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0",
+            "url" : "https://www.apache.org/licenses/LICENSE-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/com.google.code.gson/gson@2.13.2?type=jar",
+      "modified" : false,
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
       "bom-ref" : "pkg:maven/com.google.code.gson/gson@2.8.9?type=jar",
       "group" : "com.google.code.gson",
       "name" : "gson",
@@ -11655,43 +12441,43 @@
     },
     {
       "type" : "library",
-      "bom-ref" : "pkg:maven/com.google.crypto.tink/tink-android@1.16.0?type=jar",
+      "bom-ref" : "pkg:maven/com.google.crypto.tink/tink-android@1.20.0?type=jar",
       "group" : "com.google.crypto.tink",
       "name" : "tink-android",
-      "version" : "1.16.0",
+      "version" : "1.20.0",
       "description" : "Tink is a small cryptographic library that provides a safe, simple, agile and fast way to accomplish some common cryptographic tasks.",
       "hashes" : [
         {
           "alg" : "MD5",
-          "content" : "48bc86a0be1793d51d364bda39dc4b54"
+          "content" : "2b0d3f9aec48b32cced56a128ce74358"
         },
         {
           "alg" : "SHA-1",
-          "content" : "8d993436686bd9fa66101fdf86d618c1744b5b18"
+          "content" : "fc46881a2a19d8ac64a96e91cf67577a7e3f6452"
         },
         {
           "alg" : "SHA-256",
-          "content" : "67f015a5b046aa9dca7673c1a0cf6b0fc6ed3532737e3db7ef6cc3da46126da8"
+          "content" : "0341f5a23366370144733bc7edb1adee115c059928dad32e73fe59e3503d3485"
         },
         {
           "alg" : "SHA-512",
-          "content" : "4e59e674834af0eeed34c2dd25b374cddde07be260050572c66f56b6edfa9e5d0e19dccafcbc0efe2d707841ad482125a2cd12fd93ff05da9f69334574e3d3e4"
+          "content" : "71975ee6e29488162d8255c3d21b5bb7f44899fff4eb3efb9c3c0871aab1322906efa6c2b0d1e8c3a33bb1e31c596b20f45c2bbcb5200d600fce11060833c785"
         },
         {
           "alg" : "SHA3-256",
-          "content" : "c7d0ba1c981665f60a038dd85eacf75cd8ee8e03a549265a17d33386ae1137f9"
+          "content" : "c725617a6d51b067ef494527cef3c4513b45543a528cc91e72a37d0e0850f94d"
         },
         {
           "alg" : "SHA3-512",
-          "content" : "cbe74e94b90165ef177d5e5fdde4294298790c38902a580c3a6e9230fd4c6125b5ac08c1579bb68e97a9dbac7188be43aa9faed137557eb852494ffd332b0265"
+          "content" : "48878011475c4bc37494ad3563049a2f09cc9675c55cbd4261bdcfd8b8768a2bfd01bc3e74121f49dfa30dab29e1fe488674d1e63ef6a466818f4923f628a8fb"
         },
         {
           "alg" : "SHA-384",
-          "content" : "b2f4d79cb495b5c7b37c77052eba6e49eb6bd6ea4f184457e5e6a231fba1ce20dc0e723991ec08b53d1c1259a7397d08"
+          "content" : "015cb41188b4a724612f90b24ca205c9c6121e3e9faf6dec619287c26534cbe04a66a683bd597536b09c07b7f3408d64"
         },
         {
           "alg" : "SHA3-384",
-          "content" : "c760033101f1bdae3b73ec37d44731221c2fcf99090573f288cf9d7da242588880a6f95bd8c1fbb051944f08c90ecab8"
+          "content" : "3c018ecc3fe36809081a4fcd347781bb2961b257d7827f294cc11ea0ad4032f9aaabc0695642ba7c1399f951a6955bae"
         }
       ],
       "licenses" : [
@@ -11701,13 +12487,9 @@
           }
         }
       ],
-      "purl" : "pkg:maven/com.google.crypto.tink/tink-android@1.16.0?type=jar",
+      "purl" : "pkg:maven/com.google.crypto.tink/tink-android@1.20.0?type=jar",
       "modified" : false,
       "externalReferences" : [
-        {
-          "type" : "distribution",
-          "url" : "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-        },
         {
           "type" : "issue-tracker",
           "url" : "https://github.com/tink-crypto/tink-java/issues"
@@ -12164,42 +12946,42 @@
     },
     {
       "type" : "library",
-      "bom-ref" : "pkg:maven/com.google.errorprone/error_prone_annotations@2.36.0?type=jar",
+      "bom-ref" : "pkg:maven/com.google.errorprone/error_prone_annotations@2.41.0?type=jar",
       "group" : "com.google.errorprone",
       "name" : "error_prone_annotations",
-      "version" : "2.36.0",
+      "version" : "2.41.0",
       "hashes" : [
         {
           "alg" : "MD5",
-          "content" : "0e48e5ba2cd0a8d8d09bad849b99f6a6"
+          "content" : "75e3b25da8b8a2136463c4674f5e49bf"
         },
         {
           "alg" : "SHA-1",
-          "content" : "227d4d4957ccc3dc5761bd897e3a0ee587e750a7"
+          "content" : "4381275efdef6ddfae38f002c31e84cd001c97f0"
         },
         {
           "alg" : "SHA-256",
-          "content" : "77440e270b0bc9a249903c5a076c36a722c4886ca4f42675f2903a1c53ed61a5"
+          "content" : "a56e782b5b50811ac204073a355a21d915a2107fce13ec711331ad036f660fcc"
         },
         {
           "alg" : "SHA-512",
-          "content" : "bd6f5650902526d3db06aa1cc7bd36723658166acfabb823aca27d0b2c3814e83ae24a8217ce915c3e194c2c696a102580b4c21ef5dba61f7610bcb8d580f566"
+          "content" : "e2eb4bf9f36f95a4d4c5ea344db5cd90a456e63bef8e52932b8f6f4ecfdd59cb2f6c2ce9e67b0070c82177e42885688b95afef591b16001f789b378f18afdf30"
         },
         {
           "alg" : "SHA3-256",
-          "content" : "ec8420b1f4e27c3eef932a764c4cedc8b3547e114285227ceb0612e93648ac29"
+          "content" : "2ca1a59f4fdc37a3c83501542c63842fa4fe40c06f69a59a2a072e4af442a16a"
         },
         {
           "alg" : "SHA3-512",
-          "content" : "344bc9be8f3417d4bc3e9e073bff4657aace3cac73e5ace038a11f1435d04d3182f344b8237cd6b311ab0748042a4c4f84259713ec2dcbe472c75cde2e787320"
+          "content" : "6d1f419996b15e5a2bd9b268d166046e38fe9cc6c58fe56aaacbe71b95e3db8c8fe1d226e7f549ea227956feaf3087706bdfa79930fe432298bba9ec06c26a90"
         },
         {
           "alg" : "SHA-384",
-          "content" : "a5cb9ba6b5bf550de90def11ec4bb014410a14949f8598856e1693e213ec0e7d2b3c6cb41b34ba8cfe209a29801de529"
+          "content" : "43700b378624aa37197ef03a6b5ea40b5fbb6c0aa667eadf810ad36f0707dffaf3ea23471f2553327c3f5644cc875ee7"
         },
         {
           "alg" : "SHA3-384",
-          "content" : "00492c18861d7d4fa5517ccf2bcc5c170b575ff9fe88fdc834827d9fc8747846d6345f5270c64dc130228f53ac96f1b6"
+          "content" : "8bf3293cf4b72c9a999948f8812190636ef3b0c35bab8dbf9a54c263eeab2a3b3d0774fdcab52c6d114551ff74a8aea2"
         }
       ],
       "licenses" : [
@@ -12209,7 +12991,7 @@
           }
         }
       ],
-      "purl" : "pkg:maven/com.google.errorprone/error_prone_annotations@2.36.0?type=jar",
+      "purl" : "pkg:maven/com.google.errorprone/error_prone_annotations@2.41.0?type=jar",
       "modified" : false,
       "properties" : [
         {
@@ -18040,6 +18822,360 @@
     },
     {
       "type" : "library",
+      "bom-ref" : "pkg:maven/org.chromium.net/cronet-api@500.1.0?type=aar",
+      "group" : "org.chromium.net",
+      "name" : "cronet-api",
+      "version" : "500.1.0",
+      "description" : "DEPRECATED. This is a transitional empty artifact that merely pulls the cronet artifact. Depend on cronet directly instead.",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "552b4bc388965d12e43e8720b02e9c59"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "5604a648b231234a966c1b6192f193c7bbfaa57d"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "892c395ff83c4f86f20108af0572b403b24d733b847a1d4990b638993279ea09"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "ff053666c6ce6818ca61fd776ca8e2ad960e005be6e7906598c2c0ef4cca52a61e518337bcf425e75fca6406f721f5c71dd800812a21c166ba93573dd423f601"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "3bae1da7e7e910487c65a47e6f575a2308656a192cc5c5427a95a79193ceb405"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "50609880af79e41b6a6ffb1dacd80fc9f7e0a0dcc9ec6f7f1c1f09424a68280d5b32a64dbec1f93488d8b31b1dd1ad02c4ce8f5bfe26cb989cea2f60290df2ff"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "43e38ccf53b0902dec188b8c0997c243a03e8cf84ce4111ed25761f27ea5d7c0ffb5c1d95f49db41c1a45a64402177f4"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "3de8ab5c29f81e49e588f03ce8d9962f11bb6b8e3851dec1c18c1866c5387c0f90903350f8436ab370665997c3887824"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "name" : "Android Software Development Kit License",
+            "url" : "https://developer.android.com/studio/terms.html"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/org.chromium.net/cronet-api@500.1.0?type=aar",
+      "modified" : false,
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/org.chromium.net/cronet-common@500.1.0?type=aar",
+      "group" : "org.chromium.net",
+      "name" : "cronet-common",
+      "version" : "500.1.0",
+      "description" : "DEPRECATED, INTERNAL - DO NOT USE. This is a transitional empty artifact that merely pulls the cronet artifact.",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "44b8741cf35e6b766af47ae109df92bf"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "cab667ea211076fc19c45e4829d5c4a3aeb29f4a"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "5007851d11e36c59f43f9084df3927273ef0ea92c5fe3f61eb7072871e9b25f2"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "85e841ac4cb14558f4fcdde34aab031c06b8e91ec6c637317a99fbd9526541c3fbedf166cc4cf45a361d0665e56395bdfdd1a2339d93b1207bb00f8db58a4d45"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "258b83fbcf49e3d4d86d125184290e79079d4072c40c425809f798e4ea013a2a"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "11d865a0395b5790a053df1b13b7801d27dfdbf58ccaef80189f4c0dfe08283502c7c9323fa37a4d23fecb0740deb58154cd18bdec6cabbec54dbc4dc0a2646f"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "757bc4785a647ee0dd9870016cc24f5b5ad2a302427abffce0c98cc7d2ddc48540471feba42af1177170fbfb7567ca3d"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "1b7c9d2b5b89420a3aa2d8c07c7129b7d01713e4bc38013045aa619dd385a5d5c0c77358f33e1681411da8e9226d52ab"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "name" : "Android Software Development Kit License",
+            "url" : "https://developer.android.com/studio/terms.html"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/org.chromium.net/cronet-common@500.1.0?type=aar",
+      "modified" : false,
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/org.chromium.net/cronet-fallback@500.1.0?type=aar",
+      "group" : "org.chromium.net",
+      "name" : "cronet-fallback",
+      "version" : "500.1.0",
+      "description" : "DEPRECATED. This is a transitional empty artifact that merely pulls the cronet artifact. Depend on cronet directly instead.",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "5272c14ac4d9703cecdfc7fc2b5b22eb"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "480e489a38f89cf11735583b4f4f79db43dc9576"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "afb8b1b48f939eb874e121778f989e7e73f3cf1d4ba987e5bd47c0d058c5ebf0"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "97f542495836df0db604d0a1fb83ebee375ebae773d2368c51d10148eff4ea2b9469b7761b51f90c14f67b570d3055063c69c8df89bf22f8925cc0afe2447f46"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "9d8e468734809175db80e6e119b4bd7f92b2b75c2bb22ac78805d565f8e64166"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "fe3343f356b465fae3a2ee43d3687a060faf972d7a44411f22b4def95bc7005b75ac207ddcc0dc95b21b276236613fa9244e469409bbc179e1486160615a6248"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "a128cdc31eb51313d30e7776805848b9053bb706eca2fc1f69a3e095184dc88dbdb8144750739a2e8c1375a342840f4b"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "291ca1d2b4f54fb43aef9ae8b018f1a99e9d694badf6259add217e81dd00f1ee2c82ed9b8c71c60c67645c46cb8c43ee"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "name" : "Android Software Development Kit License",
+            "url" : "https://developer.android.com/studio/terms.html"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/org.chromium.net/cronet-fallback@500.1.0?type=aar",
+      "modified" : false,
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/org.chromium.net/cronet-shared@500.1.0?type=aar",
+      "group" : "org.chromium.net",
+      "name" : "cronet-shared",
+      "version" : "500.1.0",
+      "description" : "DEPRECATED, INTERNAL - DO NOT USE. This is a transitional empty artifact that merely pulls the cronet artifact.",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "b14be932a0555dff5078f9cedb0b868b"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "ee211429103b6f3b1a9422fa7b3b2f200d33f45c"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "efa79bef6eeb58e5b09de376cb0c48c0c11d3ceed25a5f1e8426c18cddcc821d"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "2444bf6b59925d45cea8efd82ab01c5eade98084b672c48b18afe8c07245601e99f13328118ee2588ae4d68f860b11353fda2ce4af111aa4b5c0d5d503584668"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "db093d0d360b4ed5fef41059a5fd1f62ee3dba20d2abee053be2aca2f6e5bb57"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "7e66ddd6b7772a9513feee01b617feddd3fd299270b7c574ae936cb1c081598debbc59a3aebbf5dfe4020aca11970798f69d8c0d924677abca28b9ffcab3ceb5"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "361cb767f8bbf208e19889d1d787845f6c1e8a0757b9bc1688f86fb6d1da0b95f62d6355225900d17bdd9ca9cd3bee55"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "27b3fc6d9df3f0401406c6593e06551b4be3a6f4bd181686cda5c66c7af4237cea0bc6fca894d7c2e8057aa3c61d09ad"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "name" : "Android Software Development Kit License",
+            "url" : "https://developer.android.com/studio/terms.html"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/org.chromium.net/cronet-shared@500.1.0?type=aar",
+      "modified" : false,
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/org.chromium.net/cronet@500.1.0?type=aar",
+      "group" : "org.chromium.net",
+      "name" : "cronet",
+      "version" : "500.1.0",
+      "description" : "The Cronet HTTP client library for Android.",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "37dc0dec029cfbab488d643a451e0a66"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "ae0b51bc7867cc467db22272ee4401db6b7443cf"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "d0cbb75a3e558166a1e21747d75b788b2650ddf8bec321b727b0878f01addcf8"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "5a2c6fe3be366de7431b415eb32d69da1decfe688f37a417fbbaebb1fb6dd007c2692a6237cd166969f279987a5723a0ca5e3970b8b7022550a47b5c9d51decc"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "d930ebdf68069e7069447a707bf9a246f15be6aa84cebade245ee4b796a1f14f"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "7a38614e7074c3637f7c1d5a1ccc6d0bf9edd7942cf81c48ae1335024b8f3dc1ad54340c1db0c0547039b556df0c48e0c30dfd5d18ce8a7e9f7fb00c45f41bca"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "698bfea07bed88f7a35d241fd8a17a2de6678081237451d8c511e703b4e051d56952621bd01d360c09c7cebab2633ae5"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "d4e2ecd9b2b2aa7d111d6e61bea727514ea518053777028bb23e40c093538879b287c2ada7e76b3c0d45b1ce31c5668c"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "name" : "Chromium License and licenses of built-in dependencies",
+            "url" : "https://chromium.googlesource.com/chromium/src/+/refs/heads/main/LICENSE"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/org.chromium.net/cronet@500.1.0?type=aar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://chromium.googlesource.com/chromium/src.git"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/org.chromium.net/httpengine-native-provider@500.1.0?type=aar",
+      "group" : "org.chromium.net",
+      "name" : "httpengine-native-provider",
+      "version" : "500.1.0",
+      "description" : "DEPRECATED. This is a transitional empty artifact that merely pulls the cronet artifact. Depend on cronet directly instead.",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "3a31ab114b2b10fedae16397528675b8"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "2bedcbeec2280914e8b2a9943bdd62c0c524473c"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "c001dc067c6de2232a51a2ec538bcceb664a5c4c58bc41bc84a38a2233838f72"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "ee4c9d9d9f62afecf63a29d6c1b08a867862193137d33909d3e555b07967d3ee1c1e12cde5b23eaae7da71a6def551edd715c4fa615ca37ce7059069a3b11bb5"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "bc975faa5bb0cd8c897439ee37f2099c4fa8fb388ea777da55451fce0d464eb6"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "c0cee6ffded8ce35d027bb723fad411c379313de841b42590991c086b7826f5825d5d8182f2962fd56d9ef15a6d87275695609ce6dd0b0777b3910e37ec86c13"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "ac96c491e463e7c2d0c5ead9f7861d88526edb7ea69cd96e4d67330096c91f60f6ab7c3153e7479c759a8ef9df36bbc2"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "d98d0911d47d3cb8a4dcfcd449c5692384d8748ba1394ff56b6ce5f0e28a573230a991d1797be13308880432c8f3737c"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "name" : "Android Software Development Kit License",
+            "url" : "https://developer.android.com/studio/terms.html"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/org.chromium.net/httpengine-native-provider@500.1.0?type=aar",
+      "modified" : false,
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
       "bom-ref" : "pkg:maven/org.codehaus.mojo/animal-sniffer-annotations@1.23?type=jar",
       "group" : "org.codehaus.mojo",
       "name" : "animal-sniffer-annotations",
@@ -21619,6 +22755,70 @@
     },
     {
       "type" : "library",
+      "bom-ref" : "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-guava@1.10.2?type=jar",
+      "group" : "org.jetbrains.kotlinx",
+      "name" : "kotlinx-coroutines-guava",
+      "version" : "1.10.2",
+      "description" : "Coroutines support libraries for Kotlin",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "821076baffba3256eb4f2d97a8acfd15"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "8e600c59d64897a9e16909d54a4153df147f6a0b"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "d54c4c9f9f2d3612afa5801daf70a7b68687f78d8936360341f1a89b535abfee"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "60ed5f74fcf1b44de7b33029346a4f8b4bf550d531a62e335299040135c7d8aa51899f3dc28928939815737e7b31605a84732d6948bbd9d498d28c9cfd479592"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "a7a19d016da1ff055c1bbfadecebf7213bb755113e1431cfee28bf78bef6e0c8"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "ffc2c12fcaa49a764cb806a46128bd9679ec461c566ae1f724b59b3a6e0372440155397ed90a448ccc1203ab5eddc6ebe6ec54cf0cbd2e58233d93f01c480331"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "6120db1d94562fb9f9a4d5a5f5d60e8b963bcf4d9d78b7cc352b5b285ccf2a64201f55ddb9c30a4dfbfe62dfbf09dc06"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "6676c17ba64ba9d4cedf3d7fad771fbde8fe4d195bc6c4fc3c7fdff5bf1df23f45789ac983df1e887fbabe5c021ddd64"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0",
+            "url" : "https://www.apache.org/licenses/LICENSE-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-guava@1.10.2?type=jar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://github.com/Kotlin/kotlinx.coroutines"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
       "bom-ref" : "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-test-jvm@1.10.2?type=jar",
       "group" : "org.jetbrains.kotlinx",
       "name" : "kotlinx-coroutines-test-jvm",
@@ -22861,7 +24061,7 @@
       ]
     },
     {
-      "ref" : "pkg:maven/androidx.annotation/annotation-experimental@1.4.1?type=aar",
+      "ref" : "pkg:maven/androidx.annotation/annotation-experimental@1.5.1?type=aar",
       "dependsOn" : [
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar"
       ]
@@ -22898,6 +24098,17 @@
       ]
     },
     {
+      "ref" : "pkg:maven/androidx.appcompat/appcompat-resources@1.4.1?type=aar",
+      "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
+        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
+        "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
+        "pkg:maven/androidx.core/core@1.16.0?type=aar",
+        "pkg:maven/androidx.vectordrawable/vectordrawable-animated@1.1.0?type=aar",
+        "pkg:maven/androidx.vectordrawable/vectordrawable@1.1.0?type=aar"
+      ]
+    },
+    {
       "ref" : "pkg:maven/androidx.arch.core/core-common@2.2.0?type=jar",
       "dependsOn" : [
         "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
@@ -22916,6 +24127,19 @@
       "ref" : "pkg:maven/androidx.autofill/autofill@1.0.0?type=aar",
       "dependsOn" : [
         "pkg:maven/androidx.core/core@1.16.0?type=aar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/androidx.browser/browser@1.8.0?type=aar",
+      "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation-experimental@1.5.1?type=aar",
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
+        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
+        "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
+        "pkg:maven/androidx.concurrent/concurrent-futures@1.1.0?type=jar",
+        "pkg:maven/androidx.core/core@1.16.0?type=aar",
+        "pkg:maven/androidx.interpolator/interpolator@1.0.0?type=aar",
+        "pkg:maven/com.google.guava/listenablefuture@9999.0-empty-to-avoid-conflict-with-guava?type=jar"
       ]
     },
     {
@@ -22962,7 +24186,7 @@
     {
       "ref" : "pkg:maven/androidx.compose.animation/animation-android@1.8.2?type=aar",
       "dependsOn" : [
-        "pkg:maven/androidx.annotation/annotation-experimental@1.4.1?type=aar",
+        "pkg:maven/androidx.annotation/annotation-experimental@1.5.1?type=aar",
         "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
         "pkg:maven/androidx.compose.animation/animation-core@1.8.2?type=jar",
@@ -23009,7 +24233,7 @@
     {
       "ref" : "pkg:maven/androidx.compose.foundation/foundation-android@1.8.2?type=aar",
       "dependsOn" : [
-        "pkg:maven/androidx.annotation/annotation-experimental@1.4.1?type=aar",
+        "pkg:maven/androidx.annotation/annotation-experimental@1.5.1?type=aar",
         "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
         "pkg:maven/androidx.compose.animation/animation@1.8.2?type=jar",
@@ -23026,7 +24250,7 @@
     {
       "ref" : "pkg:maven/androidx.compose.foundation/foundation-layout-android@1.8.2?type=aar",
       "dependsOn" : [
-        "pkg:maven/androidx.annotation/annotation-experimental@1.4.1?type=aar",
+        "pkg:maven/androidx.annotation/annotation-experimental@1.5.1?type=aar",
         "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
         "pkg:maven/androidx.compose.animation/animation-core@1.8.2?type=jar",
@@ -23058,7 +24282,7 @@
     {
       "ref" : "pkg:maven/androidx.compose.material/material-android@1.8.2?type=aar",
       "dependsOn" : [
-        "pkg:maven/androidx.annotation/annotation-experimental@1.4.1?type=aar",
+        "pkg:maven/androidx.annotation/annotation-experimental@1.5.1?type=aar",
         "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.compose.animation/animation-core@1.8.2?type=jar",
         "pkg:maven/androidx.compose.animation/animation@1.8.2?type=jar",
@@ -23133,7 +24357,7 @@
       "ref" : "pkg:maven/androidx.compose.material3/material3-android@1.3.2?type=aar",
       "dependsOn" : [
         "pkg:maven/androidx.activity/activity-compose@1.10.1?type=aar",
-        "pkg:maven/androidx.annotation/annotation-experimental@1.4.1?type=aar",
+        "pkg:maven/androidx.annotation/annotation-experimental@1.5.1?type=aar",
         "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
         "pkg:maven/androidx.compose.animation/animation-core@1.8.2?type=jar",
@@ -23165,7 +24389,7 @@
     {
       "ref" : "pkg:maven/androidx.compose.runtime/runtime-android@1.8.2?type=aar",
       "dependsOn" : [
-        "pkg:maven/androidx.annotation/annotation-experimental@1.4.1?type=aar",
+        "pkg:maven/androidx.annotation/annotation-experimental@1.5.1?type=aar",
         "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-common@2.2.21?type=pom",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
@@ -23200,7 +24424,7 @@
       "ref" : "pkg:maven/androidx.compose.ui/ui-android@1.8.2?type=aar",
       "dependsOn" : [
         "pkg:maven/androidx.activity/activity-ktx@1.10.1?type=aar",
-        "pkg:maven/androidx.annotation/annotation-experimental@1.4.1?type=aar",
+        "pkg:maven/androidx.annotation/annotation-experimental@1.5.1?type=aar",
         "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.autofill/autofill@1.0.0?type=aar",
         "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
@@ -23243,7 +24467,7 @@
     {
       "ref" : "pkg:maven/androidx.compose.ui/ui-graphics-android@1.8.2?type=aar",
       "dependsOn" : [
-        "pkg:maven/androidx.annotation/annotation-experimental@1.4.1?type=aar",
+        "pkg:maven/androidx.annotation/annotation-experimental@1.5.1?type=aar",
         "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
         "pkg:maven/androidx.compose.runtime/runtime@1.8.2?type=jar",
@@ -23265,7 +24489,7 @@
     {
       "ref" : "pkg:maven/androidx.compose.ui/ui-text-android@1.8.2?type=aar",
       "dependsOn" : [
-        "pkg:maven/androidx.annotation/annotation-experimental@1.4.1?type=aar",
+        "pkg:maven/androidx.annotation/annotation-experimental@1.5.1?type=aar",
         "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
         "pkg:maven/androidx.compose.runtime/runtime-saveable@1.8.2?type=jar",
@@ -23306,7 +24530,7 @@
     {
       "ref" : "pkg:maven/androidx.compose.ui/ui-tooling-data-android@1.8.2?type=aar",
       "dependsOn" : [
-        "pkg:maven/androidx.annotation/annotation-experimental@1.4.1?type=aar",
+        "pkg:maven/androidx.annotation/annotation-experimental@1.5.1?type=aar",
         "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.compose.runtime/runtime@1.8.2?type=jar",
         "pkg:maven/androidx.compose.ui/ui@1.8.2?type=jar",
@@ -23343,7 +24567,7 @@
     {
       "ref" : "pkg:maven/androidx.compose.ui/ui-unit-android@1.8.2?type=aar",
       "dependsOn" : [
-        "pkg:maven/androidx.annotation/annotation-experimental@1.4.1?type=aar",
+        "pkg:maven/androidx.annotation/annotation-experimental@1.5.1?type=aar",
         "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.collection/collection-ktx@1.6.0?type=jar",
         "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
@@ -23364,7 +24588,7 @@
     {
       "ref" : "pkg:maven/androidx.compose.ui/ui-util-android@1.8.2?type=aar",
       "dependsOn" : [
-        "pkg:maven/androidx.annotation/annotation-experimental@1.4.1?type=aar",
+        "pkg:maven/androidx.annotation/annotation-experimental@1.5.1?type=aar",
         "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar"
       ]
@@ -23403,6 +24627,13 @@
       ]
     },
     {
+      "ref" : "pkg:maven/androidx.concurrent/concurrent-futures@1.0.0?type=jar",
+      "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
+        "pkg:maven/com.google.guava/listenablefuture@9999.0-empty-to-avoid-conflict-with-guava?type=jar"
+      ]
+    },
+    {
       "ref" : "pkg:maven/androidx.concurrent/concurrent-futures@1.1.0?type=jar",
       "dependsOn" : [
         "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
@@ -23429,7 +24660,7 @@
     {
       "ref" : "pkg:maven/androidx.core/core@1.16.0?type=aar",
       "dependsOn" : [
-        "pkg:maven/androidx.annotation/annotation-experimental@1.4.1?type=aar",
+        "pkg:maven/androidx.annotation/annotation-experimental@1.5.1?type=aar",
         "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
         "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
@@ -23609,7 +24840,7 @@
       "ref" : "pkg:maven/androidx.fragment/fragment@1.8.9?type=aar",
       "dependsOn" : [
         "pkg:maven/androidx.activity/activity@1.10.1?type=aar",
-        "pkg:maven/androidx.annotation/annotation-experimental@1.4.1?type=aar",
+        "pkg:maven/androidx.annotation/annotation-experimental@1.5.1?type=aar",
         "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
         "pkg:maven/androidx.collection/collection@1.5.0?type=jar",
@@ -23636,7 +24867,20 @@
     {
       "ref" : "pkg:maven/androidx.interpolator/interpolator@1.0.0?type=aar",
       "dependsOn" : [
-        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom"
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
+        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/androidx.javascriptengine/javascriptengine@1.1.1?type=aar",
+      "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
+        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
+        "pkg:maven/androidx.concurrent/concurrent-futures@1.0.0?type=jar",
+        "pkg:maven/androidx.concurrent/concurrent-futures@1.1.0?type=jar",
+        "pkg:maven/androidx.core/core@1.16.0?type=aar",
+        "pkg:maven/com.google.guava/guava@33.4.8-android?type=jar",
+        "pkg:maven/org.jspecify/jspecify@1.0.0?type=jar"
       ]
     },
     {
@@ -23960,7 +25204,7 @@
     {
       "ref" : "pkg:maven/androidx.room/room-runtime-android@2.7.2?type=aar",
       "dependsOn" : [
-        "pkg:maven/androidx.annotation/annotation-experimental@1.4.1?type=aar",
+        "pkg:maven/androidx.annotation/annotation-experimental@1.5.1?type=aar",
         "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.arch.core/core-runtime@2.2.0?type=aar",
         "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
@@ -24051,7 +25295,7 @@
         "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
         "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
-        "pkg:maven/com.google.crypto.tink/tink-android@1.16.0?type=jar",
+        "pkg:maven/com.google.crypto.tink/tink-android@1.20.0?type=jar",
         "pkg:maven/org.jspecify/jspecify@1.0.0?type=jar"
       ]
     },
@@ -24181,6 +25425,25 @@
       ]
     },
     {
+      "ref" : "pkg:maven/androidx.vectordrawable/vectordrawable-animated@1.1.0?type=aar",
+      "dependsOn" : [
+        "pkg:maven/androidx.collection/collection@1.5.0?type=jar",
+        "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
+        "pkg:maven/androidx.interpolator/interpolator@1.0.0?type=aar",
+        "pkg:maven/androidx.vectordrawable/vectordrawable@1.1.0?type=aar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/androidx.vectordrawable/vectordrawable@1.1.0?type=aar",
+      "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
+        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
+        "pkg:maven/androidx.collection/collection@1.5.0?type=jar",
+        "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
+        "pkg:maven/androidx.core/core@1.16.0?type=aar"
+      ]
+    },
+    {
       "ref" : "pkg:maven/androidx.versionedparcelable/versionedparcelable@1.1.1?type=aar",
       "dependsOn" : [
         "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
@@ -24199,6 +25462,16 @@
       ]
     },
     {
+      "ref" : "pkg:maven/androidx.webkit/webkit@1.17.1?type=aar",
+      "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation-experimental@1.5.1?type=aar",
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
+        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
+        "pkg:maven/androidx.core/core@1.16.0?type=aar",
+        "pkg:maven/org.jspecify/jspecify@1.0.0?type=jar"
+      ]
+    },
+    {
       "ref" : "pkg:maven/androidx.work/work-runtime-ktx@2.10.2?type=aar",
       "dependsOn" : [
         "pkg:maven/androidx.work/work-runtime@2.10.2?type=aar"
@@ -24207,7 +25480,7 @@
     {
       "ref" : "pkg:maven/androidx.work/work-runtime@2.10.2?type=aar",
       "dependsOn" : [
-        "pkg:maven/androidx.annotation/annotation-experimental@1.4.1?type=aar",
+        "pkg:maven/androidx.annotation/annotation-experimental@1.5.1?type=aar",
         "pkg:maven/androidx.concurrent/concurrent-futures-ktx@1.1.0?type=jar",
         "pkg:maven/androidx.core/core@1.16.0?type=aar",
         "pkg:maven/androidx.lifecycle/lifecycle-livedata@2.9.1?type=aar",
@@ -24237,7 +25510,7 @@
         "pkg:maven/com.google.android.datatransport/transport-runtime@3.1.8?type=aar",
         "pkg:maven/com.google.android.gms/play-services-base@18.5.0?type=aar",
         "pkg:maven/com.google.android.gms/play-services-basement@18.9.0?type=aar",
-        "pkg:maven/com.google.android.gms/play-services-location@19.0.0?type=aar",
+        "pkg:maven/com.google.android.gms/play-services-location@21.3.0?type=aar",
         "pkg:maven/com.google.android.gms/play-services-tasks@18.2.0?type=aar"
       ]
     },
@@ -24507,6 +25780,20 @@
       ]
     },
     {
+      "ref" : "pkg:maven/com.google.android.gms/play-services-ads-identifier@18.0.0?type=aar",
+      "dependsOn" : [
+        "pkg:maven/com.google.android.gms/play-services-basement@18.9.0?type=aar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/com.google.android.gms/play-services-appset@16.0.1?type=aar",
+      "dependsOn" : [
+        "pkg:maven/com.google.android.gms/play-services-base@18.5.0?type=aar",
+        "pkg:maven/com.google.android.gms/play-services-basement@18.9.0?type=aar",
+        "pkg:maven/com.google.android.gms/play-services-tasks@18.2.0?type=aar"
+      ]
+    },
+    {
       "ref" : "pkg:maven/com.google.android.gms/play-services-base@18.5.0?type=aar",
       "dependsOn" : [
         "pkg:maven/androidx.collection/collection@1.5.0?type=jar",
@@ -24527,23 +25814,75 @@
       ]
     },
     {
-      "ref" : "pkg:maven/com.google.android.gms/play-services-location@19.0.0?type=aar",
+      "ref" : "pkg:maven/com.google.android.gms/play-services-cronet@18.0.1?type=aar",
       "dependsOn" : [
         "pkg:maven/com.google.android.gms/play-services-base@18.5.0?type=aar",
         "pkg:maven/com.google.android.gms/play-services-basement@18.9.0?type=aar",
-        "pkg:maven/com.google.android.gms/play-services-places-placereport@17.0.0?type=aar",
-        "pkg:maven/com.google.android.gms/play-services-tasks@18.2.0?type=aar"
+        "pkg:maven/com.google.android.gms/play-services-tasks@18.2.0?type=aar",
+        "pkg:maven/org.chromium.net/cronet-api@500.1.0?type=aar"
       ]
     },
     {
-      "ref" : "pkg:maven/com.google.android.gms/play-services-places-placereport@17.0.0?type=aar",
+      "ref" : "pkg:maven/com.google.android.gms/play-services-location@21.3.0?type=aar",
       "dependsOn" : [
-        "pkg:maven/com.google.android.gms/play-services-basement@18.9.0?type=aar"
+        "pkg:maven/com.google.android.gms/play-services-base@18.5.0?type=aar",
+        "pkg:maven/com.google.android.gms/play-services-basement@18.9.0?type=aar",
+        "pkg:maven/com.google.android.gms/play-services-tasks@18.2.0?type=aar",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-android@1.10.2?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.10.2?type=jar"
       ]
     },
     {
       "ref" : "pkg:maven/com.google.android.gms/play-services-tasks@18.2.0?type=aar",
       "dependsOn" : [
+        "pkg:maven/com.google.android.gms/play-services-basement@18.9.0?type=aar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/com.google.android.libraries.ads.mobile.sdk/ads-mobile-sdk@1.6.0?type=aar",
+      "dependsOn" : [
+        "pkg:maven/androidx.activity/activity@1.10.1?type=aar",
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
+        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
+        "pkg:maven/androidx.browser/browser@1.8.0?type=aar",
+        "pkg:maven/androidx.core/core-ktx@1.16.0?type=aar",
+        "pkg:maven/androidx.core/core@1.16.0?type=aar",
+        "pkg:maven/androidx.datastore/datastore@1.3.0?type=jar",
+        "pkg:maven/androidx.javascriptengine/javascriptengine@1.1.1?type=aar",
+        "pkg:maven/androidx.webkit/webkit@1.17.1?type=aar",
+        "pkg:maven/androidx.work/work-runtime@2.10.2?type=aar",
+        "pkg:maven/com.google.android.gms/play-services-ads-identifier@18.0.0?type=aar",
+        "pkg:maven/com.google.android.gms/play-services-appset@16.0.1?type=aar",
+        "pkg:maven/com.google.android.gms/play-services-base@18.5.0?type=aar",
+        "pkg:maven/com.google.android.gms/play-services-basement@18.9.0?type=aar",
+        "pkg:maven/com.google.android.gms/play-services-cronet@18.0.1?type=aar",
+        "pkg:maven/com.google.android.gms/play-services-location@21.3.0?type=aar",
+        "pkg:maven/com.google.android.gms/play-services-tasks@18.2.0?type=aar",
+        "pkg:maven/com.google.android.play/hsdp@2.2.0?type=aar",
+        "pkg:maven/com.google.android.ump/user-messaging-platform@4.0.0?type=aar",
+        "pkg:maven/com.google.code.gson/gson@2.13.2?type=jar",
+        "pkg:maven/com.google.crypto.tink/tink-android@1.20.0?type=jar",
+        "pkg:maven/com.google.guava/guava@33.4.8-android?type=jar",
+        "pkg:maven/com.squareup.okhttp3/okhttp@4.12.0?type=jar",
+        "pkg:maven/org.chromium.net/cronet@500.1.0?type=aar",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-android@1.10.2?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-guava@1.10.2?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/com.google.android.play/hsdp@2.2.0?type=aar",
+      "dependsOn" : [
+        "pkg:maven/androidx.appcompat/appcompat-resources@1.4.1?type=aar",
+        "pkg:maven/com.google.android.gms/play-services-basement@18.9.0?type=aar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/com.google.android.ump/user-messaging-platform@4.0.0?type=aar",
+      "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
+        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
         "pkg:maven/com.google.android.gms/play-services-basement@18.9.0?type=aar"
       ]
     },
@@ -24604,17 +25943,23 @@
       ]
     },
     {
+      "ref" : "pkg:maven/com.google.code.gson/gson@2.13.2?type=jar",
+      "dependsOn" : [
+        "pkg:maven/com.google.errorprone/error_prone_annotations@2.41.0?type=jar"
+      ]
+    },
+    {
       "ref" : "pkg:maven/com.google.code.gson/gson@2.8.9?type=jar",
       "dependsOn" : [ ]
     },
     {
-      "ref" : "pkg:maven/com.google.crypto.tink/tink-android@1.16.0?type=jar",
+      "ref" : "pkg:maven/com.google.crypto.tink/tink-android@1.20.0?type=jar",
       "dependsOn" : [
         "pkg:maven/androidx.annotation/annotation-jvm@1.10.0?type=jar",
         "pkg:maven/androidx.annotation/annotation-jvm@1.8.2?type=jar",
         "pkg:maven/com.google.code.findbugs/jsr305@3.0.2?type=jar",
-        "pkg:maven/com.google.code.gson/gson@2.10.1?type=jar",
-        "pkg:maven/com.google.errorprone/error_prone_annotations@2.36.0?type=jar"
+        "pkg:maven/com.google.code.gson/gson@2.13.2?type=jar",
+        "pkg:maven/com.google.errorprone/error_prone_annotations@2.41.0?type=jar"
       ]
     },
     {
@@ -24653,7 +25998,7 @@
       "dependsOn" : [ ]
     },
     {
-      "ref" : "pkg:maven/com.google.errorprone/error_prone_annotations@2.36.0?type=jar",
+      "ref" : "pkg:maven/com.google.errorprone/error_prone_annotations@2.41.0?type=jar",
       "dependsOn" : [ ]
     },
     {
@@ -24727,7 +26072,7 @@
     {
       "ref" : "pkg:maven/com.google.guava/guava@33.4.8-android?type=jar",
       "dependsOn" : [
-        "pkg:maven/com.google.errorprone/error_prone_annotations@2.36.0?type=jar",
+        "pkg:maven/com.google.errorprone/error_prone_annotations@2.41.0?type=jar",
         "pkg:maven/com.google.guava/failureaccess@1.0.3?type=jar",
         "pkg:maven/com.google.guava/listenablefuture@9999.0-empty-to-avoid-conflict-with-guava?type=jar",
         "pkg:maven/com.google.j2objc/j2objc-annotations@3.0.0?type=jar",
@@ -24994,7 +26339,9 @@
         "pkg:maven/com.android.tools.utp/android-test-plugin-host-emulator-control@31.13.2?type=jar",
         "pkg:maven/com.android.tools.utp/android-test-plugin-host-logcat@31.13.2?type=jar",
         "pkg:maven/com.android.tools.utp/android-test-plugin-result-listener-gradle@31.13.2?type=jar",
-        "pkg:maven/com.google.crypto.tink/tink-android@1.16.0?type=jar",
+        "pkg:maven/com.google.android.libraries.ads.mobile.sdk/ads-mobile-sdk@1.6.0?type=aar",
+        "pkg:maven/com.google.android.ump/user-messaging-platform@4.0.0?type=aar",
+        "pkg:maven/com.google.crypto.tink/tink-android@1.20.0?type=jar",
         "pkg:maven/com.google.guava/guava@33.4.8-android?type=jar",
         "pkg:maven/com.google.testing.platform/android-driver-instrumentation@0.0.9-alpha03?type=jar",
         "pkg:maven/com.google.testing.platform/android-test-plugin@0.0.9-alpha03?type=jar",
@@ -25479,6 +26826,49 @@
       "dependsOn" : [ ]
     },
     {
+      "ref" : "pkg:maven/org.chromium.net/cronet-api@500.1.0?type=aar",
+      "dependsOn" : [
+        "pkg:maven/org.chromium.net/cronet@500.1.0?type=aar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/org.chromium.net/cronet-common@500.1.0?type=aar",
+      "dependsOn" : [
+        "pkg:maven/org.chromium.net/cronet@500.1.0?type=aar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/org.chromium.net/cronet-fallback@500.1.0?type=aar",
+      "dependsOn" : [
+        "pkg:maven/org.chromium.net/cronet@500.1.0?type=aar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/org.chromium.net/cronet-shared@500.1.0?type=aar",
+      "dependsOn" : [
+        "pkg:maven/org.chromium.net/cronet@500.1.0?type=aar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/org.chromium.net/cronet@500.1.0?type=aar",
+      "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation-experimental@1.5.1?type=aar",
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
+        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
+        "pkg:maven/org.chromium.net/cronet-api@500.1.0?type=aar",
+        "pkg:maven/org.chromium.net/cronet-common@500.1.0?type=aar",
+        "pkg:maven/org.chromium.net/cronet-fallback@500.1.0?type=aar",
+        "pkg:maven/org.chromium.net/cronet-shared@500.1.0?type=aar",
+        "pkg:maven/org.chromium.net/httpengine-native-provider@500.1.0?type=aar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/org.chromium.net/httpengine-native-provider@500.1.0?type=aar",
+      "dependsOn" : [
+        "pkg:maven/org.chromium.net/cronet@500.1.0?type=aar"
+      ]
+    },
+    {
       "ref" : "pkg:maven/org.codehaus.mojo/animal-sniffer-annotations@1.23?type=jar",
       "dependsOn" : [ ]
     },
@@ -25874,6 +27264,15 @@
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-jdk8@1.8.20?type=jar",
         "pkg:maven/org.jetbrains.kotlinx/atomicfu@0.21.0?type=jar",
         "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core-jvm@1.7.3?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-guava@1.10.2?type=jar",
+      "dependsOn" : [
+        "pkg:maven/com.google.guava/guava@33.4.8-android?type=jar",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-bom@1.10.2?type=pom",
+        "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.10.2?type=jar"
       ]
     },
     {
