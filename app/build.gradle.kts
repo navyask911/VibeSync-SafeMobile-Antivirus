@@ -174,6 +174,9 @@ dependencies {
  implementation("com.google.crypto.tink:tink-android:1.16.0")
  // Google Android SDK License: Play Billing is only for explicit checkout, never scanning.
  implementation("com.android.billingclient:billing-ktx:8.3.0")
+ // Google Mobile Ads Next-Gen SDK and UMP consent platform.
+ implementation("com.google.android.libraries.ads.mobile.sdk:ads-mobile-sdk:1.6.0")
+ implementation("com.google.android.ump:user-messaging-platform:4.0.0")
  // Apache-2.0: KeyStore-backed encrypted local device-bound entitlement.
  implementation("androidx.security:security-crypto:1.1.0")
  // TensorFlow Lite 2.17.0 is local inference only; no model training or network calls.
