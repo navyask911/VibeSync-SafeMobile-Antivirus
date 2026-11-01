@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ad_privacy_intro">मुख्य मालवेअर स्कॅनिंग याच डिव्हाइसवर राहते. मोफत स्तर Google AdMob वापरतो; जाहिरात वितरण आणि फसवणूक प्रतिबंधासाठी Google Advertising ID आणि IP पत्ता प्रक्रिया करू शकते. SafeMobile Pro सक्रिय असताना AdMob सुरू होत नाही आणि जाहिराती मागवल्या किंवा दाखवल्या जात नाहीत.</string>
+    <string name="ad_privacy_options">गोपनीयता आणि जाहिरात पर्याय</string>
+</resources>
