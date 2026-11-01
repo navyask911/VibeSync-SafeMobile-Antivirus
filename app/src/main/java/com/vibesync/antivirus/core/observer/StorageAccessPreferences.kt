@@ -99,8 +99,15 @@ object StorageAccessPreferences {
             }.sortedBy(Uri::toString)
         }
 
-    suspend fun customTreeUris(context: Context): List<Uri> =
-        observeCustomTreeUris(context).first()
+    suspend fun customTreeUris(context: Context): List<Uri> {
+        val granted = runCatching {
+            context.contentResolver.persistedUriPermissions
+                .filter { it.isReadPermission }
+                .map { it.uri }
+                .toSet()
+        }.getOrDefault(emptySet())
+        return observeCustomTreeUris(context).first().filter { it in granted }
+    }
 
     /** Persists only an SAF tree URI; read access is granted persistently before DataStore is updated. */
     suspend fun persistCustomFolder(context: Context, uri: Uri, grantFlags: Int): Boolean {
