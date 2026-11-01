@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ad_privacy_intro">Põhiline pahavara kontroll toimub selles seadmes. Tasuta versioon kasutab Google AdMobi; Google võib reklaamide edastamiseks ja pettuste ennetamiseks töödelda reklaami-ID-d ja IP-aadressi. Kui SafeMobile Pro on aktiivne, AdMobi ei käivitata ning reklaame ei küsita ega kuvata.</string>
+    <string name="ad_privacy_options">Privaatsus ja reklaamieelistused</string>
+</resources>
