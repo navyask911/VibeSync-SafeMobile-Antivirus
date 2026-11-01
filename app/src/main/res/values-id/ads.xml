@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ad_privacy_intro">Pemindaian malware inti tetap dilakukan di perangkat ini. Paket Gratis menggunakan Google AdMob; Google dapat memproses ID Iklan dan alamat IP untuk penayangan iklan dan pencegahan penipuan. Selama SafeMobile Pro aktif, AdMob tidak diinisialisasi dan iklan tidak diminta atau ditampilkan.</string>
+    <string name="ad_privacy_options">Privasi dan pilihan iklan</string>
+</resources>
