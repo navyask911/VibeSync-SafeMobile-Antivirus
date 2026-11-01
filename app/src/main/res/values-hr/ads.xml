@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ad_privacy_intro">Osnovno skeniranje zlonamjernog softvera ostaje na ovom uređaju. Besplatna razina koristi Google AdMob; Google može obrađivati ID oglašavanja i IP adresu radi prikaza oglasa i sprječavanja prijevara. Dok je SafeMobile Pro aktivan, AdMob se ne pokreće i oglasi se ne traže niti prikazuju.</string>
+    <string name="ad_privacy_options">Privatnost i izbor oglasa</string>
+</resources>
