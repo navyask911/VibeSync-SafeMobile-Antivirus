@@ -817,4 +817,11 @@
     <string name="threat_intelligence_updated">जानकारीको पछिल्लो अद्यावधिक</string>
     <string name="threat_intelligence_updating">खतरा जानकारी अद्यावधिक हुँदै छ…</string>
     <string name="threat_intelligence_training_note">यी प्रशिक्षणका तथ्याङ्क हुन्। यस यन्त्रमा उपलब्ध सुरक्षाका लागि तलका पहिचान तहहरू हेर्नुहोस्।</string>
+    <string name="ui_sentinel_add_custom_folder">+ अनुकूल फोल्डर थप्नुहोस्</string>
+    <string name="ui_sentinel_custom_folders">अनुकूल फोल्डरहरू</string>
+    <string name="ui_sentinel_folder_limit">तपाईं अधिकतम १० वटा अनुकूल फोल्डर थप्न सक्नुहुन्छ।</string>
+    <string name="ui_read_more">थप पढ्नुहोस्</string>
+    <string name="ui_read_less">कम देखाउनुहोस्</string>
+    <string name="ui_status_safe">सुरक्षित</string>
+    <string name="ui_status_at_risk">जोखिममा</string>
 </resources>
