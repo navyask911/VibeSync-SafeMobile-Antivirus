@@ -221,7 +221,7 @@ import kotlinx.coroutines.launch
  var securityAlertsEnabled by remember(context) { mutableStateOf(securityPrefs.getBoolean(SafeMobileApp.KEY_SECURITY_ALERTS_ENABLED, false)) }
  val snackbarHostState = remember { SnackbarHostState() }
  val uiScope = rememberCoroutineScope()
- var lastHandledManualScanSequence by remember { mutableStateOf(0L) }
+ var lastHandledManualScanSequence by remember { mutableStateOf(state.manualScanCompletionSequence) }
  LaunchedEffect(privacyAccepted, activity) {
   if (privacyAccepted && activity != null) adMobManager.refresh(activity)
  }
