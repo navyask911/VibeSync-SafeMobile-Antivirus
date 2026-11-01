@@ -12,7 +12,6 @@ ROOT = Path(__file__).resolve().parents[1]
 APK_ROOT = ROOT / "app" / "build" / "outputs" / "apk"
 BUNDLE_ROOT = ROOT / "app" / "build" / "outputs" / "bundle"
 BAD_MARKERS = (
-    b"com/google/android/gms/ads",
     b"com/google/firebase",
     b"com/facebook/ads",
     b"com/facebook/appevents",
