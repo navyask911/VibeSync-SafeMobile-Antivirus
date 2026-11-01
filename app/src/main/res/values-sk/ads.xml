@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="ad_privacy_intro">Základná kontrola škodlivého softvéru zostáva v tomto zariadení. Bezplatná verzia používa Google AdMob; Google môže na zobrazovanie reklám a prevenciu podvodov spracúvať reklamné ID a IP adresu. Keď je SafeMobile Pro aktívny, AdMob sa neinicializuje a reklamy sa nežiadajú ani nezobrazujú.</string>
+    <string name="ad_privacy_intro">Základná kontrola škodlivého softvéru zostáva v tomto zariadení. Bezplatná verzia používa Google AdMob; Google môže na zobrazovanie reklám a prevenciu podvodov spracúvať reklamné ID a IP adresu. Keď je SafeMobile Pro aktívny, AdMob sa neinicializuje a reklamy sa nežiadajú ani nezobrazujú. V prípade reklám v bezplatnej verzii môže Google používať reklamné ID a IP adresu aj na meranie reklamy a analytiku.</string>
     <string name="ad_privacy_options">Súkromie a možnosti reklám</string>
 </resources>
