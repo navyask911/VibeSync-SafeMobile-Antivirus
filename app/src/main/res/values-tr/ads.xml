@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="ad_privacy_intro">Temel kötü amaçlı yazılım taraması bu cihazda kalır. Ücretsiz katman Google AdMob kullanır; Google reklam sunumu ve dolandırıcılığı önlemek için Reklam Kimliği ile IP adresini işleyebilir. SafeMobile Pro etkin olduğu sürece AdMob başlatılmaz ve reklam istenmez veya gösterilmez.</string>
+    <string name="ad_privacy_intro">Temel kötü amaçlı yazılım taraması bu cihazda kalır. Ücretsiz katman Google AdMob kullanır; Google reklam sunumu ve dolandırıcılığı önlemek için Reklam Kimliği ile IP adresini işleyebilir. SafeMobile Pro etkin olduğu sürece AdMob başlatılmaz ve reklam istenmez veya gösterilmez. Ücretsiz katman reklamları için Google, reklam ölçümü ve analiz amacıyla Reklam Kimliği ile IP adresini de kullanabilir.</string>
     <string name="ad_privacy_options">Gizlilik ve reklam tercihleri</string>
 </resources>
