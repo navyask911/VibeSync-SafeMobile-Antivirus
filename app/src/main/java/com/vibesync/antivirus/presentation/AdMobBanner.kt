@@ -42,7 +42,7 @@ internal fun AdMobBanner(manager: AdMobManager) {
         runCatching {
             val size = AdSize.getLargeAnchoredAdaptiveBannerAdSize(context, widthDp)
             val request = BannerAdRequest.Builder(manager.bannerUnitId, size).build()
-            adView.loadAd(request, object : AdLoadCallback<BannerAd>() {
+            adView.loadAd(request, object : AdLoadCallback<BannerAd> {
                 override fun onAdLoaded(ad: BannerAd) { loaded = true }
                 override fun onAdFailedToLoad(adError: LoadAdError) { loaded = false }
             })
