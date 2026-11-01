@@ -56,7 +56,7 @@ internal fun AdMobBanner(manager: AdMobManager) {
     if (loaded) {
         Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(
-                stringResource(R.string.ad_banner_label),
+                stringResource(R.string.ads_label),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
