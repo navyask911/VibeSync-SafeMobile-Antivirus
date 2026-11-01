@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ad_privacy_intro">يظل فحص البرامج الضارة الأساسي على هذا الجهاز. تستخدم الفئة المجانية Google AdMob؛ وقد تعالج Google معرّف الإعلانات وعنوان IP لتقديم الإعلانات ومنع الاحتيال. أثناء تفعيل SafeMobile Pro، لا تتم تهيئة AdMob ولا تُطلب الإعلانات أو تُعرض.</string>
+    <string name="ad_privacy_options">الخصوصية وخيارات الإعلانات</string>
+</resources>
