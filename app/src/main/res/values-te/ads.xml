@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="ad_privacy_intro">ప్రధాన మాల్వేర్ స్కానింగ్ ఈ పరికరంలోనే ఉంటుంది. ఉచిత స్థాయి Google AdMob‌ను ఉపయోగిస్తుంది; ప్రకటనల పంపిణీ మరియు మోసాల నివారణ కోసం Google Advertising ID మరియు IP చిరునామాను ప్రాసెస్ చేయవచ్చు. SafeMobile Pro సక్రియంగా ఉన్నప్పుడు AdMob ప్రారంభించబడదు; ప్రకటనలు అభ్యర్థించబడవు లేదా చూపించబడవు.</string>
+    <string name="ad_privacy_intro">ప్రధాన మాల్వేర్ స్కానింగ్ ఈ పరికరంలోనే ఉంటుంది. ఉచిత స్థాయి Google AdMob‌ను ఉపయోగిస్తుంది; ప్రకటనల పంపిణీ మరియు మోసాల నివారణ కోసం Google Advertising ID మరియు IP చిరునామాను ప్రాసెస్ చేయవచ్చు. SafeMobile Pro సక్రియంగా ఉన్నప్పుడు AdMob ప్రారంభించబడదు; ప్రకటనలు అభ్యర్థించబడవు లేదా చూపించబడవు. ఉచిత స్థాయి ప్రకటనల కోసం Google ప్రకటన కొలత మరియు విశ్లేషణ కోసం Advertising ID మరియు IP చిరునామాను కూడా ఉపయోగించవచ్చు.</string>
     <string name="ad_privacy_options">గోప్యత మరియు ప్రకటన ఎంపికలు</string>
 </resources>
