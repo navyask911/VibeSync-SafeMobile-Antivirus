@@ -817,4 +817,11 @@
     <string name="threat_intelligence_updated">ਖ਼ਤਰੇ ਦੀ ਜਾਣਕਾਰੀ ਦਾ ਆਖ਼ਰੀ ਅੱਪਡੇਟ</string>
     <string name="threat_intelligence_updating">ਖ਼ਤਰੇ ਦੀ ਜਾਣਕਾਰੀ ਅੱਪਡੇਟ ਹੋ ਰਹੀ ਹੈ…</string>
     <string name="threat_intelligence_training_note">ਇਹ ਸਿਖਲਾਈ ਦੇ ਅੰਕੜੇ ਹਨ। ਇਸ ਡਿਵਾਈਸ ਉੱਤੇ ਉਪਲਬਧ ਸੁਰੱਖਿਆ ਲਈ ਹੇਠਾਂ ਦਿੱਤੀਆਂ ਪਛਾਣ ਪਰਤਾਂ ਵੇਖੋ।</string>
+    <string name="ui_sentinel_add_custom_folder">+ ਕਸਟਮ ਫੋਲਡਰ ਜੋੜੋ</string>
+    <string name="ui_sentinel_custom_folders">ਕਸਟਮ ਫੋਲਡਰ</string>
+    <string name="ui_sentinel_folder_limit">ਤੁਸੀਂ ਵੱਧ ਤੋਂ ਵੱਧ 10 ਕਸਟਮ ਫੋਲਡਰ ਜੋੜ ਸਕਦੇ ਹੋ।</string>
+    <string name="ui_read_more">ਹੋਰ ਪੜ੍ਹੋ</string>
+    <string name="ui_read_less">ਘੱਟ ਦਿਖਾਓ</string>
+    <string name="ui_status_safe">ਸੁਰੱਖਿਅਤ</string>
+    <string name="ui_status_at_risk">ਖਤਰੇ ਵਿੱਚ</string>
 </resources>
