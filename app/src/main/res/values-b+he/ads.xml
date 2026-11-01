@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="ad_privacy_intro">סריקת תוכנות זדוניות בסיסית נשארת במכשיר זה. המסלול החינמי משתמש ב-Google AdMob; Google עשויה לעבד את מזהה הפרסום ואת כתובת ה-IP להצגת מודעות ולמניעת הונאות. כאשר SafeMobile Pro פעיל, AdMob אינו מאותחל ולא מתבצעות בקשות או הצגות מודעות.</string>
+    <string name="ad_privacy_intro">סריקת תוכנות זדוניות בסיסית נשארת במכשיר זה. המסלול החינמי משתמש ב-Google AdMob; Google עשויה לעבד את מזהה הפרסום ואת כתובת ה-IP להצגת מודעות ולמניעת הונאות. כאשר SafeMobile Pro פעיל, AdMob אינו מאותחל ולא מתבצעות בקשות או הצגות מודעות. עבור מודעות במסלול החינמי, Google עשויה להשתמש גם במזהה הפרסום ובכתובת ה-IP למדידת מודעות ולניתוח נתונים.</string>
     <string name="ad_privacy_options">פרטיות והעדפות פרסום</string>
 </resources>
