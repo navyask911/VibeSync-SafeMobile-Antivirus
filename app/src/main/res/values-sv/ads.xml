@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="ad_privacy_intro">Den grundläggande skanningen efter skadlig kod sker på den här enheten. Gratisnivån använder Google AdMob; Google kan behandla annonserings-ID och IP-adress för annonsvisning och bedrägeribekämpning. När SafeMobile Pro är aktivt initieras inte AdMob och inga annonser begärs eller visas.</string>
+    <string name="ad_privacy_intro">Den grundläggande skanningen efter skadlig kod sker på den här enheten. Gratisnivån använder Google AdMob; Google kan behandla annonserings-ID och IP-adress för annonsvisning och bedrägeribekämpning. När SafeMobile Pro är aktivt initieras inte AdMob och inga annonser begärs eller visas. För annonser i gratisnivån kan Google även använda annonserings-ID och IP-adress för annonsmätning och analys.</string>
     <string name="ad_privacy_options">Integritet och annonsval</string>
 </resources>
