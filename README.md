@@ -6,7 +6,7 @@
 
 <p align="center">
   <strong>Cybersecurity that stays on your device.</strong><br>
-  <em>100% Offline Malware Scanning. Ad-supported Free Tier. No Ads or Tracking with Pro.</em>
+  <em>On-device Malware Scanning. Ad-supported Free Tier. No AdMob Ads with Pro.</em>
 </p>
 
 <p align="center">
@@ -34,7 +34,7 @@
 
 Some mobile security tools depend on remote lookups, user accounts or analytics. SafeMobile takes a different approach: **inspect accessible files and apps locally, retain scan history on the device, and keep core protection working without an internet connection.**
 
-SafeMobile keeps core malware scanning on the device and does not send scanned APK contents, scan verdicts or device-posture snapshots to a developer-operated server. The Free tier is ad-supported by Google AdMob; Google AdMob may collect the Android Advertising ID and IP addresses for ad delivery, ad measurement/reporting and analytics, and fraud prevention. While SafeMobile Pro is active, the app does not initialize AdMob or make ad requests, so Pro users are exempt from AdMob advertising and associated AdMob data collection. These advertising-related data flows are separate from locally processed malware scan content; see the [privacy policy](docs/PRIVACY_POLICY.md) for details.
+SafeMobile keeps core malware scanning on the device and does not send scanned APK contents, scan verdicts or device-posture snapshots to a developer-operated server. The Free tier is ad-supported by Google AdMob. Google's Mobile Ads Next-Gen SDK automatically collects and shares IP address; user product interactions (including app launches, taps and video views); diagnostic information (including app launch time, hang rate and energy usage); and device/account identifiers (including Android Advertising ID, App Set ID and, where applicable, identifiers associated with signed-in accounts) for advertising, analytics and fraud prevention. Google states that this data is encrypted in transit using TLS. While SafeMobile Pro is active, the app does not initialize AdMob or make ad requests; Pro disables AdMob advertising and its SDK data collection. The app does not send scanned APK contents, scan verdicts or local scan history to AdMob. See the [privacy policy](docs/PRIVACY_POLICY.md) for details.
 
 > **Offline-first, not network-free:** optional signed threat-intelligence updates, optional research model downloads and user-initiated Google Play Billing use network services. Their providers can receive ordinary request/IP metadata. None is required for core offline scanning. [Read the privacy policy](docs/PRIVACY_POLICY.md).
 
@@ -46,7 +46,7 @@ SafeMobile keeps core malware scanning on the device and does not send scanned A
 - 🌍 **Global & Accessible — designed for more users.** **51 bundled locale resource folders**, **Midnight / Light / OLED** themes, Material 3 Compose screens, adaptable typography and screen-reader support. CI checks resource completeness; individual translations and screen layouts still require human review.
 - 🌐 **Global Threat Intelligence — optional and data-minimised.** OFF by default; requires both a Settings opt-in and a separate Donate tap for each confirmed malicious APK. The Android client sends only the detected malware SHA-256 hash and 215 binary behavioral features to the VibeSync Cloudflare Worker. It never uploads APK bytes, file paths, package names, scan history or device identifiers, and contains no GitHub token. Network providers may still process ordinary connection metadata.
 - 🤖 **Research MLOps — improvement with validation gates.** GitHub Actions can extract limited static research features from available MalwareBazaar samples and dispatch them to the separate [ML research repository](https://github.com/navyask911/safemobile-Antivirus-Trained-ML-Data-of-Android-malware). **Retraining and deployment are conditional**, not automatic promises; research candidates do not become active production classifiers without independent validation.
-- 📢 **Ad-supported Free tier.** Google AdMob provides Home dashboard banners and eligible interstitials after manual scans that find no confirmed threats, once UMP consent permits ad requests. Google AdMob may collect the Android Advertising ID and IP addresses for ad delivery, ad measurement/reporting and analytics, and fraud prevention. Active Pro users are excluded from AdMob initialization, requests and display.
+- 📢 **Ad-supported Free tier.** Google AdMob provides Home dashboard banners and eligible interstitials after manual scans that find no confirmed threats, once UMP consent permits ad requests. The Next-Gen SDK automatically collects and shares IP address, product interactions, diagnostics and device/account identifiers (including Advertising ID and App Set ID) for advertising, analytics and fraud prevention. Active Pro users are excluded from AdMob initialization, requests and display.
 - 💎 **SafeMobile Pro — optional, ad-free and device-bound.** An active Pro entitlement disables the AdMob SDK and all ad requests/displays. The **365-day local entitlement** has an **intended ₹299 India list price**, subject to the actual Google Play checkout price. No developer cloud entitlement account or backup; a consumed pass **cannot be restored** after uninstall, clearing app data or loss of local keys. Pro changes optional research-model update cadence, **not** the active detection engine.
 - 🧊 **Private Quarantine — your files, your decision.** App-private encrypted quarantine where supported, guided restore and user-controlled removal. No automatic deletion of personal files.
 
@@ -90,11 +90,11 @@ Its **Zero-Binary Repository** rule keeps raw malware samples outside the Git tr
 
 ## Google Play Store description
 
-**100% Offline Scanning. Ad-supported Free Tier. No Ads or Tracking with Pro.**
+**On-device Malware Scanning. Ad-supported Free Tier. No AdMob Ads with Pro.**
 
 SafeMobile performs its core malware scanning on your device. It checks readable installed APKs and files you select against local threat definitions and performs supported static inspection. A no-match result is not a guarantee that a file is safe.
 
-**Free tier:** Supported by Google AdMob. Banner ads appear on the Home dashboard, and an interstitial may appear after a successful manual scan when no confirmed threats are found. Google may process the Advertising ID and IP address for ad delivery and fraud prevention. Google's UMP privacy choices are presented before ad requests where required.
+**Free tier:** Supported by Google AdMob. Banner ads appear on the Home dashboard, and an interstitial may appear after a successful manual scan when no confirmed threats are found. Google's Mobile Ads Next-Gen SDK automatically collects and shares IP address; user product interactions (including app launches, taps and video views); diagnostic information (including app launch time, hang rate and energy usage); and device/account identifiers (including Android Advertising ID, App Set ID and, where applicable, identifiers associated with signed-in accounts) for advertising, analytics and fraud prevention. Google states that this data is encrypted in transit using TLS. The app does not send scanned APK contents, scan verdicts or local scan history to AdMob. Google's UMP privacy choices are refreshed at app launch and required consent forms are shown before ad requests.
 
 **SafeMobile Pro:** While Pro is active, AdMob is not initialized and no ads are requested or displayed. Pro entitlement is verified locally on this device. Optional definition updates, Google Play purchases and any explicitly enabled Global Threat Intelligence contribution remain separately disclosed network features.
 
@@ -134,7 +134,7 @@ SafeMobile is not a kernel-level security product and cannot inspect every priva
 
 CI includes version guards, localization checks, offline tooling tests, lint, builds, and Android instrumented tests. Signed releases use private signing credentials and an independent release workflow.
 
-**Package:** `com.vibesync.antivirus` · **Version:** `1.1.0` · **Version code:** `20261115` · **Android:** minSdk 26 / targetSdk 36.
+**Package:** `com.vibesync.antivirus` · **Version:** `1.2.0` · **Version code:** `20261116` · **Android:** minSdk 26 / targetSdk 36.
 
 ## Responsible Security Disclosure
 
