@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="ad_privacy_intro">اسکن اصلی بدافزار روی همین دستگاه انجام می‌شود. نسخه رایگان از Google AdMob استفاده می‌کند؛ Google ممکن است برای نمایش تبلیغات و جلوگیری از تقلب، Advertising ID و نشانی IP را پردازش کند. تا زمانی که SafeMobile Pro فعال است، AdMob راه‌اندازی نمی‌شود و هیچ تبلیغی درخواست یا نمایش داده نمی‌شود.</string>
+    <string name="ad_privacy_intro">اسکن اصلی بدافزار روی همین دستگاه انجام می‌شود. نسخه رایگان از Google AdMob استفاده می‌کند؛ Google ممکن است برای نمایش تبلیغات و جلوگیری از تقلب، Advertising ID و نشانی IP را پردازش کند. تا زمانی که SafeMobile Pro فعال است، AdMob راه‌اندازی نمی‌شود و هیچ تبلیغی درخواست یا نمایش داده نمی‌شود. برای تبلیغات نسخه رایگان، Google ممکن است از Advertising ID و نشانی IP برای سنجش تبلیغات و تحلیل داده‌ها نیز استفاده کند.</string>
     <string name="ad_privacy_options">حریم خصوصی و گزینه‌های تبلیغات</string>
 </resources>
