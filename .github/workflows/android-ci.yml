@@ -52,6 +52,8 @@ jobs:
         run: python3 scripts/check_proprietary_safety.py
       - name: Verify optional threat contribution privacy boundary
         run: python3 scripts/check_global_threat_intelligence.py
+      - name: Verify AdMob consent, Pro gating and privacy disclosures
+        run: python3 scripts/check_admob_privacy.py
       - name: Generate CycloneDX dependency SBOM (retry transient repository failures)
         run: |
           set -e
