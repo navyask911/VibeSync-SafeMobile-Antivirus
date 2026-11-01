@@ -163,25 +163,70 @@ jobs:
           apk="${apks[0]}"
           apksigner="$(find "$ANDROID_HOME/build-tools" -maxdepth 2 -type f -name apksigner | sort -V | tail -n 1)"
           test -n "$apksigner" && test -x "$apksigner"
+          build_tools_dir="$(dirname "$apksigner")"
+          aapt="$build_tools_dir/aapt"
+          test -x "$aapt"
           "$apksigner" verify --min-sdk-version 26 --verbose --print-certs "$apk"
-          python3 - "$apk" <<'PY'
-          import hashlib,json,sys,zipfile
-          with zipfile.ZipFile(sys.argv[1]) as z:
+          "$aapt" dump xmltree "$apk" AndroidManifest.xml > "$RUNNER_TEMP/safemobile-apk-manifest.xmltree"
+          python3 - "$apk" "$RUNNER_TEMP/safemobile-apk-manifest.xmltree" <<'PY'
+          import hashlib,json,re,sys,zipfile
+          apk,tree_path=sys.argv[1:3]
+          with zipfile.ZipFile(apk) as z:
               files=set(z.namelist())
               for required in ("AndroidManifest.xml","assets/yara/safemobile_android_dex.yar",
                                "assets/malware_model.tflite","assets/malware_model.json"):
                   if required not in files:
                       raise SystemExit("SAFE STOP: Signed APK missing "+required)
-              manifest=z.read("AndroidManifest.xml")
-              for required in (b"com.google.android.gms.ads.APPLICATION_ID",
-                               b"ca-app-pub-4783826505860771~8485727119",
-                               b"com.google.android.gms.permission.AD_ID"):
-                  if required not in manifest:
-                      raise SystemExit("SAFE STOP: Signed APK lacks AdMob app ID metadata or AD_ID.")
-              for forbidden in (b"android.permission.BIND_ACCESSIBILITY_SERVICE",
-                                b"android.accessibilityservice.AccessibilityService"):
-                  if forbidden in manifest:
+
+              # APK AndroidManifest.xml is compiled binary XML, not UTF-8 source.
+              # Inspect the decoded aapt tree to avoid false negatives from binary
+              # string-pool encoding while still checking the actual installable APK.
+              lines=open(tree_path,encoding="utf-8").read().splitlines()
+
+              def blocks(element_name):
+                  found=[]
+                  pattern=re.compile(r"^(\s*)E:\s+"+re.escape(element_name)+r"(?:\s|$)")
+                  for index,line in enumerate(lines):
+                      match=pattern.match(line)
+                      if not match:
+                          continue
+                      indent=len(match.group(1))
+                      end=len(lines)
+                      for next_index in range(index+1,len(lines)):
+                          nested=re.match(r"^(\s*)E:\s+",lines[next_index])
+                          if nested and len(nested.group(1))<=indent:
+                              end=next_index
+                              break
+                      found.append((index,indent,"\n".join(lines[index+1:end])))
+                  return found
+
+              applications=blocks("application")
+              if not applications:
+                  raise SystemExit("SAFE STOP: Signed APK application element is missing.")
+              meta_found=False
+              for app_index,app_indent,_ in applications:
+                  for meta_index,meta_indent,meta_contents in blocks("meta-data"):
+                      if meta_index<=app_index or meta_indent<=app_indent:
+                          continue
+                      if ("com.google.android.gms.ads.APPLICATION_ID" in meta_contents and
+                          "ca-app-pub-4783826505860771~8485727119" in meta_contents):
+                          meta_found=True
+              if not meta_found:
+                  raise SystemExit("SAFE STOP: Signed APK application metadata is missing or incorrect.")
+
+              permission_found=False
+              for _,_,permission_contents in blocks("uses-permission"):
+                  if "com.google.android.gms.permission.AD_ID" in permission_contents:
+                      permission_found=True
+              if not permission_found:
+                  raise SystemExit("SAFE STOP: Signed APK AD_ID permission is missing.")
+
+              manifest_tree="\n".join(lines)
+              for forbidden in ("android.permission.BIND_ACCESSIBILITY_SERVICE",
+                                "android.accessibilityservice.AccessibilityService"):
+                  if forbidden in manifest_tree:
                       raise SystemExit("SAFE STOP: Signed APK declares an AccessibilityService.")
+
               model=z.read("assets/malware_model.tflite")
               if len(model)!=18584 or hashlib.sha256(model).hexdigest()!="8b66adaf01a939c26d5a756e66f53fe0d6e85e1a06ec97166579138c6ce47061":
                   raise SystemExit("SAFE STOP: Signed APK model failed SHA-256 pin")
