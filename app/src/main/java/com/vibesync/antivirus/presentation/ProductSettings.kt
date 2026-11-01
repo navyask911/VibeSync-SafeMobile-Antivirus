@@ -318,7 +318,8 @@ internal fun SafeMobileSettingsPanel(
     adPrivacyOptionsRequired: Boolean = false,
     isProForAds: Boolean = true,
     onShowAdPrivacyOptions: () -> Unit = {},
-    onManageFolders: () -> Unit = {}
+    onManageFolders: () -> Unit = {},
+    onAddCustomFolder: () -> Unit = {}
 ) {
     val context = LocalContext.current
     fun openOfficialWebsite(url: String) {
@@ -493,6 +494,10 @@ internal fun SafeMobileSettingsPanel(
                     onClick = onManageFolders,
                     modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)
                 ) { Text(stringResource(R.string.ui_sentinel_setup)) }
+                Button(
+                    onClick = onAddCustomFolder,
+                    modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp)
+                ) { Text(stringResource(R.string.ui_sentinel_add_custom_folder)) }
                 Text(stringResource(R.string.security_alerts_title), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
                 ExpandableText(stringResource(R.string.incident_alerts_explanation), maxLines = 3)
                 Row(Modifier.fillMaxWidth(), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
