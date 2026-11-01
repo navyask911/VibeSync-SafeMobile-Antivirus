@@ -817,4 +817,11 @@
     <string name="threat_intelligence_updated">Pēdējais izlūkošanas datu atjauninājums</string>
     <string name="threat_intelligence_updating">Notiek apdraudējumu datu atjaunināšana…</string>
     <string name="threat_intelligence_training_note">Apmācības statistika. Šajā ierīcē pieejamā aizsardzība ir aprakstīta tālāk norādītajos noteikšanas slāņos.</string>
+    <string name="ui_sentinel_add_custom_folder">+ Pievienot pielāgotu mapi</string>
+    <string name="ui_sentinel_custom_folders">Pielāgotās mapes</string>
+    <string name="ui_sentinel_folder_limit">Varat pievienot līdz 10 pielāgotām mapēm.</string>
+    <string name="ui_read_more">Lasīt vairāk</string>
+    <string name="ui_read_less">Rādīt mazāk</string>
+    <string name="ui_status_safe">Droši</string>
+    <string name="ui_status_at_risk">Riskanti</string>
 </resources>
