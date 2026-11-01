@@ -817,4 +817,11 @@
     <string name="threat_intelligence_updated">Poslední aktualizace informací</string>
     <string name="threat_intelligence_updating">Aktualizace informací o hrozbách…</string>
     <string name="threat_intelligence_training_note">Statistiky trénování. Dostupnou ochranu tohoto zařízení najdete v detekčních vrstvách níže.</string>
+    <string name="ui_sentinel_add_custom_folder">+ Přidat vlastní složku</string>
+    <string name="ui_sentinel_custom_folders">Vlastní složky</string>
+    <string name="ui_sentinel_folder_limit">Můžete přidat až 10 vlastních složek.</string>
+    <string name="ui_read_more">Číst více</string>
+    <string name="ui_read_less">Zobrazit méně</string>
+    <string name="ui_status_safe">Bezpečné</string>
+    <string name="ui_status_at_risk">V ohrožení</string>
 </resources>
