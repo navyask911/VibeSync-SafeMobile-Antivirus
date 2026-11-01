@@ -37,7 +37,10 @@ import java.util.Date
  * Google Play controls quantity; the selected amount is only a price estimate.
  */
 @Composable
-fun SafeMobileProPaywallScreen(onBack: () -> Unit) {
+fun SafeMobileProPaywallScreen(
+    onBack: () -> Unit,
+    onProStatusChanged: (Boolean) -> Unit = {}
+) {
     val context = LocalContext.current
     val activity = remember(context) { context.paywallActivity() }
     val locale = LocalConfiguration.current.locales[0]
@@ -53,6 +56,7 @@ fun SafeMobileProPaywallScreen(onBack: () -> Unit) {
         onDispose { manager.close() }
     }
     LaunchedEffect(manager) { manager.refreshLocalStatus() }
+    LaunchedEffect(state.proActive) { onProStatusChanged(state.proActive) }
     DisposableEffect(manager, owner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) manager.start()
