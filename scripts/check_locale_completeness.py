@@ -163,6 +163,26 @@ for locale in LOCALES:
         if formats(value) != formats(original):
             errors.append(f"{locale}: Global Threat Intelligence placeholder mismatch {key}")
 
+# AdMob/UMP privacy copy must exist in English and all 51 supported locales.
+ADMOB_KEYS = ("ad_privacy_intro", "ad_privacy_options")
+base_ads, _ = read_resources(BASE / "values" / "ads.xml")
+for key in ADMOB_KEYS:
+    if key not in base_ads:
+        errors.append(f"base ads.xml: missing {key}")
+for locale in LOCALES:
+    translated_ads, _ = read_resources(BASE / f"values-{locale}" / "ads.xml")
+    for key in ADMOB_KEYS:
+        source, target = base_ads.get(key), translated_ads.get(key)
+        if target is None:
+            errors.append(f"{locale}: missing AdMob/UMP translation {key}")
+            continue
+        value = "".join(target.itertext()).strip()
+        original = "".join(source.itertext()).strip() if source is not None else ""
+        if not value or value == original:
+            errors.append(f"{locale}: empty or English AdMob/UMP fallback {key}")
+        if formats(value) != formats(original):
+            errors.append(f"{locale}: AdMob/UMP placeholder mismatch {key}")
+
 # Preserve previous invariant: every existing locale must provide a voice warning.
 # Paid purchase disclosures must never fall back to English in any supported locale.
 # SafeMobile Pro and Google Play are product brands, not untranslated sentences.
