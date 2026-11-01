@@ -821,7 +821,7 @@
     <string name="ui_sentinel_custom_folders">Carpetes personalitzades</string>
     <string name="ui_sentinel_folder_limit">Pots afegir fins a 10 carpetes personalitzades.</string>
     <string name="ui_read_more">Llegeix-ne més</string>
-    <string name="ui_read_less">Mostra'n menys</string>
+    <string name="ui_read_less">Mostra menys</string>
     <string name="ui_status_safe">Segur</string>
     <string name="ui_status_at_risk">En risc</string>
 </resources>
