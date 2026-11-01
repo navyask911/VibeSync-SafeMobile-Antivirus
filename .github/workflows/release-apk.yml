@@ -66,6 +66,7 @@ jobs:
           python3 scripts/check_locale_completeness.py
           python3 scripts/check_ja_kn_and_siren.py
           python3 scripts/check_global_threat_intelligence.py
+          python3 scripts/check_admob_privacy.py
           python3 scripts/check_proprietary_safety.py
           test "$(git hash-object app/src/main/res/font/dm_sans_regular.ttf)" = 9b1d3099a7b431b026c597c5b41be79a155adc62
           test "$(git hash-object app/src/main/res/font/dm_sans_medium.ttf)" = 39ddfe4c3612291a39c17dced309093f7241fc9c
@@ -104,13 +105,19 @@ jobs:
           with zipfile.ZipFile(aab) as z:
               names=set(z.namelist())
               manifest=z.read("base/manifest/AndroidManifest.xml")
-              for required in (b"com.android.vending.BILLING", b"com.google.android.play.billingclient.version", b"8.3.0"):
+              for required in (
+                  b"com.android.vending.BILLING",
+                  b"com.google.android.play.billingclient.version",
+                  b"8.3.0",
+                  b"com.google.android.gms.ads.APPLICATION_ID",
+                  b"ca-app-pub-4783826505860771~8485727119",
+                  b"com.google.android.gms.permission.AD_ID",
+              ):
                   if required not in manifest:
                       raise SystemExit("SAFE STOP: supported Google Play billing metadata absent from AAB.")
               for forbidden in (
                   b"android.permission.ACCESS_FINE_LOCATION",
                   b"android.permission.ACCESS_COARSE_LOCATION",
-                  b"com.google.android.gms.permission.AD_ID",
                   b"android.permission.BIND_ACCESSIBILITY_SERVICE",
                   b"android.accessibilityservice.AccessibilityService",
               ):
@@ -136,7 +143,7 @@ jobs:
               meta=json.loads(z.read("base/assets/malware_model.json"))
               if meta.get("validated") or meta.get("production_ready") or meta.get("status")!="research_candidate":
                   raise SystemExit("SAFE STOP: unvalidated research model falsely promoted.")
-              print("Signed AAB contains Billing 8.3.0, pinned 18KB model, 215 schema, reviewed YARA and no hash DB.")
+              print("Signed AAB contains Billing 8.3.0, AdMob app ID/AD_ID, pinned model, 215 schema, reviewed YARA and no hash DB.")
           PY
           version_name="$(sed -nE 's/^[[:space:]]*versionName = "([^"]+)".*/\1/p' app/build.gradle.kts | head -n 1)"
           version_code="$(sed -nE 's/^[[:space:]]*versionCode = ([0-9]+).*/\1/p' app/build.gradle.kts | head -n 1)"
@@ -166,6 +173,11 @@ jobs:
                   if required not in files:
                       raise SystemExit("SAFE STOP: Signed APK missing "+required)
               manifest=z.read("AndroidManifest.xml")
+              for required in (b"com.google.android.gms.ads.APPLICATION_ID",
+                               b"ca-app-pub-4783826505860771~8485727119",
+                               b"com.google.android.gms.permission.AD_ID"):
+                  if required not in manifest:
+                      raise SystemExit("SAFE STOP: Signed APK lacks AdMob app ID metadata or AD_ID.")
               for forbidden in (b"android.permission.BIND_ACCESSIBILITY_SERVICE",
                                 b"android.accessibilityservice.AccessibilityService"):
                   if forbidden in manifest:
@@ -219,7 +231,7 @@ jobs:
           APK/AAB version: ${{ steps.verify-aab.outputs.version_name }} (version code ${{ steps.verify-aab.outputs.version_code }}).
           Built from commit ${GITHUB_SHA}.
           Includes pinned 18KB research v1.0.1-model and a 215-feature schema; this unvalidated candidate remains inactive as malware protection. All scanning is on-device.
-          v1.0.17: optional Google Play Billing 8.3.0 consumable Pro passes with locally encrypted, device-bound expiry and actual purchased-quantity credit. Core scanning, YARA, quarantine and siren incident response stay free. No ad SDK is added.
+          v1.1.0: Google Mobile Ads Next-Gen 1.6.0 and UMP 4.0.0 power the consented, ad-supported Free tier. Home dashboard banners and eligible interstitials after manual scans with no confirmed threats use Google's sample units in debug builds. The local device-bound Pro check is repeated before SDK initialization, banner loads and interstitial display; active Pro does not initialize AdMob or make ad requests. Google may process Advertising ID and IP addresses for ad delivery and fraud prevention.
           Pro purchase copy, quantity controls, status messages and the requested non-restorable device-bound disclaimer are translated across all 51 locale folders. Google Play purchases and optional model downloads need a connection; core protection works offline.
           Consumed Pro passes cannot be restored after uninstall, app-data clearing, reset or encryption-key loss. The local status button cannot recover consumed orders from Google Play.
           The Threat Intelligence Engine card reads a verified local stats.json cache; missing upstream statistics show the localized updating state.
