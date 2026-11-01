@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ad_privacy_intro">ਮੁੱਖ ਮਾਲਵੇਅਰ ਸਕੈਨਿੰਗ ਇਸ ਡਿਵਾਈਸ \'ਤੇ ਹੀ ਰਹਿੰਦੀ ਹੈ। ਮੁਫ਼ਤ ਪੱਧਰ Google AdMob ਵਰਤਦਾ ਹੈ; ਵਿਗਿਆਪਨ ਦੇਣ ਅਤੇ ਧੋਖਾਧੜੀ ਰੋਕਣ ਲਈ Google Advertising ID ਅਤੇ IP ਪਤਾ ਪ੍ਰਕਿਰਿਆ ਕਰ ਸਕਦਾ ਹੈ। SafeMobile Pro ਸਰਗਰਮ ਹੋਣ ਦੌਰਾਨ AdMob ਸ਼ੁਰੂ ਨਹੀਂ ਹੁੰਦਾ ਅਤੇ ਕੋਈ ਵਿਗਿਆਪਨ ਮੰਗਿਆ ਜਾਂ ਦਿਖਾਇਆ ਨਹੀਂ ਜਾਂਦਾ।</string>
+    <string name="ad_privacy_options">ਪਰਦੇਦਾਰੀ ਅਤੇ ਵਿਗਿਆਪਨ ਵਿਕਲਪ</string>
+</resources>
