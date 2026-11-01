@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="ad_privacy_intro">L'anàlisi principal de programari maliciós continua en aquest dispositiu. El nivell gratuït utilitza Google AdMob; Google pot tractar l'identificador publicitari i l'adreça IP per publicar anuncis i prevenir el frau. Mentre SafeMobile Pro estigui actiu, AdMob no s'inicialitza i no se sol·liciten ni es mostren anuncis. Per als anuncis del nivell gratuït, Google també pot utilitzar l'identificador publicitari i l'adreça IP per mesurar els anuncis i fer anàlisis.</string>
-    <string name="ad_privacy_options">Privadesa i opcions d'anuncis</string>
+    <string name="ad_privacy_intro">L’anàlisi principal de programari maliciós continua en aquest dispositiu. El nivell gratuït utilitza Google AdMob; Google pot tractar l’identificador publicitari i l’adreça IP per publicar anuncis i prevenir el frau. Mentre SafeMobile Pro estigui actiu, AdMob no s’inicialitza i no se sol·liciten ni es mostren anuncis. Per als anuncis del nivell gratuït, Google també pot utilitzar l’identificador publicitari i l’adreça IP per mesurar els anuncis i fer anàlisis.</string>
+    <string name="ad_privacy_options">Privadesa i opcions d’anuncis</string>
 </resources>
