@@ -8,9 +8,9 @@
 
 ## 1. Overview: scanning stays on your device
 
-SafeMobile's **core scanning works 100% offline**. Readable APKs, installed-app information, user-selected files, hashes, local signature checks, scan verdicts and scan history are processed on the device. **SafeMobile does not transmit scan data, scanned file contents, file hashes, file paths, Android ID, device fingerprints, permission/posture snapshots, or telemetry to a developer-operated server.** No developer analytics, advertisements or crash-reporting SDK is intentionally integrated in the v1.0.21 release.
+SafeMobile's **core malware scanning works 100% offline**. Readable APKs, installed-app information, user-selected files, hashes, local signature checks, scan verdicts and scan history are processed on the device. SafeMobile does not transmit scanned APK contents, scan verdicts or device-posture snapshots to a developer-operated server. The Free tier includes Google AdMob advertising, which can process advertising-related identifiers and connection metadata as described in **Third-Party Advertising** below. This is not a zero-telemetry or no-tracking product. Active SafeMobile Pro users are excluded from AdMob requests and ads.
 
-**The whole app is not completely offline.** Optional signed threat-definition downloads and research ML-candidate updates use HTTPS to public GitHub-hosted services. User-initiated purchases use **Google Play Billing**. Those third parties and network infrastructure can receive ordinary connection data, including network/IP metadata. SafeMobile does not control their independent retention practices. Core scans do not depend on these connections.
+**The whole app is not completely offline.** Optional signed threat-definition downloads and research ML-candidate updates use HTTPS to public GitHub-hosted services. User-initiated purchases use **Google Play Billing**. The Free tier also uses **Google AdMob** for advertising and Google's **User Messaging Platform (UMP)** for privacy choices. These providers and network infrastructure may process ordinary connection data, including IP addresses, under their own privacy terms. Active Pro entitlement prevents AdMob initialization and ad requests; it does not disable separately disclosed optional GitHub or user-initiated network functions. Core scans do not depend on these connections.
 
 **Live Threat Intelligence Dashboard:** [Open the public dashboard](https://navyask911.github.io/safemobile-Antivirus-Trained-ML-Data-of-Android-malware/). The Live Threat Intelligence Dashboard is a public website that displays aggregated, anonymous ML training statistics. It is not part of the Android app and collects no data from SafeMobile users' on-device scans. The app sends no APK bytes, scan history, hashes, local analytics or identifiers to this dashboard; tapping the link opens the device's external browser. Visiting a public GitHub Pages website can expose ordinary browser/network metadata (such as IP address) to GitHub and its infrastructure, independently of the app.
 
@@ -51,7 +51,7 @@ App-private storage is used for scans, histories and settings; selected sensitiv
 
 SafeMobile may request `QUERY_ALL_PACKAGES`, notifications, full-screen intent, foreground service, battery-optimization exemptions and file-picker access for antivirus, posture auditing, locally monitored downloads and incident alerts. Accessibility and device-administrator integrations have separately described purposes and require Android-mediated user enablement. The app does not secretly activate privileged access. Notifications/full-screen alerts and install-event receipt are subject to device settings and Android/OEM limitations.
 
-No mobile advertising SDK, analytics SDK, or commercial tracking is intentionally shipped with this release. Security findings are advisory; permission possession is not itself proof of malware.
+Security findings are advisory; permission possession is not itself proof of malware.
 
 ## 7. Third-party services, children and changes
 
@@ -71,9 +71,17 @@ The following public websites provide company and product information:
 
 These links are opened only after a user chooses them in the app or visits them independently. The browser and website infrastructure may receive ordinary connection metadata, such as an IP address. SafeMobile does not append or transmit scanned APKs, file hashes, scan history, device identifiers or security findings to these websites.
 
-## 9. Optional Global Threat Intelligence contributions
+## 9. Third-Party Advertising
 
-SafeMobile's Global Threat Intelligence contribution flow is **zero-telemetry by default**. It is designed so the contribution service does not receive personal user data, account details, device identifiers or location information in the contribution JSON. The app does not send a contribution unless the user explicitly enables **“Contribute to Global Threat Intelligence (Optional)”** in Settings and separately taps **Donate** for a confirmed malicious APK. Enabling the Settings switch alone sends nothing. **Decline**, leaving the switch OFF, or turning it OFF before submission means no contribution is sent.
+The Free tier displays advertisements through **Google AdMob** using Google's Mobile Ads SDK. The app uses Google's **User Messaging Platform (UMP)** to refresh advertising privacy choices and present any required consent form before ad requests. Google may process device identifiers, including the **Android Advertising ID**, and **IP addresses** for ad delivery and fraud prevention. Exact processing may depend on consent, jurisdiction, device settings and Google's current service terms.
+
+**SafeMobile Pro is exempt from AdMob advertising.** While Pro is active on this device, SafeMobile does not initialize the Mobile Ads SDK and does not preload, request or display ads. SafeMobile checks the existing device-bound `checkProStatusForThisDevice()` entitlement before SDK initialization, each banner load and each interstitial display. If local entitlement status cannot be verified, ads remain disabled. This exemption applies to AdMob only; Google Play Billing, optional GitHub updates and any explicitly enabled Global Threat Intelligence contribution have their own separately described network processing.
+
+Users can review or change advertising privacy choices using the in-app **Privacy and ad choices** entry point whenever UMP indicates that the entry point is required.
+
+## 10. Optional Global Threat Intelligence contributions
+
+Global Threat Intelligence contributions are **off by default and data-minimised**. It is designed so the contribution service does not receive personal user data, account details, device identifiers or location information in the contribution JSON. The app does not send a contribution unless the user explicitly enables **“Contribute to Global Threat Intelligence (Optional)”** in Settings and separately taps **Donate** for a confirmed malicious APK. Enabling the Settings switch alone sends nothing. **Decline**, leaving the switch OFF, or turning it OFF before submission means no contribution is sent.
 
 After the two explicit consent actions, SafeMobile uses its bounded, on-device Drebin-215 extractor and sends only:
 - the detected malicious APK's SHA-256 cryptographic hash; and
@@ -81,6 +89,6 @@ After the two explicit consent actions, SafeMobile uses its bounded, on-device D
 
 The request is an HTTPS POST to the VibeSync Cloudflare Worker. **The APK itself is never uploaded.** The JSON does not contain an APK filename, file contents, filesystem path, app/package name, scan history, account or user identity, Android ID, device fingerprint, contacts, messages or location. No GitHub access token, repository token or GitHub credential is embedded in the Android app. The app checks that the APK still has the detected SHA-256 before and after feature extraction; invalid, changed or unscannable files are not submitted. Upload or extraction failures do not interrupt scanning.
 
-This is a zero-telemetry-by-default, data-minimised contribution flow; it is not a claim that the entire app performs no local data processing. Other app functions retain local records as described above (including scan history and the local, app-scoped Pro entitlement binding). Those local values are not included in threat contribution requests.
+This is a data-minimised contribution flow; it is not a claim that the entire app performs no local data processing. Other app functions retain local records as described above (including scan history and the local, app-scoped Pro entitlement binding). Those local values are not included in threat contribution requests.
 
 **Network metadata:** Cloudflare and internet infrastructure necessarily receive ordinary connection metadata, which may include an IP address and request timing. This connection metadata is separate from the contribution JSON. Worker-side logging, access controls and retention are configured by the Worker operator and are not independently audited by this Android client. The Worker is expected to retain only the threat intelligence needed for its stated purpose.
