@@ -312,7 +312,10 @@ internal fun SafeMobileSettingsPanel(
     onToggleProtection: ((Boolean) -> Unit)? = null,
     onStrictModeChanged: ((Boolean) -> Unit)? = null,
     appTheme: AppTheme = AppTheme.MIDNIGHT,
-    onAppThemeChanged: (AppTheme) -> Unit = {}
+    onAppThemeChanged: (AppTheme) -> Unit = {},
+    adPrivacyOptionsRequired: Boolean = false,
+    isProForAds: Boolean = true,
+    onShowAdPrivacyOptions: () -> Unit = {}
 ) {
     val context = LocalContext.current
     fun openOfficialWebsite(url: String) {
@@ -578,7 +581,12 @@ internal fun SafeMobileSettingsPanel(
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(stringResource(R.string.settings_privacy), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                Text(stringResource(R.string.privacy_body), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(R.string.ad_privacy_intro), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                if (adPrivacyOptionsRequired && !isProForAds) {
+                    OutlinedButton(onClick = onShowAdPrivacyOptions, modifier = Modifier.fillMaxWidth()) {
+                        Text(stringResource(R.string.ad_privacy_options))
+                    }
+                }
             }
         }
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
@@ -660,7 +668,7 @@ internal fun SafeMobileSettingsPanel(
             "license" -> context.getString(R.string.about_license) + "\n\n" +
                 context.getString(R.string.metrics_not_blocked_disclaimer) + "\n\n" +
                 context.getString(R.string.scan_clean_warning)
-            else -> context.getString(R.string.privacy_body) + "\n\n" + context.getString(R.string.about_localized_privacy)
+            else -> context.getString(R.string.ad_privacy_intro) + "\n\n" + context.getString(R.string.about_localized_privacy)
         }
     }
     if (showAbout) AlertDialog(
