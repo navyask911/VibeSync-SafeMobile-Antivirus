@@ -817,4 +817,11 @@
     <string name="threat_intelligence_updated">Darrera actualització d’intel·ligència</string>
     <string name="threat_intelligence_updating">S’està actualitzant la intel·ligència…</string>
     <string name="threat_intelligence_training_note">Estadístiques d’entrenament. Consulteu les capes de detecció següents per conèixer la protecció disponible en aquest dispositiu.</string>
+    <string name="ui_sentinel_add_custom_folder">+ Afegeix una carpeta personalitzada</string>
+    <string name="ui_sentinel_custom_folders">Carpetes personalitzades</string>
+    <string name="ui_sentinel_folder_limit">Pots afegir fins a 10 carpetes personalitzades.</string>
+    <string name="ui_read_more">Llegeix-ne més</string>
+    <string name="ui_read_less">Mostra'n menys</string>
+    <string name="ui_status_safe">Segur</string>
+    <string name="ui_status_at_risk">En risc</string>
 </resources>
