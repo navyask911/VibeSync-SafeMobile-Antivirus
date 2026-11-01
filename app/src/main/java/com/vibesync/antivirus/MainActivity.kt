@@ -20,7 +20,7 @@ import com.vibesync.antivirus.core.posture.PostureChangeNotifier
 import com.vibesync.antivirus.presentation.SafeMobileScreen
 import com.vibesync.antivirus.presentation.SafeMobileTheme
 
-/** Offline-first entry point without ad, analytics, crash-reporting or Play update SDKs. */
+/** Offline-first entry point; UMP consent is refreshed before any Free-tier AdMob request. */
 class MainActivity : ComponentActivity() {
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(LocalePreferences.wrap(newBase))
@@ -59,6 +59,15 @@ class MainActivity : ComponentActivity() {
                     openDevicePosture = openDevicePosture,
                     onOpenDevicePostureConsumed = { openDevicePosture = false }
                 )
+            }
+        }
+        // Refresh UMP consent on every app launch. AdMobManager verifies Pro first,
+        // shows any required privacy form, and initializes Mobile Ads only afterwards.
+        lifecycleScope.launch {
+            runCatching {
+                (application as SafeMobileApp).adMobManager.refresh(this@MainActivity)
+            }.onFailure {
+                Log.w("SafeMobileConsent", "Consent unavailable; advertising remains disabled", it)
             }
         }
     }
