@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify Play artifacts omit the signed hash database and unwanted tracking SDKs."""
+"""Verify Play artifacts omit the signed hash database and unapproved analytics/crash SDKs."""
 from pathlib import Path
 import os
 import re
@@ -13,7 +13,6 @@ APK_ROOT = ROOT / "app" / "build" / "outputs" / "apk"
 BUNDLE_ROOT = ROOT / "app" / "build" / "outputs" / "bundle"
 BAD_MARKERS = (
     b"com/google/android/gms/ads",
-    b"com/google/android/ump",
     b"com/google/firebase",
     b"com/facebook/ads",
     b"com/facebook/appevents",
@@ -75,7 +74,7 @@ def inspect_artifact(path):
                     data = archive.read(name)
                     for marker in BAD_MARKERS:
                         if marker in data:
-                            fail(path.name + " contains forbidden ad/analytics/crash SDK marker " + marker.decode())
+                            fail(path.name + " contains unapproved legacy ad/analytics/crash SDK marker " + marker.decode())
                     if b"mb-api.abuse.ch" in data or b"bazaar.abuse.ch" in data:
                         fail(path.name + " contains a direct MalwareBazaar runtime endpoint.")
     except zipfile.BadZipFile:
@@ -91,9 +90,8 @@ def check_permissions(apk):
     if "com.android.vending.BILLING" not in result.stdout:
         fail(apk.name + " must include Google Play Billing for the optional Pro purchase flow.")
     if any(permission in result.stdout for permission in (
-            "android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION",
-            "com.google.android.gms.permission.AD_ID")):
-        fail(apk.name + " must not gain location or advertising-ID permissions from billing.")
+            "android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION")):
+        fail(apk.name + " must not gain location permissions.")
     manifest = subprocess.run([aapt, "dump", "xmltree", str(apk), "AndroidManifest.xml"],
                               text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
     if manifest.returncode:
@@ -105,6 +103,10 @@ def check_permissions(apk):
         fail(apk.name + " must reference dataExtractionRules.")
     if "com.google.android.play.billingclient.version" not in manifest.stdout or "8.3.0" not in manifest.stdout:
         fail(apk.name + " must contain the supported Play Billing 8.3.0 manifest metadata.")
+    if "com.google.android.gms.ads.APPLICATION_ID" not in manifest.stdout or "ca-app-pub-4783826505860771~8485727119" not in manifest.stdout:
+        fail(apk.name + " must contain the configured AdMob application ID.")
+    if "com.google.android.gms.permission.AD_ID" not in result.stdout:
+        fail(apk.name + " must declare the Advertising ID permission for its disclosed Free-tier ad SDK.")
     if "android.permission.MANAGE_EXTERNAL_STORAGE" in result.stdout or "android.permission.READ_EXTERNAL_STORAGE" in result.stdout:
         fail(apk.name + " declares broad/legacy storage access; use the SAF.")
     inspect_artifact(apk)
