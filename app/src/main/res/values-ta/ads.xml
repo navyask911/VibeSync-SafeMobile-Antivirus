@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ad_privacy_intro">முக்கிய தீம்பொருள் ஸ்கேனிங் இந்தச் சாதனத்திலேயே நடைபெறும். இலவச நிலை Google AdMob-ஐப் பயன்படுத்துகிறது; விளம்பர விநியோகம் மற்றும் மோசடி தடுப்புக்காக Google Advertising ID மற்றும் IP முகவரியைச் செயலாக்கலாம். SafeMobile Pro செயல்பாட்டில் இருக்கும் போது AdMob தொடங்கப்படாது; விளம்பரங்கள் கோரப்படவோ காட்டப்படவோ மாட்டா.</string>
+    <string name="ad_privacy_options">தனியுரிமை மற்றும் விளம்பரத் தேர்வுகள்</string>
+</resources>
