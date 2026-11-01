@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="ad_privacy_intro">El análisis principal de malware se realiza en este dispositivo. El nivel gratuito utiliza Google AdMob; Google puede procesar el ID de publicidad y la dirección IP para mostrar anuncios y prevenir el fraude. Mientras SafeMobile Pro esté activo, AdMob no se inicializa y no se solicitan ni muestran anuncios.</string>
+    <string name="ad_privacy_intro">El análisis principal de malware se realiza en este dispositivo. El nivel gratuito utiliza Google AdMob; Google puede procesar el ID de publicidad y la dirección IP para mostrar anuncios y prevenir el fraude. Mientras SafeMobile Pro esté activo, AdMob no se inicializa y no se solicitan ni muestran anuncios. Para los anuncios de la versión gratuita, Google también puede utilizar el ID de publicidad y la dirección IP para medir los anuncios y realizar análisis.</string>
     <string name="ad_privacy_options">Privacidad y opciones de anuncios</string>
 </resources>
