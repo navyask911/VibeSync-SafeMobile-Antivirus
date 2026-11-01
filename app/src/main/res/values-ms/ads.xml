@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="ad_privacy_intro">Pengimbasan malware teras kekal pada peranti ini. Tahap Percuma menggunakan Google AdMob; Google boleh memproses ID Pengiklanan dan alamat IP untuk penyampaian iklan dan pencegahan penipuan. Semasa SafeMobile Pro aktif, AdMob tidak dimulakan dan tiada iklan diminta atau dipaparkan.</string>
+    <string name="ad_privacy_intro">Pengimbasan malware teras kekal pada peranti ini. Tahap Percuma menggunakan Google AdMob; Google boleh memproses ID Pengiklanan dan alamat IP untuk penyampaian iklan dan pencegahan penipuan. Semasa SafeMobile Pro aktif, AdMob tidak dimulakan dan tiada iklan diminta atau dipaparkan. Untuk iklan Tahap Percuma, Google juga boleh menggunakan ID Pengiklanan dan alamat IP bagi pengukuran iklan dan analitik.</string>
     <string name="ad_privacy_options">Privasi dan pilihan iklan</string>
 </resources>
