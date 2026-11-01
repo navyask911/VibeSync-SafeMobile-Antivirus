@@ -39,6 +39,8 @@ banner_id = "ca-app-pub-4783826505860771/4710308648"
 interstitial_id = "ca-app-pub-4783826505860771/9523651625"
 if app_id not in manifest or app_id not in app:
     errors.append("AdMob App ID must be in the manifest metadata and Application initialization config.")
+if "com.google.android.gms:play-services-ads" in gradle:
+    errors.append("Use the configured GMA Next-Gen SDK; do not add the legacy play-services-ads artifact.")
 if "com.google.android.gms.ads.APPLICATION_ID" not in manifest:
     errors.append("Manifest must declare com.google.android.gms.ads.APPLICATION_ID.")
 if "com.google.android.gms.permission.AD_ID" not in manifest:
