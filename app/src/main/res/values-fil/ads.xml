@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="ad_privacy_intro">Nananatili sa device na ito ang pangunahing pag-scan ng malware. Gumagamit ang Libreng antas ng Google AdMob; maaaring iproseso ng Google ang Advertising ID at IP address para sa paghahatid ng ad at pag-iwas sa pandaraya. Habang aktibo ang SafeMobile Pro, hindi ini-initialize ang AdMob at walang ad na hinihiling o ipinapakita.</string>
+    <string name="ad_privacy_intro">Nananatili sa device na ito ang pangunahing pag-scan ng malware. Gumagamit ang Libreng antas ng Google AdMob; maaaring iproseso ng Google ang Advertising ID at IP address para sa paghahatid ng ad at pag-iwas sa pandaraya. Habang aktibo ang SafeMobile Pro, hindi ini-initialize ang AdMob at walang ad na hinihiling o ipinapakita. Para sa mga ad ng Libreng antas, maaari ring gamitin ng Google ang Advertising ID at IP address para sa pagsukat ng ad at analytics.</string>
     <string name="ad_privacy_options">Privacy at mga pagpipilian sa ad</string>
 </resources>
