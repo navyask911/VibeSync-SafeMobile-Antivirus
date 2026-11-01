@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ad_privacy_intro">核心恶意软件扫描始终在此设备上进行。免费版使用 Google AdMob；Google 可能会为广告投放和防止欺诈处理广告 ID 和 IP 地址。SafeMobile Pro 有效期间，AdMob 不会初始化，也不会请求或展示广告。</string>
+    <string name="ad_privacy_options">隐私和广告选项</string>
+</resources>
