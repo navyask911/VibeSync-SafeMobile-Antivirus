@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ad_privacy_intro">بنیادی میلویئر اسکیننگ اسی آلے پر ہوتی ہے۔ مفت درجہ Google AdMob استعمال کرتا ہے؛ اشتہارات کی فراہمی اور دھوکہ دہی کی روک تھام کے لیے Google Advertising ID اور IP پتہ پراسیس کر سکتا ہے۔ SafeMobile Pro فعال ہونے کے دوران AdMob شروع نہیں ہوتا اور اشتہارات کی درخواست یا نمائش نہیں ہوتی۔</string>
+    <string name="ad_privacy_options">رازداری اور اشتہارات کے انتخاب</string>
+</resources>
