@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ad_privacy_intro">Základní kontrola malwaru zůstává v tomto zařízení. Bezplatná verze používá Google AdMob; Google může kvůli zobrazování reklam a prevenci podvodů zpracovávat reklamní ID a IP adresu. Když je SafeMobile Pro aktivní, AdMob se neinicializuje a reklamy se nevyžadují ani nezobrazují.</string>
+    <string name="ad_privacy_options">Soukromí a volby reklam</string>
+</resources>
