@@ -39,11 +39,14 @@ class BackgroundInstallSirenTest {
         val security = context.getSharedPreferences(SafeMobileApp.SECURITY_PREFS, Context.MODE_PRIVATE)
         val oldPrivacy = privacy.getBoolean(SafeMobileApp.PRIVACY_ACKNOWLEDGED, false)
         val oldEnabled = security.getBoolean(SafeMobileApp.KEY_INSTALL_SENTINEL_ENABLED, true)
+        val oldSecurityAlerts = security.getBoolean(SafeMobileApp.KEY_SECURITY_ALERTS_ENABLED, false)
         val onboarding = context.getSharedPreferences(com.vibesync.antivirus.presentation.OnboardingPrefs.NAME, Context.MODE_PRIVATE)
         val oldAutoScan = onboarding.getBoolean(com.vibesync.antivirus.presentation.OnboardingPrefs.FIRST_SCAN_REQUESTED, false)
         onboarding.edit().putBoolean(com.vibesync.antivirus.presentation.OnboardingPrefs.FIRST_SCAN_REQUESTED, true).commit()
         privacy.edit().putBoolean(SafeMobileApp.PRIVACY_ACKNOWLEDGED, true).commit()
         security.edit().putBoolean(SafeMobileApp.KEY_INSTALL_SENTINEL_ENABLED, true).commit()
+        // The diagnostic siren obeys the same explicit Security Alerts opt-in as real alerts.
+        security.edit().putBoolean(SafeMobileApp.KEY_SECURITY_ALERTS_ENABLED, true).commit()
         if (Build.VERSION.SDK_INT >= 33) shell("pm grant ${context.packageName} android.permission.POST_NOTIFICATIONS")
         runBlocking { com.vibesync.antivirus.core.security.TrustedAppStore(context).untrust(InstallDiagnosticPolicy.FIXTURE_PACKAGE) }
         shell("pm uninstall com.safemobile.sirentest")
@@ -67,6 +70,7 @@ class BackgroundInstallSirenTest {
             shell("pm uninstall com.safemobile.sirentest")
             privacy.edit().putBoolean(SafeMobileApp.PRIVACY_ACKNOWLEDGED, oldPrivacy).commit()
             security.edit().putBoolean(SafeMobileApp.KEY_INSTALL_SENTINEL_ENABLED, oldEnabled).commit()
+            security.edit().putBoolean(SafeMobileApp.KEY_SECURITY_ALERTS_ENABLED, oldSecurityAlerts).commit()
             onboarding.edit().putBoolean(com.vibesync.antivirus.presentation.OnboardingPrefs.FIRST_SCAN_REQUESTED, oldAutoScan).commit()
         }
     }
