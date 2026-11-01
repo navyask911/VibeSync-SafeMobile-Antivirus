@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.DeleteOutline
 import androidx.compose.material3.*
 import com.vibesync.antivirus.ui.components.CyberCard as Card
 import androidx.compose.runtime.Composable
@@ -68,7 +67,7 @@ internal fun SentinelFolderPanel(
                 modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                folders.forEach { uri ->
+                customFolders.forEach { uri ->
                     InputChip(
                         selected = false,
                         onClick = { onRemove(uri) },
