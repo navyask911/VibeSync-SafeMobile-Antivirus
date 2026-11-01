@@ -6,7 +6,7 @@
 
 <p align="center">
   <strong>Cybersecurity that stays on your device.</strong><br>
-  <em>100% offline core scanning. Zero scan telemetry. No cloud required for protection.</em>
+  <em>100% Offline Scanning. Ad-supported Free Tier. No Ads or Tracking with Pro.</em>
 </p>
 
 <p align="center">
@@ -34,7 +34,7 @@
 
 Some mobile security tools depend on remote lookups, user accounts or analytics. SafeMobile takes a different approach: **inspect accessible files and apps locally, retain scan history on the device, and keep core protection working without an internet connection.**
 
-SafeMobile does **not** send your APK contents, local file hashes, scan verdicts or device-posture snapshots to a developer-operated server. No developer analytics, ad SDK or crash-reporting telemetry is intentionally integrated into the documented release.
+SafeMobile keeps core malware scanning on the device and does not send scanned APK contents, scan verdicts or device-posture snapshots to a developer-operated server. The Free tier is ad-supported by Google AdMob; Google may process the Advertising ID and IP addresses for ad delivery and fraud prevention. While SafeMobile Pro is active, the app does not initialize AdMob or make ad requests. This is not a claim of zero telemetry or no third-party processing; see the [privacy policy](docs/PRIVACY_POLICY.md) for details.
 
 > **Offline-first, not network-free:** optional signed threat-intelligence updates, optional research model downloads and user-initiated Google Play Billing use network services. Their providers can receive ordinary request/IP metadata. None is required for core offline scanning. [Read the privacy policy](docs/PRIVACY_POLICY.md).
 
@@ -44,9 +44,10 @@ SafeMobile does **not** send your APK contents, local file hashes, scan verdicts
 - 🚨 **Incident Response — alert fast, act deliberately.** A **five-second alarm-stream siren**, security notification, **eligible full-screen alert**, and **user-confirmed uninstall prompt** can accompany detected incidents. Android and OEM restrictions govern audio, alert delivery and uninstall permissions; there is no forced takeover or silent removal.
 - 🔍 **Device Posture Audit — visibility into risky privileges.** Inspect available **Accessibility services, Device Administrators, notification listeners and overlay permissions**, with installation-source and permission-risk signals. These are advisory indicators, **not proof of spyware**.
 - 🌍 **Global & Accessible — designed for more users.** **51 bundled locale resource folders**, **Midnight / Light / OLED** themes, Material 3 Compose screens, adaptable typography and screen-reader support. CI checks resource completeness; individual translations and screen layouts still require human review.
-- 🌐 **Global Threat Intelligence — optional and anonymous.** OFF by default; requires both a Settings opt-in and a separate Donate tap for each confirmed malicious APK. The Android client sends only the detected malware SHA-256 hash and 215 binary behavioral features to the VibeSync Cloudflare Worker. It never uploads APK bytes, file paths, package names, scan history or device identifiers, and contains no GitHub token. Network providers may still process ordinary connection metadata.
+- 🌐 **Global Threat Intelligence — optional and data-minimised.** OFF by default; requires both a Settings opt-in and a separate Donate tap for each confirmed malicious APK. The Android client sends only the detected malware SHA-256 hash and 215 binary behavioral features to the VibeSync Cloudflare Worker. It never uploads APK bytes, file paths, package names, scan history or device identifiers, and contains no GitHub token. Network providers may still process ordinary connection metadata.
 - 🤖 **Research MLOps — improvement with validation gates.** GitHub Actions can extract limited static research features from available MalwareBazaar samples and dispatch them to the separate [ML research repository](https://github.com/navyask911/safemobile-Antivirus-Trained-ML-Data-of-Android-malware). **Retraining and deployment are conditional**, not automatic promises; research candidates do not become active production classifiers without independent validation.
-- 💎 **SafeMobile Pro — optional, private and device-bound.** A **365-day local entitlement** with an **intended ₹299 India list price**, subject to the actual Google Play checkout price. No developer cloud entitlement account or backup; a consumed pass **cannot be restored** after uninstall, clearing app data or loss of local keys. Pro changes optional research-model update cadence, **not** the active detection engine.
+- 📢 **Ad-supported Free tier.** Google AdMob provides Home dashboard banners and eligible interstitials after manual scans that find no confirmed threats, once UMP consent permits ad requests. Google may process the Advertising ID and IP address for ad delivery and fraud prevention. Active Pro users are excluded from AdMob initialization, requests and display.
+- 💎 **SafeMobile Pro — optional, ad-free and device-bound.** An active Pro entitlement disables the AdMob SDK and all ad requests/displays. The **365-day local entitlement** has an **intended ₹299 India list price**, subject to the actual Google Play checkout price. No developer cloud entitlement account or backup; a consumed pass **cannot be restored** after uninstall, clearing app data or loss of local keys. Pro changes optional research-model update cadence, **not** the active detection engine.
 - 🧊 **Private Quarantine — your files, your decision.** App-private encrypted quarantine where supported, guided restore and user-controlled removal. No automatic deletion of personal files.
 
 ### Engineering architecture
@@ -87,11 +88,24 @@ Its **Zero-Binary Repository** rule keeps raw malware samples outside the Git tr
 
 **Read before buying:** There is no developer cloud entitlement recovery. Uninstalling, clearing app data, resetting the device or losing the encryption key can permanently prevent recovery of a consumed Pro pass.
 
+## Google Play Store description
+
+**100% Offline Scanning. Ad-supported Free Tier. No Ads or Tracking with Pro.**
+
+SafeMobile performs its core malware scanning on your device. It checks readable installed APKs and files you select against local threat definitions and performs supported static inspection. A no-match result is not a guarantee that a file is safe.
+
+**Free tier:** Supported by Google AdMob. Banner ads appear on the Home dashboard, and an interstitial may appear after a successful manual scan when no confirmed threats are found. Google may process the Advertising ID and IP address for ad delivery and fraud prevention. Google's UMP privacy choices are presented before ad requests where required.
+
+**SafeMobile Pro:** While Pro is active, AdMob is not initialized and no ads are requested or displayed. Pro entitlement is verified locally on this device. Optional definition updates, Google Play purchases and any explicitly enabled Global Threat Intelligence contribution remain separately disclosed network features.
+
+SafeMobile is not a kernel-level security product and cannot inspect every private file or guarantee detection of every malware family. Coverage depends on Android access, local definitions and device restrictions.
+
 ## Documentation
 
 | Resource | Description |
 |---|---|
-| 🔒 [Privacy Policy](docs/PRIVACY_POLICY.md) | **No developer collection of scan data**; local retention and optional network use |
+| 🔒 [Privacy Policy](docs/PRIVACY_POLICY.md) | Local scan retention, AdMob disclosures, Pro advertising exemption and optional network use |
+| 🏪 [Google Play Store description](docs/PLAY_STORE_DESCRIPTION.md) | Free-tier and Pro advertising disclosure |
 | 📊 [Annual Benchmark Results](docs/ANNUAL_BENCHMARK_RESULTS.md) | Permanent ledger for rigorous **200-APK testing** |
 | 🧪 [Current Benchmark Report](docs/BENCHMARK_REPORT.md) | Actual TPR, FPR and latency with provenance and caveats |
 | 🧠 [Research Model Activation](docs/ML_MODEL_ACTIVATION.md) | 215-feature model, holdout context and activation restrictions |
