@@ -102,7 +102,7 @@ for path, text in (
         if value not in lowered:
             errors.append(f"{path} is missing the complete Google Mobile Ads SDK disclosure: {value}.")
 
-version_code_match = re.search(r"\\bversionCode\\s*=\\s*(\\d+)", gradle)
+version_code_match = re.search(r"\bversionCode\s*=\s*(\d+)", gradle)
 version_name_match = re.search(r'\\bversionName\\s*=\\s*"([0-9]+\\.[0-9]+\\.[0-9]+)"', gradle)
 if version_code_match is None or int(version_code_match.group(1)) <= 0:
     errors.append("The Android app must declare a positive numeric versionCode.")
