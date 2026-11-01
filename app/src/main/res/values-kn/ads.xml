@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ad_privacy_intro">ಮಾಲ್ವೇರ್‌ನ ಮುಖ್ಯ ಸ್ಕ್ಯಾನಿಂಗ್ ಈ ಸಾಧನದಲ್ಲೇ ನಡೆಯುತ್ತದೆ. ಉಚಿತ ಹಂತವು Google AdMob ಬಳಸುತ್ತದೆ; ಜಾಹೀರಾತು ವಿತರಣೆ ಮತ್ತು ವಂಚನೆ ತಡೆಗಾಗಿ Google Advertising ID ಮತ್ತು IP ವಿಳಾಸವನ್ನು ಪ್ರಕ್ರಿಯೆಗೊಳಿಸಬಹುದು. SafeMobile Pro ಸಕ್ರಿಯವಾಗಿರುವಾಗ AdMob ಪ್ರಾರಂಭವಾಗುವುದಿಲ್ಲ ಮತ್ತು ಜಾಹೀರಾತುಗಳನ್ನು ವಿನಂತಿಸುವುದಿಲ್ಲ ಅಥವಾ ತೋರಿಸುವುದಿಲ್ಲ.</string>
+    <string name="ad_privacy_options">ಗೌಪ್ಯತೆ ಮತ್ತು ಜಾಹೀರಾತು ಆಯ್ಕೆಗಳು</string>
+</resources>
