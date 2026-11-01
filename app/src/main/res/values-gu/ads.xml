@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="ad_privacy_intro">મુખ્ય મેલવેર સ્કેનિંગ આ ઉપકરણ પર જ રહે છે. મફત સ્તર Google AdMob વાપરે છે; જાહેરાતો પહોંચાડવા અને છેતરપિંડી અટકાવવા Google Advertising ID અને IP સરનામું પ્રક્રિયા કરી શકે છે. SafeMobile Pro સક્રિય હોય ત્યારે AdMob શરૂ થતું નથી અને કોઈ જાહેરાત માગવામાં કે બતાવવામાં આવતી નથી.</string>
+    <string name="ad_privacy_intro">મુખ્ય મેલવેર સ્કેનિંગ આ ઉપકરણ પર જ રહે છે. મફત સ્તર Google AdMob વાપરે છે; જાહેરાતો પહોંચાડવા અને છેતરપિંડી અટકાવવા Google Advertising ID અને IP સરનામું પ્રક્રિયા કરી શકે છે. SafeMobile Pro સક્રિય હોય ત્યારે AdMob શરૂ થતું નથી અને કોઈ જાહેરાત માગવામાં કે બતાવવામાં આવતી નથી. મફત સ્તરની જાહેરાતો માટે Google જાહેરાત માપન અને વિશ્લેષણ માટે Advertising ID અને IP સરનામાનો પણ ઉપયોગ કરી શકે છે.</string>
     <string name="ad_privacy_options">ગોપનીયતા અને જાહેરાત પસંદગીઓ</string>
 </resources>
