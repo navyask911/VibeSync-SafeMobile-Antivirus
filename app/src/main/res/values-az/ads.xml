@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="ad_privacy_intro">Əsas zərərli proqram skanı bu cihazda qalır. Pulsuz səviyyə Google AdMob-dan istifadə edir; Google reklamların çatdırılması və fırıldaqçılığın qarşısının alınması üçün Advertising ID və IP ünvanını emal edə bilər. SafeMobile Pro aktiv olduqda AdMob işə salınmır, reklam istəyi göndərilmir və reklam göstərilmir.</string>
+    <string name="ad_privacy_intro">Əsas zərərli proqram skanı bu cihazda qalır. Pulsuz səviyyə Google AdMob-dan istifadə edir; Google reklamların çatdırılması və fırıldaqçılığın qarşısının alınması üçün Advertising ID və IP ünvanını emal edə bilər. SafeMobile Pro aktiv olduqda AdMob işə salınmır, reklam istəyi göndərilmir və reklam göstərilmir. Pulsuz səviyyə reklamları üçün Google reklam ölçümü və analitika məqsədilə Advertising ID və IP ünvanından da istifadə edə bilər.</string>
     <string name="ad_privacy_options">Məxfilik və reklam seçimləri</string>
 </resources>
