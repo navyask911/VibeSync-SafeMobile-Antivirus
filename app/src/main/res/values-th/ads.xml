@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="ad_privacy_intro">การสแกนมัลแวร์หลักยังคงทำงานบนอุปกรณ์นี้ ระดับฟรีใช้ Google AdMob; Google อาจประมวลผล Advertising ID และที่อยู่ IP เพื่อแสดงโฆษณาและป้องกันการฉ้อโกง ขณะที่ SafeMobile Pro ยังใช้งานอยู่ จะไม่มีการเริ่มต้น AdMob และจะไม่มีการร้องขอหรือแสดงโฆษณา</string>
+    <string name="ad_privacy_intro">การสแกนมัลแวร์หลักยังคงทำงานบนอุปกรณ์นี้ ระดับฟรีใช้ Google AdMob; Google อาจประมวลผล Advertising ID และที่อยู่ IP เพื่อแสดงโฆษณาและป้องกันการฉ้อโกง ขณะที่ SafeMobile Pro ยังใช้งานอยู่ จะไม่มีการเริ่มต้น AdMob และจะไม่มีการร้องขอหรือแสดงโฆษณา สำหรับโฆษณาระดับฟรี Google อาจใช้ Advertising ID และที่อยู่ IP เพื่อวัดผลโฆษณาและวิเคราะห์ข้อมูลด้วย</string>
     <string name="ad_privacy_options">ความเป็นส่วนตัวและตัวเลือกโฆษณา</string>
 </resources>
