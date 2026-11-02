@@ -121,7 +121,7 @@ internal fun SecurityDashboardV14(
                         ) {
                             if (scanProgress != null) {
                                 CircularProgressIndicator(
-                                    progress = { scanProgress.coerceIn(0f, 1f) },
+                                    progress = scanProgress.coerceIn(0f, 1f),
                                     modifier = Modifier.size(24.dp),
                                     strokeWidth = 2.dp
                                 )
