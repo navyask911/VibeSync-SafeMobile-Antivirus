@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v140_dashboard">Табло</string>
+    <string name="v140_analytics_tools">Анализи и инструменти</string>
+    <string name="v140_critical">Критично</string>
+    <string name="v140_minor">Незначително</string>
+    <string name="v140_snoozed">Отложено</string>
+    <string name="v140_completed">Завършено</string>
+    <string name="v140_snooze_warning">Отложи предупреждението</string>
+    <string name="v140_done_return_to_audit">Готово — обратно към одита</string>
+    <string name="v140_security_risk_explained">Обяснение на риска за сигурността</string>
+    <string name="v140_posture_score_impact">Влияние върху оценката на състоянието на устройството</string>
+    <string name="v140_pending_actions">%1$d действия за състоянието на сигурността чакат — преглед на одита</string>
+</resources>
