@@ -201,7 +201,7 @@ private fun DashboardActionRow(
 
 @Composable
 private fun DualRingProtectionGauge(score: Int, pendingCount: Int) {
-    val sweep by animateFloatAsState(targetValue = score.coerceIn(0, 100) / 100f, animationSpec = tween(950), label = "vibeSyncProtectionScore")
+    val sweep by animateFloatAsState(targetValue = score.coerceIn(0, 100) / 100f, animationSpec = tween(950), label = stringResource(R.string.device_security_score))
     val scoreColor = when {
         score < 50 -> MaterialTheme.colorScheme.error
         score < 80 -> Color(0xFFD97706)
