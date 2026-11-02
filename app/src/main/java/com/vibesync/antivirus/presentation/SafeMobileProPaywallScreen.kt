@@ -12,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -37,6 +38,7 @@ fun SafeMobileProPaywallScreen(
 ) {
     val context = LocalContext.current
     val activity = remember(context) { context.paywallActivity() }
+    val locale = LocalConfiguration.current.locales[0]
     val manager = remember(context) { SafeMobileBillingManager(context) }
     val state by manager.state.collectAsStateWithLifecycle()
     val owner = LocalLifecycleOwner.current
@@ -101,7 +103,7 @@ fun SafeMobileProPaywallScreen(
         }
         OutlinedButton(
             onClick = { manager.restoreProLicenseFromPlayStore() },
-            enabled = state.connected && !state.processing,
+            enabled = !state.processing,
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(stringResource(R.string.pro_restore_check))
@@ -110,7 +112,7 @@ fun SafeMobileProPaywallScreen(
             Text(
                 stringResource(
                     R.string.pro_active_until,
-                    DateFormat.getDateInstance(DateFormat.MEDIUM).format(Date(state.expiresAt))
+                    DateFormat.getDateInstance(DateFormat.MEDIUM, locale).format(Date(state.expiresAt))
                 ),
                 color = MaterialTheme.colorScheme.primary
             )
