@@ -732,13 +732,13 @@ import kotlinx.coroutines.launch
     }
     if (selectedDestination == "home") {
      DevicePostureDashboardCard(postureState, onOpen = {
-      selectedDestination = "posture"
+      navigateToDestination("posture")
       if (privacyAccepted) postureVm.refresh()
      })
      LimitedProtectionBanner(
       downloads = folderUris.isNotEmpty() && StorageAccessPreferences.hasRole(context, StorageAccessPreferences.DOWNLOADS),
       whatsapp = folderUris.isNotEmpty() && StorageAccessPreferences.hasRole(context, StorageAccessPreferences.WHATSAPP),
-      running = monitoringRunning, onSetup = { selectedDestination = "sentinel" })
+      running = monitoringRunning, onSetup = { navigateToDestination("sentinel") })
      SecurityDashboard(state.securityAssessment,
       onCheckPlayProtect = { requestPrivacyAcknowledgement { showPlayProtectDialog = true } },
       onSync = { vm.requestHashDatabaseSync() })
@@ -759,7 +759,7 @@ import kotlinx.coroutines.launch
       Text(stringResource(R.string.security_scan_now), Modifier.padding(start = 8.dp))
      }
      AnalyticsCharts(repository, state.results)
-     SectionHeader(title=stringResource(R.string.analytics_recent_activity), actionLabel=stringResource(R.string.nav_history), onAction={ selectedDestination="history" })
+     SectionHeader(title=stringResource(R.string.analytics_recent_activity), actionLabel=stringResource(R.string.nav_history), onAction={ navigateToDestination("history") })
      if (auditEntries.isEmpty()) EmptyState(title=stringResource(R.string.analytics_no_audits),description=stringResource(R.string.analytics_no_audits_body))
      else auditEntries.take(3).forEach { audit ->
       Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surface),shape=RoundedCornerShape(16.dp),modifier=Modifier.fillMaxWidth()) {
@@ -824,7 +824,7 @@ import kotlinx.coroutines.launch
      }
     }
     }
-    if (selectedDestination == "home") CoreStrengthsAccordion { destination -> selectedDestination = destination }
+    if (selectedDestination == "home") CoreStrengthsAccordion { destination -> navigateToDestination(destination) }
     if (selectedDestination == "apps") {
      SectionHeader(title=stringResource(R.string.nav_apps),actionLabel=stringResource(R.string.security_scan_now),onAction={ requestPrivacyAcknowledgement { vm.scanInstalled() } })
      val apps=state.results.filter { it.packageName != null }
@@ -918,7 +918,7 @@ import kotlinx.coroutines.launch
        if (!storageAccessGranted) disableSentinel()
       } },
       onStart = { requestPrivacyAcknowledgement { enableSentinel() } }, onStop = disableSentinel,
-      onSkip = { selectedDestination = "home" })
+      onSkip = { navigateToDestination("home") })
     }
     if (selectedDestination == "guardian") GuardianPanel()
     if (selectedDestination == "posture") DevicePostureScreen(
@@ -1023,9 +1023,9 @@ import kotlinx.coroutines.launch
        appTheme = appTheme, onAppThemeChanged = onAppThemeChanged,
        adPrivacyOptionsRequired = adMobState.privacyOptionsRequired,
        isProForAds = adMobState.isPro,
-       onManageFolders = { selectedDestination = "sentinel" },
+       onManageFolders = { navigateToDestination("sentinel") },
        onAddCustomFolder = { requestPrivacyAcknowledgement {
-        selectedDestination = "sentinel"
+        navigateToDestination("sentinel")
         pendingFolderRole = StorageAccessPreferences.CUSTOM
         pendingSentinelEnable = true
         showStoragePermissionPrompt = true
@@ -1037,7 +1037,7 @@ import kotlinx.coroutines.launch
     }
     if (selectedDestination == "pro") {
      SafeMobileProPaywallScreen(
-      onBack = { selectedDestination = "home" },
+      onBack = { navigateToDestination("home") },
       onProStatusChanged = { isPro -> if (isPro) adMobManager.disableForPro() }
      )
     }
@@ -1189,7 +1189,7 @@ pendingQuarantine?.let { flagged ->
   )
   if (showStoragePermissionPrompt) AlertDialog(
   properties = DialogProperties(dismissOnClickOutside = true, dismissOnBackPress = true),
-   onDismissRequest = { showStoragePermissionPrompt = false; pendingSentinelEnable = false; selectedDestination = "home" },
+   onDismissRequest = { showStoragePermissionPrompt = false; pendingSentinelEnable = false; navigateToDestination("home") },
    title = { Text(stringResource(R.string.setup_sentinel_title)) },
    text = { Text(stringResource(R.string.ui_folder_picker_explanation)) },
    confirmButton = {
@@ -1197,7 +1197,7 @@ pendingQuarantine?.let { flagged ->
      showStoragePermissionPrompt = false
      runCatching { storageTreeLauncher.launch(StorageAccessPreferences.pickerIntent(pendingFolderRole)) }
       .onFailure {
-       pendingSentinelEnable = false; selectedDestination = "home"
+       pendingSentinelEnable = false; navigateToDestination("home")
        Toast.makeText(context, R.string.ui_folder_picker_unavailable, Toast.LENGTH_LONG).show()
       }
     }) { Text(stringResource(R.string.setup_allow_storage)) }
@@ -1207,7 +1207,7 @@ pendingQuarantine?.let { flagged ->
      showStoragePermissionPrompt = false
      pendingSentinelEnable = false
      storageAccessGranted = hasSharedStorageAccess(context)
-     selectedDestination = "home"
+     navigateToDestination("home")
     }) { Text(stringResource(R.string.setup_continue_limited)) }
    }
   )
