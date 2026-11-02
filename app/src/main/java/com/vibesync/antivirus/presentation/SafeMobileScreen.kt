@@ -612,450 +612,452 @@ import kotlinx.coroutines.launch
       contentDescription = stringResource(R.string.pro_title), tint = MaterialTheme.colorScheme.primary)
     }
    }
+   val navScreenContent: @Composable () -> Unit = {
+       Box(Modifier.fillMaxSize()) {
+        when (selectedDestination) {
+         "home" -> Column(Modifier.fillMaxSize()) {
+          ScanFeedbackCard(state,
+           onResults = { navigateToDestination(if (state.results.isEmpty()) "history" else "scan") },
+           onCancel = vm::cancelScan
+          )
+          SecurityDashboardV14(
+           advisor = advisorState,
+           isPro = adMobState.isPro,
+           adsReady = adMobState.adsReady,
+           adMobManager = adMobManager,
+           scanRunning = state.isScanning,
+           downloadsActive = StorageAccessPreferences.hasRole(context, StorageAccessPreferences.DOWNLOADS),
+           chatFoldersActive = StorageAccessPreferences.hasRole(context, StorageAccessPreferences.WHATSAPP) || customFolderUris.isNotEmpty(),
+           installSentinelActive = securityPrefs.getBoolean(SafeMobileApp.KEY_INSTALL_SENTINEL_ENABLED, false),
+           onOpenAdvisor = { navigateToDestination("advisor") },
+           onOpenPro = { navigateToDestination("pro") },
+           onScan = { requestPrivacyAcknowledgement { vm.scanFull() }; navigateToDestination("scan") },
+           onCleaner = { navigateToDestination("cleaner") },
+           onInstallSentinel = { navigateToDestination("sources") },
+           onFolders = { navigateToDestination("sentinel") },
+           onLinkChecker = { navigateToDestination("phishing") },
+           onPosture = { navigateToDestination("posture"); if (privacyAccepted) postureVm.refreshAuditSilently() },
+           onApps = { navigateToDestination("apps") },
+           onQuarantine = { navigateToDestination("quarantine") }
+          )
+         }
+         "tools" -> Column(Modifier.fillMaxSize().verticalScroll(contentScrollState).padding(horizontal = 18.dp, vertical = 14.dp)) {
+          ProtectionToolsHub(onOpen = { navigateToDestination(it) })
+         }
+         "settings" -> Column(Modifier.fillMaxSize().verticalScroll(contentScrollState).padding(horizontal = 18.dp, vertical = 14.dp)) {
+          SafeMobileSettingsPanel(
+           sentinelEnabled = monitoringRunning,
+           onEnableSentinel = enableSentinel,
+           onDisableSentinel = disableSentinel,
+           strictMode = strictMode,
+           securityAlertsEnabled = securityAlertsEnabled,
+           onSecurityAlertsChanged = changeSecurityAlerts,
+           onToggleProtection = toggleProtection,
+           onStrictModeChanged = updateStrictMode,
+           appTheme = appTheme,
+           onAppThemeChanged = onAppThemeChanged,
+           adPrivacyOptionsRequired = adMobState.privacyOptionsRequired,
+           isProForAds = adMobState.isPro,
+           onManageFolders = { navigateToDestination("sentinel") },
+           onAddCustomFolder = { requestPrivacyAcknowledgement {
+            navigateToDestination("sentinel")
+            pendingFolderRole = StorageAccessPreferences.CUSTOM
+            pendingSentinelEnable = true
+            showStoragePermissionPrompt = true
+           } },
+           onShowAdPrivacyOptions = {
+            activity?.let { host -> uiScope.launch { adMobManager.showPrivacyOptions(host) } }
+           },
+           subRoute = settingsSubRoute,
+           onSubRouteChanged = { settingsSubRoute = it },
+           onOpenPro = { navigateToDestination("pro") }
+          )
+         }
+         else -> Column(
+          Modifier.fillMaxSize().verticalScroll(contentScrollState)
+           .padding(horizontal = 18.dp, vertical = 14.dp),
+          verticalArrangement = Arrangement.spacedBy(14.dp)
+         ) {
+          if (selectedDestination == "advisor") {
+           SecurityAdvisorScreen(
+            state = advisorState,
+            onOpenIssue = { issue ->
+             if (issue.destination == "settings") {
+              settingsSubRoute = when (issue.id) {
+               "notifications_on", "fullscreen_alert", "voice_alert_tts" -> SettingsSubRoute.NOTIFICATIONS
+               else -> SettingsSubRoute.SECURITY
+              }
+              navigateToDestination("settings")
+             } else navigateToDestination(issue.destination)
+            },
+            onSnooze = { issueId -> uiScope.launch { advisorStore.setSnoozed(issueId, true) } },
+            onRestore = { issueId -> uiScope.launch { advisorStore.setSnoozed(issueId, false) } }
+           )
+          }
+        if (privacyAccepted && !notificationsGranted && Build.VERSION.SDK_INT >= 33) {
+           Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer)) {
+             Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+               Text(stringResource(R.string.ui_notifications_denied), color = MaterialTheme.colorScheme.onErrorContainer)
+               OutlinedButton(onClick = {
+                 val settings = Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                     Uri.parse("package:" + context.packageName))
+                 runCatching { context.startActivity(settings) }.onFailure {
+                   Toast.makeText(context, R.string.ui_notifications_settings_unavailable, Toast.LENGTH_LONG).show()
+                 }
+               }) { Text(stringResource(R.string.ui_enable_notifications_settings)) }
+             }
+           }
+         }
+         if (selectedDestination == "home" || selectedDestination == "scan") {
+         if (selectedDestination == "home") {
+          if (!fullScreenAlertsGranted) FullScreenAlertPermissionCard(onOpenSettings = {
+           runCatching { FullScreenAlertAccess.settingsIntent(context)?.let(context::startActivity) }
+            .onFailure { Toast.makeText(context, R.string.full_screen_settings_unavailable, Toast.LENGTH_LONG).show() }
+          })
+          SystemAppProtectionBadge()
+          BatteryOptimizationCard(batteryStatusEpoch)
+         }
+         ScanFeedbackCard(state,
+          onResults = { navigateToDestination(if (state.results.isEmpty()) "history" else "scan") },
+          onCancel = vm::cancelScan)
+        }
+        if (selectedDestination == "home") {
+         DevicePostureDashboardCard(postureState, onOpen = {
+          navigateToDestination("posture")
+          if (privacyAccepted) postureVm.refresh()
+         })
+         LimitedProtectionBanner(
+          downloads = folderUris.isNotEmpty() && StorageAccessPreferences.hasRole(context, StorageAccessPreferences.DOWNLOADS),
+          whatsapp = folderUris.isNotEmpty() && StorageAccessPreferences.hasRole(context, StorageAccessPreferences.WHATSAPP),
+          running = monitoringRunning, onSetup = { navigateToDestination("sentinel") })
+         SecurityDashboard(state.securityAssessment,
+          onCheckPlayProtect = { requestPrivacyAcknowledgement { showPlayProtectDialog = true } },
+          onSync = { vm.requestHashDatabaseSync() })
+         HomeSecurityMetrics(
+          summary = state.scanSummary,
+          hashDbPublishedAt = com.vibesync.antivirus.core.hashdb.HashDatabaseFreshness.updatedAt(context, state.hashDatabaseCapability.version)
+         )
+         if (initialHashSyncPending) {
+          Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.primaryContainer),shape=RoundedCornerShape(16.dp),modifier=Modifier.fillMaxWidth()) {
+           Row(Modifier.padding(14.dp), horizontalArrangement=Arrangement.spacedBy(10.dp), verticalAlignment=Alignment.CenterVertically) {
+            CircularProgressIndicator(Modifier.size(18.dp), strokeWidth=2.dp)
+            Text(stringResource(R.string.hash_database_initial_syncing), style=MaterialTheme.typography.bodyMedium)
+           }
+          }
+         }
+         Button(onClick = { requestPrivacyAcknowledgement { vm.scanFull() } }, enabled = !state.isScanning, modifier = Modifier.fillMaxWidth()) {
+          androidx.compose.material3.Icon(Icons.Default.Security, contentDescription = null)
+          Text(stringResource(R.string.security_scan_now), Modifier.padding(start = 8.dp))
+         }
+         AnalyticsCharts(repository, state.results)
+         SectionHeader(title=stringResource(R.string.analytics_recent_activity), actionLabel=stringResource(R.string.nav_history), onAction={ navigateToDestination("history") })
+         if (auditEntries.isEmpty()) EmptyState(title=stringResource(R.string.analytics_no_audits),description=stringResource(R.string.analytics_no_audits_body))
+         else auditEntries.take(3).forEach { audit ->
+          Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surface),shape=RoundedCornerShape(16.dp),modifier=Modifier.fillMaxWidth()) {
+           Row(Modifier.padding(12.dp),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(10.dp)) {
+            androidx.compose.material3.Icon(if(audit.verdict==ScanVerdict.THREAT.name) Icons.Default.Warning else Icons.Default.History,
+             contentDescription=null,tint=if(audit.verdict==ScanVerdict.THREAT.name) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary)
+            Column(Modifier.weight(1f)) {
+             Text(audit.packageOrPath,style=MaterialTheme.typography.titleSmall)
+             Text(stringResource(SecurityText.verdict(audit.verdict)),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+            Text(localizedDate(audit.scanTimestamp, timeOnly = true),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+           }
+          }
+         }
+        }
+        if (selectedDestination == "sources") {
+         InstallSourceAuditPanel(
+          incidents = securityIncidents,
+          onScan = { requestPrivacyAcknowledgement { vm.scanInstalled() } },
+          onInspect = { packageName ->
+           try { context.startActivity(UninstallHandler.buildAppInfoIntent(packageName)) }
+           catch (_: ActivityNotFoundException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
+           catch (_: SecurityException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
+          },
+          onUninstall = { packageName ->
+           lastUninstallPackage = packageName
+           pendingUninstallPackage = packageName
+           when (vm.requestUninstall(
+            context, packageName,
+            launchDelete = { intent -> deleteLauncher.launch(intent) },
+            openAppInfo = { intent -> context.startActivity(intent) }
+           )) {
+            UninstallResult.Success, UninstallResult.RequiresUserAction -> Unit
+            is UninstallResult.BlockedSystemApp -> showUninstallSnackbar(context.getString(R.string.uninstall_protected), packageName)
+            UninstallResult.NotFound -> showUninstallSnackbar(context.getString(R.string.uninstall_not_found), null)
+            UninstallResult.OpenedAppInfo -> showUninstallSnackbar(context.getString(R.string.uninstall_opened_app_info), null)
+            UninstallResult.HandlerUnavailable -> showUninstallSnackbar(context.getString(R.string.uninstall_launch_failed), packageName)
+           }
+          }
+         )
+        }
+        if (selectedDestination == "scan") {
+        Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surface),shape=RoundedCornerShape(16.dp),modifier=Modifier.fillMaxWidth()) {
+         Column(Modifier.padding(18.dp),verticalArrangement=Arrangement.spacedBy(10.dp)) {
+          Row(verticalAlignment=Alignment.CenterVertically) {
+           androidx.compose.material3.Icon(statusIcon,contentDescription=null,tint=statusTint,modifier=Modifier.size(30.dp))
+           Column(Modifier.padding(start=10.dp).weight(1f)) {
+            Text(stringResource(statusResource),style=MaterialTheme.typography.titleMedium,fontWeight=FontWeight.Bold,color=statusTint)
+            Text(stringResource(R.string.signature_count,state.signatureCount,state.completedScans),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+           }
+          }
+          ExpandableText(stringResource(R.string.scan_explanation), maxLines = 3)
+          Button(onClick={ requestPrivacyAcknowledgement { vm.scanFull() } },enabled=!state.isScanning,modifier=Modifier.fillMaxWidth()) {
+           if(state.isScanning) CircularProgressIndicator(Modifier.size(18.dp),strokeWidth=2.dp,color=MaterialTheme.colorScheme.onPrimary) else androidx.compose.material3.Icon(Icons.Default.Security,contentDescription=null)
+           Text(stringResource(if(state.isScanning) R.string.scan_running else R.string.scan_installed),modifier=Modifier.padding(start=8.dp))
+          }
+          OutlinedButton(onClick={ requestPrivacyAcknowledgement { apkPicker.launch(arrayOf("application/vnd.android.package-archive","application/octet-stream")) } },enabled=!state.isScanning,modifier=Modifier.fillMaxWidth()) {
+           androidx.compose.material3.Icon(Icons.Default.FolderOpen,contentDescription=null)
+           Text(stringResource(R.string.scan_selected),modifier=Modifier.padding(start=8.dp))
+          }
+          OutlinedButton(onClick={ requestPrivacyAcknowledgement { showDefinitionImportWarning = true } },enabled=!state.isScanning,modifier=Modifier.fillMaxWidth()) { Text(stringResource(R.string.import_definitions)) }
+         }
+        }
+        }
+        if (selectedDestination == "home") CoreStrengthsAccordion { destination -> navigateToDestination(destination) }
+        if (selectedDestination == "apps") {
+         SectionHeader(title=stringResource(R.string.nav_apps),actionLabel=stringResource(R.string.security_scan_now),onAction={ requestPrivacyAcknowledgement { vm.scanInstalled() } })
+         val apps=state.results.filter { it.packageName != null }
+         if (state.isScanning) {
+           LinearProgressIndicator(modifier=Modifier.fillMaxWidth())
+           Text(stringResource(R.string.apps_scanning_in_progress), style=MaterialTheme.typography.bodySmall)
+          }
+          if (state.inventoryLoading) CircularProgressIndicator()
+          if (apps.isEmpty() && state.installedApps.isNotEmpty()) {
+           Text(pluralStringResource(R.plurals.l10n_apps, state.installedApps.size, state.installedApps.size), style=MaterialTheme.typography.bodyMedium)
+           state.installedApps.take(80).forEach { item ->
+            Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surface), modifier=Modifier.fillMaxWidth()) {
+             Row(Modifier.fillMaxWidth().padding(12.dp), verticalAlignment=Alignment.CenterVertically, horizontalArrangement=Arrangement.spacedBy(8.dp)) {
+              Column(Modifier.weight(1f)) {
+               Text(item.displayName, style=MaterialTheme.typography.titleSmall)
+               Text(item.packageName, style=MaterialTheme.typography.labelSmall, color=MaterialTheme.colorScheme.onSurfaceVariant)
+              }
+              TextButton(onClick={ runCatching { context.startActivity(UninstallHandler.buildAppInfoIntent(item.packageName)) }
+                .onFailure { Toast.makeText(context,R.string.uninstall_no_settings,Toast.LENGTH_SHORT).show() } }) {
+               Text(stringResource(R.string.app_info_label))
+              }
+             }
+            }
+           }
+          } else if (apps.isEmpty()) EmptyState(title=stringResource(R.string.apps_inventory_empty),description=stringResource(if(state.inventoryLoaded) R.string.apps_no_user_installed else R.string.apps_inventory_empty_body),
+          actionLabel=stringResource(R.string.security_scan_now),onAction={ requestPrivacyAcknowledgement { vm.scanInstalled() } })
+         else {
+          Text(pluralStringResource(R.plurals.l10n_apps, apps.size, apps.size),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+          apps.take(80).forEach { result ->
+           ScanResultCard(
+            result,
+            showUninstall = result.packageName?.let { canOfferUninstall(context,it) } == true,
+            showQuarantine = false,
+            showAppInfo = true,
+            onUninstall = { packageName ->
+             lastUninstallPackage = packageName
+             pendingUninstallPackage = packageName
+             when (vm.requestUninstall(context, packageName,
+              launchDelete = { intent -> deleteLauncher.launch(intent) },
+              openAppInfo = { intent -> context.startActivity(intent) })) {
+              UninstallResult.Success, UninstallResult.RequiresUserAction -> Unit
+              is UninstallResult.BlockedSystemApp -> {
+               showUninstallSnackbar(context.getString(R.string.uninstall_protected), null)
+               try { context.startActivity(UninstallHandler.buildAppInfoIntent(packageName)) }
+               catch (e: ActivityNotFoundException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
+               catch (e: SecurityException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
+              }
+              UninstallResult.NotFound -> {
+               pendingUninstallPackage = null; lastUninstallPackage = null
+               showUninstallSnackbar(context.getString(R.string.uninstall_not_found), null)
+              }
+              UninstallResult.OpenedAppInfo -> showUninstallSnackbar(context.getString(R.string.uninstall_opened_app_info), packageName)
+              UninstallResult.HandlerUnavailable -> {
+               pendingUninstallPackage = null
+               showUninstallSnackbar(context.getString(R.string.uninstall_launch_failed), packageName)
+              }
+             }
+            },
+            onAppInfo = { packageName ->
+             try { context.startActivity(UninstallHandler.buildAppInfoIntent(packageName)) }
+             catch (e: ActivityNotFoundException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
+             catch (e: SecurityException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
+            },
+            onQuarantine = {}, onTrust = { vm.trustApp(it) }, onRemoveTrust = vm::removeTrust
+           )
+          }
+         }
+        }
+        if (selectedDestination == "analytics") AnalyticsCharts(repository)
+        if (selectedDestination == "analytics") ProtectionAnalyticsPanel(
+         audits=auditEntries, results=state.results, signatureCount=state.signatureCount,
+         activeIndicatorCount=state.activeThreatIndicatorCount, lastScanAt=state.lastScanAt, isScanning=state.isScanning,
+         quarantinedCount=state.quarantinedFiles.size, monitoringRunning=monitoringRunning,
+         storageAccessGranted=storageAccessGranted, notificationsGranted=notificationsGranted, online=online
+        )
+        if (selectedDestination == "sentinel") {
+         SentinelFolderPanel(context, folderUris, monitoringRunning,
+          customFolders = customFolderUris.filter { it in folderUris },
+          onAdd = { role -> requestPrivacyAcknowledgement {
+           pendingFolderRole = role; pendingSentinelEnable = true; showStoragePermissionPrompt = true
+          } },
+          onAddCustom = { requestPrivacyAcknowledgement {
+           pendingFolderRole = StorageAccessPreferences.CUSTOM
+           pendingSentinelEnable = true
+           showStoragePermissionPrompt = true
+          } },
+          onRemove = { uri -> uiScope.launch {
+           kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { StorageAccessPreferences.removeSelectedFolder(context, uri) }
+           folderUris = StorageAccessPreferences.accessibleTreeUris(context)
+           storageAccessGranted = folderUris.isNotEmpty()
+           if (!storageAccessGranted) disableSentinel()
+          } },
+          onStart = { requestPrivacyAcknowledgement { enableSentinel() } }, onStop = disableSentinel,
+          onSkip = { navigateToDestination("home") })
+        }
+        if (selectedDestination == "guardian") GuardianPanel()
+        if (selectedDestination == "posture") DevicePostureScreen(
+         state = postureState, alertsAvailable = securityAlertsEnabled && notificationsGranted,
+         onRefresh = { requestPrivacyAcknowledgement { postureVm.refresh() } },
+         onMonitoringChanged = { enabled ->
+          if (enabled) requestPrivacyAcknowledgement { postureVm.setMonitoring(context, true) }
+          else postureVm.setMonitoring(context, false)
+         },
+         onEnableAlerts = { requestPrivacyAcknowledgement { changeSecurityAlerts(true) } }
+        )
+        if (selectedDestination == "phishing") PhishingPanel(sharedText, repository) { onSharedTextConsumed() }
+        if (selectedDestination == "cleaner") StorageCleanerPanel()
+        state.messageResource?.takeUnless { it == R.string.scan_complete && selectedDestination in listOf("home", "scan") }?.let { message -> Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant)) { Text(stringResource(message),Modifier.padding(14.dp),color=MaterialTheme.colorScheme.onSurface,style=MaterialTheme.typography.bodySmall) } }
+        state.messageText?.let { message -> Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant)) { Text(message.resolve(context),Modifier.padding(14.dp),color=MaterialTheme.colorScheme.onSurface,style=MaterialTheme.typography.bodySmall) } }
+        if(selectedDestination == "scan" && state.results.isNotEmpty()) {
+         Column(verticalArrangement=Arrangement.spacedBy(10.dp)) {
+          Text(stringResource(R.string.latest_results),style=MaterialTheme.typography.titleLarge,fontWeight=FontWeight.Bold)
+          Text(listOf(pluralStringResource(R.plurals.l10n_threats, state.threatCount, state.threatCount), pluralStringResource(R.plurals.l10n_review, state.suspiciousCount, state.suspiciousCount), state.results.count { it.verdict == ScanVerdict.NO_MATCH }.let { pluralStringResource(R.plurals.l10n_no_match, it, it) }).joinToString(" · "),color=MaterialTheme.colorScheme.onSurfaceVariant,style=MaterialTheme.typography.bodySmall)
+          val notScannedCount = state.results.count { it.verdict == ScanVerdict.NOT_SCANNED }
+          if (notScannedCount > 0) Text(pluralStringResource(R.plurals.l10n_unreadable, notScannedCount, notScannedCount), color=MaterialTheme.colorScheme.onSurfaceVariant, style=MaterialTheme.typography.bodySmall)
+          state.results.take(80).forEach { result ->
+           ScanResultCard(
+            result,
+            showUninstall = result.packageName != null && result.packageName != context.packageName &&
+             result.verdict in listOf(ScanVerdict.THREAT, ScanVerdict.SUSPICIOUS),
+            showQuarantine = result.sourceUri != null && result.verdict in listOf(ScanVerdict.THREAT, ScanVerdict.SUSPICIOUS),
+            onUninstall = { packageName ->
+             lastUninstallPackage = packageName
+             pendingUninstallPackage = packageName
+             when (vm.requestUninstall(context, packageName,
+              launchDelete = { intent -> deleteLauncher.launch(intent) },
+              openAppInfo = { intent -> context.startActivity(intent) })) {
+              UninstallResult.Success, UninstallResult.RequiresUserAction -> Unit
+              is UninstallResult.BlockedSystemApp -> {
+               showUninstallSnackbar(context.getString(R.string.uninstall_protected), null)
+               try { context.startActivity(UninstallHandler.buildAppInfoIntent(packageName)) }
+               catch (e: ActivityNotFoundException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
+               catch (e: SecurityException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
+              }
+              UninstallResult.NotFound -> { pendingUninstallPackage = null; lastUninstallPackage = null; showUninstallSnackbar(context.getString(R.string.uninstall_not_found), null) }
+              UninstallResult.OpenedAppInfo -> showUninstallSnackbar(context.getString(R.string.uninstall_opened_app_info), packageName)
+              UninstallResult.HandlerUnavailable -> { pendingUninstallPackage = null; showUninstallSnackbar(context.getString(R.string.uninstall_launch_failed), packageName) }
+             }
+            },
+            showAppInfo = true,
+            onAppInfo = { packageName ->
+             try { context.startActivity(UninstallHandler.buildAppInfoIntent(packageName)) }
+             catch (e: ActivityNotFoundException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
+             catch (e: SecurityException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
+            },
+            onQuarantine = { pendingQuarantine = result }, onTrust = { vm.trustApp(it) }, onRemoveTrust = vm::removeTrust
+           )
+          }
+         }
+        }
+        if (selectedDestination == "quarantine") {
+        Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant),shape=RoundedCornerShape(16.dp),modifier=Modifier.fillMaxWidth()) {
+         Column(Modifier.padding(16.dp),verticalArrangement=Arrangement.spacedBy(10.dp)) {
+          Text(stringResource(R.string.quarantine_vault_title),style=MaterialTheme.typography.titleMedium,fontWeight=FontWeight.Bold)
+          ExpandableText(stringResource(R.string.quarantine_vault_description), maxLines = 3)
+          if (state.quarantinedFiles.isEmpty()) {
+           Text(stringResource(R.string.quarantine_vault_empty),style=MaterialTheme.typography.bodyMedium,color=MaterialTheme.colorScheme.onSurfaceVariant)
+          } else {
+           state.quarantinedFiles.take(30).forEach { file ->
+            Column(
+             modifier=Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surface,RoundedCornerShape(12.dp)).padding(12.dp),
+             verticalArrangement=Arrangement.spacedBy(5.dp)
+            ) {
+             Text(
+              text=runCatching { quarantineManager.displayName(file) }.getOrDefault(file.name),
+              style=MaterialTheme.typography.titleSmall,fontWeight=FontWeight.SemiBold,color=MaterialTheme.colorScheme.onSurface
+             )
+             val byteSize = runCatching { quarantineManager.displaySize(file) }.getOrDefault(0L)
+             Text(pluralStringResource(R.plurals.l10n_bytes, byteSize.coerceAtMost(Int.MAX_VALUE.toLong()).toInt(), byteSize),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+             if (!quarantineManager.isEncrypted(file)) Text(stringResource(R.string.quarantine_legacy_warning),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.tertiary)
+             OutlinedButton(
+              onClick={ pendingRestoreFile=file; showRestoreWarning=true },
+              modifier=Modifier.fillMaxWidth()
+             ) { Text(stringResource(R.string.quarantine_restore)) }
+             TextButton(
+              onClick={ pendingDeleteFile=file },
+              modifier=Modifier.fillMaxWidth()
+             ) { Text(stringResource(R.string.quarantine_delete),color=MaterialTheme.colorScheme.error) }
+            }
+           }
+           if (state.quarantinedFiles.size > 30) {
+            Text(stringResource(R.string.quarantine_vault_limit),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+           }
+          }
+         }
+        }
+        }
+        if (selectedDestination == "history") ScanHistoryPanel(auditEntries)
+        if (selectedDestination == "settings") {
+         SafeMobileSettingsPanel(
+          monitoringRunning, enableSentinel, disableSentinel,
+          strictMode = strictMode,
+          securityAlertsEnabled = securityAlertsEnabled,
+          onSecurityAlertsChanged = changeSecurityAlerts,
+          onToggleProtection = toggleProtection, onStrictModeChanged = updateStrictMode,
+           appTheme = appTheme, onAppThemeChanged = onAppThemeChanged,
+           adPrivacyOptionsRequired = adMobState.privacyOptionsRequired,
+           isProForAds = adMobState.isPro,
+           onManageFolders = { navigateToDestination("sentinel") },
+           onAddCustomFolder = { requestPrivacyAcknowledgement {
+            navigateToDestination("sentinel")
+            pendingFolderRole = StorageAccessPreferences.CUSTOM
+            pendingSentinelEnable = true
+            showStoragePermissionPrompt = true
+           } },
+           onShowAdPrivacyOptions = {
+            activity?.let { host -> uiScope.launch { adMobManager.showPrivacyOptions(host) } }
+           }
+         )
+        }
+        if (selectedDestination == "pro") {
+         SafeMobileProPaywallScreen(
+          onBack = { navigateToDestination("home") },
+          onProStatusChanged = { isPro -> if (isPro) adMobManager.disableForPro() }
+         )
+        }
+        if (selectedDestination == "capabilities") {
+         DetectionCapabilitiesScreen(
+          hashDatabaseCapability = state.hashDatabaseCapability,
+          initialSyncPending = initialHashSyncPending,
+           yaraMatchCount = state.results.sumOf { it.riskReport?.yaraResult?.matches?.size ?: 0 },
+           yaraMatchedRuleNames = state.results.flatMap { it.riskReport?.yaraResult?.matchedRules.orEmpty() }.distinct(),
+          onImportYaraRulesForReview = { pendingYaraPicker.launch(arrayOf("text/plain", "application/octet-stream", "application/x-yara")) }
+         )
+        }
+        Spacer(Modifier.height(8.dp))
+        if (selectedDestination == "home" && adMobState.adsReady && !adMobState.isPro) {
+         AdMobBanner(adMobManager)
+        }
+         }
+        }
+       }
+   }
    NavHost(
     navController = tabNavController,
     startDestination = "dashboard",
-    modifier = Modifier.size(0.dp)
+    modifier = Modifier.weight(1f).fillMaxWidth()
    ) {
-    composable("dashboard") { Spacer(Modifier.size(0.dp)) }
-    composable("tools") { Spacer(Modifier.size(0.dp)) }
-    composable("settings") { Spacer(Modifier.size(0.dp)) }
-    composable("detail/{parentTab}/{screen}") { Spacer(Modifier.size(0.dp)) }
-   }
-   Box(Modifier.weight(1f).fillMaxWidth()) {
-    when (selectedDestination) {
-     "home" -> Column(Modifier.fillMaxSize()) {
-      ScanFeedbackCard(state,
-       onResults = { navigateToDestination(if (state.results.isEmpty()) "history" else "scan") },
-       onCancel = vm::cancelScan
-      )
-      SecurityDashboardV14(
-       advisor = advisorState,
-       isPro = adMobState.isPro,
-       adsReady = adMobState.adsReady,
-       adMobManager = adMobManager,
-       scanRunning = state.isScanning,
-       downloadsActive = StorageAccessPreferences.hasRole(context, StorageAccessPreferences.DOWNLOADS),
-       chatFoldersActive = StorageAccessPreferences.hasRole(context, StorageAccessPreferences.WHATSAPP) || customFolderUris.isNotEmpty(),
-       installSentinelActive = securityPrefs.getBoolean(SafeMobileApp.KEY_INSTALL_SENTINEL_ENABLED, false),
-       onOpenAdvisor = { navigateToDestination("advisor") },
-       onOpenPro = { navigateToDestination("pro") },
-       onScan = { requestPrivacyAcknowledgement { vm.scanFull() }; navigateToDestination("scan") },
-       onCleaner = { navigateToDestination("cleaner") },
-       onInstallSentinel = { navigateToDestination("sources") },
-       onFolders = { navigateToDestination("sentinel") },
-       onLinkChecker = { navigateToDestination("phishing") },
-       onPosture = { navigateToDestination("posture"); if (privacyAccepted) postureVm.refreshAuditSilently() },
-       onApps = { navigateToDestination("apps") },
-       onQuarantine = { navigateToDestination("quarantine") }
-      )
-     }
-     "tools" -> Column(Modifier.fillMaxSize().verticalScroll(contentScrollState).padding(horizontal = 18.dp, vertical = 14.dp)) {
-      ProtectionToolsHub(onOpen = { navigateToDestination(it) })
-     }
-     "settings" -> Column(Modifier.fillMaxSize().verticalScroll(contentScrollState).padding(horizontal = 18.dp, vertical = 14.dp)) {
-      SafeMobileSettingsPanel(
-       sentinelEnabled = monitoringRunning,
-       onEnableSentinel = enableSentinel,
-       onDisableSentinel = disableSentinel,
-       strictMode = strictMode,
-       securityAlertsEnabled = securityAlertsEnabled,
-       onSecurityAlertsChanged = changeSecurityAlerts,
-       onToggleProtection = toggleProtection,
-       onStrictModeChanged = updateStrictMode,
-       appTheme = appTheme,
-       onAppThemeChanged = onAppThemeChanged,
-       adPrivacyOptionsRequired = adMobState.privacyOptionsRequired,
-       isProForAds = adMobState.isPro,
-       onManageFolders = { navigateToDestination("sentinel") },
-       onAddCustomFolder = { requestPrivacyAcknowledgement {
-        navigateToDestination("sentinel")
-        pendingFolderRole = StorageAccessPreferences.CUSTOM
-        pendingSentinelEnable = true
-        showStoragePermissionPrompt = true
-       } },
-       onShowAdPrivacyOptions = {
-        activity?.let { host -> uiScope.launch { adMobManager.showPrivacyOptions(host) } }
-       },
-       subRoute = settingsSubRoute,
-       onSubRouteChanged = { settingsSubRoute = it },
-       onOpenPro = { navigateToDestination("pro") }
-      )
-     }
-     else -> Column(
-      Modifier.fillMaxSize().verticalScroll(contentScrollState)
-       .padding(horizontal = 18.dp, vertical = 14.dp),
-      verticalArrangement = Arrangement.spacedBy(14.dp)
-     ) {
-      if (selectedDestination == "advisor") {
-       SecurityAdvisorScreen(
-        state = advisorState,
-        onOpenIssue = { issue ->
-         if (issue.destination == "settings") {
-          settingsSubRoute = when (issue.id) {
-           "notifications_on", "fullscreen_alert", "voice_alert_tts" -> SettingsSubRoute.NOTIFICATIONS
-           else -> SettingsSubRoute.SECURITY
-          }
-          navigateToDestination("settings")
-         } else navigateToDestination(issue.destination)
-        },
-        onSnooze = { issueId -> uiScope.launch { advisorStore.setSnoozed(issueId, true) } },
-        onRestore = { issueId -> uiScope.launch { advisorStore.setSnoozed(issueId, false) } }
-       )
-      }
-    if (privacyAccepted && !notificationsGranted && Build.VERSION.SDK_INT >= 33) {
-       Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer)) {
-         Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-           Text(stringResource(R.string.ui_notifications_denied), color = MaterialTheme.colorScheme.onErrorContainer)
-           OutlinedButton(onClick = {
-             val settings = Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                 Uri.parse("package:" + context.packageName))
-             runCatching { context.startActivity(settings) }.onFailure {
-               Toast.makeText(context, R.string.ui_notifications_settings_unavailable, Toast.LENGTH_LONG).show()
-             }
-           }) { Text(stringResource(R.string.ui_enable_notifications_settings)) }
-         }
-       }
-     }
-     if (selectedDestination == "home" || selectedDestination == "scan") {
-     if (selectedDestination == "home") {
-      if (!fullScreenAlertsGranted) FullScreenAlertPermissionCard(onOpenSettings = {
-       runCatching { FullScreenAlertAccess.settingsIntent(context)?.let(context::startActivity) }
-        .onFailure { Toast.makeText(context, R.string.full_screen_settings_unavailable, Toast.LENGTH_LONG).show() }
-      })
-      SystemAppProtectionBadge()
-      BatteryOptimizationCard(batteryStatusEpoch)
-     }
-     ScanFeedbackCard(state,
-      onResults = { navigateToDestination(if (state.results.isEmpty()) "history" else "scan") },
-      onCancel = vm::cancelScan)
-    }
-    if (selectedDestination == "home") {
-     DevicePostureDashboardCard(postureState, onOpen = {
-      navigateToDestination("posture")
-      if (privacyAccepted) postureVm.refresh()
-     })
-     LimitedProtectionBanner(
-      downloads = folderUris.isNotEmpty() && StorageAccessPreferences.hasRole(context, StorageAccessPreferences.DOWNLOADS),
-      whatsapp = folderUris.isNotEmpty() && StorageAccessPreferences.hasRole(context, StorageAccessPreferences.WHATSAPP),
-      running = monitoringRunning, onSetup = { navigateToDestination("sentinel") })
-     SecurityDashboard(state.securityAssessment,
-      onCheckPlayProtect = { requestPrivacyAcknowledgement { showPlayProtectDialog = true } },
-      onSync = { vm.requestHashDatabaseSync() })
-     HomeSecurityMetrics(
-      summary = state.scanSummary,
-      hashDbPublishedAt = com.vibesync.antivirus.core.hashdb.HashDatabaseFreshness.updatedAt(context, state.hashDatabaseCapability.version)
-     )
-     if (initialHashSyncPending) {
-      Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.primaryContainer),shape=RoundedCornerShape(16.dp),modifier=Modifier.fillMaxWidth()) {
-       Row(Modifier.padding(14.dp), horizontalArrangement=Arrangement.spacedBy(10.dp), verticalAlignment=Alignment.CenterVertically) {
-        CircularProgressIndicator(Modifier.size(18.dp), strokeWidth=2.dp)
-        Text(stringResource(R.string.hash_database_initial_syncing), style=MaterialTheme.typography.bodyMedium)
-       }
-      }
-     }
-     Button(onClick = { requestPrivacyAcknowledgement { vm.scanFull() } }, enabled = !state.isScanning, modifier = Modifier.fillMaxWidth()) {
-      androidx.compose.material3.Icon(Icons.Default.Security, contentDescription = null)
-      Text(stringResource(R.string.security_scan_now), Modifier.padding(start = 8.dp))
-     }
-     AnalyticsCharts(repository, state.results)
-     SectionHeader(title=stringResource(R.string.analytics_recent_activity), actionLabel=stringResource(R.string.nav_history), onAction={ navigateToDestination("history") })
-     if (auditEntries.isEmpty()) EmptyState(title=stringResource(R.string.analytics_no_audits),description=stringResource(R.string.analytics_no_audits_body))
-     else auditEntries.take(3).forEach { audit ->
-      Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surface),shape=RoundedCornerShape(16.dp),modifier=Modifier.fillMaxWidth()) {
-       Row(Modifier.padding(12.dp),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(10.dp)) {
-        androidx.compose.material3.Icon(if(audit.verdict==ScanVerdict.THREAT.name) Icons.Default.Warning else Icons.Default.History,
-         contentDescription=null,tint=if(audit.verdict==ScanVerdict.THREAT.name) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary)
-        Column(Modifier.weight(1f)) {
-         Text(audit.packageOrPath,style=MaterialTheme.typography.titleSmall)
-         Text(stringResource(SecurityText.verdict(audit.verdict)),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
-        }
-        Text(localizedDate(audit.scanTimestamp, timeOnly = true),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
-       }
-      }
-     }
-    }
-    if (selectedDestination == "sources") {
-     InstallSourceAuditPanel(
-      incidents = securityIncidents,
-      onScan = { requestPrivacyAcknowledgement { vm.scanInstalled() } },
-      onInspect = { packageName ->
-       try { context.startActivity(UninstallHandler.buildAppInfoIntent(packageName)) }
-       catch (_: ActivityNotFoundException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
-       catch (_: SecurityException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
-      },
-      onUninstall = { packageName ->
-       lastUninstallPackage = packageName
-       pendingUninstallPackage = packageName
-       when (vm.requestUninstall(
-        context, packageName,
-        launchDelete = { intent -> deleteLauncher.launch(intent) },
-        openAppInfo = { intent -> context.startActivity(intent) }
-       )) {
-        UninstallResult.Success, UninstallResult.RequiresUserAction -> Unit
-        is UninstallResult.BlockedSystemApp -> showUninstallSnackbar(context.getString(R.string.uninstall_protected), packageName)
-        UninstallResult.NotFound -> showUninstallSnackbar(context.getString(R.string.uninstall_not_found), null)
-        UninstallResult.OpenedAppInfo -> showUninstallSnackbar(context.getString(R.string.uninstall_opened_app_info), null)
-        UninstallResult.HandlerUnavailable -> showUninstallSnackbar(context.getString(R.string.uninstall_launch_failed), packageName)
-       }
-      }
-     )
-    }
-    if (selectedDestination == "scan") {
-    Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surface),shape=RoundedCornerShape(16.dp),modifier=Modifier.fillMaxWidth()) {
-     Column(Modifier.padding(18.dp),verticalArrangement=Arrangement.spacedBy(10.dp)) {
-      Row(verticalAlignment=Alignment.CenterVertically) {
-       androidx.compose.material3.Icon(statusIcon,contentDescription=null,tint=statusTint,modifier=Modifier.size(30.dp))
-       Column(Modifier.padding(start=10.dp).weight(1f)) {
-        Text(stringResource(statusResource),style=MaterialTheme.typography.titleMedium,fontWeight=FontWeight.Bold,color=statusTint)
-        Text(stringResource(R.string.signature_count,state.signatureCount,state.completedScans),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
-       }
-      }
-      ExpandableText(stringResource(R.string.scan_explanation), maxLines = 3)
-      Button(onClick={ requestPrivacyAcknowledgement { vm.scanFull() } },enabled=!state.isScanning,modifier=Modifier.fillMaxWidth()) {
-       if(state.isScanning) CircularProgressIndicator(Modifier.size(18.dp),strokeWidth=2.dp,color=MaterialTheme.colorScheme.onPrimary) else androidx.compose.material3.Icon(Icons.Default.Security,contentDescription=null)
-       Text(stringResource(if(state.isScanning) R.string.scan_running else R.string.scan_installed),modifier=Modifier.padding(start=8.dp))
-      }
-      OutlinedButton(onClick={ requestPrivacyAcknowledgement { apkPicker.launch(arrayOf("application/vnd.android.package-archive","application/octet-stream")) } },enabled=!state.isScanning,modifier=Modifier.fillMaxWidth()) {
-       androidx.compose.material3.Icon(Icons.Default.FolderOpen,contentDescription=null)
-       Text(stringResource(R.string.scan_selected),modifier=Modifier.padding(start=8.dp))
-      }
-      OutlinedButton(onClick={ requestPrivacyAcknowledgement { showDefinitionImportWarning = true } },enabled=!state.isScanning,modifier=Modifier.fillMaxWidth()) { Text(stringResource(R.string.import_definitions)) }
-     }
-    }
-    }
-    if (selectedDestination == "home") CoreStrengthsAccordion { destination -> navigateToDestination(destination) }
-    if (selectedDestination == "apps") {
-     SectionHeader(title=stringResource(R.string.nav_apps),actionLabel=stringResource(R.string.security_scan_now),onAction={ requestPrivacyAcknowledgement { vm.scanInstalled() } })
-     val apps=state.results.filter { it.packageName != null }
-     if (state.isScanning) {
-       LinearProgressIndicator(modifier=Modifier.fillMaxWidth())
-       Text(stringResource(R.string.apps_scanning_in_progress), style=MaterialTheme.typography.bodySmall)
-      }
-      if (state.inventoryLoading) CircularProgressIndicator()
-      if (apps.isEmpty() && state.installedApps.isNotEmpty()) {
-       Text(pluralStringResource(R.plurals.l10n_apps, state.installedApps.size, state.installedApps.size), style=MaterialTheme.typography.bodyMedium)
-       state.installedApps.take(80).forEach { item ->
-        Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surface), modifier=Modifier.fillMaxWidth()) {
-         Row(Modifier.fillMaxWidth().padding(12.dp), verticalAlignment=Alignment.CenterVertically, horizontalArrangement=Arrangement.spacedBy(8.dp)) {
-          Column(Modifier.weight(1f)) {
-           Text(item.displayName, style=MaterialTheme.typography.titleSmall)
-           Text(item.packageName, style=MaterialTheme.typography.labelSmall, color=MaterialTheme.colorScheme.onSurfaceVariant)
-          }
-          TextButton(onClick={ runCatching { context.startActivity(UninstallHandler.buildAppInfoIntent(item.packageName)) }
-            .onFailure { Toast.makeText(context,R.string.uninstall_no_settings,Toast.LENGTH_SHORT).show() } }) {
-           Text(stringResource(R.string.app_info_label))
-          }
-         }
-        }
-       }
-      } else if (apps.isEmpty()) EmptyState(title=stringResource(R.string.apps_inventory_empty),description=stringResource(if(state.inventoryLoaded) R.string.apps_no_user_installed else R.string.apps_inventory_empty_body),
-      actionLabel=stringResource(R.string.security_scan_now),onAction={ requestPrivacyAcknowledgement { vm.scanInstalled() } })
-     else {
-      Text(pluralStringResource(R.plurals.l10n_apps, apps.size, apps.size),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
-      apps.take(80).forEach { result ->
-       ScanResultCard(
-        result,
-        showUninstall = result.packageName?.let { canOfferUninstall(context,it) } == true,
-        showQuarantine = false,
-        showAppInfo = true,
-        onUninstall = { packageName ->
-         lastUninstallPackage = packageName
-         pendingUninstallPackage = packageName
-         when (vm.requestUninstall(context, packageName,
-          launchDelete = { intent -> deleteLauncher.launch(intent) },
-          openAppInfo = { intent -> context.startActivity(intent) })) {
-          UninstallResult.Success, UninstallResult.RequiresUserAction -> Unit
-          is UninstallResult.BlockedSystemApp -> {
-           showUninstallSnackbar(context.getString(R.string.uninstall_protected), null)
-           try { context.startActivity(UninstallHandler.buildAppInfoIntent(packageName)) }
-           catch (e: ActivityNotFoundException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
-           catch (e: SecurityException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
-          }
-          UninstallResult.NotFound -> {
-           pendingUninstallPackage = null; lastUninstallPackage = null
-           showUninstallSnackbar(context.getString(R.string.uninstall_not_found), null)
-          }
-          UninstallResult.OpenedAppInfo -> showUninstallSnackbar(context.getString(R.string.uninstall_opened_app_info), packageName)
-          UninstallResult.HandlerUnavailable -> {
-           pendingUninstallPackage = null
-           showUninstallSnackbar(context.getString(R.string.uninstall_launch_failed), packageName)
-          }
-         }
-        },
-        onAppInfo = { packageName ->
-         try { context.startActivity(UninstallHandler.buildAppInfoIntent(packageName)) }
-         catch (e: ActivityNotFoundException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
-         catch (e: SecurityException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
-        },
-        onQuarantine = {}, onTrust = { vm.trustApp(it) }, onRemoveTrust = vm::removeTrust
-       )
-      }
-     }
-    }
-    if (selectedDestination == "analytics") AnalyticsCharts(repository)
-    if (selectedDestination == "analytics") ProtectionAnalyticsPanel(
-     audits=auditEntries, results=state.results, signatureCount=state.signatureCount,
-     activeIndicatorCount=state.activeThreatIndicatorCount, lastScanAt=state.lastScanAt, isScanning=state.isScanning,
-     quarantinedCount=state.quarantinedFiles.size, monitoringRunning=monitoringRunning,
-     storageAccessGranted=storageAccessGranted, notificationsGranted=notificationsGranted, online=online
-    )
-    if (selectedDestination == "sentinel") {
-     SentinelFolderPanel(context, folderUris, monitoringRunning,
-      customFolders = customFolderUris.filter { it in folderUris },
-      onAdd = { role -> requestPrivacyAcknowledgement {
-       pendingFolderRole = role; pendingSentinelEnable = true; showStoragePermissionPrompt = true
-      } },
-      onAddCustom = { requestPrivacyAcknowledgement {
-       pendingFolderRole = StorageAccessPreferences.CUSTOM
-       pendingSentinelEnable = true
-       showStoragePermissionPrompt = true
-      } },
-      onRemove = { uri -> uiScope.launch {
-       kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { StorageAccessPreferences.removeSelectedFolder(context, uri) }
-       folderUris = StorageAccessPreferences.accessibleTreeUris(context)
-       storageAccessGranted = folderUris.isNotEmpty()
-       if (!storageAccessGranted) disableSentinel()
-      } },
-      onStart = { requestPrivacyAcknowledgement { enableSentinel() } }, onStop = disableSentinel,
-      onSkip = { navigateToDestination("home") })
-    }
-    if (selectedDestination == "guardian") GuardianPanel()
-    if (selectedDestination == "posture") DevicePostureScreen(
-     state = postureState, alertsAvailable = securityAlertsEnabled && notificationsGranted,
-     onRefresh = { requestPrivacyAcknowledgement { postureVm.refresh() } },
-     onMonitoringChanged = { enabled ->
-      if (enabled) requestPrivacyAcknowledgement { postureVm.setMonitoring(context, true) }
-      else postureVm.setMonitoring(context, false)
-     },
-     onEnableAlerts = { requestPrivacyAcknowledgement { changeSecurityAlerts(true) } }
-    )
-    if (selectedDestination == "phishing") PhishingPanel(sharedText, repository) { onSharedTextConsumed() }
-    if (selectedDestination == "cleaner") StorageCleanerPanel()
-    state.messageResource?.takeUnless { it == R.string.scan_complete && selectedDestination in listOf("home", "scan") }?.let { message -> Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant)) { Text(stringResource(message),Modifier.padding(14.dp),color=MaterialTheme.colorScheme.onSurface,style=MaterialTheme.typography.bodySmall) } }
-    state.messageText?.let { message -> Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant)) { Text(message.resolve(context),Modifier.padding(14.dp),color=MaterialTheme.colorScheme.onSurface,style=MaterialTheme.typography.bodySmall) } }
-    if(selectedDestination == "scan" && state.results.isNotEmpty()) {
-     Column(verticalArrangement=Arrangement.spacedBy(10.dp)) {
-      Text(stringResource(R.string.latest_results),style=MaterialTheme.typography.titleLarge,fontWeight=FontWeight.Bold)
-      Text(listOf(pluralStringResource(R.plurals.l10n_threats, state.threatCount, state.threatCount), pluralStringResource(R.plurals.l10n_review, state.suspiciousCount, state.suspiciousCount), state.results.count { it.verdict == ScanVerdict.NO_MATCH }.let { pluralStringResource(R.plurals.l10n_no_match, it, it) }).joinToString(" · "),color=MaterialTheme.colorScheme.onSurfaceVariant,style=MaterialTheme.typography.bodySmall)
-      val notScannedCount = state.results.count { it.verdict == ScanVerdict.NOT_SCANNED }
-      if (notScannedCount > 0) Text(pluralStringResource(R.plurals.l10n_unreadable, notScannedCount, notScannedCount), color=MaterialTheme.colorScheme.onSurfaceVariant, style=MaterialTheme.typography.bodySmall)
-      state.results.take(80).forEach { result ->
-       ScanResultCard(
-        result,
-        showUninstall = result.packageName != null && result.packageName != context.packageName &&
-         result.verdict in listOf(ScanVerdict.THREAT, ScanVerdict.SUSPICIOUS),
-        showQuarantine = result.sourceUri != null && result.verdict in listOf(ScanVerdict.THREAT, ScanVerdict.SUSPICIOUS),
-        onUninstall = { packageName ->
-         lastUninstallPackage = packageName
-         pendingUninstallPackage = packageName
-         when (vm.requestUninstall(context, packageName,
-          launchDelete = { intent -> deleteLauncher.launch(intent) },
-          openAppInfo = { intent -> context.startActivity(intent) })) {
-          UninstallResult.Success, UninstallResult.RequiresUserAction -> Unit
-          is UninstallResult.BlockedSystemApp -> {
-           showUninstallSnackbar(context.getString(R.string.uninstall_protected), null)
-           try { context.startActivity(UninstallHandler.buildAppInfoIntent(packageName)) }
-           catch (e: ActivityNotFoundException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
-           catch (e: SecurityException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
-          }
-          UninstallResult.NotFound -> { pendingUninstallPackage = null; lastUninstallPackage = null; showUninstallSnackbar(context.getString(R.string.uninstall_not_found), null) }
-          UninstallResult.OpenedAppInfo -> showUninstallSnackbar(context.getString(R.string.uninstall_opened_app_info), packageName)
-          UninstallResult.HandlerUnavailable -> { pendingUninstallPackage = null; showUninstallSnackbar(context.getString(R.string.uninstall_launch_failed), packageName) }
-         }
-        },
-        showAppInfo = true,
-        onAppInfo = { packageName ->
-         try { context.startActivity(UninstallHandler.buildAppInfoIntent(packageName)) }
-         catch (e: ActivityNotFoundException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
-         catch (e: SecurityException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
-        },
-        onQuarantine = { pendingQuarantine = result }, onTrust = { vm.trustApp(it) }, onRemoveTrust = vm::removeTrust
-       )
-      }
-     }
-    }
-    if (selectedDestination == "quarantine") {
-    Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant),shape=RoundedCornerShape(16.dp),modifier=Modifier.fillMaxWidth()) {
-     Column(Modifier.padding(16.dp),verticalArrangement=Arrangement.spacedBy(10.dp)) {
-      Text(stringResource(R.string.quarantine_vault_title),style=MaterialTheme.typography.titleMedium,fontWeight=FontWeight.Bold)
-      ExpandableText(stringResource(R.string.quarantine_vault_description), maxLines = 3)
-      if (state.quarantinedFiles.isEmpty()) {
-       Text(stringResource(R.string.quarantine_vault_empty),style=MaterialTheme.typography.bodyMedium,color=MaterialTheme.colorScheme.onSurfaceVariant)
-      } else {
-       state.quarantinedFiles.take(30).forEach { file ->
-        Column(
-         modifier=Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surface,RoundedCornerShape(12.dp)).padding(12.dp),
-         verticalArrangement=Arrangement.spacedBy(5.dp)
-        ) {
-         Text(
-          text=runCatching { quarantineManager.displayName(file) }.getOrDefault(file.name),
-          style=MaterialTheme.typography.titleSmall,fontWeight=FontWeight.SemiBold,color=MaterialTheme.colorScheme.onSurface
-         )
-         val byteSize = runCatching { quarantineManager.displaySize(file) }.getOrDefault(0L)
-         Text(pluralStringResource(R.plurals.l10n_bytes, byteSize.coerceAtMost(Int.MAX_VALUE.toLong()).toInt(), byteSize),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
-         if (!quarantineManager.isEncrypted(file)) Text(stringResource(R.string.quarantine_legacy_warning),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.tertiary)
-         OutlinedButton(
-          onClick={ pendingRestoreFile=file; showRestoreWarning=true },
-          modifier=Modifier.fillMaxWidth()
-         ) { Text(stringResource(R.string.quarantine_restore)) }
-         TextButton(
-          onClick={ pendingDeleteFile=file },
-          modifier=Modifier.fillMaxWidth()
-         ) { Text(stringResource(R.string.quarantine_delete),color=MaterialTheme.colorScheme.error) }
-        }
-       }
-       if (state.quarantinedFiles.size > 30) {
-        Text(stringResource(R.string.quarantine_vault_limit),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
-       }
-      }
-     }
-    }
-    }
-    if (selectedDestination == "history") ScanHistoryPanel(auditEntries)
-    if (selectedDestination == "settings") {
-     SafeMobileSettingsPanel(
-      monitoringRunning, enableSentinel, disableSentinel,
-      strictMode = strictMode,
-      securityAlertsEnabled = securityAlertsEnabled,
-      onSecurityAlertsChanged = changeSecurityAlerts,
-      onToggleProtection = toggleProtection, onStrictModeChanged = updateStrictMode,
-       appTheme = appTheme, onAppThemeChanged = onAppThemeChanged,
-       adPrivacyOptionsRequired = adMobState.privacyOptionsRequired,
-       isProForAds = adMobState.isPro,
-       onManageFolders = { navigateToDestination("sentinel") },
-       onAddCustomFolder = { requestPrivacyAcknowledgement {
-        navigateToDestination("sentinel")
-        pendingFolderRole = StorageAccessPreferences.CUSTOM
-        pendingSentinelEnable = true
-        showStoragePermissionPrompt = true
-       } },
-       onShowAdPrivacyOptions = {
-        activity?.let { host -> uiScope.launch { adMobManager.showPrivacyOptions(host) } }
-       }
-     )
-    }
-    if (selectedDestination == "pro") {
-     SafeMobileProPaywallScreen(
-      onBack = { navigateToDestination("home") },
-      onProStatusChanged = { isPro -> if (isPro) adMobManager.disableForPro() }
-     )
-    }
-    if (selectedDestination == "capabilities") {
-     DetectionCapabilitiesScreen(
-      hashDatabaseCapability = state.hashDatabaseCapability,
-      initialSyncPending = initialHashSyncPending,
-       yaraMatchCount = state.results.sumOf { it.riskReport?.yaraResult?.matches?.size ?: 0 },
-       yaraMatchedRuleNames = state.results.flatMap { it.riskReport?.yaraResult?.matchedRules.orEmpty() }.distinct(),
-      onImportYaraRulesForReview = { pendingYaraPicker.launch(arrayOf("text/plain", "application/octet-stream", "application/x-yara")) }
-     )
-    }
-    Spacer(Modifier.height(8.dp))
-    if (selectedDestination == "home" && adMobState.adsReady && !adMobState.isPro) {
-     AdMobBanner(adMobManager)
-    }
-     }
-    }
+    composable("dashboard") { navScreenContent() }
+    composable("tools") { navScreenContent() }
+    composable("settings") { navScreenContent() }
+    composable("detail/{parentTab}/{screen}") { navScreenContent() }
    }
    SnackbarHost(hostState = snackbarHostState)
    NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
