@@ -24,7 +24,7 @@ class ProEntitlementStoreTest {
         val now = System.currentTimeMillis()
         assertTrue(store.grant("test-purchase-one", 2, now))
         val expected = now + 2 * ProEntitlementStore.MILLIS_PER_YEAR
-        assertEquals(expected, store.expiresAt())
+        assertEquals(expected, store.expiresAt(purchaseTime))
         assertTrue(store.grant("test-purchase-one", 2, now + 1_000))
         assertEquals(expected, store.expiresAt())
         assertTrue(store.grant("test-purchase-two", 1, now + 2_000))
@@ -60,13 +60,13 @@ class ProEntitlementStoreTest {
         val firstExpiry = purchaseTime + ProEntitlementStore.MILLIS_PER_YEAR +
             ProEntitlementStore.GOOGLE_GRACE_BUFFER_MS
         assertTrue(store.grantSubscription("test-subscription-token", purchaseTime, purchaseTime + 1_000))
-        assertEquals(firstExpiry, store.expiresAt())
+        assertEquals(firstExpiry, store.expiresAt(purchaseTime + 1_000))
 
         val renewalPurchaseTime = purchaseTime + ProEntitlementStore.MILLIS_PER_YEAR
         assertTrue(store.grantSubscription("test-subscription-token", renewalPurchaseTime, renewalPurchaseTime))
         val renewedExpiry = renewalPurchaseTime + ProEntitlementStore.MILLIS_PER_YEAR +
             ProEntitlementStore.GOOGLE_GRACE_BUFFER_MS
-        assertEquals(renewedExpiry, store.expiresAt())
+        assertEquals(renewedExpiry, store.expiresAt(renewalPurchaseTime))
     }
 
     @Test fun subscriptionRequiresTokenAndPositivePurchaseTimestamp() {

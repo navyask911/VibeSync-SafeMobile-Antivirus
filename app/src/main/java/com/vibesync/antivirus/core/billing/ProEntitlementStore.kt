@@ -46,8 +46,8 @@ class ProEntitlementStore(
             }.getOrDefault(false)
         }
 
-    fun expiresAt(): Long = synchronized(lock) {
-        if (checkProStatusForThisDevice()) preferences.getLong(KEY_EXPIRY, 0) else 0L
+    fun expiresAt(nowMs: Long = System.currentTimeMillis()): Long = synchronized(lock) {
+        if (checkProStatusForThisDevice(nowMs)) preferences.getLong(KEY_EXPIRY, 0) else 0L
     }
 
     /**
