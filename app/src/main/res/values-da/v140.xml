@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v140_dashboard">Dashboard</string>
+    <string name="v140_analytics_tools">Analyse og værktøjer</string>
+    <string name="v140_critical">Kritisk</string>
+    <string name="v140_minor">Mindre</string>
+    <string name="v140_snoozed">Udsat</string>
+    <string name="v140_completed">Fuldført</string>
+    <string name="v140_snooze_warning">Udsæt advarsel</string>
+    <string name="v140_done_return_to_audit">Færdig — tilbage til kontrol</string>
+    <string name="v140_security_risk_explained">Forklaring af sikkerhedsrisiko</string>
+    <string name="v140_posture_score_impact">Indvirkning på enhedens sikkerhedsscore</string>
+    <string name="v140_pending_actions">%1$d sikkerhedshandlinger afventer — gennemgå kontrollen</string>
+</resources>
