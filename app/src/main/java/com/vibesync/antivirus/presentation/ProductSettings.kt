@@ -14,6 +14,14 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.Alignment
 import androidx.compose.material3.RadioButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.HelpOutline
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Security
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.WorkspacePremium
+import androidx.compose.ui.graphics.vector.ImageVector
 import com.vibesync.antivirus.ui.theme.AppTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -74,6 +82,8 @@ import java.text.DateFormat
 import java.util.Date
 import java.util.UUID
 
+enum class SettingsSubRoute { ROOT, GENERAL, SUBSCRIPTION, NOTIFICATIONS, SECURITY, HELP_LEGAL, RATE }
+
 internal object InstallRayId {
     private const val PREFS_NAME = "safe_mobile_installation"
     private const val KEY = "ray_id"
@@ -85,6 +95,43 @@ internal object InstallRayId {
         val generated = UUID.randomUUID().toString()
         prefs.edit().putString(KEY, generated).commit()
         return prefs.getString(KEY, generated) ?: generated
+    }
+}
+
+@Composable
+private fun SettingsRootRow(
+    icon: ImageVector,
+    titleResource: Int,
+    subtitleResource: Int,
+    onClick: () -> Unit
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth().clickable(onClick = onClick),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(14.dp)
+        ) {
+            androidx.compose.material3.Surface(
+                shape = RoundedCornerShape(14.dp),
+                color = MaterialTheme.colorScheme.secondaryContainer
+            ) {
+                androidx.compose.material3.Icon(
+                    icon,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.secondary,
+                    modifier = Modifier.padding(10.dp)
+                )
+            }
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                Text(stringResource(titleResource), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Bold)
+                Text(stringResource(subtitleResource), style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2)
+            }
+            Text("›", color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.titleLarge)
+        }
     }
 }
 
@@ -313,13 +360,16 @@ internal fun SafeMobileSettingsPanel(
     onSecurityAlertsChanged: ((Boolean) -> Unit)? = null,
     onToggleProtection: ((Boolean) -> Unit)? = null,
     onStrictModeChanged: ((Boolean) -> Unit)? = null,
-    appTheme: AppTheme = AppTheme.MIDNIGHT,
+    appTheme: AppTheme = AppTheme.LIGHT,
     onAppThemeChanged: (AppTheme) -> Unit = {},
     adPrivacyOptionsRequired: Boolean = false,
     isProForAds: Boolean = true,
     onShowAdPrivacyOptions: () -> Unit = {},
     onManageFolders: () -> Unit = {},
-    onAddCustomFolder: () -> Unit = {}
+    onAddCustomFolder: () -> Unit = {},
+    subRoute: SettingsSubRoute = SettingsSubRoute.ROOT,
+    onSubRouteChanged: (SettingsSubRoute) -> Unit = {},
+    onOpenPro: () -> Unit = {}
 ) {
     val context = LocalContext.current
     fun openOfficialWebsite(url: String) {
@@ -350,7 +400,61 @@ internal fun SafeMobileSettingsPanel(
     var voiceAlertsEnabled by remember(context) { mutableStateOf(voicePrefs.getBoolean(SafeMobileApp.KEY_VOICE_ALERTS_ENABLED, false)) }
 
     Column(verticalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
-        Text(stringResource(R.string.settings_title), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+        if (subRoute == SettingsSubRoute.ROOT) {
+            Text(stringResource(R.string.settings_title), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+            SettingsRootRow(Icons.Default.Settings, R.string.appearance_title, R.string.theme_appearance_description) {
+                onSubRouteChanged(SettingsSubRoute.GENERAL)
+            }
+            SettingsRootRow(Icons.Default.WorkspacePremium, R.string.pro_title, R.string.pro_truthful_summary) {
+                onSubRouteChanged(SettingsSubRoute.SUBSCRIPTION)
+            }
+            SettingsRootRow(Icons.Default.Notifications, R.string.security_alerts_title, R.string.incident_alerts_explanation) {
+                onSubRouteChanged(SettingsSubRoute.NOTIFICATIONS)
+            }
+            SettingsRootRow(Icons.Default.Security, R.string.download_interceptor_label, R.string.download_interceptor_description) {
+                onSubRouteChanged(SettingsSubRoute.SECURITY)
+            }
+            SettingsRootRow(Icons.Default.HelpOutline, R.string.about_legal, R.string.ad_privacy_intro) {
+                onSubRouteChanged(SettingsSubRoute.HELP_LEGAL)
+            }
+            SettingsRootRow(Icons.Default.Star, R.string.app_name, R.string.official_website_visit) {
+                onSubRouteChanged(SettingsSubRoute.RATE)
+            }
+        } else {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                TextButton(onClick = { onSubRouteChanged(SettingsSubRoute.ROOT) }) {
+                    Text(stringResource(R.string.nav_settings))
+                }
+                Spacer(Modifier.weight(1f))
+            }
+            when (subRoute) {
+                SettingsSubRoute.GENERAL -> Text(stringResource(R.string.appearance_title), style = MaterialTheme.typography.titleLarge)
+                SettingsSubRoute.SUBSCRIPTION -> {
+                    Text(stringResource(R.string.pro_title), style = MaterialTheme.typography.titleLarge)
+                    Button(onClick = onOpenPro, modifier = Modifier.fillMaxWidth()) {
+                        Text(stringResource(R.string.pro_unlock))
+                    }
+                    Text(stringResource(R.string.pro_truthful_summary), style = MaterialTheme.typography.bodySmall)
+                }
+                SettingsSubRoute.NOTIFICATIONS -> Text(stringResource(R.string.security_alerts_title), style = MaterialTheme.typography.titleLarge)
+                SettingsSubRoute.SECURITY -> Text(stringResource(R.string.download_interceptor_label), style = MaterialTheme.typography.titleLarge)
+                SettingsSubRoute.HELP_LEGAL -> Text(stringResource(R.string.about_legal), style = MaterialTheme.typography.titleLarge)
+                SettingsSubRoute.RATE -> {
+                    Text(stringResource(R.string.app_name), style = MaterialTheme.typography.titleLarge)
+                    Text(stringResource(R.string.official_website_visit), style = MaterialTheme.typography.bodySmall)
+                    Button(onClick = {
+                        val playUri = android.net.Uri.parse("market://details?id=com.vibesync.antivirus")
+                        val webUri = android.net.Uri.parse("https://play.google.com/store/apps/details?id=com.vibesync.antivirus")
+                        runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, playUri)) }
+                            .onFailure { runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, webUri)) } }
+                    }, modifier = Modifier.fillMaxWidth()) {
+                        Text(stringResource(R.string.official_website_title))
+                    }
+                }
+                SettingsSubRoute.ROOT -> Unit
+            }
+        }
+        if (subRoute == SettingsSubRoute.GENERAL) {
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text(stringResource(R.string.appearance_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
@@ -376,6 +480,8 @@ internal fun SafeMobileSettingsPanel(
                 }
             }
         }
+        }
+        if (subRoute == SettingsSubRoute.NOTIFICATIONS) {
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text(stringResource(R.string.siren_test_settings_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
@@ -391,6 +497,8 @@ internal fun SafeMobileSettingsPanel(
                 }) { Text(stringResource(R.string.siren_test_button)) }
             }
         }
+        }
+        if (subRoute == SettingsSubRoute.GENERAL) {
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(stringResource(R.string.global_threat_intelligence_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
@@ -408,6 +516,8 @@ internal fun SafeMobileSettingsPanel(
                 }
             }
         }
+        }
+        if (subRoute == SettingsSubRoute.SECURITY) {
         InstallSentinelSettings()
         OverlayRiskReviewPanel()
 
@@ -475,6 +585,8 @@ internal fun SafeMobileSettingsPanel(
             }
         }
 
+        }
+        if (subRoute == SettingsSubRoute.SECURITY) {
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text(stringResource(R.string.download_interceptor_label), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
@@ -498,9 +610,21 @@ internal fun SafeMobileSettingsPanel(
                     onClick = onAddCustomFolder,
                     modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp)
                 ) { Text(stringResource(R.string.ui_sentinel_add_custom_folder)) }
-                Text(stringResource(R.string.security_alerts_title), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
-                ExpandableText(stringResource(R.string.incident_alerts_explanation), maxLines = 3)
+                ExpandableText(stringResource(R.string.strict_mode_description), maxLines = 3)
                 Row(Modifier.fillMaxWidth(), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+                    Text(stringResource(R.string.strict_mode_label), modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium)
+                    Switch(checked = strictMode, onCheckedChange = { onStrictModeChanged?.invoke(it) })
+                }
+            }
+        }
+
+        }
+        if (subRoute == SettingsSubRoute.NOTIFICATIONS) {
+        Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
+            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(stringResource(R.string.security_alerts_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                ExpandableText(stringResource(R.string.incident_alerts_explanation), maxLines = 3)
+                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                     Text(stringResource(if (securityAlertsEnabled) R.string.security_alerts_enabled else R.string.security_alerts_disabled),
                         modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium)
                     Switch(checked = securityAlertsEnabled, onCheckedChange = { onSecurityAlertsChanged?.invoke(it) })
@@ -510,14 +634,8 @@ internal fun SafeMobileSettingsPanel(
                         Text(stringResource(R.string.incident_full_screen_settings))
                     }
                 }
-                ExpandableText(stringResource(R.string.strict_mode_description), maxLines = 3)
-                Row(Modifier.fillMaxWidth(), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
-                    Text(stringResource(R.string.strict_mode_label), modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium)
-                    Switch(checked = strictMode, onCheckedChange = { onStrictModeChanged?.invoke(it) })
-                }
             }
         }
-
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(stringResource(R.string.voice_alerts_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
@@ -539,6 +657,8 @@ internal fun SafeMobileSettingsPanel(
             }
         }
 
+        }
+        if (subRoute == SettingsSubRoute.GENERAL) {
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(stringResource(R.string.language_settings), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
@@ -572,6 +692,8 @@ internal fun SafeMobileSettingsPanel(
                 }
             }
         }
+        }
+        if (subRoute == SettingsSubRoute.HELP_LEGAL) {
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(stringResource(R.string.ray_id), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
@@ -626,6 +748,10 @@ internal fun SafeMobileSettingsPanel(
                 Text(stringResource(R.string.family_dedication_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
                 ExpandableText(stringResource(R.string.family_dedication), maxLines = 3)
             }
+        }
+        }
+        if (subRoute == SettingsSubRoute.HELP_LEGAL) {
+            // Legal and support links live together in this focused destination.
         }
     }
 
