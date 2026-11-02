@@ -34,6 +34,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.AlertDialog
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
+import kotlinx.coroutines.launch
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -70,6 +74,9 @@ internal fun SecurityOnboardingScreen(
     onSkipSetup: () -> Unit
 ) {
     var showPermissionPrimer by rememberSaveable { mutableStateOf(false) }
+    var showPrivacyDisclosure by rememberSaveable { mutableStateOf(false) }
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
     val pagerState = rememberPagerState(pageCount = { 3 })
     val notificationLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -129,7 +136,7 @@ internal fun SecurityOnboardingScreen(
                 Spacer(Modifier.weight(1f))
                 Button(
                     onClick = {
-                        if (hasNotificationAccess(LocalContextCompat.contextForPermission())) onFinish()
+                        if (hasNotificationAccess(context)) onFinish()
                         else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                             notificationLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
                         } else onFinish()
@@ -238,25 +245,35 @@ internal fun SecurityOnboardingScreen(
                 Button(
                     onClick = {
                         if (pagerState.currentPage < 2) {
-                            androidx.compose.runtime.rememberCoroutineScope()
+                            coroutineScope.launch { pagerState.animateScrollToPage(pagerState.currentPage + 1) }
+                        } else {
+                            showPermissionPrimer = true
                         }
-                        showPermissionPrimer = true
                     },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(stringResource(R.string.setup_finish))
-                }
-                OutlinedButton(onClick = onFinish, modifier = Modifier.fillMaxWidth()) {
-                    Text(stringResource(R.string.pro_restore_check))
+                    Text(stringResource(if (pagerState.currentPage < 2) R.string.setup_finish else R.string.setup_allow_notifications))
                 }
                 TextButton(
-                    onClick = { showPermissionPrimer = true },
+                    onClick = { showPrivacyDisclosure = true },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(stringResource(R.string.ad_privacy_options))
+                    Text(stringResource(R.string.privacy_title))
                 }
             }
         }
+    }
+    if (showPrivacyDisclosure) {
+        AlertDialog(
+            onDismissRequest = { showPrivacyDisclosure = false },
+            title = { Text(stringResource(R.string.privacy_title)) },
+            text = { Text(stringResource(R.string.ad_privacy_intro)) },
+            confirmButton = {
+                TextButton(onClick = { showPrivacyDisclosure = false }) {
+                    Text(stringResource(R.string.close))
+                }
+            }
+        )
     }
 }
 
