@@ -521,11 +521,6 @@ internal fun SafeMobileSettingsPanel(
                 }
             }
         }
-        }
-        if (subRoute == SettingsSubRoute.SECURITY) {
-        InstallSentinelSettings()
-        OverlayRiskReviewPanel()
-
         if (BuildConfig.OPTIONAL_FEED_ENABLED) {
             Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -589,6 +584,12 @@ internal fun SafeMobileSettingsPanel(
                 }
             }
         }
+        }
+        if (subRoute == SettingsSubRoute.SECURITY) {
+        InstallSentinelSettings()
+        OverlayRiskReviewPanel()
+
+
 
         }
         if (subRoute == SettingsSubRoute.SECURITY) {
