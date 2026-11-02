@@ -24,7 +24,7 @@ class ProEntitlementStoreTest {
         val now = System.currentTimeMillis()
         assertTrue(store.grant("test-purchase-one", 2, now))
         val expected = now + 2 * ProEntitlementStore.MILLIS_PER_YEAR
-        assertEquals(expected, store.expiresAt(purchaseTime))
+        assertEquals(expected, store.expiresAt())
         assertTrue(store.grant("test-purchase-one", 2, now + 1_000))
         assertEquals(expected, store.expiresAt())
         assertTrue(store.grant("test-purchase-two", 1, now + 2_000))
@@ -51,7 +51,7 @@ class ProEntitlementStoreTest {
         assertTrue(store.grantSubscription("test-subscription-token", purchaseTime, purchaseTime))
         val expected = purchaseTime + ProEntitlementStore.MILLIS_PER_YEAR +
             ProEntitlementStore.GOOGLE_GRACE_BUFFER_MS
-        assertEquals(expected, store.expiresAt())
+        assertEquals(expected, store.expiresAt(purchaseTime))
     }
 
     @Test fun repeatedSubscriptionQueryIsIdempotentAndRenewalMovesExpiryForward() {
