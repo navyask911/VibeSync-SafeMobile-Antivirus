@@ -3,6 +3,7 @@ package com.vibesync.antivirus.presentation
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -73,10 +74,9 @@ internal fun SecurityDashboardV14(
         if (!isPro) {
             item {
                 Surface(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().clickable(onClick = onOpenPro),
                     shape = CircleShape,
-                    color = MaterialTheme.colorScheme.primaryContainer,
-                    onClick = onOpenPro
+                    color = MaterialTheme.colorScheme.primaryContainer
                 ) {
                     Row(Modifier.padding(horizontal = 16.dp, vertical = 11.dp), verticalAlignment = Alignment.CenterVertically) {
                         Icon(Icons.Outlined.Shield, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
