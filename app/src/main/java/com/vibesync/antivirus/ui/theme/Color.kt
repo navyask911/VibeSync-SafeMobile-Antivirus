@@ -25,18 +25,29 @@ val SafeMobileDarkColorScheme = darkColorScheme(
     error = SafeMobileDanger, onError = Color(0xFF320606),
     errorContainer = Color(0xFF6C161B), onErrorContainer = Color(0xFFFFDFE0)
 )
+val VibeSyncLightCanvas = Color(0xFFF4F7FA)
+val VibeSyncLightSurface = Color(0xFFFFFFFF)
+val VibeSyncLightSurfaceVariant = Color(0xFFEDF2F7)
+val VibeSyncNavy = Color(0xFF0F2942)
+val VibeSyncCyberTeal = Color(0xFF0284C7)
+val VibeSyncEmerald = Color(0xFF059669)
+val VibeSyncHeading = Color(0xFF0F172A)
+val VibeSyncBody = Color(0xFF475569)
+val VibeSyncCardBorder = Color(0xFFE2E8F0)
+
 val SafeMobileLightColorScheme = lightColorScheme(
-    primary = Color(0xFF1A73E8), onPrimary = Color(0xFFFFFFFF),
-    primaryContainer = Color(0xFFD8E8FF), onPrimaryContainer = Color(0xFF092D68),
-    secondary = Color(0xFF31618A), onSecondary = Color(0xFFFFFFFF),
-    secondaryContainer = Color(0xFFD8EAFA), onSecondaryContainer = Color(0xFF102F4C),
-    tertiary = Color(0xFF865A00), onTertiary = Color(0xFFFFFFFF),
-    background = Color(0xFFF8F9FA), onBackground = Color(0xFF182332),
-    surface = Color(0xFFFFFFFF), onSurface = Color(0xFF182332),
-    surfaceVariant = Color(0xFFEDF1F5), onSurfaceVariant = Color(0xFF424E5E),
-    outline = Color(0xFF687587), outlineVariant = Color(0xFFCAD2DE),
-    error = Color(0xFFD93025), onError = Color(0xFFFFFFFF),
-    errorContainer = Color(0xFFFFDAD6), onErrorContainer = Color(0xFF6F120F)
+    primary = VibeSyncNavy, onPrimary = Color(0xFFFFFFFF),
+    primaryContainer = Color(0xFFE3EEF7), onPrimaryContainer = VibeSyncNavy,
+    secondary = VibeSyncCyberTeal, onSecondary = Color(0xFFFFFFFF),
+    secondaryContainer = Color(0xFFDDF2FC), onSecondaryContainer = Color(0xFF073B57),
+    tertiary = VibeSyncEmerald, onTertiary = Color(0xFFFFFFFF),
+    tertiaryContainer = Color(0xFFDDF7EC), onTertiaryContainer = Color(0xFF064E3B),
+    background = VibeSyncLightCanvas, onBackground = VibeSyncHeading,
+    surface = VibeSyncLightSurface, onSurface = VibeSyncHeading,
+    surfaceVariant = VibeSyncLightSurfaceVariant, onSurfaceVariant = VibeSyncBody,
+    outline = VibeSyncCardBorder, outlineVariant = VibeSyncCardBorder,
+    error = Color(0xFFB42318), onError = Color(0xFFFFFFFF),
+    errorContainer = Color(0xFFFEE4E2), onErrorContainer = Color(0xFF7A271A)
 )
 val SafeMobileOledColorScheme = darkColorScheme(
     primary = Color(0xFF00E676), onPrimary = Color(0xFF001E0D),
