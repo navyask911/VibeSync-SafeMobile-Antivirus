@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="v140_dashboard">Dashboard</string>
+    <string name="v140_dashboard">Pangunahing pahina</string>
     <string name="v140_analytics_tools">Analytics at mga tool</string>
     <string name="v140_critical">Kritikal</string>
     <string name="v140_minor">Maliit</string>
