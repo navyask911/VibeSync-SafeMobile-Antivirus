@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="v140_dashboard">Dashboard</string>
+    <string name="v140_dashboard">Oorsig</string>
     <string name="v140_analytics_tools">Analise en gereedskap</string>
     <string name="v140_critical">Kritiek</string>
     <string name="v140_minor">Gering</string>
