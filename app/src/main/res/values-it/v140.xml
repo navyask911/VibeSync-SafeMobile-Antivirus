@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="v140_dashboard">Dashboard</string>
+    <string name="v140_dashboard">Schermata iniziale</string>
     <string name="v140_analytics_tools">Analisi e strumenti</string>
     <string name="v140_critical">Critico</string>
     <string name="v140_minor">Minore</string>
