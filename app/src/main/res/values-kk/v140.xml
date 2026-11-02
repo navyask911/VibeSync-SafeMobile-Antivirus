@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v140_dashboard">Бақылау тақтасы</string>
+    <string name="v140_analytics_tools">Аналитика және құралдар</string>
+    <string name="v140_critical">Сыни</string>
+    <string name="v140_minor">Шағын</string>
+    <string name="v140_snoozed">Кейінге қалдырылған</string>
+    <string name="v140_completed">Аяқталды</string>
+    <string name="v140_snooze_warning">Ескертуді кейінге қалдыру</string>
+    <string name="v140_done_return_to_audit">Дайын — аудитке оралу</string>
+    <string name="v140_security_risk_explained">Қауіпсіздік тәуекелінің түсіндірмесі</string>
+    <string name="v140_posture_score_impact">Құрылғының қауіпсіздік күйі ұпайына әсері</string>
+    <string name="v140_pending_actions">Қауіпсіздік күйінің %1$d әрекеті күтіп тұр — аудитті қарап шығыңыз</string>
+</resources>
