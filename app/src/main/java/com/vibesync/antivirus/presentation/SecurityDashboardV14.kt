@@ -158,7 +158,8 @@ internal fun SecurityDashboardV14(
         item {
             CyberCard(modifier = Modifier.fillMaxWidth().animateContentSize()) {
                 Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Text(stringResource(R.string.nav_sentinel), style = MaterialTheme.typography.titleLarge)
+                    Text(stringResource(R.string.nav_sentinel), style = MaterialTheme.typography.titleLarge,
+                        maxLines = 1, overflow = TextOverflow.Ellipsis)
                     DashboardActionRow(
                         Icons.Outlined.Shield, R.string.setup_sentinel_title, R.string.setup_sentinel_body,
                         if (installSentinelActive) R.string.ui_sentinel_running else R.string.ui_sentinel_setup,
@@ -179,7 +180,8 @@ internal fun SecurityDashboardV14(
         item {
             CyberCard(modifier = Modifier.fillMaxWidth().animateContentSize()) {
                 Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Text(stringResource(R.string.posture_title), style = MaterialTheme.typography.titleLarge)
+                    Text(stringResource(R.string.posture_title), style = MaterialTheme.typography.titleLarge,
+                        maxLines = 1, overflow = TextOverflow.Ellipsis)
                     DashboardActionRow(
                         Icons.Outlined.SettingsSuggest, R.string.posture_title, R.string.posture_risk_note,
                         R.string.posture_refresh, onPosture

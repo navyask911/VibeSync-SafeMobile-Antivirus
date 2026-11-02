@@ -90,7 +90,7 @@ private fun SettingsDescription(resource: Int) {
         stringResource(resource),
         style = MaterialTheme.typography.bodySmall,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
-        maxLines = 2,
+        maxLines = 1,
         overflow = TextOverflow.Ellipsis
     )
 }
@@ -277,7 +277,8 @@ internal fun OverlayRiskReviewPanel() {
                     }
                 })
             }
-            Text(stringResource(R.string.overlay_review_description), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(stringResource(R.string.overlay_review_description), style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
             if (lastAttempt > 0L) {
                 Text(
                     stringResource(R.string.overlay_review_last_attempt, localizedDate(lastAttempt)),
