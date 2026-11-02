@@ -41,7 +41,7 @@ internal fun SecurityAdvisorScreen(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
-        Text(stringResource(R.string.posture_title), style = MaterialTheme.typography.headlineMedium)
+        Text(stringResource(R.string.v140_pending_actions, state.pendingCount), style = MaterialTheme.typography.headlineMedium)
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
             Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(stringResource(R.string.ui_score_title), style = MaterialTheme.typography.titleLarge)

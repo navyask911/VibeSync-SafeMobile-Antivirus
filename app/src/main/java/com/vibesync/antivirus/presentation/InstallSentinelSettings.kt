@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vibesync.antivirus.R
 import com.vibesync.antivirus.SafeMobileApp
@@ -23,7 +24,14 @@ internal fun InstallSentinelSettings() {
     GlassCard(Modifier.fillMaxWidth()) {
         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(stringResource(R.string.install_sentinel_title), Modifier.weight(1f), style = MaterialTheme.typography.titleMedium)
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                    Text(stringResource(R.string.install_sentinel_title), style = MaterialTheme.typography.titleMedium,
+                        maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Text(stringResource(if (running) R.string.install_sentinel_active else R.string.monitor_inactive),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = if (running) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1, overflow = TextOverflow.Ellipsis)
+                }
                 Switch(checked = running && desired, onCheckedChange = { enabled ->
                     desired = enabled
                     if (enabled) {
@@ -33,9 +41,10 @@ internal fun InstallSentinelSettings() {
                     } else InstallSentinelService.stop(context)
                 })
             }
-            Text(stringResource(if (running) R.string.install_sentinel_active else R.string.monitor_inactive),
-                color = if (running) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant)
-            ExpandableText(stringResource(R.string.install_sentinel_description), maxLines = 3)
+            Text(stringResource(R.string.install_sentinel_description),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 2, overflow = TextOverflow.Ellipsis)
         }
     }
 }

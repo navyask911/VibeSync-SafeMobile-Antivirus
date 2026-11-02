@@ -22,6 +22,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -56,8 +57,6 @@ import androidx.compose.material3.Button
 import com.vibesync.antivirus.ui.components.CyberCard as Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -108,7 +107,6 @@ import com.vibesync.antivirus.core.observer.StorageSentinelService
 import com.vibesync.antivirus.core.observer.StorageAccessPreferences
 import com.vibesync.antivirus.core.observer.FullScreenAlertAccess
 import com.vibesync.antivirus.core.worker.OverlayRiskReviewManager
-import com.vibesync.antivirus.core.locale.LocalePreferences
 import com.vibesync.antivirus.core.security.DeviceOwnerManager
 import com.vibesync.antivirus.core.engine.ScanResult
 import com.vibesync.antivirus.core.quarantine.LocalQuarantineManager
@@ -165,14 +163,16 @@ import kotlinx.coroutines.launch
  var settingsSubRoute by rememberSaveable { mutableStateOf(SettingsSubRoute.ROOT) }
  val tabNavController = rememberNavController()
  val currentBackStackEntry by tabNavController.currentBackStackEntryAsState()
- val currentRoute = currentBackStackEntry?.destination?.route
- val activeTopTab = when (currentRoute) {
-  "tools" -> "tools"
-  "settings" -> "settings"
-  "detail/{parentTab}/{screen}" -> currentBackStackEntry?.arguments?.getString("parentTab") ?: "dashboard"
+ val currentDestination = currentBackStackEntry?.destination
+ val currentRoute = currentDestination?.route
+ val activeTopTab = when {
+  currentDestination?.hierarchy?.any { it.route == "tools" } == true -> "tools"
+  currentDestination?.hierarchy?.any { it.route == "settings" } == true -> "settings"
+  currentRoute == "detail/{parentTab}/{screen}" -> currentBackStackEntry?.arguments?.getString("parentTab") ?: "dashboard"
+  currentDestination?.hierarchy?.any { it.route == "dashboard" } == true -> "dashboard"
   else -> "dashboard"
  }
- fun navigateToDestination(destination: String) {
+ fun navigateToDestination(destination: String, parentTabOverride: String? = null) {
   val rootRoute = when (destination) {
    "home" -> "dashboard"
    "tools" -> "tools"
@@ -189,7 +189,7 @@ import kotlinx.coroutines.launch
    }
    selectedDestination = destination
   } else {
-   val parentTab = if (destination == "pro") "settings" else
+   val parentTab = parentTabOverride ?: if (destination == "pro") "settings" else
     (currentBackStackEntry?.arguments?.getString("parentTab")
     ?: when (currentRoute) {
      "tools" -> "tools"
@@ -229,9 +229,6 @@ import kotlinx.coroutines.launch
  var storageAccessGranted by remember(context) { mutableStateOf(hasSharedStorageAccess(context)) }
  var notificationsGranted by remember(context) { mutableStateOf(hasNotificationAccess(context)) }
  var sentinelOptIn by remember(context) { mutableStateOf(onboardingPrefs.getBoolean(OnboardingPrefs.SENTINEL_OPT_IN, isStorageSentinelRunning(context))) }
- var languageMenuExpanded by remember { mutableStateOf(false) }
- var featureMenuExpanded by remember { mutableStateOf(false) }
- var localeOverrideTag by remember { mutableStateOf(LocalePreferences.overrideTag(context)) }
  val statusResource = when {
   state.isScanning -> R.string.scan_running
   state.threatCount > 0 -> R.string.threat_found
@@ -616,20 +613,17 @@ import kotlinx.coroutines.launch
        Box(Modifier.fillMaxSize()) {
         when (selectedDestination) {
          "home" -> Column(Modifier.fillMaxSize()) {
-          ScanFeedbackCard(state,
-           onResults = { navigateToDestination(if (state.results.isEmpty()) "history" else "scan") },
-           onCancel = vm::cancelScan
-          )
           SecurityDashboardV14(
            advisor = advisorState,
            isPro = adMobState.isPro,
            adsReady = adMobState.adsReady,
            adMobManager = adMobManager,
            scanRunning = state.isScanning,
+           scanProgress = state.totalItems.takeIf { it > 0 }?.let { state.processedItems.toFloat() / it },
            downloadsActive = StorageAccessPreferences.hasRole(context, StorageAccessPreferences.DOWNLOADS),
            chatFoldersActive = StorageAccessPreferences.hasRole(context, StorageAccessPreferences.WHATSAPP) || customFolderUris.isNotEmpty(),
            installSentinelActive = securityPrefs.getBoolean(SafeMobileApp.KEY_INSTALL_SENTINEL_ENABLED, false),
-           onOpenAdvisor = { navigateToDestination("advisor") },
+           onOpenAdvisor = { navigateToDestination("advisor", parentTabOverride = "dashboard") },
            onOpenPro = { navigateToDestination("pro") },
            onScan = { requestPrivacyAcknowledgement { vm.scanFull() }; navigateToDestination("scan") },
            onCleaner = { navigateToDestination("cleaner") },
