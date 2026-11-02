@@ -2,6 +2,7 @@ package com.vibesync.antivirus.presentation
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -24,6 +25,7 @@ import androidx.compose.material.icons.outlined.Shield
 import androidx.compose.material.icons.outlined.Storage
 import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -40,6 +42,8 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.vibesync.antivirus.R
 import com.vibesync.antivirus.core.ads.AdMobManager
@@ -52,6 +56,7 @@ internal fun SecurityDashboardV14(
     adsReady: Boolean,
     adMobManager: AdMobManager,
     scanRunning: Boolean,
+    scanProgress: Float?,
     downloadsActive: Boolean,
     chatFoldersActive: Boolean,
     installSentinelActive: Boolean,
@@ -74,7 +79,7 @@ internal fun SecurityDashboardV14(
         if (!isPro) {
             item {
                 Surface(
-                    modifier = Modifier.fillMaxWidth().clickable(onClick = onOpenPro),
+                    modifier = Modifier.fillMaxWidth().animateContentSize().clickable(onClick = onOpenPro),
                     shape = CircleShape,
                     color = MaterialTheme.colorScheme.primaryContainer
                 ) {
@@ -89,13 +94,10 @@ internal fun SecurityDashboardV14(
             }
         }
         item {
-            CyberCard(modifier = Modifier.fillMaxWidth()) {
+            CyberCard(modifier = Modifier.fillMaxWidth().animateContentSize()) {
                 Column(Modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    DualRingProtectionGauge(advisor.score, advisor.pendingCount)
-                    Text(stringResource(R.string.ui_score_title), style = MaterialTheme.typography.titleMedium)
-                    Text(stringResource(R.string.ui_score_checks, advisor.score, 100),
-                        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    DualRingProtectionGauge(advisor.score)
                     Button(onClick = onOpenAdvisor, modifier = Modifier.fillMaxWidth()) {
                         Text(
                             if (advisor.pendingCount > 0)
@@ -107,9 +109,40 @@ internal fun SecurityDashboardV14(
             }
         }
         item {
-            CyberCard(modifier = Modifier.fillMaxWidth()) {
+            CyberCard(modifier = Modifier.fillMaxWidth().animateContentSize()) {
                 Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Text(stringResource(R.string.security_dashboard_title), style = MaterialTheme.typography.titleLarge)
+                    Text(stringResource(R.string.security_dashboard_title), style = MaterialTheme.typography.titleLarge,
+                        maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    if (scanRunning) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            if (scanProgress != null) {
+                                CircularProgressIndicator(
+                                    progress = scanProgress.coerceIn(0f, 1f),
+                                    modifier = Modifier.size(24.dp),
+                                    strokeWidth = 2.dp
+                                )
+                            } else {
+                                CircularProgressIndicator(modifier = Modifier.size(24.dp), strokeWidth = 2.dp)
+                            }
+                            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                                Text(stringResource(R.string.scan_running), style = MaterialTheme.typography.bodyMedium,
+                                    maxLines = 1, overflow = TextOverflow.Ellipsis)
+                                scanProgress?.let { progress ->
+                                    Text(
+                                        stringResource(R.string.format_label_value, stringResource(R.string.analytics_scan_in_progress), "${(progress.coerceIn(0f, 1f) * 100).toInt()}%"),
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+                                }
+                            }
+                        }
+                    }
                     Button(onClick = onScan, enabled = !scanRunning, modifier = Modifier.fillMaxWidth()) {
                         Icon(Icons.Outlined.Security, contentDescription = null)
                         Text(stringResource(if (scanRunning) R.string.scan_running else R.string.security_scan_now),
@@ -123,9 +156,10 @@ internal fun SecurityDashboardV14(
             }
         }
         item {
-            CyberCard(modifier = Modifier.fillMaxWidth()) {
+            CyberCard(modifier = Modifier.fillMaxWidth().animateContentSize()) {
                 Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Text(stringResource(R.string.nav_sentinel), style = MaterialTheme.typography.titleLarge)
+                    Text(stringResource(R.string.nav_sentinel), style = MaterialTheme.typography.titleLarge,
+                        maxLines = 1, overflow = TextOverflow.Ellipsis)
                     DashboardActionRow(
                         Icons.Outlined.Shield, R.string.setup_sentinel_title, R.string.setup_sentinel_body,
                         if (installSentinelActive) R.string.ui_sentinel_running else R.string.ui_sentinel_setup,
@@ -144,9 +178,10 @@ internal fun SecurityDashboardV14(
             }
         }
         item {
-            CyberCard(modifier = Modifier.fillMaxWidth()) {
+            CyberCard(modifier = Modifier.fillMaxWidth().animateContentSize()) {
                 Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Text(stringResource(R.string.posture_title), style = MaterialTheme.typography.titleLarge)
+                    Text(stringResource(R.string.posture_title), style = MaterialTheme.typography.titleLarge,
+                        maxLines = 1, overflow = TextOverflow.Ellipsis)
                     DashboardActionRow(
                         Icons.Outlined.SettingsSuggest, R.string.posture_title, R.string.posture_risk_note,
                         R.string.posture_refresh, onPosture
@@ -181,7 +216,7 @@ private fun DashboardActionRow(
     onClick: () -> Unit
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 10.dp).animateContentSize(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
@@ -191,16 +226,19 @@ private fun DashboardActionRow(
             }
         }
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-            Text(stringResource(titleResource), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Bold)
+            Text(stringResource(titleResource), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Bold,
+                maxLines = 1, overflow = TextOverflow.Ellipsis)
             Text(stringResource(descriptionResource), style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2)
+                color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
-        OutlinedButton(onClick = onClick) { Text(stringResource(actionResource)) }
+        androidx.compose.material3.TextButton(onClick = onClick) {
+            Text(stringResource(actionResource), maxLines = 1, softWrap = false, overflow = TextOverflow.Ellipsis)
+        }
     }
 }
 
 @Composable
-private fun DualRingProtectionGauge(score: Int, pendingCount: Int) {
+private fun DualRingProtectionGauge(score: Int) {
     val sweep by animateFloatAsState(targetValue = score.coerceIn(0, 100) / 100f, animationSpec = tween(950), label = stringResource(R.string.device_security_score))
     val trackColor = MaterialTheme.colorScheme.surfaceVariant
     val scoreColor = when {
@@ -260,12 +298,22 @@ private fun DualRingProtectionGauge(score: Int, pendingCount: Int) {
                 style = Stroke(width = innerStroke, cap = StrokeCap.Round)
             )
         }
-        Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(1.dp)) {
+        Column(
+            modifier = Modifier.padding(horizontal = 28.dp, vertical = 18.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(2.dp)
+        ) {
             Text(score.toString(), style = MaterialTheme.typography.displayLarge, color = MaterialTheme.colorScheme.onSurface)
             Text(stringResource(if (score >= 80) R.string.ui_status_safe else R.string.ui_status_at_risk),
-                style = MaterialTheme.typography.titleMedium, color = scoreColor)
-            Text(stringResource(R.string.ui_score_checks, pendingCount, 100),
-                style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                style = MaterialTheme.typography.titleMedium, color = scoreColor, maxLines = 1)
+            Text(
+                stringResource(R.string.ui_score_checks, score, 100),
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
         }
     }
 }

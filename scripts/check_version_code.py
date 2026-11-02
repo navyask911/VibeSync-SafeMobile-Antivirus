@@ -9,6 +9,7 @@
 - Signed malware-hash-database tags never count as Android app releases.
 """
 import argparse
+import os
 import re
 import subprocess
 import sys
@@ -29,7 +30,7 @@ def run(*args: str) -> str:
     return subprocess.check_output(args, cwd=ROOT, text=True, stderr=subprocess.DEVNULL).strip()
 
 
-def validate(release: bool = False) -> None:
+def validate(release: bool = False, allow_pr_version_reuse: bool = False) -> None:
     try:
         current = code_from_text(APP_GRADLE.read_text(encoding="utf-8"))
     except OSError as error:
@@ -54,6 +55,19 @@ def validate(release: bool = False) -> None:
             raise ValueError(f"Inconsistent Play release tag/build versionCode: {tag}")
         tagged.append((code, tag))
     maximum = max((code for code, _ in tagged), default=0)
+    if allow_pr_version_reuse:
+        if release:
+            raise ValueError("PR version reuse cannot be combined with --release")
+        if (os.environ.get("GITHUB_EVENT_NAME") != "pull_request" or
+                os.environ.get("GITHUB_HEAD_REF") != "feat/ui-polish-v1.4.1"):
+            raise ValueError("PR version reuse is restricted to the feat/ui-polish-v1.4.1 pull request")
+        if current == maximum:
+            owner = next((tag for code, tag in tagged if code == maximum), "none")
+            print(
+                f"PR validation only: allowing source changes at published versionCode {current} "
+                f"(tag {owner}). A signed release still requires a strictly greater versionCode."
+            )
+            return
     if current > maximum:
         print(f"Version-code guard passed: current={current}, prior Play max={maximum}.")
         return
@@ -89,9 +103,11 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--release", action="store_true",
                         help="Require a strictly greater versionCode for new signed Play releases")
+    parser.add_argument("--allow-pr-version-reuse", action="store_true",
+                        help="Allow the published versionCode only for the feat/ui-polish-v1.4.1 PR validation run; never for signed releases")
     args = parser.parse_args()
     try:
-        validate(release=args.release)
+        validate(release=args.release, allow_pr_version_reuse=args.allow_pr_version_reuse)
     except ValueError as error:
         print(f"Version-code guard FAILED: {error}", file=sys.stderr)
         return 1

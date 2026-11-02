@@ -38,8 +38,6 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.compose.material3.Button
 import com.vibesync.antivirus.ui.components.CyberCard as Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -67,6 +65,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.vibesync.antivirus.BuildConfig
@@ -84,6 +83,17 @@ import java.util.Date
 import java.util.UUID
 
 enum class SettingsSubRoute { ROOT, GENERAL, SUBSCRIPTION, NOTIFICATIONS, SECURITY, HELP_LEGAL, RATE }
+
+@Composable
+private fun SettingsDescription(resource: Int) {
+    Text(
+        stringResource(resource),
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis
+    )
+}
 
 internal object InstallRayId {
     private const val PREFS_NAME = "safe_mobile_installation"
@@ -127,9 +137,10 @@ private fun SettingsRootRow(
                 )
             }
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
-                Text(stringResource(titleResource), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Bold)
+                Text(stringResource(titleResource), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Bold,
+                    maxLines = 1, overflow = TextOverflow.Ellipsis)
                 Text(stringResource(subtitleResource), style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2)
+                    color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
             androidx.compose.material3.Icon(
                 Icons.AutoMirrored.Filled.KeyboardArrowRight,
@@ -206,7 +217,7 @@ internal fun OverlayRiskReviewPanel() {
     var enabledServices by remember { mutableStateOf(prefs.getInt(OverlayRiskReviewManager.KEY_ENABLED_ACCESSIBILITY_SERVICES, 0)) }
     var resultState by remember { mutableStateOf(prefs.getString(OverlayRiskReviewManager.KEY_RESULT, "NOT_CHECKED") ?: "NOT_CHECKED") }
     var reminderHours by remember { mutableStateOf(prefs.getInt(OverlayRiskReviewManager.KEY_REMINDER_HOURS, 24)) }
-    var intervalMenuExpanded by remember { mutableStateOf(false) }
+    var showReminderDialog by remember { mutableStateOf(false) }
     var showNotificationPermissionPrompt by remember { mutableStateOf(false) }
     var pendingReviewEnable by remember { mutableStateOf(false) }
     fun refreshFromPreferences() {
@@ -266,7 +277,8 @@ internal fun OverlayRiskReviewPanel() {
                     }
                 })
             }
-            Text(stringResource(R.string.overlay_review_description), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(stringResource(R.string.overlay_review_description), style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
             if (lastAttempt > 0L) {
                 Text(
                     stringResource(R.string.overlay_review_last_attempt, localizedDate(lastAttempt)),
@@ -297,7 +309,7 @@ internal fun OverlayRiskReviewPanel() {
                 )
             }
             androidx.compose.material3.TextButton(
-                onClick = { intervalMenuExpanded = true },
+                onClick = { showReminderDialog = true },
                 enabled = enabled
             ) {
                 Text(
@@ -311,22 +323,43 @@ internal fun OverlayRiskReviewPanel() {
                         )
                 )
             }
-            DropdownMenu(expanded = intervalMenuExpanded, onDismissRequest = { intervalMenuExpanded = false }) {
-                listOf(
-                    12 to R.string.overlay_review_reminder_12h,
-                    24 to R.string.overlay_review_reminder_24h,
-                    48 to R.string.overlay_review_reminder_48h
-                ).forEach { (hours, label) ->
-                    DropdownMenuItem(
-                        text = { Text(stringResource(label)) },
-                        onClick = {
-                            OverlayRiskReviewManager.setReminderIntervalHours(context, hours)
-                            intervalMenuExpanded = false
-                            refreshFromPreferences()
+            if (showReminderDialog) AlertDialog(
+                onDismissRequest = { showReminderDialog = false },
+                title = { Text(stringResource(R.string.overlay_review_reminder_interval)) },
+                text = {
+                    Column(
+                        Modifier.fillMaxWidth().heightIn(max = 260.dp).verticalScroll(rememberScrollState()),
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        listOf(
+                            12 to R.string.overlay_review_reminder_12h,
+                            24 to R.string.overlay_review_reminder_24h,
+                            48 to R.string.overlay_review_reminder_48h
+                        ).forEach { (hours, label) ->
+                            Row(
+                                modifier = Modifier.fillMaxWidth().selectable(
+                                    selected = reminderHours == hours,
+                                    role = Role.RadioButton,
+                                    onClick = {
+                                        OverlayRiskReviewManager.setReminderIntervalHours(context, hours)
+                                        showReminderDialog = false
+                                        refreshFromPreferences()
+                                    }
+                                ),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                RadioButton(selected = reminderHours == hours, onClick = null)
+                                Text(stringResource(label), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                            }
                         }
-                    )
+                    }
+                },
+                confirmButton = {
+                    TextButton(onClick = { showReminderDialog = false }) {
+                        Text(stringResource(R.string.close))
+                    }
                 }
-            }
+            )
             if (enabled && !notificationsAvailable) {
                 Text(stringResource(R.string.overlay_review_notifications_off), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
@@ -385,7 +418,8 @@ internal fun SafeMobileSettingsPanel(
         }
     }
     val activity = context as? Activity
-    var languageMenuExpanded by remember { mutableStateOf(false) }
+    var showLanguageDialog by remember { mutableStateOf(false) }
+    var showThemeDialog by remember { mutableStateOf(false) }
     var localeOverrideTag by remember { mutableStateOf(LocalePreferences.overrideTag(context)) }
     var showAbout by remember { mutableStateOf(false) }
     var benchmarkUnlockCount by remember { mutableIntStateOf(0) }
@@ -463,25 +497,13 @@ internal fun SafeMobileSettingsPanel(
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text(stringResource(R.string.appearance_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                ExpandableText(stringResource(R.string.theme_appearance_description), maxLines = 3)
-                for (option in AppTheme.entries) {
-                    val label = when (option) {
+                SettingsDescription(R.string.theme_appearance_description)
+                TextButton(onClick = { showThemeDialog = true }) {
+                    Text(stringResource(when (appTheme) {
                         AppTheme.MIDNIGHT -> R.string.theme_midnight
                         AppTheme.LIGHT -> R.string.theme_light
                         AppTheme.OLED -> R.string.theme_oled
-                    }
-                    Row(
-                        modifier = Modifier.fillMaxWidth().selectable(
-                            selected = appTheme == option,
-                            role = Role.RadioButton,
-                            onClick = { onAppThemeChanged(option) }
-                        ).padding(vertical = 6.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        RadioButton(selected = appTheme == option, onClick = null)
-                        Text(stringResource(label), color = MaterialTheme.colorScheme.onSurface)
-                    }
+                    }))
                 }
             }
         }
@@ -490,7 +512,7 @@ internal fun SafeMobileSettingsPanel(
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text(stringResource(R.string.siren_test_settings_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                ExpandableText(stringResource(R.string.siren_test_settings_description), maxLines = 3)
+                SettingsDescription(R.string.siren_test_settings_description)
                 Button(onClick = {
                     // Explicit user-initiated demo; never inserts a fabricated malware record.
                     val eventId = SecurityAlertNotifier.runManualSirenTest(context)
@@ -507,7 +529,7 @@ internal fun SafeMobileSettingsPanel(
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(stringResource(R.string.global_threat_intelligence_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                ExpandableText(stringResource(R.string.global_threat_intelligence_description), maxLines = 3)
+                SettingsDescription(R.string.global_threat_intelligence_description)
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                     Text(stringResource(R.string.global_threat_intelligence_title),
                         modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium)
@@ -525,7 +547,7 @@ internal fun SafeMobileSettingsPanel(
             Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Text(stringResource(R.string.feed_settings_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                    ExpandableText(stringResource(R.string.feed_settings_description), maxLines = 3)
+                    SettingsDescription(R.string.feed_settings_description)
                     OutlinedTextField(
                         value = feedUrl,
                         onValueChange = { feedUrl = it; feedConfigSaved = false },
@@ -565,7 +587,7 @@ internal fun SafeMobileSettingsPanel(
                     Row(Modifier.fillMaxWidth(), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
                         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                             Text(stringResource(R.string.feed_settings_opt_in_title), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
-                            ExpandableText(stringResource(R.string.feed_settings_opt_in_description), maxLines = 3)
+                            SettingsDescription(R.string.feed_settings_opt_in_description)
                         }
                         Switch(
                             checked = feedConsentEnabled,
@@ -596,7 +618,7 @@ internal fun SafeMobileSettingsPanel(
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text(stringResource(R.string.download_interceptor_label), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                ExpandableText(stringResource(R.string.download_interceptor_description), maxLines = 3)
+                SettingsDescription(R.string.download_interceptor_description)
                 Text(
                     stringResource(if (sentinelEnabled) R.string.download_interceptor_status_enabled else R.string.download_interceptor_status_setup),
                     style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -616,7 +638,7 @@ internal fun SafeMobileSettingsPanel(
                     onClick = onAddCustomFolder,
                     modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp)
                 ) { Text(stringResource(R.string.ui_sentinel_add_custom_folder)) }
-                ExpandableText(stringResource(R.string.strict_mode_description), maxLines = 3)
+                SettingsDescription(R.string.strict_mode_description)
                 Row(Modifier.fillMaxWidth(), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
                     Text(stringResource(R.string.strict_mode_label), modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium)
                     Switch(checked = strictMode, onCheckedChange = { onStrictModeChanged?.invoke(it) })
@@ -629,7 +651,7 @@ internal fun SafeMobileSettingsPanel(
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(stringResource(R.string.security_alerts_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                ExpandableText(stringResource(R.string.incident_alerts_explanation), maxLines = 3)
+                SettingsDescription(R.string.incident_alerts_explanation)
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                     Text(stringResource(if (securityAlertsEnabled) R.string.security_alerts_enabled else R.string.security_alerts_disabled),
                         modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium)
@@ -645,7 +667,7 @@ internal fun SafeMobileSettingsPanel(
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(stringResource(R.string.voice_alerts_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                ExpandableText(stringResource(R.string.voice_alerts_description), maxLines = 3)
+                SettingsDescription(R.string.voice_alerts_description)
                 Row(Modifier.fillMaxWidth(), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
                     Text(
                         stringResource(if (voiceAlertsEnabled) R.string.voice_alerts_enabled else R.string.voice_alerts_disabled),
@@ -673,28 +695,8 @@ internal fun SafeMobileSettingsPanel(
                     else stringResource(LocalePreferences.labelResource(localeOverrideTag)),
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-                TextButton(onClick = { languageMenuExpanded = true }) { Text(stringResource(R.string.language_settings)) }
-                DropdownMenu(expanded = languageMenuExpanded, onDismissRequest = { languageMenuExpanded = false }) {
-                    DropdownMenuItem(
-                        text = { Text(stringResource(R.string.language_system_default)) },
-                        onClick = {
-                            LocalePreferences.saveOverride(context, "")
-                            localeOverrideTag = ""
-                            languageMenuExpanded = false
-                            activity?.recreate()
-                        }
-                    )
-                    LocalePreferences.choices.forEach { choice ->
-                        DropdownMenuItem(
-                            text = { Text(stringResource(choice.labelResource)) },
-                            onClick = {
-                                LocalePreferences.saveOverride(context, choice.tag)
-                                localeOverrideTag = choice.tag
-                                languageMenuExpanded = false
-                                activity?.recreate()
-                            }
-                        )
-                    }
+                TextButton(onClick = { showLanguageDialog = true }) {
+                    Text(stringResource(R.string.language_settings))
                 }
             }
         }
@@ -714,7 +716,7 @@ internal fun SafeMobileSettingsPanel(
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(stringResource(R.string.settings_privacy), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                ExpandableText(stringResource(R.string.ad_privacy_intro), maxLines = 3)
+                SettingsDescription(R.string.ad_privacy_intro)
                 if (adPrivacyOptionsRequired && !isProForAds) {
                     OutlinedButton(onClick = onShowAdPrivacyOptions, modifier = Modifier.fillMaxWidth()) {
                         Text(stringResource(R.string.ad_privacy_options))
@@ -752,11 +754,90 @@ internal fun SafeMobileSettingsPanel(
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant), shape = RoundedCornerShape(16.dp)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(stringResource(R.string.family_dedication_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                ExpandableText(stringResource(R.string.family_dedication), maxLines = 3)
+                SettingsDescription(R.string.family_dedication)
             }
         }
         }
     }
+
+    if (showThemeDialog) AlertDialog(
+        onDismissRequest = { showThemeDialog = false },
+        title = { Text(stringResource(R.string.appearance_title)) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                AppTheme.entries.forEach { option ->
+                    val label = when (option) {
+                        AppTheme.MIDNIGHT -> R.string.theme_midnight
+                        AppTheme.LIGHT -> R.string.theme_light
+                        AppTheme.OLED -> R.string.theme_oled
+                    }
+                    Row(
+                        modifier = Modifier.fillMaxWidth().selectable(
+                            selected = appTheme == option,
+                            role = Role.RadioButton,
+                            onClick = { onAppThemeChanged(option); showThemeDialog = false }
+                        ),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RadioButton(selected = appTheme == option, onClick = null)
+                        Text(stringResource(label))
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = { showThemeDialog = false }) { Text(stringResource(R.string.close)) }
+        }
+    )
+
+    if (showLanguageDialog) AlertDialog(
+        onDismissRequest = { showLanguageDialog = false },
+        title = { Text(stringResource(R.string.language_settings)) },
+        text = {
+            Column(
+                Modifier.fillMaxWidth().heightIn(max = 420.dp).verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth().selectable(
+                        selected = localeOverrideTag.isBlank(),
+                        role = Role.RadioButton,
+                        onClick = {
+                            LocalePreferences.saveOverride(context, "")
+                            localeOverrideTag = ""
+                            showLanguageDialog = false
+                            activity?.recreate()
+                        }
+                    ),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    RadioButton(selected = localeOverrideTag.isBlank(), onClick = null)
+                    Text(stringResource(R.string.language_system_default))
+                }
+                LocalePreferences.choices.forEach { choice ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth().selectable(
+                            selected = localeOverrideTag == choice.tag,
+                            role = Role.RadioButton,
+                            onClick = {
+                                LocalePreferences.saveOverride(context, choice.tag)
+                                localeOverrideTag = choice.tag
+                                showLanguageDialog = false
+                                activity?.recreate()
+                            }
+                        ),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RadioButton(selected = localeOverrideTag == choice.tag, onClick = null)
+                        Text(stringResource(choice.labelResource))
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = { showLanguageDialog = false }) { Text(stringResource(R.string.close)) }
+        }
+    )
 
     if (showFullScreenPrompt && Build.VERSION.SDK_INT >= 34) AlertDialog(
         properties = DialogProperties(dismissOnClickOutside = true, dismissOnBackPress = true),

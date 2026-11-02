@@ -32,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.runtime.DisposableEffect
@@ -92,17 +93,25 @@ fun DevicePostureDashboardCard(state: DevicePostureUiState, onOpen: () -> Unit) 
     }
     CyberCard(Modifier.fillMaxWidth()) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
                 Icon(Icons.Default.Security, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
-                Text(stringResource(R.string.posture_title), style = MaterialTheme.typography.titleMedium)
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                    Text(stringResource(R.string.posture_title), style = MaterialTheme.typography.titleMedium,
+                        maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Text(stringResource(when {
+                        state.refreshing -> R.string.posture_checking
+                        state.failed -> R.string.posture_failed
+                        state.report == null -> R.string.posture_not_checked
+                        state.report.unavailable.isNotEmpty() -> R.string.posture_unavailable
+                        else -> R.string.posture_risk_note
+                    }), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1, overflow = TextOverflow.Ellipsis)
+                }
             }
-            Text(stringResource(when {
-                state.refreshing -> R.string.posture_checking
-                state.failed -> R.string.posture_failed
-                state.report == null -> R.string.posture_not_checked
-                state.report.unavailable.isNotEmpty() -> R.string.posture_unavailable
-                else -> R.string.posture_risk_note
-            }), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             OutlinedButton(onClick = onOpen, modifier = Modifier.fillMaxWidth()) {
                 Text(stringResource(R.string.posture_open))
             }

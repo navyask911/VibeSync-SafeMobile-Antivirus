@@ -77,6 +77,7 @@ internal fun SecurityOnboardingScreen(
     var showPrivacyDisclosure by rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
+    val appVisibilitySummary = stringResource(R.string.setup_apps_body).substringBefore('.').trimEnd() + "."
     val pagerState = rememberPagerState(pageCount = { 3 })
     val notificationLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -128,9 +129,12 @@ internal fun SecurityOnboardingScreen(
                     }
                 }
                 Text(
-                    stringResource(R.string.privacy_body),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    appVisibilitySummary,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center,
+                    maxLines = 2,
+                    overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
                 )
                 if (initialSyncPending) InitialSyncNotice()
                 Spacer(Modifier.weight(1f))
@@ -144,9 +148,6 @@ internal fun SecurityOnboardingScreen(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(stringResource(R.string.setup_allow_notifications))
-                }
-                TextButton(onClick = onFinish, modifier = Modifier.fillMaxWidth()) {
-                    Text(stringResource(R.string.setup_notifications_not_now))
                 }
             }
         } else {
