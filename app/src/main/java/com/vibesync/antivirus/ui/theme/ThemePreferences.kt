@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.map
 
 enum class AppTheme { MIDNIGHT, LIGHT, OLED;
     companion object {
-        fun fromSaved(value: String?): AppTheme = entries.firstOrNull { it.name == value } ?: MIDNIGHT
+        fun fromSaved(value: String?): AppTheme = entries.firstOrNull { it.name == value } ?: LIGHT
     }
 }
 private val Context.safeMobileThemeStore by preferencesDataStore(name = "safe_mobile_theme")

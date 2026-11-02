@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v140_dashboard">ڈیش بورڈ</string>
+    <string name="v140_analytics_tools">تجزیات اور ٹولز</string>
+    <string name="v140_critical">اہم</string>
+    <string name="v140_minor">معمولی</string>
+    <string name="v140_snoozed">ملتوی</string>
+    <string name="v140_completed">مکمل</string>
+    <string name="v140_snooze_warning">انتباہ مؤخر کریں</string>
+    <string name="v140_done_return_to_audit">مکمل — آڈٹ پر واپس جائیں</string>
+    <string name="v140_security_risk_explained">سیکیورٹی خطرے کی وضاحت</string>
+    <string name="v140_posture_score_impact">ڈیوائس کی سیکیورٹی حالت کے اسکور پر اثر</string>
+    <string name="v140_pending_actions">%1$d سیکیورٹی حالت کے اقدامات زیر التوا ہیں — آڈٹ دیکھیں</string>
+</resources>

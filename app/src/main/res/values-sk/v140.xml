@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v140_dashboard">Panel</string>
+    <string name="v140_analytics_tools">Analytika a nástroje</string>
+    <string name="v140_critical">Kritické</string>
+    <string name="v140_minor">Menšie</string>
+    <string name="v140_snoozed">Odložené</string>
+    <string name="v140_completed">Dokončené</string>
+    <string name="v140_snooze_warning">Odložiť upozornenie</string>
+    <string name="v140_done_return_to_audit">Hotovo — späť na audit</string>
+    <string name="v140_security_risk_explained">Vysvetlenie bezpečnostného rizika</string>
+    <string name="v140_posture_score_impact">Vplyv na skóre stavu zabezpečenia zariadenia</string>
+    <string name="v140_pending_actions">Čaká %1$d bezpečnostných akcií — skontrolujte audit</string>
+</resources>

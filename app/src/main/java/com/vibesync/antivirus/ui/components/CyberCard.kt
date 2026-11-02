@@ -17,10 +17,10 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun CyberCard(
     modifier: Modifier = Modifier,
-    shape: Shape = RoundedCornerShape(16.dp),
+    shape: Shape = RoundedCornerShape(20.dp),
     colors: CardColors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-    elevation: CardElevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-    border: BorderStroke? = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.18f)),
+    elevation: CardElevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+    border: BorderStroke? = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
     content: @Composable ColumnScope.() -> Unit
 ) {
     Card(modifier = modifier, shape = shape, colors = colors, elevation = elevation, border = border, content = content)

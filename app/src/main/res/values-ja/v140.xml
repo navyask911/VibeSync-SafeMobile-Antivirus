@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v140_dashboard">ダッシュボード</string>
+    <string name="v140_analytics_tools">分析とツール</string>
+    <string name="v140_critical">重大</string>
+    <string name="v140_minor">軽微</string>
+    <string name="v140_snoozed">保留中</string>
+    <string name="v140_completed">完了</string>
+    <string name="v140_snooze_warning">警告を延期</string>
+    <string name="v140_done_return_to_audit">完了 — 監査に戻る</string>
+    <string name="v140_security_risk_explained">セキュリティリスクの説明</string>
+    <string name="v140_posture_score_impact">デバイスのセキュリティ状態スコアへの影響</string>
+    <string name="v140_pending_actions">セキュリティ状態の対応が%1$d件保留中 — 監査を確認</string>
+</resources>

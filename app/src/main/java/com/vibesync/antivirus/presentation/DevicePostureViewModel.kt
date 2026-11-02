@@ -41,6 +41,9 @@ class DevicePostureViewModel(private val repository: DevicePostureRepository) : 
         }
     }
 
+    /** Lifecycle-safe refresh used when returning from Android permission settings. */
+    fun refreshAuditSilently() = refresh(force = false)
+
     fun setMonitoring(context: Context, enabled: Boolean) {
         val app = context.applicationContext
         viewModelScope.launch {

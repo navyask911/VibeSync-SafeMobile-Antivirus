@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v140_dashboard">대시보드</string>
+    <string name="v140_analytics_tools">분석 및 도구</string>
+    <string name="v140_critical">심각</string>
+    <string name="v140_minor">경미</string>
+    <string name="v140_snoozed">미룸</string>
+    <string name="v140_completed">완료</string>
+    <string name="v140_snooze_warning">경고 미루기</string>
+    <string name="v140_done_return_to_audit">완료 — 감사로 돌아가기</string>
+    <string name="v140_security_risk_explained">보안 위험 설명</string>
+    <string name="v140_posture_score_impact">기기 보호 상태 점수에 미치는 영향</string>
+    <string name="v140_pending_actions">보안 상태 작업 %1$d개 대기 중 — 감사 검토</string>
+</resources>

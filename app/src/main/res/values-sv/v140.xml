@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v140_dashboard">Instrumentpanel</string>
+    <string name="v140_analytics_tools">Analys och verktyg</string>
+    <string name="v140_critical">Kritisk</string>
+    <string name="v140_minor">Mindre</string>
+    <string name="v140_snoozed">Senarelagd</string>
+    <string name="v140_completed">Slutförd</string>
+    <string name="v140_snooze_warning">Skjut upp varning</string>
+    <string name="v140_done_return_to_audit">Klart — tillbaka till granskning</string>
+    <string name="v140_security_risk_explained">Förklaring av säkerhetsrisk</string>
+    <string name="v140_posture_score_impact">Påverkan på enhetens säkerhetsstatuspoäng</string>
+    <string name="v140_pending_actions">%1$d åtgärder för säkerhetsstatus väntar — granska kontrollen</string>
+</resources>

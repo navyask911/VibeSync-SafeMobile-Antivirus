@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v140_dashboard">لوحة المعلومات</string>
+    <string name="v140_analytics_tools">التحليلات والأدوات</string>
+    <string name="v140_critical">حرج</string>
+    <string name="v140_minor">ثانوي</string>
+    <string name="v140_snoozed">مؤجل</string>
+    <string name="v140_completed">مكتمل</string>
+    <string name="v140_snooze_warning">تأجيل التحذير</string>
+    <string name="v140_done_return_to_audit">تم — العودة إلى التدقيق</string>
+    <string name="v140_security_risk_explained">شرح مخاطر الأمان</string>
+    <string name="v140_posture_score_impact">التأثير على درجة وضع الجهاز</string>
+    <string name="v140_pending_actions">%1$d من إجراءات وضع الأمان معلقة — مراجعة التدقيق</string>
+</resources>

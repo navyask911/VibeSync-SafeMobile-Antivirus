@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v140_dashboard">Tableau de bord</string>
+    <string name="v140_analytics_tools">Analyses et outils</string>
+    <string name="v140_critical">Critique</string>
+    <string name="v140_minor">Mineur</string>
+    <string name="v140_snoozed">Reporté</string>
+    <string name="v140_completed">Terminé</string>
+    <string name="v140_snooze_warning">Reporter l’alerte</string>
+    <string name="v140_done_return_to_audit">Terminé — retour à l’audit</string>
+    <string name="v140_security_risk_explained">Explication du risque de sécurité</string>
+    <string name="v140_posture_score_impact">Impact sur le score de posture de l’appareil</string>
+    <string name="v140_pending_actions">%1$d actions de posture de sécurité en attente — consulter l’audit</string>
+</resources>

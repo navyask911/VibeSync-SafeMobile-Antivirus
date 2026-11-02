@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v140_dashboard">Dashboard</string>
+    <string name="v140_analytics_tools">Analytics and Tools</string>
+    <string name="v140_critical">Critical</string>
+    <string name="v140_minor">Minor</string>
+    <string name="v140_snoozed">Snoozed</string>
+    <string name="v140_completed">Completed</string>
+    <string name="v140_snooze_warning">Snooze warning</string>
+    <string name="v140_done_return_to_audit">Done — Return to Audit</string>
+    <string name="v140_security_risk_explained">Security Risk Explained</string>
+    <string name="v140_posture_score_impact">Impact on Device Posture Score</string>
+    <string name="v140_pending_actions">%1$d Security Posture Actions Pending — Review Audit</string>
+</resources>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v140_dashboard">แดชบอร์ด</string>
+    <string name="v140_analytics_tools">การวิเคราะห์และเครื่องมือ</string>
+    <string name="v140_critical">วิกฤต</string>
+    <string name="v140_minor">เล็กน้อย</string>
+    <string name="v140_snoozed">เลื่อน</string>
+    <string name="v140_completed">เสร็จสิ้น</string>
+    <string name="v140_snooze_warning">เลื่อนคำเตือน</string>
+    <string name="v140_done_return_to_audit">เสร็จแล้ว — กลับไปยังการตรวจสอบ</string>
+    <string name="v140_security_risk_explained">คำอธิบายความเสี่ยงด้านความปลอดภัย</string>
+    <string name="v140_posture_score_impact">ผลต่อคะแนนสถานะความปลอดภัยของอุปกรณ์</string>
+    <string name="v140_pending_actions">มีการดำเนินการด้านความปลอดภัยค้างอยู่ %1$d รายการ — ตรวจสอบการตรวจประเมิน</string>
+</resources>

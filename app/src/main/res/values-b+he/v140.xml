@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v140_dashboard">לוח בקרה</string>
+    <string name="v140_analytics_tools">ניתוח וכלים</string>
+    <string name="v140_critical">קריטי</string>
+    <string name="v140_minor">משני</string>
+    <string name="v140_snoozed">מושהה</string>
+    <string name="v140_completed">הושלם</string>
+    <string name="v140_snooze_warning">השהיית אזהרה</string>
+    <string name="v140_done_return_to_audit">בוצע — חזרה לביקורת</string>
+    <string name="v140_security_risk_explained">הסבר על סיכון אבטחה</string>
+    <string name="v140_posture_score_impact">השפעה על ציון מצב המכשיר</string>
+    <string name="v140_pending_actions">%1$d פעולות מצב אבטחה ממתינות — סקירת ביקורת</string>
+</resources>

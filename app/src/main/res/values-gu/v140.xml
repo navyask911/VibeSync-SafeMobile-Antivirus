@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v140_dashboard">ડેશબોર્ડ</string>
+    <string name="v140_analytics_tools">વિશ્લેષણ અને સાધનો</string>
+    <string name="v140_critical">ગંભીર</string>
+    <string name="v140_minor">નાનું</string>
+    <string name="v140_snoozed">મુલતવી</string>
+    <string name="v140_completed">પૂર્ણ</string>
+    <string name="v140_snooze_warning">ચેતવણી મુલતવી રાખો</string>
+    <string name="v140_done_return_to_audit">પૂર્ણ — ઓડિટ પર પાછા જાઓ</string>
+    <string name="v140_security_risk_explained">સુરક્ષા જોખમની સમજણ</string>
+    <string name="v140_posture_score_impact">ઉપકરણની સુરક્ષા સ્થિતિના સ્કોર પર અસર</string>
+    <string name="v140_pending_actions">%1$d સુરક્ષા સ્થિતિની કાર્યવાહી બાકી — ઓડિટ તપાસો</string>
+</resources>
