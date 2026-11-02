@@ -13,6 +13,15 @@ import android.os.Handler
 import android.os.Looper
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import android.os.PowerManager
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -117,13 +126,13 @@ import java.text.DateFormat
 import java.util.Date
 import kotlinx.coroutines.launch
 @Composable fun SafeMobileTheme(
- theme: com.vibesync.antivirus.ui.theme.AppTheme = com.vibesync.antivirus.ui.theme.AppTheme.MIDNIGHT,
+ theme: com.vibesync.antivirus.ui.theme.AppTheme = com.vibesync.antivirus.ui.theme.AppTheme.LIGHT,
  content: @Composable () -> Unit
 ) { com.vibesync.antivirus.ui.theme.SafeMobileMaterialTheme(theme = theme, content = content) }
 @Composable fun SafeMobileScreen(
  repository:ThreatRepository,
   batteryStatusEpoch: Int = 0,
-  appTheme: com.vibesync.antivirus.ui.theme.AppTheme = com.vibesync.antivirus.ui.theme.AppTheme.MIDNIGHT,
+  appTheme: com.vibesync.antivirus.ui.theme.AppTheme = com.vibesync.antivirus.ui.theme.AppTheme.LIGHT,
   onAppThemeChanged: (com.vibesync.antivirus.ui.theme.AppTheme) -> Unit = {},
  sharedText:String? = null,
  onSharedTextConsumed:() -> Unit = {},
@@ -137,6 +146,10 @@ import kotlinx.coroutines.launch
  val adMobManager = remember(safeMobileApp) { safeMobileApp.adMobManager }
  val adMobState by adMobManager.state.collectAsStateWithLifecycle()
  var fullScreenAlertsGranted by remember(context) { mutableStateOf(FullScreenAlertAccess.isGranted(context)) }
+ val powerManager = remember(context) { context.getSystemService(Context.POWER_SERVICE) as? PowerManager }
+ var batteryUnrestricted by remember(context) {
+  mutableStateOf(powerManager?.isIgnoringBatteryOptimizations(context.packageName) == true)
+ }
  val activity=context as? Activity
  val vm:SafeMobileViewModel=viewModel(factory=SafeMobileViewModel.Factory(repository))
  val state by vm.state.collectAsStateWithLifecycle()
@@ -148,7 +161,53 @@ import kotlinx.coroutines.launch
  val auditEntries by repository.observeRecentAudits().collectAsStateWithLifecycle(initialValue = emptyList())
  val securityIncidents by repository.observeRecentSecurityIncidents().collectAsStateWithLifecycle(initialValue = emptyList())
  val ownerManager = remember(context) { DeviceOwnerManager(context) }
- var selectedDestination by remember { mutableStateOf("home") }
+ var selectedDestination by rememberSaveable { mutableStateOf("home") }
+ var settingsSubRoute by rememberSaveable { mutableStateOf(SettingsSubRoute.ROOT) }
+ val tabNavController = rememberNavController()
+ val currentBackStackEntry by tabNavController.currentBackStackEntryAsState()
+ val currentRoute = currentBackStackEntry?.destination?.route
+ val activeTopTab = when (currentRoute) {
+  "tools" -> "tools"
+  "settings" -> "settings"
+  "detail/{parentTab}/{screen}" -> currentBackStackEntry?.arguments?.getString("parentTab") ?: "dashboard"
+  else -> "dashboard"
+ }
+ fun navigateToDestination(destination: String) {
+  val rootRoute = when (destination) {
+   "home" -> "dashboard"
+   "tools" -> "tools"
+   "settings" -> "settings"
+   else -> null
+  }
+  if (rootRoute != null) {
+   if (currentRoute != rootRoute) {
+    tabNavController.navigate(rootRoute) {
+     popUpTo(tabNavController.graph.findStartDestination().id) { saveState = true }
+     launchSingleTop = true
+     restoreState = true
+    }
+   }
+   selectedDestination = destination
+  } else {
+   val parentTab = currentBackStackEntry?.arguments?.getString("parentTab")
+    ?: when (currentRoute) {
+     "tools" -> "tools"
+     "settings" -> "settings"
+     else -> "dashboard"
+    }
+   tabNavController.navigate("detail/$parentTab/$destination") { launchSingleTop = true }
+   selectedDestination = destination
+  }
+ }
+ LaunchedEffect(currentRoute, currentBackStackEntry?.arguments?.getString("screen")) {
+  selectedDestination = when (currentRoute) {
+   "dashboard" -> "home"
+   "tools" -> "tools"
+   "settings" -> "settings"
+   "detail/{parentTab}/{screen}" -> currentBackStackEntry?.arguments?.getString("screen") ?: "home"
+   else -> "home"
+  }
+ }
  val contentScrollState = rememberScrollState()
  var folderUris by remember(context) { mutableStateOf(StorageAccessPreferences.accessibleTreeUris(context)) }
  val customFolderUris by StorageAccessPreferences.observeCustomTreeUris(context).collectAsStateWithLifecycle(initialValue = emptyList())
@@ -221,6 +280,26 @@ import kotlinx.coroutines.launch
  var sentinelDesired by remember(context) { mutableStateOf(securityPrefs.getBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, false)) }
  var strictMode by remember(context) { mutableStateOf(securityPrefs.getBoolean(SafeMobileApp.KEY_STRICT_MODE, false)) }
  var securityAlertsEnabled by remember(context) { mutableStateOf(securityPrefs.getBoolean(SafeMobileApp.KEY_SECURITY_ALERTS_ENABLED, false)) }
+ val advisorStore = remember(context) { ProtectionAdvisorStore(context) }
+ val snoozedAdvisorIds by advisorStore.snoozedIssueIds.collectAsStateWithLifecycle(initialValue = emptySet())
+ val advisorState = ProtectionAdvisorEngine.evaluate(
+  ProtectionAdvisorInputs(
+   totalScans = maxOf(state.completedScans, if (state.scanSummary != null) 1 else 0),
+   threatsDetected = state.scanSummary?.threats ?: state.threatCount,
+   folderSentinelConfigured = StorageAccessPreferences.hasRole(context, StorageAccessPreferences.DOWNLOADS) ||
+    StorageAccessPreferences.hasRole(context, StorageAccessPreferences.WHATSAPP) || customFolderUris.isNotEmpty(),
+   highRiskPostureCount = postureState.report?.highRiskAppCount,
+   notificationsEnabled = notificationsGranted && securityAlertsEnabled,
+   batteryUnrestricted = batteryUnrestricted,
+   fullScreenIntentEnabled = fullScreenAlertsGranted,
+   databaseUpdatedAt = com.vibesync.antivirus.core.hashdb.HashDatabaseFreshness.updatedAt(context, state.hashDatabaseCapability.version),
+   installSentinelEnabled = securityPrefs.getBoolean(SafeMobileApp.KEY_INSTALL_SENTINEL_ENABLED, false),
+   playProtectEnabled = state.securityAssessment?.signals?.playProtectEnabled,
+   usbDebuggingEnabled = state.securityAssessment?.signals?.usbDebuggingEnabled,
+   voiceAlertsEnabled = securityPrefs.getBoolean(SafeMobileApp.KEY_VOICE_ALERTS_ENABLED, false)
+  ),
+  snoozedAdvisorIds
+ )
  val snackbarHostState = remember { SnackbarHostState() }
  val uiScope = rememberCoroutineScope()
  var lastHandledManualScanSequence by remember { mutableStateOf(state.manualScanCompletionSequence) }
@@ -415,10 +494,11 @@ import kotlinx.coroutines.launch
    if (event == Lifecycle.Event.ON_RESUME) {
     if (privacyAccepted) vm.refreshTrustOverrides()
     fullScreenAlertsGranted = FullScreenAlertAccess.isGranted(context)
+    batteryUnrestricted = powerManager?.isIgnoringBatteryOptimizations(context.packageName) == true
     storageAccessGranted = hasSharedStorageAccess(context)
     folderUris = StorageAccessPreferences.accessibleTreeUris(context)
     vm.refreshSecurityScore()
-    if (privacyAccepted) postureVm.refresh()
+    if (privacyAccepted) postureVm.refreshAuditSilently()
     ownerManager.refreshState()
     sentinelDesired = securityPrefs.getBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, false)
     sentinelOptIn = sentinelDesired
@@ -495,82 +575,133 @@ import kotlinx.coroutines.launch
    Toast.makeText(context, R.string.quarantine_delete_failed, Toast.LENGTH_LONG).show()
   }
  }
- Surface(Modifier.fillMaxSize(),color=MaterialTheme.colorScheme.background) {
+ Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
   if (!onboardingComplete) {
    SecurityOnboardingScreen(
-    initialSyncPending=initialHashSyncPending,
-    onFinish=finishOnboarding,
-    onSkipSetup=finishOnboarding
+    initialSyncPending = initialHashSyncPending,
+    onFinish = finishOnboarding,
+    onSkipSetup = finishOnboarding
    )
   } else {
-   Column(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing)) {
-   Column(Modifier.weight(1f).verticalScroll(contentScrollState).padding(horizontal=18.dp,vertical=14.dp),verticalArrangement=Arrangement.spacedBy(14.dp)) {
-    Row(verticalAlignment=Alignment.CenterVertically) {
-     Box(Modifier.size(46.dp).background(MaterialTheme.colorScheme.primaryContainer,RoundedCornerShape(15.dp)),contentAlignment=Alignment.Center) {
-      androidx.compose.material3.Icon(painterResource(R.drawable.ic_launcher_foreground),contentDescription=stringResource(R.string.app_name),tint=Color.Unspecified,modifier=Modifier.size(35.dp))
-     }
-     Column(Modifier.padding(start=10.dp).weight(1f)) {
-      Text(stringResource(R.string.brand_title),style=MaterialTheme.typography.titleLarge,fontWeight=FontWeight.Black,color=MaterialTheme.colorScheme.onSurface)
-      Text(stringResource(R.string.brand_subtitle),style=MaterialTheme.typography.labelMedium,color=MaterialTheme.colorScheme.primary)
-     }
-     IconButton(onClick = { selectedDestination = "pro" }) {
-      androidx.compose.material3.Icon(Icons.Default.WorkspacePremium,
-       contentDescription = stringResource(R.string.pro_title), tint = MaterialTheme.colorScheme.primary)
-     }
-     Box {
-      IconButton(onClick = { languageMenuExpanded = true }) {
-       androidx.compose.material3.Icon(Icons.Default.Language, contentDescription = stringResource(R.string.language_settings), tint = MaterialTheme.colorScheme.primary)
-      }
-      DropdownMenu(expanded = languageMenuExpanded, onDismissRequest = { languageMenuExpanded = false }) {
-       DropdownMenuItem(
-        text = { Text(stringResource(R.string.language_system_default)) },
-        onClick = {
-         LocalePreferences.saveOverride(context, "")
-         localeOverrideTag = ""
-         languageMenuExpanded = false
-         activity?.recreate()
-        }
-       )
-       LocalePreferences.choices.forEach { choice ->
-        DropdownMenuItem(
-         text = { Text(stringResource(choice.labelResource)) },
-         onClick = {
-          LocalePreferences.saveOverride(context, choice.tag)
-          localeOverrideTag = choice.tag
-          languageMenuExpanded = false
-          activity?.recreate()
-         }
-        )
-       }
-      }
-     }
-     Box {
-      IconButton(onClick = { featureMenuExpanded = true }) {
-       androidx.compose.material3.Icon(Icons.Default.MoreVert, contentDescription = stringResource(R.string.features_menu))
-      }
-      DropdownMenu(expanded = featureMenuExpanded, onDismissRequest = { featureMenuExpanded = false }) {
-       listOf(
-        "apps" to R.string.nav_apps,
-        "sources" to R.string.nav_install_sources,
-        "sentinel" to R.string.nav_sentinel,
-        "posture" to R.string.posture_title,
-        "analytics" to R.string.nav_analytics,
-        "history" to R.string.nav_history,
-        "quarantine" to R.string.nav_quarantine,
-        "guardian" to R.string.nav_guardian,
-        "phishing" to R.string.nav_phishing,
-        "cleaner" to R.string.nav_cleaner,
-         "capabilities" to R.string.detection_capabilities_title,
-         "pro" to R.string.pro_title
-       ).forEach { (destination, label) ->
-        DropdownMenuItem(
-         text = { Text(stringResource(label)) },
-         onClick = { selectedDestination = destination; featureMenuExpanded = false }
-        )
-       }
-      }
+  Column(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing)) {
+   Row(
+    modifier = Modifier.fillMaxWidth().padding(horizontal = 18.dp, vertical = 10.dp),
+    verticalAlignment = Alignment.CenterVertically
+   ) {
+    if (selectedDestination !in setOf("home", "tools", "settings")) {
+     IconButton(onClick = { tabNavController.popBackStack() }) {
+      androidx.compose.material3.Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.nav_settings))
      }
     }
+    Box(Modifier.size(42.dp).background(MaterialTheme.colorScheme.primaryContainer, RoundedCornerShape(14.dp)), contentAlignment = Alignment.Center) {
+     androidx.compose.material3.Icon(
+      painterResource(R.drawable.ic_launcher_foreground),
+      contentDescription = stringResource(R.string.app_name),
+      tint = Color.Unspecified,
+      modifier = Modifier.size(32.dp)
+     )
+    }
+    Column(Modifier.padding(start = 10.dp).weight(1f)) {
+     Text(stringResource(R.string.brand_title), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold,
+      color = MaterialTheme.colorScheme.onSurface)
+     Text(stringResource(R.string.brand_subtitle), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
+    }
+    IconButton(onClick = { navigateToDestination("pro") }) {
+     androidx.compose.material3.Icon(Icons.Default.WorkspacePremium,
+      contentDescription = stringResource(R.string.pro_title), tint = MaterialTheme.colorScheme.primary)
+    }
+   }
+   NavHost(
+    navController = tabNavController,
+    startDestination = "dashboard",
+    modifier = Modifier.size(0.dp)
+   ) {
+    composable("dashboard") { Spacer(Modifier.size(0.dp)) }
+    composable("tools") { Spacer(Modifier.size(0.dp)) }
+    composable("settings") { Spacer(Modifier.size(0.dp)) }
+    composable("detail/{parentTab}/{screen}") { Spacer(Modifier.size(0.dp)) }
+   }
+   Box(Modifier.weight(1f).fillMaxWidth()) {
+    when (selectedDestination) {
+     "home" -> Column(Modifier.fillMaxSize()) {
+      ScanFeedbackCard(state,
+       onResults = { navigateToDestination(if (state.results.isEmpty()) "history" else "scan") },
+       onCancel = vm::cancelScan
+      )
+      SecurityDashboardV14(
+       advisor = advisorState,
+       isPro = adMobState.isPro,
+       adsReady = adMobState.adsReady,
+       adMobManager = adMobManager,
+       scanRunning = state.isScanning,
+       downloadsActive = StorageAccessPreferences.hasRole(context, StorageAccessPreferences.DOWNLOADS),
+       chatFoldersActive = StorageAccessPreferences.hasRole(context, StorageAccessPreferences.WHATSAPP) || customFolderUris.isNotEmpty(),
+       installSentinelActive = securityPrefs.getBoolean(SafeMobileApp.KEY_INSTALL_SENTINEL_ENABLED, false),
+       onOpenAdvisor = { navigateToDestination("advisor") },
+       onOpenPro = { navigateToDestination("pro") },
+       onScan = { requestPrivacyAcknowledgement { vm.scanFull() }; navigateToDestination("scan") },
+       onCleaner = { navigateToDestination("cleaner") },
+       onInstallSentinel = { navigateToDestination("sources") },
+       onFolders = { navigateToDestination("sentinel") },
+       onLinkChecker = { navigateToDestination("phishing") },
+       onPosture = { navigateToDestination("posture"); if (privacyAccepted) postureVm.refreshAuditSilently() },
+       onApps = { navigateToDestination("apps") },
+       onQuarantine = { navigateToDestination("quarantine") }
+      )
+     }
+     "tools" -> Column(Modifier.fillMaxSize().verticalScroll(contentScrollState).padding(horizontal = 18.dp, vertical = 14.dp)) {
+      ProtectionToolsHub(onOpen = { navigateToDestination(it) })
+     }
+     "settings" -> Column(Modifier.fillMaxSize().verticalScroll(contentScrollState).padding(horizontal = 18.dp, vertical = 14.dp)) {
+      SafeMobileSettingsPanel(
+       sentinelEnabled = monitoringRunning,
+       onEnableSentinel = enableSentinel,
+       onDisableSentinel = disableSentinel,
+       strictMode = strictMode,
+       securityAlertsEnabled = securityAlertsEnabled,
+       onSecurityAlertsChanged = changeSecurityAlerts,
+       onToggleProtection = toggleProtection,
+       onStrictModeChanged = updateStrictMode,
+       appTheme = appTheme,
+       onAppThemeChanged = onAppThemeChanged,
+       adPrivacyOptionsRequired = adMobState.privacyOptionsRequired,
+       isProForAds = adMobState.isPro,
+       onManageFolders = { navigateToDestination("sentinel") },
+       onAddCustomFolder = { requestPrivacyAcknowledgement {
+        navigateToDestination("sentinel")
+        pendingFolderRole = StorageAccessPreferences.CUSTOM
+        pendingSentinelEnable = true
+        showStoragePermissionPrompt = true
+       } },
+       onShowAdPrivacyOptions = {
+        activity?.let { host -> uiScope.launch { adMobManager.showPrivacyOptions(host) } }
+       },
+       subRoute = settingsSubRoute,
+       onSubRouteChanged = { settingsSubRoute = it },
+       onOpenPro = { navigateToDestination("pro") }
+      )
+     }
+     else -> Column(
+      Modifier.fillMaxSize().verticalScroll(contentScrollState)
+       .padding(horizontal = 18.dp, vertical = 14.dp),
+      verticalArrangement = Arrangement.spacedBy(14.dp)
+     ) {
+      if (selectedDestination == "advisor") {
+       SecurityAdvisorScreen(
+        state = advisorState,
+        onOpenIssue = { issue ->
+         if (issue.destination == "settings") {
+          settingsSubRoute = when (issue.id) {
+           "notifications_on", "fullscreen_alert", "voice_alert_tts" -> SettingsSubRoute.NOTIFICATIONS
+           else -> SettingsSubRoute.SECURITY
+          }
+          navigateToDestination("settings")
+         } else navigateToDestination(issue.destination)
+        },
+        onSnooze = { issueId -> uiScope.launch { advisorStore.setSnoozed(issueId, true) } },
+        onRestore = { issueId -> uiScope.launch { advisorStore.setSnoozed(issueId, false) } }
+       )
+      }
     if (privacyAccepted && !notificationsGranted && Build.VERSION.SDK_INT >= 33) {
        Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer)) {
          Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -595,7 +726,7 @@ import kotlinx.coroutines.launch
       BatteryOptimizationCard(batteryStatusEpoch)
      }
      ScanFeedbackCard(state,
-      onResults = { selectedDestination = if (state.results.isEmpty()) "history" else "scan" },
+      onResults = { navigateToDestination(if (state.results.isEmpty()) "history" else "scan") },
       onCancel = vm::cancelScan)
     }
     if (selectedDestination == "home") {
@@ -922,28 +1053,34 @@ import kotlinx.coroutines.launch
     if (selectedDestination == "home" && adMobState.adsReady && !adMobState.isPro) {
      AdMobBanner(adMobManager)
     }
+     }
+    }
    }
    SnackbarHost(hostState = snackbarHostState)
    NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
     val destinations = listOf(
-     Triple("home", R.string.nav_home, Icons.Default.Home),
-     Triple("scan", R.string.nav_scan, Icons.Default.Search),
-     Triple("apps", R.string.nav_apps, Icons.Default.Security),
-     Triple("analytics", R.string.nav_analytics, Icons.Default.History),
+     Triple("dashboard", R.string.security_dashboard_title, Icons.Default.Home),
+     Triple("tools", R.string.analytics_title, Icons.Default.History),
      Triple("settings", R.string.nav_settings, Icons.Default.SettingsIcon)
     )
     destinations.forEach { destination ->
      NavigationBarItem(
-      selected = selectedDestination == destination.first,
-      onClick = { selectedDestination = destination.first },
+      selected = activeTopTab == destination.first,
+      onClick = { navigateToDestination(when(destination.first) {
+       "dashboard" -> "home"
+       "tools" -> "tools"
+       else -> "settings"
+      }) },
       icon = { androidx.compose.material3.Icon(destination.third, contentDescription = stringResource(destination.second)) },
       label = { Text(stringResource(destination.second), maxLines = 1, softWrap = false, overflow = TextOverflow.Ellipsis) }
      )
     }
    }
   }
+
   }
  }
+
  if (showDefinitionImportWarning) AlertDialog(
   properties = DialogProperties(dismissOnClickOutside = true, dismissOnBackPress = true),
   onDismissRequest = { showDefinitionImportWarning = false },
