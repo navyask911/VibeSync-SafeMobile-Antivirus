@@ -1060,8 +1060,8 @@ import kotlinx.coroutines.launch
    SnackbarHost(hostState = snackbarHostState)
    NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
     val destinations = listOf(
-     Triple("dashboard", R.string.security_dashboard_title, Icons.Default.Home),
-     Triple("tools", R.string.analytics_title, Icons.Default.History),
+     Triple("dashboard", R.string.v140_dashboard, Icons.Default.Home),
+     Triple("tools", R.string.v140_analytics_tools, Icons.Default.History),
      Triple("settings", R.string.nav_settings, Icons.Default.SettingsIcon)
     )
     destinations.forEach { destination ->
