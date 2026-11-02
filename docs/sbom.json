@@ -1,10 +1,10 @@
 {
   "bomFormat" : "CycloneDX",
   "specVersion" : "1.6",
-  "serialNumber" : "urn:uuid:5546fdcc-965e-40c9-9d17-5a02e104c57d",
+  "serialNumber" : "urn:uuid:38c05904-657d-4ac6-b001-04e9f9325d94",
   "version" : 1,
   "metadata" : {
-    "timestamp" : "2026-11-01T07:35:06Z",
+    "timestamp" : "2026-11-02T14:25:28Z",
     "tools" : {
       "components" : [
         {
@@ -26,7 +26,7 @@
       "externalReferences" : [
         {
           "type" : "build-system",
-          "url" : "https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/actions/runs/41285317766"
+          "url" : "https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/actions/runs/41461684283"
         },
         {
           "type" : "vcs",
@@ -6918,6 +6918,390 @@
     },
     {
       "type" : "library",
+      "bom-ref" : "pkg:maven/androidx.navigation/navigation-common-android@2.9.8?type=aar",
+      "publisher" : "The Android Open Source Project",
+      "group" : "androidx.navigation",
+      "name" : "navigation-common-android",
+      "version" : "2.9.8",
+      "description" : "Android Navigation-Common",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "993f22cb1e43c4a821360b3ed36177c0"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "0c6c7ff5c4f4dc795fb92367074b9e209c699c1f"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "d43832772012afa0d5c71d03153aef764f1c5f683fe7605f0db77cada8515102"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "38f39e6706bb7b0cc599caa5d3147231d45adce1b72d58d6b414549265db540ec3617b365920be30825c5ab7267d5d18920680ddf85f64cfc90421ad05276a59"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "72aa6bbf3a424fa8c6df0ac0511bf8704f2c065cea04eabdb9c033361561789b"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "052ca1f3cd3390436869728000ad02e1ae155c40a46e1ddcf1b856a62f2afaf87b6be3718c9cf803024de8be0b4d4a8de1b228901c45b2925bde61ef4dd937e2"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "0393998ae310b1cac883919e64f4b41973ef6ae598d88f13889ea0247e6a76bdebcce39c2909e380000aaa102ac47009"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "37fa7b3203c36dcd952fc2c701430e2e182e0e781ed97eddbba96ca6bfb94aa61b2b49e3d3cd59819e9eabffab15a437"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/androidx.navigation/navigation-common-android@2.9.8?type=aar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://cs.android.com/androidx/platform/frameworks/support"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/androidx.navigation/navigation-common@2.9.8?type=jar",
+      "publisher" : "The Android Open Source Project",
+      "group" : "androidx.navigation",
+      "name" : "navigation-common",
+      "version" : "2.9.8",
+      "description" : "Android Navigation-Common",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "8b6753d1295ac571a9b0c490d8ff9e19"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "fe6d072d47ad24b980ac1a64dda68ec08a4a29fa"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "c118b6182a247f41c1afb19a55d12c5aaf3c39bd20a3f0583a06bcadd84b28a8"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "2b1106220cb8fd1dacc9366579904c9f4f5c1c2aeacf857af526289df94db8371296f81d6aeeefe9cb137a073729a0b95d5408e259adb3b405e4ef44197b2ac0"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "6407eecf1123c0db57912d03531f5bdf8998f351ee5fb9cdfa6b1f206e541902"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "1e50ffb71bf8fe334a8a3cd0b1ccc11b855b3a659227b442d1eebaf6ba017241e5854534e134a32014047374ce37f3d1c852d472292323c00adfd5498b76809b"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "65a1c67a9bb835c69fd8d27f6236d03517ba3e7ef65624077eb93a15606c691399d7456e15b4522fea9123408cf6532b"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "8bb58c4b8a6fec0517237346d199bfe52cd70320d1554a7c474e9b9304b32d50f3e9843e5c04d3975a63d92ce9b2f6b1"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/androidx.navigation/navigation-common@2.9.8?type=jar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://cs.android.com/androidx/platform/frameworks/support"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/androidx.navigation/navigation-compose-android@2.9.8?type=aar",
+      "publisher" : "The Android Open Source Project",
+      "group" : "androidx.navigation",
+      "name" : "navigation-compose-android",
+      "version" : "2.9.8",
+      "description" : "Compose integration with Navigation",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "416ac05e43ae1aa68a0a8b64f996b1f1"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "1bfdb5e17ebb462fbb80fd1c52cbc112b329e325"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "53dccc442276cde3898751f53fcc869f335340fd677fb1ca5c6c0abc0575d180"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "a8fa3984e54eb3342194fea78b298ee997b8290815aa5747d01063ca1efc3dad5d4beb92eb1b52122bc3a3007569be64b3ce520ad5b4bb4ac99e4cb3e29812e4"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "7cfc010b4a086907b21bccaab7c6306f1955cd90525e8e9404d64ba61de6da6b"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "073d1e8a2d98d682fbd5139d07387506fef2092f7b0fdc4635a0b176f72fd311bbcaada823c1f4eb408cbc452b79488f2b2b4bdfc9e04b9c5f23d27496082f7e"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "e3156d013362d65388bf510fa92e481fd4902160b88c1b5d131283c18dd845ac91964914cab80830cd22ed93ba4f44b8"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "ff312670530ce9894c17b009beb4d103fcf6a18605daf4281eb9131f98b89e98896c4c7f28a5ea60bb7048dfd4f614a4"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/androidx.navigation/navigation-compose-android@2.9.8?type=aar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://cs.android.com/androidx/platform/frameworks/support"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/androidx.navigation/navigation-compose@2.9.8?type=jar",
+      "publisher" : "The Android Open Source Project",
+      "group" : "androidx.navigation",
+      "name" : "navigation-compose",
+      "version" : "2.9.8",
+      "description" : "Compose integration with Navigation",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "064a343a48cc232cd9d9ed19eff9d5cc"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "ffda01688053cab19c61d4f9e5fffb9dce9c9024"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "1aa2eb69bf76dbc337305348e6a00fec3ba70f91348fe750d0dba02bf0974804"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "6b8b570acd76a25b4dabe009a116f5d218938b5fb8b8be0835ac22857c559eefda75986da1a7be300cffba5cd3691978d71400edb3d20cd773ff3262a8081545"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "c7122970d527f2fa62426d286bcd242c9f3a1103cdf472eb155285435c7fb221"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "0c7703a11b1e72cb9434f30517f9fc1a497214bad5cb599faaf7020e5eeb5ff08de6f4eb779b9da475a76df4062bd0a0615fd78aac9e6e69b48330770bf41eba"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "b305e49b0a777a0c6bd01c45ba3690662b739521ba54dd13b0ff6aaf5579bab6711a9b05b224121e308decfd82f1b264"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "0ce32c5176b171b33a647cd90277a1c5fd6fde70a701a8e92b7da47d6884a3480f9afc87a5527eead058b5eff00bcef3"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/androidx.navigation/navigation-compose@2.9.8?type=jar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://cs.android.com/androidx/platform/frameworks/support"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/androidx.navigation/navigation-runtime-android@2.9.8?type=aar",
+      "publisher" : "The Android Open Source Project",
+      "group" : "androidx.navigation",
+      "name" : "navigation-runtime-android",
+      "version" : "2.9.8",
+      "description" : "Android Navigation-Runtime",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "d5a612cc93a9c54ddbd6037dfc0941c7"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "369440f7ca40f1bc00a5d0c4528bb479d8013433"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "7d741a3b0a299a8c8990712009c63bfca8d52d060afe8f5ad9c200619f113237"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "c109cdd300546c5dbd41ac1818d5b8732d652c94f474fd67607617c7176c7c5593c87161993159f4ec67be36ffe89f6f216d9830c65a72ad1e97141a762c5b0d"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "dabd613a03f8bca3092292c32cadf89f02854e915786665bdf41c88cfc3cb1c1"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "3d41fa90fa501db0adced950bccecbd31f78ebbdfbd87d11758e4435688fa67d3c3a89e2536e395925df12265fe1dd3aa8cd6b91a5ae8e477eff27a4c046f98a"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "fa9629bac1d8c1dc2d73e6a85a30c76f0a7f01e51d365a667f4a531662ff2ef612c0f3fd4c6edda9ea8b7df02a8ae3dc"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "04d5bc0adb0117abd6fa06b661b0ae7280bbb28d3a8f345096800e6534f00f65f10c20a680a4cef32c270a9ef5767886"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/androidx.navigation/navigation-runtime-android@2.9.8?type=aar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://cs.android.com/androidx/platform/frameworks/support"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/androidx.navigation/navigation-runtime@2.9.8?type=jar",
+      "publisher" : "The Android Open Source Project",
+      "group" : "androidx.navigation",
+      "name" : "navigation-runtime",
+      "version" : "2.9.8",
+      "description" : "Android Navigation-Runtime",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "dc1f257d3604566e57bef4b329543984"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "aa9cf30f26ebb454c9761e0353ee6883c05d8c30"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "d8e5f5c13070ec42a81d55f96ec2acb6b5af0decbaff07cb0fd409df23c97423"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "66d3dd5b1d4b783ee8b32ab75308c170a0bd49dffde1a35d5af4efec92903ff306a61163d35c6c608a935bdfe37350d512afcd7a9e207856eb80a9fe2a287e72"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "121933281b7cacd77bac1ef7bcf72e5f12494e0ec20ed18a3c25a11bec1526f4"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "3ae14cd66f0ac49eb697d26bad7fbedf737d7d0ccdb9e6c7ceb3f219d9267283dab8d0d9850695a3d90f5f6b0c8ba3a0b1725660f2861834e282f0208dd70f4c"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "77b4856c4c4d4c78393dd13b2ab3267528241552c043333294ee6906f458a8c330963fd460d50b1ad2d921163e4b67fb"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "2ee20b7c821902df732fd6ba0bea8d91f5198a38c823cbd980b738cbd6ad62a0f3b6113edfe7e4d69209a93a19261fc0"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/androidx.navigation/navigation-runtime@2.9.8?type=jar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://cs.android.com/androidx/platform/frameworks/support"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
       "bom-ref" : "pkg:maven/androidx.profileinstaller/profileinstaller@1.4.0?type=aar",
       "publisher" : "The Android Open Source Project",
       "group" : "androidx.profileinstaller",
@@ -7799,6 +8183,100 @@
         }
       ],
       "purl" : "pkg:maven/androidx.savedstate/savedstate-android@1.3.0?type=aar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://cs.android.com/androidx/platform/frameworks/support"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/androidx.savedstate/savedstate-compose-android@1.3.0?type=aar",
+      "publisher" : "The Android Open Source Project",
+      "group" : "androidx.savedstate",
+      "name" : "savedstate-compose-android",
+      "version" : "1.3.0",
+      "description" : "Compose integration with Saved State",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "4a7e479c2b26531c70f1c606ccc1c123"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "59bae949f3d40d39212dbceb2686041e432a3aeb"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "ab71562c138019ad6084dc8fc690af6cb9359bfe2743a79062065b28bdef7c6e"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "fb34772792ea8e2ea6afcd6eae20d61e9c4737d689e572f412bddbda2538d67fbc142df64b83235be1469c18b78b2e1be0cd6fdad697102cf9cae262c2578b42"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "567bd828e15c481328d983e8b296532971310e489d9b54bcb962efe8e8031e51"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "6e91559fb12180d2676e3f6551eef7cbef7a954a5601709357cdba9d9b189a20d300a24d71e080bc547b5b584a733b409ad684e7a6b4a00a4ad3b88d5ac47024"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "df6d5949833df9dbf652b9e9a7bc6d504ec8d51eac92b278bf41ad291f0cd56b2548ccb79b7d4f84b0928add5602ff81"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "9564f862bc06794e475d36595044c89dbacd5815163650872aef6e329b1dd7464252c6a1e7394ca8fc873053a1a890cb"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/androidx.savedstate/savedstate-compose-android@1.3.0?type=aar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://cs.android.com/androidx/platform/frameworks/support"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/androidx.savedstate/savedstate-compose@1.3.0?type=pom",
+      "publisher" : "The Android Open Source Project",
+      "group" : "androidx.savedstate",
+      "name" : "savedstate-compose",
+      "version" : "1.3.0",
+      "description" : "Compose integration with Saved State",
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/androidx.savedstate/savedstate-compose@1.3.0?type=pom",
       "modified" : false,
       "externalReferences" : [
         {
@@ -24391,7 +24869,6 @@
       "dependsOn" : [
         "pkg:maven/androidx.annotation/annotation-experimental@1.5.1?type=aar",
         "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
-        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-common@2.2.21?type=pom",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
         "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-android@1.10.2?type=jar",
         "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.10.2?type=jar"
@@ -25108,6 +25585,105 @@
       ]
     },
     {
+      "ref" : "pkg:maven/androidx.navigation/navigation-common-android@2.9.8?type=aar",
+      "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
+        "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
+        "pkg:maven/androidx.core/core-ktx@1.16.0?type=aar",
+        "pkg:maven/androidx.lifecycle/lifecycle-common@2.9.1?type=jar",
+        "pkg:maven/androidx.lifecycle/lifecycle-runtime@2.9.1?type=jar",
+        "pkg:maven/androidx.lifecycle/lifecycle-viewmodel-savedstate@2.9.1?type=jar",
+        "pkg:maven/androidx.lifecycle/lifecycle-viewmodel@2.9.1?type=aar",
+        "pkg:maven/androidx.profileinstaller/profileinstaller@1.4.0?type=aar",
+        "pkg:maven/androidx.savedstate/savedstate@1.3.0?type=jar",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/kotlinx-serialization-core@1.7.3?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/androidx.navigation/navigation-common@2.9.8?type=jar",
+      "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
+        "pkg:maven/androidx.lifecycle/lifecycle-common@2.9.1?type=jar",
+        "pkg:maven/androidx.lifecycle/lifecycle-runtime@2.9.1?type=jar",
+        "pkg:maven/androidx.lifecycle/lifecycle-viewmodel-savedstate@2.9.1?type=jar",
+        "pkg:maven/androidx.lifecycle/lifecycle-viewmodel@2.9.1?type=aar",
+        "pkg:maven/androidx.navigation/navigation-common-android@2.9.8?type=aar",
+        "pkg:maven/androidx.savedstate/savedstate@1.3.0?type=jar",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/androidx.navigation/navigation-compose-android@2.9.8?type=aar",
+      "dependsOn" : [
+        "pkg:maven/androidx.activity/activity-compose@1.10.1?type=aar",
+        "pkg:maven/androidx.activity/activity@1.10.1?type=aar",
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
+        "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
+        "pkg:maven/androidx.compose.animation/animation-core@1.8.2?type=jar",
+        "pkg:maven/androidx.compose.animation/animation@1.8.2?type=jar",
+        "pkg:maven/androidx.compose.foundation/foundation-layout@1.8.2?type=jar",
+        "pkg:maven/androidx.compose.runtime/runtime-saveable@1.8.2?type=jar",
+        "pkg:maven/androidx.compose.runtime/runtime@1.8.2?type=jar",
+        "pkg:maven/androidx.compose.ui/ui@1.8.2?type=jar",
+        "pkg:maven/androidx.lifecycle/lifecycle-common@2.9.1?type=jar",
+        "pkg:maven/androidx.lifecycle/lifecycle-runtime-compose@2.9.1?type=jar",
+        "pkg:maven/androidx.lifecycle/lifecycle-viewmodel-compose@2.9.1?type=jar",
+        "pkg:maven/androidx.lifecycle/lifecycle-viewmodel-savedstate@2.9.1?type=jar",
+        "pkg:maven/androidx.lifecycle/lifecycle-viewmodel@2.9.1?type=aar",
+        "pkg:maven/androidx.navigation/navigation-common@2.9.8?type=jar",
+        "pkg:maven/androidx.navigation/navigation-runtime@2.9.8?type=jar",
+        "pkg:maven/androidx.savedstate/savedstate-compose@1.3.0?type=pom",
+        "pkg:maven/androidx.savedstate/savedstate@1.3.0?type=jar",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.10.2?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/kotlinx-serialization-core@1.7.3?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/androidx.navigation/navigation-compose@2.9.8?type=jar",
+      "dependsOn" : [
+        "pkg:maven/androidx.compose.animation/animation@1.8.2?type=jar",
+        "pkg:maven/androidx.compose.runtime/runtime-saveable@1.8.2?type=jar",
+        "pkg:maven/androidx.compose.runtime/runtime@1.8.2?type=jar",
+        "pkg:maven/androidx.compose.ui/ui@1.8.2?type=jar",
+        "pkg:maven/androidx.navigation/navigation-common@2.9.8?type=jar",
+        "pkg:maven/androidx.navigation/navigation-compose-android@2.9.8?type=aar",
+        "pkg:maven/androidx.navigation/navigation-runtime@2.9.8?type=jar",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/androidx.navigation/navigation-runtime-android@2.9.8?type=aar",
+      "dependsOn" : [
+        "pkg:maven/androidx.activity/activity-ktx@1.10.1?type=aar",
+        "pkg:maven/androidx.annotation/annotation-experimental@1.5.1?type=aar",
+        "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
+        "pkg:maven/androidx.core/core-ktx@1.16.0?type=aar",
+        "pkg:maven/androidx.lifecycle/lifecycle-common@2.9.1?type=jar",
+        "pkg:maven/androidx.lifecycle/lifecycle-runtime-ktx@2.9.1?type=jar",
+        "pkg:maven/androidx.lifecycle/lifecycle-runtime@2.9.1?type=jar",
+        "pkg:maven/androidx.lifecycle/lifecycle-viewmodel-ktx@2.9.1?type=aar",
+        "pkg:maven/androidx.lifecycle/lifecycle-viewmodel@2.9.1?type=aar",
+        "pkg:maven/androidx.navigation/navigation-common@2.9.8?type=jar",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.10.2?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/kotlinx-serialization-core@1.7.3?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/androidx.navigation/navigation-runtime@2.9.8?type=jar",
+      "dependsOn" : [
+        "pkg:maven/androidx.lifecycle/lifecycle-common@2.9.1?type=jar",
+        "pkg:maven/androidx.lifecycle/lifecycle-runtime@2.9.1?type=jar",
+        "pkg:maven/androidx.lifecycle/lifecycle-viewmodel@2.9.1?type=aar",
+        "pkg:maven/androidx.navigation/navigation-common@2.9.8?type=jar",
+        "pkg:maven/androidx.navigation/navigation-runtime-android@2.9.8?type=aar",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.10.2?type=jar"
+      ]
+    },
+    {
       "ref" : "pkg:maven/androidx.profileinstaller/profileinstaller@1.4.0?type=aar",
       "dependsOn" : [
         "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
@@ -25269,6 +25845,21 @@
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
         "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.10.2?type=jar",
         "pkg:maven/org.jetbrains.kotlinx/kotlinx-serialization-core@1.7.3?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/androidx.savedstate/savedstate-compose-android@1.3.0?type=aar",
+      "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
+        "pkg:maven/androidx.compose.runtime/runtime@1.8.2?type=jar",
+        "pkg:maven/androidx.core/core-ktx@1.16.0?type=aar",
+        "pkg:maven/androidx.savedstate/savedstate@1.3.0?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/androidx.savedstate/savedstate-compose@1.3.0?type=pom",
+      "dependsOn" : [
+        "pkg:maven/androidx.savedstate/savedstate-compose-android@1.3.0?type=aar"
       ]
     },
     {
@@ -26321,6 +26912,7 @@
         "pkg:maven/androidx.lifecycle/lifecycle-runtime-ktx@2.9.1?type=jar",
         "pkg:maven/androidx.lifecycle/lifecycle-viewmodel-compose@2.9.1?type=jar",
         "pkg:maven/androidx.lifecycle/lifecycle-viewmodel-ktx@2.9.1?type=aar",
+        "pkg:maven/androidx.navigation/navigation-compose@2.9.8?type=jar",
         "pkg:maven/androidx.room/room-compiler@2.7.2?type=jar",
         "pkg:maven/androidx.room/room-ktx@2.7.2?type=aar",
         "pkg:maven/androidx.room/room-runtime@2.7.2?type=jar",

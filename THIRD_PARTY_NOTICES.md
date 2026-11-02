@@ -1,6 +1,6 @@
 # Third-party dependency notices
 
-Generated from the CycloneDX SBOM by `scripts/render_third_party_notices.py`. Components: 397.
+Generated from the CycloneDX SBOM by `scripts/render_third_party_notices.py`. Components: 405.
 
 Regenerate this file with the CI SBOM refresh workflow; do not hand-edit dependency rows.
 
@@ -288,6 +288,12 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | material3 | 1.3.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | material3-android | 1.3.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | monitor | 1.7.2 | Apache-2.0 | Package URL: pkg:maven/androidx.test/monitor@1.7.2?type=aar |
+| navigation-common | 2.9.8 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| navigation-common-android | 2.9.8 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| navigation-compose | 2.9.8 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| navigation-compose-android | 2.9.8 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| navigation-runtime | 2.9.8 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| navigation-runtime-android | 2.9.8 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | netty-buffer | 4.1.110.Final | Apache-2.0 | Package URL: pkg:maven/io.netty/netty-buffer@4.1.110.Final?type=jar |
 | netty-buffer | 4.1.93.Final | Apache-2.0 | Package URL: pkg:maven/io.netty/netty-buffer@4.1.93.Final?type=jar |
 | netty-codec | 4.1.110.Final | Apache-2.0 | Package URL: pkg:maven/io.netty/netty-codec@4.1.110.Final?type=jar |
@@ -355,6 +361,8 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | runtime-saveable-android | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | savedstate | 1.3.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | savedstate-android | 1.3.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| savedstate-compose | 1.3.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| savedstate-compose-android | 1.3.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | savedstate-ktx | 1.3.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | security-crypto | 1.1.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | sqlite | 2.5.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
@@ -404,7 +412,7 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | work-runtime | 2.10.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | work-runtime-ktx | 2.10.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 
-Metadata completeness: 395/397 components have both a declared licence and a source/package reference.
+Metadata completeness: 403/405 components have both a declared licence and a source/package reference.
 
 ## Metadata requiring manual review
 
