@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v140_dashboard">Dashboard</string>
+    <string name="v140_analytics_tools">Analise en gereedskap</string>
+    <string name="v140_critical">Kritiek</string>
+    <string name="v140_minor">Gering</string>
+    <string name="v140_snoozed">Uitgestel</string>
+    <string name="v140_completed">Voltooi</string>
+    <string name="v140_snooze_warning">Stel waarskuwing uit</string>
+    <string name="v140_done_return_to_audit">Klaar — Keer terug na oudit</string>
+    <string name="v140_security_risk_explained">Verduideliking van sekuriteitsrisiko</string>
+    <string name="v140_posture_score_impact">Impak op toestelstatus telling</string>
+    <string name="v140_pending_actions">%1$d sekuriteitstatus-aksies hangend — Hersien oudit</string>
+</resources>
