@@ -6,25 +6,26 @@
     <string name="pro_feature_free">Offline hash, YARA and sideload detection stay free.</string>
     <string name="pro_feature_research">Experimental machine learning is not validated or enabled.</string>
     <string name="pro_feature_updates">Pro offers optional daily research-model updates. Weekly updates stay free.</string>
-    <string name="pro_feature_adfree">SafeMobile is currently ad-free for everyone.</string>
+    <string name="pro_feature_adfree">Free-tier ads are disabled while your SafeMobile Pro subscription is active.</string>
     <string name="pro_years">Years for the estimate (1–10)</string>
     <string name="pro_price_preview">Estimated total: %1$s. Years: %2$d. Confirm in Google Play.</string>
     <string name="pro_price_unavailable">Waiting for Google Play pricing; purchases are unavailable.</string>
     <string name="pro_cart_quantity_warning">Choose the purchase quantity in Google Play. The confirmed quantity determines the years credited to this device.</string>
     <string name="pro_non_restorable_warning">Device-only purchase. Reinstalling, resetting or losing encryption keys can permanently remove your remaining Pro access.</string>
     <string name="pro_unlock">Unlock SafeMobile Pro</string>
-    <string name="pro_restore_check">Restore / Check Status (this device only)</string>
-    <string name="pro_active_until">Local Pro access until %1$s</string>
-    <string name="pro_not_active">No active local Pro pass on this device.</string>
+    <string name="pro_restore_check">Restore / Check Status</string>
+    <string name="pro_active_until">Subscription access is locally active until %1$s.</string>
+    <string name="pro_not_active">No active Pro subscription or legacy access was found on this device.</string>
     <string name="pro_purchase_unavailable">Google Play is unavailable or the product is not configured.</string>
     <string name="pro_purchase_canceled">Purchase canceled.</string>
     <string name="pro_purchase_pending">Payment pending. Pro access starts after Google Play confirms the purchase.</string>
-    <string name="pro_purchase_recheck">Reconnect to Google Play to finish processing your purchase.</string>
+    <string name="pro_purchase_recheck">Reconnect to Google Play to finish processing your subscription.</string>
     <string name="pro_storage_failed">Secure storage could not save the purchase. Contact support before retrying.</string>
-    <string name="pro_purchase_success">Purchase saved locally. The purchased quantity was credited.</string>
+    <string name="pro_purchase_success">Subscription confirmed. Pro access is saved securely on this device.</string>
     <string name="pro_restore_local_only">Local status checked. Google Play cannot restore consumed passes.</string>
-    <string name="pro_device_disclaimer" formatted="false">Disclaimer: Pro passes are bound to this physical device. Because SafeMobile is 100% offline, if you uninstall the app or clear app data, your Pro pass cannot be restored by Google Play.</string>
+    <string name="pro_device_disclaimer" formatted="false">Your subscription is managed by Google Play. Active subscriptions can be restored after reinstalling. SafeMobile keeps an encrypted, device-bound record for offline Pro checks.</string>
     <string name="pro_network_notice">Core protection works offline. Google Play purchases and optional model updates require an internet connection.</string>
     <string name="pro_fewer_years">Fewer years</string>
     <string name="pro_more_years">More years</string>
+    <string name="pro_subscription_offer" formatted="false">Unlock SafeMobile Pro — ₹299 / Year (Auto-renewing). Cancel anytime in Google Play.</string>
 </resources>

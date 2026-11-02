@@ -1,30 +1,36 @@
-# SafeMobile Pro billing and Play upload handoff
+# SafeMobile Pro subscription billing review
 
-Branch: `playstore/v1.0.16-monetization`, Android version **1.0.17**, code **20261110** (published 1.0.16 already uses 20261109).
+Branch: `feat/billing-subs-v1.4.2`  
+App version: **1.4.2**  
+Version code: **20261121**
 
-## Implementation and distribution
+## Subscription product
 
-- **Supported SDK**: `com.android.billingclient:billing-ktx:8.3.0` replaces 7.1.1. Product queries read `QueryProductDetailsResult.productDetailsList`; eligible buy offers supply their offer token at checkout. Rentals and preorders are not sold as annual Pro passes. Automatic reconnection is enabled and entering/resuming the paywall recovers still-unconsumed transactions.
-- **Purchase quantity**: consumable product `safemobile_pro_1_year` must be configured and activated in Google Play Console, with its regional price and optional multi-quantity support. The 1–10 year selector is a price estimate; the Google Play cart controls actual quantity. Credit every positive, representable `Purchase.quantity`, including a cart quantity above the estimate range. All expiry arithmetic checks overflow. No price or purchase result is fabricated locally.
-- **Permanent loss possible**: consumed purchases and 365-day increments are device-bound to a locally SHA-256-hashed Android ID and Keystore-encrypted SharedPreferences; reinstall, hardware reset, migration, signing-key change or Keystore loss can delete years. The restore button checks local data ONLY and **cannot** restore consumed purchases from Play. Establish a durable customer remedy and refund policy before charging users.
-- **Verification limits**: client-only Billing callbacks do not independently verify purchase tokens against Play Developer API, chargebacks, or revoked orders. Require security review before selling long-term entitlements.
-- **Languages**: all 26 paywall resources are present in base English and the 51 translated locale folders. The exact requested device-bound disclaimer is the final paywall text. A nearby network disclosure clarifies that core protection is offline while Play purchases and optional model updates use a connection. CI rejects missing, empty, English-fallback and placeholder-mismatched paywall copy; product brands stay unchanged.
-- **Product claims**: existing offline hash/YARA scanning and siren protection stay FREE. The ML model is unvalidated and is NEVER advertised as paid active threat defense. Pro can shorten optional research-model candidate refresh from weekly to daily, but no claimed malware detection. No ad SDK is present in free or paid builds.
+- New Google Play product ID: `safemobile_pro_1y_subs`.
+- Product type: **SUBS**, with an annual auto-renewing base plan. The Play Console product and its annual ₹299 price must be activated and tested on the Play internal track before rollout.
+- The app queries subscription ProductDetails and uses a returned subscription offer token at checkout. The Play Billing offer and price are authoritative; the in-app paywall discloses the annual auto-renewing offer and cancellation through Google Play.
+- Subscription purchases are **never consumed**. An initial purchased subscription is acknowledged with `acknowledgePurchase()` when `Purchase.isAcknowledged` is false. Already-acknowledged renewals do not need another acknowledgement.
+- The 1–10 year consumable quantity selector and one-time repurchase warning have been removed from the paywall.
 
-**Dependency licences**: Google `billing-ktx:8.3.0` is under the Android Software Development Kit License and applicable Play Billing terms (https://developer.android.com/studio/terms.html). AndroidX `security-crypto:1.1.0` is Apache-2.0. Exact upstream artifact review is recorded in THIRD_PARTY_LICENSES.md; resolved dependencies and notices are generated in CI.
+## Restore and legacy migration
 
-## Validation and owner rollout
+- `restoreProLicenseFromPlayStore()` queries `ProductType.SUBS` for the active subscription product and rehydrates local access from a purchased result.
+- The manager also performs a one-time `ProductType.INAPP` compatibility lookup for the former SKU `safemobile_pro_1_year`. It grants only a still-owned, purchased legacy transaction and consumes that old transaction after recording it, preventing repeated migration grants.
+- Existing encrypted local entitlements and redeemed-token markers retain their original preference store and keys, so an app update does not discard the existing local pass.
+- **Important migration limit:** the former product was consumable. Google Play does not return an already-consumed one-time purchase from `queryPurchasesAsync`; the fallback can therefore only discover a legacy transaction that is still owned and unconsumed. Previously credited local legacy access remains available while its encrypted local data remains intact. A consumed legacy purchase cannot be reconstructed after local app data or its Keystore key is lost.
+- The restore/check action can restore an active subscription from Google Play after reinstall when the user is signed in and Play can return the subscription. Offline status checks continue to use the encrypted local cache.
 
-Before squash merge, require all five Android CI jobs: unit tests/lint/signed builds plus API
-26, 33, 34 and 36 instrumentation. Real encrypted-ledger tests cover quantity, token replay,
-expiry, clock rollback and irreversible local-data loss. The source guard rejects billing
-entitlement checks in core scanning, posture, quarantine and incident-response code.
+## Local entitlement and privacy boundaries
 
-The production release workflow builds the signed offline Play AAB with the pinned research
-model still inactive, reviewed YARA, all locales, billing metadata and no bundled hash database.
-Generating this AAB does not publish it to Google Play or configure products in Play Console.
-Before public rollout, use a licensed tester on the Play internal track to verify the activated
-product, prices, pending/canceled/paid transactions, actual cart quantity and consumption retry.
-CI uses no real Google account, card or paid order and cannot establish that live checkout passed.
+- The existing device fingerprint and `EncryptedSharedPreferences` store remain in place. The Android ID is hashed locally and is not uploaded or logged.
+- Subscription cache expiry is calculated as `Purchase.purchaseTime + 365 days + 1 day` (the requested local grace buffer). The cache is an offline gating approximation, not an independent receipt-verification service. The app does not call the Google Play Developer API and cannot independently detect server-side refunds or revocations while offline.
+- The encrypted device-bound cache drives the existing Pro status consumed by AdMob. The Free tier remains eligible for consent-gated ads; a locally active Pro entitlement excludes Pro users from ad requests and preloaded interstitials. Billing changes do not alter the AdMob manager, UMP consent logic, or privacy disclosures.
+- Billing code remains isolated under `core/billing`; no Pro entitlement gate is introduced into scanning, YARA, hash matching, posture checks, quarantine, or the siren/incident-response pipeline.
+- No Android ID, purchase token, APK, scan data, or verdict is sent to a developer server.
 
-Privacy: No Android ID, purchase token, APK, or protected content is transmitted to the developer's servers. Google Play Billing communicates with Google during purchase. WorkManager network access remains confined to optional downloaded research models; scanning, verdicts and stored malware evidence remain local.
+## Validation and rollout
+
+- CI must pass the unit/lint/build job and instrumented test jobs on API 26, 33, 34, and 36.
+- Encrypted-ledger tests cover legacy quantity idempotency, subscription expiry plus grace buffer, repeated subscription-query idempotency, renewal expiry movement, invalid inputs, and clock rollback.
+- CI cannot validate a real paid order. Before public rollout, activate the subscription product and test pending, canceled, purchased, acknowledged, restore-after-reinstall, renewal, and cancellation behavior with licensed Play internal-track testers.
+- This change does not trigger the signed production release workflow or publish to Google Play.
