@@ -97,7 +97,11 @@ internal fun SecurityDashboardV14(
                     Text(stringResource(R.string.ui_score_checks, advisor.score, 100),
                         style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Button(onClick = onOpenAdvisor, modifier = Modifier.fillMaxWidth()) {
-                        Text(stringResource(R.string.posture_title))
+                        Text(
+                            if (advisor.pendingCount > 0)
+                                stringResource(R.string.v140_pending_actions, advisor.pendingCount)
+                            else stringResource(R.string.v140_done_return_to_audit)
+                        )
                     }
                 }
             }
