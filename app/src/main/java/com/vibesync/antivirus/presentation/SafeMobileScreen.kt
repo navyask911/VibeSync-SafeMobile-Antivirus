@@ -393,13 +393,13 @@ import kotlinx.coroutines.launch
   val uri = result.data?.data
   if (result.resultCode != Activity.RESULT_OK || uri == null) {
    pendingSentinelEnable = false
-   selectedDestination = "home"
+   navigateToDestination("home")
    return@folderResult
   }
   if (StorageAccessPreferences.isStorageRoot(uri)) {
    Toast.makeText(context, R.string.ui_storage_root_blocked, Toast.LENGTH_LONG).show()
    pendingSentinelEnable = false
-   selectedDestination = "home"
+   navigateToDestination("home")
    return@folderResult
   }
   val role = pendingFolderRole
@@ -428,11 +428,11 @@ import kotlinx.coroutines.launch
     Toast.makeText(context,
      if (customLimitReached) R.string.ui_sentinel_folder_limit else R.string.ui_folder_access_not_granted,
      Toast.LENGTH_LONG).show()
-    selectedDestination = "home"
+    navigateToDestination("home")
    }
   }
  }
- val requestStorage: () -> Unit = { selectedDestination = "sentinel" }
+ val requestStorage: () -> Unit = { navigateToDestination("sentinel") }
  val enableSentinel: () -> Unit = {
   if (!hasSharedStorageAccess(context)) requestStorage()
   else runCatching { context.startForegroundService(Intent(context, StorageSentinelService::class.java)) }
@@ -557,16 +557,16 @@ import kotlinx.coroutines.launch
    }
   }
  }
- LaunchedEffect(sharedText) { if (!sharedText.isNullOrBlank()) selectedDestination = "phishing" }
+ LaunchedEffect(sharedText) { if (!sharedText.isNullOrBlank()) navigateToDestination("phishing") }
  LaunchedEffect(openQuarantine) {
   if (openQuarantine) {
-   selectedDestination = "quarantine"
+   navigateToDestination("quarantine")
    onOpenQuarantineConsumed()
   }
  }
  LaunchedEffect(openDevicePosture) {
   if (openDevicePosture) {
-   selectedDestination = "posture"
+   navigateToDestination("posture")
    if (privacyAccepted) postureVm.refresh()
    onOpenDevicePostureConsumed()
   }
