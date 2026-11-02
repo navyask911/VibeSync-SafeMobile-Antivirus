@@ -41,6 +41,7 @@ internal fun SecurityAdvisorScreen(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
+        Text(stringResource(R.string.posture_title), style = MaterialTheme.typography.headlineMedium)
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
             Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(stringResource(R.string.ui_score_title), style = MaterialTheme.typography.titleLarge)
@@ -54,28 +55,28 @@ internal fun SecurityAdvisorScreen(
             }
         }
         AdvisorAccordion(
-            titleResource = R.string.threat_found,
+            titleResource = R.string.v140_critical,
             items = state.critical,
             onOpenIssue = onOpenIssue,
             onSnooze = onSnooze,
             onRestore = onRestore
         )
         AdvisorAccordion(
-            titleResource = R.string.review_recommended,
+            titleResource = R.string.v140_minor,
             items = state.minor,
             onOpenIssue = onOpenIssue,
             onSnooze = onSnooze,
             onRestore = onRestore
         )
         AdvisorAccordion(
-            titleResource = R.string.setup_notifications_not_now,
+            titleResource = R.string.v140_snoozed,
             items = state.snoozed,
             onOpenIssue = onOpenIssue,
             onSnooze = onSnooze,
             onRestore = onRestore
         )
         AdvisorAccordion(
-            titleResource = R.string.scan_complete,
+            titleResource = R.string.v140_completed,
             items = state.completed,
             onOpenIssue = onOpenIssue,
             onSnooze = onSnooze,
@@ -120,8 +121,10 @@ private fun AdvisorAccordion(
                             verticalArrangement = Arrangement.spacedBy(7.dp)
                         ) {
                             Text(stringResource(item.titleResource), style = MaterialTheme.typography.titleMedium)
+                            Text(stringResource(R.string.v140_security_risk_explained), style = MaterialTheme.typography.titleSmall)
                             Text(stringResource(item.detailResource), style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text(stringResource(R.string.v140_posture_score_impact), style = MaterialTheme.typography.titleSmall)
                             Text(stringResource(R.string.ui_score_checks, item.points, 100),
                                 style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
                             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -139,12 +142,18 @@ private fun AdvisorAccordion(
                                 }
                                 if (item.group == AdvisorIssueGroup.SNOOZED) {
                                     OutlinedButton(onClick = { onRestore(item.id) }) {
-                                        Text(stringResource(R.string.setup_finish))
+                                        Text(stringResource(R.string.v140_done_return_to_audit))
                                     }
                                 } else if (item.canSnooze && item.group != AdvisorIssueGroup.COMPLETED) {
                                     OutlinedButton(onClick = { onSnooze(item.id) }) {
-                                        Text(stringResource(R.string.setup_notifications_not_now))
+                                        Text(stringResource(R.string.v140_snooze_warning))
                                     }
+                                } else if (item.group == AdvisorIssueGroup.COMPLETED) {
+                                    Text(
+                                        stringResource(R.string.v140_done_return_to_audit),
+                                        color = MaterialTheme.colorScheme.tertiary,
+                                        style = MaterialTheme.typography.labelLarge
+                                    )
                                 }
                             }
                         }
