@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.WorkspacePremium
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.vibesync.antivirus.ui.theme.AppTheme
 import androidx.compose.foundation.layout.Column
@@ -130,7 +131,11 @@ private fun SettingsRootRow(
                 Text(stringResource(subtitleResource), style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2)
             }
-            Text("›", color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.titleLarge)
+            androidx.compose.material3.Icon(
+                Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary
+            )
         }
     }
 }
@@ -749,9 +754,6 @@ internal fun SafeMobileSettingsPanel(
                 ExpandableText(stringResource(R.string.family_dedication), maxLines = 3)
             }
         }
-        }
-        if (subRoute == SettingsSubRoute.HELP_LEGAL) {
-            // Legal and support links live together in this focused destination.
         }
     }
 
