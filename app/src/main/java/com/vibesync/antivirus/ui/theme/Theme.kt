@@ -3,7 +3,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 
 @Composable
-fun SafeMobileMaterialTheme(theme: AppTheme = AppTheme.MIDNIGHT, content: @Composable () -> Unit) {
+fun SafeMobileMaterialTheme(theme: AppTheme = AppTheme.LIGHT, content: @Composable () -> Unit) {
     MaterialTheme(
         colorScheme = when (theme) {
             AppTheme.MIDNIGHT -> SafeMobileDarkColorScheme
