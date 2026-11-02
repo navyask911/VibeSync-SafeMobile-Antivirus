@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="v140_dashboard">Dashboard</string>
+    <string name="v140_dashboard">Oversigt</string>
     <string name="v140_analytics_tools">Analyse og værktøjer</string>
     <string name="v140_critical">Kritisk</string>
     <string name="v140_minor">Mindre</string>
