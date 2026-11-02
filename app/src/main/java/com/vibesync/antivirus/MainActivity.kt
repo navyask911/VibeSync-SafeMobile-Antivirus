@@ -26,14 +26,14 @@ class MainActivity : ComponentActivity() {
         super.attachBaseContext(LocalePreferences.wrap(newBase))
     }
     private val themePreferences by lazy { ThemePreferences(this) }
-    private var selectedTheme by mutableStateOf(AppTheme.MIDNIGHT)
+    private var selectedTheme by mutableStateOf(AppTheme.LIGHT)
     private var sharedText by mutableStateOf<String?>(null)
     private var openQuarantine by mutableStateOf(false)
     private var openDevicePosture by mutableStateOf(false)
     private var batteryStatusEpoch by mutableStateOf(0)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        applySystemBars(AppTheme.MIDNIGHT)
+        applySystemBars(AppTheme.LIGHT)
         lifecycleScope.launch { themePreferences.selected.collect { saved -> selectedTheme = saved; applySystemBars(saved) } }
         sharedText = incomingSharedText(intent)
         openQuarantine = intent.getBooleanExtra(SecurityAlertNotifier.EXTRA_OPEN_QUARANTINE, false)
@@ -88,7 +88,7 @@ class MainActivity : ComponentActivity() {
         val light = theme == AppTheme.LIGHT
         val background = when (theme) {
             AppTheme.MIDNIGHT -> android.graphics.Color.rgb(11, 19, 43)
-            AppTheme.LIGHT -> android.graphics.Color.rgb(248, 249, 250)
+            AppTheme.LIGHT -> android.graphics.Color.rgb(244, 247, 250)
             AppTheme.OLED -> android.graphics.Color.BLACK
         }
         enableEdgeToEdge(
