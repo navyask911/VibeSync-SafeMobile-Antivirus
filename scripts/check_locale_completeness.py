@@ -220,6 +220,36 @@ for path in sorted(BASE.glob("values-*/strings.xml")):
     if item is None or not "".join(item.itertext()).strip():
         errors.append(f"{path}: missing voice_alert_malware_detected")
 
+# v1.4.0: all new navigation and posture-audit labels must be translated in every locale.
+V140_KEYS = (
+    "v140_dashboard", "v140_analytics_tools", "v140_critical", "v140_minor",
+    "v140_snoozed", "v140_completed", "v140_snooze_warning",
+    "v140_done_return_to_audit", "v140_security_risk_explained",
+    "v140_posture_score_impact", "v140_pending_actions",
+)
+base_v140, _ = read_resources(BASE / "values" / "v140.xml")
+for key in V140_KEYS:
+    if key not in base_v140:
+        errors.append(f"base v140.xml: missing {key}")
+for locale in LOCALES:
+    translated_v140, _ = read_resources(BASE / f"values-{locale}" / "v140.xml")
+    for key in V140_KEYS:
+        source, target = base_v140.get(key), translated_v140.get(key)
+        if target is None:
+            errors.append(f"{locale}: missing v1.4.0 translation {key}")
+            continue
+        value = "".join(target.itertext()).strip()
+        original = "".join(source.itertext()).strip() if source is not None else ""
+        if not value or value == original:
+            errors.append(f"{locale}: empty or English v1.4.0 fallback {key}")
+        if formats(value) != formats(original):
+            errors.append(f"{locale}: v1.4.0 placeholder mismatch {key}")
+    try:
+        if "\\'" in (BASE / f"values-{locale}" / "v140.xml").read_text(encoding="utf-8"):
+            errors.append(f"{locale}: remove backslash-escaped apostrophes from v1.4.0 XML")
+    except OSError:
+        errors.append(f"{locale}: missing v1.4.0 XML resource file")
+
 # Audit obvious literal UI labels on all Compose/Kotlin presentation components.
 # Semantic inspection remains necessary for dynamic messages and names.
 for folder in SOURCE_DIRS:
