@@ -596,10 +596,10 @@ import kotlinx.coroutines.launch
     }
     Box(Modifier.size(42.dp).background(MaterialTheme.colorScheme.primaryContainer, RoundedCornerShape(14.dp)), contentAlignment = Alignment.Center) {
      androidx.compose.material3.Icon(
-      painterResource(R.drawable.ic_launcher_foreground),
+      Icons.Default.Security,
       contentDescription = stringResource(R.string.app_name),
-      tint = Color.Unspecified,
-      modifier = Modifier.size(32.dp)
+      tint = MaterialTheme.colorScheme.primary,
+      modifier = Modifier.size(28.dp)
      )
     }
     Column(Modifier.padding(start = 10.dp).weight(1f)) {
