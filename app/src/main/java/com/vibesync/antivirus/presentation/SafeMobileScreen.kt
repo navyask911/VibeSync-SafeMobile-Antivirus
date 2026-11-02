@@ -189,12 +189,13 @@ import kotlinx.coroutines.launch
    }
    selectedDestination = destination
   } else {
-   val parentTab = currentBackStackEntry?.arguments?.getString("parentTab")
+   val parentTab = if (destination == "pro") "settings" else
+    (currentBackStackEntry?.arguments?.getString("parentTab")
     ?: when (currentRoute) {
      "tools" -> "tools"
      "settings" -> "settings"
      else -> "dashboard"
-    }
+    })
    tabNavController.navigate("detail/$parentTab/$destination") { launchSingleTop = true }
    selectedDestination = destination
   }
