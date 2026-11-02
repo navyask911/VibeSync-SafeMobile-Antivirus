@@ -202,6 +202,7 @@ private fun DashboardActionRow(
 @Composable
 private fun DualRingProtectionGauge(score: Int, pendingCount: Int) {
     val sweep by animateFloatAsState(targetValue = score.coerceIn(0, 100) / 100f, animationSpec = tween(950), label = stringResource(R.string.device_security_score))
+    val trackColor = MaterialTheme.colorScheme.surfaceVariant
     val scoreColor = when {
         score < 50 -> MaterialTheme.colorScheme.error
         score < 80 -> Color(0xFFD97706)
@@ -219,7 +220,7 @@ private fun DualRingProtectionGauge(score: Int, pendingCount: Int) {
             repeat(4) { index ->
                 val start = outerStart + index * 90f
                 drawArc(
-                    color = MaterialTheme.colorScheme.surfaceVariant,
+                    color = trackColor,
                     startAngle = start,
                     sweepAngle = 55f,
                     useCenter = false,
@@ -241,7 +242,7 @@ private fun DualRingProtectionGauge(score: Int, pendingCount: Int) {
             val innerInset = ringStroke + 8.dp.toPx()
             val innerSize = Size(size.width - innerInset * 2f, size.height - innerInset * 2f)
             drawArc(
-                color = MaterialTheme.colorScheme.surfaceVariant,
+                color = trackColor,
                 startAngle = -90f,
                 sweepAngle = 360f,
                 useCenter = false,
