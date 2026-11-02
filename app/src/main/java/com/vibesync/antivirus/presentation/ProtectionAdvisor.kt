@@ -66,7 +66,7 @@ object ProtectionAdvisorEngine {
             it > 0L && it <= inputs.nowMillis && inputs.nowMillis - it < WEEK_MS
         } == true
         val raw = listOf(
-            issue("initial_scan_run", R.string.scan_installed, R.string.scan_explanation, 15, scanned, "scan"),
+            issue("initial_scan_run", R.string.security_scan_now, R.string.scan_explanation, 15, scanned, "scan"),
             issue("active_threats", R.string.threat_found, R.string.scan_clean_warning, 25,
                 scanned && inputs.threatsDetected == 0, "scan", canSnooze = false,
                 activeThreat = scanned && inputs.threatsDetected > 0),
@@ -77,7 +77,7 @@ object ProtectionAdvisorEngine {
                 activeThreat = (inputs.highRiskPostureCount ?: 0) > 0),
             issue("notifications_on", R.string.security_alerts_title, R.string.incident_alerts_explanation,
                 8, inputs.notificationsEnabled, "settings"),
-            issue("battery_unrestricted", R.string.battery_review_title, R.string.battery_review_description,
+            issue("battery_unrestricted", R.string.battery_review_title, R.string.battery_review_body,
                 6, inputs.batteryUnrestricted, "settings"),
             issue("fullscreen_alert", R.string.incident_full_screen_settings,
                 R.string.incident_full_screen_explanation, 5,
