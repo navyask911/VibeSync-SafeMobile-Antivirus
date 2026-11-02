@@ -25,9 +25,9 @@ class ThemePreferencesTest {
         }
     }
 
-    @Test fun invalidPreferencesFallBackToMidnight() {
-        assertEquals(AppTheme.MIDNIGHT, AppTheme.fromSaved(null))
-        assertEquals(AppTheme.MIDNIGHT, AppTheme.fromSaved("INVALID"))
-        assertEquals(AppTheme.MIDNIGHT, AppTheme.fromSaved(""))
+    @Test fun invalidPreferencesFallBackToCleanLight() {
+        assertEquals(AppTheme.LIGHT, AppTheme.fromSaved(null))
+        assertEquals(AppTheme.LIGHT, AppTheme.fromSaved("INVALID"))
+        assertEquals(AppTheme.LIGHT, AppTheme.fromSaved(""))
     }
 }
