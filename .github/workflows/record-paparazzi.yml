@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - "feat/phase4-final-v1.5.1"
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
 
 permissions:
   contents: write
@@ -14,7 +17,7 @@ concurrency:
 
 jobs:
   record:
-    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+    if: ${{ github.event_name != 'pull_request' || (github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'feat/phase4-final-v1.5.1') }}
     runs-on: ubuntu-latest
     timeout-minutes: 35
     steps:
