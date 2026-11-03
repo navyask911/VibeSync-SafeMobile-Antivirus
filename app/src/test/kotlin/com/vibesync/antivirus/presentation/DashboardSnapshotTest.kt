@@ -184,7 +184,8 @@ class DashboardSnapshotTest {
                 }
             }
         }
-        val snapshotContext = remember { SnapshotContextWrapper(LocalContext.current) }
+        val baseContext = LocalContext.current
+        val snapshotContext = remember(baseContext) { SnapshotContextWrapper(baseContext) }
         CompositionLocalProvider(
             LocalLifecycleOwner provides lifecycleOwner,
             LocalContext provides snapshotContext
