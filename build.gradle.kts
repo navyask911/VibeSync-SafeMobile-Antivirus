@@ -1,6 +1,6 @@
 plugins {
     id("org.cyclonedx.bom") version "3.5.1"
- id("app.cash.paparazzi") version "1.3.5" apply false
+ id("app.cash.paparazzi") version "2.0.0-alpha02" apply false
  id("com.android.application") version "8.13.2" apply false
  id("org.jetbrains.kotlin.android") version "2.2.21" apply false
  id("org.jetbrains.kotlin.kapt") version "2.2.21" apply false
