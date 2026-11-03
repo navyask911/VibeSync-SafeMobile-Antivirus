@@ -574,7 +574,7 @@ import kotlinx.coroutines.launch
    Toast.makeText(context, R.string.quarantine_delete_failed, Toast.LENGTH_LONG).show()
   }
  }
- Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+ Surface(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing), color = MaterialTheme.colorScheme.background) {
   if (!onboardingComplete) {
    SecurityOnboardingScreen(
     initialSyncPending = initialHashSyncPending,
@@ -582,9 +582,9 @@ import kotlinx.coroutines.launch
     onSkipSetup = finishOnboarding
    )
   } else {
-  Column(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing)) {
+  Column(Modifier.fillMaxSize()) {
    Row(
-    modifier = Modifier.fillMaxWidth().padding(horizontal = 18.dp, vertical = 10.dp),
+    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 10.dp),
     verticalAlignment = Alignment.CenterVertically
    ) {
     if (selectedDestination !in setOf("home", "tools", "settings")) {
@@ -640,7 +640,7 @@ import kotlinx.coroutines.launch
            onOpenScanResults = { navigateToDestination("scan") }
           )
          }
-         "tools" -> Column(Modifier.fillMaxSize().verticalScroll(contentScrollState).padding(horizontal = 18.dp, vertical = 14.dp)) {
+         "tools" -> Column(Modifier.fillMaxSize().verticalScroll(contentScrollState)) {
           ProtectionToolsHub(
             onOpen = { navigateToDestination(it) },
             onScanInstalled = {
@@ -655,7 +655,7 @@ import kotlinx.coroutines.launch
             }
            )
          }
-         "settings" -> Column(Modifier.fillMaxSize().verticalScroll(contentScrollState).padding(horizontal = 18.dp, vertical = 14.dp)) {
+         "settings" -> Column(Modifier.fillMaxSize().verticalScroll(contentScrollState).padding(horizontal = 16.dp, vertical = 16.dp)) {
           SafeMobileSettingsPanel(
            sentinelEnabled = monitoringRunning,
            onEnableSentinel = enableSentinel,
@@ -686,7 +686,7 @@ import kotlinx.coroutines.launch
          }
          else -> Column(
           Modifier.fillMaxSize().verticalScroll(contentScrollState)
-           .padding(horizontal = 18.dp, vertical = 14.dp),
+           .padding(horizontal = 16.dp, vertical = 16.dp),
           verticalArrangement = Arrangement.spacedBy(14.dp)
          ) {
           if (selectedDestination == "advisor") {
@@ -707,7 +707,7 @@ import kotlinx.coroutines.launch
           }
         if (privacyAccepted && !notificationsGranted && Build.VERSION.SDK_INT >= 33) {
            Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer)) {
-             Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                Text(stringResource(R.string.ui_notifications_denied), color = MaterialTheme.colorScheme.onErrorContainer)
                OutlinedButton(onClick = {
                  val settings = Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
@@ -750,7 +750,7 @@ import kotlinx.coroutines.launch
          )
          if (initialHashSyncPending) {
           Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.primaryContainer),shape=RoundedCornerShape(16.dp),modifier=Modifier.fillMaxWidth()) {
-           Row(Modifier.padding(14.dp), horizontalArrangement=Arrangement.spacedBy(10.dp), verticalAlignment=Alignment.CenterVertically) {
+           Row(Modifier.padding(16.dp), horizontalArrangement=Arrangement.spacedBy(10.dp), verticalAlignment=Alignment.CenterVertically) {
             CircularProgressIndicator(Modifier.size(18.dp), strokeWidth=2.dp)
             Text(stringResource(R.string.hash_database_initial_syncing), style=MaterialTheme.typography.bodyMedium)
            }
@@ -934,8 +934,8 @@ import kotlinx.coroutines.launch
         )
         if (selectedDestination == "phishing") PhishingPanel(sharedText, repository) { onSharedTextConsumed() }
         if (selectedDestination == "cleaner") StorageCleanerPanel()
-        state.messageResource?.takeUnless { it == R.string.scan_complete && selectedDestination in listOf("home", "scan") }?.let { message -> Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant)) { Text(stringResource(message),Modifier.padding(14.dp),color=MaterialTheme.colorScheme.onSurface,style=MaterialTheme.typography.bodySmall) } }
-        state.messageText?.let { message -> Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant)) { Text(message.resolve(context),Modifier.padding(14.dp),color=MaterialTheme.colorScheme.onSurface,style=MaterialTheme.typography.bodySmall) } }
+        state.messageResource?.takeUnless { it == R.string.scan_complete && selectedDestination in listOf("home", "scan") }?.let { message -> Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant)) { Text(stringResource(message),Modifier.padding(16.dp),color=MaterialTheme.colorScheme.onSurface,style=MaterialTheme.typography.bodySmall) } }
+        state.messageText?.let { message -> Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant)) { Text(message.resolve(context),Modifier.padding(16.dp),color=MaterialTheme.colorScheme.onSurface,style=MaterialTheme.typography.bodySmall) } }
         if(selectedDestination == "scan" && state.results.isNotEmpty()) {
          Column(verticalArrangement=Arrangement.spacedBy(12.dp), modifier=Modifier.fillMaxWidth().padding(top = 4.dp)) {
           Text(stringResource(R.string.latest_results),style=MaterialTheme.typography.titleLarge,fontWeight=FontWeight.Bold)
@@ -1360,7 +1360,7 @@ private fun ScanVerdictCountTile(
   colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
   elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
  ) {
-  Column(Modifier.fillMaxWidth().padding(14.dp),
+  Column(Modifier.fillMaxWidth().padding(16.dp),
    verticalArrangement = Arrangement.spacedBy(4.dp)) {
    Text(count.toString(), style = MaterialTheme.typography.headlineMedium,
     fontWeight = FontWeight.Bold, color = accent)

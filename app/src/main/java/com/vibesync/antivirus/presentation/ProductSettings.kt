@@ -170,7 +170,7 @@ internal fun ScanHistoryPanel(audits: List<ScanAudit>) {
                 val review = group.count { it.verdict == "SUSPICIOUS" }
                 val incomplete = group.count { it.verdict == "NOT_SCANNED" }
                 Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
-                    Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
                         Text(localizedDate(mostRecent.scanTimestamp), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
                         Text(
                             stringResource(R.string.format_label_value, stringResource(R.string.history_session), mostRecent.scanSessionId.ifBlank { "—" }),

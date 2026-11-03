@@ -12,10 +12,11 @@ object SecurityTokens {
     val glassBorder = Color(0xFFE2E8F0)
     const val glassSurfaceAlpha = 0.94f
     const val glassBorderAlpha = 0.22f
-    val pageHorizontalPadding: Dp = 20.dp
-    val pageTopPadding: Dp = 8.dp
-    val sectionSpacing: Dp = 20.dp
-    val cardContentPadding: Dp = 18.dp
+    val pageHorizontalPadding: Dp = 16.dp
+    val pageTopPadding: Dp = 16.dp
+    val pageVerticalPadding: Dp = 16.dp
+    val sectionSpacing: Dp = 24.dp
+    val cardContentPadding: Dp = 16.dp
     val cardInnerSpacing: Dp = 12.dp
     val cardElevation: Dp = 0.dp
     val cardBorderWidth: Dp = 1.dp

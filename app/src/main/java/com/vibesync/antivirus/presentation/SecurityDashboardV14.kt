@@ -97,10 +97,8 @@ internal fun SecurityDashboardV14(
     androidx.compose.foundation.lazy.LazyColumn(
         modifier = Modifier.fillMaxWidth(),
         contentPadding = PaddingValues(
-            start = SecurityTokens.pageHorizontalPadding,
-            top = SecurityTokens.pageTopPadding,
-            end = SecurityTokens.pageHorizontalPadding,
-            bottom = 24.dp
+            horizontal = SecurityTokens.pageHorizontalPadding,
+            vertical = SecurityTokens.pageVerticalPadding
         ),
         verticalArrangement = Arrangement.spacedBy(SecurityTokens.sectionSpacing)
     ) {
@@ -303,7 +301,7 @@ private fun QuickProtectionTool(
         color = MaterialTheme.colorScheme.surface,
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
     ) {
-        Column(Modifier.fillMaxWidth().padding(14.dp),
+        Column(Modifier.fillMaxWidth().padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(9.dp)) {
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                 Box(Modifier.size(36.dp).background(

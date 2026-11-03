@@ -42,7 +42,7 @@ internal fun ProtectionToolsHub(
     onPickApk: () -> Unit
 ) {
     Column(
-        Modifier.fillMaxWidth().padding(horizontal = SecurityTokens.pageHorizontalPadding, vertical = 14.dp),
+        Modifier.fillMaxWidth().padding(horizontal = SecurityTokens.pageHorizontalPadding, vertical = SecurityTokens.pageVerticalPadding),
         verticalArrangement = Arrangement.spacedBy(18.dp)
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {

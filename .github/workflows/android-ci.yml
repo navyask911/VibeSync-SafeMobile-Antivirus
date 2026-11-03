@@ -85,7 +85,7 @@ jobs:
       - name: Unit tests
         run: ./gradlew --no-daemon testOfflineDebugUnitTest
       - name: Android lint
-        run: ./gradlew --no-daemon lintOfflineDebug lintFeedDebug
+        run: ./gradlew --no-daemon lintOfflineDebug lintFeedDebug lintVitalOfflineRelease lintVitalFeedRelease
       - name: Print Android lint error locations when lint fails
         if: failure()
         shell: bash
