@@ -152,7 +152,7 @@ internal fun SecurityDashboardV14(
                     val scanButtonScale by animateFloatAsState(
                         targetValue = if (scanPressed) 0.98f else 1f,
                         animationSpec = tween(durationMillis = 110),
-                        label = "scanNowScale"
+                        label = stringResource(R.string.security_scan_now)
                     )
                     Button(
                         onClick = onScan,
