@@ -4,14 +4,6 @@ on:
   push:
     branches:
       - "feat/phase4-final-v1.5.1"
-  pull_request:
-    branches: [main]
-    paths:
-      - "app/src/main/java/com/vibesync/antivirus/presentation/**"
-      - "app/src/test/kotlin/**"
-      - "app/build.gradle.kts"
-      - "build.gradle.kts"
-      - ".github/workflows/record-paparazzi.yml"
 
 permissions:
   contents: write

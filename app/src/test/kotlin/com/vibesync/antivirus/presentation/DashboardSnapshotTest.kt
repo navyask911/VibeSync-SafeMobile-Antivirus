@@ -20,7 +20,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
-private enum class SnapshotPalette(val appTheme: AppTheme) {
+enum class SnapshotPalette(val appTheme: AppTheme) {
     LIGHT(AppTheme.LIGHT),
     DARK(AppTheme.MIDNIGHT)
 }
