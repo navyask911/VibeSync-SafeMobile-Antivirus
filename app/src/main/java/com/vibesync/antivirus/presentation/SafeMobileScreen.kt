@@ -620,7 +620,6 @@ import kotlinx.coroutines.launch
            advisor = advisorState,
            isPro = adMobState.isPro,
            adsReady = adMobState.adsReady,
-           adMobManager = adMobManager,
            scanRunning = state.isScanning,
            scanProgress = state.totalItems.takeIf { it > 0 }?.let { state.processedItems.toFloat() / it },
            downloadsActive = StorageAccessPreferences.hasRole(context, StorageAccessPreferences.DOWNLOADS),
@@ -939,70 +938,35 @@ import kotlinx.coroutines.launch
         state.messageResource?.takeUnless { it == R.string.scan_complete && selectedDestination in listOf("home", "scan") }?.let { message -> Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant)) { Text(stringResource(message),Modifier.padding(16.dp),color=MaterialTheme.colorScheme.onSurface,style=MaterialTheme.typography.bodySmall) } }
         state.messageText?.let { message -> Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant)) { Text(message.resolve(context),Modifier.padding(16.dp),color=MaterialTheme.colorScheme.onSurface,style=MaterialTheme.typography.bodySmall) } }
         if(selectedDestination == "scan" && state.results.isNotEmpty()) {
-         Column(verticalArrangement=Arrangement.spacedBy(12.dp), modifier=Modifier.fillMaxWidth().padding(top = 4.dp)) {
-          Text(stringResource(R.string.latest_results),style=MaterialTheme.typography.titleLarge,fontWeight=FontWeight.Bold)
-          val threatTotal = state.results.count { it.verdict == ScanVerdict.THREAT }
-          val reviewTotal = state.results.count { it.verdict == ScanVerdict.SUSPICIOUS }
-          val noMatchTotal = state.results.count { it.verdict == ScanVerdict.NO_MATCH }
-          val notScannedCount = state.results.count { it.verdict == ScanVerdict.NOT_SCANNED }
-          Text(
-           listOf(
-            pluralStringResource(R.plurals.l10n_threats, threatTotal, threatTotal),
-            pluralStringResource(R.plurals.l10n_review, reviewTotal, reviewTotal),
-            pluralStringResource(R.plurals.l10n_no_match, noMatchTotal, noMatchTotal),
-            pluralStringResource(R.plurals.l10n_unreadable, notScannedCount, notScannedCount)
-           ).joinToString(" · "),
-           color=MaterialTheme.colorScheme.onSurfaceVariant,
-           style=MaterialTheme.typography.bodySmall
-          )
-          Row(horizontalArrangement=Arrangement.spacedBy(10.dp), modifier=Modifier.fillMaxWidth()) {
-           ScanVerdictCountTile(threatTotal, R.string.verdict_threat, MaterialTheme.colorScheme.error,
-            modifier=Modifier.weight(1f))
-           ScanVerdictCountTile(reviewTotal, R.string.verdict_suspicious, MaterialTheme.colorScheme.tertiary,
-            modifier=Modifier.weight(1f))
-          }
-          Row(horizontalArrangement=Arrangement.spacedBy(10.dp), modifier=Modifier.fillMaxWidth()) {
-           ScanVerdictCountTile(noMatchTotal, R.string.verdict_no_match, MaterialTheme.colorScheme.onSurface,
-            modifier=Modifier.weight(1f))
-           ScanVerdictCountTile(notScannedCount, R.string.verdict_not_scanned, MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier=Modifier.weight(1f))
-          }
-          Text(stringResource(R.string.scan_explanation),
-           style=MaterialTheme.typography.bodySmall, color=MaterialTheme.colorScheme.onSurfaceVariant)
-          state.results.take(80).forEach { result ->
-           ScanResultCard(
-            result,
-            showUninstall = result.packageName != null && result.packageName != context.packageName &&
-             result.verdict in listOf(ScanVerdict.THREAT, ScanVerdict.SUSPICIOUS),
-            showQuarantine = result.sourceUri != null && result.verdict in listOf(ScanVerdict.THREAT, ScanVerdict.SUSPICIOUS),
-            onUninstall = { packageName ->
-             lastUninstallPackage = packageName
-             pendingUninstallPackage = packageName
-             when (vm.requestUninstall(context, packageName,
-              launchDelete = { intent -> deleteLauncher.launch(intent) },
-              openAppInfo = { intent -> context.startActivity(intent) })) {
-              UninstallResult.Success, UninstallResult.RequiresUserAction -> Unit
-              is UninstallResult.BlockedSystemApp -> {
-               showUninstallSnackbar(context.getString(R.string.uninstall_protected), null)
-               try { context.startActivity(UninstallHandler.buildAppInfoIntent(packageName)) }
-               catch (e: ActivityNotFoundException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
-               catch (e: SecurityException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
-              }
-              UninstallResult.NotFound -> { pendingUninstallPackage = null; lastUninstallPackage = null; showUninstallSnackbar(context.getString(R.string.uninstall_not_found), null) }
-              UninstallResult.OpenedAppInfo -> showUninstallSnackbar(context.getString(R.string.uninstall_opened_app_info), packageName)
-              UninstallResult.HandlerUnavailable -> { pendingUninstallPackage = null; showUninstallSnackbar(context.getString(R.string.uninstall_launch_failed), packageName) }
-             }
-            },
-            showAppInfo = true,
-            onAppInfo = { packageName ->
+         ScanResultsScreen(
+          results = state.results,
+          onUninstall = { packageName ->
+           lastUninstallPackage = packageName
+           pendingUninstallPackage = packageName
+           when (vm.requestUninstall(context, packageName,
+            launchDelete = { intent -> deleteLauncher.launch(intent) },
+            openAppInfo = { intent -> context.startActivity(intent) })) {
+            UninstallResult.Success, UninstallResult.RequiresUserAction -> Unit
+            is UninstallResult.BlockedSystemApp -> {
+             showUninstallSnackbar(context.getString(R.string.uninstall_protected), null)
              try { context.startActivity(UninstallHandler.buildAppInfoIntent(packageName)) }
              catch (e: ActivityNotFoundException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
              catch (e: SecurityException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
-            },
-            onQuarantine = { pendingQuarantine = result }, onTrust = { vm.trustApp(it) }, onRemoveTrust = vm::removeTrust
-           )
-          }
-         }
+            }
+            UninstallResult.NotFound -> { pendingUninstallPackage = null; lastUninstallPackage = null; showUninstallSnackbar(context.getString(R.string.uninstall_not_found), null) }
+            UninstallResult.OpenedAppInfo -> showUninstallSnackbar(context.getString(R.string.uninstall_opened_app_info), packageName)
+            UninstallResult.HandlerUnavailable -> { pendingUninstallPackage = null; showUninstallSnackbar(context.getString(R.string.uninstall_launch_failed), packageName) }
+           }
+          },
+          onAppInfo = { packageName ->
+           try { context.startActivity(UninstallHandler.buildAppInfoIntent(packageName)) }
+           catch (e: ActivityNotFoundException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
+           catch (e: SecurityException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
+          },
+          onQuarantine = { pendingQuarantine = it },
+          onTrust = vm::trustApp,
+          onRemoveTrust = vm::removeTrust
+         )
         }
         if (selectedDestination == "quarantine") {
         Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant),shape=RoundedCornerShape(16.dp),modifier=Modifier.fillMaxWidth()) {
@@ -1313,6 +1277,68 @@ private fun canOfferUninstall(context: Context, packageName: String): Boolean {
  val flags=appInfoForUninstall(context,packageName)?.flags ?: return false
  return flags and (android.content.pm.ApplicationInfo.FLAG_SYSTEM or android.content.pm.ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) == 0
 }
+@Composable
+internal fun ScanResultsScreen(
+ results: List<ScanResult>,
+ onUninstall: (String) -> Unit,
+ onAppInfo: (String) -> Unit,
+ onQuarantine: (ScanResult) -> Unit,
+ onTrust: (ScanResult) -> Unit,
+ onRemoveTrust: (String) -> Unit
+) {
+ if (results.isEmpty()) return
+ val context = LocalContext.current
+ Column(
+  verticalArrangement = Arrangement.spacedBy(12.dp),
+  modifier = Modifier.fillMaxWidth().padding(top = 4.dp)
+ ) {
+  Text(stringResource(R.string.latest_results),style=MaterialTheme.typography.titleLarge,fontWeight=FontWeight.Bold)
+  val threatTotal = results.count { it.verdict == ScanVerdict.THREAT }
+  val reviewTotal = results.count { it.verdict == ScanVerdict.SUSPICIOUS }
+  val noMatchTotal = results.count { it.verdict == ScanVerdict.NO_MATCH }
+  val notScannedCount = results.count { it.verdict == ScanVerdict.NOT_SCANNED }
+  Text(
+   listOf(
+    pluralStringResource(R.plurals.l10n_threats, threatTotal, threatTotal),
+    pluralStringResource(R.plurals.l10n_review, reviewTotal, reviewTotal),
+    pluralStringResource(R.plurals.l10n_no_match, noMatchTotal, noMatchTotal),
+    pluralStringResource(R.plurals.l10n_unreadable, notScannedCount, notScannedCount)
+   ).joinToString(" · "),
+   color=MaterialTheme.colorScheme.onSurfaceVariant,
+   style=MaterialTheme.typography.bodySmall
+  )
+  Row(horizontalArrangement=Arrangement.spacedBy(10.dp), modifier=Modifier.fillMaxWidth()) {
+   ScanVerdictCountTile(threatTotal, R.string.verdict_threat, MaterialTheme.colorScheme.error,
+    modifier=Modifier.weight(1f))
+   ScanVerdictCountTile(reviewTotal, R.string.verdict_suspicious, MaterialTheme.colorScheme.tertiary,
+    modifier=Modifier.weight(1f))
+  }
+  Row(horizontalArrangement=Arrangement.spacedBy(10.dp), modifier=Modifier.fillMaxWidth()) {
+   ScanVerdictCountTile(noMatchTotal, R.string.verdict_no_match, MaterialTheme.colorScheme.onSurface,
+    modifier=Modifier.weight(1f))
+   ScanVerdictCountTile(notScannedCount, R.string.verdict_not_scanned, MaterialTheme.colorScheme.onSurfaceVariant,
+    modifier=Modifier.weight(1f))
+  }
+  Text(stringResource(R.string.scan_explanation),
+   style=MaterialTheme.typography.bodySmall, color=MaterialTheme.colorScheme.onSurfaceVariant)
+  results.take(80).forEach { result ->
+   ScanResultCard(
+    result,
+    showUninstall = result.packageName != null && result.packageName != context.packageName &&
+     result.verdict in listOf(ScanVerdict.THREAT, ScanVerdict.SUSPICIOUS),
+    showQuarantine = result.sourceUri != null &&
+     result.verdict in listOf(ScanVerdict.THREAT, ScanVerdict.SUSPICIOUS),
+    onUninstall = onUninstall,
+    showAppInfo = true,
+    onAppInfo = onAppInfo,
+    onQuarantine = { onQuarantine(result) },
+    onTrust = onTrust,
+    onRemoveTrust = onRemoveTrust
+   )
+  }
+ }
+}
+
 @Composable private fun ScanResultCard(
  result:ScanResult, showUninstall:Boolean, showQuarantine:Boolean, showAppInfo:Boolean,
  onUninstall:(String)->Unit, onAppInfo:(String)->Unit, onQuarantine:()->Unit,

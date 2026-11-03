@@ -7,6 +7,7 @@ plugins {
  id("org.jetbrains.kotlin.android")
  id("org.jetbrains.kotlin.kapt")
  id("org.jetbrains.kotlin.plugin.compose")
+ id("app.cash.paparazzi")
 }
 fun cfg(value: String): String = "\"" + value.replace("\\", "\\\\").replace("\"", "\\\"") + "\""
 
@@ -40,8 +41,8 @@ android {
   applicationId = "com.vibesync.antivirus"
   minSdk = 26
   targetSdk = 36
-  versionCode = 20261123
-  versionName = "1.5.0"
+  versionCode = 20261124
+  versionName = "1.5.1"
   testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   buildConfigField("String", "FEED_MANIFEST_PUBLIC_KEY_B64", cfg(feedManifestPublicKey))
   buildConfigField("Boolean", "FEED_MANIFEST_KEY_CONFIGURED", (!feedManifestPublicKey.isBlank()).toString())
@@ -196,6 +197,9 @@ dependencies {
  androidTestImplementation("androidx.room:room-testing:2.7.2")
  testImplementation("org.json:json:20240303")
  testImplementation("junit:junit:4.13.2")
+ testImplementation(platform("androidx.compose:compose-bom:2025.05.01"))
+ testImplementation("androidx.compose.ui:ui-test-junit4")
+ testImplementation("com.google.testparameterinjector:test-parameter-injector:1.25")
  testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.2")
 }
 

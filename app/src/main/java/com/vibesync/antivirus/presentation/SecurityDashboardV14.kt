@@ -55,7 +55,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.vibesync.antivirus.R
-import com.vibesync.antivirus.core.ads.AdMobManager
 import com.vibesync.antivirus.ui.components.CyberCard
 import com.vibesync.antivirus.ui.theme.SecurityTokens
 
@@ -64,7 +63,6 @@ internal fun SecurityDashboardV14(
     advisor: ProtectionAdvisorState,
     isPro: Boolean,
     adsReady: Boolean,
-    adMobManager: AdMobManager,
     scanRunning: Boolean,
     scanProgress: Float?,
     downloadsActive: Boolean,
