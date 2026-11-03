@@ -47,6 +47,9 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.platform.LocalConfiguration
+import java.text.DateFormat
+import java.util.Date
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -76,7 +79,10 @@ internal fun SecurityDashboardV14(
     onPosture: () -> Unit,
     onApps: () -> Unit,
     onQuarantine: () -> Unit,
-    onOpenTools: () -> Unit = {}
+    onOpenTools: () -> Unit = {},
+    lastScanAt: Long? = null,
+    reviewCount: Int = 0,
+    onOpenScanResults: () -> Unit = {}
 ) {
     val pendingIssue = advisor.critical.firstOrNull() ?: advisor.minor.firstOrNull()
     val interactionSource = remember { MutableInteractionSource() }
@@ -117,7 +123,7 @@ internal fun SecurityDashboardV14(
                         horizontalArrangement = Arrangement.spacedBy(18.dp)) {
                         ProtectionScoreRing(advisor.score)
                         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(5.dp)) {
-                            Text(stringResource(R.string.v140_security_risk_explained),
+                            Text(stringResource(R.string.device_security_score),
                                 style = MaterialTheme.typography.labelMedium,
                                 color = MaterialTheme.colorScheme.secondary,
                                 fontWeight = FontWeight.SemiBold)
@@ -171,12 +177,40 @@ internal fun SecurityDashboardV14(
                         Row(verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                             if (scanProgress != null) CircularProgressIndicator(
-                                progress = { scanProgress.coerceIn(0f, 1f) },
+                                progress = scanProgress.coerceIn(0f, 1f),
                                 modifier = Modifier.size(18.dp), strokeWidth = 2.dp
                             )
                             Text(stringResource(R.string.scan_running),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                    }
+                    val latestScanLabel = lastScanAt?.let { timestamp ->
+                        DateFormat.getDateTimeInstance(
+                            DateFormat.SHORT,
+                            DateFormat.SHORT,
+                            LocalConfiguration.current.locales[0]
+                        ).format(Date(timestamp))
+                    }
+                    if (latestScanLabel != null) {
+                        val scanSummary = stringResource(
+                            R.string.format_label_value,
+                            stringResource(R.string.history_title),
+                            latestScanLabel
+                        )
+                        val reviewSummary = if (reviewCount > 0) {
+                            pluralStringResource(R.plurals.l10n_review, reviewCount, reviewCount)
+                        } else null
+                        TextButton(onClick = onOpenScanResults, modifier = Modifier.fillMaxWidth()) {
+                            Text(
+                                listOfNotNull(scanSummary, reviewSummary).joinToString(" · "),
+                                maxLines = 2,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
+                    } else {
+                        TextButton(onClick = onOpenScanResults, modifier = Modifier.fillMaxWidth()) {
+                            Text(stringResource(R.string.history_empty))
                         }
                     }
                     TextButton(onClick = onOpenAdvisor, modifier = Modifier.fillMaxWidth()) {
@@ -338,7 +372,7 @@ private fun ProtectionScoreRing(score: Int) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(score.toString(), style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
-            Text(stringResource(R.string.v140_completed), style = MaterialTheme.typography.labelSmall,
+            Text(stringResource(R.string.ui_score_checks, score, 100), style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }

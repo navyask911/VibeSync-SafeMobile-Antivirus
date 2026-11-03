@@ -633,7 +633,11 @@ import kotlinx.coroutines.launch
            onLinkChecker = { navigateToDestination("phishing") },
            onPosture = { navigateToDestination("posture"); if (privacyAccepted) postureVm.refreshAuditSilently() },
            onApps = { navigateToDestination("apps") },
-           onQuarantine = { navigateToDestination("quarantine") }
+           onQuarantine = { navigateToDestination("quarantine") },
+           onOpenTools = { navigateToDestination("tools") },
+           lastScanAt = state.lastScanAt,
+           reviewCount = state.threatCount + state.suspiciousCount,
+           onOpenScanResults = { navigateToDestination("scan") }
           )
          }
          "tools" -> Column(Modifier.fillMaxSize().verticalScroll(contentScrollState).padding(horizontal = 18.dp, vertical = 14.dp)) {
