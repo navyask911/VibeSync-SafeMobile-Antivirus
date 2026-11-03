@@ -1,9 +1,6 @@
 name: Record Paparazzi UI goldens
 
 on:
-  push:
-    branches:
-      - "feat/phase4-final-v1.5.1"
   pull_request:
     branches: [main]
     types: [opened, synchronize, reopened]
