@@ -20,7 +20,7 @@ class ProEntitlementStoreTest {
 
     @After fun removeLedger() { context.deleteSharedPreferences(name) }
 
-    @Test fun actualQuantityExtendsExpiryAndRepeatedTokenIsIdempotent() {
+    @Test fun actualLegacyQuantityExtendsExpiryAndRepeatedTokenIsIdempotent() {
         val now = System.currentTimeMillis()
         assertTrue(store.grant("test-purchase-one", 2, now))
         val expected = now + 2 * ProEntitlementStore.MILLIS_PER_YEAR
@@ -31,7 +31,7 @@ class ProEntitlementStoreTest {
         assertEquals(expected + ProEntitlementStore.MILLIS_PER_YEAR, store.expiresAt())
     }
 
-    @Test fun missingDataAndInvalidQuantitiesNeverGrantPro() {
+    @Test fun missingDataAndInvalidLegacyQuantitiesNeverGrantPro() {
         assertFalse(store.checkProStatusForThisDevice())
         assertFalse(store.grant("", 1))
         assertFalse(store.grant("test-zero", 0))
@@ -40,10 +40,40 @@ class ProEntitlementStoreTest {
         assertEquals(0L, store.expiresAt())
     }
 
-    @Test fun actualPlayQuantityIsNotCappedByThePriceEstimateSelector() {
+    @Test fun actualLegacyPlayQuantityIsNotCappedByThePriceEstimateSelector() {
         val now = System.currentTimeMillis()
         assertTrue(store.grant("test-play-cart-quantity", 11, now))
         assertEquals(now + 11 * ProEntitlementStore.MILLIS_PER_YEAR, store.expiresAt())
+    }
+
+    @Test fun subscriptionExpiryIncludes365DaysAndOneDayGraceBuffer() {
+        val purchaseTime = System.currentTimeMillis()
+        assertTrue(store.grantSubscription("test-subscription-token", purchaseTime, purchaseTime))
+        val expected = purchaseTime + ProEntitlementStore.MILLIS_PER_YEAR +
+            ProEntitlementStore.GOOGLE_GRACE_BUFFER_MS
+        assertEquals(expected, store.expiresAt(purchaseTime))
+    }
+
+    @Test fun repeatedSubscriptionQueryIsIdempotentAndRenewalMovesExpiryForward() {
+        val purchaseTime = System.currentTimeMillis()
+        assertTrue(store.grantSubscription("test-subscription-token", purchaseTime, purchaseTime))
+        val firstExpiry = purchaseTime + ProEntitlementStore.MILLIS_PER_YEAR +
+            ProEntitlementStore.GOOGLE_GRACE_BUFFER_MS
+        assertTrue(store.grantSubscription("test-subscription-token", purchaseTime, purchaseTime + 1_000))
+        assertEquals(firstExpiry, store.expiresAt(purchaseTime + 1_000))
+
+        val renewalPurchaseTime = purchaseTime + ProEntitlementStore.MILLIS_PER_YEAR
+        assertTrue(store.grantSubscription("test-subscription-token", renewalPurchaseTime, renewalPurchaseTime))
+        val renewedExpiry = renewalPurchaseTime + ProEntitlementStore.MILLIS_PER_YEAR +
+            ProEntitlementStore.GOOGLE_GRACE_BUFFER_MS
+        assertEquals(renewedExpiry, store.expiresAt(renewalPurchaseTime))
+    }
+
+    @Test fun subscriptionRequiresTokenAndPositivePurchaseTimestamp() {
+        assertFalse(store.grantSubscription("", System.currentTimeMillis()))
+        assertFalse(store.grantSubscription("test-token-zero", 0L))
+        assertFalse(store.grantSubscription("test-token-negative", -1L))
+        assertEquals(0L, store.expiresAt())
     }
 
     @Test fun clearedLocalDataCannotBeRecoveredByCreatingAnotherLedger() {
@@ -53,7 +83,7 @@ class ProEntitlementStoreTest {
         assertFalse(ProEntitlementStore(context, name).checkProStatusForThisDevice())
     }
 
-    @Test fun expiredPassStartsANewPeriodAndClockRollbackFailsClosed() {
+    @Test fun expiredLegacyPassStartsANewPeriodAndClockRollbackFailsClosed() {
         val now = System.currentTimeMillis()
         assertTrue(store.grant("test-expired", 1, now - 2 * ProEntitlementStore.MILLIS_PER_YEAR))
         assertFalse(store.checkProStatusForThisDevice(now))
