@@ -10,7 +10,7 @@ fun SafeMobileMaterialTheme(theme: AppTheme = AppTheme.LIGHT, content: @Composab
             AppTheme.LIGHT -> SafeMobileLightColorScheme
             AppTheme.OLED -> SafeMobileOledColorScheme
         },
-        typography = SafeMobileTypography,
+        typography = AppTypography,
         shapes = SafeMobileShapes,
         content = content
     )
