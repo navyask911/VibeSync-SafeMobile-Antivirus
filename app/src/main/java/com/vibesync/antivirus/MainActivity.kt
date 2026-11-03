@@ -11,7 +11,6 @@ import com.vibesync.antivirus.ui.theme.ThemePreferences
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.compose.setContent
-import androidx.core.view.WindowCompat
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -34,7 +33,6 @@ class MainActivity : ComponentActivity() {
     private var batteryStatusEpoch by mutableStateOf(0)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        WindowCompat.setDecorFitsSystemWindows(window, false)
         applySystemBars(AppTheme.LIGHT)
         lifecycleScope.launch { themePreferences.selected.collect { saved -> selectedTheme = saved; applySystemBars(saved) } }
         sharedText = incomingSharedText(intent)
@@ -98,8 +96,8 @@ class MainActivity : ComponentActivity() {
                 androidx.activity.SystemBarStyle.light(android.graphics.Color.TRANSPARENT, background)
                 else androidx.activity.SystemBarStyle.dark(android.graphics.Color.TRANSPARENT),
             navigationBarStyle = if (light)
-                androidx.activity.SystemBarStyle.light(android.graphics.Color.TRANSPARENT, background)
-                else androidx.activity.SystemBarStyle.dark(android.graphics.Color.TRANSPARENT)
+                androidx.activity.SystemBarStyle.light(background, background)
+                else androidx.activity.SystemBarStyle.dark(background)
         )
     }
 
