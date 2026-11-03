@@ -3,6 +3,7 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
 
+// Figma uses one component structure with separate Light, Midnight and OLED palettes.
 val SafeMobileDarkBackground = Color(0xFF0B132B)
 val SafeMobileDarkSurface = Color(0xFF1C2541)
 val SafeMobileDarkSurfaceVariant = Color(0xFF283557)
@@ -20,8 +21,8 @@ val SafeMobileDarkColorScheme = darkColorScheme(
     tertiary = SafeMobileAmber, onTertiary = Color(0xFF3A2C02),
     background = SafeMobileDarkBackground, onBackground = Color(0xFFF5F7FC),
     surface = SafeMobileDarkSurface, onSurface = Color(0xFFF5F7FC),
-    surfaceVariant = SafeMobileDarkSurfaceVariant, onSurfaceVariant = Color(0xFFD7DFF0),
-    outline = Color(0xFF8290AB), outlineVariant = Color(0xFF465470),
+    surfaceVariant = SafeMobileDarkSurfaceVariant, onSurfaceVariant = Color(0xFFB9C6DC),
+    outline = Color(0xFF354366), outlineVariant = Color(0xFF354366),
     error = SafeMobileDanger, onError = Color(0xFF320606),
     errorContainer = Color(0xFF6C161B), onErrorContainer = Color(0xFFFFDFE0)
 )
@@ -57,8 +58,8 @@ val SafeMobileOledColorScheme = darkColorScheme(
     tertiary = Color(0xFFFFD166), onTertiary = Color(0xFF312100),
     background = Color(0xFF000000), onBackground = Color(0xFFF7FFF9),
     surface = Color(0xFF121212), onSurface = Color(0xFFF7FFF9),
-    surfaceVariant = Color(0xFF252525), onSurfaceVariant = Color(0xFFE3EAE5),
-    outline = Color(0xFF939A95), outlineVariant = Color(0xFF3D4540),
+    surfaceVariant = Color(0xFF252525), onSurfaceVariant = Color(0xFFB4C6BB),
+    outline = Color(0xFF333B36), outlineVariant = Color(0xFF333B36),
     error = Color(0xFFFF1744), onError = Color(0xFF200008),
     errorContainer = Color(0xFF670A23), onErrorContainer = Color(0xFFFFDDE3)
 )

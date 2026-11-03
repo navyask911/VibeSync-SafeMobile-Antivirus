@@ -124,7 +124,7 @@ internal fun ProtectionAnalyticsPanel(
 @Composable
 private fun MetricCard(label: String, value: String, modifier: Modifier = Modifier, danger: Boolean = false, warning: Boolean = false) {
     Card(modifier = modifier, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface), shape = RoundedCornerShape(16.dp)) {
-        Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
             Text(value, style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold,
                 color = when { danger -> MaterialTheme.colorScheme.error; warning -> MaterialTheme.colorScheme.tertiary; else -> MaterialTheme.colorScheme.onSurface })
             Text(label, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
