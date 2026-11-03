@@ -7,7 +7,13 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LifecycleRegistry
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import app.cash.paparazzi.DeviceConfig
 import app.cash.paparazzi.Paparazzi
 import com.google.testing.junit.testparameterinjector.TestParameter
@@ -167,12 +173,21 @@ class DashboardSnapshotTest {
 
     @Composable
     private fun themed(palette: SnapshotPalette, content: @Composable () -> Unit) {
-        SafeMobileTheme(theme = palette.appTheme) {
-            Surface(
-                modifier = Modifier.fillMaxSize(),
-                color = MaterialTheme.colorScheme.background
-            ) {
-                content()
+        val lifecycleOwner = remember {
+            object : LifecycleOwner {
+                override val lifecycle: Lifecycle = LifecycleRegistry(this).apply {
+                    currentState = Lifecycle.State.RESUMED
+                }
+            }
+        }
+        CompositionLocalProvider(LocalLifecycleOwner provides lifecycleOwner) {
+            SafeMobileTheme(theme = palette.appTheme) {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    content()
+                }
             }
         }
     }

@@ -36,6 +36,19 @@ jobs:
       - name: Record Paparazzi snapshots
         run: ./gradlew --no-daemon recordPaparazziDebug
 
+      - name: Print failing Paparazzi test diagnostics
+        if: failure()
+        shell: bash
+        run: |
+          set -uo pipefail
+          report_dir="app/build/test-results/testOfflineDebugUnitTest"
+          if [[ -d "$report_dir" ]]; then
+            find "$report_dir" -type f -name 'TEST-*.xml' -print0 | while IFS= read -r -d '' report; do
+              echo "===== $report ====="
+              grep -A24 -B2 '<failure' "$report" || true
+            done
+          fi
+
       - name: Commit generated golden images to the feature branch
         shell: bash
         env:
