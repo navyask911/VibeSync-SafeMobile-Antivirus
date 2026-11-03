@@ -199,7 +199,7 @@ dependencies {
  testImplementation("junit:junit:4.13.2")
  testImplementation(platform("androidx.compose:compose-bom:2025.05.01"))
  testImplementation("androidx.compose.ui:ui-test-junit4")
- testImplementation("com.google.testparameterinjector:test-parameter-injector:1.24")
+ testImplementation("com.google.testparameterinjector:test-parameter-injector:1.25")
  testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.2")
 }
 
