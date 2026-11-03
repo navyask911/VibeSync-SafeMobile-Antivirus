@@ -574,15 +574,17 @@ import kotlinx.coroutines.launch
    Toast.makeText(context, R.string.quarantine_delete_failed, Toast.LENGTH_LONG).show()
   }
  }
- Surface(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing), color = MaterialTheme.colorScheme.background) {
+ Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
   if (!onboardingComplete) {
-   SecurityOnboardingScreen(
-    initialSyncPending = initialHashSyncPending,
-    onFinish = finishOnboarding,
-    onSkipSetup = finishOnboarding
-   )
+   Box(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing)) {
+    SecurityOnboardingScreen(
+     initialSyncPending = initialHashSyncPending,
+     onFinish = finishOnboarding,
+     onSkipSetup = finishOnboarding
+    )
+   }
   } else {
-  Column(Modifier.fillMaxSize()) {
+  Column(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing)) {
    Row(
     modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 10.dp),
     verticalAlignment = Alignment.CenterVertically
