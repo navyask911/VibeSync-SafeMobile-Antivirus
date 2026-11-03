@@ -47,6 +47,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.platform.LocalConfiguration
 import java.text.DateFormat
 import java.util.Date
@@ -96,8 +97,9 @@ internal fun SecurityDashboardV14(
     androidx.compose.foundation.lazy.LazyColumn(
         modifier = Modifier.fillMaxWidth(),
         contentPadding = PaddingValues(
-            horizontal = SecurityTokens.pageHorizontalPadding,
+            start = SecurityTokens.pageHorizontalPadding,
             top = SecurityTokens.pageTopPadding,
+            end = SecurityTokens.pageHorizontalPadding,
             bottom = 24.dp
         ),
         verticalArrangement = Arrangement.spacedBy(SecurityTokens.sectionSpacing)

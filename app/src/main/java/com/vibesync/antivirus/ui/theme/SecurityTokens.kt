@@ -7,6 +7,11 @@ import androidx.compose.ui.unit.dp
 
 /** Shared layout tokens for all three Figma themes; Material color roles stay theme-resolved. */
 object SecurityTokens {
+    // Retained for GlassCard, which continues to be used by existing settings panels.
+    val glassTint = Color(0xFFFFFFFF)
+    val glassBorder = Color(0xFFE2E8F0)
+    const val glassSurfaceAlpha = 0.94f
+    const val glassBorderAlpha = 0.22f
     val pageHorizontalPadding: Dp = 20.dp
     val pageTopPadding: Dp = 8.dp
     val sectionSpacing: Dp = 20.dp
