@@ -23,6 +23,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -636,7 +637,19 @@ import kotlinx.coroutines.launch
           )
          }
          "tools" -> Column(Modifier.fillMaxSize().verticalScroll(contentScrollState).padding(horizontal = 18.dp, vertical = 14.dp)) {
-          ProtectionToolsHub(onOpen = { navigateToDestination(it) })
+          ProtectionToolsHub(
+            onOpen = { navigateToDestination(it) },
+            onScanInstalled = {
+             navigateToDestination("scan")
+             requestPrivacyAcknowledgement { vm.scanInstalled() }
+            },
+            onPickApk = {
+             navigateToDestination("scan")
+             requestPrivacyAcknowledgement {
+              apkPicker.launch(arrayOf("application/vnd.android.package-archive", "application/octet-stream"))
+             }
+            }
+           )
          }
          "settings" -> Column(Modifier.fillMaxSize().verticalScroll(contentScrollState).padding(horizontal = 18.dp, vertical = 14.dp)) {
           SafeMobileSettingsPanel(
@@ -920,11 +933,36 @@ import kotlinx.coroutines.launch
         state.messageResource?.takeUnless { it == R.string.scan_complete && selectedDestination in listOf("home", "scan") }?.let { message -> Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant)) { Text(stringResource(message),Modifier.padding(14.dp),color=MaterialTheme.colorScheme.onSurface,style=MaterialTheme.typography.bodySmall) } }
         state.messageText?.let { message -> Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant)) { Text(message.resolve(context),Modifier.padding(14.dp),color=MaterialTheme.colorScheme.onSurface,style=MaterialTheme.typography.bodySmall) } }
         if(selectedDestination == "scan" && state.results.isNotEmpty()) {
-         Column(verticalArrangement=Arrangement.spacedBy(10.dp)) {
+         Column(verticalArrangement=Arrangement.spacedBy(12.dp), modifier=Modifier.fillMaxWidth().padding(top = 4.dp)) {
           Text(stringResource(R.string.latest_results),style=MaterialTheme.typography.titleLarge,fontWeight=FontWeight.Bold)
-          Text(listOf(pluralStringResource(R.plurals.l10n_threats, state.threatCount, state.threatCount), pluralStringResource(R.plurals.l10n_review, state.suspiciousCount, state.suspiciousCount), state.results.count { it.verdict == ScanVerdict.NO_MATCH }.let { pluralStringResource(R.plurals.l10n_no_match, it, it) }).joinToString(" · "),color=MaterialTheme.colorScheme.onSurfaceVariant,style=MaterialTheme.typography.bodySmall)
+          val threatTotal = state.results.count { it.verdict == ScanVerdict.THREAT }
+          val reviewTotal = state.results.count { it.verdict == ScanVerdict.SUSPICIOUS }
+          val noMatchTotal = state.results.count { it.verdict == ScanVerdict.NO_MATCH }
           val notScannedCount = state.results.count { it.verdict == ScanVerdict.NOT_SCANNED }
-          if (notScannedCount > 0) Text(pluralStringResource(R.plurals.l10n_unreadable, notScannedCount, notScannedCount), color=MaterialTheme.colorScheme.onSurfaceVariant, style=MaterialTheme.typography.bodySmall)
+          Text(
+           listOf(
+            pluralStringResource(R.plurals.l10n_threats, threatTotal, threatTotal),
+            pluralStringResource(R.plurals.l10n_review, reviewTotal, reviewTotal),
+            pluralStringResource(R.plurals.l10n_no_match, noMatchTotal, noMatchTotal),
+            pluralStringResource(R.plurals.l10n_unreadable, notScannedCount, notScannedCount)
+           ).joinToString(" · "),
+           color=MaterialTheme.colorScheme.onSurfaceVariant,
+           style=MaterialTheme.typography.bodySmall
+          )
+          Row(horizontalArrangement=Arrangement.spacedBy(10.dp), modifier=Modifier.fillMaxWidth()) {
+           ScanVerdictCountTile(threatTotal, R.string.verdict_threat, MaterialTheme.colorScheme.error,
+            modifier=Modifier.weight(1f))
+           ScanVerdictCountTile(reviewTotal, R.string.verdict_suspicious, MaterialTheme.colorScheme.tertiary,
+            modifier=Modifier.weight(1f))
+          }
+          Row(horizontalArrangement=Arrangement.spacedBy(10.dp), modifier=Modifier.fillMaxWidth()) {
+           ScanVerdictCountTile(noMatchTotal, R.string.verdict_no_match, MaterialTheme.colorScheme.onSurface,
+            modifier=Modifier.weight(1f))
+           ScanVerdictCountTile(notScannedCount, R.string.verdict_not_scanned, MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier=Modifier.weight(1f))
+          }
+          Text(stringResource(R.string.scan_explanation),
+           style=MaterialTheme.typography.bodySmall, color=MaterialTheme.colorScheme.onSurfaceVariant)
           state.results.take(80).forEach { result ->
            ScanResultCard(
             result,
@@ -1054,10 +1092,10 @@ import kotlinx.coroutines.launch
     composable("detail/{parentTab}/{screen}") { navScreenContent() }
    }
    SnackbarHost(hostState = snackbarHostState)
-   NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
+   NavigationBar(containerColor = MaterialTheme.colorScheme.surface, tonalElevation = 0.dp) {
     val destinations = listOf(
      Triple("dashboard", R.string.v140_dashboard, Icons.Default.Home),
-     Triple("tools", R.string.v140_analytics_tools, Icons.Default.History),
+     Triple("tools", R.string.v140_analytics_tools, Icons.Default.Security),
      Triple("settings", R.string.nav_settings, Icons.Default.SettingsIcon)
     )
     destinations.forEach { destination ->
@@ -1302,3 +1340,29 @@ private fun canOfferUninstall(context: Context, packageName: String): Boolean {
  }
 }
 
+
+
+@Composable
+private fun ScanVerdictCountTile(
+ count: Int,
+ labelResource: Int,
+ accent: Color,
+ modifier: Modifier = Modifier
+) {
+ Card(
+  modifier = modifier,
+  shape = RoundedCornerShape(16.dp),
+  border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+  colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+  elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+ ) {
+  Column(Modifier.fillMaxWidth().padding(14.dp),
+   verticalArrangement = Arrangement.spacedBy(4.dp)) {
+   Text(count.toString(), style = MaterialTheme.typography.headlineMedium,
+    fontWeight = FontWeight.Bold, color = accent)
+   Text(stringResource(labelResource), style = MaterialTheme.typography.labelSmall,
+    color = MaterialTheme.colorScheme.onSurface, maxLines = 2,
+    overflow = TextOverflow.Ellipsis)
+  }
+ }
+}

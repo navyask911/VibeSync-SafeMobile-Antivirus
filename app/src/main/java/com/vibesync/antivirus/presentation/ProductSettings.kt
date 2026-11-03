@@ -440,21 +440,123 @@ internal fun SafeMobileSettingsPanel(
 
     Column(verticalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
         if (subRoute == SettingsSubRoute.ROOT) {
-            Text(stringResource(R.string.settings_title), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-            SettingsRootRow(Icons.Default.Settings, R.string.appearance_title, R.string.theme_appearance_description) {
-                onSubRouteChanged(SettingsSubRoute.GENERAL)
+            Text(stringResource(R.string.settings_title), style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold)
+            Text(stringResource(R.string.theme_appearance_description),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                shape = RoundedCornerShape(20.dp)) {
+                Column(Modifier.fillMaxWidth().padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Text(stringResource(R.string.appearance_title),
+                        style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                    Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                        AppTheme.entries.forEach { option ->
+                            val label = when (option) {
+                                AppTheme.LIGHT -> R.string.theme_light
+                                AppTheme.MIDNIGHT -> R.string.theme_midnight
+                                AppTheme.OLED -> R.string.theme_oled
+                            }
+                            FilterChip(
+                                selected = appTheme == option,
+                                onClick = { onAppThemeChanged(option) },
+                                label = { Text(stringResource(label), maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
+                    }
+                    SettingsRootRow(Icons.Default.Settings, R.string.language_settings,
+                        R.string.theme_appearance_description) {
+                        showLanguageDialog = true
+                    }
+                }
             }
-            SettingsRootRow(Icons.Default.WorkspacePremium, R.string.pro_title, R.string.pro_truthful_summary) {
-                onSubRouteChanged(SettingsSubRoute.SUBSCRIPTION)
+
+            Text(stringResource(R.string.security_alerts_title),
+                style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+            Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                shape = RoundedCornerShape(20.dp)) {
+                Column(Modifier.fillMaxWidth().padding(16.dp)) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                            Text(stringResource(R.string.security_alerts_title),
+                                style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
+                            SettingsDescription(R.string.incident_alerts_explanation)
+                        }
+                        Switch(checked = securityAlertsEnabled,
+                            onCheckedChange = { requested -> onSecurityAlertsChanged?.invoke(requested) })
+                    }
+                }
             }
-            SettingsRootRow(Icons.Default.Notifications, R.string.security_alerts_title, R.string.incident_alerts_explanation) {
-                onSubRouteChanged(SettingsSubRoute.NOTIFICATIONS)
+            InstallSentinelSettings()
+            SettingsRootRow(Icons.Default.Security, R.string.sentinel_scope_title,
+                R.string.monitor_explanation) {
+                onManageFolders()
             }
-            SettingsRootRow(Icons.Default.Security, R.string.download_interceptor_label, R.string.download_interceptor_description) {
+
+            Text(stringResource(R.string.settings_privacy),
+                style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+            Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                shape = RoundedCornerShape(20.dp)) {
+                Column(Modifier.fillMaxWidth().padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Text(stringResource(R.string.global_threat_intelligence_title),
+                        style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                    SettingsDescription(R.string.global_threat_intelligence_description)
+                    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                        Text(stringResource(R.string.global_threat_intelligence_title),
+                            modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium)
+                        Switch(
+                            checked = globalThreatIntelligenceEnabled,
+                            onCheckedChange = { enabled ->
+                                GlobalThreatIntelligenceConsent.setEnabled(context, enabled)
+                                globalThreatIntelligenceEnabled = enabled
+                            }
+                        )
+                    }
+                    if (adPrivacyOptionsRequired && !isProForAds) {
+                        OutlinedButton(onClick = onShowAdPrivacyOptions, modifier = Modifier.fillMaxWidth()) {
+                            Text(stringResource(R.string.ad_privacy_options))
+                        }
+                    }
+                }
+            }
+
+            Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+                shape = RoundedCornerShape(20.dp)) {
+                Column(Modifier.fillMaxWidth().padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(stringResource(R.string.pro_title),
+                        style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                    SettingsDescription(R.string.pro_truthful_summary)
+                    Text(stringResource(R.string.pro_feature_adfree),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Button(onClick = onOpenPro, modifier = Modifier.fillMaxWidth()) {
+                        Text(stringResource(R.string.posture_open))
+                    }
+                }
+            }
+
+            Text(stringResource(R.string.about_legal),
+                style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+            SettingsRootRow(Icons.Default.HelpOutline, R.string.settings_privacy, R.string.ad_privacy_intro) {
+                onSubRouteChanged(SettingsSubRoute.HELP_LEGAL)
+            }
+            SettingsRootRow(Icons.Default.Security, R.string.download_interceptor_label,
+                R.string.download_interceptor_description) {
                 onSubRouteChanged(SettingsSubRoute.SECURITY)
             }
-            SettingsRootRow(Icons.Default.HelpOutline, R.string.about_legal, R.string.ad_privacy_intro) {
-                onSubRouteChanged(SettingsSubRoute.HELP_LEGAL)
+            SettingsRootRow(Icons.Default.Notifications, R.string.siren_test_settings_title,
+                R.string.siren_test_settings_description) {
+                onSubRouteChanged(SettingsSubRoute.NOTIFICATIONS)
+            }
+            if (BuildConfig.OPTIONAL_FEED_ENABLED) {
+                SettingsRootRow(Icons.Default.Settings, R.string.feed_settings_title,
+                    R.string.feed_settings_description) {
+                    onSubRouteChanged(SettingsSubRoute.GENERAL)
+                }
             }
             SettingsRootRow(Icons.Default.Star, R.string.app_name, R.string.official_website_visit) {
                 onSubRouteChanged(SettingsSubRoute.RATE)
