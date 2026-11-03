@@ -1,11 +1,12 @@
 # Third-party dependency notices
 
-Generated from the CycloneDX SBOM by `scripts/render_third_party_notices.py`. Components: 405.
+Generated from the CycloneDX SBOM by `scripts/render_third_party_notices.py`. Components: 477.
 
 Regenerate this file with the CI SBOM refresh workflow; do not hand-edit dependency rows.
 
 | Component | Version | Declared licence | Upstream source / package reference |
 |---|---:|---|---|
+| aapt2-proto | 8.10.1-12782657 | Apache-2.0 | https://android.googlesource.com/platform/tools/base |
 | abi-tools | 2.2.21 | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0) | https://github.com/JetBrains/kotlin |
 | abi-tools-api | 2.2.21 | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0) | https://github.com/JetBrains/kotlin |
 | activity | 1.10.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
@@ -39,6 +40,7 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | animation-android | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | animation-core | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | animation-core-android | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| annotation | 1.0.1 | Apache-2.0 | Package URL: pkg:maven/androidx.test/annotation@1.0.1?type=aar |
 | annotation | 1.10.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | annotation | 1.9.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | annotation-experimental | 1.5.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
@@ -48,9 +50,11 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | annotations | 12.0 | [Apache License 2](http://www.apache.org/licenses/LICENSE-2.0.txt) | https://github.com/JetBrains/intellij-community |
 | annotations | 13.0 | Apache-2.0 | https://github.com/JetBrains/intellij-community |
 | annotations | 23.0.0 | Apache-2.0 | https://github.com/JetBrains/java-annotations |
+| annotations | 31.10.1 | Apache-2.0 | Package URL: pkg:maven/com.android.tools/annotations@31.10.1?type=jar |
+| annotations | 31.11.0-rc02 | Apache-2.0 | Package URL: pkg:maven/com.android.tools/annotations@31.11.0-rc02?type=jar |
 | annotations | 31.13.2 | Apache-2.0 | Package URL: pkg:maven/com.android.tools/annotations@31.13.2?type=jar |
 | annotations | 4.1.1.4 | Apache-2.0 | https://android.git.kernel.org/ |
-| app | 1.0.18 | UNKNOWN — review required | Package URL: pkg:maven/com.vibesync.antivirus/app@1.0.18?project_path=%3Aapp |
+| app | 1.5.1 | UNKNOWN — review required | Package URL: pkg:maven/com.vibesync.antivirus/app@1.5.1?project_path=%3Aapp |
 | appcompat-resources | 1.4.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | atomicfu | 0.21.0 | Apache-2.0 | https://github.com/Kotlin/kotlinx.atomicfu |
 | atomicfu | 0.22.0 | Apache-2.0 | https://github.com/Kotlin/kotlinx.atomicfu |
@@ -62,15 +66,20 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | auto-service | 1.1.1 | Apache-2.0 | http://github.com/google/auto |
 | auto-service-annotations | 1.1.1 | Apache-2.0 | http://github.com/google/auto |
 | auto-value-annotations | 1.6.3 | Apache-2.0 | http://github.com/google/auto |
+| auto-value-annotations | 1.7.4 | Apache-2.0 | http://github.com/google/auto |
 | autofill | 1.0.0 | Apache-2.0 | http://source.android.com |
 | bcpg-jdk18on | 1.80 | Apache-2.0; [Bouncy Castle Licence](https://www.bouncycastle.org/licence.html) | https://github.com/bcgit/bc-java |
+| bcpkix-jdk18on | 1.79 | [Bouncy Castle Licence](https://www.bouncycastle.org/licence.html) | https://github.com/bcgit/bc-java |
 | bcpkix-jdk18on | 1.80 | [Bouncy Castle Licence](https://www.bouncycastle.org/licence.html) | https://github.com/bcgit/bc-java |
 | bcprov-jdk18on | 1.80.2 | [Bouncy Castle Licence](https://www.bouncycastle.org/licence.html) | https://github.com/bcgit/bc-java |
 | bcprov-jdk18on | 1.86 | [Bouncy Castle Licence](https://www.bouncycastle.org/licence.html) | https://github.com/bcgit/bc-java |
+| bcutil-jdk18on | 1.79 | [Bouncy Castle Licence](https://www.bouncycastle.org/licence.html) | https://github.com/bcgit/bc-java |
 | bcutil-jdk18on | 1.80.2 | [Bouncy Castle Licence](https://www.bouncycastle.org/licence.html) | https://github.com/bcgit/bc-java |
 | billing | 8.3.0 | [Android Software Development Kit License](https://developer.android.com/studio/terms.html) | Package URL: pkg:maven/com.android.billingclient/billing@8.3.0?type=aar |
 | billing-ktx | 8.3.0 | [Android Software Development Kit License](https://developer.android.com/studio/terms.html) | Package URL: pkg:maven/com.android.billingclient/billing-ktx@8.3.0?type=aar |
 | browser | 1.8.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| byte-buddy | 1.17.6 | Apache-2.0 | Package URL: pkg:maven/net.bytebuddy/byte-buddy@1.17.6?type=jar |
+| byte-buddy-agent | 1.17.6 | Apache-2.0 | Package URL: pkg:maven/net.bytebuddy/byte-buddy-agent@1.17.6?type=jar |
 | caffeine | 2.9.3 | Apache-2.0 | https://github.com/ben-manes/caffeine |
 | checker-qual | 3.33.0 | MIT | https://github.com/typetools/checker-framework.git |
 | checker-qual | 3.42.0 | MIT | https://github.com/typetools/checker-framework.git |
@@ -81,15 +90,21 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | collection-jvm | 1.6.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | collection-ktx | 1.5.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | collection-ktx | 1.6.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| common | 31.10.1 | Apache-2.0 | Package URL: pkg:maven/com.android.tools/common@31.10.1?type=jar |
+| common | 31.11.0-rc02 | Apache-2.0 | Package URL: pkg:maven/com.android.tools/common@31.11.0-rc02?type=jar |
 | common | 31.13.2 | Apache-2.0 | Package URL: pkg:maven/com.android.tools/common@31.13.2?type=jar |
+| commons-codec | 1.10 | Apache-2.0 | http://svn.apache.org/viewvc/commons/proper/codec/trunk |
 | commons-codec | 1.15 | Apache-2.0 | https://github.com/apache/commons-codec |
+| commons-compress | 1.21 | Apache-2.0 | https://gitbox.apache.org/repos/asf?p=commons-compress.git |
 | commons-io | 2.16.1 | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0) | https://gitbox.apache.org/repos/asf?p=commons-io.git |
+| commons-logging | 1.2 | Apache-2.0 | http://svn.apache.org/repos/asf/commons/proper/logging/trunk |
 | compose-bom | 2025.05.01 | Apache-2.0 | Package URL: pkg:maven/androidx.compose/compose-bom@2025.05.01?type=pom |
 | concurrent-futures | 1.0.0 | Apache-2.0 | http://source.android.com |
 | concurrent-futures | 1.1.0 | Apache-2.0 | http://source.android.com |
 | concurrent-futures-ktx | 1.1.0 | Apache-2.0 | http://source.android.com |
 | core | 0.0.9-alpha03 | [Android Software Development Kit License Agreement](https://developer.android.com/studio/terms) | Package URL: pkg:maven/com.google.testing.platform/core@0.0.9-alpha03?type=jar |
 | core | 1.16.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| core | 1.5.0 | Apache-2.0 | Package URL: pkg:maven/androidx.test/core@1.5.0?type=aar |
 | core | 1.6.1 | Apache-2.0 | Package URL: pkg:maven/androidx.test/core@1.6.1?type=aar |
 | core-common | 2.2.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | core-ktx | 1.16.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
@@ -116,18 +131,24 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | datastore-preferences-core-android | 1.3.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | datastore-preferences-external-protobuf | 1.3.0 | [BSD-3-Clause](https://opensource.org/licenses/BSD-3-Clause) | https://cs.android.com/androidx/platform/frameworks/support |
 | datastore-preferences-proto | 1.3.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| ddmlib | 31.10.1 | Apache-2.0 | Package URL: pkg:maven/com.android.tools.ddms/ddmlib@31.10.1?type=jar |
 | ddmlib | 31.13.2 | Apache-2.0 | Package URL: pkg:maven/com.android.tools.ddms/ddmlib@31.13.2?type=jar |
 | dexlib2 | 2.5.2 | BSD-3-Clause | https://github.com/JesusFreke/smali/tree/master/dexlib2 |
 | documentfile | 1.0.1 | Apache-2.0 | http://source.android.com |
+| dvlib | 31.10.1 | Apache-2.0 | Package URL: pkg:maven/com.android.tools/dvlib@31.10.1?type=jar |
 | emoji2 | 1.4.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | error_prone_annotations | 2.23.0 | Apache-2.0 | Package URL: pkg:maven/com.google.errorprone/error_prone_annotations@2.23.0?type=jar |
 | error_prone_annotations | 2.26.1 | Apache-2.0 | Package URL: pkg:maven/com.google.errorprone/error_prone_annotations@2.26.1?type=jar |
 | error_prone_annotations | 2.28.0 | Apache-2.0 | Package URL: pkg:maven/com.google.errorprone/error_prone_annotations@2.28.0?type=jar |
 | error_prone_annotations | 2.30.0 | Apache-2.0 | Package URL: pkg:maven/com.google.errorprone/error_prone_annotations@2.30.0?type=jar |
+| error_prone_annotations | 2.36.0 | Apache-2.0 | Package URL: pkg:maven/com.google.errorprone/error_prone_annotations@2.36.0?type=jar |
 | error_prone_annotations | 2.41.0 | Apache-2.0 | Package URL: pkg:maven/com.google.errorprone/error_prone_annotations@2.41.0?type=jar |
+| espresso-core | 3.5.0 | Apache-2.0 | Package URL: pkg:maven/androidx.test.espresso/espresso-core@3.5.0?type=aar |
+| espresso-idling-resource | 3.5.0 | Apache-2.0 | Package URL: pkg:maven/androidx.test.espresso/espresso-idling-resource@3.5.0?type=aar |
 | failureaccess | 1.0.1 | Apache-2.0 | Package URL: pkg:maven/com.google.guava/failureaccess@1.0.1?type=jar |
 | failureaccess | 1.0.2 | Apache-2.0 | Package URL: pkg:maven/com.google.guava/failureaccess@1.0.2?type=jar |
 | failureaccess | 1.0.3 | Apache-2.0 | Package URL: pkg:maven/com.google.guava/failureaccess@1.0.3?type=jar |
+| FastInfoset | 1.2.16 | Apache-2.0; BSD-3-Clause | Package URL: pkg:maven/com.sun.xml.fastinfoset/FastInfoset@1.2.16?type=jar |
 | firebase-encoders | 17.0.0 | Apache-2.0 | Package URL: pkg:maven/com.google.firebase/firebase-encoders@17.0.0?type=jar |
 | firebase-encoders-json | 18.0.0 | Apache-2.0 | Package URL: pkg:maven/com.google.firebase/firebase-encoders-json@18.0.0?type=aar |
 | firebase-encoders-proto | 16.0.0 | Apache-2.0 | Package URL: pkg:maven/com.google.firebase/firebase-encoders-proto@16.0.0?type=jar |
@@ -163,25 +184,40 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | guava | 33.2.1-jre | Apache-2.0 | Package URL: pkg:maven/com.google.guava/guava@33.2.1-jre?type=jar |
 | guava | 33.3.1-jre | Apache-2.0 | Package URL: pkg:maven/com.google.guava/guava@33.3.1-jre?type=jar |
 | guava | 33.4.8-android | Apache-2.0 | Package URL: pkg:maven/com.google.guava/guava@33.4.8-android?type=jar |
+| guava | 33.4.8-jre | Apache-2.0 | Package URL: pkg:maven/com.google.guava/guava@33.4.8-jre?type=jar |
 | hamcrest-core | 1.3 | BSD-3-Clause | Package URL: pkg:maven/org.hamcrest/hamcrest-core@1.3?type=jar |
+| hamcrest-integration | 1.3 | BSD-3-Clause | Package URL: pkg:maven/org.hamcrest/hamcrest-integration@1.3?type=jar |
+| hamcrest-library | 1.3 | BSD-3-Clause | Package URL: pkg:maven/org.hamcrest/hamcrest-library@1.3?type=jar |
 | hsdp | 2.2.0 | [Android Software Development Kit License](https://developer.android.com/studio/terms.html) | Package URL: pkg:maven/com.google.android.play/hsdp@2.2.0?type=aar |
+| httpclient | 4.5.6 | Apache-2.0 | Package URL: pkg:maven/org.apache.httpcomponents/httpclient@4.5.6?type=jar |
+| httpcore | 4.4.16 | Apache-2.0 | Package URL: pkg:maven/org.apache.httpcomponents/httpcore@4.4.16?type=jar |
 | httpengine-native-provider | 500.1.0 | [Android Software Development Kit License](https://developer.android.com/studio/terms.html) | Package URL: pkg:maven/org.chromium.net/httpengine-native-provider@500.1.0?type=aar |
+| httpmime | 4.5.6 | Apache-2.0 | Package URL: pkg:maven/org.apache.httpcomponents/httpmime@4.5.6?type=jar |
 | interpolator | 1.0.0 | Apache-2.0 | http://source.android.com |
+| istack-commons-runtime | 3.0.8 | BSD-3-Clause | Package URL: pkg:maven/com.sun.istack/istack-commons-runtime@3.0.8?type=jar |
 | j2objc-annotations | 2.8 | Apache-2.0 | Package URL: pkg:maven/com.google.j2objc/j2objc-annotations@2.8?type=jar |
 | j2objc-annotations | 3.0.0 | Apache-2.0 | http://github.com/google/j2objc |
+| jakarta.activation-api | 1.2.1 | BSD-3-Clause | Package URL: pkg:maven/jakarta.activation/jakarta.activation-api@1.2.1?type=jar |
+| jakarta.xml.bind-api | 2.3.2 | BSD-3-Clause | Package URL: pkg:maven/jakarta.xml.bind/jakarta.xml.bind-api@2.3.2?type=jar |
 | java-diff-utils | 4.12 | Apache-2.0 | Package URL: pkg:maven/io.github.java-diff-utils/java-diff-utils@4.12?type=jar |
 | javapoet | 1.13.0 | Apache-2.0 | http://github.com/square/javapoet/ |
 | javascriptengine | 1.1.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| javawriter | 2.1.1 | Apache-2.0 | http://github.com/square/javawriter/ |
+| javax.activation | 1.2.0 | UNKNOWN — review required | Package URL: pkg:maven/com.sun.activation/javax.activation@1.2.0?type=jar |
 | javax.annotation-api | 1.3.2 | UNKNOWN — review required | https://github.com/javaee/javax.annotation |
 | javax.inject | 1 | Apache-2.0 | http://code.google.com/p/atinject/source/checkout |
+| jaxb-runtime | 2.3.2 | BSD-3-Clause | Package URL: pkg:maven/org.glassfish.jaxb/jaxb-runtime@2.3.2?type=jar |
+| jimfs | 1.1 | Apache-2.0 | Package URL: pkg:maven/com.google.jimfs/jimfs@1.1?type=jar |
 | jna | 5.6.0 | Apache-2.0; LGPL-2.1-only | https://github.com/java-native-access/jna |
 | jna-platform | 5.6.0 | Apache-2.0; LGPL-2.1-only | https://github.com/java-native-access/jna |
 | json | 20240303 | [Public Domain](https://github.com/stleary/JSON-java/blob/master/LICENSE) | https://github.com/douglascrockford/JSON-java.git |
 | jspecify | 1.0.0 | Apache-2.0 | https://github.com/jspecify/jspecify/ |
 | jsr305 | 3.0.2 | Apache-2.0 | https://code.google.com/p/jsr-305/ |
+| junit | 1.1.5 | Apache-2.0 | Package URL: pkg:maven/androidx.test.ext/junit@1.1.5?type=aar |
 | junit | 1.2.1 | Apache-2.0 | Package URL: pkg:maven/androidx.test.ext/junit@1.2.1?type=aar |
 | junit | 4.13.2 | [EPL-1.0](http://www.eclipse.org/legal/epl-v10.html) | https://github.com/junit-team/junit4 |
 | kotlin-annotation-processing-gradle | 2.2.21 | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0) | https://github.com/JetBrains/kotlin |
+| kotlin-bom | 2.1.21 | Apache-2.0 | https://github.com/JetBrains/kotlin |
 | kotlin-build-tools-api | 2.2.21 | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0) | https://github.com/JetBrains/kotlin |
 | kotlin-build-tools-impl | 2.2.21 | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0) | https://github.com/JetBrains/kotlin |
 | kotlin-compiler-embeddable | 2.2.21 | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0) | https://github.com/JetBrains/kotlin |
@@ -195,6 +231,7 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | kotlin-reflect | 1.6.10 | Apache-2.0 | https://github.com/JetBrains/kotlin |
 | kotlin-reflect | 1.8.21 | Apache-2.0 | https://github.com/JetBrains/kotlin |
 | kotlin-reflect | 1.9.24 | Apache-2.0 | https://github.com/JetBrains/kotlin |
+| kotlin-reflect | 2.2.20 | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0) | https://github.com/JetBrains/kotlin |
 | kotlin-script-runtime | 2.2.21 | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0) | https://github.com/JetBrains/kotlin |
 | kotlin-scripting-common | 2.2.21 | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0) | https://github.com/JetBrains/kotlin |
 | kotlin-scripting-compiler-embeddable | 2.2.21 | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0) | https://github.com/JetBrains/kotlin |
@@ -202,23 +239,25 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | kotlin-scripting-jvm | 2.2.21 | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0) | https://github.com/JetBrains/kotlin |
 | kotlin-stdlib | 1.8.21 | Apache-2.0 | https://github.com/JetBrains/kotlin |
 | kotlin-stdlib | 1.9.0 | Apache-2.0 | https://github.com/JetBrains/kotlin |
-| kotlin-stdlib | 2.1.0 | Apache-2.0 | https://github.com/JetBrains/kotlin |
 | kotlin-stdlib | 2.1.10 | Apache-2.0 | https://github.com/JetBrains/kotlin |
 | kotlin-stdlib | 2.2.0 | Apache-2.0 | https://github.com/JetBrains/kotlin |
+| kotlin-stdlib | 2.2.20 | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0) | https://github.com/JetBrains/kotlin |
 | kotlin-stdlib | 2.2.21 | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0) | https://github.com/JetBrains/kotlin |
 | kotlin-stdlib-common | 1.8.21 | Apache-2.0 | https://github.com/JetBrains/kotlin |
 | kotlin-stdlib-common | 1.9.0 | Apache-2.0 | https://github.com/JetBrains/kotlin |
-| kotlin-stdlib-common | 2.1.0 | Apache-2.0 | https://github.com/JetBrains/kotlin |
 | kotlin-stdlib-common | 2.1.10 | Apache-2.0 | https://github.com/JetBrains/kotlin |
 | kotlin-stdlib-common | 2.2.0 | Apache-2.0 | https://github.com/JetBrains/kotlin |
+| kotlin-stdlib-common | 2.2.20 | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0) | https://github.com/JetBrains/kotlin |
 | kotlin-stdlib-common | 2.2.21 | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0) | https://github.com/JetBrains/kotlin |
 | kotlin-stdlib-jdk7 | 1.8.20 | Apache-2.0 | https://github.com/JetBrains/kotlin |
 | kotlin-stdlib-jdk7 | 1.8.21 | Apache-2.0 | https://github.com/JetBrains/kotlin |
 | kotlin-stdlib-jdk7 | 1.9.24 | Apache-2.0 | https://github.com/JetBrains/kotlin |
+| kotlin-stdlib-jdk7 | 2.1.21 | Apache-2.0 | https://github.com/JetBrains/kotlin |
 | kotlin-stdlib-jdk7 | 2.2.0 | Apache-2.0 | https://github.com/JetBrains/kotlin |
 | kotlin-stdlib-jdk8 | 1.8.20 | Apache-2.0 | https://github.com/JetBrains/kotlin |
 | kotlin-stdlib-jdk8 | 1.8.21 | Apache-2.0 | https://github.com/JetBrains/kotlin |
 | kotlin-stdlib-jdk8 | 1.9.24 | Apache-2.0 | https://github.com/JetBrains/kotlin |
+| kotlin-stdlib-jdk8 | 2.1.21 | Apache-2.0 | https://github.com/JetBrains/kotlin |
 | kotlin-stdlib-jdk8 | 2.2.0 | Apache-2.0 | https://github.com/JetBrains/kotlin |
 | kotlinpoet | 1.17.0 | Apache-2.0 | https://github.com/square/kotlinpoet |
 | kotlinpoet-javapoet | 1.17.0 | Apache-2.0 | https://github.com/square/kotlinpoet |
@@ -248,9 +287,15 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | kotlinx-serialization-json-jvm | 1.7.3 | Apache-2.0 | https://github.com/Kotlin/kotlinx.serialization |
 | kotlinx-serialization-json-okio | 1.6.3 | Apache-2.0 | https://github.com/Kotlin/kotlinx.serialization |
 | kotlinx-serialization-protobuf | 1.7.3 | Apache-2.0 | https://github.com/Kotlin/kotlinx.serialization |
+| kxml2 | 2.3.0 | UNKNOWN — review required | Package URL: pkg:maven/kxml2/kxml2@2.3.0?type=pom |
 | kxml2 | 2.3.0 | [BSD style](http://kxml.cvs.sourceforge.net/viewvc/kxml/kxml2/license.txt?view=markup); [Public Domain](http://creativecommons.org/licenses/publicdomain) | http://kxml.cvs.sourceforge.net/viewvc/kxml/kxml2/ |
 | launcher | 0.0.9-alpha03 | [Android Software Development Kit License Agreement](https://developer.android.com/studio/terms) | Package URL: pkg:maven/com.google.testing.platform/launcher@0.0.9-alpha03?type=jar |
+| layoutlib | 15.2.3 | Apache-2.0 | https://cs.android.com/android/platform/frameworks/layoutlib/ |
+| layoutlib-api | 31.11.0-rc02 | Apache-2.0 | Package URL: pkg:maven/com.android.tools.layoutlib/layoutlib-api@31.11.0-rc02?type=jar |
+| layoutlib-resources | 15.2.3 | Apache-2.0 | https://cs.android.com/android/platform/frameworks/base/ |
+| layoutlib-runtime | 15.2.3 | Apache-2.0 | https://cs.android.com/android/platform/frameworks/base/ |
 | lifecycle-common | 2.3.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| lifecycle-common | 2.8.7 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | lifecycle-common | 2.9.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | lifecycle-common-java8 | 2.9.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | lifecycle-common-jvm | 2.9.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
@@ -258,8 +303,10 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | lifecycle-livedata-core | 2.9.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | lifecycle-livedata-core-ktx | 2.9.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | lifecycle-process | 2.9.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| lifecycle-runtime | 2.8.7 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | lifecycle-runtime | 2.9.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | lifecycle-runtime-android | 2.9.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| lifecycle-runtime-compose | 2.8.7 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | lifecycle-runtime-compose | 2.9.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | lifecycle-runtime-compose-android | 2.9.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | lifecycle-runtime-ktx | 2.9.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
@@ -287,7 +334,11 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | material-ripple-android | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | material3 | 1.3.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | material3-android | 1.3.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| monitor | 1.6.1 | Apache-2.0 | Package URL: pkg:maven/androidx.test/monitor@1.6.1?type=aar |
 | monitor | 1.7.2 | Apache-2.0 | Package URL: pkg:maven/androidx.test/monitor@1.7.2?type=aar |
+| moshi | 1.15.2 | Apache-2.0 | https://github.com/square/moshi/ |
+| moshi-adapters | 1.15.2 | Apache-2.0 | https://github.com/square/moshi/ |
+| moshi-kotlin | 1.15.2 | Apache-2.0 | https://github.com/square/moshi/ |
 | navigation-common | 2.9.8 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | navigation-common-android | 2.9.8 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | navigation-compose | 2.9.8 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
@@ -316,7 +367,9 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | netty-transport | 4.1.93.Final | Apache-2.0 | Package URL: pkg:maven/io.netty/netty-transport@4.1.93.Final?type=jar |
 | netty-transport-native-unix-common | 4.1.110.Final | Apache-2.0 | Package URL: pkg:maven/io.netty/netty-transport-native-unix-common@4.1.110.Final?type=jar |
 | netty-transport-native-unix-common | 4.1.93.Final | Apache-2.0 | Package URL: pkg:maven/io.netty/netty-transport-native-unix-common@4.1.93.Final?type=jar |
+| ninepatch | 31.10.1 | Apache-2.0 | Package URL: pkg:maven/com.android.tools/ninepatch@31.10.1?type=jar |
 | okhttp | 4.12.0 | Apache-2.0 | https://github.com/square/okhttp |
+| okio | 3.13.0 | Apache-2.0 | https://github.com/square/okio/ |
 | okio | 3.17.0 | Apache-2.0 | https://github.com/square/okio/ |
 | okio | 3.9.1 | Apache-2.0 | https://github.com/square/okio/ |
 | okio-jvm | 3.17.0 | Apache-2.0 | https://github.com/square/okio/ |
@@ -324,6 +377,7 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | opencensus-proto | 0.2.0 | Apache-2.0 | https://github.com/census-instrumentation/opencensus-proto |
 | opentelemetry-api | 1.41.0 | Apache-2.0 | Package URL: pkg:maven/io.opentelemetry/opentelemetry-api@1.41.0?type=jar |
 | opentelemetry-context | 1.41.0 | Apache-2.0 | Package URL: pkg:maven/io.opentelemetry/opentelemetry-context@1.41.0?type=jar |
+| paparazzi | 2.0.0-alpha02 | Apache-2.0 | https://github.com/cashapp/paparazzi/ |
 | perfmark-api | 0.26.0 | Apache-2.0 | https://github.com/perfmark/perfmark |
 | perfmark-api | 0.27.0 | Apache-2.0 | https://github.com/perfmark/perfmark |
 | play-services-ads-identifier | 18.0.0 | [Android Software Development Kit License](https://developer.android.com/studio/terms.html) | Package URL: pkg:maven/com.google.android.gms/play-services-ads-identifier@18.0.0?type=aar |
@@ -333,6 +387,8 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | play-services-cronet | 18.0.1 | [Android Software Development Kit License](https://developer.android.com/studio/terms.html) | Package URL: pkg:maven/com.google.android.gms/play-services-cronet@18.0.1?type=aar |
 | play-services-location | 21.3.0 | [Android Software Development Kit License](https://developer.android.com/studio/terms.html) | Package URL: pkg:maven/com.google.android.gms/play-services-location@21.3.0?type=aar |
 | play-services-tasks | 18.2.0 | [Android Software Development Kit License](https://developer.android.com/studio/terms.html) | Package URL: pkg:maven/com.google.android.gms/play-services-tasks@18.2.0?type=aar |
+| poko-annotations | 0.18.7 | Apache-2.0 | https://github.com/drewhamilton/Poko/tree/main |
+| poko-annotations-jvm | 0.18.7 | Apache-2.0 | https://github.com/drewhamilton/Poko/tree/main |
 | profileinstaller | 1.4.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | proto | 31.13.2 | Apache-2.0 | Package URL: pkg:maven/com.android.tools.emulator/proto@31.13.2?type=jar |
 | proto-google-common-protos | 2.17.0 | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0) | https://github.com/googleapis/gapic-generator-java |
@@ -342,6 +398,8 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | protobuf-java-util | 3.22.3 | [BSD-3-Clause](https://opensource.org/licenses/BSD-3-Clause) | Package URL: pkg:maven/com.google.protobuf/protobuf-java-util@3.22.3?type=jar |
 | protobuf-java-util | 3.24.4 | [BSD-3-Clause](https://opensource.org/licenses/BSD-3-Clause) | Package URL: pkg:maven/com.google.protobuf/protobuf-java-util@3.24.4?type=jar |
 | protobuf-kotlin | 3.24.4 | [BSD-3-Clause](https://opensource.org/licenses/BSD-3-Clause) | Package URL: pkg:maven/com.google.protobuf/protobuf-kotlin@3.24.4?type=jar |
+| protos | 31.10.1 | Apache-2.0 | Package URL: pkg:maven/com.android.tools.analytics-library/protos@31.10.1?type=jar |
+| repository | 31.10.1 | Apache-2.0 | Package URL: pkg:maven/com.android.tools/repository@31.10.1?type=jar |
 | room-common | 2.7.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | room-common-jvm | 2.7.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | room-compiler | 2.7.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
@@ -354,6 +412,7 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | room-runtime-android | 2.7.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | room-testing | 2.7.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | room-testing-android | 2.7.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| runner | 1.5.0 | Apache-2.0 | Package URL: pkg:maven/androidx.test/runner@1.5.0?type=aar |
 | runner | 1.6.2 | Apache-2.0 | Package URL: pkg:maven/androidx.test/runner@1.6.2?type=aar |
 | runtime | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | runtime-android | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
@@ -364,17 +423,24 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | savedstate-compose | 1.3.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | savedstate-compose-android | 1.3.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | savedstate-ktx | 1.3.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| sdk-common | 31.10.1 | Apache-2.0 | Package URL: pkg:maven/com.android.tools/sdk-common@31.10.1?type=jar |
+| sdklib | 31.10.1 | Apache-2.0 | Package URL: pkg:maven/com.android.tools/sdklib@31.10.1?type=jar |
 | security-crypto | 1.1.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| shared | 31.10.1 | Apache-2.0 | Package URL: pkg:maven/com.android.tools.analytics-library/shared@31.10.1?type=jar |
+| snakeyaml | 2.0 | Apache-2.0 | https://bitbucket.org/snakeyaml/snakeyaml/src |
 | sqlite | 2.5.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | sqlite-android | 2.5.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | sqlite-framework | 2.5.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | sqlite-framework-android | 2.5.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | sqlite-jdbc | 3.41.2.2 | Apache-2.0 | https://github.com/xerial/sqlite-jdbc |
 | startup-runtime | 1.1.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| stax-ex | 1.8.1 | BSD-3-Clause | https://github.com/eclipse-ee4j/jaxb-stax-ex |
+| storage | 1.4.2 | Apache-2.0 | Package URL: pkg:maven/androidx.test.services/storage@1.4.2?type=aar |
 | storage | 1.5.0 | Apache-2.0 | Package URL: pkg:maven/androidx.test.services/storage@1.5.0?type=aar |
 | swift-export-embeddable | 2.2.21 | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0) | https://github.com/JetBrains/kotlin |
 | symbol-processing-api | 2.0.10-1.0.24 | Apache-2.0 | https://github.com/google/ksp |
 | tensorflow-lite | 2.17.0 | Apache-2.0 | https://github.com/tensorflow/tensorflow/tree/master/ |
+| test-parameter-injector | 1.25 | Apache-2.0 | Package URL: pkg:maven/com.google.testparameterinjector/test-parameter-injector@1.25?type=jar |
 | tink | 1.7.0 | Apache-2.0 | https://github.com/google/tink.git |
 | tink-android | 1.20.0 | Apache-2.0 | https://github.com/tink-crypto/tink-java.git |
 | tracing | 1.1.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
@@ -384,12 +450,18 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | transport-api | 3.0.0 | Apache-2.0 | Package URL: pkg:maven/com.google.android.datatransport/transport-api@3.0.0?type=aar |
 | transport-backend-cct | 3.1.8 | Apache-2.0 | Package URL: pkg:maven/com.google.android.datatransport/transport-backend-cct@3.1.8?type=aar |
 | transport-runtime | 3.1.8 | Apache-2.0 | Package URL: pkg:maven/com.google.android.datatransport/transport-runtime@3.1.8?type=aar |
+| trove4j | 1.0.20200330 | LGPL-2.1-only | https://github.com/JetBrains/intellij-deps-trove4j |
+| txw2 | 2.3.2 | BSD-3-Clause | Package URL: pkg:maven/org.glassfish.jaxb/txw2@2.3.2?type=jar |
 | ui | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | ui-android | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | ui-geometry | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | ui-geometry-android | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | ui-graphics | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | ui-graphics-android | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| ui-test | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| ui-test-android | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| ui-test-junit4 | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| ui-test-junit4-android | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | ui-text | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | ui-text-android | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | ui-tooling | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
@@ -412,9 +484,11 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | work-runtime | 2.10.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | work-runtime-ktx | 2.10.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 
-Metadata completeness: 403/405 components have both a declared licence and a source/package reference.
+Metadata completeness: 473/477 components have both a declared licence and a source/package reference.
 
 ## Metadata requiring manual review
 
-- app@1.0.18: licence=UNKNOWN — review required; source=Package URL: pkg:maven/com.vibesync.antivirus/app@1.0.18?project_path=%3Aapp
+- app@1.5.1: licence=UNKNOWN — review required; source=Package URL: pkg:maven/com.vibesync.antivirus/app@1.5.1?project_path=%3Aapp
+- javax.activation@1.2.0: licence=UNKNOWN — review required; source=Package URL: pkg:maven/com.sun.activation/javax.activation@1.2.0?type=jar
 - javax.annotation-api@1.3.2: licence=UNKNOWN — review required; source=https://github.com/javaee/javax.annotation
+- kxml2@2.3.0: licence=UNKNOWN — review required; source=Package URL: pkg:maven/kxml2/kxml2@2.3.0?type=pom
