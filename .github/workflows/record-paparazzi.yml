@@ -1,0 +1,61 @@
+name: Record Paparazzi UI goldens
+
+on:
+  push:
+    branches:
+      - "feat/phase4-final-v1.5.1"
+  pull_request:
+    branches: [main]
+    paths:
+      - "app/src/main/java/com/vibesync/antivirus/presentation/**"
+      - "app/src/test/kotlin/**"
+      - "app/build.gradle.kts"
+      - "build.gradle.kts"
+      - ".github/workflows/record-paparazzi.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: safemobile-paparazzi-record-${{ github.event.pull_request.head.ref || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  record:
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - name: Check out the feature branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
+          persist-credentials: true
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Record Paparazzi snapshots
+        run: ./gradlew --no-daemon recordPaparazziDebug
+
+      - name: Commit generated golden images to the feature branch
+        shell: bash
+        env:
+          TARGET_BRANCH: ${{ github.event.pull_request.head.ref || github.ref_name }}
+        run: |
+          set -euo pipefail
+          git add -A app/src/test/snapshots
+          if git diff --cached --quiet; then
+            echo "Paparazzi goldens are already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "test: record Paparazzi UI goldens [paparazzi-recorded]"
+          git push origin "HEAD:${TARGET_BRANCH}"
