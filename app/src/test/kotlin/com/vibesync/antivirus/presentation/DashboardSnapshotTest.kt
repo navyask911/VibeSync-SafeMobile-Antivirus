@@ -8,8 +8,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import android.content.Context
+import android.content.ContextWrapper
+import android.content.SharedPreferences
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
@@ -180,7 +184,11 @@ class DashboardSnapshotTest {
                 }
             }
         }
-        CompositionLocalProvider(LocalLifecycleOwner provides lifecycleOwner) {
+        val snapshotContext = remember { SnapshotContextWrapper(LocalContext.current) }
+        CompositionLocalProvider(
+            LocalLifecycleOwner provides lifecycleOwner,
+            LocalContext provides snapshotContext
+        ) {
             SafeMobileTheme(theme = palette.appTheme) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -189,6 +197,133 @@ class DashboardSnapshotTest {
                     content()
                 }
             }
+        }
+    }
+}
+
+
+// Paparazzi's host-side Android Context does not provide working SharedPreferences editors.
+// The Settings screen only reads local preferences during rendering; this in-memory context
+// reproduces that contract without touching device storage or production persistence code.
+private class SnapshotContextWrapper(base: Context) : ContextWrapper(base) {
+    private val preferences = mutableMapOf<String, SharedPreferences>()
+
+    override fun getApplicationContext(): Context = this
+
+    override fun getSharedPreferences(name: String, mode: Int): SharedPreferences =
+        preferences.getOrPut(name) { SnapshotSharedPreferences() }
+}
+
+private class SnapshotSharedPreferences : SharedPreferences {
+    private val values = linkedMapOf<String, Any?>()
+    private val listeners = linkedSetOf<SharedPreferences.OnSharedPreferenceChangeListener>()
+
+    @Synchronized
+    override fun getAll(): MutableMap<String, *> = values.toMutableMap()
+
+    @Synchronized
+    override fun getString(key: String, defValue: String?): String? =
+        (values[key] as? String) ?: defValue
+
+    @Synchronized
+    override fun getStringSet(key: String, defValues: MutableSet<String>?): MutableSet<String>? =
+        ((values[key] as? Set<*>)?.filterIsInstance<String>()?.toMutableSet())
+            ?: defValues?.toMutableSet()
+
+    @Synchronized
+    override fun getInt(key: String, defValue: Int): Int = values[key] as? Int ?: defValue
+
+    @Synchronized
+    override fun getLong(key: String, defValue: Long): Long = values[key] as? Long ?: defValue
+
+    @Synchronized
+    override fun getFloat(key: String, defValue: Float): Float = values[key] as? Float ?: defValue
+
+    @Synchronized
+    override fun getBoolean(key: String, defValue: Boolean): Boolean =
+        values[key] as? Boolean ?: defValue
+
+    @Synchronized
+    override fun contains(key: String): Boolean = values.containsKey(key)
+
+    override fun edit(): SharedPreferences.Editor = SnapshotEditor()
+
+    @Synchronized
+    override fun registerOnSharedPreferenceChangeListener(
+        listener: SharedPreferences.OnSharedPreferenceChangeListener
+    ) {
+        listeners += listener
+    }
+
+    @Synchronized
+    override fun unregisterOnSharedPreferenceChangeListener(
+        listener: SharedPreferences.OnSharedPreferenceChangeListener
+    ) {
+        listeners -= listener
+    }
+
+    private inner class SnapshotEditor : SharedPreferences.Editor {
+        private val updates = linkedMapOf<String, Any?>()
+        private val removals = linkedSetOf<String>()
+        private var clearRequested = false
+
+        override fun putString(key: String, value: String?): SharedPreferences.Editor =
+            update(key, value)
+
+        override fun putStringSet(
+            key: String,
+            values: MutableSet<String>?
+        ): SharedPreferences.Editor = update(key, values?.toSet())
+
+        override fun putInt(key: String, value: Int): SharedPreferences.Editor = update(key, value)
+        override fun putLong(key: String, value: Long): SharedPreferences.Editor = update(key, value)
+        override fun putFloat(key: String, value: Float): SharedPreferences.Editor = update(key, value)
+        override fun putBoolean(key: String, value: Boolean): SharedPreferences.Editor = update(key, value)
+
+        private fun update(key: String, value: Any?): SharedPreferences.Editor {
+            updates[key] = value
+            removals -= key
+            return this
+        }
+
+        override fun remove(key: String): SharedPreferences.Editor {
+            updates -= key
+            removals += key
+            return this
+        }
+
+        override fun clear(): SharedPreferences.Editor {
+            clearRequested = true
+            updates.clear()
+            removals.clear()
+            return this
+        }
+
+        override fun commit(): Boolean {
+            val changed = linkedSetOf<String>()
+            synchronized(this@SnapshotSharedPreferences) {
+                if (clearRequested) {
+                    changed += values.keys
+                    values.clear()
+                }
+                removals.forEach { key ->
+                    if (values.remove(key) != null) changed += key
+                }
+                updates.forEach { (key, value) ->
+                    if (values[key] != value) {
+                        values[key] = value
+                        changed += key
+                    }
+                }
+                changed.forEach { key ->
+                    listeners.toList().forEach { it.onSharedPreferenceChanged(this@SnapshotSharedPreferences, key) }
+                }
+            }
+            return true
+        }
+
+        override fun apply() {
+            commit()
         }
     }
 }
