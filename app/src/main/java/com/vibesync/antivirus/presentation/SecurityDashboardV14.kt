@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Apps
 import androidx.compose.material.icons.outlined.CleaningServices
@@ -29,6 +30,7 @@ import androidx.compose.material.icons.outlined.SettingsSuggest
 import androidx.compose.material.icons.outlined.Shield
 import androidx.compose.material.icons.outlined.Storage
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -47,6 +49,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.platform.LocalConfiguration
 import java.text.DateFormat
@@ -54,6 +57,7 @@ import java.util.Date
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.vibesync.antivirus.R
 import com.vibesync.antivirus.ui.components.CyberCard
 import com.vibesync.antivirus.ui.theme.SecurityTokens
@@ -81,7 +85,10 @@ internal fun SecurityDashboardV14(
     onOpenTools: () -> Unit = {},
     lastScanAt: Long? = null,
     reviewCount: Int = 0,
-    onOpenScanResults: () -> Unit = {}
+    onOpenScanResults: () -> Unit = {},
+    installedAppsCount: Int = 0,
+    inventoryLoaded: Boolean = false,
+    quarantinedFilesCount: Int = 0
 ) {
     val pendingIssue = advisor.critical.firstOrNull() ?: advisor.minor.firstOrNull()
     val interactionSource = remember { MutableInteractionSource() }
@@ -102,9 +109,9 @@ internal fun SecurityDashboardV14(
     ) {
         item {
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(stringResource(R.string.security_dashboard_title),
+                Text(stringResource(R.string.dashboard_title_ux),
                     style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
-                Text(stringResource(R.string.scan_explanation),
+                Text(stringResource(R.string.dashboard_subtitle_ux),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
@@ -121,14 +128,14 @@ internal fun SecurityDashboardV14(
                         horizontalArrangement = Arrangement.spacedBy(18.dp)) {
                         ProtectionScoreRing(advisor.score)
                         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(5.dp)) {
-                            Text(stringResource(R.string.device_security_score),
+                            Text(stringResource(R.string.dashboard_advisor_label),
                                 style = MaterialTheme.typography.labelMedium,
                                 color = MaterialTheme.colorScheme.secondary,
                                 fontWeight = FontWeight.SemiBold)
-                            Text(stringResource(R.string.v140_pending_actions, advisor.pendingCount),
+                            Text(stringResource(R.string.dashboard_advisor_pending, advisor.pendingCount),
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Bold)
-                            Text(stringResource(R.string.v140_security_risk_explained),
+                            Text(stringResource(R.string.dashboard_advisor_disclaimer),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
@@ -157,9 +164,14 @@ internal fun SecurityDashboardV14(
                     }
                     Button(
                         onClick = onScan,
+                        shape = CircleShape,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.onPrimary
+                        ),
                         enabled = !scanRunning,
                         interactionSource = interactionSource,
-                        modifier = Modifier.fillMaxWidth().graphicsLayer {
+                        modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).graphicsLayer {
                             scaleX = buttonScale
                             scaleY = buttonScale
                         }
@@ -220,25 +232,25 @@ internal fun SecurityDashboardV14(
         item {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                    Text(stringResource(R.string.nav_sentinel), modifier = Modifier.weight(1f),
+                    Text(stringResource(R.string.dashboard_everyday_title), modifier = Modifier.weight(1f),
                         style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
                     TextButton(onClick = onOpenTools) {
-                        Text(stringResource(R.string.v140_analytics_tools))
+                        Text(stringResource(R.string.dashboard_all_tools))
                     }
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    QuickProtectionTool(Icons.Outlined.Shield, R.string.setup_sentinel_title,
-                        if (installSentinelActive) R.string.ui_sentinel_running else R.string.ui_sentinel_setup,
+                    QuickProtectionTool(R.drawable.ic_home_install_sentinel, R.string.dashboard_install_sentinel_title,
+                        stringResource(if (installSentinelActive) R.string.dashboard_status_on else R.string.dashboard_status_off),
                         onInstallSentinel, Modifier.weight(1f))
-                    QuickProtectionTool(Icons.Outlined.FolderOpen, R.string.sentinel_scope_title,
-                        if (downloadsActive || chatFoldersActive) R.string.ui_sentinel_running else R.string.ui_sentinel_setup,
+                    QuickProtectionTool(R.drawable.ic_home_folder_monitor, R.string.dashboard_folder_monitoring_title,
+                        stringResource(if (downloadsActive || chatFoldersActive) R.string.dashboard_status_on else R.string.dashboard_status_off),
                         onFolders, Modifier.weight(1f))
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    QuickProtectionTool(Icons.Outlined.Link, R.string.nav_phishing,
-                        R.string.phishing_assess, onLinkChecker, Modifier.weight(1f))
-                    QuickProtectionTool(Icons.Outlined.SettingsSuggest, R.string.posture_title,
-                        R.string.posture_refresh, onPosture, Modifier.weight(1f))
+                    QuickProtectionTool(R.drawable.ic_home_link_checker, R.string.dashboard_link_checker_title,
+                        stringResource(R.string.dashboard_status_on_demand), onLinkChecker, Modifier.weight(1f))
+                    QuickProtectionTool(R.drawable.ic_home_device_posture, R.string.dashboard_device_posture_title,
+                        stringResource(R.string.dashboard_status_review, advisor.pendingCount), onPosture, Modifier.weight(1f))
                 }
             }
         }
@@ -246,12 +258,14 @@ internal fun SecurityDashboardV14(
             CyberCard(modifier = Modifier.fillMaxWidth(), shape = SecurityTokens.cardShape) {
                 Column(Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
                     verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                    DashboardActionRow(Icons.Outlined.Apps, R.string.nav_apps,
-                        R.string.apps_inventory_empty_body, R.string.posture_open, onApps)
-                    DashboardActionRow(Icons.Outlined.Storage, R.string.quarantine_vault_title,
-                        R.string.quarantine_vault_description, R.string.posture_open, onQuarantine)
+                    DashboardActionRow(R.drawable.ic_home_apps, R.string.nav_apps,
+                        if (inventoryLoaded) pluralStringResource(R.plurals.l10n_apps, installedAppsCount, installedAppsCount) else stringResource(R.string.apps_inventory_empty),
+                        stringResource(R.string.dashboard_view), onApps)
+                    DashboardActionRow(R.drawable.ic_home_quarantine, R.string.quarantine_vault_title,
+                        pluralStringResource(R.plurals.l10n_files, quarantinedFilesCount, quarantinedFilesCount),
+                        stringResource(R.string.dashboard_view), onQuarantine)
                     DashboardActionRow(Icons.Outlined.CleaningServices, R.string.cleaner_title,
-                        R.string.cleaner_description, R.string.cleaner_scan_storage, onCleaner)
+                        stringResource(R.string.cleaner_description), stringResource(R.string.cleaner_scan_storage), onCleaner)
                 }
             }
         }
@@ -268,10 +282,10 @@ internal fun SecurityDashboardV14(
                         Icon(Icons.Outlined.Shield, contentDescription = null,
                             tint = MaterialTheme.colorScheme.primary)
                         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                            Text(stringResource(R.string.pro_title),
+                            Text(stringResource(R.string.dashboard_pro_title),
                                 style = MaterialTheme.typography.titleSmall,
-                                fontWeight = FontWeight.SemiBold)
-                            Text(stringResource(R.string.pro_feature_adfree),
+                                fontWeight = FontWeight.Bold)
+                            Text(stringResource(R.string.dashboard_pro_summary),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
@@ -287,9 +301,9 @@ internal fun SecurityDashboardV14(
 
 @Composable
 private fun QuickProtectionTool(
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    iconResource: Int,
     titleResource: Int,
-    stateResource: Int,
+    stateLabel: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -305,11 +319,12 @@ private fun QuickProtectionTool(
                 Box(Modifier.size(36.dp).background(
                     MaterialTheme.colorScheme.secondaryContainer, SecurityTokens.iconTileShape
                 ), contentAlignment = Alignment.Center) {
-                    Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.secondary)
+                    Icon(painterResource(iconResource), contentDescription = null, tint = MaterialTheme.colorScheme.secondary)
                 }
-                Spacer(Modifier.weight(1f))
-                Text(stringResource(stateResource), style = MaterialTheme.typography.labelSmall,
+                Text(stateLabel, modifier = Modifier.weight(1f),
+                    style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = androidx.compose.ui.text.style.TextAlign.End,
                     maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
             Text(stringResource(titleResource), style = MaterialTheme.typography.bodyMedium,
@@ -322,12 +337,12 @@ private fun QuickProtectionTool(
 private fun DashboardActionRow(
     icon: androidx.compose.ui.graphics.vector.ImageVector,
     titleResource: Int,
-    descriptionResource: Int,
-    actionResource: Int,
+    description: String,
+    action: String,
     onClick: () -> Unit
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth().clickable(onClick = onClick).padding(vertical = 10.dp),
+        modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).clickable(onClick = onClick).padding(vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
@@ -339,11 +354,11 @@ private fun DashboardActionRow(
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
             Text(stringResource(titleResource), style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.SemiBold, maxLines = 2, overflow = TextOverflow.Ellipsis)
-            Text(stringResource(descriptionResource), style = MaterialTheme.typography.bodySmall,
+            Text(description, style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 2, overflow = TextOverflow.Ellipsis)
         }
-        Text(stringResource(actionResource), style = MaterialTheme.typography.labelMedium,
+        Text(action, style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.primary, maxLines = 1, overflow = TextOverflow.Ellipsis)
     }
 }
@@ -368,9 +383,11 @@ private fun ProtectionScoreRing(score: Int) {
                 style = Stroke(stroke, cap = StrokeCap.Round))
         }
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(score.toString(), style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
-            Text(stringResource(R.string.ui_score_checks, score, 100), style = MaterialTheme.typography.labelSmall,
+            Text(score.toString(), style = MaterialTheme.typography.headlineMedium.copy(
+                fontSize = 48.sp, lineHeight = 52.sp
+            ), fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
+            Text(stringResource(R.string.dashboard_score_out_of_100),
+                style = MaterialTheme.typography.labelMedium.copy(fontSize = 12.sp),
                 color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
