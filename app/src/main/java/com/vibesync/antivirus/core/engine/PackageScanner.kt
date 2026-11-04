@@ -12,6 +12,10 @@ import com.google.common.hash.BloomFilter
 import com.vibesync.antivirus.core.engine.hash.BloomFilterBuilder
 import com.vibesync.antivirus.core.engine.hash.HashMatcher
 import com.vibesync.antivirus.core.engine.hash.SignatureDatabaseParser
+import com.vibesync.antivirus.core.engine.yara.YaraScanner as YaraXScanner
+import com.vibesync.antivirus.core.engine.yara.YaraXRuleMatch
+import com.vibesync.antivirus.core.engine.yara.YaraXScanResult
+import com.vibesync.antivirus.core.engine.yara.YaraXScanState
 import com.vibesync.antivirus.core.hashdb.HashDatabaseManager
 import com.vibesync.antivirus.core.engine.DeepStaticAnalyzer
 import com.vibesync.antivirus.core.heuristics.PermissionRiskAnalyzer
@@ -48,6 +52,7 @@ class PackageScanner(
  private val trustedAppStore = TrustedAppStore(context)
  private val deepStaticAnalyzer = DeepStaticAnalyzer()
  private val machineLearningScanner = MachineLearningScanner(context)
+ private val yaraXScanner = YaraXScanner(context)
 
  private data class BundledHashSnapshot(
   val hashes: Set<String>,
@@ -86,6 +91,85 @@ class PackageScanner(
     bloomFilter = bloomFilterBuilder.buildBloomFilter(hashes.toList())
    ).also { cachedBundledHashSnapshot = it }
   }
+ }
+
+ private fun mergeYaraXFindings(report: RiskReport, scan: YaraXScanResult): RiskReport {
+  val yaraFindings = scan.suspiciousMatches.map { match ->
+   val severity = when (match.severity) {
+    "critical", "high" -> RiskSeverity.HIGH
+    "low" -> RiskSeverity.LOW
+    else -> RiskSeverity.MEDIUM
+   }
+   RiskFinding(
+    ruleId = "YARAX_" + match.ruleIdentifier,
+    severity = severity,
+    confidence = when (severity) {
+     RiskSeverity.HIGH -> 70
+     RiskSeverity.MEDIUM -> 55
+     RiskSeverity.LOW -> 35
+    },
+    evidence = "YARA-X rule ${match.ruleIdentifier} matched ${match.componentName}. ${match.description}",
+    details = (listOf(match.ruleIdentifier, match.namespace, match.componentName) +
+     match.tags + match.matchedPatterns).take(64)
+   )
+  }
+  val addedScore = when {
+   scan.suspiciousMatches.any { it.severity == "critical" || it.severity == "high" } -> 65
+   scan.suspiciousMatches.isNotEmpty() -> 45
+   else -> 0
+  }
+  val notes = when (scan.state) {
+   YaraXScanState.MATCHES -> listOf("YARA-X completed; ${scan.matches.size} rule match(es) observed.")
+   YaraXScanState.NO_MATCH -> listOf("YARA-X completed; no bundled rule matched.")
+   YaraXScanState.DISABLED -> listOf("YARA-X unavailable; this component was not evaluated by YARA-X.")
+   YaraXScanState.NOT_SCANNED -> listOf("YARA-X did not complete: ${scan.reason.orEmpty()}")
+  }
+  val limitations = if (scan.isComplete) report.limitations else
+   report.limitations + "YARA-X was not fully executed: ${scan.reason.orEmpty()}"
+  return report.copy(
+   findings = (report.findings + yaraFindings).distinctBy { it.ruleId + it.evidence },
+   riskScore = maxOf(report.riskScore, addedScore),
+   observations = (report.observations + notes).distinct(),
+   limitations = limitations
+  )
+ }
+
+ private fun yaraThreatResult(
+  key: String,
+  label: String,
+  sha256: String,
+  md5: String,
+  match: YaraXRuleMatch,
+  start: Long,
+  packageName: String?,
+  scanSessionId: String
+ ): ScanResult {
+  val name = match.malwareName ?: match.ruleIdentifier
+  return ScanResult(
+   key, label, sha256, md5, ScanVerdict.THREAT,
+   listOf("YARA-X ${match.ruleIdentifier}: ${match.description}"), elapsed(start)
+  ).copy(
+   packageName = packageName,
+   scanSessionId = scanSessionId,
+   threatEventId = UUID.randomUUID().toString(),
+   riskScore = 1f,
+   detectionSource = DetectionSource.YARA,
+   malwareName = name
+  )
+ }
+
+ private fun markIncompleteYaraIfOtherwiseClean(
+  result: ScanResult,
+  yaraResult: YaraXScanResult?
+ ): ScanResult {
+  if (result.verdict != ScanVerdict.NO_MATCH) return result
+  if (yaraResult?.state != YaraXScanState.DISABLED &&
+   yaraResult?.state != YaraXScanState.NOT_SCANNED
+  ) return result
+  return result.copy(
+   verdict = ScanVerdict.NOT_SCANNED,
+   reasons = result.reasons + context.getString(R.string.file_could_not_read)
+  )
  }
 
  private suspend fun withMachineLearning(report: RiskReport, apk: File, info: PackageInfo?): RiskReport {
@@ -190,6 +274,24 @@ class PackageScanner(
    return exactThreat.copy(durationMs = elapsed(start),
     sourceLocalPath = file.absolutePath, scanSessionId = scanSessionId)
   }
+
+  val yaraXResult = if (file.extension.equals("apk", ignoreCase = true)) {
+   yaraXScanner.scanApk(file)
+  } else null
+  val yaraThreat = yaraXResult?.threatMatches?.firstOrNull()
+  if (yaraThreat != null) {
+   val detected = yaraThreatResult(
+    file.name, file.name, hash.sha256, hash.md5,
+    yaraThreat, start, null, scanSessionId
+   )
+   audit(detected, start, scanSessionId)
+   return detected.copy(
+    durationMs = elapsed(start),
+    sourceLocalPath = file.absolutePath,
+    scanSessionId = scanSessionId
+   )
+  }
+
   val staticReport = if (file.extension.equals("apk", ignoreCase = true)) {
     val archiveInfo = try {
      val flags = PackageManager.GET_PERMISSIONS or PackageManager.GET_SERVICES or PackageManager.GET_ACTIVITIES or PackageManager.GET_RECEIVERS or PackageManager.GET_PROVIDERS or signingFlags()
@@ -201,13 +303,23 @@ class PackageScanner(
      }
     } catch (_: Exception) { null }
     archiveInfo?.applicationInfo?.apply { sourceDir = file.absolutePath; publicSourceDir = file.absolutePath }
-    withMachineLearning(deepStaticAnalyzer.analyze(archiveInfo, file, archiveInfo?.let(::isDebugSigned) == true), file, archiveInfo)
+    val baseReport = deepStaticAnalyzer.analyze(archiveInfo, file, archiveInfo?.let(::isDebugSigned) == true)
+    val mergedReport = yaraXResult?.let { mergeYaraXFindings(baseReport, it) } ?: baseReport
+    withMachineLearning(mergedReport, file, archiveInfo)
    } else null
    val staticReasons = staticReport?.findings.orEmpty().map { "[${it.ruleId}] ${it.evidence} (confidence ${it.confidence}%)" }
    val staticScore = staticReport?.riskScore ?: 0
-   val output = evaluateUnmatched(file.name, file.name, hash.sha256, hash.md5, staticReasons, staticScore, sha1 = hash.sha1, report = staticReport)
+   val assessed = evaluateUnmatched(file.name, file.name, hash.sha256, hash.md5, staticReasons, staticScore, sha1 = hash.sha1, report = staticReport)
     .copy(riskReport = staticReport, mlProbability = staticReport?.mlProbability)
-   if (persistAllAudit || output.verdict == ScanVerdict.THREAT || output.verdict == ScanVerdict.SUSPICIOUS) audit(output, start, scanSessionId)
+   val firstSuspiciousYara = yaraXResult?.suspiciousMatches?.firstOrNull()
+   var output = markIncompleteYaraIfOtherwiseClean(assessed, yaraXResult)
+   if (output.verdict == ScanVerdict.SUSPICIOUS && firstSuspiciousYara != null) {
+    output = output.copy(
+     detectionSource = DetectionSource.YARA,
+     malwareName = firstSuspiciousYara.malwareName ?: firstSuspiciousYara.ruleIdentifier
+    )
+   }
+   if (persistAllAudit || output.verdict == ScanVerdict.THREAT || output.verdict == ScanVerdict.SUSPICIOUS || output.verdict == ScanVerdict.NOT_SCANNED) audit(output, start, scanSessionId)
    output.copy(durationMs = elapsed(start), sourceLocalPath = file.absolutePath, scanSessionId = scanSessionId)
   } catch (cancelled: CancellationException) {
    throw cancelled
@@ -303,13 +415,38 @@ class PackageScanner(
    return exactThreat.copy(durationMs = elapsed(start),
     packageName = info.packageName, scanSessionId = scanSessionId)
   }
-  val deepReport = withMachineLearning(deepStaticAnalyzer.analyze(info, apk, debugSigned), apk, info)
+
+  val yaraXResult = yaraXScanner.scanApk(apk)
+  val yaraThreat = yaraXResult.threatMatches.firstOrNull()
+  if (yaraThreat != null) {
+   val detected = yaraThreatResult(
+    info.packageName, label, hashes.sha256, hashes.md5,
+    yaraThreat, start, info.packageName, scanSessionId
+   )
+   audit(detected, start, scanSessionId)
+   return detected.copy(
+    durationMs = elapsed(start),
+    packageName = info.packageName,
+    scanSessionId = scanSessionId
+   )
+  }
+
+  val baseDeepReport = deepStaticAnalyzer.analyze(info, apk, debugSigned)
+  val mergedDeepReport = mergeYaraXFindings(baseDeepReport, yaraXResult)
+  val deepReport = withMachineLearning(mergedDeepReport, apk, info)
   val deepReasons = deepReport.findings.map { "[${it.ruleId}] ${it.evidence} (confidence ${it.confidence}%)" }
   reasons += deepReasons
   val combinedRiskScore = maxOf(adjustedRiskScore, deepReport.riskScore)
   val assessed = evaluateUnmatched(info.packageName, label, hashes.sha256, hashes.md5, reasons, combinedRiskScore, sha1 = hashes.sha1, report = deepReport)
    .copy(riskReport = deepReport, mlProbability = deepReport.mlProbability)
-  val output = assessed
+  val firstSuspiciousYara = yaraXResult.suspiciousMatches.firstOrNull()
+  var output = markIncompleteYaraIfOtherwiseClean(assessed, yaraXResult)
+  if (output.verdict == ScanVerdict.SUSPICIOUS && firstSuspiciousYara != null) {
+   output = output.copy(
+    detectionSource = DetectionSource.YARA,
+    malwareName = firstSuspiciousYara.malwareName ?: firstSuspiciousYara.ruleIdentifier
+   )
+  }
   audit(output, start, scanSessionId)
   return output.copy(durationMs = elapsed(start), packageName = info.packageName, scanSessionId = scanSessionId)
  }
