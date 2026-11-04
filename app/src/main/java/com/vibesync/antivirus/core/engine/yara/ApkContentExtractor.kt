@@ -130,6 +130,6 @@ class ApkContentExtractor {
         const val MAX_SINGLE_DEX_BYTES = 16L * 1024L * 1024L
         const val MAX_TOTAL_EXTRACTED_BYTES = 32L * 1024L * 1024L
         const val MAX_COMPRESSION_RATIO = 200.0
-        val DEX_ENTRY = Regex("""classes(?:[2-9][0-9]*)?\.dex""")
+        val DEX_ENTRY = Regex("""classes(?:[0-9]+)?\.dex""")
     }
 }
