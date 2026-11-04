@@ -74,11 +74,11 @@ def load_quota_state(path: Path) -> dict[str, Any]:
 
 
 class ReputationClient:
-    def __init__(self, session: requests.Session, quota_path: Path, *, sleep=time.sleep, monotonic=time.monotonic):
+    def __init__(self, session: requests.Session, quota_path: Path, *, sleep=None, monotonic=None):
         self.session = session
         self.quota_path = quota_path
-        self.sleep = sleep
-        self.monotonic = monotonic
+        self.sleep = sleep or time.sleep
+        self.monotonic = monotonic or time.monotonic
         self.usage = load_quota_state(quota_path)
         self.last_request_at: dict[str, float] = {}
 
@@ -252,7 +252,7 @@ def append_record(path: Path, record: dict[str, Any]) -> None:
 
 
 def enrich_hashes(hashes_path: Path, csv_path: Path, quota_path: Path, *, session=None,
-                  sleep=time.sleep, monotonic=time.monotonic) -> dict[str, int]:
+                  sleep=None, monotonic=None) -> dict[str, int]:
     hashes = read_hashes(hashes_path)
     existing = load_existing(csv_path)
     pending = [digest for digest in hashes if digest not in existing]

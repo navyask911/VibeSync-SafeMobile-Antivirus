@@ -99,6 +99,30 @@ class EnrichmentTests(unittest.TestCase):
         self.assertEqual(session.get.call_count, 2)
         self.assertGreaterEqual(sleeper.call_args_list[0].args[0], 30.0)
 
+    def test_provider_spacing_is_enforced_between_requests(self):
+        session = Mock()
+        vt_payload = {"data": {"attributes": {"last_analysis_stats": {"malicious": 1}}}}
+        ha_payload = [{"sha256": HASH1, "threat_score": 55, "verdict": "malicious"}]
+        session.get.side_effect = [Response(payload=vt_payload), Response(payload=vt_payload)]
+        session.post.side_effect = [Response(payload=ha_payload), Response(payload=ha_payload)]
+        now = [0.0]
+        delays = []
+
+        def clock():
+            return now[0]
+
+        def sleep(seconds):
+            delays.append(seconds)
+            now[0] += seconds
+
+        client = ReputationClient(session, self.quota, sleep=sleep, monotonic=clock)
+        client.virustotal_malicious_count(HASH1, "vt-key")
+        client.virustotal_malicious_count(HASH2, "vt-key")
+        client.hybrid_analysis_result(HASH1, "ha-key")
+        client.hybrid_analysis_result(HASH2, "ha-key")
+        self.assertIn(16.0, delays)
+        self.assertIn(2.0, delays)
+
     def test_virus_total_commercial_gate_fails_before_network(self):
         self.hashes.write_text(HASH1 + "\n", encoding="ascii")
         session = Mock()
