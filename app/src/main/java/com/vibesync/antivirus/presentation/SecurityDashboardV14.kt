@@ -109,9 +109,9 @@ internal fun SecurityDashboardV14(
     ) {
         item {
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(stringResource(R.string.dashboard_title_ux),
+                Text(stringResource(R.string.security_dashboard_title),
                     style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
-                Text(stringResource(R.string.dashboard_subtitle_ux),
+                Text(stringResource(R.string.security_dashboard_subtitle),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
@@ -128,14 +128,14 @@ internal fun SecurityDashboardV14(
                         horizontalArrangement = Arrangement.spacedBy(18.dp)) {
                         ProtectionScoreRing(advisor.score)
                         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(5.dp)) {
-                            Text(stringResource(R.string.dashboard_advisor_label),
+                            Text(stringResource(R.string.device_security_score),
                                 style = MaterialTheme.typography.labelMedium,
                                 color = MaterialTheme.colorScheme.secondary,
                                 fontWeight = FontWeight.SemiBold)
-                            Text(stringResource(R.string.dashboard_advisor_pending, advisor.pendingCount),
+                            Text(stringResource(R.string.v140_pending_actions, advisor.pendingCount),
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Bold)
-                            Text(stringResource(R.string.dashboard_advisor_disclaimer),
+                            Text(stringResource(R.string.v116_score_meaning),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
@@ -232,25 +232,25 @@ internal fun SecurityDashboardV14(
         item {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                    Text(stringResource(R.string.dashboard_everyday_title), modifier = Modifier.weight(1f),
+                    Text(stringResource(R.string.security_filter_overview), modifier = Modifier.weight(1f),
                         style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
                     TextButton(onClick = onOpenTools) {
-                        Text(stringResource(R.string.dashboard_all_tools))
+                        Text(stringResource(R.string.v140_analytics_tools))
                     }
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    QuickProtectionTool(R.drawable.ic_home_install_sentinel, R.string.dashboard_install_sentinel_title,
-                        stringResource(if (installSentinelActive) R.string.dashboard_status_on else R.string.dashboard_status_off),
+                    QuickProtectionTool(R.drawable.ic_home_install_sentinel, R.string.download_interceptor_label,
+                        stringResource(if (installSentinelActive) R.string.monitor_active else R.string.monitor_inactive),
                         onInstallSentinel, Modifier.weight(1f))
-                    QuickProtectionTool(R.drawable.ic_home_folder_monitor, R.string.dashboard_folder_monitoring_title,
-                        stringResource(if (downloadsActive || chatFoldersActive) R.string.dashboard_status_on else R.string.dashboard_status_off),
+                    QuickProtectionTool(R.drawable.ic_home_folder_monitor, R.string.sentinel_scope_title,
+                        stringResource(if (downloadsActive || chatFoldersActive) R.string.monitor_active else R.string.monitor_inactive),
                         onFolders, Modifier.weight(1f))
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    QuickProtectionTool(R.drawable.ic_home_link_checker, R.string.dashboard_link_checker_title,
-                        stringResource(R.string.dashboard_status_on_demand), onLinkChecker, Modifier.weight(1f))
-                    QuickProtectionTool(R.drawable.ic_home_device_posture, R.string.dashboard_device_posture_title,
-                        stringResource(R.string.dashboard_status_review, advisor.pendingCount), onPosture, Modifier.weight(1f))
+                    QuickProtectionTool(R.drawable.ic_home_link_checker, R.string.nav_phishing,
+                        stringResource(R.string.monitor_active_demand), onLinkChecker, Modifier.weight(1f))
+                    QuickProtectionTool(R.drawable.ic_home_device_posture, R.string.posture_title,
+                        stringResource(R.string.v140_pending_actions, advisor.pendingCount), onPosture, Modifier.weight(1f))
                 }
             }
         }
@@ -261,11 +261,11 @@ internal fun SecurityDashboardV14(
                     DashboardActionRow({ Icon(painterResource(R.drawable.ic_home_apps), null, tint = MaterialTheme.colorScheme.secondary) },
                         R.string.nav_apps,
                         if (inventoryLoaded) pluralStringResource(R.plurals.l10n_apps, installedAppsCount, installedAppsCount) else stringResource(R.string.apps_inventory_empty),
-                        stringResource(R.string.dashboard_view), onApps)
+                        stringResource(R.string.ui_view_scan_results), onApps)
                     DashboardActionRow({ Icon(painterResource(R.drawable.ic_home_quarantine), null, tint = MaterialTheme.colorScheme.secondary) },
                         R.string.quarantine_vault_title,
                         pluralStringResource(R.plurals.l10n_files, quarantinedFilesCount, quarantinedFilesCount),
-                        stringResource(R.string.dashboard_view), onQuarantine)
+                        stringResource(R.string.ui_view_scan_results), onQuarantine)
                     DashboardActionRow({ Icon(Icons.Outlined.CleaningServices, null, tint = MaterialTheme.colorScheme.secondary) },
                         R.string.cleaner_title,
                         stringResource(R.string.cleaner_description), stringResource(R.string.cleaner_scan_storage), onCleaner)
@@ -285,10 +285,10 @@ internal fun SecurityDashboardV14(
                         Icon(Icons.Outlined.Shield, contentDescription = null,
                             tint = MaterialTheme.colorScheme.primary)
                         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                            Text(stringResource(R.string.dashboard_pro_title),
+                            Text(stringResource(R.string.pro_truthful_summary),
                                 style = MaterialTheme.typography.titleSmall,
                                 fontWeight = FontWeight.Bold)
-                            Text(stringResource(R.string.dashboard_pro_summary),
+                            Text(stringResource(R.string.pro_feature_adfree),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
@@ -389,7 +389,7 @@ private fun ProtectionScoreRing(score: Int) {
             Text(score.toString(), style = MaterialTheme.typography.headlineMedium.copy(
                 fontSize = 48.sp, lineHeight = 52.sp
             ), fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
-            Text(stringResource(R.string.dashboard_score_out_of_100),
+            Text(stringResource(R.string.ui_score_out_of_100),
                 style = MaterialTheme.typography.labelMedium.copy(fontSize = 12.sp),
                 color = MaterialTheme.colorScheme.onSurfaceVariant)
         }

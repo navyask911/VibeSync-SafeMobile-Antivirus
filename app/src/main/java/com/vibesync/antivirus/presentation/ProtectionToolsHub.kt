@@ -57,9 +57,9 @@ internal fun ProtectionToolsHub(
         verticalArrangement = Arrangement.spacedBy(18.dp)
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text(stringResource(R.string.tools_page_heading_ux),
+            Text(stringResource(R.string.analytics_title),
                 style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
-            Text(stringResource(R.string.tools_page_subtitle_ux),
+            Text(stringResource(R.string.analytics_subtitle),
                 style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
         CyberCard(modifier = Modifier.fillMaxWidth(), shape = SecurityTokens.cardShape) {
@@ -74,9 +74,9 @@ internal fun ProtectionToolsHub(
                             modifier = Modifier.padding(10.dp).size(24.dp))
                     }
                     Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                        Text(stringResource(R.string.tools_start_scan_ux),
+                        Text(stringResource(R.string.security_scan_now),
                             style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                        Text(stringResource(R.string.tools_scan_description_ux),
+                        Text(stringResource(R.string.scan_explanation),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
@@ -91,39 +91,39 @@ internal fun ProtectionToolsHub(
                         contentColor = MaterialTheme.colorScheme.secondary
                     ), modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) {
                     Icon(Icons.Outlined.FolderOpen, contentDescription = null)
-                    Text(stringResource(R.string.tools_choose_apk_ux), modifier = Modifier.padding(start = 8.dp))
+                    Text(stringResource(R.string.scan_selected), modifier = Modifier.padding(start = 8.dp))
                 }
             }
         }
         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Text(stringResource(R.string.tools_watch_check_ux),
+            Text(stringResource(R.string.nav_sentinel),
                 style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
             CyberCard(modifier = Modifier.fillMaxWidth(), shape = SecurityTokens.cardShape) {
                 Column(Modifier.padding(horizontal = 16.dp)) {
-                    ToolHubRow({ Icon(painterResource(R.drawable.ic_home_install_sentinel), null, tint = MaterialTheme.colorScheme.secondary) }, R.string.dashboard_install_sentinel_title, R.string.tools_install_sentinel_desc_ux,
-                        stringResource(if (installSentinelActive) R.string.dashboard_status_on else R.string.dashboard_status_off)) { onOpen("sources") }
-                    ToolHubRow({ Icon(painterResource(R.drawable.ic_home_folder_monitor), null, tint = MaterialTheme.colorScheme.secondary) }, R.string.dashboard_folder_monitoring_title, R.string.tools_folder_monitoring_desc_ux,
-                        stringResource(if (foldersActive) R.string.dashboard_status_on else R.string.dashboard_status_off)) { onOpen("sentinel") }
-                    ToolHubRow({ Icon(painterResource(R.drawable.ic_home_link_checker), null, tint = MaterialTheme.colorScheme.secondary) }, R.string.dashboard_link_checker_title, R.string.tools_link_checker_desc_ux,
-                        stringResource(R.string.dashboard_status_on_demand)) { onOpen("phishing") }
+                    ToolHubRow({ Icon(painterResource(R.drawable.ic_home_install_sentinel), null, tint = MaterialTheme.colorScheme.secondary) }, R.string.download_interceptor_label, R.string.install_sources_body,
+                        stringResource(if (installSentinelActive) R.string.monitor_active else R.string.monitor_inactive)) { onOpen("sources") }
+                    ToolHubRow({ Icon(painterResource(R.drawable.ic_home_folder_monitor), null, tint = MaterialTheme.colorScheme.secondary) }, R.string.sentinel_scope_title, R.string.monitor_explanation,
+                        stringResource(if (foldersActive) R.string.monitor_active else R.string.monitor_inactive)) { onOpen("sentinel") }
+                    ToolHubRow({ Icon(painterResource(R.drawable.ic_home_link_checker), null, tint = MaterialTheme.colorScheme.secondary) }, R.string.nav_phishing, R.string.phishing_disclaimer,
+                        stringResource(R.string.monitor_active_demand)) { onOpen("phishing") }
                 }
             }
         }
         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Text(stringResource(R.string.tools_review_manage_ux),
+            Text(stringResource(R.string.nav_analytics),
                 style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
             CyberCard(modifier = Modifier.fillMaxWidth(), shape = SecurityTokens.cardShape) {
                 Column(Modifier.padding(horizontal = 16.dp)) {
-                    ToolHubRow({ Icon(painterResource(R.drawable.ic_home_device_posture), null, tint = MaterialTheme.colorScheme.secondary) }, R.string.dashboard_device_posture_title, R.string.tools_posture_desc_ux,
-                        stringResource(R.string.dashboard_status_review, pendingActions)) { onOpen("posture") }
-                    ToolHubRow({ Icon(painterResource(R.drawable.ic_home_apps), null, tint = MaterialTheme.colorScheme.secondary) }, R.string.nav_apps, R.string.tools_apps_desc_ux,
+                    ToolHubRow({ Icon(painterResource(R.drawable.ic_home_device_posture), null, tint = MaterialTheme.colorScheme.secondary) }, R.string.posture_title, R.string.posture_risk_note,
+                        stringResource(R.string.v140_pending_actions, pendingActions)) { onOpen("posture") }
+                    ToolHubRow({ Icon(painterResource(R.drawable.ic_home_apps), null, tint = MaterialTheme.colorScheme.secondary) }, R.string.nav_apps, R.string.apps_inventory_empty_body,
                         if (inventoryLoaded) pluralStringResource(R.plurals.l10n_apps, installedAppsCount, installedAppsCount) else stringResource(R.string.apps_inventory_empty)) { onOpen("apps") }
-                    ToolHubRow({ Icon(painterResource(R.drawable.ic_home_quarantine), null, tint = MaterialTheme.colorScheme.secondary) }, R.string.quarantine_vault_title, R.string.tools_quarantine_desc_ux,
+                    ToolHubRow({ Icon(painterResource(R.drawable.ic_home_quarantine), null, tint = MaterialTheme.colorScheme.secondary) }, R.string.quarantine_vault_title, R.string.quarantine_vault_description,
                         pluralStringResource(R.plurals.l10n_files, quarantinedFilesCount, quarantinedFilesCount)) { onOpen("quarantine") }
-                    ToolHubRow({ Icon(Icons.Outlined.History, null, tint = MaterialTheme.colorScheme.secondary) }, R.string.nav_history, R.string.tools_history_desc_ux,
-                        stringResource(R.string.dashboard_view)) { onOpen("history") }
+                    ToolHubRow({ Icon(Icons.Outlined.History, null, tint = MaterialTheme.colorScheme.secondary) }, R.string.nav_history, R.string.history_empty,
+                        stringResource(R.string.ui_view_scan_results)) { onOpen("history") }
                     ToolHubRow({ Icon(Icons.Outlined.Assessment, null, tint = MaterialTheme.colorScheme.secondary) }, R.string.detection_capabilities_title, R.string.detection_capabilities_title,
-                        stringResource(R.string.dashboard_view)) { onOpen("capabilities") }
+                        stringResource(R.string.ui_view_scan_results)) { onOpen("capabilities") }
                 }
             }
         }

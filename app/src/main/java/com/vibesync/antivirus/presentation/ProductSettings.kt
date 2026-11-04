@@ -450,16 +450,16 @@ internal fun SafeMobileSettingsPanel(
 
     Column(verticalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
         if (subRoute == SettingsSubRoute.ROOT) {
-            Text(stringResource(R.string.settings_main_heading_ux), style = MaterialTheme.typography.headlineMedium,
+            Text(stringResource(R.string.settings_title), style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold)
-            Text(stringResource(R.string.settings_main_subtitle_ux),
+            Text(stringResource(R.string.theme_appearance_description),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant)
             Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                 shape = RoundedCornerShape(20.dp)) {
                 Column(Modifier.fillMaxWidth().padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Text(stringResource(R.string.settings_appearance_heading_ux),
+                    Text(stringResource(R.string.appearance_title),
                         style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         AppTheme.entries.forEach { option ->
@@ -508,13 +508,13 @@ internal fun SafeMobileSettingsPanel(
                         }
                     }
                     SettingsRootRow(Icons.Default.Settings, R.string.language_settings,
-                        R.string.settings_language_desc_ux) {
+                        R.string.theme_appearance_description) {
                         showLanguageDialog = true
                     }
                 }
             }
 
-            Text(stringResource(R.string.settings_alerts_heading_ux),
+            Text(stringResource(R.string.monitor_title),
                 style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                 shape = RoundedCornerShape(20.dp)) {
@@ -543,7 +543,7 @@ internal fun SafeMobileSettingsPanel(
                 onManageFolders()
             }
 
-            Text(stringResource(R.string.settings_privacy_heading_ux),
+            Text(stringResource(R.string.settings_privacy),
                 style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                 shape = RoundedCornerShape(20.dp)) {
@@ -601,7 +601,7 @@ internal fun SafeMobileSettingsPanel(
                 }
             }
 
-            Text(stringResource(R.string.settings_about_heading_ux),
+            Text(stringResource(R.string.about_legal),
                 style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             SettingsRootRow(Icons.Default.HelpOutline, R.string.about_privacy_policy, R.string.ad_privacy_intro) {
                 onSubRouteChanged(SettingsSubRoute.HELP_LEGAL)
