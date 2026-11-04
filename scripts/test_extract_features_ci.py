@@ -88,13 +88,19 @@ class BatchAndNetworkSafetyTests(unittest.TestCase):
             {"sha256_hash": "b" * 64, "file_type": "apk"},
         ]}))
         out = self.root / "vectors.json"
+        reputation = {"vt_malicious_count": "5", "ha_threat_score": "88", "ha_verdict": "malicious"}
         with patch.dict("os.environ", {"MALWAREBAZAAR_AUTH_KEY": "test-only"}), (
+                patch("extract_features_ci.load_enrichment_cache", return_value={"a" * 64: reputation, "b" * 64: reputation})),
                 patch("extract_features_ci.download_sample", side_effect=[SampleRejected("corrupt"), b"mock_zip"])), (
                 patch("extract_features_ci.encrypted_zip_to_apk", return_value=b"mock_apk")), (
                 patch("extract_features_ci.analyze_android_apk", return_value=[1] * 215)):
             result = extract_recent(recent, out, 10, session=Mock())
         self.assertEqual(len(result), 1)
-        self.assertEqual(json.loads(out.read_text()), {"feature_rows": [[1] * 215]})
+        payload = json.loads(out.read_text())
+        self.assertEqual(payload["feature_rows"], [[1] * 215])
+        self.assertEqual(payload["feature_metadata"][0]["sha256"], "b" * 64)
+        self.assertEqual(payload["feature_metadata"][0]["vt_malicious_count"], 5)
+        self.assertEqual(payload["feature_metadata"][0]["ha_threat_score"], 88.0)
         self.assertNotIn("mock_apk", out.read_text())
         self.assertFalse(any(self.root.glob("*.apk")))
         self.assertLess(MAX_APK_BYTES, 30 * 1024 * 1024)
@@ -132,7 +138,9 @@ class BatchAndNetworkSafetyTests(unittest.TestCase):
         recent = self.root / "recent.json"
         recent.write_text(json.dumps({"query_status": "ok", "data": []}))
         output = self.root / "rows.json"
+        reputation = {"vt_malicious_count": "5", "ha_threat_score": "88", "ha_verdict": "malicious"}
         with patch.dict("os.environ", {"MALWAREBAZAAR_AUTH_KEY": "test-key"}), (
+            patch("extract_features_ci.load_enrichment_cache", return_value={"c" * 64: reputation})),
             patch("extract_features_ci.older_apk_digests", return_value=["c" * 64] * 10)), (
             patch("extract_features_ci.download_sample", return_value=b"example_zip")), (
             patch("extract_features_ci.encrypted_zip_to_apk", return_value=b"example_apk")), (
@@ -155,6 +163,21 @@ class BatchAndNetworkSafetyTests(unittest.TestCase):
         self.assertEqual(rows, ["c"*64, "d"*64])
         self.assertEqual(session.post.call_args.kwargs["data"]["query"], "get_file_type")
         self.assertEqual(session.post.call_args.kwargs["data"]["file_type"], "apk")
+
+    def test_dispatch_carries_aligned_reputation_sidecar_and_keeps_215_bit_shape(self):
+        raw = self.root / "metadata.json"
+        metadata = [{"sha256": "a" * 64, "vt_malicious_count": 7,
+                     "ha_threat_score": 93.0, "ha_verdict": "malicious"} for _ in range(12)]
+        raw.write_text(json.dumps({"feature_rows": [[1] * 215 for _ in range(12)],
+                                   "feature_metadata": metadata}))
+        batches = create_batches(raw, self.root / "metadata-dispatch")
+        self.assertEqual(len(batches), 2)
+        for batch in batches:
+            payload = json.loads(batch.read_text())["client_payload"]
+            self.assertEqual(len(payload["feature_rows"][0]), 215)
+            self.assertEqual(len(payload["feature_metadata"]), len(payload["feature_rows"]))
+            self.assertIn("vt_malicious_count", payload["feature_metadata"][0])
+            self.assertIn("ha_threat_score", payload["feature_metadata"][0])
 
     def test_dispatch_exact_shape_ten_rows_and_empty_no_http(self):
         raw = self.root / "data.json"

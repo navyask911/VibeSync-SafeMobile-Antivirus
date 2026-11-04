@@ -8,6 +8,7 @@ not change the separately signed hash database. Run in the ephemeral CI runner.
 from __future__ import annotations
 
 import argparse
+import csv
 from io import BytesIO
 import hashlib
 import json
@@ -230,6 +231,36 @@ def older_apk_digests(session, key: str, limit: int = 100) -> list[str]:
             found.append(sha)
     return found
 
+
+def load_enrichment_cache(path: Path) -> dict[str, dict[str, str]]:
+    """Load provider metadata keyed by SHA-256; never infer a missing verdict."""
+    if not path.is_file():
+        return {}
+    expected = {"sha256", "vt_malicious_count", "ha_threat_score", "ha_verdict"}
+    with path.open("r", newline="", encoding="utf-8") as stream:
+        reader = csv.DictReader(stream)
+        if set(reader.fieldnames or ()) != expected:
+            raise ValueError("Enrichment CSV header does not match the required schema")
+        output = {}
+        for row in reader:
+            digest = str(row.get("sha256") or "").lower()
+            if not SHA256.fullmatch(digest):
+                raise ValueError("Enrichment CSV contains an invalid SHA-256")
+            output[digest] = row
+    return output
+
+
+def has_complete_reputation(record: dict[str, str]) -> bool:
+    """Require usable results from both providers before optional MLOps dispatch."""
+    try:
+        vt_count = int(record["vt_malicious_count"])
+        ha_score = float(record["ha_threat_score"])
+        verdict = str(record["ha_verdict"]).strip().lower()
+        return vt_count >= 0 and 0.0 <= ha_score <= 100.0 and verdict not in ("", "not found")
+    except (KeyError, TypeError, ValueError):
+        return False
+
+
 def encrypted_zip_to_apk(contents: bytes, digest: str) -> bytes:
     """Read one AES ZIP entry in memory, enforce size/hash; do not extractall."""
     if len(contents) > MAX_DOWNLOAD_BYTES or not contents.startswith(b"PK\x03\x04"):
@@ -276,13 +307,19 @@ def download_sample(session, api_key: str, digest: str) -> bytes:
         return out.getvalue()
 
 
-def extract_recent(path: Path, output: Path, max_samples: int = 20, *, session=None, analyzer=None):
+def extract_recent(path: Path, output: Path, max_samples: int = 20, *, session=None, analyzer=None,
+                   enrichment_csv: Path | None = None):
     """Try recent then older APK metadata; allow at most 20 sample downloads."""
     if not 10 <= max_samples <= 20:
         raise ValueError("Sampling budget must be 10..20 APK attempts")
     schema = schema_features()
     recent = recent_apk_digests(path)
-    print(f"MLOps discovery: {len(recent)} APKs in recent detection metadata.", flush=True)
+    if enrichment_csv is None:
+        enrichment_csv = Path(__file__).resolve().parents[1] / "data/enriched_threats.csv"
+    enrichment = load_enrichment_cache(Path(enrichment_csv))
+    unverified = sum(1 for digest in recent if not has_complete_reputation(enrichment.get(digest, {})))
+    recent = [digest for digest in recent if has_complete_reputation(enrichment.get(digest, {}))]
+    print(f"MLOps discovery: {len(recent)} provider-verified APKs; skipped {unverified} without complete VT/HA reports.", flush=True)
     key = os.environ.get("MALWAREBAZAAR_AUTH_KEY", "")
     if not key:
         raise ValueError("MalwareBazaar authorization not available")
@@ -296,7 +333,12 @@ def extract_recent(path: Path, output: Path, max_samples: int = 20, *, session=N
     if len(pool) < max_samples:
         try:
             older = older_apk_digests(session, key, 100)
-            pool.extend(digest for digest in older if digest not in set(pool))
+            verified_older = [digest for digest in older if has_complete_reputation(enrichment.get(digest, {}))]
+            seen_pool = set(pool)
+            for digest in verified_older:
+                if digest not in seen_pool:
+                    pool.append(digest)
+                    seen_pool.add(digest)
             print(f"MLOps discovery: {len(older)} older APK metadata entries; "
                   f"{len(pool)} unique candidates.", flush=True)
         except Exception as exc:
@@ -304,6 +346,7 @@ def extract_recent(path: Path, output: Path, max_samples: int = 20, *, session=N
                   "continuing with recent candidates.", flush=True)
 
     rows = []
+    feature_metadata = []
     attempts = 0
     failures: dict[str, int] = {}
     target_rows = min(10, max_samples)
@@ -327,6 +370,13 @@ def extract_recent(path: Path, output: Path, max_samples: int = 20, *, session=N
             if len(vector) != 215 or any(type(bit) is not int or bit not in (0, 1) for bit in vector):
                 raise SampleRejected("Extractor produced an invalid feature vector")
             rows.append(vector)
+            reputation = enrichment[digest]
+            feature_metadata.append({
+                "sha256": digest,
+                "vt_malicious_count": int(reputation["vt_malicious_count"]),
+                "ha_threat_score": float(reputation["ha_threat_score"]),
+                "ha_verdict": reputation["ha_verdict"],
+            })
         except Exception as exc:
             # Do not print hash/filename/APK contents or uncensored tracebacks.
             cause = f"{stage}:{type(exc).__name__}"
@@ -338,7 +388,8 @@ def extract_recent(path: Path, output: Path, max_samples: int = 20, *, session=N
     output.parent.mkdir(parents=True, exist_ok=True)
     tmp = output.with_suffix(".part")
     try:
-        tmp.write_text(json.dumps({"feature_rows": rows}, separators=(",", ":")) + "\n", encoding="utf-8")
+        tmp.write_text(json.dumps({"feature_rows": rows, "feature_metadata": feature_metadata},
+                                   separators=(",", ":"), allow_nan=False) + "\n", encoding="utf-8")
         tmp.replace(output)
     finally:
         tmp.unlink(missing_ok=True)
@@ -357,8 +408,10 @@ def main() -> int:
     parser.add_argument("--recent", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--max-samples", type=int, default=20)
+    parser.add_argument("--enrichment-csv", type=Path,
+                        default=Path(__file__).resolve().parents[1] / "data/enriched_threats.csv")
     args = parser.parse_args()
-    extract_recent(args.recent, args.output, args.max_samples)
+    extract_recent(args.recent, args.output, args.max_samples, enrichment_csv=args.enrichment_csv)
     return 0
 
 
