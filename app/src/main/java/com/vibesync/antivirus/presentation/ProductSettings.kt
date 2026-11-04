@@ -45,6 +45,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -64,6 +65,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -140,7 +142,7 @@ private fun SettingsRootRow(
                 Text(stringResource(titleResource), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Bold,
                     maxLines = 1, overflow = TextOverflow.Ellipsis)
                 Text(stringResource(subtitleResource), style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
             }
             androidx.compose.material3.Icon(
                 Icons.AutoMirrored.Filled.KeyboardArrowRight,
@@ -440,30 +442,61 @@ internal fun SafeMobileSettingsPanel(
 
     Column(verticalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
         if (subRoute == SettingsSubRoute.ROOT) {
-            Text(stringResource(R.string.settings_title), style = MaterialTheme.typography.headlineMedium,
+            Text(stringResource(R.string.settings_main_heading_ux), style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold)
-            Text(stringResource(R.string.theme_appearance_description),
+            Text(stringResource(R.string.settings_main_subtitle_ux),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant)
             Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                 shape = RoundedCornerShape(20.dp)) {
                 Column(Modifier.fillMaxWidth().padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Text(stringResource(R.string.appearance_title),
-                        style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                    Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Text(stringResource(R.string.settings_appearance_heading_ux),
+                        style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         AppTheme.entries.forEach { option ->
                             val label = when (option) {
                                 AppTheme.LIGHT -> R.string.theme_light
                                 AppTheme.MIDNIGHT -> R.string.theme_midnight
                                 AppTheme.OLED -> R.string.theme_oled
                             }
-                            FilterChip(
-                                selected = appTheme == option,
-                                onClick = { onAppThemeChanged(option) },
-                                label = { Text(stringResource(label), maxLines = 1, overflow = TextOverflow.Ellipsis) },
-                                modifier = Modifier.weight(1f)
-                            )
+                            val icon = when (option) {
+                                AppTheme.LIGHT -> R.drawable.ic_theme_light
+                                AppTheme.MIDNIGHT -> R.drawable.ic_theme_midnight
+                                AppTheme.OLED -> R.drawable.ic_theme_oled
+                            }
+                            val selected = appTheme == option
+                            androidx.compose.material3.Surface(
+                                modifier = Modifier.weight(1f).heightIn(min = 80.dp)
+                                    .clickable { onAppThemeChanged(option) },
+                                shape = RoundedCornerShape(12.dp),
+                                color = if (selected) MaterialTheme.colorScheme.surfaceVariant
+                                    else MaterialTheme.colorScheme.surface,
+                                border = androidx.compose.foundation.BorderStroke(
+                                    if (selected) 2.dp else 1.dp,
+                                    if (selected) MaterialTheme.colorScheme.secondary
+                                    else MaterialTheme.colorScheme.outline
+                                )
+                            ) {
+                                Column(
+                                    modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp, horizontal = 4.dp),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.spacedBy(6.dp)
+                                ) {
+                                    androidx.compose.material3.Icon(
+                                        painterResource(icon), contentDescription = null,
+                                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        modifier = Modifier.size(22.dp)
+                                    )
+                                    Row(verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.spacedBy(3.dp)) {
+                                        if (selected) Text("✓", color = MaterialTheme.colorScheme.secondary,
+                                            style = MaterialTheme.typography.labelMedium)
+                                        Text(stringResource(label), style = MaterialTheme.typography.labelMedium,
+                                            maxLines = 1, overflow = TextOverflow.Ellipsis)
+                                    }
+                                }
+                            }
                         }
                     }
                     SettingsRootRow(Icons.Default.Settings, R.string.language_settings,
@@ -473,8 +506,8 @@ internal fun SafeMobileSettingsPanel(
                 }
             }
 
-            Text(stringResource(R.string.security_alerts_title),
-                style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+            Text(stringResource(R.string.settings_alerts_heading_ux),
+                style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                 shape = RoundedCornerShape(20.dp)) {
                 Column(Modifier.fillMaxWidth().padding(16.dp)) {
@@ -485,7 +518,14 @@ internal fun SafeMobileSettingsPanel(
                             SettingsDescription(R.string.incident_alerts_explanation)
                         }
                         Switch(checked = securityAlertsEnabled,
-                            onCheckedChange = { requested -> onSecurityAlertsChanged?.invoke(requested) })
+                            onCheckedChange = { requested -> onSecurityAlertsChanged?.invoke(requested) },
+                            colors = SwitchDefaults.colors(
+                                checkedThumbColor = MaterialTheme.colorScheme.surface,
+                                checkedTrackColor = MaterialTheme.colorScheme.primary,
+                                uncheckedThumbColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant,
+                                uncheckedBorderColor = MaterialTheme.colorScheme.outline
+                            ))
                     }
                 }
             }
@@ -495,14 +535,14 @@ internal fun SafeMobileSettingsPanel(
                 onManageFolders()
             }
 
-            Text(stringResource(R.string.settings_privacy),
-                style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+            Text(stringResource(R.string.settings_privacy_heading_ux),
+                style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                 shape = RoundedCornerShape(20.dp)) {
                 Column(Modifier.fillMaxWidth().padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Text(stringResource(R.string.global_threat_intelligence_title),
-                        style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                        style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
                     SettingsDescription(R.string.global_threat_intelligence_description)
                     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                         Text(stringResource(R.string.global_threat_intelligence_title),
@@ -512,7 +552,14 @@ internal fun SafeMobileSettingsPanel(
                             onCheckedChange = { enabled ->
                                 GlobalThreatIntelligenceConsent.setEnabled(context, enabled)
                                 globalThreatIntelligenceEnabled = enabled
-                            }
+                            },
+                            colors = SwitchDefaults.colors(
+                                checkedThumbColor = MaterialTheme.colorScheme.surface,
+                                checkedTrackColor = MaterialTheme.colorScheme.primary,
+                                uncheckedThumbColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant,
+                                uncheckedBorderColor = MaterialTheme.colorScheme.outline
+                            )
                         )
                     }
                     if (adPrivacyOptionsRequired && !isProForAds) {
@@ -539,9 +586,9 @@ internal fun SafeMobileSettingsPanel(
                 }
             }
 
-            Text(stringResource(R.string.about_legal),
-                style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-            SettingsRootRow(Icons.Default.HelpOutline, R.string.settings_privacy, R.string.ad_privacy_intro) {
+            Text(stringResource(R.string.settings_about_heading_ux),
+                style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            SettingsRootRow(Icons.Default.HelpOutline, R.string.about_privacy_policy, R.string.ad_privacy_intro) {
                 onSubRouteChanged(SettingsSubRoute.HELP_LEGAL)
             }
             SettingsRootRow(Icons.Default.Security, R.string.download_interceptor_label,
