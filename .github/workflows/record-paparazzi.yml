@@ -3,6 +3,7 @@ name: Record Paparazzi UI goldens
 on:
   push:
     branches:
+      - "main"
       - "feat/phase4-final-v1.5.1"
 
 permissions:
