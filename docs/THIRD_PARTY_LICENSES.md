@@ -15,11 +15,16 @@ This file records detection-engine-specific license decisions. The CI-generated 
 
 Before adding a dependency or dataset, review the exact distributed artifact's license and upstream source. An SBOM license field alone is not legal approval. No Hypatia/AGPL source code or data is copied.
 
-### DM Sans (Regular, Medium, Bold; bundled font assets)
+### Inter variable font (current UI typography)
 
-- Upstream: https://github.com/googlefonts/dm-fonts (pinned revision `4412393b7d2de9fe7a92064c2dce9b5af5d7fd26`)
-- License: SIL Open Font License 1.1, full license in `docs/licenses/DM_SANS_OFL.txt`
-- Copyright 2014 The DM Sans Project Authors. Original unmodified static fonts; used only for Latin UI typography, with Android font fallback for unsupported scripts.
+- Upstream: https://github.com/rsms/inter — `docs/font-files/InterVariable.ttf`
+- Bundled resource: `app/src/main/res/font/inter_variable.ttf` (upstream Git blob SHA `4ab79e0102bbe0ffa1ed879b13e52ac8c6487833`)
+- License: SIL Open Font License 1.1; full license retained at `app/src/main/assets/licenses/Inter-OFL.txt`
+- Copyright 2016 The Inter Project Authors. Compose maps the variable weight axis to 400 Regular, 500 Medium, 600 SemiBold and 700 Bold. No runtime font download is used.
+
+### DM Sans (retired UI typography)
+
+DM Sans was used by earlier application versions. It is no longer loaded by the v1.5.2 typography theme; its historical license record is retained at `docs/licenses/DM_SANS_OFL.txt` for provenance.
 
 ### Weekly ML research candidate distribution (v1.0.16)
 

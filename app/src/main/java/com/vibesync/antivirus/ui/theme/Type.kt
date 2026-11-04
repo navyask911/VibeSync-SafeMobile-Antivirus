@@ -1,21 +1,35 @@
 package com.vibesync.antivirus.ui.theme
 
 import androidx.compose.material3.Typography
+import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontVariation
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.vibesync.antivirus.R
 
 /**
- * Inter variable font family bundled locally for deterministic offline rendering.
- * Android SansSerif is the final system fallback if font loading is unavailable.
+ * Official Inter variable font bundled locally at res/font/inter_variable.ttf.
+ * The variable weight axis is applied explicitly, so regular, medium, semibold and
+ * bold text all use their intended Inter weights. Android SansSerif remains the
+ * fallback for glyphs not present in Inter.
  */
+@OptIn(ExperimentalTextApi::class)
+private fun interFont(weight: FontWeight, axisWeight: Int): Font = Font(
+    R.font.inter_variable,
+    weight = weight,
+    variationSettings = FontVariation.Settings(
+        FontVariation.weight(axisWeight)
+    )
+)
+
+@OptIn(ExperimentalTextApi::class)
 val InterFontFamily = FontFamily(
-    Font(R.font.inter_variable, FontWeight.Normal),
-    Font(R.font.inter_variable, FontWeight.Medium),
-    Font(R.font.inter_variable, FontWeight.SemiBold),
-    Font(R.font.inter_variable, FontWeight.Bold)
+    interFont(FontWeight.Normal, 400),
+    interFont(FontWeight.Medium, 500),
+    interFont(FontWeight.SemiBold, 600),
+    interFont(FontWeight.Bold, 700)
 )
 
 /** Product type scale: 28 / 20 / 17 / 14 / 12 / 11 sp. */
