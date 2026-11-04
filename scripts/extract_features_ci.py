@@ -244,7 +244,7 @@ def extract_recent(path: Path, output: Path, max_samples: int = 20, *,
         raise ValueError("Sampling budget must be 1..20 APK attempts")
     if os.environ.get("LOCAL_APK_TRAINING_APPROVED", "").strip().lower() != "true":
         raise PermissionError(
-            "Local APK sample rights are not confirmed; require explicit authorization for the separate sample source."
+            "Local APK sample rights are not confirmed; require explicit authorization for the separate APK sample source."
         )
     schema = schema_features()
     candidates = recent_tweetfeed_sha256_iocs(path)
