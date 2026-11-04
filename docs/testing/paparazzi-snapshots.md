@@ -1,6 +1,6 @@
 # Paparazzi UI snapshot tests
 
-SafeMobile keeps committed Paparazzi baselines for the current dashboard, scan-results screen, and Settings panel. Each screen is captured in both Light and Midnight themes, for six PNG baselines in total.
+SafeMobile keeps committed Paparazzi baselines for Home, Protection Tools, Scan Results, and Settings. Each screen is captured in Light, Midnight, and OLED themes.
 
 ## Verify snapshots
 
@@ -24,8 +24,9 @@ Review the PNG changes and commit the complete `app/src/test/snapshots/` directo
 
 ## Coverage
 
-- Security dashboard: Light and Midnight
-- Scan-results screen: Light and Midnight
-- Settings panel: Light and Midnight
+- Home dashboard: Light, Midnight, and OLED
+- Protection Tools: Light, Midnight, and OLED
+- Scan Results: Light, Midnight, and OLED
+- Settings panel: Light, Midnight, and OLED
 
 Snapshots are host-rendered regression tests. They do not replace the existing Android emulator, scanning-engine, billing, or AdMob test gates.
