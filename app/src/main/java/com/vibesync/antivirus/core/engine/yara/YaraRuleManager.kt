@@ -70,16 +70,16 @@ class YaraRuleManager(context: Context) {
         var compilerConsumed = false
         try {
             var totalSourceBytes = 0
-            for (name in names) {
+            for ((index, name) in names.withIndex()) {
+                compiler.newNamespace("safemobile_rules_${index + 1}")
                 val source = readRuleSource("$RULES_ASSET_DIRECTORY/$name")
                 totalSourceBytes += source.toByteArray(Charsets.UTF_8).size
                 require(totalSourceBytes <= MAX_TOTAL_RULE_BYTES) {
                     "Bundled YARA-X rules exceed the aggregate source limit."
                 }
 
-                // Use the wrapper's default namespace. Its current JNI binding
-                // exports createNamespace while Compiler.java calls newNamespace;
-                // avoiding that unused method keeps the verified API path reliable.
+                // The vendored Compiler wrapper maps newNamespace to the exact
+                // createNamespace JNI export in the pinned Rust wrapper.
                 val error = compiler.addSource(source)
                 check(error.isNullOrBlank()) {
                     "YARA-X rejected $name: ${error.orEmpty().take(500)}"
