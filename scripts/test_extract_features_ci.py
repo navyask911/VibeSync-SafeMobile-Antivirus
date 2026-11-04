@@ -197,9 +197,10 @@ class BatchAndNetworkSafetyTests(unittest.TestCase):
         for batch in batches:
             payload = json.loads(batch.read_text())["client_payload"]
             self.assertEqual(len(payload["feature_rows"][0]), 215)
-            self.assertEqual(len(payload["feature_metadata"]), len(payload["feature_rows"]))
-            self.assertIn("vt_malicious_count", payload["feature_metadata"][0])
-            self.assertIn("ha_threat_score", payload["feature_metadata"][0])
+            self.assertEqual(len(payload["metadata"]), len(payload["feature_rows"]))
+            self.assertIn("vt_malicious_count", payload["metadata"][0])
+            self.assertIn("ha_threat_score", payload["metadata"][0])
+            self.assertEqual(payload["metadata"][0]["vt_malicious_count"], -1)
 
     def test_dispatch_exact_shape_ten_rows_and_empty_no_http(self):
         raw = self.root / "data.json"

@@ -58,7 +58,8 @@ def create_batches(source: Path, destination: Path) -> list[Path]:
     for offset in range(0, len(rows), BATCH_SIZE):
         client_payload = {"feature_rows": rows[offset:offset + BATCH_SIZE]}
         if metadata is not None:
-            client_payload["feature_metadata"] = metadata[offset:offset + BATCH_SIZE]
+            # Match the receiving ML repository's repository_dispatch contract.
+            client_payload["metadata"] = metadata[offset:offset + BATCH_SIZE]
         payload = {
             "event_type": "new_malware_features",
             "client_payload": client_payload,
