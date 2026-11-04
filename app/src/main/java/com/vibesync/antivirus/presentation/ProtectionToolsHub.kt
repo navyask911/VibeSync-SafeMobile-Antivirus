@@ -105,7 +105,7 @@ internal fun ProtectionToolsHub(
                     ToolHubRow({ Icon(painterResource(R.drawable.ic_home_folder_monitor), null, tint = MaterialTheme.colorScheme.secondary) }, R.string.sentinel_scope_title, R.string.monitor_explanation,
                         stringResource(if (foldersActive) R.string.monitor_active else R.string.monitor_inactive)) { onOpen("sentinel") }
                     ToolHubRow({ Icon(painterResource(R.drawable.ic_home_link_checker), null, tint = MaterialTheme.colorScheme.secondary) }, R.string.nav_phishing, R.string.phishing_disclaimer,
-                        stringResource(R.string.monitor_active_demand)) { onOpen("phishing") }
+                        stringResource(R.string.feature_status_review)) { onOpen("phishing") }
                 }
             }
         }

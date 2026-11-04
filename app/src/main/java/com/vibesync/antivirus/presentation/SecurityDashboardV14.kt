@@ -248,7 +248,7 @@ internal fun SecurityDashboardV14(
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     QuickProtectionTool(R.drawable.ic_home_link_checker, R.string.nav_phishing,
-                        stringResource(R.string.monitor_active_demand), onLinkChecker, Modifier.weight(1f))
+                        stringResource(R.string.feature_status_review), onLinkChecker, Modifier.weight(1f))
                     QuickProtectionTool(R.drawable.ic_home_device_posture, R.string.posture_title,
                         stringResource(R.string.v140_pending_actions, advisor.pendingCount), onPosture, Modifier.weight(1f))
                 }
