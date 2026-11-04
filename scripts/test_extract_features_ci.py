@@ -1,4 +1,4 @@
-"""Offline, network-free tests for ThreatFox-to-local-APK feature extraction."""
+"""Offline, network-free tests for TweetFeed-to-local-APK feature extraction."""
 import hashlib
 import json
 from pathlib import Path
@@ -7,7 +7,7 @@ import unittest
 from unittest.mock import Mock, patch
 
 from extract_features_ci import (
-    SampleRejected, analyze_android_apk, feature_vector, recent_threatfox_sha256_iocs,
+    SampleRejected, analyze_android_apk, feature_vector, recent_tweetfeed_sha256_iocs,
     schema_features, extract_recent, file_sha256, has_complete_reputation,
 )
 from prepare_feature_batches_ci import create_batches
@@ -52,51 +52,48 @@ class StaticFeatureTests(unittest.TestCase):
             self.assertEqual(vector[idx], 0)
 
 
-class ThreatFoxLocalSampleTests(unittest.TestCase):
+class TweetFeedLocalSampleTests(unittest.TestCase):
     def setUp(self):
         self.directory = tempfile.TemporaryDirectory()
         self.addCleanup(self.directory.cleanup)
         self.root = Path(self.directory.name)
 
-    def write_threatfox(self, digest: str):
-        recent = self.root / "threatfox.json"
-        recent.write_text(json.dumps({
-            "query_status": "ok",
-            "data": [
-                {"ioc_type": "domain", "ioc": "malicious.example"},
-                {"ioc_type": "sha256_hash", "ioc": digest},
-                {"ioc_type": "sha256_hash", "ioc": digest.upper()},
-                {"ioc_type": "url", "ioc": "https://example.invalid/payload"},
-            ],
-        }))
+    def write_tweetfeed(self, digest: str):
+        recent = self.root / "tweetfeed.json"
+        recent.write_text(json.dumps([
+            {"type": "domain", "value": "malicious.example"},
+            {"type": "sha256", "value": digest},
+            {"type": "sha256", "value": digest.upper()},
+            {"type": "url", "value": "https://example.invalid/payload"},
+        ]))
         return recent
 
     def test_parser_only_reads_sha256_hash_ioc_field(self):
         digest = "a" * 64
-        recent = self.write_threatfox(digest)
-        self.assertEqual(recent_threatfox_sha256_iocs(recent), [digest])
+        recent = self.write_tweetfeed(digest)
+        self.assertEqual(recent_tweetfeed_sha256_iocs(recent), [digest])
 
     def test_parser_rejects_non_ok_or_malformed_sha256_data(self):
         recent = self.root / "bad.json"
-        recent.write_text(json.dumps({"query_status": "error", "data": []}))
+        recent.write_text(json.dumps({"error": "not an array"}))
         with self.assertRaises(ValueError):
-            recent_threatfox_sha256_iocs(recent)
-        recent.write_text(json.dumps({"query_status": "ok", "data": [
-            {"ioc_type": "sha256_hash", "ioc": "not-a-sha256"}
-        ]}))
+            recent_tweetfeed_sha256_iocs(recent)
+        recent.write_text(json.dumps([
+            {"type": "sha256", "value": "not-a-sha256"}
+        ]))
         with self.assertRaisesRegex(ValueError, "malformed"):
-            recent_threatfox_sha256_iocs(recent)
+            recent_tweetfeed_sha256_iocs(recent)
 
     def test_written_ai_training_permission_is_required(self):
         digest = hashlib.sha256(b"APK bytes staged by a separately authorized source").hexdigest()
-        recent = self.write_threatfox(digest)
+        recent = self.write_tweetfeed(digest)
         with patch.dict("os.environ", {}, clear=True):
-            with self.assertRaisesRegex(PermissionError, "Spamhaus prior written consent"):
+            with self.assertRaisesRegex(PermissionError, "separate APK sample source"):
                 extract_recent(recent, self.root / "rows.json", 10, samples_dir=self.root / "samples")
 
     def test_no_sample_binaries_means_no_fabricated_feature_rows(self):
         digest = hashlib.sha256(b"APK bytes").hexdigest()
-        recent = self.write_threatfox(digest)
+        recent = self.write_tweetfeed(digest)
         samples_dir = self.root / "missing-samples"
         output = self.root / "rows.json"
         reputation = {
@@ -105,7 +102,7 @@ class ThreatFoxLocalSampleTests(unittest.TestCase):
             "ha_verdict": "suspicious",
         }
         with (
-            patch.dict("os.environ", {"THREATFOX_AI_TRAINING_APPROVED": "true"}),
+            patch.dict("os.environ", {"LOCAL_APK_TRAINING_APPROVED": "true"}),
             patch("extract_features_ci.load_enrichment_cache", return_value={digest: reputation}),
         ):
             rows = extract_recent(recent, output, 10, samples_dir=samples_dir)
@@ -116,7 +113,7 @@ class ThreatFoxLocalSampleTests(unittest.TestCase):
     def test_feature_extraction_uses_local_hash_matching_apk(self):
         apk_bytes = b"APK bytes staged by a separately authorized source"
         digest = hashlib.sha256(apk_bytes).hexdigest()
-        recent = self.write_threatfox(digest)
+        recent = self.write_tweetfeed(digest)
         samples = self.root / "samples"
         samples.mkdir()
         (samples / f"{digest}.apk").write_bytes(apk_bytes)
@@ -127,7 +124,7 @@ class ThreatFoxLocalSampleTests(unittest.TestCase):
             "ha_verdict": "suspicious",
         }
         with (
-            patch.dict("os.environ", {"THREATFOX_AI_TRAINING_APPROVED": "true"}),
+            patch.dict("os.environ", {"LOCAL_APK_TRAINING_APPROVED": "true"}),
             patch("extract_features_ci.load_enrichment_cache", return_value={digest: reputation}),
             patch("extract_features_ci.analyze_android_apk", return_value=[1] * 215),
         ):
@@ -144,11 +141,11 @@ class ThreatFoxLocalSampleTests(unittest.TestCase):
         good_bytes = b"correct local APK"
         digest = hashlib.sha256(good_bytes).hexdigest()
         wrong_digest = hashlib.sha256(b"wrong APK").hexdigest()
-        recent = self.root / "threatfox.json"
-        recent.write_text(json.dumps({"query_status": "ok", "data": [
-            {"ioc_type": "sha256_hash", "ioc": digest},
-            {"ioc_type": "sha256_hash", "ioc": wrong_digest},
-        ]}))
+        recent = self.root / "tweetfeed.json"
+        recent.write_text(json.dumps([
+            {"type": "sha256", "value": digest},
+            {"type": "sha256", "value": wrong_digest},
+        ]))
         samples = self.root / "samples"
         samples.mkdir()
         (samples / f"{digest}.apk").write_bytes(b"mismatch")
@@ -159,7 +156,7 @@ class ThreatFoxLocalSampleTests(unittest.TestCase):
             wrong_digest: {"vt_malicious_count": "-1", "ha_threat_score": "20", "ha_verdict": "suspicious"},
         }
         with (
-            patch.dict("os.environ", {"THREATFOX_AI_TRAINING_APPROVED": "true"}),
+            patch.dict("os.environ", {"LOCAL_APK_TRAINING_APPROVED": "true"}),
             patch("extract_features_ci.load_enrichment_cache", return_value=reputation),
             patch("extract_features_ci.analyze_android_apk", return_value=[1] * 215),
         ):

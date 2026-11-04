@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Opt-in ThreatFox IOC -> local APK -> frozen Drebin-215 feature vectors.
+"""Opt-in TweetFeed IOC -> local APK -> frozen Drebin-215 feature vectors.
 
 Defensive static inspection ONLY: never execute APK code, upload samples or store
 sample ZIP/APK bytes in GitHub Actions artifacts. Failures are per-sample and do
@@ -204,28 +204,26 @@ def has_complete_reputation(record: dict[str, str]) -> bool:
 
 
 
-def recent_threatfox_sha256_iocs(path: Path) -> list[str]:
-    """Read unique SHA-256 IOC values from a ThreatFox get_iocs response."""
-    response = json.loads(path.read_text(encoding="utf-8"))
-    if not isinstance(response, dict) or response.get("query_status") != "ok":
-        raise ValueError("Invalid ThreatFox recent IOCs response")
-    items = response.get("data")
-    if not isinstance(items, list):
-        raise ValueError("Missing ThreatFox IOC data")
+def recent_tweetfeed_sha256_iocs(path: Path) -> list[str]:
+    """Read unique SHA-256 values from TweetFeed's public JSON array."""
+    records = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(records, list):
+        raise ValueError("Invalid TweetFeed JSON response: expected an array")
     found, seen = [], set()
-    for record in items:
+    for index, record in enumerate(records, start=1):
         if not isinstance(record, dict):
+            raise ValueError(f"TweetFeed record {index} is not an object")
+        if str(record.get("type", "")).strip().lower() != "sha256":
             continue
-        if str(record.get("ioc_type", "")).strip().lower() != "sha256_hash":
-            continue
-        digest = str(record.get("ioc") or "").strip().lower()
+        digest = str(record.get("value") or "").strip().lower()
         if not SHA256.fullmatch(digest):
-            raise ValueError("ThreatFox returned a malformed SHA-256 IOC")
+            raise ValueError(f"TweetFeed record {index} contains a malformed SHA-256 value")
         if digest not in seen:
             seen.add(digest)
             found.append(digest)
+    if not found:
+        raise ValueError("TweetFeed response contains no SHA-256 indicators")
     return found
-
 
 def file_sha256(path: Path) -> str:
     digest = hashlib.sha256()
@@ -240,24 +238,23 @@ def extract_recent(path: Path, output: Path, max_samples: int = 20, *,
                    enrichment_csv: Path | None = None):
     """Extract vectors only from separately staged, hash-matching local APK files.
 
-    ThreatFox is an IOC feed and does not expose APK download bytes through
-    get_iocs. This helper deliberately performs no sample-provider network calls.
+    TweetFeed supplies IOCs, not APK download bytes. This helper does not fetch samples. This helper deliberately performs no sample-provider network calls.
     """
     if not 1 <= max_samples <= 20:
         raise ValueError("Sampling budget must be 1..20 APK attempts")
-    if os.environ.get("THREATFOX_AI_TRAINING_APPROVED", "").strip().lower() != "true":
+    if os.environ.get("LOCAL_APK_TRAINING_APPROVED", "").strip().lower() != "true":
         raise PermissionError(
-            "ThreatFox data is not approved for AI training; require Spamhaus prior written consent."
+            "Local APK sample rights are not confirmed; require explicit authorization for the separate sample source."
         )
     schema = schema_features()
-    candidates = recent_threatfox_sha256_iocs(path)
+    candidates = recent_tweetfeed_sha256_iocs(path)
     if enrichment_csv is None:
         enrichment_csv = Path(__file__).resolve().parents[1] / "data/enriched_threats.csv"
     enrichment = load_enrichment_cache(Path(enrichment_csv))
     verified = [digest for digest in candidates
                 if has_complete_reputation(enrichment.get(digest, {}))]
     skipped = len(candidates) - len(verified)
-    print(f"MLOps discovery: {len(verified)} reputation-qualified ThreatFox hashes; "
+    print(f"MLOps discovery: {len(verified)} reputation-qualified TweetFeed hashes; "
           f"skipped {skipped} without required HA evidence.", flush=True)
 
     rows: list[list[int]] = []
@@ -277,7 +274,7 @@ def extract_recent(path: Path, output: Path, max_samples: int = 20, *,
                 if sample.stat().st_size <= 0 or sample.stat().st_size > MAX_APK_BYTES:
                     raise SampleRejected("Local APK violates size limits")
                 if file_sha256(sample) != digest:
-                    raise SampleRejected("Local APK SHA-256 does not match ThreatFox IOC")
+                    raise SampleRejected("Local APK SHA-256 does not match TweetFeed IOC")
                 vector = analyze_android_apk(sample, schema, analyzer=analyzer)
                 if len(vector) != 215 or any(bit not in (0, 1) for bit in vector):
                     raise SampleRejected("Feature extractor returned a non-binary 215-bit vector")
@@ -306,7 +303,7 @@ def extract_recent(path: Path, output: Path, max_samples: int = 20, *,
         temporary.replace(output)
     finally:
         temporary.unlink(missing_ok=True)
-    print(f"MLOps RESULT: ThreatFox candidates={len(candidates)}; validated_local_apk_rows={len(rows)}; "
+    print(f"MLOps RESULT: TweetFeed candidates={len(candidates)}; validated_local_apk_rows={len(rows)}; "
           f"target_rows={min(10, max_samples)}.", flush=True)
     return rows
 
@@ -314,7 +311,7 @@ def extract_recent(path: Path, output: Path, max_samples: int = 20, *,
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--recent", type=Path, required=True,
-                        help="ThreatFox get_iocs JSON response written by build_threatfox_hsb.py")
+                        help="TweetFeed public JSON response written by build_tweetfeed_hsb.py")
     parser.add_argument("--samples-dir", type=Path, required=True,
                         help="Separately authorized local directory containing <sha256>.apk files")
     parser.add_argument("--output", type=Path, required=True)
