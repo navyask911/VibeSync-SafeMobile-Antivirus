@@ -665,58 +665,58 @@
     <string name="ui_status_at_risk">At risk</string>
 
     <!-- v1.5.2 Figma visual-reference copy. Marked non-translatable until reviewed translations are supplied. -->
-    <string name="nav_home_ux" translatable="false">Home</string>
-    <string name="nav_tools_ux" translatable="false">Tools</string>
-    <string name="home_header_subtitle_free" translatable="false">FREE PLAN · ON-DEVICE SCANNING</string>
-    <string name="home_header_subtitle_pro" translatable="false">PRO PLAN · ON-DEVICE SCANNING</string>
-    <string name="tools_header_title_ux" translatable="false">Protection tools</string>
-    <string name="tools_header_subtitle_ux" translatable="false">Simple checks. Clear choices.</string>
-    <string name="settings_header_title_ux" translatable="false">Settings</string>
-    <string name="settings_header_subtitle_ux" translatable="false">Make SafeMobile yours</string>
+    <string name="nav_home_ux">Home</string>
+    <string name="nav_tools_ux">Tools</string>
+    <string name="home_header_subtitle_free">FREE PLAN · ON-DEVICE SCANNING</string>
+    <string name="home_header_subtitle_pro">PRO PLAN · ON-DEVICE SCANNING</string>
+    <string name="tools_header_title_ux">Protection tools</string>
+    <string name="tools_header_subtitle_ux">Simple checks. Clear choices.</string>
+    <string name="settings_header_title_ux">Settings</string>
+    <string name="settings_header_subtitle_ux">Make SafeMobile yours</string>
 
-    <string name="dashboard_title_ux" translatable="false">Your security, at a glance.</string>
-    <string name="dashboard_subtitle_ux" translatable="false">A little attention makes a difference.</string>
-    <string name="dashboard_advisor_label" translatable="false">PROTECTION ADVISOR</string>
-    <string name="dashboard_advisor_pending" translatable="false">%1$d actions pending</string>
-    <string name="dashboard_advisor_disclaimer" translatable="false">Advisory score, not a measure of malware detection.</string>
-    <string name="dashboard_everyday_title" translatable="false">Everyday protection</string>
-    <string name="dashboard_all_tools" translatable="false">All tools</string>
-    <string name="dashboard_score_out_of_100" translatable="false">of 100</string>
-    <string name="dashboard_install_sentinel_title" translatable="false">Install sentinel</string>
-    <string name="dashboard_folder_monitoring_title" translatable="false">Folder monitoring</string>
-    <string name="dashboard_link_checker_title" translatable="false">Link checker</string>
-    <string name="dashboard_device_posture_title" translatable="false">Device posture</string>
-    <string name="dashboard_status_on" translatable="false">On</string>
-    <string name="dashboard_status_off" translatable="false">Off</string>
-    <string name="dashboard_status_on_demand" translatable="false">On demand</string>
-    <string name="dashboard_status_review" translatable="false">%1$d to review</string>
-    <string name="dashboard_view" translatable="false">View</string>
-    <string name="dashboard_pro_title" translatable="false">Less clutter. Same detection.</string>
-    <string name="dashboard_pro_summary" translatable="false">Pro removes AdMob ads and SDK collection.</string>
+    <string name="dashboard_title_ux">Your security, at a glance.</string>
+    <string name="dashboard_subtitle_ux">A little attention makes a difference.</string>
+    <string name="dashboard_advisor_label">PROTECTION ADVISOR</string>
+    <string name="dashboard_advisor_pending">%1$d actions pending</string>
+    <string name="dashboard_advisor_disclaimer">Advisory score, not a measure of malware detection.</string>
+    <string name="dashboard_everyday_title">Everyday protection</string>
+    <string name="dashboard_all_tools">All tools</string>
+    <string name="dashboard_score_out_of_100">of 100</string>
+    <string name="dashboard_install_sentinel_title">Install sentinel</string>
+    <string name="dashboard_folder_monitoring_title">Folder monitoring</string>
+    <string name="dashboard_link_checker_title">Link checker</string>
+    <string name="dashboard_device_posture_title">Device posture</string>
+    <string name="dashboard_status_on">On</string>
+    <string name="dashboard_status_off">Off</string>
+    <string name="dashboard_status_on_demand">On demand</string>
+    <string name="dashboard_status_review">%1$d to review</string>
+    <string name="dashboard_view">View</string>
+    <string name="dashboard_pro_title">Less clutter. Same detection.</string>
+    <string name="dashboard_pro_summary">Pro removes AdMob ads and SDK collection.</string>
 
-    <string name="tools_page_heading_ux" translatable="false">A toolkit for your device.</string>
-    <string name="tools_page_subtitle_ux" translatable="false">Scan, review and manage what matters. You stay in control of every action.</string>
-    <string name="tools_scan_description_ux" translatable="false">Check installed apps or choose an APK file.</string>
-    <string name="tools_start_scan_ux" translatable="false">Start a scan</string>
-    <string name="tools_choose_apk_ux" translatable="false">Choose APK file</string>
-    <string name="tools_watch_check_ux" translatable="false">Watch &amp; check</string>
-    <string name="tools_review_manage_ux" translatable="false">Review &amp; manage</string>
-    <string name="tools_install_sentinel_desc_ux" translatable="false">Review newly installed apps</string>
-    <string name="tools_folder_monitoring_desc_ux" translatable="false">Select folders and grant access</string>
-    <string name="tools_link_checker_desc_ux" translatable="false">Paste a link for an on-demand check</string>
-    <string name="tools_posture_desc_ux" translatable="false">Settings and permission-risk advice</string>
-    <string name="tools_apps_desc_ux" translatable="false">Explore installed apps and their access</string>
-    <string name="tools_quarantine_desc_ux" translatable="false">Encrypted storage for supported files</string>
-    <string name="tools_history_desc_ux" translatable="false">Past scans stored on this device</string>
-    <string name="tools_advice_title_ux" translatable="false">Advice is not a malware verdict</string>
-    <string name="tools_advice_body_ux" translatable="false">Sensitive permissions alone are not proof of spyware. Quarantine is user-controlled; removal and uninstall require your confirmation.</string>
+    <string name="tools_page_heading_ux">A toolkit for your device.</string>
+    <string name="tools_page_subtitle_ux">Scan, review and manage what matters. You stay in control of every action.</string>
+    <string name="tools_scan_description_ux">Check installed apps or choose an APK file.</string>
+    <string name="tools_start_scan_ux">Start a scan</string>
+    <string name="tools_choose_apk_ux">Choose APK file</string>
+    <string name="tools_watch_check_ux">Watch &amp; check</string>
+    <string name="tools_review_manage_ux">Review &amp; manage</string>
+    <string name="tools_install_sentinel_desc_ux">Review newly installed apps</string>
+    <string name="tools_folder_monitoring_desc_ux">Select folders and grant access</string>
+    <string name="tools_link_checker_desc_ux">Paste a link for an on-demand check</string>
+    <string name="tools_posture_desc_ux">Settings and permission-risk advice</string>
+    <string name="tools_apps_desc_ux">Explore installed apps and their access</string>
+    <string name="tools_quarantine_desc_ux">Encrypted storage for supported files</string>
+    <string name="tools_history_desc_ux">Past scans stored on this device</string>
+    <string name="tools_advice_title_ux">Advice is not a malware verdict</string>
+    <string name="tools_advice_body_ux">Sensitive permissions alone are not proof of spyware. Quarantine is user-controlled; removal and uninstall require your confirmation.</string>
 
-    <string name="settings_main_heading_ux" translatable="false">Your app. Your choices.</string>
-    <string name="settings_main_subtitle_ux" translatable="false">Adjust how it looks, alerts and shares.</string>
-    <string name="settings_appearance_heading_ux" translatable="false">Appearance &amp; language</string>
-    <string name="settings_language_desc_ux" translatable="false">Choose your preferred app language</string>
-    <string name="settings_alerts_heading_ux" translatable="false">Alerts &amp; monitoring</string>
-    <string name="settings_privacy_heading_ux" translatable="false">Privacy &amp; sharing</string>
-    <string name="settings_about_heading_ux" translatable="false">About &amp; legal</string>
+    <string name="settings_main_heading_ux">Your app. Your choices.</string>
+    <string name="settings_main_subtitle_ux">Adjust how it looks, alerts and shares.</string>
+    <string name="settings_appearance_heading_ux">Appearance &amp; language</string>
+    <string name="settings_language_desc_ux">Choose your preferred app language</string>
+    <string name="settings_alerts_heading_ux">Alerts &amp; monitoring</string>
+    <string name="settings_privacy_heading_ux">Privacy &amp; sharing</string>
+    <string name="settings_about_heading_ux">About &amp; legal</string>
 
 </resources>
