@@ -15,9 +15,9 @@ public class Compiler {
     }
 
     /**
-     * Kept for API parity with upstream. The pinned native wrapper currently
-     * exports createNamespace rather than newNamespace; SafeMobile intentionally
-     * does not call this method and compiles all bundled rules in the default namespace.
+     * Creates a namespace for subsequently added rules.
+     * The native JNI export in the pinned yarax_android revision is
+     * Java_org_revengi_abhi_yarax_Compiler_createNamespace.
      */
     public void newNamespace(String namespace) {
         if (nativePtr == 0) throw new IllegalStateException("Compiler is closed");
@@ -52,7 +52,8 @@ public class Compiler {
 
     private static native long create();
     private static native String addSource(long ptr, String source);
-    // Native symbol name follows the pinned Rust JNI export: Compiler_createNamespace.\n    private static native long createNamespace(long ptr, String namespace);
+    // This JNI method name matches the exported Rust symbol at the pinned revision.
+    private static native long createNamespace(long ptr, String namespace);
     private static native String defineGlobal(long ptr, String name, String value);
     private static native long build(long ptr);
     private static native void destroy(long ptr);
