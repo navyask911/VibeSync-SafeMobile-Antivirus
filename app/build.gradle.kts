@@ -103,11 +103,14 @@ require(yaraXAndroidAbis.isNotEmpty() &&
 val prepareYaraXNativeSource = tasks.register("prepareYaraXNativeSource") {
     val sourceDirectory = yaraXSourceDirectory.get().asFile
     val revisionMarker = sourceDirectory.resolve(".safemobile-source-revision")
+    val dexPatchMarker = sourceDirectory.resolve(".safemobile-dex-patches-applied")
     inputs.property("yaraxAndroidRevision", yaraXSourceRevision)
     outputs.dir(yaraXSourceDirectory)
     outputs.upToDateWhen {
         revisionMarker.isFile &&
             revisionMarker.readText().trim() == yaraXSourceRevision &&
+            dexPatchMarker.isFile &&
+            dexPatchMarker.readText().trim() == yaraXSourceRevision &&
             sourceDirectory.resolve("src/lib.rs").isFile &&
             sourceDirectory.resolve("yarax_patches/yara-x/Cargo.toml").isFile
     }
@@ -142,6 +145,14 @@ val prepareYaraXNativeSource = tasks.register("prepareYaraXNativeSource") {
             workingDir = sourceDirectory
             commandLine("git", "submodule", "update", "--init", "--recursive", "--depth", "1")
         }.assertNormalExitValue()
+
+        // The nested yarax_patches submodule carries the pinned DEX parser/protobuf
+        // compatibility patches required by the generated DexHeader bindings.
+        project.exec {
+            workingDir = sourceDirectory.resolve("yarax_patches")
+            commandLine("make", "update-yarax")
+        }.assertNormalExitValue()
+        dexPatchMarker.writeText(yaraXSourceRevision + System.lineSeparator())
 
         check(sourceDirectory.resolve("src/lib.rs").isFile) {
             "Pinned YARA-X Android JNI source is incomplete."
