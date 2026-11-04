@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Hash-only VirusTotal and Hybrid Analysis enrichment for MalwareBazaar detections.
+"""Hash-only VirusTotal and Hybrid Analysis enrichment for ThreatFox SHA-256 IOCs.
 
-No APK, archive, file bytes, or sample is uploaded to either provider.
-The optional enrichment step is independent of signed SAFEHASH release generation.
+The ThreatFox builder supplies a normalized SHA-256 text file. This module only
+queries the optional reputation providers; it does not fetch ThreatFox IOCs or
+upload APK, archive, file bytes, or samples to either reputation provider.
 """
 from __future__ import annotations
 
@@ -210,7 +211,7 @@ class ReputationClient:
 
 def read_hashes(path: Path) -> list[str]:
     if not path.is_file():
-        raise EnrichmentError(f"MalwareBazaar hash list is missing: {path}")
+        raise EnrichmentError(f"ThreatFox SHA-256 IOC list is missing: {path}")
     output: list[str] = []
     seen: set[str] = set()
     for line_number, raw in enumerate(path.read_text(encoding="ascii").splitlines(), start=1):
