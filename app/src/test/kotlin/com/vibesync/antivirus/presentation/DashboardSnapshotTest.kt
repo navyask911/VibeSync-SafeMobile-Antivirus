@@ -32,7 +32,8 @@ import org.junit.runner.RunWith
 
 enum class SnapshotPalette(val appTheme: AppTheme) {
     LIGHT(AppTheme.LIGHT),
-    DARK(AppTheme.MIDNIGHT)
+    DARK(AppTheme.MIDNIGHT),
+    OLED(AppTheme.OLED)
 }
 
 @RunWith(TestParameterInjector::class)
@@ -79,7 +80,10 @@ class DashboardSnapshotTest {
                     onOpenTools = {},
                     lastScanAt = 1_735_689_600_000L,
                     reviewCount = 1,
-                    onOpenScanResults = {}
+                    onOpenScanResults = {},
+                    installedAppsCount = 25,
+                    inventoryLoaded = true,
+                    quarantinedFilesCount = 2
                 )
             }
         }
@@ -137,6 +141,29 @@ class DashboardSnapshotTest {
                         onQuarantine = {},
                         onTrust = {},
                         onRemoveTrust = {}
+                    )
+                }
+            }
+        }
+    }
+
+    @Test
+    fun protectionToolsHub(@TestParameter palette: SnapshotPalette) {
+        paparazzi.snapshot {
+            themed(palette) {
+                Column(
+                    modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())
+                ) {
+                    ProtectionToolsHub(
+                        onOpen = {},
+                        onScanInstalled = {},
+                        onPickApk = {},
+                        installSentinelActive = true,
+                        foldersActive = false,
+                        pendingActions = 1,
+                        installedAppsCount = 25,
+                        inventoryLoaded = true,
+                        quarantinedFilesCount = 2
                     )
                 }
             }
