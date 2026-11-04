@@ -127,7 +127,7 @@ def build_database(
     if not unique:
         raise InputRejected("No SHA-256 hashes available to build the database.")
     if len(unique) > max_records:
-        raise InputRejected("Full feed exceeds Android's record limit; do not truncate or publish a partial database.")
+        raise InputRejected("Full feed exceeds Android's record limit. Do not truncate or publish a partial database.")
 
     lines = [
         f"# SAFEHASH version={version} source={SOURCE} license={LICENSE}\n",
