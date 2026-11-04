@@ -86,6 +86,102 @@ android {
  packaging { resources.excludes += setOf("META-INF/AL2.0", "META-INF/LGPL2.1") }
 }
 
+// YARA-X Android JNI wrapper, pinned to an immutable upstream revision.
+// The application performs no network access for scanning; the native source is
+// fetched only when building APK/AAB artifacts and compiled into packaged jniLibs.
+val yaraXSourceRevision = "b666fbc15ff67fba1ceaf5deb68d071b44a1cbfe"
+val yaraXSourceDirectory = layout.buildDirectory.dir("native/yarax_android")
+val yaraXGeneratedJniDirectory = layout.buildDirectory.dir("generated/yarax-jniLibs")
+val yaraXAndroidAbis = providers.gradleProperty("yaraxAndroidAbis").orNull
+    ?.split(",")?.map { it.trim() }?.filter { it.isNotEmpty() }?.distinct()
+    ?: listOf("arm64-v8a", "armeabi-v7a", "x86_64")
+require(yaraXAndroidAbis.isNotEmpty() &&
+    yaraXAndroidAbis.all { it in setOf("arm64-v8a", "armeabi-v7a", "x86_64") }) {
+    "yaraxAndroidAbis must contain supported Android ABI names."
+}
+
+val prepareYaraXNativeSource = tasks.register("prepareYaraXNativeSource") {
+    val sourceDirectory = yaraXSourceDirectory.get().asFile
+    val revisionMarker = sourceDirectory.resolve(".safemobile-source-revision")
+    inputs.property("yaraxAndroidRevision", yaraXSourceRevision)
+    outputs.dir(yaraXSourceDirectory)
+    outputs.upToDateWhen {
+        revisionMarker.isFile &&
+            revisionMarker.readText().trim() == yaraXSourceRevision &&
+            sourceDirectory.resolve("src/lib.rs").isFile &&
+            sourceDirectory.resolve("yarax_patches/yara-x/Cargo.toml").isFile
+    }
+    doLast {
+        if (!sourceDirectory.resolve(".git").isDirectory) {
+            sourceDirectory.deleteRecursively()
+            check(sourceDirectory.parentFile.mkdirs() || sourceDirectory.parentFile.isDirectory) {
+                "Could not create YARA-X build source directory."
+            }
+            project.exec {
+                commandLine(
+                    "git", "clone", "--no-checkout",
+                    "https://github.com/RevEngiSquad/yarax_android.git",
+                    sourceDirectory.absolutePath
+                )
+            }.assertNormalExitValue()
+        }
+
+        project.exec {
+            workingDir = sourceDirectory
+            commandLine("git", "fetch", "--depth=1", "origin", yaraXSourceRevision)
+        }.assertNormalExitValue()
+        project.exec {
+            workingDir = sourceDirectory
+            commandLine("git", "checkout", "--force", "--detach", yaraXSourceRevision)
+        }.assertNormalExitValue()
+        project.exec {
+            workingDir = sourceDirectory
+            commandLine("git", "submodule", "sync", "--recursive")
+        }.assertNormalExitValue()
+        project.exec {
+            workingDir = sourceDirectory
+            commandLine("git", "submodule", "update", "--init", "--recursive", "--depth", "1")
+        }.assertNormalExitValue()
+
+        check(sourceDirectory.resolve("src/lib.rs").isFile) {
+            "Pinned YARA-X Android JNI source is incomplete."
+        }
+        check(sourceDirectory.resolve("yarax_patches/yara-x/Cargo.toml").isFile) {
+            "Pinned YARA-X recursive source submodule is missing."
+        }
+        revisionMarker.writeText(yaraXSourceRevision + System.lineSeparator())
+    }
+}
+
+val buildYaraXNative = tasks.register<Exec>("buildYaraXNative") {
+    group = "build"
+    description = "Build the pinned YARA-X JNI library for supported Android ABIs."
+    dependsOn(prepareYaraXNativeSource)
+    workingDir = yaraXSourceDirectory.get().asFile
+    inputs.dir(yaraXSourceDirectory)
+    inputs.property("androidAbis", yaraXAndroidAbis)
+    outputs.dir(yaraXGeneratedJniDirectory)
+    doFirst {
+        val outputDirectory = yaraXGeneratedJniDirectory.get().asFile
+        outputDirectory.deleteRecursively()
+        check(outputDirectory.mkdirs() || outputDirectory.isDirectory) {
+            "Could not create generated YARA-X JNI output directory."
+        }
+        val ndkArguments = yaraXAndroidAbis.flatMap { listOf("-t", it) }
+        commandLine(
+            listOf("cargo", "ndk") + ndkArguments +
+                listOf("-o", outputDirectory.absolutePath, "build", "--release")
+        )
+    }
+}
+
+android.sourceSets.getByName("main").jniLibs.srcDir(yaraXGeneratedJniDirectory)
+tasks.matching {
+    it.name.startsWith("merge") && it.name.endsWith("JniLibFolders")
+}.configureEach {
+    dependsOn(buildYaraXNative)
+}
+
 // docs/BENCHMARK_REPORT.md is canonical: the hidden card reads its build-time asset copy.
 // Generated assets are not committed and never contain APK samples.
 val benchmarkAssetDirectory = layout.buildDirectory.dir("generated/benchmark-report/assets")

@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
-    branches: [main, "feat/**", "phase/**"]
+    branches: [main, "feat/**", "phase/**", "feature/**"]
 permissions:
   contents: read
 concurrency:
@@ -27,6 +27,22 @@ jobs:
           java-version: "17"
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
+      - name: Set up Rust and cargo-ndk for YARA-X
+        shell: bash
+        run: |
+          set -euo pipefail
+          rustup toolchain install stable --profile minimal
+          rustup default stable
+          rustup target add armv7-linux-androideabi aarch64-linux-android x86_64-linux-android
+          SDK_ROOT="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-}}"
+          test -n "$SDK_ROOT"
+          NDK_DIR="$(find "$SDK_ROOT/ndk" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -n 1)"
+          test -n "$NDK_DIR"
+          echo "ANDROID_NDK_HOME=$NDK_DIR" >> "$GITHUB_ENV"
+          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
+          if ! command -v cargo-ndk >/dev/null 2>&1; then
+            cargo install cargo-ndk --locked
+          fi
       - name: Version-code monotonicity guard
         env:
           GITHUB_EVENT_NAME: ${{ github.event_name }}
@@ -188,7 +204,9 @@ jobs:
   android-emulator-tests:
     name: Instrumented tests on API ${{ matrix.api-level }}
     needs: test-lint-build
-    if: github.event_name != 'pull_request' || github.base_ref == 'main'
+    if: github.event_name != 'pull_request' || github.base_ref == 'main' || startsWith(github.base_ref, 'feature/')
+    env:
+      ORG_GRADLE_PROJECT_yaraxAndroidAbis: x86_64
     runs-on: ubuntu-latest
     timeout-minutes: 55
     strategy:
@@ -209,6 +227,22 @@ jobs:
           java-version: "17"
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
+      - name: Set up Rust and cargo-ndk for YARA-X
+        shell: bash
+        run: |
+          set -euo pipefail
+          rustup toolchain install stable --profile minimal
+          rustup default stable
+          rustup target add armv7-linux-androideabi aarch64-linux-android x86_64-linux-android
+          SDK_ROOT="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-}}"
+          test -n "$SDK_ROOT"
+          NDK_DIR="$(find "$SDK_ROOT/ndk" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -n 1)"
+          test -n "$NDK_DIR"
+          echo "ANDROID_NDK_HOME=$NDK_DIR" >> "$GITHUB_ENV"
+          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
+          if ! command -v cargo-ndk >/dev/null 2>&1; then
+            cargo install cargo-ndk --locked
+          fi
       # Assemble the target and instrumentation APKs while no emulator is running.
       # Keeping dexing/packaging off the AVD startup window avoids system_server/ADB starvation
       # on API 33 and 36 runners.
