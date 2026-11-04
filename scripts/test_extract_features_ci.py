@@ -8,6 +8,7 @@ from unittest.mock import Mock, patch
 from extract_features_ci import (
     SCHEMA_PATH, SampleRejected, feature_vector, recent_apk_digests, schema_features,
     extract_recent, analyze_android_apk, older_apk_digests, MAX_APK_BYTES,
+    has_complete_reputation,
 )
 from prepare_feature_batches_ci import create_batches
 
@@ -88,7 +89,7 @@ class BatchAndNetworkSafetyTests(unittest.TestCase):
             {"sha256_hash": "b" * 64, "file_type": "apk"},
         ]}))
         out = self.root / "vectors.json"
-        reputation = {"vt_malicious_count": "5", "ha_threat_score": "88", "ha_verdict": "malicious"}
+        reputation = {"vt_malicious_count": "-1", "ha_threat_score": "88", "ha_verdict": "suspicious"}
         with (
             patch.dict("os.environ", {"MALWAREBAZAAR_AUTH_KEY": "test-only"}),
             patch("extract_features_ci.load_enrichment_cache", return_value={"a" * 64: reputation, "b" * 64: reputation}),
@@ -101,7 +102,7 @@ class BatchAndNetworkSafetyTests(unittest.TestCase):
         payload = json.loads(out.read_text())
         self.assertEqual(payload["feature_rows"], [[1] * 215])
         self.assertEqual(payload["feature_metadata"][0]["sha256"], "b" * 64)
-        self.assertEqual(payload["feature_metadata"][0]["vt_malicious_count"], 5)
+        self.assertEqual(payload["feature_metadata"][0]["vt_malicious_count"], -1)
         self.assertEqual(payload["feature_metadata"][0]["ha_threat_score"], 88.0)
         self.assertNotIn("mock_apk", out.read_text())
         self.assertFalse(any(self.root.glob("*.apk")))
@@ -140,7 +141,7 @@ class BatchAndNetworkSafetyTests(unittest.TestCase):
         recent = self.root / "recent.json"
         recent.write_text(json.dumps({"query_status": "ok", "data": []}))
         output = self.root / "rows.json"
-        reputation = {"vt_malicious_count": "5", "ha_threat_score": "88", "ha_verdict": "malicious"}
+        reputation = {"vt_malicious_count": "-1", "ha_threat_score": "88", "ha_verdict": "unknown"}
         with (
             patch.dict("os.environ", {"MALWAREBAZAAR_AUTH_KEY": "test-key"}),
             patch("extract_features_ci.load_enrichment_cache", return_value={"c" * 64: reputation}),
@@ -168,10 +169,27 @@ class BatchAndNetworkSafetyTests(unittest.TestCase):
         self.assertEqual(session.post.call_args.kwargs["data"]["query"], "get_file_type")
         self.assertEqual(session.post.call_args.kwargs["data"]["file_type"], "apk")
 
+    def test_vt_disabled_ha_threshold_or_verdict_forwarding_rule(self):
+        self.assertTrue(has_complete_reputation({
+            "vt_malicious_count": "-1", "ha_threat_score": "70", "ha_verdict": "suspicious"
+        }))
+        self.assertTrue(has_complete_reputation({
+            "vt_malicious_count": "-1", "ha_threat_score": "24", "ha_verdict": "malicious"
+        }))
+        self.assertTrue(has_complete_reputation({
+            "vt_malicious_count": "-1", "ha_threat_score": "Not Found", "ha_verdict": "malicious"
+        }))
+        self.assertFalse(has_complete_reputation({
+            "vt_malicious_count": "-1", "ha_threat_score": "69.9", "ha_verdict": "suspicious"
+        }))
+        self.assertFalse(has_complete_reputation({
+            "vt_malicious_count": "0", "ha_threat_score": "90", "ha_verdict": "suspicious"
+        }))
+
     def test_dispatch_carries_aligned_reputation_sidecar_and_keeps_215_bit_shape(self):
         raw = self.root / "metadata.json"
-        metadata = [{"sha256": "a" * 64, "vt_malicious_count": 7,
-                     "ha_threat_score": 93.0, "ha_verdict": "malicious"} for _ in range(12)]
+        metadata = [{"sha256": "a" * 64, "vt_malicious_count": -1,
+                     "ha_threat_score": 93.0, "ha_verdict": "suspicious"} for _ in range(12)]
         raw.write_text(json.dumps({"feature_rows": [[1] * 215 for _ in range(12)],
                                    "feature_metadata": metadata}))
         batches = create_batches(raw, self.root / "metadata-dispatch")

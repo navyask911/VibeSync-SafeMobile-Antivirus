@@ -35,10 +35,13 @@ def create_batches(source: Path, destination: Path) -> list[Path]:
                 raise ValueError(f"Invalid reputation metadata fields at index {index}")
             if not isinstance(record.get("sha256"), str) or not SHA256_RE.fullmatch(record["sha256"]):
                 raise ValueError(f"Invalid reputation SHA-256 at index {index}")
-            if type(record.get("vt_malicious_count")) is not int or record["vt_malicious_count"] < 0:
+            if type(record.get("vt_malicious_count")) is not int or record["vt_malicious_count"] < -1:
                 raise ValueError(f"Invalid VirusTotal count at index {index}")
             score = record.get("ha_threat_score")
-            if type(score) not in (int, float) or not 0 <= score <= 100:
+            if type(score) in (int, float):
+                if not 0 <= score <= 100:
+                    raise ValueError(f"Invalid Hybrid Analysis score at index {index}")
+            elif score != "Not Found":
                 raise ValueError(f"Invalid Hybrid Analysis score at index {index}")
             if not isinstance(record.get("ha_verdict"), str) or not record["ha_verdict"].strip():
                 raise ValueError(f"Invalid Hybrid Analysis verdict at index {index}")

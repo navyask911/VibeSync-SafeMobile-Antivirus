@@ -251,12 +251,23 @@ def load_enrichment_cache(path: Path) -> dict[str, dict[str, str]]:
 
 
 def has_complete_reputation(record: dict[str, str]) -> bool:
-    """Require usable results from both providers before optional MLOps dispatch."""
+    """Apply the Hybrid Analysis fallback when VirusTotal is disabled (-1)."""
     try:
         vt_count = int(record["vt_malicious_count"])
-        ha_score = float(record["ha_threat_score"])
         verdict = str(record["ha_verdict"]).strip().lower()
-        return vt_count > 0 and 0.0 <= ha_score <= 100.0 and verdict == "malicious"
+        try:
+            ha_score = float(record["ha_threat_score"])
+        except (TypeError, ValueError):
+            ha_score = None
+        if vt_count == -1:
+            # With VT disabled, either HA score >=70 OR a malicious verdict is enough.
+            return (ha_score is not None and ha_score >= 70.0) or verdict == "malicious"
+        return (
+            vt_count > 0
+            and ha_score is not None
+            and 0.0 <= ha_score <= 100.0
+            and verdict == "malicious"
+        )
     except (KeyError, TypeError, ValueError):
         return False
 
@@ -374,7 +385,11 @@ def extract_recent(path: Path, output: Path, max_samples: int = 20, *, session=N
             feature_metadata.append({
                 "sha256": digest,
                 "vt_malicious_count": int(reputation["vt_malicious_count"]),
-                "ha_threat_score": float(reputation["ha_threat_score"]),
+                "ha_threat_score": (
+                    float(reputation["ha_threat_score"])
+                    if str(reputation["ha_threat_score"]).strip().lower() not in ("", "not found")
+                    else "Not Found"
+                ),
                 "ha_verdict": reputation["ha_verdict"],
             })
         except Exception as exc:

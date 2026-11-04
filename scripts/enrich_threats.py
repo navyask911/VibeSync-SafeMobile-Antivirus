@@ -264,27 +264,34 @@ def enrich_hashes(hashes_path: Path, csv_path: Path, quota_path: Path, *, sessio
     vt_key = os.environ.get("VIRUSTOTAL_API_KEY", "").strip()
     ha_key = os.environ.get("HYBRID_ANALYSIS_API_KEY", "").strip()
     vt_approved = os.environ.get("VIRUSTOTAL_COMMERCIAL_USE_APPROVED", "").strip().lower()
-    if not vt_key:
-        raise EnrichmentError("VIRUSTOTAL_API_KEY is not configured; no provider calls were made.")
-    if vt_approved != "true":
-        raise EnrichmentError(
-            "VirusTotal use is disabled: set VIRUSTOTAL_COMMERCIAL_USE_APPROVED=true only "
-            "when the account/license authorizes commercial business-workflow use."
-        )
+    # No commercial VirusTotal license is configured for this project. A missing
+    # key OR missing approval disables VT safely and records the -1 sentinel.
+    vt_enabled = bool(vt_key) and vt_approved == "true"
+    if not vt_enabled:
+        reason = "API key is absent" if not vt_key else "commercial-use approval is absent"
+        print(f"VirusTotal disabled ({reason}); recording vt_malicious_count=-1.")
     if not ha_key:
-        raise EnrichmentError("HYBRID_ANALYSIS_API_KEY is not configured; no provider calls were made.")
+        raise EnrichmentError("HYBRID_ANALYSIS_API_KEY is not configured; no Hybrid Analysis calls were made.")
 
     client = ReputationClient(session or requests.Session(), quota_path, sleep=sleep, monotonic=monotonic)
     added = 0
     for digest in pending:
         try:
-            # Avoid spending VT quota when HA has already exhausted its daily allowance.
-            client.ensure_budget("virustotal")
             client.ensure_budget("hybrid_analysis")
         except DailyQuotaReached as error:
             print(f"Threat enrichment paused safely: {error}")
             break
-        vt_count = client.virustotal_malicious_count(digest, vt_key)
+
+        vt_count = -1
+        if vt_enabled:
+            try:
+                client.ensure_budget("virustotal")
+                vt_count = client.virustotal_malicious_count(digest, vt_key)
+            except DailyQuotaReached as error:
+                print(f"VirusTotal disabled for the remainder of this UTC day: {error}")
+                vt_enabled = False
+                vt_count = -1
+
         ha_score, ha_verdict = client.hybrid_analysis_result(digest, ha_key)
         append_record(csv_path, {
             "sha256": digest,

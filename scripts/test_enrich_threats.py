@@ -123,17 +123,42 @@ class EnrichmentTests(unittest.TestCase):
         self.assertIn(16.0, delays)
         self.assertIn(2.0, delays)
 
-    def test_virus_total_commercial_gate_fails_before_network(self):
+    def test_missing_virustotal_key_skips_vt_and_records_minus_one(self):
         self.hashes.write_text(HASH1 + "\n", encoding="ascii")
         session = Mock()
+        session.post.return_value = Response(
+            payload=[{"sha256": HASH1, "threat_score": 78, "verdict": "suspicious"}]
+        )
+        with patch.dict("os.environ", {"HYBRID_ANALYSIS_API_KEY": "ha-key"}, clear=True):
+            result = enrich_hashes(self.hashes, self.cache, self.quota, session=session)
+        self.assertEqual(result["added"], 1)
+        session.get.assert_not_called()
+        session.post.assert_called_once()
+        with self.cache.open(newline="", encoding="utf-8") as stream:
+            row = next(csv.DictReader(stream))
+        self.assertEqual(row["vt_malicious_count"], "-1")
+        self.assertEqual(row["ha_threat_score"], "78")
+        self.assertEqual(row["ha_verdict"], "suspicious")
+        quota = __import__("json").loads(self.quota.read_text(encoding="utf-8"))
+        self.assertEqual(quota["virustotal_requests"], 0)
+        self.assertEqual(quota["hybrid_analysis_requests"], 1)
+
+    def test_key_without_commercial_approval_also_skips_vt(self):
+        self.hashes.write_text(HASH1 + "\n", encoding="ascii")
+        session = Mock()
+        session.post.return_value = Response(
+            payload=[{"sha256": HASH1, "threat_score": 72, "verdict": "unknown"}]
+        )
         with patch.dict("os.environ", {
             "VIRUSTOTAL_API_KEY": "vt-key",
             "HYBRID_ANALYSIS_API_KEY": "ha-key",
         }, clear=True):
-            with self.assertRaisesRegex(EnrichmentError, "commercial business-workflow"):
-                enrich_hashes(self.hashes, self.cache, self.quota, session=session)
+            result = enrich_hashes(self.hashes, self.cache, self.quota, session=session)
+        self.assertEqual(result["added"], 1)
         session.get.assert_not_called()
-        session.post.assert_not_called()
+        with self.cache.open(newline="", encoding="utf-8") as stream:
+            row = next(csv.DictReader(stream))
+        self.assertEqual(row["vt_malicious_count"], "-1")
 
     def test_invalid_hash_rejected_before_network(self):
         self.hashes.write_text("not-a-sha256\n", encoding="ascii")
