@@ -603,20 +603,9 @@ import kotlinx.coroutines.launch
       modifier = Modifier.size(30.dp)
      )
     }
-    val headerTitle = when (selectedDestination) {
-     "tools" -> R.string.tools_header_title_ux
-     "settings" -> R.string.settings_header_title_ux
-     else -> R.string.brand_title
-    }
-    val headerSubtitle = when (selectedDestination) {
-     "tools" -> R.string.tools_header_subtitle_ux
-     "settings" -> R.string.settings_header_subtitle_ux
-     else -> if (adMobState.isPro) R.string.home_header_subtitle_pro else R.string.home_header_subtitle_free
-    }
     Column(Modifier.padding(start = 10.dp).weight(1f)) {
-     Text(stringResource(headerTitle), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold,
-      color = MaterialTheme.colorScheme.onSurface)
-     Text(stringResource(headerSubtitle), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
+     Text(stringResource(R.string.brand_title), style = MaterialTheme.typography.titleLarge,
+      fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
     }
     IconButton(onClick = { navigateToDestination("pro") }) {
      androidx.compose.material3.Icon(Icons.Default.WorkspacePremium,
@@ -1088,36 +1077,38 @@ import kotlinx.coroutines.launch
     composable("detail/{parentTab}/{screen}") { navScreenContent() }
    }
    SnackbarHost(hostState = snackbarHostState)
-   NavigationBar(containerColor = MaterialTheme.colorScheme.surface, tonalElevation = 0.dp) {
-    val destinations = listOf(
-     Triple("dashboard", R.string.nav_home, R.drawable.ic_nav_home),
-     Triple("tools", R.string.v140_analytics_tools, R.drawable.ic_nav_tools),
-     Triple("settings", R.string.nav_settings, R.drawable.ic_nav_settings)
-    )
-    destinations.forEach { destination ->
-     NavigationBarItem(
-      selected = activeTopTab == destination.first,
-      onClick = { navigateToDestination(when(destination.first) {
-       "dashboard" -> "home"
-       "tools" -> "tools"
-       else -> "settings"
-      }) },
-      icon = {
-       androidx.compose.material3.Icon(
-        painter = painterResource(destination.third),
-        contentDescription = stringResource(destination.second),
-        modifier = Modifier.size(22.dp)
-       )
-      },
-      label = { Text(stringResource(destination.second), maxLines = 1, softWrap = false, overflow = TextOverflow.Ellipsis) },
-      colors = androidx.compose.material3.NavigationBarItemDefaults.colors(
-       selectedIconColor = MaterialTheme.colorScheme.secondary,
-       selectedTextColor = MaterialTheme.colorScheme.onSurface,
-       indicatorColor = MaterialTheme.colorScheme.surfaceVariant,
-       unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-       unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
-      )
+   if (selectedDestination in setOf("home", "tools", "settings")) {
+    NavigationBar(containerColor = MaterialTheme.colorScheme.surface, tonalElevation = 0.dp) {
+     val destinations = listOf(
+      Triple("dashboard", R.string.nav_home, R.drawable.ic_nav_home),
+      Triple("tools", R.string.v140_analytics_tools, R.drawable.ic_nav_tools),
+      Triple("settings", R.string.nav_settings, R.drawable.ic_nav_settings)
      )
+     destinations.forEach { destination ->
+      NavigationBarItem(
+       selected = activeTopTab == destination.first,
+       onClick = { navigateToDestination(when(destination.first) {
+        "dashboard" -> "home"
+        "tools" -> "tools"
+        else -> "settings"
+       }) },
+       icon = {
+        androidx.compose.material3.Icon(
+         painter = painterResource(destination.third),
+         contentDescription = stringResource(destination.second),
+         modifier = Modifier.size(22.dp)
+        )
+       },
+       label = { Text(stringResource(destination.second), maxLines = 1, softWrap = false, overflow = TextOverflow.Ellipsis) },
+       colors = androidx.compose.material3.NavigationBarItemDefaults.colors(
+        selectedIconColor = MaterialTheme.colorScheme.secondary,
+        selectedTextColor = MaterialTheme.colorScheme.onSurface,
+        indicatorColor = MaterialTheme.colorScheme.surfaceVariant,
+        unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+        unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
+       )
+      )
+     }
     }
    }
   }
