@@ -666,4 +666,29 @@
 
     <!-- v1.5.2 Figma visual-reference copy. Marked non-translatable until reviewed translations are supplied. -->
 
+
+    <string name="v152_tools_header_subtitle" translatable="false">Simple checks. Clear choices.</string>
+    <string name="v152_tools_main_heading" translatable="false">A toolkit for your device.</string>
+    <string name="v152_tools_main_description" translatable="false">Scan, review and manage what matters. You stay in control of every action.</string>
+    <string name="v152_tools_start_scan" translatable="false">Start a scan</string>
+    <string name="v152_tools_scan_card_description" translatable="false">Check installed apps or choose an APK file.</string>
+    <string name="v152_tools_review_manage" translatable="false">Review &amp; manage</string>
+    <string name="v152_tools_apps_permissions" translatable="false">Apps &amp; permissions</string>
+    <string name="v152_tools_history_description" translatable="false">Past scans stored on this device.</string>
+    <string name="v152_settings_header_subtitle" translatable="false">Make SafeMobile yours</string>
+    <string name="v152_settings_app_theme" translatable="false">App theme</string>
+    <string name="v152_settings_donate_selected" translatable="false">Donate a selected item</string>
+    <string name="v152_settings_donate_hint" translatable="false">Enabling this only allows contributions. Nothing is sent without a separate confirmation for an eligible confirmed threat.</string>
+    <string name="v152_scan_results_title" translatable="false">Scan results</string>
+    <string name="v152_scan_results_subtitle" translatable="false">On-device results · saved locally</string>
+    <string name="v152_toolbar_free_plan" translatable="false">FREE PLAN · AD-SUPPORTED</string>
+    <string name="v152_toolbar_pro_plan" translatable="false">PRO PLAN</string>
+    <string name="v152_nav_tools" translatable="false">Tools</string>
+    <string name="v152_verdict_threat" translatable="false">THREAT · confirmed</string>
+    <string name="v152_verdict_suspicious" translatable="false">SUSPICIOUS · review</string>
+    <string name="v152_verdict_no_match" translatable="false">NO_MATCH</string>
+    <string name="v152_verdict_not_scanned" translatable="false">NOT_SCANNED</string>
+    <string name="v152_apps_installed_summary" translatable="false">%1$d installed · review permissions</string>
+    <string name="v152_quarantine_summary_suffix" translatable="false"> · encrypted, user-controlled</string>
+
 </resources>

@@ -93,7 +93,7 @@ private fun SettingsDescription(resource: Int) {
         stringResource(resource),
         style = MaterialTheme.typography.bodySmall,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
-        maxLines = 1,
+        maxLines = 2,
         overflow = TextOverflow.Ellipsis
     )
 }
@@ -120,7 +120,7 @@ private fun SettingsRootRow(
     onClick: () -> Unit
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth().clickable(onClick = onClick),
+        modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).clickable(onClick = onClick),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
         Row(
@@ -141,7 +141,7 @@ private fun SettingsRootRow(
             }
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
                 Text(stringResource(titleResource), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Bold,
-                    maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    maxLines = 2, overflow = TextOverflow.Ellipsis)
                 Text(stringResource(subtitleResource), style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
             }
@@ -455,11 +455,13 @@ internal fun SafeMobileSettingsPanel(
             Text(stringResource(R.string.theme_appearance_description),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(stringResource(R.string.appearance_title),
+                style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                 shape = RoundedCornerShape(20.dp)) {
                 Column(Modifier.fillMaxWidth().padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Text(stringResource(R.string.appearance_title),
+                    Text(stringResource(R.string.v152_settings_app_theme),
                         style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         AppTheme.entries.forEach { option ->
@@ -478,8 +480,10 @@ internal fun SafeMobileSettingsPanel(
                                 modifier = Modifier.weight(1f).heightIn(min = 80.dp)
                                     .clickable { onAppThemeChanged(option) },
                                 shape = RoundedCornerShape(12.dp),
-                                color = if (selected) MaterialTheme.colorScheme.surfaceVariant
-                                    else MaterialTheme.colorScheme.surface,
+                                color = if (selected && appTheme == AppTheme.LIGHT) {
+                                    com.vibesync.antivirus.ui.theme.SafeMobileLightSelectedContainer
+                                } else if (selected) MaterialTheme.colorScheme.surfaceVariant
+                                else MaterialTheme.colorScheme.surface,
                                 border = androidx.compose.foundation.BorderStroke(
                                     if (selected) 2.dp else 1.dp,
                                     if (selected) MaterialTheme.colorScheme.secondary
@@ -575,8 +579,13 @@ internal fun SafeMobileSettingsPanel(
                         enabled = globalThreatIntelligenceEnabled,
                         modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)
                     ) {
-                        Text(stringResource(R.string.latest_results))
+                        Text(stringResource(R.string.v152_settings_donate_selected))
                     }
+                    Text(
+                        stringResource(R.string.v152_settings_donate_hint),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                     if (adPrivacyOptionsRequired && !isProForAds) {
                         OutlinedButton(onClick = onShowAdPrivacyOptions, modifier = Modifier.fillMaxWidth()) {
                             Text(stringResource(R.string.ad_privacy_options))

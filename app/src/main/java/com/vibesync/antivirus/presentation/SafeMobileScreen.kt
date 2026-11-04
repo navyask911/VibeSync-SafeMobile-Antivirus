@@ -586,6 +586,30 @@ import kotlinx.coroutines.launch
    }
   } else {
   Column(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing)) {
+   val toolbarTitleResource = when (selectedDestination) {
+    "home" -> R.string.brand_title
+    "tools" -> R.string.analytics_title
+    "settings" -> R.string.nav_settings
+    "scan" -> R.string.v152_scan_results_title
+    "sources" -> R.string.download_interceptor_label
+    "sentinel" -> R.string.sentinel_scope_title
+    "phishing" -> R.string.nav_phishing
+    "posture" -> R.string.posture_title
+    "apps" -> R.string.nav_apps
+    "quarantine" -> R.string.quarantine_vault_title
+    "history" -> R.string.nav_history
+    "pro" -> R.string.pro_title
+    "capabilities" -> R.string.detection_capabilities_title
+    "cleaner" -> R.string.cleaner_title
+    else -> R.string.brand_title
+   }
+   val toolbarSubtitleResource: Int? = when (selectedDestination) {
+    "home" -> if (adMobState.isPro) R.string.v152_toolbar_pro_plan else R.string.v152_toolbar_free_plan
+    "tools" -> R.string.v152_tools_header_subtitle
+    "settings" -> R.string.v152_settings_header_subtitle
+    "scan" -> R.string.v152_scan_results_subtitle
+    else -> null
+   }
    Row(
     modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 10.dp),
     verticalAlignment = Alignment.CenterVertically
@@ -603,9 +627,15 @@ import kotlinx.coroutines.launch
       modifier = Modifier.size(30.dp)
      )
     }
-    Column(Modifier.padding(start = 10.dp).weight(1f)) {
-     Text(stringResource(R.string.brand_title), style = MaterialTheme.typography.titleLarge,
-      fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
+    Column(Modifier.padding(start = 10.dp).weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+     Text(stringResource(toolbarTitleResource), style = MaterialTheme.typography.titleLarge,
+      fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface,
+      maxLines = 1, overflow = TextOverflow.Ellipsis)
+     toolbarSubtitleResource?.let { subtitle ->
+      Text(stringResource(subtitle), style = MaterialTheme.typography.bodySmall,
+       color = MaterialTheme.colorScheme.onSurfaceVariant,
+       maxLines = 1, overflow = TextOverflow.Ellipsis)
+     }
     }
     IconButton(onClick = { navigateToDestination("pro") }) {
      androidx.compose.material3.Icon(Icons.Default.WorkspacePremium,
@@ -696,7 +726,9 @@ import kotlinx.coroutines.launch
            onSubRouteChanged = { settingsSubRoute = it },
            onOpenPro = { navigateToDestination("pro") },
            onReviewThreatFindings = {
-            navigateToDestination(if (state.results.isEmpty()) "history" else "scan")
+            // Opening Scan is navigation only; it never starts a scan or donates data.
+            // The user must run a scan and separately confirm an eligible THREAT result.
+            navigateToDestination("scan")
            }
           )
          }
@@ -1081,7 +1113,7 @@ import kotlinx.coroutines.launch
     NavigationBar(containerColor = MaterialTheme.colorScheme.surface, tonalElevation = 0.dp) {
      val destinations = listOf(
       Triple("dashboard", R.string.nav_home, R.drawable.ic_nav_home),
-      Triple("tools", R.string.v140_analytics_tools, R.drawable.ic_nav_tools),
+      Triple("tools", R.string.v152_nav_tools, R.drawable.ic_nav_tools),
       Triple("settings", R.string.nav_settings, R.drawable.ic_nav_settings)
      )
      destinations.forEach { destination ->
@@ -1103,7 +1135,9 @@ import kotlinx.coroutines.launch
        colors = androidx.compose.material3.NavigationBarItemDefaults.colors(
         selectedIconColor = MaterialTheme.colorScheme.secondary,
         selectedTextColor = MaterialTheme.colorScheme.onSurface,
-        indicatorColor = MaterialTheme.colorScheme.surfaceVariant,
+        indicatorColor = if (appTheme == com.vibesync.antivirus.ui.theme.AppTheme.LIGHT)
+         com.vibesync.antivirus.ui.theme.SafeMobileLightSelectedContainer
+        else MaterialTheme.colorScheme.surfaceVariant,
         unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
         unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
        )
@@ -1338,15 +1372,15 @@ internal fun ScanResultsScreen(
    style=MaterialTheme.typography.bodySmall
   )
   Row(horizontalArrangement=Arrangement.spacedBy(10.dp), modifier=Modifier.fillMaxWidth()) {
-   ScanVerdictCountTile(threatTotal, R.drawable.ic_verdict_threat, R.string.verdict_threat, MaterialTheme.colorScheme.error,
+   ScanVerdictCountTile(threatTotal, R.drawable.ic_verdict_threat, R.string.v152_verdict_threat, MaterialTheme.colorScheme.error,
     modifier=Modifier.weight(1f))
-   ScanVerdictCountTile(reviewTotal, R.drawable.ic_verdict_suspicious, R.string.verdict_suspicious, MaterialTheme.colorScheme.tertiary,
+   ScanVerdictCountTile(reviewTotal, R.drawable.ic_verdict_suspicious, R.string.v152_verdict_suspicious, MaterialTheme.colorScheme.tertiary,
     modifier=Modifier.weight(1f))
   }
   Row(horizontalArrangement=Arrangement.spacedBy(10.dp), modifier=Modifier.fillMaxWidth()) {
-   ScanVerdictCountTile(noMatchTotal, R.drawable.ic_verdict_no_match, R.string.verdict_no_match, MaterialTheme.colorScheme.onSurfaceVariant,
+   ScanVerdictCountTile(noMatchTotal, R.drawable.ic_verdict_no_match, R.string.v152_verdict_no_match, MaterialTheme.colorScheme.onSurfaceVariant,
     modifier=Modifier.weight(1f))
-   ScanVerdictCountTile(notScannedCount, R.drawable.ic_verdict_not_scanned, R.string.verdict_not_scanned, MaterialTheme.colorScheme.onSurfaceVariant,
+   ScanVerdictCountTile(notScannedCount, R.drawable.ic_verdict_not_scanned, R.string.v152_verdict_not_scanned, MaterialTheme.colorScheme.onSurfaceVariant,
     modifier=Modifier.weight(1f))
   }
   Text(stringResource(R.string.scan_explanation),
@@ -1415,8 +1449,7 @@ private fun ScanVerdictCountTile(
     Card(
         modifier = modifier,
         shape = RoundedCornerShape(20.dp),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(

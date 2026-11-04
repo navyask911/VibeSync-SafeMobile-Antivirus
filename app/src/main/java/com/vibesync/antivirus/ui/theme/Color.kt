@@ -13,6 +13,7 @@ val VibeSyncCyberTeal = Color(0xFF0284C7)
 val VibeSyncHeading = Color(0xFF0F172A)
 val VibeSyncBody = Color(0xFF475569)
 val VibeSyncCardBorder = Color(0xFFE2E8F0)
+val SafeMobileLightSelectedContainer = Color(0xFFE0F2FE)
 
 // Midnight palette.
 val SafeMobileDarkBackground = Color(0xFF0B132B)

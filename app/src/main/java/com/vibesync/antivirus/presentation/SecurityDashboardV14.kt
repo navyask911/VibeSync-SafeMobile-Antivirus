@@ -237,7 +237,7 @@ internal fun SecurityDashboardV14(
                     Text(stringResource(R.string.security_filter_overview), modifier = Modifier.weight(1f),
                         style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
                     TextButton(onClick = onOpenTools) {
-                        Text(stringResource(R.string.v140_analytics_tools))
+                        Text(stringResource(R.string.nav_analytics))
                     }
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -266,11 +266,11 @@ internal fun SecurityDashboardV14(
                     verticalArrangement = Arrangement.spacedBy(2.dp)) {
                     DashboardActionRow({ Icon(painterResource(R.drawable.ic_home_apps), null, tint = MaterialTheme.colorScheme.secondary) },
                         R.string.nav_apps,
-                        if (inventoryLoaded) pluralStringResource(R.plurals.l10n_apps, installedAppsCount, installedAppsCount) else stringResource(R.string.apps_inventory_empty),
+                        if (inventoryLoaded) stringResource(R.string.v152_apps_installed_summary, installedAppsCount) else stringResource(R.string.apps_inventory_empty),
                         stringResource(R.string.ui_view_scan_results), onApps)
                     DashboardActionRow({ Icon(painterResource(R.drawable.ic_home_quarantine), null, tint = MaterialTheme.colorScheme.secondary) },
                         R.string.quarantine_vault_title,
-                        pluralStringResource(R.plurals.l10n_files, quarantinedFilesCount, quarantinedFilesCount),
+                        pluralStringResource(R.plurals.l10n_files, quarantinedFilesCount, quarantinedFilesCount) + stringResource(R.string.v152_quarantine_summary_suffix),
                         stringResource(R.string.ui_view_scan_results), onQuarantine)
                     DashboardActionRow({ Icon(Icons.Outlined.CleaningServices, null, tint = MaterialTheme.colorScheme.secondary) },
                         R.string.cleaner_title,
