@@ -337,6 +337,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 55
     permissions:
+      actions: write
       contents: write
     env:
       ORG_GRADLE_PROJECT_yaraxAndroidAbis: arm64-v8a,armeabi-v7a,x86_64
@@ -388,4 +389,8 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git tag -a v1.6.0 -m "Release v1.6.0: 100% Offline Ensemble Antivirus Engine"
           git push origin refs/tags/v1.6.0
+      - name: Dispatch signed v1.6.0 APK and AAB publication
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run release-apk.yml --ref v1.6.0
 
