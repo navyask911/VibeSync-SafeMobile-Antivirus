@@ -627,9 +627,6 @@ import kotlinx.coroutines.launch
            installSentinelActive = installSentinelRunning,
            onOpenAdvisor = { navigateToDestination("advisor", parentTabOverride = "dashboard") },
            onOpenPro = { navigateToDestination("pro") },
-           onReviewThreatFindings = {
-            navigateToDestination(if (state.results.isEmpty()) "history" else "scan")
-           },
            onScan = { requestPrivacyAcknowledgement { vm.scanFull(); navigateToDestination("scan") } },
            onCleaner = { navigateToDestination("cleaner") },
            onInstallSentinel = { navigateToDestination("sources") },
@@ -697,7 +694,10 @@ import kotlinx.coroutines.launch
            },
            subRoute = settingsSubRoute,
            onSubRouteChanged = { settingsSubRoute = it },
-           onOpenPro = { navigateToDestination("pro") }
+           onOpenPro = { navigateToDestination("pro") },
+           onReviewThreatFindings = {
+            navigateToDestination(if (state.results.isEmpty()) "history" else "scan")
+           }
           )
          }
          else -> Column(
