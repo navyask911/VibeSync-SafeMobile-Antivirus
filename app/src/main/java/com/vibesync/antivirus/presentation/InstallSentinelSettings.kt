@@ -32,7 +32,15 @@ internal fun InstallSentinelSettings() {
                         color = if (running) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
-                Switch(checked = running && desired, onCheckedChange = { enabled ->
+                Switch(checked = running && desired,
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = MaterialTheme.colorScheme.surface,
+                        checkedTrackColor = MaterialTheme.colorScheme.primary,
+                        uncheckedThumbColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant,
+                        uncheckedBorderColor = MaterialTheme.colorScheme.outline
+                    ),
+                    onCheckedChange = { enabled ->
                     desired = enabled
                     if (enabled) {
                         context.getSharedPreferences(SafeMobileApp.SECURITY_PREFS, Context.MODE_PRIVATE).edit()
