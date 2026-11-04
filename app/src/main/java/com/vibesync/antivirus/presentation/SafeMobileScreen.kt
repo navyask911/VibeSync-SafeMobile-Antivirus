@@ -332,6 +332,12 @@ import kotlinx.coroutines.launch
  }
  var pendingGlobalDonationResults by remember { mutableStateOf<List<ScanResult>>(emptyList()) }
  val promptedGlobalDonationEvents = remember { mutableSetOf<String>() }
+ val hasEligibleDonationResult = state.results.any { result ->
+  result.verdict == ScanVerdict.THREAT &&
+   result.sha256?.matches(Regex("[0-9a-f]{64}")) == true &&
+   (result.sourceLocalPath != null || result.sourceUri != null || result.packageName != null) &&
+   result.threatEventId?.let { it !in promptedGlobalDonationEvents } == true
+ }
  LaunchedEffect(state.results) {
   if (!GlobalThreatIntelligenceConsent.isEnabled(context) ||
       selectedDestination !in setOf("home", "scan", "apps")) return@LaunchedEffect
@@ -726,10 +732,10 @@ import kotlinx.coroutines.launch
            onSubRouteChanged = { settingsSubRoute = it },
            onOpenPro = { navigateToDestination("pro") },
            onReviewThreatFindings = {
-            // Opening Scan is navigation only; it never starts a scan or donates data.
-            // The user must run a scan and separately confirm an eligible THREAT result.
+            // Opening Scan is navigation only; donation remains a separate confirmation.
             navigateToDestination("scan")
-           }
+           },
+           canReviewThreatFindings = hasEligibleDonationResult
           )
          }
          else -> Column(

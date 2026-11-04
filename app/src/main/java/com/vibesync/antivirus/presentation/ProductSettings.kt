@@ -426,7 +426,8 @@ internal fun SafeMobileSettingsPanel(
     subRoute: SettingsSubRoute = SettingsSubRoute.ROOT,
     onSubRouteChanged: (SettingsSubRoute) -> Unit = {},
     onOpenPro: () -> Unit = {},
-    onReviewThreatFindings: () -> Unit = {}
+    onReviewThreatFindings: () -> Unit = {},
+    canReviewThreatFindings: Boolean = false
 ) {
     val context = LocalContext.current
     fun openOfficialWebsite(url: String) {
@@ -585,7 +586,7 @@ internal fun SafeMobileSettingsPanel(
                     }
                     OutlinedButton(
                         onClick = onReviewThreatFindings,
-                        enabled = globalThreatIntelligenceEnabled,
+                        enabled = globalThreatIntelligenceEnabled && canReviewThreatFindings,
                         modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)
                     ) {
                         Text(stringResource(R.string.latest_results))
