@@ -142,7 +142,7 @@ val prepareYaraXNativeSource = tasks.register("prepareYaraXNativeSource") {
         check(sourceDirectory.resolve("yarax_patches/yara-x/Cargo.toml").isFile) {
             "Pinned YARA-X recursive source submodule is missing."
         }
-        revisionMarker.writeText(yaraXSourceRevision + "\\n")
+        revisionMarker.writeText(yaraXSourceRevision + System.lineSeparator())
     }
 }
 
