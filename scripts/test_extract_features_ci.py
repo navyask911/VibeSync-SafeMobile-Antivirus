@@ -89,11 +89,13 @@ class BatchAndNetworkSafetyTests(unittest.TestCase):
         ]}))
         out = self.root / "vectors.json"
         reputation = {"vt_malicious_count": "5", "ha_threat_score": "88", "ha_verdict": "malicious"}
-        with patch.dict("os.environ", {"MALWAREBAZAAR_AUTH_KEY": "test-only"}), (
-                patch("extract_features_ci.load_enrichment_cache", return_value={"a" * 64: reputation, "b" * 64: reputation})),
-                patch("extract_features_ci.download_sample", side_effect=[SampleRejected("corrupt"), b"mock_zip"])), (
-                patch("extract_features_ci.encrypted_zip_to_apk", return_value=b"mock_apk")), (
-                patch("extract_features_ci.analyze_android_apk", return_value=[1] * 215)):
+        with (
+            patch.dict("os.environ", {"MALWAREBAZAAR_AUTH_KEY": "test-only"}),
+            patch("extract_features_ci.load_enrichment_cache", return_value={"a" * 64: reputation, "b" * 64: reputation}),
+            patch("extract_features_ci.download_sample", side_effect=[SampleRejected("corrupt"), b"mock_zip"]),
+            patch("extract_features_ci.encrypted_zip_to_apk", return_value=b"mock_apk"),
+            patch("extract_features_ci.analyze_android_apk", return_value=[1] * 215),
+        ):
             result = extract_recent(recent, out, 10, session=Mock())
         self.assertEqual(len(result), 1)
         payload = json.loads(out.read_text())
@@ -139,12 +141,14 @@ class BatchAndNetworkSafetyTests(unittest.TestCase):
         recent.write_text(json.dumps({"query_status": "ok", "data": []}))
         output = self.root / "rows.json"
         reputation = {"vt_malicious_count": "5", "ha_threat_score": "88", "ha_verdict": "malicious"}
-        with patch.dict("os.environ", {"MALWAREBAZAAR_AUTH_KEY": "test-key"}), (
-            patch("extract_features_ci.load_enrichment_cache", return_value={"c" * 64: reputation})),
-            patch("extract_features_ci.older_apk_digests", return_value=["c" * 64] * 10)), (
-            patch("extract_features_ci.download_sample", return_value=b"example_zip")), (
-            patch("extract_features_ci.encrypted_zip_to_apk", return_value=b"example_apk")), (
-            patch("extract_features_ci.analyze_android_apk", return_value=[1] * 215)):
+        with (
+            patch.dict("os.environ", {"MALWAREBAZAAR_AUTH_KEY": "test-key"}),
+            patch("extract_features_ci.load_enrichment_cache", return_value={"c" * 64: reputation}),
+            patch("extract_features_ci.older_apk_digests", return_value=["c" * 64] * 10),
+            patch("extract_features_ci.download_sample", return_value=b"example_zip"),
+            patch("extract_features_ci.encrypted_zip_to_apk", return_value=b"example_apk"),
+            patch("extract_features_ci.analyze_android_apk", return_value=[1] * 215),
+        ):
             rows = extract_recent(recent, output, 10, session=Mock())
         self.assertGreaterEqual(len(rows), 1)
         self.assertEqual(len(rows[0]), 215)
