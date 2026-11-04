@@ -14,3 +14,6 @@ captures/
 
 # Downloaded/extracted research datasets and derived local indexes (never commit/package).
 .cache/datasets/
+
+# Transient TweetFeed hash list for one signed database workflow run.
+data/new_hashes.txt
