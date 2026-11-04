@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Opt-in MalwareBazaar APK -> frozen Drebin-215 feature vectors.
+"""Opt-in ThreatFox IOC -> local APK -> frozen Drebin-215 feature vectors.
 
 Defensive static inspection ONLY: never execute APK code, upload samples or store
 sample ZIP/APK bytes in GitHub Actions artifacts. Failures are per-sample and do
@@ -9,21 +9,17 @@ from __future__ import annotations
 
 import argparse
 import csv
-from io import BytesIO
 import hashlib
 import json
 import os
 from pathlib import Path
 import re
-import tempfile
 import zipfile
 
 SCHEMA_PATH = Path(__file__).resolve().parents[1] / "app/src/main/assets/feature_schema.json"
 SCHEMA_SHA256 = "ffb386be14adf8c0af1bb96032e5485fcc8fd5b401a24488c5896e2d5ea425ac"
-MALWAREBAZAAR_URL = "https://mb-api.abuse.ch/api/v1/"
 SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 INVOKE = re.compile(r"(L[A-Za-z0-9_/$-]+;)->([A-Za-z0-9_$<>]+)\(")
-MAX_DOWNLOAD_BYTES = 16 * 1024 * 1024
 MAX_APK_BYTES = 20 * 1024 * 1024
 MAX_CODE_METHODS = 120_000
 MAX_CODE_INSTRUCTIONS = 1_500_000
@@ -166,72 +162,136 @@ def analyze_android_apk(path: Path, schema: list[str], analyzer=None) -> list[in
                           classes=classes, calls=calls, callbacks=callbacks, literals=literals)
 
 
-def recent_apk_digests(path: Path) -> list[str]:
+def recent_threatfox_sha256_iocs(path: Path) -> list[str]:
+    """Read unique SHA-256 IOC values from a ThreatFox get_iocs response."""
     response = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(response, dict) or response.get("query_status") != "ok":
-        raise ValueError("Invalid MalwareBazaar recent detections response")
+        raise ValueError("Invalid ThreatFox recent IOCs response")
     items = response.get("data")
     if not isinstance(items, list):
-        raise ValueError("Missing recent detections")
+        raise ValueError("Missing ThreatFox IOC data")
     found, seen = [], set()
     for record in items:
         if not isinstance(record, dict):
             continue
-        digest = str(record.get("sha256_hash", "")).lower()
-        if not SHA256.fullmatch(digest) or digest in seen:
+        if str(record.get("ioc_type", "")).strip().lower() != "sha256_hash":
             continue
-        file_name = str(record.get("file_name") or "").lower()
-        file_type = str(record.get("file_type") or "").lower()
-        mime = str(record.get("file_type_mime") or "").lower()
-        # Avoid unnecessary downloads of Windows EXEs, PDFs and non-APK malware.
-        if (file_type not in ("apk", "android") and not file_name.endswith(".apk")
-                and mime not in ("application/vnd.android.package-archive", "application/x-android-package")):
-            continue
-        seen.add(digest)
-        found.append(digest)
+        digest = str(record.get("ioc") or "").strip().lower()
+        if not SHA256.fullmatch(digest):
+            raise ValueError("ThreatFox returned a malformed SHA-256 IOC")
+        if digest not in seen:
+            seen.add(digest)
+            found.append(digest)
     return found
 
 
+def file_sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(64 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
-def older_apk_digests(session, key: str, limit: int = 100) -> list[str]:
-    """Find older APK metadata when the 168-hour detection window is too sparse.
 
-    MalwareBazaar's official get_file_type query is read-only metadata. No
-    binary malware is downloaded until an individual hash is selected.
+def extract_recent(path: Path, output: Path, max_samples: int = 20, *,
+                   samples_dir: Path, analyzer=None,
+                   enrichment_csv: Path | None = None):
+    """Extract vectors only from separately staged, hash-matching local APK files.
+
+    ThreatFox is an IOC feed and does not expose APK download bytes through
+    get_iocs. This helper deliberately performs no sample-provider network calls.
     """
-    if not 10 <= limit <= 100:
-        raise ValueError("Fallback query must stay within 10..100 metadata entries")
-    with session.post(
-        MALWAREBAZAAR_URL,
-        headers={"Auth-Key": key, "User-Agent": "SafeMobile-Defensive-Research/1.0"},
-        data={"query": "get_file_type", "file_type": "apk", "limit": str(limit)},
-        timeout=(12, 30), allow_redirects=False,
-    ) as response:
-        response.raise_for_status()
-        if len(response.content) > 1024 * 1024:
-            raise SampleRejected("Fallback metadata exceeds 1 MiB")
-        metadata = response.json()
-    if not isinstance(metadata, dict) or metadata.get("query_status") not in ("ok", "no_results"):
-        raise SampleRejected("Fallback APK metadata API rejected the request")
-    if metadata["query_status"] == "no_results":
-        return []
-    records = metadata.get("data", [])
-    if not isinstance(records, list):
-        raise SampleRejected("Invalid fallback metadata records")
-    found, seen = [], set()
-    for row in records:
-        if not isinstance(row, dict):
-            continue
-        sha = row.get("sha256_hash")
-        if not isinstance(sha, str) or not SHA256.fullmatch(sha.lower()):
-            continue
-        sha = sha.lower()
-        if sha not in seen:
-            seen.add(sha)
-            found.append(sha)
-    return found
+    if not 1 <= max_samples <= 20:
+        raise ValueError("Sampling budget must be 1..20 APK attempts")
+    if os.environ.get("THREATFOX_AI_TRAINING_APPROVED", "").strip().lower() != "true":
+        raise PermissionError(
+            "ThreatFox data is not approved for AI training; require Spamhaus prior written consent."
+        )
+    schema = schema_features()
+    candidates = recent_threatfox_sha256_iocs(path)
+    if enrichment_csv is None:
+        enrichment_csv = Path(__file__).resolve().parents[1] / "data/enriched_threats.csv"
+    enrichment = load_enrichment_cache(Path(enrichment_csv))
+    verified = [digest for digest in candidates
+                if has_complete_reputation(enrichment.get(digest, {}))]
+    skipped = len(candidates) - len(verified)
+    print(f"MLOps discovery: {len(verified)} reputation-qualified ThreatFox hashes; "
+          f"skipped {skipped} without required HA evidence.", flush=True)
+
+    if not samples_dir.is_dir():
+        print("MLOps skipped: no separately authorized local APK sample directory was supplied.", flush=True)
+        rows: list[list[int]] = []
+        feature_metadata: list[dict[str, object]] = []
+    else:
+        rows = []
+        feature_metadata = []
+        attempts = 0
+        failures: dict[str, int] = {}
+        for digest in verified:
+            if attempts >= max_samples or len(rows) >= min(10, max_samples):
+                break
+            attempts += 1
+            sample = samples_dir / f"{digest}.apk"
+            try:
+                if not sample.is_file() or sample.is_symlink():
+                    raise SampleRejected("No local APK file staged for this IOC")
+                if sample.stat().st_size <= 0 or sample.stat().st_size > MAX_APK_BYTES:
+                    raise SampleRejected("Local APK violates size limits")
+                if file_sha256(sample) != digest:
+                    raise SampleRejected("Local APK SHA-256 does not match ThreatFox IOC")
+                vector = analyze_android_apk(sample, schema, analyzer=analyzer)
+                if len(vector) != 215 or any(bit not in (0, 1) for bit in vector):
+                    raise SampleRejected("Feature extractor returned a non-binary 215-bit vector")
+                reputation = enrichment[digest]
+                rows.append(vector)
+                feature_metadata.append({
+                    "sha256": digest,
+                    "vt_malicious_count": int(reputation["vt_malicious_count"]),
+                    "ha_threat_score": (
+                        float(reputation["ha_threat_score"])
+                        if str(reputation["ha_threat_score"]).strip().lower() not in ("", "not found")
+                        else "Not Found"
+                    ),
+                    "ha_verdict": reputation["ha_verdict"],
+                })
+            except Exception as exc:
+                cause = type(exc).__name__
+                failures[cause] = failures.get(cause, 0) + 1
+                print(f"MLOps skipped local candidate: {cause}", flush=True)
+
+    output.parent.mkdir(parents=True, exist_ok=True)
+    temporary = output.with_suffix(".part")
+    try:
+        temporary.write_text(json.dumps({
+            "feature_rows": rows,
+            "feature_metadata": feature_metadata,
+        }, separators=(",", ":"), allow_nan=False) + "\n", encoding="utf-8")
+        temporary.replace(output)
+    finally:
+        temporary.unlink(missing_ok=True)
+    print(f"MLOps RESULT: ThreatFox candidates={len(candidates)}; validated_local_apk_rows={len(rows)}; "
+          f"target_rows={min(10, max_samples)}.", flush=True)
+    return rows
 
 
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--recent", type=Path, required=True,
+                        help="ThreatFox get_iocs JSON response written by build_threatfox_hsb.py")
+    parser.add_argument("--samples-dir", type=Path, required=True,
+                        help="Separately authorized local directory containing <sha256>.apk files")
+    parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--max-samples", type=int, default=20)
+    parser.add_argument("--enrichment-csv", type=Path,
+                        default=Path(__file__).resolve().parents[1] / "data/enriched_threats.csv")
+    args = parser.parse_args()
+    extract_recent(args.recent, args.output, args.max_samples, samples_dir=args.samples_dir,
+                   enrichment_csv=args.enrichment_csv)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
 def load_enrichment_cache(path: Path) -> dict[str, dict[str, str]]:
     """Load provider metadata keyed by SHA-256; never infer a missing verdict."""
     if not path.is_file():
@@ -272,163 +332,3 @@ def has_complete_reputation(record: dict[str, str]) -> bool:
         return False
 
 
-def encrypted_zip_to_apk(contents: bytes, digest: str) -> bytes:
-    """Read one AES ZIP entry in memory, enforce size/hash; do not extractall."""
-    if len(contents) > MAX_DOWNLOAD_BYTES or not contents.startswith(b"PK\x03\x04"):
-        raise SampleRejected("Not a bounded encrypted sample ZIP")
-    import pyzipper
-    with pyzipper.AESZipFile(BytesIO(contents)) as archive:
-        members = [item for item in archive.infolist() if not item.is_dir()]
-        if len(members) != 1:
-            raise SampleRejected("Expected one malware sample per ZIP")
-        entry = members[0]
-        if (entry.file_size <= 0 or entry.file_size > MAX_APK_BYTES
-                or entry.is_dir() or ((entry.external_attr >> 16) & 0o170000) == 0o120000):
-            raise SampleRejected("ZIP member violates resource/symlink limits")
-        with archive.open(entry, pwd=b"infected") as source:
-            apk = source.read(MAX_APK_BYTES + 1)
-        if len(apk) != entry.file_size or len(apk) > MAX_APK_BYTES:
-            raise SampleRejected("APK decompression length mismatch")
-    if hashlib.sha256(apk).hexdigest() != digest:
-        raise SampleRejected("Sample SHA-256 does not match MalwareBazaar metadata")
-    with zipfile.ZipFile(BytesIO(apk)) as container:
-        names = set(container.namelist())
-        if "AndroidManifest.xml" not in names or "classes.dex" not in names:
-            raise SampleRejected("Not a DEX-backed Android APK")
-    return apk
-
-
-def download_sample(session, api_key: str, digest: str) -> bytes:
-    with session.post(
-        MALWAREBAZAAR_URL, headers={"Auth-Key": api_key, "User-Agent": "SafeMobile-Defensive-Research/1.0"},
-        data={"query": "get_file", "sha256_hash": digest},
-        stream=True, timeout=(12, 45), allow_redirects=False,
-    ) as response:
-        response.raise_for_status()
-        if response.headers.get("Content-Length", "").isdigit() and (
-                int(response.headers["Content-Length"]) > MAX_DOWNLOAD_BYTES):
-            raise SampleRejected("Downloaded ZIP exceeds byte budget")
-        out = BytesIO()
-        for chunk in response.iter_content(chunk_size=65536):
-            if not chunk:
-                continue
-            if out.tell() + len(chunk) > MAX_DOWNLOAD_BYTES:
-                raise SampleRejected("Downloaded ZIP exceeds byte budget")
-            out.write(chunk)
-        return out.getvalue()
-
-
-def extract_recent(path: Path, output: Path, max_samples: int = 20, *, session=None, analyzer=None,
-                   enrichment_csv: Path | None = None):
-    """Try recent then older APK metadata; allow at most 20 sample downloads."""
-    if not 10 <= max_samples <= 20:
-        raise ValueError("Sampling budget must be 10..20 APK attempts")
-    schema = schema_features()
-    recent = recent_apk_digests(path)
-    if enrichment_csv is None:
-        enrichment_csv = Path(__file__).resolve().parents[1] / "data/enriched_threats.csv"
-    enrichment = load_enrichment_cache(Path(enrichment_csv))
-    unverified = sum(1 for digest in recent if not has_complete_reputation(enrichment.get(digest, {})))
-    recent = [digest for digest in recent if has_complete_reputation(enrichment.get(digest, {}))]
-    print(f"MLOps discovery: {len(recent)} provider-verified APKs; skipped {unverified} without complete VT/HA reports.", flush=True)
-    key = os.environ.get("MALWAREBAZAAR_AUTH_KEY", "")
-    if not key:
-        raise ValueError("MalwareBazaar authorization not available")
-    if session is None:
-        import requests
-        session = requests.Session()
-
-    # Expand the candidate pool before downloading: the original workflow
-    # received only four recent APKs, and all reached Androguard but failed.
-    pool = list(dict.fromkeys(recent))
-    if len(pool) < max_samples:
-        try:
-            older = older_apk_digests(session, key, 100)
-            verified_older = [digest for digest in older if has_complete_reputation(enrichment.get(digest, {}))]
-            seen_pool = set(pool)
-            for digest in verified_older:
-                if digest not in seen_pool:
-                    pool.append(digest)
-                    seen_pool.add(digest)
-            print(f"MLOps discovery: {len(older)} older APK metadata entries; "
-                  f"{len(pool)} unique candidates.", flush=True)
-        except Exception as exc:
-            print(f"MLOps optional older-APK lookup unavailable ({type(exc).__name__}); "
-                  "continuing with recent candidates.", flush=True)
-
-    rows = []
-    feature_metadata = []
-    attempts = 0
-    failures: dict[str, int] = {}
-    target_rows = min(10, max_samples)
-    for digest in pool:
-        if attempts >= max_samples or len(rows) >= target_rows:
-            break
-        attempts += 1
-        stage = "download"
-        try:
-            zip_bytes = download_sample(session, key, digest)
-            stage = "decompress"
-            apk = encrypted_zip_to_apk(zip_bytes, digest)
-            del zip_bytes
-            stage = "parse"
-            with tempfile.TemporaryDirectory(prefix="safemobile-ml-apk-") as directory:
-                target = Path(directory) / "sample.apk"
-                target.write_bytes(apk)
-                del apk
-                vector = analyze_android_apk(target, schema, analyzer=analyzer)
-            stage = "validate"
-            if len(vector) != 215 or any(type(bit) is not int or bit not in (0, 1) for bit in vector):
-                raise SampleRejected("Extractor produced an invalid feature vector")
-            rows.append(vector)
-            reputation = enrichment[digest]
-            feature_metadata.append({
-                "sha256": digest,
-                "vt_malicious_count": int(reputation["vt_malicious_count"]),
-                "ha_threat_score": (
-                    float(reputation["ha_threat_score"])
-                    if str(reputation["ha_threat_score"]).strip().lower() not in ("", "not found")
-                    else "Not Found"
-                ),
-                "ha_verdict": reputation["ha_verdict"],
-            })
-        except Exception as exc:
-            # Do not print hash/filename/APK contents or uncensored tracebacks.
-            cause = f"{stage}:{type(exc).__name__}"
-            failures[cause] = failures.get(cause, 0) + 1
-            detail = (str(exc).splitlines()[0][:120]
-                      if isinstance(exc, (AttributeError, TypeError)) else "")
-            print(f"MLOps skipped candidate at {cause} {detail}", flush=True)
-            continue
-    output.parent.mkdir(parents=True, exist_ok=True)
-    tmp = output.with_suffix(".part")
-    try:
-        tmp.write_text(json.dumps({"feature_rows": rows, "feature_metadata": feature_metadata},
-                                   separators=(",", ":"), allow_nan=False) + "\n", encoding="utf-8")
-        tmp.replace(output)
-    finally:
-        tmp.unlink(missing_ok=True)
-    print(f"MLOps RESULT: candidates={len(pool)} downloads_attempted={attempts} "
-          f"validated_rows={len(rows)} target_rows={target_rows}; "
-          f"failure_counts={json.dumps(failures, sort_keys=True)}", flush=True)
-    if not rows:
-        # The enclosing workflow already has continue-on-error, so signing
-        # and publishing the independent hash DB are never affected.
-        raise SampleRejected("No validated Android feature rows; dispatch deliberately skipped")
-    return rows
-
-
-def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--recent", type=Path, required=True)
-    parser.add_argument("--output", type=Path, required=True)
-    parser.add_argument("--max-samples", type=int, default=20)
-    parser.add_argument("--enrichment-csv", type=Path,
-                        default=Path(__file__).resolve().parents[1] / "data/enriched_threats.csv")
-    args = parser.parse_args()
-    extract_recent(args.recent, args.output, args.max_samples, enrichment_csv=args.enrichment_csv)
-    return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())
