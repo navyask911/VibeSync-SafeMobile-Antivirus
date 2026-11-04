@@ -28,7 +28,7 @@ object SecurityTokens {
     val cardElevation: Dp = 0.dp
     val cardBorderWidth: Dp = 1.dp
     val cardShape = RoundedCornerShape(20.dp)
-    val tileShape = RoundedCornerShape(16.dp)
+    val tileShape = RoundedCornerShape(20.dp)
     val iconTileShape = RoundedCornerShape(12.dp)
     val chipShape = RoundedCornerShape(50)
 
