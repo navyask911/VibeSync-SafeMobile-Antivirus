@@ -37,6 +37,22 @@ class HashMatcher {
         sha256: String,
         hashes: Collection<String>,
         bloomFilter: BloomFilter<String>
+    ): HashDetectionResult = matchNormalizedDigests(
+        md5, sha256, hashes.toHashSet(), bloomFilter
+    )
+
+    fun matchDigests(
+        md5: String,
+        sha256: String,
+        hashes: Set<String>,
+        bloomFilter: BloomFilter<String>
+    ): HashDetectionResult = matchNormalizedDigests(md5, sha256, hashes, bloomFilter)
+
+    private fun matchNormalizedDigests(
+        md5: String,
+        sha256: String,
+        exactHashes: Set<String>,
+        bloomFilter: BloomFilter<String>
     ): HashDetectionResult {
         val normalizedMd5 = md5.lowercase(Locale.ROOT)
         val normalizedSha256 = sha256.lowercase(Locale.ROOT)
@@ -44,8 +60,6 @@ class HashMatcher {
         if (normalizedSha256 == EICAR_SHA256) {
             return HashDetectionResult(true, EICAR_MALWARE_NAME)
         }
-
-        val exactHashes = if (hashes is Set<String>) hashes else hashes.toHashSet()
         val sha256Match = bloomFilter.mightContain(normalizedSha256) &&
             normalizedSha256 in exactHashes
         val md5Match = bloomFilter.mightContain(normalizedMd5) &&
