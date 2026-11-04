@@ -416,7 +416,8 @@ internal fun SafeMobileSettingsPanel(
     onAddCustomFolder: () -> Unit = {},
     subRoute: SettingsSubRoute = SettingsSubRoute.ROOT,
     onSubRouteChanged: (SettingsSubRoute) -> Unit = {},
-    onOpenPro: () -> Unit = {}
+    onOpenPro: () -> Unit = {},
+    onReviewThreatFindings: () -> Unit = {}
 ) {
     val context = LocalContext.current
     fun openOfficialWebsite(url: String) {
@@ -568,6 +569,13 @@ internal fun SafeMobileSettingsPanel(
                                 uncheckedBorderColor = MaterialTheme.colorScheme.outline
                             )
                         )
+                    }
+                    OutlinedButton(
+                        onClick = onReviewThreatFindings,
+                        enabled = globalThreatIntelligenceEnabled,
+                        modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)
+                    ) {
+                        Text(stringResource(R.string.latest_results))
                     }
                     if (adPrivacyOptionsRequired && !isProForAds) {
                         OutlinedButton(onClick = onShowAdPrivacyOptions, modifier = Modifier.fillMaxWidth()) {
