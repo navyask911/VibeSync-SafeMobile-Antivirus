@@ -590,7 +590,7 @@ import kotlinx.coroutines.launch
     "home" -> R.string.brand_title
     "tools" -> R.string.analytics_title
     "settings" -> R.string.nav_settings
-    "scan" -> R.string.v152_scan_results_title
+    "scan" -> R.string.latest_results
     "sources" -> R.string.download_interceptor_label
     "sentinel" -> R.string.sentinel_scope_title
     "phishing" -> R.string.nav_phishing
@@ -604,10 +604,10 @@ import kotlinx.coroutines.launch
     else -> R.string.brand_title
    }
    val toolbarSubtitleResource: Int? = when (selectedDestination) {
-    "home" -> if (adMobState.isPro) R.string.v152_toolbar_pro_plan else R.string.v152_toolbar_free_plan
-    "tools" -> R.string.v152_tools_header_subtitle
-    "settings" -> R.string.v152_settings_header_subtitle
-    "scan" -> R.string.v152_scan_results_subtitle
+    "home" -> if (adMobState.isPro) R.string.pro_title else R.string.security_dashboard_subtitle
+    "tools" -> R.string.analytics_subtitle
+    "settings" -> R.string.theme_appearance_description
+    "scan" -> R.string.scan_explanation
     else -> null
    }
    Row(
@@ -1113,7 +1113,7 @@ import kotlinx.coroutines.launch
     NavigationBar(containerColor = MaterialTheme.colorScheme.surface, tonalElevation = 0.dp) {
      val destinations = listOf(
       Triple("dashboard", R.string.nav_home, R.drawable.ic_nav_home),
-      Triple("tools", R.string.v152_nav_tools, R.drawable.ic_nav_tools),
+      Triple("tools", R.string.v140_analytics_tools, R.drawable.ic_nav_tools),
       Triple("settings", R.string.nav_settings, R.drawable.ic_nav_settings)
      )
      destinations.forEach { destination ->
@@ -1372,15 +1372,15 @@ internal fun ScanResultsScreen(
    style=MaterialTheme.typography.bodySmall
   )
   Row(horizontalArrangement=Arrangement.spacedBy(10.dp), modifier=Modifier.fillMaxWidth()) {
-   ScanVerdictCountTile(threatTotal, R.drawable.ic_verdict_threat, R.string.v152_verdict_threat, MaterialTheme.colorScheme.error,
+   ScanVerdictCountTile(threatTotal, R.drawable.ic_verdict_threat, R.string.verdict_threat, MaterialTheme.colorScheme.error,
     modifier=Modifier.weight(1f))
-   ScanVerdictCountTile(reviewTotal, R.drawable.ic_verdict_suspicious, R.string.v152_verdict_suspicious, MaterialTheme.colorScheme.tertiary,
+   ScanVerdictCountTile(reviewTotal, R.drawable.ic_verdict_suspicious, R.string.verdict_suspicious, MaterialTheme.colorScheme.tertiary,
     modifier=Modifier.weight(1f))
   }
   Row(horizontalArrangement=Arrangement.spacedBy(10.dp), modifier=Modifier.fillMaxWidth()) {
-   ScanVerdictCountTile(noMatchTotal, R.drawable.ic_verdict_no_match, R.string.v152_verdict_no_match, MaterialTheme.colorScheme.onSurfaceVariant,
+   ScanVerdictCountTile(noMatchTotal, R.drawable.ic_verdict_no_match, R.string.verdict_no_match, MaterialTheme.colorScheme.onSurfaceVariant,
     modifier=Modifier.weight(1f))
-   ScanVerdictCountTile(notScannedCount, R.drawable.ic_verdict_not_scanned, R.string.v152_verdict_not_scanned, MaterialTheme.colorScheme.onSurfaceVariant,
+   ScanVerdictCountTile(notScannedCount, R.drawable.ic_verdict_not_scanned, R.string.verdict_not_scanned, MaterialTheme.colorScheme.onSurfaceVariant,
     modifier=Modifier.weight(1f))
   }
   Text(stringResource(R.string.scan_explanation),

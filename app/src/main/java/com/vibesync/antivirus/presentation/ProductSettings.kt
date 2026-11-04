@@ -461,7 +461,7 @@ internal fun SafeMobileSettingsPanel(
                 shape = RoundedCornerShape(20.dp)) {
                 Column(Modifier.fillMaxWidth().padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Text(stringResource(R.string.v152_settings_app_theme),
+                    Text(stringResource(R.string.appearance_title),
                         style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         AppTheme.entries.forEach { option ->
@@ -579,13 +579,8 @@ internal fun SafeMobileSettingsPanel(
                         enabled = globalThreatIntelligenceEnabled,
                         modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)
                     ) {
-                        Text(stringResource(R.string.v152_settings_donate_selected))
+                        Text(stringResource(R.string.latest_results))
                     }
-                    Text(
-                        stringResource(R.string.v152_settings_donate_hint),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
                     if (adPrivacyOptionsRequired && !isProForAds) {
                         OutlinedButton(onClick = onShowAdPrivacyOptions, modifier = Modifier.fillMaxWidth()) {
                             Text(stringResource(R.string.ad_privacy_options))

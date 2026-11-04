@@ -59,9 +59,9 @@ internal fun ProtectionToolsHub(
         verticalArrangement = Arrangement.spacedBy(18.dp)
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text(stringResource(R.string.v152_tools_main_heading),
+            Text(stringResource(R.string.analytics_title),
                 style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
-            Text(stringResource(R.string.v152_tools_main_description),
+            Text(stringResource(R.string.analytics_subtitle),
                 style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
         CyberCard(modifier = Modifier.fillMaxWidth(), shape = SecurityTokens.cardShape) {
@@ -76,9 +76,9 @@ internal fun ProtectionToolsHub(
                             modifier = Modifier.padding(10.dp).size(24.dp))
                     }
                     Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                        Text(stringResource(R.string.v152_tools_start_scan),
+                        Text(stringResource(R.string.security_scan_now),
                             style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                        Text(stringResource(R.string.v152_tools_scan_card_description),
+                        Text(stringResource(R.string.scan_explanation),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
@@ -114,17 +114,17 @@ internal fun ProtectionToolsHub(
             }
         }
         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Text(stringResource(R.string.v152_tools_review_manage),
+            Text(stringResource(R.string.nav_analytics),
                 style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
             CyberCard(modifier = Modifier.fillMaxWidth(), shape = SecurityTokens.cardShape) {
                 Column(Modifier.padding(horizontal = 16.dp)) {
                     ToolHubRow({ Icon(painterResource(R.drawable.ic_home_device_posture), null, tint = MaterialTheme.colorScheme.secondary) }, R.string.posture_title, R.string.posture_risk_note,
                         stringResource(R.string.v140_pending_actions, pendingActions), MaterialTheme.colorScheme.tertiary) { onOpen("posture") }
-                    ToolHubRow({ Icon(painterResource(R.drawable.ic_home_apps), null, tint = MaterialTheme.colorScheme.secondary) }, R.string.v152_tools_apps_permissions, R.string.apps_inventory_empty_body,
+                    ToolHubRow({ Icon(painterResource(R.drawable.ic_home_apps), null, tint = MaterialTheme.colorScheme.secondary) }, R.string.nav_apps, R.string.apps_inventory_empty_body,
                         if (inventoryLoaded) pluralStringResource(R.plurals.l10n_apps, installedAppsCount, installedAppsCount) else stringResource(R.string.apps_inventory_empty)) { onOpen("apps") }
                     ToolHubRow({ Icon(painterResource(R.drawable.ic_home_quarantine), null, tint = MaterialTheme.colorScheme.secondary) }, R.string.quarantine_vault_title, R.string.quarantine_vault_description,
                         pluralStringResource(R.plurals.l10n_files, quarantinedFilesCount, quarantinedFilesCount)) { onOpen("quarantine") }
-                    ToolHubRow({ Icon(Icons.Outlined.History, null, tint = MaterialTheme.colorScheme.secondary) }, R.string.nav_history, R.string.v152_tools_history_description,
+                    ToolHubRow({ Icon(Icons.Outlined.History, null, tint = MaterialTheme.colorScheme.secondary) }, R.string.nav_history, R.string.history_empty,
                         stringResource(R.string.ui_view_scan_results)) { onOpen("history") }
                     ToolHubRow({ Icon(Icons.Outlined.Assessment, null, tint = MaterialTheme.colorScheme.secondary) }, R.string.detection_capabilities_title, R.string.detection_capabilities_title,
                         stringResource(R.string.ui_view_scan_results)) { onOpen("capabilities") }
