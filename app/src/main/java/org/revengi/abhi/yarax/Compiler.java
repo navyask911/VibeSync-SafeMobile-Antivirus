@@ -22,7 +22,9 @@ public class Compiler {
     public void newNamespace(String namespace) {
         if (nativePtr == 0) throw new IllegalStateException("Compiler is closed");
         if (namespace == null) throw new IllegalArgumentException("Namespace cannot be null");
-        newNamespace(nativePtr, namespace);
+        if (createNamespace(nativePtr, namespace) == 0) {
+            throw new RuntimeException("Failed to create YARA-X namespace");
+        }
     }
 
     public String defineGlobal(String name, String value) {
@@ -50,7 +52,7 @@ public class Compiler {
 
     private static native long create();
     private static native String addSource(long ptr, String source);
-    private static native long newNamespace(long ptr, String namespace);
+    // Native symbol name follows the pinned Rust JNI export: Compiler_createNamespace.\n    private static native long createNamespace(long ptr, String namespace);
     private static native String defineGlobal(long ptr, String name, String value);
     private static native long build(long ptr);
     private static native void destroy(long ptr);
