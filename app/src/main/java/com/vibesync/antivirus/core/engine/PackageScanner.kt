@@ -51,7 +51,8 @@ class PackageScanner(
  private val integrityChecker = IntegrityChecker(context)
  private val trustedAppStore = TrustedAppStore(context)
  private val deepStaticAnalyzer = DeepStaticAnalyzer()
- private val machineLearningScanner = MachineLearningScanner(context)
+ private val drebinFeatureExtractor = com.vibesync.antivirus.engine.ml.DrebinFeatureExtractor(context)
+ private val tfliteInferenceEngine = com.vibesync.antivirus.engine.ml.TfliteInferenceEngine(context)
  private val yaraXScanner = YaraXScanner(context)
 
  private data class BundledHashSnapshot(
@@ -172,16 +173,10 @@ class PackageScanner(
   )
  }
 
- private suspend fun withMachineLearning(report: RiskReport, apk: File, info: PackageInfo?): RiskReport {
-  val prediction = machineLearningScanner.scan(apk, info) ?: return report
-  val percent = (prediction.probability * 100).roundToInt().coerceIn(0, 100)
-  val mlFinding = if (prediction.probability > MachineLearningScanner.THRESHOLD) listOf(
-   RiskFinding("ML_HEURISTIC_HIGH", RiskSeverity.HIGH,
-    "ML static feature heuristic scored $percent%; advisory only, not proof of malware.", percent)
-  ) else emptyList()
-  return report.copy(mlProbability = prediction.probability,
-   findings = report.findings + mlFinding,
-   riskScore = maxOf(report.riskScore, if (mlFinding.isEmpty()) 0 else 65))
+ private suspend fun runMachineLearning(apk: File): Float? {
+  val features = drebinFeatureExtractor.extractFeaturesAsync(apk)
+  // Phase 3 records the research probability only. Phase 4 owns any verdict fusion.
+  return tfliteInferenceEngine.runInference(features)
  }
 
  fun installedAppInventory(): List<InstalledAppItem> {
@@ -292,6 +287,9 @@ class PackageScanner(
    )
   }
 
+  val mlProbability = if (file.extension.equals("apk", ignoreCase = true)) {
+   runMachineLearning(file)
+  } else null
   val staticReport = if (file.extension.equals("apk", ignoreCase = true)) {
     val archiveInfo = try {
      val flags = PackageManager.GET_PERMISSIONS or PackageManager.GET_SERVICES or PackageManager.GET_ACTIVITIES or PackageManager.GET_RECEIVERS or PackageManager.GET_PROVIDERS or signingFlags()
@@ -305,7 +303,7 @@ class PackageScanner(
     archiveInfo?.applicationInfo?.apply { sourceDir = file.absolutePath; publicSourceDir = file.absolutePath }
     val baseReport = deepStaticAnalyzer.analyze(archiveInfo, file, archiveInfo?.let(::isDebugSigned) == true)
     val mergedReport = yaraXResult?.let { mergeYaraXFindings(baseReport, it) } ?: baseReport
-    withMachineLearning(mergedReport, file, archiveInfo)
+    mergedReport.copy(mlProbability = mlProbability)
    } else null
    val staticReasons = staticReport?.findings.orEmpty().map { "[${it.ruleId}] ${it.evidence} (confidence ${it.confidence}%)" }
    val staticScore = staticReport?.riskScore ?: 0
@@ -431,9 +429,10 @@ class PackageScanner(
    )
   }
 
+  val mlProbability = runMachineLearning(apk)
   val baseDeepReport = deepStaticAnalyzer.analyze(info, apk, debugSigned)
   val mergedDeepReport = mergeYaraXFindings(baseDeepReport, yaraXResult)
-  val deepReport = withMachineLearning(mergedDeepReport, apk, info)
+  val deepReport = mergedDeepReport.copy(mlProbability = mlProbability)
   val deepReasons = deepReport.findings.map { "[${it.ruleId}] ${it.evidence} (confidence ${it.confidence}%)" }
   reasons += deepReasons
   val combinedRiskScore = maxOf(adjustedRiskScore, deepReport.riskScore)

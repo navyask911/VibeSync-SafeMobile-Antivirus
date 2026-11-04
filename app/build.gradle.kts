@@ -1,7 +1,10 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.util.Base64
-import java.net.URL
 import java.security.MessageDigest
+import java.net.URL
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
+import java.nio.file.AtomicMoveNotSupportedException
 plugins {
  id("com.android.application")
  id("org.jetbrains.kotlin.android")
@@ -103,14 +106,11 @@ require(yaraXAndroidAbis.isNotEmpty() &&
 val prepareYaraXNativeSource = tasks.register("prepareYaraXNativeSource") {
     val sourceDirectory = yaraXSourceDirectory.get().asFile
     val revisionMarker = sourceDirectory.resolve(".safemobile-source-revision")
-    val dexPatchMarker = sourceDirectory.resolve(".safemobile-dex-patches-applied")
     inputs.property("yaraxAndroidRevision", yaraXSourceRevision)
     outputs.dir(yaraXSourceDirectory)
     outputs.upToDateWhen {
         revisionMarker.isFile &&
             revisionMarker.readText().trim() == yaraXSourceRevision &&
-            dexPatchMarker.isFile &&
-            dexPatchMarker.readText().trim() == yaraXSourceRevision &&
             sourceDirectory.resolve("src/lib.rs").isFile &&
             sourceDirectory.resolve("yarax_patches/yara-x/Cargo.toml").isFile
     }
@@ -146,14 +146,6 @@ val prepareYaraXNativeSource = tasks.register("prepareYaraXNativeSource") {
             commandLine("git", "submodule", "update", "--init", "--recursive", "--depth", "1")
         }.assertNormalExitValue()
 
-        // The nested yarax_patches submodule carries the pinned DEX parser/protobuf
-        // compatibility patches required by the generated DexHeader bindings.
-        project.exec {
-            workingDir = sourceDirectory.resolve("yarax_patches")
-            commandLine("make", "update-yarax")
-        }.assertNormalExitValue()
-        dexPatchMarker.writeText(yaraXSourceRevision + System.lineSeparator())
-
         check(sourceDirectory.resolve("src/lib.rs").isFile) {
             "Pinned YARA-X Android JNI source is incomplete."
         }
@@ -164,10 +156,51 @@ val prepareYaraXNativeSource = tasks.register("prepareYaraXNativeSource") {
     }
 }
 
+// The upstream JNI crate's build.rs intentionally skips patching when the nested
+// YARA-X submodule already has local changes. Gradle caches can restore that tree
+// in an unpatched state, so never rely on the upstream dirty-tree heuristic.
+// Reset the pinned nested checkout and apply the complete patch set before cargo
+// starts; build.rs will then correctly observe the applied patches and leave them.
+val prepareYaraXPatches = tasks.register("prepareYaraXPatches") {
+    group = "build"
+    description = "Apply the pinned YARA-X DEX protobuf/parser patches deterministically."
+    dependsOn(prepareYaraXNativeSource)
+    doLast {
+        val patchesDirectory = yaraXSourceDirectory.get().asFile.resolve("yarax_patches")
+        val patchedYaraXDirectory = patchesDirectory.resolve("yara-x")
+        check(patchesDirectory.resolve("Makefile").isFile &&
+            patchesDirectory.resolve("patches").isDirectory &&
+            patchedYaraXDirectory.resolve(".git").exists()) {
+            "Pinned YARA-X patch submodule is incomplete."
+        }
+
+        project.exec {
+            workingDir = patchesDirectory
+            commandLine("make", "patch")
+        }.assertNormalExitValue()
+
+        val dexParser = patchedYaraXDirectory.resolve("lib/src/modules/dex/parser.rs")
+            .takeIf { it.isFile }?.readText()
+            ?: throw GradleException("Patched YARA-X DEX parser is missing.")
+        val dexProto = patchedYaraXDirectory.resolve("lib/src/modules/protos/dex.proto")
+            .takeIf { it.isFile }?.readText()
+            ?: throw GradleException("Patched YARA-X DEX protobuf schema is missing.")
+        check(
+            dexParser.contains("item.set_interfaces_off(interfaces_off)") &&
+                dexParser.contains("result.set_string_ids_size(header.string_ids_size)") &&
+                dexParser.contains("let string_ids = Self::parse_string_ids(data, &header)") &&
+                dexProto.contains("repeated StringId string_ids = 10;") &&
+                dexProto.contains("message StringId")
+        ) {
+            "Pinned YARA-X DEX patch set did not apply completely."
+        }
+    }
+}
+
 val buildYaraXNative = tasks.register<Exec>("buildYaraXNative") {
     group = "build"
     description = "Build the pinned YARA-X JNI library for supported Android ABIs."
-    dependsOn(prepareYaraXNativeSource)
+    dependsOn(prepareYaraXPatches)
     workingDir = yaraXSourceDirectory.get().asFile
     inputs.dir(yaraXSourceDirectory)
     inputs.property("androidAbis", yaraXAndroidAbis)
@@ -207,45 +240,126 @@ android.sourceSets.getByName("main").assets.srcDir(stageBenchmarkReport)
 // AGP's vital lint tasks inspect assets separately from merge<Variant>Assets.
 // Keep an explicit dependency as a belt-and-braces guard across AGP upgrades.
 
-// The 18,584-byte, SHA-pinned Drebin 215 research model is staged into the APK at
-// BUILD time. No network is used by inference, and no downloaded model is trusted
-// without exact checksum verification. No untrained fixture is shipped.
-val researchModelAssetDirectory = layout.buildDirectory.dir("generated/research-ml/assets")
-val researchModelSha = "8b66adaf01a939c26d5a756e66f53fe0d6e85e1a06ec97166579138c6ce47061"
-val researchSchemaSha = "ffb386be14adf8c0af1bb96032e5485fcc8fd5b401a24488c5896e2d5ea425ac"
-val stageResearchModel = tasks.register("stageResearchModel") {
-    inputs.property("release", "v1.0.1-model")
-    inputs.property("modelSha256", researchModelSha)
-    inputs.property("schemaSha256", researchSchemaSha)
-    inputs.file("src/main/assets/feature_schema.json")
-    outputs.dir(researchModelAssetDirectory)
+// Fetch the immutable, publisher-approved research release from the separate ML repository.
+// The assets live only in the local build workspace (ignored by Git); they are never committed
+// to this application repository. The model file is renamed to model.tflite for the Android app.
+val mlModelUrl = "https://github.com/navyask911/safemobile-Antivirus-Trained-ML-Data-of-Android-malware/releases/download/v1.0.1-model/malware_model.tflite"
+val mlSchemaUrl = "https://github.com/navyask911/safemobile-Antivirus-Trained-ML-Data-of-Android-malware/releases/download/v1.0.1-model/feature_schema.json"
+val mlModelSha256 = "8b66adaf01a939c26d5a756e66f53fe0d6e85e1a06ec97166579138c6ce47061"
+val mlSchemaSha256 = "ffb386be14adf8c0af1bb96032e5485fcc8fd5b401a24488c5896e2d5ea425ac"
+val mlModelSize = 18_584L
+val mlSchemaSize = 6_856L
+
+val downloadMlAssets = tasks.register("downloadMlAssets") {
+    group = "build setup"
+    description = "Download and SHA-256 verify the approved v1.0.1-model assets from the ML repository."
+    val modelFile = layout.projectDirectory.file("src/main/assets/model.tflite").asFile
+    val schemaFile = layout.projectDirectory.file("src/main/assets/feature_schema.json").asFile
+    inputs.property("mlRelease", "v1.0.1-model")
+    inputs.property("modelUrl", mlModelUrl)
+    inputs.property("schemaUrl", mlSchemaUrl)
+    inputs.property("modelSha256", mlModelSha256)
+    inputs.property("schemaSha256", mlSchemaSha256)
+    outputs.files(modelFile, schemaFile)
+
+    fun sha256(bytes: ByteArray): String =
+        MessageDigest.getInstance("SHA-256").digest(bytes)
+            .joinToString("") { byte -> "%02x".format(byte.toInt() and 0xff) }
+
+    fun isValid(asset: File, expectedSize: Long, expectedSha: String): Boolean =
+        asset.isFile && asset.length() == expectedSize &&
+            runCatching { sha256(asset.readBytes()) == expectedSha }.getOrDefault(false)
+
+    outputs.upToDateWhen {
+        isValid(modelFile, mlModelSize, mlModelSha256) &&
+            isValid(schemaFile, mlSchemaSize, mlSchemaSha256)
+    }
+
     doLast {
-        val modelUrl = "https://github.com/navyask911/safemobile-Antivirus-Trained-ML-Data-of-Android-malware/releases/download/v1.0.1-model/malware_model.tflite"
-        val connection = URL(modelUrl).openConnection().apply {
-            connectTimeout = 30000
-            readTimeout = 60000
+        fun downloadAndVerify(
+            sourceUrl: String,
+            destination: File,
+            expectedSize: Long,
+            expectedSha: String,
+            maxBytes: Long
+        ) {
+            check(destination.parentFile.mkdirs() || destination.parentFile.isDirectory) {
+                "Could not create ML asset directory: ${destination.parentFile}"
+            }
+            val temporary = File(destination.parentFile, destination.name + ".download")
+            temporary.delete()
+            try {
+                val connection = URL(sourceUrl).openConnection().apply {
+                    connectTimeout = 20_000
+                    readTimeout = 45_000
+                    useCaches = false
+                    setRequestProperty("User-Agent", "SafeMobile-Gradle-ML-Bridge")
+                }
+                connection.getInputStream().buffered().use { input ->
+                    temporary.outputStream().buffered().use { output ->
+                        val buffer = ByteArray(8 * 1024)
+                        var total = 0L
+                        while (true) {
+                            val count = input.read(buffer)
+                            if (count < 0) break
+                            if (count == 0) continue
+                            total += count
+                            require(total <= maxBytes) {
+                                "ML release asset exceeded its download size limit: $sourceUrl"
+                            }
+                            output.write(buffer, 0, count)
+                        }
+                    }
+                }
+
+                val bytes = temporary.readBytes()
+                require(bytes.size.toLong() == expectedSize) {
+                    "Unexpected ML asset size for ${destination.name}: ${bytes.size}"
+                }
+                require(sha256(bytes) == expectedSha) {
+                    "SHA-256 mismatch for ML asset ${destination.name}; refusing to package it."
+                }
+                if (destination.exists()) destination.delete()
+                try {
+                    Files.move(
+                        temporary.toPath(),
+                        destination.toPath(),
+                        StandardCopyOption.REPLACE_EXISTING,
+                        StandardCopyOption.ATOMIC_MOVE
+                    )
+                } catch (_: AtomicMoveNotSupportedException) {
+                    Files.move(temporary.toPath(), destination.toPath(), StandardCopyOption.REPLACE_EXISTING)
+                }
+            } finally {
+                temporary.delete()
+            }
         }
-        val bytes = connection.getInputStream().use { input ->
-            input.readNBytes(18585)
+
+        downloadAndVerify(
+            mlModelUrl,
+            modelFile,
+            mlModelSize,
+            mlModelSha256,
+            20L * 1024 * 1024
+        )
+        require(String(modelFile.readBytes(), 4, 4, Charsets.US_ASCII) == "TFL3") {
+            "Downloaded ML model is not a TensorFlow Lite flatbuffer."
         }
-        fun sha256(data: ByteArray): String =
-            MessageDigest.getInstance("SHA-256").digest(data)
-                .joinToString("") { byte -> "%02x".format(byte.toInt() and 0xff) }
-        require(bytes.size == 18584 && sha256(bytes) == researchModelSha) {
-            "Rejected research ML release artifact: size/SHA256 did not match pin"
-        }
-        require(String(bytes, 4, 4, Charsets.US_ASCII) == "TFL3") {
-            "Rejected research ML artifact: invalid TensorFlow Lite header"
-        }
-        val schemaBytes = file("src/main/assets/feature_schema.json").readBytes()
-        require(sha256(schemaBytes) == researchSchemaSha) {
-            "Rejected research ML release: 215-feature schema SHA256 mismatch"
-        }
-        val dest = researchModelAssetDirectory.get().asFile.apply { mkdirs() }
-        dest.resolve("malware_model.tflite").writeBytes(bytes)
+        downloadAndVerify(
+            mlSchemaUrl,
+            schemaFile,
+            mlSchemaSize,
+            mlSchemaSha256,
+            32L * 1024
+        )
+        logger.lifecycle("Downloaded and verified ML release v1.0.1-model into app/src/main/assets/.")
     }
 }
-android.sourceSets.getByName("main").assets.srcDir(stageResearchModel)
+
+// The standard Android preBuild lifecycle cannot start until both verified ML assets exist.
+tasks.named("preBuild").configure {
+    dependsOn(downloadMlAssets)
+}
 
 // All AGP model writers, analyzers, lint report and asset merger tasks must
 // wait for generated inputs; never disable Android lint or Gradle validation.
@@ -253,7 +367,7 @@ tasks.matching {
     (it.name.startsWith("merge") && it.name.endsWith("Assets")) ||
         it.name.contains("Lint") || it.name.startsWith("lint")
 }.configureEach {
-    dependsOn(stageBenchmarkReport, stageResearchModel)
+    dependsOn(stageBenchmarkReport, downloadMlAssets)
 }
 
 kapt { correctErrorTypes = true }
@@ -289,7 +403,8 @@ dependencies {
  // Apache-2.0: KeyStore-backed encrypted local device-bound entitlement.
  implementation("androidx.security:security-crypto:1.1.0")
  // TensorFlow Lite 2.17.0 is local inference only; no model training or network calls.
- implementation("org.tensorflow:tensorflow-lite:2.17.0")
+ implementation("org.tensorflow:tensorflow-lite:2.14.0")
+ implementation("org.tensorflow:tensorflow-lite-support:0.4.4")
  // Apache-2.0 OkHttp is confined to the opt-in weekly model download worker.
  implementation("com.squareup.okhttp3:okhttp:4.12.0")
  // BSD-3-Clause: structured read-only DEX parsing of 215 research features.
