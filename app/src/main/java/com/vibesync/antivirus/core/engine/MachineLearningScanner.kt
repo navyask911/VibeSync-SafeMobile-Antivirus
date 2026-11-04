@@ -11,14 +11,16 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
-import org.json.JSONObject
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.Interpreter
 
 /**
- * Fully offline, typed 215-feature extraction. The downloadable research model is never
- * promoted to a production detector; an independently validated, APK-signed metadata
- * manifest is required before ANY ML result can contribute to risk scoring.
+ * Fully offline, typed 215-feature extraction. The approved research model is
+ * retrieved from the separate ML repository by the Gradle build bridge and pinned
+ * by model/schema SHA-256. Release metadata is source-pinned; the model remains
+ * research-only and production classification stays disabled until independent
+ * contemporary APK validation and approval.
+ *
  * APKs are not read into memory in their entirety: feature extraction streams
  * bounded ZIP/DEX entries, and the production model gate skips inactive models.
  */
@@ -92,45 +94,62 @@ class MachineLearningScanner(context: Context) {
             }
         }
 
+    /**
+     * Metadata mirrored from the immutable v1.0.1-model release contract.
+     * The research candidate remains deliberately unvalidated and production-disabled.
+     * Any production activation requires a reviewed source change after independent validation.
+     */
     private fun validatedModelBytes(schema: List<String>, allowResearch: Boolean = false): ByteArray? {
-        val metadata = app.assets.open("malware_model.json").bufferedReader().use {
-            JSONObject(it.readText())
+        val approvedProduction = MODEL_VALIDATED && MODEL_PRODUCTION_READY &&
+            MODEL_STATUS == "validated_production"
+        val approvedResearch = allowResearch && MODEL_TRAINED &&
+            !MODEL_VALIDATED && !MODEL_PRODUCTION_READY &&
+            !MODEL_DUMMY_UNTRAINED && MODEL_STATUS == "research_candidate"
+        if ((!approvedProduction && !approvedResearch) || schema.size != FEATURE_COUNT) return null
+
+        val schemaBytes = app.assets.open(SCHEMA_ASSET_NAME).use { input ->
+            input.readBytes().takeIf { it.size in 100..MAX_SCHEMA_BYTES } ?: return null
         }
-        val approvedProduction = metadata.optBoolean("trained") &&
-            metadata.optBoolean("validated") && metadata.optBoolean("production_ready") &&
-            metadata.optString("status") == "validated_production"
-        val approvedResearch = allowResearch && metadata.optBoolean("trained") &&
-            !metadata.optBoolean("validated") && !metadata.optBoolean("production_ready") &&
-            !metadata.optBoolean("dummy_untrained", true) &&
-            metadata.optString("status") == "research_candidate"
-        if ((!approvedProduction && !approvedResearch) ||
-            metadata.optInt("schema_version") != 1 ||
-            metadata.optInt("feature_count") != schema.size) return null
-        val named = metadata.optJSONArray("features") ?: return null
-        if (named.length() != schema.size ||
-            schema.indices.any { index -> named.optString(index) != schema[index] }) return null
-        val expected = metadata.optString("model_sha256")
-        if (!Regex("[0-9a-f]{64}").matches(expected)) return null
-        val bytes = app.assets.open("malware_model.tflite").use { input ->
+        val schemaDigest = MessageDigest.getInstance("SHA-256").digest(schemaBytes)
+            .joinToString("") { "%02x".format(it.toInt() and 0xff) }
+        if (schemaDigest != APPROVED_SCHEMA_SHA256) return null
+
+        val bytes = app.assets.open(MODEL_ASSET_NAME).use { input ->
             val output = ByteArrayOutputStream()
             val buffer = ByteArray(8192)
             while (true) {
-                val n = input.read(buffer)
-                if (n < 0) break
-                if (output.size() + n >= MAX_BYTES) return null
-                output.write(buffer, 0, n)
+                val count = input.read(buffer)
+                if (count < 0) break
+                if (count == 0) continue
+                if (output.size().toLong() + count > MAX_BYTES) return null
+                output.write(buffer, 0, count)
             }
             output.toByteArray()
         }
-        if (bytes.size < 64 || String(bytes, 4, 4, Charsets.US_ASCII) != "TFL3") return null
+        if (bytes.size != APPROVED_MODEL_SIZE ||
+            String(bytes, 4, 4, Charsets.US_ASCII) != "TFL3") return null
         val digest = MessageDigest.getInstance("SHA-256").digest(bytes)
-            .joinToString("") { "%02x".format(it) }
-        return bytes.takeIf { digest == expected }
+            .joinToString("") { "%02x".format(it.toInt() and 0xff) }
+        return bytes.takeIf { digest == APPROVED_MODEL_SHA256 }
     }
 
     companion object {
         private const val MAX_BYTES = 20 * 1024 * 1024
+        private const val MAX_SCHEMA_BYTES = 32 * 1024
         private const val TOTAL_TIMEOUT_MS = 8000L
-        const val THRESHOLD = 0.85f // Legacy advisory threshold; never used while disabled.
+        private const val MODEL_ASSET_NAME = "model.tflite"
+        private const val SCHEMA_ASSET_NAME = "feature_schema.json"
+        private const val APPROVED_MODEL_SIZE = 18_584
+        private const val FEATURE_COUNT = 215
+        private const val APPROVED_MODEL_SHA256 =
+            "8b66adaf01a939c26d5a756e66f53fe0d6e85e1a06ec97166579138c6ce47061"
+        private const val APPROVED_SCHEMA_SHA256 =
+            "ffb386be14adf8c0af1bb96032e5485fcc8fd5b401a24488c5896e2d5ea425ac"
+        private const val MODEL_STATUS = "research_candidate"
+        private const val MODEL_TRAINED = true
+        private const val MODEL_VALIDATED = false
+        private const val MODEL_PRODUCTION_READY = false
+        private const val MODEL_DUMMY_UNTRAINED = false
+        const val THRESHOLD = 0.85f // Legacy advisory threshold; never used while production-disabled.
     }
 }

@@ -17,3 +17,10 @@ captures/
 
 # Transient TweetFeed hash list for one signed database workflow run.
 data/new_hashes.txt
+
+# ML model and feature-schema release assets are downloaded and verified by Gradle.
+# Keep them local to the build workspace; never commit them to the app repository.
+/app/src/main/assets/model.tflite
+/app/src/main/assets/malware_model.tflite
+/app/src/main/assets/feature_schema.json
+/app/src/main/assets/malware_model.json
