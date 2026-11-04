@@ -93,7 +93,7 @@ val yaraXSourceRevision = "b666fbc15ff67fba1ceaf5deb68d071b44a1cbfe"
 val yaraXSourceDirectory = layout.buildDirectory.dir("native/yarax_android")
 val yaraXGeneratedJniDirectory = layout.buildDirectory.dir("generated/yarax-jniLibs")
 val yaraXAndroidAbis = providers.gradleProperty("yaraxAndroidAbis").orNull
-    ?.split(",")?.map(String::trim)?.filter(String::isNotEmpty)?.distinct()
+    ?.split(",")?.map { it.trim() }?.filter { it.isNotEmpty() }?.distinct()
     ?: listOf("arm64-v8a", "armeabi-v7a", "x86_64")
 require(yaraXAndroidAbis.isNotEmpty() &&
     yaraXAndroidAbis.all { it in setOf("arm64-v8a", "armeabi-v7a", "x86_64") }) {
