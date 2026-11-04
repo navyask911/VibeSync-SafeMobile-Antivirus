@@ -15,6 +15,20 @@ This file records detection-engine-specific license decisions. The CI-generated 
 
 Before adding a dependency or dataset, review the exact distributed artifact's license and upstream source. An SBOM license field alone is not legal approval. No Hypatia/AGPL source code or data is copied.
 
+### YARA-X Android JNI wrapper and native engine
+
+- JNI wrapper: `RevEngiSquad/yarax_android`, pinned source revision
+  `b666fbc15ff67fba1ceaf5deb68d071b44a1cbfe`; BSD 3-Clause. License copy:
+  `app/src/main/assets/licenses/YARAX_ANDROID_BSD-3-Clause.txt`.
+- Native engine: `VirusTotal/yara-x`, included by the wrapper's pinned recursive
+  submodule; BSD 3-Clause. License copy:
+  `app/src/main/assets/licenses/YARA-X-BSD-3-Clause.txt`.
+- The Java JNI façade is vendored under `app/src/main/java/org/revengi/abhi/yarax/`.
+  Native libraries are built for Android ABIs during APK/AAB packaging from the
+  pinned upstream source. They are not downloaded or loaded at app runtime.
+- The build requires Git, Rust stable, cargo-ndk, Android NDK and the recursive
+  upstream submodules. A source/build failure fails native packaging closed.
+
 ### Inter variable font (current UI typography)
 
 - Upstream: https://github.com/rsms/inter — `docs/font-files/InterVariable.ttf`
