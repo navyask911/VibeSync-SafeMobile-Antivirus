@@ -594,18 +594,28 @@ import kotlinx.coroutines.launch
       androidx.compose.material3.Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.nav_settings))
      }
     }
-    Box(Modifier.size(42.dp).background(MaterialTheme.colorScheme.primaryContainer, RoundedCornerShape(14.dp)), contentAlignment = Alignment.Center) {
+    Box(Modifier.size(42.dp), contentAlignment = Alignment.Center) {
      androidx.compose.material3.Icon(
-      Icons.Default.Security,
+      painter = painterResource(R.drawable.ic_home_brand),
       contentDescription = stringResource(R.string.app_name),
-      tint = MaterialTheme.colorScheme.primary,
-      modifier = Modifier.size(28.dp)
+      tint = MaterialTheme.colorScheme.secondary,
+      modifier = Modifier.size(30.dp)
      )
     }
+    val headerTitle = when (selectedDestination) {
+     "tools" -> R.string.tools_header_title_ux
+     "settings" -> R.string.settings_header_title_ux
+     else -> R.string.brand_title
+    }
+    val headerSubtitle = when (selectedDestination) {
+     "tools" -> R.string.tools_header_subtitle_ux
+     "settings" -> R.string.settings_header_subtitle_ux
+     else -> if (adMobState.isPro) R.string.home_header_subtitle_pro else R.string.home_header_subtitle_free
+    }
     Column(Modifier.padding(start = 10.dp).weight(1f)) {
-     Text(stringResource(R.string.brand_title), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold,
+     Text(stringResource(headerTitle), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold,
       color = MaterialTheme.colorScheme.onSurface)
-     Text(stringResource(R.string.brand_subtitle), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
+     Text(stringResource(headerSubtitle), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
     }
     IconButton(onClick = { navigateToDestination("pro") }) {
      androidx.compose.material3.Icon(Icons.Default.WorkspacePremium,
@@ -627,7 +637,7 @@ import kotlinx.coroutines.launch
            installSentinelActive = securityPrefs.getBoolean(SafeMobileApp.KEY_INSTALL_SENTINEL_ENABLED, false),
            onOpenAdvisor = { navigateToDestination("advisor", parentTabOverride = "dashboard") },
            onOpenPro = { navigateToDestination("pro") },
-           onScan = { requestPrivacyAcknowledgement { vm.scanFull() }; navigateToDestination("scan") },
+           onScan = { requestPrivacyAcknowledgement { vm.scanFull(); navigateToDestination("scan") } },
            onCleaner = { navigateToDestination("cleaner") },
            onInstallSentinel = { navigateToDestination("sources") },
            onFolders = { navigateToDestination("sentinel") },
@@ -638,22 +648,34 @@ import kotlinx.coroutines.launch
            onOpenTools = { navigateToDestination("tools") },
            lastScanAt = state.lastScanAt,
            reviewCount = state.threatCount + state.suspiciousCount,
-           onOpenScanResults = { navigateToDestination("scan") }
+           onOpenScanResults = { navigateToDestination(if (state.results.isEmpty()) "history" else "scan") },
+           installedAppsCount = state.installedApps.size,
+           inventoryLoaded = state.inventoryLoaded,
+           quarantinedFilesCount = state.quarantinedFiles.size
           )
          }
          "tools" -> Column(Modifier.fillMaxSize().verticalScroll(contentScrollState)) {
           ProtectionToolsHub(
             onOpen = { navigateToDestination(it) },
             onScanInstalled = {
-             navigateToDestination("scan")
-             requestPrivacyAcknowledgement { vm.scanInstalled() }
+             requestPrivacyAcknowledgement {
+              navigateToDestination("scan")
+              vm.scanInstalled()
+             }
             },
             onPickApk = {
-             navigateToDestination("scan")
              requestPrivacyAcknowledgement {
+              navigateToDestination("scan")
               apkPicker.launch(arrayOf("application/vnd.android.package-archive", "application/octet-stream"))
              }
-            }
+            },
+            installSentinelActive = securityPrefs.getBoolean(SafeMobileApp.KEY_INSTALL_SENTINEL_ENABLED, false),
+            foldersActive = StorageAccessPreferences.hasRole(context, StorageAccessPreferences.DOWNLOADS) ||
+             StorageAccessPreferences.hasRole(context, StorageAccessPreferences.WHATSAPP) || customFolderUris.isNotEmpty(),
+            pendingActions = advisorState.pendingCount,
+            installedAppsCount = state.installedApps.size,
+            inventoryLoaded = state.inventoryLoaded,
+            quarantinedFilesCount = state.quarantinedFiles.size
            )
          }
          "settings" -> Column(Modifier.fillMaxSize().verticalScroll(contentScrollState).padding(horizontal = 16.dp, vertical = 16.dp)) {
@@ -817,7 +839,7 @@ import kotlinx.coroutines.launch
           ExpandableText(stringResource(R.string.scan_explanation), maxLines = 3)
           Button(onClick={ requestPrivacyAcknowledgement { vm.scanFull() } },enabled=!state.isScanning,modifier=Modifier.fillMaxWidth()) {
            if(state.isScanning) CircularProgressIndicator(Modifier.size(18.dp),strokeWidth=2.dp,color=MaterialTheme.colorScheme.onPrimary) else androidx.compose.material3.Icon(Icons.Default.Security,contentDescription=null)
-           Text(stringResource(if(state.isScanning) R.string.scan_running else R.string.scan_installed),modifier=Modifier.padding(start=8.dp))
+           Text(stringResource(if(state.isScanning) R.string.scan_running else R.string.security_scan_now),modifier=Modifier.padding(start=8.dp))
           }
           OutlinedButton(onClick={ requestPrivacyAcknowledgement { apkPicker.launch(arrayOf("application/vnd.android.package-archive","application/octet-stream")) } },enabled=!state.isScanning,modifier=Modifier.fillMaxWidth()) {
            androidx.compose.material3.Icon(Icons.Default.FolderOpen,contentDescription=null)
@@ -1064,9 +1086,9 @@ import kotlinx.coroutines.launch
    SnackbarHost(hostState = snackbarHostState)
    NavigationBar(containerColor = MaterialTheme.colorScheme.surface, tonalElevation = 0.dp) {
     val destinations = listOf(
-     Triple("dashboard", R.string.v140_dashboard, Icons.Default.Home),
-     Triple("tools", R.string.v140_analytics_tools, Icons.Default.Security),
-     Triple("settings", R.string.nav_settings, Icons.Default.SettingsIcon)
+     Triple("dashboard", R.string.nav_home_ux, R.drawable.ic_nav_home),
+     Triple("tools", R.string.nav_tools_ux, R.drawable.ic_nav_tools),
+     Triple("settings", R.string.nav_settings, R.drawable.ic_nav_settings)
     )
     destinations.forEach { destination ->
      NavigationBarItem(
@@ -1076,8 +1098,21 @@ import kotlinx.coroutines.launch
        "tools" -> "tools"
        else -> "settings"
       }) },
-      icon = { androidx.compose.material3.Icon(destination.third, contentDescription = stringResource(destination.second)) },
-      label = { Text(stringResource(destination.second), maxLines = 1, softWrap = false, overflow = TextOverflow.Ellipsis) }
+      icon = {
+       androidx.compose.material3.Icon(
+        painter = painterResource(destination.third),
+        contentDescription = stringResource(destination.second),
+        modifier = Modifier.size(22.dp)
+       )
+      },
+      label = { Text(stringResource(destination.second), maxLines = 1, softWrap = false, overflow = TextOverflow.Ellipsis) },
+      colors = androidx.compose.material3.NavigationBarItemDefaults.colors(
+       selectedIconColor = MaterialTheme.colorScheme.secondary,
+       selectedTextColor = MaterialTheme.colorScheme.onSurface,
+       indicatorColor = MaterialTheme.colorScheme.surfaceVariant,
+       unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+       unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
+      )
      )
     }
    }
@@ -1308,15 +1343,15 @@ internal fun ScanResultsScreen(
    style=MaterialTheme.typography.bodySmall
   )
   Row(horizontalArrangement=Arrangement.spacedBy(10.dp), modifier=Modifier.fillMaxWidth()) {
-   ScanVerdictCountTile(threatTotal, R.string.verdict_threat, MaterialTheme.colorScheme.error,
+   ScanVerdictCountTile(threatTotal, R.drawable.ic_verdict_threat, R.string.verdict_threat, MaterialTheme.colorScheme.error,
     modifier=Modifier.weight(1f))
-   ScanVerdictCountTile(reviewTotal, R.string.verdict_suspicious, MaterialTheme.colorScheme.tertiary,
+   ScanVerdictCountTile(reviewTotal, R.drawable.ic_verdict_suspicious, R.string.verdict_suspicious, MaterialTheme.colorScheme.tertiary,
     modifier=Modifier.weight(1f))
   }
   Row(horizontalArrangement=Arrangement.spacedBy(10.dp), modifier=Modifier.fillMaxWidth()) {
-   ScanVerdictCountTile(noMatchTotal, R.string.verdict_no_match, MaterialTheme.colorScheme.onSurface,
+   ScanVerdictCountTile(noMatchTotal, R.drawable.ic_verdict_no_match, R.string.verdict_no_match, MaterialTheme.colorScheme.onSurfaceVariant,
     modifier=Modifier.weight(1f))
-   ScanVerdictCountTile(notScannedCount, R.string.verdict_not_scanned, MaterialTheme.colorScheme.onSurfaceVariant,
+   ScanVerdictCountTile(notScannedCount, R.drawable.ic_verdict_not_scanned, R.string.verdict_not_scanned, MaterialTheme.colorScheme.onSurfaceVariant,
     modifier=Modifier.weight(1f))
   }
   Text(stringResource(R.string.scan_explanation),
@@ -1376,25 +1411,47 @@ internal fun ScanResultsScreen(
 
 @Composable
 private fun ScanVerdictCountTile(
- count: Int,
- labelResource: Int,
- accent: Color,
- modifier: Modifier = Modifier
+    count: Int,
+    iconResource: Int,
+    labelResource: Int,
+    accent: Color,
+    modifier: Modifier = Modifier
 ) {
- Card(
-  modifier = modifier,
-  shape = RoundedCornerShape(16.dp),
-  border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-  colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-  elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
- ) {
-  Column(Modifier.fillMaxWidth().padding(16.dp),
-   verticalArrangement = Arrangement.spacedBy(4.dp)) {
-   Text(count.toString(), style = MaterialTheme.typography.headlineMedium,
-    fontWeight = FontWeight.Bold, color = accent)
-   Text(stringResource(labelResource), style = MaterialTheme.typography.labelSmall,
-    color = MaterialTheme.colorScheme.onSurface, maxLines = 2,
-    overflow = TextOverflow.Ellipsis)
-  }
- }
+    Card(
+        modifier = modifier,
+        shape = RoundedCornerShape(20.dp),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+    ) {
+        Column(
+            Modifier.fillMaxWidth().padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                androidx.compose.material3.Icon(
+                    painter = painterResource(iconResource),
+                    contentDescription = null,
+                    tint = accent,
+                    modifier = Modifier.size(22.dp)
+                )
+                Text(
+                    count.toString(),
+                    style = MaterialTheme.typography.headlineMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = accent
+                )
+            }
+            Text(
+                stringResource(labelResource),
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+    }
 }
