@@ -261,10 +261,16 @@ internal fun OverlayRiskReviewPanel() {
                 verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
             ) {
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Text(stringResource(R.string.overlay_review_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                    Text(stringResource(R.string.overlay_review_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                     Text(stringResource(if (enabled) R.string.overlay_review_enabled else R.string.overlay_review_disabled), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
-                Switch(checked = enabled, onCheckedChange = { requested ->
+                Switch(checked = enabled, colors = SwitchDefaults.colors(
+                    checkedThumbColor = MaterialTheme.colorScheme.surface,
+                    checkedTrackColor = MaterialTheme.colorScheme.primary,
+                    uncheckedThumbColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant,
+                    uncheckedBorderColor = MaterialTheme.colorScheme.outline
+                ), onCheckedChange = { requested ->
                     if (!requested) {
                         OverlayRiskReviewManager.setEnabled(context, false)
                         refreshFromPreferences()
@@ -500,7 +506,7 @@ internal fun SafeMobileSettingsPanel(
                         }
                     }
                     SettingsRootRow(Icons.Default.Settings, R.string.language_settings,
-                        R.string.theme_appearance_description) {
+                        R.string.settings_language_desc_ux) {
                         showLanguageDialog = true
                     }
                 }
