@@ -8,8 +8,10 @@ SafeMobile pins the Android JNI wrapper from `RevEngiSquad/yarax_android` at com
 source and recursive submodules during Android packaging. No YARA-X library is loaded
 from the network at runtime.
 
-The wrapper is licensed under BSD 3-Clause. The complete license is included at
-`app/src/main/assets/licenses/YARAX_ANDROID_BSD-3-Clause.txt`.
+The Android wrapper and the underlying YARA-X native engine are both BSD 3-Clause.
+Their license copies are included at
+`app/src/main/assets/licenses/YARAX_ANDROID_BSD-3-Clause.txt` and
+`app/src/main/assets/licenses/YARA-X-BSD-3-Clause.txt`, respectively.
 
 ## Build requirements
 
@@ -31,6 +33,11 @@ A native build or source-fetch failure fails packaging; it does not silently omi
 Only signed-APK assets in `app/src/main/assets/yara_rules/` are loaded. All `.yar` and
 `.yara` sources are size-bounded and compiled once per process. Rule compilation errors,
 empty rule packs, native initialization errors and scanner errors are fail-closed.
+
+The native engine source is fetched at build time from the pinned public upstream revision
+and compiled into the Android package. First-time builds therefore require source-network
+access, Git, Rust stable, cargo-ndk and Android NDK; the installed application has no runtime
+YARA update or scan-data network dependency.
 
 The current placeholder rule has `classification = "informational"`. It is deliberately
 not a malware signature and cannot generate a THREAT or SUSPICIOUS verdict.
