@@ -88,6 +88,15 @@ import java.util.UUID
 enum class SettingsSubRoute { ROOT, GENERAL, SUBSCRIPTION, NOTIFICATIONS, SECURITY, HELP_LEGAL, RATE }
 
 @Composable
+private fun safeMobileSwitchColors() = SwitchDefaults.colors(
+    checkedThumbColor = MaterialTheme.colorScheme.surface,
+    checkedTrackColor = MaterialTheme.colorScheme.primary,
+    uncheckedThumbColor = MaterialTheme.colorScheme.onSurfaceVariant,
+    uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant,
+    uncheckedBorderColor = MaterialTheme.colorScheme.outline
+)
+
+@Composable
 private fun SettingsDescription(resource: Int) {
     Text(
         stringResource(resource),
@@ -703,6 +712,7 @@ internal fun SafeMobileSettingsPanel(
                         modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium)
                     Switch(
                         checked = globalThreatIntelligenceEnabled,
+                        colors = safeMobileSwitchColors(),
                         onCheckedChange = { enabled ->
                             GlobalThreatIntelligenceConsent.setEnabled(context, enabled)
                             globalThreatIntelligenceEnabled = enabled
@@ -759,6 +769,7 @@ internal fun SafeMobileSettingsPanel(
                         }
                         Switch(
                             checked = feedConsentEnabled,
+                            colors = safeMobileSwitchColors(),
                             enabled = BuildConfig.FEED_MANIFEST_KEY_CONFIGURED && feedConfigSaved && feedUrl.isNotBlank(),
                             onCheckedChange = { requested ->
                                 if (requested) showFeedConsentDialog = true
@@ -793,7 +804,7 @@ internal fun SafeMobileSettingsPanel(
                 Row(Modifier.fillMaxWidth(), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
                     Text(stringResource(if (sentinelEnabled) R.string.download_sentinel_running else R.string.download_sentinel_stopped),
                         style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f))
-                    Switch(checked = sentinelEnabled, onCheckedChange = { enabled ->
+                    Switch(checked = sentinelEnabled, colors = safeMobileSwitchColors(), onCheckedChange = { enabled ->
                         if (onToggleProtection != null) onToggleProtection.invoke(enabled)
                         else if (enabled) onEnableSentinel() else onDisableSentinel()
                     })
@@ -809,7 +820,7 @@ internal fun SafeMobileSettingsPanel(
                 SettingsDescription(R.string.strict_mode_description)
                 Row(Modifier.fillMaxWidth(), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
                     Text(stringResource(R.string.strict_mode_label), modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium)
-                    Switch(checked = strictMode, onCheckedChange = { onStrictModeChanged?.invoke(it) })
+                    Switch(checked = strictMode, colors = safeMobileSwitchColors(), onCheckedChange = { onStrictModeChanged?.invoke(it) })
                 }
             }
         }
@@ -823,7 +834,7 @@ internal fun SafeMobileSettingsPanel(
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                     Text(stringResource(if (securityAlertsEnabled) R.string.security_alerts_enabled else R.string.security_alerts_disabled),
                         modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium)
-                    Switch(checked = securityAlertsEnabled, onCheckedChange = { onSecurityAlertsChanged?.invoke(it) })
+                    Switch(checked = securityAlertsEnabled, colors = safeMobileSwitchColors(), onCheckedChange = { onSecurityAlertsChanged?.invoke(it) })
                 }
                 if (securityAlertsEnabled && Build.VERSION.SDK_INT >= 34) {
                     OutlinedButton(onClick = { showFullScreenPrompt = true }, modifier = Modifier.fillMaxWidth()) {
@@ -844,6 +855,7 @@ internal fun SafeMobileSettingsPanel(
                     )
                     Switch(
                         checked = voiceAlertsEnabled,
+                        colors = safeMobileSwitchColors(),
                         onCheckedChange = { enabled ->
                             voiceAlertsEnabled = enabled
                             voicePrefs.edit().putBoolean(SafeMobileApp.KEY_VOICE_ALERTS_ENABLED, enabled).apply()
