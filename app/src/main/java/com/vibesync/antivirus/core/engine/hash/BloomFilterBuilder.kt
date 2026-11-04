@@ -10,7 +10,7 @@ class BloomFilterBuilder {
         // Guava rejects zero expected insertions. Callers include the EICAR
         // fallback, but keep this builder safe for an empty standalone input.
         val expectedInsertions = hashes.size.coerceAtLeast(1).toLong()
-        val filter = BloomFilter.create(
+        val filter = BloomFilter.create<String>(
             Funnels.stringFunnel(Charsets.UTF_8),
             expectedInsertions,
             FALSE_POSITIVE_PROBABILITY
