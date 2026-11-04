@@ -92,6 +92,13 @@ android {
 val yaraXSourceRevision = "b666fbc15ff67fba1ceaf5deb68d071b44a1cbfe"
 val yaraXSourceDirectory = layout.buildDirectory.dir("native/yarax_android")
 val yaraXGeneratedJniDirectory = layout.buildDirectory.dir("generated/yarax-jniLibs")
+val yaraXAndroidAbis = providers.gradleProperty("yaraxAndroidAbis").orNull
+    ?.split(",")?.map(String::trim)?.filter(String::isNotEmpty)?.distinct()
+    ?: listOf("arm64-v8a", "armeabi-v7a", "x86_64")
+require(yaraXAndroidAbis.isNotEmpty() &&
+    yaraXAndroidAbis.all { it in setOf("arm64-v8a", "armeabi-v7a", "x86_64") }) {
+    "yaraxAndroidAbis must contain supported Android ABI names."
+}
 
 val prepareYaraXNativeSource = tasks.register("prepareYaraXNativeSource") {
     val sourceDirectory = yaraXSourceDirectory.get().asFile
@@ -159,13 +166,10 @@ val buildYaraXNative = tasks.register<Exec>("buildYaraXNative") {
         check(outputDirectory.mkdirs() || outputDirectory.isDirectory) {
             "Could not create generated YARA-X JNI output directory."
         }
+        val ndkArguments = yaraXAndroidAbis.flatMap { listOf("-t", it) }
         commandLine(
-            "cargo", "ndk",
-            "-t", "arm64-v8a",
-            "-t", "armeabi-v7a",
-            "-t", "x86_64",
-            "-o", outputDirectory.absolutePath,
-            "build", "--release"
+            listOf("cargo", "ndk") + ndkArguments +
+                listOf("-o", outputDirectory.absolutePath, "build", "--release")
         )
     }
 }
