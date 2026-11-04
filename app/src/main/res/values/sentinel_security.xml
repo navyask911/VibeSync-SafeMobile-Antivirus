@@ -2,7 +2,7 @@
 <resources>
 
 
-    <string name="download_interceptor_label">Download Sentinel</string>
+    <string name="download_interceptor_label">Install sentinel</string>
     <string name="download_interceptor_description">Best-effort monitoring of new APK/EXE files using accessible Downloads and MediaStore entries. Android controls installation; SafeMobile cannot block every installer prompt.</string>
     <string name="download_interceptor_status_enabled">Download Sentinel is enabled and its foreground service is running.</string>
     <string name="download_interceptor_status_setup">Enable Download Sentinel and grant storage access to begin monitoring.</string>

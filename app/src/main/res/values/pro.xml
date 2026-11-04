@@ -2,7 +2,7 @@
 <resources>
     <!-- SafeMobile Pro is the product brand; all purchase copy below is localized. -->
     <string name="pro_title">SafeMobile Pro</string>
-    <string name="pro_truthful_summary">Core antivirus checks stay free. Pro does not activate experimental machine learning.</string>
+    <string name="pro_truthful_summary">Less clutter. Same detection.</string>
     <string name="pro_feature_free">Offline hash, YARA and sideload detection stay free.</string>
     <string name="pro_feature_research">Experimental machine learning is not validated or enabled.</string>
     <string name="pro_feature_updates">Pro offers optional daily research-model updates. Weekly updates stay free.</string>
