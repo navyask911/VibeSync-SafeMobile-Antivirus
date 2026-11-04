@@ -684,55 +684,5 @@
     <string name="ui_status_at_risk">ಅಪಾಯದಲ್ಲಿದೆ</string>
 
     <!-- v1.5.2 Figma UI translations -->
-    <string name="nav_home_ux">ಮುಖಪುಟ</string>
-    <string name="nav_tools_ux">ಪರಿಕರಗಳು</string>
-    <string name="home_header_subtitle_free">ಉಚಿತ ಯೋಜನೆ · ಸಾಧನದಲ್ಲೇ ಸ್ಕ್ಯಾನಿಂಗ್</string>
-    <string name="home_header_subtitle_pro">ಪ್ರೊ ಯೋಜನೆ · ಸಾಧನದಲ್ಲೇ ಸ್ಕ್ಯಾನಿಂಗ್</string>
-    <string name="tools_header_title_ux">ರಕ್ಷಣಾ ಪರಿಕರಗಳು</string>
-    <string name="tools_header_subtitle_ux">ಸರಳ ಪರಿಶೀಲನೆಗಳು. ಸ್ಪಷ್ಟ ಆಯ್ಕೆಗಳು.</string>
-    <string name="settings_header_title_ux">ಸೆಟ್ಟಿಂಗ್‌ಗಳು</string>
-    <string name="settings_header_subtitle_ux">SafeMobile ಅನ್ನು ನಿಮ್ಮಂತೆ ರೂಪಿಸಿ</string>
-    <string name="dashboard_title_ux">ನಿಮ್ಮ ಭದ್ರತೆ, ಒಂದೇ ನೋಟದಲ್ಲಿ.</string>
-    <string name="dashboard_subtitle_ux">ಸ್ವಲ್ಪ ಗಮನ ದೊಡ್ಡ ವ್ಯತ್ಯಾಸ ತರುತ್ತದೆ.</string>
-    <string name="dashboard_advisor_label">ರಕ್ಷಣಾ ಸಲಹೆಗಾರ</string>
-    <string name="dashboard_advisor_pending">%1$d ಕ್ರಮಗಳು ಬಾಕಿ</string>
-    <string name="dashboard_advisor_disclaimer">ಸಲಹಾ ಅಂಕ; ಮಾಲ್‌ವೇರ್ ಪತ್ತೆ ಸಾಮರ್ಥ್ಯದ ಅಳತೆ ಅಲ್ಲ.</string>
-    <string name="dashboard_everyday_title">ದೈನಂದಿನ ರಕ್ಷಣೆ</string>
-    <string name="dashboard_all_tools">ಎಲ್ಲಾ ಪರಿಕರಗಳು</string>
-    <string name="dashboard_score_out_of_100">100ರಲ್ಲಿ</string>
-    <string name="dashboard_install_sentinel_title">ಸ್ಥಾಪನೆಗಳ ಮೇಲ್ವಿಚಾರಣೆ</string>
-    <string name="dashboard_folder_monitoring_title">ಫೋಲ್ಡರ್ ಮೇಲ್ವಿಚಾರಣೆ</string>
-    <string name="dashboard_link_checker_title">ಲಿಂಕ್ ಪರಿಶೀಲಕ</string>
-    <string name="dashboard_device_posture_title">ಸಾಧನದ ಭದ್ರತಾ ಸ್ಥಿತಿ</string>
-    <string name="dashboard_status_on">ಆನ್</string>
-    <string name="dashboard_status_off">ಆಫ್</string>
-    <string name="dashboard_status_on_demand">ಬೇಡಿಕೆಯ ಮೇರೆಗೆ</string>
-    <string name="dashboard_status_review">ಪರಿಶೀಲಿಸಲು %1$d</string>
-    <string name="dashboard_view">ನೋಡಿ</string>
-    <string name="dashboard_pro_title">ಕಡಿಮೆ ಅಡ್ಡಿ. ಅದೇ ಪತ್ತೆ ಸಾಮರ್ಥ್ಯ.</string>
-    <string name="dashboard_pro_summary">ಪ್ರೊ ಯೋಜನೆ AdMob ಜಾಹೀರಾತುಗಳು ಮತ್ತು SDK ಸಂಗ್ರಹಣೆಯನ್ನು ನಿಷ್ಕ್ರಿಯಗೊಳಿಸುತ್ತದೆ.</string>
-    <string name="tools_page_heading_ux">ನಿಮ್ಮ ಸಾಧನಕ್ಕಾಗಿ ಉಪಕರಣಗಳ ಸಮೂಹ.</string>
-    <string name="tools_page_subtitle_ux">ಮುಖ್ಯವಾದವುಗಳನ್ನು ಸ್ಕ್ಯಾನ್ ಮಾಡಿ, ಪರಿಶೀಲಿಸಿ ಮತ್ತು ನಿರ್ವಹಿಸಿ. ಪ್ರತಿಯೊಂದು ಕ್ರಮವೂ ನಿಮ್ಮ ನಿಯಂತ್ರಣದಲ್ಲಿರುತ್ತದೆ.</string>
-    <string name="tools_scan_description_ux">ಸ್ಥಾಪಿತ ಆಪ್‌ಗಳನ್ನು ಪರಿಶೀಲಿಸಿ ಅಥವಾ APK ಫೈಲ್ ಆಯ್ಕೆಮಾಡಿ.</string>
-    <string name="tools_start_scan_ux">ಸ್ಕ್ಯಾನ್ ಪ್ರಾರಂಭಿಸಿ</string>
-    <string name="tools_choose_apk_ux">APK ಫೈಲ್ ಆಯ್ಕೆಮಾಡಿ</string>
-    <string name="tools_watch_check_ux">ಮೇಲ್ವಿಚಾರಣೆ ಮತ್ತು ಪರಿಶೀಲನೆ</string>
-    <string name="tools_review_manage_ux">ಪರಿಶೀಲಿಸಿ ಮತ್ತು ನಿರ್ವಹಿಸಿ</string>
-    <string name="tools_install_sentinel_desc_ux">ಹೊಸದಾಗಿ ಸ್ಥಾಪಿಸಿದ ಆಪ್‌ಗಳನ್ನು ಪರಿಶೀಲಿಸಿ</string>
-    <string name="tools_folder_monitoring_desc_ux">ಫೋಲ್ಡರ್‌ಗಳನ್ನು ಆಯ್ಕೆ ಮಾಡಿ ಪ್ರವೇಶ ಅನುಮತಿ ನೀಡಿ</string>
-    <string name="tools_link_checker_desc_ux">ಬಯಸಿದಾಗ ಲಿಂಕ್ ಅಂಟಿಸಿ ಪರಿಶೀಲಿಸಿ</string>
-    <string name="tools_posture_desc_ux">ಸೆಟ್ಟಿಂಗ್‌ಗಳು ಮತ್ತು ಅನುಮತಿ ಅಪಾಯದ ಸಲಹೆ</string>
-    <string name="tools_apps_desc_ux">ಸ್ಥಾಪಿತ ಆಪ್‌ಗಳು ಮತ್ತು ಅವುಗಳ ಪ್ರವೇಶವನ್ನು ನೋಡಿ</string>
-    <string name="tools_quarantine_desc_ux">ಬೆಂಬಲಿತ ಫೈಲ್‌ಗಳಿಗೆ ಎನ್‌ಕ್ರಿಪ್ಟ್ ಸಂಗ್ರಹಣೆ</string>
-    <string name="tools_history_desc_ux">ಈ ಸಾಧನದಲ್ಲಿ ಉಳಿಸಿದ ಹಿಂದಿನ ಸ್ಕ್ಯಾನ್‌ಗಳು</string>
-    <string name="tools_advice_title_ux">ಸಲಹೆ ಎಂದರೆ ಮಾಲ್‌ವೇರ್ ತೀರ್ಪು ಅಲ್ಲ</string>
-    <string name="tools_advice_body_ux">ಸೂಕ್ಷ್ಮ ಅನುಮತಿಗಳು ಮಾತ್ರ ಸ್ಪೈವೇರ್‌ಗೆ ಸಾಕ್ಷಿಯಲ್ಲ. ಕ್ವಾರಂಟೈನ್ ನಿಮ್ಮ ನಿಯಂತ್ರಣದಲ್ಲಿದೆ; ತೆಗೆದುಹಾಕಲು ಅಥವಾ ಅನ್‌ಇನ್‌ಸ್ಟಾಲ್ ಮಾಡಲು ನಿಮ್ಮ ದೃಢೀಕರಣ ಅಗತ್ಯ.</string>
-    <string name="settings_main_heading_ux">ನಿಮ್ಮ ಆಪ್. ನಿಮ್ಮ ಆಯ್ಕೆಗಳು.</string>
-    <string name="settings_main_subtitle_ux">ರೂಪ, ಎಚ್ಚರಿಕೆಗಳು ಮತ್ತು ಹಂಚಿಕೆಯನ್ನು ಹೊಂದಿಸಿ.</string>
-    <string name="settings_appearance_heading_ux">ರೂಪ ಮತ್ತು ಭಾಷೆ</string>
-    <string name="settings_language_desc_ux">ನಿಮಗೆ ಇಷ್ಟವಾದ ಆಪ್ ಭಾಷೆಯನ್ನು ಆಯ್ಕೆ ಮಾಡಿ</string>
-    <string name="settings_alerts_heading_ux">ಎಚ್ಚರಿಕೆಗಳು ಮತ್ತು ಮೇಲ್ವಿಚಾರಣೆ</string>
-    <string name="settings_privacy_heading_ux">ಗೌಪ್ಯತೆ ಮತ್ತು ಹಂಚಿಕೆ</string>
-    <string name="settings_about_heading_ux">ಮಾಹಿತಿ ಮತ್ತು ಕಾನೂನು</string>
 </resources>
 
