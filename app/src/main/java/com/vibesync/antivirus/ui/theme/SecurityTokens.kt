@@ -16,6 +16,13 @@ object SecurityTokens {
     val pageTopPadding: Dp = 16.dp
     val pageVerticalPadding: Dp = 16.dp
     val sectionSpacing: Dp = 24.dp
+    val tightSpacing: Dp = 4.dp
+    val smallSpacing: Dp = 8.dp
+    val mediumSpacing: Dp = 12.dp
+    val standardSpacing: Dp = 16.dp
+    val cardSpacing: Dp = 20.dp
+    val largeSpacing: Dp = 24.dp
+    val extraLargeSpacing: Dp = 32.dp
     val cardContentPadding: Dp = 16.dp
     val cardInnerSpacing: Dp = 12.dp
     val cardElevation: Dp = 0.dp
@@ -26,8 +33,8 @@ object SecurityTokens {
     val chipShape = RoundedCornerShape(50)
 
     // Verdicts always retain a text label as well as their semantic hue.
-    val threat = Color(0xFFB42318)
-    val suspicious = Color(0xFF925E00)
+    val threat = Color(0xFFEF4444)
+    val suspicious = Color(0xFFF59E0B)
     val noMatch = Color(0xFF475569)
-    val notScanned = Color(0xFF64748B)
+    val notScanned = Color(0xFF475569)
 }

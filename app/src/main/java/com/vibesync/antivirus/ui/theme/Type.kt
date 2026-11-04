@@ -1,85 +1,31 @@
 package com.vibesync.antivirus.ui.theme
 
 import androidx.compose.material3.Typography
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.vibesync.antivirus.R
-
-/** Bundled, offline DM Sans under SIL OFL 1.1; Android font fallback covers other scripts. */
-val DmSansFamily = FontFamily(
-    Font(R.font.dm_sans_regular, FontWeight.Normal),
-    Font(R.font.dm_sans_medium, FontWeight.Medium),
-    Font(R.font.dm_sans_bold, FontWeight.Bold)
-)
 
 /**
- * DM Sans is applied to every Material text style so composables using default Material
- * typography cannot silently fall back to the platform font. The five primary styles use
- * the product's v1.4.3 scale and explicit, legible line heights.
+ * Inter is the reference font. No licensed Inter asset is currently bundled in this
+ * repository, so Android SansSerif is used as the explicit runtime fallback.
+ * Reference type scale: 28 / 20 / 17 / 14 / 12 / 11 sp.
  */
-val AppTypography = Typography().run {
-    copy(
-        displayLarge = displayLarge.copy(
-            fontFamily = DmSansFamily,
-            fontWeight = FontWeight.Bold,
-            fontSize = 48.sp,
-            lineHeight = 52.sp
-        ),
-        displayMedium = displayMedium.copy(fontFamily = DmSansFamily, fontWeight = FontWeight.Bold),
-        displaySmall = displaySmall.copy(fontFamily = DmSansFamily, fontWeight = FontWeight.Bold),
-        headlineLarge = headlineLarge.copy(fontFamily = DmSansFamily, fontWeight = FontWeight.Bold),
-        headlineMedium = headlineMedium.copy(
-            fontFamily = DmSansFamily,
-            fontWeight = FontWeight.Bold,
-            fontSize = 22.sp,
-            lineHeight = 28.sp
-        ),
-        headlineSmall = headlineSmall.copy(
-            fontFamily = DmSansFamily,
-            fontWeight = FontWeight.Bold,
-            fontSize = 22.sp,
-            lineHeight = 28.sp
-        ),
-        titleLarge = titleLarge.copy(
-            fontFamily = DmSansFamily,
-            fontWeight = FontWeight.Bold,
-            fontSize = 22.sp,
-            lineHeight = 28.sp
-        ),
-        titleMedium = titleMedium.copy(
-            fontFamily = DmSansFamily,
-            fontWeight = FontWeight.Bold,
-            fontSize = 16.sp,
-            lineHeight = 22.sp
-        ),
-        titleSmall = titleSmall.copy(
-            fontFamily = DmSansFamily,
-            fontWeight = FontWeight.Medium,
-            fontSize = 15.sp,
-            lineHeight = 20.sp
-        ),
-        bodyLarge = bodyLarge.copy(
-            fontFamily = DmSansFamily,
-            fontWeight = FontWeight.Medium,
-            fontSize = 15.sp,
-            lineHeight = 20.sp
-        ),
-        bodyMedium = bodyMedium.copy(
-            fontFamily = DmSansFamily,
-            fontWeight = FontWeight.Normal,
-            fontSize = 13.sp,
-            lineHeight = 18.sp
-        ),
-        bodySmall = bodySmall.copy(
-            fontFamily = DmSansFamily,
-            fontWeight = FontWeight.Normal,
-            fontSize = 13.sp,
-            lineHeight = 18.sp
-        ),
-        labelLarge = labelLarge.copy(fontFamily = DmSansFamily, fontWeight = FontWeight.Medium, fontSize = 15.sp),
-        labelMedium = labelMedium.copy(fontFamily = DmSansFamily, fontWeight = FontWeight.Medium, fontSize = 13.sp),
-        labelSmall = labelSmall.copy(fontFamily = DmSansFamily, fontWeight = FontWeight.Normal, fontSize = 13.sp)
-    )
-}
+val DmSansFamily: FontFamily = FontFamily.SansSerif
+
+val AppTypography = Typography(
+    displayLarge = Typography().displayLarge.copy(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Bold, fontSize = 28.sp, lineHeight = 34.sp),
+    displayMedium = Typography().displayMedium.copy(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Bold, fontSize = 28.sp, lineHeight = 34.sp),
+    displaySmall = Typography().displaySmall.copy(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Bold, fontSize = 20.sp, lineHeight = 26.sp),
+    headlineLarge = Typography().headlineLarge.copy(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Bold, fontSize = 28.sp, lineHeight = 34.sp),
+    headlineMedium = Typography().headlineMedium.copy(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Bold, fontSize = 28.sp, lineHeight = 34.sp),
+    headlineSmall = Typography().headlineSmall.copy(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Bold, fontSize = 20.sp, lineHeight = 26.sp),
+    titleLarge = Typography().titleLarge.copy(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Bold, fontSize = 20.sp, lineHeight = 26.sp),
+    titleMedium = Typography().titleMedium.copy(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Bold, fontSize = 17.sp, lineHeight = 23.sp),
+    titleSmall = Typography().titleSmall.copy(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Bold, fontSize = 14.sp, lineHeight = 20.sp),
+    bodyLarge = Typography().bodyLarge.copy(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Normal, fontSize = 17.sp, lineHeight = 24.sp),
+    bodyMedium = Typography().bodyMedium.copy(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Normal, fontSize = 14.sp, lineHeight = 20.sp),
+    bodySmall = Typography().bodySmall.copy(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Normal, fontSize = 12.sp, lineHeight = 17.sp),
+    labelLarge = Typography().labelLarge.copy(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Bold, fontSize = 14.sp, lineHeight = 20.sp),
+    labelMedium = Typography().labelMedium.copy(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Bold, fontSize = 12.sp, lineHeight = 16.sp),
+    labelSmall = Typography().labelSmall.copy(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Normal, fontSize = 11.sp, lineHeight = 15.sp)
+)
