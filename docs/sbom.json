@@ -1,10 +1,10 @@
 {
   "bomFormat" : "CycloneDX",
   "specVersion" : "1.6",
-  "serialNumber" : "urn:uuid:32821fa9-cd2d-40b8-8950-cb18c6d9a16c",
+  "serialNumber" : "urn:uuid:31931d78-0842-484b-89b3-036fcab92c9f",
   "version" : 1,
   "metadata" : {
-    "timestamp" : "2026-11-03T16:23:19Z",
+    "timestamp" : "2026-11-04T23:02:08Z",
     "tools" : {
       "components" : [
         {
@@ -26,7 +26,7 @@
       "externalReferences" : [
         {
           "type" : "build-system",
-          "url" : "https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/actions/runs/41673389246"
+          "url" : "https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/actions/runs/41930268477"
         },
         {
           "type" : "vcs",
@@ -13252,132 +13252,6 @@
     },
     {
       "type" : "library",
-      "bom-ref" : "pkg:maven/com.google.ai.edge.litert/litert-api@1.0.1?type=aar",
-      "group" : "com.google.ai.edge.litert",
-      "name" : "litert-api",
-      "version" : "1.0.1",
-      "description" : "A library helps deploy machine learning models on mobile devices",
-      "hashes" : [
-        {
-          "alg" : "MD5",
-          "content" : "31ce9008082fd494ce35a8bf1c53c2f9"
-        },
-        {
-          "alg" : "SHA-1",
-          "content" : "2732ea657e35aa64bd15168322f0e8bfb6e2306d"
-        },
-        {
-          "alg" : "SHA-256",
-          "content" : "b51b05d8160a9e59e5a6140a228421bd8c594f205a7a7dfa2028bfacaf5a74aa"
-        },
-        {
-          "alg" : "SHA-512",
-          "content" : "eee44fa00433e22aceb43c6c214e62a1c59f5f81a99123458d7ae159e32222a0fde3ac1dfcff83ec7a65d3bbdaeedda451b1c078ed1b0812624aa0a2c180e372"
-        },
-        {
-          "alg" : "SHA3-256",
-          "content" : "7c0e2861e70db5a089024b96da2c3633ac3b460d5ee1507fb0bb4a989de463c5"
-        },
-        {
-          "alg" : "SHA3-512",
-          "content" : "c4d9107c34fa0c96eef5a3939c2f9f865fd883b8a4f99580be4df3bdc3a78548b3925d9928b11690ba3382a22fac1fa2f61d57ed17e7cdc57989e7df6467ee46"
-        },
-        {
-          "alg" : "SHA-384",
-          "content" : "f53c0acfcebc95c82086368a18089872ae05f8a1060b117d05aed0f3c7ee791bf85a3dcd718f50d07c4323ed4545123a"
-        },
-        {
-          "alg" : "SHA3-384",
-          "content" : "a49a2925a1c76e57f3e5f0e15b1ef2d0ef0de055aea8bbd25066acfd5ab5fb8b3a4039bce6d2f3cd8fd4e5a500fc67b8"
-        }
-      ],
-      "licenses" : [
-        {
-          "license" : {
-            "id" : "Apache-2.0"
-          }
-        }
-      ],
-      "purl" : "pkg:maven/com.google.ai.edge.litert/litert-api@1.0.1?type=aar",
-      "modified" : false,
-      "externalReferences" : [
-        {
-          "type" : "vcs",
-          "url" : "https://github.com/tensorflow/tensorflow/tree/master/"
-        }
-      ],
-      "properties" : [
-        {
-          "name" : "cdx:maven:package:test",
-          "value" : "false"
-        }
-      ]
-    },
-    {
-      "type" : "library",
-      "bom-ref" : "pkg:maven/com.google.ai.edge.litert/litert@1.0.1?type=aar",
-      "group" : "com.google.ai.edge.litert",
-      "name" : "litert",
-      "version" : "1.0.1",
-      "description" : "A library helps deploy machine learning models on mobile devices",
-      "hashes" : [
-        {
-          "alg" : "MD5",
-          "content" : "079f5ee951e87c4c2ddcc419e573797d"
-        },
-        {
-          "alg" : "SHA-1",
-          "content" : "0c0402b02cdfc0a0cda22d601fafbacfb083115d"
-        },
-        {
-          "alg" : "SHA-256",
-          "content" : "467679820f836fe70418f01c9f6689f328f79fbf2cbabe197eab70b209b43e8d"
-        },
-        {
-          "alg" : "SHA-512",
-          "content" : "a6925d9caab3420d64f159c4477ff77cb3a8e73524847dc0809b5c110d444eb503c9ac959014a32ad4df4464d5ab4a1a58068acc5967fd61231d52b94c668667"
-        },
-        {
-          "alg" : "SHA3-256",
-          "content" : "f837a24d43cdcf821a4ba85d90df869b3448c062d03b6149f96124aa8fb1f3de"
-        },
-        {
-          "alg" : "SHA3-512",
-          "content" : "c30e63c80dd6e22e3cfe5e3d442bed88740189fe3faab455733b5e2facff23f0ce0b52a406cae53aeb1a9d7076462469972c51bd33722a838dfca77c7718e27e"
-        },
-        {
-          "alg" : "SHA-384",
-          "content" : "d7f988f275a4d891e307e2c6432c94f637a07e1f14f23fa2f53d02bfb1117da15b993571ec47c28495cc03089d26ac48"
-        },
-        {
-          "alg" : "SHA3-384",
-          "content" : "9c2b7f67a85051fa886b3810b8d90d218d0e7694d379029e0b7254fe3e3a21c91910009bc59bec632c2bf47dd87fe1af"
-        }
-      ],
-      "licenses" : [
-        {
-          "license" : {
-            "id" : "Apache-2.0"
-          }
-        }
-      ],
-      "purl" : "pkg:maven/com.google.ai.edge.litert/litert@1.0.1?type=aar",
-      "modified" : false,
-      "externalReferences" : [
-        {
-          "type" : "vcs",
-          "url" : "https://github.com/tensorflow/tensorflow/tree/master/"
-        }
-      ],
-      "properties" : [
-        {
-          "name" : "cdx:maven:package:test",
-          "value" : "false"
-        }
-      ]
-    },
-    {
-      "type" : "library",
       "bom-ref" : "pkg:maven/com.google.android.datatransport/transport-api@3.0.0?type=aar",
       "group" : "com.google.android.datatransport",
       "name" : "transport-api",
@@ -13992,6 +13866,63 @@
         }
       ],
       "purl" : "pkg:maven/com.google.android.libraries.ads.mobile.sdk/ads-mobile-sdk@1.6.0?type=aar",
+      "modified" : false,
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/com.google.android.odml/image@1.0.0-beta1?type=aar",
+      "group" : "com.google.android.odml",
+      "name" : "image",
+      "version" : "1.0.0-beta1",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "eee049dd9b864d118568c59745d4f169"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "a508729dbdb2a0d27728b0ef42223bba53013d1c"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "2e71aa31f83a9415277f119de67195726f07d1760e9542c111778c320e3aa1f2"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "954d95a7091258b31b6075999d6f54f50e2a1e490df5efacaceb562fb1b2fda886f680f615e5a55d305e5a53745c3f4e0a43a5cf6a93822860c657f509072967"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "b3082e1f99e28b875c3b4e79c9ea5bae07c63879d97e59d62a394b40cd5d38cd"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "8fb8dcb8d99189ef0938271e7cd3e8f7fa809158d72be405a0d14559d399e04881a6d928742bc8089046c6c21aaab4d838e5f40427c5911c0239004e6aef0b8c"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "5d1593e965082f8a28c118da87387641e7b4b4fa5c329ddbf62f0520c72be69bcbd89a34f7d746d8d90b62826fb5f5f2"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "35b8bebf0eaaed7affe79597485d6a4241bbdf2521ffa4907410a7c7ed1de29da0832e107302cb198d9fb8ca65859875"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "name" : "Android Software Development Kit License",
+            "url" : "https://developer.android.com/studio/terms.html"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/com.google.android.odml/image@1.0.0-beta1?type=aar",
       "modified" : false,
       "properties" : [
         {
@@ -22689,6 +22620,69 @@
     },
     {
       "type" : "library",
+      "bom-ref" : "pkg:maven/org.checkerframework/checker-qual@2.5.8?type=jar",
+      "group" : "org.checkerframework",
+      "name" : "checker-qual",
+      "version" : "2.5.8",
+      "description" : "Checker Qual is the set of annotations (qualifiers) and supporting classes used by the Checker Framework to type check Java source code. Please see artifact: org.checkerframework:checker",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "b03cb4466d6840985cf35119a4f6b729"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "41c6fa63cba0fea55ebd3581d42b3d2c5cca98b2"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "bd655da535df1eeb96fc8874d05d0f7029209de95096e4f84bd07c66688a210d"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "6c0e829a9ab21e07b0c13db770d4b822f877cc1ea339bab4fc2123eb4b5fef16c833aa4ea5d9205f0798492f637478f5315a9e13b348a46fe53aa52f7ceaac52"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "3998035f35d6f718c5276e86fa9af6b0228a805bcc325da55b23ef8fb8d63d02"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "f5a11d53b4e138ce0d293ed0dcf6d81207985f3267218dc381ffd139f4d505be4457495a4dec7c3bfea4cd034b2fe7c58658dc66b051fc74944e9fa208cc73fb"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "bfabf22bded3b4e14cd096ba564b3db1d81cacc23b81509c5624bb10d80a4aab6d3069e0944abce070b9c014a9181e43"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "04b91cd22910887d0fc4a35cc5582d8421bf7e7053dedfa559c597b2d2aebec5f6a3729f7dc69f12fd68e0137ff8555c"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "MIT"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/org.checkerframework/checker-qual@2.5.8?type=jar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://github.com/typetools/checker-framework.git"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
       "bom-ref" : "pkg:maven/org.checkerframework/checker-qual@3.33.0?type=jar",
       "group" : "org.checkerframework",
       "name" : "checker-qual",
@@ -28564,11 +28558,45 @@
     },
     {
       "type" : "library",
-      "bom-ref" : "pkg:maven/org.tensorflow/tensorflow-lite@2.17.0?type=pom",
+      "bom-ref" : "pkg:maven/org.tensorflow/tensorflow-lite-api@2.14.0?type=aar",
       "group" : "org.tensorflow",
-      "name" : "tensorflow-lite",
-      "version" : "2.17.0",
+      "name" : "tensorflow-lite-api",
+      "version" : "2.14.0",
       "description" : "A library helps deploy machine learning models on mobile devices",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "b2a6369bf3cdc204472f722f67a6298f"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "b9fa4f69c9bfe85c9afea0355863b342c7e25f4f"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "1d1ffffe9d15969882c856249a3018ccd2199319e195a63b7b58699fc8cb836f"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "02ac0d372b08b8ebc7abc40dca3985ac30d77e7bd62e141846fa043fd6d19b79195ce0b555c4ae229f3dca8d3433685c6e040f9696af30f6f2364a4a0496515b"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "167264e5fdf82c89a7e562d791b983740ac5ada8c8782bb513fba3f814eabc7e"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "b5ea3b5efbe38c06a7bd8a30d06ec305b84d5ec2db90796186d990b6e7f1d8acdec22292d58198f2b5bc1d2be27c964ac1aa4a7aecf32f72a4841c93e453c4f0"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "c07fa835865505bc5755c9025c3b8ba08ef41ee18e6ec1618a05cb586ab9d48bc828de4b0e85a7306178fb304b27be83"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "2d389db0de6617ed08fd617cda1cec3d7e82bd90d0c6871d9a5e7388f581b11e011f8e12048afcac5c9416a5f71451ff"
+        }
+      ],
       "licenses" : [
         {
           "license" : {
@@ -28576,7 +28604,196 @@
           }
         }
       ],
-      "purl" : "pkg:maven/org.tensorflow/tensorflow-lite@2.17.0?type=pom",
+      "purl" : "pkg:maven/org.tensorflow/tensorflow-lite-api@2.14.0?type=aar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://github.com/tensorflow/tensorflow/tree/master/"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/org.tensorflow/tensorflow-lite-support-api@0.4.4?type=aar",
+      "group" : "org.tensorflow",
+      "name" : "tensorflow-lite-support-api",
+      "version" : "0.4.4",
+      "description" : "A library with utilities and data structures to deploy TFLite models on-device. It doesn't have TFLite interpreter dependency unlike \"tensorflow-lite-support\".",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "6d6bfc2c4ffc2cc7fd49e62cf984d383"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "136db9594d4ae528bced44d6ccf225df82bd397f"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "072481f7f3822074996a06afb1d784efd8287319b38e3e48572bb299079298e4"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "3322ac11d9e283d2e9334bf1016ece90025159badf3bc27f1a157a1504b83b58e180ed72035583fc025777a0d339109e61907426a991aad2ac32cfb26cb2fc6f"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "f294d94d012edbbe008dab65d89458cf7ed1abbc8ac0e65bc53ac0f7f8abb7a8"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "6477542b7a5f2e551a7b6fc6dd74ee0a703f426793c4f4f29a5a88ed0bf119f96362070090992ce285b4bb113c09efa4bf671b8da2738cae58ef5510cee5bf55"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "3e472ebb86fa1d536c9d3af12dac6cddd233cf956c400599f667bf84865eff36d7a06bae3574261a9180ce0b203c27a2"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "0cf8dd1bb342849df1159755a4a9a267c7808ad7e1dd1b12786c416c41c36acdcbedfc4991390dff2e5c9520da09a0d9"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/org.tensorflow/tensorflow-lite-support-api@0.4.4?type=aar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://github.com/tensorflow/tflite-support/tree/master/"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/org.tensorflow/tensorflow-lite-support@0.4.4?type=aar",
+      "group" : "org.tensorflow",
+      "name" : "tensorflow-lite-support",
+      "version" : "0.4.4",
+      "description" : "A library with utilities and data structures to deploy TFLite models on-device",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "161e35fe2f11a1dec437867e26d8f3bf"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "db19d9dabe7ad60aeff56b4870bde8c5d55e88f5"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "1c1d10b8cec85efbe8024e755641cb044f1f10e204db773f868c327d398fc5fa"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "37f2b09715d105d6e222646600108fa53928e33b126c4eca54a7667bac478da540b9f16b4606e2851db5c64990eacb62f61721343db0349003bb8d480a4ae97f"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "8aa7afdc54e175dd5fa6e3d1658a5657e5b1c6196a46c5c8dcd8313fdb036546"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "ce0bfa296b114a1813646d4d53ada37b4a9f10d195d2a799b68043da72140fc4c6e9248ebcd061d1a239dd85fa02ac2d90da1f65eb72bc7019a7c0ddf0ef3412"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "e07622bc60ee9145331e15e5101af558102c5f505f28d4269cb210fa1b74fbe86c6f11b41199dbeaaf79dc7c58ab5329"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "289fe22c64867af668ec620853f73d3511916e93234169595c4518a4006318d37a690fbe32006e275afaff6a51ea047e"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/org.tensorflow/tensorflow-lite-support@0.4.4?type=aar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://github.com/tensorflow/tflite-support/tree/master/"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/org.tensorflow/tensorflow-lite@2.14.0?type=aar",
+      "group" : "org.tensorflow",
+      "name" : "tensorflow-lite",
+      "version" : "2.14.0",
+      "description" : "A library helps deploy machine learning models on mobile devices",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "8d021619e4e573d87b40cede7b759b75"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "ef56a7801678e6fb8ae07750d16564651df55740"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "709db81fbfba461b1ed27e9c1e83817c2d7cc60469074eaa36c88fb8dbea4886"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "59fd64a99c40d075021333723eb840d67d8281f853b60d06621566deb63db65600475945e9c15e167c8902153149f2b2894d1c766b7f85cf1698641d62c59a18"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "0856dabc49522bb46188ec97bedace63c63444c0c6cdf62d87bf6acdfb6768a6"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "39029526338f74f87015166d09150a6c58705fb4f54c12bfd865567d47cd995244abe517c8e433e848160e6b372fdc7c215d64bed8015d74c3aca95396cae477"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "08705791b85b2b189d881c878e97459233f2f8c955dc524f0928ad02ceb6269ebe7beba6cf101643b7853953ea774ae5"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "6277732d89a5f3500fccdc664fc5c1068894ac1004e8aae3797a7ce53b8daaaaea63b8bd3eedb0a644a8fbfd98fe468b"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/org.tensorflow/tensorflow-lite@2.14.0?type=aar",
       "modified" : false,
       "externalReferences" : [
         {
@@ -30894,16 +31111,6 @@
       ]
     },
     {
-      "ref" : "pkg:maven/com.google.ai.edge.litert/litert-api@1.0.1?type=aar",
-      "dependsOn" : [ ]
-    },
-    {
-      "ref" : "pkg:maven/com.google.ai.edge.litert/litert@1.0.1?type=aar",
-      "dependsOn" : [
-        "pkg:maven/com.google.ai.edge.litert/litert-api@1.0.1?type=aar"
-      ]
-    },
-    {
       "ref" : "pkg:maven/com.google.android.datatransport/transport-api@3.0.0?type=aar",
       "dependsOn" : [
         "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
@@ -31024,6 +31231,10 @@
         "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-android@1.10.2?type=jar",
         "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-guava@1.10.2?type=jar"
       ]
+    },
+    {
+      "ref" : "pkg:maven/com.google.android.odml/image@1.0.0-beta1?type=aar",
+      "dependsOn" : [ ]
     },
     {
       "ref" : "pkg:maven/com.google.android.play/hsdp@2.2.0?type=aar",
@@ -31610,7 +31821,8 @@
         "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-test@1.10.2?type=jar",
         "pkg:maven/org.json/json@20240303?type=jar",
         "pkg:maven/org.smali/dexlib2@2.5.2?type=jar",
-        "pkg:maven/org.tensorflow/tensorflow-lite@2.17.0?type=pom"
+        "pkg:maven/org.tensorflow/tensorflow-lite-support@0.4.4?type=aar",
+        "pkg:maven/org.tensorflow/tensorflow-lite@2.14.0?type=aar"
       ]
     },
     {
@@ -32137,6 +32349,10 @@
       "dependsOn" : [
         "pkg:maven/org.bouncycastle/bcprov-jdk18on@1.80.2?type=jar"
       ]
+    },
+    {
+      "ref" : "pkg:maven/org.checkerframework/checker-qual@2.5.8?type=jar",
+      "dependsOn" : [ ]
     },
     {
       "ref" : "pkg:maven/org.checkerframework/checker-qual@3.33.0?type=jar",
@@ -32794,9 +33010,28 @@
       ]
     },
     {
-      "ref" : "pkg:maven/org.tensorflow/tensorflow-lite@2.17.0?type=pom",
+      "ref" : "pkg:maven/org.tensorflow/tensorflow-lite-api@2.14.0?type=aar",
+      "dependsOn" : [ ]
+    },
+    {
+      "ref" : "pkg:maven/org.tensorflow/tensorflow-lite-support-api@0.4.4?type=aar",
       "dependsOn" : [
-        "pkg:maven/com.google.ai.edge.litert/litert@1.0.1?type=aar"
+        "pkg:maven/com.google.android.odml/image@1.0.0-beta1?type=aar",
+        "pkg:maven/org.checkerframework/checker-qual@2.5.8?type=jar",
+        "pkg:maven/org.tensorflow/tensorflow-lite-api@2.14.0?type=aar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/org.tensorflow/tensorflow-lite-support@0.4.4?type=aar",
+      "dependsOn" : [
+        "pkg:maven/org.tensorflow/tensorflow-lite-support-api@0.4.4?type=aar",
+        "pkg:maven/org.tensorflow/tensorflow-lite@2.14.0?type=aar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/org.tensorflow/tensorflow-lite@2.14.0?type=aar",
+      "dependsOn" : [
+        "pkg:maven/org.tensorflow/tensorflow-lite-api@2.14.0?type=aar"
       ]
     },
     {
