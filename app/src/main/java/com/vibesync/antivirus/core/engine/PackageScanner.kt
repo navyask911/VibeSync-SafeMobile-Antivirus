@@ -8,6 +8,10 @@ import com.vibesync.antivirus.core.locale.UiText
 import com.vibesync.antivirus.core.locale.SecurityText
 import com.vibesync.antivirus.core.crypto.EncryptedHashStore
 import com.vibesync.antivirus.core.crypto.HashCalculator
+import com.google.common.hash.BloomFilter
+import com.vibesync.antivirus.core.engine.hash.BloomFilterBuilder
+import com.vibesync.antivirus.core.engine.hash.HashMatcher
+import com.vibesync.antivirus.core.engine.hash.SignatureDatabaseParser
 import com.vibesync.antivirus.core.hashdb.HashDatabaseManager
 import com.vibesync.antivirus.core.engine.DeepStaticAnalyzer
 import com.vibesync.antivirus.core.heuristics.PermissionRiskAnalyzer
@@ -27,6 +31,8 @@ import java.util.UUID
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 class PackageScanner(
  private val context: Context,
@@ -42,6 +48,45 @@ class PackageScanner(
  private val trustedAppStore = TrustedAppStore(context)
  private val deepStaticAnalyzer = DeepStaticAnalyzer()
  private val machineLearningScanner = MachineLearningScanner(context)
+
+ private data class BundledHashSnapshot(
+  val hashes: Set<String>,
+  val bloomFilter: BloomFilter<String>
+ )
+
+ private val signatureDatabaseParser = SignatureDatabaseParser()
+ private val bloomFilterBuilder = BloomFilterBuilder()
+ private val hashMatcher = HashMatcher()
+ private val signatureDatabaseMutex = Mutex()
+
+ @Volatile
+ private var cachedBundledHashSnapshot: BundledHashSnapshot? = null
+
+ /**
+  * Loads the read-only bundled signatures once. EICAR is always inserted
+  * independently of asset parsing so the fallback remains available if the
+  * asset is absent, unreadable, or malformed.
+  */
+ private suspend fun loadBundledHashSnapshot(): BundledHashSnapshot {
+  cachedBundledHashSnapshot?.let { return it }
+  return signatureDatabaseMutex.withLock {
+   cachedBundledHashSnapshot?.let { return@withLock it }
+   val parsed = try {
+    signatureDatabaseParser.parseDatabase(context, "signatures/mock_signatures.hsb")
+   } catch (cancelled: CancellationException) {
+    throw cancelled
+   } catch (_: Exception) {
+    emptyList()
+   }
+   val hashes = (parsed + HashMatcher.EICAR_SHA256)
+    .map { it.lowercase(java.util.Locale.ROOT) }
+    .toSet()
+   BundledHashSnapshot(
+    hashes = hashes,
+    bloomFilter = bloomFilterBuilder.buildBloomFilter(hashes.toList())
+   ).also { cachedBundledHashSnapshot = it }
+  }
+ }
 
  private suspend fun withMachineLearning(report: RiskReport, apk: File, info: PackageInfo?): RiskReport {
   val prediction = machineLearningScanner.scan(apk, info) ?: return report
@@ -275,26 +320,62 @@ class PackageScanner(
  private suspend fun findExactHashThreat(
   key: String, label: String, sha: String, md5: String, sha1: String?, fileSize: Long?
  ): ScanResult? {
+  // The fixed EICAR digest is a local fallback and is checked before optional
+  // signed-database, local Room, or threat-feed lookups.
+  if (sha.equals(HashMatcher.EICAR_SHA256, ignoreCase = true)) {
+   return ScanResult(
+    key, label, sha, md5, ScanVerdict.THREAT,
+    listOf(HashMatcher.EICAR_MALWARE_NAME), 0
+   ).copy(
+    threatEventId = UUID.randomUUID().toString(),
+    riskScore = 1f,
+    sha1 = sha1,
+    detectionSource = DetectionSource.HASH,
+    malwareName = HashMatcher.EICAR_MALWARE_NAME
+   )
+  }
+
   val encrypted = hashStore.protectHash(sha)
   val signedHashMatch = hashDatabaseManager?.lookup(sha, md5, sha1, fileSize)
   if (signedHashMatch != null) {
    return ScanResult(key, label, sha, md5, ScanVerdict.THREAT,
     listOf(context.getString(R.string.hashdb_match, signedHashMatch.algorithm.token.uppercase(), signedHashMatch.threatName)), 0)
-    .copy(threatEventId = UUID.randomUUID().toString(), riskScore = 1f, sha1 = sha1, reasonTexts = listOf(UiText(R.string.hashdb_match, listOf(signedHashMatch.algorithm.token.uppercase(), signedHashMatch.threatName))))
+    .copy(threatEventId = UUID.randomUUID().toString(), riskScore = 1f, sha1 = sha1, reasonTexts = listOf(UiText(R.string.hashdb_match, listOf(signedHashMatch.algorithm.token.uppercase(), signedHashMatch.threatName))), detectionSource = DetectionSource.SIGNED_DATABASE, malwareName = signedHashMatch.threatName)
   }
   val threat = dao.findThreatByEncryptedHash(encrypted)
   if (threat != null) {
    val family = revealMetadataOrPlaintext(threat.malwareFamily, "family")
    val level = revealMetadataOrPlaintext(threat.threatLevel, "level")
-   return ScanResult(key, label, sha, md5, ScanVerdict.THREAT, listOf(context.getString(R.string.hash_match, family, level)), 0).copy(threatEventId = UUID.randomUUID().toString(), riskScore = 1f, sha1 = sha1, reasonTexts = listOf(UiText(R.string.hash_match, listOf(family, UiText(SecurityText.severity(level))))))
+   return ScanResult(key, label, sha, md5, ScanVerdict.THREAT, listOf(context.getString(R.string.hash_match, family, level)), 0).copy(threatEventId = UUID.randomUUID().toString(), riskScore = 1f, sha1 = sha1, reasonTexts = listOf(UiText(R.string.hash_match, listOf(family, UiText(SecurityText.severity(level))))), detectionSource = DetectionSource.HASH, malwareName = family)
   }
   val feedThreat = threatIntelligenceRepository?.lookupHash(sha, md5, sha1, fileSize)
   if (feedThreat != null) {
    return ScanResult(key, label, sha, md5, ScanVerdict.THREAT,
     listOf(context.getString(R.string.threat_feed_hash_match, feedThreat.threatName, feedThreat.source)), 0)
-    .copy(threatEventId = UUID.randomUUID().toString(), riskScore = 1f, sha1 = sha1, reasonTexts = listOf(UiText(R.string.threat_feed_hash_match, listOf(feedThreat.threatName, feedThreat.source))))
+    .copy(
+     threatEventId = UUID.randomUUID().toString(),
+     riskScore = 1f,
+     sha1 = sha1,
+     reasonTexts = listOf(UiText(R.string.threat_feed_hash_match, listOf(feedThreat.threatName, feedThreat.source))),
+     detectionSource = DetectionSource.THREAT_INTELLIGENCE_FEED,
+     malwareName = feedThreat.threatName
+    )
   }
-  return null
+
+  // Bundled signatures are a final local exact-match layer. Existing signed
+  // DB, encrypted Room allow/trust state, and opted-in feed checks retain their
+  // established precedence; every Bloom-filter candidate is exact-verified.
+  val bundled = loadBundledHashSnapshot()
+  val bundledMatch = hashMatcher.matchDigests(md5, sha, bundled.hashes, bundled.bloomFilter)
+  if (!bundledMatch.isThreat) return null
+  val name = bundledMatch.malwareName ?: "Known hash signature"
+  return ScanResult(key, label, sha, md5, ScanVerdict.THREAT, listOf(name), 0).copy(
+   threatEventId = UUID.randomUUID().toString(),
+   riskScore = 1f,
+   sha1 = sha1,
+   detectionSource = DetectionSource.HASH,
+   malwareName = name
+  )
  }
  // Invoked only after all exact-hash engines return no match.
  private suspend fun evaluateUnmatched(

@@ -1,5 +1,15 @@
 package com.vibesync.antivirus.core.engine
 enum class ScanVerdict { THREAT, SUSPICIOUS, NO_MATCH, NOT_SCANNED }
+
+enum class DetectionSource {
+    NONE,
+    HASH,
+    SIGNED_DATABASE,
+    THREAT_INTELLIGENCE_FEED,
+    YARA,
+    ML,
+    HEURISTIC
+}
 data class ScanResult(
  val packageOrPath: String,
  val displayName: String,
@@ -26,5 +36,9 @@ data class ScanResult(
  /** User override; no detection engine was executed. */
  val trustedByUser: Boolean = false,
  /** Resource-backed copy is resolved against the current Activity locale. */
- val reasonTexts: List<com.vibesync.antivirus.core.locale.UiText> = emptyList()
+ val reasonTexts: List<com.vibesync.antivirus.core.locale.UiText> = emptyList(),
+ /** Detection engine that produced a conclusive or advisory result. */
+ val detectionSource: DetectionSource = DetectionSource.NONE,
+ /** Matched signature/rule label when the engine supplies one. */
+ val malwareName: String? = null
 )
