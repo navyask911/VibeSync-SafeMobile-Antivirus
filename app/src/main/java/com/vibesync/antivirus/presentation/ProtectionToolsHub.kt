@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import com.vibesync.antivirus.R
 import com.vibesync.antivirus.ui.components.CyberCard
 import com.vibesync.antivirus.ui.theme.SecurityTokens
+import com.vibesync.antivirus.ui.theme.VibeSyncEmerald
 
 @Composable
 internal fun ProtectionToolsHub(
