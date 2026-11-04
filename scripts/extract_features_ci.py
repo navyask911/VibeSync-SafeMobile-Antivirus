@@ -256,7 +256,7 @@ def has_complete_reputation(record: dict[str, str]) -> bool:
         vt_count = int(record["vt_malicious_count"])
         ha_score = float(record["ha_threat_score"])
         verdict = str(record["ha_verdict"]).strip().lower()
-        return vt_count >= 0 and 0.0 <= ha_score <= 100.0 and verdict not in ("", "not found")
+        return vt_count > 0 and 0.0 <= ha_score <= 100.0 and verdict == "malicious"
     except (KeyError, TypeError, ValueError):
         return False
 
