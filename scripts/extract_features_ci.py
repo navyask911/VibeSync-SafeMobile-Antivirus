@@ -292,6 +292,138 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
+
+def recent_threatfox_sha256_iocs(path: Path) -> list[str]:
+    """Read unique SHA-256 IOC values from a ThreatFox get_iocs response."""
+    response = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(response, dict) or response.get("query_status") != "ok":
+        raise ValueError("Invalid ThreatFox recent IOCs response")
+    items = response.get("data")
+    if not isinstance(items, list):
+        raise ValueError("Missing ThreatFox IOC data")
+    found, seen = [], set()
+    for record in items:
+        if not isinstance(record, dict):
+            continue
+        if str(record.get("ioc_type", "")).strip().lower() != "sha256_hash":
+            continue
+        digest = str(record.get("ioc") or "").strip().lower()
+        if not SHA256.fullmatch(digest):
+            raise ValueError("ThreatFox returned a malformed SHA-256 IOC")
+        if digest not in seen:
+            seen.add(digest)
+            found.append(digest)
+    return found
+
+
+def file_sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(64 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def extract_recent(path: Path, output: Path, max_samples: int = 20, *,
+                   samples_dir: Path, analyzer=None,
+                   enrichment_csv: Path | None = None):
+    """Extract vectors only from separately staged, hash-matching local APK files.
+
+    ThreatFox is an IOC feed and does not expose APK download bytes through
+    get_iocs. This helper deliberately performs no sample-provider network calls.
+    """
+    if not 1 <= max_samples <= 20:
+        raise ValueError("Sampling budget must be 1..20 APK attempts")
+    if os.environ.get("THREATFOX_AI_TRAINING_APPROVED", "").strip().lower() != "true":
+        raise PermissionError(
+            "ThreatFox data is not approved for AI training; require Spamhaus prior written consent."
+        )
+    schema = schema_features()
+    candidates = recent_threatfox_sha256_iocs(path)
+    if enrichment_csv is None:
+        enrichment_csv = Path(__file__).resolve().parents[1] / "data/enriched_threats.csv"
+    enrichment = load_enrichment_cache(Path(enrichment_csv))
+    verified = [digest for digest in candidates
+                if has_complete_reputation(enrichment.get(digest, {}))]
+    skipped = len(candidates) - len(verified)
+    print(f"MLOps discovery: {len(verified)} reputation-qualified ThreatFox hashes; "
+          f"skipped {skipped} without required HA evidence.", flush=True)
+
+    if not samples_dir.is_dir():
+        print("MLOps skipped: no separately authorized local APK sample directory was supplied.", flush=True)
+        rows: list[list[int]] = []
+        feature_metadata: list[dict[str, object]] = []
+    else:
+        rows = []
+        feature_metadata = []
+        attempts = 0
+        failures: dict[str, int] = {}
+        for digest in verified:
+            if attempts >= max_samples or len(rows) >= min(10, max_samples):
+                break
+            attempts += 1
+            sample = samples_dir / f"{digest}.apk"
+            try:
+                if not sample.is_file() or sample.is_symlink():
+                    raise SampleRejected("No local APK file staged for this IOC")
+                if sample.stat().st_size <= 0 or sample.stat().st_size > MAX_APK_BYTES:
+                    raise SampleRejected("Local APK violates size limits")
+                if file_sha256(sample) != digest:
+                    raise SampleRejected("Local APK SHA-256 does not match ThreatFox IOC")
+                vector = analyze_android_apk(sample, schema, analyzer=analyzer)
+                if len(vector) != 215 or any(bit not in (0, 1) for bit in vector):
+                    raise SampleRejected("Feature extractor returned a non-binary 215-bit vector")
+                reputation = enrichment[digest]
+                rows.append(vector)
+                feature_metadata.append({
+                    "sha256": digest,
+                    "vt_malicious_count": int(reputation["vt_malicious_count"]),
+                    "ha_threat_score": (
+                        float(reputation["ha_threat_score"])
+                        if str(reputation["ha_threat_score"]).strip().lower() not in ("", "not found")
+                        else "Not Found"
+                    ),
+                    "ha_verdict": reputation["ha_verdict"],
+                })
+            except Exception as exc:
+                cause = type(exc).__name__
+                failures[cause] = failures.get(cause, 0) + 1
+                print(f"MLOps skipped local candidate: {cause}", flush=True)
+
+    output.parent.mkdir(parents=True, exist_ok=True)
+    temporary = output.with_suffix(".part")
+    try:
+        temporary.write_text(json.dumps({
+            "feature_rows": rows,
+            "feature_metadata": feature_metadata,
+        }, separators=(",", ":"), allow_nan=False) + "\n", encoding="utf-8")
+        temporary.replace(output)
+    finally:
+        temporary.unlink(missing_ok=True)
+    print(f"MLOps RESULT: ThreatFox candidates={len(candidates)}; validated_local_apk_rows={len(rows)}; "
+          f"target_rows={min(10, max_samples)}.", flush=True)
+    return rows
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--recent", type=Path, required=True,
+                        help="ThreatFox get_iocs JSON response written by build_threatfox_hsb.py")
+    parser.add_argument("--samples-dir", type=Path, required=True,
+                        help="Separately authorized local directory containing <sha256>.apk files")
+    parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--max-samples", type=int, default=20)
+    parser.add_argument("--enrichment-csv", type=Path,
+                        default=Path(__file__).resolve().parents[1] / "data/enriched_threats.csv")
+    args = parser.parse_args()
+    extract_recent(args.recent, args.output, args.max_samples, samples_dir=args.samples_dir,
+                   enrichment_csv=args.enrichment_csv)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
 def load_enrichment_cache(path: Path) -> dict[str, dict[str, str]]:
     """Load provider metadata keyed by SHA-256; never infer a missing verdict."""
     if not path.is_file():
