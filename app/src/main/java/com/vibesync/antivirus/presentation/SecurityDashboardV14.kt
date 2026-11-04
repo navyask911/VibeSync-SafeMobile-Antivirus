@@ -258,13 +258,16 @@ internal fun SecurityDashboardV14(
             CyberCard(modifier = Modifier.fillMaxWidth(), shape = SecurityTokens.cardShape) {
                 Column(Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
                     verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                    DashboardActionRow(R.drawable.ic_home_apps, R.string.nav_apps,
+                    DashboardActionRow({ Icon(painterResource(R.drawable.ic_home_apps), null, tint = MaterialTheme.colorScheme.secondary) },
+                        R.string.nav_apps,
                         if (inventoryLoaded) pluralStringResource(R.plurals.l10n_apps, installedAppsCount, installedAppsCount) else stringResource(R.string.apps_inventory_empty),
                         stringResource(R.string.dashboard_view), onApps)
-                    DashboardActionRow(R.drawable.ic_home_quarantine, R.string.quarantine_vault_title,
+                    DashboardActionRow({ Icon(painterResource(R.drawable.ic_home_quarantine), null, tint = MaterialTheme.colorScheme.secondary) },
+                        R.string.quarantine_vault_title,
                         pluralStringResource(R.plurals.l10n_files, quarantinedFilesCount, quarantinedFilesCount),
                         stringResource(R.string.dashboard_view), onQuarantine)
-                    DashboardActionRow(Icons.Outlined.CleaningServices, R.string.cleaner_title,
+                    DashboardActionRow({ Icon(Icons.Outlined.CleaningServices, null, tint = MaterialTheme.colorScheme.secondary) },
+                        R.string.cleaner_title,
                         stringResource(R.string.cleaner_description), stringResource(R.string.cleaner_scan_storage), onCleaner)
                 }
             }
@@ -335,7 +338,7 @@ private fun QuickProtectionTool(
 
 @Composable
 private fun DashboardActionRow(
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    icon: @Composable () -> Unit,
     titleResource: Int,
     description: String,
     action: String,
@@ -349,7 +352,7 @@ private fun DashboardActionRow(
         Box(Modifier.size(40.dp).background(
             MaterialTheme.colorScheme.secondaryContainer, SecurityTokens.iconTileShape
         ), contentAlignment = Alignment.Center) {
-            Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.secondary)
+            icon()
         }
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
             Text(stringResource(titleResource), style = MaterialTheme.typography.bodyMedium,
