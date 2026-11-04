@@ -159,6 +159,7 @@ val buildYaraXNative = tasks.register<Exec>("buildYaraXNative") {
     dependsOn(prepareYaraXNativeSource)
     workingDir = yaraXSourceDirectory.get().asFile
     inputs.dir(yaraXSourceDirectory)
+    inputs.property("androidAbis", yaraXAndroidAbis)
     outputs.dir(yaraXGeneratedJniDirectory)
     doFirst {
         val outputDirectory = yaraXGeneratedJniDirectory.get().asFile
