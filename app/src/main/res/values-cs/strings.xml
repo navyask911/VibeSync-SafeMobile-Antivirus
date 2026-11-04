@@ -824,4 +824,6 @@
     <string name="ui_read_less">Zobrazit méně</string>
     <string name="ui_status_safe">Bezpečné</string>
     <string name="ui_status_at_risk">V ohrožení</string>
+    <string name="scan_detected_by">Zjištěno pomocí: %1$s</string>
+    <string name="scan_detected_by_confidence">Zjištěno pomocí: %1$s (%2$d%%)</string>
 </resources>

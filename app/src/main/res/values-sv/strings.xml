@@ -824,4 +824,6 @@
     <string name="ui_read_less">Visa mindre</string>
     <string name="ui_status_safe">Säkert</string>
     <string name="ui_status_at_risk">I riskzonen</string>
+    <string name="scan_detected_by">Identifierad av: %1$s</string>
+    <string name="scan_detected_by_confidence">Identifierad av: %1$s (%2$d%%)</string>
 </resources>

@@ -18,6 +18,7 @@ import com.vibesync.antivirus.core.engine.yara.YaraXScanResult
 import com.vibesync.antivirus.core.engine.yara.YaraXScanState
 import com.vibesync.antivirus.core.hashdb.HashDatabaseManager
 import com.vibesync.antivirus.core.engine.DeepStaticAnalyzer
+import com.vibesync.antivirus.engine.ensemble.ThreatEnsembleEvaluator
 import com.vibesync.antivirus.core.heuristics.PermissionRiskAnalyzer
 import com.vibesync.antivirus.core.security.IntegrityChecker
 import com.vibesync.antivirus.core.security.ProtectedPackagePolicy
@@ -173,6 +174,21 @@ class PackageScanner(
   )
  }
 
+ private fun rawYaraVerdict(yaraResult: YaraXScanResult?): ScanVerdict? = when {
+  yaraResult == null -> null
+  yaraResult.threatMatches.isNotEmpty() -> ScanVerdict.THREAT
+  yaraResult.suspiciousMatches.isNotEmpty() -> ScanVerdict.SUSPICIOUS
+  yaraResult.state == YaraXScanState.NO_MATCH -> ScanVerdict.NO_MATCH
+  else -> null
+ }
+
+ private fun evaluateWithEnsemble(
+  result: ScanResult,
+  yaraResult: YaraXScanResult? = null
+ ): ScanResult = ThreatEnsembleEvaluator.evaluate(
+  result.copy(yaraVerdict = rawYaraVerdict(yaraResult))
+ )
+
  private suspend fun runMachineLearning(apk: File): Float? {
   val features = drebinFeatureExtractor.extractFeaturesAsync(apk)
   // Phase 3 records the research probability only. Phase 4 owns any verdict fusion.
@@ -265,8 +281,10 @@ class PackageScanner(
   val exactThreat = findExactHashThreat(file.name, file.name,
    hash.sha256, hash.md5, hash.sha1, hash.bytesRead)
   if (exactThreat != null) {
-   audit(exactThreat, start, scanSessionId)
-   return exactThreat.copy(durationMs = elapsed(start),
+   // Exact hash matches remain an immediate short-circuit: no YARA or ML work runs.
+   val evaluated = evaluateWithEnsemble(exactThreat)
+   audit(evaluated, start, scanSessionId)
+   return evaluated.copy(durationMs = elapsed(start),
     sourceLocalPath = file.absolutePath, scanSessionId = scanSessionId)
   }
 
@@ -275,9 +293,12 @@ class PackageScanner(
   } else null
   val yaraThreat = yaraXResult?.threatMatches?.firstOrNull()
   if (yaraThreat != null) {
-   val detected = yaraThreatResult(
-    file.name, file.name, hash.sha256, hash.md5,
-    yaraThreat, start, null, scanSessionId
+   val detected = evaluateWithEnsemble(
+    yaraThreatResult(
+     file.name, file.name, hash.sha256, hash.md5,
+     yaraThreat, start, null, scanSessionId
+    ),
+    yaraXResult
    )
    audit(detected, start, scanSessionId)
    return detected.copy(
@@ -310,13 +331,14 @@ class PackageScanner(
    val assessed = evaluateUnmatched(file.name, file.name, hash.sha256, hash.md5, staticReasons, staticScore, sha1 = hash.sha1, report = staticReport)
     .copy(riskReport = staticReport, mlProbability = staticReport?.mlProbability)
    val firstSuspiciousYara = yaraXResult?.suspiciousMatches?.firstOrNull()
-   var output = markIncompleteYaraIfOtherwiseClean(assessed, yaraXResult)
-   if (output.verdict == ScanVerdict.SUSPICIOUS && firstSuspiciousYara != null) {
+   var output = assessed
+   if (firstSuspiciousYara != null) {
     output = output.copy(
-     detectionSource = DetectionSource.YARA,
      malwareName = firstSuspiciousYara.malwareName ?: firstSuspiciousYara.ruleIdentifier
     )
    }
+   output = evaluateWithEnsemble(output, yaraXResult)
+   output = markIncompleteYaraIfOtherwiseClean(output, yaraXResult)
    if (persistAllAudit || output.verdict == ScanVerdict.THREAT || output.verdict == ScanVerdict.SUSPICIOUS || output.verdict == ScanVerdict.NOT_SCANNED) audit(output, start, scanSessionId)
    output.copy(durationMs = elapsed(start), sourceLocalPath = file.absolutePath, scanSessionId = scanSessionId)
   } catch (cancelled: CancellationException) {
@@ -394,7 +416,11 @@ class PackageScanner(
   val apk = appInfo.sourceDir?.let(::File)
   if (apk == null || !apk.isFile || !apk.canRead()) {
    reasons += context.getString(R.string.apk_unreadable)
-   val failed = result(info.packageName, label, null, null, if (adjustedRiskScore >= 45) ScanVerdict.SUSPICIOUS else ScanVerdict.NOT_SCANNED, reasons, start).copy(packageName = info.packageName, scanSessionId = scanSessionId)
+   val failed = result(info.packageName, label, null, null, if (adjustedRiskScore >= 45) ScanVerdict.SUSPICIOUS else ScanVerdict.NOT_SCANNED, reasons, start).copy(
+    packageName = info.packageName,
+    scanSessionId = scanSessionId,
+    detectionSource = if (adjustedRiskScore >= 45) DetectionSource.HEURISTIC else DetectionSource.NONE
+   )
    auditSafely(failed, start, scanSessionId)
    return failed
   }
@@ -409,17 +435,22 @@ class PackageScanner(
   val exactThreat = findExactHashThreat(info.packageName, label,
    hashes.sha256, hashes.md5, hashes.sha1, hashes.bytesRead)
   if (exactThreat != null) {
-   audit(exactThreat, start, scanSessionId)
-   return exactThreat.copy(durationMs = elapsed(start),
+   // Exact hash matches remain an immediate short-circuit: no YARA or ML work runs.
+   val evaluated = evaluateWithEnsemble(exactThreat)
+   audit(evaluated, start, scanSessionId)
+   return evaluated.copy(durationMs = elapsed(start),
     packageName = info.packageName, scanSessionId = scanSessionId)
   }
 
   val yaraXResult = yaraXScanner.scanApk(apk)
   val yaraThreat = yaraXResult.threatMatches.firstOrNull()
   if (yaraThreat != null) {
-   val detected = yaraThreatResult(
-    info.packageName, label, hashes.sha256, hashes.md5,
-    yaraThreat, start, info.packageName, scanSessionId
+   val detected = evaluateWithEnsemble(
+    yaraThreatResult(
+     info.packageName, label, hashes.sha256, hashes.md5,
+     yaraThreat, start, info.packageName, scanSessionId
+    ),
+    yaraXResult
    )
    audit(detected, start, scanSessionId)
    return detected.copy(
@@ -439,13 +470,14 @@ class PackageScanner(
   val assessed = evaluateUnmatched(info.packageName, label, hashes.sha256, hashes.md5, reasons, combinedRiskScore, sha1 = hashes.sha1, report = deepReport)
    .copy(riskReport = deepReport, mlProbability = deepReport.mlProbability)
   val firstSuspiciousYara = yaraXResult.suspiciousMatches.firstOrNull()
-  var output = markIncompleteYaraIfOtherwiseClean(assessed, yaraXResult)
-  if (output.verdict == ScanVerdict.SUSPICIOUS && firstSuspiciousYara != null) {
+  var output = assessed
+  if (firstSuspiciousYara != null) {
    output = output.copy(
-    detectionSource = DetectionSource.YARA,
     malwareName = firstSuspiciousYara.malwareName ?: firstSuspiciousYara.ruleIdentifier
    )
   }
+  output = evaluateWithEnsemble(output, yaraXResult)
+  output = markIncompleteYaraIfOtherwiseClean(output, yaraXResult)
   audit(output, start, scanSessionId)
   return output.copy(durationMs = elapsed(start), packageName = info.packageName, scanSessionId = scanSessionId)
  }
@@ -523,14 +555,21 @@ class PackageScanner(
   if (dao.isHashWhitelisted(encrypted)) return ScanResult(key, label, sha, md5, ScanVerdict.NO_MATCH, listOf(context.getString(R.string.hash_allowlisted)), 0).copy(sha1 = sha1, reasonTexts = listOf(UiText(R.string.hash_allowlisted)))
   val verdict = if (score >= 45) ScanVerdict.SUSPICIOUS else ScanVerdict.NO_MATCH
   val notes = if (heuristic.isEmpty()) listOf(context.getString(R.string.no_match_detail)) else heuristic + context.getString(R.string.risk_review)
-  return ScanResult(key, label, sha, md5, verdict, notes, 0).copy(riskScore = score.coerceIn(0, 100) / 100f, sha1 = sha1, reasonTexts = SecurityText.reasons(context, notes, report))
+  return ScanResult(key, label, sha, md5, verdict, notes, 0).copy(
+   riskScore = score.coerceIn(0, 100) / 100f,
+   sha1 = sha1,
+   reasonTexts = SecurityText.reasons(context, notes, report),
+   detectionSource = if (verdict == ScanVerdict.SUSPICIOUS) DetectionSource.HEURISTIC else DetectionSource.NONE
+  )
  }
  // Stream-only scans still check exact hashes before allowing heuristic verdicts.
  private suspend fun evaluate(
   key: String, label: String, sha: String, md5: String, heuristic: List<String>,
   score: Int, sha1: String? = null, fileSize: Long? = null, report: RiskReport? = null
- ): ScanResult = findExactHashThreat(key, label, sha, md5, sha1, fileSize)
-  ?: evaluateUnmatched(key, label, sha, md5, heuristic, score, sha1, report)
+ ): ScanResult = evaluateWithEnsemble(
+  findExactHashThreat(key, label, sha, md5, sha1, fileSize)
+   ?: evaluateUnmatched(key, label, sha, md5, heuristic, score, sha1, report)
+ )
  private suspend fun auditSafely(result: ScanResult, start: Long, scanSessionId: String) {
   try {
    audit(result, start, scanSessionId)

@@ -824,4 +824,6 @@
     <string name="ui_read_less">Minder weergeven</string>
     <string name="ui_status_safe">Veilig</string>
     <string name="ui_status_at_risk">Risico</string>
+    <string name="scan_detected_by">Gedetecteerd door: %1$s</string>
+    <string name="scan_detected_by_confidence">Gedetecteerd door: %1$s (%2$d%%)</string>
 </resources>

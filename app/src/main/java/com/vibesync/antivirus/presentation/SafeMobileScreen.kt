@@ -110,6 +110,7 @@ import com.vibesync.antivirus.core.observer.FullScreenAlertAccess
 import com.vibesync.antivirus.core.worker.OverlayRiskReviewManager
 import com.vibesync.antivirus.core.security.DeviceOwnerManager
 import com.vibesync.antivirus.core.engine.ScanResult
+import com.vibesync.antivirus.core.engine.DetectionSource
 import com.vibesync.antivirus.core.quarantine.LocalQuarantineManager
 import com.vibesync.antivirus.core.engine.ScanVerdict
 import com.vibesync.antivirus.core.security.GlobalThreatIntelligenceConsent
@@ -123,6 +124,7 @@ import com.vibesync.antivirus.ui.components.StatusKind
 import java.io.File
 import java.text.DateFormat
 import java.util.Date
+import kotlin.math.roundToInt
 import kotlinx.coroutines.launch
 @Composable fun SafeMobileTheme(
  theme: com.vibesync.antivirus.ui.theme.AppTheme = com.vibesync.antivirus.ui.theme.AppTheme.LIGHT,
@@ -1430,6 +1432,22 @@ internal fun ScanResultsScreen(
   }
   result.threatEventId?.takeIf { it.isNotBlank() }?.let {
    Text(stringResource(R.string.threat_event_ray_id,it),modifier=Modifier.padding(horizontal=8.dp),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+  }
+  if ((result.verdict == ScanVerdict.THREAT || result.verdict == ScanVerdict.SUSPICIOUS) &&
+   result.detectionSource != DetectionSource.NONE) {
+   val sourceText = if (result.detectionSource == DetectionSource.ENSEMBLE) {
+    val confidencePercent = result.confidence.takeIf { it.isFinite() }
+     ?.coerceIn(0f, 1f)?.let { (it * 100f).roundToInt() } ?: 0
+    stringResource(R.string.scan_detected_by_confidence, result.detectionSource.name, confidencePercent)
+   } else {
+    stringResource(R.string.scan_detected_by, result.detectionSource.name)
+   }
+   Text(
+    sourceText,
+    modifier = Modifier.padding(horizontal = 8.dp),
+    style = MaterialTheme.typography.labelSmall,
+    color = MaterialTheme.colorScheme.onSurfaceVariant
+   )
   }
   result.mlProbability?.let { p ->
    Text(stringResource(R.string.ml_probability, (p * 100).toInt().coerceIn(0, 100)),

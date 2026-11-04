@@ -824,4 +824,6 @@
     <string name="ui_read_less">Rādīt mazāk</string>
     <string name="ui_status_safe">Droši</string>
     <string name="ui_status_at_risk">Riskanti</string>
+    <string name="scan_detected_by">Noteica: %1$s</string>
+    <string name="scan_detected_by_confidence">Noteica: %1$s (%2$d%%)</string>
 </resources>

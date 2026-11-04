@@ -681,4 +681,6 @@
     <string name="ui_read_less">הצג פחות</string>
     <string name="ui_status_safe">בטוח</string>
     <string name="ui_status_at_risk">בסיכון</string>
+    <string name="scan_detected_by">זוהה על ידי: %1$s</string>
+    <string name="scan_detected_by_confidence">זוהה על ידי: %1$s (%2$d%%)</string>
 </resources>

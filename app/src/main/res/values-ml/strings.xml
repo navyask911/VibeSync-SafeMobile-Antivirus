@@ -824,4 +824,6 @@
     <string name="ui_read_less">കുറച്ച് മാത്രം കാണിക്കുക</string>
     <string name="ui_status_safe">സുരക്ഷിതം</string>
     <string name="ui_status_at_risk">അപകടസാധ്യത</string>
+    <string name="scan_detected_by">കണ്ടെത്തിയത്: %1$s</string>
+    <string name="scan_detected_by_confidence">കണ്ടെത്തിയത്: %1$s (%2$d%%)</string>
 </resources>

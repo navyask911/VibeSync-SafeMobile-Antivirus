@@ -824,4 +824,6 @@
     <string name="ui_read_less">Vis mindre</string>
     <string name="ui_status_safe">Trygg</string>
     <string name="ui_status_at_risk">I fare</string>
+    <string name="scan_detected_by">Oppdaget av: %1$s</string>
+    <string name="scan_detected_by_confidence">Oppdaget av: %1$s (%2$d%%)</string>
 </resources>

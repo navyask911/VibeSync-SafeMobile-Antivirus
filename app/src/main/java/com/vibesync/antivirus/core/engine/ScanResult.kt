@@ -8,6 +8,7 @@ enum class DetectionSource {
     THREAT_INTELLIGENCE_FEED,
     YARA,
     ML,
+    ENSEMBLE,
     HEURISTIC
 }
 data class ScanResult(
@@ -40,5 +41,9 @@ data class ScanResult(
  /** Detection engine that produced a conclusive or advisory result. */
  val detectionSource: DetectionSource = DetectionSource.NONE,
  /** Matched signature/rule label when the engine supplies one. */
- val malwareName: String? = null
+ val malwareName: String? = null,
+ /** Raw YARA result retained separately from the fused verdict. */
+ val yaraVerdict: ScanVerdict? = null,
+ /** Confidence assigned by the conclusive detection layer or ensemble. */
+ val confidence: Float = 0.0f
 )

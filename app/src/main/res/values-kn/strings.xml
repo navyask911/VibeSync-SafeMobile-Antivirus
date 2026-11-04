@@ -684,5 +684,7 @@
     <string name="ui_status_at_risk">ಅಪಾಯದಲ್ಲಿದೆ</string>
 
     <!-- v1.5.2 Figma UI translations -->
+    <string name="scan_detected_by">ಪತ್ತೆಹಚ್ಚಿದ ಮೂಲ: %1$s</string>
+    <string name="scan_detected_by_confidence">ಪತ್ತೆಹಚ್ಚಿದ ಮೂಲ: %1$s (%2$d%%)</string>
 </resources>
 
