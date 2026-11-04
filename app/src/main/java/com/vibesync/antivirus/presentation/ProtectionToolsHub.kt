@@ -101,11 +101,13 @@ internal fun ProtectionToolsHub(
             CyberCard(modifier = Modifier.fillMaxWidth(), shape = SecurityTokens.cardShape) {
                 Column(Modifier.padding(horizontal = 16.dp)) {
                     ToolHubRow({ Icon(painterResource(R.drawable.ic_home_install_sentinel), null, tint = MaterialTheme.colorScheme.secondary) }, R.string.download_interceptor_label, R.string.install_sources_body,
-                        stringResource(if (installSentinelActive) R.string.monitor_active else R.string.monitor_inactive)) { onOpen("sources") }
+                        stringResource(if (installSentinelActive) R.string.monitor_active else R.string.monitor_inactive),
+                        if (installSentinelActive) VibeSyncEmerald else MaterialTheme.colorScheme.tertiary) { onOpen("sources") }
                     ToolHubRow({ Icon(painterResource(R.drawable.ic_home_folder_monitor), null, tint = MaterialTheme.colorScheme.secondary) }, R.string.sentinel_scope_title, R.string.monitor_explanation,
-                        stringResource(if (foldersActive) R.string.monitor_active else R.string.monitor_inactive)) { onOpen("sentinel") }
+                        stringResource(if (foldersActive) R.string.monitor_active else R.string.monitor_inactive),
+                        if (foldersActive) VibeSyncEmerald else MaterialTheme.colorScheme.tertiary) { onOpen("sentinel") }
                     ToolHubRow({ Icon(painterResource(R.drawable.ic_home_link_checker), null, tint = MaterialTheme.colorScheme.secondary) }, R.string.nav_phishing, R.string.phishing_disclaimer,
-                        stringResource(R.string.feature_status_review)) { onOpen("phishing") }
+                        stringResource(R.string.feature_status_review), MaterialTheme.colorScheme.secondary) { onOpen("phishing") }
                 }
             }
         }
@@ -115,7 +117,7 @@ internal fun ProtectionToolsHub(
             CyberCard(modifier = Modifier.fillMaxWidth(), shape = SecurityTokens.cardShape) {
                 Column(Modifier.padding(horizontal = 16.dp)) {
                     ToolHubRow({ Icon(painterResource(R.drawable.ic_home_device_posture), null, tint = MaterialTheme.colorScheme.secondary) }, R.string.posture_title, R.string.posture_risk_note,
-                        stringResource(R.string.v140_pending_actions, pendingActions)) { onOpen("posture") }
+                        stringResource(R.string.v140_pending_actions, pendingActions), MaterialTheme.colorScheme.tertiary) { onOpen("posture") }
                     ToolHubRow({ Icon(painterResource(R.drawable.ic_home_apps), null, tint = MaterialTheme.colorScheme.secondary) }, R.string.nav_apps, R.string.apps_inventory_empty_body,
                         if (inventoryLoaded) pluralStringResource(R.plurals.l10n_apps, installedAppsCount, installedAppsCount) else stringResource(R.string.apps_inventory_empty)) { onOpen("apps") }
                     ToolHubRow({ Icon(painterResource(R.drawable.ic_home_quarantine), null, tint = MaterialTheme.colorScheme.secondary) }, R.string.quarantine_vault_title, R.string.quarantine_vault_description,
@@ -136,6 +138,7 @@ private fun ToolHubRow(
     titleResource: Int,
     bodyResource: Int,
     status: String,
+    statusColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
     onClick: () -> Unit
 ) {
     Row(
@@ -154,7 +157,7 @@ private fun ToolHubRow(
                 color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
         }
         Text(status, style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1,
+            color = statusColor, maxLines = 1,
             overflow = TextOverflow.Ellipsis)
     }
 }

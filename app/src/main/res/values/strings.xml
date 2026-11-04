@@ -45,8 +45,8 @@
 <string name="scan_preparing">Preparing scan…</string>
 <string name="scan_cancel">Cancel scan</string>
 <string name="scan_cancelled">Scan cancelled. No complete-device safety conclusion was made.</string>
-<string name="monitor_active">Monitoring is active</string>
-<string name="monitor_inactive">Monitoring is stopped</string>
+<string name="monitor_active">On</string>
+<string name="monitor_inactive">Off</string>
 <string name="monitor_start_failed">Downloads monitoring could not be started. Check permissions and try again.</string>
 <string name="import_unverified_title">Import unverified definitions?</string>
 <string name="import_unverified_body">SafeMobile validates the JSON structure and hash format, but this local file is not cryptographically authenticated by SafeMobile. Untrusted definitions may create false positives. Import only from a source you trust and are permitted to use. The file and hashes are not uploaded.</string>
@@ -322,7 +322,7 @@
     <string name="apps_inventory_empty">Installed app inventory is not available yet</string>
     <string name="apps_inventory_empty_body">Run an installed-app scan to populate this list. System and protected packages are review-only.</string>
     <string name="apps_inventory_count">%1$d apps assessed in the latest available results</string>
-    <string name="sentinel_scope_title">Monitoring scope and limitations</string>
+    <string name="sentinel_scope_title">Folder monitoring</string>
     <string name="sentinel_scope_body">The current watcher observes APK create, move, and write-close events directly under the public Downloads directory while its foreground service is running. Events can be missed if the service stops or files are stored elsewhere. Post-install checks are best-effort and do not block Android installation.</string>
 
 <string name="risk_accessibility_overlay">Requests Accessibility plus overlay capability (potential overlay/RAT pattern)</string>

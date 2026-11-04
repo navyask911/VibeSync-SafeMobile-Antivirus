@@ -241,16 +241,20 @@ internal fun SecurityDashboardV14(
                 Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     QuickProtectionTool(R.drawable.ic_home_install_sentinel, R.string.download_interceptor_label,
                         stringResource(if (installSentinelActive) R.string.monitor_active else R.string.monitor_inactive),
-                        onInstallSentinel, Modifier.weight(1f))
+                        onInstallSentinel, Modifier.weight(1f),
+                        stateColor = if (installSentinelActive) VibeSyncEmerald else MaterialTheme.colorScheme.tertiary)
                     QuickProtectionTool(R.drawable.ic_home_folder_monitor, R.string.sentinel_scope_title,
                         stringResource(if (downloadsActive || chatFoldersActive) R.string.monitor_active else R.string.monitor_inactive),
-                        onFolders, Modifier.weight(1f))
+                        onFolders, Modifier.weight(1f),
+                        stateColor = if (downloadsActive || chatFoldersActive) VibeSyncEmerald else MaterialTheme.colorScheme.tertiary)
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     QuickProtectionTool(R.drawable.ic_home_link_checker, R.string.nav_phishing,
-                        stringResource(R.string.feature_status_review), onLinkChecker, Modifier.weight(1f))
+                        stringResource(R.string.feature_status_review), onLinkChecker, Modifier.weight(1f),
+                        stateColor = MaterialTheme.colorScheme.secondary)
                     QuickProtectionTool(R.drawable.ic_home_device_posture, R.string.posture_title,
-                        stringResource(R.string.v140_pending_actions, advisor.pendingCount), onPosture, Modifier.weight(1f))
+                        stringResource(R.string.v140_pending_actions, advisor.pendingCount), onPosture, Modifier.weight(1f),
+                        stateColor = MaterialTheme.colorScheme.tertiary)
                 }
             }
         }
@@ -308,7 +312,8 @@ private fun QuickProtectionTool(
     titleResource: Int,
     stateLabel: String,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    stateColor: Color = MaterialTheme.colorScheme.onSurfaceVariant
 ) {
     Surface(
         modifier = modifier.heightIn(min = 116.dp).clickable(onClick = onClick).animateContentSize(),
@@ -326,7 +331,7 @@ private fun QuickProtectionTool(
                 }
                 Text(stateLabel, modifier = Modifier.weight(1f),
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = stateColor,
                     textAlign = androidx.compose.ui.text.style.TextAlign.End,
                     maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
