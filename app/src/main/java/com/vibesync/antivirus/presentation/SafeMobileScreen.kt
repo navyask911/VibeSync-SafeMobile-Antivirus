@@ -152,6 +152,7 @@ import kotlinx.coroutines.launch
  val activity=context as? Activity
  val vm:SafeMobileViewModel=viewModel(factory=SafeMobileViewModel.Factory(repository))
  val state by vm.state.collectAsStateWithLifecycle()
+ val installSentinelRunning by com.vibesync.antivirus.core.observer.InstallSentinelService.running.collectAsStateWithLifecycle()
  val postureVm:DevicePostureViewModel=viewModel(factory=DevicePostureViewModel.Factory(safeMobileApp.devicePostureRepository))
  val postureState by postureVm.state.collectAsStateWithLifecycle()
  val initialHashSyncPending by androidx.compose.runtime.produceState(initialValue = false, context) {
@@ -632,9 +633,9 @@ import kotlinx.coroutines.launch
            adsReady = adMobState.adsReady,
            scanRunning = state.isScanning,
            scanProgress = state.totalItems.takeIf { it > 0 }?.let { state.processedItems.toFloat() / it },
-           downloadsActive = StorageAccessPreferences.hasRole(context, StorageAccessPreferences.DOWNLOADS),
-           chatFoldersActive = StorageAccessPreferences.hasRole(context, StorageAccessPreferences.WHATSAPP) || customFolderUris.isNotEmpty(),
-           installSentinelActive = securityPrefs.getBoolean(SafeMobileApp.KEY_INSTALL_SENTINEL_ENABLED, false),
+           downloadsActive = monitoringRunning,
+           chatFoldersActive = false,
+           installSentinelActive = installSentinelRunning,
            onOpenAdvisor = { navigateToDestination("advisor", parentTabOverride = "dashboard") },
            onOpenPro = { navigateToDestination("pro") },
            onScan = { requestPrivacyAcknowledgement { vm.scanFull(); navigateToDestination("scan") } },
@@ -669,8 +670,8 @@ import kotlinx.coroutines.launch
               apkPicker.launch(arrayOf("application/vnd.android.package-archive", "application/octet-stream"))
              }
             },
-            installSentinelActive = securityPrefs.getBoolean(SafeMobileApp.KEY_INSTALL_SENTINEL_ENABLED, false),
-            foldersActive = StorageAccessPreferences.hasRole(context, StorageAccessPreferences.DOWNLOADS) ||
+            installSentinelActive = installSentinelRunning,
+            foldersActive = monitoringRunning ||
              StorageAccessPreferences.hasRole(context, StorageAccessPreferences.WHATSAPP) || customFolderUris.isNotEmpty(),
             pendingActions = advisorState.pendingCount,
             installedAppsCount = state.installedApps.size,
