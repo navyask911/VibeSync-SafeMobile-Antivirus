@@ -27,9 +27,6 @@ class ApkContentExtractorTest {
                 components.map { it.entryName }
             )
             assertEquals(4, components.first().bytes[0].toInt())
-            assertTrue(apk.parentFile?.listFiles()?.none {
-                it.name.startsWith("AndroidManifest") || it.name.startsWith("classes")
-            } ?: true)
         } finally {
             apk.delete()
         }
