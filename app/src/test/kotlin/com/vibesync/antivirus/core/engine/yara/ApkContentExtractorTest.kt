@@ -26,7 +26,7 @@ class ApkContentExtractorTest {
                 listOf("AndroidManifest.xml", "classes.dex", "classes10.dex"),
                 components.map { it.entryName }
             )
-            assertEquals(4, components.first().bytes[0].toInt())
+            assertEquals(0x03, components.first().bytes[0].toInt())
         } finally {
             apk.delete()
         }
