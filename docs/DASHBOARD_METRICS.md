@@ -37,10 +37,12 @@ main branch and can be read without credentials at:
 - `CLOUDFLARE_ACCOUNT_ID`: repository **Secret**. The workflow passes it
   through to `scripts/generate_dashboard_metrics.py` using
   `secrets.CLOUDFLARE_ACCOUNT_ID`, avoiding account discovery.
+- `CLOUDFLARE_KV_NAMESPACE_ID`: repository **Secret** containing the ID of
+  the dedicated contribution KV namespace. The workflow reads it with
+  `secrets.CLOUDFLARE_KV_NAMESPACE_ID`.
 
 ## Optional GitHub Actions variables
 
-- `CLOUDFLARE_KV_NAMESPACE_ID`: ID of the dedicated contribution KV namespace.
 - `CLOUDFLARE_KV_NAMESPACE_TITLE`: retained for deployments that configure a
   namespace title; it does not replace the namespace ID required by the metrics
   step.
@@ -51,8 +53,8 @@ When `CLOUDFLARE_KV_NAMESPACE_ID` is missing, the generator prints
 `WARNING: CLOUDFLARE_KV_NAMESPACE_ID is missing`, skips all Cloudflare KV
 requests, and writes `0` for both Cloudflare counters. This is a non-fatal
 configuration state: TweetFeed and Hybrid Analysis metrics are still generated
-normally. Once the namespace exists, set the namespace ID variable to enable
-Cloudflare reads.
+normally. Once the namespace exists, store its ID in the repository Secret
+`CLOUDFLARE_KV_NAMESPACE_ID` to enable Cloudflare reads.
 
 The script never prints credentials and never sends the Cloudflare token to
 the public Worker. It publishes counts only; no hashes, feature vectors,
