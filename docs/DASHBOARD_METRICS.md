@@ -32,27 +32,31 @@ main branch and can be read without credentials at:
 
 - `HYBRID_ANALYSIS_API_KEY`: already used by the preceding reputation
   enrichment step; the metrics step checks that it is configured.
-- `CLOUDFLARE_API_TOKEN`: read-only Cloudflare API token with access to list
-  the target account's KV namespaces and read KV values/keys.
+- `CLOUDFLARE_API_TOKEN`: read-only Cloudflare API token with permission to
+  read the selected account's KV namespace and values/keys.
+- `CLOUDFLARE_ACCOUNT_ID`: repository **Secret**. The workflow passes it
+  through to `scripts/generate_dashboard_metrics.py` using
+  `secrets.CLOUDFLARE_ACCOUNT_ID`, avoiding account discovery.
 
-Set the GitHub repository **Variables** (not secrets) for the Cloudflare
-account and the contribution KV namespace. The latest manual run showed the
-token was present but `CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_KV_NAMESPACE_ID`
-and `CLOUDFLARE_KV_NAMESPACE_TITLE` were all missing; account discovery then
-failed before the KV namespace could be queried.
+## Optional GitHub Actions variables
 
-- `CLOUDFLARE_ACCOUNT_ID`
-- `CLOUDFLARE_KV_NAMESPACE_ID`, or `CLOUDFLARE_KV_NAMESPACE_TITLE`
-- `CLOUDFLARE_KV_METRICS_KEY` if the aggregate JSON uses a nonstandard key
-  name (the default candidates include `dashboard_metrics`, `stats` and
-  `metrics`).
+- `CLOUDFLARE_KV_NAMESPACE_ID`: ID of the dedicated contribution KV namespace.
+- `CLOUDFLARE_KV_NAMESPACE_TITLE`: retained for deployments that configure a
+  namespace title; it does not replace the namespace ID required by the metrics
+  step.
+- `CLOUDFLARE_KV_METRICS_KEY`: optional nonstandard aggregate key (default
+  candidates include `dashboard_metrics`, `stats` and `metrics`).
 
-The Cloudflare token must have permission to read the selected account's KV
-namespace and its values/keys. Supplying the explicit account and namespace IDs
-avoids the account/namespace discovery calls. The script never prints
-credentials and never sends the Cloudflare token to the public Worker. It
-publishes counts only; no hashes, feature vectors, sample data, device
-identifiers or user identifiers are included. When a provider fails, the
-generator retains a previous valid count or uses the explicit safe default 0;
-workflow logs identify each fallback so a fallback zero is not mistaken for a
-successful empty result.
+When `CLOUDFLARE_KV_NAMESPACE_ID` is missing, the generator prints
+`WARNING: CLOUDFLARE_KV_NAMESPACE_ID is missing`, skips all Cloudflare KV
+requests, and writes `0` for both Cloudflare counters. This is a non-fatal
+configuration state: TweetFeed and Hybrid Analysis metrics are still generated
+normally. Once the namespace exists, set the namespace ID variable to enable
+Cloudflare reads.
+
+The script never prints credentials and never sends the Cloudflare token to
+the public Worker. It publishes counts only; no hashes, feature vectors,
+sample data, device identifiers or user identifiers are included. For other
+provider failures, the generator retains a previous valid count or uses the
+explicit safe default 0; workflow logs identify each fallback so a fallback
+zero is not mistaken for a successful empty result.

@@ -1,5 +1,6 @@
 """Offline tests for the public dashboard metrics generator."""
 import csv
+import io
 from datetime import datetime, timezone
 from pathlib import Path
 import tempfile
@@ -14,6 +15,7 @@ from generate_dashboard_metrics import (
     parse_cloudflare_metrics_document,
     tweetfeed_current_sha256_count,
     build_metrics,
+    main,
     write_metrics,
 )
 
@@ -206,6 +208,70 @@ class MetricsGeneratorTests(unittest.TestCase):
         ):
             self.assertEqual(result[field], 0)
             self.assertIsNotNone(result[field])
+
+
+    def test_missing_cloudflare_namespace_warns_and_skips_query_with_zero_counts(self):
+        previous = {
+            "cloudflare_total_donations": 88,
+            "cloudflare_confirmed_threats": 22,
+        }
+        stderr = io.StringIO()
+        with (
+            patch("generate_dashboard_metrics.tweetfeed_current_sha256_count", return_value=21),
+            patch("generate_dashboard_metrics.hybrid_analysis_verified_count", return_value=5),
+            patch("generate_dashboard_metrics.CloudflareKVReader") as reader_factory,
+            patch("sys.stderr", stderr),
+        ):
+            result = build_metrics(
+                ha_api_key="configured-ha-key",
+                cloudflare_api_token="configured-cloudflare-token",
+                cloudflare_account_id="secret-account-id",
+                cloudflare_namespace_id="",
+                fallback_metrics=previous,
+                now=datetime(2026, 11, 5, 8, 0, 0, tzinfo=timezone.utc),
+            )
+
+        reader_factory.assert_not_called()
+        self.assertEqual(result["tweetfeed_count"], 21)
+        self.assertEqual(result["ha_verified_count"], 5)
+        self.assertEqual(result["cloudflare_total_donations"], 0)
+        self.assertEqual(result["cloudflare_confirmed_threats"], 0)
+        self.assertIn("CLOUDFLARE_KV_NAMESPACE_ID is missing", stderr.getvalue())
+
+    def test_main_reads_cloudflare_account_id_from_environment_secret(self):
+        expected_metrics = {
+            "last_fetched": "2026-11-05T08:00:00Z",
+            "next_fetch": "2026-11-05T14:00:00Z",
+            "tweetfeed_count": 21,
+            "ha_verified_count": 5,
+            "cloudflare_total_donations": 0,
+            "cloudflare_confirmed_threats": 0,
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / "dashboard_metrics.json"
+            with (
+                patch.dict(
+                    "os.environ",
+                    {
+                        "HYBRID_ANALYSIS_API_KEY": "ha-key",
+                        "CLOUDFLARE_API_TOKEN": "cf-token",
+                        "CLOUDFLARE_ACCOUNT_ID": "account-from-secret",
+                        "CLOUDFLARE_KV_NAMESPACE_ID": "namespace-id",
+                        "CLOUDFLARE_KV_NAMESPACE_TITLE": "SafeMobile Contributions",
+                    },
+                ),
+                patch("sys.argv", ["generate_dashboard_metrics.py", "--output", str(output)]),
+                patch("generate_dashboard_metrics.read_last_known_metrics", return_value={}),
+                patch("generate_dashboard_metrics.build_metrics", return_value=expected_metrics) as build,
+                patch("generate_dashboard_metrics.write_metrics"),
+                patch("sys.stdout", io.StringIO()),
+            ):
+                self.assertEqual(main(), 0)
+
+        kwargs = build.call_args.kwargs
+        self.assertEqual(kwargs["cloudflare_account_id"], "account-from-secret")
+        self.assertEqual(kwargs["cloudflare_namespace_id"], "namespace-id")
+        self.assertEqual(kwargs["cloudflare_namespace_title"], "SafeMobile Contributions")
 
     def test_metrics_writer_requires_exact_public_contract(self):
         with tempfile.TemporaryDirectory() as directory:

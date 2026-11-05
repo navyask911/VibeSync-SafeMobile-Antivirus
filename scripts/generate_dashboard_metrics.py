@@ -517,6 +517,9 @@ def build_metrics(
     *,
     ha_api_key: str,
     cloudflare_api_token: str,
+    cloudflare_account_id: str = "",
+    cloudflare_namespace_id: str = "",
+    cloudflare_namespace_title: str = "",
     hashes_path: Path = Path("data/new_hashes.txt"),
     ha_cache_path: Path = Path("data/enriched_threats.csv"),
     cloudflare_reader: CloudflareKVReader | None = None,
@@ -551,15 +554,29 @@ def build_metrics(
         _warn_source_fallback("Hybrid Analysis", error, "ha_verified_count")
         ha_count = _last_known_count(fallback_metrics, "ha_verified_count")
 
-    try:
-        cf_reader = cloudflare_reader or CloudflareKVReader(cloudflare_api_token)
-        donation_count, threat_count = cf_reader.fetch_counts()
-        donation_count = _non_negative_int(donation_count, "Cloudflare total donations")
-        threat_count = _non_negative_int(threat_count, "Cloudflare confirmed threats")
-    except (MetricsError, requests.RequestException, OSError, ValueError) as error:
-        _warn_source_fallback("Cloudflare KV", error, "cloudflare donation/threat counts")
-        donation_count = _last_known_count(fallback_metrics, "cloudflare_total_donations")
-        threat_count = _last_known_count(fallback_metrics, "cloudflare_confirmed_threats")
+    if cloudflare_reader is None and not cloudflare_namespace_id.strip():
+        print(
+            "WARNING: CLOUDFLARE_KV_NAMESPACE_ID is missing; skipping Cloudflare KV query "
+            "and using 0 for Cloudflare donation/threat counts.",
+            file=sys.stderr,
+        )
+        donation_count = 0
+        threat_count = 0
+    else:
+        try:
+            cf_reader = cloudflare_reader or CloudflareKVReader(
+                cloudflare_api_token,
+                account_id=cloudflare_account_id,
+                namespace_id=cloudflare_namespace_id,
+                namespace_title=cloudflare_namespace_title,
+            )
+            donation_count, threat_count = cf_reader.fetch_counts()
+            donation_count = _non_negative_int(donation_count, "Cloudflare total donations")
+            threat_count = _non_negative_int(threat_count, "Cloudflare confirmed threats")
+        except (MetricsError, requests.RequestException, OSError, ValueError) as error:
+            _warn_source_fallback("Cloudflare KV", error, "cloudflare donation/threat counts")
+            donation_count = _last_known_count(fallback_metrics, "cloudflare_total_donations")
+            threat_count = _last_known_count(fallback_metrics, "cloudflare_confirmed_threats")
 
     return {
         "last_fetched": iso_utc(fetched_at),
@@ -588,6 +605,9 @@ def main() -> int:
         metrics = build_metrics(
             ha_api_key=ha_api_key,
             cloudflare_api_token=cloudflare_token,
+            cloudflare_account_id=os.environ.get("CLOUDFLARE_ACCOUNT_ID", ""),
+            cloudflare_namespace_id=os.environ.get("CLOUDFLARE_KV_NAMESPACE_ID", ""),
+            cloudflare_namespace_title=os.environ.get("CLOUDFLARE_KV_NAMESPACE_TITLE", ""),
             hashes_path=args.hashes,
             ha_cache_path=args.ha_cache,
             fallback_metrics=previous_metrics,
