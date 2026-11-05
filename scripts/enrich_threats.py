@@ -257,6 +257,42 @@ class ReputationClient:
         return score, verdict.strip()
 
 
+def read_hashes(path: Path) -> list[str]:
+    if not path.is_file():
+        raise EnrichmentError(f"TweetFeed SHA-256 IOC list is missing: {path}")
+    output: list[str] = []
+    seen: set[str] = set()
+    for line_number, raw in enumerate(path.read_text(encoding="ascii").splitlines(), start=1):
+        digest = raw.strip().lower()
+        if not digest:
+            continue
+        if not SHA256_RE.fullmatch(digest):
+            raise EnrichmentError(f"Invalid SHA-256 on input line {line_number}.")
+        if digest not in seen:
+            seen.add(digest)
+            output.append(digest)
+    return output
+
+
+def load_existing(path: Path) -> set[str]:
+    if not path.exists():
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with path.open("w", newline="", encoding="utf-8") as stream:
+            csv.DictWriter(stream, fieldnames=CSV_FIELDS).writeheader()
+        return set()
+    with path.open("r", newline="", encoding="utf-8") as stream:
+        reader = csv.DictReader(stream)
+        if tuple(reader.fieldnames or ()) != CSV_FIELDS:
+            raise EnrichmentError("Existing enrichment CSV header does not match the required schema.")
+        existing: set[str] = set()
+        for row in reader:
+            digest = str(row.get("sha256") or "").strip().lower()
+            if not SHA256_RE.fullmatch(digest):
+                raise EnrichmentError("Existing enrichment CSV contains an invalid SHA-256.")
+            existing.add(digest)
+        return existing
+
+
 def append_record(path: Path, record: dict[str, Any]) -> None:
     with path.open("a", newline="", encoding="utf-8") as stream:
         csv.DictWriter(stream, fieldnames=CSV_FIELDS).writerow(record)
