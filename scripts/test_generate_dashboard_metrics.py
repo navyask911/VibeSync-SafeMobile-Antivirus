@@ -8,8 +8,9 @@ import unittest
 from unittest.mock import Mock, patch
 
 from generate_dashboard_metrics import (
+    CloudflareKVReader,
+    DEFAULT_CLOUDFLARE_KV_METRICS_KEY,
     MetricsError,
-    count_sha256_kv_keys,
     hybrid_analysis_verified_count,
     next_six_hour_fetch,
     parse_cloudflare_metrics_document,
@@ -25,11 +26,11 @@ HASH_C = "c" * 64
 
 
 class FakeResponse:
-    def __init__(self, payload, status_code=200):
+    def __init__(self, payload=None, status_code=200, text=""):
         self._payload = payload
         self.status_code = status_code
         self.headers = {}
-        self.text = ""
+        self.text = text
         self.closed = False
 
     def json(self):
@@ -120,15 +121,96 @@ class MetricsGeneratorTests(unittest.TestCase):
             (7, 7),
         )
 
-    def test_count_only_unique_sha256_keys(self):
-        keys = [
-            {"name": HASH_A},
-            {"name": f"donation:{HASH_B}"},
-            {"name": f"sha256/{HASH_A}"},
-            {"name": "dashboard_metrics"},
-            {"name": "non-hash-key"},
-        ]
-        self.assertEqual(count_sha256_kv_keys(keys), 2)
+
+    def test_cloudflare_default_key_is_safemobile_donation_totals(self):
+        self.assertEqual(DEFAULT_CLOUDFLARE_KV_METRICS_KEY, "safemobile_donation_totals")
+        session = Mock()
+        session.get.return_value = FakeResponse(
+            text='{"total_donations": 17, "confirmed_threats": 13, "private_note": "do-not-log"}'
+        )
+        output = io.StringIO()
+        with patch.dict("os.environ", {}, clear=True), patch("sys.stdout", output):
+            reader = CloudflareKVReader(
+                "token",
+                account_id="account",
+                namespace_id="namespace",
+                session=session,
+            )
+            self.assertEqual(reader.fetch_counts(), (17, 13))
+
+        requested_url = session.get.call_args.args[0]
+        self.assertTrue(requested_url.endswith("/values/safemobile_donation_totals"))
+        self.assertIn("cloudflare_total_donations", output.getvalue())
+        self.assertIn("17", output.getvalue())
+        self.assertNotIn("private_note", output.getvalue())
+        self.assertNotIn("do-not-log", output.getvalue())
+
+    def test_cloudflare_metrics_key_can_be_overridden_by_environment(self):
+        session = Mock()
+        session.get.return_value = FakeResponse(
+            text='{"data":{"totalDonations":"34","confirmedThreats":21}}'
+        )
+        output = io.StringIO()
+        with (
+            patch.dict("os.environ", {"CLOUDFLARE_KV_METRICS_KEY": "aggregate_stats"}),
+            patch("sys.stdout", output),
+        ):
+            reader = CloudflareKVReader(
+                "token",
+                account_id="account",
+                namespace_id="namespace",
+                session=session,
+            )
+            self.assertEqual(reader.fetch_counts(), (34, 21))
+
+        requested_url = session.get.call_args.args[0]
+        self.assertTrue(requested_url.endswith("/values/aggregate_stats"))
+        self.assertIn("'status': 'parsed'", output.getvalue())
+
+    def test_cloudflare_empty_null_and_missing_values_return_zero(self):
+        for response_body in ("", "null", "{}", "[]"):
+            with self.subTest(response_body=response_body):
+                session = Mock()
+                session.get.return_value = FakeResponse(text=response_body)
+                output = io.StringIO()
+                with patch.dict("os.environ", {}, clear=True), patch("sys.stdout", output):
+                    reader = CloudflareKVReader(
+                        "token",
+                        account_id="account",
+                        namespace_id="namespace",
+                        session=session,
+                    )
+                    self.assertEqual(reader.fetch_counts(), (0, 0))
+
+                self.assertIn("Cloudflare KV Response (redacted)", output.getvalue())
+                self.assertEqual(session.get.call_count, 1)
+
+        missing_session = Mock()
+        missing_session.get.return_value = FakeResponse(status_code=404)
+        with patch.dict("os.environ", {}, clear=True), patch("sys.stdout", io.StringIO()):
+            missing_reader = CloudflareKVReader(
+                "token",
+                account_id="account",
+                namespace_id="namespace",
+                session=missing_session,
+            )
+            self.assertEqual(missing_reader.fetch_counts(), (0, 0))
+
+    def test_cloudflare_invalid_json_returns_zero_without_raising(self):
+        session = Mock()
+        session.get.return_value = FakeResponse(text="this is not JSON")
+        with (
+            patch.dict("os.environ", {}, clear=True),
+            patch("sys.stdout", io.StringIO()),
+            patch("sys.stderr", io.StringIO()),
+        ):
+            reader = CloudflareKVReader(
+                "token",
+                account_id="account",
+                namespace_id="namespace",
+                session=session,
+            )
+            self.assertEqual(reader.fetch_counts(), (0, 0))
 
     def test_next_fetch_is_exactly_six_hours_after_last_fetched(self):
         value = datetime(2026, 11, 5, 12, 12, 44, tzinfo=timezone.utc)

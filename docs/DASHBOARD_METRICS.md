@@ -46,8 +46,31 @@ main branch and can be read without credentials at:
 - `CLOUDFLARE_KV_NAMESPACE_TITLE`: retained for deployments that configure a
   namespace title; it does not replace the namespace ID required by the metrics
   step.
-- `CLOUDFLARE_KV_METRICS_KEY`: optional nonstandard aggregate key (default
-  candidates include `dashboard_metrics`, `stats` and `metrics`).
+- `CLOUDFLARE_KV_METRICS_KEY`: optional Actions Variable override for the
+  aggregate key. The default is `safemobile_donation_totals`.
+
+The metrics reader requests exactly one value from the configured namespace:
+`safemobile_donation_totals` by default. Its expected JSON shape is:
+
+```json
+{
+  "total_donations": 1420,
+  "confirmed_threats": 312
+}
+```
+
+The parser also accepts camelCase field names and counters nested inside JSON
+objects. If the deployed Worker uses another KV key name, set the
+`CLOUDFLARE_KV_METRICS_KEY` Actions Variable to that exact name. The repository
+does not contain the deployed Worker implementation, so the default key is a
+configuration default rather than an independently confirmed Worker literal.
+
+The workflow logs the selected key, response status/size and parsed aggregate
+counts. The raw KV value is intentionally not printed: GitHub Actions logs can
+be visible to repository readers, and arbitrary Worker values may contain
+sensitive data. Empty, missing, JSON `null`, invalid JSON, or an object without
+recognized count fields produces zero Cloudflare counts without interrupting
+TweetFeed or Hybrid Analysis metrics.
 
 When `CLOUDFLARE_KV_NAMESPACE_ID` is missing, the generator prints
 `WARNING: CLOUDFLARE_KV_NAMESPACE_ID is missing`, skips all Cloudflare KV

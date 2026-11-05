@@ -26,6 +26,7 @@ from urllib.parse import quote
 import requests
 
 CLOUDFLARE_API_BASE = "https://api.cloudflare.com/client/v4"
+DEFAULT_CLOUDFLARE_KV_METRICS_KEY = "safemobile_donation_totals"
 DEFAULT_WORKER_URL = "https://misty-fog-d936.navyask911.workers.dev"
 SHA256_RE = re.compile(r"[0-9a-f]{64}\Z", re.IGNORECASE)
 SHA256_KEY_RE = re.compile(r"(?:^|[:/])([0-9a-f]{64})\Z", re.IGNORECASE)
@@ -187,34 +188,6 @@ def count_sha256_kv_keys(keys: list[dict[str, Any]]) -> int:
 class CloudflareKVReader:
     """Read-only Cloudflare KV client; never logs or returns the API token."""
 
-    AGGREGATE_KEYS = (
-        "dashboard_metrics",
-        "dashboard-metrics",
-        "global_threat_intelligence_stats",
-        "global-threat-intelligence-stats",
-        "threat_intelligence_stats",
-        "threat-intelligence-stats",
-        "contribution_stats",
-        "contribution-stats",
-        "stats",
-        "metrics",
-        "totals",
-    )
-    DONATION_KEYS = (
-        "total_donations",
-        "totalDonations",
-        "donation_count",
-        "total_contributions",
-        "contribution_count",
-    )
-    THREAT_KEYS = (
-        "confirmed_threats",
-        "confirmedThreats",
-        "confirmed_threat_count",
-        "total_confirmed_threats",
-        "malicious_samples",
-    )
-
     def __init__(
         self,
         api_token: str,
@@ -236,6 +209,10 @@ class CloudflareKVReader:
         self.account_id = account_id.strip()
         self.namespace_id = namespace_id.strip()
         self.namespace_title = namespace_title.strip()
+        self.metrics_key = (
+            os.environ.get("CLOUDFLARE_KV_METRICS_KEY", "").strip()
+            or DEFAULT_CLOUDFLARE_KV_METRICS_KEY
+        )
 
     def _request(self, url: str, *, params: dict[str, Any] | None = None, allow_404: bool = False):
         response = None
@@ -368,73 +345,63 @@ class CloudflareKVReader:
         raise MetricsError("Cloudflare KV key listing exceeded the safety page limit.")
 
     def fetch_counts(self) -> tuple[int, int]:
+        """Read the one aggregate key configured for the SafeMobile Worker."""
         account_id = self._account()
         namespace_id = self._namespace()
+        key = self.metrics_key
+        print(f"DEBUG: Fetching Cloudflare KV aggregate key: {key}")
 
-        aggregate_keys = list(self.AGGREGATE_KEYS)
-        configured_key = os.environ.get("CLOUDFLARE_KV_METRICS_KEY", "").strip()
-        if configured_key:
-            aggregate_keys.insert(0, configured_key)
+        kv_response = self._value(account_id, namespace_id, key)
+        if kv_response is None or not kv_response.strip() or kv_response.strip().lower() == "null":
+            debug_view = {"key": key, "status": "empty_or_missing"}
+            print(f"DEBUG: Cloudflare KV Response (redacted): {debug_view}")
+            print(
+                f"WARNING: Cloudflare KV key {key!r} is empty or null; "
+                "using zero donation and confirmed-threat counts.",
+                file=sys.stderr,
+            )
+            return 0, 0
 
-        for key in dict.fromkeys(aggregate_keys):
-            raw = self._value(account_id, namespace_id, key)
-            if not raw:
-                continue
-            try:
-                document = json.loads(raw)
-            except json.JSONDecodeError:
-                continue
-            metrics = parse_cloudflare_metrics_document(document)
-            if metrics is not None:
-                return metrics
-
-        donation_count: int | None = None
-        threat_count: int | None = None
-        for key in self.DONATION_KEYS:
-            raw = self._value(account_id, namespace_id, key)
-            if raw is not None:
-                try:
-                    donation_count = _non_negative_int(raw, "Cloudflare donation count")
-                    break
-                except MetricsError:
-                    try:
-                        donation_count = parse_cloudflare_metrics_document(json.loads(raw))[0]
-                        break
-                    except (ValueError, TypeError, MetricsError):
-                        pass
-        for key in self.THREAT_KEYS:
-            raw = self._value(account_id, namespace_id, key)
-            if raw is not None:
-                try:
-                    threat_count = _non_negative_int(raw, "Cloudflare confirmed-threat count")
-                    break
-                except MetricsError:
-                    try:
-                        parsed = parse_cloudflare_metrics_document(json.loads(raw))
-                        if parsed is not None:
-                            threat_count = parsed[1]
-                            break
-                    except (ValueError, TypeError, MetricsError):
-                        pass
-        if donation_count is not None and threat_count is not None:
-            return donation_count, threat_count
-        if donation_count is not None:
-            # SafeMobile's fixed contribution endpoint accepts only confirmed THREAT results.
-            return donation_count, donation_count
-        if threat_count is not None:
-            return threat_count, threat_count
-
-        # Some deployments store one KV entry per donated SHA-256 instead of a
-        # compact aggregate. Count only hash-shaped keys in the dedicated
-        # contribution namespace; never infer counts from arbitrary KV keys.
-        contribution_count = count_sha256_kv_keys(self._keys(account_id, namespace_id))
-        if contribution_count:
-            return contribution_count, contribution_count
-        raise MetricsError(
-            "Cloudflare contribution totals were not found. Publish a JSON aggregate "
-            "under dashboard_metrics (or set CLOUDFLARE_KV_METRICS_KEY), or store "
-            "one SHA-256-keyed entry per contribution in the dedicated namespace."
+        # Do not log the unfiltered KV value: Actions logs may be visible to
+        # repository readers, and future Worker payloads could contain private data.
+        print(
+            f"DEBUG: Cloudflare KV Response (redacted): "
+            f"{{'key': {key!r}, 'status': 'received', 'bytes': {len(kv_response)}}}"
         )
+        try:
+            document = json.loads(kv_response)
+        except json.JSONDecodeError:
+            print(
+                f"WARNING: Cloudflare KV key {key!r} did not contain valid JSON; "
+                "using zero donation and confirmed-threat counts.",
+                file=sys.stderr,
+            )
+            return 0, 0
+
+        if document is None:
+            debug_view = {"key": key, "status": "json_null"}
+            print(f"DEBUG: Parsed Cloudflare KV counters (redacted): {debug_view}")
+            return 0, 0
+
+        metrics = parse_cloudflare_metrics_document(document)
+        if metrics is None:
+            debug_view = {"key": key, "status": "no_supported_counter_fields"}
+            print(f"DEBUG: Parsed Cloudflare KV counters (redacted): {debug_view}")
+            print(
+                f"WARNING: Cloudflare KV key {key!r} did not contain supported donation "
+                "or confirmed-threat counters; using zero counts.",
+                file=sys.stderr,
+            )
+            return 0, 0
+
+        debug_view = {
+            "key": key,
+            "status": "parsed",
+            "cloudflare_total_donations": metrics[0],
+            "cloudflare_confirmed_threats": metrics[1],
+        }
+        print(f"DEBUG: Parsed Cloudflare KV counters (redacted): {debug_view}")
+        return metrics
 
 
 def next_six_hour_fetch(now: datetime) -> datetime:
