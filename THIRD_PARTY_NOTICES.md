@@ -1,6 +1,6 @@
 # Third-party dependency notices
 
-Generated from the CycloneDX SBOM by `scripts/render_third_party_notices.py`. Components: 481.
+Generated from the CycloneDX SBOM by `scripts/render_third_party_notices.py`. Components: 482.
 
 Regenerate this file with the CI SBOM refresh workflow; do not hand-edit dependency rows.
 
@@ -334,6 +334,7 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | material-ripple-android | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | material3 | 1.3.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | material3-android | 1.3.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| mockwebserver | 4.12.0 | Apache-2.0 | https://github.com/square/okhttp |
 | monitor | 1.6.1 | Apache-2.0 | Package URL: pkg:maven/androidx.test/monitor@1.6.1?type=aar |
 | monitor | 1.7.2 | Apache-2.0 | Package URL: pkg:maven/androidx.test/monitor@1.7.2?type=aar |
 | moshi | 1.15.2 | Apache-2.0 | https://github.com/square/moshi/ |
@@ -488,7 +489,7 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | work-runtime | 2.10.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | work-runtime-ktx | 2.10.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 
-Metadata completeness: 477/481 components have both a declared licence and a source/package reference.
+Metadata completeness: 478/482 components have both a declared licence and a source/package reference.
 
 ## Metadata requiring manual review
 

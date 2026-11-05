@@ -1,10 +1,10 @@
 {
   "bomFormat" : "CycloneDX",
   "specVersion" : "1.6",
-  "serialNumber" : "urn:uuid:b165be61-c264-4648-8367-6cbe15e7aa6b",
+  "serialNumber" : "urn:uuid:95de6ffc-fb52-42e8-9fb1-5a8cd8b4280c",
   "version" : 1,
   "metadata" : {
-    "timestamp" : "2026-11-05T00:38:36Z",
+    "timestamp" : "2026-11-05T10:00:49Z",
     "tools" : {
       "components" : [
         {
@@ -26,7 +26,7 @@
       "externalReferences" : [
         {
           "type" : "build-system",
-          "url" : "https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/actions/runs/41942732010"
+          "url" : "https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/actions/runs/42006966520"
         },
         {
           "type" : "vcs",
@@ -17354,6 +17354,69 @@
     },
     {
       "type" : "library",
+      "bom-ref" : "pkg:maven/com.squareup.okhttp3/mockwebserver@4.12.0?type=jar",
+      "group" : "com.squareup.okhttp3",
+      "name" : "mockwebserver",
+      "version" : "4.12.0",
+      "description" : "Square’s meticulous HTTP client for Java and Kotlin.",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "6b32971dd9faa898f64f9e431407584d"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "3bc54cc5c87cd632031d0881f3c313d3799a1476"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "6784673687f4ac8f21679b9d4bc7cdb46e1a1ce1be9d3133b36bede59a741561"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "7c93a4e52f816e1a29523068778d90a1080fdc94a0b143f21e6dbe070d7e98330ac45679e6ec3609489c2880c607442e65fa792e6b92b3832b76717126b9955e"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "671b63b9cdf3d348085ce0463f5336d5a5bee22ad8f54ca10c0b94ddd0254e92"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "ce37e017b8239aef3e897c6628036c4c3df34d2160ddeb7dc4a340b26d5e5dbd9c6d21b5908e6c8f9a8bb9b6d251e4ac585aac837857376ef880adc400431656"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "455bbde5e110371e9a74109b55cf8a9f35867793cc0c0c5ff977b1b411461387e857986c5c12d3036b50607688b57110"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "10c1e413d80293be21ebe440a72541142e980b17d4702628898708f86ac6de7a9c3d797bdf81d464d406022397017b92"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/com.squareup.okhttp3/mockwebserver@4.12.0?type=jar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://github.com/square/okhttp"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
       "bom-ref" : "pkg:maven/com.squareup.okhttp3/okhttp@4.12.0?type=jar",
       "group" : "com.squareup.okhttp3",
       "name" : "okhttp",
@@ -31749,8 +31812,17 @@
       ]
     },
     {
+      "ref" : "pkg:maven/com.squareup.okhttp3/mockwebserver@4.12.0?type=jar",
+      "dependsOn" : [
+        "pkg:maven/com.squareup.okhttp3/okhttp@4.12.0?type=jar",
+        "pkg:maven/junit/junit@4.13.2?type=jar",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-jdk8@2.1.21?type=jar"
+      ]
+    },
+    {
       "ref" : "pkg:maven/com.squareup.okhttp3/okhttp@4.12.0?type=jar",
       "dependsOn" : [
+        "pkg:maven/com.squareup.okio/okio@3.13.0?type=jar",
         "pkg:maven/com.squareup.okio/okio@3.17.0?type=jar",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-jdk8@1.8.21?type=jar",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-jdk8@2.1.21?type=jar"
@@ -31883,6 +31955,7 @@
         "pkg:maven/com.google.testing.platform/core@0.0.9-alpha03?type=jar",
         "pkg:maven/com.google.testing.platform/launcher@0.0.9-alpha03?type=jar",
         "pkg:maven/com.google.testparameterinjector/test-parameter-injector@1.25?type=jar",
+        "pkg:maven/com.squareup.okhttp3/mockwebserver@4.12.0?type=jar",
         "pkg:maven/com.squareup.okhttp3/okhttp@4.12.0?type=jar",
         "pkg:maven/junit/junit@4.13.2?type=jar",
         "pkg:maven/org.bouncycastle/bcpg-jdk18on@1.80?type=jar",
@@ -32733,6 +32806,7 @@
     {
       "ref" : "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-jdk7@2.1.21?type=jar",
       "dependsOn" : [
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.20?type=jar",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar"
       ]
     },
@@ -32769,6 +32843,7 @@
       "ref" : "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-jdk8@2.1.21?type=jar",
       "dependsOn" : [
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-jdk7@2.1.21?type=jar",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.20?type=jar",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar"
       ]
     },
