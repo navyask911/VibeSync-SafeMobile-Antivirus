@@ -65,6 +65,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -143,7 +144,7 @@ private fun SettingsRootRow(
             ) {
                 androidx.compose.material3.Icon(
                     icon,
-                    contentDescription = null,
+                    contentDescription = stringResource(titleResource),
                     tint = MaterialTheme.colorScheme.secondary,
                     modifier = Modifier.padding(10.dp)
                 )
@@ -427,7 +428,10 @@ internal fun SafeMobileSettingsPanel(
     onSubRouteChanged: (SettingsSubRoute) -> Unit = {},
     onOpenPro: () -> Unit = {},
     onReviewThreatFindings: () -> Unit = {},
-    canReviewThreatFindings: Boolean = false
+    canReviewThreatFindings: Boolean = false,
+    installSentinelRunningOverride: Boolean? = null,
+    installSentinelEnabledOverride: Boolean? = null,
+    onInstallSentinelChanged: ((Boolean) -> Unit)? = null
 ) {
     val context = LocalContext.current
     fun openOfficialWebsite(url: String) {
@@ -488,7 +492,12 @@ internal fun SafeMobileSettingsPanel(
                             val selected = appTheme == option
                             androidx.compose.material3.Surface(
                                 modifier = Modifier.weight(1f).heightIn(min = 80.dp)
-                                    .clickable { onAppThemeChanged(option) },
+                                    .selectable(
+                                        selected = selected,
+                                        role = Role.RadioButton,
+                                        onClick = { onAppThemeChanged(option) }
+                                    )
+                                    .testTag("settings.theme.${option.name.lowercase()}"),
                                 shape = RoundedCornerShape(12.dp),
                                 color = if (selected && appTheme == AppTheme.LIGHT) {
                                     com.vibesync.antivirus.ui.theme.SafeMobileLightSelectedContainer
@@ -539,7 +548,9 @@ internal fun SafeMobileSettingsPanel(
                                 style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
                             SettingsDescription(R.string.incident_alerts_explanation)
                         }
-                        Switch(checked = securityAlertsEnabled,
+                        Switch(
+                            modifier = Modifier.testTag("settings.security-alerts"),
+                            checked = securityAlertsEnabled,
                             onCheckedChange = { requested -> onSecurityAlertsChanged?.invoke(requested) },
                             colors = SwitchDefaults.colors(
                                 checkedThumbColor = MaterialTheme.colorScheme.surface,
@@ -551,7 +562,11 @@ internal fun SafeMobileSettingsPanel(
                     }
                 }
             }
-            InstallSentinelSettings()
+            InstallSentinelSettings(
+                isRunningOverride = installSentinelRunningOverride,
+                isEnabledOverride = installSentinelEnabledOverride,
+                onToggleOverride = onInstallSentinelChanged
+            )
             SettingsRootRow(Icons.Default.Security, R.string.sentinel_scope_title,
                 R.string.monitor_explanation) {
                 onManageFolders()
@@ -788,7 +803,11 @@ internal fun SafeMobileSettingsPanel(
         }
         }
         if (subRoute == SettingsSubRoute.SECURITY) {
-        InstallSentinelSettings()
+        InstallSentinelSettings(
+                isRunningOverride = installSentinelRunningOverride,
+                isEnabledOverride = installSentinelEnabledOverride,
+                onToggleOverride = onInstallSentinelChanged
+            )
         OverlayRiskReviewPanel()
 
 
@@ -805,7 +824,11 @@ internal fun SafeMobileSettingsPanel(
                 Row(Modifier.fillMaxWidth(), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
                     Text(stringResource(if (sentinelEnabled) R.string.download_sentinel_running else R.string.download_sentinel_stopped),
                         style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f))
-                    Switch(checked = sentinelEnabled, colors = safeMobileSwitchColors(), onCheckedChange = { enabled ->
+                    Switch(
+                        modifier = Modifier.testTag("settings.download-monitoring"),
+                        checked = sentinelEnabled,
+                        colors = safeMobileSwitchColors(),
+                        onCheckedChange = { enabled ->
                         if (onToggleProtection != null) onToggleProtection.invoke(enabled)
                         else if (enabled) onEnableSentinel() else onDisableSentinel()
                     })

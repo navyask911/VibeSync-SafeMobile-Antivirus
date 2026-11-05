@@ -1,6 +1,6 @@
 # Paparazzi UI snapshot tests
 
-SafeMobile keeps committed Paparazzi baselines for Home, Protection Tools, Scan Results, and Settings. Each screen is captured in Light, Midnight, and OLED themes.
+SafeMobile keeps committed Paparazzi baselines for Home, Protection Tools, Scan Results, and Settings. The UI regression suite also captures Home, Protection Tools, and Settings at 320dp width with font scales 1.5x and 2.0x.
 
 ## Verify snapshots
 
@@ -8,7 +8,10 @@ Run the offline debug unit tests and compare the rendered UI against the committ
 
 ```bash
 ./gradlew --no-daemon testOfflineDebugUnitTest verifyPaparazziDebug
+./gradlew --no-daemon connectedOfflineDebugAndroidTest
 ```
+
+The connected task runs on the Android emulator CI job. Compose semantics tests verify theme selection, monitoring switches, dashboard actions, destinations, accessible icons, and text bounds in a 320dp viewport at 2.0x font scale. Host-side MockWebServer fixtures only permit loopback traffic, so test requests cannot contact public threat-feed or Cloudflare endpoints.
 
 A verification failure means a rendered screen differs from its baseline or a baseline is missing. Review the Paparazzi HTML report under `app/build/reports/paparazzi/offlineDebug/` before changing any images.
 
@@ -28,5 +31,9 @@ Review the PNG changes and commit the complete `app/src/test/snapshots/` directo
 - Protection Tools: Light, Midnight, and OLED
 - Scan Results: Light, Midnight, and OLED
 - Settings panel: Light, Midnight, and OLED
+- UI regression snapshots: Home, Protection Tools, and Settings at 320dp / 1.5x and 2.0x font scale
+- Compose wiring: theme buttons, Security Alerts and Install Sentinel switches, Scan now, All tools, and protection-card routes
+- Security score logic: direct pending-action deductions and 0–100 clamping
+- Network isolation: MockWebServer hardcoded fixtures with external-host blocking
 
 Snapshots are host-rendered regression tests. They do not replace the existing Android emulator, scanning-engine, billing, or AdMob test gates.

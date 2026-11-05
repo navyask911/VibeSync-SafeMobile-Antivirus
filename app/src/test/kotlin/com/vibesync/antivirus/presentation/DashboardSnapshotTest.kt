@@ -233,7 +233,7 @@ class DashboardSnapshotTest {
 // Paparazzi's host-side Android Context does not provide working SharedPreferences editors.
 // The Settings screen only reads local preferences during rendering; this in-memory context
 // reproduces that contract without touching device storage or production persistence code.
-private class SnapshotContextWrapper(base: Context) : ContextWrapper(base) {
+internal class SnapshotContextWrapper(base: Context) : ContextWrapper(base) {
     private val preferences = mutableMapOf<String, SharedPreferences>()
 
     override fun getApplicationContext(): Context = this

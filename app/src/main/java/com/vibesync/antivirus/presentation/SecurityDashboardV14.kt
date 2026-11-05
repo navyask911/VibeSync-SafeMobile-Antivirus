@@ -181,7 +181,10 @@ internal fun SecurityDashboardV14(
                         if (scanRunning) CircularProgressIndicator(
                             Modifier.size(18.dp), strokeWidth = 2.dp,
                             color = MaterialTheme.colorScheme.onPrimary
-                        ) else Icon(Icons.Outlined.Security, contentDescription = null)
+                        ) else Icon(
+                            Icons.Outlined.Security,
+                            contentDescription = stringResource(R.string.security_scan_now)
+                        )
                         Text(stringResource(if (scanRunning) R.string.scan_running else R.string.security_scan_now),
                             modifier = Modifier.padding(start = 8.dp))
                     }
@@ -329,7 +332,11 @@ private fun QuickProtectionTool(
                 Box(Modifier.size(36.dp).background(
                     MaterialTheme.colorScheme.secondaryContainer, SecurityTokens.iconTileShape
                 ), contentAlignment = Alignment.Center) {
-                    Icon(painterResource(iconResource), contentDescription = null, tint = MaterialTheme.colorScheme.secondary)
+                    Icon(
+                        painterResource(iconResource),
+                        contentDescription = stringResource(titleResource),
+                        tint = MaterialTheme.colorScheme.secondary
+                    )
                 }
                 Text(stateLabel, modifier = Modifier.weight(1f),
                     style = MaterialTheme.typography.labelSmall,

@@ -56,8 +56,7 @@ data class ProtectionAdvisorInputs(
 )
 
 object ProtectionAdvisorEngine {
-    private const val SCORE_BASELINE = 28
-    private const val ACTIONABLE_SCORE_RANGE = 72
+    private const val SCORE_MAX = 100
     private const val WEEK_MS = 7L * 24 * 60 * 60 * 1000
 
     fun evaluate(inputs: ProtectionAdvisorInputs, snoozedIds: Set<String>): ProtectionAdvisorState {
@@ -70,7 +69,7 @@ object ProtectionAdvisorEngine {
             issue("active_threats", R.string.threat_found, R.string.scan_clean_warning, 25,
                 scanned && inputs.threatsDetected == 0, "scan", canSnooze = false,
                 activeThreat = scanned && inputs.threatsDetected > 0),
-            issue("folder_sentinel", R.string.nav_sentinel, R.string.monitor_explanation, 12,
+            issue("folder_sentinel", R.string.nav_sentinel, R.string.monitor_explanation, 10,
                 inputs.folderSentinelConfigured, "sentinel"),
             issue("high_risk_posture", R.string.posture_title, R.string.posture_risk_note, 12,
                 inputs.highRiskPostureCount == 0, "posture",
@@ -85,7 +84,7 @@ object ProtectionAdvisorEngine {
             issue("db_freshness", R.string.ui_score_database, R.string.ui_stale_10, 5,
                 databaseFresh, "capabilities"),
             issue("install_sentinel", R.string.setup_sentinel_title, R.string.setup_sentinel_body,
-                4, inputs.installSentinelEnabled, "sentinel"),
+                15, inputs.installSentinelEnabled, "sentinel"),
             issue("play_protect_adb", R.string.guardian_developer_settings,
                 R.string.guardian_settings_limit, 4,
                 inputs.playProtectEnabled == true && inputs.usbDebuggingEnabled == false, "guardian"),
@@ -101,10 +100,13 @@ object ProtectionAdvisorEngine {
                 else -> item.copy(group = AdvisorIssueGroup.MINOR)
             }
         }
-        val earned = mapped.filter {
-            it.group == AdvisorIssueGroup.COMPLETED || it.group == AdvisorIssueGroup.SNOOZED
+        val pendingDeductions = mapped.filter {
+            it.group == AdvisorIssueGroup.CRITICAL || it.group == AdvisorIssueGroup.MINOR
         }.sumOf { it.points }
-        val score = (SCORE_BASELINE + (earned * ACTIONABLE_SCORE_RANGE / 100.0).toInt()).coerceIn(0, 100)
+        // Scores are direct deductions from 100. Snoozed/completed actions do not
+        // lower the score; the aggregate is clamped because pending penalties can
+        // exceed the available range when several high-risk actions coexist.
+        val score = (SCORE_MAX - pendingDeductions).coerceIn(0, SCORE_MAX)
         val pending = mapped.count { it.group == AdvisorIssueGroup.CRITICAL || it.group == AdvisorIssueGroup.MINOR }
         return ProtectionAdvisorState(score, pending, mapped)
     }

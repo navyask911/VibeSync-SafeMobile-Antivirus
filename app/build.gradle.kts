@@ -421,6 +421,7 @@ dependencies {
  androidTestImplementation("androidx.test:core:1.6.1")
  androidTestImplementation("androidx.room:room-testing:2.7.2")
  testImplementation("org.json:json:20240303")
+ testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
  testImplementation("junit:junit:4.13.2")
  testImplementation(platform("androidx.compose:compose-bom:2025.05.01"))
  testImplementation("androidx.compose.ui:ui-test-junit4")
