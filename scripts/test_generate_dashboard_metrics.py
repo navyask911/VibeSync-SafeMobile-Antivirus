@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 import tempfile
 import unittest
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
 from generate_dashboard_metrics import (
     MetricsError,
@@ -13,6 +13,7 @@ from generate_dashboard_metrics import (
     next_six_hour_fetch,
     parse_cloudflare_metrics_document,
     tweetfeed_today_sha256_count,
+    build_metrics,
     write_metrics,
 )
 
@@ -124,6 +125,73 @@ class MetricsGeneratorTests(unittest.TestCase):
             next_six_hour_fetch(late),
             datetime(2026, 11, 6, 5, 59, tzinfo=timezone.utc),
         )
+
+    def test_build_metrics_preserves_last_known_counts_when_sources_fail(self):
+        previous = {
+            "last_fetched": "2026-11-05T06:00:00Z",
+            "next_fetch": "2026-11-05T12:00:00Z",
+            "tweetfeed_count": 142,
+            "ha_verified_count": 312,
+            "cloudflare_total_donations": 1420,
+            "cloudflare_confirmed_threats": 312,
+        }
+
+        class FailingCloudflareReader:
+            def fetch_counts(self):
+                raise MetricsError("Cloudflare token or namespace is unavailable")
+
+        with patch(
+            "generate_dashboard_metrics.tweetfeed_today_sha256_count",
+            side_effect=MetricsError("TweetFeed temporarily unavailable"),
+        ):
+            result = build_metrics(
+                ha_api_key="configured",
+                cloudflare_api_token="configured",
+                cloudflare_reader=FailingCloudflareReader(),
+                fallback_metrics=previous,
+                ha_enrichment_succeeded=False,
+                now=datetime(2026, 11, 5, 7, 30, 0, tzinfo=timezone.utc),
+            )
+
+        self.assertEqual(
+            set(result),
+            {
+                "last_fetched", "next_fetch", "tweetfeed_count", "ha_verified_count",
+                "cloudflare_total_donations", "cloudflare_confirmed_threats",
+            },
+        )
+        self.assertEqual(result["last_fetched"], "2026-11-05T07:30:00Z")
+        self.assertEqual(result["next_fetch"], "2026-11-05T13:30:00Z")
+        self.assertEqual(result["tweetfeed_count"], 142)
+        self.assertEqual(result["ha_verified_count"], 312)
+        self.assertEqual(result["cloudflare_total_donations"], 1420)
+        self.assertEqual(result["cloudflare_confirmed_threats"], 312)
+        self.assertNotIn(None, result.values())
+
+    def test_build_metrics_uses_safe_zero_defaults_without_previous_snapshot(self):
+        class FailingCloudflareReader:
+            def fetch_counts(self):
+                raise MetricsError("Cloudflare unavailable")
+
+        with patch(
+            "generate_dashboard_metrics.tweetfeed_today_sha256_count",
+            side_effect=MetricsError("TweetFeed unavailable"),
+        ):
+            result = build_metrics(
+                ha_api_key="",
+                cloudflare_api_token="",
+                cloudflare_reader=FailingCloudflareReader(),
+                fallback_metrics=None,
+                ha_enrichment_succeeded=False,
+                now=datetime(2026, 11, 5, 7, 30, 0, tzinfo=timezone.utc),
+            )
+
+        for field in (
+            "tweetfeed_count", "ha_verified_count",
+            "cloudflare_total_donations", "cloudflare_confirmed_threats",
+        ):
+            self.assertEqual(result[field], 0)
+            self.assertIsNotNone(result[field])
 
     def test_metrics_writer_requires_exact_public_contract(self):
         with tempfile.TemporaryDirectory() as directory:
