@@ -459,12 +459,9 @@ class CloudflareKVReader:
 
 
 def next_six_hour_fetch(now: datetime) -> datetime:
-    """Return the next UTC cron boundary for 0 */6 * * *."""
-    current = now.astimezone(timezone.utc).replace(microsecond=0)
-    next_hour = ((current.hour // 6) + 1) * 6
-    if next_hour >= 24:
-        return (current + timedelta(days=1)).replace(hour=0, minute=0, second=0)
-    return current.replace(hour=next_hour, minute=0, second=0)
+    """Return exactly six hours after the UTC metrics-fetch timestamp."""
+    fetched_at = now.astimezone(timezone.utc).replace(microsecond=0)
+    return fetched_at + timedelta(hours=6)
 
 
 def iso_utc(value: datetime) -> str:
