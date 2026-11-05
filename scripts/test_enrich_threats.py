@@ -12,10 +12,11 @@ HASH2 = "b" * 64
 
 
 class Response:
-    def __init__(self, status_code=200, payload=None, headers=None):
+    def __init__(self, status_code=200, payload=None, headers=None, text=""):
         self.status_code = status_code
         self.payload = payload or {}
         self.headers = headers or {}
+        self.text = text
         self.closed = False
 
     def json(self):
@@ -63,10 +64,9 @@ class EnrichmentTests(unittest.TestCase):
         session = Mock()
         session.get.side_effect = [
             Response(payload={"data": {"attributes": {"last_analysis_stats": {"malicious": 11}}}}),
+            Response(payload={"reports": [{"id": "ha-report-1", "sha256": HASH1}]}),
+            Response(payload={"sha256": HASH1, "threat_score": 88, "verdict": "malicious"}),
             Response(status_code=404),
-        ]
-        session.post.side_effect = [
-            Response(payload=[{"sha256": HASH1, "threat_score": 88, "verdict": "malicious"}]),
             Response(status_code=404),
         ]
         with self.env(), patch("enrich_threats.time.sleep"):
@@ -74,17 +74,15 @@ class EnrichmentTests(unittest.TestCase):
         self.assertEqual(result["added"], 2)
         self.assertEqual(session.get.call_args_list[0].args[0], VT_URL.format(sha256=HASH1))
         self.assertEqual(session.get.call_args_list[0].kwargs["headers"]["x-apikey"], "vt-test-key")
-        self.assertEqual(session.post.call_args_list[0].args[0], HA_URL)
-        ha_request = session.post.call_args_list[0]
-        self.assertEqual(ha_request.kwargs["headers"]["api-key"], "ha-test-key")
-        self.assertEqual(ha_request.kwargs["headers"]["User-Agent"], "Falcon Sandbox")
-        self.assertEqual(
-            ha_request.kwargs["headers"]["Content-Type"],
-            "application/x-www-form-urlencoded",
-        )
-        self.assertEqual(ha_request.kwargs["data"], {"hash": HASH1})
-        self.assertNotIn("json", ha_request.kwargs)
-        self.assertNotIn("files", ha_request.kwargs)
+        ha_search_request = session.get.call_args_list[1]
+        self.assertEqual(ha_search_request.args[0], HA_URL)
+        self.assertEqual(ha_search_request.kwargs["headers"]["api-key"], "ha-test-key")
+        self.assertEqual(ha_search_request.kwargs["headers"]["User-Agent"], "Falcon Sandbox")
+        self.assertEqual(ha_search_request.kwargs["params"], {"hash": HASH1})
+        self.assertNotIn("data", ha_search_request.kwargs)
+        self.assertNotIn("json", ha_search_request.kwargs)
+        self.assertIn("/report/ha-report-1/summary", session.get.call_args_list[2].args[0])
+        session.post.assert_not_called()
         with self.cache.open(newline="", encoding="utf-8") as stream:
             rows = list(csv.DictReader(stream))
         self.assertEqual(rows[0]["vt_malicious_count"], "11")
@@ -110,8 +108,12 @@ class EnrichmentTests(unittest.TestCase):
         session = Mock()
         vt_payload = {"data": {"attributes": {"last_analysis_stats": {"malicious": 1}}}}
         ha_payload = [{"sha256": HASH1, "threat_score": 55, "verdict": "malicious"}]
-        session.get.side_effect = [Response(payload=vt_payload), Response(payload=vt_payload)]
-        session.post.side_effect = [Response(payload=ha_payload), Response(payload=ha_payload)]
+        session.get.side_effect = [
+            Response(payload=vt_payload),
+            Response(payload=vt_payload),
+            Response(payload=ha_payload),
+            Response(payload=ha_payload),
+        ]
         now = [0.0]
         delays = []
 
@@ -129,18 +131,20 @@ class EnrichmentTests(unittest.TestCase):
         client.hybrid_analysis_result(HASH2, "ha-key")
         self.assertIn(16.0, delays)
         self.assertIn(2.0, delays)
+        session.post.assert_not_called()
 
     def test_missing_virustotal_key_skips_vt_and_records_minus_one(self):
         self.hashes.write_text(HASH1 + "\n", encoding="ascii")
         session = Mock()
-        session.post.return_value = Response(
+        session.get.return_value = Response(
             payload=[{"sha256": HASH1, "threat_score": 78, "verdict": "suspicious"}]
         )
         with patch.dict("os.environ", {"HYBRID_ANALYSIS_API_KEY": "ha-key"}, clear=True):
             result = enrich_hashes(self.hashes, self.cache, self.quota, session=session)
         self.assertEqual(result["added"], 1)
         session.get.assert_not_called()
-        session.post.assert_called_once()
+        session.get.assert_called_once()
+        session.post.assert_not_called()
         with self.cache.open(newline="", encoding="utf-8") as stream:
             row = next(csv.DictReader(stream))
         self.assertEqual(row["vt_malicious_count"], "-1")
@@ -153,7 +157,7 @@ class EnrichmentTests(unittest.TestCase):
     def test_key_without_commercial_approval_also_skips_vt(self):
         self.hashes.write_text(HASH1 + "\n", encoding="ascii")
         session = Mock()
-        session.post.return_value = Response(
+        session.get.return_value = Response(
             payload=[{"sha256": HASH1, "threat_score": 72, "verdict": "unknown"}]
         )
         with patch.dict("os.environ", {

@@ -16,6 +16,7 @@ import os
 from pathlib import Path
 import re
 import time
+from urllib.parse import quote
 from typing import Any
 
 import requests
@@ -23,7 +24,8 @@ import requests
 CSV_FIELDS = ("sha256", "vt_malicious_count", "ha_threat_score", "ha_verdict")
 SHA256_RE = re.compile(r"[0-9a-f]{64}\Z")
 VT_URL = "https://www.virustotal.com/api/v3/files/{sha256}"
-HA_URL = "https://www.hybrid-analysis.com/api/v2/search/hash"
+HA_URL = "https://hybrid-analysis.com/api/v2/search/hash"
+HA_REPORT_URL = "https://hybrid-analysis.com/api/v2/report/{job_id}/summary"
 VT_INTERVAL_SECONDS = 16.0
 VT_DAILY_LIMIT = 480  # VirusTotal Public API is documented at 4/minute and 500/day.
 HA_INTERVAL_SECONDS = 2.0
@@ -164,42 +166,50 @@ class ReputationClient:
         return malicious
 
     def hybrid_analysis_result(self, digest: str, api_key: str) -> tuple[int | float | str, str]:
-        # Prefer the exact repository secret at request time. The argument is
-        # retained as a fallback for direct offline callers/tests.
+        # Current API: GET /search/hash?hash=<sha256>. The legacy POST body
+        # variant was returning HTTP 400 even with form encoding and the right headers.
         configured_api_key = os.environ.get("HYBRID_ANALYSIS_API_KEY")
         request_api_key = configured_api_key if configured_api_key is not None else api_key
         if not request_api_key or not request_api_key.strip():
             raise EnrichmentError("HYBRID_ANALYSIS_API_KEY is not configured.")
 
+        headers = {
+            "api-key": request_api_key.strip(),
+            "User-Agent": USER_AGENT,
+            "Accept": "application/json",
+        }
         response = self.request(
             "hybrid_analysis",
-            "post",
+            "get",
             HA_URL,
-            headers={
-                "api-key": os.environ.get("HYBRID_ANALYSIS_API_KEY", api_key).strip(),
-                "User-Agent": USER_AGENT,
-                "Accept": "application/json",
-                "Content-Type": "application/x-www-form-urlencoded",
-            },
-            data={"hash": digest},
+            headers=headers,
+            params={"hash": digest},
         )
         if response.status_code == 404:
             response.close()
             return "Not Found", "Not Found"
         if response.status_code != 200:
-            response.raise_for_status()
-            raise EnrichmentError(f"Hybrid Analysis returned unexpected HTTP {response.status_code}.")
+            status = response.status_code
+            detail = str(getattr(response, "text", "") or "").strip().replace("\\n", " ")[:240]
+            response.close()
+            suffix = f": {detail}" if detail else ""
+            raise EnrichmentError(f"Hybrid Analysis hash lookup returned HTTP {status}{suffix}.")
         try:
-            payload = response.json()
-        except ValueError as error:
-            raise EnrichmentError("Hybrid Analysis returned invalid JSON.") from error
+            try:
+                payload = response.json()
+            except ValueError as error:
+                raise EnrichmentError("Hybrid Analysis returned invalid JSON for hash lookup.") from error
+        finally:
+            response.close()
+
         if isinstance(payload, list):
             candidates = payload
         elif isinstance(payload, dict):
-            nested = payload.get("result") or payload.get("results") or payload.get("data")
+            nested = payload.get("reports") or payload.get("result") or payload.get("results") or payload.get("data")
             candidates = nested if isinstance(nested, list) else [payload]
         else:
-            raise EnrichmentError("Hybrid Analysis response must be an object or array.")
+            raise EnrichmentError("Hybrid Analysis hash lookup must return an object or array.")
+
         record = next(
             (item for item in candidates
              if isinstance(item, dict) and str(item.get("sha256", "")).lower() == digest),
@@ -207,6 +217,37 @@ class ReputationClient:
         )
         if record is None:
             return "Not Found", "Not Found"
+
+        # Search results often expose the report ID while the full threat_score
+        # and verdict live in /report/{job_id}/summary.
+        job_id = record.get("job_id") or record.get("id")
+        if isinstance(job_id, str) and job_id.strip():
+            summary_url = HA_REPORT_URL.format(job_id=quote(job_id.strip(), safe=""))
+            summary_response = self.request(
+                "hybrid_analysis",
+                "get",
+                summary_url,
+                headers=headers,
+            )
+            if summary_response.status_code == 404:
+                summary_response.close()
+            elif summary_response.status_code != 200:
+                status = summary_response.status_code
+                detail = str(getattr(summary_response, "text", "") or "").strip().replace("\\n", " ")[:240]
+                summary_response.close()
+                suffix = f": {detail}" if detail else ""
+                raise EnrichmentError(f"Hybrid Analysis report summary returned HTTP {status}{suffix}.")
+            else:
+                try:
+                    try:
+                        summary = summary_response.json()
+                    except ValueError as error:
+                        raise EnrichmentError("Hybrid Analysis returned invalid report-summary JSON.") from error
+                finally:
+                    summary_response.close()
+                if isinstance(summary, dict) and not summary.get("error"):
+                    record = {**record, **summary}
+
         score = record.get("threat_score")
         if isinstance(score, bool) or not isinstance(score, (int, float)) or not math.isfinite(float(score)):
             score = "Not Found"
@@ -214,42 +255,6 @@ class ReputationClient:
         if not isinstance(verdict, str) or not verdict.strip():
             verdict = "Not Found"
         return score, verdict.strip()
-
-
-def read_hashes(path: Path) -> list[str]:
-    if not path.is_file():
-        raise EnrichmentError(f"TweetFeed SHA-256 IOC list is missing: {path}")
-    output: list[str] = []
-    seen: set[str] = set()
-    for line_number, raw in enumerate(path.read_text(encoding="ascii").splitlines(), start=1):
-        digest = raw.strip().lower()
-        if not digest:
-            continue
-        if not SHA256_RE.fullmatch(digest):
-            raise EnrichmentError(f"Invalid SHA-256 on input line {line_number}.")
-        if digest not in seen:
-            seen.add(digest)
-            output.append(digest)
-    return output
-
-
-def load_existing(path: Path) -> set[str]:
-    if not path.exists():
-        path.parent.mkdir(parents=True, exist_ok=True)
-        with path.open("w", newline="", encoding="utf-8") as stream:
-            csv.DictWriter(stream, fieldnames=CSV_FIELDS).writeheader()
-        return set()
-    with path.open("r", newline="", encoding="utf-8") as stream:
-        reader = csv.DictReader(stream)
-        if tuple(reader.fieldnames or ()) != CSV_FIELDS:
-            raise EnrichmentError("Existing enrichment CSV header does not match the required schema.")
-        existing: set[str] = set()
-        for row in reader:
-            digest = str(row.get("sha256") or "").strip().lower()
-            if not SHA256_RE.fullmatch(digest):
-                raise EnrichmentError("Existing enrichment CSV contains an invalid SHA-256.")
-            existing.add(digest)
-        return existing
 
 
 def append_record(path: Path, record: dict[str, Any]) -> None:

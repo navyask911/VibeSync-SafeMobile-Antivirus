@@ -12,7 +12,7 @@ from generate_dashboard_metrics import (
     hybrid_analysis_verified_count,
     next_six_hour_fetch,
     parse_cloudflare_metrics_document,
-    tweetfeed_today_sha256_count,
+    tweetfeed_current_sha256_count,
     build_metrics,
     write_metrics,
 )
@@ -42,21 +42,17 @@ class FakeResponse:
 
 
 class MetricsGeneratorTests(unittest.TestCase):
-    def test_tweetfeed_reads_preaggregated_today_sha256_count(self):
-        response = FakeResponse({
-            "windows": {"today": {"types": {"sha256": 142}}}
-        })
-        session = Mock()
-        session.get.return_value = response
-        self.assertEqual(tweetfeed_today_sha256_count(session=session), 142)
-        self.assertIn("/v1/counts", session.get.call_args.args[0])
-        self.assertTrue(response.closed)
+    def test_tweetfeed_count_uses_validated_current_feed_and_deduplicates(self):
+        with tempfile.TemporaryDirectory() as directory:
+            hashes = Path(directory) / "new_hashes.txt"
+            hashes.write_text(f"{HASH_A}\\n{HASH_B}\\n{HASH_A.upper()}\\n", encoding="ascii")
+            self.assertEqual(tweetfeed_current_sha256_count(hashes), 2)
 
-    def test_tweetfeed_rejects_missing_counter(self):
-        session = Mock()
-        session.get.return_value = FakeResponse({"windows": {"today": {"types": {}}}})
-        with self.assertRaises(MetricsError):
-            tweetfeed_today_sha256_count(session=session)
+    def test_tweetfeed_count_rejects_missing_current_feed(self):
+        with tempfile.TemporaryDirectory() as directory:
+            hashes = Path(directory) / "missing_hashes.txt"
+            with self.assertRaises(MetricsError):
+                tweetfeed_current_sha256_count(hashes)
 
     def test_ha_count_is_scoped_to_current_feed_and_confirmed_threshold(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -86,6 +82,24 @@ class MetricsGeneratorTests(unittest.TestCase):
                 hybrid_analysis_verified_count(hashes, cache, "")
             with self.assertRaises(MetricsError):
                 hybrid_analysis_verified_count(hashes, cache, "configured-key")
+
+    def test_ha_malicious_verdict_counts_when_score_is_not_supplied(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            hashes = root / "new_hashes.txt"
+            cache = root / "enriched.csv"
+            hashes.write_text(f"{HASH_A}\\n", encoding="ascii")
+            with cache.open("w", newline="", encoding="utf-8") as stream:
+                writer = csv.DictWriter(
+                    stream, fieldnames=("sha256", "vt_malicious_count", "ha_threat_score", "ha_verdict")
+                )
+                writer.writeheader()
+                writer.writerow({
+                    "sha256": HASH_A,
+                    "ha_threat_score": "Not Found",
+                    "ha_verdict": "malicious",
+                })
+            self.assertEqual(hybrid_analysis_verified_count(hashes, cache, "configured-key"), 1)
 
     def test_cloudflare_nested_aggregate_document(self):
         value = {
@@ -141,7 +155,7 @@ class MetricsGeneratorTests(unittest.TestCase):
                 raise MetricsError("Cloudflare token or namespace is unavailable")
 
         with patch(
-            "generate_dashboard_metrics.tweetfeed_today_sha256_count",
+            "generate_dashboard_metrics.tweetfeed_current_sha256_count",
             side_effect=MetricsError("TweetFeed temporarily unavailable"),
         ):
             result = build_metrics(

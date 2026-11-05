@@ -25,7 +25,6 @@ from urllib.parse import quote
 
 import requests
 
-TWEETFEED_COUNTS_URL = "https://api.tweetfeed.live/v1/counts"
 CLOUDFLARE_API_BASE = "https://api.cloudflare.com/client/v4"
 DEFAULT_WORKER_URL = "https://misty-fog-d936.navyask911.workers.dev"
 SHA256_RE = re.compile(r"[0-9a-f]{64}\Z", re.IGNORECASE)
@@ -73,33 +72,6 @@ def _close_response(response: Any) -> None:
         close()
 
 
-def tweetfeed_today_sha256_count(session: Any | None = None) -> int:
-    """Read TweetFeed's cached daily per-type counters; one public request."""
-    client = session or requests.Session()
-    response = client.get(
-        TWEETFEED_COUNTS_URL,
-        headers={
-            "Accept": "application/json",
-            "User-Agent": "SafeMobile-Dashboard-Metrics/1.0",
-        },
-        timeout=(10, 30),
-    )
-    try:
-        response.raise_for_status()
-        try:
-            payload = response.json()
-        except (ValueError, TypeError) as error:
-            raise MetricsError("TweetFeed /v1/counts returned invalid JSON.") from error
-    finally:
-        _close_response(response)
-
-    try:
-        count = payload["windows"]["today"]["types"]["sha256"]
-    except (KeyError, TypeError) as error:
-        raise MetricsError("TweetFeed /v1/counts omitted windows.today.types.sha256.") from error
-    return _non_negative_int(count, "TweetFeed today's SHA-256 count")
-
-
 def read_current_feed_hashes(path: Path) -> set[str]:
     """Read the TweetFeed hash list built during this workflow execution."""
     if not path.is_file():
@@ -113,6 +85,10 @@ def read_current_feed_hashes(path: Path) -> set[str]:
             raise MetricsError(f"Invalid SHA-256 at {path}:{line_number}.")
         hashes.add(digest)
     return hashes
+
+def tweetfeed_current_sha256_count(path: Path) -> int:
+    """Count unique SHA-256 IOCs from this run's already-validated TweetFeed feed."""
+    return len(read_current_feed_hashes(path))
 
 
 def hybrid_analysis_verified_count(
@@ -145,11 +121,13 @@ def hybrid_analysis_verified_count(
                 continue
             verdict = (row.get("ha_verdict") or "").strip().lower()
             score_text = (row.get("ha_threat_score") or "").strip()
-            try:
-                score = float(score_text)
-            except (TypeError, ValueError):
-                continue
-            if verdict == "malicious" and score >= 70:
+            score: float | None = None
+            if score_text:
+                try:
+                    score = float(score_text)
+                except (TypeError, ValueError):
+                    score = None
+            if verdict == "malicious" and (score is None or score >= 70):
                 verified.add(digest)
     return len(verified)
 
@@ -540,7 +518,6 @@ def build_metrics(
     cloudflare_api_token: str,
     hashes_path: Path = Path("data/new_hashes.txt"),
     ha_cache_path: Path = Path("data/enriched_threats.csv"),
-    session: Any | None = None,
     cloudflare_reader: CloudflareKVReader | None = None,
     now: datetime | None = None,
     fallback_metrics: Mapping[str, Any] | None = None,
@@ -552,8 +529,8 @@ def build_metrics(
 
     try:
         tweetfeed_count = _non_negative_int(
-            tweetfeed_today_sha256_count(session=session),
-            "TweetFeed today's SHA-256 count",
+            tweetfeed_current_sha256_count(hashes_path),
+            "TweetFeed current-feed SHA-256 count",
         )
     except (MetricsError, requests.RequestException, OSError, ValueError) as error:
         _warn_source_fallback("TweetFeed", error, "tweetfeed_count")

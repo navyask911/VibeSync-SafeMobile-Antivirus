@@ -8,14 +8,19 @@ main branch and can be read without credentials at:
 
 ## Data definitions
 
-- `tweetfeed_count`: TweetFeed's pre-aggregated `windows.today.types.sha256`
-  value. TweetFeed's "today" window is UTC and its `/v1/counts` endpoint is
-  cached/pre-aggregated. The script makes one unauthenticated request per cron.
+- `tweetfeed_count`: number of unique SHA-256 values in the exact weekly
+  TweetFeed feed fetched and validated earlier in the same workflow
+  (`/v1/week/malware/sha256`). This avoids querying the separate `/v1/counts`
+  endpoint, whose response in run #41986159798 did not contain the expected
+  `windows.today.types.sha256` field. The feed builder reported 21 unique hashes
+  in that run.
 - `ha_verified_count`: unique SHA-256 hashes in this workflow's current
   TweetFeed input that have a cached Hybrid Analysis verdict of `malicious`
-  and threat score >= 70. Hybrid Analysis requests are made by the existing
-  quota-limited `scripts/enrich_threats.py` step; the metrics script reuses
-  that output and does not issue duplicate provider requests.
+  and a current Hybrid Analysis report verdict of `malicious`. A supplied
+  numeric threat score must be >= 70; if the API omits a score, the explicit
+  `malicious` verdict is still counted. The enrichment step uses
+  `GET /api/v2/search/hash?hash={sha256}` and then
+  `GET /api/v2/report/{job_id}/summary` when a report ID is returned.
 - `cloudflare_total_donations` and `cloudflare_confirmed_threats`: read from
   the Cloudflare KV contribution namespace. The SafeMobile contribution
   client submits only after a confirmed `ScanVerdict.THREAT`; in deployments
@@ -30,8 +35,11 @@ main branch and can be read without credentials at:
 - `CLOUDFLARE_API_TOKEN`: read-only Cloudflare API token with access to list
   the target account's KV namespaces and read KV values/keys.
 
-Optional GitHub repository **Variables** (not secrets) can avoid Cloudflare
-account/namespace discovery:
+Set the GitHub repository **Variables** (not secrets) for the Cloudflare
+account and the contribution KV namespace. The latest manual run showed the
+token was present but `CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_KV_NAMESPACE_ID`
+and `CLOUDFLARE_KV_NAMESPACE_TITLE` were all missing; account discovery then
+failed before the KV namespace could be queried.
 
 - `CLOUDFLARE_ACCOUNT_ID`
 - `CLOUDFLARE_KV_NAMESPACE_ID`, or `CLOUDFLARE_KV_NAMESPACE_TITLE`
@@ -39,8 +47,12 @@ account/namespace discovery:
   name (the default candidates include `dashboard_metrics`, `stats` and
   `metrics`).
 
-The script never prints credentials and never sends the Cloudflare token to
-the public Worker. It publishes counts only; no hashes, feature vectors,
-sample data, device identifiers or user identifiers are included. If an
-unambiguous metrics source cannot be read, generation fails and the prior
-public JSON is left untouched rather than publishing fabricated zeroes.
+The Cloudflare token must have permission to read the selected account's KV
+namespace and its values/keys. Supplying the explicit account and namespace IDs
+avoids the account/namespace discovery calls. The script never prints
+credentials and never sends the Cloudflare token to the public Worker. It
+publishes counts only; no hashes, feature vectors, sample data, device
+identifiers or user identifiers are included. When a provider fails, the
+generator retains a previous valid count or uses the explicit safe default 0;
+workflow logs identify each fallback so a fallback zero is not mistaken for a
+successful empty result.
