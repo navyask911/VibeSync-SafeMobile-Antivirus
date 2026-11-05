@@ -113,16 +113,16 @@ class MetricsGeneratorTests(unittest.TestCase):
         ]
         self.assertEqual(count_sha256_kv_keys(keys), 2)
 
-    def test_next_six_hour_cron_boundary(self):
+    def test_next_fetch_is_exactly_six_hours_after_last_fetched(self):
         value = datetime(2026, 11, 5, 12, 12, 44, tzinfo=timezone.utc)
         self.assertEqual(
             next_six_hour_fetch(value),
-            datetime(2026, 11, 5, 18, 0, tzinfo=timezone.utc),
+            datetime(2026, 11, 5, 18, 12, 44, tzinfo=timezone.utc),
         )
         late = datetime(2026, 11, 5, 23, 59, tzinfo=timezone.utc)
         self.assertEqual(
             next_six_hour_fetch(late),
-            datetime(2026, 11, 6, 0, 0, tzinfo=timezone.utc),
+            datetime(2026, 11, 6, 5, 59, tzinfo=timezone.utc),
         )
 
     def test_metrics_writer_requires_exact_public_contract(self):
