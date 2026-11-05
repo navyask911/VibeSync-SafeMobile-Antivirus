@@ -68,6 +68,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.painterResource
@@ -91,6 +92,87 @@ import java.util.Date
 import java.util.UUID
 
 enum class SettingsSubRoute { ROOT, GENERAL, SUBSCRIPTION, NOTIFICATIONS, SECURITY, HELP_LEGAL, RATE }
+
+@Composable
+private fun ThemeOptionButton(
+    option: AppTheme,
+    selected: Boolean,
+    compact: Boolean,
+    modifier: Modifier = Modifier,
+    onSelected: () -> Unit
+) {
+    val label = when (option) {
+        AppTheme.LIGHT -> R.string.theme_light
+        AppTheme.MIDNIGHT -> R.string.theme_midnight
+        AppTheme.OLED -> R.string.theme_oled
+    }
+    val icon = when (option) {
+        AppTheme.LIGHT -> R.drawable.ic_theme_light
+        AppTheme.MIDNIGHT -> R.drawable.ic_theme_midnight
+        AppTheme.OLED -> R.drawable.ic_theme_oled
+    }
+    androidx.compose.material3.Surface(
+        modifier = modifier
+            .heightIn(min = if (compact) 56.dp else 80.dp)
+            .selectable(selected = selected, role = Role.RadioButton, onClick = onSelected)
+            .testTag("settings.theme.${option.name.lowercase()}"),
+        shape = RoundedCornerShape(12.dp),
+        color = if (selected && option == AppTheme.LIGHT) {
+            com.vibesync.antivirus.ui.theme.SafeMobileLightSelectedContainer
+        } else if (selected) MaterialTheme.colorScheme.surfaceVariant
+        else MaterialTheme.colorScheme.surface,
+        border = androidx.compose.foundation.BorderStroke(
+            if (selected) 2.dp else 1.dp,
+            if (selected) MaterialTheme.colorScheme.secondary
+            else MaterialTheme.colorScheme.outline
+        )
+    ) {
+        if (compact) {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                androidx.compose.material3.Icon(
+                    painterResource(icon),
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(22.dp)
+                )
+                Text(
+                    stringResource(label),
+                    modifier = Modifier.weight(1f),
+                    style = MaterialTheme.typography.labelLarge,
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+        } else {
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp, horizontal = 4.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(6.dp)
+            ) {
+                androidx.compose.material3.Icon(
+                    painterResource(icon),
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(22.dp)
+                )
+                Text(
+                    stringResource(label),
+                    modifier = Modifier.fillMaxWidth(),
+                    style = MaterialTheme.typography.labelMedium,
+                    textAlign = TextAlign.Center,
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+        }
+    }
+}
 
 @Composable
 private fun safeMobileSwitchColors() = SwitchDefaults.colors(
@@ -438,6 +520,7 @@ internal fun SafeMobileSettingsPanel(
     onInstallSentinelChanged: ((Boolean) -> Unit)? = null
 ) {
     val context = LocalContext.current
+    val useExpandedThemeOptions = LocalDensity.current.fontScale >= 1.4f
     fun openOfficialWebsite(url: String) {
         runCatching {
             context.startActivity(Intent(Intent.ACTION_VIEW, android.net.Uri.parse(url)))
@@ -481,58 +564,28 @@ internal fun SafeMobileSettingsPanel(
                     verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     Text(stringResource(R.string.appearance_title),
                         style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        AppTheme.entries.forEach { option ->
-                            val label = when (option) {
-                                AppTheme.LIGHT -> R.string.theme_light
-                                AppTheme.MIDNIGHT -> R.string.theme_midnight
-                                AppTheme.OLED -> R.string.theme_oled
-                            }
-                            val icon = when (option) {
-                                AppTheme.LIGHT -> R.drawable.ic_theme_light
-                                AppTheme.MIDNIGHT -> R.drawable.ic_theme_midnight
-                                AppTheme.OLED -> R.drawable.ic_theme_oled
-                            }
-                            val selected = appTheme == option
-                            androidx.compose.material3.Surface(
-                                modifier = Modifier.weight(1f).fillMaxWidth().heightIn(min = 80.dp)
-                                    .selectable(
-                                        selected = selected,
-                                        role = Role.RadioButton,
-                                        onClick = { onAppThemeChanged(option) }
-                                    )
-                                    .testTag("settings.theme.${option.name.lowercase()}"),
-                                shape = RoundedCornerShape(12.dp),
-                                color = if (selected && appTheme == AppTheme.LIGHT) {
-                                    com.vibesync.antivirus.ui.theme.SafeMobileLightSelectedContainer
-                                } else if (selected) MaterialTheme.colorScheme.surfaceVariant
-                                else MaterialTheme.colorScheme.surface,
-                                border = androidx.compose.foundation.BorderStroke(
-                                    if (selected) 2.dp else 1.dp,
-                                    if (selected) MaterialTheme.colorScheme.secondary
-                                    else MaterialTheme.colorScheme.outline
+                    if (useExpandedThemeOptions) {
+                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            AppTheme.entries.forEach { option ->
+                                ThemeOptionButton(
+                                    option = option,
+                                    selected = appTheme == option,
+                                    compact = true,
+                                    modifier = Modifier.fillMaxWidth(),
+                                    onSelected = { onAppThemeChanged(option) }
                                 )
-                            ) {
-                                Column(
-                                    modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp, horizontal = 4.dp),
-                                    horizontalAlignment = Alignment.CenterHorizontally,
-                                    verticalArrangement = Arrangement.spacedBy(6.dp)
-                                ) {
-                                    androidx.compose.material3.Icon(
-                                        painterResource(icon), contentDescription = null,
-                                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                        modifier = Modifier.size(22.dp)
-                                    )
-                                    Text(
-                                        stringResource(label),
-                                        modifier = Modifier.fillMaxWidth(),
-                                        style = MaterialTheme.typography.labelMedium,
-                                        textAlign = TextAlign.Center,
-                                        maxLines = 1,
-                                        softWrap = false,
-                                        overflow = TextOverflow.Ellipsis
-                                    )
-                                }
+                            }
+                        }
+                    } else {
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            AppTheme.entries.forEach { option ->
+                                ThemeOptionButton(
+                                    option = option,
+                                    selected = appTheme == option,
+                                    compact = false,
+                                    modifier = Modifier.weight(1f).fillMaxWidth(),
+                                    onSelected = { onAppThemeChanged(option) }
+                                )
                             }
                         }
                     }
