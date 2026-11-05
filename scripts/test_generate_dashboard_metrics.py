@@ -53,7 +53,7 @@ class MetricsGeneratorTests(unittest.TestCase):
 
     def test_tweetfeed_rejects_missing_counter(self):
         session = Mock()
-        session.get.return_value = FakeResponse({"windows": {"today": {"types": {}}})
+        session.get.return_value = FakeResponse({"windows": {"today": {"types": {}}}})
         with self.assertRaises(MetricsError):
             tweetfeed_today_sha256_count(session=session)
 
