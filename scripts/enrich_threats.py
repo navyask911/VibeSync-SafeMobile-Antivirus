@@ -176,8 +176,8 @@ class ReputationClient:
             "post",
             HA_URL,
             headers={
-                "api-key": request_api_key.strip(),
-                "User-Agent": "Falcon Sandbox",
+                "api-key": os.environ.get("HYBRID_ANALYSIS_API_KEY", api_key).strip(),
+                "User-Agent": USER_AGENT,
                 "Accept": "application/json",
                 "Content-Type": "application/x-www-form-urlencoded",
             },
