@@ -1,6 +1,6 @@
 # Third-party dependency notices
 
-Generated from the CycloneDX SBOM by `scripts/render_third_party_notices.py`. Components: 482.
+Generated from the CycloneDX SBOM by `scripts/render_third_party_notices.py`. Components: 484.
 
 Regenerate this file with the CI SBOM refresh workflow; do not hand-edit dependency rows.
 
@@ -56,6 +56,7 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | annotations | 4.1.1.4 | Apache-2.0 | https://android.git.kernel.org/ |
 | app | 1.5.1 | UNKNOWN — review required | Package URL: pkg:maven/com.vibesync.antivirus/app@1.5.1?project_path=%3Aapp |
 | appcompat-resources | 1.4.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| appcompat-resources | 1.7.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | atomicfu | 0.21.0 | Apache-2.0 | https://github.com/Kotlin/kotlinx.atomicfu |
 | atomicfu | 0.22.0 | Apache-2.0 | https://github.com/Kotlin/kotlinx.atomicfu |
 | atomicfu | 0.23.1 | Apache-2.0 | https://github.com/Kotlin/kotlinx.atomicfu |
@@ -111,6 +112,7 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | core-ktx | 1.16.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | core-proto | 0.0.9-alpha03 | Apache-2.0 | Package URL: pkg:maven/com.google.testing.platform/core-proto@0.0.9-alpha03?type=jar |
 | core-runtime | 2.2.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| core-splashscreen | 1.2.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | core-viewtree | 1.0.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | cronet | 500.1.0 | [Chromium License and licenses of built-in dependencies](https://chromium.googlesource.com/chromium/src/+/refs/heads/main/LICENSE) | https://chromium.googlesource.com/chromium/src.git |
 | cronet-api | 500.1.0 | [Android Software Development Kit License](https://developer.android.com/studio/terms.html) | Package URL: pkg:maven/org.chromium.net/cronet-api@500.1.0?type=aar |
@@ -489,7 +491,7 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | work-runtime | 2.10.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | work-runtime-ktx | 2.10.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 
-Metadata completeness: 478/482 components have both a declared licence and a source/package reference.
+Metadata completeness: 480/484 components have both a declared licence and a source/package reference.
 
 ## Metadata requiring manual review
 
