@@ -21,7 +21,7 @@
   <meta-data
    android:name="com.google.android.gms.ads.APPLICATION_ID"
    android:value="ca-app-pub-4783826505860771~8485727119" />
-  <activity android:name=".MainActivity" android:exported="true">
+  <activity android:name=".MainActivity" android:exported="true" android:theme="@style/Theme.SafeMobile.Splash">
    <intent-filter><action android:name="android.intent.action.MAIN" /><category android:name="android.intent.category.LAUNCHER" /></intent-filter>
    <intent-filter>
     <action android:name="android.intent.action.SEND" />

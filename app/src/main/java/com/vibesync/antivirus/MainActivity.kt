@@ -10,6 +10,7 @@ import com.vibesync.antivirus.ui.theme.AppTheme
 import com.vibesync.antivirus.ui.theme.ThemePreferences
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.activity.compose.setContent
 import androidx.core.view.WindowCompat
 import androidx.compose.runtime.getValue
@@ -33,6 +34,7 @@ class MainActivity : ComponentActivity() {
     private var openDevicePosture by mutableStateOf(false)
     private var batteryStatusEpoch by mutableStateOf(0)
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         applySystemBars(AppTheme.LIGHT)
