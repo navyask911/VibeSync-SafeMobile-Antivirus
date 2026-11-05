@@ -142,8 +142,9 @@ class EnrichmentTests(unittest.TestCase):
         with patch.dict("os.environ", {"HYBRID_ANALYSIS_API_KEY": "ha-key"}, clear=True):
             result = enrich_hashes(self.hashes, self.cache, self.quota, session=session)
         self.assertEqual(result["added"], 1)
-        session.get.assert_not_called()
-        session.get.assert_called_once()
+        self.assertEqual(session.get.call_count, 1)
+        self.assertEqual(session.get.call_args.args[0], HA_URL)
+        self.assertEqual(session.get.call_args.kwargs["headers"]["api-key"], "ha-key")
         session.post.assert_not_called()
         with self.cache.open(newline="", encoding="utf-8") as stream:
             row = next(csv.DictReader(stream))
@@ -166,7 +167,10 @@ class EnrichmentTests(unittest.TestCase):
         }, clear=True):
             result = enrich_hashes(self.hashes, self.cache, self.quota, session=session)
         self.assertEqual(result["added"], 1)
-        session.get.assert_not_called()
+        self.assertEqual(session.get.call_count, 1)
+        self.assertEqual(session.get.call_args.args[0], HA_URL)
+        self.assertEqual(session.get.call_args.kwargs["headers"]["api-key"], "ha-key")
+        session.post.assert_not_called()
         with self.cache.open(newline="", encoding="utf-8") as stream:
             row = next(csv.DictReader(stream))
         self.assertEqual(row["vt_malicious_count"], "-1")
