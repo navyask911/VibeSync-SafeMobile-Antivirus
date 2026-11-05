@@ -1,6 +1,6 @@
 # Third-party dependency notices
 
-Generated from the CycloneDX SBOM by `scripts/render_third_party_notices.py`. Components: 480.
+Generated from the CycloneDX SBOM by `scripts/render_third_party_notices.py`. Components: 481.
 
 Regenerate this file with the CI SBOM refresh workflow; do not hand-edit dependency rows.
 
@@ -276,6 +276,7 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | kotlinx-coroutines-core-jvm | 1.8.0 | Apache-2.0 | https://github.com/Kotlin/kotlinx.coroutines |
 | kotlinx-coroutines-guava | 1.10.2 | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0) | https://github.com/Kotlin/kotlinx.coroutines |
 | kotlinx-coroutines-test | 1.10.2 | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0) | https://github.com/Kotlin/kotlinx.coroutines |
+| kotlinx-coroutines-test | 1.7.3 | Apache-2.0 | https://github.com/Kotlin/kotlinx.coroutines |
 | kotlinx-coroutines-test-jvm | 1.10.2 | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0) | https://github.com/Kotlin/kotlinx.coroutines |
 | kotlinx-serialization-bom | 1.6.3 | Apache-2.0 | https://github.com/Kotlin/kotlinx.serialization |
 | kotlinx-serialization-bom | 1.7.3 | Apache-2.0 | https://github.com/Kotlin/kotlinx.serialization |
@@ -296,7 +297,6 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | layoutlib-api | 31.11.0-rc02 | Apache-2.0 | Package URL: pkg:maven/com.android.tools.layoutlib/layoutlib-api@31.11.0-rc02?type=jar |
 | layoutlib-resources | 15.2.3 | Apache-2.0 | https://cs.android.com/android/platform/frameworks/base/ |
 | layoutlib-runtime | 15.2.3 | Apache-2.0 | https://cs.android.com/android/platform/frameworks/base/ |
-| lifecycle-common | 2.3.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | lifecycle-common | 2.8.7 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | lifecycle-common | 2.9.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | lifecycle-common-java8 | 2.9.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
@@ -465,6 +465,7 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | ui-test-android | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | ui-test-junit4 | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | ui-test-junit4-android | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| ui-test-manifest | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | ui-text | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | ui-text-android | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | ui-tooling | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
@@ -487,7 +488,7 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | work-runtime | 2.10.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | work-runtime-ktx | 2.10.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 
-Metadata completeness: 476/480 components have both a declared licence and a source/package reference.
+Metadata completeness: 477/481 components have both a declared licence and a source/package reference.
 
 ## Metadata requiring manual review
 

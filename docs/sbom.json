@@ -1,10 +1,10 @@
 {
   "bomFormat" : "CycloneDX",
   "specVersion" : "1.6",
-  "serialNumber" : "urn:uuid:31931d78-0842-484b-89b3-036fcab92c9f",
+  "serialNumber" : "urn:uuid:b165be61-c264-4648-8367-6cbe15e7aa6b",
   "version" : 1,
   "metadata" : {
-    "timestamp" : "2026-11-04T23:02:08Z",
+    "timestamp" : "2026-11-05T00:38:36Z",
     "tools" : {
       "components" : [
         {
@@ -26,7 +26,7 @@
       "externalReferences" : [
         {
           "type" : "build-system",
-          "url" : "https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/actions/runs/41930268477"
+          "url" : "https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/actions/runs/41942732010"
         },
         {
           "type" : "vcs",
@@ -3132,6 +3132,70 @@
     },
     {
       "type" : "library",
+      "bom-ref" : "pkg:maven/androidx.compose.ui/ui-test-manifest@1.8.2?type=aar",
+      "publisher" : "The Android Open Source Project",
+      "group" : "androidx.compose.ui",
+      "name" : "ui-test-manifest",
+      "version" : "1.8.2",
+      "description" : "Compose testing library that should be added as a debugImplementation dependency to add properties to the debug manifest necessary for testing an application",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "cae253a1f93cf73e5cd9fdc3eb424a72"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "1d992c31b3631f12427e9a5e4c548f03fa5ad151"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "4ce2851bff85426e64eab8020eca87192f6fc9cb31fad51e7c01ca04f882476a"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "2418b2010534b9e84eaff7670d4f55cbd7ce3ff02ad961237414d3b763b0498c931001a1f21b00157238ec16077632a9b84dddf66cb99cca0656d1a66e9ddfc1"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "b7480a8ba3cd616249fa760bda76dfa90da7583cb34390186f522567f1c97226"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "42a06403e9d207a8384423f19093d387ad177b8b5b6f04b811855e3dca666fbadaa78fff000006a848a4ecb46e7ad8b27116e170ab6820bf15b53ba52b733b64"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "f65042d32fd2145fb681a64e1596da77903b9105a58e6692b00b30d1793db59d4800f7371fda2144231851c52687ee11"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "6c1e3311571381ca9411569afb81556298d1b0505a964971c1301141a62e37d6c7d6fecb5ee169cd34fe5c52541483b4"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/androidx.compose.ui/ui-test-manifest@1.8.2?type=aar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://cs.android.com/androidx/platform/frameworks/support"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
       "bom-ref" : "pkg:maven/androidx.compose.ui/ui-test@1.8.2?type=jar",
       "publisher" : "The Android Open Source Project",
       "group" : "androidx.compose.ui",
@@ -5832,69 +5896,6 @@
     },
     {
       "type" : "library",
-      "bom-ref" : "pkg:maven/androidx.lifecycle/lifecycle-common@2.3.1?type=jar",
-      "group" : "androidx.lifecycle",
-      "name" : "lifecycle-common",
-      "version" : "2.3.1",
-      "description" : "Android Lifecycle-Common",
-      "hashes" : [
-        {
-          "alg" : "MD5",
-          "content" : "6dc11266c5c0aa964aeb11a565b389d9"
-        },
-        {
-          "alg" : "SHA-1",
-          "content" : "fc466261d52f4433863642fb40d12441ae274a98"
-        },
-        {
-          "alg" : "SHA-256",
-          "content" : "15848fb56db32f4c7cdc72b324003183d52a4884d6bf09be708ac7f587d139b5"
-        },
-        {
-          "alg" : "SHA-512",
-          "content" : "82ff03b0e8bc8e6045f2258dc0b17d84a4782b7e2b5b93609dd3afcfd6a760c711f1b8e139d93536dd2a0f0c64adc525783aebd82e01e4324d7ed2e99e388b08"
-        },
-        {
-          "alg" : "SHA3-256",
-          "content" : "af8d19ac0a1bd0b9c2126e8d4cad9315aaab290c4f7ddd3cccf397b86581a7ce"
-        },
-        {
-          "alg" : "SHA3-512",
-          "content" : "bdf181c54fc8afd6b8b4ac4b49885cbe8816cc3230b7dd7668d7bb8fb60f8fedc26b813c5e722843acf5342bf11cb2f0ba508e747aae52a73c65264aa255aa20"
-        },
-        {
-          "alg" : "SHA-384",
-          "content" : "d5b295ce39e3ac1c59cc91b565b29791cebe3062fc13bfce24ecff94a0e49af95673feae11905353e01b24d84e1cd6a3"
-        },
-        {
-          "alg" : "SHA3-384",
-          "content" : "e257458467b74b712e22a2a33bd7cf2f05c4bd6b865cccf6078b45bea09500a0491ca8c89928ae78c6b682510bbe2876"
-        }
-      ],
-      "licenses" : [
-        {
-          "license" : {
-            "id" : "Apache-2.0"
-          }
-        }
-      ],
-      "purl" : "pkg:maven/androidx.lifecycle/lifecycle-common@2.3.1?type=jar",
-      "modified" : false,
-      "externalReferences" : [
-        {
-          "type" : "vcs",
-          "url" : "https://cs.android.com/androidx/platform/frameworks/support"
-        }
-      ],
-      "properties" : [
-        {
-          "name" : "cdx:maven:package:test",
-          "value" : "false"
-        }
-      ]
-    },
-    {
-      "type" : "library",
       "bom-ref" : "pkg:maven/androidx.lifecycle/lifecycle-common@2.8.7?type=jar",
       "publisher" : "The Android Open Source Project",
       "group" : "androidx.lifecycle",
@@ -5953,7 +5954,7 @@
       "properties" : [
         {
           "name" : "cdx:maven:package:test",
-          "value" : "true"
+          "value" : "false"
         }
       ]
     },
@@ -6465,7 +6466,7 @@
       "properties" : [
         {
           "name" : "cdx:maven:package:test",
-          "value" : "true"
+          "value" : "false"
         }
       ]
     },
@@ -6721,7 +6722,7 @@
       "properties" : [
         {
           "name" : "cdx:maven:package:test",
-          "value" : "true"
+          "value" : "false"
         }
       ]
     },
@@ -27509,6 +27510,69 @@
     },
     {
       "type" : "library",
+      "bom-ref" : "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-test@1.7.3?type=jar",
+      "group" : "org.jetbrains.kotlinx",
+      "name" : "kotlinx-coroutines-test",
+      "version" : "1.7.3",
+      "description" : "Coroutines support libraries for Kotlin",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "59a13cc538caad415a92bfbb086d0332"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "cab9c91b6bcc913c24918abfe334051da990c80b"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "2ddfad185b7cc7e3a2e4707c916525d37ce62cf6572ad5fcac2b9f4ba70e010a"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "415d675e49aa25f6428e56b134a2920a80546c26ed5042ad27efd6be12d1680fa9d2db303e2ae44ddec371593f87397e5569f2a4330f916983bb891722c6106c"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "86ca5f246e2559a35efb0d2c1d45e5301714e72cdbf3b882b56414f9232917b3"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "193711b4be8dfe8ca971fe042d728c2a106777aa68104833ef94f8b8086a6b62aeb426db3a734ee356e759e4af3732dd2273ee2460b8a0bf6d8024b4b95317a6"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "51068538978fc2ff21b5de41ea7ec7ccfe5a85b25106ea743a5f0af63281ad267a4f7692e75a16dac2150544d2b3f371"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "4e51a627a137336873de40ad124c2c059f9e424595ad55fac9ff3b56c8f036f93334bc85993cfc0520971b74dce35eee"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-test@1.7.3?type=jar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://github.com/Kotlin/kotlinx.coroutines"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
       "bom-ref" : "pkg:maven/org.jetbrains.kotlinx/kotlinx-serialization-bom@1.6.3?type=pom",
       "group" : "org.jetbrains.kotlinx",
       "name" : "kotlinx-serialization-bom",
@@ -29340,7 +29404,8 @@
       "ref" : "pkg:maven/androidx.compose.runtime/runtime@1.8.2?type=jar",
       "dependsOn" : [
         "pkg:maven/androidx.compose.runtime/runtime-android@1.8.2?type=aar",
-        "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.10.2?type=jar"
+        "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.10.2?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.7.3?type=jar"
       ]
     },
     {
@@ -29425,6 +29490,7 @@
         "pkg:maven/androidx.test.espresso/espresso-core@3.5.0?type=aar",
         "pkg:maven/androidx.test.espresso/espresso-idling-resource@3.5.0?type=aar",
         "pkg:maven/androidx.test/monitor@1.6.1?type=aar",
+        "pkg:maven/androidx.test/monitor@1.7.2?type=aar",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
         "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.10.2?type=jar",
         "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-test@1.10.2?type=jar"
@@ -29441,8 +29507,11 @@
         "pkg:maven/androidx.lifecycle/lifecycle-common@2.9.1?type=jar",
         "pkg:maven/androidx.lifecycle/lifecycle-runtime@2.9.1?type=jar",
         "pkg:maven/androidx.test.ext/junit@1.1.5?type=aar",
+        "pkg:maven/androidx.test.ext/junit@1.2.1?type=aar",
         "pkg:maven/androidx.test/core@1.5.0?type=aar",
+        "pkg:maven/androidx.test/core@1.6.1?type=aar",
         "pkg:maven/androidx.test/monitor@1.6.1?type=aar",
+        "pkg:maven/androidx.test/monitor@1.7.2?type=aar",
         "pkg:maven/junit/junit@4.13.2?type=jar",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
         "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.10.2?type=jar",
@@ -29458,6 +29527,12 @@
       ]
     },
     {
+      "ref" : "pkg:maven/androidx.compose.ui/ui-test-manifest@1.8.2?type=aar",
+      "dependsOn" : [
+        "pkg:maven/androidx.activity/activity@1.10.1?type=aar"
+      ]
+    },
+    {
       "ref" : "pkg:maven/androidx.compose.ui/ui-test@1.8.2?type=jar",
       "dependsOn" : [
         "pkg:maven/androidx.compose.runtime/runtime@1.8.2?type=jar",
@@ -29466,8 +29541,11 @@
         "pkg:maven/androidx.compose.ui/ui-unit@1.8.2?type=jar",
         "pkg:maven/androidx.compose.ui/ui@1.8.2?type=jar",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.20?type=jar",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
         "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.10.2?type=jar",
-        "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-test@1.10.2?type=jar"
+        "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.7.3?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-test@1.10.2?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-test@1.7.3?type=jar"
       ]
     },
     {
@@ -29886,18 +29964,15 @@
       ]
     },
     {
-      "ref" : "pkg:maven/androidx.lifecycle/lifecycle-common@2.3.1?type=jar",
-      "dependsOn" : [
-        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar"
-      ]
-    },
-    {
       "ref" : "pkg:maven/androidx.lifecycle/lifecycle-common@2.8.7?type=jar",
       "dependsOn" : [
         "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.20?type=jar",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/atomicfu@0.21.0?type=jar",
         "pkg:maven/org.jetbrains.kotlinx/atomicfu@0.23.1?type=jar",
-        "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.10.2?type=jar"
+        "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.10.2?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.7.3?type=jar"
       ]
     },
     {
@@ -30012,7 +30087,8 @@
         "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
         "pkg:maven/androidx.arch.core/core-common@2.2.0?type=jar",
         "pkg:maven/androidx.lifecycle/lifecycle-common@2.8.7?type=jar",
-        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.20?type=jar"
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.20?type=jar",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar"
       ]
     },
     {
@@ -30471,7 +30547,9 @@
         "pkg:maven/androidx.test.espresso/espresso-idling-resource@3.5.0?type=aar",
         "pkg:maven/androidx.test/annotation@1.0.1?type=aar",
         "pkg:maven/androidx.test/core@1.5.0?type=aar",
+        "pkg:maven/androidx.test/core@1.6.1?type=aar",
         "pkg:maven/androidx.test/runner@1.5.0?type=aar",
+        "pkg:maven/androidx.test/runner@1.6.2?type=aar",
         "pkg:maven/com.google.code.findbugs/jsr305@3.0.2?type=jar",
         "pkg:maven/com.squareup/javawriter@2.1.1?type=jar",
         "pkg:maven/javax.inject/javax.inject@1?type=jar",
@@ -30548,7 +30626,7 @@
         "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
         "pkg:maven/androidx.concurrent/concurrent-futures-ktx@1.1.0?type=jar",
-        "pkg:maven/androidx.lifecycle/lifecycle-common@2.3.1?type=jar",
+        "pkg:maven/androidx.lifecycle/lifecycle-common@2.8.7?type=jar",
         "pkg:maven/androidx.lifecycle/lifecycle-common@2.9.1?type=jar",
         "pkg:maven/androidx.test/monitor@1.7.2?type=aar",
         "pkg:maven/androidx.tracing/tracing@1.1.0?type=aar",
@@ -31760,6 +31838,7 @@
         "pkg:maven/androidx.compose.material/material-icons-extended@1.7.8?type=jar",
         "pkg:maven/androidx.compose.material3/material3@1.3.2?type=jar",
         "pkg:maven/androidx.compose.ui/ui-test-junit4@1.8.2?type=jar",
+        "pkg:maven/androidx.compose.ui/ui-test-manifest@1.8.2?type=aar",
         "pkg:maven/androidx.compose.ui/ui-tooling-preview@1.8.2?type=jar",
         "pkg:maven/androidx.compose.ui/ui-tooling@1.8.2?type=pom",
         "pkg:maven/androidx.compose.ui/ui@1.8.2?type=jar",
@@ -32889,6 +32968,14 @@
         "pkg:maven/org.jetbrains.kotlinx/atomicfu@0.23.1?type=jar",
         "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.10.2?type=jar",
         "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-test-jvm@1.10.2?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-test@1.7.3?type=jar",
+      "dependsOn" : [
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-common@2.2.21?type=pom",
+        "pkg:maven/org.jetbrains.kotlinx/atomicfu@0.21.0?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.7.3?type=jar"
       ]
     },
     {
