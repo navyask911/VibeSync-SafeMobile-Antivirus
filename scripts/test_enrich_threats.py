@@ -75,9 +75,16 @@ class EnrichmentTests(unittest.TestCase):
         self.assertEqual(session.get.call_args_list[0].args[0], VT_URL.format(sha256=HASH1))
         self.assertEqual(session.get.call_args_list[0].kwargs["headers"]["x-apikey"], "vt-test-key")
         self.assertEqual(session.post.call_args_list[0].args[0], HA_URL)
-        self.assertEqual(session.post.call_args_list[0].kwargs["headers"]["api-key"], "ha-test-key")
-        self.assertEqual(session.post.call_args_list[0].kwargs["data"], {"hash": HASH1})
-        self.assertNotIn("files", session.post.call_args_list[0].kwargs)
+        ha_request = session.post.call_args_list[0]
+        self.assertEqual(ha_request.kwargs["headers"]["api-key"], "ha-test-key")
+        self.assertEqual(ha_request.kwargs["headers"]["User-Agent"], "Falcon Sandbox")
+        self.assertEqual(
+            ha_request.kwargs["headers"]["Content-Type"],
+            "application/x-www-form-urlencoded",
+        )
+        self.assertEqual(ha_request.kwargs["data"], {"hash": HASH1})
+        self.assertNotIn("json", ha_request.kwargs)
+        self.assertNotIn("files", ha_request.kwargs)
         with self.cache.open(newline="", encoding="utf-8") as stream:
             rows = list(csv.DictReader(stream))
         self.assertEqual(rows[0]["vt_malicious_count"], "11")
