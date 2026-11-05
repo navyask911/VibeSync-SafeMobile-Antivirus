@@ -1,0 +1,54 @@
+name: Inspect Android design assets
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "app/src/main/design_assets/AppIcons.zip"
+      - "app/src/main/design_assets/splash_logo.png"
+      - ".github/workflows/inspect-design-assets.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Inspect archive contents and image dimensions
+        run: |
+          python3 - <<'PY'
+          import struct, zipfile
+          from pathlib import Path
+          archive = Path("app/src/main/design_assets/AppIcons.zip")
+          splash = Path("app/src/main/design_assets/splash_logo.png")
+          print("=== ZIP MEMBERS ===")
+          with zipfile.ZipFile(archive) as z:
+              for info in z.infolist():
+                  print(f"{info.filename} size={info.file_size}")
+                  if info.filename.lower().endswith((".png", ".webp", ".jpg", ".jpeg")):
+                      data = z.read(info)
+                      if data.startswith(b"\\x89PNG\\r\\n\\x1a\\n"):
+                          width, height = struct.unpack(">II", data[16:24])
+                          print(f"  IMAGE {width}x{height} PNG")
+                      elif data[:4] == b"RIFF" and data[8:12] == b"WEBP":
+                          print(f"  IMAGE WEBP bytes={len(data)}")
+                      elif data[:2] == b"\\xff\\xd8":
+                          print(f"  IMAGE JPEG bytes={len(data)}")
+          data = splash.read_bytes()
+          print("=== SPLASH ===")
+          print(f"bytes={len(data)} signature={data[:8]!r}")
+          if data.startswith(b"\\x89PNG\\r\\n\\x1a\\n"):
+              print("dimensions=", struct.unpack(">II", data[16:24]))
+          PY
+      - name: Preserve original design assets for inspection
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-design-assets-source
+          path: |
+            app/src/main/design_assets/AppIcons.zip
+            app/src/main/design_assets/splash_logo.png
+          if-no-files-found: error
+          retention-days: 2
