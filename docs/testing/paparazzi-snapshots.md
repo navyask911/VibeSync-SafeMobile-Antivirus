@@ -23,7 +23,7 @@ To regenerate the baselines after an approved UI change:
 ./gradlew --no-daemon recordPaparazziDebug
 ```
 
-Review the PNG changes and commit the complete `app/src/test/snapshots/` directory with the related UI change. Do not delete baselines or update them merely to silence a failing test. The feature-branch recording workflow performs the same recording step and commits generated PNGs to the branch.
+Review the PNG changes and commit the complete `app/src/test/snapshots/` directory with the related UI change. Do not delete baselines or update them merely to silence a failing test. The recording workflow commits the six 320dp stress baselines for Home, Protection Tools, and Settings at 1.5x and 2.0x font scale. It rebases the generated images onto the latest target branch before pushing so concurrent CI metadata commits cannot discard the snapshots.
 
 ## Coverage
 
