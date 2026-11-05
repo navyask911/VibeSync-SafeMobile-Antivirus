@@ -824,4 +824,6 @@
     <string name="ui_read_less">Vis mindre</string>
     <string name="ui_status_safe">Sikker</string>
     <string name="ui_status_at_risk">I risiko</string>
+    <string name="scan_detected_by">Registreret af: %1$s</string>
+    <string name="scan_detected_by_confidence">Registreret af: %1$s (%2$d%%)</string>
 </resources>

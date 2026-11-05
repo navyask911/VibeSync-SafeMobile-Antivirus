@@ -680,4 +680,6 @@
     <string name="ui_read_less">कम दिखाएँ</string>
     <string name="ui_status_safe">सुरक्षित</string>
     <string name="ui_status_at_risk">जोखिम में</string>
+    <string name="scan_detected_by">पहचान स्रोत: %1$s</string>
+    <string name="scan_detected_by_confidence">पहचान स्रोत: %1$s (%2$d%%)</string>
 </resources>

@@ -681,4 +681,6 @@
     <string name="ui_read_less">తక్కువ చూపించు</string>
     <string name="ui_status_safe">సురక్షితం</string>
     <string name="ui_status_at_risk">ప్రమాదంలో ఉంది</string>
+    <string name="scan_detected_by">గుర్తించినది: %1$s</string>
+    <string name="scan_detected_by_confidence">గుర్తించినది: %1$s (%2$d%%)</string>
 </resources>

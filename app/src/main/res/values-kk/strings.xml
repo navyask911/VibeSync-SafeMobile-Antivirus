@@ -824,4 +824,6 @@
     <string name="ui_read_less">Азырақ көрсету</string>
     <string name="ui_status_safe">Қауіпсіз</string>
     <string name="ui_status_at_risk">Қауіп бар</string>
+    <string name="scan_detected_by">Анықтаған: %1$s</string>
+    <string name="scan_detected_by_confidence">Анықтаған: %1$s (%2$d%%)</string>
 </resources>
