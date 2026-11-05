@@ -145,7 +145,7 @@ class MetricsGeneratorTests(unittest.TestCase):
         self.assertNotIn("private_note", output.getvalue())
         self.assertNotIn("do-not-log", output.getvalue())
 
-    def test_cloudflare_metrics_key_can_be_overridden_by_environment(self):
+    def test_cloudflare_metrics_key_is_fixed_even_when_environment_override_is_set(self):
         session = Mock()
         session.get.return_value = FakeResponse(
             text='{"data":{"totalDonations":"34","confirmedThreats":21}}'
@@ -164,8 +164,33 @@ class MetricsGeneratorTests(unittest.TestCase):
             self.assertEqual(reader.fetch_counts(), (34, 21))
 
         requested_url = session.get.call_args.args[0]
-        self.assertTrue(requested_url.endswith("/values/aggregate_stats"))
+        self.assertTrue(requested_url.endswith("/values/safemobile_donation_totals"))
+        self.assertNotIn("/values/aggregate_stats", requested_url)
         self.assertIn("'status': 'parsed'", output.getvalue())
+
+    def test_cloudflare_debug_mode_shows_structure_and_counters_but_redacts_other_values(self):
+        session = Mock()
+        session.get.return_value = FakeResponse(
+            text='{"data":{"totals":{"total_donations":17,"confirmed_threats":13},'
+                 '"private_note":"do-not-log","worker_token":"secret-value"}}'
+        )
+        output = io.StringIO()
+        with patch("sys.stdout", output):
+            reader = CloudflareKVReader(
+                "token",
+                account_id="account",
+                namespace_id="namespace",
+                debug_cloudflare=True,
+                session=session,
+            )
+            self.assertEqual(reader.fetch_counts(), (17, 13))
+
+        logged = output.getvalue()
+        self.assertIn("DEBUG: Raw Cloudflare KV Response (redacted):", logged)
+        self.assertIn('"total_donations":17', logged)
+        self.assertIn('"confirmed_threats":13', logged)
+        self.assertNotIn("do-not-log", logged)
+        self.assertNotIn("secret-value", logged)
 
     def test_cloudflare_empty_null_and_missing_values_return_zero(self):
         for response_body in ("", "null", "{}", "[]"):
@@ -187,7 +212,12 @@ class MetricsGeneratorTests(unittest.TestCase):
 
         missing_session = Mock()
         missing_session.get.return_value = FakeResponse(status_code=404)
-        with patch.dict("os.environ", {}, clear=True), patch("sys.stdout", io.StringIO()):
+        warning = io.StringIO()
+        with (
+            patch.dict("os.environ", {}, clear=True),
+            patch("sys.stdout", io.StringIO()),
+            patch("sys.stderr", warning),
+        ):
             missing_reader = CloudflareKVReader(
                 "token",
                 account_id="account",
@@ -195,6 +225,10 @@ class MetricsGeneratorTests(unittest.TestCase):
                 session=missing_session,
             )
             self.assertEqual(missing_reader.fetch_counts(), (0, 0))
+        self.assertIn(
+            "Cloudflare KV key 'safemobile_donation_totals' not found. Returning 0.",
+            warning.getvalue(),
+        )
 
     def test_cloudflare_invalid_json_returns_zero_without_raising(self):
         session = Mock()
@@ -342,7 +376,9 @@ class MetricsGeneratorTests(unittest.TestCase):
                         "CLOUDFLARE_KV_NAMESPACE_TITLE": "SafeMobile Contributions",
                     },
                 ),
-                patch("sys.argv", ["generate_dashboard_metrics.py", "--output", str(output)]),
+                patch("sys.argv", [
+                    "generate_dashboard_metrics.py", "--output", str(output), "--debug-cloudflare"
+                ]),
                 patch("generate_dashboard_metrics.read_last_known_metrics", return_value={}),
                 patch("generate_dashboard_metrics.build_metrics", return_value=expected_metrics) as build,
                 patch("generate_dashboard_metrics.write_metrics"),
@@ -354,6 +390,7 @@ class MetricsGeneratorTests(unittest.TestCase):
         self.assertEqual(kwargs["cloudflare_account_id"], "account-from-secret")
         self.assertEqual(kwargs["cloudflare_namespace_id"], "namespace-id")
         self.assertEqual(kwargs["cloudflare_namespace_title"], "SafeMobile Contributions")
+        self.assertTrue(kwargs["debug_cloudflare"])
 
     def test_metrics_writer_requires_exact_public_contract(self):
         with tempfile.TemporaryDirectory() as directory:

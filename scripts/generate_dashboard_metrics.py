@@ -45,6 +45,16 @@ THREAT_ALIASES = {
     "total_confirmed_threats", "totalconfirmedthreats",
     "malicious_samples", "malicioussamples", "total_threats", "totalthreats",
 }
+_CLOUDFLARE_DEBUG_COUNTER_KEYS = {
+    alias.replace("_", "").replace("-", "")
+    for alias in DONATION_ALIASES | THREAT_ALIASES
+}
+_CLOUDFLARE_DEBUG_SENSITIVE_KEY_RE = re.compile(
+    r"(?:token|secret|password|authorization|credential|email|phone|address|device|"
+    r"user|ip|uuid|hash|sample|package|filename|filepath|private|cookie|session|"
+    r"account.?id|namespace.?id)",
+    re.IGNORECASE,
+)
 
 
 class MetricsError(RuntimeError):
@@ -144,6 +154,42 @@ def _walk_json(value: Any):
             yield from _walk_json(nested)
 
 
+def redact_cloudflare_debug_document(value: Any, *, key: str = "", depth: int = 0) -> Any:
+    """Keep KV structure and aggregate counters while redacting all other values."""
+    normalized_key = re.sub(r"[_-]", "", key).casefold()
+    if normalized_key in _CLOUDFLARE_DEBUG_COUNTER_KEYS:
+        try:
+            return _non_negative_int(value, "Cloudflare debug counter")
+        except MetricsError:
+            return "<redacted>"
+    if key and _CLOUDFLARE_DEBUG_SENSITIVE_KEY_RE.search(key):
+        return "<redacted>"
+    if depth >= 6:
+        return "<max-depth>"
+    if isinstance(value, dict):
+        redacted: dict[str, Any] = {}
+        entries = list(value.items())
+        for raw_key, nested in entries[:40]:
+            label = str(raw_key)
+            if len(label) > 64 or not re.fullmatch(r"[A-Za-z][A-Za-z0-9_.-]{0,63}", label):
+                label = "<redacted-key>"
+            redacted[label] = redact_cloudflare_debug_document(
+                nested, key=str(raw_key), depth=depth + 1
+            )
+        if len(entries) > 40:
+            redacted["<truncated>"] = f"{len(entries) - 40} additional fields"
+        return redacted
+    if isinstance(value, list):
+        result = [
+            redact_cloudflare_debug_document(item, depth=depth + 1)
+            for item in value[:20]
+        ]
+        if len(value) > 20:
+            result.append("<additional-items-redacted>")
+        return result
+    return "<redacted>"
+
+
 def parse_cloudflare_metrics_document(payload: Any) -> tuple[int, int] | None:
     """Read donation/threat counters from a KV aggregate JSON document."""
     if not isinstance(payload, (dict, list)):
@@ -195,6 +241,7 @@ class CloudflareKVReader:
         account_id: str = "",
         namespace_id: str = "",
         namespace_title: str = "",
+        debug_cloudflare: bool = False,
         session: Any | None = None,
         sleep=time.sleep,
     ):
@@ -209,10 +256,38 @@ class CloudflareKVReader:
         self.account_id = account_id.strip()
         self.namespace_id = namespace_id.strip()
         self.namespace_title = namespace_title.strip()
-        self.metrics_key = (
-            os.environ.get("CLOUDFLARE_KV_METRICS_KEY", "").strip()
-            or DEFAULT_CLOUDFLARE_KV_METRICS_KEY
-        )
+        # This key is part of the Worker-to-dashboard contract. Keep it exact
+        # so an unrelated Actions Variable cannot silently redirect the query.
+        self.metrics_key = DEFAULT_CLOUDFLARE_KV_METRICS_KEY
+        self.debug_cloudflare = bool(debug_cloudflare)
+
+    def _print_debug_response(self, key: str, raw_response: str | None) -> None:
+        """Print the KV document shape and aggregate counters, redacting other values."""
+        if not self.debug_cloudflare:
+            return
+
+        if raw_response is None:
+            view: Any = {"status": "not_found", "document": None}
+        elif not raw_response.strip():
+            view = {"status": "empty_response", "bytes": 0}
+        else:
+            try:
+                payload = json.loads(raw_response)
+            except (json.JSONDecodeError, TypeError):
+                view = {"status": "invalid_json", "bytes": len(raw_response)}
+            else:
+                if payload is None:
+                    view = {"status": "json_null", "document": None}
+                else:
+                    view = {
+                        "status": "parsed_document",
+                        "document": redact_cloudflare_debug_document(payload),
+                    }
+
+        serialized = json.dumps({"key": key, **view}, sort_keys=True, separators=(",", ":"))
+        if len(serialized) > 4096:
+            serialized = serialized[:4096] + "...<truncated>"
+        print(f"DEBUG: Raw Cloudflare KV Response (redacted): {serialized}")
 
     def _request(self, url: str, *, params: dict[str, Any] | None = None, allow_404: bool = False):
         response = None
@@ -352,8 +427,15 @@ class CloudflareKVReader:
         print(f"DEBUG: Fetching Cloudflare KV aggregate key: {key}")
 
         kv_response = self._value(account_id, namespace_id, key)
-        if kv_response is None or not kv_response.strip() or kv_response.strip().lower() == "null":
-            debug_view = {"key": key, "status": "empty_or_missing"}
+        self._print_debug_response(key, kv_response)
+        if kv_response is None:
+            print(
+                "WARNING: Cloudflare KV key 'safemobile_donation_totals' not found. Returning 0.",
+                file=sys.stderr,
+            )
+            return 0, 0
+        if not kv_response.strip() or kv_response.strip().lower() == "null":
+            debug_view = {"key": key, "status": "empty_or_null"}
             print(f"DEBUG: Cloudflare KV Response (redacted): {debug_view}")
             print(
                 f"WARNING: Cloudflare KV key {key!r} is empty or null; "
@@ -362,8 +444,8 @@ class CloudflareKVReader:
             )
             return 0, 0
 
-        # Do not log the unfiltered KV value: Actions logs may be visible to
-        # repository readers, and future Worker payloads could contain private data.
+        # Normal logs contain only response metadata. Detailed debug mode prints
+        # a separately redacted document structure and the aggregate counters.
         print(
             f"DEBUG: Cloudflare KV Response (redacted): "
             f"{{'key': {key!r}, 'status': 'received', 'bytes': {len(kv_response)}}}"
@@ -487,6 +569,7 @@ def build_metrics(
     cloudflare_account_id: str = "",
     cloudflare_namespace_id: str = "",
     cloudflare_namespace_title: str = "",
+    debug_cloudflare: bool = False,
     hashes_path: Path = Path("data/new_hashes.txt"),
     ha_cache_path: Path = Path("data/enriched_threats.csv"),
     cloudflare_reader: CloudflareKVReader | None = None,
@@ -536,6 +619,7 @@ def build_metrics(
                 account_id=cloudflare_account_id,
                 namespace_id=cloudflare_namespace_id,
                 namespace_title=cloudflare_namespace_title,
+                debug_cloudflare=debug_cloudflare,
             )
             donation_count, threat_count = cf_reader.fetch_counts()
             donation_count = _non_negative_int(donation_count, "Cloudflare total donations")
@@ -560,6 +644,11 @@ def main() -> int:
     parser.add_argument("--output", type=Path, default=Path("docs/dashboard_metrics.json"))
     parser.add_argument("--hashes", type=Path, default=Path("data/new_hashes.txt"))
     parser.add_argument("--ha-cache", type=Path, default=Path("data/enriched_threats.csv"))
+    parser.add_argument(
+        "--debug-cloudflare",
+        action="store_true",
+        help="print the Cloudflare KV response structure with non-aggregate values redacted",
+    )
     args = parser.parse_args()
 
     ha_api_key = os.environ.get("HYBRID_ANALYSIS_API_KEY", "")
@@ -575,6 +664,7 @@ def main() -> int:
             cloudflare_account_id=os.environ.get("CLOUDFLARE_ACCOUNT_ID", ""),
             cloudflare_namespace_id=os.environ.get("CLOUDFLARE_KV_NAMESPACE_ID", ""),
             cloudflare_namespace_title=os.environ.get("CLOUDFLARE_KV_NAMESPACE_TITLE", ""),
+            debug_cloudflare=args.debug_cloudflare,
             hashes_path=args.hashes,
             ha_cache_path=args.ha_cache,
             fallback_metrics=previous_metrics,

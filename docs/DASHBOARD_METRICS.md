@@ -46,11 +46,10 @@ main branch and can be read without credentials at:
 - `CLOUDFLARE_KV_NAMESPACE_TITLE`: retained for deployments that configure a
   namespace title; it does not replace the namespace ID required by the metrics
   step.
-- `CLOUDFLARE_KV_METRICS_KEY`: optional Actions Variable override for the
-  aggregate key. The default is `safemobile_donation_totals`.
-
-The metrics reader requests exactly one value from the configured namespace:
-`safemobile_donation_totals` by default. Its expected JSON shape is:
+The metrics reader always requests the exact key
+`safemobile_donation_totals` from the configured namespace. The key is fixed
+in code so an unrelated Actions Variable cannot silently redirect the request.
+Its expected JSON shape is:
 
 ```json
 {
@@ -60,10 +59,16 @@ The metrics reader requests exactly one value from the configured namespace:
 ```
 
 The parser also accepts camelCase field names and counters nested inside JSON
-objects. If the deployed Worker uses another KV key name, set the
-`CLOUDFLARE_KV_METRICS_KEY` Actions Variable to that exact name. The repository
-does not contain the deployed Worker implementation, so the default key is a
-configuration default rather than an independently confirmed Worker literal.
+objects. A missing key (HTTP 404) logs
+`Cloudflare KV key 'safemobile_donation_totals' not found. Returning 0.`
+and uses zero Cloudflare counters without interrupting TweetFeed or Hybrid
+Analysis metrics. The repository does not contain the deployed Worker
+implementation, so the Worker-side key still needs to be confirmed there.
+
+For a manual Actions run, set the `debug_cloudflare` workflow-dispatch input to
+`true`. The generator's `--debug-cloudflare` flag prints the KV document
+structure and recognized aggregate counter values while redacting all other
+values (including token, user, device, hash, and private fields).
 
 The workflow logs the selected key, response status/size and parsed aggregate
 counts. The raw KV value is intentionally not printed: GitHub Actions logs can
