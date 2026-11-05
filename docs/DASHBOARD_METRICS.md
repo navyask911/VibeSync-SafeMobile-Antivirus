@@ -70,12 +70,14 @@ For a manual Actions run, set the `debug_cloudflare` workflow-dispatch input to
 structure and recognized aggregate counter values while redacting all other
 values (including token, user, device, hash, and private fields).
 
-The workflow logs the selected key, response status/size and parsed aggregate
-counts. The raw KV value is intentionally not printed: GitHub Actions logs can
-be visible to repository readers, and arbitrary Worker values may contain
-sensitive data. Empty, missing, JSON `null`, invalid JSON, or an object without
-recognized count fields produces zero Cloudflare counts without interrupting
-TweetFeed or Hybrid Analysis metrics.
+Normal workflow logs include the selected key, response status/size and parsed
+aggregate counts. With `debug_cloudflare=true`, the workflow also prints a
+redacted view of the KV document structure and recognized aggregate counters.
+All non-counter values are redacted; the unfiltered raw KV value is never
+printed because Actions logs can be visible to repository readers. Empty,
+missing, JSON `null`, invalid JSON, or an object without recognized count
+fields produces zero Cloudflare counts without interrupting TweetFeed or
+Hybrid Analysis metrics.
 
 When `CLOUDFLARE_KV_NAMESPACE_ID` is missing, the generator prints
 `WARNING: CLOUDFLARE_KV_NAMESPACE_ID is missing`, skips all Cloudflare KV
