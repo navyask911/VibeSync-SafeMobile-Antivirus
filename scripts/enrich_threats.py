@@ -31,7 +31,7 @@ HA_DAILY_LIMIT = 100
 MAX_429_RETRIES = 5
 BACKOFF_BASE_SECONDS = 30.0
 BACKOFF_MAX_SECONDS = 900.0
-USER_AGENT = "SafeMobile-Threat-Intelligence/1.0"
+USER_AGENT = "Falcon Sandbox"
 
 
 class EnrichmentError(RuntimeError):
@@ -164,13 +164,20 @@ class ReputationClient:
         return malicious
 
     def hybrid_analysis_result(self, digest: str, api_key: str) -> tuple[int | float | str, str]:
+        # Prefer the exact repository secret at request time. The argument is
+        # retained as a fallback for direct offline callers/tests.
+        configured_api_key = os.environ.get("HYBRID_ANALYSIS_API_KEY")
+        request_api_key = configured_api_key if configured_api_key is not None else api_key
+        if not request_api_key or not request_api_key.strip():
+            raise EnrichmentError("HYBRID_ANALYSIS_API_KEY is not configured.")
+
         response = self.request(
             "hybrid_analysis",
             "post",
             HA_URL,
             headers={
-                "api-key": api_key,
-                "user-agent": USER_AGENT,
+                "api-key": request_api_key.strip(),
+                "User-Agent": "Falcon Sandbox",
                 "Accept": "application/json",
                 "Content-Type": "application/x-www-form-urlencoded",
             },
