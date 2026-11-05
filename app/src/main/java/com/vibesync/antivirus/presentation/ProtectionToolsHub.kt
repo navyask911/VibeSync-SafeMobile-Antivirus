@@ -59,10 +59,20 @@ internal fun ProtectionToolsHub(
         verticalArrangement = Arrangement.spacedBy(18.dp)
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text(stringResource(R.string.analytics_title),
-                style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
-            Text(stringResource(R.string.analytics_subtitle),
-                style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(
+                stringResource(R.string.analytics_title),
+                modifier = Modifier.fillMaxWidth(),
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold,
+                softWrap = true
+            )
+            Text(
+                stringResource(R.string.analytics_subtitle),
+                modifier = Modifier.fillMaxWidth(),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                softWrap = true
+            )
         }
         CyberCard(modifier = Modifier.fillMaxWidth(), shape = SecurityTokens.cardShape) {
             Column(Modifier.fillMaxWidth().padding(18.dp),

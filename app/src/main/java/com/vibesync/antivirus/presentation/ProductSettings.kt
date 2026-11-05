@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.WorkspacePremium
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.vibesync.antivirus.ui.theme.AppTheme
@@ -42,6 +43,8 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -69,6 +72,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
@@ -491,7 +495,7 @@ internal fun SafeMobileSettingsPanel(
                             }
                             val selected = appTheme == option
                             androidx.compose.material3.Surface(
-                                modifier = Modifier.weight(1f).heightIn(min = 80.dp)
+                                modifier = Modifier.weight(1f).fillMaxWidth().heightIn(min = 80.dp)
                                     .selectable(
                                         selected = selected,
                                         role = Role.RadioButton,
@@ -519,13 +523,15 @@ internal fun SafeMobileSettingsPanel(
                                         tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                         modifier = Modifier.size(22.dp)
                                     )
-                                    Row(verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.spacedBy(3.dp)) {
-                                        if (selected) Text("✓", color = MaterialTheme.colorScheme.secondary,
-                                            style = MaterialTheme.typography.labelMedium)
-                                        Text(stringResource(label), style = MaterialTheme.typography.labelMedium,
-                                            maxLines = 1, overflow = TextOverflow.Ellipsis)
-                                    }
+                                    Text(
+                                        stringResource(label),
+                                        modifier = Modifier.fillMaxWidth(),
+                                        style = MaterialTheme.typography.labelMedium,
+                                        textAlign = TextAlign.Center,
+                                        maxLines = 1,
+                                        softWrap = false,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
                                 }
                             }
                         }
@@ -653,10 +659,24 @@ internal fun SafeMobileSettingsPanel(
                 onSubRouteChanged(SettingsSubRoute.RATE)
             }
         } else {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                TextButton(onClick = { onSubRouteChanged(SettingsSubRoute.ROOT) }) {
-                    Text(stringResource(R.string.nav_settings))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                IconButton(
+                    onClick = { onSubRouteChanged(SettingsSubRoute.ROOT) },
+                    modifier = Modifier.testTag("settings.subpage.back")
+                ) {
+                    Icon(
+                        Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = stringResource(R.string.nav_settings)
+                    )
                 }
+                Text(
+                    stringResource(R.string.nav_settings),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold
+                )
                 Spacer(Modifier.weight(1f))
             }
             when (subRoute) {

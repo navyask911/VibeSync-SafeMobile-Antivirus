@@ -39,7 +39,7 @@ enum class SnapshotPalette(val appTheme: AppTheme) {
 @RunWith(TestParameterInjector::class)
 class DashboardSnapshotTest {
     @get:Rule
-    val paparazzi = Paparazzi(deviceConfig = DeviceConfig.PIXEL_5)
+    val paparazzi = Paparazzi(deviceConfig = DeviceConfig.PIXEL_6.copy(screenHeight = 2200))
 
     @Test
     fun securityDashboard(@TestParameter palette: SnapshotPalette) {

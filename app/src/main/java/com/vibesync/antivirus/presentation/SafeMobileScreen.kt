@@ -1,4 +1,5 @@
 package com.vibesync.antivirus.presentation
+import androidx.compose.animation.AnimatedVisibility
 import com.vibesync.antivirus.core.locale.SecurityText
 import androidx.compose.ui.res.pluralStringResource
 import android.app.Activity
@@ -164,6 +165,7 @@ import kotlinx.coroutines.launch
  val securityIncidents by repository.observeRecentSecurityIncidents().collectAsStateWithLifecycle(initialValue = emptyList())
  val ownerManager = remember(context) { DeviceOwnerManager(context) }
  var selectedDestination by rememberSaveable { mutableStateOf("home") }
+ var isSubscriptionExpanded by rememberSaveable { mutableStateOf(false) }
  var settingsSubRoute by rememberSaveable { mutableStateOf(SettingsSubRoute.ROOT) }
  val tabNavController = rememberNavController()
  val currentBackStackEntry by tabNavController.currentBackStackEntryAsState()
@@ -636,7 +638,7 @@ import kotlinx.coroutines.launch
      )
     }
     Column(Modifier.padding(start = 10.dp).weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-     Text(stringResource(toolbarTitleResource), style = MaterialTheme.typography.titleLarge,
+     Text(stringResource(toolbarTitleResource), modifier = Modifier.fillMaxWidth(), style = MaterialTheme.typography.titleLarge,
       fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface,
       maxLines = 1, overflow = TextOverflow.Ellipsis)
      toolbarSubtitleResource?.let { subtitle ->
@@ -645,9 +647,57 @@ import kotlinx.coroutines.launch
        maxLines = 1, overflow = TextOverflow.Ellipsis)
      }
     }
-    IconButton(onClick = { navigateToDestination("pro") }) {
+    IconButton(onClick = { isSubscriptionExpanded = !isSubscriptionExpanded }) {
      androidx.compose.material3.Icon(Icons.Default.WorkspacePremium,
       contentDescription = stringResource(R.string.pro_title), tint = MaterialTheme.colorScheme.primary)
+    }
+   }
+   AnimatedVisibility(
+    visible = isSubscriptionExpanded,
+    modifier = Modifier.fillMaxWidth()
+   ) {
+    Card(
+     modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 6.dp),
+     shape = RoundedCornerShape(16.dp),
+     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+    ) {
+     Column(
+      Modifier.fillMaxWidth().padding(16.dp),
+      verticalArrangement = Arrangement.spacedBy(8.dp)
+     ) {
+      Row(
+       verticalAlignment = Alignment.CenterVertically,
+       horizontalArrangement = Arrangement.spacedBy(8.dp)
+      ) {
+       androidx.compose.material3.Icon(
+        Icons.Default.WorkspacePremium,
+        contentDescription = null,
+        tint = MaterialTheme.colorScheme.primary,
+        modifier = Modifier.size(24.dp)
+       )
+       Text(
+        stringResource(R.string.pro_title),
+        style = MaterialTheme.typography.titleMedium,
+        fontWeight = FontWeight.Bold,
+        modifier = Modifier.weight(1f)
+       )
+      }
+      Text(stringResource(R.string.pro_truthful_summary), style = MaterialTheme.typography.bodyMedium)
+      Text(
+       stringResource(R.string.pro_feature_adfree),
+       style = MaterialTheme.typography.bodySmall,
+       color = MaterialTheme.colorScheme.onSurfaceVariant
+      )
+      Button(
+       onClick = {
+        isSubscriptionExpanded = false
+        navigateToDestination("pro")
+       },
+       modifier = Modifier.fillMaxWidth()
+      ) {
+       Text(stringResource(R.string.pro_unlock))
+      }
+     }
     }
    }
    val navScreenContent: @Composable () -> Unit = {

@@ -23,21 +23,21 @@ import org.junit.Test
 /**
  * Snapshot stress cases for the main Compose surfaces.
  *
- * All three screens are rendered at a narrow 320dp viewport and larger
- * font scales. Missing resources/icons and visual clipping show up as
- * snapshot diffs before a build is delivered to a physical device.
+ * Home, Protection Tools and Settings render on a full-screen Pixel 6
+ * profile at normal, 1.5x and 2.0x font scale. The connected Compose bounds
+ * test separately retains its 320dp narrow-viewport coverage.
  */
 abstract class UIRegressionTestBase(private val testFontScale: Float) {
     @get:Rule
     val paparazzi = Paparazzi(
-        deviceConfig = DeviceConfig.PIXEL_5.copy(
-            screenWidth = 320,
+        deviceConfig = DeviceConfig.PIXEL_6.copy(
+            screenHeight = 2200,
             fontScale = testFontScale
         )
     )
 
     @Test
-    fun homeScreenAtSmallWidthAndLargeFont() {
+    fun homeScreenAtFontScale() {
         paparazzi.snapshot {
             themed {
                 SecurityDashboardV14(
@@ -72,7 +72,7 @@ abstract class UIRegressionTestBase(private val testFontScale: Float) {
     }
 
     @Test
-    fun toolsScreenAtSmallWidthAndLargeFont() {
+    fun toolsScreenAtFontScale() {
         paparazzi.snapshot {
             themed {
                 Column(
@@ -95,7 +95,7 @@ abstract class UIRegressionTestBase(private val testFontScale: Float) {
     }
 
     @Test
-    fun settingsScreenAtSmallWidthAndLargeFont() {
+    fun settingsScreenAtFontScale() {
         paparazzi.snapshot {
             themed {
                 Column(
@@ -140,5 +140,6 @@ abstract class UIRegressionTestBase(private val testFontScale: Float) {
     }
 }
 
+class UIRegressionFontScale100Test : UIRegressionTestBase(1.0f)
 class UIRegressionFontScale150Test : UIRegressionTestBase(1.5f)
 class UIRegressionFontScale200Test : UIRegressionTestBase(2.0f)

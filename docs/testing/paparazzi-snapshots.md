@@ -1,6 +1,6 @@
 # Paparazzi UI snapshot tests
 
-SafeMobile keeps committed Paparazzi baselines for Home, Protection Tools, Scan Results, and Settings. The UI regression suite also captures Home, Protection Tools, and Settings at 320dp width with font scales 1.5x and 2.0x.
+SafeMobile keeps committed full-screen Pixel 6 Paparazzi baselines for Home, Protection Tools, Scan Results, and Settings. The UI regression suite captures Home, Protection Tools, and Settings at font scales 1.0x, 1.5x, and 2.0x. Compose semantics tests separately verify text bounds at 320dp and 2.0x font scale.
 
 ## Verify snapshots
 
@@ -23,7 +23,7 @@ To regenerate the baselines after an approved UI change:
 ./gradlew --no-daemon recordPaparazziDebug
 ```
 
-Review the PNG changes and commit the complete `app/src/test/snapshots/` directory with the related UI change. Do not delete baselines or update them merely to silence a failing test. The recording workflow commits the six 320dp stress baselines for Home, Protection Tools, and Settings at 1.5x and 2.0x font scale. It rebases the generated images onto the latest target branch before pushing so concurrent CI metadata commits cannot discard the snapshots.
+Review the PNG changes and commit the complete `app/src/test/snapshots/` directory with the related UI change. Do not delete baselines or update them merely to silence a failing test. The recording workflow commits the nine Pixel 6 full-screen stress baselines for Home, Protection Tools, and Settings at 1.0x, 1.5x, and 2.0x font scale. It rebases the generated images onto the latest target branch before pushing so concurrent CI metadata commits cannot discard the snapshots.
 
 ## Coverage
 
@@ -31,7 +31,7 @@ Review the PNG changes and commit the complete `app/src/test/snapshots/` directo
 - Protection Tools: Light, Midnight, and OLED
 - Scan Results: Light, Midnight, and OLED
 - Settings panel: Light, Midnight, and OLED
-- UI regression snapshots: Home, Protection Tools, and Settings at 320dp / 1.5x and 2.0x font scale
+- UI regression snapshots: Home, Protection Tools, and Settings on Pixel 6 at 1.0x, 1.5x, and 2.0x font scale
 - Compose wiring: theme buttons, Security Alerts and Install Sentinel switches, Scan now, All tools, and protection-card routes
 - Security score logic: direct pending-action deductions and 0–100 clamping
 - Network isolation: MockWebServer hardcoded fixtures with external-host blocking

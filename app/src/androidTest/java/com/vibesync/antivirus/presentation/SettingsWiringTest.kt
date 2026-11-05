@@ -126,6 +126,27 @@ class SettingsWiringTest {
     }
 
     @Test
+    fun settingsSubpageBackArrowReturnsToSettingsRoot() {
+        var subRoute by mutableStateOf(SettingsSubRoute.SECURITY)
+        renderSettings {
+            SafeMobileSettingsPanel(
+                sentinelEnabled = false,
+                onEnableSentinel = {},
+                onDisableSentinel = {},
+                subRoute = subRoute,
+                onSubRouteChanged = { subRoute = it },
+                installSentinelRunningOverride = false,
+                installSentinelEnabledOverride = false,
+                onInstallSentinelChanged = {}
+            )
+        }
+
+        composeRule.onNodeWithTag("settings.subpage.back").performClick()
+        composeRule.waitForIdle()
+        assertEquals(SettingsSubRoute.ROOT, subRoute)
+    }
+
+    @Test
     fun settingsGearAndBellIconsExposeAccessibleNodes() {
         renderSettings {
             SafeMobileSettingsPanel(
