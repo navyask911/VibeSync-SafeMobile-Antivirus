@@ -64,4 +64,9 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "test: record Paparazzi UI goldens [paparazzi-recorded]"
+          # Other main-branch automation (for example, SBOM refresh) may push
+          # while Paparazzi is rendering. Rebase the generated snapshots onto
+          # the latest target before pushing so a harmless race cannot lose them.
+          git fetch origin "${TARGET_BRANCH}"
+          git rebase FETCH_HEAD
           git push origin "HEAD:${TARGET_BRANCH}"
