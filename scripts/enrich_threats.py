@@ -16,8 +16,8 @@ import os
 from pathlib import Path
 import re
 import time
-from urllib.parse import quote
 from typing import Any
+from urllib.parse import quote
 
 import requests
 

@@ -45,7 +45,7 @@ class MetricsGeneratorTests(unittest.TestCase):
     def test_tweetfeed_count_uses_validated_current_feed_and_deduplicates(self):
         with tempfile.TemporaryDirectory() as directory:
             hashes = Path(directory) / "new_hashes.txt"
-            hashes.write_text(f"{HASH_A}\\n{HASH_B}\\n{HASH_A.upper()}\\n", encoding="ascii")
+            hashes.write_text(f"{HASH_A}\n{HASH_B}\n{HASH_A.upper()}\n", encoding="ascii")
             self.assertEqual(tweetfeed_current_sha256_count(hashes), 2)
 
     def test_tweetfeed_count_rejects_missing_current_feed(self):
@@ -88,7 +88,7 @@ class MetricsGeneratorTests(unittest.TestCase):
             root = Path(directory)
             hashes = root / "new_hashes.txt"
             cache = root / "enriched.csv"
-            hashes.write_text(f"{HASH_A}\\n", encoding="ascii")
+            hashes.write_text(f"{HASH_A}\n", encoding="ascii")
             with cache.open("w", newline="", encoding="utf-8") as stream:
                 writer = csv.DictWriter(
                     stream, fieldnames=("sha256", "vt_malicious_count", "ha_threat_score", "ha_verdict")
@@ -188,7 +188,7 @@ class MetricsGeneratorTests(unittest.TestCase):
                 raise MetricsError("Cloudflare unavailable")
 
         with patch(
-            "generate_dashboard_metrics.tweetfeed_today_sha256_count",
+            "generate_dashboard_metrics.tweetfeed_current_sha256_count",
             side_effect=MetricsError("TweetFeed unavailable"),
         ):
             result = build_metrics(

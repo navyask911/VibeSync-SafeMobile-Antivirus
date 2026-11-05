@@ -86,6 +86,7 @@ def read_current_feed_hashes(path: Path) -> set[str]:
         hashes.add(digest)
     return hashes
 
+
 def tweetfeed_current_sha256_count(path: Path) -> int:
     """Count unique SHA-256 IOCs from this run's already-validated TweetFeed feed."""
     return len(read_current_feed_hashes(path))
@@ -96,7 +97,7 @@ def hybrid_analysis_verified_count(
     cache_path: Path,
     api_key: str,
 ) -> int:
-    """Count current-feed hashes that HA marked malicious with score >= 70.
+    """Count current-feed hashes HA marked malicious, enforcing score >= 70 when supplied.
 
     The API key is required to ensure the preceding enrichment step was
     configured. No additional HA request is made here: enrich_threats.py
