@@ -36,6 +36,13 @@ enum class SnapshotPalette(val appTheme: AppTheme) {
     OLED(AppTheme.OLED)
 }
 
+enum class SetupWizardPage(val page: Int) {
+    NOTIFICATIONS(0),
+    GLOBAL_DEFENSE(1),
+    DOWNLOADS_FOLDER(2),
+    ADVANCED_PROTECTION(3)
+}
+
 @RunWith(TestParameterInjector::class)
 class DashboardSnapshotTest {
     @get:Rule
@@ -198,6 +205,32 @@ class DashboardSnapshotTest {
                         onOpenPro = {}
                     )
                 }
+            }
+        }
+    }
+
+    @Test
+    fun smartSecuritySetupWizard(
+        @TestParameter palette: SnapshotPalette,
+        @TestParameter page: SetupWizardPage
+    ) {
+        paparazzi.snapshot {
+            themed(palette) {
+                SecuritySetupScreen(
+                    initialSyncPending = false,
+                    notificationsGranted = false,
+                    globalDefenseEnabled = false,
+                    folderAccessGranted = false,
+                    batteryOptimizationExempt = false,
+                    initialPage = page.page,
+                    onRequestNotifications = {},
+                    onToggleGlobalDefense = {},
+                    onChooseFolder = {},
+                    onReviewOverlayAccess = {},
+                    onRequestBatteryOptimization = {},
+                    onFinish = {},
+                    onSkipSetup = {}
+                )
             }
         }
     }
