@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="global_threat_intelligence_title">Přispívat do globálních informací o hrozbách (volitelné)</string>
-    <string name="global_threat_intelligence_description">Ve výchozím nastavení je vypnuto. Po zapnutí se SafeMobile zeptá před každým příspěvkem. Nic se neodešle, dokud nestisknete Darovat. Sdílí se pouze hash SHA-256 malwaru a 215 behaviorálních příznaků.</string>
+    <string name="global_threat_intelligence_description">Když je tato možnost zapnutá, SafeMobile automaticky sdílí SHA-256 hashe potvrzených hrozeb a případně dostupných 215 binárních behaviorálních příznaků. Nikdy neodesílá soubory APK, názvy souborů, cesty, názvy balíčků ani identifikátory zařízení. Tuto možnost můžete kdykoli vypnout.</string>
     <string name="global_threat_intelligence_donate_message">Pomozte chránit ostatní anonymním darováním podpisu tohoto škodlivého souboru do naší sítě pro trénování AI.</string>
     <string name="global_threat_intelligence_donate">Darovat</string>
     <string name="global_threat_intelligence_decline">Odmítnout</string>
