@@ -69,6 +69,21 @@ object SecurityAlertNotifier {
     }
 
     /**
+     * Manual scans happen while the user is in the app. A confirmed THREAT always plays the local
+     * five-second alarm, regardless of notification, voice, or full-screen preference toggles.
+     * Spoken narration remains opt-in through the Voice Alerts setting; no notification permission
+     * is required to play the local alarm.
+     */
+    fun notifyManualScanThreat(context: Context, eventId: String) {
+        val app = context.applicationContext
+        SecurityVoiceAlert.speakIfEnabled(app, R.string.voice_alert_malware_detected)
+        if (InstallScanNotifications.claimAlarm(eventId)) {
+            Log.i(TAG, "Manual scan confirmed a threat; starting local siren event=$eventId")
+            SecurityIncidentSiren.start(app)
+        }
+    }
+
+    /**
      * Explicit user-initiated AUDIO/NOTIFICATION diagnostic. Does not fabricate a malware verdict,
      * mark any app as infected, insert an incident row, or bypass production hash verification.
      * Returns its unique test event id for a foreground-only preview activity.
@@ -100,7 +115,7 @@ object SecurityAlertNotifier {
             .getBoolean(SafeMobileApp.KEY_SECURITY_ALERTS_ENABLED, false)
         if (!enabled && !testMode && !contributionPromptOnly) return
         InstallScanNotifications.escalated(eventId)
-        if (confirmed && enabled && InstallScanNotifications.claimAlarm(eventId)) {
+        if (confirmed && (enabled || testMode) && InstallScanNotifications.claimAlarm(eventId)) {
             Log.d(TAG, if (testMode) "Manual siren playback start" else "Verified threat siren playback start")
             SecurityIncidentSiren.start(app)
         }
