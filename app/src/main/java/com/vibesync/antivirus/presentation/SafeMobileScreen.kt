@@ -116,7 +116,7 @@ import com.vibesync.antivirus.core.engine.DetectionSource
 import com.vibesync.antivirus.core.quarantine.LocalQuarantineManager
 import com.vibesync.antivirus.core.engine.ScanVerdict
 import com.vibesync.antivirus.core.security.GlobalThreatIntelligenceConsent
-import com.vibesync.antivirus.core.security.GlobalThreatIntelligenceDonor
+import com.vibesync.antivirus.core.security.GlobalThreatIntelligenceDonationScheduler
 import com.vibesync.antivirus.data.repository.ThreatRepository
 import com.vibesync.antivirus.ui.components.EmptyState
 import com.vibesync.antivirus.ui.components.SecurityStatusCard
@@ -394,7 +394,19 @@ import kotlinx.coroutines.launch
  var pendingDeleteFile by remember { mutableStateOf<File?>(null) }
  var showRestoreWarning by remember { mutableStateOf(false) }
  val quarantineManager = remember(context) { LocalQuarantineManager(context) }
- val apkPicker=rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri:Uri? -> uri?.let(vm::scanSelected) }
+ val apkPicker=rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri:Uri? ->
+  uri?.let { selectedUri ->
+   // A queued WorkManager contribution may run after the picker Activity and screen close.
+   runCatching {
+    context.contentResolver.takePersistableUriPermission(
+     selectedUri, Intent.FLAG_GRANT_READ_URI_PERMISSION
+    )
+   }.onFailure { error ->
+    android.util.Log.w("Donation", "Could not persist source document access for deferred donation", error)
+   }
+   vm.scanSelected(selectedUri)
+  }
+ }
  val definitionsPicker=rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri:Uri? -> uri?.let(vm::importOfflineDefinitions) }
   val pendingYaraPicker=rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri:Uri? -> uri?.let(vm::importPendingYaraRule) }
  val restorePicker=rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/octet-stream")) { uri:Uri? ->
@@ -1291,7 +1303,7 @@ pendingQuarantine?.let { flagged ->
     TextButton(onClick = {
      pendingGlobalDonationResults = pendingGlobalDonationResults.drop(1)
      if (GlobalThreatIntelligenceConsent.isEnabled(context)) {
-      uiScope.launch { GlobalThreatIntelligenceDonor(context).donateScanResult(detectedThreat) }
+      GlobalThreatIntelligenceDonationScheduler.enqueue(context, detectedThreat)
      }
     }) { Text(stringResource(R.string.global_threat_intelligence_donate)) }
    },
