@@ -10,6 +10,7 @@ import com.vibesync.antivirus.core.locale.UiNumber
 import com.vibesync.antivirus.core.engine.ScanResult
 import com.vibesync.antivirus.core.engine.InstalledAppItem
 import com.vibesync.antivirus.core.engine.ScanVerdict
+import com.vibesync.antivirus.core.observer.ManualThreatAlertPolicy
 import com.vibesync.antivirus.core.hashdb.HashDatabaseCapability
 import com.vibesync.antivirus.data.repository.ThreatRepository
 import java.io.File
@@ -32,6 +33,7 @@ data class SafeMobileUiState(
     val inventoryLoaded: Boolean = false,
     val completedScans: Int = 0,
     val manualScanCompletionSequence: Long = 0L,
+    val manualThreatAlertSequence: Long = 0L,
     val lastScanAt: Long? = null,
     val messageResource: Int? = null,
     val messageText: UiText? = null,
@@ -354,6 +356,10 @@ fun importOfflineDefinitions(uri: Uri) {
                 val summary = com.vibesync.antivirus.core.engine.ScanCompletionSummary.from(
                     results, mutableState.value.processedItems, System.currentTimeMillis()).copy(signedDefinitionsUsed = signedDefinitionsUsed)
                 repository.saveScanSummary(summary)
+                val shouldAlertManualThreat = ManualThreatAlertPolicy.shouldAlert(
+                    isManualScan = manualScan,
+                    hasConfirmedThreat = results.any { it.verdict == ScanVerdict.THREAT }
+                )
                 mutableState.update { state ->
                     state.copy(
                         scanSummary = summary,
@@ -362,6 +368,8 @@ fun importOfflineDefinitions(uri: Uri) {
                         completedScans = state.completedScans + 1,
                         manualScanCompletionSequence = state.manualScanCompletionSequence +
                             if (manualScan) 1L else 0L,
+                        manualThreatAlertSequence = state.manualThreatAlertSequence +
+                            if (shouldAlertManualThreat) 1L else 0L,
                         lastScanAt = System.currentTimeMillis(),
                         messageResource = R.string.scan_complete,
                         messageText = null,
