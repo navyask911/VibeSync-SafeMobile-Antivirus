@@ -167,7 +167,6 @@ internal fun SecuritySetupScreen(
                         when (page) {
                             0 -> Button(
                                 onClick = onRequestNotifications,
-                                enabled = !notificationsGranted,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 Text(stringResource(
