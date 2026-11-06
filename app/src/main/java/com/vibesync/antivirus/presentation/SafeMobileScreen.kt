@@ -365,7 +365,7 @@ import kotlinx.coroutines.launch
   additions.forEach { it.threatEventId?.let(promptedGlobalDonationEvents::add) }
   if (additions.isNotEmpty()) {
    if (GlobalThreatIntelligenceConsent.isEnabled(context)) {
-    val queued = additions.count { vm.contributeThreatHash(context, it) }
+    additions.forEach { vm.contributeThreatHash(context, it) }
 
    } else {
     pendingGlobalDonationResults = pendingGlobalDonationResults + additions
@@ -1355,11 +1355,7 @@ pendingQuarantine?.let { flagged ->
    confirmButton = {
     TextButton(onClick = {
      pendingGlobalDonationResults = pendingGlobalDonationResults.drop(1)
-     val queued = vm.contributeThreatHash(
-      context = context,
-      result = detectedThreat,
-      oneTimeConsent = !GlobalThreatIntelligenceConsent.isEnabled(context)
-     )
+
 
     }) { Text(stringResource(R.string.global_threat_intelligence_donate)) }
    },
