@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="global_threat_intelligence_title">বৈশ্বিক হুমকি গোয়েন্দা তথ্যতে অবদান রাখুন (ঐচ্ছিক)</string>
-    <string name="global_threat_intelligence_description">ডিফল্টভাবে বন্ধ। চালু করলে প্রতিটি অবদানের আগে SafeMobile অনুমতি চাইবে। আপনি দান করুন চাপার আগে কিছুই পাঠানো হবে না। শুধু ম্যালওয়্যারের SHA-256 হ্যাশ এবং ২১৫টি আচরণগত বৈশিষ্ট্য ভাগ করা হবে।</string>
+    <string name="global_threat_intelligence_description">এই বিকল্পটি চালু থাকলে SafeMobile নিশ্চিত হুমকির SHA-256 হ্যাশ এবং উপলভ্য হলে ২১৫টি বাইনারি আচরণগত বৈশিষ্ট্য স্বয়ংক্রিয়ভাবে শেয়ার করে। APK ফাইল, ফাইলের নাম, পথ, প্যাকেজের নাম বা ডিভাইস শনাক্তকারী কখনো পাঠানো হয় না। আপনি যেকোনো সময় এটি বন্ধ করতে পারেন।</string>
     <string name="global_threat_intelligence_donate_message">এই ক্ষতিকর ফাইলের স্বাক্ষর আমাদের AI প্রশিক্ষণ নেটওয়ার্কে বেনামে দান করে অন্যদের সুরক্ষায় সাহায্য করুন।</string>
     <string name="global_threat_intelligence_donate">দান করুন</string>
     <string name="global_threat_intelligence_decline">প্রত্যাখ্যান করুন</string>
