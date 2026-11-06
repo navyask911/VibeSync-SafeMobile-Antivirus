@@ -10,6 +10,7 @@ settings = ROOT.joinpath("presentation/ProductSettings.kt").read_text(encoding="
 incident = ROOT.joinpath("core/observer/ThreatDetectedActivity.kt").read_text(encoding="utf-8")
 screen = ROOT.joinpath("presentation/SafeMobileScreen.kt").read_text(encoding="utf-8")
 notifier = ROOT.joinpath("core/observer/SecurityAlertNotifier.kt").read_text(encoding="utf-8")
+worker = ROOT.joinpath("core/security/GlobalThreatIntelligenceDonationWorker.kt").read_text(encoding="utf-8")
 
 errors = []
 endpoint = "https://misty-fog-d936.navyask911.workers.dev/donate"
@@ -54,7 +55,6 @@ if "operation.result.addListener" not in worker:
 if "EXTRA_SHA256" not in notifier:
     errors.append("The install incident must bind donation to the detected hash.")
 
-worker = ROOT.joinpath("core/security/GlobalThreatIntelligenceDonationWorker.kt").read_text(encoding="utf-8")
 manifest = Path("app/src/main/AndroidManifest.xml").read_text(encoding="utf-8")
 if "CoroutineWorker" not in worker or "NetworkType.CONNECTED" not in worker:
     errors.append("Donation delivery must use a network-constrained WorkManager CoroutineWorker.")
