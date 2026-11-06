@@ -140,13 +140,18 @@ class ThreatDetectedActivity : ComponentActivity() {
                                 val packageName = target?.packageName
                                 val sha256 = expectedSha256
                                 if (packageName != null && sha256 != null) {
-                                    GlobalThreatIntelligenceConsent.setEnabled(this@ThreatDetectedActivity, true)
-                                    GlobalThreatIntelligenceDonationScheduler.enqueueInstalledPackage(
+                                    val queued = GlobalThreatIntelligenceDonationScheduler.enqueueInstalledPackage(
                                         context = this@ThreatDetectedActivity,
                                         packageName = packageName,
                                         detectedSha256 = sha256,
-                                        eventId = eventId
+                                        eventId = eventId,
+                                        oneTimeConsent = true
                                     )
+                                    if (queued) Toast.makeText(
+                                        this@ThreatDetectedActivity,
+                                        "Threat hash contributed to community defense.",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 }
                             }) { Text(stringResource(R.string.global_threat_intelligence_donate)) }
                         },
@@ -198,13 +203,13 @@ class ThreatDetectedActivity : ComponentActivity() {
                 loading = false
                 val canDonate = app != null && !trustedNow && expectedSha256 != null
                 if (canDonate && GlobalThreatIntelligenceConsent.isEnabled(this@ThreatDetectedActivity)) {
-                    GlobalThreatIntelligenceDonationScheduler.enqueueInstalledPackage(
+                    val queued = GlobalThreatIntelligenceDonationScheduler.enqueueInstalledPackage(
                         context = this@ThreatDetectedActivity,
                         packageName = app!!.packageName,
                         detectedSha256 = expectedSha256!!,
                         eventId = eventId
                     )
-                    Toast.makeText(
+                    if (queued) Toast.makeText(
                         this@ThreatDetectedActivity,
                         "Threat hash contributed to community defense.",
                         Toast.LENGTH_SHORT
