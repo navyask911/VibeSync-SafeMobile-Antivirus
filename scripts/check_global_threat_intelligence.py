@@ -12,7 +12,7 @@ screen = ROOT.joinpath("presentation/SafeMobileScreen.kt").read_text(encoding="u
 notifier = ROOT.joinpath("core/observer/SecurityAlertNotifier.kt").read_text(encoding="utf-8")
 
 errors = []
-endpoint = "https://misty-fog-d936.navyask911.workers.dev"
+endpoint = "https://misty-fog-d936.navyask911.workers.dev/donate"
 if donor.count(endpoint) != 1:
     errors.append("The client must use only the approved fixed HTTPS Worker endpoint.")
 if '.getBoolean(KEY_ENABLED, false)' not in donor:
@@ -37,10 +37,27 @@ if "global_threat_intelligence_title" not in settings:
     errors.append("Settings must expose the optional contribution switch.")
 if "global_threat_intelligence_donate_message" not in incident:
     errors.append("The install incident must expose a per-sample consent prompt.")
-if "GlobalThreatIntelligenceDonor(context).donateScanResult" not in screen:
-    errors.append("Manual scan results must require an individual Donate action.")
+if "GlobalThreatIntelligenceDonationScheduler.enqueue(context, detectedThreat)" not in screen:
+    errors.append("The per-sample Donate action must enqueue lifecycle-independent background work.")
+if "GlobalThreatIntelligenceDonor(context).donateScanResult" in screen:
+    errors.append("Donation uploads must not run directly from the Compose screen.")
 if "EXTRA_SHA256" not in notifier:
     errors.append("The install incident must bind donation to the detected hash.")
+
+worker = ROOT.joinpath("core/security/GlobalThreatIntelligenceDonationWorker.kt").read_text(encoding="utf-8")
+manifest = Path("app/src/main/AndroidManifest.xml").read_text(encoding="utf-8")
+if "CoroutineWorker" not in worker or "NetworkType.CONNECTED" not in worker:
+    errors.append("Donation delivery must use a network-constrained WorkManager CoroutineWorker.")
+if "Result.retry()" not in worker:
+    errors.append("Transient donation transport errors must be retryable.")
+if 'Log.d(TAG, "Sending hash to Cloudflare: $url")' not in donor:
+    errors.append("A clear Logcat line must identify the Cloudflare donation URL.")
+if 'Log.e(TAG, "Failed", error)' not in donor:
+    errors.append("Donation exceptions must be logged with the exception.")
+if "takePersistableUriPermission" not in screen:
+    errors.append("Selected documents must retain read permission for deferred donation work.")
+if 'android.permission.INTERNET' not in manifest:
+    errors.append("The main app manifest must declare INTERNET permission.")
 
 if errors:
     print("Global Threat Intelligence privacy guard FAILED:", file=sys.stderr)
