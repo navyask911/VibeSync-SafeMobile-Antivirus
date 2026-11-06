@@ -147,11 +147,7 @@ class ThreatDetectedActivity : ComponentActivity() {
                                         eventId = eventId,
                                         oneTimeConsent = true
                                     )
-                                    if (queued) Toast.makeText(
-                                        this@ThreatDetectedActivity,
-                                        R.string.threat_hash_contributed,
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+
                                 }
                             }) { Text(stringResource(R.string.global_threat_intelligence_donate)) }
                         },
