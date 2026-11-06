@@ -10,13 +10,21 @@ class GlobalThreatIntelligenceDonorTest {
         val hash = "a".repeat(64)
         val vector = FloatArray(215) { if (it % 2 == 0) 1f else 0f }
         val payload = JSONObject(GlobalThreatIntelligenceDonor.buildPayload(hash, vector))
-        assertEquals(setOf("sha256", "features"), payload.keys().asSequence().toSet())
+        assertEquals(setOf("sha256", "verdict", "features"), payload.keys().asSequence().toSet())
         assertEquals(hash, payload.getString("sha256"))
+        assertEquals("THREAT", payload.getString("verdict"))
         val features = payload.getJSONArray("features")
         assertEquals(215, features.length())
         for (index in 0 until features.length()) {
             assertEquals(if (index % 2 == 0) 1 else 0, features.getInt(index))
         }
+    }
+
+    @Test fun nonApkThreatPayloadContainsHashAndVerdictWithoutInventingFeatures() {
+        val payload = JSONObject(GlobalThreatIntelligenceDonor.buildPayload("d".repeat(64), null))
+        assertEquals(setOf("sha256", "verdict"), payload.keys().asSequence().toSet())
+        assertEquals("d".repeat(64), payload.getString("sha256"))
+        assertEquals("THREAT", payload.getString("verdict"))
     }
 
     @Test fun rejectsIncorrectFeatureCount() {
