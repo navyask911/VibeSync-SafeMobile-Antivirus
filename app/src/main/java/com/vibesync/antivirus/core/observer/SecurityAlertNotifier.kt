@@ -62,10 +62,11 @@ object SecurityAlertNotifier {
                 .enqueueInstalledPackage(context, packageName, validThreatHash, eventId)
             if (!queued) Log.w(TAG, "Global-defense threat contribution could not be queued (event=$eventId)")
         }
-        val contributionPromptOnly = globalDefenseEnabled && validThreatHash != null
+        // Contribution is queued silently; notification display still obeys the user's
+        // independent Security Alerts preference.
         show(local, eventId, local.getString(R.string.security_alert_malware_title),
             local.getString(R.string.security_alert_malware_body), packageName, R.string.voice_alert_malware_detected, true,
-            sha256 = sha256, contributionPromptOnly = contributionPromptOnly)
+            sha256 = sha256)
     }
 
     suspend fun notifySuspiciousApp(context: Context, packageName: String, eventId: String) {
