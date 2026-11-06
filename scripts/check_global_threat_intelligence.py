@@ -43,6 +43,14 @@ if "GlobalThreatIntelligenceDonationScheduler.enqueue(context, detectedThreat)" 
     errors.append("The per-sample Donate action must enqueue lifecycle-independent background work.")
 if "GlobalThreatIntelligenceDonor(context).donateScanResult" in screen:
     errors.append("Donation uploads must not run directly from the Compose screen.")
+if "GlobalThreatIntelligenceDonationScheduler.enqueueInstalledPackage" not in incident:
+    errors.append("Install-alert donation must also enqueue durable WorkManager delivery.")
+if "GlobalThreatIntelligenceDonor(this@ThreatDetectedActivity)" in incident:
+    errors.append("Install-alert donation must not run in the Activity lifecycle scope.")
+if "Donation worker started" not in worker:
+    errors.append("The donation worker must log its start and local source type.")
+if "operation.result.addListener" not in worker:
+    errors.append("WorkManager queue persistence failures must be logged.")
 if "EXTRA_SHA256" not in notifier:
     errors.append("The install incident must bind donation to the detected hash.")
 
@@ -56,6 +64,8 @@ if 'Log.d(TAG, "Sending hash to Cloudflare: $url")' not in donor:
     errors.append("A clear Logcat line must identify the Cloudflare donation URL.")
 if 'Log.e(TAG, "Failed", error)' not in donor:
     errors.append("Donation exceptions must be logged with the exception.")
+if "Could not stage selected document for background donation" not in donor:
+    errors.append("A SAF document staging failure must be logged before the network request is skipped.")
 if "takePersistableUriPermission" not in screen:
     errors.append("Selected documents must retain read permission for deferred donation work.")
 if 'android.permission.INTERNET' not in manifest:
