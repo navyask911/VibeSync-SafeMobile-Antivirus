@@ -15,6 +15,7 @@ import android.os.Looper
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import android.os.PowerManager
+import android.provider.Settings
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.navigation.NavHostController
@@ -285,6 +286,7 @@ import kotlinx.coroutines.launch
  var sentinelDesired by remember(context) { mutableStateOf(securityPrefs.getBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, false)) }
  var strictMode by remember(context) { mutableStateOf(securityPrefs.getBoolean(SafeMobileApp.KEY_STRICT_MODE, false)) }
  var securityAlertsEnabled by remember(context) { mutableStateOf(securityPrefs.getBoolean(SafeMobileApp.KEY_SECURITY_ALERTS_ENABLED, false)) }
+ var globalDefenseEnabled by remember(context) { mutableStateOf(GlobalThreatIntelligenceConsent.isEnabled(context)) }
  val advisorStore = remember(context) { ProtectionAdvisorStore(context) }
  val snoozedAdvisorIds by advisorStore.snoozedIssueIds.collectAsStateWithLifecycle(initialValue = emptySet())
  val advisorState = ProtectionAdvisorEngine.evaluate(
@@ -355,9 +357,8 @@ import kotlinx.coroutines.launch
    (result.sourceLocalPath != null || result.sourceUri != null || result.packageName != null) &&
    result.threatEventId?.let { it !in promptedGlobalDonationEvents } == true
  }
- LaunchedEffect(state.results) {
-  if (!GlobalThreatIntelligenceConsent.isEnabled(context) ||
-      selectedDestination !in setOf("home", "scan", "apps")) return@LaunchedEffect
+ LaunchedEffect(state.results, globalDefenseEnabled, selectedDestination) {
+  if (selectedDestination !in setOf("home", "scan", "apps")) return@LaunchedEffect
   val additions = state.results.filter { result ->
    result.verdict == ScanVerdict.THREAT &&
     result.sha256?.matches(Regex("[0-9a-f]{64}")) == true &&
@@ -365,7 +366,16 @@ import kotlinx.coroutines.launch
     result.threatEventId?.let { it !in promptedGlobalDonationEvents } == true
   }
   additions.forEach { it.threatEventId?.let(promptedGlobalDonationEvents::add) }
-  if (additions.isNotEmpty()) pendingGlobalDonationResults = pendingGlobalDonationResults + additions
+  if (additions.isNotEmpty()) {
+   if (GlobalThreatIntelligenceConsent.isEnabled(context)) {
+    val queued = additions.count { vm.contributeThreatHash(context, it) }
+    if (queued > 0) {
+     uiScope.launch { snackbarHostState.showSnackbar(context.getString(R.string.threat_hash_contributed)) }
+    }
+   } else {
+    pendingGlobalDonationResults = pendingGlobalDonationResults + additions
+   }
+  }
  }
  var lastUninstallPackage by remember { mutableStateOf<String?>(null) }
  val showUninstallSnackbar: (String, String?) -> Unit = { message, appInfoPackage ->
@@ -539,6 +549,7 @@ import kotlinx.coroutines.launch
     sentinelOptIn = sentinelDesired
     strictMode = securityPrefs.getBoolean(SafeMobileApp.KEY_STRICT_MODE, false)
     securityAlertsEnabled = securityPrefs.getBoolean(SafeMobileApp.KEY_SECURITY_ALERTS_ENABLED, false)
+    globalDefenseEnabled = GlobalThreatIntelligenceConsent.isEnabled(context)
     monitoringRunning = isStorageSentinelRunning(context) && storageAccessGranted
     if (!storageAccessGranted && isStorageSentinelRunning(context)) {
      context.stopService(Intent(context, StorageSentinelService::class.java))
@@ -613,8 +624,51 @@ import kotlinx.coroutines.launch
  Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
   if (!onboardingComplete) {
    Box(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing)) {
-    SecurityOnboardingScreen(
+    SecuritySetupScreen(
      initialSyncPending = initialHashSyncPending,
+     notificationsGranted = notificationsGranted,
+     globalDefenseEnabled = globalDefenseEnabled,
+     folderAccessGranted = storageAccessGranted,
+     batteryOptimizationExempt = batteryUnrestricted,
+     onRequestNotifications = {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !hasNotificationAccess(context)) {
+       pendingAlertEnable = true
+       notificationLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+      } else {
+       notificationsGranted = hasNotificationAccess(context)
+       securityAlertsEnabled = true
+       securityPrefs.edit().putBoolean(SafeMobileApp.KEY_SECURITY_ALERTS_ENABLED, true).apply()
+      }
+     },
+     onToggleGlobalDefense = { enabled ->
+      GlobalThreatIntelligenceConsent.setEnabled(context, enabled)
+      globalDefenseEnabled = enabled
+     },
+     onChooseFolder = {
+      pendingFolderRole = StorageAccessPreferences.DOWNLOADS
+      pendingSentinelEnable = true
+      runCatching { storageTreeLauncher.launch(StorageAccessPreferences.pickerIntent(StorageAccessPreferences.DOWNLOADS)) }
+       .onFailure {
+        pendingSentinelEnable = false
+        Toast.makeText(context, R.string.ui_folder_picker_unavailable, Toast.LENGTH_LONG).show()
+       }
+     },
+     onReviewOverlayAccess = {
+      val overlayIntent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:${context.packageName}"))
+      runCatching { context.startActivity(overlayIntent) }
+       .onFailure {
+        runCatching { context.startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:${context.packageName}"))) }
+         .onFailure { Toast.makeText(context, R.string.battery_review_unavailable, Toast.LENGTH_LONG).show() }
+       }
+     },
+     onRequestBatteryOptimization = {
+      val batteryIntent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.parse("package:${context.packageName}"))
+      runCatching { context.startActivity(batteryIntent) }
+       .onFailure {
+        runCatching { context.startActivity(Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)) }
+         .onFailure { Toast.makeText(context, R.string.battery_review_unavailable, Toast.LENGTH_LONG).show() }
+       }
+     },
      onFinish = finishOnboarding,
      onSkipSetup = finishOnboarding
     )
@@ -1302,8 +1356,13 @@ pendingQuarantine?.let { flagged ->
    confirmButton = {
     TextButton(onClick = {
      pendingGlobalDonationResults = pendingGlobalDonationResults.drop(1)
-     if (GlobalThreatIntelligenceConsent.isEnabled(context)) {
-      GlobalThreatIntelligenceDonationScheduler.enqueue(context, detectedThreat)
+     val queued = vm.contributeThreatHash(
+      context = context,
+      result = detectedThreat,
+      oneTimeConsent = !GlobalThreatIntelligenceConsent.isEnabled(context)
+     )
+     if (queued) uiScope.launch {
+      snackbarHostState.showSnackbar(context.getString(R.string.threat_hash_contributed))
      }
     }) { Text(stringResource(R.string.global_threat_intelligence_donate)) }
    },
