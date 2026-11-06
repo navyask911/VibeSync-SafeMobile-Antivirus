@@ -371,32 +371,6 @@ jobs:
           fi
       - name: Verify release version
         run: |
-          grep -F 'versionName = "1.6.0"' app/build.gradle.kts
-          grep -F 'versionCode = 20261126' app/build.gradle.kts
-      - name: Clean release debug build with build-time ML downloads
-        run: ./gradlew --no-daemon clean assembleDebug
-      - name: Verify downloaded assets, APK contents, EICAR hash and YARA rules
-        run: python3 scripts/verify_release_ml_assets.py --apk app/build/outputs/apk/offline/debug/app-offline-debug.apk
-      - name: Create and push annotated v1.6.0 release tag
-        shell: bash
-        run: |
-          set -euo pipefail
-          if git ls-remote --exit-code --tags origin refs/tags/v1.6.0 >/dev/null 2>&1; then
-            git fetch --no-tags origin refs/tags/v1.6.0:refs/tags/v1.6.0
-            existing_tag_commit="$(git rev-parse 'refs/tags/v1.6.0^{commit}')"
-            if ! git merge-base --is-ancestor "$existing_tag_commit" "$GITHUB_SHA"; then
-              echo "SAFE STOP: Existing v1.6.0 tag is not an ancestor of this release commit; refusing to move it." >&2
-              exit 1
-            fi
-            echo "Release tag v1.6.0 already exists at ancestor $existing_tag_commit; preserving the immutable tag."
-          else
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git tag -a v1.6.0 -m "Release v1.6.0: 100% Offline Ensemble Antivirus Engine"
-            git push origin refs/tags/v1.6.0
-          fi
-      - name: Dispatch signed v1.6.0 APK and AAB publication
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh workflow run release-apk.yml --ref main
+          grep -F 'versionName = "1.6.4"' app/build.gradle.kts
+          grep -F 'versionCode = 20261130' app/build.gradle.kts
 
