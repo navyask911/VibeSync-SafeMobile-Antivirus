@@ -83,7 +83,16 @@ internal class GlobalThreatIntelligenceDonor(context: Context) {
                 File(path)
             }.getOrNull()
             else -> null
-        } ?: return@withContext false
+        } ?: run {
+            val sourceType = when {
+                !result.sourceLocalPath.isNullOrBlank() -> "local-file"
+                !result.sourceUri.isNullOrBlank() -> "document-uri"
+                !result.packageName.isNullOrBlank() -> "installed-package"
+                else -> "missing"
+            }
+            Log.e(TAG, "Donation stopped before network: no readable sample source (source=$sourceType)")
+            return@withContext false
+        }
 
         try {
             donateApk(apk, detectedHash)
@@ -161,6 +170,7 @@ internal class GlobalThreatIntelligenceDonor(context: Context) {
             .getOrNull() ?: return null
         return try {
             val input = app.contentResolver.openInputStream(Uri.parse(uriValue)) ?: run {
+                Log.e(TAG, "Could not open selected document for background donation; no network request was sent")
                 staged.delete()
                 return null
             }
@@ -178,10 +188,12 @@ internal class GlobalThreatIntelligenceDonor(context: Context) {
                 }
             }
             staged.takeIf { it.isFile && it.length() > 0L } ?: run {
+                Log.e(TAG, "Selected document staged as an empty or missing file; no network request was sent")
                 staged.delete()
                 null
             }
-        } catch (_: Exception) {
+        } catch (error: Exception) {
+            Log.e(TAG, "Could not stage selected document for background donation; no network request was sent", error)
             staged.delete()
             null
         }
