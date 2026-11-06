@@ -744,7 +744,7 @@ import kotlinx.coroutines.launch
             onPickApk = {
              requestPrivacyAcknowledgement {
               navigateToDestination("scan")
-              apkPicker.launch(arrayOf("application/vnd.android.package-archive", "application/octet-stream"))
+              apkPicker.launch(arrayOf("*/*"))
              }
             },
             installSentinelActive = installSentinelRunning,
@@ -924,7 +924,7 @@ import kotlinx.coroutines.launch
            if(state.isScanning) CircularProgressIndicator(Modifier.size(18.dp),strokeWidth=2.dp,color=MaterialTheme.colorScheme.onPrimary) else androidx.compose.material3.Icon(Icons.Default.Security,contentDescription=null)
            Text(stringResource(if(state.isScanning) R.string.scan_running else R.string.security_scan_now),modifier=Modifier.padding(start=8.dp))
           }
-          OutlinedButton(onClick={ requestPrivacyAcknowledgement { apkPicker.launch(arrayOf("application/vnd.android.package-archive","application/octet-stream")) } },enabled=!state.isScanning,modifier=Modifier.fillMaxWidth()) {
+          OutlinedButton(onClick={ requestPrivacyAcknowledgement { apkPicker.launch(arrayOf("*/*")) } },enabled=!state.isScanning,modifier=Modifier.fillMaxWidth()) {
            androidx.compose.material3.Icon(Icons.Default.FolderOpen,contentDescription=null)
            Text(stringResource(R.string.scan_selected),modifier=Modifier.padding(start=8.dp))
           }
