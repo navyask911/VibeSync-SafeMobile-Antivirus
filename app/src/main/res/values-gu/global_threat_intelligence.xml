@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="global_threat_intelligence_title">વૈશ્વિક જોખમ માહિતીમાં યોગદાન આપો (વૈકલ્પિક)</string>
-    <string name="global_threat_intelligence_description">ડિફૉલ્ટ રૂપે બંધ છે. ચાલુ કર્યા પછી પણ દરેક યોગદાન પહેલાં SafeMobile તમારી સંમતિ પૂછશે. દાન કરો દબાવો ત્યાં સુધી કંઈ મોકલાશે નહીં. માત્ર માલવેરનો SHA-256 હૅશ અને 215 વર્તણૂકીય લક્ષણો વહેંચાશે.</string>
+    <string name="global_threat_intelligence_description">આ વિકલ્પ ચાલુ હોય ત્યારે SafeMobile પુષ્ટિ થયેલા જોખમોના SHA-256 હેશ અને ઉપલબ્ધ હોય ત્યારે 215 બાઇનરી વર્તન લક્ષણો આપમેળે શેર કરે છે. APK ફાઇલો, ફાઇલનાં નામ, પાથ, પેકેજનાં નામ અથવા ઉપકરણની ઓળખ ક્યારેય મોકલાતી નથી. તમે આ વિકલ્પ કોઈપણ સમયે બંધ કરી શકો છો.</string>
     <string name="global_threat_intelligence_donate_message">આ દૂષિત ફાઇલની સહી અમારા AI તાલીમ નેટવર્કને અનામિક રીતે દાન કરીને અન્યને સુરક્ષિત કરવામાં મદદ કરો.</string>
     <string name="global_threat_intelligence_donate">દાન કરો</string>
     <string name="global_threat_intelligence_decline">નકારો</string>
