@@ -8,6 +8,8 @@ on:
       - "main"
     paths:
       - "app/build.gradle.kts"
+      - "scripts/check_admob_privacy.py"
+      - ".github/workflows/release-apk.yml"
     tags:
       - "v1.6.1"
 
