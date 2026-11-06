@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="global_threat_intelligence_title">参与全球威胁情报（可选）</string>
-    <string name="global_threat_intelligence_description">默认关闭。启用后，SafeMobile 会在每次贡献前征求确认。只有点击“捐赠”后才会发送数据。仅共享恶意软件的 SHA-256 哈希和 215 项行为特征。</string>
+    <string name="global_threat_intelligence_description">启用此选项后，SafeMobile 会自动共享已确认威胁的 SHA-256 哈希，以及可用时的 215 个二进制行为特征。应用不会发送 APK 文件、文件名、路径、软件包名称或设备标识符。你可以随时关闭此选项。</string>
     <string name="global_threat_intelligence_donate_message">通过匿名捐赠此恶意文件的特征签名到我们的 AI 训练网络，帮助保护其他用户。</string>
     <string name="global_threat_intelligence_donate">捐赠</string>
     <string name="global_threat_intelligence_decline">拒绝</string>
