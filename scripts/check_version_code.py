@@ -58,7 +58,7 @@ def validate(release: bool = False, allow_pr_version_reuse: bool = False) -> Non
         if release_tag is not None and code != int(release_tag.group("code")):
             raise ValueError(f"Inconsistent Play release tag/build versionCode: {tag}")
         if canonical_tag is not None:
-            version_match = re.search(r'\\bversionName\\s*=\\s*"([^"]+)"', tagged_gradle)
+            version_match = re.search(r'\bversionName\s*=\s*"([^"]+)"', tagged_gradle)
             if version_match is None or version_match.group(1) != canonical_tag.group("version"):
                 raise ValueError(f"Inconsistent canonical Play release tag/build versionName: {tag}")
         tagged.append((code, tag))
