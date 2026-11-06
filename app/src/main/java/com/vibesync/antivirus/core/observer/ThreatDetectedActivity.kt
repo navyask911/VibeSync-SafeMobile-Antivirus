@@ -149,7 +149,7 @@ class ThreatDetectedActivity : ComponentActivity() {
                                     )
                                     if (queued) Toast.makeText(
                                         this@ThreatDetectedActivity,
-                                        "Threat hash contributed to community defense.",
+                                        R.string.threat_hash_contributed,
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
@@ -211,7 +211,7 @@ class ThreatDetectedActivity : ComponentActivity() {
                     )
                     if (queued) Toast.makeText(
                         this@ThreatDetectedActivity,
-                        "Threat hash contributed to community defense.",
+                        R.string.threat_hash_contributed,
                         Toast.LENGTH_SHORT
                     ).show()
                 }
