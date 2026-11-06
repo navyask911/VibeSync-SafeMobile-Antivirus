@@ -1,5 +1,12 @@
 # SafeMobile Antivirus Changelog
 
+## 1.6.3 — 2026-11-06
+
+- Wired completed manual scans to a dedicated confirmed-threat siren event, including picked-file scans.
+- Play the local five-second alarm for a confirmed manual-scan threat even when notification or full-screen alert preferences are off.
+- Keep voice narration opt-in; initialize TTS asynchronously and log unavailable voice-pack or engine failures.
+- Added regression coverage for manual-versus-automatic confirmed-threat alert policy.
+
 ## 1.6.2 — 2026-11-06
 
 - Updated the scan document picker to accept all MIME types, including plain-text EICAR test files.
