@@ -28,6 +28,14 @@ class GlobalThreatIntelligenceDonationWorker(
 ) : CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result {
+        val sourceType = when {
+            !inputData.getString(KEY_SOURCE_LOCAL_PATH).isNullOrBlank() -> "local-file"
+            !inputData.getString(KEY_SOURCE_URI).isNullOrBlank() -> "document-uri"
+            !inputData.getString(KEY_PACKAGE_NAME).isNullOrBlank() -> "installed-package"
+            else -> "missing"
+        }
+        val hashPrefix = inputData.getString(KEY_SHA256)?.take(12) ?: "missing"
+        Log.i(TAG, "Donation worker started (source=$sourceType, sha256=$hashPrefix…)")
         if (!GlobalThreatIntelligenceConsent.isEnabled(applicationContext)) {
             Log.i(TAG, "Donation consent is off; dropping queued contribution")
             return Result.success()
@@ -36,12 +44,15 @@ class GlobalThreatIntelligenceDonationWorker(
         val sha256 = inputData.getString(KEY_SHA256)
             ?.lowercase()
             ?.takeIf { it.matches(Regex("[0-9a-f]{64}")) }
-            ?: return Result.failure()
+            ?: run {
+                Log.e(TAG, "Donation worker stopped: missing or invalid SHA-256 input")
+                return Result.failure()
+            }
         val sourceLocalPath = inputData.getString(KEY_SOURCE_LOCAL_PATH)
         val sourceUri = inputData.getString(KEY_SOURCE_URI)
         val packageName = inputData.getString(KEY_PACKAGE_NAME)
         if (sourceLocalPath.isNullOrBlank() && sourceUri.isNullOrBlank() && packageName.isNullOrBlank()) {
-            Log.w(TAG, "Queued donation has no readable local source")
+            Log.e(TAG, "Donation worker stopped: queued item has no sample source")
             return Result.failure()
         }
 
@@ -94,17 +105,59 @@ class GlobalThreatIntelligenceDonationWorker(
 internal object GlobalThreatIntelligenceDonationScheduler {
     private const val TAG = "Donation"
 
+    fun enqueueInstalledPackage(
+        context: Context,
+        packageName: String,
+        detectedSha256: String,
+        eventId: String?
+    ): Boolean {
+        val normalizedPackage = packageName.takeIf {
+            it.matches(Regex("[A-Za-z0-9_]+(\\.[A-Za-z0-9_]+)+"))
+        } ?: run {
+            Log.e(TAG, "Installed-package donation refused: invalid local package reference")
+            return false
+        }
+        val normalizedHash = detectedSha256.lowercase()
+            .takeIf { it.matches(Regex("[0-9a-f]{64}")) } ?: run {
+                Log.e(TAG, "Installed-package donation refused: invalid SHA-256")
+                return false
+            }
+        val sample = ScanResult(
+            packageOrPath = normalizedPackage,
+            displayName = "User-approved threat sample",
+            sha256 = normalizedHash,
+            md5 = null,
+            verdict = ScanVerdict.THREAT,
+            reasons = emptyList(),
+            durationMs = 0L,
+            packageName = normalizedPackage,
+            threatEventId = eventId
+        )
+        return enqueue(context, sample)
+    }
+
     fun enqueue(context: Context, result: ScanResult): Boolean {
         val app = context.applicationContext
-        if (!GlobalThreatIntelligenceConsent.isEnabled(app) || result.verdict != ScanVerdict.THREAT) {
+        if (!GlobalThreatIntelligenceConsent.isEnabled(app)) {
+            Log.w(TAG, "Donation queue refused: master contribution consent is off")
+            return false
+        }
+        if (result.verdict != ScanVerdict.THREAT) {
+            Log.w(TAG, "Donation queue refused: sample is not a confirmed THREAT")
             return false
         }
         val sha256 = result.sha256?.lowercase()
-            ?.takeIf { it.matches(Regex("[0-9a-f]{64}")) } ?: return false
+            ?.takeIf { it.matches(Regex("[0-9a-f]{64}")) } ?: run {
+                Log.e(TAG, "Donation queue refused: confirmed threat has no valid SHA-256")
+                return false
+            }
         if (result.sourceLocalPath.isNullOrBlank() &&
             result.sourceUri.isNullOrBlank() &&
             result.packageName.isNullOrBlank()
-        ) return false
+        ) {
+            Log.e(TAG, "Donation queue refused: confirmed threat has no local source reference")
+            return false
+        }
 
         return try {
             val eventId = result.threatEventId
@@ -133,12 +186,23 @@ internal object GlobalThreatIntelligenceDonationScheduler {
                 .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 30, TimeUnit.SECONDS)
                 .addTag(GlobalThreatIntelligenceDonationWorker.UNIQUE_WORK_PREFIX)
                 .build()
-            WorkManager.getInstance(app).enqueueUniqueWork(
+            val operation = WorkManager.getInstance(app).enqueueUniqueWork(
                 "${GlobalThreatIntelligenceDonationWorker.UNIQUE_WORK_PREFIX}-$eventId",
                 ExistingWorkPolicy.KEEP,
                 request
             )
-            Log.d(TAG, "User-approved threat contribution queued for background delivery (sha256=${sha256.take(12)}…)")
+            operation.result.addListener(
+                {
+                    try {
+                        operation.result.get()
+                        Log.i(TAG, "WorkManager persisted the approved donation request (sha256=${sha256.take(12)}…)")
+                    } catch (error: Exception) {
+                        Log.e(TAG, "WorkManager could not persist the approved donation request", error)
+                    }
+                },
+                java.util.concurrent.Executor { command -> command.run() }
+            )
+            Log.d(TAG, "Approved threat contribution queued (source=local-only, sha256=${sha256.take(12)}…)")
             true
         } catch (error: Exception) {
             Log.e(TAG, "Could not queue user-approved threat contribution", error)
