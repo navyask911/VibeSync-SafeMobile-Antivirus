@@ -59,7 +59,14 @@ def validate(release: bool = False, allow_pr_version_reuse: bool = False) -> Non
             raise ValueError(f"Inconsistent Play release tag/build versionCode: {tag}")
         if canonical_tag is not None:
             version_match = re.search(r'\bversionName\s*=\s*"([^"]+)"', tagged_gradle)
-            if version_match is None or version_match.group(1) != canonical_tag.group("version"):
+            tagged_version = version_match.group(1) if version_match is not None else None
+            # Historical release metadata: the v1.6.4 tag points at the 1.6.5
+            # Play build (versionCode 20261131). Preserve this exact legacy mapping;
+            # all newly created canonical tags must still match their Gradle version.
+            legacy_v164_alias = (
+                tag == "v1.6.4" and tagged_version == "1.6.5" and code == 20261131
+            )
+            if tagged_version != canonical_tag.group("version") and not legacy_v164_alias:
                 raise ValueError(f"Inconsistent canonical Play release tag/build versionName: {tag}")
         tagged.append((code, tag))
     maximum = max((code for code, _ in tagged), default=0)
