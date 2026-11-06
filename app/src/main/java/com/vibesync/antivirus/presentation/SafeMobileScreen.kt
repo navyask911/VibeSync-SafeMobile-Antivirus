@@ -366,9 +366,7 @@ import kotlinx.coroutines.launch
   if (additions.isNotEmpty()) {
    if (GlobalThreatIntelligenceConsent.isEnabled(context)) {
     val queued = additions.count { vm.contributeThreatHash(context, it) }
-    if (queued > 0) {
-     uiScope.launch { snackbarHostState.showSnackbar(context.getString(R.string.threat_hash_contributed)) }
-    }
+
    } else {
     pendingGlobalDonationResults = pendingGlobalDonationResults + additions
    }
@@ -1362,9 +1360,7 @@ pendingQuarantine?.let { flagged ->
       result = detectedThreat,
       oneTimeConsent = !GlobalThreatIntelligenceConsent.isEnabled(context)
      )
-     if (queued) uiScope.launch {
-      snackbarHostState.showSnackbar(context.getString(R.string.threat_hash_contributed))
-     }
+
     }) { Text(stringResource(R.string.global_threat_intelligence_donate)) }
    },
    dismissButton = {
