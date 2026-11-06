@@ -11,7 +11,7 @@ on:
       - "scripts/check_admob_privacy.py"
       - ".github/workflows/release-apk.yml"
     tags:
-      - "v1.6.4"
+      - "v1.6.5"
 
 permissions:
   contents: write
@@ -22,7 +22,7 @@ concurrency:
 
 jobs:
   release:
-    if: github.repository == 'navyask911/VibeSync-SafeMobile-Antivirus' && (github.event_name == 'workflow_dispatch' || github.ref_type != 'branch' || github.ref_name != 'main' || contains(github.event.head_commit.message, '[release-v1.6.4]'))
+    if: github.repository == 'navyask911/VibeSync-SafeMobile-Antivirus' && (github.event_name == 'workflow_dispatch' || github.ref_type != 'branch' || github.ref_name != 'main' || contains(github.event.head_commit.message, '[release-v1.6.5]'))
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
@@ -292,13 +292,13 @@ jobs:
           version_name="${{ steps.verify-aab.outputs.version_name }}"
           version_code="${{ steps.verify-aab.outputs.version_code }}"
           if [[ "${GITHUB_REF_TYPE:-}" == "branch" && "${GITHUB_REF_NAME:-}" == "main" ]]; then
-            if [[ "$version_name" != "1.6.4" || "$version_code" != "20261130" ]]; then
+            if [[ "$version_name" != "1.6.5" || "$version_code" != "20261131" ]]; then
               echo "SAFE STOP: main release trigger expected v1.6.4 / 20261130, got $version_name / $version_code." >&2
               exit 1
             fi
           fi
-          if [[ "${GITHUB_REF_TYPE:-}" == "tag" && "${GITHUB_REF_NAME:-}" == "v1.6.4" ]] ||
-             [[ "${GITHUB_REF_TYPE:-}" == "branch" && "${GITHUB_REF_NAME:-}" == "main" && "$version_name" == "1.6.4" && "$version_code" == "20261130" ]]; then
+          if [[ "${GITHUB_REF_TYPE:-}" == "tag" && "${GITHUB_REF_NAME:-}" == "v1.6.5" ]] ||
+             [[ "${GITHUB_REF_TYPE:-}" == "branch" && "${GITHUB_REF_NAME:-}" == "main" && "$version_name" == "1.6.5" && "$version_code" == "20261131" ]]; then
             tag="v1.6.4"
           else
             tag="safemobile-v${{ steps.verify-aab.outputs.version_name }}-code${{ steps.verify-aab.outputs.version_code }}-run${GITHUB_RUN_NUMBER}"
@@ -311,6 +311,7 @@ jobs:
           Built from commit ${GITHUB_SHA}.
           v1.6.1: Added new launcher icons and splash screen. Fixed text wrapping and added back navigation. Added inline Crown subscription toggle.
           v1.6.2: Accept all file types in the scan document picker for .txt/EICAR testing; preserve the originating screen when backing out of Pro; make the paywall and shared app toolbar wrap and scroll at larger font scales.
+          v1.6.5: Add queue-persistence and worker-start diagnostics, expose document staging failures in Logcat, and route install-alert donations through WorkManager to survive Activity dismissal.
           v1.6.4: Queue individually approved threat contributions in network-constrained WorkManager, persist picker URI access, use the Cloudflare /donate route, log HTTP failures, and support hash/verdict-only non-APK test samples. APKs also include the validated 215-bit feature vector.
           v1.6.3: Trigger the five-second local siren after a confirmed manual scan threat, including picked files, independent of notification/full-screen preferences. Spoken alerts remain opt-in and use asynchronous local TTS.
           Includes pinned 18KB research v1.0.1-model and a 215-feature schema; this unvalidated candidate remains inactive as malware protection. All scanning is on-device.
