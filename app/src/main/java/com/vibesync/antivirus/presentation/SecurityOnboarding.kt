@@ -65,6 +65,7 @@ internal object OnboardingPrefs {
     const val STEP = "step"
     const val SENTINEL_OPT_IN = "sentinel_opt_in"
     const val FIRST_SCAN_REQUESTED = "first_scan_requested"
+    const val SECURITY_SETUP_V166_COMPLETED = "security_setup_v166_completed"
 }
 
 @Composable
