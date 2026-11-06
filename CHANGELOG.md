@@ -1,5 +1,12 @@
 # SafeMobile Antivirus Changelog
 
+## 1.6.2 — 2026-11-06
+
+- Updated the scan document picker to accept all MIME types, including plain-text EICAR test files.
+- Fixed Pro paywall close and system-back behavior to pop to the previously opened screen instead of always returning Home.
+- Made the Pro paywall vertically scrollable and allowed shared toolbar titles/subtitles to wrap at larger font scales.
+- Added a regression test for the Settings Download/Folder Monitoring switch callback at 2× font scale.
+
 ## 1.6.1 — 2026-11-06
 
 - Added the new legacy, round and adaptive launcher icon assets for all Android density buckets.
