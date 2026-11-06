@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="global_threat_intelligence_title">Đóng góp vào tình báo mối đe dọa toàn cầu (Tùy chọn)</string>
-    <string name="global_threat_intelligence_description">Mặc định là tắt. Khi bật, SafeMobile sẽ hỏi trước mỗi lần đóng góp. Không có dữ liệu nào được gửi cho đến khi bạn nhấn Quyên góp. Chỉ chia sẻ mã băm SHA-256 của phần mềm độc hại và 215 đặc trưng hành vi.</string>
+    <string name="global_threat_intelligence_description">Khi bật tùy chọn này, SafeMobile tự động chia sẻ mã băm SHA-256 của các mối đe dọa đã xác nhận và 215 đặc trưng hành vi nhị phân nếu có. Ứng dụng không bao giờ gửi tệp APK, tên tệp, đường dẫn, tên gói hoặc mã nhận dạng thiết bị. Bạn có thể tắt tùy chọn này bất cứ lúc nào.</string>
     <string name="global_threat_intelligence_donate_message">Hãy giúp bảo vệ người khác bằng cách ẩn danh quyên góp chữ ký của tệp độc hại này cho mạng đào tạo AI của chúng tôi.</string>
     <string name="global_threat_intelligence_donate">Quyên góp</string>
     <string name="global_threat_intelligence_decline">Từ chối</string>
