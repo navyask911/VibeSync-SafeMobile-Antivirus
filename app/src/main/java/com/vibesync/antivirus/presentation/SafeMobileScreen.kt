@@ -1355,8 +1355,11 @@ pendingQuarantine?.let { flagged ->
    confirmButton = {
     TextButton(onClick = {
      pendingGlobalDonationResults = pendingGlobalDonationResults.drop(1)
-
-
+     vm.contributeThreatHash(
+      context = context,
+      result = detectedThreat,
+      oneTimeConsent = !GlobalThreatIntelligenceConsent.isEnabled(context)
+     )
     }) { Text(stringResource(R.string.global_threat_intelligence_donate)) }
    },
    dismissButton = {
