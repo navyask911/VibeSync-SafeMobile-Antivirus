@@ -228,11 +228,9 @@ import kotlinx.coroutines.launch
  val onboardingPrefs = remember(context) { context.getSharedPreferences(OnboardingPrefs.NAME, Context.MODE_PRIVATE) }
 
 
- var onboardingComplete by remember(context) { mutableStateOf(onboardingPrefs.getBoolean(
-  OnboardingPrefs.COMPLETED,
-  context.getSharedPreferences(SafeMobileApp.PRIVACY_PREFS, Context.MODE_PRIVATE)
-   .getBoolean(SafeMobileApp.PRIVACY_ACKNOWLEDGED, false)
- )) }
+ var onboardingComplete by remember(context) { mutableStateOf(
+  onboardingPrefs.getBoolean(OnboardingPrefs.SECURITY_SETUP_V166_COMPLETED, false)
+ ) }
  var storageAccessGranted by remember(context) { mutableStateOf(hasSharedStorageAccess(context)) }
  var notificationsGranted by remember(context) { mutableStateOf(hasNotificationAccess(context)) }
  var sentinelOptIn by remember(context) { mutableStateOf(onboardingPrefs.getBoolean(OnboardingPrefs.SENTINEL_OPT_IN, isStorageSentinelRunning(context))) }
@@ -521,7 +519,11 @@ import kotlinx.coroutines.launch
   securityPrefs.edit().putBoolean(SafeMobileApp.KEY_STRICT_MODE, enabled).apply()
  }
  val finishOnboarding: () -> Unit = {
-  onboardingPrefs.edit().putBoolean(OnboardingPrefs.COMPLETED, true).putInt(OnboardingPrefs.STEP, 4).apply()
+  onboardingPrefs.edit()
+   .putBoolean(OnboardingPrefs.COMPLETED, true)
+   .putBoolean(OnboardingPrefs.SECURITY_SETUP_V166_COMPLETED, true)
+   .putInt(OnboardingPrefs.STEP, 4)
+   .apply()
   onboardingComplete = true
   if (!onboardingPrefs.getBoolean(OnboardingPrefs.FIRST_SCAN_REQUESTED, false)) {
    requestPrivacyAcknowledgement {
