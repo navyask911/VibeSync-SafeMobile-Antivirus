@@ -117,7 +117,6 @@ import com.vibesync.antivirus.core.engine.DetectionSource
 import com.vibesync.antivirus.core.quarantine.LocalQuarantineManager
 import com.vibesync.antivirus.core.engine.ScanVerdict
 import com.vibesync.antivirus.core.security.GlobalThreatIntelligenceConsent
-import com.vibesync.antivirus.core.security.GlobalThreatIntelligenceDonationScheduler
 import com.vibesync.antivirus.data.repository.ThreatRepository
 import com.vibesync.antivirus.ui.components.EmptyState
 import com.vibesync.antivirus.ui.components.SecurityStatusCard
