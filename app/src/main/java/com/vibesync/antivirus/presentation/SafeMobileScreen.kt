@@ -640,11 +640,11 @@ import kotlinx.coroutines.launch
     Column(Modifier.padding(start = 10.dp).weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
      Text(stringResource(toolbarTitleResource), modifier = Modifier.fillMaxWidth(), style = MaterialTheme.typography.titleLarge,
       fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface,
-      maxLines = 1, overflow = TextOverflow.Ellipsis)
+      maxLines = 2, softWrap = true, overflow = TextOverflow.Ellipsis)
      toolbarSubtitleResource?.let { subtitle ->
       Text(stringResource(subtitle), style = MaterialTheme.typography.bodySmall,
        color = MaterialTheme.colorScheme.onSurfaceVariant,
-       maxLines = 1, overflow = TextOverflow.Ellipsis)
+       maxLines = 2, softWrap = true, overflow = TextOverflow.Ellipsis)
      }
     }
     IconButton(onClick = { isSubscriptionExpanded = !isSubscriptionExpanded }) {
@@ -1135,7 +1135,7 @@ import kotlinx.coroutines.launch
         }
         if (selectedDestination == "pro") {
          SafeMobileProPaywallScreen(
-          onBack = { navigateToDestination("home") },
+          onBack = { if (!tabNavController.popBackStack()) navigateToDestination("home") },
           onProStatusChanged = { isPro -> if (isPro) adMobManager.disableForPro() }
          )
         }
