@@ -19,4 +19,5 @@
     <string name="setup_battery_exempt">Background battery access enabled</string>
     <string name="setup_overlay_optional_note">Overlay access is not required for local scanning. SafeMobile does not draw over other apps; this link only opens Android’s overlay settings for review.</string>
     <string name="setup_next_step">Continue</string>
+    <string name="threat_hash_contributed">Threat hash contributed to community defense.</string>
 </resources>
