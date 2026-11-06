@@ -1,5 +1,12 @@
 # SafeMobile Antivirus Changelog
 
+## 1.6.4 — 2026-11-06
+
+- Move per-sample Global Threat Intelligence donations to a network-constrained WorkManager worker so delivery survives screen dismissal and process recreation.
+- Persist picker URI read grants for deferred contribution work and retry transient network/server failures.
+- Send contributions to the explicit Cloudflare `/donate` route with SHA-256 and confirmed `THREAT` verdict; include the 215-bit Drebin vector only when a valid APK vector exists.
+- Add URL, HTTP status and exception Logcat diagnostics while retaining the no-package-name/no-device-identifier payload boundary.
+
 ## 1.6.3 — 2026-11-06
 
 - Wired completed manual scans to a dedicated confirmed-threat siren event, including picked-file scans.
