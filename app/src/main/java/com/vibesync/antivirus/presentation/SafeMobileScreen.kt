@@ -342,8 +342,7 @@ import kotlinx.coroutines.launch
    lastHandledManualThreatAlertSequence = completed
    val threat = state.results.firstOrNull { it.verdict == ScanVerdict.THREAT }
    if (threat != null) {
-    val eventId = threat.threatEventId?.takeIf { it.isNotBlank() }
-     ?: "manual-threat-scan-$completed"
+    val eventId = "manual-threat-scan-$completed-" + java.util.UUID.randomUUID()
     SecurityAlertNotifier.notifyManualScanThreat(context, eventId)
    }
   }
