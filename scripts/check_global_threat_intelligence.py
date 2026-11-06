@@ -11,6 +11,7 @@ incident = ROOT.joinpath("core/observer/ThreatDetectedActivity.kt").read_text(en
 screen = ROOT.joinpath("presentation/SafeMobileScreen.kt").read_text(encoding="utf-8")
 notifier = ROOT.joinpath("core/observer/SecurityAlertNotifier.kt").read_text(encoding="utf-8")
 worker = ROOT.joinpath("core/security/GlobalThreatIntelligenceDonationWorker.kt").read_text(encoding="utf-8")
+view_model = ROOT.joinpath("presentation/SafeMobileViewModel.kt").read_text(encoding="utf-8")
 
 errors = []
 endpoint = "https://misty-fog-d936.navyask911.workers.dev/donate"
@@ -40,8 +41,16 @@ if "global_threat_intelligence_title" not in settings:
     errors.append("Settings must expose the optional contribution switch.")
 if "global_threat_intelligence_donate_message" not in incident:
     errors.append("The install incident must expose a per-sample consent prompt.")
-if "GlobalThreatIntelligenceDonationScheduler.enqueue(context, detectedThreat)" not in screen:
-    errors.append("The per-sample Donate action must enqueue lifecycle-independent background work.")
+if "vm.contributeThreatHash(" not in screen or "oneTimeConsent = !GlobalThreatIntelligenceConsent.isEnabled(context)" not in screen:
+    errors.append("The scan UI must route explicit one-sample approval through the ViewModel.")
+if "GlobalThreatIntelligenceDonationScheduler.enqueueOnce(context, result)" not in view_model:
+    errors.append("The ViewModel must route one-time approvals to the durable one-sample queue.")
+if "fun enqueueOnce(context: Context, result: ScanResult)" not in worker or "KEY_ONE_TIME_APPROVED" not in worker:
+    errors.append("One-time approval must persist with the queued sample without enabling global consent.")
+if "GlobalThreatIntelligenceConsent.setEnabled(this@ThreatDetectedActivity, true)" in incident:
+    errors.append("A one-sample confirmation must never silently enable permanent global contribution consent.")
+if "oneTimeConsent = true" not in incident:
+    errors.append("Install-alert one-sample approval must be explicitly queued as one-time consent.")
 if "GlobalThreatIntelligenceDonor(context).donateScanResult" in screen:
     errors.append("Donation uploads must not run directly from the Compose screen.")
 if "GlobalThreatIntelligenceDonationScheduler.enqueueInstalledPackage" not in incident:
