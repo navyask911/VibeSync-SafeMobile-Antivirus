@@ -156,6 +156,7 @@ import kotlinx.coroutines.launch
  val vm:SafeMobileViewModel=viewModel(factory=SafeMobileViewModel.Factory(repository))
  val state by vm.state.collectAsStateWithLifecycle()
  val installSentinelRunning by com.vibesync.antivirus.core.observer.InstallSentinelService.running.collectAsStateWithLifecycle()
+ var installSentinelDesired by remember(context) { mutableStateOf(com.vibesync.antivirus.core.observer.InstallSentinelService.enabled(context)) }
  val postureVm:DevicePostureViewModel=viewModel(factory=DevicePostureViewModel.Factory(safeMobileApp.devicePostureRepository))
  val postureState by postureVm.state.collectAsStateWithLifecycle()
  val initialHashSyncPending by androidx.compose.runtime.produceState(initialValue = false, context) {
@@ -482,6 +483,19 @@ import kotlinx.coroutines.launch
    if (privacyAccepted) DevicePostureMonitor.enqueueNow(context)
   }
  }
+ val changeInstallSentinel: (Boolean) -> Unit = { enabled ->
+  installSentinelDesired = enabled
+  securityPrefs.edit().putBoolean(SafeMobileApp.KEY_INSTALL_SENTINEL_ENABLED, enabled).apply()
+  if (enabled) {
+   if (!com.vibesync.antivirus.core.observer.InstallSentinelService.startFromVisibleUi(context)) {
+    installSentinelDesired = false
+    securityPrefs.edit().putBoolean(SafeMobileApp.KEY_INSTALL_SENTINEL_ENABLED, false).apply()
+    Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show()
+   }
+  } else {
+   com.vibesync.antivirus.core.observer.InstallSentinelService.stop(context)
+  }
+ }
  val updateStrictMode: (Boolean) -> Unit = { enabled ->
   strictMode = enabled
   securityPrefs.edit().putBoolean(SafeMobileApp.KEY_STRICT_MODE, enabled).apply()
@@ -514,6 +528,7 @@ import kotlinx.coroutines.launch
     sentinelOptIn = sentinelDesired
     strictMode = securityPrefs.getBoolean(SafeMobileApp.KEY_STRICT_MODE, false)
     securityAlertsEnabled = securityPrefs.getBoolean(SafeMobileApp.KEY_SECURITY_ALERTS_ENABLED, false)
+    installSentinelDesired = com.vibesync.antivirus.core.observer.InstallSentinelService.enabled(context)
     monitoringRunning = isStorageSentinelRunning(context) && storageAccessGranted
     if (!storageAccessGranted && isStorageSentinelRunning(context)) {
      context.stopService(Intent(context, StorageSentinelService::class.java))
@@ -764,6 +779,9 @@ import kotlinx.coroutines.launch
            strictMode = strictMode,
            securityAlertsEnabled = securityAlertsEnabled,
            onSecurityAlertsChanged = changeSecurityAlerts,
+           installSentinelRunningOverride = installSentinelRunning,
+           installSentinelEnabledOverride = installSentinelDesired,
+           onInstallSentinelChanged = changeInstallSentinel,
            onToggleProtection = toggleProtection,
            onStrictModeChanged = updateStrictMode,
            appTheme = appTheme,
