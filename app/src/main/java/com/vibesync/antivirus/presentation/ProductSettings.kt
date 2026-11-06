@@ -493,6 +493,7 @@ internal fun OverlayRiskReviewPanel() {
     )
 }
 
+/** Read-only inventory of manifest declarations; this screen never requests or grants access. */
 @Composable
 private fun AppManifestPermissionsCard() {
     val context = LocalContext.current
