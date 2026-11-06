@@ -199,17 +199,12 @@ class ThreatDetectedActivity : ComponentActivity() {
                 loading = false
                 val canDonate = app != null && !trustedNow && expectedSha256 != null
                 if (canDonate && GlobalThreatIntelligenceConsent.isEnabled(this@ThreatDetectedActivity)) {
-                    val queued = GlobalThreatIntelligenceDonationScheduler.enqueueInstalledPackage(
+                    GlobalThreatIntelligenceDonationScheduler.enqueueInstalledPackage(
                         context = this@ThreatDetectedActivity,
                         packageName = app!!.packageName,
                         detectedSha256 = expectedSha256!!,
                         eventId = eventId
                     )
-                    if (queued) Toast.makeText(
-                        this@ThreatDetectedActivity,
-                        R.string.threat_hash_contributed,
-                        Toast.LENGTH_SHORT
-                    ).show()
                 }
                 showGlobalDonationPrompt = canDonate &&
                     !GlobalThreatIntelligenceConsent.isEnabled(this@ThreatDetectedActivity)
