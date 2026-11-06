@@ -108,6 +108,7 @@ import com.vibesync.antivirus.core.posture.DevicePostureMonitor
 import com.vibesync.antivirus.core.observer.StorageSentinelService
 import com.vibesync.antivirus.core.observer.StorageAccessPreferences
 import com.vibesync.antivirus.core.observer.FullScreenAlertAccess
+import com.vibesync.antivirus.core.observer.SecurityAlertNotifier
 import com.vibesync.antivirus.core.worker.OverlayRiskReviewManager
 import com.vibesync.antivirus.core.security.DeviceOwnerManager
 import com.vibesync.antivirus.core.engine.ScanResult
@@ -307,6 +308,7 @@ import kotlinx.coroutines.launch
  val snackbarHostState = remember { SnackbarHostState() }
  val uiScope = rememberCoroutineScope()
  var lastHandledManualScanSequence by remember { mutableStateOf(state.manualScanCompletionSequence) }
+ var lastHandledManualThreatAlertSequence by remember { mutableStateOf(state.manualThreatAlertSequence) }
  LaunchedEffect(privacyAccepted, activity) {
   if (privacyAccepted && activity != null) adMobManager.refresh(activity)
  }
@@ -332,6 +334,18 @@ import kotlinx.coroutines.launch
     manualScanCompleted = true,
     hasConfirmedThreats = state.threatCount > 0
    )
+  }
+ }
+ LaunchedEffect(state.manualThreatAlertSequence) {
+  val completed = state.manualThreatAlertSequence
+  if (completed > lastHandledManualThreatAlertSequence) {
+   lastHandledManualThreatAlertSequence = completed
+   val threat = state.results.firstOrNull { it.verdict == ScanVerdict.THREAT }
+   if (threat != null) {
+    val eventId = threat.threatEventId?.takeIf { it.isNotBlank() }
+     ?: "manual-threat-scan-$completed"
+    SecurityAlertNotifier.notifyManualScanThreat(context, eventId)
+   }
   }
  }
  var pendingGlobalDonationResults by remember { mutableStateOf<List<ScanResult>>(emptyList()) }
