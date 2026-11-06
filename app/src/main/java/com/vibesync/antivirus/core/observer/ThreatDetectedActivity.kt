@@ -54,7 +54,7 @@ import androidx.lifecycle.lifecycleScope
 import com.vibesync.antivirus.R
 import com.vibesync.antivirus.core.locale.LocalePreferences
 import com.vibesync.antivirus.core.security.GlobalThreatIntelligenceConsent
-import com.vibesync.antivirus.core.security.GlobalThreatIntelligenceDonor
+import com.vibesync.antivirus.core.security.GlobalThreatIntelligenceDonationScheduler
 import com.vibesync.antivirus.presentation.SystemPackageGuard
 import com.vibesync.antivirus.presentation.UninstallHandler
 import com.vibesync.antivirus.presentation.UninstallResult
@@ -141,12 +141,12 @@ class ThreatDetectedActivity : ComponentActivity() {
                                 val sha256 = expectedSha256
                                 if (packageName != null && sha256 != null &&
                                     GlobalThreatIntelligenceConsent.isEnabled(this@ThreatDetectedActivity)) {
-                                    lifecycleScope.launch {
-                                        withContext(Dispatchers.IO) {
-                                            GlobalThreatIntelligenceDonor(this@ThreatDetectedActivity)
-                                                .donateInstalledPackage(packageName, sha256)
-                                        }
-                                    }
+                                    GlobalThreatIntelligenceDonationScheduler.enqueueInstalledPackage(
+                                        context = this@ThreatDetectedActivity,
+                                        packageName = packageName,
+                                        detectedSha256 = sha256,
+                                        eventId = eventId
+                                    )
                                 }
                             }) { Text(stringResource(R.string.global_threat_intelligence_donate)) }
                         },
