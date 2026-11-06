@@ -46,6 +46,7 @@ android {
   targetSdk = 36
   versionCode = 20261131
   versionName = "1.6.5"
+  // [release-v1.6.5] signed physical-device donation test candidate
   testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   buildConfigField("String", "FEED_MANIFEST_PUBLIC_KEY_B64", cfg(feedManifestPublicKey))
   buildConfigField("Boolean", "FEED_MANIFEST_KEY_CONFIGURED", (!feedManifestPublicKey.isBlank()).toString())
