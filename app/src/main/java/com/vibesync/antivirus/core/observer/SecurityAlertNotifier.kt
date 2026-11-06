@@ -116,13 +116,12 @@ object SecurityAlertNotifier {
 
     private fun show(context: Context, eventId: String, title: String, body: String,
                      packageName: String?, voiceResource: Int, confirmed: Boolean,
-                     testMode: Boolean = false, sha256: String? = null,
-                     contributionPromptOnly: Boolean = false) {
+                     testMode: Boolean = false, sha256: String? = null) {
         val app = context.applicationContext
         SecurityVoiceAlert.speakIfEnabled(app, voiceResource)
         val enabled = app.getSharedPreferences(SafeMobileApp.SECURITY_PREFS, Context.MODE_PRIVATE)
             .getBoolean(SafeMobileApp.KEY_SECURITY_ALERTS_ENABLED, false)
-        if (!enabled && !testMode && !contributionPromptOnly) return
+        if (!enabled && !testMode) return
         InstallScanNotifications.escalated(eventId)
         if (confirmed && (enabled || testMode) && InstallScanNotifications.claimAlarm(eventId)) {
             Log.d(TAG, if (testMode) "Manual siren playback start" else "Verified threat siren playback start")
