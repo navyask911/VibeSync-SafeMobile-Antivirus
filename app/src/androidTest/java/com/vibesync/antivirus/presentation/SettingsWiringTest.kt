@@ -126,6 +126,29 @@ class SettingsWiringTest {
     }
 
     @Test
+    fun downloadFolderMonitoringSwitchUpdatesItsOwnerState() {
+        var folderMonitoringEnabled by mutableStateOf(false)
+        renderSettings {
+            SafeMobileSettingsPanel(
+                sentinelEnabled = folderMonitoringEnabled,
+                onEnableSentinel = { folderMonitoringEnabled = true },
+                onDisableSentinel = { folderMonitoringEnabled = false },
+                onToggleProtection = { folderMonitoringEnabled = it },
+                subRoute = SettingsSubRoute.SECURITY,
+                installSentinelRunningOverride = false,
+                installSentinelEnabledOverride = false,
+                onInstallSentinelChanged = {}
+            )
+        }
+
+        composeRule.onNodeWithTag("settings.download-monitoring").assertIsOff()
+        composeRule.onNodeWithTag("settings.download-monitoring").performScrollTo().performClick()
+        composeRule.waitForIdle()
+        assertEquals(true, folderMonitoringEnabled)
+        composeRule.onNodeWithTag("settings.download-monitoring").assertIsOn()
+    }
+
+    @Test
     fun settingsSubpageBackArrowReturnsToSettingsRoot() {
         var subRoute by mutableStateOf(SettingsSubRoute.SECURITY)
         renderSettings {
