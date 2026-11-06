@@ -1,5 +1,11 @@
 # SafeMobile Antivirus Changelog
 
+## 1.6.5 — 2026-11-06
+
+- Log donation worker startup, WorkManager queue persistence results, and selected-document staging failures so skipped uploads can be distinguished from HTTP failures.
+- Route install-alert donations through the same network-constrained WorkManager path as manual file scans; closing the alert Activity cannot cancel approved delivery.
+- Keep the Cloudflare payload privacy-minimal: verified SHA-256 and confirmed THREAT verdict, with an optional validated 215-feature APK vector.
+
 ## 1.6.4 — 2026-11-06
 
 - Move per-sample Global Threat Intelligence donations to a network-constrained WorkManager worker so delivery survives screen dismissal and process recreation.
