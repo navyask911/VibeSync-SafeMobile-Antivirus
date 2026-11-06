@@ -111,7 +111,8 @@ internal object GlobalThreatIntelligenceDonationScheduler {
         context: Context,
         packageName: String,
         detectedSha256: String,
-        eventId: String?
+        eventId: String?,
+        oneTimeConsent: Boolean = false
     ): Boolean {
         val normalizedPackage = packageName.takeIf {
             it.matches(Regex("[A-Za-z0-9_]+(\\.[A-Za-z0-9_]+)+"))
@@ -135,7 +136,7 @@ internal object GlobalThreatIntelligenceDonationScheduler {
             packageName = normalizedPackage,
             threatEventId = eventId
         )
-        return enqueue(context, sample)
+        return if (oneTimeConsent) enqueueOnce(context, sample) else enqueue(context, sample)
     }
 
     fun enqueue(context: Context, result: ScanResult): Boolean = enqueueInternal(context, result, oneTimeConsent = false)
