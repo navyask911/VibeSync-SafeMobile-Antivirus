@@ -6,6 +6,13 @@ import org.junit.Assert.assertThrows
 import org.junit.Test
 
 class GlobalThreatIntelligenceDonorTest {
+    @Test fun endpointIsTheProductionCloudflareDonateRoute() {
+        assertEquals(
+            "https://misty-fog-d936.navyask911.workers.dev/donate",
+            GlobalThreatIntelligenceDonor.WORKER_ENDPOINT
+        )
+    }
+
     @Test fun payloadContainsOnlyHashAnd215BinaryFeatures() {
         val hash = "a".repeat(64)
         val vector = FloatArray(215) { if (it % 2 == 0) 1f else 0f }
