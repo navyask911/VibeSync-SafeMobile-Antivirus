@@ -19,6 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 APP_GRADLE = ROOT / "app" / "build.gradle.kts"
 PATTERN = re.compile(r"\bversionCode\s*=\s*(\d+)")
 APP_RELEASE_TAG = re.compile(r"^safemobile-v\d+\.\d+\.\d+-code(?P<code>\d+)-run\d+$")
+CANONICAL_APP_RELEASE_TAG = re.compile(r"^v(?P<version>\d+\.\d+\.\d+)$")
 
 
 def code_from_text(value: str):
@@ -44,15 +45,22 @@ def validate(release: bool = False, allow_pr_version_reuse: bool = False) -> Non
     tagged = []
     for tag in tags:
         release_tag = APP_RELEASE_TAG.fullmatch(tag)
-        if release_tag is None:
-            continue  # A signed hash database is NOT an Android app release.
+        canonical_tag = CANONICAL_APP_RELEASE_TAG.fullmatch(tag)
+        if release_tag is None and canonical_tag is None:
+            continue  # Ignore non-app tags such as model and hash-database releases.
         try:
             tagged_gradle = run("git", "show", f"{tag}:app/build.gradle.kts")
         except subprocess.CalledProcessError as error:
             raise ValueError(f"Tagged Play release has no Gradle build config: {tag}") from error
         code = code_from_text(tagged_gradle)
-        if code != int(release_tag.group("code")):
+        if code is None:
+            raise ValueError(f"Tagged Play release has no versionCode: {tag}")
+        if release_tag is not None and code != int(release_tag.group("code")):
             raise ValueError(f"Inconsistent Play release tag/build versionCode: {tag}")
+        if canonical_tag is not None:
+            version_match = re.search(r'\\bversionName\\s*=\\s*"([^"]+)"', tagged_gradle)
+            if version_match is None or version_match.group(1) != canonical_tag.group("version"):
+                raise ValueError(f"Inconsistent canonical Play release tag/build versionName: {tag}")
         tagged.append((code, tag))
     maximum = max((code for code, _ in tagged), default=0)
     if allow_pr_version_reuse:
