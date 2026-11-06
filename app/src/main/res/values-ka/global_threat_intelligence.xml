@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="global_threat_intelligence_title">გლობალური საფრთხეების დაზვერვაში წვლილის შეტანა (არასავალდებულო)</string>
-    <string name="global_threat_intelligence_description">ნაგულისხმევად გამორთულია. ჩართვის შემდეგ SafeMobile თითოეულ წვლილამდე თანხმობას გკითხავთ. არაფერია გაგზავნილი, სანამ „შემოწირულობას“ არ დააჭერთ. გაზიარდება მხოლოდ მავნე პროგრამის SHA-256 ჰეში და 215 ქცევითი მახასიათებელი.</string>
+    <string name="global_threat_intelligence_description">ამ პარამეტრის ჩართვისას SafeMobile ავტომატურად აზიარებს დადასტურებული საფრთხეების SHA-256 ჰეშებს და, თუ ხელმისაწვდომია, 215 ბინარულ ქცევით მახასიათებელს. APK ფაილები, ფაილების სახელები, ბილიკები, პაკეტების სახელები და მოწყობილობის იდენტიფიკატორები არასოდეს იგზავნება. ამ პარამეტრის გამორთვა ნებისმიერ დროს შეგიძლიათ.</string>
     <string name="global_threat_intelligence_donate_message">დაეხმარეთ სხვების დაცვას ამ მავნე ფაილის ხელმოწერის ანონიმურად გადაცემით ჩვენი AI სასწავლო ქსელისთვის.</string>
     <string name="global_threat_intelligence_donate">შემოწირულობა</string>
     <string name="global_threat_intelligence_decline">უარყოფა</string>
