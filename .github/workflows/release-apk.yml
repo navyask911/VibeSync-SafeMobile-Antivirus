@@ -11,7 +11,7 @@ on:
       - "scripts/check_admob_privacy.py"
       - ".github/workflows/release-apk.yml"
     tags:
-      - "v1.6.1"
+      - "v1.6.2"
 
 permissions:
   contents: write
@@ -22,7 +22,7 @@ concurrency:
 
 jobs:
   release:
-    if: github.repository == 'navyask911/VibeSync-SafeMobile-Antivirus' && (github.event_name == 'workflow_dispatch' || github.ref_type != 'branch' || github.ref_name != 'main' || contains(github.event.head_commit.message, '[release-v1.6.1]'))
+    if: github.repository == 'navyask911/VibeSync-SafeMobile-Antivirus' && (github.event_name == 'workflow_dispatch' || github.ref_type != 'branch' || github.ref_name != 'main' || contains(github.event.head_commit.message, '[release-v1.6.2]'))
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
@@ -292,14 +292,14 @@ jobs:
           version_name="${{ steps.verify-aab.outputs.version_name }}"
           version_code="${{ steps.verify-aab.outputs.version_code }}"
           if [[ "${GITHUB_REF_TYPE:-}" == "branch" && "${GITHUB_REF_NAME:-}" == "main" ]]; then
-            if [[ "$version_name" != "1.6.1" || "$version_code" != "20261127" ]]; then
-              echo "SAFE STOP: main release trigger expected v1.6.1 / 20261127, got $version_name / $version_code." >&2
+            if [[ "$version_name" != "1.6.2" || "$version_code" != "20261128" ]]; then
+              echo "SAFE STOP: main release trigger expected v1.6.2 / 20261128, got $version_name / $version_code." >&2
               exit 1
             fi
           fi
-          if [[ "${GITHUB_REF_TYPE:-}" == "tag" && "${GITHUB_REF_NAME:-}" == "v1.6.1" ]] ||
-             [[ "${GITHUB_REF_TYPE:-}" == "branch" && "${GITHUB_REF_NAME:-}" == "main" && "$version_name" == "1.6.1" && "$version_code" == "20261127" ]]; then
-            tag="v1.6.1"
+          if [[ "${GITHUB_REF_TYPE:-}" == "tag" && "${GITHUB_REF_NAME:-}" == "v1.6.2" ]] ||
+             [[ "${GITHUB_REF_TYPE:-}" == "branch" && "${GITHUB_REF_NAME:-}" == "main" && "$version_name" == "1.6.2" && "$version_code" == "20261128" ]]; then
+            tag="v1.6.2"
           else
             tag="safemobile-v${{ steps.verify-aab.outputs.version_name }}-code${{ steps.verify-aab.outputs.version_code }}-run${GITHUB_RUN_NUMBER}"
           fi
@@ -310,6 +310,7 @@ jobs:
           APK/AAB version: ${{ steps.verify-aab.outputs.version_name }} (version code ${{ steps.verify-aab.outputs.version_code }}).
           Built from commit ${GITHUB_SHA}.
           v1.6.1: Added new launcher icons and splash screen. Fixed text wrapping and added back navigation. Added inline Crown subscription toggle.
+          v1.6.2: Accept all file types in the scan document picker for .txt/EICAR testing; preserve the originating screen when backing out of Pro; make the paywall and shared app toolbar wrap and scroll at larger font scales.
           Includes pinned 18KB research v1.0.1-model and a 215-feature schema; this unvalidated candidate remains inactive as malware protection. All scanning is on-device.
           v1.2.0: Google Mobile Ads Next-Gen 1.6.0 and UMP 4.0.0 power the consented, ad-supported Free tier. Home dashboard banners and eligible interstitials after manual scans with no confirmed threats use Google's sample units in debug builds. The local device-bound Pro check is repeated before SDK initialization, banner loads and interstitial display; active Pro does not initialize AdMob or make ad requests. Google AdMob may collect the Android Advertising ID and IP addresses for ad delivery, ad measurement/reporting and analytics, and fraud prevention.
           Annual auto-renewing Pro subscription copy, status messaging and restore guidance are translated across all 51 locale folders. Google Play connectivity is required for purchase and restore; the encrypted device-bound entitlement cache supports offline Pro gating. Core scanning remains on-device.
