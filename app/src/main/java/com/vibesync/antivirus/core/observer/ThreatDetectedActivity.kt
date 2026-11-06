@@ -140,7 +140,7 @@ class ThreatDetectedActivity : ComponentActivity() {
                                 val packageName = target?.packageName
                                 val sha256 = expectedSha256
                                 if (packageName != null && sha256 != null) {
-                                    val queued = GlobalThreatIntelligenceDonationScheduler.enqueueInstalledPackage(
+                                    GlobalThreatIntelligenceDonationScheduler.enqueueInstalledPackage(
                                         context = this@ThreatDetectedActivity,
                                         packageName = packageName,
                                         detectedSha256 = sha256,
