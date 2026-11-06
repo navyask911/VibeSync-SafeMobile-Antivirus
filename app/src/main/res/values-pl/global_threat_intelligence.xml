@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="global_threat_intelligence_title">Współtwórz globalny wywiad o zagrożeniach (opcjonalnie)</string>
-    <string name="global_threat_intelligence_description">Domyślnie wyłączone. Po włączeniu SafeMobile zapyta o zgodę przed każdym przekazaniem danych. Nic nie zostanie wysłane, dopóki nie naciśniesz Przekaż. Udostępniany jest wyłącznie skrót SHA-256 złośliwego oprogramowania i 215 cech behawioralnych.</string>
+    <string name="global_threat_intelligence_description">Po włączeniu tej opcji SafeMobile automatycznie udostępnia skróty SHA-256 potwierdzonych zagrożeń oraz, jeśli są dostępne, 215 binarnych cech behawioralnych. Pliki APK, nazwy plików, ścieżki, nazwy pakietów ani identyfikatory urządzenia nigdy nie są wysyłane. Opcję można wyłączyć w dowolnym momencie.</string>
     <string name="global_threat_intelligence_donate_message">Pomóż chronić innych, anonimowo przekazując sygnaturę tego złośliwego pliku do naszej sieci trenowania AI.</string>
     <string name="global_threat_intelligence_donate">Przekaż</string>
     <string name="global_threat_intelligence_decline">Odmów</string>
