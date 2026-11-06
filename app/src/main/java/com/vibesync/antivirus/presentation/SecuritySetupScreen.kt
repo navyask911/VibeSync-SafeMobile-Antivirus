@@ -28,6 +28,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.AlertDialog
@@ -97,7 +98,7 @@ internal fun SecuritySetupScreen(
             )
             Spacer(Modifier.height(8.dp))
             Text(
-                stringResource(R.string.setup_step_label, pagerState.currentPage + 1),
+                stringResource(R.string.setup_step_progress, pagerState.currentPage + 1),
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.primary
             )
@@ -114,16 +115,16 @@ internal fun SecuritySetupScreen(
                     else -> Icons.Default.SettingsSuggest
                 }
                 val title = when (page) {
-                    0 -> R.string.setup_notifications_card_title
-                    1 -> R.string.setup_global_defense_card_title
-                    2 -> R.string.setup_folders_card_title
-                    else -> R.string.setup_advanced_card_title
+                    0 -> R.string.setup_notifications_title
+                    1 -> R.string.global_threat_intelligence_title
+                    2 -> R.string.setup_storage_title
+                    else -> R.string.battery_review_title
                 }
                 val description = when (page) {
-                    0 -> R.string.setup_notifications_card_body
-                    1 -> R.string.setup_global_defense_card_body
-                    2 -> R.string.setup_folders_card_body
-                    else -> R.string.setup_advanced_card_body
+                    0 -> R.string.setup_notifications_body
+                    1 -> R.string.global_threat_intelligence_description
+                    2 -> R.string.setup_storage_body
+                    else -> R.string.battery_review_body
                 }
                 Card(
                     modifier = Modifier.fillMaxSize().padding(vertical = 18.dp),
@@ -170,26 +171,21 @@ internal fun SecuritySetupScreen(
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 Text(stringResource(
-                                    if (notificationsGranted) R.string.setup_notifications_enabled
+                                    if (notificationsGranted) R.string.setup_permission_granted
                                     else R.string.setup_allow_notifications
                                 ))
                             }
-                            1 -> Button(
-                                onClick = { onToggleGlobalDefense(!globalDefenseEnabled) },
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Text(stringResource(
-                                    if (globalDefenseEnabled) R.string.setup_global_defense_disable
-                                    else R.string.setup_global_defense_enable
-                                ))
-                            }
+                            1 -> Switch(
+                                checked = globalDefenseEnabled,
+                                onCheckedChange = onToggleGlobalDefense
+                            )
                             2 -> Button(
                                 onClick = onChooseFolder,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 Text(stringResource(
-                                    if (folderAccessGranted) R.string.setup_folder_change
-                                    else R.string.setup_folder_choose
+                                    if (folderAccessGranted) R.string.setup_permission_granted
+                                    else R.string.setup_allow_storage
                                 ))
                             }
                             else -> Column(
@@ -199,19 +195,19 @@ internal fun SecuritySetupScreen(
                                 OutlinedButton(
                                     onClick = onReviewOverlayAccess,
                                     modifier = Modifier.fillMaxWidth()
-                                ) { Text(stringResource(R.string.setup_review_overlay_access)) }
+                                ) { Text(stringResource(R.string.posture_overlays)) }
                                 Button(
                                     onClick = onRequestBatteryOptimization,
                                     enabled = !batteryOptimizationExempt,
                                     modifier = Modifier.fillMaxWidth()
                                 ) {
                                     Text(stringResource(
-                                        if (batteryOptimizationExempt) R.string.setup_battery_exempt
-                                        else R.string.setup_allow_background
+                                        if (batteryOptimizationExempt) R.string.setup_permission_granted
+                                        else R.string.battery_review_action
                                     ))
                                 }
                                 Text(
-                                    stringResource(R.string.setup_overlay_optional_note),
+                                    stringResource(R.string.posture_overlay_power),
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     textAlign = TextAlign.Center
@@ -250,7 +246,7 @@ internal fun SecuritySetupScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(stringResource(
-                    if (pagerState.currentPage < 3) R.string.setup_next_step
+                    if (pagerState.currentPage < 3) R.string.setup_continue
                     else R.string.setup_finish
                 ))
             }
