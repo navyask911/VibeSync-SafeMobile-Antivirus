@@ -63,6 +63,10 @@ if "operation.result.addListener" not in worker:
     errors.append("WorkManager queue persistence failures must be logged.")
 if "EXTRA_SHA256" not in notifier:
     errors.append("The install incident must bind donation to the detected hash.")
+if "enqueueInstalledPackage(context, packageName, validThreatHash, eventId)" not in notifier:
+    errors.append("Global opt-in must queue install-threat hashes before notification permission checks.")
+if "vm.contributeThreatHash(context, it)" not in screen:
+    errors.append("The scan UI must automatically queue hashes when global contribution is enabled.")
 
 manifest = Path("app/src/main/AndroidManifest.xml").read_text(encoding="utf-8")
 if "CoroutineWorker" not in worker or "NetworkType.CONNECTED" not in worker:
