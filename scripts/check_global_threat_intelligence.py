@@ -21,8 +21,10 @@ if donor.count("GlobalThreatIntelligenceConsent.isEnabled(app)") < 4:
     errors.append("The client must check consent before extraction and immediately before upload.")
 if "result.verdict != ScanVerdict.THREAT" not in donor:
     errors.append("Only confirmed THREAT results may be donated.")
-if "FEATURE_COUNT = 215" not in donor or "vector.size != FEATURE_COUNT" not in donor:
-    errors.append("The feature vector must contain exactly 215 values.")
+if "FEATURE_COUNT = 215" not in donor or "features.size == FEATURE_COUNT" not in donor:
+    errors.append("Any transmitted feature vector must contain exactly 215 values.")
+if '.put("verdict", ScanVerdict.THREAT.name)' not in donor:
+    errors.append("Every threat contribution must identify its confirmed THREAT verdict.")
 if '.put("sha256", sha256)' not in donor or '.put("features", features)' not in donor:
     errors.append("The JSON payload must contain the malware hash and feature vector.")
 if ".followRedirects(false)" not in donor or ".followSslRedirects(false)" not in donor:
