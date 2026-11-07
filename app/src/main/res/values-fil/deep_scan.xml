@@ -1,0 +1,4 @@
+<resources>
+    <string name="deep_scan_folder">I-scan ang folder (malalim na pag-scan)</string>
+    <string name="quarantine_manual_delete">Na-secure ang file sa Quarantine. Pakitanggal nang manu-mano ang orihinal.</string>
+</resources>
