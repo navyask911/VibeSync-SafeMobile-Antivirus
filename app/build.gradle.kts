@@ -42,7 +42,6 @@ android {
  }
  defaultConfig {
   applicationId = "com.vibesync.antivirus"
-  ndk { abiFilters += listOf("arm64-v8a", "armeabi-v7a") }
   minSdk = 26
   targetSdk = 36
   versionCode = 20261135
@@ -77,7 +76,11 @@ android {
   release {
    isMinifyEnabled = true
    isShrinkResources = true
-   ndk { debugSymbolLevel = "FULL" }
+   // Keep x86_64 available to debug emulator tests; production APK/AAB ships ARM only.
+   ndk {
+    abiFilters += listOf("arm64-v8a", "armeabi-v7a")
+    debugSymbolLevel = "FULL"
+   }
    if (releaseSigningEnabled) signingConfig = signingConfigs.getByName("release")
    proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
   }
@@ -101,7 +104,7 @@ val yaraXAndroidAbis = providers.gradleProperty("yaraxAndroidAbis").orNull
     ?.split(",")?.map { it.trim() }?.filter { it.isNotEmpty() }?.distinct()
     ?: listOf("arm64-v8a", "armeabi-v7a")
 require(yaraXAndroidAbis.isNotEmpty() &&
-    yaraXAndroidAbis.all { it in setOf("arm64-v8a", "armeabi-v7a") }) {
+    yaraXAndroidAbis.all { it in setOf("arm64-v8a", "armeabi-v7a", "x86_64") }) {
     "yaraxAndroidAbis must contain supported Android ABI names."
 }
 
