@@ -735,7 +735,7 @@ import kotlinx.coroutines.launch
      )
     }
     Column(Modifier.padding(start = 10.dp).weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-     Text(stringResource(toolbarTitleResource), modifier = Modifier.fillMaxWidth(), style = MaterialTheme.typography.titleLarge, maxLines = 1, overflow = TextOverflow.Ellipsis,
+     Text(stringResource(toolbarTitleResource), modifier = Modifier.fillMaxWidth(), style = MaterialTheme.typography.titleLarge,
       fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface,
       maxLines = 2, softWrap = true, overflow = TextOverflow.Ellipsis)
      toolbarSubtitleResource?.let { subtitle ->
