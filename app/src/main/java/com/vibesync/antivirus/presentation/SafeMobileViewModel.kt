@@ -249,6 +249,11 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
         listOf(repository.scanUri(uri))
     }
 
+    /** Use the existing hash/YARA/ML scan pipeline for a user-selected folder tree. */
+    fun scanFolderTree(uri: Uri) = runScan(manualScan = true) { onProgress ->
+        repository.scanFolderTree(uri, onProgress)
+    }
+
     fun cancelScan() {
         scanJob?.cancel()
     }
@@ -282,15 +287,24 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
         }
     }
 
-    fun quarantineSelectedFile(uri: Uri, expectedSha256: String?) {
+    fun quarantineSelectedFile(uri: Uri, expectedSha256: String?, onOriginalRetained: () -> Unit = {}) {
         viewModelScope.launch {
             mutableState.update { it.copy(messageResource = null, messageText = null) }
-            runCatching { repository.quarantineSelectedFile(uri, expectedSha256) }
-                .onSuccess { message ->
-                    mutableState.update { it.copy(messageText = message, messageResource = null) }
-                    refreshQuarantine()
+            try {
+                val outcome = repository.quarantineSelectedFile(uri, expectedSha256)
+                val message = if (outcome.originalRemoved) {
+                    UiText(R.string.quarantine_success_removed, listOf(outcome.privateCopy.name))
+                } else {
+                    UiText(R.string.quarantine_success_copy_only, listOf(outcome.privateCopy.name))
                 }
-                .onFailure { mutableState.update { it.copy(messageText = null, messageResource = R.string.quarantine_failed) } }
+                mutableState.update { it.copy(messageText = message, messageResource = null) }
+                refreshQuarantine()
+                if (!outcome.originalRemoved) onOriginalRetained()
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (_: Exception) {
+                mutableState.update { it.copy(messageText = null, messageResource = R.string.quarantine_failed) }
+            }
         }
     }
 

@@ -47,6 +47,7 @@ internal fun ProtectionToolsHub(
     onOpen: (String) -> Unit,
     onScanInstalled: () -> Unit,
     onPickApk: () -> Unit,
+    onScanFolder: () -> Unit,
     installSentinelActive: Boolean = false,
     foldersActive: Boolean = false,
     pendingActions: Int = 0,
@@ -89,7 +90,7 @@ internal fun ProtectionToolsHub(
                         Text(stringResource(R.string.security_scan_now),
                             style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
                         Text(stringResource(R.string.scan_explanation),
-                            style = MaterialTheme.typography.bodySmall,
+                            style = MaterialTheme.typography.bodySmall, maxLines = 3, overflow = TextOverflow.Ellipsis,
                             color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
@@ -103,7 +104,14 @@ internal fun ProtectionToolsHub(
                         contentColor = MaterialTheme.colorScheme.secondary
                     ), modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) {
                     Icon(Icons.Outlined.FolderOpen, contentDescription = null)
-                    Text(stringResource(R.string.scan_selected), modifier = Modifier.padding(start = 8.dp))
+                    Text(stringResource(R.string.scan_selected), modifier = Modifier.padding(start = 8.dp),
+                        maxLines = 2, overflow = TextOverflow.Ellipsis)
+                }
+                OutlinedButton(onClick = onScanFolder, shape = CircleShape,
+                    modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) {
+                    Icon(Icons.Outlined.FolderOpen, contentDescription = null)
+                    Text(stringResource(R.string.deep_scan_folder), modifier = Modifier.padding(start = 8.dp),
+                        maxLines = 2, overflow = TextOverflow.Ellipsis)
                 }
             }
         }
@@ -163,9 +171,9 @@ private fun ToolHubRow(
             icon()
         }
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-            Text(stringResource(titleResource), style = MaterialTheme.typography.bodyMedium,
+            Text(stringResource(titleResource), style = MaterialTheme.typography.bodyMedium, maxLines = 2, overflow = TextOverflow.Ellipsis,
                 fontWeight = FontWeight.SemiBold, maxLines = 2, overflow = TextOverflow.Ellipsis)
-            Text(stringResource(bodyResource), style = MaterialTheme.typography.bodySmall,
+            Text(stringResource(bodyResource), style = MaterialTheme.typography.bodySmall, maxLines = 3, overflow = TextOverflow.Ellipsis,
                 color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
         }
         Text(status, style = MaterialTheme.typography.labelMedium,

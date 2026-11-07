@@ -149,6 +149,7 @@ import kotlinx.coroutines.launch
  val adMobManager = remember(safeMobileApp) { safeMobileApp.adMobManager }
  val adMobState by adMobManager.state.collectAsStateWithLifecycle()
  var fullScreenAlertsGranted by remember(context) { mutableStateOf(FullScreenAlertAccess.isGranted(context)) }
+ var overlayAccessGranted by remember(context) { mutableStateOf(Settings.canDrawOverlays(context)) }
  val powerManager = remember(context) { context.getSystemService(Context.POWER_SERVICE) as? PowerManager }
  var batteryUnrestricted by remember(context) {
   mutableStateOf(powerManager?.isIgnoringBatteryOptimizations(context.packageName) == true)
@@ -231,7 +232,7 @@ import kotlinx.coroutines.launch
  var onboardingComplete by remember(context) { mutableStateOf(
   onboardingPrefs.getBoolean(OnboardingPrefs.SECURITY_SETUP_V166_COMPLETED, false)
  ) }
- var storageAccessGranted by remember(context) { mutableStateOf(hasSharedStorageAccess(context)) }
+ var storageAccessGranted by remember(context) { mutableStateOf(StorageAccessPreferences.hasAccess(context)) }
  var notificationsGranted by remember(context) { mutableStateOf(hasNotificationAccess(context)) }
  var sentinelOptIn by remember(context) { mutableStateOf(onboardingPrefs.getBoolean(OnboardingPrefs.SENTINEL_OPT_IN, isStorageSentinelRunning(context))) }
  val statusResource = when {
@@ -272,7 +273,7 @@ import kotlinx.coroutines.launch
  val requestPrivacyAcknowledgement: (() -> Unit) -> Unit = { action ->
   if (privacyAccepted) action() else { pendingSensitiveAction = action; showPrivacyDisclosure = true }
  }
- var monitoringRunning by remember(context) { mutableStateOf(isStorageSentinelRunning(context) && hasSharedStorageAccess(context)) }
+ var monitoringRunning by remember(context) { mutableStateOf(isStorageSentinelRunning(context) && StorageAccessPreferences.hasAccess(context)) }
  var pendingUninstallPackage by remember { mutableStateOf<String?>(null) }
  var showNotificationPermissionPrompt by remember { mutableStateOf(false) }
   val notificationPermissionPromptKey = "notification_permission_first_prompted"
@@ -412,6 +413,14 @@ import kotlinx.coroutines.launch
    vm.scanSelected(selectedUri)
   }
  }
+ val deepFolderPicker = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri: Uri? ->
+  uri?.let { treeUri ->
+   runCatching { context.contentResolver.takePersistableUriPermission(treeUri, Intent.FLAG_GRANT_READ_URI_PERMISSION) }
+    .onFailure { error -> android.util.Log.w("SafeMobileDeepScan", "Could not persist selected tree grant; scan uses the current grant", error) }
+   navigateToDestination("scan")
+   vm.scanFolderTree(treeUri)
+  }
+ }
  val definitionsPicker=rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri:Uri? -> uri?.let(vm::importOfflineDefinitions) }
   val pendingYaraPicker=rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri:Uri? -> uri?.let(vm::importPendingYaraRule) }
  val restorePicker=rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/octet-stream")) { uri:Uri? ->
@@ -462,7 +471,7 @@ import kotlinx.coroutines.launch
     sentinelOptIn = true
     runCatching { context.startForegroundService(Intent(context, StorageSentinelService::class.java)) }
      .onFailure { Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show() }
-    Handler(Looper.getMainLooper()).postDelayed({ monitoringRunning = isStorageSentinelRunning(context) && hasSharedStorageAccess(context) }, 900L)
+    Handler(Looper.getMainLooper()).postDelayed({ monitoringRunning = isStorageSentinelRunning(context) && StorageAccessPreferences.hasAccess(context) }, 900L)
    } else {
     Toast.makeText(context,
      if (customLimitReached) R.string.ui_sentinel_folder_limit else R.string.ui_folder_access_not_granted,
@@ -473,14 +482,14 @@ import kotlinx.coroutines.launch
  }
  val requestStorage: () -> Unit = { navigateToDestination("sentinel") }
  val enableSentinel: () -> Unit = {
-  if (!hasSharedStorageAccess(context)) requestStorage()
+  if (!StorageAccessPreferences.hasAccess(context)) requestStorage()
   else runCatching { context.startForegroundService(Intent(context, StorageSentinelService::class.java)) }
    .onSuccess {
     securityPrefs.edit().putBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, true).apply()
     sentinelDesired = true
     sentinelOptIn = true
     Handler(Looper.getMainLooper()).postDelayed({
-     storageAccessGranted = hasSharedStorageAccess(context)
+     storageAccessGranted = StorageAccessPreferences.hasAccess(context)
      monitoringRunning = isStorageSentinelRunning(context) && storageAccessGranted
     }, 900L)
    }
@@ -539,8 +548,9 @@ import kotlinx.coroutines.launch
     if (privacyAccepted) vm.refreshTrustOverrides()
     fullScreenAlertsGranted = FullScreenAlertAccess.isGranted(context)
     batteryUnrestricted = powerManager?.isIgnoringBatteryOptimizations(context.packageName) == true
-    storageAccessGranted = hasSharedStorageAccess(context)
+    overlayAccessGranted = Settings.canDrawOverlays(context)
     folderUris = StorageAccessPreferences.accessibleTreeUris(context)
+    storageAccessGranted = folderUris.isNotEmpty()
     vm.refreshSecurityScore()
     if (privacyAccepted) postureVm.refreshAuditSilently()
     ownerManager.refreshState()
@@ -557,7 +567,7 @@ import kotlinx.coroutines.launch
      runCatching { context.startForegroundService(Intent(context, StorageSentinelService::class.java)) }
       .onFailure { Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show() }
      Handler(Looper.getMainLooper()).postDelayed({
-      monitoringRunning = isStorageSentinelRunning(context) && hasSharedStorageAccess(context)
+      monitoringRunning = isStorageSentinelRunning(context) && StorageAccessPreferences.hasAccess(context)
      }, 700L)
     }
     notificationsGranted = hasNotificationAccess(context)
@@ -592,6 +602,8 @@ import kotlinx.coroutines.launch
   lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
    while (true) {
     fullScreenAlertsGranted = FullScreenAlertAccess.isGranted(context)
+    batteryUnrestricted = powerManager?.isIgnoringBatteryOptimizations(context.packageName) == true
+    overlayAccessGranted = Settings.canDrawOverlays(context)
     folderUris = StorageAccessPreferences.accessibleTreeUris(context)
     storageAccessGranted = folderUris.isNotEmpty()
     monitoringRunning = isStorageSentinelRunning(context) && storageAccessGranted
@@ -629,6 +641,7 @@ import kotlinx.coroutines.launch
      globalDefenseEnabled = globalDefenseEnabled,
      folderAccessGranted = storageAccessGranted,
      batteryOptimizationExempt = batteryUnrestricted,
+     overlayAccessGranted = overlayAccessGranted,
      onRequestNotifications = {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !hasNotificationAccess(context)) {
        pendingAlertEnable = true
@@ -653,20 +666,26 @@ import kotlinx.coroutines.launch
        }
      },
      onReviewOverlayAccess = {
-      val overlayIntent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:${context.packageName}"))
-      runCatching { context.startActivity(overlayIntent) }
-       .onFailure {
-        runCatching { context.startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:${context.packageName}"))) }
-         .onFailure { Toast.makeText(context, R.string.battery_review_unavailable, Toast.LENGTH_LONG).show() }
-       }
+      overlayAccessGranted = Settings.canDrawOverlays(context)
+      if (!overlayAccessGranted) {
+       val overlayIntent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:${context.packageName}"))
+       runCatching { context.startActivity(overlayIntent) }
+        .onFailure {
+         runCatching { context.startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:${context.packageName}"))) }
+          .onFailure { Toast.makeText(context, R.string.battery_review_unavailable, Toast.LENGTH_LONG).show() }
+        }
+      }
      },
      onRequestBatteryOptimization = {
-      val batteryIntent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.parse("package:${context.packageName}"))
-      runCatching { context.startActivity(batteryIntent) }
-       .onFailure {
-        runCatching { context.startActivity(Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)) }
-         .onFailure { Toast.makeText(context, R.string.battery_review_unavailable, Toast.LENGTH_LONG).show() }
-       }
+      batteryUnrestricted = powerManager?.isIgnoringBatteryOptimizations(context.packageName) == true
+      if (!batteryUnrestricted) {
+       val batteryIntent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.parse("package:${context.packageName}"))
+       runCatching { context.startActivity(batteryIntent) }
+        .onFailure {
+         runCatching { context.startActivity(Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)) }
+          .onFailure { Toast.makeText(context, R.string.battery_review_unavailable, Toast.LENGTH_LONG).show() }
+        }
+      }
      },
      onFinish = finishOnboarding,
      onSkipSetup = finishOnboarding
@@ -716,7 +735,7 @@ import kotlinx.coroutines.launch
      )
     }
     Column(Modifier.padding(start = 10.dp).weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-     Text(stringResource(toolbarTitleResource), modifier = Modifier.fillMaxWidth(), style = MaterialTheme.typography.titleLarge,
+     Text(stringResource(toolbarTitleResource), modifier = Modifier.fillMaxWidth(), style = MaterialTheme.typography.titleLarge, maxLines = 1, overflow = TextOverflow.Ellipsis,
       fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface,
       maxLines = 2, softWrap = true, overflow = TextOverflow.Ellipsis)
      toolbarSubtitleResource?.let { subtitle ->
@@ -825,6 +844,7 @@ import kotlinx.coroutines.launch
               apkPicker.launch(arrayOf("*/*"))
              }
             },
+            onScanFolder = { requestPrivacyAcknowledgement { deepFolderPicker.launch(null) } },
             installSentinelActive = installSentinelRunning,
             foldersActive = monitoringRunning ||
              StorageAccessPreferences.hasRole(context, StorageAccessPreferences.WHATSAPP) || customFolderUris.isNotEmpty(),
@@ -1109,6 +1129,7 @@ import kotlinx.coroutines.launch
         if (selectedDestination == "guardian") GuardianPanel()
         if (selectedDestination == "posture") DevicePostureScreen(
          state = postureState, alertsAvailable = securityAlertsEnabled && notificationsGranted,
+         actionableActionsCount = advisorState.pendingCount,
          onRefresh = { requestPrivacyAcknowledgement { postureVm.refresh() } },
          onMonitoringChanged = { enabled ->
           if (enabled) requestPrivacyAcknowledgement { postureVm.setMonitoring(context, true) }
@@ -1119,7 +1140,7 @@ import kotlinx.coroutines.launch
         if (selectedDestination == "phishing") PhishingPanel(sharedText, repository) { onSharedTextConsumed() }
         if (selectedDestination == "cleaner") StorageCleanerPanel()
         state.messageResource?.takeUnless { it == R.string.scan_complete && selectedDestination in listOf("home", "scan") }?.let { message -> Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant)) { Text(stringResource(message),Modifier.padding(16.dp),color=MaterialTheme.colorScheme.onSurface,style=MaterialTheme.typography.bodySmall) } }
-        state.messageText?.let { message -> Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant)) { Text(message.resolve(context),Modifier.padding(16.dp),color=MaterialTheme.colorScheme.onSurface,style=MaterialTheme.typography.bodySmall) } }
+        state.messageText?.let { message -> Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant)) { Text(message.resolve(context),Modifier.padding(16.dp),color=MaterialTheme.colorScheme.onSurface,style=MaterialTheme.typography.bodySmall,maxLines=3,overflow=TextOverflow.Ellipsis) } }
         if(selectedDestination == "scan" && state.results.isNotEmpty()) {
          ScanResultsScreen(
           results = state.results,
@@ -1340,7 +1361,9 @@ pendingQuarantine?.let { flagged ->
    text={ Text(stringResource(R.string.quarantine_confirm_body)) },
    confirmButton={ TextButton(onClick={
     val uri = runCatching { Uri.parse(flagged.sourceUri) }.getOrNull()
-    if (uri != null) vm.quarantineSelectedFile(uri, flagged.sha256)
+    if (uri != null) vm.quarantineSelectedFile(uri, flagged.sha256) {
+     Toast.makeText(context, R.string.quarantine_manual_delete, Toast.LENGTH_LONG).show()
+    }
     pendingQuarantine = null
    }) { Text(stringResource(R.string.quarantine_confirm_action)) } },
    dismissButton={ TextButton(onClick={ pendingQuarantine = null }) { Text(stringResource(R.string.close)) } }
@@ -1412,7 +1435,7 @@ pendingQuarantine?.let { flagged ->
     TextButton(onClick = {
      showStoragePermissionPrompt = false
      pendingSentinelEnable = false
-     storageAccessGranted = hasSharedStorageAccess(context)
+     storageAccessGranted = StorageAccessPreferences.hasAccess(context)
      navigateToDestination("home")
     }) { Text(stringResource(R.string.setup_continue_limited)) }
    }

@@ -33,7 +33,7 @@ jobs:
           set -euo pipefail
           rustup toolchain install stable --profile minimal
           rustup default stable
-          rustup target add armv7-linux-androideabi aarch64-linux-android x86_64-linux-android
+          rustup target add armv7-linux-androideabi aarch64-linux-android
           SDK_ROOT="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-}}"
           test -n "$SDK_ROOT"
           NDK_DIR="$(find "$SDK_ROOT/ndk" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -n 1)"
@@ -235,7 +235,7 @@ jobs:
           set -euo pipefail
           rustup toolchain install stable --profile minimal
           rustup default stable
-          rustup target add armv7-linux-androideabi aarch64-linux-android x86_64-linux-android
+          rustup target add armv7-linux-androideabi aarch64-linux-android
           SDK_ROOT="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-}}"
           test -n "$SDK_ROOT"
           NDK_DIR="$(find "$SDK_ROOT/ndk" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -n 1)"
@@ -359,7 +359,7 @@ jobs:
           set -euo pipefail
           rustup toolchain install stable --profile minimal
           rustup default stable
-          rustup target add armv7-linux-androideabi aarch64-linux-android x86_64-linux-android
+          rustup target add armv7-linux-androideabi aarch64-linux-android
           SDK_ROOT="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-}}"
           test -n "$SDK_ROOT"
           NDK_DIR="$(find "$SDK_ROOT/ndk" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -n 1)"

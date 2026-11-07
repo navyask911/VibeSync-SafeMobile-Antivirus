@@ -44,6 +44,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.vibesync.antivirus.R
 import kotlinx.coroutines.launch
@@ -56,6 +57,7 @@ internal fun SecuritySetupScreen(
     globalDefenseEnabled: Boolean,
     folderAccessGranted: Boolean,
     batteryOptimizationExempt: Boolean,
+    overlayAccessGranted: Boolean,
     initialPage: Int = 0,
     onRequestNotifications: () -> Unit,
     onToggleGlobalDefense: (Boolean) -> Unit,
@@ -155,20 +157,25 @@ internal fun SecuritySetupScreen(
                             stringResource(title),
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Bold,
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Center,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis
                         )
                         Spacer(Modifier.height(10.dp))
                         Text(
                             stringResource(description),
                             style = MaterialTheme.typography.bodyMedium,
                             textAlign = TextAlign.Center,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            maxLines = 5,
+                            overflow = TextOverflow.Ellipsis
                         )
                         Spacer(Modifier.height(24.dp))
                         when (page) {
                             0 -> Button(
                                 onClick = onRequestNotifications,
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier.fillMaxWidth(),
+                                enabled = !notificationsGranted
                             ) {
                                 Text(stringResource(
                                     if (notificationsGranted) R.string.setup_permission_granted
@@ -181,7 +188,8 @@ internal fun SecuritySetupScreen(
                             )
                             2 -> Button(
                                 onClick = onChooseFolder,
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier.fillMaxWidth(),
+                                enabled = !folderAccessGranted
                             ) {
                                 Text(stringResource(
                                     if (folderAccessGranted) R.string.setup_permission_granted
@@ -194,8 +202,12 @@ internal fun SecuritySetupScreen(
                             ) {
                                 OutlinedButton(
                                     onClick = onReviewOverlayAccess,
-                                    modifier = Modifier.fillMaxWidth()
-                                ) { Text(stringResource(R.string.posture_overlays)) }
+                                    modifier = Modifier.fillMaxWidth(),
+                                    enabled = !overlayAccessGranted
+                                ) { Text(stringResource(
+                                    if (overlayAccessGranted) R.string.setup_permission_granted
+                                    else R.string.posture_overlays
+                                )) }
                                 Button(
                                     onClick = onRequestBatteryOptimization,
                                     enabled = !batteryOptimizationExempt,

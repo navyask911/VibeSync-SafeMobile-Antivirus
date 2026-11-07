@@ -17,6 +17,7 @@ class DevicePostureRepository(context: Context) {
     private val inspector = DevicePostureInspector(app)
     private val store by lazy { EncryptedPostureSnapshotStore(app) }
     private val mutableReport = MutableStateFlow<DevicePostureReport?>(null)
+    private val auditMutex = Mutex()
     val report = mutableReport.asStateFlow()
     private val prefs get() = app.getSharedPreferences(DevicePostureMonitor.PREFS, Context.MODE_PRIVATE)
 
@@ -25,7 +26,12 @@ class DevicePostureRepository(context: Context) {
 
     suspend fun refresh(): DevicePostureReport? = withContext(Dispatchers.IO) {
         if (!consented()) return@withContext null
-        inspector.inspect().retainingUnavailable(mutableReport.value).also { mutableReport.value = it }
+        auditMutex.withLock {
+            val previous = mutableReport.value
+            val observed = inspector.inspect().retainingUnavailable(previous)
+            mutableReport.value = observed
+            observed
+        }
     }
 
     fun status() = PostureMonitorStatus(DevicePostureMonitor.isEnabled(app),

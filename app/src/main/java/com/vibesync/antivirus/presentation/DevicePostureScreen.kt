@@ -124,6 +124,7 @@ fun DevicePostureDashboardCard(state: DevicePostureUiState, onOpen: () -> Unit) 
 fun DevicePostureScreen(
     state: DevicePostureUiState,
     alertsAvailable: Boolean,
+    actionableActionsCount: Int = 0,
     onRefresh: () -> Unit,
     onMonitoringChanged: (Boolean) -> Unit,
     onEnableAlerts: () -> Unit
@@ -139,17 +140,19 @@ fun DevicePostureScreen(
     }
     Column(Modifier.animateContentSize(), verticalArrangement = Arrangement.spacedBy(14.dp)) {
         Text(stringResource(R.string.posture_title), style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.Bold)
+            fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis)
         ExpandableText(stringResource(R.string.posture_intro), maxLines = 3)
         ExpandableText(stringResource(R.string.posture_risk_note), maxLines = 3)
         Button(onClick = onRefresh, enabled = !state.refreshing, modifier = Modifier.fillMaxWidth()) {
             if (state.refreshing) CircularProgressIndicator(Modifier.size(18.dp).padding(end = 4.dp), strokeWidth = 2.dp)
             Text(stringResource(if (state.refreshing) R.string.posture_checking else R.string.posture_refresh))
         }
-        if (state.failed) Text(stringResource(R.string.posture_failed), color = PostureWarning)
+        if (state.failed) Text(stringResource(R.string.posture_failed), color = PostureWarning, maxLines = 2, overflow = TextOverflow.Ellipsis)
+        Text(stringResource(R.string.v140_pending_actions, actionableActionsCount), style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.SemiBold, maxLines = 2, overflow = TextOverflow.Ellipsis)
         state.report?.let { report ->
             Text(stringResource(R.string.posture_checked_at, displayPostureTime(report.checkedAt)),
-                style = MaterialTheme.typography.labelSmall)
+                style = MaterialTheme.typography.labelSmall, maxLines = 2, overflow = TextOverflow.Ellipsis)
             if (report.highRiskAppCount > 0) Text(pluralStringResource(R.plurals.l10n_posture_apps, report.highRiskAppCount, report.highRiskAppCount),
                 color = PostureWarning, fontWeight = FontWeight.Bold)
         }
@@ -158,7 +161,7 @@ fun DevicePostureScreen(
                 Text(stringResource(R.string.posture_monitor_title), style = MaterialTheme.typography.titleMedium)
                 ExpandableText(stringResource(R.string.posture_monitor_description), maxLines = 3)
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(stringResource(R.string.posture_monitor_toggle), modifier = Modifier.weight(1f))
+                    Text(stringResource(R.string.posture_monitor_toggle), modifier = Modifier.weight(1f), maxLines = 2, overflow = TextOverflow.Ellipsis)
                     Switch(checked = state.monitor?.enabled ?: true, onCheckedChange = onMonitoringChanged)
                 }
                 val monitor = state.monitor
@@ -177,26 +180,27 @@ fun DevicePostureScreen(
                 }
             }
         }
-        PostureAccess.entries.forEach { access ->
-            CyberCard(Modifier.fillMaxWidth()) {
-                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Text(stringResource(PostureText.title(access)), style = MaterialTheme.typography.titleMedium)
-                    if (access == PostureAccess.OVERLAY) ExpandableText(stringResource(R.string.posture_overlay_limit), maxLines = 3)
-                    val report = state.report
-                    if (report == null) Text(stringResource(R.string.posture_not_checked), style = MaterialTheme.typography.bodySmall)
-                    else {
-                        if (access in report.unavailable) Text(stringResource(R.string.posture_unavailable), color = PostureWarning,
-                            style = MaterialTheme.typography.bodySmall)
-                        val findings = report.findings.filter { it.access == access }
-                            .sortedWith(compareByDescending<PostureFinding> { it.highRisk }.thenBy { it.appName.lowercase() })
-                        if (findings.isEmpty() && access !in report.unavailable) Text(stringResource(R.string.posture_no_access),
-                            style = MaterialTheme.typography.bodySmall)
-                        findings.forEachIndexed { index, finding ->
-                            if (index > 0) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-                            PostureFindingRow(finding) {
-                                if (!PostureSettingsLinks.open(context, finding))
-                                    Toast.makeText(context, R.string.posture_settings_missing, Toast.LENGTH_LONG).show()
-                            }
+        PostureAccess.entries.forEachIndexed { sectionIndex, access ->
+            Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                if (sectionIndex > 0) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+                Text(stringResource(PostureText.title(access)), style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                if (access == PostureAccess.OVERLAY) ExpandableText(stringResource(R.string.posture_overlay_limit), maxLines = 3)
+                val report = state.report
+                if (report == null) Text(stringResource(R.string.posture_not_checked), style = MaterialTheme.typography.bodySmall,
+                    maxLines = 3, overflow = TextOverflow.Ellipsis)
+                else {
+                    if (access in report.unavailable) Text(stringResource(R.string.posture_unavailable), color = PostureWarning,
+                        style = MaterialTheme.typography.bodySmall, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                    val findings = report.findings.filter { it.access == access }
+                        .sortedWith(compareByDescending<PostureFinding> { it.highRisk }.thenBy { it.appName.lowercase() })
+                    if (findings.isEmpty() && access !in report.unavailable) Text(stringResource(R.string.posture_no_access),
+                        style = MaterialTheme.typography.bodySmall, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                    findings.forEachIndexed { index, finding ->
+                        if (index > 0) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+                        PostureFindingRow(finding) {
+                            if (!PostureSettingsLinks.open(context, finding))
+                                Toast.makeText(context, R.string.posture_settings_missing, Toast.LENGTH_LONG).show()
                         }
                     }
                 }
@@ -208,9 +212,9 @@ fun DevicePostureScreen(
 @Composable
 private fun PostureFindingRow(finding: PostureFinding, onFix: () -> Unit) {
     Column(verticalArrangement = Arrangement.spacedBy(7.dp)) {
-        Text(finding.appName, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+        Text(finding.appName, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, maxLines = 2, overflow = TextOverflow.Ellipsis)
         Text(finding.componentName ?: finding.packageName, style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant)
+            color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
         if (finding.highRisk) Text(stringResource(R.string.posture_high_risk), color = PostureWarning,
             style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
         if (finding.systemApp != false) Text(stringResource(if (finding.systemApp == true) R.string.posture_system

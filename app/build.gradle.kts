@@ -42,11 +42,12 @@ android {
  }
  defaultConfig {
   applicationId = "com.vibesync.antivirus"
+  ndk { abiFilters += listOf("arm64-v8a", "armeabi-v7a") }
   minSdk = 26
   targetSdk = 36
-  versionCode = 20261132
-  versionName = "1.6.6"
-  // [release-v1.6.6] smart onboarding and consent-correct threat contribution UX
+  versionCode = 20261135
+  versionName = "1.6.7"
+  // [release-v1.6.7] UI state sync, permission lifecycle, SAF deep scan and release hardening
   testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   buildConfigField("String", "FEED_MANIFEST_PUBLIC_KEY_B64", cfg(feedManifestPublicKey))
   buildConfigField("Boolean", "FEED_MANIFEST_KEY_CONFIGURED", (!feedManifestPublicKey.isBlank()).toString())
@@ -98,9 +99,9 @@ val yaraXSourceDirectory = layout.buildDirectory.dir("native/yarax_android")
 val yaraXGeneratedJniDirectory = layout.buildDirectory.dir("generated/yarax-jniLibs")
 val yaraXAndroidAbis = providers.gradleProperty("yaraxAndroidAbis").orNull
     ?.split(",")?.map { it.trim() }?.filter { it.isNotEmpty() }?.distinct()
-    ?: listOf("arm64-v8a", "armeabi-v7a", "x86_64")
+    ?: listOf("arm64-v8a", "armeabi-v7a")
 require(yaraXAndroidAbis.isNotEmpty() &&
-    yaraXAndroidAbis.all { it in setOf("arm64-v8a", "armeabi-v7a", "x86_64") }) {
+    yaraXAndroidAbis.all { it in setOf("arm64-v8a", "armeabi-v7a") }) {
     "yaraxAndroidAbis must contain supported Android ABI names."
 }
 
