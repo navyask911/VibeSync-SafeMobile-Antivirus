@@ -1,0 +1,4 @@
+<resources>
+    <string name="deep_scan_folder">Сканувати папку (поглиблене сканування)</string>
+    <string name="quarantine_manual_delete">Файл захищено в карантині. Будь ласка, видаліть оригінал вручну.</string>
+</resources>

@@ -1,0 +1,4 @@
+<resources>
+    <string name="deep_scan_folder">Scansiona cartella (scansione approfondita)</string>
+    <string name="quarantine_manual_delete">File messo in quarantena. Elimina manualmente il file originale.</string>
+</resources>

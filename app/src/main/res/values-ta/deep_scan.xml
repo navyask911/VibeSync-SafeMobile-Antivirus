@@ -1,0 +1,4 @@
+<resources>
+    <string name="deep_scan_folder">கோப்புறையை ஸ்கேன் செய் (ஆழமான ஸ்கேன்)</string>
+    <string name="quarantine_manual_delete">கோப்பு தனிமைப்படுத்தலில் பாதுகாப்பாக வைக்கப்பட்டது. அசல் கோப்பை கைமுறையாக நீக்கவும்.</string>
+</resources>

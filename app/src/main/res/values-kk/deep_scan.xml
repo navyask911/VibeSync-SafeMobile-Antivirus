@@ -1,0 +1,4 @@
+<resources>
+    <string name="deep_scan_folder">Қалтаны сканерлеу (терең сканерлеу)</string>
+    <string name="quarantine_manual_delete">Файл карантинде қорғалды. Бастапқы файлды қолмен жойыңыз.</string>
+</resources>

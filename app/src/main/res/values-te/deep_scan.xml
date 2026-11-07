@@ -1,0 +1,4 @@
+<resources>
+    <string name="deep_scan_folder">ఫోల్డర్ స్కాన్ (లోతైన స్కాన్)</string>
+    <string name="quarantine_manual_delete">ఫైల్ క్వారంటైన్‌లో భద్రపరచబడింది. దయచేసి అసలు ఫైల్‌ను మాన్యువల్‌గా తొలగించండి.</string>
+</resources>

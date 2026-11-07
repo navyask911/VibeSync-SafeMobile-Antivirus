@@ -1,0 +1,4 @@
+<resources>
+    <string name="deep_scan_folder">Skenovať priečinok (hĺbková kontrola)</string>
+    <string name="quarantine_manual_delete">Súbor je bezpečne uložený v karanténe. Pôvodný súbor odstráňte manuálne.</string>
+</resources>

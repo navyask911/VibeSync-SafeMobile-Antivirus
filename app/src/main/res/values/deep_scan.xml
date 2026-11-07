@@ -1,0 +1,4 @@
+<resources>
+    <string name="deep_scan_folder">Scan Folder (Deep Scan)</string>
+    <string name="quarantine_manual_delete">File secured in Quarantine. Please delete the original manually.</string>
+</resources>
