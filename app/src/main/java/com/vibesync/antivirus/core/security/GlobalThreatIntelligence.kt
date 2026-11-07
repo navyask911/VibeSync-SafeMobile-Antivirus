@@ -52,19 +52,19 @@ internal object GlobalThreatIntelligenceConsent {
 internal class GlobalThreatIntelligenceDonor(context: Context) {
     private val app = context.applicationContext
 
-    suspend fun donateInstalledPackage(packageName: String, detectedSha256: String): Boolean =
+    suspend fun donateInstalledPackage(packageName: String, detectedSha256: String, oneTimeConsent: Boolean = false): Boolean =
         withContext(Dispatchers.IO) {
-            if (!GlobalThreatIntelligenceConsent.isEnabled(app)) return@withContext false
+            if (!oneTimeConsent && !GlobalThreatIntelligenceConsent.isEnabled(app)) return@withContext false
             val apk = runCatching {
                 val info = app.packageManager.getApplicationInfo(packageName, 0)
                 val path = info.sourceDir ?: info.publicSourceDir ?: return@runCatching null
                 File(path)
             }.getOrNull() ?: return@withContext false
-            donateApk(apk, detectedSha256)
+            donateApk(apk, detectedSha256, oneTimeConsent)
         }
 
-    suspend fun donateScanResult(result: ScanResult): Boolean = withContext(Dispatchers.IO) {
-        if (!GlobalThreatIntelligenceConsent.isEnabled(app) || result.verdict != ScanVerdict.THREAT)
+    suspend fun donateScanResult(result: ScanResult, oneTimeConsent: Boolean = false): Boolean = withContext(Dispatchers.IO) {
+        if ((!oneTimeConsent && !GlobalThreatIntelligenceConsent.isEnabled(app)) || result.verdict != ScanVerdict.THREAT)
             return@withContext false
         val detectedHash = result.sha256?.lowercase()
             ?.takeIf { it.matches(Regex("[0-9a-f]{64}")) } ?: return@withContext false
@@ -95,14 +95,14 @@ internal class GlobalThreatIntelligenceDonor(context: Context) {
         }
 
         try {
-            donateApk(apk, detectedHash)
+            donateApk(apk, detectedHash, oneTimeConsent)
         } finally {
             stagedFile?.delete()
         }
     }
 
-    private suspend fun donateApk(apk: File, detectedHash: String): Boolean {
-        if (!GlobalThreatIntelligenceConsent.isEnabled(app)) return false
+    private suspend fun donateApk(apk: File, detectedHash: String, oneTimeConsent: Boolean = false): Boolean {
+        if (!oneTimeConsent && !GlobalThreatIntelligenceConsent.isEnabled(app)) return false
         if (!detectedHash.matches(Regex("[0-9a-f]{64}")) ||
             !apk.isFile || !apk.canRead() || apk.length() !in 1..MAX_APK_BYTES) return false
 
@@ -124,7 +124,7 @@ internal class GlobalThreatIntelligenceDonor(context: Context) {
                 Log.w(TAG, "Sample changed after scan; refusing contribution")
                 return false
             }
-            if (!GlobalThreatIntelligenceConsent.isEnabled(app)) return false
+            if (!oneTimeConsent && !GlobalThreatIntelligenceConsent.isEnabled(app)) return false
 
             val body = buildPayload(detectedHash, vector)
             val url = WORKER_ENDPOINT

@@ -139,14 +139,15 @@ class ThreatDetectedActivity : ComponentActivity() {
                                 showGlobalDonationPrompt = false
                                 val packageName = target?.packageName
                                 val sha256 = expectedSha256
-                                if (packageName != null && sha256 != null &&
-                                    GlobalThreatIntelligenceConsent.isEnabled(this@ThreatDetectedActivity)) {
+                                if (packageName != null && sha256 != null) {
                                     GlobalThreatIntelligenceDonationScheduler.enqueueInstalledPackage(
                                         context = this@ThreatDetectedActivity,
                                         packageName = packageName,
                                         detectedSha256 = sha256,
-                                        eventId = eventId
+                                        eventId = eventId,
+                                        oneTimeConsent = true
                                     )
+
                                 }
                             }) { Text(stringResource(R.string.global_threat_intelligence_donate)) }
                         },
@@ -196,8 +197,17 @@ class ThreatDetectedActivity : ComponentActivity() {
                 target = app
                 trusted = trustedNow
                 loading = false
-                showGlobalDonationPrompt = app != null && !trustedNow && expectedSha256 != null &&
-                    GlobalThreatIntelligenceConsent.isEnabled(this@ThreatDetectedActivity)
+                val canDonate = app != null && !trustedNow && expectedSha256 != null
+                if (canDonate && GlobalThreatIntelligenceConsent.isEnabled(this@ThreatDetectedActivity)) {
+                    GlobalThreatIntelligenceDonationScheduler.enqueueInstalledPackage(
+                        context = this@ThreatDetectedActivity,
+                        packageName = app!!.packageName,
+                        detectedSha256 = expectedSha256!!,
+                        eventId = eventId
+                    )
+                }
+                showGlobalDonationPrompt = canDonate &&
+                    !GlobalThreatIntelligenceConsent.isEnabled(this@ThreatDetectedActivity)
             }
         }
     }

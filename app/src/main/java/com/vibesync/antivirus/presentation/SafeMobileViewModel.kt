@@ -1,6 +1,7 @@
 package com.vibesync.antivirus.presentation
 
 import android.net.Uri
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -13,6 +14,8 @@ import com.vibesync.antivirus.core.engine.ScanVerdict
 import com.vibesync.antivirus.core.observer.ManualThreatAlertPolicy
 import com.vibesync.antivirus.core.hashdb.HashDatabaseCapability
 import com.vibesync.antivirus.data.repository.ThreatRepository
+import com.vibesync.antivirus.core.security.GlobalThreatIntelligenceConsent
+import com.vibesync.antivirus.core.security.GlobalThreatIntelligenceDonationScheduler
 import java.io.File
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
@@ -135,6 +138,21 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
     fun requestHashDatabaseSync() = repository.requestHashDatabaseSync()
 
     fun requestThreatFeedSync() { repository.requestThreatFeedSync() }
+
+    /** Queue a confirmed threat hash after master opt-in or explicit one-sample consent. */
+    fun contributeThreatHash(
+        context: Context,
+        result: ScanResult,
+        oneTimeConsent: Boolean = false
+    ): Boolean {
+        if (result.verdict != ScanVerdict.THREAT) return false
+        if (!oneTimeConsent && !GlobalThreatIntelligenceConsent.isEnabled(context)) return false
+        return if (oneTimeConsent) {
+            GlobalThreatIntelligenceDonationScheduler.enqueueOnce(context, result)
+        } else {
+            GlobalThreatIntelligenceDonationScheduler.enqueue(context, result)
+        }
+    }
 
     fun uninstallGuard(context: android.content.Context, packageName: String): PackageGuardResult =
         SystemPackageGuard.evaluate(context.applicationContext, packageName)

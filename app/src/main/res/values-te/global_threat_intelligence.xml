@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="global_threat_intelligence_title">ప్రపంచ ముప్పు సమాచారానికి సహకరించండి (ఐచ్ఛికం)</string>
-    <string name="global_threat_intelligence_description">ఇది డిఫాల్ట్‌గా ఆఫ్‌లో ఉంటుంది. ఆన్ చేసినా ప్రతి సహకారానికి ముందు SafeMobile అనుమతి అడుగుతుంది. విరాళం ఇవ్వండి నొక్కే వరకు ఏదీ పంపబడదు. మాల్వేర్ SHA-256 హ్యాష్ మరియు 215 ప్రవర్తనా లక్షణాలు మాత్రమే పంచబడతాయి.</string>
+    <string name="global_threat_intelligence_description">ఈ ఎంపికను ప్రారంభిస్తే, ధృవీకరించిన ముప్పుల SHA-256 హ్యాష్‌లను మరియు అందుబాటులో ఉన్నప్పుడు 215 బైనరీ ప్రవర్తనా లక్షణాలను SafeMobile స్వయంచాలకంగా పంచుకుంటుంది. APK ఫైళ్లు, ఫైల్ పేర్లు, మార్గాలు, ప్యాకేజీ పేర్లు లేదా పరికర గుర్తింపులు ఎప్పుడూ పంపబడవు. మీరు దీన్ని ఎప్పుడైనా నిలిపివేయవచ్చు.</string>
     <string name="global_threat_intelligence_donate_message">ఈ హానికరమైన ఫైల్ సంతకాన్ని మా AI శిక్షణ నెట్‌వర్క్‌కు అనామకంగా అందించి ఇతరులను రక్షించడంలో సహాయపడండి.</string>
     <string name="global_threat_intelligence_donate">విరాళం ఇవ్వండి</string>
     <string name="global_threat_intelligence_decline">తిరస్కరించండి</string>

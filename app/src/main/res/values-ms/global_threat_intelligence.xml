@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="global_threat_intelligence_title">Sumbang kepada Perisikan Ancaman Global (Pilihan)</string>
-    <string name="global_threat_intelligence_description">Dimatikan secara lalai. Apabila diaktifkan, SafeMobile akan meminta pengesahan sebelum setiap sumbangan. Tiada apa-apa dihantar sehingga anda mengetik Sumbang. Hanya cincangan SHA-256 perisian hasad dan 215 ciri tingkah laku dikongsi.</string>
+    <string name="global_threat_intelligence_description">Apabila pilihan ini diaktifkan, SafeMobile berkongsi hash SHA-256 ancaman yang disahkan dan, jika tersedia, 215 ciri tingkah laku binari secara automatik. Fail APK, nama fail, laluan, nama pakej dan pengecam peranti tidak akan dihantar. Anda boleh mematikan pilihan ini pada bila-bila masa.</string>
     <string name="global_threat_intelligence_donate_message">Bantu melindungi orang lain dengan menderma tandatangan fail berniat jahat ini secara tanpa nama kepada rangkaian latihan AI kami.</string>
     <string name="global_threat_intelligence_donate">Sumbang</string>
     <string name="global_threat_intelligence_decline">Tolak</string>

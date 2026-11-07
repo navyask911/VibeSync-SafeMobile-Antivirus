@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="global_threat_intelligence_title">المساهمة في معلومات التهديدات العالمية (اختياري)</string>
-    <string name="global_threat_intelligence_description">متوقف افتراضيًا. عند تفعيله، سيطلب SafeMobile موافقتك قبل كل مساهمة. لن يُرسل أي شيء حتى تضغط على «تبرع». تتم مشاركة تجزئة SHA-256 للبرمجية الخبيثة و215 سمة سلوكية فقط.</string>
+    <string name="global_threat_intelligence_description">عند تفعيل هذا الخيار، يشارك SafeMobile تلقائيًا تجزئات SHA-256 للتهديدات المؤكدة و215 سمة سلوكية ثنائية عند توفرها. لا يتم إرسال ملفات APK أو أسماء الملفات أو المسارات أو أسماء الحزم أو معرّفات الجهاز مطلقًا. يمكنك إيقاف هذا الخيار في أي وقت.</string>
     <string name="global_threat_intelligence_donate_message">ساعد في حماية الآخرين من خلال التبرع بشكل مجهول ببصمة هذا الملف الضار إلى شبكة تدريب الذكاء الاصطناعي لدينا.</string>
     <string name="global_threat_intelligence_donate">تبرع</string>
     <string name="global_threat_intelligence_decline">رفض</string>

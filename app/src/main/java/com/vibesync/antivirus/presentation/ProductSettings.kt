@@ -493,6 +493,85 @@ internal fun OverlayRiskReviewPanel() {
     )
 }
 
+/** Read-only inventory of manifest declarations; this screen never requests or grants access. */
+@Composable
+private fun AppManifestPermissionsCard() {
+    val context = LocalContext.current
+    val permissions = remember(context) {
+        val manager = context.packageManager
+        @Suppress("DEPRECATION")
+        val requested = runCatching {
+            manager.getPackageInfo(context.packageName, PackageManager.GET_PERMISSIONS)
+                .requestedPermissions
+                ?.toList()
+                .orEmpty()
+        }.getOrDefault(emptyList())
+
+        requested.distinct().sorted().map { permission ->
+            val info = runCatching {
+                manager.getPermissionInfo(permission, 0)
+            }.getOrNull()
+            val label = runCatching { info?.loadLabel(manager)?.toString() }
+                .getOrNull()
+                ?.takeIf { it.isNotBlank() }
+                ?: permission.substringAfterLast('.').replace('_', ' ')
+            val description = runCatching { info?.loadDescription(manager)?.toString() }
+                .getOrNull()
+                ?.takeIf { it.isNotBlank() }
+            Triple(permission, label, description)
+        }
+    }
+
+    Card(
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        shape = RoundedCornerShape(20.dp)
+    ) {
+        Column(
+            Modifier.fillMaxWidth().padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Text(
+                stringResource(R.string.coverage_permissions_title),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold
+            )
+            Text(
+                stringResource(R.string.coverage_permissions_body),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            if (permissions.isEmpty()) {
+                Text(
+                    stringResource(R.string.setup_permission_missing),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            } else {
+                permissions.forEachIndexed { index, (permission, label, description) ->
+                    if (index > 0) {
+                        androidx.compose.material3.HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+                    }
+                    Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                        Text(label, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
+                        Text(
+                            permission,
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        if (description != null) {
+                            Text(
+                                description,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 @Composable
 internal fun SafeMobileSettingsPanel(
     sentinelEnabled: Boolean,
@@ -979,6 +1058,7 @@ internal fun SafeMobileSettingsPanel(
         }
         }
         if (subRoute == SettingsSubRoute.HELP_LEGAL) {
+        AppManifestPermissionsCard()
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(stringResource(R.string.ray_id), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)

@@ -36,7 +36,8 @@ class GlobalThreatIntelligenceDonationWorker(
         }
         val hashPrefix = inputData.getString(KEY_SHA256)?.take(12) ?: "missing"
         Log.i(TAG, "Donation worker started (source=$sourceType, sha256=$hashPrefix…)")
-        if (!GlobalThreatIntelligenceConsent.isEnabled(applicationContext)) {
+        val oneTimeConsent = inputData.getBoolean(KEY_ONE_TIME_APPROVED, false)
+        if (!oneTimeConsent && !GlobalThreatIntelligenceConsent.isEnabled(applicationContext)) {
             Log.i(TAG, "Donation consent is off; dropping queued contribution")
             return Result.success()
         }
@@ -71,7 +72,7 @@ class GlobalThreatIntelligenceDonationWorker(
         )
 
         return try {
-            if (GlobalThreatIntelligenceDonor(applicationContext).donateScanResult(sample)) {
+            if (GlobalThreatIntelligenceDonor(applicationContext).donateScanResult(sample, oneTimeConsent)) {
                 Log.i(TAG, "Background threat contribution completed")
                 Result.success()
             } else {
@@ -96,6 +97,7 @@ class GlobalThreatIntelligenceDonationWorker(
         internal const val KEY_SOURCE_URI = "donation_source_uri"
         internal const val KEY_PACKAGE_NAME = "donation_package_name"
         internal const val KEY_EVENT_ID = "donation_event_id"
+        internal const val KEY_ONE_TIME_APPROVED = "donation_one_time_approved"
         internal const val UNIQUE_WORK_PREFIX = "safe_mobile_global_threat_donation"
         private const val TAG = "Donation"
     }
@@ -109,7 +111,8 @@ internal object GlobalThreatIntelligenceDonationScheduler {
         context: Context,
         packageName: String,
         detectedSha256: String,
-        eventId: String?
+        eventId: String?,
+        oneTimeConsent: Boolean = false
     ): Boolean {
         val normalizedPackage = packageName.takeIf {
             it.matches(Regex("[A-Za-z0-9_]+(\\.[A-Za-z0-9_]+)+"))
@@ -133,12 +136,17 @@ internal object GlobalThreatIntelligenceDonationScheduler {
             packageName = normalizedPackage,
             threatEventId = eventId
         )
-        return enqueue(context, sample)
+        return if (oneTimeConsent) enqueueOnce(context, sample) else enqueue(context, sample)
     }
 
-    fun enqueue(context: Context, result: ScanResult): Boolean {
+    fun enqueue(context: Context, result: ScanResult): Boolean = enqueueInternal(context, result, oneTimeConsent = false)
+
+    /** Queues exactly one sample after a distinct user confirmation without changing the global setting. */
+    fun enqueueOnce(context: Context, result: ScanResult): Boolean = enqueueInternal(context, result, oneTimeConsent = true)
+
+    private fun enqueueInternal(context: Context, result: ScanResult, oneTimeConsent: Boolean): Boolean {
         val app = context.applicationContext
-        if (!GlobalThreatIntelligenceConsent.isEnabled(app)) {
+        if (!oneTimeConsent && !GlobalThreatIntelligenceConsent.isEnabled(app)) {
             Log.w(TAG, "Donation queue refused: master contribution consent is off")
             return false
         }
@@ -165,7 +173,8 @@ internal object GlobalThreatIntelligenceDonationScheduler {
                 ?: sha256
             val input = Data.Builder()
                 .putString(GlobalThreatIntelligenceDonationWorker.KEY_SHA256, sha256)
-                .putString(GlobalThreatIntelligenceDonationWorker.KEY_EVENT_ID, eventId)
+                 .putString(GlobalThreatIntelligenceDonationWorker.KEY_EVENT_ID, eventId)
+                .putBoolean(GlobalThreatIntelligenceDonationWorker.KEY_ONE_TIME_APPROVED, oneTimeConsent)
             result.sourceLocalPath?.let {
                 input.putString(GlobalThreatIntelligenceDonationWorker.KEY_SOURCE_LOCAL_PATH, it)
             }
@@ -202,7 +211,7 @@ internal object GlobalThreatIntelligenceDonationScheduler {
                 },
                 java.util.concurrent.Executor { command -> command.run() }
             )
-            Log.d(TAG, "Approved threat contribution queued (source=local-only, sha256=${sha256.take(12)}…)")
+            Log.d(TAG, "${if (oneTimeConsent) "One-time approved" else "Opted-in"} threat contribution queued (source=local-only, sha256=${sha256.take(12)}…)")
             true
         } catch (error: Exception) {
             Log.e(TAG, "Could not queue user-approved threat contribution", error)
