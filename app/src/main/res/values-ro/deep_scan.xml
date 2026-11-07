@@ -1,0 +1,4 @@
+<resources>
+    <string name="deep_scan_folder">Scanează folderul (scanare aprofundată)</string>
+    <string name="quarantine_manual_delete">Fișierul a fost securizat în carantină. Ștergeți manual originalul.</string>
+</resources>

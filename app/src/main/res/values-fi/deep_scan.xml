@@ -1,0 +1,4 @@
+<resources>
+    <string name="deep_scan_folder">Skannaa kansio (syväskannaus)</string>
+    <string name="quarantine_manual_delete">Tiedosto on suojattu karanteenissa. Poista alkuperäinen tiedosto manuaalisesti.</string>
+</resources>
