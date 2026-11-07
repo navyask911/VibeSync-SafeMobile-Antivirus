@@ -1,0 +1,4 @@
+<resources>
+    <string name="deep_scan_folder">Klasörü Tara (Derin Tarama)</string>
+    <string name="quarantine_manual_delete">Dosya Karantina'da güvence altına alındı. Lütfen orijinal dosyayı manuel olarak silin.</string>
+</resources>

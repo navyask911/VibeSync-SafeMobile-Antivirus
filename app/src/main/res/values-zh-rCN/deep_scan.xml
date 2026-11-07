@@ -1,0 +1,4 @@
+<resources>
+    <string name="deep_scan_folder">扫描文件夹（深度扫描）</string>
+    <string name="quarantine_manual_delete">文件已安全隔离。请手动删除原始文件。</string>
+</resources>
