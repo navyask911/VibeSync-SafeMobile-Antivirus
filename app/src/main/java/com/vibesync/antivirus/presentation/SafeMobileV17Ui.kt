@@ -29,6 +29,8 @@ import androidx.compose.ui.graphics.*
 import androidx.core.graphics.drawable.toBitmap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import com.vibesync.antivirus.BuildConfig
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
@@ -125,9 +127,9 @@ internal fun V17TopBar(
                 Box(contentAlignment = Alignment.Center) { Icon(Icons.Outlined.Shield, "VibeSync", tint = c.green) }
             }
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(1.dp)) {
-                Text("VibeSync", style = MaterialTheme.typography.titleMedium.copy(fontSize = 15.sp),
+                Text(stringResource(R.string.brand_subtitle), style = MaterialTheme.typography.titleMedium.copy(fontSize = 15.sp),
                     fontWeight = FontWeight.Bold, color = c.text)
-                Text("SafeMobile Antivirus", style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp), color = c.muted)
+                Text(stringResource(R.string.app_name), style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp), color = c.muted)
             }
             IconButton(onClick = onThemeToggle, modifier = Modifier.size(34.dp)) {
                 Icon(Icons.Outlined.Palette, "Toggle theme", tint = c.muted)
@@ -225,7 +227,7 @@ internal fun V17ShieldScreen(
 @Composable
 private fun V17ScoreRing(score: Int, isDark: Boolean) {
     val c = v17Colors(isDark)
-    val progress by animateFloatAsState(score / 100f, tween(550), label = "device-score")
+    val progress by animateFloatAsState(score / 100f, tween(550), label = score.toString())
     Box(Modifier.size(96.dp), contentAlignment = Alignment.Center) {
         Canvas(Modifier.fillMaxSize()) {
             val sw = 9.dp.toPx()
@@ -237,7 +239,7 @@ private fun V17ScoreRing(score: Int, isDark: Boolean) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(score.toString(), style = MaterialTheme.typography.headlineMedium.copy(fontSize = 24.sp),
                 fontWeight = FontWeight.ExtraBold, color = c.text)
-            Text("SCORE", style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp), color = c.muted)
+            Text(stringResource(R.string.ui_score_title), style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp), color = c.muted)
         }
     }
 }
@@ -290,7 +292,7 @@ internal fun V17ProtectionSetupSheet(
                     }
                 }
             }
-            Button(onClick = onDismiss, modifier = Modifier.fillMaxWidth()) { Text("Done") }
+            Button(onClick = onDismiss, modifier = Modifier.fillMaxWidth()) { Text(stringResource(R.string.close)) }
             Spacer(Modifier.height(16.dp))
         }
     }
@@ -317,11 +319,11 @@ internal fun V17ScanLabScreen(
             Button(onClick = { if (deep) onStartDeepScan() else onStartQuickScan() },
                 enabled = !state.isScanning, modifier = Modifier.fillMaxWidth()) {
                 if (state.isScanning) {
-                    Text("Scanning packages with 4-Layer Ensemble...")
+                    Text(stringResource(R.string.scan_running))
                 } else {
                     Icon(Icons.Outlined.PlayArrow, contentDescription = null)
                     Spacer(Modifier.width(8.dp))
-                    Text("Start " + if (deep) "Deep Storage Scan" else "Quick App Scan")
+                    Text(stringResource(if (deep) R.string.cleaner_scan_storage else R.string.scan_installed))
                 }
             }
             if (state.isScanning) {
@@ -330,8 +332,8 @@ internal fun V17ScanLabScreen(
                     modifier = Modifier.fillMaxWidth()
                 ) else LinearProgressIndicator(Modifier.fillMaxWidth())
                 V17Body(if (state.totalItems > 0) "Scanning ${state.processedItems} of ${state.totalItems}"
-                    else "Scanning packages with 4-Layer Ensemble...")
-                TextButton(onClick = onCancelScan) { Text("Cancel scan") }
+                    else stringResource(R.string.scan_running))
+                TextButton(onClick = onCancelScan) { Text(stringResource(R.string.scan_cancel)) }
             }
         }
         V17Card(isDark) {
@@ -374,9 +376,11 @@ private fun V17ScanResultRow(
     }
     val uninstallAllowed = result.packageName?.let { name ->
         name != context.packageName &&
-            SystemPackageGuard.evaluate(context, name) is PackageGuardResult.Allowed &&
             result.verdict in setOf(ScanVerdict.THREAT, ScanVerdict.SUSPICIOUS) &&
-            !result.trustedByUser
+            !result.trustedByUser &&
+            runCatching {
+                SystemPackageGuard.evaluate(context, name) is PackageGuardResult.Allowed
+            }.getOrDefault(false)
     } == true
     val (label, tint) = when {
         result.trustedByUser -> "WHITELISTED" to c.green
@@ -431,14 +435,13 @@ private fun V17ScanResultRow(
                 if (result.malwareName != null) V17Body("Matched signature: ${result.malwareName}", color = c.text)
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     if (uninstallAllowed) OutlinedButton(onClick = { result.packageName?.let(onUninstall) },
-                        Modifier.weight(1f), contentPadding = PaddingValues(4.dp)) { Text("Uninstall", maxLines = 1) }
+                        Modifier.weight(1f), contentPadding = PaddingValues(4.dp)) { Text(stringResource(R.string.uninstall_app), maxLines = 1) }
                     if (result.sourceUri != null && result.verdict in setOf(ScanVerdict.THREAT, ScanVerdict.SUSPICIOUS) && !result.trustedByUser) OutlinedButton(onClick = onQuarantine,
-                        Modifier.weight(1f), contentPadding = PaddingValues(4.dp)) { Text("Quarantine", maxLines = 1) }
+                        Modifier.weight(1f), contentPadding = PaddingValues(4.dp)) { Text(stringResource(R.string.quarantine_confirm_action), maxLines = 1) }
                     if (result.packageName != null && !result.trustedByUser) OutlinedButton(onClick = onTrust,
-                        Modifier.weight(1f), contentPadding = PaddingValues(4.dp)) { Text("Whitelist", maxLines = 1) }
-                    if (result.trustedByUser) TextButton(onClick = onRemoveTrust) { Text("Remove whitelist") }
+                        Modifier.weight(1f), contentPadding = PaddingValues(4.dp)) { Text(stringResource(R.string.trusted_app_mark), maxLines = 1) }
                 }
-                if (result.packageName != null) TextButton(onClick = { onAppInfo(result.packageName) }) { Text("App details") }
+                if (result.packageName != null) TextButton(onClick = { onAppInfo(result.packageName) }) { Text(stringResource(R.string.guardian_open_app_info)) }
             }
         }
     }
@@ -553,12 +556,12 @@ internal fun V17ConsoleSettingsScreen(
                     HorizontalDivider(color = c.border)
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Column(Modifier.weight(1f)) { V17Title("YARA custom rules"); V17Body("Import a local .yar rule.") }
-                        OutlinedButton(onClick = onImportYara) { Text("Import .yar") }
+                        OutlinedButton(onClick = onImportYara) { Text(stringResource(R.string.detection_capabilities_import_yara)) }
                     }
                     HorizontalDivider(color = c.border)
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Column(Modifier.weight(1f)) { V17Title("ThreatFeed Sync"); V17Body("Run the configured feed sync.") }
-                        OutlinedButton(onClick = onThreatFeedSync) { Text("Sync Now") }
+                        OutlinedButton(onClick = onThreatFeedSync) { Text(stringResource(R.string.threat_feed_sync_now)) }
                     }
                     HorizontalDivider(color = c.border)
                     V17Switch("Global Threat Intelligence", "Opt in to explicitly approved hash contributions",
@@ -566,13 +569,13 @@ internal fun V17ConsoleSettingsScreen(
                     HorizontalDivider(color = c.border)
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Column(Modifier.weight(1f)) { V17Title("Benchmarks & Analytics"); V17Body("Review local scan timing and results.") }
-                        OutlinedButton(onClick = onBenchmarks) { Text("Open") }
+                        OutlinedButton(onClick = onBenchmarks) { Text(stringResource(R.string.open_feature)) }
                     }
                 }
             }
         }
-        OutlinedButton(onClick = onOpenPro, Modifier.fillMaxWidth()) { Text("VibeSync Pro · Ad-free experience") }
-        Text("v1.7.0", Modifier.align(Alignment.CenterHorizontally),
+        OutlinedButton(onClick = onOpenPro, Modifier.fillMaxWidth()) { Text(stringResource(R.string.pro_title)) }
+        Text(BuildConfig.VERSION_NAME, Modifier.align(Alignment.CenterHorizontally),
             style = MaterialTheme.typography.labelSmall, color = c.muted)
     }
     if (languageOpen) AlertDialog(onDismissRequest = { languageOpen = false },
@@ -580,7 +583,7 @@ internal fun V17ConsoleSettingsScreen(
         text = {
             Column(Modifier.fillMaxWidth().heightIn(max = 420.dp).verticalScroll(rememberScrollState())) {
                 TextButton(onClick = { selectedLanguage = ""; LocalePreferences.saveOverride(context, ""); languageOpen = false }) {
-                    Text("System default")
+                    Text(stringResource(R.string.language_system_default))
                 }
                 LocalePreferences.choices.forEach { choice ->
                     TextButton(onClick = {
@@ -591,7 +594,7 @@ internal fun V17ConsoleSettingsScreen(
                     }, modifier = Modifier.fillMaxWidth()) { Text(context.getString(choice.labelResource)) }
                 }
             }
-        }, confirmButton = { TextButton(onClick = { languageOpen = false }) { Text("Close") } })
+        }, confirmButton = { TextButton(onClick = { languageOpen = false }) { Text(stringResource(R.string.close)) } })
 }
 
 @Composable

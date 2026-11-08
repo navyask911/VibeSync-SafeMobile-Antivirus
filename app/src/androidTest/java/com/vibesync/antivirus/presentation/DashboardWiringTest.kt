@@ -21,6 +21,9 @@ class DashboardWiringTest {
     @get:Rule
     val composeRule = createComposeRule()
 
+    private val context
+        get() = androidx.test.platform.app.InstrumentationRegistry.getInstrumentation().targetContext
+
     private fun render(content: @Composable () -> Unit) {
         composeRule.setContent {
             SafeMobileTheme(theme = AppTheme.MIDNIGHT) {
@@ -104,9 +107,9 @@ class DashboardWiringTest {
             )
         }
 
-        composeRule.onNodeWithText("Start Quick App Scan").performScrollTo().performClick()
+        composeRule.onNodeWithText(context.getString(com.vibesync.antivirus.R.string.scan_installed)).performScrollTo().performClick()
         composeRule.onNodeWithText("Deep Storage (Worker)").performScrollTo().performClick()
-        composeRule.onNodeWithText("Start Deep Storage Scan").performScrollTo().performClick()
+        composeRule.onNodeWithText(context.getString(com.vibesync.antivirus.R.string.cleaner_scan_storage)).performScrollTo().performClick()
 
         assertEquals(1, quickScans)
         assertEquals(1, deepScans)

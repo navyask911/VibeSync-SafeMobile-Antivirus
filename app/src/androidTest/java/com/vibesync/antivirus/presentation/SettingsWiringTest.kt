@@ -183,9 +183,9 @@ class SettingsWiringTest {
         }
 
         composeRule.onNodeWithText("Advanced Telemetry & Rules").performScrollTo().performClick()
-        composeRule.onNodeWithText("Import .yar").performScrollTo().performClick()
-        composeRule.onNodeWithText("Sync Now").performScrollTo().performClick()
-        composeRule.onNodeWithText("Open").performScrollTo().performClick()
+        composeRule.onNodeWithText(context.getString(com.vibesync.antivirus.R.string.detection_capabilities_import_yara)).performScrollTo().performClick()
+        composeRule.onNodeWithText(context.getString(com.vibesync.antivirus.R.string.threat_feed_sync_now)).performScrollTo().performClick()
+        composeRule.onNodeWithText(context.getString(com.vibesync.antivirus.R.string.open_feature)).performScrollTo().performClick()
         assertEquals(1, yaraImports)
         assertEquals(1, threatSyncs)
         assertEquals(1, benchmarks)
