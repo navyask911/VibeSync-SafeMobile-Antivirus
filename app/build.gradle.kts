@@ -44,9 +44,9 @@ android {
   applicationId = "com.vibesync.antivirus"
   minSdk = 26
   targetSdk = 36
-  versionCode = 20261135
-  versionName = "1.6.7"
-  // [release-v1.6.7] UI state sync, permission lifecycle, SAF deep scan and release hardening
+  versionCode = 20261140
+  versionName = "1.7.0"
+  // [release-v1.7.0] Four-tab Compose overhaul, scan lab, tools hub, unified protection setup and console
   testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   buildConfigField("String", "FEED_MANIFEST_PUBLIC_KEY_B64", cfg(feedManifestPublicKey))
   buildConfigField("Boolean", "FEED_MANIFEST_KEY_CONFIGURED", (!feedManifestPublicKey.isBlank()).toString())

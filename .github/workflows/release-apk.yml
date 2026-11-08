@@ -14,6 +14,7 @@ on:
       - "v1.6.5"
       - "v1.6.6"
       - "v1.6.7"
+      - "v1.7.0"
 
 permissions:
   contents: write
@@ -24,7 +25,7 @@ concurrency:
 
 jobs:
   release:
-    if: github.repository == 'navyask911/VibeSync-SafeMobile-Antivirus' && (github.event_name == 'workflow_dispatch' || github.ref_type != 'branch' || github.ref_name != 'main' || contains(github.event.head_commit.message, '[release-v1.6.7]'))
+    if: github.repository == 'navyask911/VibeSync-SafeMobile-Antivirus' && (github.event_name == 'workflow_dispatch' || github.ref_type != 'branch' || github.ref_name != 'main' || contains(github.event.head_commit.message, '[release-v1.7.0]'))
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
@@ -94,6 +95,9 @@ jobs:
           python3 scripts/check_proprietary_safety.py
           test "$(git hash-object app/src/main/res/font/inter_variable.ttf)" = 4ab79e0102bbe0ffa1ed879b13e52ac8c6487833
           test "$(git hash-object app/src/main/assets/licenses/Inter-OFL.txt)" = 9b2ca37b3ffc77391d8b2ebef4a974ef32bf46ea
+
+      - name: Record Paparazzi screenshots for all four v1.7.0 tabs
+        run: ./gradlew --no-daemon recordPaparazziDebug
 
       - name: Test bundled YARA rules before production build
         run: ./gradlew --no-daemon testOfflineDebugUnitTest
@@ -282,6 +286,28 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
+      - name: Package native four-tab screenshots
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p build
+          test -d app/src/test/snapshots
+          snapshot_count="$(find app/src/test/snapshots -type f -name '*.png' | wc -l)"
+          if [[ "$snapshot_count" -lt 4 ]]; then
+            echo "SAFE STOP: Expected Paparazzi PNG screenshots for the four tabs; found $snapshot_count." >&2
+            exit 1
+          fi
+          zip -qr build/ui-screenshots-v1.7.0.zip app/src/test/snapshots
+          echo "Packaged $snapshot_count Paparazzi screenshots."
+
+      - name: Upload four-tab screenshots artifact
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: SafeMobile-v1.7.0-UI-Screenshots-${{ github.run_id }}
+          path: build/ui-screenshots-v1.7.0.zip
+          if-no-files-found: error
+          retention-days: 30
+
       - name: Build valid harmless siren-test APK and matching local definition
         run: bash scripts/test_siren.sh
 
@@ -294,14 +320,14 @@ jobs:
           version_name="${{ steps.verify-aab.outputs.version_name }}"
           version_code="${{ steps.verify-aab.outputs.version_code }}"
           if [[ "${GITHUB_REF_TYPE:-}" == "branch" && "${GITHUB_REF_NAME:-}" == "main" ]]; then
-            if [[ "$version_name" != "1.6.7" || "$version_code" != "20261135" ]]; then
-              echo "SAFE STOP: main release trigger expected v1.6.7 / 20261135, got $version_name / $version_code." >&2
+            if [[ "$version_name" != "1.7.0" || "$version_code" != "20261140" ]]; then
+              echo "SAFE STOP: main release trigger expected v1.7.0 / 20261140, got $version_name / $version_code." >&2
               exit 1
             fi
           fi
-          if [[ "${GITHUB_REF_TYPE:-}" == "tag" && "${GITHUB_REF_NAME:-}" == "v1.6.7" ]] ||
-             [[ "${GITHUB_REF_TYPE:-}" == "branch" && "${GITHUB_REF_NAME:-}" == "main" && "$version_name" == "1.6.7" && "$version_code" == "20261135" ]]; then
-            tag="v1.6.7"
+          if [[ "${GITHUB_REF_TYPE:-}" == "tag" && "${GITHUB_REF_NAME:-}" == "v1.7.0" ]] ||
+             [[ "${GITHUB_REF_TYPE:-}" == "branch" && "${GITHUB_REF_NAME:-}" == "main" && "$version_name" == "1.7.0" && "$version_code" == "20261140" ]]; then
+            tag="v1.7.0"
           else
             tag="safemobile-v${{ steps.verify-aab.outputs.version_name }}-code${{ steps.verify-aab.outputs.version_code }}-run${GITHUB_RUN_NUMBER}"
           fi
@@ -313,7 +339,7 @@ jobs:
           Built from commit ${GITHUB_SHA}.
           v1.6.1: Added new launcher icons and splash screen. Fixed text wrapping and added back navigation. Added inline Crown subscription toggle.
           v1.6.2: Accept all file types in the scan document picker for .txt/EICAR testing; preserve the originating screen when backing out of Pro; make the paywall and shared app toolbar wrap and scroll at larger font scales.
-          v1.6.7: Synchronize Protection Advisor and Device Posture counts, refresh SAF/battery/overlay grants from Android lifecycle state, stabilize posture audits, add recursive user-selected folder scanning through the existing hash/YARA/ML pipeline, improve scoped-storage quarantine feedback, and ship ARM-only native libraries with FULL debug symbols.
+          v1.7.0: Replace the legacy navigation with Shield, Scan & Lab, Tools Hub and Console; add the animated device security score, unified four-permission setup checklist, expandable four-layer scan findings, six-tool grid, shared-preference defense controls and persistent non-Pro AdMob banner. Paparazzi screenshots for all four tabs are attached as a separate ZIP.
           v1.6.6: Add four-step Smart Security Setup, request permissions only after user action, distinguish one-time sample approval from global community-defense opt-in, and auto-queue hashes without a dialog when global defense is enabled.
           v1.6.5: Add queue-persistence and worker-start diagnostics, expose document staging failures in Logcat, and route install-alert donations through WorkManager to survive Activity dismissal.
           v1.6.4: Queue individually approved threat contributions in network-constrained WorkManager, persist picker URI access, use the Cloudflare /donate route, log HTTP failures, and support hash/verdict-only non-APK test samples. APKs also include the validated 215-bit feature vector.
@@ -343,6 +369,7 @@ jobs:
           release_files=(
             "${{ steps.verify-aab.outputs.aab_path }}"
             "${{ steps.verify-aab.outputs.apk_path }}"
+            "build/ui-screenshots-v1.7.0.zip"
             "build/siren-test/SafeMobile-Siren-Test.apk"
             "build/siren-test/siren-test-definitions.json"
             "build/siren-test/SHA256SUMS.txt"

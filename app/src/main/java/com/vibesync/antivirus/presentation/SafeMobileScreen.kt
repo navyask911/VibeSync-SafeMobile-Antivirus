@@ -67,6 +67,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
@@ -112,6 +113,9 @@ import com.vibesync.antivirus.core.observer.FullScreenAlertAccess
 import com.vibesync.antivirus.core.observer.SecurityAlertNotifier
 import com.vibesync.antivirus.core.worker.OverlayRiskReviewManager
 import com.vibesync.antivirus.core.security.DeviceOwnerManager
+import com.vibesync.antivirus.core.security.DeviceAdminManager
+import com.vibesync.antivirus.core.observer.InstallSentinelService
+import com.vibesync.antivirus.core.observer.SecurityVoiceAlert
 import com.vibesync.antivirus.core.engine.ScanResult
 import com.vibesync.antivirus.core.engine.DetectionSource
 import com.vibesync.antivirus.core.quarantine.LocalQuarantineManager
@@ -166,6 +170,9 @@ import kotlinx.coroutines.launch
  val auditEntries by repository.observeRecentAudits().collectAsStateWithLifecycle(initialValue = emptyList())
  val securityIncidents by repository.observeRecentSecurityIncidents().collectAsStateWithLifecycle(initialValue = emptyList())
  val ownerManager = remember(context) { DeviceOwnerManager(context) }
+ val deviceAdminManager = remember(context) { DeviceAdminManager(context) }
+ var adminActive by remember(context) { mutableStateOf(deviceAdminManager.isAdminActive()) }
+ var showV17ProtectionSetupSheet by rememberSaveable { mutableStateOf(false) }
  var selectedDestination by rememberSaveable { mutableStateOf("home") }
  var isSubscriptionExpanded by rememberSaveable { mutableStateOf(false) }
  var settingsSubRoute by rememberSaveable { mutableStateOf(SettingsSubRoute.ROOT) }
@@ -175,6 +182,7 @@ import kotlinx.coroutines.launch
  val currentRoute = currentDestination?.route
  val activeTopTab = when {
   currentDestination?.hierarchy?.any { it.route == "tools" } == true -> "tools"
+  currentDestination?.hierarchy?.any { it.route == "scan" } == true -> "scan"
   currentDestination?.hierarchy?.any { it.route == "settings" } == true -> "settings"
   currentRoute == "detail/{parentTab}/{screen}" -> currentBackStackEntry?.arguments?.getString("parentTab") ?: "dashboard"
   currentDestination?.hierarchy?.any { it.route == "dashboard" } == true -> "dashboard"
@@ -183,6 +191,7 @@ import kotlinx.coroutines.launch
  fun navigateToDestination(destination: String, parentTabOverride: String? = null) {
   val rootRoute = when (destination) {
    "home" -> "dashboard"
+   "scan" -> "scan"
    "tools" -> "tools"
    "settings" -> "settings"
    else -> null
@@ -201,6 +210,7 @@ import kotlinx.coroutines.launch
     (currentBackStackEntry?.arguments?.getString("parentTab")
     ?: when (currentRoute) {
      "tools" -> "tools"
+     "scan" -> "scan"
      "settings" -> "settings"
      else -> "dashboard"
     })
@@ -211,6 +221,7 @@ import kotlinx.coroutines.launch
  LaunchedEffect(currentRoute, currentBackStackEntry?.arguments?.getString("screen")) {
   selectedDestination = when (currentRoute) {
    "dashboard" -> "home"
+   "scan" -> "scan"
    "tools" -> "tools"
    "settings" -> "settings"
    "detail/{parentTab}/{screen}" -> currentBackStackEntry?.arguments?.getString("screen") ?: "home"
@@ -284,6 +295,8 @@ import kotlinx.coroutines.launch
  var sentinelDesired by remember(context) { mutableStateOf(securityPrefs.getBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, false)) }
  var strictMode by remember(context) { mutableStateOf(securityPrefs.getBoolean(SafeMobileApp.KEY_STRICT_MODE, false)) }
  var securityAlertsEnabled by remember(context) { mutableStateOf(securityPrefs.getBoolean(SafeMobileApp.KEY_SECURITY_ALERTS_ENABLED, false)) }
+ var voiceAlertsEnabled by remember(context) { mutableStateOf(securityPrefs.getBoolean(SafeMobileApp.KEY_VOICE_ALERTS_ENABLED, false)) }
+ var installSentinelEnabled by remember(context) { mutableStateOf(InstallSentinelService.enabled(context)) }
  var globalDefenseEnabled by remember(context) { mutableStateOf(GlobalThreatIntelligenceConsent.isEnabled(context)) }
  val advisorStore = remember(context) { ProtectionAdvisorStore(context) }
  val snoozedAdvisorIds by advisorStore.snoozedIssueIds.collectAsStateWithLifecycle(initialValue = emptySet())
@@ -547,6 +560,9 @@ import kotlinx.coroutines.launch
    if (event == Lifecycle.Event.ON_RESUME) {
     if (privacyAccepted) vm.refreshTrustOverrides()
     fullScreenAlertsGranted = FullScreenAlertAccess.isGranted(context)
+    adminActive = deviceAdminManager.isAdminActive()
+    voiceAlertsEnabled = securityPrefs.getBoolean(SafeMobileApp.KEY_VOICE_ALERTS_ENABLED, false)
+    installSentinelEnabled = InstallSentinelService.enabled(context)
     batteryUnrestricted = powerManager?.isIgnoringBatteryOptimizations(context.packageName) == true
     overlayAccessGranted = Settings.canDrawOverlays(context)
     folderUris = StorageAccessPreferences.accessibleTreeUris(context)
@@ -692,202 +708,142 @@ import kotlinx.coroutines.launch
     )
    }
   } else {
-  Column(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing)) {
-   val toolbarTitleResource = when (selectedDestination) {
-    "home" -> R.string.brand_title
-    "tools" -> R.string.analytics_title
-    "settings" -> R.string.nav_settings
-    "scan" -> R.string.latest_results
-    "sources" -> R.string.download_interceptor_label
-    "sentinel" -> R.string.sentinel_scope_title
-    "phishing" -> R.string.nav_phishing
-    "posture" -> R.string.posture_title
-    "apps" -> R.string.nav_apps
-    "quarantine" -> R.string.quarantine_vault_title
-    "history" -> R.string.nav_history
-    "pro" -> R.string.pro_title
-    "capabilities" -> R.string.detection_capabilities_title
-    "cleaner" -> R.string.cleaner_title
-    else -> R.string.brand_title
-   }
-   val toolbarSubtitleResource: Int? = when (selectedDestination) {
-    "home" -> if (adMobState.isPro) R.string.pro_title else R.string.security_dashboard_subtitle
-    "tools" -> R.string.analytics_subtitle
-    "settings" -> R.string.theme_appearance_description
-    "scan" -> R.string.scan_explanation
-    else -> null
-   }
-   Row(
-    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 10.dp),
-    verticalAlignment = Alignment.CenterVertically
-   ) {
-    if (selectedDestination !in setOf("home", "tools", "settings")) {
-     IconButton(onClick = { tabNavController.popBackStack() }) {
-      androidx.compose.material3.Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.nav_settings))
-     }
-    }
-    Box(Modifier.size(42.dp), contentAlignment = Alignment.Center) {
-     androidx.compose.material3.Icon(
-      painter = painterResource(R.drawable.ic_home_brand),
-      contentDescription = stringResource(R.string.app_name),
-      tint = MaterialTheme.colorScheme.secondary,
-      modifier = Modifier.size(30.dp)
+   Scaffold(
+    modifier = Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing),
+    topBar = {
+     V17TopBar(
+      appTheme = appTheme, isPro = adMobState.isPro,
+      showBack = selectedDestination !in setOf("home", "scan", "tools", "settings"),
+      onThemeToggle = {
+       onAppThemeChanged(
+        if (appTheme == com.vibesync.antivirus.ui.theme.AppTheme.LIGHT)
+         com.vibesync.antivirus.ui.theme.AppTheme.MIDNIGHT
+        else com.vibesync.antivirus.ui.theme.AppTheme.LIGHT
+       )
+      },
+      onProClick = { navigateToDestination("pro") },
+      onBack = { if (!tabNavController.popBackStack()) navigateToDestination("home") }
      )
-    }
-    Column(Modifier.padding(start = 10.dp).weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-     Text(stringResource(toolbarTitleResource), modifier = Modifier.fillMaxWidth(), style = MaterialTheme.typography.titleLarge,
-      fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface,
-      maxLines = 2, softWrap = true, overflow = TextOverflow.Ellipsis)
-     toolbarSubtitleResource?.let { subtitle ->
-      Text(stringResource(subtitle), style = MaterialTheme.typography.bodySmall,
-       color = MaterialTheme.colorScheme.onSurfaceVariant,
-       maxLines = 2, softWrap = true, overflow = TextOverflow.Ellipsis)
-     }
-    }
-    IconButton(onClick = { isSubscriptionExpanded = !isSubscriptionExpanded }) {
-     androidx.compose.material3.Icon(Icons.Default.WorkspacePremium,
-      contentDescription = stringResource(R.string.pro_title), tint = MaterialTheme.colorScheme.primary)
-    }
-   }
-   AnimatedVisibility(
-    visible = isSubscriptionExpanded,
-    modifier = Modifier.fillMaxWidth()
-   ) {
-    Card(
-     modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 6.dp),
-     shape = RoundedCornerShape(16.dp),
-     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
-    ) {
-     Column(
-      Modifier.fillMaxWidth().padding(16.dp),
-      verticalArrangement = Arrangement.spacedBy(8.dp)
-     ) {
-      Row(
-       verticalAlignment = Alignment.CenterVertically,
-       horizontalArrangement = Arrangement.spacedBy(8.dp)
-      ) {
-       androidx.compose.material3.Icon(
-        Icons.Default.WorkspacePremium,
-        contentDescription = null,
-        tint = MaterialTheme.colorScheme.primary,
-        modifier = Modifier.size(24.dp)
-       )
-       Text(
-        stringResource(R.string.pro_title),
-        style = MaterialTheme.typography.titleMedium,
-        fontWeight = FontWeight.Bold,
-        modifier = Modifier.weight(1f)
+    },
+    bottomBar = {
+     Column {
+      if (adMobState.adsReady && !adMobState.isPro) AdMobBanner(adMobManager)
+      if (selectedDestination in setOf("home", "scan", "tools", "settings")) {
+       V17BottomNavigationBar(
+        selectedTab = if (activeTopTab == "dashboard") "home" else activeTopTab,
+        isDark = appTheme != com.vibesync.antivirus.ui.theme.AppTheme.LIGHT,
+        onSelect = { navigateToDestination(it) }
        )
       }
-      Text(stringResource(R.string.pro_truthful_summary), style = MaterialTheme.typography.bodyMedium)
-      Text(
-       stringResource(R.string.pro_feature_adfree),
-       style = MaterialTheme.typography.bodySmall,
-       color = MaterialTheme.colorScheme.onSurfaceVariant
-      )
-      Button(
-       onClick = {
-        isSubscriptionExpanded = false
-        navigateToDestination("pro")
-       },
-       modifier = Modifier.fillMaxWidth()
-      ) {
-       Text(stringResource(R.string.pro_unlock))
-      }
      }
-    }
-   }
+    },
+    snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+    containerColor = MaterialTheme.colorScheme.background
+   ) { scaffoldPadding ->
+    Column(Modifier.fillMaxSize().padding(scaffoldPadding)) {
    val navScreenContent: @Composable () -> Unit = {
        Box(Modifier.fillMaxSize()) {
         when (selectedDestination) {
-         "home" -> Column(Modifier.fillMaxSize()) {
-          SecurityDashboardV14(
-           advisor = advisorState,
-           isPro = adMobState.isPro,
-           adsReady = adMobState.adsReady,
-           scanRunning = state.isScanning,
-           scanProgress = state.totalItems.takeIf { it > 0 }?.let { state.processedItems.toFloat() / it },
-           downloadsActive = monitoringRunning,
-           chatFoldersActive = false,
-           installSentinelActive = installSentinelRunning,
-           onOpenAdvisor = { navigateToDestination("advisor", parentTabOverride = "dashboard") },
-           onOpenPro = { navigateToDestination("pro") },
-           onScan = { requestPrivacyAcknowledgement { vm.scanFull(); navigateToDestination("scan") } },
-           onCleaner = { navigateToDestination("cleaner") },
-           onInstallSentinel = { navigateToDestination("sources") },
-           onFolders = { navigateToDestination("sentinel") },
-           onLinkChecker = { navigateToDestination("phishing") },
-           onPosture = { navigateToDestination("posture"); if (privacyAccepted) postureVm.refreshAuditSilently() },
-           onApps = { navigateToDestination("apps") },
-           onQuarantine = { navigateToDestination("quarantine") },
-           onOpenTools = { navigateToDestination("tools") },
-           lastScanAt = state.lastScanAt,
-           reviewCount = state.threatCount + state.suspiciousCount,
-           onOpenScanResults = { navigateToDestination(if (state.results.isEmpty()) "history" else "scan") },
-           installedAppsCount = state.installedApps.size,
-           inventoryLoaded = state.inventoryLoaded,
-           quarantinedFilesCount = state.quarantinedFiles.size
-          )
-         }
-         "tools" -> Column(Modifier.fillMaxSize().verticalScroll(contentScrollState)) {
-          ProtectionToolsHub(
-            onOpen = { navigateToDestination(it) },
-            onScanInstalled = {
-             requestPrivacyAcknowledgement {
-              navigateToDestination("scan")
-              vm.scanInstalled()
-             }
-            },
-            onPickApk = {
-             requestPrivacyAcknowledgement {
-              navigateToDestination("scan")
-              apkPicker.launch(arrayOf("*/*"))
-             }
-            },
-            onScanFolder = { requestPrivacyAcknowledgement { deepFolderPicker.launch(null) } },
-            installSentinelActive = installSentinelRunning,
-            foldersActive = monitoringRunning ||
-             StorageAccessPreferences.hasRole(context, StorageAccessPreferences.WHATSAPP) || customFolderUris.isNotEmpty(),
-            pendingActions = advisorState.pendingCount,
-            installedAppsCount = state.installedApps.size,
-            inventoryLoaded = state.inventoryLoaded,
-            quarantinedFilesCount = state.quarantinedFiles.size
-           )
-         }
-         "settings" -> Column(Modifier.fillMaxSize().verticalScroll(contentScrollState).padding(horizontal = 16.dp, vertical = 16.dp)) {
-          SafeMobileSettingsPanel(
-           sentinelEnabled = monitoringRunning,
-           onEnableSentinel = enableSentinel,
-           onDisableSentinel = disableSentinel,
-           strictMode = strictMode,
-           securityAlertsEnabled = securityAlertsEnabled,
-           onSecurityAlertsChanged = changeSecurityAlerts,
-           onToggleProtection = toggleProtection,
-           onStrictModeChanged = updateStrictMode,
-           appTheme = appTheme,
-           onAppThemeChanged = onAppThemeChanged,
-           adPrivacyOptionsRequired = adMobState.privacyOptionsRequired,
-           isProForAds = adMobState.isPro,
-           onManageFolders = { navigateToDestination("sentinel") },
-           onAddCustomFolder = { requestPrivacyAcknowledgement {
-            navigateToDestination("sentinel")
-            pendingFolderRole = StorageAccessPreferences.CUSTOM
-            pendingSentinelEnable = true
-            showStoragePermissionPrompt = true
-           } },
-           onShowAdPrivacyOptions = {
-            activity?.let { host -> uiScope.launch { adMobManager.showPrivacyOptions(host) } }
-           },
-           subRoute = settingsSubRoute,
-           onSubRouteChanged = { settingsSubRoute = it },
-           onOpenPro = { navigateToDestination("pro") },
-           onReviewThreatFindings = {
-            // Opening Scan is navigation only; donation remains a separate confirmation.
-            navigateToDestination("scan")
-           },
-           canReviewThreatFindings = hasEligibleDonationResult
-          )
-         }
+         "home" -> V17ShieldScreen(
+          isDark = appTheme != com.vibesync.antivirus.ui.theme.AppTheme.LIGHT,
+          securityScore = advisorState.score,
+          isPro = adMobState.isPro,
+          activeGuards = listOf(batteryUnrestricted, adminActive, fullScreenAlertsGranted, storageAccessGranted).count { it },
+          liveSentinelActive = installSentinelRunning,
+          posturePassed = postureState.report?.highRiskAppCount?.let { (8 - it.coerceIn(0, 8)).coerceIn(0, 8) },
+          quarantinedFilesCount = state.quarantinedFiles.size,
+          onOpenSetup = { showV17ProtectionSetupSheet = true },
+          onOpenLiveSentinel = { navigateToDestination("sources") },
+          onOpenPosture = { navigateToDestination("posture"); if (privacyAccepted) postureVm.refreshAuditSilently() },
+          onOpenDetection = { navigateToDestination("capabilities") },
+          onOpenThreatDb = { navigateToDestination("quarantine") }
+         )
+         "scan" -> V17ScanLabScreen(
+          isDark = appTheme != com.vibesync.antivirus.ui.theme.AppTheme.LIGHT,
+          state = state,
+          onStartQuickScan = { requestPrivacyAcknowledgement { vm.scanInstalled() } },
+          onStartDeepScan = { requestPrivacyAcknowledgement { deepFolderPicker.launch(null) } },
+          onCancelScan = vm::cancelScan,
+          onUninstall = { packageName ->
+           lastUninstallPackage = packageName
+           pendingUninstallPackage = packageName
+           when (vm.requestUninstall(context, packageName,
+            launchDelete = { intent -> deleteLauncher.launch(intent) },
+            openAppInfo = { intent -> context.startActivity(intent) })) {
+            UninstallResult.Success, UninstallResult.RequiresUserAction -> Unit
+            is UninstallResult.BlockedSystemApp -> {
+             showUninstallSnackbar(context.getString(R.string.uninstall_protected), null)
+             try { context.startActivity(UninstallHandler.buildAppInfoIntent(packageName)) }
+             catch (_: ActivityNotFoundException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
+             catch (_: SecurityException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
+            }
+            UninstallResult.NotFound -> {
+             pendingUninstallPackage = null
+             lastUninstallPackage = null
+             showUninstallSnackbar(context.getString(R.string.uninstall_not_found), null)
+            }
+            UninstallResult.OpenedAppInfo -> showUninstallSnackbar(context.getString(R.string.uninstall_opened_app_info), packageName)
+            UninstallResult.HandlerUnavailable -> {
+             pendingUninstallPackage = null
+             showUninstallSnackbar(context.getString(R.string.uninstall_launch_failed), packageName)
+            }
+           }
+          },
+          onAppInfo = { packageName ->
+           try { context.startActivity(UninstallHandler.buildAppInfoIntent(packageName)) }
+           catch (_: ActivityNotFoundException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
+           catch (_: SecurityException) { showUninstallSnackbar(context.getString(R.string.uninstall_no_settings), packageName) }
+          },
+          onQuarantine = { pendingQuarantine = it },
+          onTrust = vm::trustApp,
+          onRemoveTrust = vm::removeTrust
+         )
+         "tools" -> V17ToolsHubScreen(
+          isDark = appTheme != com.vibesync.antivirus.ui.theme.AppTheme.LIGHT,
+          onOpen = { destination ->
+           navigateToDestination(destination)
+           if (destination == "posture" && privacyAccepted) postureVm.refreshAuditSilently()
+          }
+         )
+         "settings" -> V17ConsoleSettingsScreen(
+          isDark = appTheme != com.vibesync.antivirus.ui.theme.AppTheme.LIGHT,
+          appTheme = appTheme,
+          onAppThemeChanged = onAppThemeChanged,
+          sirenEnabled = securityAlertsEnabled,
+          onSirenChanged = changeSecurityAlerts,
+          voiceEnabled = voiceAlertsEnabled,
+          onVoiceChanged = { enabled ->
+           voiceAlertsEnabled = enabled
+           securityPrefs.edit().putBoolean(SafeMobileApp.KEY_VOICE_ALERTS_ENABLED, enabled).apply()
+           if (!enabled) SecurityVoiceAlert.stop()
+          },
+          installSentinelEnabled = installSentinelEnabled,
+          installSentinelRunning = installSentinelRunning,
+          onInstallSentinelChanged = { enabled ->
+           if (enabled) {
+            requestPrivacyAcknowledgement {
+             securityPrefs.edit().putBoolean(SafeMobileApp.KEY_INSTALL_SENTINEL_ENABLED, true).apply()
+             installSentinelEnabled = true
+             if (!InstallSentinelService.startFromVisibleUi(context))
+              Toast.makeText(context, R.string.monitor_start_failed, Toast.LENGTH_LONG).show()
+            }
+           } else {
+            installSentinelEnabled = false
+            InstallSentinelService.stop(context)
+           }
+          },
+          globalIntelEnabled = globalDefenseEnabled,
+          onGlobalIntelChanged = { enabled ->
+           requestPrivacyAcknowledgement {
+            GlobalThreatIntelligenceConsent.setEnabled(context, enabled)
+            globalDefenseEnabled = enabled
+           }
+          },
+          onImportYara = { pendingYaraPicker.launch(arrayOf("text/plain", "application/octet-stream", "application/x-yara")) },
+          onThreatFeedSync = { requestPrivacyAcknowledgement { vm.requestThreatFeedSync() } },
+          onBenchmarks = { navigateToDestination("analytics") },
+          onOpenPro = { navigateToDestination("pro") }
+         )
          else -> Column(
           Modifier.fillMaxSize().verticalScroll(contentScrollState)
            .padding(horizontal = 16.dp, vertical = 16.dp),
@@ -1248,9 +1204,6 @@ import kotlinx.coroutines.launch
          )
         }
         Spacer(Modifier.height(8.dp))
-        if (selectedDestination == "home" && adMobState.adsReady && !adMobState.isPro) {
-         AdMobBanner(adMobManager)
-        }
          }
         }
        }
@@ -1261,50 +1214,51 @@ import kotlinx.coroutines.launch
     modifier = Modifier.weight(1f).fillMaxWidth()
    ) {
     composable("dashboard") { navScreenContent() }
+    composable("scan") { navScreenContent() }
     composable("tools") { navScreenContent() }
     composable("settings") { navScreenContent() }
     composable("detail/{parentTab}/{screen}") { navScreenContent() }
    }
-   SnackbarHost(hostState = snackbarHostState)
-   if (selectedDestination in setOf("home", "tools", "settings")) {
-    NavigationBar(containerColor = MaterialTheme.colorScheme.surface, tonalElevation = 0.dp) {
-     val destinations = listOf(
-      Triple("dashboard", R.string.nav_home, R.drawable.ic_nav_home),
-      Triple("tools", R.string.v140_analytics_tools, R.drawable.ic_nav_tools),
-      Triple("settings", R.string.nav_settings, R.drawable.ic_nav_settings)
-     )
-     destinations.forEach { destination ->
-      NavigationBarItem(
-       selected = activeTopTab == destination.first,
-       onClick = { navigateToDestination(when(destination.first) {
-        "dashboard" -> "home"
-        "tools" -> "tools"
-        else -> "settings"
-       }) },
-       icon = {
-        androidx.compose.material3.Icon(
-         painter = painterResource(destination.third),
-         contentDescription = stringResource(destination.second),
-         modifier = Modifier.size(22.dp)
-        )
-       },
-       label = { Text(stringResource(destination.second), maxLines = 1, softWrap = false, overflow = TextOverflow.Ellipsis) },
-       colors = androidx.compose.material3.NavigationBarItemDefaults.colors(
-        selectedIconColor = MaterialTheme.colorScheme.secondary,
-        selectedTextColor = MaterialTheme.colorScheme.onSurface,
-        indicatorColor = if (appTheme == com.vibesync.antivirus.ui.theme.AppTheme.LIGHT)
-         com.vibesync.antivirus.ui.theme.SafeMobileLightSelectedContainer
-        else MaterialTheme.colorScheme.surfaceVariant,
-        unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-        unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
-       )
-      )
+   if (showV17ProtectionSetupSheet) {
+    V17ProtectionSetupSheet(
+     isDark = appTheme != com.vibesync.antivirus.ui.theme.AppTheme.LIGHT,
+     batteryActive = batteryUnrestricted,
+     adminActive = adminActive,
+     fullScreenActive = fullScreenAlertsGranted,
+     safActive = storageAccessGranted,
+     onDismiss = { showV17ProtectionSetupSheet = false },
+     onRequestBattery = {
+      val batteryIntent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.parse("package:${context.packageName}"))
+      runCatching { context.startActivity(batteryIntent) }.onFailure {
+       runCatching { context.startActivity(Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)) }
+        .onFailure { Toast.makeText(context, R.string.battery_review_unavailable, Toast.LENGTH_LONG).show() }
+      }
+     },
+     onRequestAdmin = {
+      runCatching { activity?.let(deviceAdminManager::requestAdminPermission) }
+       .onFailure { Toast.makeText(context, R.string.device_admin_explanation, Toast.LENGTH_LONG).show() }
+     },
+     onRequestFullScreen = {
+      runCatching { FullScreenAlertAccess.settingsIntent(context)?.let(context::startActivity) }
+       .onFailure { Toast.makeText(context, R.string.full_screen_settings_unavailable, Toast.LENGTH_LONG).show() }
+     },
+     onRequestSaf = {
+      requestPrivacyAcknowledgement {
+       pendingFolderRole = StorageAccessPreferences.DOWNLOADS
+       pendingSentinelEnable = true
+       runCatching { storageTreeLauncher.launch(StorageAccessPreferences.pickerIntent(StorageAccessPreferences.DOWNLOADS)) }
+        .onFailure {
+         pendingSentinelEnable = false
+         Toast.makeText(context, R.string.ui_folder_picker_unavailable, Toast.LENGTH_LONG).show()
+        }
+      }
      }
-    }
+    )
+   }
+
    }
   }
-
-  }
+ }
  }
 
  if (showDefinitionImportWarning) AlertDialog(
