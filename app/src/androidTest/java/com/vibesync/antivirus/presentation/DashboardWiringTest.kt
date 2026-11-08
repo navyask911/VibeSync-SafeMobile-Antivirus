@@ -131,6 +131,7 @@ class DashboardWiringTest {
                         onOpen = { destination = it },
                         onScanInstalled = {},
                         onPickApk = {},
+                    onScanFolder = {},
                         installSentinelActive = false,
                         foldersActive = false,
                         pendingActions = 0,

@@ -44,9 +44,9 @@ android {
   applicationId = "com.vibesync.antivirus"
   minSdk = 26
   targetSdk = 36
-  versionCode = 20261132
-  versionName = "1.6.6"
-  // [release-v1.6.6] smart onboarding and consent-correct threat contribution UX
+  versionCode = 20261135
+  versionName = "1.6.7"
+  // [release-v1.6.7] UI state sync, permission lifecycle, SAF deep scan and release hardening
   testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   buildConfigField("String", "FEED_MANIFEST_PUBLIC_KEY_B64", cfg(feedManifestPublicKey))
   buildConfigField("Boolean", "FEED_MANIFEST_KEY_CONFIGURED", (!feedManifestPublicKey.isBlank()).toString())
@@ -76,7 +76,11 @@ android {
   release {
    isMinifyEnabled = true
    isShrinkResources = true
-   ndk { debugSymbolLevel = "FULL" }
+   // Keep x86_64 available to debug emulator tests; production APK/AAB ships ARM only.
+   ndk {
+    abiFilters += listOf("arm64-v8a", "armeabi-v7a")
+    debugSymbolLevel = "FULL"
+   }
    if (releaseSigningEnabled) signingConfig = signingConfigs.getByName("release")
    proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
   }
@@ -98,7 +102,7 @@ val yaraXSourceDirectory = layout.buildDirectory.dir("native/yarax_android")
 val yaraXGeneratedJniDirectory = layout.buildDirectory.dir("generated/yarax-jniLibs")
 val yaraXAndroidAbis = providers.gradleProperty("yaraxAndroidAbis").orNull
     ?.split(",")?.map { it.trim() }?.filter { it.isNotEmpty() }?.distinct()
-    ?: listOf("arm64-v8a", "armeabi-v7a", "x86_64")
+    ?: listOf("arm64-v8a", "armeabi-v7a")
 require(yaraXAndroidAbis.isNotEmpty() &&
     yaraXAndroidAbis.all { it in setOf("arm64-v8a", "armeabi-v7a", "x86_64") }) {
     "yaraxAndroidAbis must contain supported Android ABI names."
@@ -179,6 +183,174 @@ val prepareYaraXPatches = tasks.register("prepareYaraXPatches") {
             workingDir = patchesDirectory
             commandLine("make", "patch")
         }.assertNormalExitValue()
+
+        // The pinned YARA-X fork defaults to Wasmtime/Cranelift JIT. Android 9 and
+        // earlier deny the executable-memory/membarrier path used by JIT, so enable
+        // Wasmtime Pulley and select it at runtime only for SDK levels below 29.
+        // Restore the pinned JNI files before applying the deterministic bridge patch.
+        val nativeSourceDirectory = yaraXSourceDirectory.get().asFile
+        project.exec {
+            workingDir = nativeSourceDirectory
+            commandLine("git", "checkout", "--", "Cargo.toml", "src/lib.rs")
+        }.assertNormalExitValue()
+
+        val nativeManifest = nativeSourceDirectory.resolve("Cargo.toml")
+        val nativeManifestText = nativeManifest.readText()
+        val defaultYaraXDependency = "yara-x = { path = \"./yarax_patches/yara-x/lib\", default-features = false, features = [\"dex-module\", \"hash-module\", \"crypto\", \"pe-module\", \"elf-module\", \"generate-proto-code\"]}"
+        val pulleyYaraXDependency = "yara-x = { path = \"./yarax_patches/yara-x/lib\", default-features = false, features = [\"dex-module\", \"hash-module\", \"crypto\", \"pe-module\", \"elf-module\", \"generate-proto-code\", \"pulley\"]}"
+        check(nativeManifestText.contains(defaultYaraXDependency) ||
+            nativeManifestText.contains(pulleyYaraXDependency)) {
+            "Pinned YARA-X JNI dependency changed; review the Android Pulley feature patch."
+        }
+        nativeManifest.writeText(nativeManifestText.replace(defaultYaraXDependency, pulleyYaraXDependency))
+
+        val nativeJniSource = nativeSourceDirectory.resolve("src/lib.rs")
+        val nativeJniText = nativeJniSource.readText()
+        val compilerCreateBefore = """pub extern "system" fn Java_org_revengi_abhi_yarax_Compiler_create(
+    _env: JNIEnv,
+    _class: JClass,
+) -> jlong {
+    let compiler = Compiler::new();"""
+        val compilerCreateAfter = """pub extern "system" fn Java_org_revengi_abhi_yarax_Compiler_create(
+    mut env: JNIEnv,
+    _class: JClass,
+) -> jlong {
+    configure_yara_x_android_runtime(&mut env);
+    let compiler = Compiler::new();"""
+        check(nativeJniText.windowed(compilerCreateBefore.length).count { it == compilerCreateBefore } == 1) {
+            "Pinned YARA-X JNI Compiler_create entry point changed; refusing to apply an unsafe runtime patch."
+        }
+        val runtimeBridgeHelper = """
+            fn configure_yara_x_android_runtime(env: &mut JNIEnv) {
+                let api_level = match env.find_class(concat!("android/os/Build", "$", "VERSION")) {
+                    Ok(version_class) => match env
+                        .get_static_field(version_class, "SDK_INT", "I")
+                        .and_then(|value| value.i())
+                    {
+                        Ok(api_level) => api_level,
+                        Err(_) => {
+                            let _ = env.exception_clear();
+                            0
+                        }
+                    },
+                    Err(_) => {
+                        let _ = env.exception_clear();
+                        0
+                    }
+                };
+                // Fail safe to the interpreter if Android SDK lookup fails.
+                yara_x::set_android_api_level(api_level);
+            }
+        """.trimIndent()
+        val nativeJniUpdated = nativeJniText
+            .replace("struct NativeCompiler {", runtimeBridgeHelper + "\nstruct NativeCompiler {")
+            .replace(compilerCreateBefore, compilerCreateAfter)
+        val deserializeBefore = """pub extern "system" fn Java_org_revengi_abhi_yarax_Rules_deserializeFromBytes(
+    env: JNIEnv,
+    _class: JClass,
+    bytes: JByteArray,
+) -> jlong {
+    let bytes_len = env.get_array_length(&bytes).unwrap_or(0) as usize;"""
+        val deserializeAfter = """pub extern "system" fn Java_org_revengi_abhi_yarax_Rules_deserializeFromBytes(
+    mut env: JNIEnv,
+    _class: JClass,
+    bytes: JByteArray,
+) -> jlong {
+    configure_yara_x_android_runtime(&mut env);
+    let bytes_len = env.get_array_length(&bytes).unwrap_or(0) as usize;"""
+        check(nativeJniUpdated.windowed(deserializeBefore.length).count { it == deserializeBefore } == 1) {
+            "Pinned YARA-X JNI Rules_deserializeFromBytes entry point changed; refusing to apply an unsafe runtime patch."
+        }
+        nativeJniSource.writeText(nativeJniUpdated.replace(deserializeBefore, deserializeAfter))
+
+        // Add an Android-only configuration hook to the pinned YARA-X library.
+        // The JNI bridge calls it before the shared Wasmtime engine is created.
+        val yaraRoot = patchedYaraXDirectory.resolve("lib/src/lib.rs")
+        val yaraRootText = yaraRoot.readText()
+        check(yaraRootText.windowed("mod wasm;".length).count { it == "mod wasm;" } == 1) {
+            "Pinned YARA-X crate root changed; refusing to apply the Android runtime hook."
+        }
+        yaraRoot.writeText(yaraRootText.replace(
+            "mod wasm;",
+            """mod wasm;
+
+            #[cfg(all(target_os = "android", feature = "pulley"))]
+            /// Sets the Android API level before the shared YARA-X WASM runtime is initialized.
+            ///
+            /// On Android API levels below 29, YARA-X uses the portable Pulley
+            /// interpreter instead of Cranelift JIT to avoid restricted executable-memory
+            /// and membarrier syscalls. Call this before constructing a compiler or ruleset.
+            pub fn set_android_api_level(api_level: i32) {
+                wasm::set_android_api_level(api_level);
+            }"""
+        ))
+
+        val wasmRuntime = patchedYaraXDirectory.resolve("lib/src/wasm/mod.rs")
+        val wasmRuntimeText = wasmRuntime.readText()
+        val syncImport = "use std::sync::{LazyLock, OnceLock};"
+        check(wasmRuntimeText.windowed(syncImport.length).count { it == syncImport } == 1) {
+            "Pinned YARA-X WASM module imports changed; refusing to apply the Android runtime hook."
+        }
+        val androidApiState = """
+            #[cfg(all(target_os = "android", feature = "pulley"))]
+            use std::sync::atomic::{AtomicI32, Ordering};
+
+            #[cfg(all(target_os = "android", feature = "pulley"))]
+            static ANDROID_API_LEVEL: AtomicI32 = AtomicI32::new(0);
+
+            #[cfg(all(target_os = "android", feature = "pulley"))]
+            pub(crate) fn set_android_api_level(api_level: i32) {
+                ANDROID_API_LEVEL.store(api_level, Ordering::Release);
+            }
+        """.trimIndent()
+        val withAndroidApiState = wasmRuntimeText.replace(syncImport, syncImport + "\n" + androidApiState)
+        val defaultPulleyConfig = """
+            #[cfg(feature = "pulley")]
+            {
+                #[cfg(target_pointer_width = "64")]
+                config.target("pulley64").unwrap();
+                #[cfg(target_pointer_width = "32")]
+                config.target("pulley32").unwrap();
+            }
+        """.trimIndent().prependIndent("    ")
+        val apiAwarePulleyConfig = """
+            // Android 9 (API 28) and lower block syscalls needed by Cranelift.
+            // Select Pulley only on those devices; newer Android keeps native JIT.
+            #[cfg(all(feature = "pulley", target_os = "android"))]
+            if ANDROID_API_LEVEL.load(Ordering::Acquire) < 29 {
+                #[cfg(target_pointer_width = "64")]
+                config.target("pulley64").unwrap();
+                #[cfg(target_pointer_width = "32")]
+                config.target("pulley32").unwrap();
+            }
+
+            // Preserve explicit Pulley behavior on non-Android consumers.
+            #[cfg(all(feature = "pulley", not(target_os = "android")))]
+            {
+                #[cfg(target_pointer_width = "64")]
+                config.target("pulley64").unwrap();
+                #[cfg(target_pointer_width = "32")]
+                config.target("pulley32").unwrap();
+            }
+        """.trimIndent().prependIndent("    ")
+        check(withAndroidApiState.windowed(defaultPulleyConfig.length).count { it == defaultPulleyConfig } == 1) {
+            "Pinned YARA-X Pulley configuration changed; refusing to apply the Android SDK gate."
+        }
+        val finalWasmRuntime = withAndroidApiState.replace(defaultPulleyConfig, apiAwarePulleyConfig)
+        check(finalWasmRuntime.contains("ANDROID_API_LEVEL.load(Ordering::Acquire) < 29") &&
+            finalWasmRuntime.contains("config.target(\"pulley64\")") &&
+            finalWasmRuntime.contains("config.target(\"pulley32\")")) {
+            "Android Pulley interpreter configuration is incomplete."
+        }
+        wasmRuntime.writeText(finalWasmRuntime)
+
+        // Verify the Android runtime patch in the exact source tree consumed by cargo.
+        check(nativeManifest.readText().contains("\"pulley\"") &&
+            nativeJniSource.readText().contains("yara_x::set_android_api_level") &&
+            yaraRoot.readText().contains("pub fn set_android_api_level") &&
+            wasmRuntime.readText().contains("ANDROID_API_LEVEL.load(Ordering::Acquire) < 29")) {
+            "Android 9 Pulley runtime patch was not completely applied."
+        }
 
         val dexParser = patchedYaraXDirectory.resolve("lib/src/modules/dex/parser.rs")
             .takeIf { it.isFile }?.readText()

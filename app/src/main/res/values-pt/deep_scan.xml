@@ -1,0 +1,4 @@
+<resources>
+    <string name="deep_scan_folder">Verificar pasta (análise profunda)</string>
+    <string name="quarantine_manual_delete">O ficheiro foi protegido na quarentena. Elimine manualmente o original.</string>
+</resources>

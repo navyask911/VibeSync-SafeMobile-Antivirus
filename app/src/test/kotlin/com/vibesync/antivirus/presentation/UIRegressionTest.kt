@@ -82,6 +82,7 @@ abstract class UIRegressionTestBase(private val testFontScale: Float) {
                         onOpen = {},
                         onScanInstalled = {},
                         onPickApk = {},
+                        onScanFolder = {},
                         installSentinelActive = false,
                         foldersActive = false,
                         pendingActions = 0,

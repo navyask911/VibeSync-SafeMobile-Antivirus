@@ -215,38 +215,36 @@ private fun SettingsRootRow(
     subtitleResource: Int,
     onClick: () -> Unit
 ) {
-    Card(
-        modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).clickable(onClick = onClick),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+    Row(
+        modifier = Modifier.fillMaxWidth()
+            .heightIn(min = 64.dp)
+            .clickable(onClick = onClick)
+            .padding(horizontal = 8.dp, vertical = 10.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(14.dp)
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(14.dp)
+        androidx.compose.material3.Surface(
+            shape = RoundedCornerShape(14.dp),
+            color = MaterialTheme.colorScheme.secondaryContainer
         ) {
-            androidx.compose.material3.Surface(
-                shape = RoundedCornerShape(14.dp),
-                color = MaterialTheme.colorScheme.secondaryContainer
-            ) {
-                androidx.compose.material3.Icon(
-                    icon,
-                    contentDescription = stringResource(titleResource),
-                    tint = MaterialTheme.colorScheme.secondary,
-                    modifier = Modifier.padding(10.dp)
-                )
-            }
-            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
-                Text(stringResource(titleResource), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Bold,
-                    maxLines = 2, overflow = TextOverflow.Ellipsis)
-                Text(stringResource(subtitleResource), style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
-            }
             androidx.compose.material3.Icon(
-                Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary
+                icon,
+                contentDescription = stringResource(titleResource),
+                tint = MaterialTheme.colorScheme.secondary,
+                modifier = Modifier.padding(10.dp)
             )
         }
+        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+            Text(stringResource(titleResource), style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.SemiBold, maxLines = 2, overflow = TextOverflow.Ellipsis)
+            Text(stringResource(subtitleResource), style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
+        }
+        androidx.compose.material3.Icon(
+            Icons.AutoMirrored.Filled.KeyboardArrowRight,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary
+        )
     }
 }
 
@@ -641,8 +639,6 @@ internal fun SafeMobileSettingsPanel(
                 shape = RoundedCornerShape(20.dp)) {
                 Column(Modifier.fillMaxWidth().padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Text(stringResource(R.string.appearance_title),
-                        style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                     if (useExpandedThemeOptions) {
                         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             AppTheme.entries.forEach { option ->
@@ -716,8 +712,6 @@ internal fun SafeMobileSettingsPanel(
                 shape = RoundedCornerShape(20.dp)) {
                 Column(Modifier.fillMaxWidth().padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Text(stringResource(R.string.global_threat_intelligence_title),
-                        style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
                     SettingsDescription(R.string.global_threat_intelligence_description)
                     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                         Text(stringResource(R.string.global_threat_intelligence_title),

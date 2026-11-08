@@ -1,0 +1,4 @@
+<resources>
+    <string name="deep_scan_folder">ਫੋਲਡਰ ਸਕੈਨ (ਡੂੰਘੀ ਸਕੈਨ)</string>
+    <string name="quarantine_manual_delete">ਫਾਈਲ ਕੁਆਰੰਟੀਨ ਵਿੱਚ ਸੁਰੱਖਿਅਤ ਹੈ। ਕਿਰਪਾ ਕਰਕੇ ਅਸਲ ਫਾਈਲ ਨੂੰ ਹੱਥੀਂ ਮਿਟਾਓ।</string>
+</resources>

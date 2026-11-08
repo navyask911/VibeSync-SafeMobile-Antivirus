@@ -86,6 +86,7 @@ class UIRegressionBoundsTest {
                     onOpen = {},
                     onScanInstalled = {},
                     onPickApk = {},
+                    onScanFolder = {},
                     installSentinelActive = false,
                     foldersActive = false,
                     pendingActions = 0,

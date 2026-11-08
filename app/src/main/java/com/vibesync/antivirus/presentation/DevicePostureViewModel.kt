@@ -33,11 +33,21 @@ class DevicePostureViewModel(private val repository: DevicePostureRepository) : 
         refreshJob = viewModelScope.launch {
             mutableState.update { it.copy(refreshing = true, failed = false) }
             try {
-                repository.refresh()
-                lastRefreshAt = System.currentTimeMillis()
-                mutableState.update { it.copy(refreshing = false, monitor = repository.status()) }
-            } catch (cancelled: CancellationException) { throw cancelled }
-            catch (_: Exception) { mutableState.update { it.copy(refreshing = false, failed = true) } }
+                val report = repository.refresh()
+                if (report != null) {
+                    lastRefreshAt = report.checkedAt
+                    mutableState.update { it.copy(report = report, refreshing = false, failed = false, monitor = repository.status()) }
+                } else {
+                    mutableState.update { it.copy(refreshing = false, monitor = repository.status()) }
+                }
+            } catch (cancelled: CancellationException) {
+                mutableState.update { it.copy(refreshing = false) }
+                throw cancelled
+            } catch (_: Exception) {
+                mutableState.update { it.copy(refreshing = false, failed = true) }
+            } finally {
+                refreshJob = null
+            }
         }
     }
 

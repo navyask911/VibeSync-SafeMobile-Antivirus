@@ -176,6 +176,36 @@ class ThreatRepository(
   installedResults + findings
  }
 
+
+ /** Deep-scan readable files below one user-selected SAF tree, without widening the grant. */
+ suspend fun scanFolderTree(treeUri: Uri, progress: suspend (Int, Int) -> Unit = { _, _ -> }): List<ScanResult> =
+  withContext(Dispatchers.IO) {
+   val root = DocumentFile.fromTreeUri(context, treeUri)
+   require(root != null && root.isDirectory && root.canRead()) {
+    "The selected folder is not readable. Re-select a folder using Android's document picker."
+   }
+   definitionLoader.importBundledIfEmpty()
+   val candidates = com.vibesync.antivirus.core.observer.SafTreeWalker
+    .files(context, listOf(treeUri)).take(maxSafScanFiles).toList()
+   val total = candidates.size
+   val scanSessionId = UUID.randomUUID().toString()
+   val findings = ArrayList<ScanResult>()
+   progress(0, total)
+   candidates.forEachIndexed { index, candidate ->
+    currentCoroutineContext().ensureActive()
+    val label = candidate.name?.take(250) ?: context.getString(R.string.unknown_file)
+    val stream = runCatching { context.contentResolver.openInputStream(candidate.uri) }.getOrNull()
+    val assessed = if (stream != null) {
+     scanner.scanStream(label, stream, scanSessionId, persistAudit = false)
+    } else {
+     recordUnscannedUri(label, context.getString(R.string.file_stream_failed), scanSessionId)
+    }
+    if (assessed.verdict != ScanVerdict.NO_MATCH) findings += assessed.copy(sourceUri = candidate.uri.toString())
+    progress(index + 1, total)
+   }
+   findings
+  }
+
  private data class SelectedFolderFile(val uri: Uri, val displayName: String)
 
  /**
@@ -268,10 +298,9 @@ class ThreatRepository(
  suspend fun retryRemoveObservedDownload(file: File): Boolean = withContext(Dispatchers.IO) {
   LocalQuarantineManager(context).retryRemoveOriginal(file)
  }
- suspend fun quarantineSelectedFile(uri: Uri, expectedSha256: String?): UiText = withContext(Dispatchers.IO) {
-  val outcome = LocalQuarantineManager(context).quarantine(uri, expectedSha256, removeOriginalAfterVerified = false)
-  if (outcome.originalRemoved) UiText(R.string.quarantine_success_removed, listOf(outcome.privateCopy.name))
-  else UiText(R.string.quarantine_success_copy_only, listOf(outcome.privateCopy.name))
+ suspend fun quarantineSelectedFile(uri: Uri, expectedSha256: String?): QuarantineOutcome = withContext(Dispatchers.IO) {
+  // Authenticate the encrypted vault copy before asking Android to remove the source document.
+  LocalQuarantineManager(context).quarantine(uri, expectedSha256, removeOriginalAfterVerified = true)
  }
 
  suspend fun listQuarantinedFiles(): List<File> = withContext(Dispatchers.IO) {
