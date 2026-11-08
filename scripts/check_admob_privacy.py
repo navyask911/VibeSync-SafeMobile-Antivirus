@@ -77,8 +77,12 @@ if "hasConfirmedThreats" not in manager or "state.threatCount > 0" not in screen
     errors.append("Interstitial must be suppressed when confirmed threats are found.")
 if "scanFull(manualScan = false)" not in screen:
     errors.append("Automatic first-run scans must not be treated as manual ad-trigger scans.")
-if "selectedDestination == \"home\"" not in screen or "AdMobBanner(adMobManager)" not in screen:
-    errors.append("Banner placement must be limited to the Home dashboard.")
+if (
+    "bottomBar = {" not in screen
+    or "adMobState.adsReady && !adMobState.isPro" not in screen
+    or "AdMobBanner(adMobManager)" not in screen
+):
+    errors.append("AdMob banner must persist in the shared Scaffold bottom bar and stay hidden for Pro.")
 
 for path, text in (
     ("docs/PRIVACY_POLICY.md", privacy),
@@ -102,8 +106,8 @@ for path, text in (
         if value not in lowered:
             errors.append(f"{path} is missing the complete Google Mobile Ads SDK disclosure: {value}.")
 
-if 'versionCode = 20261135' not in gradle or 'versionName = "1.6.7"' not in gradle:
-    errors.append("The Android app must be version 1.6.7 with versionCode 20261135.")
+if 'versionCode = 20261140' not in gradle or 'versionName = "1.7.0"' not in gradle:
+    errors.append("The Android app must be version 1.7.0 with versionCode 20261140.")
 if "On-device Malware Scanning. Ad-supported Free Tier. No AdMob Ads with Pro." not in readme:
     errors.append("README must use the requested Free/Pro advertising tagline.")
 if "Ad-supported Free Tier" not in store or "Advertising ID" not in store or "IP address" not in store or "analytics" not in store:
