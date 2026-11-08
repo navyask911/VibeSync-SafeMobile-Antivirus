@@ -557,14 +557,17 @@ dependencies {
             }
         """.trimIndent()
         val withAndroidApiState = wasmRuntimeText.replace(syncImport, syncImport + "\n" + androidApiState)
-        val defaultPulleyConfig = """    #[cfg(feature = "pulley")]
+        val defaultPulleyConfig = """
+            #[cfg(feature = "pulley")]
             {
                 #[cfg(target_pointer_width = "64")]
                 config.target("pulley64").unwrap();
                 #[cfg(target_pointer_width = "32")]
                 config.target("pulley32").unwrap();
-            }"""
-        val apiAwarePulleyConfig = """    // Android 9 (API 28) and lower block syscalls needed by Cranelift's
+            }
+        """.trimIndent().prependIndent("    ")
+        val apiAwarePulleyConfig = """
+            // Android 9 (API 28) and lower block syscalls needed by Cranelift's
             // executable-memory pipeline. Select Pulley only on those devices;
             // newer Android releases retain the native JIT for performance.
             #[cfg(all(feature = "pulley", target_os = "android"))]
@@ -583,7 +586,8 @@ dependencies {
                 config.target("pulley64").unwrap();
                 #[cfg(target_pointer_width = "32")]
                 config.target("pulley32").unwrap();
-            }"""
+            }
+        """.trimIndent().prependIndent("    ")
         check(withAndroidApiState.windowed(defaultPulleyConfig.length).count { it == defaultPulleyConfig } == 1) {
             "Pinned YARA-X Pulley configuration changed; refusing to apply the Android SDK gate."
         }
