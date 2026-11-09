@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.assertDoesNotExist
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
@@ -78,7 +78,7 @@ class DashboardWiringTest {
         }
 
         composeRule.onNodeWithText("100").assertExists()
-        composeRule.onNodeWithText("Protection Setup", substring = true).assertDoesNotExist()
+        assertTrue(composeRule.onAllNodesWithText("Protection Setup", substring = true).fetchSemanticsNodes().isEmpty())
     }
 
     @Test
