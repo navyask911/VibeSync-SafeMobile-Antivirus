@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material.icons.outlined.RadioButtonUnchecked
 import androidx.compose.material3.*
 import com.vibesync.antivirus.ui.components.CyberCard as Card
 import androidx.compose.runtime.Composable
@@ -56,9 +58,19 @@ internal fun SentinelFolderPanel(
             ExpandableText(stringResource(R.string.ui_sentinel_intro), maxLines = 3)
             ExpandableText(stringResource(R.string.ui_sentinel_scoped), maxLines = 3)
             ExpandableText(stringResource(R.string.ui_sentinel_select_tip), maxLines = 3)
-            Text((if (running && StorageAccessPreferences.hasRole(context, StorageAccessPreferences.DOWNLOADS)) "✓ " else "○ ") + stringResource(R.string.ui_sentinel_download_folder))
+            val downloadsActive = running && StorageAccessPreferences.hasRole(context, StorageAccessPreferences.DOWNLOADS)
+            Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Icon(if (downloadsActive) Icons.Outlined.CheckCircle else Icons.Outlined.RadioButtonUnchecked,
+                    contentDescription = null, tint = if (downloadsActive) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(R.string.ui_sentinel_download_folder))
+            }
             Button(onClick = { onAdd(StorageAccessPreferences.DOWNLOADS) }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) { Text(stringResource(R.string.ui_sentinel_enable_download)) }
-            Text((if (running && StorageAccessPreferences.hasRole(context, StorageAccessPreferences.WHATSAPP)) "✓ " else "○ ") + stringResource(R.string.ui_sentinel_whatsapp_folder))
+            val whatsappActive = running && StorageAccessPreferences.hasRole(context, StorageAccessPreferences.WHATSAPP)
+            Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Icon(if (whatsappActive) Icons.Outlined.CheckCircle else Icons.Outlined.RadioButtonUnchecked,
+                    contentDescription = null, tint = if (whatsappActive) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(R.string.ui_sentinel_whatsapp_folder))
+            }
             Button(onClick = { onAdd(StorageAccessPreferences.WHATSAPP) }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) { Text(stringResource(R.string.ui_sentinel_enable_whatsapp)) }
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
             Text(stringResource(R.string.ui_sentinel_custom_folders), style = MaterialTheme.typography.titleMedium)
