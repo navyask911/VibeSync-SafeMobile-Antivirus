@@ -52,11 +52,14 @@ private data class V17Colors(
 )
 
 @Composable
-private fun v17Colors(dark: Boolean) = if (dark) V17Colors(
-    Color(0xFF0F172A), Color(0xFF1E293B), Color(0xFF263349), Color(0xFFF8FAFC),
-    Color(0xFF94A3B8), Color(0xFF38BDF8), Color(0xFF10B981), Color(0xFFF59E0B),
-    Color(0xFFEF4444), Color.White.copy(alpha = .08f)
-) else V17Colors(
+private fun v17Colors(dark: Boolean) = if (dark) {
+    val scheme = MaterialTheme.colorScheme
+    V17Colors(
+        scheme.background, scheme.surface, scheme.surfaceVariant, scheme.onSurface,
+        scheme.onSurfaceVariant, scheme.primary, Color(0xFF10B981), Color(0xFFF59E0B),
+        Color(0xFFEF4444), scheme.outlineVariant
+    )
+} else V17Colors(
     Color(0xFFF8FAFC), Color.White, Color(0xFFF1F5F9), Color(0xFF0F172A),
     Color(0xFF475569), Color(0xFF0284C7), Color(0xFF059669), Color(0xFFD97706),
     Color(0xFFDC2626), Color(0xFF0F172A).copy(alpha = .09f)
@@ -70,7 +73,9 @@ private fun V17Title(text: String, modifier: Modifier = Modifier, color: Color =
 
 @Composable
 private fun V17Body(text: String, modifier: Modifier = Modifier, color: Color = MaterialTheme.colorScheme.onSurfaceVariant) {
-    Text(text, modifier, style = MaterialTheme.typography.bodyMedium.copy(fontSize = 13.sp, lineHeight = 19.sp), color = color)
+    Text(text, modifier.fillMaxWidth(),
+        style = MaterialTheme.typography.bodyMedium.copy(fontSize = 13.sp, lineHeight = 19.sp),
+        color = color, softWrap = true)
 }
 
 @Composable
@@ -228,6 +233,7 @@ internal fun V17ShieldScreen(
 @Composable
 private fun V17ScoreRing(score: Int, isDark: Boolean) {
     val c = v17Colors(isDark)
+    val label = stringResource(R.string.ui_score_title)
     val progress by animateFloatAsState(score / 100f, tween(550), label = score.toString())
     Box(Modifier.size(96.dp), contentAlignment = Alignment.Center) {
         Canvas(Modifier.fillMaxSize()) {
@@ -238,26 +244,27 @@ private fun V17ScoreRing(score: Int, isDark: Boolean) {
             drawArc(c.green, -90f, progress * 360f, false, offset, arcSize, style = Stroke(sw, cap = StrokeCap.Round))
         }
         Column(
-            Modifier.fillMaxWidth().padding(horizontal = 7.dp),
+            Modifier.fillMaxWidth().padding(horizontal = 11.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                score.toString(),
-                style = MaterialTheme.typography.headlineMedium.copy(fontSize = 24.sp),
-                fontWeight = FontWeight.ExtraBold,
-                color = c.text,
-                maxLines = 1
-            )
-            Text(
-                stringResource(R.string.ui_score_title),
-                Modifier.fillMaxWidth(),
-                style = MaterialTheme.typography.labelSmall.copy(fontSize = 8.sp, lineHeight = 9.sp),
-                color = c.muted,
-                textAlign = TextAlign.Center,
-                maxLines = 2,
-                softWrap = true,
-                overflow = TextOverflow.Ellipsis
-            )
+            Text(score.toString(), style = MaterialTheme.typography.headlineMedium.copy(fontSize = 24.sp),
+                fontWeight = FontWeight.ExtraBold, color = c.text, maxLines = 1)
+            // Kannada and other translated score labels can be wider than the ring's inner
+            // diameter. Scale this one-line label to its measured width instead of clipping it.
+            BoxWithConstraints(Modifier.fillMaxWidth()) {
+                val fittedSize = (maxWidth.value * 0.72f / label.length.coerceAtLeast(1))
+                    .coerceIn(6f, 9f).sp
+                Text(
+                    label,
+                    Modifier.fillMaxWidth(),
+                    style = MaterialTheme.typography.labelSmall.copy(fontSize = fittedSize),
+                    color = c.muted,
+                    textAlign = TextAlign.Center,
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Clip
+                )
+            }
         }
     }
 }
@@ -286,27 +293,27 @@ private fun V17Tile(
 @Composable
 internal fun V17ProtectionSetupSheet(
     isDark: Boolean, batteryActive: Boolean, adminActive: Boolean, fullScreenActive: Boolean, safActive: Boolean,
-    onDismiss: () -> Unit, onRequestBattery: () -> Unit, onRequestAdmin: () -> Unit,
-    onRequestFullScreen: () -> Unit, onRequestSaf: () -> Unit
+    onDismiss: () -> Unit, onToggleBattery: (Boolean) -> Unit, onToggleAdmin: (Boolean) -> Unit,
+    onToggleFullScreen: (Boolean) -> Unit, onToggleSaf: (Boolean) -> Unit
 ) {
     val c = v17Colors(isDark)
     ModalBottomSheet(onDismissRequest = onDismiss, containerColor = c.surface,
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)) {
         Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            V17Title("Unified Setup Checklist")
-            V17Body("Each permission is optional and is completed in Android system settings.")
+            V17Title(stringResource(R.string.v17_setup_checklist_title))
+            V17Body(stringResource(R.string.v17_setup_checklist_subtitle))
             listOf(
-                Triple("Battery optimization", batteryActive, onRequestBattery),
-                Triple("Device Admin", adminActive, onRequestAdmin),
-                Triple("Full-screen alerts", fullScreenActive, onRequestFullScreen),
-                Triple("SAF folder grants", safActive, onRequestSaf)
+                Triple(stringResource(R.string.v17_battery_setup_label), batteryActive, onToggleBattery),
+                Triple(stringResource(R.string.v17_admin_setup_label), adminActive, onToggleAdmin),
+                Triple(stringResource(R.string.v17_full_screen_setup_label), fullScreenActive, onToggleFullScreen),
+                Triple(stringResource(R.string.v17_saf_setup_label), safActive, onToggleSaf)
             ).forEach { (title, checked, action) ->
-                Surface(Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp))
-                    .clickable(enabled = !checked, onClick = action), color = c.elevated, shape = RoundedCornerShape(12.dp)) {
-                    Row(Modifier.padding(horizontal = 12.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+                Surface(Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).clickable { action(!checked) },
+                    color = c.elevated, shape = RoundedCornerShape(12.dp)) {
+                    Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
                         V17Title(title, Modifier.weight(1f))
-                        Checkbox(checked, onCheckedChange = if (checked) null else { { action() } })
+                        Checkbox(checked = checked, onCheckedChange = action)
                     }
                 }
             }
@@ -320,19 +327,20 @@ internal fun V17ProtectionSetupSheet(
 internal fun V17ScanLabScreen(
     isDark: Boolean, state: SafeMobileUiState, onStartQuickScan: () -> Unit, onStartDeepScan: () -> Unit,
     onCancelScan: () -> Unit, onUninstall: (String) -> Unit, onAppInfo: (String) -> Unit,
-    onQuarantine: (ScanResult) -> Unit, onTrust: (ScanResult) -> Unit, onRemoveTrust: (String) -> Unit
+    onQuarantine: (ScanResult) -> Unit, onTrust: (ScanResult) -> Unit, onRemoveTrust: (String) -> Unit,
+    repository: com.vibesync.antivirus.data.repository.ThreatRepository? = null
 ) {
     val c = v17Colors(isDark)
     var deep by rememberSaveable { mutableStateOf(false) }
     Column(Modifier.fillMaxSize().background(c.device).verticalScroll(rememberScrollState()).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)) {
         V17Card(isDark) {
-            V17Title("Run Smart Scan")
-            V17Body("Progressive four-layer inspection using the on-device scan pipeline.")
+            V17Title(stringResource(R.string.v17_scan_title))
+            V17Body(stringResource(R.string.v17_scan_subtitle))
             Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp)).background(c.elevated).padding(4.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                V17ModeButton("Quick App Scan", !deep, isDark, Modifier.weight(1f)) { deep = false }
-                V17ModeButton("Deep Storage (Worker)", deep, isDark, Modifier.weight(1f)) { deep = true }
+                V17ModeButton(stringResource(R.string.v17_scan_quick_mode), !deep, isDark, Modifier.weight(1f)) { deep = false }
+                V17ModeButton(stringResource(R.string.v17_scan_deep_mode), deep, isDark, Modifier.weight(1f)) { deep = true }
             }
             Button(onClick = { if (deep) onStartDeepScan() else onStartQuickScan() },
                 enabled = !state.isScanning, modifier = Modifier.fillMaxWidth()) {
@@ -355,12 +363,25 @@ internal fun V17ScanLabScreen(
             }
         }
         V17Card(isDark) {
-            V17Title("Scan Results (Tap for 4-Layer Breakdown)")
-            if (state.results.isEmpty()) V17Body("No scan results yet. Run Quick App Scan or choose a folder for deep scanning.")
+            V17Title(stringResource(R.string.v17_scan_results_title))
+            if (state.results.isEmpty()) V17Body(stringResource(R.string.v17_scan_no_results))
             state.results.take(80).forEach { result ->
                 V17ScanResultRow(result, isDark, onUninstall, onAppInfo,
                     { onQuarantine(result) }, { onTrust(result) }, { result.packageName?.let(onRemoveTrust) })
             }
+        }
+        V17Card(isDark) {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
+                Icon(Icons.Outlined.Analytics, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(22.dp))
+                V17Title(stringResource(R.string.v17_scan_metrics_title), Modifier.weight(1f))
+            }
+            if (repository != null) AnalyticsCharts(repository, state.results)
+            HorizontalDivider()
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
+                Icon(Icons.Outlined.Assessment, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(22.dp))
+                V17Title(stringResource(R.string.benchmark_title), Modifier.weight(1f))
+            }
+            BenchmarkResultsPanel()
         }
     }
 }
@@ -520,7 +541,11 @@ internal fun V17ConsoleSettingsScreen(
     onVoiceChanged: (Boolean) -> Unit, installSentinelEnabled: Boolean, installSentinelRunning: Boolean,
     onInstallSentinelChanged: (Boolean) -> Unit, globalIntelEnabled: Boolean,
     onGlobalIntelChanged: (Boolean) -> Unit, onImportYara: () -> Unit,
-    onThreatFeedSync: () -> Unit, onBenchmarks: () -> Unit, onOpenPro: () -> Unit
+    onThreatFeedSync: () -> Unit, onOpenPro: () -> Unit, onBenchmarks: () -> Unit = {},
+    batteryGuardEnabled: Boolean = false, onBatteryGuardChanged: (Boolean) -> Unit = {},
+    adminGuardEnabled: Boolean = false, onAdminGuardChanged: (Boolean) -> Unit = {},
+    fullScreenGuardEnabled: Boolean = false, onFullScreenGuardChanged: (Boolean) -> Unit = {},
+    safGuardEnabled: Boolean = false, onSafGuardChanged: (Boolean) -> Unit = {}
 ) {
     val context = LocalContext.current
     val c = v17Colors(isDark)
@@ -531,13 +556,15 @@ internal fun V17ConsoleSettingsScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp)) {
         V17Card(isDark) {
             V17Title("Appearance")
-            V17Title("Theme")
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                AppTheme.entries.forEach { theme ->
+                AppTheme.entries.filter { it != AppTheme.LIGHT }.forEach { theme ->
                     FilterChip(selected = appTheme == theme, onClick = { onAppThemeChanged(theme) },
-                        modifier = Modifier.weight(1f), label = { Text(when(theme) {
-                            AppTheme.LIGHT -> "Light"; AppTheme.MIDNIGHT -> "Dark"; AppTheme.OLED -> "OLED"
-                        }, style = MaterialTheme.typography.labelMedium.copy(fontSize = 11.sp)) })
+                        modifier = Modifier.weight(1f), label = { Text(stringResource(when (theme) {
+                            AppTheme.DARK_SLATE -> R.string.v17_theme_dark_slate
+                            AppTheme.MIDNIGHT -> R.string.v17_theme_midnight_navy
+                            AppTheme.OLED -> R.string.theme_oled
+                            AppTheme.LIGHT -> R.string.v17_theme_dark_slate
+                        }), style = MaterialTheme.typography.labelMedium.copy(fontSize = 11.sp), maxLines = 1) })
                 }
             }
             HorizontalDivider(color = c.border)
@@ -562,33 +589,52 @@ internal fun V17ConsoleSettingsScreen(
                 installSentinelEnabled, "console.install-sentinel", Icons.Outlined.Security, isDark, onInstallSentinelChanged)
         }
         V17Card(isDark) {
+            V17Title(stringResource(R.string.v17_guard_card_title))
+            V17Switch(stringResource(R.string.v17_battery_guard_title), stringResource(R.string.v17_battery_guard_summary),
+                batteryGuardEnabled, "console.guard.battery", Icons.Outlined.BatteryChargingFull, isDark, onBatteryGuardChanged)
+            HorizontalDivider(color = c.border)
+            V17Switch(stringResource(R.string.v17_admin_guard_title), stringResource(R.string.v17_admin_guard_summary),
+                adminGuardEnabled, "console.guard.admin", Icons.Outlined.Security, isDark, onAdminGuardChanged)
+            HorizontalDivider(color = c.border)
+            V17Switch(stringResource(R.string.v17_full_screen_guard_title), stringResource(R.string.v17_full_screen_guard_summary),
+                fullScreenGuardEnabled, "console.guard.fullscreen", Icons.Outlined.Notifications, isDark, onFullScreenGuardChanged)
+            HorizontalDivider(color = c.border)
+            V17Switch(stringResource(R.string.v17_saf_guard_title), stringResource(R.string.v17_saf_guard_summary),
+                safGuardEnabled, "console.guard.saf", Icons.Outlined.FolderOpen, isDark, onSafGuardChanged)
+        }
+        V17Card(isDark) {
             Row(Modifier.fillMaxWidth().clickable { advanced = !advanced }, verticalAlignment = Alignment.CenterVertically) {
                 Column(Modifier.weight(1f)) {
-                    V17Title("Advanced Telemetry & Rules")
-                    V17Body("YARA imports, ThreatFeed sync, global intelligence and benchmarks.")
+                    V17Title(stringResource(R.string.v17_advanced_title))
+                    V17Body(stringResource(R.string.v17_advanced_subtitle))
                 }
                 Icon(Icons.Outlined.ExpandMore, if (advanced) "Collapse" else "Expand", tint = c.muted)
             }
             AnimatedVisibility(advanced) {
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     HorizontalDivider(color = c.border)
-                    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                        Column(Modifier.weight(1f).fillMaxWidth()) { V17Title("YARA custom rules"); V17Body("Import a local .yar rule.") }
-                        OutlinedButton(onClick = onImportYara) { Text(stringResource(R.string.detection_capabilities_import_yara)) }
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Column(Modifier.weight(1f).fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                            V17Title(stringResource(R.string.v17_advanced_yara_title))
+                            V17Body(stringResource(R.string.v17_advanced_yara_subtitle))
+                        }
+                        OutlinedButton(onClick = onImportYara, modifier = Modifier.weight(1f).fillMaxWidth()) {
+                            Text(stringResource(R.string.detection_capabilities_import_yara), maxLines = 2, overflow = TextOverflow.Ellipsis)
+                        }
                     }
                     HorizontalDivider(color = c.border)
-                    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                        Column(Modifier.weight(1f).fillMaxWidth()) { V17Title("ThreatFeed Sync"); V17Body("Run the configured feed sync.") }
-                        OutlinedButton(onClick = onThreatFeedSync) { Text(stringResource(R.string.threat_feed_sync_now)) }
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Column(Modifier.weight(1f).fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                            V17Title(stringResource(R.string.v17_advanced_feed_title))
+                            V17Body(stringResource(R.string.v17_advanced_feed_subtitle))
+                        }
+                        OutlinedButton(onClick = onThreatFeedSync, modifier = Modifier.weight(1f).fillMaxWidth()) {
+                            Text(stringResource(R.string.threat_feed_sync_now), maxLines = 2, overflow = TextOverflow.Ellipsis)
+                        }
                     }
                     HorizontalDivider(color = c.border)
                     V17Switch("Global Threat Intelligence", "Opt in to explicitly approved hash contributions",
                         globalIntelEnabled, "console.global-intel", Icons.Outlined.Security, isDark, onGlobalIntelChanged)
-                    HorizontalDivider(color = c.border)
-                    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                        Column(Modifier.weight(1f).fillMaxWidth()) { V17Title("Benchmarks & Analytics"); V17Body("Review local scan timing and results.") }
-                        OutlinedButton(onClick = onBenchmarks) { Text(stringResource(R.string.open_feature)) }
-                    }
                 }
             }
         }
