@@ -10,7 +10,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -66,7 +66,7 @@ internal fun SecurityDashboard(assessment: DeviceSecurityAssessment?, onCheckPla
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(stringResource(R.string.ui_score_title), style = MaterialTheme.typography.titleLarge)
                         IconButton(onClick = { showScoreInfo = true }) {
-                            Icon(Icons.Default.Info, contentDescription = stringResource(R.string.ui_score_explanation))
+                            Icon(Icons.Outlined.Info, contentDescription = stringResource(R.string.ui_score_explanation))
                         }
                     }
                     Text(if (assessment == null) stringResource(R.string.ui_score_checking) else
