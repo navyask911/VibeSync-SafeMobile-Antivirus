@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.util.Base64
 import java.security.MessageDigest
 import java.net.URL
+import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import java.nio.file.AtomicMoveNotSupportedException
@@ -460,29 +461,54 @@ val downloadMlAssets = tasks.register("downloadMlAssets") {
                 "Could not create ML asset directory: ${destination.parentFile}"
             }
             val temporary = File(destination.parentFile, destination.name + ".download")
-            temporary.delete()
             try {
-                val connection = URL(sourceUrl).openConnection().apply {
-                    connectTimeout = 20_000
-                    readTimeout = 45_000
-                    useCaches = false
-                    setRequestProperty("User-Agent", "SafeMobile-Gradle-ML-Bridge")
-                }
-                connection.getInputStream().buffered().use { input ->
-                    temporary.outputStream().buffered().use { output ->
-                        val buffer = ByteArray(8 * 1024)
-                        var total = 0L
-                        while (true) {
-                            val count = input.read(buffer)
-                            if (count < 0) break
-                            if (count == 0) continue
-                            total += count
-                            require(total <= maxBytes) {
-                                "ML release asset exceeded its download size limit: $sourceUrl"
-                            }
-                            output.write(buffer, 0, count)
+                var downloaded = false
+                var lastDownloadError: IOException? = null
+                // GitHub Release assets can briefly return 5xx responses under load.
+                // Retry transport failures only; every successful download still has
+                // exact size, SHA-256 and TFLite/schema validation below.
+                for (attempt in 1..4) {
+                    temporary.delete()
+                    try {
+                        val connection = URL(sourceUrl).openConnection().apply {
+                            connectTimeout = 20_000
+                            readTimeout = 45_000
+                            useCaches = false
+                            setRequestProperty("User-Agent", "SafeMobile-Gradle-ML-Bridge")
                         }
+                        connection.getInputStream().buffered().use { input ->
+                            temporary.outputStream().buffered().use { output ->
+                                val buffer = ByteArray(8 * 1024)
+                                var total = 0L
+                                while (true) {
+                                    val count = input.read(buffer)
+                                    if (count < 0) break
+                                    if (count == 0) continue
+                                    total += count
+                                    require(total <= maxBytes) {
+                                        "ML release asset exceeded its download size limit: $sourceUrl"
+                                    }
+                                    output.write(buffer, 0, count)
+                                }
+                            }
+                        }
+                        downloaded = true
+                        lastDownloadError = null
+                        break
+                    } catch (error: IOException) {
+                        lastDownloadError = error
+                        temporary.delete()
+                        if (attempt == 4) break
+                        val delayMs = 1_000L * attempt
+                        logger.warn(
+                            "Temporary ML asset download failure for ${destination.name} " +
+                                "(attempt $attempt/4): ${error.message}; retrying in ${delayMs}ms."
+                        )
+                        Thread.sleep(delayMs)
                     }
+                }
+                if (!downloaded) {
+                    throw lastDownloadError ?: IOException("ML release asset download failed: $sourceUrl")
                 }
 
                 val bytes = temporary.readBytes()
