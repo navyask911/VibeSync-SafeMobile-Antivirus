@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.assertDoesNotExist
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
@@ -55,6 +56,29 @@ class DashboardWiringTest {
         composeRule.onNodeWithText("Protection Setup: 2/4 Active")
             .performScrollTo().performClick()
         assertTrue(opened)
+    }
+
+    @Test
+    fun fourActiveGuardsHideSetupBannerAndForcePerfectScore() {
+        render {
+            V17ShieldScreen(
+                isDark = true,
+                securityScore = 41,
+                isPro = false,
+                activeGuards = 4,
+                liveSentinelActive = true,
+                posturePassed = 8,
+                quarantinedFilesCount = 0,
+                onOpenSetup = {},
+                onOpenLiveSentinel = {},
+                onOpenPosture = {},
+                onOpenDetection = {},
+                onOpenThreatDb = {}
+            )
+        }
+
+        composeRule.onNodeWithText("100").assertExists()
+        composeRule.onNodeWithText("Protection Setup", substring = true).assertDoesNotExist()
     }
 
     @Test
