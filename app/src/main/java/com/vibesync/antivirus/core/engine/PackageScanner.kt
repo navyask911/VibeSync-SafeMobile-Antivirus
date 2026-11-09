@@ -29,6 +29,7 @@ import com.vibesync.antivirus.data.local.ScanAudit
 import com.vibesync.antivirus.data.local.ThreatDao
 import com.vibesync.antivirus.data.repository.ThreatIntelligenceRepository
 import java.io.ByteArrayInputStream
+import java.io.InputStream
 import java.io.File
 import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
@@ -49,6 +50,7 @@ class PackageScanner(
  private val hashDatabaseManager: HashDatabaseManager? = null
 ) {
  private val pm = context.packageManager
+ private val eicarProbeBytes = 64 * 1024
  private val integrityChecker = IntegrityChecker(context)
  private val trustedAppStore = TrustedAppStore(context)
  private val deepStaticAnalyzer = DeepStaticAnalyzer()
@@ -339,6 +341,10 @@ class PackageScanner(
    }
    output = evaluateWithEnsemble(output, yaraXResult)
    output = markIncompleteYaraIfOtherwiseClean(output, yaraXResult)
+   if (!file.extension.equals("apk", ignoreCase = true)) {
+    val prefix = file.inputStream().buffered().use(::readBoundedPrefix)
+    output = ThreatEnsembleEvaluator.evaluateTextPayload(output, prefix)
+   }
    if (persistAllAudit || output.verdict == ScanVerdict.THREAT || output.verdict == ScanVerdict.SUSPICIOUS || output.verdict == ScanVerdict.NOT_SCANNED) audit(output, start, scanSessionId)
    output.copy(durationMs = elapsed(start), sourceLocalPath = file.absolutePath, scanSessionId = scanSessionId)
   } catch (cancelled: CancellationException) {
@@ -382,8 +388,15 @@ class PackageScanner(
       sourceLocalPath = null, scanSessionId = scanSessionId)
     } finally { staged.delete() }
    }
+   val eicarProbe = if (zipHeader || label.substringBefore('?').endsWith(".apk", ignoreCase = true)) {
+    null
+   } else {
+    inputStream.mark(eicarProbeBytes)
+    readBoundedPrefix(inputStream).also { inputStream.reset() }
+   }
    val hash = inputStream.use { calculator.calculate(it) }
-   val output = evaluate(label, label, hash.sha256, hash.md5, emptyList(), 0, sha1 = hash.sha1, fileSize = hash.bytesRead)
+   var output = evaluate(label, label, hash.sha256, hash.md5, emptyList(), 0, sha1 = hash.sha1, fileSize = hash.bytesRead)
+   if (eicarProbe != null) output = ThreatEnsembleEvaluator.evaluateTextPayload(output, eicarProbe)
    if (persistAudit || output.verdict == ScanVerdict.THREAT ||
        output.verdict == ScanVerdict.SUSPICIOUS || output.verdict == ScanVerdict.NOT_SCANNED) {
     audit(output, start, scanSessionId)
@@ -481,6 +494,17 @@ class PackageScanner(
   audit(output, start, scanSessionId)
   return output.copy(durationMs = elapsed(start), packageName = info.packageName, scanSessionId = scanSessionId)
  }
+ private fun readBoundedPrefix(input: InputStream): ByteArray {
+  val buffer = ByteArray(eicarProbeBytes)
+  var total = 0
+  while (total < buffer.size) {
+   val count = input.read(buffer, total, buffer.size - total)
+   if (count <= 0) break
+   total += count
+  }
+  return if (total == buffer.size) buffer else buffer.copyOf(total)
+ }
+
  private fun trustedResult(name: String, session: String, start: Long) =
   result(name, name, null, null, ScanVerdict.NO_MATCH,
    listOf(context.getString(R.string.trusted_app_explanation)), start).copy(

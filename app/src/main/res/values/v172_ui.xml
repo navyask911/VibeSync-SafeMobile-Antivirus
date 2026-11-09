@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="theme_dark_slate">Dark Slate</string>
+    <string name="setup_checklist_title">Unified Setup Checklist</string>
+    <string name="setup_checklist_body">These controls open Android settings. The checked state follows the permission currently granted by the device.</string>
+    <string name="setup_checklist_battery">Battery optimization exemption</string>
+    <string name="setup_checklist_admin">Device Administrator</string>
+    <string name="setup_checklist_overlay">High-priority overlay alert</string>
+    <string name="setup_checklist_saf">SAF Directory Watch</string>
+    <string name="security_guards_title">Active Security Guards &amp; Permissions</string>
+    <string name="security_guards_description">Manage system permissions used by SafeMobile protection.</string>
+    <string name="security_guard_battery">Battery Optimization Exemption</string>
+    <string name="security_guard_battery_desc">Keep the background sentinel eligible to run.</string>
+    <string name="security_guard_admin">Device Administrator</string>
+    <string name="security_guard_admin_desc">Enable Android device-admin protection controls.</string>
+    <string name="security_guard_overlay">High-Priority Overlay Alert</string>
+    <string name="security_guard_overlay_desc">Allow urgent threat warnings to appear over other apps.</string>
+    <string name="security_guard_saf">SAF Directory Watch</string>
+    <string name="security_guard_saf_desc">Monitor only folders explicitly granted through Android's file picker.</string>
+    <string name="scan_lab_metrics_title">Scan &amp; Lab Metrics</string>
+    <string name="scan_lab_metrics_body">Inspect verified benchmark information and local scan analytics.</string>
+</resources>

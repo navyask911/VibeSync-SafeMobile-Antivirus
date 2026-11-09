@@ -10,9 +10,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 
-enum class AppTheme { MIDNIGHT, LIGHT, OLED;
+enum class AppTheme { DARK_SLATE, MIDNIGHT, OLED, LIGHT;
     companion object {
-        fun fromSaved(value: String?): AppTheme = entries.firstOrNull { it.name == value } ?: LIGHT
+        /** Migrate the former binary Light choice into the first dark-tier palette. */
+        fun fromSaved(value: String?): AppTheme = when (value) {
+            "LIGHT", null -> DARK_SLATE
+            else -> entries.firstOrNull { it.name == value && it != LIGHT } ?: DARK_SLATE
+        }
     }
 }
 private val Context.safeMobileThemeStore by preferencesDataStore(name = "safe_mobile_theme")

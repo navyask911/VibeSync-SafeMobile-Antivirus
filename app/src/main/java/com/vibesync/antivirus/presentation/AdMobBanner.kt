@@ -3,8 +3,9 @@ package com.vibesync.antivirus.presentation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -17,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.google.android.libraries.ads.mobile.sdk.banner.AdSize
@@ -54,17 +56,24 @@ internal fun AdMobBanner(manager: AdMobManager) {
     }
 
     if (loaded) {
-        Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(2.dp)) {
             Text(
                 stringResource(R.string.ads_label),
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
-            AndroidView(
-                factory = { adView },
-                modifier = Modifier.fillMaxWidth().wrapContentHeight(),
-                update = {}
-            )
+            Surface(
+                modifier = Modifier.fillMaxWidth().height(56.dp),
+                color = MaterialTheme.colorScheme.surface
+            ) {
+                AndroidView(
+                    factory = { adView },
+                    modifier = Modifier.fillMaxWidth().height(56.dp),
+                    update = {}
+                )
+            }
         }
     }
 }

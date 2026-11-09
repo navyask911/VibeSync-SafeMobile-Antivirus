@@ -27,6 +27,11 @@ object StorageAccessPreferences {
     private val CUSTOM_TREE_URIS = stringSetPreferencesKey("custom_tree_uris")
     private fun prefs(context: Context) = context.getSharedPreferences(SafeMobileApp.SECURITY_PREFS, Context.MODE_PRIVATE)
 
+    /** Initial navigation hint for the user's explicit Deep Scan folder selection. */
+    fun deepScanInitialUri(): Uri = DocumentsContract.buildDocumentUri(
+        "com.android.externalstorage.documents", "primary:Android/media"
+    )
+
     fun selectedTreeUris(context: Context): List<Uri> {
         val preferences = prefs(context)
         val saved = preferences.getString(TREES, null)
@@ -130,6 +135,12 @@ object StorageAccessPreferences {
             }
         }
         removeFolder(context, uri)
+    }
+
+    /** Revokes every persisted folder grant when the user disables SAF Directory Watch. */
+    suspend fun revokeAllFolders(context: Context) {
+        selectedTreeUris(context).forEach { removeFolder(context, it) }
+        context.customFolderDataStore.edit { it.remove(CUSTOM_TREE_URIS) }
     }
 
     @Synchronized

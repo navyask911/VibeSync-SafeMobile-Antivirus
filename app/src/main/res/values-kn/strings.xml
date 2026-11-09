@@ -686,5 +686,24 @@
     <!-- v1.5.2 Figma UI translations -->
     <string name="scan_detected_by">ಪತ್ತೆಹಚ್ಚಿದ ಮೂಲ: %1$s</string>
     <string name="scan_detected_by_confidence">ಪತ್ತೆಹಚ್ಚಿದ ಮೂಲ: %1$s (%2$d%%)</string>
+    <!-- v1.7.2 theme, setup checklist, security guards and Scan &amp; Lab metrics -->
+    <string name="theme_dark_slate">ಗಾಢ ಸ್ಲೇಟ್</string>
+    <string name="setup_checklist_title">ಏಕೀಕೃತ ಸೆಟಪ್ ಪರಿಶೀಲನಾಪಟ್ಟಿ</string>
+    <string name="setup_checklist_body">ಈ ನಿಯಂತ್ರಣಗಳು Android ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ತೆರೆಯುತ್ತವೆ. ಗುರುತಿಸಿದ ಸ್ಥಿತಿ ಸಾಧನದಲ್ಲಿ ಪ್ರಸ್ತುತ ಅನುಮತಿಯನ್ನು ತೋರಿಸುತ್ತದೆ.</string>
+    <string name="setup_checklist_battery">ಬ್ಯಾಟರಿ ಆಪ್ಟಿಮೈಸೇಶನ್ ವಿನಾಯಿತಿ</string>
+    <string name="setup_checklist_admin">ಸಾಧನ ನಿರ್ವಾಹಕ</string>
+    <string name="setup_checklist_overlay">ಹೆಚ್ಚಿನ ಆದ್ಯತೆಯ ಓವರ್‌ಲೇ ಎಚ್ಚರಿಕೆ</string>
+    <string name="setup_checklist_saf">SAF ಫೋಲ್ಡರ್ ಮೇಲ್ವಿಚಾರಣೆ</string>
+    <string name="security_guards_title">ಸಕ್ರಿಯ ಭದ್ರತಾ ರಕ್ಷಣೆಗಳು ಮತ್ತು ಅನುಮತಿಗಳು</string>
+    <string name="security_guards_description">SafeMobile ರಕ್ಷಣೆಗೆ ಬಳಸುವ ಸಿಸ್ಟಮ್ ಅನುಮತಿಗಳನ್ನು ನಿರ್ವಹಿಸಿ.</string>
+    <string name="security_guard_battery">ಬ್ಯಾಟರಿ ಆಪ್ಟಿಮೈಸೇಶನ್ ವಿನಾಯಿತಿ</string>
+    <string name="security_guard_battery_desc">ಹಿನ್ನೆಲೆ ಸೆಂಟಿನೆಲ್ ಕಾರ್ಯನಿರ್ವಹಿಸಲು ಅವಕಾಶ ನೀಡಿ.</string>
+    <string name="security_guard_admin">ಸಾಧನ ನಿರ್ವಾಹಕ</string>
+    <string name="security_guard_admin_desc">Android ಸಾಧನ ನಿರ್ವಾಹಕ ರಕ್ಷಣೆಯನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ.</string>
+    <string name="security_guard_overlay">ಹೆಚ್ಚಿನ ಆದ್ಯತೆಯ ಓವರ್‌ಲೇ ಎಚ್ಚರಿಕೆ</string>
+    <string name="security_guard_overlay_desc">ಇತರ ಆ್ಯಪ್‌ಗಳ ಮೇಲೆಯೂ ತುರ್ತು ಬೆದರಿಕೆ ಎಚ್ಚರಿಕೆಗಳನ್ನು ತೋರಿಸಲು ಅನುಮತಿಸಿ.</string>
+    <string name="security_guard_saf">SAF ಫೋಲ್ಡರ್ ಮೇಲ್ವಿಚಾರಣೆ</string>
+    <string name="security_guard_saf_desc">Android ಫೈಲ್ ಆಯ್ಕೆಯ ಮೂಲಕ ಅನುಮತಿಸಿದ ಫೋಲ್ಡರ್‌ಗಳನ್ನು ಮಾತ್ರ ಮೇಲ್ವಿಚಾರಣೆ ಮಾಡಿ.</string>
+    <string name="scan_lab_metrics_title">ಸ್ಕ್ಯಾನ್ ಮತ್ತು ಲ್ಯಾಬ್ ಮಾಪನಗಳು</string>
+    <string name="scan_lab_metrics_body">ಪರಿಶೀಲಿತ ಬೆಂಚ್‌ಮಾರ್ಕ್ ಮಾಹಿತಿ ಮತ್ತು ಸ್ಥಳೀಯ ಸ್ಕ್ಯಾನ್ ವಿಶ್ಲೇಷಣೆಗಳನ್ನು ಪರಿಶೀಲಿಸಿ.</string>
 </resources>
-
