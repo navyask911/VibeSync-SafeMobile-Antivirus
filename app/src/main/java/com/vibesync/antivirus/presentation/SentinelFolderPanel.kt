@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.RadioButtonUnchecked
 import androidx.compose.material3.*
@@ -27,7 +28,10 @@ internal fun LimitedProtectionBanner(downloads: Boolean, whatsapp: Boolean, runn
     if (downloads && whatsapp && running) return
     Card(colors = CardDefaults.cardColors(containerColor = Color(0xFFFFD54F)), modifier = Modifier.fillMaxWidth()) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text(stringResource(R.string.ui_sentinel_limited), color = Color(0xFF211A00), style = MaterialTheme.typography.titleMedium)
+            Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Icon(Icons.Outlined.Warning, contentDescription = null, tint = Color(0xFF211A00))
+                Text(stringResource(R.string.ui_sentinel_limited), color = Color(0xFF211A00), style = MaterialTheme.typography.titleMedium)
+            }
             Text(when {
                 !running || (!downloads && !whatsapp) -> stringResource(R.string.ui_sentinel_both_off)
                 !downloads -> stringResource(R.string.ui_sentinel_download_off)
