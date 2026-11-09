@@ -15,14 +15,14 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.Alignment
 import androidx.compose.material3.RadioButton
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.HelpOutline
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Security
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.filled.WorkspacePremium
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.outlined.HelpOutline
+import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.outlined.Security
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material.icons.outlined.WorkspacePremium
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
+import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.vibesync.antivirus.ui.theme.AppTheme
 import androidx.compose.foundation.layout.Column
@@ -245,7 +245,7 @@ private fun SettingsRootRow(
                 color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
         }
         androidx.compose.material3.Icon(
-            Icons.AutoMirrored.Filled.KeyboardArrowRight,
+            Icons.AutoMirrored.Outlined.KeyboardArrowRight,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.primary
         )
@@ -668,7 +668,7 @@ internal fun SafeMobileSettingsPanel(
                             }
                         }
                     }
-                    SettingsRootRow(Icons.Default.Settings, R.string.language_settings,
+                    SettingsRootRow(Icons.Outlined.Settings, R.string.language_settings,
                         R.string.theme_appearance_description) {
                         showLanguageDialog = true
                     }
@@ -705,7 +705,7 @@ internal fun SafeMobileSettingsPanel(
                 isEnabledOverride = installSentinelEnabledOverride,
                 onToggleOverride = onInstallSentinelChanged
             )
-            SettingsRootRow(Icons.Default.Security, R.string.sentinel_scope_title,
+            SettingsRootRow(Icons.Outlined.Security, R.string.sentinel_scope_title,
                 R.string.monitor_explanation) {
                 onManageFolders()
             }
@@ -768,24 +768,24 @@ internal fun SafeMobileSettingsPanel(
 
             Text(stringResource(R.string.about_legal),
                 style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-            SettingsRootRow(Icons.Default.HelpOutline, R.string.about_privacy_policy, R.string.ad_privacy_intro) {
+            SettingsRootRow(Icons.Outlined.HelpOutline, R.string.about_privacy_policy, R.string.ad_privacy_intro) {
                 onSubRouteChanged(SettingsSubRoute.HELP_LEGAL)
             }
-            SettingsRootRow(Icons.Default.Security, R.string.download_interceptor_label,
+            SettingsRootRow(Icons.Outlined.Security, R.string.download_interceptor_label,
                 R.string.download_interceptor_description) {
                 onSubRouteChanged(SettingsSubRoute.SECURITY)
             }
-            SettingsRootRow(Icons.Default.Notifications, R.string.siren_test_settings_title,
+            SettingsRootRow(Icons.Outlined.Notifications, R.string.siren_test_settings_title,
                 R.string.siren_test_settings_description) {
                 onSubRouteChanged(SettingsSubRoute.NOTIFICATIONS)
             }
             if (BuildConfig.OPTIONAL_FEED_ENABLED) {
-                SettingsRootRow(Icons.Default.Settings, R.string.feed_settings_title,
+                SettingsRootRow(Icons.Outlined.Settings, R.string.feed_settings_title,
                     R.string.feed_settings_description) {
                     onSubRouteChanged(SettingsSubRoute.GENERAL)
                 }
             }
-            SettingsRootRow(Icons.Default.Star, R.string.app_name, R.string.official_website_visit) {
+            SettingsRootRow(Icons.Outlined.Star, R.string.app_name, R.string.official_website_visit) {
                 onSubRouteChanged(SettingsSubRoute.RATE)
             }
         } else {
@@ -798,7 +798,7 @@ internal fun SafeMobileSettingsPanel(
                     modifier = Modifier.testTag("settings.subpage.back")
                 ) {
                     Icon(
-                        Icons.AutoMirrored.Filled.ArrowBack,
+                        Icons.AutoMirrored.Outlined.ArrowBack,
                         contentDescription = stringResource(R.string.nav_settings)
                     )
                 }
