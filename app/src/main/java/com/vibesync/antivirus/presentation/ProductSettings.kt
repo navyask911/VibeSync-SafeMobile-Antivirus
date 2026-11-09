@@ -102,12 +102,12 @@ private fun ThemeOptionButton(
     onSelected: () -> Unit
 ) {
     val label = when (option) {
-        AppTheme.LIGHT -> R.string.theme_light
-        AppTheme.MIDNIGHT -> R.string.theme_midnight
+        AppTheme.DARK_SLATE, AppTheme.LIGHT -> R.string.v17_theme_dark_slate
+        AppTheme.MIDNIGHT -> R.string.v17_theme_midnight_navy
         AppTheme.OLED -> R.string.theme_oled
     }
     val icon = when (option) {
-        AppTheme.LIGHT -> R.drawable.ic_theme_light
+        AppTheme.DARK_SLATE, AppTheme.LIGHT -> R.drawable.ic_theme_midnight
         AppTheme.MIDNIGHT -> R.drawable.ic_theme_midnight
         AppTheme.OLED -> R.drawable.ic_theme_oled
     }
@@ -117,10 +117,7 @@ private fun ThemeOptionButton(
             .selectable(selected = selected, role = Role.RadioButton, onClick = onSelected)
             .testTag("settings.theme.${option.name.lowercase()}"),
         shape = RoundedCornerShape(12.dp),
-        color = if (selected && option == AppTheme.LIGHT) {
-            com.vibesync.antivirus.ui.theme.SafeMobileLightSelectedContainer
-        } else if (selected) MaterialTheme.colorScheme.surfaceVariant
-        else MaterialTheme.colorScheme.surface,
+        color = if (selected) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.surface,
         border = androidx.compose.foundation.BorderStroke(
             if (selected) 2.dp else 1.dp,
             if (selected) MaterialTheme.colorScheme.secondary
@@ -580,7 +577,7 @@ internal fun SafeMobileSettingsPanel(
     onSecurityAlertsChanged: ((Boolean) -> Unit)? = null,
     onToggleProtection: ((Boolean) -> Unit)? = null,
     onStrictModeChanged: ((Boolean) -> Unit)? = null,
-    appTheme: AppTheme = AppTheme.LIGHT,
+    appTheme: AppTheme = AppTheme.DARK_SLATE,
     onAppThemeChanged: (AppTheme) -> Unit = {},
     adPrivacyOptionsRequired: Boolean = false,
     isProForAds: Boolean = true,
@@ -641,7 +638,7 @@ internal fun SafeMobileSettingsPanel(
                     verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     if (useExpandedThemeOptions) {
                         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                            AppTheme.entries.forEach { option ->
+                            listOf(AppTheme.DARK_SLATE, AppTheme.MIDNIGHT, AppTheme.OLED).forEach { option ->
                                 ThemeOptionButton(
                                     option = option,
                                     selected = appTheme == option,
@@ -653,7 +650,7 @@ internal fun SafeMobileSettingsPanel(
                         }
                     } else {
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            AppTheme.entries.forEach { option ->
+                            listOf(AppTheme.DARK_SLATE, AppTheme.MIDNIGHT, AppTheme.OLED).forEach { option ->
                                 ThemeOptionButton(
                                     option = option,
                                     selected = appTheme == option,
@@ -839,8 +836,8 @@ internal fun SafeMobileSettingsPanel(
                 SettingsDescription(R.string.theme_appearance_description)
                 TextButton(onClick = { showThemeDialog = true }) {
                     Text(stringResource(when (appTheme) {
-                        AppTheme.MIDNIGHT -> R.string.theme_midnight
-                        AppTheme.LIGHT -> R.string.theme_light
+                        AppTheme.DARK_SLATE, AppTheme.LIGHT -> R.string.v17_theme_dark_slate
+                        AppTheme.MIDNIGHT -> R.string.v17_theme_midnight_navy
                         AppTheme.OLED -> R.string.theme_oled
                     }))
                 }
@@ -1116,10 +1113,10 @@ internal fun SafeMobileSettingsPanel(
         title = { Text(stringResource(R.string.appearance_title)) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                AppTheme.entries.forEach { option ->
+                listOf(AppTheme.DARK_SLATE, AppTheme.MIDNIGHT, AppTheme.OLED).forEach { option ->
                     val label = when (option) {
-                        AppTheme.MIDNIGHT -> R.string.theme_midnight
-                        AppTheme.LIGHT -> R.string.theme_light
+                        AppTheme.DARK_SLATE, AppTheme.LIGHT -> R.string.v17_theme_dark_slate
+                        AppTheme.MIDNIGHT -> R.string.v17_theme_midnight_navy
                         AppTheme.OLED -> R.string.theme_oled
                     }
                     Row(
