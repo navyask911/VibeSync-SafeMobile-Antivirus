@@ -309,7 +309,7 @@
     <string name="ui_no_readable_items">ಓದಲು ಸಾಧ್ಯವಾದ ಅಂಶಗಳಿಲ್ಲ. ಫೈಲ್ ಆಯ್ಕೆ ಮಾಡಿದ ನಂತರ ಅಥವಾ ಆ್ಯಪ್ ಸ್ಥಾಪಿಸಿದ ನಂತರ ಮರುಪ್ರಯತ್ನಿಸಿ.</string>
     <string name="ui_unsigned_definitions_warning">ಸಕ್ರಿಯ ಸಹಿ ಮಾಡಿದ ಬೆದರಿಕೆ ವ್ಯಾಖ್ಯಾನಗಳನ್ನು ಬಳಸಿಲ್ಲ. ವ್ಯಾಖ್ಯಾನಗಳನ್ನು ನವೀಕರಿಸಿ ಮತ್ತೆ ಸ್ಕ್ಯಾನ್ ಮಾಡಿ.</string>
     <string name="ui_view_scan_results">ಸ್ಕ್ಯಾನ್ ಫಲಿತಾಂಶಗಳನ್ನು ನೋಡಿ</string>
-    <string name="ui_sentinel_limited">⚠ ಸೀಮಿತ ರಕ್ಷಣೆ ಸಕ್ರಿಯ</string>
+    <string name="ui_sentinel_limited">ಸೀಮಿತ ರಕ್ಷಣೆ ಸಕ್ರಿಯ</string>
     <string name="ui_sentinel_both_off">ಡೌನ್‌ಲೋಡ್ ಮತ್ತು ಸಂದೇಶ ಆ್ಯಪ್‌ಗಳು ಫೋಲ್ಡರ್‌ಗಳನ್ನು ಮೇಲ್ವಿಚಾರಣೆ ಮಾಡುತ್ತಿಲ್ಲ.</string>
     <string name="ui_sentinel_download_off">ಡೌನ್‌ಲೋಡ್ ಫೋಲ್ಡರ್ ಮೇಲ್ವಿಚಾರಣೆಯಲ್ಲಿಲ್ಲ.</string>
     <string name="ui_sentinel_whatsapp_off">ಸಂದೇಶ ಆ್ಯಪ್‌ಗಳ ದಾಖಲೆ ಫೋಲ್ಡರ್ ಮೇಲ್ವಿಚಾರಣೆಯಲ್ಲಿಲ್ಲ.</string>
