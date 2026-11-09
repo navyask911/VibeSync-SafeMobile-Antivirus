@@ -16,8 +16,8 @@ class ThemePreferencesTest {
         val first = ThemePreferences(context)
         val previous = first.selected.first()
         try {
-            first.save(AppTheme.LIGHT)
-            assertEquals(AppTheme.LIGHT, ThemePreferences(context).selected.first())
+            first.save(AppTheme.DARK_SLATE)
+            assertEquals(AppTheme.DARK_SLATE, ThemePreferences(context).selected.first())
             first.save(AppTheme.OLED)
             assertEquals(AppTheme.OLED, ThemePreferences(context).selected.first())
         } finally {
@@ -25,9 +25,16 @@ class ThemePreferencesTest {
         }
     }
 
-    @Test fun invalidPreferencesFallBackToCleanLight() {
-        assertEquals(AppTheme.LIGHT, AppTheme.fromSaved(null))
-        assertEquals(AppTheme.LIGHT, AppTheme.fromSaved("INVALID"))
-        assertEquals(AppTheme.LIGHT, AppTheme.fromSaved(""))
+    @Test fun invalidAndLegacyLightPreferencesFallBackToDarkSlate() {
+        assertEquals(AppTheme.DARK_SLATE, AppTheme.fromSaved(null))
+        assertEquals(AppTheme.DARK_SLATE, AppTheme.fromSaved("INVALID"))
+        assertEquals(AppTheme.DARK_SLATE, AppTheme.fromSaved(""))
+        assertEquals(AppTheme.DARK_SLATE, AppTheme.fromSaved("LIGHT"))
+    }
+
+    @Test fun threeTierCycleIsSeamless() {
+        assertEquals(AppTheme.MIDNIGHT, AppTheme.DARK_SLATE.next())
+        assertEquals(AppTheme.OLED, AppTheme.MIDNIGHT.next())
+        assertEquals(AppTheme.DARK_SLATE, AppTheme.OLED.next())
     }
 }

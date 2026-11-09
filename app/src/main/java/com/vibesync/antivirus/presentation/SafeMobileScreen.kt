@@ -114,6 +114,7 @@ import com.vibesync.antivirus.core.observer.SecurityAlertNotifier
 import com.vibesync.antivirus.core.worker.OverlayRiskReviewManager
 import com.vibesync.antivirus.core.security.DeviceOwnerManager
 import com.vibesync.antivirus.core.security.DeviceAdminManager
+import com.vibesync.antivirus.core.security.ProtectionGuardPreferences
 import com.vibesync.antivirus.core.observer.InstallSentinelService
 import com.vibesync.antivirus.core.observer.SecurityVoiceAlert
 import com.vibesync.antivirus.core.engine.ScanResult
@@ -133,13 +134,13 @@ import java.util.Date
 import kotlin.math.roundToInt
 import kotlinx.coroutines.launch
 @Composable fun SafeMobileTheme(
- theme: com.vibesync.antivirus.ui.theme.AppTheme = com.vibesync.antivirus.ui.theme.AppTheme.DARK_SLATE,
+ theme: com.vibesync.antivirus.ui.theme.AppTheme = com.vibesync.antivirus.ui.theme.AppTheme.LIGHT,
  content: @Composable () -> Unit
 ) { com.vibesync.antivirus.ui.theme.SafeMobileMaterialTheme(theme = theme, content = content) }
 @Composable fun SafeMobileScreen(
  repository:ThreatRepository,
   batteryStatusEpoch: Int = 0,
-  appTheme: com.vibesync.antivirus.ui.theme.AppTheme = com.vibesync.antivirus.ui.theme.AppTheme.DARK_SLATE,
+  appTheme: com.vibesync.antivirus.ui.theme.AppTheme = com.vibesync.antivirus.ui.theme.AppTheme.LIGHT,
   onAppThemeChanged: (com.vibesync.antivirus.ui.theme.AppTheme) -> Unit = {},
  sharedText:String? = null,
  onSharedTextConsumed:() -> Unit = {},
@@ -305,19 +306,6 @@ import kotlinx.coroutines.launch
  var voiceAlertsEnabled by remember(context) { mutableStateOf(securityPrefs.getBoolean(SafeMobileApp.KEY_VOICE_ALERTS_ENABLED, false)) }
  var installSentinelEnabled by remember(context) { mutableStateOf(InstallSentinelService.enabled(context)) }
  var globalDefenseEnabled by remember(context) { mutableStateOf(GlobalThreatIntelligenceConsent.isEnabled(context)) }
- var guardState by remember(context) { mutableStateOf(ProtectionGuardPreferences.read(context)) }
- fun refreshGuardState() {
-  guardState = ProtectionGuardPreferences.updateFromSystem(
-   context,
-   batteryExempt = batteryUnrestricted,
-   deviceAdmin = adminActive,
-   highPriorityAlerts = fullScreenAlertsGranted,
-   safDirectoryWatch = storageAccessGranted && sentinelDesired && monitoringRunning
-  )
- }
- LaunchedEffect(batteryUnrestricted, adminActive, fullScreenAlertsGranted, storageAccessGranted, sentinelDesired, monitoringRunning) {
-  refreshGuardState()
- }
  val advisorStore = remember(context) { ProtectionAdvisorStore(context) }
  val snoozedAdvisorIds by advisorStore.snoozedIssueIds.collectAsStateWithLifecycle(initialValue = emptySet())
  val advisorState = ProtectionAdvisorEngine.evaluate(
@@ -541,44 +529,6 @@ import kotlinx.coroutines.launch
   onboardingPrefs.edit().putBoolean(OnboardingPrefs.SENTINEL_OPT_IN, false).apply()
  }
  val toggleProtection: (Boolean) -> Unit = { enabled -> if (enabled) enableSentinel() else disableSentinel() }
- val changeBatteryGuard: (Boolean) -> Unit = { enabled ->
-  val intent = if (enabled) Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.fromParts("package", context.packageName, null))
-   else Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)
-  runCatching { context.startActivity(intent) }.onFailure {
-   Toast.makeText(context, R.string.battery_review_unavailable, Toast.LENGTH_LONG).show()
-  }
- }
- val changeAdminGuard: (Boolean) -> Unit = { enabled ->
-  if (enabled) {
-   if (!deviceAdminManager.isAdminActive()) {
-    runCatching { adminPermissionLauncher.launch(deviceAdminManager.createAdminRequestIntent(context)) }
-     .onFailure { Toast.makeText(context, R.string.device_admin_explanation, Toast.LENGTH_LONG).show() }
-   }
-  } else {
-   runCatching { deviceAdminManager.removeAdmin() }
-    .onFailure { Toast.makeText(context, R.string.device_admin_explanation, Toast.LENGTH_LONG).show() }
-   adminActive = deviceAdminManager.isAdminActive()
-   refreshGuardState()
-   vm.refreshSecurityScore()
-  }
- }
- val changeFullScreenGuard: (Boolean) -> Unit = {
-  runCatching { FullScreenAlertAccess.settingsIntent(context)?.let(context::startActivity) }
-   .onFailure { Toast.makeText(context, R.string.full_screen_settings_unavailable, Toast.LENGTH_LONG).show() }
- }
- val changeSafGuard: (Boolean) -> Unit = { enabled ->
-  if (!enabled) disableSentinel() else requestPrivacyAcknowledgement {
-   if (StorageAccessPreferences.hasAccess(context)) enableSentinel() else {
-    pendingFolderRole = StorageAccessPreferences.DOWNLOADS
-    pendingSentinelEnable = true
-    runCatching { storageTreeLauncher.launch(StorageAccessPreferences.pickerIntent(StorageAccessPreferences.DOWNLOADS)) }
-     .onFailure {
-      pendingSentinelEnable = false
-      Toast.makeText(context, R.string.ui_folder_picker_unavailable, Toast.LENGTH_LONG).show()
-     }
-   }
-  }
- }
  val changeSecurityAlerts: (Boolean) -> Unit = { enabled ->
   if (!enabled) {
    pendingAlertEnable = false
@@ -773,7 +723,13 @@ import kotlinx.coroutines.launch
      V17TopBar(
       appTheme = appTheme, isPro = adMobState.isPro,
       showBack = selectedDestination !in setOf("home", "scan", "tools", "settings"),
-      onThemeToggle = { onAppThemeChanged(appTheme.next()) },
+      onThemeToggle = {
+       onAppThemeChanged(
+        if (appTheme == com.vibesync.antivirus.ui.theme.AppTheme.LIGHT)
+         com.vibesync.antivirus.ui.theme.AppTheme.MIDNIGHT
+        else com.vibesync.antivirus.ui.theme.AppTheme.LIGHT
+       )
+      },
       onProClick = { navigateToDestination("pro") },
       onBack = { if (!tabNavController.popBackStack()) navigateToDestination("home") }
      )
@@ -801,7 +757,7 @@ import kotlinx.coroutines.launch
           isDark = appTheme != com.vibesync.antivirus.ui.theme.AppTheme.LIGHT,
           securityScore = advisorState.score,
           isPro = adMobState.isPro,
-          activeGuards = guardState.activeCount,
+          activeGuards = listOf(batteryUnrestricted, adminActive, fullScreenAlertsGranted, storageAccessGranted).count { it },
           liveSentinelActive = installSentinelRunning,
           posturePassed = postureState.report?.highRiskAppCount?.let { (8 - it.coerceIn(0, 8)).coerceIn(0, 8) },
           quarantinedFilesCount = state.quarantinedFiles.size,
@@ -814,9 +770,8 @@ import kotlinx.coroutines.launch
          "scan" -> V17ScanLabScreen(
           isDark = appTheme != com.vibesync.antivirus.ui.theme.AppTheme.LIGHT,
           state = state,
-          repository = repository,
           onStartQuickScan = { requestPrivacyAcknowledgement { vm.scanInstalled() } },
-          onStartDeepScan = { requestPrivacyAcknowledgement { deepFolderPicker.launch(StorageAccessPreferences.deepScanInitialUri()) } },
+          onStartDeepScan = { requestPrivacyAcknowledgement { deepFolderPicker.launch(null) } },
           onCancelScan = vm::cancelScan,
           onUninstall = { packageName ->
            lastUninstallPackage = packageName
@@ -895,15 +850,8 @@ import kotlinx.coroutines.launch
           },
           onImportYara = { pendingYaraPicker.launch(arrayOf("text/plain", "application/octet-stream", "application/x-yara")) },
           onThreatFeedSync = { requestPrivacyAcknowledgement { vm.requestThreatFeedSync() } },
-          onOpenPro = { navigateToDestination("pro") },
-          batteryGuardEnabled = guardState.batteryExempt,
-          onBatteryGuardChanged = changeBatteryGuard,
-          adminGuardEnabled = guardState.deviceAdmin,
-          onAdminGuardChanged = changeAdminGuard,
-          fullScreenGuardEnabled = guardState.highPriorityAlerts,
-          onFullScreenGuardChanged = changeFullScreenGuard,
-          safGuardEnabled = guardState.safDirectoryWatch,
-          onSafGuardChanged = changeSafGuard
+          onBenchmarks = { navigateToDestination("analytics") },
+          onOpenPro = { navigateToDestination("pro") }
          )
          else -> Column(
           Modifier.fillMaxSize().verticalScroll(contentScrollState)
@@ -981,6 +929,7 @@ import kotlinx.coroutines.launch
           androidx.compose.material3.Icon(Icons.Default.Security, contentDescription = null)
           Text(stringResource(R.string.security_scan_now), Modifier.padding(start = 8.dp))
          }
+         AnalyticsCharts(repository, state.results)
          SectionHeader(title=stringResource(R.string.analytics_recent_activity), actionLabel=stringResource(R.string.nav_history), onAction={ navigateToDestination("history") })
          if (auditEntries.isEmpty()) EmptyState(title=stringResource(R.string.analytics_no_audits),description=stringResource(R.string.analytics_no_audits_body))
          else auditEntries.take(3).forEach { audit ->
@@ -1115,6 +1064,7 @@ import kotlinx.coroutines.launch
           }
          }
         }
+        if (selectedDestination == "analytics") AnalyticsCharts(repository)
         if (selectedDestination == "analytics") ProtectionAnalyticsPanel(
          audits=auditEntries, results=state.results, signatureCount=state.signatureCount,
          activeIndicatorCount=state.activeThreatIndicatorCount, lastScanAt=state.lastScanAt, isScanning=state.isScanning,
@@ -1281,15 +1231,45 @@ import kotlinx.coroutines.launch
    if (showV17ProtectionSetupSheet) {
     V17ProtectionSetupSheet(
      isDark = appTheme != com.vibesync.antivirus.ui.theme.AppTheme.LIGHT,
-     batteryActive = guardState.batteryExempt,
-     adminActive = guardState.deviceAdmin,
-     fullScreenActive = guardState.highPriorityAlerts,
-     safActive = guardState.safDirectoryWatch,
+     batteryActive = batteryUnrestricted,
+     adminActive = adminActive,
+     fullScreenActive = fullScreenAlertsGranted,
+     safActive = storageAccessGranted,
      onDismiss = { showV17ProtectionSetupSheet = false },
-     onToggleBattery = changeBatteryGuard,
-     onToggleAdmin = changeAdminGuard,
-     onToggleFullScreen = changeFullScreenGuard,
-     onToggleSaf = changeSafGuard
+     onRequestBattery = {
+      val batteryIntent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.parse("package:${context.packageName}"))
+      runCatching { context.startActivity(batteryIntent) }.onFailure {
+       runCatching { context.startActivity(Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)) }
+        .onFailure { Toast.makeText(context, R.string.battery_review_unavailable, Toast.LENGTH_LONG).show() }
+      }
+     },
+     onRequestAdmin = {
+      if (!deviceAdminManager.isAdminActive()) {
+        runCatching {
+         adminPermissionLauncher.launch(deviceAdminManager.createAdminRequestIntent(context))
+        }.onFailure {
+         Toast.makeText(context, R.string.device_admin_explanation, Toast.LENGTH_LONG).show()
+        }
+       } else {
+        adminActive = true
+        vm.refreshSecurityScore()
+       }
+     },
+     onRequestFullScreen = {
+      runCatching { FullScreenAlertAccess.settingsIntent(context)?.let(context::startActivity) }
+       .onFailure { Toast.makeText(context, R.string.full_screen_settings_unavailable, Toast.LENGTH_LONG).show() }
+     },
+     onRequestSaf = {
+      requestPrivacyAcknowledgement {
+       pendingFolderRole = StorageAccessPreferences.DOWNLOADS
+       pendingSentinelEnable = true
+       runCatching { storageTreeLauncher.launch(StorageAccessPreferences.pickerIntent(StorageAccessPreferences.DOWNLOADS)) }
+        .onFailure {
+         pendingSentinelEnable = false
+         Toast.makeText(context, R.string.ui_folder_picker_unavailable, Toast.LENGTH_LONG).show()
+        }
+      }
+     }
     )
    }
 

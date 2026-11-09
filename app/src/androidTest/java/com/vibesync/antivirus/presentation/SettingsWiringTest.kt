@@ -81,12 +81,12 @@ class SettingsWiringTest {
             )
         }
 
-        composeRule.onNodeWithText("Dark").performScrollTo().performClick()
+        composeRule.onNodeWithText(context.getString(com.vibesync.antivirus.R.string.v17_theme_midnight_navy)).performScrollTo().performClick()
         assertEquals(AppTheme.MIDNIGHT, selectedTheme)
-        composeRule.onNodeWithText("OLED").performScrollTo().performClick()
+        composeRule.onNodeWithText(context.getString(com.vibesync.antivirus.R.string.theme_oled)).performScrollTo().performClick()
         assertEquals(AppTheme.OLED, selectedTheme)
-        composeRule.onNodeWithText("Light").performScrollTo().performClick()
-        assertEquals(AppTheme.LIGHT, selectedTheme)
+        composeRule.onNodeWithText(context.getString(com.vibesync.antivirus.R.string.v17_theme_dark_slate)).performScrollTo().performClick()
+        assertEquals(AppTheme.DARK_SLATE, selectedTheme)
     }
 
     @Test
@@ -128,6 +128,50 @@ class SettingsWiringTest {
     }
 
     @Test
+    fun fourSecurityGuardSwitchesUpdateTheirSharedOwnerState() {
+        var battery = false
+        var admin = false
+        var fullScreen = false
+        var saf = false
+        render {
+            V17ConsoleSettingsScreen(
+                isDark = false,
+                appTheme = AppTheme.DARK_SLATE,
+                onAppThemeChanged = {},
+                sirenEnabled = false,
+                onSirenChanged = {},
+                voiceEnabled = false,
+                onVoiceChanged = {},
+                installSentinelEnabled = false,
+                installSentinelRunning = false,
+                onInstallSentinelChanged = {},
+                globalIntelEnabled = false,
+                onGlobalIntelChanged = {},
+                onImportYara = {},
+                onThreatFeedSync = {},
+                onOpenPro = {},
+                batteryGuardEnabled = battery,
+                onBatteryGuardChanged = { battery = it },
+                adminGuardEnabled = admin,
+                onAdminGuardChanged = { admin = it },
+                fullScreenGuardEnabled = fullScreen,
+                onFullScreenGuardChanged = { fullScreen = it },
+                safGuardEnabled = saf,
+                onSafGuardChanged = { saf = it }
+            )
+        }
+
+        composeRule.onNodeWithTag("console.guard.battery").performScrollTo().performClick()
+        composeRule.onNodeWithTag("console.guard.admin").performScrollTo().performClick()
+        composeRule.onNodeWithTag("console.guard.fullscreen").performScrollTo().performClick()
+        composeRule.onNodeWithTag("console.guard.saf").performScrollTo().performClick()
+        assertEquals(true, battery)
+        assertEquals(true, admin)
+        assertEquals(true, fullScreen)
+        assertEquals(true, saf)
+    }
+
+    @Test
     fun globalIntelOptInIsConnectedToItsOwningState() {
         var optedIn by mutableStateOf(false)
         render {
@@ -157,10 +201,20 @@ class SettingsWiringTest {
     }
 
     @Test
-    fun advancedActionsInvokeYaraThreatFeedAndBenchmarkCallbacks() {
+    fun advancedTelemetryRowsRemainReadableWhenExpanded() {
+        render()
+        composeRule.onNodeWithText("Advanced Telemetry & Rules").performScrollTo().performClick()
+
+        composeRule.onNodeWithText("YARA custom rules").performScrollTo().assertExists()
+        composeRule.onNodeWithText("Import a local .yar rule.").performScrollTo().assertExists()
+        composeRule.onNodeWithText("ThreatFeed Sync").performScrollTo().assertExists()
+        composeRule.onNodeWithText("Run the configured feed sync.").performScrollTo().assertExists()
+    }
+
+    @Test
+    fun advancedActionsInvokeYaraAndThreatFeedCallbacks() {
         var yaraImports = 0
         var threatSyncs = 0
-        var benchmarks = 0
         render {
             V17ConsoleSettingsScreen(
                 isDark = false,
@@ -177,7 +231,6 @@ class SettingsWiringTest {
                 onGlobalIntelChanged = {},
                 onImportYara = { yaraImports++ },
                 onThreatFeedSync = { threatSyncs++ },
-                onBenchmarks = { benchmarks++ },
                 onOpenPro = {}
             )
         }
@@ -185,9 +238,7 @@ class SettingsWiringTest {
         composeRule.onNodeWithText("Advanced Telemetry & Rules").performScrollTo().performClick()
         composeRule.onNodeWithText(context.getString(com.vibesync.antivirus.R.string.detection_capabilities_import_yara)).performScrollTo().performClick()
         composeRule.onNodeWithText(context.getString(com.vibesync.antivirus.R.string.threat_feed_sync_now)).performScrollTo().performClick()
-        composeRule.onNodeWithText(context.getString(com.vibesync.antivirus.R.string.open_feature)).performScrollTo().performClick()
         assertEquals(1, yaraImports)
         assertEquals(1, threatSyncs)
-        assertEquals(1, benchmarks)
     }
 }
