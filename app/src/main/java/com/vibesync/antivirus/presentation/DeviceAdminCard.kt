@@ -10,8 +10,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Security
+import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material3.Button
 import com.vibesync.antivirus.ui.components.CyberCard as Card
 import androidx.compose.material3.CardDefaults
@@ -60,7 +60,7 @@ internal fun DeviceAdminCard(modifier: Modifier = Modifier) {
         Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Icon(
-                    imageVector = if (active) Icons.Default.CheckCircle else Icons.Default.Security,
+                    imageVector = if (active) Icons.Outlined.CheckCircle else Icons.Outlined.Security,
                     contentDescription = null,
                     tint = if (active) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
                 )
