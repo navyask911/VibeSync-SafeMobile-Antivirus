@@ -9,6 +9,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.WorkspacePremium
+import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -95,7 +96,10 @@ fun SafeMobileProPaywallScreen(
             R.string.pro_feature_updates,
             R.string.pro_feature_adfree,
         ).forEach { textRes ->
-            Text("✓  " + stringResource(textRes), style = MaterialTheme.typography.bodyMedium)
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Icon(Icons.Outlined.CheckCircle, contentDescription = null, tint = MaterialTheme.colorScheme.secondary)
+                Text(stringResource(textRes), style = MaterialTheme.typography.bodyMedium)
+            }
         }
 
         HorizontalDivider()
