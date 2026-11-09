@@ -15,10 +15,15 @@ val VibeSyncBody = Color(0xFF475569)
 val VibeSyncCardBorder = Color(0xFFE2E8F0)
 val SafeMobileLightSelectedContainer = Color(0xFFE0F2FE)
 
-// Midnight palette.
-val SafeMobileDarkBackground = Color(0xFF0B132B)
-val SafeMobileDarkSurface = Color(0xFF1C2541)
-val SafeMobileDarkSurfaceVariant = Color(0xFF283557)
+// Dark Slate palette — default tier.
+val SafeMobileSlateBackground = Color(0xFF1E293B)
+val SafeMobileSlateSurface = Color(0xFF334155)
+val SafeMobileSlateSurfaceVariant = Color(0xFF475569)
+
+// Midnight Navy palette — second tier.
+val SafeMobileDarkBackground = Color(0xFF0F172A)
+val SafeMobileDarkSurface = Color(0xFF1E293B)
+val SafeMobileDarkSurfaceVariant = Color(0xFF263349)
 val SafeMobileCyan = Color(0xFF4DA8DA)
 val SafeMobileMidnightHeading = Color(0xFFF5F7FC)
 val SafeMobileMidnightBody = Color(0xFFB9C6DC)
@@ -61,6 +66,31 @@ val SafeMobileLightColorScheme = lightColorScheme(
     onErrorContainer = Color(0xFF7A271A)
 )
 
+val SafeMobileDarkSlateColorScheme = darkColorScheme(
+    primary = SafeMobileCyan,
+    onPrimary = Color(0xFF071827),
+    primaryContainer = SafeMobileSlateSurfaceVariant,
+    onPrimaryContainer = SafeMobileMidnightHeading,
+    secondary = SafeMobileCyan,
+    onSecondary = Color(0xFF071827),
+    secondaryContainer = SafeMobileSlateSurfaceVariant,
+    onSecondaryContainer = SafeMobileMidnightHeading,
+    tertiary = SafeMobileAmber,
+    onTertiary = Color(0xFF312000),
+    background = SafeMobileSlateBackground,
+    onBackground = SafeMobileMidnightHeading,
+    surface = SafeMobileSlateSurface,
+    onSurface = SafeMobileMidnightHeading,
+    surfaceVariant = SafeMobileSlateSurfaceVariant,
+    onSurfaceVariant = SafeMobileMidnightBody,
+    outline = SafeMobileMidnightBorder,
+    outlineVariant = SafeMobileMidnightBorder,
+    error = SafeMobileDanger,
+    onError = Color(0xFF320606),
+    errorContainer = Color(0xFF6C161B),
+    onErrorContainer = Color(0xFFFFDFE0)
+)
+
 val SafeMobileDarkColorScheme = darkColorScheme(
     primary = SafeMobileCyan,
     onPrimary = Color(0xFF071827),
@@ -99,9 +129,9 @@ val SafeMobileOledColorScheme = darkColorScheme(
     onTertiary = Color(0xFF312100),
     background = Color(0xFF000000),
     onBackground = SafeMobileOledHeading,
-    surface = Color(0xFF121212),
+    surface = Color(0xFF000000),
     onSurface = SafeMobileOledHeading,
-    surfaceVariant = Color(0xFF252525),
+    surfaceVariant = Color(0xFF080808),
     onSurfaceVariant = SafeMobileOledBody,
     outline = SafeMobileOledBorder,
     outlineVariant = SafeMobileOledBorder,

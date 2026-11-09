@@ -686,5 +686,36 @@
     <!-- v1.5.2 Figma UI translations -->
     <string name="scan_detected_by">ಪತ್ತೆಹಚ್ಚಿದ ಮೂಲ: %1$s</string>
     <string name="scan_detected_by_confidence">ಪತ್ತೆಹಚ್ಚಿದ ಮೂಲ: %1$s (%2$d%%)</string>
+
+    <string name="v17_setup_checklist_title">ಏಕೀಕೃತ ಸೆಟಪ್ ಪರಿಶೀಲನಾ ಪಟ್ಟಿ</string>
+    <string name="v17_setup_checklist_subtitle">ಪ್ರತಿ ರಕ್ಷಣೆಯೂ ಐಚ್ಛಿಕವಾಗಿದೆ; ಸಂಬಂಧಿತ Android ಸೆಟ್ಟಿಂಗ್ ಅಥವಾ ಅನುಮತಿ ಪ್ರಕ್ರಿಯೆ ತೆರೆಯುತ್ತದೆ.</string>
+    <string name="v17_battery_setup_label">ಬ್ಯಾಟರಿ ಆಪ್ಟಿಮೈಸೇಶನ್</string>
+    <string name="v17_admin_setup_label">ಸಾಧನ ನಿರ್ವಾಹಕ</string>
+    <string name="v17_full_screen_setup_label">ಹೆಚ್ಚಿನ ಆದ್ಯತೆಯ ಎಚ್ಚರಿಕೆಗಳು</string>
+    <string name="v17_saf_setup_label">SAF ಫೋಲ್ಡರ್ ಮೇಲ್ವಿಚಾರಣೆ</string>
+    <string name="v17_guard_card_title">ಸಕ್ರಿಯ ಭದ್ರತಾ ರಕ್ಷಣೆಗಳು ಮತ್ತು ಅನುಮತಿಗಳು</string>
+    <string name="v17_battery_guard_title">ಬ್ಯಾಟರಿ ಆಪ್ಟಿಮೈಸೇಶನ್ ವಿನಾಯಿತಿ</string>
+    <string name="v17_battery_guard_summary">ಹಿನ್ನೆಲೆ ಮೇಲ್ವಿಚಾರಣೆಯನ್ನು ಸಕ್ರಿಯವಾಗಿರಿಸಿ</string>
+    <string name="v17_admin_guard_title">ಸಾಧನ ನಿರ್ವಾಹಕ</string>
+    <string name="v17_admin_guard_summary">ಅನಧಿಕೃತ ಆ್ಯಪ್ ತೆಗೆದುಹಾಕುವಿಕೆಯನ್ನು ತಡೆಯಿರಿ</string>
+    <string name="v17_full_screen_guard_title">ಹೆಚ್ಚಿನ ಆದ್ಯತೆಯ ತುರ್ತು ಎಚ್ಚರಿಕೆ</string>
+    <string name="v17_full_screen_guard_summary">ತುರ್ತು ಬೆದರಿಕೆ ಎಚ್ಚರಿಕೆಗಳನ್ನು ತೋರಿಸಿ</string>
+    <string name="v17_saf_guard_title">SAF ಫೋಲ್ಡರ್ ಮೇಲ್ವಿಚಾರಣೆ</string>
+    <string name="v17_saf_guard_summary">ಆಯ್ಕೆ ಮಾಡಿದ ಡೌನ್‌ಲೋಡ್ ಮತ್ತು ಮೀಡಿಯಾ ಮಾರ್ಗಗಳನ್ನು ಮೇಲ್ವಿಚಾರಣೆ ಮಾಡಿ</string>
+    <string name="v17_theme_dark_slate">ಡಾರ್ಕ್ ಸ್ಲೇಟ್</string>
+    <string name="v17_theme_midnight_navy">ಮಧ್ಯರಾತ್ರಿ ನೇವಿ</string>
+    <string name="v17_advanced_title">ಸುಧಾರಿತ ಟೆಲಿಮೆಟ್ರಿ ಮತ್ತು ನಿಯಮಗಳು</string>
+    <string name="v17_advanced_subtitle">YARA ಆಮದು, ThreatFeed ಸಿಂಕ್ ಮತ್ತು ಜಾಗತಿಕ ಬುದ್ಧಿವಂತಿಕೆ.</string>
+    <string name="v17_advanced_yara_title">ಕಸ್ಟಮ್ YARA ನಿಯಮಗಳು</string>
+    <string name="v17_advanced_yara_subtitle">ಸ್ಥಳೀಯ .yar ನಿಯಮವನ್ನು ಆಮದು ಮಾಡಿ.</string>
+    <string name="v17_advanced_feed_title">ThreatFeed ಸಿಂಕ್</string>
+    <string name="v17_advanced_feed_subtitle">ಕಾನ್ಫಿಗರ್ ಮಾಡಿದ ಫೀಡ್ ಸಿಂಕ್ ನಡೆಸಿ.</string>
+    <string name="v17_scan_title">ಸ್ಮಾರ್ಟ್ ಸ್ಕ್ಯಾನ್ ಪ್ರಾರಂಭಿಸಿ</string>
+    <string name="v17_scan_subtitle">ಸಾಧನದಲ್ಲೇ ನಾಲ್ಕು ಹಂತಗಳ ಪರಿಶೀಲನೆ.</string>
+    <string name="v17_scan_quick_mode">ತ್ವರಿತ ಆ್ಯಪ್ ಸ್ಕ್ಯಾನ್</string>
+    <string name="v17_scan_deep_mode">ಆಳವಾದ ಸಂಗ್ರಹಣೆ ಸ್ಕ್ಯಾನ್</string>
+    <string name="v17_scan_results_title">ಸ್ಕ್ಯಾನ್ ಫಲಿತಾಂಶಗಳು (ನಾಲ್ಕು ಹಂತಗಳನ್ನು ನೋಡಲು ಒತ್ತಿ)</string>
+    <string name="v17_scan_no_results">ಇನ್ನೂ ಸ್ಕ್ಯಾನ್ ಫಲಿತಾಂಶಗಳಿಲ್ಲ. ತ್ವರಿತ ಸ್ಕ್ಯಾನ್ ನಡೆಸಿ ಅಥವಾ ಫೋಲ್ಡರ್ ಆಯ್ಕೆಮಾಡಿ.</string>
+    <string name="v17_scan_metrics_title">ಸ್ಥಳೀಯ ಸ್ಕ್ಯಾನ್ ಮಾಪನಗಳು ಮತ್ತು ವಿಶ್ಲೇಷಣೆ</string>
 </resources>
 

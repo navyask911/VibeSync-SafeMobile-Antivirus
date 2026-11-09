@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v17_setup_checklist_title">Unified Setup Checklist</string>
+    <string name="v17_setup_checklist_subtitle">Each protection is optional and opens the relevant Android settings or permission flow.</string>
+    <string name="v17_battery_setup_label">Battery optimization</string>
+    <string name="v17_admin_setup_label">Device Administrator</string>
+    <string name="v17_full_screen_setup_label">High-priority alerts</string>
+    <string name="v17_saf_setup_label">SAF directory watch</string>
+    <string name="v17_guard_card_title">Active Security Guards &amp; Permissions</string>
+    <string name="v17_battery_guard_title">Battery Optimization Exemption</string>
+    <string name="v17_battery_guard_summary">Keep background sentinel alive</string>
+    <string name="v17_admin_guard_title">Device Administrator</string>
+    <string name="v17_admin_guard_summary">Block unauthorized app removal</string>
+    <string name="v17_full_screen_guard_title">High-Priority Overlay Alert</string>
+    <string name="v17_full_screen_guard_summary">Display urgent threat warnings</string>
+    <string name="v17_saf_guard_title">SAF Directory Watch</string>
+    <string name="v17_saf_guard_summary">Monitor selected download and media paths</string>
+    <string name="v17_theme_dark_slate">Dark Slate</string>
+    <string name="v17_theme_midnight_navy">Midnight Navy</string>
+    <string name="v17_advanced_title">Advanced Telemetry &amp; Rules</string>
+    <string name="v17_advanced_subtitle">YARA imports, ThreatFeed sync and global intelligence.</string>
+    <string name="v17_advanced_yara_title">YARA custom rules</string>
+    <string name="v17_advanced_yara_subtitle">Import a local .yar rule.</string>
+    <string name="v17_advanced_feed_title">ThreatFeed Sync</string>
+    <string name="v17_advanced_feed_subtitle">Run the configured feed sync.</string>
+    <string name="v17_scan_title">Run Smart Scan</string>
+    <string name="v17_scan_subtitle">Progressive four-layer inspection using the on-device scan pipeline.</string>
+    <string name="v17_scan_quick_mode">Quick App Scan</string>
+    <string name="v17_scan_deep_mode">Deep Storage (Worker)</string>
+    <string name="v17_scan_results_title">Scan Results (Tap for 4-Layer Breakdown)</string>
+    <string name="v17_scan_no_results">No scan results yet. Run Quick App Scan or choose a folder for deep scanning.</string>
+    <string name="v17_scan_metrics_title">Local Scan Metrics &amp; Analytics</string>
+</resources>

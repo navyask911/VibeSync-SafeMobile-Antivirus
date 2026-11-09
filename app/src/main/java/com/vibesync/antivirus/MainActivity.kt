@@ -15,6 +15,8 @@ import androidx.activity.compose.setContent
 import androidx.core.view.WindowCompat
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.setValue
 import com.vibesync.antivirus.core.locale.LocalePreferences
 import com.vibesync.antivirus.core.observer.SecurityAlertNotifier
@@ -28,7 +30,6 @@ class MainActivity : ComponentActivity() {
         super.attachBaseContext(LocalePreferences.wrap(newBase))
     }
     private val themePreferences by lazy { ThemePreferences(this) }
-    private var selectedTheme by mutableStateOf(AppTheme.LIGHT)
     private var sharedText by mutableStateOf<String?>(null)
     private var openQuarantine by mutableStateOf(false)
     private var openDevicePosture by mutableStateOf(false)
@@ -37,12 +38,20 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        applySystemBars(AppTheme.LIGHT)
-        lifecycleScope.launch { themePreferences.selected.collect { saved -> selectedTheme = saved; applySystemBars(saved) } }
+        applySystemBars(AppTheme.DARK_SLATE)
         sharedText = incomingSharedText(intent)
         openQuarantine = intent.getBooleanExtra(SecurityAlertNotifier.EXTRA_OPEN_QUARANTINE, false)
         openDevicePosture = intent.getBooleanExtra(PostureChangeNotifier.EXTRA_OPEN_POSTURE, false)
         setContent {
+            // Keep the preference stream inside Compose so a selected theme redraws the
+            // Material color scheme immediately without recreating the Activity.
+            var selectedTheme by remember { mutableStateOf(AppTheme.DARK_SLATE) }
+            LaunchedEffect(themePreferences) {
+                themePreferences.selected.collect { saved ->
+                    selectedTheme = saved
+                    applySystemBars(saved)
+                }
+            }
             SafeMobileTheme(theme = selectedTheme) {
                 SafeMobileScreen(
                     repository = (application as SafeMobileApp).repository,
@@ -89,19 +98,14 @@ class MainActivity : ComponentActivity() {
         SecurityAlertNotifier.stopIncidentAudio()
     }
     private fun applySystemBars(theme: AppTheme) {
-        val light = theme == AppTheme.LIGHT
         val background = when (theme) {
-            AppTheme.MIDNIGHT -> android.graphics.Color.rgb(11, 19, 43)
-            AppTheme.LIGHT -> android.graphics.Color.rgb(244, 247, 250)
+            AppTheme.DARK_SLATE, AppTheme.LIGHT -> android.graphics.Color.rgb(30, 41, 59)
+            AppTheme.MIDNIGHT -> android.graphics.Color.rgb(15, 23, 42)
             AppTheme.OLED -> android.graphics.Color.BLACK
         }
         enableEdgeToEdge(
-            statusBarStyle = if (light)
-                androidx.activity.SystemBarStyle.light(android.graphics.Color.TRANSPARENT, background)
-                else androidx.activity.SystemBarStyle.dark(android.graphics.Color.TRANSPARENT),
-            navigationBarStyle = if (light)
-                androidx.activity.SystemBarStyle.light(android.graphics.Color.TRANSPARENT, background)
-                else androidx.activity.SystemBarStyle.dark(android.graphics.Color.TRANSPARENT)
+            statusBarStyle = androidx.activity.SystemBarStyle.dark(background),
+            navigationBarStyle = androidx.activity.SystemBarStyle.dark(background)
         )
     }
 
