@@ -15,6 +15,8 @@ import androidx.activity.compose.setContent
 import androidx.core.view.WindowCompat
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.setValue
 import com.vibesync.antivirus.core.locale.LocalePreferences
 import com.vibesync.antivirus.core.observer.SecurityAlertNotifier
@@ -28,7 +30,6 @@ class MainActivity : ComponentActivity() {
         super.attachBaseContext(LocalePreferences.wrap(newBase))
     }
     private val themePreferences by lazy { ThemePreferences(this) }
-    private var selectedTheme by mutableStateOf(AppTheme.LIGHT)
     private var sharedText by mutableStateOf<String?>(null)
     private var openQuarantine by mutableStateOf(false)
     private var openDevicePosture by mutableStateOf(false)
@@ -38,11 +39,19 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         applySystemBars(AppTheme.LIGHT)
-        lifecycleScope.launch { themePreferences.selected.collect { saved -> selectedTheme = saved; applySystemBars(saved) } }
         sharedText = incomingSharedText(intent)
         openQuarantine = intent.getBooleanExtra(SecurityAlertNotifier.EXTRA_OPEN_QUARANTINE, false)
         openDevicePosture = intent.getBooleanExtra(PostureChangeNotifier.EXTRA_OPEN_POSTURE, false)
         setContent {
+            // Keep the preference stream inside Compose so a selected theme redraws the
+            // Material color scheme immediately without recreating the Activity.
+            var selectedTheme by remember { mutableStateOf(AppTheme.LIGHT) }
+            LaunchedEffect(themePreferences) {
+                themePreferences.selected.collect { saved ->
+                    selectedTheme = saved
+                    applySystemBars(saved)
+                }
+            }
             SafeMobileTheme(theme = selectedTheme) {
                 SafeMobileScreen(
                     repository = (application as SafeMobileApp).repository,
