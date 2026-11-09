@@ -3,6 +3,7 @@ package com.vibesync.antivirus.core.observer
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.provider.DocumentsContract
 import androidx.test.core.app.ApplicationProvider
 import com.vibesync.antivirus.SafeMobileApp
 import org.junit.Assert.*
@@ -26,6 +27,36 @@ class StorageAccessPreferencesTest {
         assertFalse(picker.hasExtra(android.provider.DocumentsContract.EXTRA_INITIAL_URI))
         assertEquals(10, StorageAccessPreferences.MAX_CUSTOM_FOLDERS)
     }
+    @Test fun nestedWhatsAppAndDownloadsDocumentTreesMapToTheirRoles() {
+        val whatsapp = DocumentsContract.buildTreeDocumentUri(
+            "com.android.externalstorage.documents",
+            "primary:Android/media/com.whatsapp/WhatsApp/Media/WhatsApp Documents"
+        )
+        val downloads = DocumentsContract.buildTreeDocumentUri(
+            "com.android.externalstorage.documents",
+            "primary:Download"
+        )
+
+        assertTrue(DocumentsContract.isTreeUri(whatsapp))
+        assertTrue(StorageAccessPreferences.matchesRole(whatsapp, StorageAccessPreferences.WHATSAPP))
+        assertTrue(StorageAccessPreferences.matchesRole(downloads, StorageAccessPreferences.DOWNLOADS))
+        assertFalse(StorageAccessPreferences.matchesRole(downloads, StorageAccessPreferences.WHATSAPP))
+    }
+
+    @Test fun folderPickerCarriesTreeUriAsInitialDirectory() {
+        val whatsappPicker = StorageAccessPreferences.pickerIntent(StorageAccessPreferences.WHATSAPP)
+        val downloadsPicker = StorageAccessPreferences.pickerIntent(StorageAccessPreferences.DOWNLOADS)
+        val whatsappInitial = whatsappPicker.getParcelableExtra<Uri>(DocumentsContract.EXTRA_INITIAL_URI)
+        val downloadsInitial = downloadsPicker.getParcelableExtra<Uri>(DocumentsContract.EXTRA_INITIAL_URI)
+
+        assertNotNull(whatsappInitial)
+        assertNotNull(downloadsInitial)
+        assertTrue(DocumentsContract.isTreeUri(whatsappInitial!!))
+        assertTrue(DocumentsContract.isTreeUri(downloadsInitial!!))
+        assertTrue(StorageAccessPreferences.matchesRole(whatsappInitial, StorageAccessPreferences.WHATSAPP))
+        assertTrue(StorageAccessPreferences.matchesRole(downloadsInitial, StorageAccessPreferences.DOWNLOADS))
+    }
+
     @Test fun oldGrantIsRetainedAndRevokedGrantsDoNotCountAsCoverage() {
         val prefs = context.getSharedPreferences(SafeMobileApp.SECURITY_PREFS, Context.MODE_PRIVATE)
         val old = prefs.getString("downloads_sentinel_tree_uri", null)
