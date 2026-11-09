@@ -16,7 +16,7 @@
     <string name="security_guard_overlay">High-Priority Overlay Alert</string>
     <string name="security_guard_overlay_desc">Allow urgent threat warnings to appear over other apps.</string>
     <string name="security_guard_saf">SAF Directory Watch</string>
-    <string name="security_guard_saf_desc">Monitor only folders explicitly granted through Android's file picker.</string>
+    <string name="security_guard_saf_desc">Monitor only folders explicitly granted through the Android file picker.</string>
     <string name="scan_lab_metrics_title">Scan &amp; Lab Metrics</string>
     <string name="scan_lab_metrics_body">Inspect verified benchmark information and local scan analytics.</string>
 </resources>

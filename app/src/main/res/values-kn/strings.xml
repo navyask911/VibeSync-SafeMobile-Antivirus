@@ -703,7 +703,7 @@
     <string name="security_guard_overlay">ಹೆಚ್ಚಿನ ಆದ್ಯತೆಯ ಓವರ್‌ಲೇ ಎಚ್ಚರಿಕೆ</string>
     <string name="security_guard_overlay_desc">ಇತರ ಆ್ಯಪ್‌ಗಳ ಮೇಲೆಯೂ ತುರ್ತು ಬೆದರಿಕೆ ಎಚ್ಚರಿಕೆಗಳನ್ನು ತೋರಿಸಲು ಅನುಮತಿಸಿ.</string>
     <string name="security_guard_saf">SAF ಫೋಲ್ಡರ್ ಮೇಲ್ವಿಚಾರಣೆ</string>
-    <string name="security_guard_saf_desc">Android ಫೈಲ್ ಆಯ್ಕೆಯ ಮೂಲಕ ಅನುಮತಿಸಿದ ಫೋಲ್ಡರ್‌ಗಳನ್ನು ಮಾತ್ರ ಮೇಲ್ವಿಚಾರಣೆ ಮಾಡಿ.</string>
+    <string name="security_guard_saf_desc">Android ಫೈಲ್ ಆಯ್ಕೆಯಿಂದ ಅನುಮತಿಸಿದ ಫೋಲ್ಡರ್‌ಗಳನ್ನು ಮಾತ್ರ ಮೇಲ್ವಿಚಾರಣೆ ಮಾಡಿ.</string>
     <string name="scan_lab_metrics_title">ಸ್ಕ್ಯಾನ್ ಮತ್ತು ಲ್ಯಾಬ್ ಮಾಪನಗಳು</string>
     <string name="scan_lab_metrics_body">ಪರಿಶೀಲಿತ ಬೆಂಚ್‌ಮಾರ್ಕ್ ಮಾಹಿತಿ ಮತ್ತು ಸ್ಥಳೀಯ ಸ್ಕ್ಯಾನ್ ವಿಶ್ಲೇಷಣೆಗಳನ್ನು ಪರಿಶೀಲಿಸಿ.</string>
 </resources>
