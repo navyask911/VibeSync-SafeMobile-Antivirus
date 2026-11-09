@@ -22,12 +22,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CloudOff
-import androidx.compose.material.icons.filled.DeleteSweep
-import androidx.compose.material.icons.filled.FolderOpen
-import androidx.compose.material.icons.filled.Link
-import androidx.compose.material.icons.filled.Security
-import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.outlined.CloudOff
+import androidx.compose.material.icons.outlined.DeleteSweep
+import androidx.compose.material.icons.outlined.FolderOpen
+import androidx.compose.material.icons.outlined.Link
+import androidx.compose.material.icons.outlined.Security
+import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import com.vibesync.antivirus.ui.components.CyberCard as Card
@@ -79,7 +79,7 @@ internal fun CoreStrengthsAccordion(onNavigate: (String) -> Unit) {
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             TextButton(onClick = { expanded = !expanded }, modifier = Modifier.fillMaxWidth()) {
-                Icon(Icons.Default.Security, contentDescription = null, modifier = Modifier.size(22.dp))
+                Icon(Icons.Outlined.Security, contentDescription = null, modifier = Modifier.size(22.dp))
                 Text(
                     stringResource(R.string.why_safemobile),
                     modifier = Modifier.weight(1f).padding(start = 8.dp),
@@ -88,11 +88,11 @@ internal fun CoreStrengthsAccordion(onNavigate: (String) -> Unit) {
                 Text(if (expanded) "−" else "+")
             }
             if (expanded) {
-                FeatureRow(Icons.Default.CloudOff, R.string.pillar_offline_title, R.string.pillar_offline_body, R.string.feature_status_local) { onNavigate("scan") }
-                FeatureRow(Icons.Default.Security, R.string.pillar_telemetry_title, R.string.pillar_telemetry_body, R.string.feature_status_local) { onNavigate("settings") }
-                FeatureRow(Icons.Default.Security, R.string.pillar_whatsapp_title, R.string.pillar_whatsapp_body, R.string.feature_status_limited) { onNavigate("scan") }
-                FeatureRow(Icons.Default.Link, R.string.pillar_phishing_title, R.string.pillar_phishing_body, R.string.feature_status_heuristic) { onNavigate("phishing") }
-                FeatureRow(Icons.Default.DeleteSweep, R.string.pillar_cleaner_title, R.string.pillar_cleaner_body, R.string.feature_status_review) { onNavigate("cleaner") }
+                FeatureRow(Icons.Outlined.CloudOff, R.string.pillar_offline_title, R.string.pillar_offline_body, R.string.feature_status_local) { onNavigate("scan") }
+                FeatureRow(Icons.Outlined.Security, R.string.pillar_telemetry_title, R.string.pillar_telemetry_body, R.string.feature_status_local) { onNavigate("settings") }
+                FeatureRow(Icons.Outlined.Security, R.string.pillar_whatsapp_title, R.string.pillar_whatsapp_body, R.string.feature_status_limited) { onNavigate("scan") }
+                FeatureRow(Icons.Outlined.Link, R.string.pillar_phishing_title, R.string.pillar_phishing_body, R.string.feature_status_heuristic) { onNavigate("phishing") }
+                FeatureRow(Icons.Outlined.DeleteSweep, R.string.pillar_cleaner_title, R.string.pillar_cleaner_body, R.string.feature_status_review) { onNavigate("cleaner") }
             }
         }
     }
@@ -367,7 +367,7 @@ internal fun PhishingPanel(
                     singleLine = true
                 )
                 Button(onClick = { assessAndLookup() }, modifier = Modifier.fillMaxWidth()) {
-                    Icon(Icons.Default.Link, contentDescription = null)
+                    Icon(Icons.Outlined.Link, contentDescription = null)
                     Text(stringResource(R.string.phishing_assess), modifier = Modifier.padding(start = 8.dp))
                 }
                 assessment?.let { result ->
@@ -421,7 +421,7 @@ internal fun PhishingPanel(
         }
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)) {
             Row(Modifier.padding(14.dp), verticalAlignment = Alignment.Top) {
-                Icon(Icons.Default.Warning, contentDescription = null, tint = MaterialTheme.colorScheme.tertiary, modifier = Modifier.padding(end = 8.dp))
+                Icon(Icons.Outlined.Warning, contentDescription = null, tint = MaterialTheme.colorScheme.tertiary, modifier = Modifier.padding(end = 8.dp))
                 Text(stringResource(R.string.phishing_limitations), style = MaterialTheme.typography.bodySmall)
             }
         }
@@ -499,7 +499,7 @@ internal fun StorageCleanerPanel() {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(if (treeUriText.isNullOrBlank()) stringResource(R.string.cleaner_no_folder) else stringResource(R.string.cleaner_folder_selected), style = MaterialTheme.typography.bodyMedium)
                 OutlinedButton(onClick = { folderPicker.launch(null) }, modifier = Modifier.fillMaxWidth()) {
-                    Icon(Icons.Default.FolderOpen, contentDescription = null)
+                    Icon(Icons.Outlined.FolderOpen, contentDescription = null)
                     Text(stringResource(R.string.cleaner_choose_folder), modifier = Modifier.padding(start = 8.dp))
                 }
                 Button(onClick = { scanSelectedFolder() }, enabled = !scanning && !treeUriText.isNullOrBlank(), modifier = Modifier.fillMaxWidth()) {
