@@ -9,8 +9,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import com.vibesync.antivirus.ui.components.CyberCard as Card
@@ -47,7 +47,7 @@ internal fun EnterpriseProtectionCard(manager: DeviceOwnerManager, modifier: Mod
   Column(Modifier.padding(14.dp),verticalArrangement=Arrangement.spacedBy(8.dp)) {
    Text(stringResource(R.string.enterprise_title),style=MaterialTheme.typography.titleMedium,fontWeight=FontWeight.SemiBold)
    Row(verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(8.dp)) {
-    androidx.compose.material3.Icon(if(owner) Icons.Default.CheckCircle else Icons.Default.Warning,null,
+    androidx.compose.material3.Icon(if(owner) Icons.Outlined.CheckCircle else Icons.Outlined.Warning,null,
      tint=if(owner) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.tertiary)
     Text(stringResource(if(owner) R.string.enterprise_status_owner else R.string.enterprise_status_standard),
      style=MaterialTheme.typography.labelLarge,color=if(owner) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.tertiary)
@@ -118,7 +118,7 @@ internal fun EnterpriseOnboardingNotice(manager: DeviceOwnerManager) {
   Column(Modifier.padding(12.dp),verticalArrangement=Arrangement.spacedBy(5.dp)) {
    Text(stringResource(R.string.enterprise_title),style=MaterialTheme.typography.titleSmall,fontWeight=FontWeight.SemiBold)
    Row(verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(6.dp)) {
-    androidx.compose.material3.Icon(if(owner) Icons.Default.CheckCircle else Icons.Default.Warning,null,
+    androidx.compose.material3.Icon(if(owner) Icons.Outlined.CheckCircle else Icons.Outlined.Warning,null,
      tint=if(owner) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.tertiary)
     Text(stringResource(if(owner) R.string.enterprise_status_owner else R.string.enterprise_status_standard),
      style=MaterialTheme.typography.labelMedium)
