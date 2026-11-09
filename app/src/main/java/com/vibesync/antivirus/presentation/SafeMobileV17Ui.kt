@@ -237,10 +237,27 @@ private fun V17ScoreRing(score: Int, isDark: Boolean) {
             drawArc(c.border, -90f, 360f, false, offset, arcSize, style = Stroke(sw, cap = StrokeCap.Round))
             drawArc(c.green, -90f, progress * 360f, false, offset, arcSize, style = Stroke(sw, cap = StrokeCap.Round))
         }
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(score.toString(), style = MaterialTheme.typography.headlineMedium.copy(fontSize = 24.sp),
-                fontWeight = FontWeight.ExtraBold, color = c.text)
-            Text(stringResource(R.string.ui_score_title), style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp), color = c.muted)
+        Column(
+            Modifier.fillMaxWidth().padding(horizontal = 7.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                score.toString(),
+                style = MaterialTheme.typography.headlineMedium.copy(fontSize = 24.sp),
+                fontWeight = FontWeight.ExtraBold,
+                color = c.text,
+                maxLines = 1
+            )
+            Text(
+                stringResource(R.string.ui_score_title),
+                Modifier.fillMaxWidth(),
+                style = MaterialTheme.typography.labelSmall.copy(fontSize = 8.sp, lineHeight = 9.sp),
+                color = c.muted,
+                textAlign = TextAlign.Center,
+                maxLines = 2,
+                softWrap = true,
+                overflow = TextOverflow.Ellipsis
+            )
         }
     }
 }
@@ -555,21 +572,21 @@ internal fun V17ConsoleSettingsScreen(
             AnimatedVisibility(advanced) {
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     HorizontalDivider(color = c.border)
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Column(Modifier.weight(1f)) { V17Title("YARA custom rules"); V17Body("Import a local .yar rule.") }
+                    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                        Column(Modifier.weight(1f).fillMaxWidth()) { V17Title("YARA custom rules"); V17Body("Import a local .yar rule.") }
                         OutlinedButton(onClick = onImportYara) { Text(stringResource(R.string.detection_capabilities_import_yara)) }
                     }
                     HorizontalDivider(color = c.border)
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Column(Modifier.weight(1f)) { V17Title("ThreatFeed Sync"); V17Body("Run the configured feed sync.") }
+                    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                        Column(Modifier.weight(1f).fillMaxWidth()) { V17Title("ThreatFeed Sync"); V17Body("Run the configured feed sync.") }
                         OutlinedButton(onClick = onThreatFeedSync) { Text(stringResource(R.string.threat_feed_sync_now)) }
                     }
                     HorizontalDivider(color = c.border)
                     V17Switch("Global Threat Intelligence", "Opt in to explicitly approved hash contributions",
                         globalIntelEnabled, "console.global-intel", Icons.Outlined.Security, isDark, onGlobalIntelChanged)
                     HorizontalDivider(color = c.border)
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Column(Modifier.weight(1f)) { V17Title("Benchmarks & Analytics"); V17Body("Review local scan timing and results.") }
+                    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                        Column(Modifier.weight(1f).fillMaxWidth()) { V17Title("Benchmarks & Analytics"); V17Body("Review local scan timing and results.") }
                         OutlinedButton(onClick = onBenchmarks) { Text(stringResource(R.string.open_feature)) }
                     }
                 }
