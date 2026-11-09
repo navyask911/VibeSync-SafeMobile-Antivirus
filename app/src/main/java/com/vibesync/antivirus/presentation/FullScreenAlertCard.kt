@@ -9,8 +9,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.NotificationsActive
-import androidx.compose.material.icons.filled.VerifiedUser
+import androidx.compose.material.icons.outlined.NotificationsActive
+import androidx.compose.material.icons.outlined.VerifiedUser
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -33,7 +33,7 @@ internal fun FullScreenAlertPermissionCard(onOpenSettings: () -> Unit) {
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.error)) {
         Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            Icon(Icons.Default.NotificationsActive, null, tint = MaterialTheme.colorScheme.onErrorContainer)
+            Icon(Icons.Outlined.NotificationsActive, null, tint = MaterialTheme.colorScheme.onErrorContainer)
             Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 Text(
                     stringResource(R.string.full_screen_dashboard_warning),
@@ -57,7 +57,7 @@ internal fun FullScreenAlertPermissionCard(onOpenSettings: () -> Unit) {
 @Composable
 internal fun SystemAppProtectionBadge() {
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-        Icon(Icons.Default.VerifiedUser, null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(18.dp))
+        Icon(Icons.Outlined.VerifiedUser, null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(18.dp))
         Text(stringResource(R.string.system_app_protection_badge), style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.primary)
     }
