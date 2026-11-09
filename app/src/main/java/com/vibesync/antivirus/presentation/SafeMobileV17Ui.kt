@@ -33,6 +33,8 @@ import androidx.compose.ui.res.stringResource
 import com.vibesync.antivirus.BuildConfig
 import com.vibesync.antivirus.R
 import com.vibesync.antivirus.data.repository.ThreatRepository
+import com.vibesync.antivirus.data.local.AnalyticsWeek
+import com.vibesync.antivirus.data.local.ScanAnalytics
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
@@ -333,7 +335,7 @@ internal fun V17ProtectionSetupSheet(
 
 @Composable
 internal fun V17ScanLabScreen(
-    isDark: Boolean, state: SafeMobileUiState, repository: ThreatRepository,
+    isDark: Boolean, state: SafeMobileUiState, repository: ThreatRepository? = null,
     onStartQuickScan: () -> Unit, onStartDeepScan: () -> Unit,
     onCancelScan: () -> Unit, onUninstall: (String) -> Unit, onAppInfo: (String) -> Unit,
     onQuarantine: (ScanResult) -> Unit, onTrust: (ScanResult) -> Unit, onRemoveTrust: (String) -> Unit
@@ -389,7 +391,8 @@ internal fun V17ScanLabScreen(
             }
             HorizontalDivider(color = c.border)
             BenchmarkResultsPanel()
-            AnalyticsCharts(repository, state.results)
+            if (repository != null) AnalyticsCharts(repository, state.results)
+            else AnalyticsChartContent(ScanAnalytics(), AnalyticsWeek.current(), state.results)
         }
     }
 }
