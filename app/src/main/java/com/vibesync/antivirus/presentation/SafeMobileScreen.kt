@@ -17,7 +17,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import android.os.PowerManager
 import android.provider.Settings
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -44,17 +44,17 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.FolderOpen
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.Language
-import androidx.compose.material.icons.filled.WorkspacePremium
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Settings as SettingsIcon
-import androidx.compose.material.icons.filled.Security
-import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material.icons.outlined.FolderOpen
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.outlined.History
+import androidx.compose.material.icons.outlined.Language
+import androidx.compose.material.icons.outlined.WorkspacePremium
+import androidx.compose.material.icons.outlined.MoreVert
+import androidx.compose.material.icons.outlined.Settings as SettingsIcon
+import androidx.compose.material.icons.outlined.Security
+import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import com.vibesync.antivirus.ui.components.CyberCard as Card
@@ -263,10 +263,10 @@ import kotlinx.coroutines.launch
   else -> successStatusColor()
  }
  val statusIcon = when {
-  state.isScanning -> Icons.Default.Security
-  state.threatCount > 0 || state.suspiciousCount > 0 || state.results.any { it.verdict == ScanVerdict.NOT_SCANNED } -> Icons.Default.Warning
-  state.lastScanAt == null || state.results.isEmpty() -> Icons.Default.Security
-  else -> Icons.Default.CheckCircle
+  state.isScanning -> Icons.Outlined.Security
+  state.threatCount > 0 || state.suspiciousCount > 0 || state.results.any { it.verdict == ScanVerdict.NOT_SCANNED } -> Icons.Outlined.Warning
+  state.lastScanAt == null || state.results.isEmpty() -> Icons.Outlined.Security
+  else -> Icons.Outlined.CheckCircle
  }
  val lifecycleOwner = LocalLifecycleOwner.current
  val connectivity=remember { ConnectivityMonitor(context) }
@@ -981,7 +981,7 @@ import kotlinx.coroutines.launch
           }
          }
          Button(onClick = { requestPrivacyAcknowledgement { vm.scanFull() } }, enabled = !state.isScanning, modifier = Modifier.fillMaxWidth()) {
-          androidx.compose.material3.Icon(Icons.Default.Security, contentDescription = null)
+          androidx.compose.material3.Icon(Icons.Outlined.Security, contentDescription = null)
           Text(stringResource(R.string.security_scan_now), Modifier.padding(start = 8.dp))
          }
           SectionHeader(title=stringResource(R.string.analytics_recent_activity), actionLabel=stringResource(R.string.nav_history), onAction={ navigateToDestination("history") })
@@ -989,7 +989,7 @@ import kotlinx.coroutines.launch
          else auditEntries.take(3).forEach { audit ->
           Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surface),shape=RoundedCornerShape(16.dp),modifier=Modifier.fillMaxWidth()) {
            Row(Modifier.padding(12.dp),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(10.dp)) {
-            androidx.compose.material3.Icon(if(audit.verdict==ScanVerdict.THREAT.name) Icons.Default.Warning else Icons.Default.History,
+            androidx.compose.material3.Icon(if(audit.verdict==ScanVerdict.THREAT.name) Icons.Outlined.Warning else Icons.Outlined.History,
              contentDescription=null,tint=if(audit.verdict==ScanVerdict.THREAT.name) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary)
             Column(Modifier.weight(1f)) {
              Text(audit.packageOrPath,style=MaterialTheme.typography.titleSmall)
@@ -1038,11 +1038,11 @@ import kotlinx.coroutines.launch
           }
           ExpandableText(stringResource(R.string.scan_explanation), maxLines = 3)
           Button(onClick={ requestPrivacyAcknowledgement { vm.scanFull() } },enabled=!state.isScanning,modifier=Modifier.fillMaxWidth()) {
-           if(state.isScanning) CircularProgressIndicator(Modifier.size(18.dp),strokeWidth=2.dp,color=MaterialTheme.colorScheme.onPrimary) else androidx.compose.material3.Icon(Icons.Default.Security,contentDescription=null)
+           if(state.isScanning) CircularProgressIndicator(Modifier.size(18.dp),strokeWidth=2.dp,color=MaterialTheme.colorScheme.onPrimary) else androidx.compose.material3.Icon(Icons.Outlined.Security,contentDescription=null)
            Text(stringResource(if(state.isScanning) R.string.scan_running else R.string.security_scan_now),modifier=Modifier.padding(start=8.dp))
           }
           OutlinedButton(onClick={ requestPrivacyAcknowledgement { apkPicker.launch(arrayOf("*/*")) } },enabled=!state.isScanning,modifier=Modifier.fillMaxWidth()) {
-           androidx.compose.material3.Icon(Icons.Default.FolderOpen,contentDescription=null)
+           androidx.compose.material3.Icon(Icons.Outlined.FolderOpen,contentDescription=null)
            Text(stringResource(R.string.scan_selected),modifier=Modifier.padding(start=8.dp))
           }
           OutlinedButton(onClick={ requestPrivacyAcknowledgement { showDefinitionImportWarning = true } },enabled=!state.isScanning,modifier=Modifier.fillMaxWidth()) { Text(stringResource(R.string.import_definitions)) }
