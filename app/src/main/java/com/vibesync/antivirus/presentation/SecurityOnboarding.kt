@@ -22,9 +22,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FolderOpen
-import androidx.compose.material.icons.filled.Security
-import androidx.compose.material.icons.filled.SettingsSuggest
+import androidx.compose.material.icons.outlined.FolderOpen
+import androidx.compose.material.icons.outlined.Security
+import androidx.compose.material.icons.outlined.SettingsSuggest
 import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -111,7 +111,7 @@ internal fun SecurityOnboardingScreen(
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         Icon(
-                            Icons.Default.Security,
+                            Icons.Outlined.Security,
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.tertiary,
                             modifier = Modifier.size(58.dp)
@@ -160,7 +160,7 @@ internal fun SecurityOnboardingScreen(
                     TextButton(onClick = onSkipSetup) { Text(stringResource(R.string.setup_skip)) }
                 }
                 Icon(
-                    Icons.Default.Security,
+                    Icons.Outlined.Security,
                     contentDescription = stringResource(R.string.app_name),
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(52.dp)
@@ -178,17 +178,17 @@ internal fun SecurityOnboardingScreen(
                 ) { page ->
                     val (icon, title, body) = when (page) {
                         0 -> Triple(
-                            Icons.Default.Security,
+                            Icons.Outlined.Security,
                             R.string.security_dashboard_title,
                             R.string.security_scan_coverage
                         )
                         1 -> Triple(
-                            Icons.Default.FolderOpen,
+                            Icons.Outlined.FolderOpen,
                             R.string.setup_sentinel_title,
                             R.string.setup_sentinel_body
                         )
                         else -> Triple(
-                            Icons.Default.SettingsSuggest,
+                            Icons.Outlined.SettingsSuggest,
                             R.string.posture_title,
                             R.string.posture_intro
                         )
