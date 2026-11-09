@@ -93,6 +93,8 @@ import java.util.UUID
 
 enum class SettingsSubRoute { ROOT, GENERAL, SUBSCRIPTION, NOTIFICATIONS, SECURITY, HELP_LEGAL, RATE }
 
+private val selectableSafeMobileThemes = listOf(AppTheme.DARK_SLATE, AppTheme.MIDNIGHT, AppTheme.OLED)
+
 @Composable
 private fun ThemeOptionButton(
     option: AppTheme,
@@ -102,14 +104,16 @@ private fun ThemeOptionButton(
     onSelected: () -> Unit
 ) {
     val label = when (option) {
-        AppTheme.LIGHT -> R.string.theme_light
+        AppTheme.DARK_SLATE -> R.string.theme_dark_slate
         AppTheme.MIDNIGHT -> R.string.theme_midnight
         AppTheme.OLED -> R.string.theme_oled
+        AppTheme.LIGHT -> R.string.theme_dark_slate
     }
     val icon = when (option) {
-        AppTheme.LIGHT -> R.drawable.ic_theme_light
+        AppTheme.DARK_SLATE -> R.drawable.ic_theme_midnight
         AppTheme.MIDNIGHT -> R.drawable.ic_theme_midnight
         AppTheme.OLED -> R.drawable.ic_theme_oled
+        AppTheme.LIGHT -> R.drawable.ic_theme_midnight
     }
     androidx.compose.material3.Surface(
         modifier = modifier
@@ -580,7 +584,7 @@ internal fun SafeMobileSettingsPanel(
     onSecurityAlertsChanged: ((Boolean) -> Unit)? = null,
     onToggleProtection: ((Boolean) -> Unit)? = null,
     onStrictModeChanged: ((Boolean) -> Unit)? = null,
-    appTheme: AppTheme = AppTheme.LIGHT,
+    appTheme: AppTheme = AppTheme.DARK_SLATE,
     onAppThemeChanged: (AppTheme) -> Unit = {},
     adPrivacyOptionsRequired: Boolean = false,
     isProForAds: Boolean = true,
@@ -641,7 +645,7 @@ internal fun SafeMobileSettingsPanel(
                     verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     if (useExpandedThemeOptions) {
                         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                            AppTheme.entries.forEach { option ->
+                            selectableSafeMobileThemes.forEach { option ->
                                 ThemeOptionButton(
                                     option = option,
                                     selected = appTheme == option,
@@ -653,7 +657,7 @@ internal fun SafeMobileSettingsPanel(
                         }
                     } else {
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            AppTheme.entries.forEach { option ->
+                            selectableSafeMobileThemes.forEach { option ->
                                 ThemeOptionButton(
                                     option = option,
                                     selected = appTheme == option,
@@ -839,8 +843,9 @@ internal fun SafeMobileSettingsPanel(
                 SettingsDescription(R.string.theme_appearance_description)
                 TextButton(onClick = { showThemeDialog = true }) {
                     Text(stringResource(when (appTheme) {
+                        AppTheme.DARK_SLATE -> R.string.theme_dark_slate
                         AppTheme.MIDNIGHT -> R.string.theme_midnight
-                        AppTheme.LIGHT -> R.string.theme_light
+                        AppTheme.LIGHT -> R.string.theme_dark_slate
                         AppTheme.OLED -> R.string.theme_oled
                     }))
                 }
@@ -1116,10 +1121,11 @@ internal fun SafeMobileSettingsPanel(
         title = { Text(stringResource(R.string.appearance_title)) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                AppTheme.entries.forEach { option ->
+                selectableSafeMobileThemes.forEach { option ->
                     val label = when (option) {
+                        AppTheme.DARK_SLATE -> R.string.theme_dark_slate
                         AppTheme.MIDNIGHT -> R.string.theme_midnight
-                        AppTheme.LIGHT -> R.string.theme_light
+                        AppTheme.LIGHT -> R.string.theme_dark_slate
                         AppTheme.OLED -> R.string.theme_oled
                     }
                     Row(
