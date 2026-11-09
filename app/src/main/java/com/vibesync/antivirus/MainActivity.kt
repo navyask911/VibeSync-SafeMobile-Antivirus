@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
         super.attachBaseContext(LocalePreferences.wrap(newBase))
     }
     private val themePreferences by lazy { ThemePreferences(this) }
-    private var selectedTheme by mutableStateOf(AppTheme.LIGHT)
+    private var selectedTheme by mutableStateOf(AppTheme.DARK_SLATE)
     private var sharedText by mutableStateOf<String?>(null)
     private var openQuarantine by mutableStateOf(false)
     private var openDevicePosture by mutableStateOf(false)
@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        applySystemBars(AppTheme.LIGHT)
+        applySystemBars(AppTheme.DARK_SLATE)
         lifecycleScope.launch { themePreferences.selected.collect { saved -> selectedTheme = saved; applySystemBars(saved) } }
         sharedText = incomingSharedText(intent)
         openQuarantine = intent.getBooleanExtra(SecurityAlertNotifier.EXTRA_OPEN_QUARANTINE, false)
@@ -91,9 +91,10 @@ class MainActivity : ComponentActivity() {
     private fun applySystemBars(theme: AppTheme) {
         val light = theme == AppTheme.LIGHT
         val background = when (theme) {
-            AppTheme.MIDNIGHT -> android.graphics.Color.rgb(11, 19, 43)
-            AppTheme.LIGHT -> android.graphics.Color.rgb(244, 247, 250)
+            AppTheme.DARK_SLATE -> android.graphics.Color.rgb(30, 41, 59)
+            AppTheme.MIDNIGHT -> android.graphics.Color.rgb(15, 23, 42)
             AppTheme.OLED -> android.graphics.Color.BLACK
+            AppTheme.LIGHT -> android.graphics.Color.rgb(244, 247, 250)
         }
         enableEdgeToEdge(
             statusBarStyle = if (light)
