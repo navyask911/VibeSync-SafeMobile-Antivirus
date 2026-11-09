@@ -172,6 +172,13 @@ import kotlinx.coroutines.launch
  val ownerManager = remember(context) { DeviceOwnerManager(context) }
  val deviceAdminManager = remember(context) { DeviceAdminManager(context) }
  var adminActive by remember(context) { mutableStateOf(deviceAdminManager.isAdminActive()) }
+  val adminPermissionLauncher = rememberLauncherForActivityResult(
+   ActivityResultContracts.StartActivityForResult()
+  ) {
+   // Query DevicePolicyManager after the platform dialog; OEMs do not always return RESULT_OK.
+   adminActive = deviceAdminManager.isAdminActive()
+   vm.refreshSecurityScore()
+  }
  var showV17ProtectionSetupSheet by rememberSaveable { mutableStateOf(false) }
  var selectedDestination by rememberSaveable { mutableStateOf("home") }
  var isSubscriptionExpanded by rememberSaveable { mutableStateOf(false) }
@@ -478,6 +485,7 @@ import kotlinx.coroutines.launch
    pendingSentinelEnable = false
    folderUris = StorageAccessPreferences.accessibleTreeUris(context)
    storageAccessGranted = folderUris.isNotEmpty()
+   vm.refreshSecurityScore()
    if (granted) {
     securityPrefs.edit().putBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, true).apply()
     sentinelDesired = true
@@ -1235,8 +1243,16 @@ import kotlinx.coroutines.launch
       }
      },
      onRequestAdmin = {
-      runCatching { activity?.let(deviceAdminManager::requestAdminPermission) }
-       .onFailure { Toast.makeText(context, R.string.device_admin_explanation, Toast.LENGTH_LONG).show() }
+      if (!deviceAdminManager.isAdminActive()) {
+        runCatching {
+         adminPermissionLauncher.launch(deviceAdminManager.createAdminRequestIntent(context))
+        }.onFailure {
+         Toast.makeText(context, R.string.device_admin_explanation, Toast.LENGTH_LONG).show()
+        }
+       } else {
+        adminActive = true
+        vm.refreshSecurityScore()
+       }
      },
      onRequestFullScreen = {
       runCatching { FullScreenAlertAccess.settingsIntent(context)?.let(context::startActivity) }
