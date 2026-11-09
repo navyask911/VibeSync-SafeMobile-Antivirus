@@ -2,6 +2,7 @@ package com.vibesync.antivirus.ui.theme
 
 import android.content.Context
 import android.content.SharedPreferences
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -28,6 +29,7 @@ class ThemePreferences(context: Context) {
 
     private val key = "selected_theme"
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     val selected: Flow<AppTheme> = callbackFlow {
         val listener = SharedPreferences.OnSharedPreferenceChangeListener { store, changedKey ->
             if (changedKey == key) {
