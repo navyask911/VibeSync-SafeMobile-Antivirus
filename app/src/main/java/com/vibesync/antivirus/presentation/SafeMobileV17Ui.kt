@@ -70,7 +70,9 @@ private fun V17Title(text: String, modifier: Modifier = Modifier, color: Color =
 
 @Composable
 private fun V17Body(text: String, modifier: Modifier = Modifier, color: Color = MaterialTheme.colorScheme.onSurfaceVariant) {
-    Text(text, modifier, style = MaterialTheme.typography.bodyMedium.copy(fontSize = 13.sp, lineHeight = 19.sp), color = color)
+    Text(text, modifier.fillMaxWidth(),
+        style = MaterialTheme.typography.bodyMedium.copy(fontSize = 13.sp, lineHeight = 19.sp),
+        color = color, softWrap = true)
 }
 
 @Composable
@@ -228,6 +230,7 @@ internal fun V17ShieldScreen(
 @Composable
 private fun V17ScoreRing(score: Int, isDark: Boolean) {
     val c = v17Colors(isDark)
+    val label = stringResource(R.string.ui_score_title)
     val progress by animateFloatAsState(score / 100f, tween(550), label = score.toString())
     Box(Modifier.size(96.dp), contentAlignment = Alignment.Center) {
         Canvas(Modifier.fillMaxSize()) {
@@ -237,10 +240,28 @@ private fun V17ScoreRing(score: Int, isDark: Boolean) {
             drawArc(c.border, -90f, 360f, false, offset, arcSize, style = Stroke(sw, cap = StrokeCap.Round))
             drawArc(c.green, -90f, progress * 360f, false, offset, arcSize, style = Stroke(sw, cap = StrokeCap.Round))
         }
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            Modifier.fillMaxWidth().padding(horizontal = 11.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Text(score.toString(), style = MaterialTheme.typography.headlineMedium.copy(fontSize = 24.sp),
-                fontWeight = FontWeight.ExtraBold, color = c.text)
-            Text(stringResource(R.string.ui_score_title), style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp), color = c.muted)
+                fontWeight = FontWeight.ExtraBold, color = c.text, maxLines = 1)
+            // Kannada and other translated score labels can be wider than the ring's inner
+            // diameter. Scale this one-line label to its measured width instead of clipping it.
+            BoxWithConstraints(Modifier.fillMaxWidth()) {
+                val fittedSize = (maxWidth.value * 0.72f / label.length.coerceAtLeast(1))
+                    .coerceIn(6f, 9f).sp
+                Text(
+                    label,
+                    Modifier.fillMaxWidth(),
+                    style = MaterialTheme.typography.labelSmall.copy(fontSize = fittedSize),
+                    color = c.muted,
+                    textAlign = TextAlign.Center,
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Clip
+                )
+            }
         }
     }
 }
@@ -555,12 +576,12 @@ internal fun V17ConsoleSettingsScreen(
             AnimatedVisibility(advanced) {
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     HorizontalDivider(color = c.border)
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                         Column(Modifier.weight(1f)) { V17Title("YARA custom rules"); V17Body("Import a local .yar rule.") }
                         OutlinedButton(onClick = onImportYara) { Text(stringResource(R.string.detection_capabilities_import_yara)) }
                     }
                     HorizontalDivider(color = c.border)
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                         Column(Modifier.weight(1f)) { V17Title("ThreatFeed Sync"); V17Body("Run the configured feed sync.") }
                         OutlinedButton(onClick = onThreatFeedSync) { Text(stringResource(R.string.threat_feed_sync_now)) }
                     }
@@ -568,7 +589,7 @@ internal fun V17ConsoleSettingsScreen(
                     V17Switch("Global Threat Intelligence", "Opt in to explicitly approved hash contributions",
                         globalIntelEnabled, "console.global-intel", Icons.Outlined.Security, isDark, onGlobalIntelChanged)
                     HorizontalDivider(color = c.border)
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                         Column(Modifier.weight(1f)) { V17Title("Benchmarks & Analytics"); V17Body("Review local scan timing and results.") }
                         OutlinedButton(onClick = onBenchmarks) { Text(stringResource(R.string.open_feature)) }
                     }
