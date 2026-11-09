@@ -16,10 +16,10 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FolderOpen
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Security
-import androidx.compose.material.icons.filled.SettingsSuggest
+import androidx.compose.material.icons.outlined.FolderOpen
+import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.outlined.Security
+import androidx.compose.material.icons.outlined.SettingsSuggest
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -86,7 +86,7 @@ internal fun SecuritySetupScreen(
                 TextButton(onClick = onSkipSetup) { Text(stringResource(R.string.setup_skip)) }
             }
             Icon(
-                Icons.Default.Security,
+                Icons.Outlined.Security,
                 contentDescription = stringResource(R.string.app_name),
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(48.dp)
@@ -111,10 +111,10 @@ internal fun SecuritySetupScreen(
                 pageSpacing = 14.dp
             ) { page ->
                 val icon = when (page) {
-                    0 -> Icons.Default.Notifications
-                    1 -> Icons.Default.Security
-                    2 -> Icons.Default.FolderOpen
-                    else -> Icons.Default.SettingsSuggest
+                    0 -> Icons.Outlined.Notifications
+                    1 -> Icons.Outlined.Security
+                    2 -> Icons.Outlined.FolderOpen
+                    else -> Icons.Outlined.SettingsSuggest
                 }
                 val title = when (page) {
                     0 -> R.string.setup_notifications_title
