@@ -7,7 +7,7 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.RadioButtonUnchecked
@@ -88,7 +88,7 @@ internal fun SentinelFolderPanel(
                         selected = false,
                         onClick = { onRemove(uri) },
                         label = { Text(StorageAccessPreferences.displayName(uri), maxLines = 1, overflow = TextOverflow.Ellipsis) },
-                        trailingIcon = { Icon(Icons.Default.Close, contentDescription = stringResource(R.string.ui_sentinel_remove_folder)) },
+                        trailingIcon = { Icon(Icons.Outlined.Close, contentDescription = stringResource(R.string.ui_sentinel_remove_folder)) },
                         modifier = Modifier.heightIn(min = 48.dp)
                     )
                 }
