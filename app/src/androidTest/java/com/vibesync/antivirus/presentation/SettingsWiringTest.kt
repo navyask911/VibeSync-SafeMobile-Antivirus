@@ -157,6 +157,19 @@ class SettingsWiringTest {
     }
 
     @Test
+    fun advancedTelemetryRowsRemainReadableWhenExpanded() {
+        render()
+        composeRule.onNodeWithText("Advanced Telemetry & Rules").performScrollTo().performClick()
+
+        composeRule.onNodeWithText("YARA custom rules").performScrollTo().assertExists()
+        composeRule.onNodeWithText("Import a local .yar rule.").performScrollTo().assertExists()
+        composeRule.onNodeWithText("ThreatFeed Sync").performScrollTo().assertExists()
+        composeRule.onNodeWithText("Run the configured feed sync.").performScrollTo().assertExists()
+        composeRule.onNodeWithText("Benchmarks & Analytics").performScrollTo().assertExists()
+        composeRule.onNodeWithText("Review local scan timing and results.").performScrollTo().assertExists()
+    }
+
+    @Test
     fun advancedActionsInvokeYaraThreatFeedAndBenchmarkCallbacks() {
         var yaraImports = 0
         var threatSyncs = 0
