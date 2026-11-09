@@ -22,13 +22,20 @@ class DeviceAdminManager(context: Context) {
         policyManager.isAdminActive(component)
     }.getOrDefault(false)
 
+    /**
+     * Returns the system activation intent so Compose can launch it through an
+     * ActivityResultLauncher. This avoids relying on LocalContext being an Activity
+     * (it is commonly a ContextThemeWrapper inside Compose).
+     */
+    fun createAdminRequestIntent(context: Context): Intent =
+        Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).apply {
+            putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, component)
+            putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, context.getString(R.string.device_admin_explanation))
+        }
+
     fun requestAdminPermission(activity: Activity) {
         if (isAdminActive()) return
-        val intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).apply {
-            putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, component)
-            putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, activity.getString(R.string.device_admin_explanation))
-        }
-        activity.startActivity(intent)
+        activity.startActivity(createAdminRequestIntent(activity))
     }
 
     /** Invokes Android's confirmation flow; actual state is refreshed when the app resumes. */
