@@ -24,7 +24,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.filled.FolderOpen
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Security
@@ -147,13 +147,21 @@ fun ScanProgressRing(progress: Float?, scanning: Boolean, label: String, modifie
                     -55f, 130f, false, topLeft, arcSize, style = Stroke(width = stroke, cap = StrokeCap.Round))
             }
         }
-        Text(
-            if (normalized != null) percentText else if (scanning) "..." else if (success) "✓" else "—",
-            style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold,
-            color = if (normalized == null && !scanning && success) Color(0xFF00A86B)
-                else if (normalized == null && !scanning) MaterialTheme.colorScheme.onSurfaceVariant
-                else MaterialTheme.colorScheme.primary
-        )
+        if (normalized == null && !scanning && success) {
+            Icon(
+                Icons.Outlined.CheckCircle,
+                contentDescription = label,
+                tint = Color(0xFF00A86B),
+                modifier = Modifier.size(28.dp)
+            )
+        } else {
+            Text(
+                if (normalized != null) percentText else if (scanning) "..." else "—",
+                style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold,
+                color = if (normalized == null && !scanning) MaterialTheme.colorScheme.onSurfaceVariant
+                    else MaterialTheme.colorScheme.primary
+            )
+        }
     }
 }
 
