@@ -25,10 +25,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CheckCircle
-import androidx.compose.material.icons.filled.FolderOpen
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Security
-import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.outlined.FolderOpen
+import androidx.compose.material.icons.outlined.MoreVert
+import androidx.compose.material.icons.outlined.Security
+import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.Button
 import com.vibesync.antivirus.ui.components.CyberCard as Card
 import androidx.compose.material3.CardDefaults
@@ -104,7 +104,7 @@ fun EmptyState(title: String, description: String, modifier: Modifier = Modifier
         horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Box(Modifier.size(64.dp).clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.10f)),
             contentAlignment = Alignment.Center) {
-            Icon(Icons.Default.FolderOpen, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(30.dp))
+            Icon(Icons.Outlined.FolderOpen, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(30.dp))
         }
         Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface)
         Text(description, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -187,7 +187,7 @@ fun SecurityStatusCard(status: String, description: String, lastScanLabel: Strin
                 StatusChip(stringResource(R.string.threat_feed_active_count, signatureCount), if (signatureCount > 0) StatusKind.ACTIVE else StatusKind.WARNING, Modifier.weight(1f))
             }
             Button(onClick = onScan, modifier = Modifier.fillMaxWidth(), enabled = !scanning) {
-                Icon(Icons.Default.Security, contentDescription = null)
+                Icon(Icons.Outlined.Security, contentDescription = null)
                 Spacer(Modifier.size(8.dp))
                 Text(stringResource(R.string.scan_installed))
             }
@@ -217,8 +217,8 @@ fun ThreatListItem(result: ScanResult, isProtectedSystemApp: Boolean, showUninst
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 Icon(
                     imageVector = when (result.verdict) {
-                        ScanVerdict.THREAT, ScanVerdict.SUSPICIOUS, ScanVerdict.NOT_SCANNED -> Icons.Default.Warning
-                        ScanVerdict.NO_MATCH -> Icons.Default.CheckCircle
+                        ScanVerdict.THREAT, ScanVerdict.SUSPICIOUS, ScanVerdict.NOT_SCANNED -> Icons.Outlined.Warning
+                        ScanVerdict.NO_MATCH -> Icons.Outlined.CheckCircle
                     },
                     contentDescription = null,
                     tint = when (kind) {
@@ -236,7 +236,7 @@ fun ThreatListItem(result: ScanResult, isProtectedSystemApp: Boolean, showUninst
                 if (result.trustedByUser && result.packageName != null) {
                     Box {
                         IconButton(onClick = { optionsExpanded = true }) {
-                            Icon(Icons.Default.MoreVert, contentDescription = stringResource(R.string.trusted_app_options))
+                            Icon(Icons.Outlined.MoreVert, contentDescription = stringResource(R.string.trusted_app_options))
                         }
                         DropdownMenu(expanded = optionsExpanded, onDismissRequest = { optionsExpanded = false }) {
                             if (showUninstall && !isProtectedSystemApp) DropdownMenuItem(
