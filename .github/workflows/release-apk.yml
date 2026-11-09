@@ -306,7 +306,7 @@ jobs:
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: SafeMobile-v1.7.2-UI-Screenshots-${{ github.run_id }}
-          path: build/ui-screenshots-v1.7.1.zip
+          path: build/ui-screenshots-v1.7.2.zip
           if-no-files-found: error
           retention-days: 30
 
@@ -341,6 +341,7 @@ jobs:
           Built from commit ${GITHUB_SHA}.
           v1.6.1: Added new launcher icons and splash screen. Fixed text wrapping and added back navigation. Added inline Crown subscription toggle.
           v1.6.2: Accept all file types in the scan document picker for .txt/EICAR testing; preserve the originating screen when backing out of Pro; make the paywall and shared app toolbar wrap and scroll at larger font scales.
+          v1.7.2: Adds recursive SAF Deep Scan starting at Android/media with text and extensionless EICAR payload coverage; a live, system-backed setup checklist and four security guards; Scan & Lab metrics; instant Dark Slate, Midnight Navy and OLED themes; outlined Material icons; and a fixed 56dp AdMob banner with one-line label.
           v1.7.1: Fix Advanced Telemetry wrapping, Kannada score-ring clipping, persisted theme selection, Device Admin activation, SAF tree permission mapping and verified encrypted quarantine fallback. Release APK and Play AAB are signed and Paparazzi screenshots are attached separately.
           v1.6.6: Add four-step Smart Security Setup, request permissions only after user action, distinguish one-time sample approval from global community-defense opt-in, and auto-queue hashes without a dialog when global defense is enabled.
           v1.6.5: Add queue-persistence and worker-start diagnostics, expose document staging failures in Logcat, and route install-alert donations through WorkManager to survive Activity dismissal.
@@ -371,7 +372,7 @@ jobs:
           release_files=(
             "${{ steps.verify-aab.outputs.aab_path }}"
             "${{ steps.verify-aab.outputs.apk_path }}"
-            "build/ui-screenshots-v1.7.1.zip"
+            "build/ui-screenshots-v1.7.2.zip"
             "build/siren-test/SafeMobile-Siren-Test.apk"
             "build/siren-test/siren-test-definitions.json"
             "build/siren-test/SHA256SUMS.txt"
