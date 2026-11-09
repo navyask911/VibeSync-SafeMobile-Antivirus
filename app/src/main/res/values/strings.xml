@@ -449,7 +449,7 @@
     <string name="ui_no_readable_items">No readable items were available. Try again after selecting files or installing apps.</string>
     <string name="ui_unsigned_definitions_warning">No active signed threat definitions were used. Update definitions and scan again for broader hash coverage.</string>
     <string name="ui_view_scan_results">View scan results</string>
-    <string name="ui_sentinel_limited">⚠ Limited Protection Active</string>
+    <string name="ui_sentinel_limited">Limited Protection Active</string>
     <string name="ui_sentinel_both_off">Download and Messaging Apps folders are not being monitored.</string>
     <string name="ui_sentinel_download_off">The Download folder is not being monitored.</string>
     <string name="ui_sentinel_whatsapp_off">The Messaging Apps Documents folder is not being monitored.</string>
@@ -668,24 +668,4 @@
 
 
 
-    <!-- v1.7.2: three-tier theme, setup checklist, security guards and Scan & Lab metrics -->
-    <string name="theme_dark_slate">Dark Slate</string>
-    <string name="setup_checklist_title">Unified Setup Checklist</string>
-    <string name="setup_checklist_body">These controls open Android settings. Checked status reflects the permission currently granted on this device.</string>
-    <string name="setup_checklist_battery">Battery Optimization Exemption</string>
-    <string name="setup_checklist_admin">Device Administrator</string>
-    <string name="setup_checklist_overlay">High-Priority Overlay Alert</string>
-    <string name="setup_checklist_saf">SAF Directory Watch</string>
-    <string name="security_guards_title">Active Security Guards &amp; Permissions</string>
-    <string name="security_guards_description">Manage system permissions used by SafeMobile protection.</string>
-    <string name="security_guard_battery">Battery Optimization Exemption</string>
-    <string name="security_guard_battery_desc">Allow the background sentinel to stay active.</string>
-    <string name="security_guard_admin">Device Administrator</string>
-    <string name="security_guard_admin_desc">Enable Android device administrator protection.</string>
-    <string name="security_guard_overlay">High-Priority Overlay Alert</string>
-    <string name="security_guard_overlay_desc">Allow urgent threat warnings to appear over other apps.</string>
-    <string name="security_guard_saf">SAF Directory Watch</string>
-    <string name="security_guard_saf_desc">Monitor only folders explicitly granted through the Android file picker.</string>
-    <string name="scan_lab_metrics_title">Scan &amp; Lab Metrics</string>
-    <string name="scan_lab_metrics_body">Inspect verified benchmark information and local scan analytics.</string>
 </resources>
