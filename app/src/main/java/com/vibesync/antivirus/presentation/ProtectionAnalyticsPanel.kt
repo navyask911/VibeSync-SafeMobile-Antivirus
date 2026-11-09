@@ -6,9 +6,9 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material.icons.outlined.History
+import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.*
 import com.vibesync.antivirus.ui.components.CyberCard as Card
 import androidx.compose.runtime.Composable
@@ -94,9 +94,9 @@ internal fun ProtectionAnalyticsPanel(
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         Icon(
                             imageVector = when (audit.verdict) {
-                                ScanVerdict.THREAT.name, ScanVerdict.SUSPICIOUS.name -> Icons.Default.Warning
-                                ScanVerdict.NO_MATCH.name -> Icons.Default.CheckCircle
-                                else -> Icons.Default.History
+                                ScanVerdict.THREAT.name, ScanVerdict.SUSPICIOUS.name -> Icons.Outlined.Warning
+                                ScanVerdict.NO_MATCH.name -> Icons.Outlined.CheckCircle
+                                else -> Icons.Outlined.History
                             },
                             contentDescription = null,
                             tint = when (audit.verdict) {
