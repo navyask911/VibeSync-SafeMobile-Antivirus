@@ -467,7 +467,7 @@ val downloadMlAssets = tasks.register("downloadMlAssets") {
                 // GitHub Release assets can briefly return 5xx responses under load.
                 // Retry transport failures only; every successful download still has
                 // exact size, SHA-256 and TFLite/schema validation below.
-                for (attempt in 1..4) {
+                for (attempt in 1..6) {
                     temporary.delete()
                     try {
                         val connection = URL(sourceUrl).openConnection().apply {
@@ -498,11 +498,11 @@ val downloadMlAssets = tasks.register("downloadMlAssets") {
                     } catch (error: IOException) {
                         lastDownloadError = error
                         temporary.delete()
-                        if (attempt == 4) break
-                        val delayMs = 1_000L * attempt
+                        if (attempt == 6) break
+                        val delayMs = 5_000L * attempt
                         logger.warn(
                             "Temporary ML asset download failure for ${destination.name} " +
-                                "(attempt $attempt/4): ${error.message}; retrying in ${delayMs}ms."
+                                "(attempt $attempt/6): ${error.message}; retrying in ${delayMs}ms."
                         )
                         Thread.sleep(delayMs)
                     }
