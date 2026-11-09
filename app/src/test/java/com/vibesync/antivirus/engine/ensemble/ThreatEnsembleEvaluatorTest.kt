@@ -92,6 +92,31 @@ class ThreatEnsembleEvaluatorTest {
     }
 
     @Test
+    fun textPayloadCandidateFilterIncludesTxtExtensionlessAndEicarNames() {
+        assertEquals(true, ThreatEnsembleEvaluator.isTextPayloadCandidate("sample.txt"))
+        assertEquals(true, ThreatEnsembleEvaluator.isTextPayloadCandidate("README"))
+        assertEquals(true, ThreatEnsembleEvaluator.isTextPayloadCandidate("EICAR-test.data"))
+        assertEquals(false, ThreatEnsembleEvaluator.isTextPayloadCandidate("sample.apk"))
+        assertEquals(false, ThreatEnsembleEvaluator.isTextPayloadCandidate("photo.jpg"))
+    }
+
+    @Test
+    fun exactEicarTextMarkerIsDetectedAndEscalatedAsHashThreat() {
+        val marker = listOf(
+            "X5O!P%@AP[4", 92.toChar().toString(), "PZX54(P^)7CC)7}",
+            36.toChar().toString(), "EICAR-STANDARD-ANTIVIRUS-TEST-FILE!",
+            36.toChar().toString(), "H+H*"
+        ).joinToString("")
+        assertEquals(true, ThreatEnsembleEvaluator.containsEicarTextPayload(marker.toByteArray()))
+        val output = ThreatEnsembleEvaluator.evaluate(result(), eicarTextMatch = true)
+        assertEquals(ScanVerdict.THREAT, output.verdict)
+        assertEquals(DetectionSource.HASH, output.detectionSource)
+        assertEquals(1.0f, output.confidence, 0.0f)
+        assertEquals("EICAR-Test-File", output.malwareName)
+        assertNotNull(output.threatEventId)
+    }
+
+    @Test
     fun unreadableInputIsNeverDowngradedToNoMatch() {
         val output = ThreatEnsembleEvaluator.evaluate(result(verdict = ScanVerdict.NOT_SCANNED))
         assertEquals(ScanVerdict.NOT_SCANNED, output.verdict)

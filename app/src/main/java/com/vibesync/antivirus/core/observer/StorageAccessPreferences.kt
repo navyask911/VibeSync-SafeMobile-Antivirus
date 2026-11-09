@@ -24,6 +24,11 @@ object StorageAccessPreferences {
     const val WHATSAPP = "whatsapp"
     const val CUSTOM = "custom"
     const val MAX_CUSTOM_FOLDERS = 10
+
+    /** Initial SAF location for a user-initiated deep scan; access stays limited to the chosen tree. */
+    fun deepScanInitialUri(): Uri = DocumentsContract.buildTreeDocumentUri(
+        "com.android.externalstorage.documents", "primary:Android/media"
+    )
     private val CUSTOM_TREE_URIS = stringSetPreferencesKey("custom_tree_uris")
     private fun prefs(context: Context) = context.getSharedPreferences(SafeMobileApp.SECURITY_PREFS, Context.MODE_PRIVATE)
 
@@ -49,11 +54,17 @@ object StorageAccessPreferences {
     fun roleUri(context: Context, role: String): Uri? = prefs(context).getString("sentinel_role_$role", null)?.let(Uri::parse)
     fun hasRole(context: Context, role: String): Boolean = accessibleTreeUris(context).any { matchesRole(it, role) }
     fun matchesRole(uri: Uri, role: String): Boolean {
-        val id = runCatching { DocumentsContract.getTreeDocumentId(uri).lowercase() }.getOrDefault("")
-        val parts = id.split(':', '/')
+        val documentId = runCatching { DocumentsContract.getTreeDocumentId(uri) }.getOrDefault("")
+        val parts = documentId.substringAfter(':', documentId)
+            .split('/')
+            .map { it.trim().lowercase() }
+            .filter { it.isNotEmpty() }
         return when (role) {
             DOWNLOADS -> parts.any { it == "download" || it == "downloads" }
-            WHATSAPP -> parts.any { it == "whatsapp" || it == "whatsapp business" || it == "whatsapp documents" }
+            WHATSAPP -> parts.any {
+                it == "whatsapp" || it == "whatsapp business" ||
+                    it == "whatsapp documents" || it == "com.whatsapp" || it == "com.whatsapp.w4b"
+            }
             else -> false
         }
     }
@@ -67,7 +78,9 @@ object StorageAccessPreferences {
             Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION or Intent.FLAG_GRANT_PREFIX_URI_PERMISSION)
         if (role != CUSTOM) {
             val path = if (role == WHATSAPP) "primary:Android/media/com.whatsapp/WhatsApp/Media/WhatsApp Documents" else "primary:Download"
-            putExtra(DocumentsContract.EXTRA_INITIAL_URI, DocumentsContract.buildDocumentUri("com.android.externalstorage.documents", path))
+            // ACTION_OPEN_DOCUMENT_TREE accepts a document URI or a tree URI. Use a
+            // tree URI so DocumentsUI opens directly at the intended directory node.
+            putExtra(DocumentsContract.EXTRA_INITIAL_URI, DocumentsContract.buildTreeDocumentUri("com.android.externalstorage.documents", path))
         }
     }
 
@@ -79,14 +92,26 @@ object StorageAccessPreferences {
         val root = runCatching { DocumentFile.fromTreeUri(context, uri) }.getOrNull() ?: return false
         if (!root.isDirectory || !root.canRead()) return false
         val resolver = context.contentResolver
-        try { resolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION) }
-        catch (_: SecurityException) { return false }
-        if (grantFlags and Intent.FLAG_GRANT_WRITE_URI_PERMISSION != 0) {
-            runCatching { resolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION) }
+        // Persist only the read/write grants actually returned by ACTION_OPEN_DOCUMENT_TREE.
+        // Taking both flags in one call avoids silently storing a read-only URI when the provider
+        // returned a different permission combination.
+        val persistFlags = grantFlags and (
+            Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+        )
+        if (persistFlags and Intent.FLAG_GRANT_READ_URI_PERMISSION == 0) return false
+        try {
+            resolver.takePersistableUriPermission(uri, persistFlags)
+        } catch (_: SecurityException) {
+            return false
         }
         val uris = (selectedTreeUris(context).map(Uri::toString) + uri.toString()).distinct()
+        val mappedRole = when {
+            role == CUSTOM -> CUSTOM
+            matchesRole(uri, WHATSAPP) -> WHATSAPP
+            else -> DOWNLOADS
+        }
         return prefs(context).edit().putString(TREES, JSONArray(uris).toString())
-            .putString("sentinel_role_$role", uri.toString()).remove(LEGACY_TREE).commit()
+            .putString("sentinel_role_$mappedRole", uri.toString()).remove(LEGACY_TREE).commit()
     }
 
     /** DataStore is the source of truth for the user-managed custom-folder set. */

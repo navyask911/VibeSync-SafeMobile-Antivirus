@@ -4,6 +4,8 @@ import com.vibesync.antivirus.core.engine.DetectionSource
 import com.vibesync.antivirus.core.engine.ScanResult
 import com.vibesync.antivirus.core.engine.ScanVerdict
 import java.util.UUID
+import java.util.Locale
+import com.vibesync.antivirus.core.engine.hash.HashMatcher
 
 /**
  * Deterministic, local-only fusion of the exact-hash, YARA and Drebin-215 signals.
@@ -12,13 +14,42 @@ import java.util.UUID
  * threat verdict. A YARA suspicious signal is required for that escalation.
  */
 object ThreatEnsembleEvaluator {
+    private val textExtensions = setOf(
+        "txt", "text", "log", "csv", "json", "xml", "md", "html", "htm", "yaml", "yml", "ini", "conf"
+    )
+    private val eicarTextMarker: String by lazy(LazyThreadSafetyMode.PUBLICATION) {
+        buildString {
+            append("X5O!P%@AP[4")
+            append(92.toChar())
+            append("PZX54(P^)7CC)7}")
+            append(36.toChar())
+            append("EICAR-STANDARD-ANTIVIRUS-TEST-FILE!")
+            append(36.toChar())
+            append("H+H*")
+        }
+    }
+
+    /** Text candidates include .txt, common text formats, extensionless files, and EICAR-named files. */
+    fun isTextPayloadCandidate(fileName: String): Boolean {
+        val name = fileName.substringBefore('?').substringAfterLast('/').substringAfterLast(92.toChar())
+            .lowercase(Locale.ROOT)
+        if ("eicar" in name) return true
+        val dot = name.lastIndexOf('.')
+        if (dot <= 0) return true
+        return name.substring(dot + 1) in textExtensions
+    }
+
+    /** Exact EICAR test marker; a generic occurrence of the word EICAR is not enough. */
+    fun containsEicarTextPayload(bytes: ByteArray): Boolean =
+        bytes.toString(Charsets.ISO_8859_1).contains(eicarTextMarker, ignoreCase = true)
+
     private val exactHashSources = setOf(
         DetectionSource.HASH,
         DetectionSource.SIGNED_DATABASE,
         DetectionSource.THREAT_INTELLIGENCE_FEED
     )
 
-    fun evaluate(scanResult: ScanResult): ScanResult {
+    fun evaluate(scanResult: ScanResult, eicarTextMatch: Boolean = false): ScanResult {
         if (scanResult.detectionSource == DetectionSource.HASH &&
             scanResult.verdict == ScanVerdict.THREAT
         ) {
@@ -42,6 +73,19 @@ object ThreatEnsembleEvaluator {
         // Never turn an inaccessible/partial scan or a user-approved app into clean.
         if (scanResult.verdict == ScanVerdict.NOT_SCANNED || scanResult.trustedByUser) {
             return scanResult
+        }
+
+        if (eicarTextMatch) {
+            return scanResult.copy(
+                verdict = ScanVerdict.THREAT,
+                reasons = (scanResult.reasons + HashMatcher.EICAR_MALWARE_NAME).distinct(),
+                reasonTexts = emptyList(),
+                detectionSource = DetectionSource.HASH,
+                confidence = 1.0f,
+                riskScore = 1.0f,
+                malwareName = HashMatcher.EICAR_MALWARE_NAME,
+                threatEventId = scanResult.threatEventId ?: UUID.randomUUID().toString()
+            )
         }
 
         val probability = scanResult.mlProbability

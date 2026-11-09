@@ -83,7 +83,8 @@ class StorageSentinelService : Service() {
         }
     }
 
- private fun candidate(n:String)=n.endsWith(".apk",true)||n.endsWith(".exe",true)
+ private fun candidate(n:String)=n.endsWith(".apk",true)||n.endsWith(".exe",true)||
+  com.vibesync.antivirus.engine.ensemble.ThreatEnsembleEvaluator.isTextPayloadCandidate(n)
  private fun hasStorage() = StorageAccessPreferences.hasAccess(this)
  private fun shouldProcess(uri: String, size: Long, modified: Long): Boolean = synchronized(recent) {
     val key = "$uri:$size:$modified"

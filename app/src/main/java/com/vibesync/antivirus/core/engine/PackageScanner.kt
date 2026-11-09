@@ -29,6 +29,8 @@ import com.vibesync.antivirus.data.local.ScanAudit
 import com.vibesync.antivirus.data.local.ThreatDao
 import com.vibesync.antivirus.data.repository.ThreatIntelligenceRepository
 import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
+import java.io.InputStream
 import java.io.File
 import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
@@ -184,10 +186,25 @@ class PackageScanner(
 
  private fun evaluateWithEnsemble(
   result: ScanResult,
-  yaraResult: YaraXScanResult? = null
+  yaraResult: YaraXScanResult? = null,
+  eicarTextMatch: Boolean = false
  ): ScanResult = ThreatEnsembleEvaluator.evaluate(
-  result.copy(yaraVerdict = rawYaraVerdict(yaraResult))
+  result.copy(yaraVerdict = rawYaraVerdict(yaraResult)), eicarTextMatch
  )
+
+ private fun containsEicarTextPayload(input: InputStream): Boolean {
+  val bytes = ByteArrayOutputStream()
+  val buffer = ByteArray(8 * 1024)
+  var total = 0
+  while (total < MAX_TEXT_SAMPLE_BYTES) {
+   val count = input.read(buffer, 0, minOf(buffer.size, MAX_TEXT_SAMPLE_BYTES - total))
+   if (count < 0) break
+   if (count == 0) continue
+   bytes.write(buffer, 0, count)
+   total += count
+  }
+  return ThreatEnsembleEvaluator.containsEicarTextPayload(bytes.toByteArray())
+ }
 
  private suspend fun runMachineLearning(apk: File): Float? {
   val features = drebinFeatureExtractor.extractFeaturesAsync(apk)
@@ -276,6 +293,8 @@ class PackageScanner(
     return trustedResult(identity, scanSessionId, start).copy(sourceLocalPath = file.absolutePath)
    }
    val hash = calculator.calculate(file)
+   val eicarTextMatch = ThreatEnsembleEvaluator.isTextPayloadCandidate(file.name) &&
+    file.inputStream().buffered().use(::containsEicarTextPayload)
    // Skip ZIP/DEX, bundled YARA and ML when any exact local threat hash matches.
   // The conclusive signature verdict is still recorded in the normal audit.
   val exactThreat = findExactHashThreat(file.name, file.name,
@@ -337,7 +356,7 @@ class PackageScanner(
      malwareName = firstSuspiciousYara.malwareName ?: firstSuspiciousYara.ruleIdentifier
     )
    }
-   output = evaluateWithEnsemble(output, yaraXResult)
+   output = evaluateWithEnsemble(output, yaraXResult, eicarTextMatch)
    output = markIncompleteYaraIfOtherwiseClean(output, yaraXResult)
    if (persistAllAudit || output.verdict == ScanVerdict.THREAT || output.verdict == ScanVerdict.SUSPICIOUS || output.verdict == ScanVerdict.NOT_SCANNED) audit(output, start, scanSessionId)
    output.copy(durationMs = elapsed(start), sourceLocalPath = file.absolutePath, scanSessionId = scanSessionId)
@@ -358,6 +377,10 @@ class PackageScanner(
   val start = System.nanoTime()
   return try {
    val inputStream = stream.buffered()
+   val eicarTextMatch = if (ThreatEnsembleEvaluator.isTextPayloadCandidate(label)) {
+    inputStream.mark(MAX_TEXT_SAMPLE_BYTES + 1)
+    try { containsEicarTextPayload(inputStream) } finally { inputStream.reset() }
+   } else false
    inputStream.mark(2)
    val zipHeader = inputStream.read() == 0x50 && inputStream.read() == 0x4b
    inputStream.reset()
@@ -383,7 +406,8 @@ class PackageScanner(
     } finally { staged.delete() }
    }
    val hash = inputStream.use { calculator.calculate(it) }
-   val output = evaluate(label, label, hash.sha256, hash.md5, emptyList(), 0, sha1 = hash.sha1, fileSize = hash.bytesRead)
+   val output = evaluate(label, label, hash.sha256, hash.md5, emptyList(), 0,
+    sha1 = hash.sha1, fileSize = hash.bytesRead, eicarTextMatch = eicarTextMatch)
    if (persistAudit || output.verdict == ScanVerdict.THREAT ||
        output.verdict == ScanVerdict.SUSPICIOUS || output.verdict == ScanVerdict.NOT_SCANNED) {
     audit(output, start, scanSessionId)
@@ -565,10 +589,12 @@ class PackageScanner(
  // Stream-only scans still check exact hashes before allowing heuristic verdicts.
  private suspend fun evaluate(
   key: String, label: String, sha: String, md5: String, heuristic: List<String>,
-  score: Int, sha1: String? = null, fileSize: Long? = null, report: RiskReport? = null
+  score: Int, sha1: String? = null, fileSize: Long? = null, report: RiskReport? = null,
+  eicarTextMatch: Boolean = false
  ): ScanResult = evaluateWithEnsemble(
   findExactHashThreat(key, label, sha, md5, sha1, fileSize)
-   ?: evaluateUnmatched(key, label, sha, md5, heuristic, score, sha1, report)
+   ?: evaluateUnmatched(key, label, sha, md5, heuristic, score, sha1, report),
+  eicarTextMatch = eicarTextMatch
  )
  private suspend fun auditSafely(result: ScanResult, start: Long, scanSessionId: String) {
   try {
@@ -611,5 +637,9 @@ class PackageScanner(
  private fun result(key: String, label: String, sha: String?, md5: String?, verdict: ScanVerdict, reasons: List<String>, start: Long) =
   ScanResult(key, label, sha, md5, verdict, reasons, elapsed(start), reasonTexts = SecurityText.reasons(context, reasons))
  private fun elapsed(start: Long) = ((System.nanoTime() - start) / 1_000_000L).coerceAtLeast(0)
+
+ private companion object {
+  const val MAX_TEXT_SAMPLE_BYTES = 256 * 1024
+ }
 }
 
