@@ -12,8 +12,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.animation.animateContentSize
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Security
-import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.outlined.Security
+import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -85,7 +85,7 @@ fun DevicePostureDashboardCard(state: DevicePostureUiState, onOpen: () -> Unit) 
             border = BorderStroke(1.dp, PostureWarning)) {
             Row(Modifier.padding(16.dp), horizontalArrangement = Arrangement.spacedBy(10.dp),
                 verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Default.Warning, contentDescription = null, tint = Color(0xFF161B25))
+                Icon(Icons.Outlined.Warning, contentDescription = null, tint = Color(0xFF161B25))
                 Text(stringResource(R.string.posture_dashboard_warning), color = Color(0xFF161B25),
                     fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
             }
@@ -98,7 +98,7 @@ fun DevicePostureDashboardCard(state: DevicePostureUiState, onOpen: () -> Unit) 
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                Icon(Icons.Default.Security, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                Icon(Icons.Outlined.Security, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                     Text(stringResource(R.string.posture_title), style = MaterialTheme.typography.titleMedium,
                         maxLines = 1, overflow = TextOverflow.Ellipsis)
