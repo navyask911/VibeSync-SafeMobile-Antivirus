@@ -51,7 +51,6 @@ object StorageAccessPreferences {
     fun matchesRole(uri: Uri, role: String): Boolean {
         val documentId = runCatching { DocumentsContract.getTreeDocumentId(uri) }.getOrDefault("")
         val parts = documentId.substringAfter(':', documentId)
-            .replace('\\\\', '/')
             .split('/')
             .map { it.trim().lowercase() }
             .filter { it.isNotEmpty() }
