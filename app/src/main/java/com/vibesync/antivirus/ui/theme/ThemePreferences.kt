@@ -1,26 +1,47 @@
 package com.vibesync.antivirus.ui.theme
 
 import android.content.Context
-import androidx.datastore.preferences.core.emptyPreferences
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
-import java.io.IOException
+import android.content.SharedPreferences
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.onStart
 
-enum class AppTheme { MIDNIGHT, LIGHT, OLED;
+enum class AppTheme {
+    MIDNIGHT, LIGHT, OLED;
+
     companion object {
-        fun fromSaved(value: String?): AppTheme = entries.firstOrNull { it.name == value } ?: LIGHT
+        fun fromSaved(value: String?): AppTheme =
+            entries.firstOrNull { it.name == value } ?: LIGHT
     }
 }
-private val Context.safeMobileThemeStore by preferencesDataStore(name = "safe_mobile_theme")
+
+/**
+ * Persists the active Material palette in SharedPreferences and exposes preference
+ * changes as a Flow so the Compose theme can redraw immediately, including changes
+ * made from another UI surface or restored when the Activity is recreated.
+ */
 class ThemePreferences(context: Context) {
-    private val store = context.applicationContext.safeMobileThemeStore
-    private val key = stringPreferencesKey("selected_theme")
-    val selected: Flow<AppTheme> = store.data
-        .catch { cause -> if (cause is IOException) emit(emptyPreferences()) else throw cause }
-        .map { AppTheme.fromSaved(it[key]) }
-    suspend fun save(theme: AppTheme) { store.edit { it[key] = theme.name } }
+    private val preferences: SharedPreferences = context.applicationContext
+        .getSharedPreferences("safe_mobile_theme", Context.MODE_PRIVATE)
+
+    private val key = "selected_theme"
+
+    val selected: Flow<AppTheme> = callbackFlow {
+        val listener = SharedPreferences.OnSharedPreferenceChangeListener { store, changedKey ->
+            if (changedKey == key) {
+                trySend(AppTheme.fromSaved(store.getString(key, null)))
+            }
+        }
+        preferences.registerOnSharedPreferenceChangeListener(listener)
+        trySend(AppTheme.fromSaved(preferences.getString(key, null)))
+        awaitClose { preferences.unregisterOnSharedPreferenceChangeListener(listener) }
+    }.distinctUntilChanged()
+
+    suspend fun save(theme: AppTheme) {
+        // apply() updates the in-process preference cache immediately and writes
+        // the value durably in the background.
+        preferences.edit().putString(key, theme.name).apply()
+    }
 }
