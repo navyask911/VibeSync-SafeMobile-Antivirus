@@ -147,7 +147,7 @@ class DashboardWiringTest {
         composeRule.onNodeWithText("1. SHA-256 Hash").assertExists()
         composeRule.onNodeWithText("2. YARA Rules").assertExists()
         composeRule.onNodeWithText("3. ML Behavioral Model").assertExists()
-        composeRule.onNodeWithText("4. Static / DEX Heuristics").assertExists()
+        composeRule.onNodeWithText("4. Static / DEX Heuristics · No findings").assertExists()
     }
 
     @Test
