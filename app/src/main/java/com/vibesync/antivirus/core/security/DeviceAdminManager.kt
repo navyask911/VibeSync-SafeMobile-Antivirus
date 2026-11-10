@@ -1,6 +1,5 @@
 package com.vibesync.antivirus.core.security
 
-import android.app.Activity
 import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
 import android.content.Context
@@ -22,13 +21,18 @@ class DeviceAdminManager(context: Context) {
         policyManager.isAdminActive(component)
     }.getOrDefault(false)
 
-    fun requestAdminPermission(activity: Activity) {
+    /**
+     * Launches Android's explicit user-consent screen. Using the application context plus
+     * NEW_TASK avoids a silent no-op when Compose supplies a ContextWrapper instead of Activity.
+     */
+    fun requestAdminPermission() {
         if (isAdminActive()) return
         val intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).apply {
             putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, component)
-            putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, activity.getString(R.string.device_admin_explanation))
+            putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, appContext.getString(R.string.device_admin_explanation))
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
-        activity.startActivity(intent)
+        appContext.startActivity(intent)
     }
 
     /** Invokes Android's confirmation flow; actual state is refreshed when the app resumes. */

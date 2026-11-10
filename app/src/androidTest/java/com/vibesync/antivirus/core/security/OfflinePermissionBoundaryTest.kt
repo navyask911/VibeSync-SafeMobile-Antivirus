@@ -1,6 +1,7 @@
 package com.vibesync.antivirus.core.security
 
 import android.Manifest
+import android.content.ComponentName
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
@@ -8,6 +9,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.vibesync.antivirus.SafeMobileApp
 import com.vibesync.antivirus.core.observer.StorageAccessPreferences
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -23,6 +25,21 @@ class NetworkPermissionBoundaryTest {
         assertFalse(Manifest.permission.MANAGE_EXTERNAL_STORAGE in requested)
         assertFalse(Manifest.permission.READ_EXTERNAL_STORAGE in requested)
     }
+    @Test fun overlaySpecialAccessAndDeviceAdminReceiverAreDeclared() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val packageInfo = context.packageManager.getPackageInfo(context.packageName, PackageManager.GET_PERMISSIONS)
+        val requested = packageInfo.requestedPermissions.orEmpty().toSet()
+        assertTrue(Manifest.permission.SYSTEM_ALERT_WINDOW in requested)
+
+        val receiver = context.packageManager.getReceiverInfo(
+            ComponentName(context, AdminReceiver::class.java),
+            PackageManager.GET_META_DATA
+        )
+        assertEquals("android.permission.BIND_DEVICE_ADMIN", receiver.permission)
+        assertTrue(receiver.enabled)
+        assertTrue((receiver.metaData?.getInt("android.app.device_admin") ?: 0) != 0)
+    }
+
     @Test fun appBackupFlagIsDisabled() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val info = context.packageManager.getApplicationInfo(context.packageName, 0)

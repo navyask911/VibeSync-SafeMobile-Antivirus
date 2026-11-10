@@ -1,8 +1,5 @@
 package com.vibesync.antivirus.presentation
 
-import android.app.Activity
-import android.content.Context
-import android.content.ContextWrapper
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -39,7 +36,6 @@ import com.vibesync.antivirus.core.security.DeviceAdminManager
 @Composable
 internal fun DeviceAdminCard(modifier: Modifier = Modifier) {
     val context = LocalContext.current
-    val activity = remember(context) { context.findActivity() }
     val lifecycleOwner = LocalLifecycleOwner.current
     val manager = remember(context) { DeviceAdminManager(context) }
     var active by remember(manager) { mutableStateOf(manager.isAdminActive()) }
@@ -84,7 +80,7 @@ internal fun DeviceAdminCard(modifier: Modifier = Modifier) {
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
                     if (active) manager.removeAdmin()
-                    else activity?.let(manager::requestAdminPermission)
+                    else manager.requestAdminPermission()
                     // The system dialog owns the transition. The card refreshes on resume.
                 }
             ) {
@@ -94,9 +90,4 @@ internal fun DeviceAdminCard(modifier: Modifier = Modifier) {
     }
 }
 
-private tailrec fun Context.findActivity(): Activity? = when (this) {
-    is Activity -> this
-    is ContextWrapper -> baseContext.findActivity()
-    else -> null
-}
 

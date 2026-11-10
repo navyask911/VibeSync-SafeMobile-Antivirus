@@ -1,5 +1,12 @@
 # SafeMobile Antivirus Changelog
 
+## 1.7.4
+
+- Declares the user-granted Android overlay special-access permission so SafeMobile is listed in the system's “Display over other apps” screen; the existing setup action opens Settings and refreshes the grant state when the app resumes.
+- Fixes Device Administrator activation when Compose supplies a wrapped context by launching Android's explicit confirmation screen with the registered SafeMobile admin component.
+- Adds an instrumentation check for the overlay permission declaration and Device Admin receiver metadata.
+
+
 ## 1.6.5 — 2026-11-06
 
 - Log donation worker startup, WorkManager queue persistence results, and selected-document staging failures so skipped uploads can be distinguished from HTTP failures.

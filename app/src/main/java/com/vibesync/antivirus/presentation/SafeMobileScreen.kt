@@ -547,7 +547,7 @@ import kotlinx.coroutines.launch
  }
  val toggleAdminGuard: (Boolean) -> Unit = { enabled ->
   runCatching {
-   if (enabled) activity?.let(deviceAdminManager::requestAdminPermission) else deviceAdminManager.removeAdmin()
+   if (enabled) deviceAdminManager.requestAdminPermission() else deviceAdminManager.removeAdmin()
   }.onFailure { Toast.makeText(context, R.string.device_admin_explanation, Toast.LENGTH_LONG).show() }
  }
  val openOverlaySettings: (Boolean) -> Unit = { forceOpen ->
