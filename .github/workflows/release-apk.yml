@@ -328,13 +328,13 @@ jobs:
           version_name="${{ steps.verify-aab.outputs.version_name }}"
           version_code="${{ steps.verify-aab.outputs.version_code }}"
           if [[ "${GITHUB_REF_TYPE:-}" == "branch" && "${GITHUB_REF_NAME:-}" == "main" ]]; then
-            if [[ "$version_name" != "1.7.3" || "$version_code" != "20261144" ]]; then
+            if [[ "$version_name" != "1.7.4" || "$version_code" != "20261144" ]]; then
               echo "SAFE STOP: main release trigger expected v1.7.4 / 20261144, got $version_name / $version_code." >&2
               exit 1
             fi
           fi
           if [[ "${GITHUB_REF_TYPE:-}" == "tag" && "${GITHUB_REF_NAME:-}" == "v1.7.4" ]] ||
-             [[ "${GITHUB_REF_TYPE:-}" == "branch" && "${GITHUB_REF_NAME:-}" == "main" && "$version_name" == "1.7.3" && "$version_code" == "20261144" ]]; then
+             [[ "${GITHUB_REF_TYPE:-}" == "branch" && "${GITHUB_REF_NAME:-}" == "main" && "$version_name" == "1.7.4" && "$version_code" == "20261144" ]]; then
             tag="v1.7.4"
           else
             tag="safemobile-v${{ steps.verify-aab.outputs.version_name }}-code${{ steps.verify-aab.outputs.version_code }}-run${GITHUB_RUN_NUMBER}"
