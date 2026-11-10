@@ -668,9 +668,9 @@
 
 
 
-    <string name="test_siren" translatable="false">Test Siren</string>
-    <string name="test_voice" translatable="false">Test Voice</string>
-    <string name="test_siren_failed" translatable="false">Siren test could not start on this device.</string>
-    <string name="test_voice_failed" translatable="false">Voice test failed. Check the installed device speech engine and voice data.</string>
-    <string name="pro_navigation_unavailable" translatable="false">The SafeMobile Pro screen is temporarily unavailable.</string>
+    <string name="test_siren">Test Siren</string>
+    <string name="test_voice">Test Voice</string>
+    <string name="test_siren_failed">Siren test could not start on this device.</string>
+    <string name="test_voice_failed">Voice test failed. Check the installed device speech engine and voice data.</string>
+    <string name="pro_navigation_unavailable">The SafeMobile Pro screen is temporarily unavailable.</string>
 </resources>
