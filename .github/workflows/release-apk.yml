@@ -1,4 +1,5 @@
 name: Build and publish signed SafeMobile APK and Play AAB
+# v1.7.2 main-branch release requires the [release-v1.7.2] commit marker after green Android CI.
 
 on:
   workflow_dispatch:
