@@ -99,10 +99,10 @@ class SettingsWiringTest {
 
         composeRule.onNodeWithText("Dark Slate").performScrollTo().performClick()
         assertEquals(AppTheme.DARK_SLATE, selectedTheme)
-        composeRule.onNodeWithText("Midnight Blue").performScrollTo().performClick()
-        assertEquals(AppTheme.MIDNIGHT, selectedTheme)
         composeRule.onNodeWithText("Pure OLED Black").performScrollTo().performClick()
         assertEquals(AppTheme.OLED, selectedTheme)
+        composeRule.onNodeWithText("Clean Light").performScrollTo().performClick()
+        assertEquals(AppTheme.LIGHT, selectedTheme)
     }
 
     @Test

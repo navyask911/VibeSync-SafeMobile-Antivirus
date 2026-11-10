@@ -335,11 +335,22 @@ class LocalQuarantineManager(context: Context, private val hashCalculator: HashC
  }
 
  private fun quarantineDirectory(): File {
-  val folder = File(app.noBackupFilesDir, "quarantine")
+  val folder = File(app.filesDir, "quarantine")
   if (!folder.exists() && !folder.mkdirs()) throw IOException("Could not create private quarantine storage.")
-  val root = app.noBackupFilesDir.canonicalFile
+  val root = app.filesDir.canonicalFile
   val canonical = folder.canonicalFile
   require(canonical.path.startsWith(root.path + File.separator)) { "Invalid private quarantine location." }
+  val legacy = File(app.noBackupFilesDir, "quarantine")
+  if (legacy.isDirectory) {
+   legacy.listFiles().orEmpty().filter { it.isFile }.forEach { oldFile ->
+    val target = File(canonical, oldFile.name)
+    if (!target.exists() && !oldFile.renameTo(target)) {
+     try { oldFile.copyTo(target, overwrite = false); oldFile.delete() }
+     catch (error: Exception) { target.delete(); throw IOException("Could not migrate encrypted quarantine data.", error) }
+    }
+   }
+   if (legacy.listFiles().orEmpty().isEmpty()) legacy.delete()
+  }
   return canonical
  }
 

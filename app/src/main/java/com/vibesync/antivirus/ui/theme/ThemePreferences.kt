@@ -12,10 +12,11 @@ import kotlinx.coroutines.flow.map
 
 enum class AppTheme { DARK_SLATE, MIDNIGHT, OLED, LIGHT;
     companion object {
-        /** Migrate the former binary Light choice into the first dark-tier palette. */
+        /** Preserve Light; migrate only the retired Midnight palette to Dark Slate. */
         fun fromSaved(value: String?): AppTheme = when (value) {
-            "LIGHT", null -> DARK_SLATE
-            else -> entries.firstOrNull { it.name == value && it != LIGHT } ?: DARK_SLATE
+            null -> DARK_SLATE
+            "MIDNIGHT" -> DARK_SLATE
+            else -> entries.firstOrNull { it.name == value } ?: DARK_SLATE
         }
     }
 }

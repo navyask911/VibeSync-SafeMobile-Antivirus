@@ -165,6 +165,7 @@ class ThreatRepository(
    currentCoroutineContext().ensureActive()
    val assessed = runCatching { context.contentResolver.openInputStream(candidate.uri) }.getOrNull()?.let { stream ->
     scanner.scanStream(candidate.displayName, stream, UUID.randomUUID().toString(), persistAudit = false)
+    .copy(sourceUri = candidate.uri.toString())
    } ?: recordUnscannedUri(candidate.displayName, context.getString(R.string.file_stream_failed), UUID.randomUUID().toString())
    if (assessed.verdict != ScanVerdict.NO_MATCH) findings += assessed
    filesProcessed++

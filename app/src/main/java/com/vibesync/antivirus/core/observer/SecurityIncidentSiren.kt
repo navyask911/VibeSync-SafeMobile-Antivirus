@@ -24,7 +24,7 @@ internal object SecurityIncidentSiren {
         cancel = { handler.removeCallbacks(it) }
     )
 
-    fun start(context: Context) {
+    fun start(context: Context, onFailure: (Throwable) -> Unit = {}) {
         val app = context.applicationContext
         handler.post {
             try {
@@ -56,6 +56,7 @@ internal object SecurityIncidentSiren {
             } catch (error: Exception) {
                 Log.w(TAG, "Unable to play local siren", error)
                 controller.stop()
+                runCatching { onFailure(error) }
             }
         }
     }

@@ -417,6 +417,7 @@ private fun V17ScanResultRow(
     val context = LocalContext.current
     val c = v17Colors(dark)
     var expanded by rememberSaveable(result.packageName, result.packageOrPath) { mutableStateOf(false) }
+    var heuristicsExpanded by rememberSaveable(result.packageName, result.packageOrPath) { mutableStateOf(false) }
     val appIcon = remember(context, result.packageName) {
         result.packageName?.let { name ->
             runCatching {
@@ -475,11 +476,24 @@ private fun V17ScanResultRow(
                         V17Layer("3. ML Behavioral Model", result.mlProbability?.let {
                             "Model probability: ${(it * 100).toInt().coerceIn(0, 100)}%"
                         } ?: "Model output unavailable for this scan.", c, Modifier.weight(1f))
-                        V17Layer("4. Static / DEX Heuristics",
-                            report?.findings?.take(6)?.joinToString { "${it.ruleId}: ${it.evidence}" }
-                                ?.takeUnless { it.isBlank() }
-                                ?: report?.observations?.take(6)?.joinToString()
-                                ?: "No static heuristic finding recorded.", c, Modifier.weight(1f))
+                        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                            val heuristicDetails = buildList {
+                                report?.findings?.forEach { add("${it.ruleId}: ${it.evidence}") }
+                                report?.observations?.forEach { add(it) }
+                            }
+                            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                                V17Body(if (heuristicDetails.isEmpty()) "4. Static / DEX Heuristics · No findings"
+                                    else "4. Static / DEX Heuristics · ${heuristicDetails.size} signals", Modifier.weight(1f), c.text)
+                                if (heuristicDetails.isNotEmpty()) TextButton(onClick = { heuristicsExpanded = !heuristicsExpanded }) {
+                                    Text(if (heuristicsExpanded) "Hide" else "Show")
+                                }
+                            }
+                            AnimatedVisibility(visible = heuristicsExpanded && heuristicDetails.isNotEmpty()) {
+                                Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                                    heuristicDetails.take(12).forEach { V17Body(it, color = c.muted) }
+                                }
+                            }
+                        }
                     }
                 }
                 if (result.malwareName != null) V17Body("Matched signature: ${result.malwareName}", color = c.text)
@@ -556,7 +570,8 @@ internal fun V17ConsoleSettingsScreen(
     onBatteryToggle: (Boolean) -> Unit, onAdminToggle: (Boolean) -> Unit,
     onOverlayToggle: (Boolean) -> Unit, onSafToggle: (Boolean) -> Unit,
     onImportYara: () -> Unit,
-    onThreatFeedSync: () -> Unit, onBenchmarks: () -> Unit, onOpenPro: () -> Unit
+    onThreatFeedSync: () -> Unit, onBenchmarks: () -> Unit, onOpenPro: () -> Unit,
+    onTestSiren: () -> Unit = {}, onTestVoice: () -> Unit = {}
 ) {
     val context = LocalContext.current
     val c = v17Colors(isDark)
@@ -569,13 +584,13 @@ internal fun V17ConsoleSettingsScreen(
             V17Title("Appearance")
             V17Title("Theme")
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                listOf(AppTheme.DARK_SLATE, AppTheme.MIDNIGHT, AppTheme.OLED).forEach { theme ->
+                listOf(AppTheme.LIGHT, AppTheme.DARK_SLATE, AppTheme.OLED).forEach { theme ->
                     FilterChip(selected = appTheme == theme, onClick = { onAppThemeChanged(theme) },
                         modifier = Modifier.weight(1f), label = { Text(stringResource(when (theme) {
+                            AppTheme.LIGHT -> R.string.theme_light
                             AppTheme.DARK_SLATE -> R.string.theme_dark_slate
-                            AppTheme.MIDNIGHT -> R.string.theme_midnight
+                            AppTheme.MIDNIGHT -> R.string.theme_dark_slate
                             AppTheme.OLED -> R.string.theme_oled
-                            AppTheme.LIGHT -> R.string.theme_dark_slate
                         }), style = MaterialTheme.typography.labelMedium.copy(fontSize = 11.sp)) })
                 }
             }
@@ -599,6 +614,14 @@ internal fun V17ConsoleSettingsScreen(
             HorizontalDivider(color = c.border)
             V17Switch("Install Sentinel", if (installSentinelRunning) "Observer is running" else "Automatically inspect newly installed apps",
                 installSentinelEnabled, "console.install-sentinel", Icons.Outlined.Security, isDark, onInstallSentinelChanged)
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                OutlinedButton(onClick = onTestSiren, modifier = Modifier.weight(1f)) {
+                    Text(stringResource(R.string.test_siren), maxLines = 2, overflow = TextOverflow.Ellipsis)
+                }
+                OutlinedButton(onClick = onTestVoice, modifier = Modifier.weight(1f)) {
+                    Text(stringResource(R.string.test_voice), maxLines = 2, overflow = TextOverflow.Ellipsis)
+                }
+            }
         }
         V17Card(isDark) {
             V17Title(stringResource(R.string.security_guards_title))
@@ -632,7 +655,9 @@ internal fun V17ConsoleSettingsScreen(
                     HorizontalDivider(color = c.border)
                     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                         Column(Modifier.weight(1f)) { V17Title("YARA custom rules"); V17Body("Import a local .yar rule.") }
-                        OutlinedButton(onClick = onImportYara) { Text(stringResource(R.string.detection_capabilities_import_yara)) }
+                        OutlinedButton(onClick = onImportYara, modifier = Modifier.weight(1f)) {
+                            Text(stringResource(R.string.detection_capabilities_import_yara), maxLines = 2, overflow = TextOverflow.Ellipsis)
+                        }
                     }
                     HorizontalDivider(color = c.border)
                     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {

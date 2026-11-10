@@ -44,9 +44,9 @@ android {
   applicationId = "com.vibesync.antivirus"
   minSdk = 26
   targetSdk = 36
-  versionCode = 20261142
-  versionName = "1.7.2"
-  // [release-v1.7.2] Four-tab UI fixes, theme persistence, SAF deep scan and quarantine hardening, scan lab, tools hub, unified protection setup and console
+  versionCode = 20261143
+  versionName = "1.7.3"
+  // [release-v1.7.3] Physical-device fixes for SAF quarantine, themes, diagnostics, overlay and Scan Results
   testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   buildConfigField("String", "FEED_MANIFEST_PUBLIC_KEY_B64", cfg(feedManifestPublicKey))
   buildConfigField("Boolean", "FEED_MANIFEST_KEY_CONFIGURED", (!feedManifestPublicKey.isBlank()).toString())

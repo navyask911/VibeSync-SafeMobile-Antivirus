@@ -22,14 +22,19 @@ object SecurityVoiceAlert {
         val app = context.applicationContext
         if (!app.getSharedPreferences(SafeMobileApp.SECURITY_PREFS, Context.MODE_PRIVATE)
                 .getBoolean(SafeMobileApp.KEY_VOICE_ALERTS_ENABLED, false)) return
+        speakOneShot(app, messageResource) { Log.w(TAG, "Unable to initialize local TTS", it) }
+    }
+
+    /** Manual test path; called only after a direct user tap in Settings. */
+    fun speakForTest(context: Context, onFailure: (Throwable) -> Unit = {}) {
+        speakOneShot(context.applicationContext, R.string.voice_alert_malware_detected, onFailure)
+    }
+
+    private fun speakOneShot(context: Context, messageResource: Int, onFailure: (Throwable) -> Unit) {
         handler.post {
             active?.shutdown()
-            runCatching {
-                OneShotSpeech(app, messageResource).also {
-                    active = it
-                    it.start()
-                }
-            }.onFailure { Log.w(TAG, "Unable to initialize local TTS", it) }
+            runCatching { OneShotSpeech(context, messageResource, onFailure).also { active = it; it.start() } }
+                .onFailure { Log.w(TAG, "Unable to initialize local TTS", it); runCatching { onFailure(it) } }
         }
     }
 
@@ -41,7 +46,11 @@ object SecurityVoiceAlert {
         } else handler.post { stop() }
     }
 
-    private class OneShotSpeech(private val context: Context, @StringRes private val messageResource: Int) :
+    private class OneShotSpeech(
+        private val context: Context,
+        @StringRes private val messageResource: Int,
+        private val onFailure: (Throwable) -> Unit = {}
+    ) :
         TextToSpeech.OnInitListener {
         private var textToSpeech: TextToSpeech? = null
         private var closed = false
@@ -59,12 +68,13 @@ object SecurityVoiceAlert {
                 val textToSpeech = this.textToSpeech ?: return@post
                 if (closed) return@post
                 runCatching {
-                    if (status != TextToSpeech.SUCCESS) { shutdown(); return@runCatching }
+                    if (status != TextToSpeech.SUCCESS) { shutdown(); runCatching { onFailure(IllegalStateException("TTS engine failed to initialize.")) }; return@runCatching }
                     val locale = Locale.getDefault()
                     val availability = textToSpeech.setLanguage(Locale.getDefault())
                     if (availability == TextToSpeech.LANG_MISSING_DATA || availability == TextToSpeech.LANG_NOT_SUPPORTED) {
                         Log.w(TAG, "Local voice pack unavailable for " + locale.toLanguageTag())
                         shutdown()
+                        runCatching { onFailure(IllegalStateException("TTS voice data is missing or unsupported.")) }
                         return@runCatching
                     }
                     // Resolve translated text at speech time, using the same current system locale.
@@ -81,8 +91,11 @@ object SecurityVoiceAlert {
                         override fun onError(utteranceId: String?) { handler.post { shutdown() } }
                         override fun onError(utteranceId: String?, errorCode: Int) { handler.post { shutdown() } }
                     })
-                    if (textToSpeech.speak(message, TextToSpeech.QUEUE_FLUSH, null, utteranceId) == TextToSpeech.ERROR) shutdown()
-                }.onFailure { Log.w(TAG, "Unable to speak local warning", it); shutdown() }
+                    if (textToSpeech.speak(message, TextToSpeech.QUEUE_FLUSH, null, utteranceId) == TextToSpeech.ERROR) {
+                        runCatching { onFailure(IllegalStateException("TTS engine rejected the diagnostic utterance.")) }
+                        shutdown()
+                    }
+                }.onFailure { Log.w(TAG, "Unable to speak local warning", it); runCatching { onFailure(it) }; shutdown() }
             }
         }
 

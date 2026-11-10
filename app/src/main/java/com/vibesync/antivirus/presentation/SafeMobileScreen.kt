@@ -116,6 +116,7 @@ import com.vibesync.antivirus.core.security.DeviceOwnerManager
 import com.vibesync.antivirus.core.security.DeviceAdminManager
 import com.vibesync.antivirus.core.observer.InstallSentinelService
 import com.vibesync.antivirus.core.observer.SecurityVoiceAlert
+import com.vibesync.antivirus.core.observer.SecurityIncidentSiren
 import com.vibesync.antivirus.core.engine.ScanResult
 import com.vibesync.antivirus.core.engine.DetectionSource
 import com.vibesync.antivirus.core.quarantine.LocalQuarantineManager
@@ -154,6 +155,7 @@ import kotlinx.coroutines.launch
  val adMobState by adMobManager.state.collectAsStateWithLifecycle()
  var fullScreenAlertsGranted by remember(context) { mutableStateOf(FullScreenAlertAccess.isGranted(context)) }
  var overlayAccessGranted by remember(context) { mutableStateOf(Settings.canDrawOverlays(context)) }
+ var overlaySettingsRequestPending by rememberSaveable { mutableStateOf(false) }
  val powerManager = remember(context) { context.getSystemService(Context.POWER_SERVICE) as? PowerManager }
  var batteryUnrestricted by remember(context) {
   mutableStateOf(powerManager?.isIgnoringBatteryOptimizations(context.packageName) == true)
@@ -217,6 +219,12 @@ import kotlinx.coroutines.launch
    tabNavController.navigate("detail/$parentTab/$destination") { launchSingleTop = true }
    selectedDestination = destination
   }
+ }
+ val openProSafely: () -> Unit = {
+  try {
+   if (tabNavController.currentDestination == null) Toast.makeText(context, R.string.pro_navigation_unavailable, Toast.LENGTH_LONG).show()
+   else navigateToDestination("pro")
+  } catch (_: Exception) { Toast.makeText(context, R.string.pro_navigation_unavailable, Toast.LENGTH_LONG).show() }
  }
  LaunchedEffect(currentRoute, currentBackStackEntry?.arguments?.getString("screen")) {
   selectedDestination = when (currentRoute) {
@@ -542,14 +550,26 @@ import kotlinx.coroutines.launch
    if (enabled) activity?.let(deviceAdminManager::requestAdminPermission) else deviceAdminManager.removeAdmin()
   }.onFailure { Toast.makeText(context, R.string.device_admin_explanation, Toast.LENGTH_LONG).show() }
  }
- val toggleOverlayGuard: (Boolean) -> Unit = { _ ->
-  val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:${context.packageName}"))
-  runCatching { context.startActivity(intent) }.onFailure {
-   runCatching { context.startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-    Uri.parse("package:${context.packageName}"))) }
-    .onFailure { Toast.makeText(context, R.string.full_screen_settings_unavailable, Toast.LENGTH_LONG).show() }
+ val openOverlaySettings: (Boolean) -> Unit = { forceOpen ->
+  overlayAccessGranted = Settings.canDrawOverlays(context)
+  if ((!overlayAccessGranted || forceOpen) && !overlaySettingsRequestPending) {
+   overlaySettingsRequestPending = true
+   val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION).apply {
+    data = Uri.parse("package:${context.packageName}")
+    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+   }
+   try { context.startActivity(intent) }
+   catch (_: ActivityNotFoundException) {
+    try { context.startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+     Uri.parse("package:${context.packageName}")).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }
+    catch (_: Exception) { overlaySettingsRequestPending = false; Toast.makeText(context, R.string.full_screen_settings_unavailable, Toast.LENGTH_LONG).show() }
+   } catch (_: Exception) {
+    overlaySettingsRequestPending = false
+    Toast.makeText(context, R.string.full_screen_settings_unavailable, Toast.LENGTH_LONG).show()
+   }
   }
  }
+ val toggleOverlayGuard: (Boolean) -> Unit = { _ -> openOverlaySettings(true) }
  val toggleSafGuard: (Boolean) -> Unit = { enabled ->
   if (enabled) {
    requestPrivacyAcknowledgement {
@@ -613,6 +633,7 @@ import kotlinx.coroutines.launch
     if (privacyAccepted) vm.refreshTrustOverrides()
     fullScreenAlertsGranted = FullScreenAlertAccess.isGranted(context)
     adminActive = deviceAdminManager.isAdminActive()
+    overlaySettingsRequestPending = false
     voiceAlertsEnabled = securityPrefs.getBoolean(SafeMobileApp.KEY_VOICE_ALERTS_ENABLED, false)
     installSentinelEnabled = InstallSentinelService.enabled(context)
     batteryUnrestricted = powerManager?.isIgnoringBatteryOptimizations(context.packageName) == true
@@ -733,17 +754,7 @@ import kotlinx.coroutines.launch
         Toast.makeText(context, R.string.ui_folder_picker_unavailable, Toast.LENGTH_LONG).show()
        }
      },
-     onReviewOverlayAccess = {
-      overlayAccessGranted = Settings.canDrawOverlays(context)
-      if (!overlayAccessGranted) {
-       val overlayIntent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:${context.packageName}"))
-       runCatching { context.startActivity(overlayIntent) }
-        .onFailure {
-         runCatching { context.startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:${context.packageName}"))) }
-          .onFailure { Toast.makeText(context, R.string.battery_review_unavailable, Toast.LENGTH_LONG).show() }
-        }
-      }
-     },
+     onReviewOverlayAccess = { openOverlaySettings(false) },
      onRequestBatteryOptimization = {
       batteryUnrestricted = powerManager?.isIgnoringBatteryOptimizations(context.packageName) == true
       if (!batteryUnrestricted) {
@@ -768,13 +779,13 @@ import kotlinx.coroutines.launch
       showBack = selectedDestination !in setOf("home", "scan", "tools", "settings"),
       onThemeToggle = {
        onAppThemeChanged(when (appTheme) {
-        com.vibesync.antivirus.ui.theme.AppTheme.DARK_SLATE -> com.vibesync.antivirus.ui.theme.AppTheme.MIDNIGHT
-        com.vibesync.antivirus.ui.theme.AppTheme.MIDNIGHT -> com.vibesync.antivirus.ui.theme.AppTheme.OLED
-        com.vibesync.antivirus.ui.theme.AppTheme.OLED -> com.vibesync.antivirus.ui.theme.AppTheme.DARK_SLATE
         com.vibesync.antivirus.ui.theme.AppTheme.LIGHT -> com.vibesync.antivirus.ui.theme.AppTheme.DARK_SLATE
+        com.vibesync.antivirus.ui.theme.AppTheme.DARK_SLATE -> com.vibesync.antivirus.ui.theme.AppTheme.OLED
+        com.vibesync.antivirus.ui.theme.AppTheme.OLED -> com.vibesync.antivirus.ui.theme.AppTheme.LIGHT
+        com.vibesync.antivirus.ui.theme.AppTheme.MIDNIGHT -> com.vibesync.antivirus.ui.theme.AppTheme.OLED
        })
       },
-      onProClick = { navigateToDestination("pro") },
+      onProClick = openProSafely,
       onBack = { if (!tabNavController.popBackStack()) navigateToDestination("home") }
      )
     },
@@ -867,6 +878,14 @@ import kotlinx.coroutines.launch
           onAppThemeChanged = onAppThemeChanged,
           sirenEnabled = securityAlertsEnabled,
           onSirenChanged = changeSecurityAlerts,
+          onTestSiren = {
+           try { SecurityIncidentSiren.start(context) { Toast.makeText(context, R.string.test_siren_failed, Toast.LENGTH_LONG).show() } }
+           catch (_: Exception) { Toast.makeText(context, R.string.test_siren_failed, Toast.LENGTH_LONG).show() }
+          },
+          onTestVoice = {
+           try { SecurityVoiceAlert.speakForTest(context) { Toast.makeText(context, R.string.test_voice_failed, Toast.LENGTH_LONG).show() } }
+           catch (_: Exception) { Toast.makeText(context, R.string.test_voice_failed, Toast.LENGTH_LONG).show() }
+          },
           voiceEnabled = voiceAlertsEnabled,
           onVoiceChanged = { enabled ->
            voiceAlertsEnabled = enabled
@@ -906,7 +925,7 @@ import kotlinx.coroutines.launch
           onImportYara = { pendingYaraPicker.launch(arrayOf("text/plain", "application/octet-stream", "application/x-yara")) },
           onThreatFeedSync = { requestPrivacyAcknowledgement { vm.requestThreatFeedSync() } },
           onBenchmarks = { navigateToDestination("scan") },
-          onOpenPro = { navigateToDestination("pro") }
+          onOpenPro = openProSafely
          )
          else -> Column(
           Modifier.fillMaxSize().verticalScroll(contentScrollState)
