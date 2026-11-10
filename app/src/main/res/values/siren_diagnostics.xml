@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="siren_test_settings_title">Siren diagnostics</string>
   <string name="siren_test_settings_description">Test the five-second siren and alert preview. This does not detect malware, modify your threat database, or request an uninstall.</string>
   <string name="siren_test_button">Test Threat Siren</string>
@@ -12,8 +12,8 @@
   <string name="battery_review_action">Review battery settings</string>
   <string name="battery_review_unavailable">Android battery settings could not be opened.</string>
  <string name="ui_folder_access_not_granted">Folder access was not granted. You can continue with limited protection.</string>
-  <string name="test_siren">Test Siren</string>
-  <string name="test_voice">Test Voice</string>
-  <string name="test_siren_failed">Siren test could not start on this device.</string>
-  <string name="test_voice_failed">Voice test failed. Check the installed device speech engine and voice data.</string>
+  <string name="test_siren" tools:ignore="MissingTranslation">Test Siren</string>
+  <string name="test_voice" tools:ignore="MissingTranslation">Test Voice</string>
+  <string name="test_siren_failed" tools:ignore="MissingTranslation">Siren test could not start on this device.</string>
+  <string name="test_voice_failed" tools:ignore="MissingTranslation">Voice test failed. Check the installed device speech engine and voice data.</string>
 </resources>
