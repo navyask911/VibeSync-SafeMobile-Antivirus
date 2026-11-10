@@ -12,4 +12,8 @@
   <string name="battery_review_action">バッテリー設定を確認</string>
   <string name="battery_review_unavailable">Android のバッテリー設定を開けませんでした。</string>
  <string name="ui_folder_access_not_granted">フォルダーへのアクセスが許可されませんでした。制限付き保護で続行できます。</string>
+  <string name="test_siren">サイレンをテスト</string>
+  <string name="test_voice">音声をテスト</string>
+  <string name="test_siren_failed">このデバイスではサイレンテストを開始できませんでした。</string>
+  <string name="test_voice_failed">音声テストに失敗しました。インストールされている音声エンジンと音声データを確認してください。</string>
 </resources>

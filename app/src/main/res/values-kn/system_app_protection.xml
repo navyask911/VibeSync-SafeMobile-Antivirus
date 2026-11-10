@@ -4,4 +4,5 @@
 <string name="full_screen_settings_unavailable">ಪೂರ್ಣಪರದೆ ಎಚ್ಚರಿಕೆ ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ತೆರೆಯಲಾಗಲಿಲ್ಲ. SafeMobile ಬಳಸಬಹುದು.</string>
 <string name="system_app_protection_badge">ವ್ಯವಸ್ಥೆಯ ಆ್ಯಪ್‌ಗಳನ್ನು ಅಪಾಯಪಟ್ಟಿ ಮತ್ತು ಅನ್‌ಇನ್‌ಸ್ಟಾಲ್‌ನಿಂದ ರಕ್ಷಿಸಲಾಗಿದೆ</string>
 <string name="system_app_scan_complete">ಸ್ಕ್ಯಾನ್ ಮುಗಿದಿದೆ. ಪರಿಶೀಲಿಸಿದ ಅಂಶಗಳಲ್ಲಿ ಬೆದರಿಕೆ ಕಂಡುಬಂದಿಲ್ಲ. ವ್ಯವಸ್ಥೆಯ ಆ್ಯಪ್‌ಗಳನ್ನು ಅಳಿಸಲು ಸೂಚಿಸುವುದಿಲ್ಲ; ಅವುಗಳ ಸಮಗ್ರತೆಯನ್ನು ಈ ಸ್ಕ್ಯಾನ್ ಪರಿಶೀಲಿಸಿಲ್ಲ.</string>
+    <string name="pro_navigation_unavailable">SafeMobile Pro ಪರದೆಯು ತಾತ್ಕಾಲಿಕವಾಗಿ ಲಭ್ಯವಿಲ್ಲ.</string>
 </resources>

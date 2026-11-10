@@ -706,9 +706,4 @@
     <string name="security_guard_saf_desc">Android ಫೈಲ್ ಆಯ್ಕೆಯಿಂದ ಅನುಮತಿಸಿದ ಫೋಲ್ಡರ್‌ಗಳನ್ನು ಮಾತ್ರ ಮೇಲ್ವಿಚಾರಣೆ ಮಾಡಿ.</string>
     <string name="scan_lab_metrics_title">ಸ್ಕ್ಯಾನ್ ಮತ್ತು ಲ್ಯಾಬ್ ಮಾಪನಗಳು</string>
     <string name="scan_lab_metrics_body">ಪರಿಶೀಲಿತ ಬೆಂಚ್‌ಮಾರ್ಕ್ ಮಾಹಿತಿ ಮತ್ತು ಸ್ಥಳೀಯ ಸ್ಕ್ಯಾನ್ ವಿಶ್ಲೇಷಣೆಗಳನ್ನು ಪರಿಶೀಲಿಸಿ.</string>
-    <string name="test_siren">ಸೈರನ್ ಪರೀಕ್ಷಿಸಿ</string>
-    <string name="test_voice">ಧ್ವನಿ ಪರೀಕ್ಷಿಸಿ</string>
-    <string name="test_siren_failed">ಈ ಸಾಧನದಲ್ಲಿ ಸೈರನ್ ಪರೀಕ್ಷೆಯನ್ನು ಪ್ರಾರಂಭಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.</string>
-    <string name="test_voice_failed">ಧ್ವನಿ ಪರೀಕ್ಷೆ ವಿಫಲವಾಗಿದೆ. ಸಾಧನದ ಸ್ಪೀಚ್ ಎಂಜಿನ್ ಮತ್ತು ಧ್ವನಿ ಡೇಟಾವನ್ನು ಪರಿಶೀಲಿಸಿ.</string>
-    <string name="pro_navigation_unavailable">SafeMobile Pro ಪರದೆಯು ತಾತ್ಕಾಲಿಕವಾಗಿ ಲಭ್ಯವಿಲ್ಲ.</string>
 </resources>

@@ -5,4 +5,5 @@
     <string name="full_screen_settings_unavailable">Full-screen alert settings could not be opened. You can continue using SafeMobile.</string>
     <string name="system_app_protection_badge">System apps protected from review and uninstall</string>
     <string name="system_app_scan_complete">Scan Complete. No threats found in the items checked. System apps are excluded from review and uninstall; their integrity has not been verified by this scan.</string>
+    <string name="pro_navigation_unavailable">The SafeMobile Pro screen is temporarily unavailable.</string>
 </resources>
