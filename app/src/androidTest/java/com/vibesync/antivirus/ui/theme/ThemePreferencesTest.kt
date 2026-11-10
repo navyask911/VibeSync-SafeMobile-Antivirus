@@ -25,10 +25,10 @@ class ThemePreferencesTest {
         }
     }
 
-    @Test fun invalidPreferencesFallBackToDarkSlate() {
+    @Test fun invalidPreferencesFallBackToDarkSlateAndPreserveValidLightTheme() {
         assertEquals(AppTheme.DARK_SLATE, AppTheme.fromSaved(null))
         assertEquals(AppTheme.DARK_SLATE, AppTheme.fromSaved("INVALID"))
         assertEquals(AppTheme.DARK_SLATE, AppTheme.fromSaved(""))
-        assertEquals(AppTheme.DARK_SLATE, AppTheme.fromSaved("LIGHT"))
+        assertEquals(AppTheme.LIGHT, AppTheme.fromSaved("LIGHT"))
     }
 }
