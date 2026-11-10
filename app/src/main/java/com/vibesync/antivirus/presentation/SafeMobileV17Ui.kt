@@ -247,7 +247,7 @@ internal fun V17ShieldScreen(
                 V17ScoreRing(if (activeGuards >= 4) 100 else securityScore.coerceIn(0, 99), isDark)
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        V17IconBadge(Icons.Outlined.Security, c.green, size = 36.dp, iconSize = 21.dp, contentDescription = "Protection status")
+                        V17IconBadge(Icons.Outlined.Security, c.green, size = 36.dp, iconSize = 21.dp, contentDescription = null)
                         V17Pill(if (isPro) "PROTECTED · PRO" else "PROTECTION STATUS", c.green, isDark)
                     }
                     V17Title("DeviceSecurityScore")
@@ -263,7 +263,7 @@ internal fun V17ShieldScreen(
         ) {
             Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                V17IconBadge(Icons.Outlined.Tune, c.amber, size = 40.dp, iconSize = 22.dp, contentDescription = "Protection setup")
+                V17IconBadge(Icons.Outlined.Tune, c.amber, size = 40.dp, iconSize = 22.dp, contentDescription = null)
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
                     V17Title("Protection Setup: $activeGuards/4 Active", color = c.text)
                     V17Body("Tap to grant the remaining recommended protection permissions.", color = c.muted)
@@ -443,7 +443,7 @@ internal fun V17ScanLabScreen(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     V17IconBadge(Icons.Outlined.Search, c.muted, size = 44.dp, iconSize = 25.dp,
-                        contentDescription = "No scan results")
+                        contentDescription = null)
                     V17Body("No scan results yet. Run Quick App Scan or choose a folder for deep scanning.")
                 }
             }
@@ -751,7 +751,7 @@ internal fun V17ConsoleSettingsScreen(
                 .clickable(role = Role.Button) { advanced = !advanced },
                 verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 V17IconBadge(Icons.Outlined.Settings, c.accent, size = 40.dp, iconSize = 23.dp,
-                    contentDescription = "Advanced rules")
+                    contentDescription = null)
                 Column(Modifier.weight(1f)) {
                     V17Title("Advanced Telemetry & Rules")
                     V17Body("YARA imports, ThreatFeed sync, global intelligence and benchmarks.")
