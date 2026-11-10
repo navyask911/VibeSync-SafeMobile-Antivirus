@@ -6,9 +6,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.test.assertExists
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -63,6 +65,15 @@ class SettingsWiringTest {
                 }
             }
         }
+    }
+
+    @Test
+    fun fourPrimaryTabsExposeAccessibleVectorIcons() {
+        render { V17BottomNavigationBar(selectedTab = "home", isDark = false, onSelect = {}) }
+        composeRule.onNodeWithContentDescription("Shield tab").assertExists()
+        composeRule.onNodeWithContentDescription("Scan & Lab tab").assertExists()
+        composeRule.onNodeWithContentDescription("Tools Hub tab").assertExists()
+        composeRule.onNodeWithContentDescription("Console tab").assertExists()
     }
 
     @Test

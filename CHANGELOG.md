@@ -7,6 +7,10 @@
 - Adds an instrumentation check for the overlay permission declaration and Device Admin receiver metadata.
 
 
+- Aligns Shield, Scan & Lab, Tools Hub and Console with the supplied HTML prototype using scalable Material vector iconography.
+- Standardizes larger icon badges across protection tiles, scan modes/results/detection layers, Tools Hub cards, Console sections and the setup checklist.
+- Adds accessible content descriptions for the four primary navigation icons; vectors remain sharp across display densities and font scales.
+
 ## 1.6.5 — 2026-11-06
 
 - Log donation worker startup, WorkManager queue persistence results, and selected-document staging failures so skipped uploads can be distinguished from HTTP failures.

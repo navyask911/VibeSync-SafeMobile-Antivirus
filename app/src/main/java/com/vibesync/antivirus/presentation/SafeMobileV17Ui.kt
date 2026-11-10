@@ -106,6 +106,38 @@ private fun V17Pill(label: String, color: Color, dark: Boolean) {
 }
 
 @Composable
+private fun V17IconBadge(
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    tint: Color,
+    size: androidx.compose.ui.unit.Dp = 44.dp,
+    iconSize: androidx.compose.ui.unit.Dp = 24.dp,
+    contentDescription: String? = null,
+    modifier: Modifier = Modifier
+) {
+    Surface(modifier = modifier.size(size), color = tint.copy(alpha = .14f),
+        shape = RoundedCornerShape(13.dp), border = BorderStroke(1.dp, tint.copy(alpha = .24f))) {
+        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Icon(icon, contentDescription, Modifier.size(iconSize), tint = tint)
+        }
+    }
+}
+
+@Composable
+private fun V17SectionHeading(
+    title: String, subtitle: String,
+    icon: androidx.compose.ui.graphics.vector.ImageVector, tint: Color
+) {
+    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+        V17IconBadge(icon, tint, size = 42.dp, iconSize = 24.dp, contentDescription = title)
+        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            V17Title(title)
+            V17Body(subtitle)
+        }
+    }
+}
+
+@Composable
 private fun V17HeroCard(dark: Boolean, content: @Composable ColumnScope.() -> Unit) {
     val c = v17Colors(dark)
     Surface(
@@ -134,22 +166,28 @@ internal fun V17TopBar(
             verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             if (showBack) IconButton(onClick = onBack, modifier = Modifier.size(34.dp)) {
                 Icon(Icons.Outlined.ArrowBack, "Back", tint = c.text)
-            } else Surface(Modifier.size(34.dp), color = c.accent.copy(alpha = .14f), shape = RoundedCornerShape(9.dp)) {
-                Box(contentAlignment = Alignment.Center) { Icon(Icons.Outlined.Shield, "VibeSync", tint = c.green) }
-            }
+            } else V17IconBadge(
+                Icons.Outlined.Shield, c.green, size = 40.dp, iconSize = 25.dp, contentDescription = "SafeMobile"
+            )
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(1.dp)) {
                 Text(stringResource(R.string.brand_subtitle), style = MaterialTheme.typography.titleMedium.copy(fontSize = 15.sp),
                     fontWeight = FontWeight.Bold, color = c.text)
                 Text(stringResource(R.string.app_name), style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp), color = c.muted)
             }
-            IconButton(onClick = onThemeToggle, modifier = Modifier.size(34.dp)) {
-                Icon(Icons.Outlined.Palette, "Toggle theme", tint = c.muted)
+            IconButton(onClick = onThemeToggle, modifier = Modifier.size(40.dp)) {
+                Icon(Icons.Outlined.Palette, "Toggle theme", tint = c.muted, modifier = Modifier.size(23.dp))
             }
             Surface(Modifier.clip(CircleShape).clickable(role = Role.Button, onClick = onProClick),
                 color = if (isPro) c.green else Color(0xFFEA580C), shape = CircleShape) {
-                Text(if (isPro) "PRO ACTIVE" else "PRO",
-                    Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
-                    style = MaterialTheme.typography.labelSmall, color = Color.White, fontWeight = FontWeight.ExtraBold)
+                Row(
+                    Modifier.padding(horizontal = 10.dp, vertical = 7.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Icon(Icons.Outlined.Star, contentDescription = null, modifier = Modifier.size(14.dp), tint = Color.White)
+                    Text(if (isPro) "PRO ACTIVE" else "PRO",
+                        style = MaterialTheme.typography.labelSmall, color = Color.White, fontWeight = FontWeight.ExtraBold)
+                }
             }
         }
     }
@@ -160,23 +198,33 @@ internal fun V17BottomNavigationBar(selectedTab: String, isDark: Boolean, onSele
     val c = v17Colors(isDark)
     val entries = listOf(
         Triple("home", "Shield", Icons.Outlined.Shield),
-        Triple("scan", "Scan & Lab", Icons.Outlined.Search),
+        Triple("scan", "Scan & Lab", Icons.Outlined.Science),
         Triple("tools", "Tools Hub", Icons.Outlined.Build),
         Triple("settings", "Console", Icons.Outlined.Tune)
     )
     Surface(color = c.surface, border = BorderStroke(1.dp, c.border)) {
-        Row(Modifier.fillMaxWidth().height(68.dp), verticalAlignment = Alignment.CenterVertically) {
+        Row(Modifier.fillMaxWidth().height(72.dp), verticalAlignment = Alignment.CenterVertically) {
             entries.forEach { (route, label, icon) ->
                 val selected = route == selectedTab
-                Column(Modifier.weight(1f).fillMaxHeight().clip(RoundedCornerShape(12.dp))
-                    .clickable(role = Role.Tab, onClick = { onSelect(route) }).padding(vertical = 7.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(3.dp)) {
-                    Surface(color = if (selected) c.accent.copy(alpha = .14f) else Color.Transparent, shape = CircleShape) {
-                        Icon(icon, label, Modifier.padding(horizontal = 14.dp, vertical = 2.dp).size(20.dp),
+                Column(
+                    Modifier.weight(1f).fillMaxHeight().clip(RoundedCornerShape(12.dp))
+                        .clickable(role = Role.Tab, onClick = { onSelect(route) })
+                        .testTag("navigation.$route").padding(vertical = 5.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(3.dp)
+                ) {
+                    Surface(
+                        color = if (selected) c.accent.copy(alpha = .16f) else Color.Transparent,
+                        shape = RoundedCornerShape(14.dp),
+                        border = if (selected) BorderStroke(1.dp, c.accent.copy(alpha = .28f)) else null
+                    ) {
+                        Icon(icon, "$label tab",
+                            Modifier.padding(horizontal = 17.dp, vertical = 4.dp).size(24.dp),
                             tint = if (selected) c.accent else c.muted)
                     }
                     Text(label, style = MaterialTheme.typography.labelSmall.copy(fontSize = 11.sp),
-                        fontWeight = FontWeight.SemiBold, color = if (selected) c.accent else c.muted, maxLines = 1)
+                        fontWeight = FontWeight.SemiBold, color = if (selected) c.accent else c.muted,
+                        maxLines = 1, softWrap = false)
                 }
             }
         }
@@ -198,7 +246,10 @@ internal fun V17ShieldScreen(
                 horizontalArrangement = Arrangement.spacedBy(14.dp)) {
                 V17ScoreRing(if (activeGuards >= 4) 100 else securityScore.coerceIn(0, 99), isDark)
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                    V17Pill(if (isPro) "PROTECTED · PRO" else "PROTECTION STATUS", c.green, isDark)
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        V17IconBadge(Icons.Outlined.Security, c.green, size = 36.dp, iconSize = 21.dp, contentDescription = "Protection status")
+                        V17Pill(if (isPro) "PROTECTED · PRO" else "PROTECTION STATUS", c.green, isDark)
+                    }
                     V17Title("DeviceSecurityScore")
                     V17Body("Real-time heuristic, YARA and signature shields active.")
                     V17Body("$activeGuards/4 protection guards active")
@@ -210,7 +261,9 @@ internal fun V17ShieldScreen(
             color = c.amber.copy(alpha = .14f), shape = RoundedCornerShape(16.dp),
             border = BorderStroke(1.dp, c.amber.copy(alpha = .4f))
         ) {
-            Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
+            Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                V17IconBadge(Icons.Outlined.Tune, c.amber, size = 40.dp, iconSize = 22.dp, contentDescription = "Protection setup")
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
                     V17Title("Protection Setup: $activeGuards/4 Active", color = c.text)
                     V17Body("Tap to grant the remaining recommended protection permissions.", color = c.muted)
@@ -277,12 +330,10 @@ private fun V17Tile(
     title: String, subtitle: String, status: String, icon: androidx.compose.ui.graphics.vector.ImageVector,
     tint: Color, dark: Boolean, modifier: Modifier, onClick: () -> Unit
 ) {
-    V17Card(dark, modifier.heightIn(min = 118.dp).clip(RoundedCornerShape(16.dp))
+    V17Card(dark, modifier.heightIn(min = 126.dp).clip(RoundedCornerShape(16.dp))
         .clickable(role = Role.Button, onClick = onClick)) {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Surface(color = tint.copy(alpha = .14f), shape = RoundedCornerShape(8.dp), modifier = Modifier.size(32.dp)) {
-                Box(contentAlignment = Alignment.Center) { Icon(icon, null, tint = tint) }
-            }
+            V17IconBadge(icon, tint, size = 42.dp, iconSize = 25.dp, contentDescription = title)
             Spacer(Modifier.weight(1f))
             V17Pill(status, tint, dark)
         }
@@ -311,7 +362,13 @@ internal fun V17ProtectionSetupSheet(
                 Triple(stringResource(R.string.setup_checklist_admin), adminActive, onAdminToggle),
                 Triple(stringResource(R.string.setup_checklist_overlay), overlayActive, onOverlayToggle),
                 Triple(stringResource(R.string.setup_checklist_saf), safActive, onSafToggle)
-            ).forEach { (title, checked, onToggle) ->
+            ).forEachIndexed { index, (title, checked, onToggle) ->
+                val icon = when (index) {
+                    0 -> Icons.Outlined.BatteryChargingFull
+                    1 -> Icons.Outlined.Security
+                    2 -> Icons.Outlined.NotificationsActive
+                    else -> Icons.Outlined.Storage
+                }
                 Surface(
                     Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp))
                         .clickable(onClick = { onToggle(!checked) }),
@@ -319,7 +376,9 @@ internal fun V17ProtectionSetupSheet(
                     shape = RoundedCornerShape(12.dp)
                 ) {
                     Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp),
-                        verticalAlignment = Alignment.CenterVertically) {
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                        V17IconBadge(icon, c.accent, size = 34.dp, iconSize = 19.dp, contentDescription = title)
                         V17Title(title, Modifier.weight(1f))
                         Checkbox(checked = checked, onCheckedChange = onToggle)
                     }
@@ -345,19 +404,23 @@ internal fun V17ScanLabScreen(
     Column(Modifier.fillMaxSize().background(c.device).verticalScroll(rememberScrollState()).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)) {
         V17Card(isDark) {
-            V17Title("Run Smart Scan")
-            V17Body("Progressive four-layer inspection using the on-device scan pipeline.")
+            V17SectionHeading("Run Smart Scan",
+                "Progressive four-layer inspection using the on-device scan pipeline.",
+                Icons.Outlined.Science, c.accent)
             Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp)).background(c.elevated).padding(4.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                V17ModeButton("Quick App Scan", !deep, isDark, Modifier.weight(1f)) { deep = false }
-                V17ModeButton("Deep Storage (Worker)", deep, isDark, Modifier.weight(1f)) { deep = true }
+                V17ModeButton("Quick App Scan", Icons.Outlined.Apps, !deep, isDark, Modifier.weight(1f)) { deep = false }
+                V17ModeButton("Deep Storage (Worker)", Icons.Outlined.FolderOpen, deep, isDark, Modifier.weight(1f)) { deep = true }
             }
             Button(onClick = { if (deep) onStartDeepScan() else onStartQuickScan() },
                 enabled = !state.isScanning, modifier = Modifier.fillMaxWidth()) {
                 if (state.isScanning) {
+                    CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp, color = Color.White)
+                    Spacer(Modifier.width(8.dp))
                     Text(stringResource(R.string.scan_running))
                 } else {
-                    Icon(Icons.Outlined.PlayArrow, contentDescription = null)
+                    Icon(if (deep) Icons.Outlined.FolderOpen else Icons.Outlined.PlayArrow,
+                        contentDescription = null, modifier = Modifier.size(21.dp))
                     Spacer(Modifier.width(8.dp))
                     Text(stringResource(if (deep) R.string.cleaner_scan_storage else R.string.scan_installed))
                 }
@@ -373,8 +436,17 @@ internal fun V17ScanLabScreen(
             }
         }
         V17Card(isDark) {
-            V17Title("Scan Results (Tap for 4-Layer Breakdown)")
-            if (state.results.isEmpty()) V17Body("No scan results yet. Run Quick App Scan or choose a folder for deep scanning.")
+            V17SectionHeading("Scan Results", "Tap a result to inspect the four detection layers.",
+                Icons.Outlined.Assessment, c.amber)
+            if (state.results.isEmpty()) {
+                Row(Modifier.fillMaxWidth().padding(vertical = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    V17IconBadge(Icons.Outlined.Search, c.muted, size = 44.dp, iconSize = 25.dp,
+                        contentDescription = "No scan results")
+                    V17Body("No scan results yet. Run Quick App Scan or choose a folder for deep scanning.")
+                }
+            }
             state.results.take(80).forEach { result ->
                 V17ScanResultRow(result, isDark, onUninstall, onAppInfo,
                     { onQuarantine(result) }, { onTrust(result) }, { result.packageName?.let(onRemoveTrust) })
@@ -383,7 +455,8 @@ internal fun V17ScanLabScreen(
         V17Card(isDark) {
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                Icon(Icons.Outlined.Assessment, contentDescription = null, tint = c.accent)
+                V17IconBadge(Icons.Outlined.Assessment, c.accent, size = 40.dp, iconSize = 22.dp,
+                    contentDescription = stringResource(R.string.scan_lab_metrics_title))
                 Column(Modifier.weight(1f)) {
                     V17Title(stringResource(R.string.scan_lab_metrics_title))
                     V17Body(stringResource(R.string.scan_lab_metrics_body))
@@ -398,14 +471,24 @@ internal fun V17ScanLabScreen(
 }
 
 @Composable
-private fun V17ModeButton(label: String, selected: Boolean, dark: Boolean, modifier: Modifier, onClick: () -> Unit) {
+private fun V17ModeButton(
+    label: String, icon: androidx.compose.ui.graphics.vector.ImageVector,
+    selected: Boolean, dark: Boolean, modifier: Modifier, onClick: () -> Unit
+) {
     val c = v17Colors(dark)
-    Surface(modifier.clip(RoundedCornerShape(8.dp)).clickable(onClick = onClick),
-        color = if (selected) c.surface else Color.Transparent, shape = RoundedCornerShape(8.dp)) {
-        Text(label, Modifier.padding(horizontal = 8.dp, vertical = 9.dp),
-            style = MaterialTheme.typography.labelMedium.copy(fontSize = 11.sp),
-            color = if (selected) c.text else c.muted, fontWeight = FontWeight.SemiBold,
-            textAlign = TextAlign.Center, maxLines = 2)
+    Surface(
+        modifier.clip(RoundedCornerShape(9.dp)).clickable(role = Role.Button, onClick = onClick),
+        color = if (selected) c.surface else Color.Transparent, shape = RoundedCornerShape(9.dp),
+        border = if (selected) BorderStroke(1.dp, c.border) else null
+    ) {
+        Row(Modifier.fillMaxWidth().padding(horizontal = 7.dp, vertical = 9.dp),
+            horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
+            Icon(icon, null, modifier = Modifier.size(17.dp), tint = if (selected) c.accent else c.muted)
+            Spacer(Modifier.width(5.dp))
+            Text(label, style = MaterialTheme.typography.labelMedium.copy(fontSize = 11.sp),
+                color = if (selected) c.text else c.muted, fontWeight = FontWeight.SemiBold,
+                textAlign = TextAlign.Center, maxLines = 2, overflow = TextOverflow.Ellipsis)
+        }
     }
 }
 
@@ -440,19 +523,32 @@ private fun V17ScanResultRow(
         result.verdict == ScanVerdict.NO_MATCH -> "CLEAN" to c.green
         else -> "NOT SCANNED" to c.muted
     }
+    val verdictIcon = when {
+        result.trustedByUser -> Icons.Outlined.Security
+        result.verdict == ScanVerdict.THREAT -> Icons.Outlined.Warning
+        result.verdict == ScanVerdict.SUSPICIOUS -> Icons.Outlined.Search
+        result.verdict == ScanVerdict.NO_MATCH -> Icons.Outlined.CheckCircle
+        else -> Icons.Outlined.HelpOutline
+    }
     Column(Modifier.fillMaxWidth().animateContentSize().clip(RoundedCornerShape(12.dp))
         .background(c.elevated).clickable { expanded = !expanded }.padding(10.dp),
         verticalArrangement = Arrangement.spacedBy(9.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-            Surface(Modifier.size(36.dp), shape = RoundedCornerShape(10.dp), color = c.surface) {
+            Surface(Modifier.size(42.dp), shape = RoundedCornerShape(11.dp), color = c.surface,
+                border = BorderStroke(1.dp, c.border)) {
                 if (appIcon != null) Image(appIcon, contentDescription = result.displayName, modifier = Modifier.fillMaxSize())
-                else Box(contentAlignment = Alignment.Center) { Icon(Icons.Outlined.Apps, "App icon", tint = c.accent) }
+                else Box(contentAlignment = Alignment.Center) {
+                    Icon(Icons.Outlined.Apps, "App icon", tint = c.accent, modifier = Modifier.size(26.dp))
+                }
             }
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                 V17Title(result.displayName)
                 V17Body(result.packageName ?: result.packageOrPath, color = c.muted)
             }
-            V17Pill(label, tint, dark)
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+                Icon(verdictIcon, "$label scan result", modifier = Modifier.size(18.dp), tint = tint)
+                V17Pill(label, tint, dark)
+            }
         }
         AnimatedVisibility(expanded) {
             Column(Modifier.fillMaxWidth().padding(top = 6.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -468,20 +564,23 @@ private fun V17ScanResultRow(
                 )) "Exact digest match: ${result.detectionSource}" else "No exact hash match recorded."
                 Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                        V17Layer("1. SHA-256 Hash", hashDetails, c, Modifier.weight(1f))
+                        V17Layer("1. SHA-256 Hash", hashDetails, c, Modifier.weight(1f), Icons.Outlined.Storage)
                         V17Layer("2. YARA Rules", report?.yaraResult?.matchedRules?.take(8)?.joinToString()
-                            ?.takeUnless { it.isBlank() } ?: "No matching YARA rule recorded.", c, Modifier.weight(1f))
+                            ?.takeUnless { it.isBlank() } ?: "No matching YARA rule recorded.", c, Modifier.weight(1f), Icons.Outlined.Science)
                     }
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                         V17Layer("3. ML Behavioral Model", result.mlProbability?.let {
                             "Model probability: ${(it * 100).toInt().coerceIn(0, 100)}%"
-                        } ?: "Model output unavailable for this scan.", c, Modifier.weight(1f))
+                        } ?: "Model output unavailable for this scan.", c, Modifier.weight(1f), Icons.Outlined.Security)
                         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                             val heuristicDetails = buildList {
                                 report?.findings?.forEach { add("${it.ruleId}: ${it.evidence}") }
                                 report?.observations?.forEach { add(it) }
                             }
                             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                                Icon(Icons.Outlined.Settings, contentDescription = null,
+                                    modifier = Modifier.size(18.dp), tint = c.accent)
+                                Spacer(Modifier.width(4.dp))
                                 V17Body(if (heuristicDetails.isEmpty()) "4. Static / DEX Heuristics · No findings"
                                     else "4. Static / DEX Heuristics · ${heuristicDetails.size} signals", Modifier.weight(1f), c.text)
                                 if (heuristicDetails.isNotEmpty()) TextButton(onClick = { heuristicsExpanded = !heuristicsExpanded }) {
@@ -516,11 +615,15 @@ private fun V17Layer(
     title: String,
     detail: String,
     c: V17Colors,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    icon: androidx.compose.ui.graphics.vector.ImageVector? = null
 ) {
     Column(modifier.fillMaxWidth().clip(RoundedCornerShape(8.dp)).background(c.surface).padding(8.dp),
         verticalArrangement = Arrangement.spacedBy(3.dp)) {
-        V17Title(title, color = c.text)
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+            if (icon != null) Icon(icon, null, Modifier.size(17.dp), tint = c.accent)
+            V17Title(title, Modifier.weight(1f), color = c.text)
+        }
         V17Body(detail, color = c.muted)
     }
 }
@@ -539,20 +642,17 @@ internal fun V17ToolsHubScreen(isDark: Boolean, onOpen: (String) -> Unit) {
         Tool("Security Advisor", "Step-by-step hardening guide", Icons.Outlined.Lightbulb, "advisor", c.accent)
     )
     Column(Modifier.fillMaxSize().background(c.device).padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        V17Title("Tools Hub")
-        V17Body("Security controls and investigation tools.")
+        V17SectionHeading("Tools Hub", "Security controls and investigation tools.", Icons.Outlined.Build, c.accent)
         LazyVerticalGrid(GridCells.Fixed(2), Modifier.weight(1f).fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp),
             contentPadding = PaddingValues(bottom = 16.dp)) {
             items(tools) { tool ->
-                V17Card(isDark, Modifier.heightIn(min = 120.dp).clip(RoundedCornerShape(16.dp))
+                V17Card(isDark, Modifier.heightIn(min = 140.dp).clip(RoundedCornerShape(16.dp))
                     .clickable(role = Role.Button, onClick = { onOpen(tool.route) })) {
-                    Surface(Modifier.size(32.dp), color = tool.tint.copy(alpha = .14f), shape = RoundedCornerShape(8.dp)) {
-                        Box(contentAlignment = Alignment.Center) { Icon(tool.icon, tool.name, tint = tool.tint) }
-                    }
+                    V17IconBadge(tool.icon, tool.tint, size = 46.dp, iconSize = 27.dp, contentDescription = tool.name)
                     V17Title(tool.name)
                     V17Body(tool.subtitle, color = c.muted)
-                    Icon(Icons.Outlined.ChevronRight, null, Modifier.align(Alignment.End), tint = c.muted)
+                    Icon(Icons.Outlined.ChevronRight, null, Modifier.align(Alignment.End).size(20.dp), tint = c.muted)
                 }
             }
         }
@@ -581,7 +681,7 @@ internal fun V17ConsoleSettingsScreen(
     Column(Modifier.fillMaxSize().background(c.device).verticalScroll(rememberScrollState()).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)) {
         V17Card(isDark) {
-            V17Title("Appearance")
+            V17SectionHeading("Appearance", "Theme and language preferences.", Icons.Outlined.Palette, c.accent)
             V17Title("Theme")
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 listOf(AppTheme.LIGHT, AppTheme.DARK_SLATE, AppTheme.OLED).forEach { theme ->
@@ -607,7 +707,7 @@ internal fun V17ConsoleSettingsScreen(
             }
         }
         V17Card(isDark) {
-            V17Title("Active Defense")
+            V17SectionHeading("Active Defense", "Local alarms and on-device monitoring.", Icons.Outlined.Security, c.green)
             V17Switch("Incident Siren", "Local incident alarm and notifications", sirenEnabled, "console.siren", Icons.Outlined.Notifications, isDark, onSirenChanged)
             HorizontalDivider(color = c.border)
             V17Switch("Voice Threat Alert", "Offline text-to-speech threat narration", voiceEnabled, "console.voice", Icons.Outlined.VolumeUp, isDark, onVoiceChanged)
@@ -616,16 +716,20 @@ internal fun V17ConsoleSettingsScreen(
                 installSentinelEnabled, "console.install-sentinel", Icons.Outlined.Security, isDark, onInstallSentinelChanged)
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 OutlinedButton(onClick = onTestSiren, modifier = Modifier.weight(1f)) {
+                    Icon(Icons.Outlined.Notifications, null, modifier = Modifier.size(17.dp))
+                    Spacer(Modifier.width(5.dp))
                     Text(stringResource(R.string.test_siren), maxLines = 2, overflow = TextOverflow.Ellipsis)
                 }
                 OutlinedButton(onClick = onTestVoice, modifier = Modifier.weight(1f)) {
+                    Icon(Icons.Outlined.VolumeUp, null, modifier = Modifier.size(17.dp))
+                    Spacer(Modifier.width(5.dp))
                     Text(stringResource(R.string.test_voice), maxLines = 2, overflow = TextOverflow.Ellipsis)
                 }
             }
         }
         V17Card(isDark) {
-            V17Title(stringResource(R.string.security_guards_title))
-            V17Body(stringResource(R.string.security_guards_description))
+            V17SectionHeading(stringResource(R.string.security_guards_title),
+                stringResource(R.string.security_guards_description), Icons.Outlined.Tune, c.accent)
             V17Switch(stringResource(R.string.security_guard_battery),
                 stringResource(R.string.security_guard_battery_desc), batteryActive, "console.guard.battery",
                 Icons.Outlined.BatteryChargingFull, isDark, onBatteryToggle)
@@ -643,12 +747,17 @@ internal fun V17ConsoleSettingsScreen(
                 Icons.Outlined.Storage, isDark, onSafToggle)
         }
         V17Card(isDark) {
-            Row(Modifier.fillMaxWidth().clickable { advanced = !advanced }, verticalAlignment = Alignment.CenterVertically) {
+            Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp))
+                .clickable(role = Role.Button) { advanced = !advanced },
+                verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                V17IconBadge(Icons.Outlined.Settings, c.accent, size = 40.dp, iconSize = 23.dp,
+                    contentDescription = "Advanced rules")
                 Column(Modifier.weight(1f)) {
                     V17Title("Advanced Telemetry & Rules")
                     V17Body("YARA imports, ThreatFeed sync, global intelligence and benchmarks.")
                 }
-                Icon(Icons.Outlined.ExpandMore, if (advanced) "Collapse" else "Expand", tint = c.muted)
+                Icon(Icons.Outlined.ExpandMore, if (advanced) "Collapse" else "Expand",
+                    tint = c.muted, modifier = Modifier.size(22.dp))
             }
             AnimatedVisibility(advanced) {
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -656,13 +765,19 @@ internal fun V17ConsoleSettingsScreen(
                     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                         Column(Modifier.weight(1f)) { V17Title("YARA custom rules"); V17Body("Import a local .yar rule.") }
                         OutlinedButton(onClick = onImportYara, modifier = Modifier.weight(1f)) {
+                            Icon(Icons.Outlined.FolderOpen, null, modifier = Modifier.size(17.dp))
+                            Spacer(Modifier.width(5.dp))
                             Text(stringResource(R.string.detection_capabilities_import_yara), maxLines = 2, overflow = TextOverflow.Ellipsis)
                         }
                     }
                     HorizontalDivider(color = c.border)
                     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                         Column(Modifier.weight(1f)) { V17Title("ThreatFeed Sync"); V17Body("Run the configured feed sync.") }
-                        OutlinedButton(onClick = onThreatFeedSync) { Text(stringResource(R.string.threat_feed_sync_now)) }
+                        OutlinedButton(onClick = onThreatFeedSync) {
+                            Icon(Icons.Outlined.Refresh, null, modifier = Modifier.size(17.dp))
+                            Spacer(Modifier.width(5.dp))
+                            Text(stringResource(R.string.threat_feed_sync_now))
+                        }
                     }
                     HorizontalDivider(color = c.border)
                     V17Switch("Global Threat Intelligence", "Opt in to explicitly approved hash contributions",
@@ -670,12 +785,20 @@ internal fun V17ConsoleSettingsScreen(
                     HorizontalDivider(color = c.border)
                     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                         Column(Modifier.weight(1f)) { V17Title("Benchmarks & Analytics"); V17Body("Review local scan timing and results.") }
-                        OutlinedButton(onClick = onBenchmarks) { Text(stringResource(R.string.open_feature)) }
+                        OutlinedButton(onClick = onBenchmarks) {
+                            Icon(Icons.Outlined.Assessment, null, modifier = Modifier.size(17.dp))
+                            Spacer(Modifier.width(5.dp))
+                            Text(stringResource(R.string.open_feature))
+                        }
                     }
                 }
             }
         }
-        OutlinedButton(onClick = onOpenPro, Modifier.fillMaxWidth()) { Text(stringResource(R.string.pro_title)) }
+        OutlinedButton(onClick = onOpenPro, Modifier.fillMaxWidth()) {
+            Icon(Icons.Outlined.Star, null, modifier = Modifier.size(18.dp))
+            Spacer(Modifier.width(7.dp))
+            Text(stringResource(R.string.pro_title))
+        }
         Text(BuildConfig.VERSION_NAME, Modifier.align(Alignment.CenterHorizontally),
             style = MaterialTheme.typography.labelSmall, color = c.muted)
     }
@@ -706,7 +829,7 @@ private fun V17Switch(
     val c = v17Colors(dark)
     Row(Modifier.fillMaxWidth().padding(vertical = 4.dp), verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-        Icon(icon, null, tint = c.muted, modifier = Modifier.size(20.dp))
+        V17IconBadge(icon, c.accent, size = 36.dp, iconSize = 20.dp, contentDescription = title)
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
             V17Title(title)
             V17Body(subtitle, color = c.muted)
