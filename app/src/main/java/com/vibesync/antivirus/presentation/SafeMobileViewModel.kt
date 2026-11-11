@@ -241,6 +241,12 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
         runScan(manualScan = true) { onProgress -> repository.scanInstalledApps(onProgress) }
     }
 
+    /** Scan only the installed package named by a notification incident. */
+    fun scanInstalledPackageNow(packageName: String) = runScan(manualScan = true) {
+        listOfNotNull(repository.scanInstalledPackage(packageName))
+    }
+
+
     fun scanFull(manualScan: Boolean = true) = runScan(manualScan) { onProgress ->
         repository.scanFull(onProgress)
     }

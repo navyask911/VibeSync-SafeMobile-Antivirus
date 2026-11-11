@@ -92,6 +92,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.documentfile.provider.DocumentFile
 import androidx.compose.ui.window.DialogProperties
 import android.widget.Toast
 import androidx.lifecycle.Lifecycle
@@ -103,6 +104,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vibesync.antivirus.BuildConfig
 import com.vibesync.antivirus.SafeMobileApp
 import com.vibesync.antivirus.core.ads.AdMobManager
+import com.vibesync.antivirus.core.crypto.EncryptedHashStore
+import com.vibesync.antivirus.core.observer.NotificationDeepLinkContract
+import com.vibesync.antivirus.core.observer.NotificationDeepLinkPayload
+import com.vibesync.antivirus.core.security.TrustedAppStore
 import com.vibesync.antivirus.R
 import com.vibesync.antivirus.core.connectivity.ConnectivityMonitor
 import com.vibesync.antivirus.core.worker.HashDatabaseSyncScheduler
@@ -147,7 +152,9 @@ import kotlinx.coroutines.launch
  openQuarantine:Boolean = false,
  onOpenQuarantineConsumed:() -> Unit = {},
  openDevicePosture:Boolean = false,
- onOpenDevicePostureConsumed:() -> Unit = {}
+ onOpenDevicePostureConsumed:() -> Unit = {},
+ notificationDeepLink: NotificationDeepLinkPayload? = null,
+ onNotificationDeepLinkConsumed: () -> Unit = {}
 ) {
  val context=LocalContext.current
  val safeMobileApp=context.applicationContext as SafeMobileApp
@@ -177,6 +184,7 @@ import kotlinx.coroutines.launch
  var showAdminPermissionDisclosure by rememberSaveable { mutableStateOf(false) }
  var showOverlayPermissionDisclosure by rememberSaveable { mutableStateOf(false) }
  var showV17ProtectionSetupSheet by rememberSaveable { mutableStateOf(false) }
+ var notificationIncidentDetails by remember { mutableStateOf<NotificationIncidentDetails?>(null) }
  var selectedDestination by rememberSaveable { mutableStateOf("home") }
  var isSubscriptionExpanded by rememberSaveable { mutableStateOf(false) }
  var settingsSubRoute by rememberSaveable { mutableStateOf(SettingsSubRoute.ROOT) }
@@ -221,6 +229,60 @@ import kotlinx.coroutines.launch
    tabNavController.navigate("detail/$parentTab/$destination") { launchSingleTop = true }
    selectedDestination = destination
   }
+ }
+
+ LaunchedEffect(notificationDeepLink) {
+  val payload = notificationDeepLink ?: return@LaunchedEffect
+  if (payload.notificationType == NotificationDeepLinkContract.TYPE_SERVICE) {
+   navigateToDestination("home")
+   onNotificationDeepLinkConsumed()
+   return@LaunchedEffect
+  }
+  navigateToDestination("scan")
+  val incident = payload.logId?.let { eventId ->
+   runCatching {
+    kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+     safeMobileApp.database.securityIncidentDao().findById(eventId)
+    }
+   }.getOrNull()
+  }
+  if (incident != null) {
+   val privateText = runCatching { EncryptedHashStore(context) }.getOrNull()
+   fun reveal(value: String?, purpose: String): String = value?.let { stored ->
+    runCatching {
+     privateText?.revealPrivateText(stored, purpose)
+      ?: context.getString(R.string.notification_details_unavailable)
+    }.getOrDefault(context.getString(R.string.notification_details_unavailable))
+   }.orEmpty()
+   notificationIncidentDetails = NotificationIncidentDetails(
+    fileName = reveal(incident.filename, "incident-filename").ifBlank {
+     incident.sourcePackage ?: context.getString(R.string.unknown_file)
+    },
+    filePath = reveal(incident.originalPath, "incident-path").ifBlank {
+     payload.fileUri ?: context.getString(R.string.notification_no_local_file_uri)
+    },
+    reason = reveal(incident.reason, "incident-reason").ifBlank {
+     context.getString(R.string.notification_details_unavailable)
+    },
+    status = incident.status,
+    sourcePackage = incident.sourcePackage,
+    fileUri = payload.fileUri,
+    sha256 = incident.sha256Hash
+   )
+  } else if (payload.fileUri != null) {
+   val uri = runCatching { Uri.parse(payload.fileUri) }.getOrNull()
+   notificationIncidentDetails = NotificationIncidentDetails(
+    fileName = uri?.let { runCatching { DocumentFile.fromSingleUri(context, it)?.name }.getOrNull() }
+     ?: context.getString(R.string.unknown_file),
+    filePath = payload.fileUri,
+    reason = context.getString(R.string.notification_details_unavailable),
+    status = payload.notificationType,
+    sourcePackage = null,
+    fileUri = payload.fileUri,
+    sha256 = null
+   )
+  }
+  onNotificationDeepLinkConsumed()
  }
  val openProSafely: () -> Unit = {
   try {
@@ -832,7 +894,9 @@ import kotlinx.coroutines.launch
           onOpenLiveSentinel = { navigateToDestination("sources") },
           onOpenPosture = { navigateToDestination("posture"); if (privacyAccepted) postureVm.refreshAuditSilently() },
           onOpenDetection = { navigateToDestination("capabilities") },
-          onOpenThreatDb = { navigateToDestination("quarantine") }
+          onOpenThreatDb = { navigateToDestination("quarantine") },
+          onOpenPrivacyDashboard = { navigateToDestination("privacy", "dashboard") },
+          onOpenSettings = { navigateToDestination("settings") }
          )
          "scan" -> V17ScanLabScreen(
           isDark = appTheme != com.vibesync.antivirus.ui.theme.AppTheme.LIGHT,
@@ -937,13 +1001,19 @@ import kotlinx.coroutines.launch
           onImportYara = { pendingYaraPicker.launch(arrayOf("text/plain", "application/octet-stream", "application/x-yara")) },
           onThreatFeedSync = { requestPrivacyAcknowledgement { vm.requestThreatFeedSync() } },
           onBenchmarks = { navigateToDestination("scan") },
-          onOpenPro = openProSafely
+          onOpenPro = openProSafely,
+          onOpenPrivacyDashboard = { navigateToDestination("privacy", "settings") },
+          onOpenAboutUs = { navigateToDestination("about", "settings") }
          )
          else -> Column(
           Modifier.fillMaxSize().verticalScroll(contentScrollState)
            .padding(horizontal = 16.dp, vertical = 16.dp),
           verticalArrangement = Arrangement.spacedBy(14.dp)
          ) {
+          if (selectedDestination == "privacy") {
+           PrivacyDashboardScreen(onOpenAboutUs = { navigateToDestination("about", "settings") })
+          }
+          if (selectedDestination == "about") AboutUsScreen()
           if (selectedDestination == "advisor") {
            SecurityAdvisorScreen(
             state = advisorState,
