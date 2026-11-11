@@ -15,11 +15,13 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,6 +41,7 @@ internal fun DeviceAdminCard(modifier: Modifier = Modifier) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val manager = remember(context) { DeviceAdminManager(context) }
     var active by remember(manager) { mutableStateOf(manager.isAdminActive()) }
+    var showPermissionDisclosure by rememberSaveable { mutableStateOf(false) }
 
     DisposableEffect(lifecycleOwner, manager) {
         val observer = LifecycleEventObserver { _, event ->
@@ -80,13 +83,24 @@ internal fun DeviceAdminCard(modifier: Modifier = Modifier) {
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
                     if (active) manager.removeAdmin()
-                    else manager.requestAdminPermission()
-                    // The system dialog owns the transition. The card refreshes on resume.
+                    else showPermissionDisclosure = true
                 }
             ) {
                 Text(stringResource(if (active) R.string.device_admin_disable else R.string.device_admin_enable))
             }
         }
+    }
+    if (showPermissionDisclosure) {
+        DeviceAdminPermissionDisclosureDialog(
+            onConfirm = {
+                showPermissionDisclosure = false
+                runCatching { manager.requestAdminPermission() }
+                    .onFailure {
+                        Toast.makeText(context, R.string.device_admin_explanation, Toast.LENGTH_LONG).show()
+                    }
+            },
+            onDismiss = { showPermissionDisclosure = false }
+        )
     }
 }
 

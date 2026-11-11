@@ -29,7 +29,7 @@ class DeviceAdminManager(context: Context) {
         if (isAdminActive()) return
         val intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).apply {
             putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, component)
-            putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, appContext.getString(R.string.device_admin_explanation))
+            putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, appContext.getString(R.string.security_guard_admin_consent_body))
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
         appContext.startActivity(intent)

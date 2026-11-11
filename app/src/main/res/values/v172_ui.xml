@@ -15,6 +15,13 @@
     <string name="security_guard_admin_desc" translatable="false">Enable Android device-admin protection controls.</string>
     <string name="security_guard_overlay" translatable="false">High-Priority Overlay Alert</string>
     <string name="security_guard_overlay_desc" translatable="false">Allow urgent threat warnings to appear over other apps.</string>
+    <string name="security_guard_admin_consent_title" translatable="false">Enable Device Administrator?</string>
+    <string name="security_guard_admin_consent_body" translatable="false">SafeMobile uses Android Device Administrator only for optional force-lock and password-policy controls. It does not read your personal files, messages, or contacts. Android still lets you deactivate the administrator before uninstalling SafeMobile; this is not tamper-proof protection and does not block APK installation.</string>
+    <string name="security_guard_overlay_consent_title" translatable="false">Enable Overlay Alerts?</string>
+    <string name="security_guard_overlay_consent_body" translatable="false">SafeMobile uses this optional special access only to display high-priority threat alerts over other apps. Overlay windows can obscure controls in other apps. It does not grant access to your personal files or messages. Enable it only if you want these alerts.</string>
+    <string name="security_guard_consent_continue" translatable="false">Continue to Android settings</string>
+    <string name="security_guard_consent_cancel" translatable="false">Not now</string>
+    <string name="security_guard_overlay_onboarding_note" translatable="false">Overlay Alerts are optional. No overlay access is requested during onboarding; enable the feature later in Security Guards.</string>
     <string name="security_guard_saf" translatable="false">SAF Directory Watch</string>
     <string name="security_guard_saf_desc" translatable="false">Monitor only folders explicitly granted through the Android file picker.</string>
     <string name="scan_lab_metrics_title" translatable="false">Scan &amp; Lab Metrics</string>

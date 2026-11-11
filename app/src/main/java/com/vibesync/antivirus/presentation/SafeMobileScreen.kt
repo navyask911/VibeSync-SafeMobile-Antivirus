@@ -174,6 +174,8 @@ import kotlinx.coroutines.launch
  val ownerManager = remember(context) { DeviceOwnerManager(context) }
  val deviceAdminManager = remember(context) { DeviceAdminManager(context) }
  var adminActive by remember(context) { mutableStateOf(deviceAdminManager.isAdminActive()) }
+ var showAdminPermissionDisclosure by rememberSaveable { mutableStateOf(false) }
+ var showOverlayPermissionDisclosure by rememberSaveable { mutableStateOf(false) }
  var showV17ProtectionSetupSheet by rememberSaveable { mutableStateOf(false) }
  var selectedDestination by rememberSaveable { mutableStateOf("home") }
  var isSubscriptionExpanded by rememberSaveable { mutableStateOf(false) }
@@ -546,9 +548,13 @@ import kotlinx.coroutines.launch
   }
  }
  val toggleAdminGuard: (Boolean) -> Unit = { enabled ->
-  runCatching {
-   if (enabled) deviceAdminManager.requestAdminPermission() else deviceAdminManager.removeAdmin()
-  }.onFailure { Toast.makeText(context, R.string.device_admin_explanation, Toast.LENGTH_LONG).show() }
+  if (enabled) {
+   // Device Admin is optional and is requested only from its dedicated security control.
+   if (!deviceAdminManager.isAdminActive()) showAdminPermissionDisclosure = true
+  } else {
+   runCatching { deviceAdminManager.removeAdmin() }
+    .onFailure { Toast.makeText(context, R.string.device_admin_explanation, Toast.LENGTH_LONG).show() }
+  }
  }
  val openOverlaySettings: (Boolean) -> Unit = { forceOpen ->
   overlayAccessGranted = Settings.canDrawOverlays(context)
@@ -569,7 +575,15 @@ import kotlinx.coroutines.launch
    }
   }
  }
- val toggleOverlayGuard: (Boolean) -> Unit = { _ -> openOverlaySettings(true) }
+ val toggleOverlayGuard: (Boolean) -> Unit = { enabled ->
+  overlayAccessGranted = Settings.canDrawOverlays(context)
+  if (enabled && !overlayAccessGranted) {
+   // The system special-access page is opened only after the user opts in here.
+   showOverlayPermissionDisclosure = true
+  } else {
+   openOverlaySettings(true)
+  }
+ }
  val toggleSafGuard: (Boolean) -> Unit = { enabled ->
   if (enabled) {
    requestPrivacyAcknowledgement {
@@ -730,7 +744,6 @@ import kotlinx.coroutines.launch
      globalDefenseEnabled = globalDefenseEnabled,
      folderAccessGranted = storageAccessGranted,
      batteryOptimizationExempt = batteryUnrestricted,
-     overlayAccessGranted = overlayAccessGranted,
      onRequestNotifications = {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !hasNotificationAccess(context)) {
        pendingAlertEnable = true
@@ -754,7 +767,6 @@ import kotlinx.coroutines.launch
         Toast.makeText(context, R.string.ui_folder_picker_unavailable, Toast.LENGTH_LONG).show()
        }
      },
-     onReviewOverlayAccess = { openOverlaySettings(false) },
      onRequestBatteryOptimization = {
       batteryUnrestricted = powerManager?.isIgnoringBatteryOptimizations(context.packageName) == true
       if (!batteryUnrestricted) {
@@ -1319,6 +1331,26 @@ import kotlinx.coroutines.launch
    }
   }
  }
+ }
+
+ if (showAdminPermissionDisclosure) {
+  DeviceAdminPermissionDisclosureDialog(
+   onConfirm = {
+    showAdminPermissionDisclosure = false
+    runCatching { deviceAdminManager.requestAdminPermission() }
+     .onFailure { Toast.makeText(context, R.string.device_admin_explanation, Toast.LENGTH_LONG).show() }
+   },
+   onDismiss = { showAdminPermissionDisclosure = false }
+  )
+ }
+ if (showOverlayPermissionDisclosure) {
+  OverlayPermissionDisclosureDialog(
+   onConfirm = {
+    showOverlayPermissionDisclosure = false
+    openOverlaySettings(true)
+   },
+   onDismiss = { showOverlayPermissionDisclosure = false }
+  )
  }
 
  if (showDefinitionImportWarning) AlertDialog(

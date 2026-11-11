@@ -241,4 +241,40 @@ class SettingsWiringTest {
         assertEquals(1, threatSyncs)
         assertEquals(1, benchmarks)
     }
+    @Test
+    fun deviceAdminDisclosureRequiresExplicitConfirmation() {
+        var confirmed = false
+        render {
+            DeviceAdminPermissionDisclosureDialog(
+                onConfirm = { confirmed = true },
+                onDismiss = {}
+            )
+        }
+
+        composeRule.onNodeWithText(context.getString(com.vibesync.antivirus.R.string.security_guard_admin_consent_body))
+            .assertIsDisplayed()
+        assertEquals(false, confirmed)
+        composeRule.onNodeWithText(context.getString(com.vibesync.antivirus.R.string.security_guard_consent_continue))
+            .performClick()
+        assertEquals(true, confirmed)
+    }
+
+    @Test
+    fun overlayDisclosureRequiresExplicitConfirmation() {
+        var confirmed = false
+        render {
+            OverlayPermissionDisclosureDialog(
+                onConfirm = { confirmed = true },
+                onDismiss = {}
+            )
+        }
+
+        composeRule.onNodeWithText(context.getString(com.vibesync.antivirus.R.string.security_guard_overlay_consent_body))
+            .assertIsDisplayed()
+        assertEquals(false, confirmed)
+        composeRule.onNodeWithText(context.getString(com.vibesync.antivirus.R.string.security_guard_consent_continue))
+            .performClick()
+        assertEquals(true, confirmed)
+    }
+
 }

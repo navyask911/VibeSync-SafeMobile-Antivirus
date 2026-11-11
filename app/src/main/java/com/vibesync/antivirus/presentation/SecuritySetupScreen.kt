@@ -25,7 +25,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
@@ -57,12 +56,10 @@ internal fun SecuritySetupScreen(
     globalDefenseEnabled: Boolean,
     folderAccessGranted: Boolean,
     batteryOptimizationExempt: Boolean,
-    overlayAccessGranted: Boolean,
     initialPage: Int = 0,
     onRequestNotifications: () -> Unit,
     onToggleGlobalDefense: (Boolean) -> Unit,
     onChooseFolder: () -> Unit,
-    onReviewOverlayAccess: () -> Unit,
     onRequestBatteryOptimization: () -> Unit,
     onFinish: () -> Unit,
     onSkipSetup: () -> Unit
@@ -200,14 +197,12 @@ internal fun SecuritySetupScreen(
                                 modifier = Modifier.fillMaxWidth(),
                                 verticalArrangement = Arrangement.spacedBy(10.dp)
                             ) {
-                                OutlinedButton(
-                                    onClick = onReviewOverlayAccess,
-                                    modifier = Modifier.fillMaxWidth(),
-                                    enabled = !overlayAccessGranted
-                                ) { Text(stringResource(
-                                    if (overlayAccessGranted) R.string.setup_permission_granted
-                                    else R.string.posture_overlays
-                                )) }
+                                Text(
+                                    stringResource(R.string.security_guard_overlay_onboarding_note),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    textAlign = TextAlign.Center
+                                )
                                 Button(
                                     onClick = onRequestBatteryOptimization,
                                     enabled = !batteryOptimizationExempt,
@@ -218,12 +213,6 @@ internal fun SecuritySetupScreen(
                                         else R.string.battery_review_action
                                     ))
                                 }
-                                Text(
-                                    stringResource(R.string.posture_overlay_power),
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    textAlign = TextAlign.Center
-                                )
                             }
                         }
                     }
