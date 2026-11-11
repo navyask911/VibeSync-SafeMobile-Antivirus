@@ -236,7 +236,8 @@ internal fun V17ShieldScreen(
     isDark: Boolean, securityScore: Int, isPro: Boolean, activeGuards: Int,
     liveSentinelActive: Boolean, posturePassed: Int?, quarantinedFilesCount: Int,
     onOpenSetup: () -> Unit, onOpenLiveSentinel: () -> Unit, onOpenPosture: () -> Unit,
-    onOpenDetection: () -> Unit, onOpenThreatDb: () -> Unit
+    onOpenDetection: () -> Unit, onOpenThreatDb: () -> Unit,
+    onOpenPrivacy: () -> Unit = {}, onOpenSettings: () -> Unit = {}
 ) {
     val c = v17Colors(isDark)
     Column(Modifier.fillMaxSize().background(c.device).verticalScroll(rememberScrollState()).padding(16.dp),
@@ -256,6 +257,10 @@ internal fun V17ShieldScreen(
                 }
             }
         }
+        TrustPillarCarousel(
+            onOpenPrivacy = onOpenPrivacy,
+            onOpenSettings = onOpenSettings
+        )
         if (activeGuards < 4) Surface(
             Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp)).clickable(onClick = onOpenSetup),
             color = c.amber.copy(alpha = .14f), shape = RoundedCornerShape(16.dp),
@@ -671,6 +676,7 @@ internal fun V17ConsoleSettingsScreen(
     onOverlayToggle: (Boolean) -> Unit, onSafToggle: (Boolean) -> Unit,
     onImportYara: () -> Unit,
     onThreatFeedSync: () -> Unit, onBenchmarks: () -> Unit, onOpenPro: () -> Unit,
+    onOpenPrivacy: () -> Unit = {}, onOpenAbout: () -> Unit = {},
     onTestSiren: () -> Unit = {}, onTestVoice: () -> Unit = {}
 ) {
     val context = LocalContext.current
@@ -704,6 +710,33 @@ internal fun V17ConsoleSettingsScreen(
                         ?.let { context.getString(it.labelResource) } ?: "System default", color = c.muted)
                 }
                 Icon(Icons.Outlined.ChevronRight, "Choose language", tint = c.muted)
+            }
+        }
+        V17Card(isDark) {
+            V17SectionHeading(stringResource(R.string.trust_pillars_heading),
+                stringResource(R.string.privacy_dashboard_intro), Icons.Outlined.Security, c.accent)
+            Row(
+                Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).clickable(onClick = onOpenPrivacy).padding(vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                V17IconBadge(Icons.Outlined.Lock, c.green, size = 38.dp, iconSize = 21.dp, contentDescription = null)
+                Column(Modifier.weight(1f)) {
+                    V17Title(stringResource(R.string.privacy_dashboard_title))
+                    V17Body(stringResource(R.string.settings_privacy_link_detail), color = c.muted)
+                }
+                Icon(Icons.Outlined.ChevronRight, contentDescription = null, tint = c.muted)
+            }
+            HorizontalDivider(color = c.border)
+            Row(
+                Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).clickable(onClick = onOpenAbout).padding(vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                V17IconBadge(Icons.Outlined.Info, c.accent, size = 38.dp, iconSize = 21.dp, contentDescription = null)
+                Column(Modifier.weight(1f)) {
+                    V17Title(stringResource(R.string.about_us_title))
+                    V17Body(stringResource(R.string.settings_about_link_detail), color = c.muted)
+                }
+                Icon(Icons.Outlined.ChevronRight, contentDescription = null, tint = c.muted)
             }
         }
         V17Card(isDark) {
