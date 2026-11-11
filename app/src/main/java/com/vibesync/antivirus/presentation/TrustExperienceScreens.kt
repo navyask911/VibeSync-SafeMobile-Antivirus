@@ -65,7 +65,7 @@ internal fun TrustPillarCarousel(
         TrustPillar(
             stringResource(R.string.trust_pillar_control_title),
             stringResource(R.string.trust_pillar_control_body),
-            Icons.Outlined.Tune,
+            Icons.Outlined.Settings,
             listOf(Color(0xFF3B176C), Color(0xFF8B5CF6)),
             "settings"
         )
