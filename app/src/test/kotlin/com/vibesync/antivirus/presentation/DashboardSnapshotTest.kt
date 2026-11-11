@@ -223,12 +223,10 @@ class DashboardSnapshotTest {
                     globalDefenseEnabled = false,
                     folderAccessGranted = false,
                     batteryOptimizationExempt = false,
-                    overlayAccessGranted = false,
                     initialPage = page.page,
                     onRequestNotifications = {},
                     onToggleGlobalDefense = {},
                     onChooseFolder = {},
-                    onReviewOverlayAccess = {},
                     onRequestBatteryOptimization = {},
                     onFinish = {},
                     onSkipSetup = {}
