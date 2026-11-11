@@ -202,6 +202,50 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
         }
     }
 
+    fun trustPackageName(packageName: String) {
+        viewModelScope.launch {
+            try {
+                if (repository.trustPackageName(packageName)) {
+                    mutableState.update { old -> old.copy(messageResource = R.string.trusted_app_saved,
+                        results = old.results.map { item ->
+                            if (item.packageName == packageName) item.copy(
+                                verdict = ScanVerdict.NO_MATCH, riskScore = 0f, reasons = emptyList(),
+                                reasonTexts = emptyList(), riskReport = null, mlProbability = null,
+                                threatEventId = null, trustedByUser = true
+                            ) else item
+                        })
+                    }
+                } else mutableState.update { it.copy(messageResource = R.string.trusted_app_denied) }
+            } catch (cancelled: CancellationException) { throw cancelled }
+            catch (_: Exception) { mutableState.update { it.copy(messageResource = R.string.trusted_app_denied) } }
+        }
+    }
+
+    fun trustFileHash(result: ScanResult) {
+        val sha256 = result.sha256?.lowercase()?.takeIf { it.matches(Regex("^[0-9a-f]{64}$")) }
+        if (sha256 == null) {
+            mutableState.update { it.copy(messageResource = R.string.trusted_file_invalid) }
+            return
+        }
+        viewModelScope.launch {
+            try {
+                if (repository.trustFileHash(sha256)) {
+                    mutableState.update { old -> old.copy(
+                        messageResource = R.string.trusted_file_saved,
+                        results = old.results.map { item ->
+                            if (item.sha256?.equals(sha256, ignoreCase = true) == true) item.copy(
+                                verdict = ScanVerdict.NO_MATCH, riskScore = 0f, reasons = emptyList(),
+                                reasonTexts = emptyList(), riskReport = null, mlProbability = null,
+                                threatEventId = null, trustedByUser = true
+                            ) else item
+                        }
+                    ) }
+                } else mutableState.update { it.copy(messageResource = R.string.trusted_file_invalid) }
+            } catch (cancelled: CancellationException) { throw cancelled }
+            catch (_: Exception) { mutableState.update { it.copy(messageResource = R.string.trusted_file_invalid) } }
+        }
+    }
+
     fun removeTrust(packageName: String) {
         viewModelScope.launch {
             try {

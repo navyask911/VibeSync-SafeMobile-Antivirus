@@ -22,17 +22,19 @@ class DeviceAdminManager(context: Context) {
     }.getOrDefault(false)
 
     /**
-     * Launches Android's explicit user-consent screen. Using the application context plus
-     * NEW_TASK avoids a silent no-op when Compose supplies a ContextWrapper instead of Activity.
+     * Build the explicit system activation request so the exact action and component can
+     * be verified independently of launching Android's protected confirmation activity.
      */
+    fun activationIntent(): Intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).apply {
+        putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, component)
+        putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, appContext.getString(R.string.security_guard_admin_consent_body))
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    }
+
+    /** Launches Android's user-consent screen; activation state is refreshed on resume. */
     fun requestAdminPermission() {
         if (isAdminActive()) return
-        val intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).apply {
-            putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, component)
-            putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, appContext.getString(R.string.security_guard_admin_consent_body))
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        }
-        appContext.startActivity(intent)
+        appContext.startActivity(activationIntent())
     }
 
     /** Invokes Android's confirmation flow; actual state is refreshed when the app resumes. */
