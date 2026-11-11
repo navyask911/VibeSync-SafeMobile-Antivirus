@@ -400,13 +400,13 @@ tasks.matching {
     dependsOn(buildYaraXNative)
 }
 
-// Keep readable rule/definition sources for review and unit tests, but ship only
-// compressed copies in the APK/AAB so their raw signature strings are not plain-text assets.
+// Keep readable rule/definition sources under src/main/raw_assets for review and tests.
+// Only the generated compressed copies are registered as Android application assets.
 val protectedSecurityAssetDirectory = layout.buildDirectory.dir("generated/protected-security-assets/assets")
 val protectedSecurityAssetInputs = listOf(
-    layout.projectDirectory.file("src/main/assets/yara/safemobile_android_dex.yar").asFile,
-    layout.projectDirectory.file("src/main/assets/offline-threat-definitions.json").asFile,
-    layout.projectDirectory.file("src/main/assets/signatures/mock_signatures.hsb").asFile
+    layout.projectDirectory.file("src/main/raw_assets/yara/safemobile_android_dex.yar").asFile,
+    layout.projectDirectory.file("src/main/raw_assets/offline-threat-definitions.json").asFile,
+    layout.projectDirectory.file("src/main/raw_assets/signatures/mock_signatures.hsb").asFile
 )
 val packageProtectedSecurityAssets = tasks.register("packageProtectedSecurityAssets") {
     group = "build setup"
