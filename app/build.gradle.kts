@@ -46,6 +46,7 @@ android {
   minSdk = 26
   targetSdk = 36
   versionCode = 20261145
+  // [release-v1.7.5] Signed release authorized after Android CI #1437 and API 26/28/33/34/36 passed.
   versionName = "1.7.5"
   // [release-v1.7.5] Stages Device Administrator and overlay access behind contextual consent.
   testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
