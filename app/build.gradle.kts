@@ -443,7 +443,9 @@ mainAssetSources.exclude(
     "offline-threat-definitions.json",
     "signatures/mock_signatures.hsb"
 )
-mainAssetSources.srcDir(packageProtectedSecurityAssets)
+// Register the generated directory explicitly; its producer is wired below into
+// every variant asset merge and lint task that consumes the main asset source set.
+mainAssetSources.srcDir(protectedSecurityAssetDirectory)
 
 // docs/BENCHMARK_REPORT.md is canonical: the hidden card reads its build-time asset copy.
 // Generated assets are not committed and never contain APK samples.
@@ -586,7 +588,7 @@ tasks.matching {
     (it.name.startsWith("merge") && it.name.endsWith("Assets")) ||
         it.name.contains("Lint") || it.name.startsWith("lint")
 }.configureEach {
-    dependsOn(stageBenchmarkReport, downloadMlAssets)
+    dependsOn(stageBenchmarkReport, downloadMlAssets, packageProtectedSecurityAssets)
 }
 
 kapt { correctErrorTypes = true }
