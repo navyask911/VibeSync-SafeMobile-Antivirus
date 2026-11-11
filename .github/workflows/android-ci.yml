@@ -106,6 +106,8 @@ jobs:
         run: ./gradlew --no-daemon testOfflineDebugUnitTest verifyPaparazziDebug
       - name: Android lint
         run: ./gradlew --no-daemon lintOfflineDebug lintFeedDebug lintVitalOfflineRelease lintVitalFeedRelease
+      - name: Explicit debug lint requested for v1.8.0
+        run: ./gradlew --no-daemon lintDebug
       - name: Print Android lint error locations when lint fails
         if: failure()
         shell: bash
