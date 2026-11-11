@@ -25,14 +25,15 @@ class DeviceAdminManager(context: Context) {
      * Launches Android's explicit user-consent screen. Using the application context plus
      * NEW_TASK avoids a silent no-op when Compose supplies a ContextWrapper instead of Activity.
      */
+    internal fun buildAdminRequestIntent(): Intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).apply {
+        putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, component)
+        putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, appContext.getString(R.string.security_guard_admin_consent_body))
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    }
+
     fun requestAdminPermission() {
         if (isAdminActive()) return
-        val intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).apply {
-            putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, component)
-            putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, appContext.getString(R.string.security_guard_admin_consent_body))
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        }
-        appContext.startActivity(intent)
+        appContext.startActivity(buildAdminRequestIntent())
     }
 
     /** Invokes Android's confirmation flow; actual state is refreshed when the app resumes. */

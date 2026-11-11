@@ -3,6 +3,8 @@ package com.vibesync.antivirus.core.security
 import android.Manifest
 import android.content.ComponentName
 import android.content.Context
+import android.app.admin.DevicePolicyManager
+import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import androidx.test.core.app.ApplicationProvider
@@ -38,6 +40,17 @@ class NetworkPermissionBoundaryTest {
         assertEquals("android.permission.BIND_DEVICE_ADMIN", receiver.permission)
         assertTrue(receiver.enabled)
         assertTrue((receiver.metaData?.getInt("android.app.device_admin") ?: 0) != 0)
+    }
+
+
+    @Test fun deviceAdminActivationIntentTargetsTheDeclaredReceiver() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val request = DeviceAdminManager(context).buildAdminRequestIntent()
+        assertEquals(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN, request.action)
+        assertEquals(ComponentName(context, AdminReceiver::class.java),
+            request.getParcelableExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, ComponentName::class.java))
+        assertTrue(request.flags and Intent.FLAG_ACTIVITY_NEW_TASK != 0)
+        assertTrue(request.getStringExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION).orEmpty().isNotBlank())
     }
 
     @Test fun appBackupFlagIsDisabled() {

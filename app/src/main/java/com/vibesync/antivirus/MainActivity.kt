@@ -18,6 +18,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.vibesync.antivirus.core.locale.LocalePreferences
 import com.vibesync.antivirus.core.observer.SecurityAlertNotifier
+import com.vibesync.antivirus.core.observer.NotificationDeepLinkContract
+import com.vibesync.antivirus.core.observer.NotificationDeepLinkPayload
 import com.vibesync.antivirus.core.posture.PostureChangeNotifier
 import com.vibesync.antivirus.presentation.SafeMobileScreen
 import com.vibesync.antivirus.presentation.SafeMobileTheme
@@ -33,6 +35,7 @@ class MainActivity : ComponentActivity() {
     private var openQuarantine by mutableStateOf(false)
     private var openDevicePosture by mutableStateOf(false)
     private var batteryStatusEpoch by mutableStateOf(0)
+    private var notificationDeepLink by mutableStateOf<NotificationDeepLinkPayload?>(null)
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
@@ -42,6 +45,7 @@ class MainActivity : ComponentActivity() {
         sharedText = incomingSharedText(intent)
         openQuarantine = intent.getBooleanExtra(SecurityAlertNotifier.EXTRA_OPEN_QUARANTINE, false)
         openDevicePosture = intent.getBooleanExtra(PostureChangeNotifier.EXTRA_OPEN_POSTURE, false)
+        notificationDeepLink = NotificationDeepLinkContract.fromIntent(intent)
         setContent {
             SafeMobileTheme(theme = selectedTheme) {
                 SafeMobileScreen(
@@ -61,7 +65,9 @@ class MainActivity : ComponentActivity() {
                     openQuarantine = openQuarantine,
                     onOpenQuarantineConsumed = { openQuarantine = false },
                     openDevicePosture = openDevicePosture,
-                    onOpenDevicePostureConsumed = { openDevicePosture = false }
+                    onOpenDevicePostureConsumed = { openDevicePosture = false },
+                    notificationDeepLink = notificationDeepLink,
+                    onNotificationDeepLinkConsumed = { notificationDeepLink = null }
                 )
             }
         }
@@ -81,6 +87,7 @@ class MainActivity : ComponentActivity() {
         incomingSharedText(intent)?.let { sharedText = it }
         if (intent.getBooleanExtra(SecurityAlertNotifier.EXTRA_OPEN_QUARANTINE, false)) openQuarantine = true
         if (intent.getBooleanExtra(PostureChangeNotifier.EXTRA_OPEN_POSTURE, false)) openDevicePosture = true
+        NotificationDeepLinkContract.fromIntent(intent)?.let { notificationDeepLink = it }
     }
     override fun onResume() {
         super.onResume()
