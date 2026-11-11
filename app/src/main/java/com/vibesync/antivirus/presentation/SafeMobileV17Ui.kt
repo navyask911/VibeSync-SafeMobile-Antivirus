@@ -9,6 +9,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -371,7 +372,7 @@ internal fun V17ProtectionSetupSheet(
                 }
                 Surface(
                     Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp))
-                        .clickable(onClick = { onToggle(!checked) }),
+                        .toggleable(value = checked, role = Role.Checkbox, onValueChange = onToggle),
                     color = c.elevated,
                     shape = RoundedCornerShape(12.dp)
                 ) {
@@ -380,7 +381,7 @@ internal fun V17ProtectionSetupSheet(
                         horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         V17IconBadge(icon, c.accent, size = 34.dp, iconSize = 19.dp, contentDescription = title)
                         V17Title(title, Modifier.weight(1f))
-                        Checkbox(checked = checked, onCheckedChange = onToggle)
+                        Checkbox(checked = checked, onCheckedChange = null)
                     }
                 }
             }

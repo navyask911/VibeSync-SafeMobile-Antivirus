@@ -42,11 +42,11 @@ object SecurityAlertNotifier {
     }
 
     /** Only called after a durable, verified encrypted quarantine copy exists. */
-    fun notifyQuarantinedFile(context: Context, fileName: String, eventId: String, confirmedMalicious: Boolean) {
+    fun notifyQuarantinedFile(context: Context, fileName: String, eventId: String, confirmedMalicious: Boolean, fileUri: Uri? = null) {
         show(context, eventId, context.getString(R.string.security_alert_file_title),
             context.getString(R.string.security_alert_file_body, fileName.take(100)), null,
             if (confirmedMalicious) R.string.voice_malicious_quarantined else R.string.voice_suspicious_quarantined,
-            confirmedMalicious)
+            confirmedMalicious, fileUri = fileUri)
     }
 
     suspend fun notifyMaliciousApp(context: Context, packageName: String, eventId: String, sha256: String?) {
@@ -116,7 +116,7 @@ object SecurityAlertNotifier {
 
     private fun show(context: Context, eventId: String, title: String, body: String,
                      packageName: String?, voiceResource: Int, confirmed: Boolean,
-                     testMode: Boolean = false, sha256: String? = null) {
+                     testMode: Boolean = false, sha256: String? = null, fileUri: Uri? = null) {
         val app = context.applicationContext
         SecurityVoiceAlert.speakIfEnabled(app, voiceResource)
         val enabled = app.getSharedPreferences(SafeMobileApp.SECURITY_PREFS, Context.MODE_PRIVATE)
@@ -133,15 +133,24 @@ object SecurityAlertNotifier {
             return
         }
         ensureChannel(app)
-        val open = if (confirmed && (packageName != null || testMode)) {
+        val notificationType = when {
+            testMode -> NotificationDeepLinkContract.TYPE_INSTALL_PROGRESS
+            fileUri != null -> if (confirmed) NotificationDeepLinkContract.TYPE_DOWNLOAD_MALICIOUS
+                else NotificationDeepLinkContract.TYPE_DOWNLOAD_REVIEW
+            packageName != null && confirmed -> NotificationDeepLinkContract.TYPE_MALWARE_APP
+            packageName != null -> NotificationDeepLinkContract.TYPE_SUSPICIOUS_APP
+            confirmed -> NotificationDeepLinkContract.TYPE_DOWNLOAD_MALICIOUS
+            else -> NotificationDeepLinkContract.TYPE_DOWNLOAD_REVIEW
+        }
+        val open = if (testMode) {
             Intent(app, ThreatDetectedActivity::class.java)
                 .putExtra(ThreatDetectedActivity.EXTRA_PACKAGE, packageName)
-                .putExtra(EXTRA_TEST_MODE, testMode)
-        } else Intent(app, MainActivity::class.java).putExtra(EXTRA_OPEN_QUARANTINE, true)
-        if (confirmed && sha256?.matches(Regex("[0-9a-fA-F]{64}")) == true) {
+                .putExtra(EXTRA_TEST_MODE, true)
+        } else NotificationDeepLinkContract.intent(app, notificationType, fileUri?.toString(), eventId)
+        if (!testMode && confirmed && sha256?.matches(Regex("[0-9a-fA-F]{64}")) == true) {
             open.putExtra(EXTRA_SHA256, sha256.lowercase())
         }
-        open.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        if (testMode) open.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
             .putExtra(EXTRA_EVENT_ID, eventId)
             .setData(Uri.fromParts("safemobile-incident", eventId, null))
         val flags = PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE

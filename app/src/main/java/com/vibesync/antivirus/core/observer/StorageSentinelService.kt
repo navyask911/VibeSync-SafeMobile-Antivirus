@@ -115,9 +115,9 @@ class StorageSentinelService : Service() {
    privateTextStore.protectPrivateText(reason, "incident-reason"),action,status);runCatching{app.database.securityIncidentDao().insert(event)}.onFailure{Log.w(TAG,"Incident insert failed",it)}
   if(saved!=null && (malicious || r.verdict==ScanVerdict.SUSPICIOUS)) {
     // Audible/high-priority alert only after encrypted quarantine content was successfully saved.
-    SecurityAlertNotifier.notifyQuarantinedFile(this,name,id,malicious)
+    SecurityAlertNotifier.notifyQuarantinedFile(this,name,id,malicious,uri)
    } else {
-    when{malicious->SentinelNotificationHelper.malicious(this,name,removed,id);quarantine->SentinelNotificationHelper.quarantined(this,name,removed,id);else->SentinelNotificationHelper.review(this,name,id)}
+    when{malicious->SentinelNotificationHelper.malicious(this,name,removed,id,uri);quarantine->SentinelNotificationHelper.quarantined(this,name,removed,id,uri);else->SentinelNotificationHelper.review(this,name,id,uri)}
    }
  }
 
