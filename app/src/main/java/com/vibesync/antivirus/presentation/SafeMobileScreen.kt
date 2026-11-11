@@ -167,7 +167,7 @@ import kotlinx.coroutines.launch
   mutableStateOf(powerManager?.isIgnoringBatteryOptimizations(context.packageName) == true)
  }
  val activity=context as? Activity
- val vm:SafeMobileViewModel=viewModel(factory=SafeMobileViewModel.Factory(repository))
+ val vm:SafeMobileViewModel=viewModel(factory=SafeMobileViewModel.Factory(repository, context.applicationContext))
  val state by vm.state.collectAsStateWithLifecycle()
  val installSentinelRunning by com.vibesync.antivirus.core.observer.InstallSentinelService.running.collectAsStateWithLifecycle()
  val postureVm:DevicePostureViewModel=viewModel(factory=DevicePostureViewModel.Factory(safeMobileApp.devicePostureRepository))
@@ -357,6 +357,9 @@ import kotlinx.coroutines.launch
   )
  }
  val advisorState by vm.protectionAdvisorState.collectAsStateWithLifecycle()
+ LaunchedEffect(advisorState.score, voiceAlertsEnabled) {
+  vm.onProtectionScoreChanged(advisorState.score, voiceAlertsEnabled)
+ }
  LaunchedEffect(advisorInputs, snoozedAdvisorIds) {
   vm.updateProtectionAdvisor(advisorInputs, snoozedAdvisorIds)
  }

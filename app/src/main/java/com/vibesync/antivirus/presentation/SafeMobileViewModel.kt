@@ -2,6 +2,8 @@ package com.vibesync.antivirus.presentation
 
 import android.net.Uri
 import android.content.Context
+import android.speech.tts.TextToSpeech
+import java.util.Locale
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -54,7 +56,13 @@ data class SafeMobileUiState(
     val suspiciousCount get() = results.count { it.verdict == ScanVerdict.SUSPICIOUS }
 }
 
-class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel() {
+class SafeMobileViewModel(
+    private val repository: ThreatRepository,
+    appContext: Context? = null
+) : ViewModel() {
+    private val appContext = appContext?.applicationContext
+    private var scoreTts: TextToSpeech? = null
+    private var lastAnnouncedProtectionScore: Int? = null
     private val mutableState = MutableStateFlow(SafeMobileUiState())
     val state = mutableState.asStateFlow()
     private val mutableProtectionAdvisorState = MutableStateFlow(
@@ -73,6 +81,41 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
             }
             mutableProtectionAdvisorState.value = calculated
         }
+    }
+
+    /** Speak the completed score only after the user has enabled Voice Alerts. */
+    fun onProtectionScoreChanged(score: Int, voiceAlertsEnabled: Boolean) {
+        val previous = lastAnnouncedProtectionScore
+        lastAnnouncedProtectionScore = score
+        if (score == 100 && previous != 100 && voiceAlertsEnabled) {
+            speakPerfectProtectionScore()
+        }
+    }
+
+    private fun speakPerfectProtectionScore() {
+        val context = appContext ?: return
+        scoreTts?.shutdown()
+        scoreTts = TextToSpeech(context) { status ->
+            if (status == TextToSpeech.SUCCESS) {
+                val engine = scoreTts ?: return@TextToSpeech
+                val currentLocale = context.resources.configuration.locales[0]
+                val result = engine.setLanguage(currentLocale)
+                if (result == TextToSpeech.LANG_MISSING_DATA ||
+                    result == TextToSpeech.LANG_NOT_SUPPORTED
+                ) {
+                    engine.setLanguage(Locale.US)
+                }
+                val textToSpeak = context.getString(R.string.security_score_100_voice)
+                engine.speak(textToSpeak, TextToSpeech.QUEUE_FLUSH, null, "100_score_alert")
+            }
+        }
+    }
+
+    override fun onCleared() {
+        scoreTts?.stop()
+        scoreTts?.shutdown()
+        scoreTts = null
+        super.onCleared()
     }
 
     init {
@@ -510,11 +553,14 @@ fun importOfflineDefinitions(uri: Uri) {
         }
     }
 
-    class Factory(private val repository: ThreatRepository) : ViewModelProvider.Factory {
+    class Factory(
+        private val repository: ThreatRepository,
+        private val appContext: Context? = null
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             require(modelClass.isAssignableFrom(SafeMobileViewModel::class.java))
-            return SafeMobileViewModel(repository) as T
+            return SafeMobileViewModel(repository, appContext) as T
         }
     }
 }
