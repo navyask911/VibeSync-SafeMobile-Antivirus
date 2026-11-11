@@ -30,9 +30,9 @@ FORBIDDEN_DB_ASSETS = (
     "malware_hashes.sig",
 )
 PROTECTED_GZIP_ASSETS = (
-    ("yara/safemobile_android_dex.yar.gz", "yara/safemobile_android_dex.yar"),
-    ("offline-threat-definitions.json.gz", "offline-threat-definitions.json"),
-    ("signatures/mock_signatures.hsb.gz", "signatures/mock_signatures.hsb"),
+    ("yara/safemobile_android_dex.yar.dat", "yara/safemobile_android_dex.yar"),
+    ("offline-threat-definitions.json.dat", "offline-threat-definitions.json"),
+    ("signatures/mock_signatures.hsb.dat", "signatures/mock_signatures.hsb"),
 )
 
 def fail(message):

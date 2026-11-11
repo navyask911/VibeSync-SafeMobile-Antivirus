@@ -13,7 +13,7 @@ data class YaraCapability(val active: Boolean, val ruleCount: Int, val reason: S
  * Content is authenticated by the signed APK, not by a remote rule service.
  */
 object BundledYaraEngine {
-    private const val ASSET_PATH = "yara/safemobile_android_dex.yar.gz"
+    private const val ASSET_PATH = "yara/safemobile_android_dex.yar.dat"
     @Volatile private var engine: YaraScanner = YaraScanner()
     @Volatile var capability: YaraCapability = YaraCapability(false, 0, YaraScanner.DISABLED_REASON)
         private set

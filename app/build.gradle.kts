@@ -87,7 +87,6 @@ android {
   }
  }
  buildFeatures { compose = true; buildConfig = true }
- androidResources { noCompress += "gz" }
  compileOptions {
   sourceCompatibility = JavaVersion.VERSION_17
   targetCompatibility = JavaVersion.VERSION_17
@@ -421,9 +420,9 @@ val packageProtectedSecurityAssets = tasks.register("packageProtectedSecurityAss
             "Could not create protected security asset output directory."
         }
         val relativeOutputs = listOf(
-            "yara/safemobile_android_dex.yar.gz",
-            "offline-threat-definitions.json.gz",
-            "signatures/mock_signatures.hsb.gz"
+            "yara/safemobile_android_dex.yar.dat",
+            "offline-threat-definitions.json.dat",
+            "signatures/mock_signatures.hsb.dat"
         )
         protectedSecurityAssetInputs.zip(relativeOutputs).forEach { (source, relativePath) ->
             check(source.isFile) { "Required security asset source is missing: ${source.path}" }

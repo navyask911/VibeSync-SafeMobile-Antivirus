@@ -24,12 +24,12 @@ class YaraDexIntegrationTest {
     @Test fun extractedDexProducesAdvisoryRuleFindingWithoutExternalNetwork() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         val packagedRules = String(
-            readGzipAsset(context.assets, "yara/safemobile_android_dex.yar.gz"),
+            readGzipAsset(context.assets, "yara/safemobile_android_dex.yar.dat"),
             StandardCharsets.UTF_8
         )
         assertTrue(packagedRules.contains("rule Takopii_Overlay_Banker_DEX"))
-        assertTrue(readGzipAsset(context.assets, "offline-threat-definitions.json.gz").isNotEmpty())
-        assertTrue(readGzipAsset(context.assets, "signatures/mock_signatures.hsb.gz").isNotEmpty())
+        assertTrue(readGzipAsset(context.assets, "offline-threat-definitions.json.dat").isNotEmpty())
+        assertTrue(readGzipAsset(context.assets, "signatures/mock_signatures.hsb.dat").isNotEmpty())
         assertFalse(context.assets.list("yara")!!.contains("safemobile_android_dex.yar"))
         assertFalse(context.assets.list("")!!.contains("offline-threat-definitions.json"))
         assertFalse(context.assets.list("signatures")!!.contains("mock_signatures.hsb"))

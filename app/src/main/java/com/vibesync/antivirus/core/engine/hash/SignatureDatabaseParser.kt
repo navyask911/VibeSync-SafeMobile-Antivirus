@@ -19,7 +19,7 @@ class SignatureDatabaseParser {
     suspend fun parseDatabase(context: Context, fileName: String): List<String> =
         withContext(Dispatchers.IO) {
             val assets = context.applicationContext.assets
-            val compressed = runCatching { assets.open("$fileName.gz") }.getOrNull()
+            val compressed = runCatching { assets.open("${fileName}.dat") }.getOrNull()
             val stream = compressed?.let(::GZIPInputStream) ?: assets.open(fileName)
             stream.bufferedReader(Charsets.UTF_8)
                 .useLines { lines ->
