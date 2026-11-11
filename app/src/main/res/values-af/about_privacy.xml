@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="trust_pillars_heading">Pillars of Trust</string>
+    <string name="trust_pillar_privacy_title">Privacy First</string>
+    <string name="trust_pillar_privacy_description">Clear privacy choices and transparent handling of your data.</string>
+    <string name="trust_pillar_local_title">Local Inspection</string>
+    <string name="trust_pillar_local_description">Inspect files on your device with local security engines.</string>
+    <string name="trust_pillar_control_title">You Are in Control</string>
+    <string name="trust_pillar_control_description">Choose the protection features and sharing options you enable.</string>
+
+    <string name="privacy_dashboard_title">Privacy Dashboard</string>
+    <string name="privacy_dashboard_intro">See what SafeMobile processes and where your information stays.</string>
+    <string name="privacy_package_title">App Package Name</string>
+    <string name="privacy_processed_locally">Processed Locally</string>
+    <string name="privacy_package_detail">Installed package names are inspected on this device to identify apps you ask SafeMobile to review.</string>
+    <string name="privacy_hash_title">File Hash</string>
+    <string name="privacy_hash_scan_status">Never uploaded during scanning</string>
+    <string name="privacy_hash_detail">Scan hashes stay on your device for local verdicts. A hash may be shared only after you separately enable Global Threat Intelligence or approve a one-time contribution.</string>
+    <string name="privacy_history_title">Scan History</string>
+    <string name="privacy_stored_on_device">Stored on Device</string>
+    <string name="privacy_history_detail">Scan history and audit entries are stored in the local app database on this device.</string>
+    <string name="privacy_dashboard_control_title">Your choice matters</string>
+    <string name="privacy_dashboard_control_detail">Optional threat contributions require a separate opt-in. Core file scanning and verdict generation remain on-device.</string>
+
+    <string name="about_us_title">About Us</string>
+    <string name="about_mission_title">Our Mission</string>
+    <string name="about_mission_statement">Building Products &amp; Connecting People with Privacy &amp; Security</string>
+    <string name="about_description">We build thoughtful Android applications and explore next-generation ideas in artificial intelligence, privacy, and security — creating technology that puts people first.</string>
+    <string name="about_website">Visit vibesyncro.com</string>
+    <string name="about_open_store">Open in Google Play</string>
+    <string name="ecosystem_title">Our Mobile Apps Ecosystem</string>
+    <string name="ecosystem_description">Explore more tools and experiences from our app ecosystem.</string>
+    <string name="ecosystem_pdf_name">VibeSync All in ONE PDF Suite</string>
+    <string name="ecosystem_pdf_description">Practical PDF tools for reading, organizing and working with documents.</string>
+    <string name="ecosystem_drawing_name">Kids Drawing Studio</string>
+    <string name="ecosystem_drawing_description">A creative drawing and coloring space designed for children.</string>
+    <string name="ecosystem_developer_name">Developer Options Shortcut</string>
+    <string name="ecosystem_developer_description">Open Android Developer Options quickly from one convenient shortcut.</string>
+
+    <string name="notification_details_title">Threat details</string>
+    <string name="notification_details_filename">File name</string>
+    <string name="notification_details_path">Path</string>
+    <string name="notification_details_reason">Reason</string>
+    <string name="notification_details_log_id">Local log ID</string>
+    <string name="notification_details_scan">Scan</string>
+    <string name="notification_details_delete">Delete</string>
+    <string name="notification_details_whitelist">Whitelist</string>
+    <string name="notification_details_close">Close</string>
+    <string name="notification_details_delete_confirm_title">Delete this file?</string>
+    <string name="notification_details_delete_confirm_body">This asks Android to delete the exact file identified by this notification. Some storage providers may require additional confirmation.</string>
+    <string name="notification_details_deleted">File deleted.</string>
+    <string name="notification_details_delete_failed">Android could not delete this file. Check its storage permissions and try again.</string>
+    <string name="notification_details_scan_unavailable">This notification does not include a readable file URI. Open Scan &amp; Lab to choose the file.</string>
+    <string name="notification_details_whitelist_scan_first">Scan this item first. You can then add the resulting app or file hash to your local trusted list.</string>
+    <string name="notification_details_package_action">Package</string>
+    <string name="device_admin_activation_failed">Android could not open the Device Administrator activation page. Check that the SafeMobile admin receiver is installed and try again.</string>
+    <string name="trusted_file_saved">File hash added to the local trusted list.</string>
+    <string name="trusted_file_invalid">A valid SHA-256 hash is required before this file can be trusted.</string>
+    <string name="settings_privacy_link_detail">Review local processing and optional data sharing.</string>
+    <string name="settings_about_link_detail">Our mission, website and mobile apps.</string>
+    <string name="about_link_unavailable">The requested link could not be opened. Check your browser or Play Store availability.</string>
+</resources>

@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -30,6 +31,7 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.painterResource
 import com.vibesync.antivirus.BuildConfig
 import com.vibesync.antivirus.R
 import com.vibesync.antivirus.data.repository.ThreatRepository
@@ -79,7 +81,7 @@ private fun V17Title(text: String, modifier: Modifier = Modifier, color: Color =
 }
 
 @Composable
-private fun V17Body(text: String, modifier: Modifier = Modifier, color: Color = MaterialTheme.colorScheme.onSurfaceVariant) {
+private fun V17Body(text: String, modifier: Modifier = Modifier, color: Color = MaterialTheme.colorScheme.onSurface) {
     Text(text, modifier, style = MaterialTheme.typography.bodyMedium.copy(fontSize = 13.sp, lineHeight = 19.sp), color = color)
 }
 
@@ -99,9 +101,9 @@ private fun V17Card(
 @Composable
 private fun V17Pill(label: String, color: Color, dark: Boolean) {
     Surface(color = color.copy(alpha = if (dark) .16f else .12f), shape = CircleShape) {
-        Text(label, Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-            style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp),
-            color = color, fontWeight = FontWeight.Bold, maxLines = 1, softWrap = false)
+        Text(label.uppercase(), Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+            style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp, letterSpacing = 0.5.sp),
+            color = color, fontWeight = FontWeight.ExtraBold, maxLines = 1, softWrap = false)
     }
 }
 
@@ -166,8 +168,10 @@ internal fun V17TopBar(
             verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             if (showBack) IconButton(onClick = onBack, modifier = Modifier.size(34.dp)) {
                 Icon(Icons.Outlined.ArrowBack, "Back", tint = c.text)
-            } else V17IconBadge(
-                Icons.Outlined.Shield, c.green, size = 40.dp, iconSize = 25.dp, contentDescription = "SafeMobile"
+            } else Image(
+                painter = painterResource(R.drawable.ic_launcher_foreground),
+                contentDescription = null,
+                modifier = Modifier.size(40.dp)
             )
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(1.dp)) {
                 Text(stringResource(R.string.brand_subtitle), style = MaterialTheme.typography.titleMedium.copy(fontSize = 15.sp),
@@ -175,7 +179,10 @@ internal fun V17TopBar(
                 Text(stringResource(R.string.app_name), style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp), color = c.muted)
             }
             IconButton(onClick = onThemeToggle, modifier = Modifier.size(40.dp)) {
-                Icon(Icons.Outlined.Palette, "Toggle theme", tint = c.muted, modifier = Modifier.size(23.dp))
+                Icon(
+                    if (appTheme == AppTheme.LIGHT) Icons.Default.DarkMode else Icons.Default.LightMode,
+                    "Toggle theme", tint = c.muted, modifier = Modifier.size(23.dp)
+                )
             }
             Surface(Modifier.clip(CircleShape).clickable(role = Role.Button, onClick = onProClick),
                 color = if (isPro) c.green else Color(0xFFEA580C), shape = CircleShape) {
@@ -197,10 +204,10 @@ internal fun V17TopBar(
 internal fun V17BottomNavigationBar(selectedTab: String, isDark: Boolean, onSelect: (String) -> Unit) {
     val c = v17Colors(isDark)
     val entries = listOf(
-        Triple("home", "Shield", Icons.Outlined.Shield),
-        Triple("scan", "Scan & Lab", Icons.Outlined.Science),
-        Triple("tools", "Tools Hub", Icons.Outlined.Build),
-        Triple("settings", "Console", Icons.Outlined.Tune)
+        Triple("home", "Shield", Icons.Default.Shield),
+        Triple("scan", "Scan & Lab", Icons.Default.Science),
+        Triple("tools", "Tools Hub", Icons.Default.Build),
+        Triple("settings", "Console", Icons.Default.Tune)
     )
     Surface(color = c.surface, border = BorderStroke(1.dp, c.border)) {
         Row(Modifier.fillMaxWidth().height(72.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -248,7 +255,7 @@ internal fun V17ShieldScreen(
                 V17ScoreRing(if (activeGuards >= 4) 100 else securityScore.coerceIn(0, 99), isDark)
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        V17IconBadge(Icons.Outlined.Security, c.green, size = 36.dp, iconSize = 21.dp, contentDescription = null)
+                        V17IconBadge(Icons.Default.Shield, c.green, size = 36.dp, iconSize = 21.dp, contentDescription = null)
                         V17Pill(if (isPro) "PROTECTED · PRO" else "PROTECTION STATUS", c.green, isDark)
                     }
                     V17Title("DeviceSecurityScore")
@@ -274,21 +281,22 @@ internal fun V17ShieldScreen(
                     V17Body("Tap to grant the remaining recommended protection permissions.", color = c.muted)
                 }
                 V17Pill("FINISH", c.amber, isDark)
+                Icon(Icons.Default.ArrowForward, contentDescription = null, tint = c.amber, modifier = Modifier.size(18.dp))
             }
         }
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
             V17Tile("Live Sentinel", "Install & download observer", if (liveSentinelActive) "ACTIVE" else "INACTIVE",
-                Icons.Outlined.Security, c.green, isDark, Modifier.weight(1f), onOpenLiveSentinel)
+                Icons.Default.Security, c.green, isDark, Modifier.weight(1f), onOpenLiveSentinel)
             V17Tile("Device Posture", "Bootloader, SELinux, ADB & Play Protect",
-                posturePassed?.let { "$it/8 PASSED" } ?: "CHECK", Icons.Outlined.Smartphone,
+                posturePassed?.let { "$it/8 PASSED" } ?: "CHECK", Icons.Default.Smartphone,
                 c.accent, isDark, Modifier.weight(1f), onOpenPosture)
         }
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
             V17Tile("AI & YARA Engine", "Four-layer ensemble analysis", "4-LAYER",
-                Icons.Outlined.Science, c.accent, isDark, Modifier.weight(1f), onOpenDetection)
+                Icons.Default.Psychology, c.accent, isDark, Modifier.weight(1f), onOpenDetection)
             V17Tile("Threat DB & Vault", "Local threat data and isolation",
                 if (quarantinedFilesCount > 0) "$quarantinedFilesCount ISOLATED" else "READY",
-                Icons.Outlined.Storage, c.amber, isDark, Modifier.weight(1f), onOpenThreatDb)
+                Icons.Default.Lock, c.amber, isDark, Modifier.weight(1f), onOpenThreatDb)
         }
     }
 }
@@ -424,8 +432,7 @@ internal fun V17ScanLabScreen(
                     Spacer(Modifier.width(8.dp))
                     Text(stringResource(R.string.scan_running))
                 } else {
-                    Icon(if (deep) Icons.Outlined.FolderOpen else Icons.Outlined.PlayArrow,
-                        contentDescription = null, modifier = Modifier.size(21.dp))
+                    Icon(Icons.Default.PlayArrow, contentDescription = null, modifier = Modifier.size(21.dp))
                     Spacer(Modifier.width(8.dp))
                     Text(stringResource(if (deep) R.string.cleaner_scan_storage else R.string.scan_installed))
                 }
@@ -529,10 +536,10 @@ private fun V17ScanResultRow(
         else -> "NOT SCANNED" to c.muted
     }
     val verdictIcon = when {
-        result.trustedByUser -> Icons.Outlined.Security
-        result.verdict == ScanVerdict.THREAT -> Icons.Outlined.Warning
-        result.verdict == ScanVerdict.SUSPICIOUS -> Icons.Outlined.Search
-        result.verdict == ScanVerdict.NO_MATCH -> Icons.Outlined.CheckCircle
+        result.trustedByUser -> Icons.Default.Shield
+        result.verdict == ScanVerdict.THREAT -> Icons.Default.Warning
+        result.verdict == ScanVerdict.SUSPICIOUS -> Icons.Default.Search
+        result.verdict == ScanVerdict.NO_MATCH -> Icons.Default.CheckCircle
         else -> Icons.Outlined.HelpOutline
     }
     Column(Modifier.fillMaxWidth().animateContentSize().clip(RoundedCornerShape(12.dp))
@@ -639,15 +646,15 @@ internal fun V17ToolsHubScreen(isDark: Boolean, onOpen: (String) -> Unit) {
     data class Tool(val name: String, val subtitle: String, val icon: androidx.compose.ui.graphics.vector.ImageVector,
                     val route: String, val tint: Color)
     val tools = listOf(
-        Tool("Device Posture", "8-point OS & hardware audit", Icons.Outlined.Smartphone, "posture", c.accent),
-        Tool("Link Checker", "Phishing and URL risk scanner", Icons.Outlined.Link, "phishing", c.green),
-        Tool("Quarantine Vault", "Isolate and purge suspicious files", Icons.Outlined.Lock, "quarantine", c.amber),
-        Tool("Folder Monitor", "SAF directory watch", Icons.Outlined.FolderOpen, "sentinel", c.accent),
-        Tool("System App Guard", "Pre-installed package integrity", Icons.Outlined.Settings, "guardian", c.green),
-        Tool("Security Advisor", "Step-by-step hardening guide", Icons.Outlined.Lightbulb, "advisor", c.accent)
+        Tool("Device Posture", "8-point OS & hardware audit", Icons.Default.Shield, "posture", c.accent),
+        Tool("Link Checker", "Phishing and URL risk scanner", Icons.Default.Link, "phishing", c.green),
+        Tool("Quarantine Vault", "Isolate and purge suspicious files", Icons.Default.Lock, "quarantine", c.amber),
+        Tool("Folder Monitor", "SAF directory watch", Icons.Default.Folder, "sentinel", c.accent),
+        Tool("System App Guard", "Pre-installed package integrity", Icons.Default.Settings, "guardian", c.green),
+        Tool("Security Advisor", "Step-by-step hardening guide", Icons.Default.Lightbulb, "advisor", c.accent)
     )
     Column(Modifier.fillMaxSize().background(c.device).padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        V17SectionHeading("Tools Hub", "Security controls and investigation tools.", Icons.Outlined.Build, c.accent)
+        V17SectionHeading("Tools Hub", "Security controls and investigation tools.", Icons.Default.Build, c.accent)
         LazyVerticalGrid(GridCells.Fixed(2), Modifier.weight(1f).fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp),
             contentPadding = PaddingValues(bottom = 16.dp)) {
@@ -789,8 +796,8 @@ internal fun V17ConsoleSettingsScreen(
                     V17Title("Advanced Telemetry & Rules")
                     V17Body("YARA imports, ThreatFeed sync, global intelligence and benchmarks.")
                 }
-                Icon(Icons.Outlined.ExpandMore, if (advanced) "Collapse" else "Expand",
-                    tint = c.muted, modifier = Modifier.size(22.dp))
+                Icon(if (advanced) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
+                    if (advanced) "Collapse" else "Expand", tint = c.muted, modifier = Modifier.size(22.dp))
             }
             AnimatedVisibility(advanced) {
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
