@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Verify Play artifacts omit the signed hash database and unapproved analytics/crash SDKs."""
 from pathlib import Path
+import gzip
 import os
 import re
 import shutil
@@ -27,6 +28,11 @@ FORBIDDEN_DB_ASSETS = (
     "hashes.hsb.sig",
     "malware_hashes.hsb",
     "malware_hashes.sig",
+)
+PROTECTED_GZIP_ASSETS = (
+    ("yara/safemobile_android_dex.yar.gz", "yara/safemobile_android_dex.yar"),
+    ("offline-threat-definitions.json.gz", "offline-threat-definitions.json"),
+    ("signatures/mock_signatures.hsb.gz", "signatures/mock_signatures.hsb"),
 )
 
 def fail(message):
@@ -64,10 +70,29 @@ def inspect_artifact(path):
     try:
         with zipfile.ZipFile(path) as archive:
             names = archive.namelist()
+            asset_roots = ("assets/", "base/assets/")
             for name in names:
                 basename = name.rsplit("/", 1)[-1]
-                if basename in FORBIDDEN_DB_ASSETS and (name.startswith("assets/") or name.startswith("base/assets/")):
+                if basename in FORBIDDEN_DB_ASSETS and name.startswith(asset_roots):
                     fail(path.name + " contains forbidden bundled database asset: " + name)
+
+            # Protected threat-rule sources must be shipped only as GZIP assets.
+            for compressed_path, raw_path in PROTECTED_GZIP_ASSETS:
+                compressed_names = [root + compressed_path for root in asset_roots]
+                raw_names = [root + raw_path for root in asset_roots]
+                present_compressed = [name for name in compressed_names if name in names]
+                present_raw = [name for name in raw_names if name in names]
+                if len(present_compressed) != 1:
+                    fail(path.name + " must package exactly one compressed security asset: " + compressed_path)
+                if present_raw:
+                    fail(path.name + " contains an uncompressed protected source asset: " + present_raw[0])
+                try:
+                    expanded = gzip.decompress(archive.read(present_compressed[0]))
+                except (OSError, EOFError) as error:
+                    fail(path.name + " contains an invalid GZIP security asset " + compressed_path + ": " + str(error))
+                if not expanded:
+                    fail(path.name + " contains an empty decompressed security asset: " + compressed_path)
+
             for name in names:
                 if name.endswith(".dex"):
                     data = archive.read(name)

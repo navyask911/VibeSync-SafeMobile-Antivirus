@@ -1,8 +1,10 @@
 package com.vibesync.antivirus.core.engine
 
+import android.content.res.AssetManager
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -10,15 +12,33 @@ import java.io.File
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.charset.StandardCharsets
+import java.util.zip.GZIPInputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
 @RunWith(AndroidJUnit4::class)
 class YaraDexIntegrationTest {
+    private fun readGzipAsset(assets: AssetManager, path: String): ByteArray =
+        GZIPInputStream(assets.open(path)).use { it.readBytes() }
+
     @Test fun extractedDexProducesAdvisoryRuleFindingWithoutExternalNetwork() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val packagedRules = String(
+            readGzipAsset(context.assets, "yara/safemobile_android_dex.yar.gz"),
+            StandardCharsets.UTF_8
+        )
+        assertTrue(packagedRules.contains("rule Takopii_Overlay_Banker_DEX"))
+        assertTrue(readGzipAsset(context.assets, "offline-threat-definitions.json.gz").isNotEmpty())
+        assertTrue(readGzipAsset(context.assets, "signatures/mock_signatures.hsb.gz").isNotEmpty())
+        assertFalse(context.assets.list("yara")!!.contains("safemobile_android_dex.yar"))
+        assertFalse(context.assets.list("")!!.contains("offline-threat-definitions.json"))
+        assertFalse(context.assets.list("signatures")!!.contains("mock_signatures.hsb"))
+
         BundledYaraEngine.initialize(context.assets)
-        assertTrue(BundledYaraEngine.capability.active)
+        assertTrue(
+            "Bundled YARA engine failed to load packaged GZIP rules: ${BundledYaraEngine.capability.reason}",
+            BundledYaraEngine.capability.active
+        )
         assertEquals(5, BundledYaraEngine.capability.ruleCount)
         val apk = File.createTempFile("dex-yara-synthetic-", ".apk", context.cacheDir)
         try {

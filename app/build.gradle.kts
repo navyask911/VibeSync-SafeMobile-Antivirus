@@ -402,7 +402,7 @@ tasks.matching {
 
 // Keep readable rule/definition sources under src/main/raw_assets for review and tests.
 // Only the generated compressed copies are registered as Android application assets.
-val protectedSecurityAssetDirectory = layout.buildDirectory.dir("generated/protected-security-assets/assets")
+val protectedSecurityAssetDirectory = layout.buildDirectory.dir("generated/protected-security-assets-v2/assets")
 val protectedSecurityAssetInputs = listOf(
     layout.projectDirectory.file("src/main/raw_assets/yara/safemobile_android_dex.yar").asFile,
     layout.projectDirectory.file("src/main/raw_assets/offline-threat-definitions.json").asFile,
@@ -439,13 +439,14 @@ val packageProtectedSecurityAssets = tasks.register("packageProtectedSecurityAss
 }
 val mainAssetSources = android.sourceSets.getByName("main").assets
 mainAssetSources.exclude(
-    "yara/safemobile_android_dex.yar",
-    "offline-threat-definitions.json",
-    "signatures/mock_signatures.hsb"
+    "**/yara/safemobile_android_dex.yar",
+    "**/offline-threat-definitions.json",
+    "**/signatures/mock_signatures.hsb"
 )
-// Register the generated directory explicitly; its producer is wired below into
-// every variant asset merge and lint task that consumes the main asset source set.
-mainAssetSources.srcDir(protectedSecurityAssetDirectory)
+// Register the producing task itself as the asset source. Gradle then binds the
+// generated output directory to the producer and cannot reuse an unrelated/stale
+// source snapshot when the checked-in files move between source directories.
+mainAssetSources.srcDir(packageProtectedSecurityAssets)
 
 // docs/BENCHMARK_REPORT.md is canonical: the hidden card reads its build-time asset copy.
 // Generated assets are not committed and never contain APK samples.
