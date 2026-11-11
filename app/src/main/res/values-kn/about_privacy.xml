@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="trust_pillars_heading">ನಂಬಿಕೆಯ ಆಧಾರಸ್ತಂಭಗಳು</string>
+    <string name="trust_pillar_privacy_title">ಗೌಪ್ಯತೆ ಮೊದಲು</string>
+    <string name="trust_pillar_privacy_description">ನಿಮ್ಮ ಡೇಟಾವನ್ನು ಹೇಗೆ ನಿರ್ವಹಿಸಲಾಗುತ್ತದೆ ಎಂಬುದರ ಸ್ಪಷ್ಟ ಮಾಹಿತಿ ಮತ್ತು ಆಯ್ಕೆಗಳು.</string>
+    <string name="trust_pillar_local_title">ಸ್ಥಳೀಯ ಪರಿಶೀಲನೆ</string>
+    <string name="trust_pillar_local_description">ಸ್ಥಳೀಯ ಭದ್ರತಾ ಎಂಜಿನ್‌ಗಳಿಂದ ನಿಮ್ಮ ಸಾಧನದಲ್ಲೇ ಫೈಲ್‌ಗಳನ್ನು ಪರಿಶೀಲಿಸಿ.</string>
+    <string name="trust_pillar_control_title">ನಿಯಂತ್ರಣ ನಿಮ್ಮ ಕೈಯಲ್ಲಿ</string>
+    <string name="trust_pillar_control_description">ನೀವು ಸಕ್ರಿಯಗೊಳಿಸುವ ರಕ್ಷಣೆ ವೈಶಿಷ್ಟ್ಯಗಳು ಮತ್ತು ಹಂಚಿಕೆ ಆಯ್ಕೆಗಳನ್ನು ಆರಿಸಿ.</string>
+
+    <string name="privacy_dashboard_title">ಗೌಪ್ಯತೆ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್</string>
+    <string name="privacy_dashboard_intro">SafeMobile ಏನನ್ನು ಪ್ರಕ್ರಿಯೆಗೊಳಿಸುತ್ತದೆ ಮತ್ತು ನಿಮ್ಮ ಮಾಹಿತಿ ಎಲ್ಲಿ ಉಳಿಯುತ್ತದೆ ಎಂಬುದನ್ನು ನೋಡಿ.</string>
+    <string name="privacy_package_title">ಆ್ಯಪ್ ಪ್ಯಾಕೇಜ್ ಹೆಸರು</string>
+    <string name="privacy_processed_locally">ಸ್ಥಳೀಯವಾಗಿ ಪ್ರಕ್ರಿಯೆಗೊಳಿಸಲಾಗುತ್ತದೆ</string>
+    <string name="privacy_package_detail">ನೀವು ಪರಿಶೀಲಿಸಲು ಆಯ್ಕೆಮಾಡುವ ಆ್ಯಪ್‌ಗಳನ್ನು ಗುರುತಿಸಲು ಸ್ಥಾಪಿತ ಪ್ಯಾಕೇಜ್ ಹೆಸರುಗಳನ್ನು ಈ ಸಾಧನದಲ್ಲೇ ಪರಿಶೀಲಿಸಲಾಗುತ್ತದೆ.</string>
+    <string name="privacy_hash_title">ಫೈಲ್ ಹ್ಯಾಶ್</string>
+    <string name="privacy_hash_scan_status">ಸ್ಕ್ಯಾನಿಂಗ್ ಸಮಯದಲ್ಲಿ ಎಂದಿಗೂ ಅಪ್‌ಲೋಡ್ ಆಗುವುದಿಲ್ಲ</string>
+    <string name="privacy_hash_detail">ಸ್ಥಳೀಯ ತೀರ್ಪುಗಳಿಗಾಗಿ ಸ್ಕ್ಯಾನ್ ಹ್ಯಾಶ್‌ಗಳು ನಿಮ್ಮ ಸಾಧನದಲ್ಲೇ ಉಳಿಯುತ್ತವೆ. ನೀವು Global Threat Intelligence ಅನ್ನು ಪ್ರತ್ಯೇಕವಾಗಿ ಸಕ್ರಿಯಗೊಳಿಸಿದಾಗ ಅಥವಾ ಒಮ್ಮೆ ಮಾತ್ರ ಹಂಚಲು ಅನುಮತಿಸಿದಾಗ ಮಾತ್ರ ಹ್ಯಾಶ್ ಹಂಚಬಹುದು.</string>
+    <string name="privacy_history_title">ಸ್ಕ್ಯಾನ್ ಇತಿಹಾಸ</string>
+    <string name="privacy_stored_on_device">ಸಾಧನದಲ್ಲೇ ಸಂಗ್ರಹಿಸಲಾಗಿದೆ</string>
+    <string name="privacy_history_detail">ಸ್ಕ್ಯಾನ್ ಇತಿಹಾಸ ಮತ್ತು ಆಡಿಟ್ ದಾಖಲೆಗಳು ಈ ಸಾಧನದಲ್ಲಿನ ಆ್ಯಪ್‌ನ ಸ್ಥಳೀಯ ಡೇಟಾಬೇಸ್‌ನಲ್ಲಿ ಉಳಿಯುತ್ತವೆ.</string>
+    <string name="privacy_dashboard_control_title">ಆಯ್ಕೆ ನಿಮ್ಮದು</string>
+    <string name="privacy_dashboard_control_detail">ಐಚ್ಛಿಕ ಬೆದರಿಕೆ ಕೊಡುಗೆಗಳಿಗೆ ಪ್ರತ್ಯೇಕ ಒಪ್ಪಿಗೆ ಅಗತ್ಯ. ಮುಖ್ಯ ಫೈಲ್ ಸ್ಕ್ಯಾನಿಂಗ್ ಮತ್ತು ತೀರ್ಪುಗಳು ಸಾಧನದಲ್ಲೇ ನಡೆಯುತ್ತವೆ.</string>
+
+    <string name="about_us_title">ನಮ್ಮ ಬಗ್ಗೆ</string>
+    <string name="about_mission_title">ನಮ್ಮ ಧ್ಯೇಯ</string>
+    <string name="about_mission_statement">ಗೌಪ್ಯತೆ ಮತ್ತು ಭದ್ರತೆಯೊಂದಿಗೆ ಉತ್ಪನ್ನಗಳನ್ನು ನಿರ್ಮಿಸಿ ಜನರನ್ನು ಸಂಪರ್ಕಿಸುವುದು</string>
+    <string name="about_description">ಜನರನ್ನು ಮೊದಲಿಗರನ್ನಾಗಿ ಮಾಡುವ ತಂತ್ರಜ್ಞಾನವನ್ನು ರಚಿಸಲು ನಾವು ಯೋಚಿಸಿ ನಿರ್ಮಿಸಿದ Android ಆ್ಯಪ್‌ಗಳನ್ನು ಅಭಿವೃದ್ಧಿಪಡಿಸುತ್ತೇವೆ ಮತ್ತು ಕೃತಕ ಬುದ್ಧಿಮತ್ತೆ, ಗೌಪ್ಯತೆ ಹಾಗೂ ಭದ್ರತೆಯ ಮುಂದಿನ ತಲೆಮಾರಿನ ಆಲೋಚನೆಗಳನ್ನು ಅನ್ವೇಷಿಸುತ್ತೇವೆ.</string>
+    <string name="about_website">vibesyncro.com ಭೇಟಿ ನೀಡಿ</string>
+    <string name="about_open_store">Google Play ನಲ್ಲಿ ತೆರೆಯಿರಿ</string>
+    <string name="ecosystem_title">ನಮ್ಮ ಮೊಬೈಲ್ ಆ್ಯಪ್ ಪರಿಸರ</string>
+    <string name="ecosystem_description">ನಮ್ಮ ಆ್ಯಪ್ ಪರಿಸರದ ಇತರ ಸಾಧನಗಳು ಮತ್ತು ಅನುಭವಗಳನ್ನು ಅನ್ವೇಷಿಸಿ.</string>
+    <string name="ecosystem_pdf_name">VibeSync All in ONE PDF Suite</string>
+    <string name="ecosystem_pdf_description">ದಾಖಲೆಗಳನ್ನು ಓದಲು, ವ್ಯವಸ್ಥೆಗೊಳಿಸಲು ಮತ್ತು ಬಳಸಲು ಉಪಯುಕ್ತ PDF ಸಾಧನಗಳು.</string>
+    <string name="ecosystem_drawing_name">Kids Drawing Studio</string>
+    <string name="ecosystem_drawing_description">ಮಕ್ಕಳಿಗಾಗಿ ಸೃಜನಾತ್ಮಕ ಚಿತ್ರಕಲೆ ಮತ್ತು ಬಣ್ಣ ತುಂಬುವ ಸ್ಥಳ.</string>
+    <string name="ecosystem_developer_name">Developer Options Shortcut</string>
+    <string name="ecosystem_developer_description">ಒಂದು ಸುಲಭ ಶಾರ್ಟ್‌ಕಟ್‌ನಿಂದ Android ಡೆವಲಪರ್ ಆಯ್ಕೆಗಳನ್ನು ತ್ವರಿತವಾಗಿ ತೆರೆಯಿರಿ.</string>
+
+    <string name="notification_details_title">ಬೆದರಿಕೆ ವಿವರಗಳು</string>
+    <string name="notification_details_filename">ಫೈಲ್ ಹೆಸರು</string>
+    <string name="notification_details_path">ಮಾರ್ಗ</string>
+    <string name="notification_details_reason">ಕಾರಣ</string>
+    <string name="notification_details_log_id">ಸ್ಥಳೀಯ ಲಾಗ್ ಐಡಿ</string>
+    <string name="notification_details_scan">ಸ್ಕ್ಯಾನ್</string>
+    <string name="notification_details_delete">ಅಳಿಸಿ</string>
+    <string name="notification_details_whitelist">ಅನುಮತಿಸಿ</string>
+    <string name="notification_details_close">ಮುಚ್ಚಿ</string>
+    <string name="notification_details_delete_confirm_title">ಈ ಫೈಲ್ ಅಳಿಸಬೇಕೇ?</string>
+    <string name="notification_details_delete_confirm_body">ಈ ಸೂಚನೆ ಗುರುತಿಸಿದ ನಿಖರ ಫೈಲ್ ಅನ್ನು Android ಮೂಲಕ ಅಳಿಸಲು ಇದು ಪ್ರಯತ್ನಿಸುತ್ತದೆ. ಕೆಲವು ಸಂಗ್ರಹ ಪೂರೈಕೆದಾರರು ಹೆಚ್ಚುವರಿ ದೃಢೀಕರಣ ಕೇಳಬಹುದು.</string>
+    <string name="notification_details_deleted">ಫೈಲ್ ಅಳಿಸಲಾಗಿದೆ.</string>
+    <string name="notification_details_delete_failed">Android ಈ ಫೈಲ್ ಅಳಿಸಲಿಲ್ಲ. ಸಂಗ್ರಹ ಅನುಮತಿಗಳನ್ನು ಪರಿಶೀಲಿಸಿ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.</string>
+    <string name="notification_details_scan_unavailable">ಈ ಸೂಚನೆಯಲ್ಲಿ ಓದಬಹುದಾದ ಫೈಲ್ URI ಇಲ್ಲ. ಫೈಲ್ ಆಯ್ಕೆ ಮಾಡಲು Scan &amp; Lab ತೆರೆಯಿರಿ.</string>
+    <string name="notification_details_whitelist_scan_first">ಮೊದಲು ಈ ಅಂಶವನ್ನು ಸ್ಕ್ಯಾನ್ ಮಾಡಿ. ನಂತರ ಫಲಿತಾಂಶದ ಆ್ಯಪ್ ಅಥವಾ ಫೈಲ್ ಹ್ಯಾಶ್ ಅನ್ನು ಸ್ಥಳೀಯ ನಂಬಿಕೆಯ ಪಟ್ಟಿಗೆ ಸೇರಿಸಬಹುದು.</string>
+    <string name="notification_details_package_action">ಪ್ಯಾಕೇಜ್</string>
+    <string name="device_admin_activation_failed">Android Device Administrator ಸಕ್ರಿಯಗೊಳಿಸುವ ಪುಟ ತೆರೆಯಲಾಗಲಿಲ್ಲ. SafeMobile ನಿರ್ವಾಹಕ ರಿಸೀವರ್ ಸ್ಥಾಪಿತವಾಗಿದೆ ಎಂಬುದನ್ನು ಪರಿಶೀಲಿಸಿ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.</string>
+    <string name="trusted_file_saved">ಫೈಲ್ ಹ್ಯಾಶ್ ಅನ್ನು ಸ್ಥಳೀಯ ನಂಬಿಕೆಯ ಪಟ್ಟಿಗೆ ಸೇರಿಸಲಾಗಿದೆ.</string>
+    <string name="trusted_file_invalid">ಈ ಫೈಲ್ ನಂಬಲು ಮಾನ್ಯ SHA-256 ಹ್ಯಾಶ್ ಅಗತ್ಯವಿದೆ.</string>
+</resources>
