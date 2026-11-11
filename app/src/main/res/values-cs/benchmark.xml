@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">Výsledky benchmarku</string>
+    <string name="benchmark_not_measured">Zatím nejsou k dispozici ověřená měření</string>
+    <string name="benchmark_total_apps">Testované soubory APK</string>
+    <string name="benchmark_tpr">Míra detekce (TPR)</string>
+    <string name="benchmark_fpr">Míra falešných poplachů (FPR)</string>
+    <string name="benchmark_latency">Průměrná doba kontroly</string>
+    <string name="benchmark_privacy_note">Zobrazují se pouze ověřené výsledky. Testovací APK se v aplikaci neukládají.</string>
+</resources>

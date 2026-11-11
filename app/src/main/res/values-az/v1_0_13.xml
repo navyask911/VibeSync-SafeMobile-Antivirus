@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="trusted_app_options">Seçimlər</string>
+<string name="trusted_app_remove">Etibarı ləğv et</string>
+<string name="trusted_app_removed">Etibar ləğv edildi. Bu paket üçün gələcək yoxlamalar və xəbərdarlıqlar yenidən aktivdir.</string>
+<string name="trusted_app_remove_failed">Etibarı ləğv etmək mümkün olmadı. Yenidən cəhd edin.</string>
+<string name="install_sentinel_title">Quraşdırmaların izlənməsi</string>
+<string name="install_sentinel_active">SafeMobile Sentinel: aktivdir və izləyir</string>
+<string name="install_sentinel_description">Daimi bildirişlə quraşdırmadan sonra yerli yoxlamalar. Dövri sorğu və oyaq saxlama kilidi yoxdur. Android xidməti dayandıra bilər.</string>
+<string name="install_sentinel_stop">Quraşdırmaların izlənməsini dayandır</string>
+<string name="install_scan_progress">Yeni quraşdırılmış tətbiq təhlil edilir: %1$s</string>
+<string name="analytics_chart_title">Yoxlama nəticələri</string>
+<string name="analytics_other">Digər nəticələr</string>
+<string name="analytics_total">Nəticələr</string>
+<string name="analytics_weekly_scans">Həftəlik yoxlamalar</string>
+<string name="analytics_week_note">Bazar ertəsindən bazar gününə qədər qeydə alınmış seanslar. Natamam yoxlamalar da daxil ola bilər.</string>
+<string name="posture_overlay_select_app">Android 11 və ya daha yeni versiyada digər tətbiqlərin üzərində göstərmə ayarları siyahısından %1$s seçin.</string>
+<string name="install_scan_received">Quraşdırma hadisəsi alındı. Yoxlamaq üçün SafeMobile tətbiqini açın.</string>
+</resources>

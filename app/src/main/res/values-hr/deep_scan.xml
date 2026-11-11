@@ -1,0 +1,4 @@
+<resources>
+    <string name="deep_scan_folder">Skeniraj mapu (dubinsko skeniranje)</string>
+    <string name="quarantine_manual_delete">Datoteka je zaštićena u karanteni. Izbrišite izvornik ručno.</string>
+</resources>

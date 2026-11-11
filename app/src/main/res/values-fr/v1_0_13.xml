@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="trusted_app_options">Options</string>
+<string name="trusted_app_remove">Retirer la confiance</string>
+<string name="trusted_app_removed">Confiance retirée. Les futures analyses et alertes sont réactivées pour ce paquet.</string>
+<string name="trusted_app_remove_failed">Impossible de retirer la confiance. Réessayez.</string>
+<string name="install_sentinel_title">Surveillance des installations</string>
+<string name="install_sentinel_active">SafeMobile Sentinel : actif et en surveillance</string>
+<string name="install_sentinel_description">Contrôles locaux après installation avec notification permanente. Sans interrogation périodique ni verrou de veille. Android peut arrêter le service.</string>
+<string name="install_sentinel_stop">Arrêter la surveillance des installations</string>
+<string name="install_scan_progress">Analyse de l’application nouvellement installée : %1$s</string>
+<string name="analytics_chart_title">Résultats des analyses</string>
+<string name="analytics_other">Autres résultats</string>
+<string name="analytics_total">Résultats</string>
+<string name="analytics_weekly_scans">Analyses hebdomadaires</string>
+<string name="analytics_week_note">Sessions enregistrées du lundi au dimanche. Les analyses partielles peuvent être incluses.</string>
+<string name="posture_overlay_select_app">Sous Android 11 ou ultérieur, sélectionnez %1$s dans la liste des autorisations de superposition.</string>
+<string name="install_scan_received">Installation reçue. Ouvrez SafeMobile pour vérifier.</string>
+</resources>

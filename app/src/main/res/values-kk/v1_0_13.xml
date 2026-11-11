@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="trusted_app_options">Параметрлер</string>
+<string name="trusted_app_remove">Сенімді алып тастау</string>
+<string name="trusted_app_removed">Сенім алынып тасталды. Бұл пакет үшін алдағы тексерулер мен ескертулер қайта қосылды.</string>
+<string name="trusted_app_remove_failed">Сенімді алып тастау мүмкін болмады. Қайта көріңіз.</string>
+<string name="install_sentinel_title">Орнатуларды бақылау</string>
+<string name="install_sentinel_active">SafeMobile Sentinel: белсенді және бақылап тұр</string>
+<string name="install_sentinel_description">Тұрақты хабарландырумен орнатудан кейінгі жергілікті тексерулер. Мерзімді сұрау немесе құрылғыны ояу ұстау құлпы жоқ. Android қызметті тоқтатуы мүмкін.</string>
+<string name="install_sentinel_stop">Орнатуларды бақылауды тоқтату</string>
+<string name="install_scan_progress">Жаңадан орнатылған қолданба талдануда: %1$s</string>
+<string name="analytics_chart_title">Тексеру нәтижелері</string>
+<string name="analytics_other">Басқа нәтижелер</string>
+<string name="analytics_total">Нәтижелер</string>
+<string name="analytics_weekly_scans">Апталық тексерулер</string>
+<string name="analytics_week_note">Дүйсенбіден жексенбіге дейін тіркелген сеанстар. Аяқталмаған тексерулер де қамтылуы мүмкін.</string>
+<string name="posture_overlay_select_app">Android 11 немесе одан кейінгі нұсқада басқа қолданбалардың үстінен көрсету параметрлері тізімінен %1$s таңдаңыз.</string>
+<string name="install_scan_received">Орнату оқиғасы қабылданды. Тексеру үшін SafeMobile қолданбасын ашыңыз.</string>
+</resources>

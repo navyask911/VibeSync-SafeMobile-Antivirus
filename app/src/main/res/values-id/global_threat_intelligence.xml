@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="global_threat_intelligence_title">Berkontribusi pada Intelijen Ancaman Global (Opsional)</string>
+    <string name="global_threat_intelligence_description">Saat opsi ini aktif, SafeMobile otomatis membagikan hash SHA-256 ancaman yang telah dikonfirmasi dan, jika tersedia, 215 fitur perilaku biner. File APK, nama file, jalur, nama paket, atau pengenal perangkat tidak pernah dikirim. Anda dapat menonaktifkan opsi ini kapan saja.</string>
+    <string name="global_threat_intelligence_donate_message">Bantu lindungi orang lain dengan menyumbangkan tanda tangan file berbahaya ini secara anonim ke jaringan pelatihan AI kami.</string>
+    <string name="global_threat_intelligence_donate">Donasikan</string>
+    <string name="global_threat_intelligence_decline">Tolak</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">Салыстырмалы сынақ нәтижелері</string>
+    <string name="benchmark_not_measured">Әзірге расталған өлшемдер жоқ</string>
+    <string name="benchmark_total_apps">Тексерілген APK файлдары</string>
+    <string name="benchmark_tpr">Анықтау деңгейі (TPR)</string>
+    <string name="benchmark_fpr">Жалған оң нәтиже деңгейі (FPR)</string>
+    <string name="benchmark_latency">Орташа сканерлеу уақыты</string>
+    <string name="benchmark_privacy_note">Тек расталған нәтижелер көрсетіледі. Сынақ APK файлдары қолданбада сақталмайды.</string>
+</resources>

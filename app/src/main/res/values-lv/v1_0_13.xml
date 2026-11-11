@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="trusted_app_options">Iespējas</string>
+<string name="trusted_app_remove">Atsaukt uzticēšanos</string>
+<string name="trusted_app_removed">Uzticēšanās atsaukta. Šīs pakotnes turpmākās pārbaudes un brīdinājumi ir atkal ieslēgti.</string>
+<string name="trusted_app_remove_failed">Neizdevās atsaukt uzticēšanos. Mēģiniet vēlreiz.</string>
+<string name="install_sentinel_title">Instalēšanas uzraudzība</string>
+<string name="install_sentinel_active">SafeMobile Sentinel: aktīvs un uzrauga</string>
+<string name="install_sentinel_description">Vietējās pārbaudes pēc instalēšanas ar pastāvīgu paziņojumu. Bez periodiskiem pieprasījumiem vai miega bloķēšanas. Android var apturēt pakalpojumu.</string>
+<string name="install_sentinel_stop">Apturēt instalēšanas uzraudzību</string>
+<string name="install_scan_progress">Tiek analizēta tikko instalētā lietotne: %1$s</string>
+<string name="analytics_chart_title">Pārbaužu rezultāti</string>
+<string name="analytics_other">Citi rezultāti</string>
+<string name="analytics_total">Rezultāti</string>
+<string name="analytics_weekly_scans">Nedēļas pārbaudes</string>
+<string name="analytics_week_note">Reģistrētās sesijas no pirmdienas līdz svētdienai. Var būt iekļautas nepabeigtas pārbaudes.</string>
+<string name="posture_overlay_select_app">Android 11 vai jaunākā versijā atlasiet %1$s attēlošanas virs citām lietotnēm iestatījumu sarakstā.</string>
+<string name="install_scan_received">Saņemts instalēšanas notikums. Atveriet SafeMobile, lai pārskatītu.</string>
+</resources>

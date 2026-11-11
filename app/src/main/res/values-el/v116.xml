@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">Η σάρωση ολοκληρώθηκε</string>
+    <string name="v116_scan_local_no_match">Η σάρωση ολοκληρώθηκε. Δεν βρέθηκε τοπική αντιστοιχία. Η συσκευή φαίνεται ασφαλής προς το παρόν.</string>
+    <string name="v116_score_meaning">Η βαθμολογία δείχνει ρυθμίσεις, όχι απόδειξη απουσίας κακόβουλου λογισμικού. Κάποιοι έλεγχοι δεν έχουν επιβεβαιωθεί.</string>
+</resources>

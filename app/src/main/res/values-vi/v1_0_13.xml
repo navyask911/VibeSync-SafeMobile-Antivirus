@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="trusted_app_options">Tùy chọn</string>
+<string name="trusted_app_remove">Bỏ tin cậy</string>
+<string name="trusted_app_removed">Đã bỏ tin cậy. Các lần quét và cảnh báo sau này cho gói này đã được bật lại.</string>
+<string name="trusted_app_remove_failed">Không thể bỏ tin cậy. Hãy thử lại.</string>
+<string name="install_sentinel_title">Giám sát cài đặt</string>
+<string name="install_sentinel_active">SafeMobile Sentinel: đang hoạt động và giám sát</string>
+<string name="install_sentinel_description">Kiểm tra cục bộ sau cài đặt với thông báo thường trực. Không thăm dò định kỳ hay giữ thiết bị thức. Android có thể dừng dịch vụ.</string>
+<string name="install_sentinel_stop">Dừng giám sát cài đặt</string>
+<string name="install_scan_progress">Đang phân tích ứng dụng vừa cài: %1$s</string>
+<string name="analytics_chart_title">Kết quả quét</string>
+<string name="analytics_other">Kết quả khác</string>
+<string name="analytics_total">Kết quả</string>
+<string name="analytics_weekly_scans">Lượt quét trong tuần</string>
+<string name="analytics_week_note">Các phiên được ghi từ thứ Hai đến Chủ nhật. Có thể gồm lượt quét chưa hoàn tất.</string>
+<string name="posture_overlay_select_app">Trên Android 11 trở lên, chọn %1$s trong danh sách cài đặt hiển thị trên ứng dụng khác.</string>
+<string name="install_scan_received">Đã nhận sự kiện cài đặt. Mở SafeMobile để xem lại.</string>
+</resources>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">स्कैन पूरा हुआ</string>
+    <string name="v116_scan_local_no_match">स्कैन पूरा हुआ। स्थानीय मिलान नहीं मिला। अभी डिवाइस सुरक्षित लगता है।</string>
+    <string name="v116_score_meaning">यह स्कोर डिवाइस की सेटिंग बताता है, मैलवेयर न होने का प्रमाण नहीं। कुछ जाँच अप्रमाणित हैं।</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">შედარებითი ტესტის შედეგები</string>
+    <string name="benchmark_not_measured">დადასტურებული გაზომვები ჯერ არ არის</string>
+    <string name="benchmark_total_apps">შემოწმებული APK ფაილები</string>
+    <string name="benchmark_tpr">აღმოჩენის მაჩვენებელი (TPR)</string>
+    <string name="benchmark_fpr">ცრუ დადებითების მაჩვენებელი (FPR)</string>
+    <string name="benchmark_latency">სკანირების საშუალო დრო</string>
+    <string name="benchmark_privacy_note">ნაჩვენებია მხოლოდ დადასტურებული შედეგები. სატესტო APK ფაილები აპში არ ინახება.</string>
+</resources>

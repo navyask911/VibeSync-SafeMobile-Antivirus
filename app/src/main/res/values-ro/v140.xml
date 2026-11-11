@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v140_dashboard">Tablou de bord</string>
+    <string name="v140_analytics_tools">Analiză și instrumente</string>
+    <string name="v140_critical">Critic</string>
+    <string name="v140_minor">Secundar</string>
+    <string name="v140_snoozed">Amânat</string>
+    <string name="v140_completed">Finalizat</string>
+    <string name="v140_snooze_warning">Amână avertizarea</string>
+    <string name="v140_done_return_to_audit">Gata — revino la audit</string>
+    <string name="v140_security_risk_explained">Explicarea riscului de securitate</string>
+    <string name="v140_posture_score_impact">Impact asupra scorului stării de securitate a dispozitivului</string>
+    <string name="v140_pending_actions">%1$d acțiuni de securitate în așteptare — verifică auditul</string>
+</resources>

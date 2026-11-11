@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">Verificação concluída</string>
+    <string name="v116_scan_local_no_match">Verificação concluída. Sem correspondências locais. Por agora, o dispositivo parece seguro.</string>
+    <string name="v116_score_meaning">A pontuação reflete as definições do dispositivo, não prova ausência de malware. Algumas verificações não estão confirmadas.</string>
+</resources>

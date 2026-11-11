@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="trusted_app_options">Valikud</string>
+<string name="trusted_app_remove">Tühista usaldus</string>
+<string name="trusted_app_removed">Usaldus on tühistatud. Selle paketi tulevased kontrollid ja hoiatused on taas lubatud.</string>
+<string name="trusted_app_remove_failed">Usaldust ei saanud tühistada. Proovige uuesti.</string>
+<string name="install_sentinel_title">Paigalduste jälgimine</string>
+<string name="install_sentinel_active">SafeMobile Sentinel: aktiivne ja jälgib</string>
+<string name="install_sentinel_description">Kohalikud kontrollid pärast paigaldamist koos püsiva teavitusega. Ilma perioodiliste päringute või ärkvelolekulukuta. Android võib teenuse peatada.</string>
+<string name="install_sentinel_stop">Peata paigalduste jälgimine</string>
+<string name="install_scan_progress">Äsja paigaldatud rakenduse analüüsimine: %1$s</string>
+<string name="analytics_chart_title">Kontrollide tulemused</string>
+<string name="analytics_other">Muud tulemused</string>
+<string name="analytics_total">Tulemused</string>
+<string name="analytics_weekly_scans">Nädala kontrollid</string>
+<string name="analytics_week_note">Salvestatud seansid esmaspäevast pühapäevani. Võivad sisaldada lõpetamata kontrolle.</string>
+<string name="posture_overlay_select_app">Android 11 või uuemas versioonis valige %1$s teiste rakenduste peal kuvamise seadete loendist.</string>
+<string name="install_scan_received">Paigaldussündmus vastu võetud. Kontrollimiseks avage SafeMobile.</string>
+</resources>

@@ -1,0 +1,4 @@
+<resources>
+    <string name="deep_scan_folder">סריקת תיקייה (סריקה מעמיקה)</string>
+    <string name="quarantine_manual_delete">הקובץ אובטח בהסגר. נא למחוק את הקובץ המקורי באופן ידני.</string>
+</resources>

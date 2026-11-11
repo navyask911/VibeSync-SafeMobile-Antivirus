@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="trusted_app_options">Valgmuligheder</string>
+<string name="trusted_app_remove">Fjern tillid</string>
+<string name="trusted_app_removed">Tilliden er fjernet. Fremtidige scanninger og advarsler er igen slået til for denne pakke.</string>
+<string name="trusted_app_remove_failed">Tilliden kunne ikke fjernes. Prøv igen.</string>
+<string name="install_sentinel_title">Installationsovervågning</string>
+<string name="install_sentinel_active">SafeMobile Sentinel: aktiv og overvåger</string>
+<string name="install_sentinel_description">Lokale kontroller efter installation med en vedvarende notifikation. Ingen løbende forespørgsler eller vågenlås. Android kan stoppe tjenesten.</string>
+<string name="install_sentinel_stop">Stop installationsovervågning</string>
+<string name="install_scan_progress">Analyserer nyinstalleret app: %1$s</string>
+<string name="analytics_chart_title">Scanningsresultater</string>
+<string name="analytics_other">Andre resultater</string>
+<string name="analytics_total">Resultater</string>
+<string name="analytics_weekly_scans">Ugens scanninger</string>
+<string name="analytics_week_note">Registrerede sessioner fra mandag til søndag. Ufuldstændige scanninger kan indgå.</string>
+<string name="posture_overlay_select_app">På Android 11 eller nyere skal du vælge %1$s i indstillingerne for visning oven på andre apps.</string>
+<string name="install_scan_received">Installationshændelse modtaget. Åbn SafeMobile for at gennemgå den.</string>
+</resources>

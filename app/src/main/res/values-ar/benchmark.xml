@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">نتائج الاختبار المعياري</string>
+    <string name="benchmark_not_measured">لا توجد نتائج قياس موثقة حتى الآن</string>
+    <string name="benchmark_total_apps">ملفات APK المختبرة</string>
+    <string name="benchmark_tpr">معدل الكشف (TPR)</string>
+    <string name="benchmark_fpr">معدل الإنذارات الخاطئة (FPR)</string>
+    <string name="benchmark_latency">متوسط وقت الفحص</string>
+    <string name="benchmark_privacy_note">تُعرض النتائج الموثقة فقط. لا تُخزن ملفات APK الاختبارية في التطبيق.</string>
+</resources>

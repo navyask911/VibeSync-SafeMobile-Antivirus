@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="global_threat_intelligence_title">عالمی خطرات کی معلومات میں تعاون کریں (اختیاری)</string>
+    <string name="global_threat_intelligence_description">یہ اختیار فعال ہونے پر SafeMobile تصدیق شدہ خطرات کے SHA-256 ہیش اور دستیاب ہونے پر 215 بائنری رویّاتی خصوصیات خودکار طور پر شیئر کرتا ہے۔ APK فائلیں، فائل کے نام، راستے، پیکیج کے نام یا ڈیوائس کی شناخت کبھی نہیں بھیجی جاتی۔ آپ اسے کسی بھی وقت بند کر سکتے ہیں۔</string>
+    <string name="global_threat_intelligence_donate_message">اس نقصان دہ فائل کے دستخط کو ہمارے AI تربیتی نیٹ ورک میں گمنام طور پر عطیہ کرکے دوسروں کے تحفظ میں مدد کریں۔</string>
+    <string name="global_threat_intelligence_donate">عطیہ کریں</string>
+    <string name="global_threat_intelligence_decline">انکار کریں</string>
+</resources>

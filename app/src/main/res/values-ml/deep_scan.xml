@@ -1,0 +1,4 @@
+<resources>
+    <string name="deep_scan_folder">ഫോൾഡർ സ്കാൻ (ആഴത്തിലുള്ള സ്കാൻ)</string>
+    <string name="quarantine_manual_delete">ഫയൽ ക്വാറന്റൈനിൽ സുരക്ഷിതമാക്കി. യഥാർത്ഥ ഫയൽ ദയവായി കൈമാറി ഇല്ലാതാക്കുക.</string>
+</resources>

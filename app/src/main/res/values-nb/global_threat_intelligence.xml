@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="global_threat_intelligence_title">Bidra til global trusseletterretning (valgfritt)</string>
+    <string name="global_threat_intelligence_description">Når dette alternativet er slått på, deler SafeMobile automatisk SHA-256-hasher for bekreftede trusler og, når de er tilgjengelige, 215 binære atferdsegenskaper. APK-filer, filnavn, filbaner, pakkenavn og enhetsidentifikatorer sendes aldri. Du kan slå av alternativet når som helst.</string>
+    <string name="global_threat_intelligence_donate_message">Hjelp med å beskytte andre ved å donere signaturen til denne skadelige filen anonymt til vårt AI-treningsnettverk.</string>
+    <string name="global_threat_intelligence_donate">Doner</string>
+    <string name="global_threat_intelligence_decline">Avslå</string>
+</resources>

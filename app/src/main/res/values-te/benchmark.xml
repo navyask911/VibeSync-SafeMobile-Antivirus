@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">ప్రమాణ పరీక్ష ఫలితాలు</string>
+    <string name="benchmark_not_measured">ఇంకా ధృవీకరించిన కొలతలు లేవు</string>
+    <string name="benchmark_total_apps">పరీక్షించిన APK ఫైళ్లు</string>
+    <string name="benchmark_tpr">గుర్తింపు రేటు (TPR)</string>
+    <string name="benchmark_fpr">తప్పుడు పాజిటివ్ రేటు (FPR)</string>
+    <string name="benchmark_latency">సగటు స్కాన్ సమయం</string>
+    <string name="benchmark_privacy_note">ధృవీకరించిన ఫలితాలే చూపబడతాయి. పరీక్ష APK ఫైళ్లు యాప్‌లో నిల్వ చేయబడవు.</string>
+</resources>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">Quét hoàn tất</string>
+    <string name="v116_scan_local_no_match">Quét hoàn tất. Không tìm thấy kết quả trùng khớp cục bộ. Thiết bị hiện có vẻ an toàn.</string>
+    <string name="v116_score_meaning">Điểm phản ánh cài đặt thiết bị, không chứng minh không có mã độc. Một số kiểm tra chưa được xác minh.</string>
+</resources>

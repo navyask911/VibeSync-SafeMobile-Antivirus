@@ -1,0 +1,397 @@
+name: Build and publish signed SafeMobile APK and Play AAB
+# [release-v1.7.5] Contextual permission staging and narrowed R8 keep rules.
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "release-apk/**"
+      - "main"
+    paths:
+      - "app/build.gradle.kts"
+      - "scripts/check_admob_privacy.py"
+      - "app/src/main/res/**"
+      - "app/src/main/AndroidManifest.xml"
+      - "app/src/main/java/**"
+      - "app/src/androidTest/**"
+      - ".github/workflows/release-apk.yml"
+    tags:
+      - "v1.6.5"
+      - "v1.6.6"
+      - "v1.6.7"
+      - "v1.7.0"
+      - "v1.7.1"
+      - "v1.7.2"
+      - "v1.7.4"
+      - "v1.7.5"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: safemobile-production-apk-release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    if: github.repository == 'navyask911/VibeSync-SafeMobile-Antivirus' && (github.event_name == 'workflow_dispatch' || github.ref_type != 'branch' || github.ref_name != 'main' || contains(github.event.head_commit.message, '[release-v1.7.5]'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Require production signing configuration
+        shell: bash
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          DB_SIGNING_PUBLIC_KEY: ${{ secrets.DB_SIGNING_PUBLIC_KEY }}
+        run: |
+          set -euo pipefail
+          if [[ -z "$KEYSTORE_BASE64" || -z "$KEYSTORE_PASSWORD" || -z "$KEY_ALIAS" || -z "$KEY_PASSWORD" ]]; then
+            echo 'SAFE STOP: Release keystore secrets are incomplete; refusing to publish an unsigned APK.' >&2
+            exit 1
+          fi
+          python3 - <<'PY'
+          import base64
+          import os
+          key = base64.b64decode(os.environ.get("DB_SIGNING_PUBLIC_KEY", ""), validate=True)
+          if len(key) != 32:
+              raise SystemExit("SAFE STOP: DB_SIGNING_PUBLIC_KEY must be a Base64 raw 32-byte Ed25519 key.")
+          print("Production signing configuration and database trust root are present.")
+          PY
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Set up Rust and cargo-ndk for YARA-X
+        shell: bash
+        run: |
+          set -euo pipefail
+          rustup toolchain install stable --profile minimal
+          rustup default stable
+          rustup target add armv7-linux-androideabi aarch64-linux-android
+          SDK_ROOT="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-}}"
+          test -n "$SDK_ROOT"
+          NDK_DIR="$(find "$SDK_ROOT/ndk" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -n 1)"
+          test -n "$NDK_DIR"
+          echo "ANDROID_NDK_HOME=$NDK_DIR" >> "$GITHUB_ENV"
+          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
+          cargo install cargo-ndk --locked
+
+      - name: Validate version code against tagged releases
+        run: python3 scripts/check_version_code.py --release
+
+      - name: Validate translated resources and offline font provenance
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/check_locale_completeness.py
+          python3 scripts/check_ja_kn_and_siren.py
+          python3 scripts/check_global_threat_intelligence.py
+          python3 scripts/check_admob_privacy.py
+          python3 scripts/check_proprietary_safety.py
+          test "$(git hash-object app/src/main/res/font/inter_variable.ttf)" = 4ab79e0102bbe0ffa1ed879b13e52ac8c6487833
+          test "$(git hash-object app/src/main/assets/licenses/Inter-OFL.txt)" = 9b2ca37b3ffc77391d8b2ebef4a974ef32bf46ea
+
+      - name: Record Paparazzi screenshots for all four v1.7.5 tabs
+        run: ./gradlew --no-daemon recordPaparazziDebug
+
+      - name: Test bundled YARA rules before production build
+        run: ./gradlew --no-daemon testOfflineDebugUnitTest
+
+      # Gradle already stages the SHA-pinned research model into generated assets.
+      # Do not also download into src/main/assets (duplicate merge entry).
+      - name: Build signed offline APK and Play AAB
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          SAFE_MOBILE_HASHDB_ED25519_PUBLIC_KEY_B64: ${{ secrets.DB_SIGNING_PUBLIC_KEY }}
+        run: ./gradlew --no-daemon assembleOfflineRelease bundleOfflineRelease
+
+      - name: Verify signed AAB and APK, model schema, YARA and no bundled malware databases
+        id: verify-aab
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t aabs < <(find app/build/outputs/bundle/offlineRelease -maxdepth 1 -type f -name '*.aab' -print)
+          if [[ "${#aabs[@]}" -ne 1 ]]; then
+            echo "SAFE STOP: Expected one signed offline AAB; found ${#aabs[@]}." >&2
+            exit 1
+          fi
+          aab="${aabs[0]}"
+          jarsigner -verify "$aab" | grep -qi 'jar verified'
+          python3 - "$aab" <<'PY'
+          import hashlib,json,sys,zipfile
+          from pathlib import Path
+          aab=sys.argv[1]
+          with zipfile.ZipFile(aab) as z:
+              names=set(z.namelist())
+              manifest=z.read("base/manifest/AndroidManifest.xml")
+              for required in (
+                  b"com.android.vending.BILLING",
+                  b"com.google.android.play.billingclient.version",
+                  b"8.3.0",
+                  b"com.google.android.gms.ads.APPLICATION_ID",
+                  b"ca-app-pub-4783826505860771~8485727119",
+                  b"com.google.android.gms.permission.AD_ID",
+              ):
+                  if required not in manifest:
+                      raise SystemExit("SAFE STOP: supported Google Play billing metadata absent from AAB.")
+              for forbidden in (
+                  b"android.permission.ACCESS_FINE_LOCATION",
+                  b"android.permission.ACCESS_COARSE_LOCATION",
+                  b"android.permission.BIND_ACCESSIBILITY_SERVICE",
+                  b"android.accessibilityservice.AccessibilityService",
+              ):
+                  if forbidden in manifest:
+                      raise SystemExit("SAFE STOP: unexpected location/ad-ID permission or AccessibilityService declaration.")
+              yara="base/assets/yara/safemobile_android_dex.yar"
+              if yara not in names: raise SystemExit("SAFE STOP: reviewed YARA rules absent.")
+              rules=z.read(yara).decode("utf-8")
+              for required in ("rule Takopii_Overlay_Banker_DEX","rule Takopii_DCL_AntiForensics_DEX"):
+                  if required not in rules: raise SystemExit("SAFE STOP: critical YARA rules absent.")
+              bad=[n for n in names if n.startswith("base/assets/") and (
+                  "safe-mobile-hashdb.bundle.zip" in n or
+                  n.split("/")[-1].startswith(("hashes.hsb","hashes.hdb","hashes.sdb","hashes.s1b"))
+              )]
+              if bad: raise SystemExit("SAFE STOP: bundled MalwareBazaar database found: "+str(bad))
+              schema=json.loads(z.read("base/assets/feature_schema.json"))
+              if len(schema)!=215 or list(schema)!=[str(i) for i in range(215)]:
+                  raise SystemExit("SAFE STOP: wrong 215-feature schema.")
+              model=z.read("base/assets/model.tflite")
+              if len(model)!=18584 or hashlib.sha256(model).hexdigest()!=(
+                  "8b66adaf01a939c26d5a756e66f53fe0d6e85e1a06ec97166579138c6ce47061"):
+                  raise SystemExit("SAFE STOP: bundled model differs from pinned v1.0.1.")
+              scanner=Path("app/src/main/java/com/vibesync/antivirus/core/engine/MachineLearningScanner.kt").read_text(encoding="utf-8")
+              required_gate=('MODEL_STATUS = "research_candidate"', "MODEL_TRAINED = true",
+                             "MODEL_VALIDATED = false", "MODEL_PRODUCTION_READY = false",
+                             "MODEL_DUMMY_UNTRAINED = false")
+              if any(item not in scanner for item in required_gate):
+                  raise SystemExit("SAFE STOP: source-pinned research model gate was changed.")
+              print("Signed AAB contains Billing 8.3.0, AdMob app ID/AD_ID, pinned model, 215 schema, reviewed YARA and no hash DB.")
+          PY
+          version_name="$(sed -nE 's/^[[:space:]]*versionName = "([^"]+)".*/\1/p' app/build.gradle.kts | head -n 1)"
+          version_code="$(sed -nE 's/^[[:space:]]*versionCode = ([0-9]+).*/\1/p' app/build.gradle.kts | head -n 1)"
+          test -n "$version_name" && test -n "$version_code"
+          aab_output="app-release.aab"
+          cp "$aab" "$aab_output"
+          echo "aab_path=$aab_output" >> "$GITHUB_OUTPUT"
+          echo "version_name=$version_name" >> "$GITHUB_OUTPUT"
+          echo "version_code=$version_code" >> "$GITHUB_OUTPUT"
+
+          # Verify the actual installable release APK (not a harmless siren fixture).
+          mapfile -t apks < <(find app/build/outputs/apk/offline/release -maxdepth 1 -type f -name '*.apk' -print)
+          if [[ "${#apks[@]}" -ne 1 ]]; then
+            echo "SAFE STOP: Expected one signed production APK; found ${#apks[@]}." >&2
+            exit 1
+          fi
+          apk="${apks[0]}"
+          apksigner="$(find "$ANDROID_HOME/build-tools" -maxdepth 2 -type f -name apksigner | sort -V | tail -n 1)"
+          test -n "$apksigner" && test -x "$apksigner"
+          build_tools_dir="$(dirname "$apksigner")"
+          aapt="$build_tools_dir/aapt"
+          test -x "$aapt"
+          "$apksigner" verify --min-sdk-version 26 --verbose --print-certs "$apk"
+          "$aapt" dump xmltree "$apk" AndroidManifest.xml > "$RUNNER_TEMP/safemobile-apk-manifest.xmltree"
+          python3 - "$apk" "$RUNNER_TEMP/safemobile-apk-manifest.xmltree" <<'PY'
+          import hashlib,json,re,sys,zipfile
+          apk,tree_path=sys.argv[1:3]
+          with zipfile.ZipFile(apk) as z:
+              files=set(z.namelist())
+              for required in ("AndroidManifest.xml","assets/yara/safemobile_android_dex.yar",
+                               "assets/model.tflite"):
+                  if required not in files:
+                      raise SystemExit("SAFE STOP: Signed APK missing "+required)
+
+              # APK AndroidManifest.xml is compiled binary XML, not UTF-8 source.
+              # Inspect the decoded aapt tree to avoid false negatives from binary
+              # string-pool encoding while still checking the actual installable APK.
+              lines=open(tree_path,encoding="utf-8").read().splitlines()
+
+              def blocks(element_name):
+                  found=[]
+                  pattern=re.compile(r"^(\s*)E:\s+"+re.escape(element_name)+r"(?:\s|$)")
+                  for index,line in enumerate(lines):
+                      match=pattern.match(line)
+                      if not match:
+                          continue
+                      indent=len(match.group(1))
+                      end=len(lines)
+                      for next_index in range(index+1,len(lines)):
+                          nested=re.match(r"^(\s*)E:\s+",lines[next_index])
+                          if nested and len(nested.group(1))<=indent:
+                              end=next_index
+                              break
+                      found.append((index,indent,"\n".join(lines[index+1:end])))
+                  return found
+
+              applications=blocks("application")
+              if not applications:
+                  raise SystemExit("SAFE STOP: Signed APK application element is missing.")
+              meta_found=False
+              for app_index,app_indent,_ in applications:
+                  for meta_index,meta_indent,meta_contents in blocks("meta-data"):
+                      if meta_index<=app_index or meta_indent<=app_indent:
+                          continue
+                      if ("com.google.android.gms.ads.APPLICATION_ID" in meta_contents and
+                          "ca-app-pub-4783826505860771~8485727119" in meta_contents):
+                          meta_found=True
+              if not meta_found:
+                  raise SystemExit("SAFE STOP: Signed APK application metadata is missing or incorrect.")
+
+              permission_found=False
+              for _,_,permission_contents in blocks("uses-permission"):
+                  if "com.google.android.gms.permission.AD_ID" in permission_contents:
+                      permission_found=True
+              if not permission_found:
+                  raise SystemExit("SAFE STOP: Signed APK AD_ID permission is missing.")
+
+              manifest_tree="\n".join(lines)
+              for forbidden in ("android.permission.BIND_ACCESSIBILITY_SERVICE",
+                                "android.accessibilityservice.AccessibilityService"):
+                  if forbidden in manifest_tree:
+                      raise SystemExit("SAFE STOP: Signed APK declares an AccessibilityService.")
+
+              model=z.read("assets/model.tflite")
+              if len(model)!=18584 or hashlib.sha256(model).hexdigest()!="8b66adaf01a939c26d5a756e66f53fe0d6e85e1a06ec97166579138c6ce47061":
+                  raise SystemExit("SAFE STOP: Signed APK model failed SHA-256 pin")
+              bad=[n for n in files if n.startswith("assets/") and
+                   ("safe-mobile-hashdb.bundle.zip" in n or
+                    n.rsplit("/",1)[-1].startswith(("hashes.hsb","hashes.hdb","hashes.sdb","hashes.s1b")))]
+              if bad:
+                  raise SystemExit("SAFE STOP: Hash DB bundled in APK: "+repr(bad))
+          PY
+          apk_output="app-release.apk"
+          cp "$apk" "$apk_output"
+          echo "apk_path=$apk_output" >> "$GITHUB_OUTPUT"
+
+      - name: Upload verified Play Console AAB as GitHub Actions artifact
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: SafeMobile-v${{ steps.verify-aab.outputs.version_name }}-Play-AAB-${{ github.run_id }}
+          path: ${{ steps.verify-aab.outputs.aab_path }}
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload signed installable test APK as GitHub Actions artifact
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: SafeMobile-v${{ steps.verify-aab.outputs.version_name }}-Signed-APK-${{ github.run_id }}
+          path: ${{ steps.verify-aab.outputs.apk_path }}
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Package native four-tab screenshots
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p build
+          test -d app/src/test/snapshots
+          snapshot_count="$(find app/src/test/snapshots -type f -name '*.png' | wc -l)"
+          if [[ "$snapshot_count" -lt 4 ]]; then
+            echo "SAFE STOP: Expected Paparazzi PNG screenshots for the four tabs; found $snapshot_count." >&2
+            exit 1
+          fi
+          zip -qr build/ui-screenshots-v1.7.5.zip app/src/test/snapshots
+          echo "Packaged $snapshot_count Paparazzi screenshots."
+
+      - name: Upload four-tab screenshots artifact
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: SafeMobile-v1.7.5-UI-Screenshots-${{ github.run_id }}
+          path: build/ui-screenshots-v1.7.5.zip
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Build valid harmless siren-test APK and matching local definition
+        run: bash scripts/test_siren.sh
+
+      - name: Publish signed APK and AAB to a new GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          version_name="${{ steps.verify-aab.outputs.version_name }}"
+          version_code="${{ steps.verify-aab.outputs.version_code }}"
+          if [[ "${GITHUB_REF_TYPE:-}" == "branch" && "${GITHUB_REF_NAME:-}" == "main" ]]; then
+            if [[ "$version_name" != "1.7.5" || "$version_code" != "20261145" ]]; then
+              echo "SAFE STOP: main release trigger expected v1.7.5 / 20261145, got $version_name / $version_code." >&2
+              exit 1
+            fi
+          fi
+          if [[ "${GITHUB_REF_TYPE:-}" == "tag" && "${GITHUB_REF_NAME:-}" == "v1.7.5" ]] ||
+             [[ "${GITHUB_REF_TYPE:-}" == "branch" && "${GITHUB_REF_NAME:-}" == "main" && "$version_name" == "1.7.5" && "$version_code" == "20261145" ]]; then
+            tag="v1.7.5"
+          else
+            tag="safemobile-v${{ steps.verify-aab.outputs.version_name }}-code${{ steps.verify-aab.outputs.version_code }}-run${GITHUB_RUN_NUMBER}"
+          fi
+          cat > release-notes.txt <<EOF
+          Production SafeMobile Antivirus signed offline APK for manual testing and Android App Bundle (AAB) for Play Console.
+          The signed SHA-256 database is downloaded only from this repository's GitHub Releases, verified with the embedded Ed25519 trust root before activation, and never packaged in the APK/AAB.
+          The first launch queues a network-constrained WorkManager sync; scanning stays on-device.
+          APK/AAB version: ${{ steps.verify-aab.outputs.version_name }} (version code ${{ steps.verify-aab.outputs.version_code }}).
+          Built from commit ${GITHUB_SHA}.
+          v1.6.1: Added new launcher icons and splash screen. Fixed text wrapping and added back navigation. Added inline Crown subscription toggle.
+          v1.6.2: Accept all file types in the scan document picker for .txt/EICAR testing; preserve the originating screen when backing out of Pro; make the paywall and shared app toolbar wrap and scroll at larger font scales.
+          v1.7.5: Requests Device Administrator and overlay access only after feature-specific consent; removes overlay access from onboarding and narrows R8 keep rules to required YARA-X JNI names.
+          v1.7.4: Declares Android overlay special access, fixes Device Administrator consent launch from Compose contexts, and adds manifest regression coverage. Existing offline scanning, quarantine, and privacy boundaries remain unchanged.
+          v1.7.2: Adds recursive SAF Deep Scan starting at Android/media with text and extensionless EICAR payload coverage; a live, system-backed setup checklist and four security guards; Scan & Lab metrics; instant Dark Slate, Midnight Navy and OLED themes; outlined Material icons; and a fixed 56dp AdMob banner with one-line label.
+          v1.7.1: Fix Advanced Telemetry wrapping, Kannada score-ring clipping, persisted theme selection, Device Admin activation, SAF tree permission mapping and verified encrypted quarantine fallback. Release APK and Play AAB are signed and Paparazzi screenshots are attached separately.
+          v1.6.6: Add four-step Smart Security Setup, request permissions only after user action, distinguish one-time sample approval from global community-defense opt-in, and auto-queue hashes without a dialog when global defense is enabled.
+          v1.6.5: Add queue-persistence and worker-start diagnostics, expose document staging failures in Logcat, and route install-alert donations through WorkManager to survive Activity dismissal.
+          v1.6.4: Queue individually approved threat contributions in network-constrained WorkManager, persist picker URI access, use the Cloudflare /donate route, log HTTP failures, and support hash/verdict-only non-APK test samples. APKs also include the validated 215-bit feature vector.
+          v1.6.3: Trigger the five-second local siren after a confirmed manual scan threat, including picked files, independent of notification/full-screen preferences. Spoken alerts remain opt-in and use asynchronous local TTS.
+          Includes pinned 18KB research v1.0.1-model and a 215-feature schema; this unvalidated candidate remains inactive as malware protection. All scanning is on-device.
+          v1.2.0: Google Mobile Ads Next-Gen 1.6.0 and UMP 4.0.0 power the consented, ad-supported Free tier. Home dashboard banners and eligible interstitials after manual scans with no confirmed threats use Google's sample units in debug builds. The local device-bound Pro check is repeated before SDK initialization, banner loads and interstitial display; active Pro does not initialize AdMob or make ad requests. Google AdMob may collect the Android Advertising ID and IP addresses for ad delivery, ad measurement/reporting and analytics, and fraud prevention.
+          Annual auto-renewing Pro subscription copy, status messaging and restore guidance are translated across all 51 locale folders. Google Play connectivity is required for purchase and restore; the encrypted device-bound entitlement cache supports offline Pro gating. Core scanning remains on-device.
+          Current subscriptions can be restored by querying Google Play. The local encrypted expiry cache supports offline entitlement checks; legacy consumed one-time Pro grants remain local-only and cannot be recovered from Google Play after consumption or app-data loss.
+          The Threat Intelligence Engine card reads a verified local stats.json cache; missing upstream statistics show the localized updating state.
+          Google Play subscription product safemobile_pro_1y_subs and its annual base plan, regional pricing and eligibility must be configured in Play Console. Verify recurring checkout and restore with a license tester on the internal testing track before public rollout. This GitHub workflow builds signed APK/AAB artifacts and a GitHub Release; it does not publish to Google Play or process a real payment.
+          v1.0.13: trusted-app options menus, foreground install monitoring with silent receipt notifications, shared immediate/durable local scan processing, and Compose Canvas donut/weekly session charts.
+          The reserved no-code siren fixture triggers a labeled five-second diagnostic without importing a database or recording a malware verdict. Android full-screen permission and OEM background restrictions still apply.
+          Overlay remediation passes each flagged package URI; Android 11+ may still show its global overlay list.
+          Includes the Phase B bundled on-device Kotlin YARA-compatible DEX scanner, adapted MIT-licensed rules, Detection Capabilities ACTIVE (LIMITED) status, and scan-rule match reporting.
+          The YARA engine supports only a bounded subset of the YARA language; findings are advisory SUSPICIOUS indicators, not definitive malware verdicts.
+          v1.0.12: absolute local package trust skips all scan engines and package alerts, including future updates. Untrusted packages retain automatic post-install scanning.
+          Includes the battery-optimization exemption request and settings recovery for devices with restrictive background policies, including Oppo/ColorOS.
+          Fix post-install scan delivery while SafeMobile runs using a runtime-registered PACKAGE_ADDED receiver; offer Android 13+ notification permission and settings recovery. Android/OEM limits still apply when the app is force-stopped.
+          Improve Quarantine Vault confirmation sequencing and error handling: dismiss before asynchronous deletion, preserve Room records if file deletion fails.
+          v1.0.14: localized scan verdicts, integrity warnings, permissions, accessibility labels, capability disclosures and formatted counts across all 51 supported locales. Added 84 translated string resources and 19 plural resources per locale, with locale-aware message formatting and no external translation services. The proprietary safety guard and 51-locale completeness checks must pass before release.
+          Bundles the official Inter variable font under SIL OFL 1.1 for locally rendered typography, with platform fallback for other scripts.
+          Also includes scan-completion feedback, a transparent configuration score, cyan glass styling, and recursive multi-folder SAF monitoring.
+          Optional harmless siren fixture: first import siren-test-definitions.json in Scan > Import definitions, then copy SafeMobile-Siren-Test.apk into a monitored folder or install it to test the post-install receiver. The test APK contains no executable code.
+          Android 11+ blocks protected storage roots in SAF; select an accessible subfolder or a chat-document folder. Skip remains available.
+          Device test instructions: https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/blob/${GITHUB_SHA}/docs/SIREN_AND_FOLDER_TESTING.md
+          EOF
+          release_files=(
+            "${{ steps.verify-aab.outputs.aab_path }}"
+            "${{ steps.verify-aab.outputs.apk_path }}"
+            "build/ui-screenshots-v1.7.5.zip"
+            "build/siren-test/SafeMobile-Siren-Test.apk"
+            "build/siren-test/siren-test-definitions.json"
+            "build/siren-test/SHA256SUMS.txt"
+          )
+          if gh release view "$tag" >/dev/null 2>&1; then
+            gh release upload "$tag" "${release_files[@]}" --clobber
+          else
+            gh release create "$tag" --target "$GITHUB_SHA" \
+              --title "SafeMobile Antivirus ${{ steps.verify-aab.outputs.version_name }} (build ${GITHUB_RUN_NUMBER})" \
+              --notes-file release-notes.txt \
+              "${release_files[@]}"
+          fi
+

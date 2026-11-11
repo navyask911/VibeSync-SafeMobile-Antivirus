@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="trusted_app_options">Pilihan</string>
+<string name="trusted_app_remove">Tarik balik kepercayaan</string>
+<string name="trusted_app_removed">Kepercayaan ditarik balik. Imbasan dan amaran akan datang untuk pakej ini diaktifkan semula.</string>
+<string name="trusted_app_remove_failed">Kepercayaan tidak dapat ditarik balik. Cuba lagi.</string>
+<string name="install_sentinel_title">Pemantauan pemasangan</string>
+<string name="install_sentinel_active">SafeMobile Sentinel: aktif dan memantau</string>
+<string name="install_sentinel_description">Semakan setempat selepas pemasangan dengan pemberitahuan kekal. Tiada pertanyaan berkala atau kunci yang menghalang tidur. Android boleh menghentikan perkhidmatan.</string>
+<string name="install_sentinel_stop">Hentikan pemantauan pemasangan</string>
+<string name="install_scan_progress">Menganalisis aplikasi yang baru dipasang: %1$s</string>
+<string name="analytics_chart_title">Hasil imbasan</string>
+<string name="analytics_other">Hasil lain</string>
+<string name="analytics_total">Hasil</string>
+<string name="analytics_weekly_scans">Imbasan mingguan</string>
+<string name="analytics_week_note">Sesi direkodkan dari Isnin hingga Ahad. Imbasan tidak lengkap mungkin disertakan.</string>
+<string name="posture_overlay_select_app">Pada Android 11 atau lebih baharu, pilih %1$s dalam senarai tetapan paparan di atas aplikasi lain.</string>
+<string name="install_scan_received">Peristiwa pemasangan diterima. Buka SafeMobile untuk menyemak.</string>
+</resources>

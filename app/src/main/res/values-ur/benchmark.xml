@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">معیاری جانچ کے نتائج</string>
+    <string name="benchmark_not_measured">ابھی تک تصدیق شدہ پیمائش دستیاب نہیں</string>
+    <string name="benchmark_total_apps">جانچی گئی APK فائلیں</string>
+    <string name="benchmark_tpr">شناخت کی شرح (TPR)</string>
+    <string name="benchmark_fpr">غلط مثبت شرح (FPR)</string>
+    <string name="benchmark_latency">اوسط اسکین وقت</string>
+    <string name="benchmark_privacy_note">صرف تصدیق شدہ نتائج دکھائے جاتے ہیں۔ آزمائشی APK ایپ میں محفوظ نہیں ہوتیں۔</string>
+</resources>

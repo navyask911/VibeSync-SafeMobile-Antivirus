@@ -1,0 +1,4 @@
+<resources>
+    <string name="deep_scan_folder">Analyser le dossier (analyse approfondie)</string>
+    <string name="quarantine_manual_delete">Le fichier est sécurisé dans la quarantaine. Veuillez supprimer manuellement l’original.</string>
+</resources>

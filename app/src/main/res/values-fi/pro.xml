@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- SafeMobile Pro is the product brand; all purchase copy below is localized. -->
+    <string name="pro_title">SafeMobile Pro</string>
+    <string name="pro_truthful_summary">Virustorjunnan perustarkistukset pysyvät maksuttomina. Pro ei ota käyttöön kokeellista koneoppimista.</string>
+    <string name="pro_feature_free">Verkoton tiiviste-, YARA- ja ulkoisten asennusten tunnistus pysyy maksuttomana.</string>
+    <string name="pro_feature_research">Kokeellista koneoppimista ei ole validoitu eikä otettu käyttöön.</string>
+    <string name="pro_feature_updates">Pro tarjoaa valinnaiset päivittäiset tutkimusmallin päivitykset. Viikoittaiset päivitykset pysyvät maksuttomina.</string>
+    <string name="pro_feature_adfree">Ilmaistason mainokset poistetaan käytöstä, kun SafeMobile Pro -tilauksesi on aktiivinen.</string>
+    <string name="pro_years">Vuodet arviota varten (1–10)</string>
+    <string name="pro_price_preview">Arvioitu yhteensä: %1$s. Vuodet: %2$d. Vahvista Google Playssa.</string>
+    <string name="pro_price_unavailable">Odotetaan Google Playn hintoja; ostaminen ei ole käytettävissä.</string>
+    <string name="pro_cart_quantity_warning">Valitse ostomäärä Google Playssa. Vahvistettu määrä määrittää tälle laitteelle lisättävät vuodet.</string>
+    <string name="pro_non_restorable_warning">Osto vain tälle laitteelle. Uudelleenasennus, nollaus tai salausavainten menetys voi poistaa jäljellä olevan Pro-käyttöoikeuden pysyvästi.</string>
+    <string name="pro_unlock">Avaa SafeMobile Pro</string>
+    <string name="pro_restore_check">Palauta / Tarkista tila</string>
+    <string name="pro_active_until">Tilauksen käyttöoikeus on paikallisesti aktiivinen %1$s asti.</string>
+    <string name="pro_not_active">Tältä laitteelta ei löytynyt aktiivista Pro-tilausta eikä aiempaa käyttöoikeutta.</string>
+    <string name="pro_purchase_unavailable">Google Play ei ole käytettävissä tai tuotetta ei ole määritetty.</string>
+    <string name="pro_purchase_canceled">Osto peruutettu.</string>
+    <string name="pro_purchase_pending">Maksu odottaa. Pro-käyttöoikeus alkaa Google Playn vahvistettua oston.</string>
+    <string name="pro_purchase_recheck">Muodosta yhteys Google Playhin uudelleen viimeistelläksesi tilauksen käsittelyn.</string>
+    <string name="pro_storage_failed">Suojattu tallennustila ei voinut tallentaa ostoa. Ota yhteys tukeen ennen uutta yritystä.</string>
+    <string name="pro_purchase_success">Tilaus vahvistettu. Pro-käyttöoikeus tallennettiin turvallisesti tälle laitteelle.</string>
+    <string name="pro_restore_local_only">Paikallinen tila tarkistettu. Google Play ei voi palauttaa käytettyjä passeja.</string>
+    <string name="pro_device_disclaimer" formatted="false">Google Play hallinnoi tilaustasi. Aktiiviset tilaukset voidaan palauttaa uudelleenasennuksen jälkeen. SafeMobile säilyttää salatun, laitteeseen sidotun tietueen offline-Pro-tarkistuksia varten.</string>
+    <string name="pro_network_notice">Perussuojaus toimii ilman verkkoyhteyttä. Google Play -ostot ja valinnaiset mallipäivitykset vaativat internetyhteyden.</string>
+    <string name="pro_fewer_years">Vähemmän vuosia</string>
+    <string name="pro_more_years">Enemmän vuosia</string>
+    <string name="pro_subscription_offer" formatted="false">Avaa SafeMobile Pro — ₹299 / vuosi (automaattinen uusinta). Peruuta milloin tahansa Google Playssa.</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">Kết quả kiểm thử chuẩn</string>
+    <string name="benchmark_not_measured">Chưa có phép đo được xác minh</string>
+    <string name="benchmark_total_apps">Tệp APK đã kiểm tra</string>
+    <string name="benchmark_tpr">Tỷ lệ phát hiện (TPR)</string>
+    <string name="benchmark_fpr">Tỷ lệ dương tính giả (FPR)</string>
+    <string name="benchmark_latency">Thời gian quét trung bình</string>
+    <string name="benchmark_privacy_note">Chỉ hiển thị kết quả đã xác minh. APK thử nghiệm không được lưu trong ứng dụng.</string>
+</resources>

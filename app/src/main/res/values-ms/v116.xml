@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">Imbasan selesai</string>
+    <string name="v116_scan_local_no_match">Imbasan selesai. Tiada padanan setempat. Peranti kini kelihatan selamat.</string>
+    <string name="v116_score_meaning">Skor mencerminkan tetapan peranti, bukan bukti ketiadaan perisian hasad. Ada semakan belum disahkan.</string>
+</resources>

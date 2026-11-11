@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">Benchmarkresultaten</string>
+    <string name="benchmark_not_measured">Nog geen geverifieerde metingen beschikbaar</string>
+    <string name="benchmark_total_apps">Geteste APK-bestanden</string>
+    <string name="benchmark_tpr">Detectiegraad (TPR)</string>
+    <string name="benchmark_fpr">Fout-positiefpercentage (FPR)</string>
+    <string name="benchmark_latency">Gemiddelde scantijd</string>
+    <string name="benchmark_privacy_note">Alleen geverifieerde resultaten worden getoond. Test-APK\'s worden niet opgeslagen in de app.</string>
+</resources>

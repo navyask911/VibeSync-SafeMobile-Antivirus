@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">Резултати от теста</string>
+    <string name="benchmark_not_measured">Все още няма потвърдени измервания</string>
+    <string name="benchmark_total_apps">Тествани APK файлове</string>
+    <string name="benchmark_tpr">Степен на откриване (TPR)</string>
+    <string name="benchmark_fpr">Ниво на фалшиви сигнали (FPR)</string>
+    <string name="benchmark_latency">Средно време за сканиране</string>
+    <string name="benchmark_privacy_note">Показват се само потвърдени резултати. Тестовите APK файлове не се съхраняват.</string>
+</resources>

@@ -1,0 +1,4 @@
+<resources>
+    <string name="deep_scan_folder">फोल्डर स्क्यान गर्नुहोस् (गहिरो स्क्यान)</string>
+    <string name="quarantine_manual_delete">फाइल क्वारेन्टाइनमा सुरक्षित गरिएको छ। कृपया मूल फाइल म्यानुअल रूपमा मेटाउनुहोस्।</string>
+</resources>

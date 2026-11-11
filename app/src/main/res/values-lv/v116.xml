@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">Skenēšana pabeigta</string>
+    <string name="v116_scan_local_no_match">Skenēšana pabeigta. Vietēju sakritību nav. Ierīce pašlaik šķiet droša.</string>
+    <string name="v116_score_meaning">Vērtējums atspoguļo iestatījumus, nevis pierāda, ka nav ļaunprogrammatūras. Dažas pārbaudes nav apstiprinātas.</string>
+</resources>

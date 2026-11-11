@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="siren_test_settings_title">Диагностика сирены</string>
+  <string name="siren_test_settings_description">Проверьте пятисекундную сирену и предварительный вид оповещения. Тест не обнаруживает угрозы, не меняет базу угроз и не запрашивает удаление приложений.</string>
+  <string name="siren_test_button">Проверить сирену угрозы</string>
+  <string name="siren_test_title">ПРОВЕРКА СИРЕНЫ — НЕ РЕАЛЬНАЯ УГРОЗА</string>
+  <string name="siren_test_notification">Ручная проверка звука. Вредоносное приложение не обнаружено.</string>
+  <string name="siren_test_preview">Это проверка сирены SafeMobile. Установленные приложения не помечались, удаление не запрашивается. Нажмите «Закрыть», чтобы остановить звук.</string>
+  <string name="voice_siren_test">Это проверка сирены SafeMobile. Угрозы не обнаружены.</string>
+  <string name="battery_review_title">Ограничения батареи могут задержать защиту</string>
+  <string name="battery_review_body">Включено энергосбережение или оптимизация приложений. Некоторые устройства Oppo/ColorOS ограничивают фоновые проверки и оповещения об установках. Проверьте настройки батареи SafeMobile; это не гарантирует непрерывное наблюдение.</string>
+  <string name="battery_review_action">Проверить настройки батареи</string>
+  <string name="battery_review_unavailable">Не удалось открыть настройки батареи Android.</string>
+  <string name="full_screen_dashboard_warning">Критические оповещения выключены: нажмите, чтобы разрешить полноэкранные предупреждения об угрозах.</string>
+  <string name="full_screen_dashboard_fallback">Полноэкранный доступ необязателен. При включённых оповещениях безопасности пятисекундная сирена и приоритетные уведомления работают и без него, с учётом настроек уведомлений и звука Android.</string>
+  <string name="full_screen_settings_unavailable">Не удалось открыть настройки полноэкранных оповещений. Можно продолжить пользоваться SafeMobile.</string>
+  <string name="system_app_protection_badge">Системные приложения защищены от проверки и удаления</string>
+  <string name="system_app_scan_complete">Проверка завершена. В проверенных объектах угроз не найдено. Системные приложения исключены из проверки и удаления; их целостность этим сканированием не подтверждена.</string>
+  <string name="ui_folder_access_not_granted">Доступ к папке не предоставлен. Можно продолжить с ограниченной защитой.</string>
+</resources>

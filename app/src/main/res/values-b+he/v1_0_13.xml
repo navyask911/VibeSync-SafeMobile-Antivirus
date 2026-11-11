@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="trusted_app_options">אפשרויות</string>
+<string name="trusted_app_remove">ביטול אמון</string>
+<string name="trusted_app_removed">האמון בוטל. סריקות והתראות עתידיות עבור החבילה הופעלו מחדש.</string>
+<string name="trusted_app_remove_failed">לא ניתן לבטל את האמון. יש לנסות שוב.</string>
+<string name="install_sentinel_title">ניטור התקנות</string>
+<string name="install_sentinel_active">SafeMobile Sentinel: פעיל ומנטר</string>
+<string name="install_sentinel_description">בדיקות מקומיות לאחר התקנה עם התראה קבועה. ללא תשאול מחזורי או מניעת שינה. Android עשוי לעצור את השירות.</string>
+<string name="install_sentinel_stop">עצירת ניטור התקנות</string>
+<string name="install_scan_progress">מתבצע ניתוח של היישום שהותקן כעת: %1$s</string>
+<string name="analytics_chart_title">תוצאות הסריקות</string>
+<string name="analytics_other">תוצאות אחרות</string>
+<string name="analytics_total">תוצאות</string>
+<string name="analytics_weekly_scans">סריקות שבועיות</string>
+<string name="analytics_week_note">הפעלות שתועדו מיום שני עד יום ראשון. ייתכן שנכללות סריקות שלא הושלמו.</string>
+<string name="posture_overlay_select_app">ב־Android 11 ואילך יש לבחור את %1$s ברשימת ההגדרות להצגה מעל יישומים אחרים.</string>
+<string name="install_scan_received">התקבל אירוע התקנה. יש לפתוח את SafeMobile לבדיקה.</string>
+</resources>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="trusted_app_options">Opțiuni</string>
+<string name="trusted_app_remove">Retrage încrederea</string>
+<string name="trusted_app_removed">Încrederea a fost retrasă. Verificările și alertele viitoare pentru acest pachet sunt reactivate.</string>
+<string name="trusted_app_remove_failed">Încrederea nu a putut fi retrasă. Încearcă din nou.</string>
+<string name="install_sentinel_title">Monitorizarea instalărilor</string>
+<string name="install_sentinel_active">SafeMobile Sentinel: activ și monitorizează</string>
+<string name="install_sentinel_description">Verificări locale după instalare, cu notificare permanentă. Fără interogări periodice sau blocarea repausului. Android poate opri serviciul.</string>
+<string name="install_sentinel_stop">Oprește monitorizarea instalărilor</string>
+<string name="install_scan_progress">Se analizează aplicația nou instalată: %1$s</string>
+<string name="analytics_chart_title">Rezultatele verificărilor</string>
+<string name="analytics_other">Alte rezultate</string>
+<string name="analytics_total">Rezultate</string>
+<string name="analytics_weekly_scans">Verificări săptămânale</string>
+<string name="analytics_week_note">Sesiuni înregistrate de luni până duminică. Pot include verificări incomplete.</string>
+<string name="posture_overlay_select_app">Pe Android 11 sau mai nou, selectează %1$s din lista setărilor pentru afișarea peste alte aplicații.</string>
+<string name="install_scan_received">Eveniment de instalare primit. Deschide SafeMobile pentru verificare.</string>
+</resources>

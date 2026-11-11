@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v140_dashboard">Pangunahing pahina</string>
+    <string name="v140_analytics_tools">Analytics at mga tool</string>
+    <string name="v140_critical">Kritikal</string>
+    <string name="v140_minor">Maliit</string>
+    <string name="v140_snoozed">Ipinagpaliban</string>
+    <string name="v140_completed">Kumpleto</string>
+    <string name="v140_snooze_warning">I-snooze ang babala</string>
+    <string name="v140_done_return_to_audit">Tapos na — bumalik sa audit</string>
+    <string name="v140_security_risk_explained">Paliwanag sa panganib sa seguridad</string>
+    <string name="v140_posture_score_impact">Epekto sa score ng postura ng device</string>
+    <string name="v140_pending_actions">May %1$d aksyon sa seguridad na nakabinbin — suriin ang audit</string>
+</resources>

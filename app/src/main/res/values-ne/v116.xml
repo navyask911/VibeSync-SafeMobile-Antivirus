@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">स्क्यान पूरा भयो</string>
+    <string name="v116_scan_local_no_match">स्क्यान पूरा भयो। स्थानीय मिलान भेटिएन। अहिले यन्त्र सुरक्षित देखिन्छ।</string>
+    <string name="v116_score_meaning">यो अङ्कले सेटिङ जनाउँछ, मालवेयर नभएको प्रमाण होइन। केही जाँच अपुष्ट छन्।</string>
+</resources>

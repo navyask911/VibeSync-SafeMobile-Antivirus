@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">Сканування завершено</string>
+    <string name="v116_scan_local_no_match">Сканування завершено. Локальних збігів немає. Наразі пристрій виглядає безпечним.</string>
+    <string name="v116_score_meaning">Оцінка відображає налаштування, а не доводить відсутність шкідливих програм. Деякі перевірки не підтверджені.</string>
+</resources>

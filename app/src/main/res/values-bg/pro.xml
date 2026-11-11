@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- SafeMobile Pro is the product brand; all purchase copy below is localized. -->
+    <string name="pro_title">SafeMobile Pro</string>
+    <string name="pro_truthful_summary">Основните антивирусни проверки остават безплатни. Pro не активира експерименталното машинно обучение.</string>
+    <string name="pro_feature_free">Офлайн проверката на хешове, YARA и външни инсталации остава безплатна.</string>
+    <string name="pro_feature_research">Експерименталното машинно обучение не е валидирано и не е включено.</string>
+    <string name="pro_feature_updates">Pro предлага незадължителни ежедневни обновявания на изследователския модел. Седмичните остават безплатни.</string>
+    <string name="pro_feature_adfree">Рекламите за безплатната версия се изключват, докато абонаментът SafeMobile Pro е активен.</string>
+    <string name="pro_years">Години за изчислението (1–10)</string>
+    <string name="pro_price_preview">Приблизителна сума: %1$s. Години: %2$d. Потвърдете в Google Play.</string>
+    <string name="pro_price_unavailable">Изчакват се цени от Google Play; покупките не са налични.</string>
+    <string name="pro_cart_quantity_warning">Изберете количество в Google Play. Потвърденото количество определя годините, добавени към това устройство.</string>
+    <string name="pro_non_restorable_warning">Покупка само за това устройство. Преинсталиране, нулиране или загуба на ключовете за шифроване може да премахне завинаги оставащия Pro достъп.</string>
+    <string name="pro_unlock">Отключване на SafeMobile Pro</string>
+    <string name="pro_restore_check">Възстановяване / Проверка на статуса</string>
+    <string name="pro_active_until">Достъпът до абонамента е локално активен до %1$s.</string>
+    <string name="pro_not_active">На това устройство не е открит активен абонамент за Pro или наследен достъп.</string>
+    <string name="pro_purchase_unavailable">Google Play не е наличен или продуктът не е настроен.</string>
+    <string name="pro_purchase_canceled">Покупката е отменена.</string>
+    <string name="pro_purchase_pending">Плащането се изчаква. Pro достъпът започва след потвърждение на покупката от Google Play.</string>
+    <string name="pro_purchase_recheck">Свържете се отново с Google Play, за да завършите обработката на абонамента.</string>
+    <string name="pro_storage_failed">Защитеното хранилище не успя да запази покупката. Свържете се с поддръжката преди нов опит.</string>
+    <string name="pro_purchase_success">Абонаментът е потвърден. Достъпът до Pro е запазен защитено на това устройство.</string>
+    <string name="pro_restore_local_only">Локалният статус е проверен. Google Play не може да възстанови използвани пропуски.</string>
+    <string name="pro_device_disclaimer" formatted="false">Абонаментът ви се управлява от Google Play. Активните абонаменти могат да бъдат възстановени след повторно инсталиране. SafeMobile съхранява криптиран запис, обвързан с устройството, за офлайн проверки на Pro.</string>
+    <string name="pro_network_notice">Основната защита работи офлайн. Покупките в Google Play и незадължителните обновявания на модела изискват интернет.</string>
+    <string name="pro_fewer_years">По-малко години</string>
+    <string name="pro_more_years">Повече години</string>
+    <string name="pro_subscription_offer" formatted="false">Отключете SafeMobile Pro — ₹299 / година (автоматично подновяване). Откажете по всяко време в Google Play.</string>
+</resources>

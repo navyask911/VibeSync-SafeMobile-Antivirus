@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">বেঞ্চমার্ক ফলাফল</string>
+    <string name="benchmark_not_measured">এখনও যাচাইকৃত পরিমাপ নেই</string>
+    <string name="benchmark_total_apps">পরীক্ষিত APK সংখ্যা</string>
+    <string name="benchmark_tpr">শনাক্তকরণের হার (TPR)</string>
+    <string name="benchmark_fpr">ভুল শনাক্তকরণের হার (FPR)</string>
+    <string name="benchmark_latency">গড় স্ক্যান সময়</string>
+    <string name="benchmark_privacy_note">শুধু যাচাইকৃত ফলাফল দেখানো হয়। পরীক্ষার APK অ্যাপে রাখা হয় না।</string>
+</resources>

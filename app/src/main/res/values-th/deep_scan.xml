@@ -1,0 +1,4 @@
+<resources>
+    <string name="deep_scan_folder">สแกนโฟลเดอร์ (สแกนเชิงลึก)</string>
+    <string name="quarantine_manual_delete">ไฟล์ได้รับการป้องกันในเขตกักกันแล้ว โปรดลบไฟล์ต้นฉบับด้วยตนเอง</string>
+</resources>

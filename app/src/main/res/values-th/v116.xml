@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">สแกนเสร็จแล้ว</string>
+    <string name="v116_scan_local_no_match">สแกนเสร็จแล้ว ไม่พบรายการที่ตรงกันในเครื่อง ขณะนี้อุปกรณ์ดูปลอดภัย</string>
+    <string name="v116_score_meaning">คะแนนสะท้อนการตั้งค่า ไม่ได้พิสูจน์ว่าไม่มีมัลแวร์ บางการตรวจสอบยังไม่ได้รับการยืนยัน</string>
+</resources>

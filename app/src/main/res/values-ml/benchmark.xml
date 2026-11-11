@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">മാനദണ്ഡ പരിശോധനാ ഫലങ്ങൾ</string>
+    <string name="benchmark_not_measured">സ്ഥിരീകരിച്ച അളവുകൾ ഇതുവരെ ലഭ്യമല്ല</string>
+    <string name="benchmark_total_apps">പരിശോധിച്ച APK ഫയലുകൾ</string>
+    <string name="benchmark_tpr">കണ്ടെത്തൽ നിരക്ക് (TPR)</string>
+    <string name="benchmark_fpr">തെറ്റായ കണ്ടെത്തൽ നിരക്ക് (FPR)</string>
+    <string name="benchmark_latency">ശരാശരി സ്കാൻ സമയം</string>
+    <string name="benchmark_privacy_note">സ്ഥിരീകരിച്ച ഫലങ്ങൾ മാത്രം കാണിക്കും. പരീക്ഷണ APK ഫയലുകൾ ആപ്പിൽ സൂക്ഷിക്കില്ല.</string>
+</resources>

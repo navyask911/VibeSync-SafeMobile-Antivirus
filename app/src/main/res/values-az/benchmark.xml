@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">Etalon test nəticələri</string>
+    <string name="benchmark_not_measured">Hələ təsdiqlənmiş ölçmə yoxdur</string>
+    <string name="benchmark_total_apps">Yoxlanmış APK sayı</string>
+    <string name="benchmark_tpr">Aşkarlama faizi (TPR)</string>
+    <string name="benchmark_fpr">Yanlış müsbət faiz (FPR)</string>
+    <string name="benchmark_latency">Orta skan vaxtı</string>
+    <string name="benchmark_privacy_note">Yalnız təsdiqlənmiş nəticələr göstərilir. Test APK-ləri tətbiqdə saxlanmır.</string>
+</resources>

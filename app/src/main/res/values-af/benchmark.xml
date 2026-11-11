@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">Maatstafresultate</string>
+    <string name="benchmark_not_measured">Nog geen geverifieerde meting beskikbaar nie</string>
+    <string name="benchmark_total_apps">APK-lêers getoets</string>
+    <string name="benchmark_tpr">Opsporingskoers (TPR)</string>
+    <string name="benchmark_fpr">Valspositiewe koers (FPR)</string>
+    <string name="benchmark_latency">Gemiddelde skantyd</string>
+    <string name="benchmark_privacy_note">Slegs geverifieerde resultate word gewys. Geen toets-APK word in die toepassing gestoor nie.</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">ผลการทดสอบประสิทธิภาพ</string>
+    <string name="benchmark_not_measured">ยังไม่มีผลการวัดที่ผ่านการยืนยัน</string>
+    <string name="benchmark_total_apps">ไฟล์ APK ที่ทดสอบ</string>
+    <string name="benchmark_tpr">อัตราการตรวจพบ (TPR)</string>
+    <string name="benchmark_fpr">อัตราผลบวกลวง (FPR)</string>
+    <string name="benchmark_latency">เวลาสแกนเฉลี่ย</string>
+    <string name="benchmark_privacy_note">แสดงเฉพาะผลที่ยืนยันแล้ว ไม่จัดเก็บ APK ทดสอบไว้ในแอป</string>
+</resources>

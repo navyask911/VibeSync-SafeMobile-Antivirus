@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">扫描完成</string>
+    <string name="v116_scan_local_no_match">扫描完成。本地未发现匹配项。目前设备看起来安全。</string>
+    <string name="v116_score_meaning">该分数反映设备设置，不能证明没有恶意软件。部分检查尚未验证。</string>
+</resources>

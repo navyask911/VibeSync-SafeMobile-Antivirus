@@ -1,0 +1,16 @@
+<resources>
+ <string name="incident_channel_description">有効時に5秒間の警報音が鳴る端末内の緊急脅威通知です。</string>
+ <string name="incident_title">悪意のあるアプリを検出</string>
+ <string name="incident_loading">アプリ情報を読み込み中…</string>
+ <string name="incident_app_unavailable">アプリは利用できなくなりました</string>
+ <string name="incident_warning">インストール済みアプリが既知のマルウェアハッシュと一致しました。開かずに Android の確認画面からアンインストールしてください。SafeMobile はこのアプリを隔離・削除していません。</string>
+ <string name="incident_uninstall_now">今すぐアンインストール</string>
+ <string name="incident_dismiss">閉じる（非推奨）</string>
+ <string name="incident_review_threat">脅威を確認</string>
+ <string name="incident_user_confirmation">アプリの削除には Android 上での確認が必要です。SafeMobile が勝手に削除することはありません。</string>
+ <string name="incident_alerts_explanation">確定したマルウェアを検出した場合の緊急通知と5秒間のサイレンを有効にします。SafeMobile を開くか通知を閉じると音は停止します。Android の音量・通知設定が適用されます。</string>
+ <string name="incident_full_screen_settings">全画面の脅威通知</string>
+ <string name="incident_full_screen_explanation">Android 14以降では全画面通知をシステムが管理します。許可は任意です。許可がなければ重要通知を表示します。</string>
+ <string name="incident_open_settings">設定を開く</string>
+ <string name="cyber_dark_appearance">ダークブルーのテーマ</string>
+</resources>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="siren_test_settings_title">Diagnóstico da sirene</string>
+  <string name="siren_test_settings_description">Teste a sirene de cinco segundos e a pré-visualização do alerta. Não deteta ameaças, não altera a base de dados nem solicita desinstalações.</string>
+  <string name="siren_test_button">Testar sirene de ameaça</string>
+  <string name="siren_test_title">TESTE DE SIRENE — NÃO É UMA AMEAÇA REAL</string>
+  <string name="siren_test_notification">Teste manual do som. Não foi detetada qualquer aplicação maliciosa.</string>
+  <string name="siren_test_preview">Este é um teste da sirene do SafeMobile. Nenhuma aplicação foi sinalizada e não foi pedida qualquer desinstalação. Toque em Dispensar para parar o áudio.</string>
+  <string name="voice_siren_test">Este é um teste da sirene do SafeMobile. Não foi detetada qualquer ameaça.</string>
+  <string name="battery_review_title">As restrições da bateria podem atrasar a proteção</string>
+  <string name="battery_review_body">A poupança de bateria ou a otimização de aplicações está ativa. Alguns dispositivos Oppo/ColorOS limitam análises em segundo plano e alertas de instalação. Reveja as definições de bateria do SafeMobile; isto não garante monitorização contínua.</string>
+  <string name="battery_review_action">Rever definições da bateria</string>
+  <string name="battery_review_unavailable">Não foi possível abrir as definições de bateria do Android.</string>
+  <string name="full_screen_dashboard_warning">Alertas críticos desativados: toque para permitir avisos de ameaças em ecrã inteiro.</string>
+  <string name="full_screen_dashboard_fallback">O acesso ao ecrã inteiro é opcional. Com os Alertas de segurança ativos, a sirene de cinco segundos e a notificação prioritária funcionam sem esse acesso, sujeitos às definições de notificações e som do Android.</string>
+  <string name="full_screen_settings_unavailable">Não foi possível abrir as definições de alertas em ecrã inteiro. Pode continuar a usar o SafeMobile.</string>
+  <string name="system_app_protection_badge">Aplicações de sistema protegidas contra revisão e desinstalação</string>
+  <string name="system_app_scan_complete">Análise concluída. Não foram encontradas ameaças nos itens verificados. As aplicações de sistema são excluídas da revisão e desinstalação; esta análise não verificou a sua integridade.</string>
+  <string name="ui_folder_access_not_granted">O acesso à pasta não foi concedido. Pode continuar com proteção limitada.</string>
+</resources>

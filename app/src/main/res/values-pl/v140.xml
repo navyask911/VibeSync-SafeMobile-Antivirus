@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v140_dashboard">Pulpit</string>
+    <string name="v140_analytics_tools">Analityka i narzędzia</string>
+    <string name="v140_critical">Krytyczne</string>
+    <string name="v140_minor">Drobne</string>
+    <string name="v140_snoozed">Odłożone</string>
+    <string name="v140_completed">Ukończone</string>
+    <string name="v140_snooze_warning">Odłóż ostrzeżenie</string>
+    <string name="v140_done_return_to_audit">Gotowe — wróć do audytu</string>
+    <string name="v140_security_risk_explained">Wyjaśnienie ryzyka bezpieczeństwa</string>
+    <string name="v140_posture_score_impact">Wpływ na wynik stanu zabezpieczeń urządzenia</string>
+    <string name="v140_pending_actions">%1$d działań bezpieczeństwa oczekuje — przejrzyj audyt</string>
+</resources>

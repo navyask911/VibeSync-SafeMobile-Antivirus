@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="global_threat_intelligence_title">Ieguldījums globālajā apdraudējumu izlūkošanā (neobligāti)</string>
+    <string name="global_threat_intelligence_description">Kad šī opcija ir ieslēgta, SafeMobile automātiski kopīgo apstiprinātu apdraudējumu SHA-256 jaucējvērtības un, ja pieejamas, 215 bināras uzvedības pazīmes. APK faili, failu nosaukumi, ceļi, pakotņu nosaukumi un ierīces identifikatori nekad netiek nosūtīti. Šo opciju varat izslēgt jebkurā laikā.</string>
+    <string name="global_threat_intelligence_donate_message">Palīdziet aizsargāt citus, anonīmi ziedojot šī ļaunprātīgā faila parakstu mūsu AI apmācības tīklam.</string>
+    <string name="global_threat_intelligence_donate">Ziedot</string>
+    <string name="global_threat_intelligence_decline">Atteikt</string>
+</resources>

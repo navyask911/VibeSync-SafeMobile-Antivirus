@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">Rezultatele testului</string>
+    <string name="benchmark_not_measured">Nu există încă măsurători verificate</string>
+    <string name="benchmark_total_apps">Fișiere APK testate</string>
+    <string name="benchmark_tpr">Rata de detectare (TPR)</string>
+    <string name="benchmark_fpr">Rata de alarme false (FPR)</string>
+    <string name="benchmark_latency">Timp mediu de scanare</string>
+    <string name="benchmark_privacy_note">Se afișează doar rezultate verificate. APK-urile de test nu sunt stocate în aplicație.</string>
+</resources>

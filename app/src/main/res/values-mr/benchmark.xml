@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">चाचणीचे तुलनात्मक निकाल</string>
+    <string name="benchmark_not_measured">अद्याप पडताळलेले मोजमाप उपलब्ध नाही</string>
+    <string name="benchmark_total_apps">तपासलेल्या APK फायली</string>
+    <string name="benchmark_tpr">शोध दर (TPR)</string>
+    <string name="benchmark_fpr">चुकीचा सकारात्मक दर (FPR)</string>
+    <string name="benchmark_latency">सरासरी स्कॅन वेळ</string>
+    <string name="benchmark_privacy_note">फक्त पडताळलेले निकाल दाखवले जातात. चाचणी APK ॲपमध्ये साठवले जात नाहीत.</string>
+</resources>

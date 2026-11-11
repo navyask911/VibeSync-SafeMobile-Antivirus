@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="trusted_app_options">Parinktys</string>
+<string name="trusted_app_remove">Atšaukti pasitikėjimą</string>
+<string name="trusted_app_removed">Pasitikėjimas atšauktas. Šio paketo būsimi tikrinimai ir įspėjimai vėl įjungti.</string>
+<string name="trusted_app_remove_failed">Nepavyko atšaukti pasitikėjimo. Bandykite dar kartą.</string>
+<string name="install_sentinel_title">Diegimų stebėjimas</string>
+<string name="install_sentinel_active">SafeMobile Sentinel: aktyvus ir stebi</string>
+<string name="install_sentinel_description">Vietiniai patikrinimai po diegimo su nuolatiniu pranešimu. Be periodinių užklausų ar miego blokavimo. Android gali sustabdyti paslaugą.</string>
+<string name="install_sentinel_stop">Sustabdyti diegimų stebėjimą</string>
+<string name="install_scan_progress">Tikrinama naujai įdiegta programa: %1$s</string>
+<string name="analytics_chart_title">Tikrinimų rezultatai</string>
+<string name="analytics_other">Kiti rezultatai</string>
+<string name="analytics_total">Rezultatai</string>
+<string name="analytics_weekly_scans">Savaitės tikrinimai</string>
+<string name="analytics_week_note">Įrašyti seansai nuo pirmadienio iki sekmadienio. Gali būti nebaigtų tikrinimų.</string>
+<string name="posture_overlay_select_app">Android 11 ar naujesnėje versijoje pasirinkite %1$s rodymo virš kitų programų nustatymų sąraše.</string>
+<string name="install_scan_received">Diegimo įvykis gautas. Atidarykite SafeMobile ir peržiūrėkite.</string>
+</resources>

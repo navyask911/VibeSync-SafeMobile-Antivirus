@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v140_dashboard">仪表板</string>
+    <string name="v140_analytics_tools">分析与工具</string>
+    <string name="v140_critical">严重</string>
+    <string name="v140_minor">次要</string>
+    <string name="v140_snoozed">已暂缓</string>
+    <string name="v140_completed">已完成</string>
+    <string name="v140_snooze_warning">暂缓警告</string>
+    <string name="v140_done_return_to_audit">完成 — 返回审核</string>
+    <string name="v140_security_risk_explained">安全风险说明</string>
+    <string name="v140_posture_score_impact">对设备安全状态评分的影响</string>
+    <string name="v140_pending_actions">%1$d 项安全状态操作待处理 — 查看审核</string>
+</resources>

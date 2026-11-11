@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">സ്കാൻ പൂർത്തിയായി</string>
+    <string name="v116_scan_local_no_match">സ്കാൻ പൂർത്തിയായി. പ്രാദേശിക പൊരുത്തമില്ല. ഇപ്പോൾ ഉപകരണം സുരക്ഷിതമായി തോന്നുന്നു.</string>
+    <string name="v116_score_meaning">ഈ സ്കോർ ഉപകരണ ക്രമീകരണങ്ങളെ കുറിച്ചാണ്; മാൽവെയർ ഇല്ലെന്ന തെളിവല്ല. ചില പരിശോധനകൾ സ്ഥിരീകരിച്ചിട്ടില്ല.</string>
+</resources>

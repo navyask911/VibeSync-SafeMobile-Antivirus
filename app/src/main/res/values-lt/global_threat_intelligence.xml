@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="global_threat_intelligence_title">Prisidėti prie pasaulinės grėsmių žvalgybos (pasirinktinai)</string>
+    <string name="global_threat_intelligence_description">Įjungus šią parinktį, „SafeMobile“ automatiškai bendrina patvirtintų grėsmių SHA-256 maišas ir, jei yra, 215 dvejetainių elgsenos požymių. APK failai, failų pavadinimai, keliai, paketų pavadinimai ir įrenginio identifikatoriai niekada nesiunčiami. Šią parinktį galite bet kada išjungti.</string>
+    <string name="global_threat_intelligence_donate_message">Padėkite apsaugoti kitus anonimiškai paaukodami šio kenkėjiško failo parašą mūsų DI mokymo tinklui.</string>
+    <string name="global_threat_intelligence_donate">Aukoti</string>
+    <string name="global_threat_intelligence_decline">Atsisakyti</string>
+</resources>

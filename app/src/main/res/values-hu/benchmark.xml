@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">Összehasonlító teszt eredményei</string>
+    <string name="benchmark_not_measured">Még nincs hitelesített mérés</string>
+    <string name="benchmark_total_apps">Tesztelt APK-fájlok</string>
+    <string name="benchmark_tpr">Felismerési arány (TPR)</string>
+    <string name="benchmark_fpr">Téves pozitív arány (FPR)</string>
+    <string name="benchmark_latency">Átlagos vizsgálati idő</string>
+    <string name="benchmark_privacy_note">Csak ellenőrzött eredmények jelennek meg. A teszt APK-kat az alkalmazás nem tárolja.</string>
+</resources>

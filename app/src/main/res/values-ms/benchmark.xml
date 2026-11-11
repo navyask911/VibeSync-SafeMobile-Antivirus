@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">Keputusan penanda aras</string>
+    <string name="benchmark_not_measured">Belum ada ukuran yang disahkan</string>
+    <string name="benchmark_total_apps">Fail APK diuji</string>
+    <string name="benchmark_tpr">Kadar pengesanan (TPR)</string>
+    <string name="benchmark_fpr">Kadar positif palsu (FPR)</string>
+    <string name="benchmark_latency">Purata masa imbasan</string>
+    <string name="benchmark_privacy_note">Hanya keputusan yang disahkan dipaparkan. APK ujian tidak disimpan dalam aplikasi.</string>
+</resources>

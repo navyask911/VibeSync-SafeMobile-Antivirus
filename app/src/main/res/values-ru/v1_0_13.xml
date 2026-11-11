@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="trusted_app_options">Параметры</string>
+<string name="trusted_app_remove">Отменить доверие</string>
+<string name="trusted_app_removed">Доверие отменено. Проверки и оповещения для этого пакета снова включены.</string>
+<string name="trusted_app_remove_failed">Не удалось отменить доверие. Повторите попытку.</string>
+<string name="install_sentinel_title">Контроль установок</string>
+<string name="install_sentinel_active">SafeMobile Sentinel: активен, наблюдение включено</string>
+<string name="install_sentinel_description">Локальные проверки после установки с постоянным уведомлением. Без периодического опроса и блокировки сна. Android может остановить службу.</string>
+<string name="install_sentinel_stop">Остановить контроль установок</string>
+<string name="install_scan_progress">Проверяется новое приложение: %1$s</string>
+<string name="analytics_chart_title">Результаты проверок</string>
+<string name="analytics_other">Другие результаты</string>
+<string name="analytics_total">Результаты</string>
+<string name="analytics_weekly_scans">Проверки за неделю</string>
+<string name="analytics_week_note">Записанные сеансы с понедельника по воскресенье. Могут включать незавершённые проверки.</string>
+<string name="posture_overlay_select_app">На Android 11 и новее выберите %1$s в списке настроек отображения поверх других приложений.</string>
+<string name="install_scan_received">Событие установки получено. Откройте SafeMobile для проверки.</string>
+</resources>

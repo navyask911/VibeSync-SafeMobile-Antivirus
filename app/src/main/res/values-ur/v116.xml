@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">اسکین مکمل ہوا</string>
+    <string name="v116_scan_local_no_match">اسکین مکمل ہوا۔ مقامی مماثلت نہیں ملی۔ فی الحال آلہ محفوظ لگتا ہے۔</string>
+    <string name="v116_score_meaning">اسکور ترتیبات کو ظاہر کرتا ہے، میل ویئر کی عدم موجودگی کا ثبوت نہیں۔ بعض جانچیں غیر مصدقہ ہیں۔</string>
+</resources>

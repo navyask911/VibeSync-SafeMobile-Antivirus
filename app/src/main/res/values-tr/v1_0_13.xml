@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="trusted_app_options">Seçenekler</string>
+<string name="trusted_app_remove">Güveni kaldır</string>
+<string name="trusted_app_removed">Güven kaldırıldı. Bu paket için sonraki taramalar ve uyarılar etkinleştirildi.</string>
+<string name="trusted_app_remove_failed">Güven kaldırılamadı. Yeniden deneyin.</string>
+<string name="install_sentinel_title">Kurulum izleme</string>
+<string name="install_sentinel_active">SafeMobile Sentinel: etkin ve izliyor</string>
+<string name="install_sentinel_description">Kalıcı bildirimle kurulum sonrası yerel denetimler. Düzenli sorgulama veya uyandırma kilidi yoktur. Android hizmeti durdurabilir.</string>
+<string name="install_sentinel_stop">Kurulum izlemeyi durdur</string>
+<string name="install_scan_progress">Yeni yüklenen uygulama inceleniyor: %1$s</string>
+<string name="analytics_chart_title">Tarama sonuçları</string>
+<string name="analytics_other">Diğer sonuçlar</string>
+<string name="analytics_total">Sonuçlar</string>
+<string name="analytics_weekly_scans">Haftalık taramalar</string>
+<string name="analytics_week_note">Pazartesiden pazara kaydedilen oturumlar. Tamamlanmamış taramalar da bulunabilir.</string>
+<string name="posture_overlay_select_app">Android 11 ve üzerinde, diğer uygulamalar üzerinde gösterme ayarları listesinden %1$s uygulamasını seçin.</string>
+<string name="install_scan_received">Kurulum olayı alındı. İncelemek için SafeMobile uygulamasını açın.</string>
+</resources>

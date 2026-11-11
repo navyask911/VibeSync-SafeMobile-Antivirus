@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v140_dashboard">داشبورد</string>
+    <string name="v140_analytics_tools">تحلیل و ابزارها</string>
+    <string name="v140_critical">بحرانی</string>
+    <string name="v140_minor">جزئی</string>
+    <string name="v140_snoozed">به تعویق افتاده</string>
+    <string name="v140_completed">تکمیل شد</string>
+    <string name="v140_snooze_warning">تعویق هشدار</string>
+    <string name="v140_done_return_to_audit">انجام شد — بازگشت به ممیزی</string>
+    <string name="v140_security_risk_explained">توضیح ریسک امنیتی</string>
+    <string name="v140_posture_score_impact">تأثیر بر امتیاز وضعیت امنیتی دستگاه</string>
+    <string name="v140_pending_actions">%1$d اقدام امنیتی در انتظار است — بررسی ممیزی</string>
+</resources>

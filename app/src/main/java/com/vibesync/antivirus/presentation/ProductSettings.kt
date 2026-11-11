@@ -1,0 +1,1281 @@
+package com.vibesync.antivirus.presentation
+
+import androidx.compose.ui.res.pluralStringResource
+import android.Manifest
+import android.app.Activity
+import android.content.pm.PackageManager
+import android.os.Build
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.widget.Toast
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.Alignment
+import androidx.compose.material3.RadioButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.HelpOutline
+import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.outlined.Security
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material.icons.outlined.WorkspacePremium
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
+import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
+import androidx.compose.ui.graphics.vector.ImageVector
+import com.vibesync.antivirus.ui.theme.AppTheme
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
+import androidx.compose.ui.window.DialogProperties
+import androidx.compose.material3.Button
+import com.vibesync.antivirus.ui.components.CyberCard as Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import androidx.core.app.NotificationManagerCompat
+import com.vibesync.antivirus.core.worker.OverlayRiskReviewManager
+import com.vibesync.antivirus.core.worker.ThreatFeedConfigStore
+import com.vibesync.antivirus.core.worker.ThreatFeedConfiguration
+import com.vibesync.antivirus.core.worker.ThreatFeedSyncScheduler
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.foundation.clickable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.unit.dp
+import com.vibesync.antivirus.BuildConfig
+import com.vibesync.antivirus.SafeMobileApp
+import com.vibesync.antivirus.core.observer.SecurityAlertNotifier
+import com.vibesync.antivirus.core.observer.ThreatDetectedActivity
+import android.content.Intent
+import android.util.Log
+import com.vibesync.antivirus.R
+import com.vibesync.antivirus.core.locale.LocalePreferences
+import com.vibesync.antivirus.core.security.GlobalThreatIntelligenceConsent
+import com.vibesync.antivirus.data.local.ScanAudit
+import java.text.DateFormat
+import java.util.Date
+import java.util.UUID
+
+enum class SettingsSubRoute { ROOT, GENERAL, SUBSCRIPTION, NOTIFICATIONS, SECURITY, HELP_LEGAL, RATE }
+
+private val selectableSafeMobileThemes = listOf(AppTheme.DARK_SLATE, AppTheme.MIDNIGHT, AppTheme.OLED)
+
+@Composable
+private fun ThemeOptionButton(
+    option: AppTheme,
+    selected: Boolean,
+    compact: Boolean,
+    modifier: Modifier = Modifier,
+    onSelected: () -> Unit
+) {
+    val label = when (option) {
+        AppTheme.DARK_SLATE -> R.string.theme_dark_slate
+        AppTheme.MIDNIGHT -> R.string.theme_midnight
+        AppTheme.OLED -> R.string.theme_oled
+        AppTheme.LIGHT -> R.string.theme_dark_slate
+    }
+    val icon = when (option) {
+        AppTheme.DARK_SLATE -> R.drawable.ic_theme_midnight
+        AppTheme.MIDNIGHT -> R.drawable.ic_theme_midnight
+        AppTheme.OLED -> R.drawable.ic_theme_oled
+        AppTheme.LIGHT -> R.drawable.ic_theme_midnight
+    }
+    androidx.compose.material3.Surface(
+        modifier = modifier
+            .heightIn(min = if (compact) 56.dp else 80.dp)
+            .selectable(selected = selected, role = Role.RadioButton, onClick = onSelected)
+            .testTag("settings.theme.${option.name.lowercase()}"),
+        shape = RoundedCornerShape(12.dp),
+        color = if (selected && option == AppTheme.LIGHT) {
+            com.vibesync.antivirus.ui.theme.SafeMobileLightSelectedContainer
+        } else if (selected) MaterialTheme.colorScheme.surfaceVariant
+        else MaterialTheme.colorScheme.surface,
+        border = androidx.compose.foundation.BorderStroke(
+            if (selected) 2.dp else 1.dp,
+            if (selected) MaterialTheme.colorScheme.secondary
+            else MaterialTheme.colorScheme.outline
+        )
+    ) {
+        if (compact) {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                androidx.compose.material3.Icon(
+                    painterResource(icon),
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(22.dp)
+                )
+                Text(
+                    stringResource(label),
+                    modifier = Modifier.weight(1f),
+                    style = MaterialTheme.typography.labelLarge,
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+        } else {
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp, horizontal = 4.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(6.dp)
+            ) {
+                androidx.compose.material3.Icon(
+                    painterResource(icon),
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(22.dp)
+                )
+                Text(
+                    stringResource(label),
+                    modifier = Modifier.fillMaxWidth(),
+                    style = MaterialTheme.typography.labelMedium,
+                    textAlign = TextAlign.Center,
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun safeMobileSwitchColors() = SwitchDefaults.colors(
+    checkedThumbColor = MaterialTheme.colorScheme.surface,
+    checkedTrackColor = MaterialTheme.colorScheme.primary,
+    uncheckedThumbColor = MaterialTheme.colorScheme.onSurfaceVariant,
+    uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant,
+    uncheckedBorderColor = MaterialTheme.colorScheme.outline
+)
+
+@Composable
+private fun SettingsDescription(resource: Int) {
+    Text(
+        stringResource(resource),
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        maxLines = 2,
+        overflow = TextOverflow.Ellipsis
+    )
+}
+
+internal object InstallRayId {
+    private const val PREFS_NAME = "safe_mobile_installation"
+    private const val KEY = "ray_id"
+
+    fun getOrCreate(context: Context): String {
+        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val existing = prefs.getString(KEY, null)
+        if (!existing.isNullOrBlank()) return existing
+        val generated = UUID.randomUUID().toString()
+        prefs.edit().putString(KEY, generated).commit()
+        return prefs.getString(KEY, generated) ?: generated
+    }
+}
+
+@Composable
+private fun SettingsRootRow(
+    icon: ImageVector,
+    titleResource: Int,
+    subtitleResource: Int,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth()
+            .heightIn(min = 64.dp)
+            .clickable(onClick = onClick)
+            .padding(horizontal = 8.dp, vertical = 10.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(14.dp)
+    ) {
+        androidx.compose.material3.Surface(
+            shape = RoundedCornerShape(14.dp),
+            color = MaterialTheme.colorScheme.secondaryContainer
+        ) {
+            androidx.compose.material3.Icon(
+                icon,
+                contentDescription = stringResource(titleResource),
+                tint = MaterialTheme.colorScheme.secondary,
+                modifier = Modifier.padding(10.dp)
+            )
+        }
+        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+            Text(stringResource(titleResource), style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.SemiBold, maxLines = 2, overflow = TextOverflow.Ellipsis)
+            Text(stringResource(subtitleResource), style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
+        }
+        androidx.compose.material3.Icon(
+            Icons.AutoMirrored.Outlined.KeyboardArrowRight,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary
+        )
+    }
+}
+
+@Composable
+internal fun ScanHistoryPanel(audits: List<ScanAudit>) {
+    Column(verticalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
+        Text(stringResource(R.string.history_title), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+        if (audits.isEmpty()) {
+            Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)) {
+                Text(stringResource(R.string.history_empty), modifier = Modifier.padding(16.dp), color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+        } else {
+            val sessions = audits.groupBy { it.scanSessionId.ifBlank { "legacy-${it.id}" } }
+                .values
+                .sortedByDescending { group -> group.maxOfOrNull { it.scanTimestamp } ?: 0L }
+                .take(30)
+            sessions.forEach { group ->
+                val mostRecent = group.maxByOrNull { it.scanTimestamp } ?: return@forEach
+                val threats = group.count { it.verdict == "THREAT" }
+                val review = group.count { it.verdict == "SUSPICIOUS" }
+                val incomplete = group.count { it.verdict == "NOT_SCANNED" }
+                Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
+                        Text(localizedDate(mostRecent.scanTimestamp), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                        Text(
+                            stringResource(R.string.format_label_value, stringResource(R.string.history_session), mostRecent.scanSessionId.ifBlank { "—" }),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Text(
+                            listOf(pluralStringResource(R.plurals.l10n_threats, threats, threats), pluralStringResource(R.plurals.l10n_review, review, review), group.count { it.verdict == "NO_MATCH" }.let { pluralStringResource(R.plurals.l10n_no_match, it, it) }).joinToString(" · "),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        group.filter { it.threatEventId.isNotBlank() && it.verdict == "THREAT" }.forEach { event ->
+                            Text(
+                                stringResource(R.string.threat_event_ray_id, event.threatEventId),
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                        if (incomplete > 0) {
+                            Text(
+                                pluralStringResource(R.plurals.l10n_unreadable, incomplete, incomplete),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.tertiary
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+internal fun OverlayRiskReviewPanel() {
+    val context = LocalContext.current
+    val prefs = remember(context) {
+        context.getSharedPreferences(OverlayRiskReviewManager.PREFS_NAME, Context.MODE_PRIVATE)
+    }
+    var enabled by remember { mutableStateOf(OverlayRiskReviewManager.isEnabled(context)) }
+    var lastAttempt by remember { mutableStateOf(prefs.getLong(OverlayRiskReviewManager.KEY_LAST_ATTEMPT, 0L)) }
+    var lastSuccess by remember { mutableStateOf(prefs.getLong(OverlayRiskReviewManager.KEY_LAST_SUCCESS, 0L)) }
+    var overlayDeclarations by remember { mutableStateOf(prefs.getInt(OverlayRiskReviewManager.KEY_OVERLAY_DECLARATIONS, 0)) }
+    var accessibilityDeclarations by remember { mutableStateOf(prefs.getInt(OverlayRiskReviewManager.KEY_ACCESSIBILITY_DECLARATIONS, 0)) }
+    var enabledServices by remember { mutableStateOf(prefs.getInt(OverlayRiskReviewManager.KEY_ENABLED_ACCESSIBILITY_SERVICES, 0)) }
+    var resultState by remember { mutableStateOf(prefs.getString(OverlayRiskReviewManager.KEY_RESULT, "NOT_CHECKED") ?: "NOT_CHECKED") }
+    var reminderHours by remember { mutableStateOf(prefs.getInt(OverlayRiskReviewManager.KEY_REMINDER_HOURS, 24)) }
+    var showReminderDialog by remember { mutableStateOf(false) }
+    var showNotificationPermissionPrompt by remember { mutableStateOf(false) }
+    var pendingReviewEnable by remember { mutableStateOf(false) }
+    fun refreshFromPreferences() {
+        enabled = OverlayRiskReviewManager.isEnabled(context)
+        lastAttempt = prefs.getLong(OverlayRiskReviewManager.KEY_LAST_ATTEMPT, 0L)
+        lastSuccess = prefs.getLong(OverlayRiskReviewManager.KEY_LAST_SUCCESS, 0L)
+        overlayDeclarations = prefs.getInt(OverlayRiskReviewManager.KEY_OVERLAY_DECLARATIONS, 0)
+        accessibilityDeclarations = prefs.getInt(OverlayRiskReviewManager.KEY_ACCESSIBILITY_DECLARATIONS, 0)
+        enabledServices = prefs.getInt(OverlayRiskReviewManager.KEY_ENABLED_ACCESSIBILITY_SERVICES, 0)
+        resultState = prefs.getString(OverlayRiskReviewManager.KEY_RESULT, "NOT_CHECKED") ?: "NOT_CHECKED"
+        reminderHours = prefs.getInt(OverlayRiskReviewManager.KEY_REMINDER_HOURS, 24)
+    }
+
+    val notificationPermissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        if (pendingReviewEnable) {
+            OverlayRiskReviewManager.setEnabled(context, granted)
+            pendingReviewEnable = false
+            refreshFromPreferences()
+        }
+    }
+    DisposableEffect(prefs) {
+        val listener = android.content.SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
+            refreshFromPreferences()
+        }
+        prefs.registerOnSharedPreferenceChangeListener(listener)
+        onDispose { prefs.unregisterOnSharedPreferenceChangeListener(listener) }
+    }
+
+    val notificationsAvailable =
+        (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
+            ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) &&
+            NotificationManagerCompat.from(context).areNotificationsEnabled()
+
+    Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            androidx.compose.foundation.layout.Row(
+                verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+            ) {
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text(stringResource(R.string.overlay_review_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                    Text(stringResource(if (enabled) R.string.overlay_review_enabled else R.string.overlay_review_disabled), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+                Switch(checked = enabled, colors = SwitchDefaults.colors(
+                    checkedThumbColor = MaterialTheme.colorScheme.surface,
+                    checkedTrackColor = MaterialTheme.colorScheme.primary,
+                    uncheckedThumbColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant,
+                    uncheckedBorderColor = MaterialTheme.colorScheme.outline
+                ), onCheckedChange = { requested ->
+                    if (!requested) {
+                        OverlayRiskReviewManager.setEnabled(context, false)
+                        refreshFromPreferences()
+                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                        ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
+                    ) {
+                        pendingReviewEnable = true
+                        showNotificationPermissionPrompt = true
+                    } else {
+                        OverlayRiskReviewManager.setEnabled(context, true)
+                        refreshFromPreferences()
+                    }
+                })
+            }
+            Text(stringResource(R.string.overlay_review_description), style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
+            if (lastAttempt > 0L) {
+                Text(
+                    stringResource(R.string.overlay_review_last_attempt, localizedDate(lastAttempt)),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            if (lastSuccess > 0L) {
+                Text(
+                    stringResource(R.string.overlay_review_last_success, localizedDate(lastSuccess)),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Text(
+                    stringResource(R.string.overlay_review_summary, overlayDeclarations, accessibilityDeclarations, enabledServices),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            } else {
+                Text(
+                    when (resultState) {
+                        "FAILED" -> stringResource(R.string.overlay_review_failed)
+                        "PERMISSION_REQUIRED" -> stringResource(R.string.overlay_review_permission_required)
+                        else -> stringResource(R.string.overlay_review_not_checked)
+                    },
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.tertiary
+                )
+            }
+            androidx.compose.material3.TextButton(
+                onClick = { showReminderDialog = true },
+                enabled = enabled
+            ) {
+                Text(
+                    stringResource(R.string.overlay_review_reminder_interval) + ": " +
+                        stringResource(
+                            when (reminderHours) {
+                                12 -> R.string.overlay_review_reminder_12h
+                                48 -> R.string.overlay_review_reminder_48h
+                                else -> R.string.overlay_review_reminder_24h
+                            }
+                        )
+                )
+            }
+            if (showReminderDialog) AlertDialog(
+                onDismissRequest = { showReminderDialog = false },
+                title = { Text(stringResource(R.string.overlay_review_reminder_interval)) },
+                text = {
+                    Column(
+                        Modifier.fillMaxWidth().heightIn(max = 260.dp).verticalScroll(rememberScrollState()),
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        listOf(
+                            12 to R.string.overlay_review_reminder_12h,
+                            24 to R.string.overlay_review_reminder_24h,
+                            48 to R.string.overlay_review_reminder_48h
+                        ).forEach { (hours, label) ->
+                            Row(
+                                modifier = Modifier.fillMaxWidth().selectable(
+                                    selected = reminderHours == hours,
+                                    role = Role.RadioButton,
+                                    onClick = {
+                                        OverlayRiskReviewManager.setReminderIntervalHours(context, hours)
+                                        showReminderDialog = false
+                                        refreshFromPreferences()
+                                    }
+                                ),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                RadioButton(selected = reminderHours == hours, onClick = null)
+                                Text(stringResource(label), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                            }
+                        }
+                    }
+                },
+                confirmButton = {
+                    TextButton(onClick = { showReminderDialog = false }) {
+                        Text(stringResource(R.string.close))
+                    }
+                }
+            )
+            if (enabled && !notificationsAvailable) {
+                Text(stringResource(R.string.overlay_review_notifications_off), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+        }
+    }
+    if (showNotificationPermissionPrompt) AlertDialog(
+        properties = DialogProperties(dismissOnClickOutside = true, dismissOnBackPress = true),
+        onDismissRequest = {
+            showNotificationPermissionPrompt = false
+            pendingReviewEnable = false
+        },
+        title = { Text(stringResource(R.string.overlay_review_title)) },
+        text = { Text(stringResource(R.string.overlay_review_description)) },
+        confirmButton = {
+            TextButton(onClick = {
+                showNotificationPermissionPrompt = false
+                notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }) { Text(stringResource(R.string.setup_allow_notifications)) }
+        },
+        dismissButton = {
+            TextButton(onClick = {
+                showNotificationPermissionPrompt = false
+                pendingReviewEnable = false
+            }) { Text(stringResource(R.string.setup_notifications_not_now)) }
+        }
+    )
+}
+
+/** Read-only inventory of manifest declarations; this screen never requests or grants access. */
+@Composable
+private fun AppManifestPermissionsCard() {
+    val context = LocalContext.current
+    val permissions = remember(context) {
+        val manager = context.packageManager
+        @Suppress("DEPRECATION")
+        val requested = runCatching {
+            manager.getPackageInfo(context.packageName, PackageManager.GET_PERMISSIONS)
+                .requestedPermissions
+                ?.toList()
+                .orEmpty()
+        }.getOrDefault(emptyList())
+
+        requested.distinct().sorted().map { permission ->
+            val info = runCatching {
+                manager.getPermissionInfo(permission, 0)
+            }.getOrNull()
+            val label = runCatching { info?.loadLabel(manager)?.toString() }
+                .getOrNull()
+                ?.takeIf { it.isNotBlank() }
+                ?: permission.substringAfterLast('.').replace('_', ' ')
+            val description = runCatching { info?.loadDescription(manager)?.toString() }
+                .getOrNull()
+                ?.takeIf { it.isNotBlank() }
+            Triple(permission, label, description)
+        }
+    }
+
+    Card(
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        shape = RoundedCornerShape(20.dp)
+    ) {
+        Column(
+            Modifier.fillMaxWidth().padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Text(
+                stringResource(R.string.coverage_permissions_title),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold
+            )
+            Text(
+                stringResource(R.string.coverage_permissions_body),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            if (permissions.isEmpty()) {
+                Text(
+                    stringResource(R.string.setup_permission_missing),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            } else {
+                permissions.forEachIndexed { index, (permission, label, description) ->
+                    if (index > 0) {
+                        androidx.compose.material3.HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+                    }
+                    Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                        Text(label, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
+                        Text(
+                            permission,
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        if (description != null) {
+                            Text(
+                                description,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+internal fun SafeMobileSettingsPanel(
+    sentinelEnabled: Boolean,
+    onEnableSentinel: () -> Unit,
+    onDisableSentinel: () -> Unit,
+    strictMode: Boolean = false,
+    securityAlertsEnabled: Boolean = false,
+    onSecurityAlertsChanged: ((Boolean) -> Unit)? = null,
+    onToggleProtection: ((Boolean) -> Unit)? = null,
+    onStrictModeChanged: ((Boolean) -> Unit)? = null,
+    appTheme: AppTheme = AppTheme.DARK_SLATE,
+    onAppThemeChanged: (AppTheme) -> Unit = {},
+    adPrivacyOptionsRequired: Boolean = false,
+    isProForAds: Boolean = true,
+    onShowAdPrivacyOptions: () -> Unit = {},
+    onManageFolders: () -> Unit = {},
+    onAddCustomFolder: () -> Unit = {},
+    subRoute: SettingsSubRoute = SettingsSubRoute.ROOT,
+    onSubRouteChanged: (SettingsSubRoute) -> Unit = {},
+    onOpenPro: () -> Unit = {},
+    onReviewThreatFindings: () -> Unit = {},
+    canReviewThreatFindings: Boolean = false,
+    installSentinelRunningOverride: Boolean? = null,
+    installSentinelEnabledOverride: Boolean? = null,
+    onInstallSentinelChanged: ((Boolean) -> Unit)? = null
+) {
+    val context = LocalContext.current
+    val useExpandedThemeOptions = LocalDensity.current.fontScale >= 1.4f
+    fun openOfficialWebsite(url: String) {
+        runCatching {
+            context.startActivity(Intent(Intent.ACTION_VIEW, android.net.Uri.parse(url)))
+        }.onFailure {
+            Toast.makeText(context, R.string.uninstall_no_settings, Toast.LENGTH_LONG).show()
+        }
+    }
+    val activity = context as? Activity
+    var showLanguageDialog by remember { mutableStateOf(false) }
+    var showThemeDialog by remember { mutableStateOf(false) }
+    var localeOverrideTag by remember { mutableStateOf(LocalePreferences.overrideTag(context)) }
+    var showAbout by remember { mutableStateOf(false) }
+    var benchmarkUnlockCount by remember { mutableIntStateOf(0) }
+    var showBenchmarkResults by remember { mutableStateOf(false) }
+    var aboutSection by remember { mutableStateOf("privacy") }
+    val rayId = remember(context) { InstallRayId.getOrCreate(context) }
+    val feedStore = remember(context) { ThreatFeedConfigStore(context) }
+    var feedUrl by remember { mutableStateOf(feedStore.load().url) }
+    var feedAuthKey by remember { mutableStateOf(feedStore.load().authKey) }
+    var feedConfigSaved by remember { mutableStateOf(feedStore.isConfigured()) }
+    var feedConsentEnabled by remember { mutableStateOf(feedStore.isSyncEnabled()) }
+    var feedConfigMessage by remember { mutableStateOf<String?>(null) }
+    var showFeedConsentDialog by remember { mutableStateOf(false) }
+    var showFullScreenPrompt by remember { mutableStateOf(false) }
+    var globalThreatIntelligenceEnabled by remember(context) { mutableStateOf(GlobalThreatIntelligenceConsent.isEnabled(context)) }
+    val voicePrefs = remember(context) { context.getSharedPreferences(SafeMobileApp.SECURITY_PREFS, Context.MODE_PRIVATE) }
+    var voiceAlertsEnabled by remember(context) { mutableStateOf(voicePrefs.getBoolean(SafeMobileApp.KEY_VOICE_ALERTS_ENABLED, false)) }
+
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
+        if (subRoute == SettingsSubRoute.ROOT) {
+            Text(stringResource(R.string.settings_title), style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold)
+            Text(stringResource(R.string.theme_appearance_description),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(stringResource(R.string.appearance_title),
+                style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                shape = RoundedCornerShape(20.dp)) {
+                Column(Modifier.fillMaxWidth().padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    if (useExpandedThemeOptions) {
+                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            selectableSafeMobileThemes.forEach { option ->
+                                ThemeOptionButton(
+                                    option = option,
+                                    selected = appTheme == option,
+                                    compact = true,
+                                    modifier = Modifier.fillMaxWidth(),
+                                    onSelected = { onAppThemeChanged(option) }
+                                )
+                            }
+                        }
+                    } else {
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            selectableSafeMobileThemes.forEach { option ->
+                                ThemeOptionButton(
+                                    option = option,
+                                    selected = appTheme == option,
+                                    compact = false,
+                                    modifier = Modifier.weight(1f).fillMaxWidth(),
+                                    onSelected = { onAppThemeChanged(option) }
+                                )
+                            }
+                        }
+                    }
+                    SettingsRootRow(Icons.Outlined.Settings, R.string.language_settings,
+                        R.string.theme_appearance_description) {
+                        showLanguageDialog = true
+                    }
+                }
+            }
+
+            Text(stringResource(R.string.monitor_title),
+                style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                shape = RoundedCornerShape(20.dp)) {
+                Column(Modifier.fillMaxWidth().padding(16.dp)) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                            Text(stringResource(R.string.security_alerts_title),
+                                style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
+                            SettingsDescription(R.string.incident_alerts_explanation)
+                        }
+                        Switch(
+                            modifier = Modifier.testTag("settings.security-alerts"),
+                            checked = securityAlertsEnabled,
+                            onCheckedChange = { requested -> onSecurityAlertsChanged?.invoke(requested) },
+                            colors = SwitchDefaults.colors(
+                                checkedThumbColor = MaterialTheme.colorScheme.surface,
+                                checkedTrackColor = MaterialTheme.colorScheme.primary,
+                                uncheckedThumbColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant,
+                                uncheckedBorderColor = MaterialTheme.colorScheme.outline
+                            ))
+                    }
+                }
+            }
+            InstallSentinelSettings(
+                isRunningOverride = installSentinelRunningOverride,
+                isEnabledOverride = installSentinelEnabledOverride,
+                onToggleOverride = onInstallSentinelChanged
+            )
+            SettingsRootRow(Icons.Outlined.Security, R.string.sentinel_scope_title,
+                R.string.monitor_explanation) {
+                onManageFolders()
+            }
+
+            Text(stringResource(R.string.settings_privacy),
+                style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                shape = RoundedCornerShape(20.dp)) {
+                Column(Modifier.fillMaxWidth().padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    SettingsDescription(R.string.global_threat_intelligence_description)
+                    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                        Text(stringResource(R.string.global_threat_intelligence_title),
+                            modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium)
+                        Switch(
+                            checked = globalThreatIntelligenceEnabled,
+                            onCheckedChange = { enabled ->
+                                GlobalThreatIntelligenceConsent.setEnabled(context, enabled)
+                                globalThreatIntelligenceEnabled = enabled
+                            },
+                            colors = SwitchDefaults.colors(
+                                checkedThumbColor = MaterialTheme.colorScheme.surface,
+                                checkedTrackColor = MaterialTheme.colorScheme.primary,
+                                uncheckedThumbColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant,
+                                uncheckedBorderColor = MaterialTheme.colorScheme.outline
+                            )
+                        )
+                    }
+                    OutlinedButton(
+                        onClick = onReviewThreatFindings,
+                        enabled = globalThreatIntelligenceEnabled && canReviewThreatFindings,
+                        modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)
+                    ) {
+                        Text(stringResource(R.string.latest_results))
+                    }
+                    if (adPrivacyOptionsRequired && !isProForAds) {
+                        OutlinedButton(onClick = onShowAdPrivacyOptions, modifier = Modifier.fillMaxWidth()) {
+                            Text(stringResource(R.string.ad_privacy_options))
+                        }
+                    }
+                }
+            }
+
+            Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+                shape = RoundedCornerShape(20.dp)) {
+                Column(Modifier.fillMaxWidth().padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(stringResource(R.string.pro_title),
+                        style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                    SettingsDescription(R.string.pro_truthful_summary)
+                    Text(stringResource(R.string.pro_feature_adfree),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Button(onClick = onOpenPro, modifier = Modifier.fillMaxWidth()) {
+                        Text(stringResource(R.string.posture_open))
+                    }
+                }
+            }
+
+            Text(stringResource(R.string.about_legal),
+                style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            SettingsRootRow(Icons.Outlined.HelpOutline, R.string.about_privacy_policy, R.string.ad_privacy_intro) {
+                onSubRouteChanged(SettingsSubRoute.HELP_LEGAL)
+            }
+            SettingsRootRow(Icons.Outlined.Security, R.string.download_interceptor_label,
+                R.string.download_interceptor_description) {
+                onSubRouteChanged(SettingsSubRoute.SECURITY)
+            }
+            SettingsRootRow(Icons.Outlined.Notifications, R.string.siren_test_settings_title,
+                R.string.siren_test_settings_description) {
+                onSubRouteChanged(SettingsSubRoute.NOTIFICATIONS)
+            }
+            if (BuildConfig.OPTIONAL_FEED_ENABLED) {
+                SettingsRootRow(Icons.Outlined.Settings, R.string.feed_settings_title,
+                    R.string.feed_settings_description) {
+                    onSubRouteChanged(SettingsSubRoute.GENERAL)
+                }
+            }
+            SettingsRootRow(Icons.Outlined.Star, R.string.app_name, R.string.official_website_visit) {
+                onSubRouteChanged(SettingsSubRoute.RATE)
+            }
+        } else {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                IconButton(
+                    onClick = { onSubRouteChanged(SettingsSubRoute.ROOT) },
+                    modifier = Modifier.testTag("settings.subpage.back")
+                ) {
+                    Icon(
+                        Icons.AutoMirrored.Outlined.ArrowBack,
+                        contentDescription = stringResource(R.string.nav_settings)
+                    )
+                }
+                Text(
+                    stringResource(R.string.nav_settings),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold
+                )
+                Spacer(Modifier.weight(1f))
+            }
+            when (subRoute) {
+                SettingsSubRoute.GENERAL -> Text(stringResource(R.string.appearance_title), style = MaterialTheme.typography.titleLarge)
+                SettingsSubRoute.SUBSCRIPTION -> {
+                    Text(stringResource(R.string.pro_title), style = MaterialTheme.typography.titleLarge)
+                    Button(onClick = onOpenPro, modifier = Modifier.fillMaxWidth()) {
+                        Text(stringResource(R.string.pro_unlock))
+                    }
+                    Text(stringResource(R.string.pro_truthful_summary), style = MaterialTheme.typography.bodySmall)
+                }
+                SettingsSubRoute.NOTIFICATIONS -> Text(stringResource(R.string.security_alerts_title), style = MaterialTheme.typography.titleLarge)
+                SettingsSubRoute.SECURITY -> Text(stringResource(R.string.download_interceptor_label), style = MaterialTheme.typography.titleLarge)
+                SettingsSubRoute.HELP_LEGAL -> Text(stringResource(R.string.about_legal), style = MaterialTheme.typography.titleLarge)
+                SettingsSubRoute.RATE -> {
+                    Text(stringResource(R.string.app_name), style = MaterialTheme.typography.titleLarge)
+                    Text(stringResource(R.string.official_website_visit), style = MaterialTheme.typography.bodySmall)
+                    Button(onClick = {
+                        val playUri = android.net.Uri.parse("market://details?id=com.vibesync.antivirus")
+                        val webUri = android.net.Uri.parse("https://play.google.com/store/apps/details?id=com.vibesync.antivirus")
+                        runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, playUri)) }
+                            .onFailure { runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, webUri)) } }
+                    }, modifier = Modifier.fillMaxWidth()) {
+                        Text(stringResource(R.string.official_website_title))
+                    }
+                }
+                SettingsSubRoute.ROOT -> Unit
+            }
+        }
+        if (subRoute == SettingsSubRoute.GENERAL) {
+        Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
+            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Text(stringResource(R.string.appearance_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                SettingsDescription(R.string.theme_appearance_description)
+                TextButton(onClick = { showThemeDialog = true }) {
+                    Text(stringResource(when (appTheme) {
+                        AppTheme.DARK_SLATE -> R.string.theme_dark_slate
+                        AppTheme.MIDNIGHT -> R.string.theme_midnight
+                        AppTheme.LIGHT -> R.string.theme_dark_slate
+                        AppTheme.OLED -> R.string.theme_oled
+                    }))
+                }
+            }
+        }
+        }
+        if (subRoute == SettingsSubRoute.NOTIFICATIONS) {
+        Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
+            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Text(stringResource(R.string.siren_test_settings_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                SettingsDescription(R.string.siren_test_settings_description)
+                Button(onClick = {
+                    // Explicit user-initiated demo; never inserts a fabricated malware record.
+                    val eventId = SecurityAlertNotifier.runManualSirenTest(context)
+                    val preview = Intent(context, ThreatDetectedActivity::class.java)
+                        .putExtra(SecurityAlertNotifier.EXTRA_TEST_MODE, true)
+                        .putExtra("security.incident.event_id", eventId)
+                    runCatching { context.startActivity(preview) }
+                        .onFailure { Log.w("SafeMobileSiren", "Manual siren preview unavailable", it) }
+                }) { Text(stringResource(R.string.siren_test_button)) }
+            }
+        }
+        }
+        if (subRoute == SettingsSubRoute.GENERAL) {
+        Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
+            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(stringResource(R.string.global_threat_intelligence_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                SettingsDescription(R.string.global_threat_intelligence_description)
+                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                    Text(stringResource(R.string.global_threat_intelligence_title),
+                        modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium)
+                    Switch(
+                        checked = globalThreatIntelligenceEnabled,
+                        colors = safeMobileSwitchColors(),
+                        onCheckedChange = { enabled ->
+                            GlobalThreatIntelligenceConsent.setEnabled(context, enabled)
+                            globalThreatIntelligenceEnabled = enabled
+                        }
+                    )
+                }
+            }
+        }
+        if (BuildConfig.OPTIONAL_FEED_ENABLED) {
+            Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
+                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Text(stringResource(R.string.feed_settings_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                    SettingsDescription(R.string.feed_settings_description)
+                    OutlinedTextField(
+                        value = feedUrl,
+                        onValueChange = { feedUrl = it; feedConfigSaved = false },
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true,
+                        label = { Text(stringResource(R.string.feed_settings_url_label)) },
+                        placeholder = { Text(stringResource(R.string.feed_url_hint)) }
+                    )
+                    OutlinedTextField(
+                        value = feedAuthKey,
+                        onValueChange = { feedAuthKey = it; feedConfigSaved = false },
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true,
+                        visualTransformation = PasswordVisualTransformation(),
+                        label = { Text(stringResource(R.string.feed_settings_auth_label)) }
+                    )
+                    Button(onClick = {
+                        runCatching {
+                            feedStore.save(feedStore.load().copy(url = feedUrl, authKey = feedAuthKey))
+                        }.onSuccess {
+                            feedConfigSaved = feedStore.isConfigured()
+                            feedConfigMessage = context.getString(R.string.feed_settings_saved)
+                            ThreatFeedSyncScheduler.ensurePeriodic(context)
+                        }.onFailure {
+                            feedConfigMessage = context.getString(R.string.feed_settings_failed)
+                        }
+                    }) { Text(stringResource(R.string.feed_settings_save)) }
+                    feedConfigMessage?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }
+                    Text(
+                        stringResource(
+                            if (BuildConfig.FEED_MANIFEST_KEY_CONFIGURED) R.string.feed_settings_key_ready
+                            else R.string.feed_settings_key_missing
+                        ),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Row(Modifier.fillMaxWidth(), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+                        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Text(stringResource(R.string.feed_settings_opt_in_title), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                            SettingsDescription(R.string.feed_settings_opt_in_description)
+                        }
+                        Switch(
+                            checked = feedConsentEnabled,
+                            colors = safeMobileSwitchColors(),
+                            enabled = BuildConfig.FEED_MANIFEST_KEY_CONFIGURED && feedConfigSaved && feedUrl.isNotBlank(),
+                            onCheckedChange = { requested ->
+                                if (requested) showFeedConsentDialog = true
+                                else {
+                                    feedStore.setSyncEnabled(false)
+                                    feedConsentEnabled = false
+                                    ThreatFeedSyncScheduler.ensurePeriodic(context)
+                                    feedConfigMessage = context.getString(R.string.feed_settings_disabled)
+                                }
+                            }
+                        )
+                    }
+                }
+            }
+        }
+        }
+        if (subRoute == SettingsSubRoute.SECURITY) {
+        InstallSentinelSettings(
+                isRunningOverride = installSentinelRunningOverride,
+                isEnabledOverride = installSentinelEnabledOverride,
+                onToggleOverride = onInstallSentinelChanged
+            )
+        OverlayRiskReviewPanel()
+
+
+
+        }
+        if (subRoute == SettingsSubRoute.SECURITY) {
+        Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
+            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Text(stringResource(R.string.download_interceptor_label), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                SettingsDescription(R.string.download_interceptor_description)
+                Text(
+                    stringResource(if (sentinelEnabled) R.string.download_interceptor_status_enabled else R.string.download_interceptor_status_setup),
+                    style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Row(Modifier.fillMaxWidth(), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+                    Text(stringResource(if (sentinelEnabled) R.string.download_sentinel_running else R.string.download_sentinel_stopped),
+                        style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f))
+                    Switch(
+                        modifier = Modifier.testTag("settings.download-monitoring"),
+                        checked = sentinelEnabled,
+                        colors = safeMobileSwitchColors(),
+                        onCheckedChange = { enabled ->
+                        if (onToggleProtection != null) onToggleProtection.invoke(enabled)
+                        else if (enabled) onEnableSentinel() else onDisableSentinel()
+                    })
+                }
+                OutlinedButton(
+                    onClick = onManageFolders,
+                    modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)
+                ) { Text(stringResource(R.string.ui_sentinel_setup)) }
+                Button(
+                    onClick = onAddCustomFolder,
+                    modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp)
+                ) { Text(stringResource(R.string.ui_sentinel_add_custom_folder)) }
+                SettingsDescription(R.string.strict_mode_description)
+                Row(Modifier.fillMaxWidth(), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+                    Text(stringResource(R.string.strict_mode_label), modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium)
+                    Switch(checked = strictMode, colors = safeMobileSwitchColors(), onCheckedChange = { onStrictModeChanged?.invoke(it) })
+                }
+            }
+        }
+
+        }
+        if (subRoute == SettingsSubRoute.NOTIFICATIONS) {
+        Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
+            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(stringResource(R.string.security_alerts_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                SettingsDescription(R.string.incident_alerts_explanation)
+                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                    Text(stringResource(if (securityAlertsEnabled) R.string.security_alerts_enabled else R.string.security_alerts_disabled),
+                        modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium)
+                    Switch(checked = securityAlertsEnabled, colors = safeMobileSwitchColors(), onCheckedChange = { onSecurityAlertsChanged?.invoke(it) })
+                }
+                if (securityAlertsEnabled && Build.VERSION.SDK_INT >= 34) {
+                    OutlinedButton(onClick = { showFullScreenPrompt = true }, modifier = Modifier.fillMaxWidth()) {
+                        Text(stringResource(R.string.incident_full_screen_settings))
+                    }
+                }
+            }
+        }
+        Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
+            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(stringResource(R.string.voice_alerts_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                SettingsDescription(R.string.voice_alerts_description)
+                Row(Modifier.fillMaxWidth(), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+                    Text(
+                        stringResource(if (voiceAlertsEnabled) R.string.voice_alerts_enabled else R.string.voice_alerts_disabled),
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.weight(1f)
+                    )
+                    Switch(
+                        checked = voiceAlertsEnabled,
+                        colors = safeMobileSwitchColors(),
+                        onCheckedChange = { enabled ->
+                            voiceAlertsEnabled = enabled
+                            voicePrefs.edit().putBoolean(SafeMobileApp.KEY_VOICE_ALERTS_ENABLED, enabled).apply()
+                        }
+                    )
+                }
+            }
+        }
+
+        }
+        if (subRoute == SettingsSubRoute.GENERAL) {
+        Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
+            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(stringResource(R.string.language_settings), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                Text(
+                    if (localeOverrideTag.isBlank()) stringResource(R.string.language_system_default)
+                    else stringResource(LocalePreferences.labelResource(localeOverrideTag)),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                TextButton(onClick = { showLanguageDialog = true }) {
+                    Text(stringResource(R.string.language_settings))
+                }
+            }
+        }
+        }
+        if (subRoute == SettingsSubRoute.HELP_LEGAL) {
+        AppManifestPermissionsCard()
+        Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
+            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(stringResource(R.string.ray_id), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                Text(rayId, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Button(onClick = {
+                    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager
+                    clipboard?.setPrimaryClip(ClipData.newPlainText(context.getString(R.string.ray_id), rayId))
+                    Toast.makeText(context, R.string.ray_id_copied, Toast.LENGTH_SHORT).show()
+                }) { Text(stringResource(R.string.ray_id_copy)) }
+            }
+        }
+        Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
+            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(stringResource(R.string.settings_privacy), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                SettingsDescription(R.string.ad_privacy_intro)
+                if (adPrivacyOptionsRequired && !isProForAds) {
+                    OutlinedButton(onClick = onShowAdPrivacyOptions, modifier = Modifier.fillMaxWidth()) {
+                        Text(stringResource(R.string.ad_privacy_options))
+                    }
+                }
+            }
+        }
+        Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
+            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                Text(stringResource(R.string.official_website_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                TextButton(onClick = { openOfficialWebsite("https://vibesyncro.com/") }) {
+                    Text(stringResource(R.string.official_website_visit))
+                }
+                TextButton(onClick = { openOfficialWebsite("https://vibesyncro.com/safemobile.html") }) {
+                    Text(stringResource(R.string.official_website_product))
+                }
+                TextButton(onClick = { openOfficialWebsite("https://vibesyncro.com/about.html") }) {
+                    Text(stringResource(R.string.official_website_about))
+                }
+            }
+        }
+        Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
+            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(stringResource(R.string.about_legal), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                Text(stringResource(R.string.format_version, stringResource(R.string.app_name), BuildConfig.VERSION_NAME, localizedNumber(BuildConfig.VERSION_CODE)),
+                    modifier = Modifier.clickable {
+                        benchmarkUnlockCount++
+                        if (benchmarkUnlockCount >= 7) showBenchmarkResults = true
+                    }, style = MaterialTheme.typography.bodySmall)
+                TextButton(onClick = { showAbout = true }) { Text(stringResource(R.string.about_legal)) }
+            }
+        }
+        // Hidden developer-only readout: tap the version line seven times to reveal it.
+        if (showBenchmarkResults) BenchmarkResultsPanel()
+        Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant), shape = RoundedCornerShape(16.dp)) {
+            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(stringResource(R.string.family_dedication_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                SettingsDescription(R.string.family_dedication)
+            }
+        }
+        }
+    }
+
+    if (showThemeDialog) AlertDialog(
+        onDismissRequest = { showThemeDialog = false },
+        title = { Text(stringResource(R.string.appearance_title)) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                selectableSafeMobileThemes.forEach { option ->
+                    val label = when (option) {
+                        AppTheme.DARK_SLATE -> R.string.theme_dark_slate
+                        AppTheme.MIDNIGHT -> R.string.theme_midnight
+                        AppTheme.LIGHT -> R.string.theme_dark_slate
+                        AppTheme.OLED -> R.string.theme_oled
+                    }
+                    Row(
+                        modifier = Modifier.fillMaxWidth().selectable(
+                            selected = appTheme == option,
+                            role = Role.RadioButton,
+                            onClick = { onAppThemeChanged(option); showThemeDialog = false }
+                        ),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RadioButton(selected = appTheme == option, onClick = null)
+                        Text(stringResource(label))
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = { showThemeDialog = false }) { Text(stringResource(R.string.close)) }
+        }
+    )
+
+    if (showLanguageDialog) AlertDialog(
+        onDismissRequest = { showLanguageDialog = false },
+        title = { Text(stringResource(R.string.language_settings)) },
+        text = {
+            Column(
+                Modifier.fillMaxWidth().heightIn(max = 420.dp).verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth().selectable(
+                        selected = localeOverrideTag.isBlank(),
+                        role = Role.RadioButton,
+                        onClick = {
+                            LocalePreferences.saveOverride(context, "")
+                            localeOverrideTag = ""
+                            showLanguageDialog = false
+                            activity?.recreate()
+                        }
+                    ),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    RadioButton(selected = localeOverrideTag.isBlank(), onClick = null)
+                    Text(stringResource(R.string.language_system_default))
+                }
+                LocalePreferences.choices.forEach { choice ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth().selectable(
+                            selected = localeOverrideTag == choice.tag,
+                            role = Role.RadioButton,
+                            onClick = {
+                                LocalePreferences.saveOverride(context, choice.tag)
+                                localeOverrideTag = choice.tag
+                                showLanguageDialog = false
+                                activity?.recreate()
+                            }
+                        ),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RadioButton(selected = localeOverrideTag == choice.tag, onClick = null)
+                        Text(stringResource(choice.labelResource))
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = { showLanguageDialog = false }) { Text(stringResource(R.string.close)) }
+        }
+    )
+
+    if (showFullScreenPrompt && Build.VERSION.SDK_INT >= 34) AlertDialog(
+        properties = DialogProperties(dismissOnClickOutside = true, dismissOnBackPress = true),
+        onDismissRequest = { showFullScreenPrompt = false },
+        title = { Text(stringResource(R.string.incident_full_screen_settings)) },
+        text = { Text(stringResource(R.string.incident_full_screen_explanation)) },
+        confirmButton = { TextButton(onClick = {
+            showFullScreenPrompt = false
+            runCatching {
+                context.startActivity(android.content.Intent(android.provider.Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT,
+                    android.net.Uri.fromParts("package", context.packageName, null)))
+            }.onFailure { Toast.makeText(context, R.string.uninstall_no_settings, Toast.LENGTH_LONG).show() }
+        }) { Text(stringResource(R.string.incident_open_settings)) } },
+        dismissButton = { TextButton(onClick = { showFullScreenPrompt = false }) {
+            Text(stringResource(R.string.setup_notifications_not_now))
+        } }
+    )
+
+    if (showFeedConsentDialog) AlertDialog(
+        properties = DialogProperties(dismissOnClickOutside = true, dismissOnBackPress = true),
+        onDismissRequest = { showFeedConsentDialog = false },
+        title = { Text(stringResource(R.string.feed_settings_consent_title)) },
+        text = { Text(stringResource(R.string.feed_settings_consent_body)) },
+        confirmButton = {
+            TextButton(onClick = {
+                feedStore.setSyncEnabled(true)
+                feedConsentEnabled = true
+                showFeedConsentDialog = false
+                ThreatFeedSyncScheduler.ensurePeriodic(context)
+                ThreatFeedSyncScheduler.enqueueNow(context)
+                feedConfigMessage = context.getString(R.string.feed_settings_enabled)
+            }) { Text(stringResource(R.string.feed_settings_confirm)) }
+        },
+        dismissButton = {
+            TextButton(onClick = { showFeedConsentDialog = false }) {
+                Text(stringResource(R.string.feed_settings_cancel))
+            }
+        }
+    )
+
+    val aboutContent = remember(context, aboutSection) {
+        when (aboutSection) {
+            "readme" -> listOf(R.string.scan_explanation, R.string.scan_clean_warning, R.string.monitor_explanation, R.string.quarantine_vault_description, R.string.features_disclaimer).joinToString("\n\n") { context.getString(it) }
+            "notices" -> context.getString(R.string.about_localized_notices)
+            "license" -> context.getString(R.string.about_license) + "\n\n" +
+                context.getString(R.string.metrics_not_blocked_disclaimer) + "\n\n" +
+                context.getString(R.string.scan_clean_warning)
+            else -> context.getString(R.string.ad_privacy_intro) + "\n\n" + context.getString(R.string.about_localized_privacy)
+        }
+    }
+    if (showAbout) AlertDialog(
+        properties = DialogProperties(dismissOnClickOutside = true, dismissOnBackPress = true),
+        onDismissRequest = { showAbout = false },
+        title = { Text(stringResource(R.string.about_legal)) },
+        text = {
+            Column(
+                Modifier.fillMaxWidth().heightIn(max = 470.dp).verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+                    TextButton(onClick = { aboutSection = "readme" }) { Text(stringResource(R.string.about_readme)) }
+                    TextButton(onClick = { aboutSection = "privacy" }) { Text(stringResource(R.string.about_privacy_policy)) }
+                }
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+                    TextButton(onClick = { aboutSection = "license" }) { Text(stringResource(R.string.about_license)) }
+                    TextButton(onClick = { aboutSection = "notices" }) { Text(stringResource(R.string.about_third_party)) }
+                }
+                Text(aboutContent, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurface)
+                TextButton(onClick = {
+                    val document = when (aboutSection) {
+                        "readme" -> "app/src/main/assets/README.md"
+                        "notices" -> "app/src/main/assets/THIRD_PARTY_NOTICES.md"
+                        "license" -> "LICENSE"
+                        else -> "app/src/main/assets/privacy-policy.md"
+                    }
+                    runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, android.net.Uri.parse("https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/blob/main/$document"))) }
+                        .onFailure { Toast.makeText(context, R.string.uninstall_no_settings, Toast.LENGTH_LONG).show() }
+                }) { Text(stringResource(R.string.about_open_original)) }
+            }
+        },
+        confirmButton = { TextButton(onClick = { showAbout = false }) { Text(stringResource(R.string.close)) } }
+    )
+}
+

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">સ્કેન પૂર્ણ</string>
+    <string name="v116_scan_local_no_match">સ્કેન પૂર્ણ થયું. સ્થાનિક મેળ મળ્યો નથી. હાલમાં ઉપકરણ સુરક્ષિત લાગે છે.</string>
+    <string name="v116_score_meaning">આ સ્કોર ઉપકરણના સેટિંગ્સ બતાવે છે, માલવેર ન હોવાનો પુરાવો નથી. કેટલીક તપાસ પુષ્ટિ થયેલી નથી.</string>
+</resources>

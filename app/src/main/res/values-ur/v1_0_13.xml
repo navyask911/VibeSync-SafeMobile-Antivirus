@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="trusted_app_options">اختیارات</string>
+<string name="trusted_app_remove">اعتماد ختم کریں</string>
+<string name="trusted_app_removed">اعتماد ختم ہوگیا۔ اس پیکیج کی آئندہ جانچ اور انتباہات دوبارہ فعال ہیں۔</string>
+<string name="trusted_app_remove_failed">اعتماد ختم نہیں ہوسکا۔ دوبارہ کوشش کریں۔</string>
+<string name="install_sentinel_title">تنصیب کی نگرانی</string>
+<string name="install_sentinel_active">SafeMobile Sentinel: فعال اور نگرانی جاری</string>
+<string name="install_sentinel_description">مستقل اطلاع کے ساتھ تنصیب کے بعد مقامی جانچ۔ بار بار تلاش یا آلہ بیدار رکھنے والا تالا نہیں۔ Android سروس روک سکتا ہے۔</string>
+<string name="install_sentinel_stop">تنصیب کی نگرانی روکیں</string>
+<string name="install_scan_progress">نئی نصب کردہ ایپ کی جانچ جاری ہے: %1$s</string>
+<string name="analytics_chart_title">جانچ کے نتائج</string>
+<string name="analytics_other">دیگر نتائج</string>
+<string name="analytics_total">نتائج</string>
+<string name="analytics_weekly_scans">ہفتہ وار جانچ</string>
+<string name="analytics_week_note">پیر سے اتوار تک درج نشستیں۔ نامکمل جانچ بھی شامل ہوسکتی ہے۔</string>
+<string name="posture_overlay_select_app">Android 11 یا بعد کے نسخے میں، دوسری ایپس کے اوپر دکھانے کی ترتیبات کی فہرست سے %1$s منتخب کریں۔</string>
+<string name="install_scan_received">تنصیب کا واقعہ موصول ہوا۔ جائزے کے لیے SafeMobile کھولیں۔</string>
+</resources>

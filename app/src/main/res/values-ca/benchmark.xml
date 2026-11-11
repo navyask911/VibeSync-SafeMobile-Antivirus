@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">Resultats de la prova</string>
+    <string name="benchmark_not_measured">Encara no hi ha mesures verificades</string>
+    <string name="benchmark_total_apps">APK analitzats</string>
+    <string name="benchmark_tpr">Taxa de detecció (TPR)</string>
+    <string name="benchmark_fpr">Taxa de falsos positius (FPR)</string>
+    <string name="benchmark_latency">Temps mitjà de cerca</string>
+    <string name="benchmark_privacy_note">Només es mostren resultats verificats. No es guarden APK de prova a l’aplicació.</string>
+</resources>

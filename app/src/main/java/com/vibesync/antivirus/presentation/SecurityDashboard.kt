@@ -1,0 +1,190 @@
+package com.vibesync.antivirus.presentation
+
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.animateIntAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.vibesync.antivirus.R
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.semantics.ProgressBarRangeInfo
+import androidx.compose.ui.semantics.progressBarRangeInfo
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.shape.RoundedCornerShape
+import com.vibesync.antivirus.core.engine.ScanVerdict
+import com.vibesync.antivirus.core.security.DeviceSecurityAssessment
+import com.vibesync.antivirus.ui.components.GlassCard
+import com.vibesync.antivirus.ui.components.ScanProgressRing
+import java.text.DateFormat
+import java.util.Date
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+internal fun SecurityDashboard(assessment: DeviceSecurityAssessment?, onCheckPlayProtect: () -> Unit, onSync: () -> Unit) {
+    var showScoreInfo by remember { mutableStateOf(false) }
+    var showScoreDetails by remember { mutableStateOf(false) }
+    val target = assessment?.score ?: 0
+    val score by animateIntAsState(target, tween(900))
+    val progress by animateFloatAsState(target / 100f, tween(900))
+    GlassCard(Modifier.fillMaxWidth()) {
+        Column(Modifier.animateContentSize(), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(18.dp)) {
+                val accent = if (target >= 90) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.tertiary
+                val track = MaterialTheme.colorScheme.surfaceVariant
+                Box(Modifier.size(110.dp).semantics { progressBarRangeInfo = ProgressBarRangeInfo(progress, 0f..1f) }, contentAlignment = Alignment.Center) {
+                    Canvas(Modifier.size(106.dp)) {
+                        val stroke = 8.dp.toPx(); val inset = stroke / 2
+                        val arcSize = androidx.compose.ui.geometry.Size(size.width - stroke, size.height - stroke)
+                        drawArc(track, -90f, 360f, false, Offset(inset, inset), arcSize, style = Stroke(stroke))
+                        drawArc(accent, -90f, progress * 360f, false, Offset(inset, inset), arcSize, style = Stroke(stroke, cap = StrokeCap.Round))
+                    }
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(if (assessment == null) "—" else localizedNumber(score), style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.Bold)
+                        Text(stringResource(R.string.ui_score_out_of_100), style = MaterialTheme.typography.labelMedium)
+                    }
+                }
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(stringResource(R.string.ui_score_title), style = MaterialTheme.typography.titleLarge)
+                        IconButton(onClick = { showScoreInfo = true }) {
+                            Icon(Icons.Outlined.Info, contentDescription = stringResource(R.string.ui_score_explanation))
+                        }
+                    }
+                    Text(if (assessment == null) stringResource(R.string.ui_score_checking) else
+                        stringResource(R.string.ui_score_checks, 7 - assessment.unknownChecks, 7),
+                        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+            }
+            if (assessment != null) {
+                val signals = assessment.signals
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Surface(
+                        shape = RoundedCornerShape(50),
+                        color = if (target >= 90) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.tertiaryContainer
+                    ) {
+                        Text(
+                            stringResource(if (target >= 90) R.string.ui_status_safe else R.string.ui_status_at_risk),
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                            color = if (target >= 90) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onTertiaryContainer,
+                            style = MaterialTheme.typography.labelLarge,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                    Spacer(Modifier.weight(1f))
+                    TextButton(onClick = { showScoreDetails = !showScoreDetails }, modifier = Modifier.heightIn(min = 48.dp)) {
+                        Text(stringResource(if (showScoreDetails) R.string.ui_read_less else R.string.ui_read_more))
+                    }
+                }
+                AnimatedVisibility(visible = showScoreDetails) {
+                    Column(Modifier.animateContentSize(), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                        ScoreRow(stringResource(R.string.ui_score_play_protect), when(signals.playProtectEnabled) { true -> stringResource(R.string.ui_on); false -> stringResource(R.string.ui_off_20); null -> stringResource(R.string.ui_not_verified) })
+                        ScoreRow(stringResource(R.string.ui_score_database), if (assessment.databaseStale) stringResource(R.string.ui_stale_10) else stringResource(R.string.ui_updated_24))
+                        ScoreRow(stringResource(R.string.ui_score_accessibility), signals.nonSystemAccessibilityApps?.let { pluralStringResource(R.plurals.l10n_enabled_apps, it, it) } ?: stringResource(R.string.ui_unavailable))
+                        ScoreRow(stringResource(R.string.ui_score_admin), signals.nonSystemDeviceAdmins?.let { pluralStringResource(R.plurals.l10n_enabled_apps, it, it) } ?: stringResource(R.string.ui_unavailable))
+                        ScoreRow(stringResource(R.string.guardian_adb_state), settingsFlag(signals.usbDebuggingEnabled))
+                        ScoreRow(stringResource(R.string.risk_install), settingsFlag(signals.safeMobileUnknownSourcesGrant))
+                        ScoreRow(stringResource(R.string.posture_overlays), signals.activeNonSystemOverlays?.let {
+                            pluralStringResource(R.plurals.l10n_enabled_apps, it, it) } ?: stringResource(R.string.ui_not_verified))
+                        ScoreRow(stringResource(R.string.battery_review_title), settingsFlag(signals.backgroundRestricted))
+                        ExpandableText(stringResource(R.string.v116_score_meaning), maxLines = 3)
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            TextButton(onClick = onCheckPlayProtect, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.ui_check_play_protect)) }
+                            if (assessment.databaseStale) TextButton(onClick = onSync, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.ui_update_definitions)) }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    if (showScoreInfo) {
+        ModalBottomSheet(onDismissRequest = { showScoreInfo = false }) {
+            Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Text(stringResource(R.string.ui_score_title), style = MaterialTheme.typography.titleLarge)
+                Text(stringResource(R.string.v116_score_meaning), style = MaterialTheme.typography.bodyMedium)
+                Text(stringResource(R.string.ui_score_play_protect) + " · −20")
+                Text(stringResource(R.string.guardian_adb_state) + " · −15")
+                Text(stringResource(R.string.risk_install) + " · −10")
+                Text(stringResource(R.string.posture_overlays) + " · −15")
+                Text(stringResource(R.string.battery_review_title) + " · −15")
+                Text(stringResource(R.string.ui_score_database) + " · −10")
+                Text(stringResource(R.string.ui_score_accessibility) + " · −10")
+                Text(stringResource(R.string.ui_score_admin) + " · −5")
+                if (assessment != null) {
+                    Text(stringResource(R.string.ui_score_checks, 7 - assessment.unknownChecks, 7))
+                }
+                Spacer(Modifier.height(16.dp))
+            }
+        }
+    }
+}
+
+@Composable
+private fun settingsFlag(value: Boolean?): String = when (value) {
+    true -> stringResource(R.string.posture_enabled)
+    false -> stringResource(R.string.posture_not_granted)
+    null -> stringResource(R.string.ui_not_verified)
+}
+
+@Composable
+private fun ScoreRow(label: String, value: String) {
+    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+        Text(label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(value, style = MaterialTheme.typography.bodyMedium)
+    }
+}
+
+@Composable
+internal fun ScanFeedbackCard(state: SafeMobileUiState, onResults: () -> Unit, onCancel: () -> Unit) {
+    val summary = state.scanSummary
+    if (!state.isScanning && summary == null) return
+    GlassCard(Modifier.fillMaxWidth()) {
+        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            if (state.isScanning) {
+                val progress = if (state.totalItems > 0) (state.processedItems.toFloat() / state.totalItems).coerceIn(0f, 1f) else null
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                    ScanProgressRing(progress, true, stringResource(R.string.ui_scanning_progress), size = 96.dp)
+                    Column(Modifier.weight(1f)) {
+                        Text(stringResource(R.string.ui_scanning_title), style = MaterialTheme.typography.titleLarge)
+                        Text(if (state.totalItems > 0) pluralStringResource(R.plurals.l10n_progress, state.totalItems, state.processedItems, state.totalItems) else stringResource(R.string.ui_preparing_inventory))
+                    }
+                }
+                TextButton(onClick = onCancel) { Text(stringResource(R.string.ui_cancel_scan)) }
+            } else if (summary != null) {
+                Text(stringResource(R.string.v116_scan_title), style = MaterialTheme.typography.headlineSmall,
+                    color = if (summary.threats > 0) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary)
+                Text(listOf(pluralStringResource(R.plurals.l10n_scanned_apps, summary.appCount, summary.appCount), pluralStringResource(R.plurals.l10n_scanned_files, summary.fileCount, summary.fileCount)).joinToString(" · "), style = MaterialTheme.typography.titleMedium)
+                Text(pluralStringResource(R.plurals.l10n_threats, summary.threats, summary.threats), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                if (summary.review > 0 || summary.unreadable > 0) Text(
+                    listOf(pluralStringResource(R.plurals.l10n_review, summary.review, summary.review), pluralStringResource(R.plurals.l10n_unreadable, summary.unreadable, summary.unreadable)).joinToString(" · "), color = MaterialTheme.colorScheme.tertiary)
+                else if (summary.appCount + summary.fileCount == 0) Text(stringResource(R.string.ui_no_readable_items))
+                else if (summary.threats == 0 && summary.review == 0 &&
+                    summary.unreadable == 0 && summary.signedDefinitionsUsed)
+                    Text(stringResource(R.string.v116_scan_local_no_match))
+                else if (summary.threats == 0) Text(stringResource(R.string.system_app_scan_complete))
+                if (!summary.signedDefinitionsUsed) Text(stringResource(R.string.ui_unsigned_definitions_warning), color = MaterialTheme.colorScheme.tertiary)
+                state.results.filter { it.verdict == ScanVerdict.THREAT }.take(3).forEach { Text(stringResource(R.string.format_bullet, it.displayName), color = MaterialTheme.colorScheme.error) }
+                Text(localizedDate(summary.completedAt), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                TextButton(onClick = onResults) { Text(stringResource(R.string.ui_view_scan_results)) }
+            }
+        }
+    }
+}

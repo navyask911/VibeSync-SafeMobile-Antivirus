@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="official_website_title">공식 웹사이트</string>
+    <string name="official_website_visit">VibeSyncro.com 방문</string>
+    <string name="official_website_product">SafeMobile 제품 페이지</string>
+    <string name="official_website_about">VibeSyncro 소개</string>
+</resources>

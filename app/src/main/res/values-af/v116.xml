@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">Skandering voltooi</string>
+    <string name="v116_scan_local_no_match">Skandering voltooi. Geen plaaslike passing gevind nie. U toestel lyk tans veilig.</string>
+    <string name="v116_score_meaning">Hierdie telling beskryf toestelinstellings, nie bewys van geen wanware nie. Sommige kontroles is nie geverifieer nie.</string>
+</resources>

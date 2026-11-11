@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">Nuskaitymas baigtas</string>
+    <string name="v116_scan_local_no_match">Nuskaitymas baigtas. Vietinių atitikmenų nėra. Šiuo metu įrenginys atrodo saugus.</string>
+    <string name="v116_score_meaning">Balas atspindi nustatymus, o ne įrodo, kad nėra kenkėjiškų programų. Kai kurios patikros nepatvirtintos.</string>
+</resources>

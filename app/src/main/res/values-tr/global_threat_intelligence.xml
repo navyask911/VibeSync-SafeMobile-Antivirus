@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="global_threat_intelligence_title">Küresel Tehdit İstihbaratına Katkıda Bulun (İsteğe Bağlı)</string>
+    <string name="global_threat_intelligence_description">Bu seçenek etkinleştirildiğinde SafeMobile, doğrulanmış tehditlerin SHA-256 özetlerini ve mevcutsa 215 ikili davranış özelliğini otomatik olarak paylaşır. APK dosyaları, dosya adları, yollar, paket adları veya cihaz tanımlayıcıları asla gönderilmez. Bu seçeneği istediğiniz zaman kapatabilirsiniz.</string>
+    <string name="global_threat_intelligence_donate_message">Bu kötü amaçlı dosyanın imzasını yapay zekâ eğitim ağımıza anonim olarak bağışlayarak başkalarını korumaya yardımcı olun.</string>
+    <string name="global_threat_intelligence_donate">Bağış Yap</string>
+    <string name="global_threat_intelligence_decline">Reddet</string>
+</resources>

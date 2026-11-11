@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">స్కాన్ పూర్తయింది</string>
+    <string name="v116_scan_local_no_match">స్కాన్ పూర్తయింది. స్థానిక సరిపోలిక లేదు. ప్రస్తుతం పరికరం సురక్షితంగా కనిపిస్తోంది.</string>
+    <string name="v116_score_meaning">ఈ స్కోరు సెట్టింగ్‌లను చూపుతుంది; మాల్వేర్ లేదనే రుజువు కాదు. కొన్ని తనిఖీలు నిర్ధారణ కాలేదు.</string>
+</resources>

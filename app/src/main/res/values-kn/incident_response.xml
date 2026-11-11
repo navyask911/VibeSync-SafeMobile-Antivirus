@@ -1,0 +1,16 @@
+<resources>
+ <string name="incident_channel_description">ಸಕ್ರಿಯಗೊಳಿಸಿದಾಗ ಐದು ಸೆಕೆಂಡುಗಳ ಸೈರನ್ ಇರುವ ತುರ್ತು ಸ್ಥಳೀಯ ಬೆದರಿಕೆ ಎಚ್ಚರಿಕೆಗಳು.</string>
+ <string name="incident_title">ದುರುದ್ದೇಶಪೂರಿತ ಆ್ಯಪ್ ಪತ್ತೆಯಾಗಿದೆ</string>
+ <string name="incident_loading">ಆ್ಯಪ್ ವಿವರಗಳನ್ನು ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ…</string>
+ <string name="incident_app_unavailable">ಆ್ಯಪ್ ಈಗ ಲಭ್ಯವಿಲ್ಲ</string>
+ <string name="incident_warning">ಈ ಸ್ಥಾಪಿತ ಆ್ಯಪ್ ತಿಳಿದಿರುವ ಮಾಲ್‌ವೇರ್ ಹ್ಯಾಶ್‌ಗೆ ಹೊಂದಿದೆ. ಇದನ್ನು ತೆರೆಯಬೇಡಿ. Android ದೃಢೀಕರಣದ ಮೂಲಕ ಅನ್‌ಇನ್‌ಸ್ಟಾಲ್ ಮಾಡಿ. SafeMobile ಈ ಆ್ಯಪ್ ಅನ್ನು ಅಳಿಸಿಲ್ಲ ಅಥವಾ ಕ್ವಾರಂಟೈನ್ ಮಾಡಿಲ್ಲ.</string>
+ <string name="incident_uninstall_now">ಈಗ ಅನ್‌ಇನ್‌ಸ್ಟಾಲ್ ಮಾಡಿ</string>
+ <string name="incident_dismiss">ಮುಚ್ಚಿ (ಶಿಫಾರಸು ಮಾಡುವುದಿಲ್ಲ)</string>
+ <string name="incident_review_threat">ಬೆದರಿಕೆ ಪರಿಶೀಲಿಸಿ</string>
+ <string name="incident_user_confirmation">ಆ್ಯಪ್ ಅಳಿಸುವ ಮೊದಲು Android ನಲ್ಲಿ ನಿಮ್ಮ ದೃಢೀಕರಣ ಅಗತ್ಯ. SafeMobile ಮೌನವಾಗಿ ಆ್ಯಪ್ ಅಳಿಸುವುದಿಲ್ಲ.</string>
+ <string name="incident_alerts_explanation">ದೃಢಪಟ್ಟ ಮಾಲ್‌ವೇರ್‌ಗಾಗಿ ತುರ್ತು ಅಧಿಸೂಚನೆ ಮತ್ತು ಐದು ಸೆಕೆಂಡುಗಳ ಸೈರನ್‌ಗೆ ಅನುಮತಿ ನೀಡಿ. SafeMobile ತೆರೆದಾಗ ಅಥವಾ ಎಚ್ಚರಿಕೆ ಮುಚ್ಚಿದಾಗ ಧ್ವನಿ ನಿಲ್ಲುತ್ತದೆ. Android ಧ್ವನಿ ನಿಯಮಗಳು ಅನ್ವಯಿಸುತ್ತವೆ.</string>
+ <string name="incident_full_screen_settings">ಪೂರ್ಣಪರದೆ ಬೆದರಿಕೆ ಎಚ್ಚರಿಕೆಗಳು</string>
+ <string name="incident_full_screen_explanation">Android 14+ ಪೂರ್ಣಪರದೆ ಎಚ್ಚರಿಕೆ ಪ್ರವೇಶವನ್ನು ನಿಯಂತ್ರಿಸುತ್ತದೆ. ಇದು ಐಚ್ಛಿಕ. ಇಲ್ಲದಿದ್ದರೆ ಪ್ರಮುಖ ಅಧಿಸೂಚನೆ ತೋರಿಸಲಾಗುತ್ತದೆ.</string>
+ <string name="incident_open_settings">ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ತೆರೆಯಿರಿ</string>
+ <string name="cyber_dark_appearance">ಗಾಢ ನೀಲಿ ಥೀಮ್</string>
+</resources>

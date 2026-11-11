@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">தரநிலைச் சோதனை முடிவுகள்</string>
+    <string name="benchmark_not_measured">சரிபார்க்கப்பட்ட அளவீடுகள் இன்னும் இல்லை</string>
+    <string name="benchmark_total_apps">சோதித்த APK கோப்புகள்</string>
+    <string name="benchmark_tpr">கண்டறிதல் விகிதம் (TPR)</string>
+    <string name="benchmark_fpr">தவறான நேர்மறை விகிதம் (FPR)</string>
+    <string name="benchmark_latency">சராசரி ஸ்கேன் நேரம்</string>
+    <string name="benchmark_privacy_note">சரிபார்க்கப்பட்ட முடிவுகள் மட்டுமே காட்டப்படும். சோதனை APK கோப்புகள் செயலியில் சேமிக்கப்படாது.</string>
+</resources>

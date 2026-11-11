@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">ਸਕੈਨ ਪੂਰਾ ਹੋਇਆ</string>
+    <string name="v116_scan_local_no_match">ਸਕੈਨ ਪੂਰਾ ਹੋਇਆ। ਸਥਾਨਕ ਮੇਲ ਨਹੀਂ ਮਿਲਿਆ। ਇਸ ਵੇਲੇ ਡਿਵਾਈਸ ਸੁਰੱਖਿਅਤ ਲੱਗਦੀ ਹੈ।</string>
+    <string name="v116_score_meaning">ਇਹ ਸਕੋਰ ਸੈਟਿੰਗਾਂ ਦੱਸਦਾ ਹੈ, ਮਾਲਵੇਅਰ ਨਾ ਹੋਣ ਦਾ ਸਬੂਤ ਨਹੀਂ। ਕੁਝ ਜਾਂਚਾਂ ਦੀ ਪੁਸ਼ਟੀ ਨਹੀਂ ਹੋਈ।</string>
+</resources>

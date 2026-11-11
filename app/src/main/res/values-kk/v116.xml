@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">Сканерлеу аяқталды</string>
+    <string name="v116_scan_local_no_match">Сканерлеу аяқталды. Жергілікті сәйкестік табылмады. Құрылғы қазір қауіпсіз сияқты.</string>
+    <string name="v116_score_meaning">Ұпай баптауларды көрсетеді, зиянды бағдарламаның жоқтығын дәлелдемейді. Кейбір тексерулер расталмаған.</string>
+</resources>

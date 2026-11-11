@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="trusted_app_options">პარამეტრები</string>
+<string name="trusted_app_remove">ნდობის გაუქმება</string>
+<string name="trusted_app_removed">ნდობა გაუქმებულია. ამ პაკეტისთვის მომავალი შემოწმებები და გაფრთხილებები კვლავ ჩართულია.</string>
+<string name="trusted_app_remove_failed">ნდობის გაუქმება ვერ მოხერხდა. სცადეთ ხელახლა.</string>
+<string name="install_sentinel_title">ინსტალაციების მონიტორინგი</string>
+<string name="install_sentinel_active">SafeMobile Sentinel: აქტიურია და აკვირდება</string>
+<string name="install_sentinel_description">ლოკალური შემოწმება ინსტალაციის შემდეგ მუდმივი შეტყობინებით. პერიოდული გამოკითხვებისა და ძილის დაბლოკვის გარეშე. Android-მა შეიძლება სერვისი შეაჩეროს.</string>
+<string name="install_sentinel_stop">ინსტალაციების მონიტორინგის შეჩერება</string>
+<string name="install_scan_progress">ახლად დაყენებული აპის შემოწმება: %1$s</string>
+<string name="analytics_chart_title">შემოწმების შედეგები</string>
+<string name="analytics_other">სხვა შედეგები</string>
+<string name="analytics_total">შედეგები</string>
+<string name="analytics_weekly_scans">კვირის შემოწმებები</string>
+<string name="analytics_week_note">ორშაბათიდან კვირამდე ჩაწერილი სესიები. შესაძლოა არასრული შემოწმებებიც იყოს შეტანილი.</string>
+<string name="posture_overlay_select_app">Android 11-სა და უფრო ახალ ვერსიაში, სხვა აპებზე ჩვენების პარამეტრების სიაში აირჩიეთ %1$s.</string>
+<string name="install_scan_received">ინსტალაციის მოვლენა მიღებულია. შესამოწმებლად გახსენით SafeMobile.</string>
+</resources>

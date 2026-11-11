@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="trusted_app_options">Options</string>
+<string name="trusted_app_remove">Remove trust</string>
+<string name="trusted_app_removed">Trust removed. Future scans and alerts are enabled for this package.</string>
+<string name="trusted_app_remove_failed">Could not remove trust. Try again.</string>
+<string name="install_sentinel_title">Install monitoring</string>
+<string name="install_sentinel_active">SafeMobile Sentinel: Active and Monitoring</string>
+<string name="install_sentinel_description">Local post-install checks with a persistent notification. No polling or wake lock. Android may stop the service.</string>
+<string name="install_sentinel_stop">Stop install monitoring</string>
+<string name="install_scan_progress">Analyzing newly installed app: %1$s</string>
+<string name="analytics_chart_title">Scan outcomes</string>
+<string name="analytics_other">Other results</string>
+<string name="analytics_total">Results</string>
+<string name="analytics_weekly_scans">Weekly scans</string>
+<string name="analytics_week_note">Recorded sessions, Monday–Sunday. Partial runs may be included.</string>
+<string name="posture_overlay_select_app">On Android 11+, select %1$s in the overlay settings list.</string>
+<string name="install_scan_received">Install event received. Open SafeMobile to review.</string>
+</resources>

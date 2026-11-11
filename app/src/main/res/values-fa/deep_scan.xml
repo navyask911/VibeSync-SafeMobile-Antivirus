@@ -1,0 +1,4 @@
+<resources>
+    <string name="deep_scan_folder">اسکن پوشه (اسکن عمیق)</string>
+    <string name="quarantine_manual_delete">فایل در قرنطینه ایمن شد. لطفاً فایل اصلی را به‌صورت دستی حذف کنید.</string>
+</resources>

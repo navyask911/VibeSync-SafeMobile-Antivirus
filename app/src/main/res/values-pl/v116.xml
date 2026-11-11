@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">Skanowanie zakończone</string>
+    <string name="v116_scan_local_no_match">Skanowanie zakończone. Brak lokalnych dopasowań. Urządzenie wygląda teraz na bezpieczne.</string>
+    <string name="v116_score_meaning">Ocena odzwierciedla ustawienia, nie dowodzi braku złośliwego oprogramowania. Niektóre kontrole nie są potwierdzone.</string>
+</resources>

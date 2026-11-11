@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">Αποτελέσματα δοκιμής</string>
+    <string name="benchmark_not_measured">Δεν υπάρχουν ακόμη επαληθευμένες μετρήσεις</string>
+    <string name="benchmark_total_apps">APK που ελέγχθηκαν</string>
+    <string name="benchmark_tpr">Ποσοστό ανίχνευσης (TPR)</string>
+    <string name="benchmark_fpr">Ποσοστό ψευδών θετικών (FPR)</string>
+    <string name="benchmark_latency">Μέσος χρόνος σάρωσης</string>
+    <string name="benchmark_privacy_note">Εμφανίζονται μόνο επαληθευμένα αποτελέσματα. Δεν αποθηκεύονται δοκιμαστικά APK στην εφαρμογή.</string>
+</resources>

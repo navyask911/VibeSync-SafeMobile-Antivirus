@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="trusted_app_options">Alternativ</string>
+<string name="trusted_app_remove">Återkalla förtroende</string>
+<string name="trusted_app_removed">Förtroendet har återkallats. Framtida skanningar och varningar är aktiverade för paketet igen.</string>
+<string name="trusted_app_remove_failed">Kunde inte återkalla förtroendet. Försök igen.</string>
+<string name="install_sentinel_title">Installationsövervakning</string>
+<string name="install_sentinel_active">SafeMobile Sentinel: aktiv och övervakar</string>
+<string name="install_sentinel_description">Lokala kontroller efter installation med en beständig avisering. Inga regelbundna förfrågningar eller vakenhetslås. Android kan stoppa tjänsten.</string>
+<string name="install_sentinel_stop">Stoppa installationsövervakning</string>
+<string name="install_scan_progress">Analyserar nyinstallerad app: %1$s</string>
+<string name="analytics_chart_title">Skanningsresultat</string>
+<string name="analytics_other">Övriga resultat</string>
+<string name="analytics_total">Resultat</string>
+<string name="analytics_weekly_scans">Veckans skanningar</string>
+<string name="analytics_week_note">Registrerade sessioner från måndag till söndag. Ofullständiga skanningar kan ingå.</string>
+<string name="posture_overlay_select_app">På Android 11 eller senare väljer du %1$s i inställningslistan för visning ovanpå andra appar.</string>
+<string name="install_scan_received">Installationshändelse mottagen. Öppna SafeMobile för att granska.</string>
+</resources>

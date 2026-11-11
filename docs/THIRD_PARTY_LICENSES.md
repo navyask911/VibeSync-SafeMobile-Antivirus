@@ -1,0 +1,77 @@
+# Third-party license inventory — detection-engine work
+
+This file records detection-engine-specific license decisions. The CI-generated CycloneDX SBOM and THIRD_PARTY_NOTICES.md are the canonical inventories of resolved dependencies; any unresolved upstream metadata remains flagged for review.
+
+| Component or data | License / status | Decision |
+|---|---|---|
+| Bouncy Castle bcprov-jdk18on 1.86 (already present before this phase) | Permissive Bouncy Castle license; exact upstream artifact notice must be retained | Used for Ed25519 verification; no new dependency was added in Phase A. |
+| Google Tink tink-android 1.16.0 (existing) | Apache-2.0 | Existing Keystore-backed quarantine encryption remains unchanged. |
+| VirusTotal YARA engine (libyara, not integrated) | BSD-3-Clause upstream | No JNI/native binaries are included. The bounded Kotlin matcher supports only a documented limited grammar and must not be described as libyara. |
+| Takopii Android detection rules (adapted) | MIT, Copyright (c) 2026 Takopii Project Contributors | Five DEX-focused signatures adapted from banker-shape.yar, dcl-antiforensics.yar, rat-capabilities.yar and dropper.yar at upstream revision `2e539dc150228a06cc983c33367b06d605c12a85`. Source: https://github.com/F2u0a0d3/takopii . APK ZIP-header conditions removed and conditions narrowed for extracted DEX and supported Boolean grammar. MIT text is retained in NOTICE. These are generic heuristics, not validated malware family identifications. |
+| Hypatia source code | AGPL-3.0-or-later | No code or rule set copied; the app is licensed Apache-2.0 and no AGPL-compatibility decision was made. |
+| Mendeley 200K malware-hash research dataset, version 1 | CC BY 4.0 | Its citation and attribution are recorded in docs/THREAT_DATASET_ATTRIBUTION.md. It is not imported into the production database. |
+| APKiD (considered for packer detection) | Dual-license GPL/commercial; no commercial license obtained | Not integrated and no source/rules copied. A bounded in-app filename/DEX-structure heuristic is used instead and is not represented as equivalent to APKiD. |\
+| Runtime production hash definitions | Not bundled | Disabled until the owner/release process verifies redistribution rights, provenance, false positives, and signs the exact bytes with the configured trust root. |
+
+Before adding a dependency or dataset, review the exact distributed artifact's license and upstream source. An SBOM license field alone is not legal approval. No Hypatia/AGPL source code or data is copied.
+
+### YARA-X Android JNI wrapper and native engine
+
+- JNI wrapper: `RevEngiSquad/yarax_android`, pinned source revision
+  `b666fbc15ff67fba1ceaf5deb68d071b44a1cbfe`; BSD 3-Clause. License copy:
+  `app/src/main/assets/licenses/YARAX_ANDROID_BSD-3-Clause.txt`.
+- Native engine: `VirusTotal/yara-x`, included by the wrapper's pinned recursive
+  submodule; BSD 3-Clause. License copy:
+  `app/src/main/assets/licenses/YARA-X-BSD-3-Clause.txt`.
+- The Java JNI façade is vendored under `app/src/main/java/org/revengi/abhi/yarax/`.
+  Native libraries are built for Android ABIs during APK/AAB packaging from the
+  pinned upstream source. They are not downloaded or loaded at app runtime.
+- The build requires Git, Rust stable, cargo-ndk, Android NDK and the recursive
+  upstream submodules. A source/build failure fails native packaging closed.
+
+### Inter variable font (current UI typography)
+
+- Upstream: https://github.com/rsms/inter — `docs/font-files/InterVariable.ttf`
+- Bundled resource: `app/src/main/res/font/inter_variable.ttf` (upstream Git blob SHA `4ab79e0102bbe0ffa1ed879b13e52ac8c6487833`)
+- License: SIL Open Font License 1.1; full license retained at `app/src/main/assets/licenses/Inter-OFL.txt`
+- Copyright 2016 The Inter Project Authors. Compose maps the variable weight axis to 400 Regular, 500 Medium, 600 SemiBold and 700 Bold. No runtime font download is used.
+
+### DM Sans (retired UI typography)
+
+DM Sans was used by earlier application versions. It is no longer loaded by the v1.5.2 typography theme; its historical license record is retained at `docs/licenses/DM_SANS_OFL.txt` for provenance.
+
+### Weekly ML research candidate distribution (v1.0.16)
+
+- **OkHttp 4.12.0** by Square, Apache License 2.0, https://github.com/square/okhttp/tree/parent-4.12.0 (review canonical upstream LICENSE); download-only HTTP client, pinned, no inference traffic.
+- **Drebin 215 research model bundle**: source https://github.com/navyask911/safemobile-Antivirus-Trained-ML-Data-of-Android-malware/releases, training code under MIT; dataset attribution under CC BY 4.0 is in its DATASET_NOTICE.md. Source, model SHA-256 and schema are compared with the same release's checksums. Research release is not production-approved and downloaded candidates are never used as a malware detector.
+- No dynamic code loading. The bundled untrained fixture, local YARA/hashes, and existing offline model validation remain untouched.
+
+### Read-only Android DEX parser for 215 features
+
+- `org.smali:dexlib2:2.5.2`, Ben Gruver / smali contributors, **BSD 3-Clause** (Maven Central POM and upstream https://github.com/JesusFreke/smali). Used only to inspect DEX methods, type references, and string pools; it never loads or runs APK code. Keep BSD attribution text in `docs/licenses/DEXLIB2_BSD_3_CLAUSE.txt`. Dependency compatibility with the existing Guava build must pass CI.
+- Schema names and ordering are from `docs/feature_schema.json` of the separately maintained training repository; that repository attributes training material under CC BY 4.0. These names are data identifiers, not copied model weights or a new source-code licence.
+- A populated feature vector does not establish a production-validated model. Research prerelease report remains `production_ready: false`, so the production scanner remains disabled.
+
+### Optional Google Play billing (v1.0.17)
+
+- `com.android.billingclient:billing-ktx:8.3.0` and `billing:8.3.0`, Google LLC,
+  **Android Software Development Kit License** and applicable Google Play Billing terms:
+  https://developer.android.com/studio/terms.html . This is a version upgrade of the
+  owner-requested Google Play checkout client, not a detection dependency or a new ad SDK.
+- Exact upstream metadata: https://dl.google.com/dl/android/maven2/com/android/billingclient/billing/8.3.0/billing-8.3.0.pom .
+  POM SHA-256: `7093e31afe926ef2b208c72c2941e8dc6b5b4b5dc972387e3048eb4ddd91f524`;
+  AAR SHA-256: `9810b5cd47e20bc82b354f3583c9d3bf7c42b33e64e192dce0495d036a85f505`.
+- The resolved Google and AndroidX transitive dependencies are captured in the CI SBOM and
+  generated notices. Release checks require billing permission/version metadata, reject newly
+  introduced location/advertising-ID permissions, and retain the existing no-ad/no-crash-SDK guard.
+- `androidx.security:security-crypto:1.1.0`, Apache-2.0, remains unchanged for device-local encrypted
+  entitlements. No account backend, cloud restore, scan upload, or paid detection layer is added.
+
+
+### Phase F / v1.0.18 release provenance and mandatory accuracy notes
+
+- **TensorFlow Lite 2.17.0**, TensorFlow authors and Google, Apache-2.0, [upstream LICENSE](https://github.com/tensorflow/tensorflow/blob/master/LICENSE); its runtime executes in the local process without cloud inference. The SHA-256-pinned 18,584-byte model is separately attributed and is NOT production-validated.
+- **Drebin 215 research candidate** `v1.0.1-model`: [training repo release](https://github.com/navyask911/safemobile-Antivirus-Trained-ML-Data-of-Android-malware/releases/tag/v1.0.1-model), see release's `DATASET_NOTICE.md` and [docs/ML_MODEL_ACTIVATION.md](ML_MODEL_ACTIVATION.md). Historical 97.45% research holdout is not independent production efficacy. `validated=false` / `production_ready=false` gates remain enforced.
+- **YARA**: NOT redistributed as native libyara; bundled limited Kotlin rules are adapted MIT Takopii sources with the full permission notice retained in root `NOTICE`. Do not attribute this rule engine to the libyara authors as if libyara code were bundled.
+- **Google Play Billing 8.3.0** uses Google licensing/Play terms. User payment details are processed by Google, while SafeMobile stores only locally encrypted expiry/binding/token hashes.
+- **Known notice-generation metadata gaps:** `THIRD_PARTY_NOTICES.md` most recently flags the app and `javax.annotation-api` fields; verify their full licence details and generated SBOM before final distribution. This document is an attribution index, not an assertion of legal clearance of every third-party artifact.

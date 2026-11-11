@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="trusted_app_options">Lehetőségek</string>
+<string name="trusted_app_remove">Megbízhatóság visszavonása</string>
+<string name="trusted_app_removed">A megbízhatóság visszavonva. A csomag jövőbeli vizsgálatai és riasztásai ismét engedélyezettek.</string>
+<string name="trusted_app_remove_failed">Nem sikerült visszavonni a megbízhatóságot. Próbálja újra.</string>
+<string name="install_sentinel_title">Telepítések figyelése</string>
+<string name="install_sentinel_active">SafeMobile Sentinel: aktív és figyel</string>
+<string name="install_sentinel_description">Helyi ellenőrzések telepítés után, állandó értesítéssel. Nincs rendszeres lekérdezés vagy ébren tartó zárolás. Az Android leállíthatja a szolgáltatást.</string>
+<string name="install_sentinel_stop">Telepítésfigyelés leállítása</string>
+<string name="install_scan_progress">Újonnan telepített alkalmazás elemzése: %1$s</string>
+<string name="analytics_chart_title">Vizsgálati eredmények</string>
+<string name="analytics_other">Egyéb eredmények</string>
+<string name="analytics_total">Eredmények</string>
+<string name="analytics_weekly_scans">Heti vizsgálatok</string>
+<string name="analytics_week_note">Hétfőtől vasárnapig rögzített munkamenetek. Befejezetlen vizsgálatokat is tartalmazhat.</string>
+<string name="posture_overlay_select_app">Android 11 vagy újabb rendszeren válassza a(z) %1$s alkalmazást a más alkalmazások feletti megjelenítés beállításlistájában.</string>
+<string name="install_scan_received">Telepítési esemény érkezett. Ellenőrzéshez nyissa meg a SafeMobile alkalmazást.</string>
+</resources>

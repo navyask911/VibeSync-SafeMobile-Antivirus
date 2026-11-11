@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VibeSync SafeMobile Antivirus v1.7.0 — Live Interactive UI Simulator</title>
+<style>
+  :root[data-theme="dark"] {
+    --bg-outer: #090d16;
+    --bg-device: #0f172a;
+    --bg-surface: #1e293b;
+    --bg-surface-elevated: #263349;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --accent: #38bdf8;
+    --accent-soft: rgba(56, 189, 248, 0.14);
+    --green: #10b981;
+    --green-soft: rgba(16, 185, 129, 0.15);
+    --amber: #f59e0b;
+    --amber-soft: rgba(245, 158, 11, 0.16);
+    --red: #ef4444;
+    --red-soft: rgba(239, 68, 68, 0.16);
+    --border: rgba(255, 255, 255, 0.08);
+    --shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  }
+  :root[data-theme="light"] {
+    --bg-outer: #e2e8f0;
+    --bg-device: #f8fafc;
+    --bg-surface: #ffffff;
+    --bg-surface-elevated: #f1f5f9;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --accent: #0284c7;
+    --accent-soft: rgba(2, 132, 199, 0.12);
+    --green: #059669;
+    --green-soft: rgba(5, 150, 105, 0.12);
+    --amber: #d97706;
+    --amber-soft: rgba(217, 119, 6, 0.14);
+    --red: #dc2626;
+    --red-soft: rgba(220, 38, 38, 0.14);
+    --border: rgba(15, 23, 42, 0.09);
+    --shadow: 0 20px 45px rgba(15, 23, 42, 0.18);
+  }
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    background: var(--bg-outer);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 16px 40px;
+    transition: background 0.25s ease;
+  }
+  .simulator-header {
+    max-width: 960px;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    padding: 12px 18px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+  }
+  .sim-title {
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .sim-sub {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+  .sim-controls {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .sim-btn {
+    background: var(--bg-surface-elevated);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+    padding: 7px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .sim-btn:hover {
+    border-color: var(--accent);
+  }
+  .sim-btn.active {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  /* Phone Frame */
+  .phone-frame {
+    width: 396px;
+    max-width: 100%;
+    height: 812px;
+    background: var(--bg-device);
+    border: 10px solid #1e293b;
+    border-radius: 42px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+  }
+  .status-bar {
+    height: 30px;
+    padding: 0 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+  }
+  /* App Top Header */
+  .app-header {
+    padding: 10px 16px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .brand-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .shield-logo {
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    background: linear-gradient(135deg, #0ea5e9, #2563eb);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 800;
+    font-size: 15px;
+  }
+  .brand-name {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+  }
+  .brand-ver {
+    font-size: 10px;
+    color: var(--text-secondary);
+  }
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .icon-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 15px;
+  }
+  .pro-badge {
+    background: linear-gradient(135deg, #f59e0b, #ea580c);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 6px 10px;
+    border-radius: 999px;
+    cursor: pointer;
+    border: none;
+    letter-spacing: 0.4px;
+  }
+  .pro-badge.entitled {
+    background: linear-gradient(135deg, #10b981, #059669);
+  }
+  /* Scrollable Viewport */
+  .viewport {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .viewport::-webkit-scrollbar {
+    width: 4px;
+  }
+  .viewport::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+  }
+  .tab-pane {
+    display: none;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .tab-pane.active {
+    display: flex;
+  }
+  .m3-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 12px;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+  }
+  .m3-card.clickable {
+    cursor: pointer;
+  }
+  .m3-card.clickable:hover {
+    border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+  .title-medium {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.35;
+  }
+  .body-medium {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text-secondary);
+    line-height: 1.45;
+  }
+  .hero-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 14px;
+    background: linear-gradient(145deg, var(--bg-surface), var(--bg-surface-elevated));
+  }
+  .ring-container {
+    position: relative;
+    width: 96px;
+    height: 96px;
+    flex-shrink: 0;
+  }
+  .ring-svg {
+    transform: rotate(-90deg);
+    width: 96px;
+    height: 96px;
+  }
+  .ring-bg {
+    fill: none;
+    stroke: var(--border);
+    stroke-width: 9;
+  }
+  .ring-progress {
+    fill: none;
+    stroke: var(--green);
+    stroke-width: 9;
+    stroke-linecap: round;
+    stroke-dasharray: 251.2;
+    stroke-dashoffset: 20.1;
+    transition: stroke-dashoffset 0.5s ease, stroke 0.3s ease;
+  }
+  .ring-Center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .score-num {
+    font-size: 24px;
+    font-weight: 800;
+  }
+  .score-label {
+    font-size: 10px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+  }
+  .setup-banner {
+    background: var(--amber-soft);
+    border: 1px solid rgba(245, 158, 11, 0.4);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+  .bento-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .bento-tile {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 118px;
+  }
+  .tile-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .tile-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+  .status-pill {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 7px;
+    border-radius: 99px;
+  }
+  .pill-green { background: var(--green-soft); color: var(--green); }
+  .pill-amber { background: var(--amber-soft); color: var(--amber); }
+  .pill-red { background: var(--red-soft); color: var(--red); }
+  .pill-blue { background: var(--accent-soft); color: var(--accent); }
+
+  .admob-banner {
+    margin-top: auto;
+    background: var(--bg-surface-elevated);
+    border: 1px dashed var(--border);
+    border-radius: 10px;
+    padding: 8px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    color: var(--text-secondary);
+  }
+  .mode-selector {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    background: var(--bg-surface-elevated);
+    padding: 4px;
+    border-radius: 10px;
+    margin: 10px 0;
+  }
+  .mode-btn {
+    padding: 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  .mode-btn.active {
+    background: var(--bg-surface);
+    color: var(--text-primary);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  }
+  .primary-scan-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #0ea5e9, #2563eb);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .scan-row {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .scan-row-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+  }
+  .app-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .app-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: var(--bg-surface-elevated);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+  }
+  .scan-row-details {
+    display: none;
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .scan-row.expanded .scan-row-details {
+    display: flex;
+  }
+  .layer-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+  .layer-chip {
+    background: var(--bg-surface-elevated);
+    padding: 6px 8px;
+    border-radius: 8px;
+    font-size: 11px;
+  }
+  .row-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+  }
+  .mini-btn {
+    flex: 1;
+    padding: 7px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg-surface-elevated);
+    color: var(--text-primary);
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .mini-btn.danger {
+    background: var(--red-soft);
+    color: var(--red);
+    border-color: rgba(239,68,68,0.3);
+  }
+  .tools-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .tool-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 120px;
+  }
+  .settings-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .setting-item:last-child {
+    border-bottom: none;
+  }
+  .toggle-switch {
+    width: 40px;
+    height: 22px;
+    border-radius: 99px;
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border);
+    position: relative;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+  .toggle-switch.on {
+    background: var(--green);
+  }
+  .toggle-knob {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #fff;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.2s ease;
+  }
+  .toggle-switch.on .toggle-knob {
+    transform: translateX(18px);
+  }
+  .bottom-nav {
+    height: 68px;
+    background: var(--bg-surface);
+    border-top: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    flex-shrink: 0;
+  }
+  .nav-item {
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .nav-item .nav-icon {
+    font-size: 18px;
+    padding: 2px 14px;
+    border-radius: 99px;
+    transition: background 0.15s ease;
+  }
+  .nav-item.active {
+    color: var(--accent);
+  }
+  .nav-item.active .nav-icon {
+    background: var(--accent-soft);
+  }
+  .modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: none;
+    align-items: flex-end;
+    z-index: 50;
+  }
+  .modal-backdrop.open {
+    display: flex;
+  }
+  .bottom-sheet {
+    width: 100%;
+    background: var(--bg-surface);
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+    padding: 16px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-height: 75%;
+    overflow-y: auto;
+  }
+  .sheet-handle {
+    width: 40px;
+    height: 4px;
+    background: var(--text-secondary);
+    opacity: 0.4;
+    border-radius: 99px;
+    align-self: center;
+    margin-bottom: 4px;
+  }
+  .check-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    background: var(--bg-surface-elevated);
+    border-radius: 12px;
+  }
+</style>
+</head>
+<body>
+
+<div class="simulator-header">
+  <div>
+    <div class="sim-title">VibeSync SafeMobile Antivirus v1.7.0 (versionCode 20261140)</div>
+    <div class="sim-sub">Interactive Enterprise Progressive Disclosure Simulator — Click tabs, cards, modals & toggles</div>
+  </div>
+  <div class="sim-controls">
+    <button class="sim-btn active" onclick="switchTab('shield', this)">1. Shield (Home)</button>
+    <button class="sim-btn" onclick="switchTab('scan', this)">2. Scan & Lab</button>
+    <button class="sim-btn" onclick="switchTab('tools', this)">3. Tools Hub</button>
+    <button class="sim-btn" onclick="switchTab('console', this)">4. Console</button>
+    <button class="sim-btn" onclick="openSetupModal()">Setup Sheet (3/4)</button>
+    <button class="sim-btn" onclick="toggleTheme()">Theme: Dark/Light</button>
+  </div>
+</div>
+
+<div class="phone-frame">
+  <div class="status-bar">
+    <span>9:41</span>
+    <span>5G • 100%</span>
+  </div>
+
+  <!-- App Header -->
+  <div class="app-header">
+    <div class="brand-row">
+      <div class="shield-logo">V</div>
+      <div>
+        <div class="brand-name">VibeSync SafeMobile Antivirus</div>
+        <div class="brand-ver">v1.7.0 • Enterprise Shield</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" title="ThemePreferences Switcher" onclick="toggleTheme()">🌗</button>
+      <button id="proBadgeBtn" class="pro-badge" onclick="openProModal()">PRO</button>
+    </div>
+  </div>
+
+  <!-- Viewport -->
+  <div class="viewport">
+
+    <!-- TAB 1: SHIELD (HOME) -->
+    <div id="tab-shield" class="tab-pane active">
+      <!-- Hero Ring -->
+      <div class="m3-card hero-card">
+        <div class="ring-container">
+          <svg class="ring-svg" viewBox="0 0 96 96">
+            <circle class="ring-bg" cx="48" cy="48" r="40"></circle>
+            <circle id="scoreRing" class="ring-progress" cx="48" cy="48" r="40"></circle>
+          </svg>
+          <div class="ring-Center">
+            <span id="scoreValue" class="score-num">92</span>
+            <span class="score-label">Score</span>
+          </div>
+        </div>
+        <div>
+          <div class="status-pill pill-green" style="display:inline-block; margin-bottom:6px;">PROTECTED</div>
+          <div class="title-medium">DeviceSecurityScore</div>
+          <div class="body-medium">Real-time heuristic, YARA & signature shields active.</div>
+        </div>
+      </div>
+
+      <!-- Unified Setup Banner (Auto-hides when 4/4 active) -->
+      <div id="setupBanner" class="m3-card setup-banner clickable" onclick="openSetupModal()">
+        <div>
+          <div class="title-medium" id="setupBannerTitle">Protection Setup: 3/4 Active</div>
+          <div class="body-medium">Tap to grant SAF Folder Monitor permission.</div>
+        </div>
+        <span class="status-pill pill-amber">Finish ➔</span>
+      </div>
+
+      <!-- 2x2 Bento Grid -->
+      <div class="bento-grid">
+        <!-- Tile 1: Live Sentinel -->
+        <div class="m3-card bento-tile clickable" onclick="showInfoSheet('Live Sentinel', 'InstallSentinelService + DownloadSentinelObserver are actively monitoring new APK installs and browser file downloads in real time.')">
+          <div class="tile-top">
+            <div class="tile-icon pill-green">🛡️</div>
+            <span class="status-pill pill-green">ACTIVE</span>
+          </div>
+          <div>
+            <div class="title-medium">Live Sentinel</div>
+            <div class="body-medium">Install & Download Observer on</div>
+          </div>
+        </div>
+
+        <!-- Tile 2: Device Posture -->
+        <div class="m3-card bento-tile clickable" onclick="switchTab('tools')">
+          <div class="tile-top">
+            <div class="tile-icon pill-blue">📱</div>
+            <span class="status-pill pill-green">7/8 PASSED</span>
+          </div>
+          <div>
+            <div class="title-medium">Device Posture</div>
+            <div class="body-medium">Bootloader, SELinux, ADB & Play Protect</div>
+          </div>
+        </div>
+
+        <!-- Tile 3: AI & YARA Engine -->
+        <div class="m3-card bento-tile clickable" onclick="showInfoSheet('DetectionCapabilitiesScreen', 'ThreatEnsembleEvaluator combines 4 layers: Static Permissions, DEX Bytecode Heuristics, Embedded YARA Rules, and SHA-256 Cloud/Local Hash Lookup.')">
+          <div class="tile-top">
+            <div class="tile-icon pill-blue">🧠</div>
+            <span class="status-pill pill-blue">4-LAYER</span>
+          </div>
+          <div>
+            <div class="title-medium">AI & YARA Engine</div>
+            <div class="body-medium">ThreatEnsemble ready • Tap for capabilities</div>
+          </div>
+        </div>
+
+        <!-- Tile 4: Threat DB & Quarantine -->
+        <div class="m3-card bento-tile clickable" onclick="switchTab('tools')">
+          <div class="tile-top">
+            <div class="tile-icon pill-amber">🗄️</div>
+            <span class="status-pill pill-amber">1 ISOLATED</span>
+          </div>
+          <div>
+            <div class="title-medium">Threat DB & Vault</div>
+            <div class="body-medium">148,920 Hashes • 1 Quarantined</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AdMob Banner -->
+      <div id="admobBanner" class="admob-banner">
+        <span>AdMobBanner • Sponsored Security Partner</span>
+        <span style="font-weight:700; cursor:pointer; color:var(--accent);" onclick="openProModal()">Hide Ads (PRO)</span>
+      </div>
+    </div>
+
+    <!-- TAB 2: SCAN & LAB -->
+    <div id="tab-scan" class="tab-pane">
+      <div class="m3-card">
+        <div class="title-medium">Run Smart Scan</div>
+        <div class="body-medium">Progressive 4-layer inspection via ThreatEnsembleEvaluator.</div>
+        <div class="mode-selector">
+          <button id="modeQuick" class="mode-btn active" onclick="setScanMode('quick')">Quick App Scan</button>
+          <button id="modeDeep" class="mode-btn" onclick="setScanMode('deep')">Deep Storage (Worker)</button>
+        </div>
+        <button id="runScanBtn" class="primary-scan-btn" onclick="triggerScan()">▶ Start Quick App Scan</button>
+      </div>
+
+      <div class="body-medium" style="font-weight:600; padding:0 4px;">Scan Results (Tap row for 4-Layer Breakdown)</div>
+
+      <!-- Row 1: Malware / Suspicious -->
+      <div class="m3-card scan-row expanded" onclick="this.classList.toggle('expanded')">
+        <div class="scan-row-header">
+          <div class="app-meta">
+            <div class="app-icon">⚠️</div>
+            <div>
+              <div class="title-medium">FlashLoan_Helper_Mod.apk</div>
+              <div class="body-medium">com.untrusted.flashmod</div>
+            </div>
+          </div>
+          <span class="status-pill pill-red">MALWARE</span>
+        </div>
+        <div class="scan-row-details" onclick="event.stopPropagation()">
+          <div class="body-medium" style="color:var(--text-primary); font-weight:600;">ThreatEnsembleEvaluator (Risk: 94/100)</div>
+          <div class="layer-grid">
+            <div class="layer-chip">1. Manifest: <b>BIND_ACCESSIBILITY</b></div>
+            <div class="layer-chip">2. YARA: <b>Banker_Overlay_v2.yar</b></div>
+            <div class="layer-chip">3. DEX Heuristic: <b>Dynamic DexLoad</b></div>
+            <div class="layer-chip">4. Hash DB: <b>Matched SHA-256</b></div>
+          </div>
+          <div class="row-actions">
+            <button class="mini-btn danger" onclick="alert('UninstallHandler invoked for com.untrusted.flashmod')">Uninstall</button>
+            <button class="mini-btn" onclick="alert('Moved to LocalQuarantineManager')">Quarantine</button>
+            <button class="mini-btn" onclick="alert('Added to TrustedPackageWhitelist')">Whitelist</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 2: Suspicious -->
+      <div class="m3-card scan-row" onclick="this.classList.toggle('expanded')">
+        <div class="scan-row-header">
+          <div class="app-meta">
+            <div class="app-icon">🔍</div>
+            <div>
+              <div class="title-medium">ScreenRecorder Pro Free</div>
+              <div class="body-medium">com.tools.screenrec</div>
+            </div>
+          </div>
+          <span class="status-pill pill-amber">SUSPICIOUS</span>
+        </div>
+        <div class="scan-row-details" onclick="event.stopPropagation()">
+          <div class="body-medium" style="color:var(--text-primary); font-weight:600;">ThreatEnsembleEvaluator (Risk: 52/100)</div>
+          <div class="layer-grid">
+            <div class="layer-chip">1. Manifest: <b>SYSTEM_ALERT_WINDOW</b></div>
+            <div class="layer-chip">2. YARA: <b>Adware_Track_Rule</b></div>
+            <div class="layer-chip">3. DEX Heuristic: <b>Obfuscated Strings</b></div>
+            <div class="layer-chip">4. Hash DB: <b>No Known Malware</b></div>
+          </div>
+          <div class="row-actions">
+            <button class="mini-btn danger" onclick="alert('UninstallHandler invoked')">Uninstall</button>
+            <button class="mini-btn" onclick="alert('Quarantined')">Quarantine</button>
+            <button class="mini-btn" onclick="alert('Whitelisted')">Whitelist</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 3: Clean -->
+      <div class="m3-card scan-row" onclick="this.classList.toggle('expanded')">
+        <div class="scan-row-header">
+          <div class="app-meta">
+            <div class="app-icon">📄</div>
+            <div>
+              <div class="title-medium">VibeSync All in ONE PDF</div>
+              <div class="body-medium">com.vibesync.toolkit.pdf</div>
+            </div>
+          </div>
+          <span class="status-pill pill-green">CLEAN</span>
+        </div>
+        <div class="scan-row-details" onclick="event.stopPropagation()">
+          <div class="body-medium">All 4 ThreatEnsemble layers passed (0 YARA hits, verified signature).</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: TOOLS HUB (6-CARD GRID) -->
+    <div id="tab-tools" class="tab-pane">
+      <div class="tools-grid">
+        <div class="m3-card tool-card clickable" onclick="showInfoSheet('1. Device Posture (DevicePostureScreen)', 'Checks Root status, SELinux enforcing, USB Debugging (ADB), Verify Apps, Screen Lock encryption, and Developer Options.')">
+          <div class="tile-icon pill-blue">🛡️</div>
+          <div class="title-medium">Device Posture</div>
+          <div class="body-medium">8-point OS & hardware audit</div>
+        </div>
+
+        <div class="m3-card tool-card clickable" onclick="showInfoSheet('2. Link Checker (UrlRiskAssessment)', 'Inspects URLs for phishing, homograph attacks, suspicious TLDs, and cleartext HTTP redirects.')">
+          <div class="tile-icon pill-green">🔗</div>
+          <div class="title-medium">Link Checker</div>
+          <div class="body-medium">Phishing & URL risk scanner</div>
+        </div>
+
+        <div class="m3-card tool-card clickable" onclick="showInfoSheet('3. Quarantine Vault (LocalQuarantineManager)', 'Isolated encrypted sandbox holding 1 suspicious file. Supports restore or permanent QuarantineDeleteOperation.')">
+          <div class="tile-icon pill-amber">🔒</div>
+          <div class="title-medium">Quarantine Vault</div>
+          <div class="body-medium">Isolate & purge malicious files</div>
+        </div>
+
+        <div class="m3-card tool-card clickable" onclick="showInfoSheet('4. Folder Monitor (SentinelFolderPanel)', 'Watches Download/ and WhatsApp/ media directories via SAF grants for dropped payloads.')">
+          <div class="tile-icon pill-blue">📂</div>
+          <div class="title-medium">Folder Monitor</div>
+          <div class="body-medium">Real-time SAF directory watch</div>
+        </div>
+
+        <div class="m3-card tool-card clickable" onclick="showInfoSheet('5. System App Guard (SystemPackageGuard)', 'Monitors privileged pre-installed packages for unauthorized hash changes or disabled protections.')">
+          <div class="tile-icon pill-green">⚙️</div>
+          <div class="title-medium">System App Guard</div>
+          <div class="body-medium">Pre-installed package integrity</div>
+        </div>
+
+        <div class="m3-card tool-card clickable" onclick="showInfoSheet('6. Security Advisor (SecurityAdvisorScreen)', 'Actionable remediation guidance to bring your DeviceSecurityScore to 100/100.')">
+          <div class="tile-icon pill-blue">💡</div>
+          <div class="title-medium">Security Advisor</div>
+          <div class="body-medium">Step-by-step hardening guide</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: CONSOLE (SETTINGS) -->
+    <div id="tab-console" class="tab-pane">
+      <!-- Appearance -->
+      <div class="m3-card settings-group">
+        <div class="title-medium">Appearance</div>
+        <div class="setting-item">
+          <div>
+            <div class="title-medium" style="font-size:14px;">Dark Enterprise Theme</div>
+            <div class="body-medium">ThemePreferences</div>
+          </div>
+          <div id="themeToggleSwitch" class="toggle-switch on" onclick="toggleTheme()"><div class="toggle-knob"></div></div>
+        </div>
+        <div class="setting-item">
+          <div>
+            <div class="title-medium" style="font-size:14px;">App Language</div>
+            <div class="body-medium">LocalePreferences (English / ಕನ್ನಡ / हिन्दी)</div>
+          </div>
+          <span class="status-pill pill-blue">English</span>
+        </div>
+      </div>
+
+      <!-- Active Defense -->
+      <div class="m3-card settings-group">
+        <div class="title-medium">Active Defense</div>
+        <div class="setting-item">
+          <div>
+            <div class="title-medium" style="font-size:14px;">Incident Siren</div>
+            <div class="body-medium">SecurityIncidentSiren on high-severity hit</div>
+          </div>
+          <div class="toggle-switch on" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div>
+        </div>
+        <div class="setting-item">
+          <div>
+            <div class="title-medium" style="font-size:14px;">Voice Threat Alert</div>
+            <div class="body-medium">SecurityVoiceAlert TTS readout</div>
+          </div>
+          <div class="toggle-switch on" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div>
+        </div>
+        <div class="setting-item">
+          <div>
+            <div class="title-medium" style="font-size:14px;">Install Sentinel</div>
+            <div class="body-medium">InstallSentinelSettings auto-scan</div>
+          </div>
+          <div class="toggle-switch on" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div>
+        </div>
+      </div>
+
+      <!-- Advanced (Collapsed by default) -->
+      <div class="m3-card settings-group">
+        <div class="scan-row-header" onclick="toggleAdvanced()">
+          <div>
+            <div class="title-medium">Advanced Telemetry & Rules</div>
+            <div class="body-medium">YARA imports, ThreatFeed sync & benchmarks</div>
+          </div>
+          <span id="advChevron" class="status-pill pill-blue">Expand ▼</span>
+        </div>
+        <div id="advancedBody" style="display:none; flex-direction:column; gap:8px; padding-top:10px; border-top:1px solid var(--border);">
+          <div class="setting-item">
+            <span class="body-medium" style="color:var(--text-primary);">YaraRuleImportStore (.yar)</span>
+            <button class="sim-btn" onclick="alert('Open .yar file picker')">Import .yar</button>
+          </div>
+          <div class="setting-item">
+            <span class="body-medium" style="color:var(--text-primary);">ThreatFeedSyncWorker</span>
+            <button class="sim-btn" onclick="alert('ThreatFeedSyncWorker triggered!')">Sync Now</button>
+          </div>
+          <div class="setting-item">
+            <span class="body-medium" style="color:var(--text-primary);">GlobalThreatIntelligence (Opt-in)</span>
+            <div class="toggle-switch" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div>
+          </div>
+          <div class="setting-item">
+            <span class="body-medium" style="color:var(--text-primary);">BenchmarkResultsPanel & AnalyticsCharts</span>
+            <span class="status-pill pill-green">14.2 ms/pkg</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 4-Tab Bottom Navigation -->
+  <div class="bottom-nav">
+    <button id="nav-shield" class="nav-item active" onclick="switchTab('shield')">
+      <span class="nav-icon">🛡️</span>
+      <span>Shield</span>
+    </button>
+    <button id="nav-scan" class="nav-item" onclick="switchTab('scan')">
+      <span class="nav-icon">🔬</span>
+      <span>Scan & Lab</span>
+    </button>
+    <button id="nav-tools" class="nav-item" onclick="switchTab('tools')">
+      <span class="nav-icon">🧰</span>
+      <span>Tools Hub</span>
+    </button>
+    <button id="nav-console" class="nav-item" onclick="switchTab('console')">
+      <span class="nav-icon">🎛️</span>
+      <span>Console</span>
+    </button>
+  </div>
+
+  <!-- ModalBottomSheet -->
+  <div id="modalBackdrop" class="modal-backdrop" onclick="closeModal()">
+    <div class="bottom-sheet" onclick="event.stopPropagation()">
+      <div class="sheet-handle"></div>
+      <div id="sheetTitle" class="title-medium">Unified Setup Checklist (ModalBottomSheet)</div>
+      <div id="sheetContent" style="display:flex; flex-direction:column; gap:8px;">
+        <div class="check-row">
+          <div>
+            <div class="title-medium" style="font-size:13px;">1. BatteryOptimizationCard</div>
+            <div class="body-medium">Unrestricted background sentinel</div>
+          </div>
+          <input type="checkbox" checked onchange="updateSetupProgress()">
+        </div>
+        <div class="check-row">
+          <div>
+            <div class="title-medium" style="font-size:13px;">2. DeviceAdminCard</div>
+            <div class="body-medium">Prevent unauthorized uninstall</div>
+          </div>
+          <input type="checkbox" checked onchange="updateSetupProgress()">
+        </div>
+        <div class="check-row">
+          <div>
+            <div class="title-medium" style="font-size:13px;">3. FullScreenAlertCard</div>
+            <div class="body-medium">High-priority incident overlay</div>
+          </div>
+          <input type="checkbox" checked onchange="updateSetupProgress()">
+        </div>
+        <div class="check-row">
+          <div>
+            <div class="title-medium" style="font-size:13px;">4. SAF Folder Grants</div>
+            <div class="body-medium">Monitor Download/ directory</div>
+          </div>
+          <input id="fourthCheck" type="checkbox" onchange="updateSetupProgress()">
+        </div>
+      </div>
+      <button class="primary-scan-btn" style="margin-top:6px;" onclick="closeModal()">Done</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let isPro = false;
+  function switchTab(tabId, headerBtn) {
+    document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+    document.getElementById('tab-' + tabId).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+    document.getElementById('nav-' + tabId).classList.add('active');
+    document.querySelectorAll('.sim-controls .sim-btn').forEach((btn, idx) => {
+      if (idx < 4) btn.classList.remove('active');
+    });
+    const mapIdx = {shield:0, scan:1, tools:2, console:3}[tabId];
+    document.querySelectorAll('.sim-controls .sim-btn')[mapIdx].classList.add('active');
+  }
+  function toggleTheme() {
+    const html = document.documentElement;
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
