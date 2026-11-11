@@ -238,13 +238,6 @@ import kotlinx.coroutines.launch
   runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url))) }
    .onFailure { Toast.makeText(context, R.string.about_link_unavailable, Toast.LENGTH_LONG).show() }
  }
- LaunchedEffect(notificationDeepLink) {
-  notificationDeepLink?.let { item ->
-   pendingNotificationDetails = item
-   navigateToDestination("scan")
-   onNotificationDeepLinkConsumed()
-  }
- }
  LaunchedEffect(currentRoute, currentBackStackEntry?.arguments?.getString("screen")) {
   selectedDestination = when (currentRoute) {
    "dashboard" -> "home"
@@ -446,6 +439,13 @@ import kotlinx.coroutines.launch
  var pendingQuarantine by remember { mutableStateOf<ScanResult?>(null) }
  var pendingNotificationDetails by remember { mutableStateOf<NotificationDeepLink?>(null) }
  var notificationDeleteTarget by remember { mutableStateOf<NotificationDeepLink?>(null) }
+ LaunchedEffect(notificationDeepLink) {
+  notificationDeepLink?.let { item ->
+   pendingNotificationDetails = item
+   navigateToDestination("scan")
+   onNotificationDeepLinkConsumed()
+  }
+ }
  var pendingRestoreFile by remember { mutableStateOf<File?>(null) }
  var pendingDeleteFile by remember { mutableStateOf<File?>(null) }
  var showRestoreWarning by remember { mutableStateOf(false) }
@@ -1371,7 +1371,7 @@ import kotlinx.coroutines.launch
     pendingNotificationDetails = null
     navigateToDestination("scan")
     val packageName = item.packageName
-     ?: item.fileUri?.removePrefix("package:")?.takeIf { item.fileUri.startsWith("package:") }
+     ?: item.fileUri?.takeIf { it.startsWith("package:") }?.removePrefix("package:")
     if (!packageName.isNullOrBlank()) {
      requestPrivacyAcknowledgement { vm.scanInstalledPackageNow(packageName) }
     } else {
@@ -1432,7 +1432,7 @@ import kotlinx.coroutines.launch
      uiScope.launch {
       val deleted = withContext(Dispatchers.IO) {
        when (uri?.scheme) {
-        "file" -> uri.path?.let { File(it).takeIf(File::isFile)?.delete() } == true
+        "file" -> uri.path?.let { File(it).takeIf { file -> file.isFile }?.delete() } == true
         "content" -> runCatching {
          if (DocumentsContract.isDocumentUri(context, uri)) DocumentsContract.deleteDocument(context.contentResolver, uri)
          else context.contentResolver.delete(uri, null, null) > 0

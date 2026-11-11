@@ -56,4 +56,7 @@
     <string name="device_admin_activation_failed">Android Device Administrator ಸಕ್ರಿಯಗೊಳಿಸುವ ಪುಟ ತೆರೆಯಲಾಗಲಿಲ್ಲ. SafeMobile ನಿರ್ವಾಹಕ ರಿಸೀವರ್ ಸ್ಥಾಪಿತವಾಗಿದೆ ಎಂಬುದನ್ನು ಪರಿಶೀಲಿಸಿ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.</string>
     <string name="trusted_file_saved">ಫೈಲ್ ಹ್ಯಾಶ್ ಅನ್ನು ಸ್ಥಳೀಯ ನಂಬಿಕೆಯ ಪಟ್ಟಿಗೆ ಸೇರಿಸಲಾಗಿದೆ.</string>
     <string name="trusted_file_invalid">ಈ ಫೈಲ್ ನಂಬಲು ಮಾನ್ಯ SHA-256 ಹ್ಯಾಶ್ ಅಗತ್ಯವಿದೆ.</string>
+    <string name="settings_privacy_link_detail">ಸ್ಥಳೀಯ ಪ್ರಕ್ರಿಯೆ ಮತ್ತು ಐಚ್ಛಿಕ ಡೇಟಾ ಹಂಚಿಕೆಯನ್ನು ಪರಿಶೀಲಿಸಿ.</string>
+    <string name="settings_about_link_detail">ನಮ್ಮ ಧ್ಯೇಯ, ವೆಬ್‌ಸೈಟ್ ಮತ್ತು ಮೊಬೈಲ್ ಆ್ಯಪ್‌ಗಳು.</string>
+    <string name="about_link_unavailable">ಲಿಂಕ್ ತೆರೆಯಲಾಗಲಿಲ್ಲ. ಬ್ರೌಸರ್ ಅಥವಾ Play Store ಲಭ್ಯತೆಯನ್ನು ಪರಿಶೀಲಿಸಿ.</string>
 </resources>

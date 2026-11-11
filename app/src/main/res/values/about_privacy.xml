@@ -56,4 +56,7 @@
     <string name="device_admin_activation_failed">Android's Device Administrator activation page could not be opened. Check that the SafeMobile admin receiver is installed and try again.</string>
     <string name="trusted_file_saved">File hash added to the local trusted list.</string>
     <string name="trusted_file_invalid">A valid SHA-256 hash is required before this file can be trusted.</string>
+    <string name="settings_privacy_link_detail">Review local processing and optional data sharing.</string>
+    <string name="settings_about_link_detail">Our mission, website and mobile apps.</string>
+    <string name="about_link_unavailable">The requested link could not be opened. Check your browser or Play Store availability.</string>
 </resources>
