@@ -48,7 +48,7 @@ class NetworkPermissionBoundaryTest {
         val request = DeviceAdminManager(context).buildAdminRequestIntent()
         assertEquals(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN, request.action)
         assertEquals(ComponentName(context, AdminReceiver::class.java),
-            request.getParcelableExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, ComponentName::class.java))
+            request.getParcelableExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN) as? ComponentName)
         assertTrue(request.flags and Intent.FLAG_ACTIVITY_NEW_TASK != 0)
         assertTrue(request.getStringExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION).orEmpty().isNotBlank())
     }

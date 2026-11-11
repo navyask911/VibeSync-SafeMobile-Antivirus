@@ -74,7 +74,7 @@ object SecurityAlertNotifier {
         if (!runCatching { SystemPackageGuard.isUserInstalled(context, packageName) }.getOrDefault(false)) return
         val local = com.vibesync.antivirus.core.locale.LocalePreferences.wrap(context)
         show(local, eventId, local.getString(R.string.security_alert_review_title),
-            local.getString(R.string.security_alert_review_body), null, R.string.voice_app_review, false)
+            local.getString(R.string.security_alert_review_body), packageName, R.string.voice_app_review, false)
     }
 
     /**

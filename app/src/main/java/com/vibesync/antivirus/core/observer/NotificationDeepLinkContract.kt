@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import com.vibesync.antivirus.MainActivity
-import java.util.UUID
 
 data class NotificationDeepLinkPayload(
     val notificationType: String,
@@ -28,7 +27,7 @@ object NotificationDeepLinkContract {
     const val TYPE_SERVICE = "SERVICE"
 
     fun intent(context: Context, notificationType: String, fileUri: String?, logId: String?): Intent {
-        val identity = logId?.takeIf(String::isNotBlank) ?: UUID.randomUUID().toString()
+        val identity = logId?.takeIf(String::isNotBlank) ?: fileUri ?: "default"
         return Intent(context, MainActivity::class.java).apply {
             action = "com.vibesync.antivirus.action.OPEN_NOTIFICATION"
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
