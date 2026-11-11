@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="global_threat_intelligence_title">Contribueix a la intel·ligència global d\'amenaces (opcional)</string>
-    <string name="global_threat_intelligence_description">Quan aquesta opció està activada, SafeMobile comparteix automàticament els hash SHA-256 de les amenaces confirmades i, si estan disponibles, 215 característiques de comportament binàries. Mai no envia fitxers APK, noms de fitxer, rutes, noms de paquets ni identificadors del dispositiu. Pots desactivar-la en qualsevol moment.</string>
-    <string name="global_threat_intelligence_donate_message">Ajuda a protegir altres persones donant anònimament la signatura d\'aquest fitxer maliciós a la nostra xarxa d\'entrenament d\'IA.</string>
-    <string name="global_threat_intelligence_donate">Dona</string>
-    <string name="global_threat_intelligence_decline">Rebutja</string>
-</resources>

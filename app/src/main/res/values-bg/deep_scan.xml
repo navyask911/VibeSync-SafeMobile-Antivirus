@@ -1,4 +1,0 @@
-<resources>
-    <string name="deep_scan_folder">Сканиране на папка (дълбоко сканиране)</string>
-    <string name="quarantine_manual_delete">Файлът е защитен в карантина. Моля, изтрийте оригинала ръчно.</string>
-</resources>

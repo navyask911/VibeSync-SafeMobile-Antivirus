@@ -1,4 +1,0 @@
-<resources>
-    <string name="deep_scan_folder">폴더 검사 (정밀 검사)</string>
-    <string name="quarantine_manual_delete">파일이 격리 저장소에 안전하게 보관되었습니다. 원본 파일을 직접 삭제해 주세요.</string>
-</resources>

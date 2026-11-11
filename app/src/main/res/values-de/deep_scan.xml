@@ -1,4 +1,0 @@
-<resources>
-    <string name="deep_scan_folder">Ordner scannen (Tiefenscan)</string>
-    <string name="quarantine_manual_delete">Datei in Quarantäne gesichert. Bitte löschen Sie das Original manuell.</string>
-</resources>

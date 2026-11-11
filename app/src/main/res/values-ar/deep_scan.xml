@@ -1,4 +1,0 @@
-<resources>
-    <string name="deep_scan_folder">فحص المجلد (فحص عميق)</string>
-    <string name="quarantine_manual_delete">تم تأمين الملف في الحجر الصحي. يُرجى حذف الملف الأصلي يدويًا.</string>
-</resources>

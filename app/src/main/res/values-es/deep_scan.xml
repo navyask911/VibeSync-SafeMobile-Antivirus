@@ -1,4 +1,0 @@
-<resources>
-    <string name="deep_scan_folder">Escanear carpeta (análisis profundo)</string>
-    <string name="quarantine_manual_delete">El archivo está protegido en cuarentena. Elimina el original manualmente.</string>
-</resources>

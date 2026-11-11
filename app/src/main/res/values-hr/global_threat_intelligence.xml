@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="global_threat_intelligence_title">Doprinesite globalnim obavještajnim podacima o prijetnjama (neobavezno)</string>
-    <string name="global_threat_intelligence_description">Kada je ova opcija uključena, SafeMobile automatski dijeli SHA-256 sažetke potvrđenih prijetnji i, kada su dostupne, 215 binarnih značajki ponašanja. APK datoteke, nazivi datoteka, putanje, nazivi paketa i identifikatori uređaja nikada se ne šalju. Opciju možete isključiti u bilo kojem trenutku.</string>
-    <string name="global_threat_intelligence_donate_message">Pomozite zaštititi druge anonimnim doniranjem potpisa ove zlonamjerne datoteke našoj AI mreži za treniranje.</string>
-    <string name="global_threat_intelligence_donate">Doniraj</string>
-    <string name="global_threat_intelligence_decline">Odbij</string>
-</resources>

@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="global_threat_intelligence_title">Bidrag til global trusselsinformation (valgfrit)</string>
-    <string name="global_threat_intelligence_description">Når denne indstilling er slået til, deler SafeMobile automatisk SHA-256-hashværdier for bekræftede trusler og, når de er tilgængelige, 215 binære adfærdsegenskaber. APK-filer, filnavne, stier, pakkenavne og enhedsidentifikatorer sendes aldrig. Du kan slå indstillingen fra når som helst.</string>
-    <string name="global_threat_intelligence_donate_message">Hjælp med at beskytte andre ved anonymt at donere signaturen for denne skadelige fil til vores AI-træningsnetværk.</string>
-    <string name="global_threat_intelligence_donate">Donér</string>
-    <string name="global_threat_intelligence_decline">Afvis</string>
-</resources>

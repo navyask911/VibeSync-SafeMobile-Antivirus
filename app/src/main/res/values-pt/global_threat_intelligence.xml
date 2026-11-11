@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="global_threat_intelligence_title">Contribuir para a inteligência global de ameaças (opcional)</string>
-    <string name="global_threat_intelligence_description">Com esta opção ativada, o SafeMobile partilha automaticamente hashes SHA-256 de ameaças confirmadas e, quando disponíveis, 215 características comportamentais binárias. Nunca envia ficheiros APK, nomes de ficheiros, caminhos, nomes de pacotes ou identificadores do dispositivo. Pode desativar esta opção a qualquer momento.</string>
-    <string name="global_threat_intelligence_donate_message">Ajude a proteger outras pessoas doando anonimamente a assinatura deste arquivo malicioso para nossa rede de treinamento de IA.</string>
-    <string name="global_threat_intelligence_donate">Doar</string>
-    <string name="global_threat_intelligence_decline">Recusar</string>
-</resources>

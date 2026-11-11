@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="global_threat_intelligence_title">Mag-ambag sa Pandaigdigang Impormasyon sa Banta (Opsyonal)</string>
-    <string name="global_threat_intelligence_description">Kapag naka-on ang opsyong ito, awtomatikong ibinabahagi ng SafeMobile ang mga SHA-256 hash ng mga kumpirmadong banta at, kung mayroon, ang 215 binary na katangian ng gawi. Hindi kailanman ipinapadala ang mga APK file, pangalan ng file, path, pangalan ng package, o pagkakakilanlan ng device. Maaari mo itong i-off anumang oras.</string>
-    <string name="global_threat_intelligence_donate_message">Tulungan ang iba na manatiling ligtas sa pamamagitan ng hindi nagpapakilalang pagbibigay ng signature ng mapaminsalang file na ito sa aming AI training network.</string>
-    <string name="global_threat_intelligence_donate">Mag-donate</string>
-    <string name="global_threat_intelligence_decline">Tanggihan</string>
-</resources>

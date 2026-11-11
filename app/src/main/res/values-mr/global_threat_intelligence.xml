@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="global_threat_intelligence_title">जागतिक धोका माहितीसाठी योगदान द्या (ऐच्छिक)</string>
-    <string name="global_threat_intelligence_description">हा पर्याय सुरू केल्यावर SafeMobile पुष्टी झालेल्या धोक्यांचे SHA-256 हॅश आणि उपलब्ध असल्यास 215 बायनरी वर्तन वैशिष्ट्ये आपोआप शेअर करते. APK फाइल, फाइलची नावे, मार्ग, पॅकेजची नावे किंवा डिव्हाइस ओळखचिन्हे कधीही पाठवली जात नाहीत. तुम्ही हा पर्याय कधीही बंद करू शकता.</string>
-    <string name="global_threat_intelligence_donate_message">या हानिकारक फाइलची स्वाक्षरी आमच्या AI प्रशिक्षण नेटवर्कला अनामिकपणे दान करून इतरांचे संरक्षण करण्यात मदत करा.</string>
-    <string name="global_threat_intelligence_donate">दान करा</string>
-    <string name="global_threat_intelligence_decline">नकार द्या</string>
-</resources>

@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="global_threat_intelligence_title">グローバル脅威インテリジェンスへの協力（任意）</string>
-    <string name="global_threat_intelligence_description">このオプションを有効にすると、SafeMobile は確認済みの脅威の SHA-256 ハッシュと、利用可能な場合は 215 個のバイナリ動作特徴を自動的に共有します。APK ファイル、ファイル名、パス、パッケージ名、端末識別子は送信しません。いつでも無効にできます。</string>
-    <string name="global_threat_intelligence_donate_message">この悪意のあるファイルのシグネチャを匿名で AI トレーニングネットワークに寄付して、他のユーザーを守りましょう。</string>
-    <string name="global_threat_intelligence_donate">寄付</string>
-    <string name="global_threat_intelligence_decline">拒否</string>
-</resources>

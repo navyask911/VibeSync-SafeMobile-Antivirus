@@ -1,4 +1,0 @@
-<resources>
-    <string name="deep_scan_folder">フォルダーをスキャン（詳細スキャン）</string>
-    <string name="quarantine_manual_delete">ファイルは隔離領域に保護されました。元のファイルを手動で削除してください。</string>
-</resources>

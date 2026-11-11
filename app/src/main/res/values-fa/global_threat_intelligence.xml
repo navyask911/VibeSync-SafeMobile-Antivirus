@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="global_threat_intelligence_title">مشارکت در اطلاعات تهدیدات جهانی (اختیاری)</string>
-    <string name="global_threat_intelligence_description">با فعال بودن این گزینه، SafeMobile هش‌های SHA-256 تهدیدهای تأییدشده و در صورت موجود بودن ۲۱۵ ویژگی رفتاری دودویی را به‌طور خودکار به اشتراک می‌گذارد. فایل‌های APK، نام فایل‌ها، مسیرها، نام بسته‌ها یا شناسه‌های دستگاه هرگز ارسال نمی‌شوند. می‌توانید این گزینه را هر زمان خاموش کنید.</string>
-    <string name="global_threat_intelligence_donate_message">با اهدای ناشناس امضای این فایل مخرب به شبکه آموزش هوش مصنوعی ما، به محافظت از دیگران کمک کنید.</string>
-    <string name="global_threat_intelligence_donate">اهدا</string>
-    <string name="global_threat_intelligence_decline">رد کردن</string>
-</resources>

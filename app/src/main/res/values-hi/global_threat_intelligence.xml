@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="global_threat_intelligence_title">वैश्विक खतरा खुफिया जानकारी में योगदान दें (वैकल्पिक)</string>
-    <string name="global_threat_intelligence_description">यह विकल्प चालू होने पर SafeMobile पुष्टि किए गए खतरों के SHA-256 हैश और उपलब्ध होने पर 215 बाइनरी व्यवहार सुविधाएँ अपने आप साझा करता है। APK फ़ाइलें, फ़ाइल नाम, पथ, पैकेज नाम या डिवाइस पहचानकर्ता कभी नहीं भेजे जाते। आप इसे कभी भी बंद कर सकते हैं।</string>
-    <string name="global_threat_intelligence_donate_message">इस दुर्भावनापूर्ण फ़ाइल के हस्ताक्षर को हमारे AI प्रशिक्षण नेटवर्क को गुमनाम रूप से दान करके दूसरों की सुरक्षा में मदद करें।</string>
-    <string name="global_threat_intelligence_donate">दान करें</string>
-    <string name="global_threat_intelligence_decline">अस्वीकार करें</string>
-</resources>

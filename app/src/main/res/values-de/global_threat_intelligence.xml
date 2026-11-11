@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="global_threat_intelligence_title">Zur globalen Bedrohungsanalyse beitragen (optional)</string>
-    <string name="global_threat_intelligence_description">Wenn diese Option aktiviert ist, teilt SafeMobile automatisch SHA-256-Hashes bestätigter Bedrohungen und, sofern verfügbar, 215 binäre Verhaltensmerkmale. APK-Dateien, Dateinamen, Pfade, Paketnamen und Gerätekennungen werden niemals gesendet. Sie können die Option jederzeit deaktivieren.</string>
-    <string name="global_threat_intelligence_donate_message">Hilf anderen, indem du die Signatur dieser schädlichen Datei anonym an unser KI-Trainingsnetzwerk spendest.</string>
-    <string name="global_threat_intelligence_donate">Spenden</string>
-    <string name="global_threat_intelligence_decline">Ablehnen</string>
-</resources>

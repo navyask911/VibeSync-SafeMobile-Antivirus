@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="global_threat_intelligence_title">Συνεισφορά στις παγκόσμιες πληροφορίες απειλών (προαιρετικό)</string>
-    <string name="global_threat_intelligence_description">Όταν αυτή η επιλογή είναι ενεργοποιημένη, το SafeMobile κοινοποιεί αυτόματα τα SHA-256 hash επιβεβαιωμένων απειλών και, όταν είναι διαθέσιμα, 215 δυαδικά χαρακτηριστικά συμπεριφοράς. Δεν αποστέλλονται ποτέ αρχεία APK, ονόματα αρχείων, διαδρομές, ονόματα πακέτων ή αναγνωριστικά συσκευής. Μπορείτε να απενεργοποιήσετε την επιλογή ανά πάσα στιγμή.</string>
-    <string name="global_threat_intelligence_donate_message">Βοηθήστε στην προστασία άλλων προσφέροντας ανώνυμα την υπογραφή αυτού του κακόβουλου αρχείου στο δίκτυο εκπαίδευσης AI.</string>
-    <string name="global_threat_intelligence_donate">Δωρεά</string>
-    <string name="global_threat_intelligence_decline">Απόρριψη</string>
-</resources>

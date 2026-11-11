@@ -1,4 +1,0 @@
-<resources>
-    <string name="deep_scan_folder">Mappa vizsgálata (mélyvizsgálat)</string>
-    <string name="quarantine_manual_delete">A fájl biztonságosan karanténba került. Kérjük, az eredetit törölje manuálisan.</string>
-</resources>
