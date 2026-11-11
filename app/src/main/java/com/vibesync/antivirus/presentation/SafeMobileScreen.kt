@@ -1445,7 +1445,18 @@ import kotlinx.coroutines.launch
      uri != null -> {
       val isGrantedChild = StorageAccessPreferences.accessibleTreeUris(context).any { root ->
        runCatching {
-        uri == root || DocumentsContract.isChildDocument(context.contentResolver, root, uri)
+        if (uri == root) {
+         true
+        } else if (uri.authority != root.authority) {
+         false
+        } else {
+         // getTreeDocumentId/getDocumentId are available on API 21+; avoid
+         // DocumentsContract.isChildDocument, which was added in API 29.
+         val treeDocumentId = DocumentsContract.getTreeDocumentId(root).trimEnd('/')
+         val candidateDocumentId = DocumentsContract.getDocumentId(uri)
+         candidateDocumentId == treeDocumentId ||
+          candidateDocumentId.startsWith("$treeDocumentId/")
+        }
        }.getOrDefault(false)
       }
       val deleted = isGrantedChild &&
