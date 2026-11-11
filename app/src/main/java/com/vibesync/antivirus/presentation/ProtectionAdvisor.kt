@@ -51,6 +51,7 @@ data class ProtectionAdvisorInputs(
     val playProtectEnabled: Boolean?,
     val usbDebuggingEnabled: Boolean?,
     val voiceAlertsEnabled: Boolean,
+    val deviceAdminActive: Boolean = false,
     val apiLevel: Int = Build.VERSION.SDK_INT,
     val nowMillis: Long = System.currentTimeMillis()
 )
@@ -65,31 +66,33 @@ object ProtectionAdvisorEngine {
             it > 0L && it <= inputs.nowMillis && inputs.nowMillis - it < WEEK_MS
         } == true
         val raw = listOf(
-            issue("initial_scan_run", R.string.security_scan_now, R.string.scan_explanation, 15, scanned, "scan"),
-            issue("active_threats", R.string.threat_found, R.string.scan_clean_warning, 25,
+            issue("initial_scan_run", R.string.security_scan_now, R.string.scan_explanation, 12, scanned, "scan"),
+            issue("active_threats", R.string.threat_found, R.string.scan_clean_warning, 22,
                 scanned && inputs.threatsDetected == 0, "scan", canSnooze = false,
                 activeThreat = scanned && inputs.threatsDetected > 0),
             issue("folder_sentinel", R.string.nav_sentinel, R.string.monitor_explanation, 10,
                 inputs.folderSentinelConfigured, "sentinel"),
-            issue("high_risk_posture", R.string.posture_title, R.string.posture_risk_note, 12,
+            issue("high_risk_posture", R.string.posture_title, R.string.posture_risk_note, 10,
                 inputs.highRiskPostureCount == 0, "posture",
                 activeThreat = (inputs.highRiskPostureCount ?: 0) > 0),
             issue("notifications_on", R.string.security_alerts_title, R.string.incident_alerts_explanation,
-                8, inputs.notificationsEnabled, "settings"),
+                6, inputs.notificationsEnabled, "settings"),
             issue("battery_unrestricted", R.string.battery_review_title, R.string.battery_review_body,
-                6, inputs.batteryUnrestricted, "settings"),
+                5, inputs.batteryUnrestricted, "settings"),
             issue("fullscreen_alert", R.string.incident_full_screen_settings,
-                R.string.incident_full_screen_explanation, 5,
+                R.string.incident_full_screen_explanation, 3,
                 inputs.apiLevel < 34 || inputs.fullScreenIntentEnabled, "settings"),
-            issue("db_freshness", R.string.ui_score_database, R.string.ui_stale_10, 5,
+            issue("db_freshness", R.string.ui_score_database, R.string.ui_stale_10, 3,
                 databaseFresh, "capabilities"),
             issue("install_sentinel", R.string.setup_sentinel_title, R.string.setup_sentinel_body,
-                15, inputs.installSentinelEnabled, "sentinel"),
+                12, inputs.installSentinelEnabled, "sentinel"),
             issue("play_protect_adb", R.string.guardian_developer_settings,
-                R.string.guardian_settings_limit, 4,
+                R.string.guardian_settings_limit, 3,
                 inputs.playProtectEnabled == true && inputs.usbDebuggingEnabled == false, "guardian"),
             issue("voice_alert_tts", R.string.voice_alerts_title, R.string.voice_alerts_description,
-                4, inputs.voiceAlertsEnabled, "settings")
+                2, inputs.voiceAlertsEnabled, "settings"),
+            issue("device_admin", R.string.device_admin_title, R.string.device_admin_description,
+                12, inputs.deviceAdminActive, "settings")
         )
         val mapped = raw.map { item ->
             when {

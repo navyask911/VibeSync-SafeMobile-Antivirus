@@ -15,7 +15,7 @@ import com.vibesync.antivirus.R
 class DeviceAdminManager(context: Context) {
     private val appContext = context.applicationContext
     private val policyManager = appContext.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
-    private val component = ComponentName(appContext, AdminReceiver::class.java)
+    private val component = ComponentName(appContext.packageName, AdminReceiver::class.java.name)
 
     fun isAdminActive(): Boolean = runCatching {
         policyManager.isAdminActive(component)

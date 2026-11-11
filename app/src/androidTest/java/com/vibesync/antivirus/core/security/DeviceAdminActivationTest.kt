@@ -32,7 +32,7 @@ class DeviceAdminActivationTest {
         // API 26 uses the legacy Parcelable getter. Set the framework Parcelable loader
         // explicitly before reading the ComponentName, and report the complete captured
         // intent metadata if the extra is missing or cannot be decoded.
-        activation.setExtrasClassLoader(ComponentName::class.java.classLoader)
+        activation.extras?.classLoader = AdminReceiver::class.java.classLoader
         val diagnostic = "action=${activation.action}, hasExtra=${activation.hasExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN)}, " +
             "extraKeys=${activation.extras?.keySet()}, extras=${activation.extras}"
         assertTrue(
@@ -40,9 +40,9 @@ class DeviceAdminActivationTest {
             activation.hasExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN)
         )
 
-        val adminComponent = activation.getParcelableExtra(
+        val adminComponent = activation.getParcelableExtra<ComponentName>(
             DevicePolicyManager.EXTRA_DEVICE_ADMIN
-        ) as? ComponentName
+        )
         assertNotNull("EXTRA_DEVICE_ADMIN must decode as ComponentName; $diagnostic", adminComponent)
         assertEquals(receiver, adminComponent)
         assertEquals(context.packageName, receiver.packageName)
