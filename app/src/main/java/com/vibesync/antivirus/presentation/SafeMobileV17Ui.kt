@@ -237,11 +237,14 @@ internal fun V17ShieldScreen(
     isDark: Boolean, securityScore: Int, isPro: Boolean, activeGuards: Int,
     liveSentinelActive: Boolean, posturePassed: Int?, quarantinedFilesCount: Int,
     onOpenSetup: () -> Unit, onOpenLiveSentinel: () -> Unit, onOpenPosture: () -> Unit,
-    onOpenDetection: () -> Unit, onOpenThreatDb: () -> Unit
+    onOpenDetection: () -> Unit, onOpenThreatDb: () -> Unit,
+    onOpenPrivacyDashboard: () -> Unit = {},
+    onOpenSettings: () -> Unit = {}
 ) {
     val c = v17Colors(isDark)
     Column(Modifier.fillMaxSize().background(c.device).verticalScroll(rememberScrollState()).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        TrustPillarCarousel(onOpenPrivacyDashboard = onOpenPrivacyDashboard, onOpenSettings = onOpenSettings)
         V17HeroCard(isDark) {
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(14.dp)) {
@@ -672,7 +675,9 @@ internal fun V17ConsoleSettingsScreen(
     onOverlayToggle: (Boolean) -> Unit, onSafToggle: (Boolean) -> Unit,
     onImportYara: () -> Unit,
     onThreatFeedSync: () -> Unit, onBenchmarks: () -> Unit, onOpenPro: () -> Unit,
-    onTestSiren: () -> Unit = {}, onTestVoice: () -> Unit = {}
+    onTestSiren: () -> Unit = {}, onTestVoice: () -> Unit = {},
+    onOpenPrivacyDashboard: () -> Unit = {},
+    onOpenAboutUs: () -> Unit = {}
 ) {
     val context = LocalContext.current
     val c = v17Colors(isDark)
@@ -681,6 +686,18 @@ internal fun V17ConsoleSettingsScreen(
     var selectedLanguage by rememberSaveable { mutableStateOf(LocalePreferences.overrideTag(context)) }
     Column(Modifier.fillMaxSize().background(c.device).verticalScroll(rememberScrollState()).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        V17Card(isDark) {
+            V17SectionHeading(stringResource(R.string.trust_and_privacy_heading),
+                stringResource(R.string.trust_and_privacy_body), Icons.Outlined.Shield, c.green)
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                OutlinedButton(onClick = onOpenPrivacyDashboard, modifier = Modifier.weight(1f)) {
+                    Text(stringResource(R.string.privacy_dashboard_title), maxLines = 2)
+                }
+                OutlinedButton(onClick = onOpenAboutUs, modifier = Modifier.weight(1f)) {
+                    Text(stringResource(R.string.about_us_title), maxLines = 2)
+                }
+            }
+        }
         V17Card(isDark) {
             V17SectionHeading("Appearance", "Theme and language preferences.", Icons.Outlined.Palette, c.accent)
             V17Title("Theme")
