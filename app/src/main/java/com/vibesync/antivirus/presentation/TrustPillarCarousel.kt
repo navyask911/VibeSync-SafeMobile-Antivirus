@@ -48,7 +48,8 @@ internal data class TrustPillar(
 @Composable
 internal fun TrustPillarCarousel(
     onOpenPrivacy: () -> Unit,
-    onOpenSettings: () -> Unit
+    onOpenSettings: () -> Unit,
+    initialPage: Int = 0
 ) {
     val pillars = listOf(
         TrustPillar(
@@ -73,7 +74,7 @@ internal fun TrustPillarCarousel(
             destination = "settings"
         )
     )
-    val pagerState = rememberPagerState(pageCount = { pillars.size })
+    val pagerState = rememberPagerState(initialPage = initialPage.coerceIn(0, pillars.lastIndex), pageCount = { pillars.size })
     Column(verticalArrangement = Arrangement.spacedBy(9.dp)) {
         Text(
             stringResource(R.string.trust_pillars_heading),
