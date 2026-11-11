@@ -7,6 +7,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
@@ -28,20 +29,38 @@ internal object InstallScanNotifications {
     }
     @Synchronized private fun wasEscalated(eventId: String) = eventId in alerts
 
-    fun received(context: Context, label: String, eventId: String, trusted: Boolean = false) {
+    fun received(context: Context, label: String, eventId: String, trusted: Boolean = false, packageName: String? = null) {
         val local = LocalePreferences.wrap(context)
         val manager = context.getSystemService(NotificationManager::class.java) ?: return
-        manager.createNotificationChannel(NotificationChannel(CHANNEL,
-            local.getString(R.string.install_sentinel_title), NotificationManager.IMPORTANCE_LOW).apply {
-            setSound(null, null); enableVibration(false)
+        manager.createNotificationChannel(NotificationChannel(
+            CHANNEL, local.getString(R.string.install_sentinel_title), NotificationManager.IMPORTANCE_LOW
+        ).apply {
+            setSound(null, null)
+            enableVibration(false)
         })
-        if (Build.VERSION.SDK_INT >= 33 && ContextCompat.checkSelfPermission(context,
-                Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+        if (Build.VERSION.SDK_INT >= 33 && ContextCompat.checkSelfPermission(
+                context, Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED) {
             Log.e("SafeMobileScan", "Install received but POST_NOTIFICATIONS is denied; delivery proof cannot be shown")
             return
         }
-        val pending = PendingIntent.getActivity(context, 0, Intent(context, MainActivity::class.java),
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+        val type = if (trusted) "TRUSTED_APP" else "INSTALL_SCAN"
+        val packageUri = packageName?.let { "package:$it" }
+        val target = Intent(context, MainActivity::class.java).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            putExtra(NotificationDeepLink.EXTRA_NOTIFICATION_TYPE, type)
+            putExtra(NotificationDeepLink.EXTRA_FILE_URI, packageUri)
+            putExtra(NotificationDeepLink.EXTRA_LOG_ID, eventId)
+            putExtra(NotificationDeepLink.EXTRA_FILE_NAME, label.take(240))
+            putExtra(NotificationDeepLink.EXTRA_FILE_PATH, packageName ?: label.take(240))
+            putExtra(NotificationDeepLink.EXTRA_REASON, if (trusted) "Package is already on the local trusted-app list." else "A package install event was received; on-device inspection is queued.")
+            putExtra(NotificationDeepLink.EXTRA_PACKAGE_NAME, packageName)
+            data = Uri.fromParts("safemobile-install", eventId, null)
+        }
+        val pending = PendingIntent.getActivity(
+            context, eventId.hashCode(), target,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
         val title = if (trusted) local.getString(R.string.trusted_app_saved)
             else local.getString(R.string.install_scan_progress, label.take(120))
         val notification = NotificationCompat.Builder(local, CHANNEL).setSmallIcon(R.drawable.ic_launcher)

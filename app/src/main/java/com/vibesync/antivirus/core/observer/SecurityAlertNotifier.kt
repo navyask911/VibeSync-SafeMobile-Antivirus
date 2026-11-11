@@ -42,11 +42,15 @@ object SecurityAlertNotifier {
     }
 
     /** Only called after a durable, verified encrypted quarantine copy exists. */
-    fun notifyQuarantinedFile(context: Context, fileName: String, eventId: String, confirmedMalicious: Boolean) {
+    fun notifyQuarantinedFile(
+        context: Context, fileName: String, eventId: String, confirmedMalicious: Boolean,
+        fileUri: String? = null, filePath: String? = null
+    ) {
         show(context, eventId, context.getString(R.string.security_alert_file_title),
             context.getString(R.string.security_alert_file_body, fileName.take(100)), null,
             if (confirmedMalicious) R.string.voice_malicious_quarantined else R.string.voice_suspicious_quarantined,
-            confirmedMalicious)
+            confirmedMalicious, fileUri = fileUri, fileName = fileName,
+            filePath = filePath, notificationType = "DOWNLOAD_ALERT")
     }
 
     suspend fun notifyMaliciousApp(context: Context, packageName: String, eventId: String, sha256: String?) {
@@ -66,7 +70,8 @@ object SecurityAlertNotifier {
         // independent Security Alerts preference.
         show(local, eventId, local.getString(R.string.security_alert_malware_title),
             local.getString(R.string.security_alert_malware_body), packageName, R.string.voice_alert_malware_detected, true,
-            sha256 = sha256)
+            sha256 = sha256, notificationType = "APP_THREAT", fileName = packageName,
+            filePath = "package:$packageName", fileUri = "package:$packageName")
     }
 
     suspend fun notifySuspiciousApp(context: Context, packageName: String, eventId: String) {
@@ -74,7 +79,9 @@ object SecurityAlertNotifier {
         if (!runCatching { SystemPackageGuard.isUserInstalled(context, packageName) }.getOrDefault(false)) return
         val local = com.vibesync.antivirus.core.locale.LocalePreferences.wrap(context)
         show(local, eventId, local.getString(R.string.security_alert_review_title),
-            local.getString(R.string.security_alert_review_body), null, R.string.voice_app_review, false)
+            local.getString(R.string.security_alert_review_body), null, R.string.voice_app_review, false,
+            notificationType = "APP_REVIEW", fileName = packageName, filePath = "package:$packageName",
+            fileUri = "package:$packageName")
     }
 
     /**
@@ -116,7 +123,9 @@ object SecurityAlertNotifier {
 
     private fun show(context: Context, eventId: String, title: String, body: String,
                      packageName: String?, voiceResource: Int, confirmed: Boolean,
-                     testMode: Boolean = false, sha256: String? = null) {
+                     testMode: Boolean = false, sha256: String? = null,
+                     notificationType: String? = null, fileUri: String? = null,
+                     fileName: String? = null, filePath: String? = null) {
         val app = context.applicationContext
         SecurityVoiceAlert.speakIfEnabled(app, voiceResource)
         val enabled = app.getSharedPreferences(SafeMobileApp.SECURITY_PREFS, Context.MODE_PRIVATE)
@@ -133,11 +142,25 @@ object SecurityAlertNotifier {
             return
         }
         ensureChannel(app)
-        val open = if (confirmed && (packageName != null || testMode)) {
+        val open = if (testMode) {
             Intent(app, ThreatDetectedActivity::class.java)
                 .putExtra(ThreatDetectedActivity.EXTRA_PACKAGE, packageName)
-                .putExtra(EXTRA_TEST_MODE, testMode)
-        } else Intent(app, MainActivity::class.java).putExtra(EXTRA_OPEN_QUARANTINE, true)
+                .putExtra(EXTRA_TEST_MODE, true)
+        } else {
+            Intent(app, MainActivity::class.java).apply {
+                val type = notificationType ?: if (packageName != null) "APP_THREAT" else "FILE_SCAN"
+                val effectiveUri = fileUri ?: packageName?.let { "package:$it" }
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                if (effectiveUri != null) addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                putExtra(NotificationDeepLink.EXTRA_NOTIFICATION_TYPE, type)
+                putExtra(NotificationDeepLink.EXTRA_FILE_URI, effectiveUri)
+                putExtra(NotificationDeepLink.EXTRA_LOG_ID, eventId)
+                putExtra(NotificationDeepLink.EXTRA_FILE_NAME, (fileName ?: packageName)?.take(240))
+                putExtra(NotificationDeepLink.EXTRA_FILE_PATH, (filePath ?: effectiveUri ?: packageName).orEmpty().take(4096))
+                putExtra(NotificationDeepLink.EXTRA_REASON, if (confirmed) "local_sha256_match" else "best_effort_review")
+                putExtra(NotificationDeepLink.EXTRA_PACKAGE_NAME, packageName)
+            }
+        }
         if (confirmed && sha256?.matches(Regex("[0-9a-fA-F]{64}")) == true) {
             open.putExtra(EXTRA_SHA256, sha256.lowercase())
         }
