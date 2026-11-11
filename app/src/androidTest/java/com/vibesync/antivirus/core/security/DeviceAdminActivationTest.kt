@@ -23,11 +23,11 @@ class DeviceAdminActivationTest {
         val info = context.packageManager.getReceiverInfo(receiver, PackageManager.GET_META_DATA)
         assertTrue(info.exported)
         assertEquals(android.Manifest.permission.BIND_DEVICE_ADMIN, info.permission)
-        assertNotNull(info.metaData?.getInt("android.app.device_admin"))
+        assertTrue(info.metaData?.containsKey("android.app.device_admin") == true)
 
         val activation = DeviceAdminManager(context).activationIntent()
         assertEquals(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN, activation.action)
-        assertEquals(receiver, activation.getParcelableExtra<ComponentName>(DevicePolicyManager.EXTRA_DEVICE_ADMIN))
+        assertEquals(receiver, activation.extras?.get(DevicePolicyManager.EXTRA_DEVICE_ADMIN) as? ComponentName)
         assertEquals(context.packageName, receiver.packageName)
     }
 }
