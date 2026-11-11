@@ -1,5 +1,6 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.util.Base64
+import java.util.zip.GZIPOutputStream
 import java.security.MessageDigest
 import java.net.URL
 import java.nio.file.Files
@@ -429,7 +430,7 @@ val packageProtectedSecurityAssets = tasks.register("packageProtectedSecurityAss
             check(target.parentFile.mkdirs() || target.parentFile.isDirectory) {
                 "Could not create protected security asset directory: ${target.parent}"
             }
-            java.util.zip.GZIPOutputStream(target.outputStream().buffered()).use { gzip ->
+            GZIPOutputStream(target.outputStream().buffered()).use { gzip ->
                 source.inputStream().use { input -> input.copyTo(gzip) }
             }
             check(target.length() > 0L) { "Protected security asset is empty: $relativePath" }
