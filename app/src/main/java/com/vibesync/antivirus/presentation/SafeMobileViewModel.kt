@@ -221,8 +221,10 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
         }
     }
 
-    fun trustFileHash(result: ScanResult) {
-        val sha256 = result.sha256?.lowercase()?.takeIf { it.matches(Regex("^[0-9a-f]{64}$")) }
+    fun trustFileHash(result: ScanResult) = trustFileHash(result.sha256)
+
+    fun trustFileHash(sha256Value: String?) {
+        val sha256 = sha256Value?.lowercase()?.takeIf { it.matches(Regex("^[0-9a-f]{64}$")) }
         if (sha256 == null) {
             mutableState.update { it.copy(messageResource = R.string.trusted_file_invalid) }
             return

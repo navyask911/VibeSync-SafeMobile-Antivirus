@@ -1408,13 +1408,17 @@ import kotlinx.coroutines.launch
      ?: item.fileUri?.takeIf { it.startsWith("package:") }?.removePrefix("package:")
     if (!packageName.isNullOrBlank()) vm.trustPackageName(packageName)
     else {
+     val incidentHash = securityIncidents.firstOrNull { it.eventId == item.logId }?.sha256Hash
      val match = state.results.lastOrNull { result ->
       (item.fileUri != null && result.sourceUri == item.fileUri) ||
        (item.fileName != null && result.displayName.equals(item.fileName, ignoreCase = true)) ||
        (item.filePath != null && result.packageOrPath == item.filePath)
      }
-     if (match != null) vm.trustFileHash(match)
-     else Toast.makeText(context, R.string.notification_details_whitelist_scan_first, Toast.LENGTH_LONG).show()
+     when {
+      !incidentHash.isNullOrBlank() -> vm.trustFileHash(incidentHash)
+      match?.sha256?.isNotBlank() == true -> vm.trustFileHash(match)
+      else -> Toast.makeText(context, R.string.notification_details_whitelist_scan_first, Toast.LENGTH_LONG).show()
+     }
     }
     pendingNotificationDetails = null
    }

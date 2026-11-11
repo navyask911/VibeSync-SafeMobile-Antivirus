@@ -114,7 +114,7 @@ class StorageSentinelService : Service() {
    privateTextStore.protectPrivateText(path.take(180), "incident-path"),
    privateTextStore.protectPrivateText(reason, "incident-reason"),action,status);runCatching{app.database.securityIncidentDao().insert(event)}.onFailure{Log.w(TAG,"Incident insert failed",it)}
   val sourceUri = uri?.toString() ?: file?.toURI()?.toString()
-  val localLogId = r.threatEventId ?: id
+  val localLogId = id
   if(saved!=null && (malicious || r.verdict==ScanVerdict.SUSPICIOUS)) {
     // Audible/high-priority alert only after encrypted quarantine content was successfully saved.
     SecurityAlertNotifier.notifyQuarantinedFile(this,name,localLogId,malicious,sourceUri,path)
