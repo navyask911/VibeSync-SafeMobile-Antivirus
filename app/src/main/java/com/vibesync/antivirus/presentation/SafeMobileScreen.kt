@@ -342,7 +342,8 @@ import kotlinx.coroutines.launch
    installSentinelEnabled = securityPrefs.getBoolean(SafeMobileApp.KEY_INSTALL_SENTINEL_ENABLED, false),
    playProtectEnabled = state.securityAssessment?.signals?.playProtectEnabled,
    usbDebuggingEnabled = state.securityAssessment?.signals?.usbDebuggingEnabled,
-   voiceAlertsEnabled = securityPrefs.getBoolean(SafeMobileApp.KEY_VOICE_ALERTS_ENABLED, false)
+   voiceAlertsEnabled = securityPrefs.getBoolean(SafeMobileApp.KEY_VOICE_ALERTS_ENABLED, false),
+   deviceAdminActive = adminActive
   ),
   snoozedAdvisorIds
  )
