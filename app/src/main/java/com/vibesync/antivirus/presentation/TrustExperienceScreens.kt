@@ -1,6 +1,7 @@
 package com.vibesync.antivirus.presentation
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -36,7 +37,7 @@ import kotlinx.coroutines.launch
 data class TrustPillar(
     val title: String,
     val description: String,
-    val icon: ImageVector,
+    val icon: ImageVector?,
     val gradient: List<Color>,
     val destination: String
 )
@@ -65,7 +66,7 @@ internal fun TrustPillarCarousel(
         TrustPillar(
             stringResource(R.string.trust_pillar_control_title),
             stringResource(R.string.trust_pillar_control_body),
-            Icons.Outlined.Settings,
+            null,
             listOf(Color(0xFF3B176C), Color(0xFF8B5CF6)),
             "settings"
         )
@@ -105,7 +106,22 @@ internal fun TrustPillarCarousel(
                     .padding(18.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                Icon(pillar.icon, contentDescription = pillar.title, tint = Color.White, modifier = Modifier.size(30.dp))
+                if (pillar.icon != null) {
+                    Icon(pillar.icon, contentDescription = pillar.title, tint = Color.White, modifier = Modifier.size(30.dp))
+                } else {
+                    Canvas(Modifier.size(30.dp)) {
+                        val stroke = 2.5.dp.toPx()
+                        val radius = 3.5.dp.toPx()
+                        val rails = listOf(size.height * .2f, size.height * .5f, size.height * .8f)
+                        val knobs = listOf(size.width * .34f, size.width * .7f, size.width * .45f)
+                        rails.forEachIndexed { index, y ->
+                            drawLine(Color.White, androidx.compose.ui.geometry.Offset(0f, y),
+                                androidx.compose.ui.geometry.Offset(size.width, y), strokeWidth = stroke)
+                            drawCircle(Color.White, radius = radius,
+                                center = androidx.compose.ui.geometry.Offset(knobs[index], y))
+                        }
+                    }
+                }
                 Text(
                     pillar.title,
                     color = Color.White,
