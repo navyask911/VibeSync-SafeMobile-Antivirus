@@ -1384,7 +1384,7 @@ import kotlinx.coroutines.launch
    },
    onDelete = {
     val packageName = item.packageName
-     ?: item.fileUri?.removePrefix("package:")?.takeIf { item.fileUri.startsWith("package:") }
+     ?: item.fileUri?.takeIf { it.startsWith("package:") }?.removePrefix("package:")
     if (!packageName.isNullOrBlank()) {
      pendingNotificationDetails = null
      lastUninstallPackage = packageName
@@ -1405,7 +1405,7 @@ import kotlinx.coroutines.launch
    },
    onWhitelist = {
     val packageName = item.packageName
-     ?: item.fileUri?.removePrefix("package:")?.takeIf { item.fileUri.startsWith("package:") }
+     ?: item.fileUri?.takeIf { it.startsWith("package:") }?.removePrefix("package:")
     if (!packageName.isNullOrBlank()) vm.trustPackageName(packageName)
     else {
      val match = state.results.lastOrNull { result ->
