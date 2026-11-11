@@ -272,14 +272,28 @@ import kotlinx.coroutines.launch
    )
   } else if (payload.fileUri != null) {
    val uri = runCatching { Uri.parse(payload.fileUri) }.getOrNull()
+   val packageName = uri?.takeIf { it.scheme == "package" }?.schemeSpecificPart
+   val appLabel = packageName?.let { name ->
+    runCatching {
+     @Suppress("DEPRECATION")
+     context.packageManager.getApplicationLabel(context.packageManager.getApplicationInfo(name, 0)).toString()
+    }.getOrNull()
+   }
+   val reasonResource = when (payload.notificationType) {
+    NotificationDeepLinkContract.TYPE_MALWARE_APP -> R.string.notification_reason_malware_app
+    NotificationDeepLinkContract.TYPE_SUSPICIOUS_APP -> R.string.notification_reason_suspicious_app
+    NotificationDeepLinkContract.TYPE_DOWNLOAD_MALICIOUS -> R.string.notification_reason_download_malicious
+    NotificationDeepLinkContract.TYPE_DOWNLOAD_QUARANTINED -> R.string.notification_reason_download_quarantined
+    else -> R.string.notification_details_unavailable
+   }
    notificationIncidentDetails = NotificationIncidentDetails(
-    fileName = uri?.let { runCatching { DocumentFile.fromSingleUri(context, it)?.name }.getOrNull() }
-     ?: context.getString(R.string.unknown_file),
-    filePath = payload.fileUri,
-    reason = context.getString(R.string.notification_details_unavailable),
+    fileName = appLabel ?: uri?.let { runCatching { DocumentFile.fromSingleUri(context, it)?.name }.getOrNull() }
+     ?: packageName ?: context.getString(R.string.unknown_file),
+    filePath = packageName ?: payload.fileUri,
+    reason = context.getString(reasonResource),
     status = payload.notificationType,
-    sourcePackage = null,
-    fileUri = payload.fileUri,
+    sourcePackage = packageName,
+    fileUri = payload.fileUri.takeIf { uri?.scheme == "content" },
     sha256 = null
    )
   }

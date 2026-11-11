@@ -146,7 +146,12 @@ object SecurityAlertNotifier {
             Intent(app, ThreatDetectedActivity::class.java)
                 .putExtra(ThreatDetectedActivity.EXTRA_PACKAGE, packageName)
                 .putExtra(EXTRA_TEST_MODE, true)
-        } else NotificationDeepLinkContract.intent(app, notificationType, fileUri?.toString(), eventId)
+        } else NotificationDeepLinkContract.intent(
+            app,
+            notificationType,
+            fileUri?.toString() ?: packageName?.let { Uri.fromParts("package", it, null).toString() },
+            eventId
+        )
         if (!testMode && confirmed && sha256?.matches(Regex("[0-9a-fA-F]{64}")) == true) {
             open.putExtra(EXTRA_SHA256, sha256.lowercase())
         }

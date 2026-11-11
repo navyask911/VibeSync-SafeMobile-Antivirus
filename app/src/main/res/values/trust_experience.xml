@@ -51,4 +51,8 @@
     <string name="notification_delete_failed">The item could not be deleted. Check local file access and try again.</string>
     <string name="notification_whitelist_saved">The app was added to your trusted apps.</string>
     <string name="notification_whitelist_failed">The app could not be added to trusted apps.</string>
+    <string name="notification_reason_malware_app">A local malware scan confirmed a threat in this installed app.</string>
+    <string name="notification_reason_suspicious_app">A local scan found indicators that need review in this installed app.</string>
+    <string name="notification_reason_download_malicious">A local file scan confirmed a malware signature.</string>
+    <string name="notification_reason_download_quarantined">A local file was isolated for further review.</string>
 </resources>

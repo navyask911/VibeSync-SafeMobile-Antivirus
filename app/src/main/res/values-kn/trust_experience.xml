@@ -51,4 +51,8 @@
     <string name="notification_delete_failed">ಐಟಂ ಅಳಿಸಲಾಗಲಿಲ್ಲ. ಸ್ಥಳೀಯ ಫೈಲ್ ಪ್ರವೇಶವನ್ನು ಪರಿಶೀಲಿಸಿ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.</string>
     <string name="notification_whitelist_saved">ಆ್ಯಪ್ ಅನ್ನು ನಿಮ್ಮ ವಿಶ್ವಾಸಾರ್ಹ ಆ್ಯಪ್‌ಗಳಿಗೆ ಸೇರಿಸಲಾಗಿದೆ.</string>
     <string name="notification_whitelist_failed">ಆ್ಯಪ್ ಅನ್ನು ವಿಶ್ವಾಸಾರ್ಹ ಆ್ಯಪ್‌ಗಳಿಗೆ ಸೇರಿಸಲಾಗಲಿಲ್ಲ.</string>
+    <string name="notification_reason_malware_app">ಸ್ಥಳೀಯ ಮಾಲ್‌ವೇರ್ ಸ್ಕ್ಯಾನ್ ಈ ಸ್ಥಾಪಿತ ಆ್ಯಪ್‌ನಲ್ಲಿ ಬೆದರಿಕೆಯನ್ನು ದೃಢಪಡಿಸಿದೆ.</string>
+    <string name="notification_reason_suspicious_app">ಸ್ಥಳೀಯ ಸ್ಕ್ಯಾನ್ ಈ ಸ್ಥಾಪಿತ ಆ್ಯಪ್‌ನಲ್ಲಿ ಪರಿಶೀಲಿಸಬೇಕಾದ ಸೂಚಕಗಳನ್ನು ಕಂಡಿದೆ.</string>
+    <string name="notification_reason_download_malicious">ಸ್ಥಳೀಯ ಫೈಲ್ ಸ್ಕ್ಯಾನ್ ಮಾಲ್‌ವೇರ್ ಸಹಿಯನ್ನು ದೃಢಪಡಿಸಿದೆ.</string>
+    <string name="notification_reason_download_quarantined">ಸ್ಥಳೀಯ ಫೈಲ್ ಅನ್ನು ಹೆಚ್ಚಿನ ಪರಿಶೀಲನೆಗಾಗಿ ಪ್ರತ್ಯೇಕಿಸಲಾಗಿದೆ.</string>
 </resources>
