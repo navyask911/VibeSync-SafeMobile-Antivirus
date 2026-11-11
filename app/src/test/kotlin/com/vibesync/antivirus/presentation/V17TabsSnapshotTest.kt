@@ -128,6 +128,34 @@ class V17TabsSnapshotTest {
         }
     }
 
+
+    @Test
+    fun trustPillarsSwipeCards(@TestParameter palette: SnapshotPalette) {
+        paparazzi.snapshot {
+            themed(palette, "home") {
+                TrustPillarCarousel(onOpenPrivacyDashboard = {}, onOpenSettings = {})
+            }
+        }
+    }
+
+    @Test
+    fun aboutUsEcosystemPage(@TestParameter palette: SnapshotPalette) {
+        paparazzi.snapshot {
+            themed(palette, "settings") {
+                AboutUsScreen()
+            }
+        }
+    }
+
+    @Test
+    fun privacyDashboard(@TestParameter palette: SnapshotPalette) {
+        paparazzi.snapshot {
+            themed(palette, "settings") {
+                PrivacyDashboardScreen()
+            }
+        }
+    }
+
     @Composable
     private fun themed(palette: SnapshotPalette, selectedTab: String, content: @Composable () -> Unit) {
         val baseContext = LocalContext.current
