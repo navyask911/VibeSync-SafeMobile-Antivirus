@@ -83,7 +83,8 @@ object SentinelNotificationHelper {
             putExtra(NotificationDeepLink.EXTRA_FILE_NAME, name?.take(240))
             putExtra(NotificationDeepLink.EXTRA_FILE_PATH, (path ?: fileUri).orEmpty().take(4096))
             putExtra(NotificationDeepLink.EXTRA_REASON, reason ?: if (confirmed) "local_sha256_match" else "best_effort_review")
-            data = Uri.fromParts("safemobile-notification", id, null)
+            data = fileUri?.takeIf { it.startsWith("content:") || it.startsWith("file:") }?.let(Uri::parse)
+                ?: Uri.fromParts("safemobile-notification", id, null)
         }
         val pending = PendingIntent.getActivity(
             context, id.hashCode(), target,

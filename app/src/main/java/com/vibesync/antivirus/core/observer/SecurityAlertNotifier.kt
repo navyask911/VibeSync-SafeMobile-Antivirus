@@ -166,7 +166,8 @@ object SecurityAlertNotifier {
         }
         open.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
             .putExtra(EXTRA_EVENT_ID, eventId)
-            .setData(Uri.fromParts("safemobile-incident", eventId, null))
+            .setData(fileUri?.takeIf { it.startsWith("content:") || it.startsWith("file:") }?.let(Uri::parse)
+                ?: Uri.fromParts("safemobile-incident", eventId, null))
         val flags = PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         val content = PendingIntent.getActivity(app, eventId.hashCode(), open, flags)
         val dismiss = PendingIntent.getBroadcast(app, eventId.hashCode(),
