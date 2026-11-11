@@ -16,6 +16,10 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import android.os.PowerManager
 import android.provider.Settings
+import android.provider.DocumentsContract
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import com.vibesync.antivirus.core.observer.NotificationDeepLink
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.navigation.NavHostController
@@ -147,7 +151,9 @@ import kotlinx.coroutines.launch
  openQuarantine:Boolean = false,
  onOpenQuarantineConsumed:() -> Unit = {},
  openDevicePosture:Boolean = false,
- onOpenDevicePostureConsumed:() -> Unit = {}
+ onOpenDevicePostureConsumed:() -> Unit = {},
+ notificationDeepLink: NotificationDeepLink? = null,
+ onNotificationDeepLinkConsumed: () -> Unit = {}
 ) {
  val context=LocalContext.current
  val safeMobileApp=context.applicationContext as SafeMobileApp
@@ -227,6 +233,17 @@ import kotlinx.coroutines.launch
    if (tabNavController.currentDestination == null) Toast.makeText(context, R.string.pro_navigation_unavailable, Toast.LENGTH_LONG).show()
    else navigateToDestination("pro")
   } catch (_: Exception) { Toast.makeText(context, R.string.pro_navigation_unavailable, Toast.LENGTH_LONG).show() }
+ }
+ val openExternalLink: (String) -> Unit = { url ->
+  runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url))) }
+   .onFailure { Toast.makeText(context, R.string.about_link_unavailable, Toast.LENGTH_LONG).show() }
+ }
+ LaunchedEffect(notificationDeepLink) {
+  notificationDeepLink?.let { item ->
+   pendingNotificationDetails = item
+   navigateToDestination("scan")
+   onNotificationDeepLinkConsumed()
+  }
  }
  LaunchedEffect(currentRoute, currentBackStackEntry?.arguments?.getString("screen")) {
   selectedDestination = when (currentRoute) {
@@ -427,6 +444,8 @@ import kotlinx.coroutines.launch
  }
  var showDefinitionImportWarning by remember { mutableStateOf(false) }
  var pendingQuarantine by remember { mutableStateOf<ScanResult?>(null) }
+ var pendingNotificationDetails by remember { mutableStateOf<NotificationDeepLink?>(null) }
+ var notificationDeleteTarget by remember { mutableStateOf<NotificationDeepLink?>(null) }
  var pendingRestoreFile by remember { mutableStateOf<File?>(null) }
  var pendingDeleteFile by remember { mutableStateOf<File?>(null) }
  var showRestoreWarning by remember { mutableStateOf(false) }
@@ -549,8 +568,10 @@ import kotlinx.coroutines.launch
  }
  val toggleAdminGuard: (Boolean) -> Unit = { enabled ->
   if (enabled) {
-   // Device Admin is optional and is requested only from its dedicated security control.
-   if (!deviceAdminManager.isAdminActive()) showAdminPermissionDisclosure = true
+   if (!deviceAdminManager.isAdminActive()) {
+    runCatching { deviceAdminManager.requestAdminPermission() }
+     .onFailure { Toast.makeText(context, R.string.device_admin_activation_failed, Toast.LENGTH_LONG).show() }
+   }
   } else {
    runCatching { deviceAdminManager.removeAdmin() }
     .onFailure { Toast.makeText(context, R.string.device_admin_explanation, Toast.LENGTH_LONG).show() }
@@ -832,7 +853,14 @@ import kotlinx.coroutines.launch
           onOpenLiveSentinel = { navigateToDestination("sources") },
           onOpenPosture = { navigateToDestination("posture"); if (privacyAccepted) postureVm.refreshAuditSilently() },
           onOpenDetection = { navigateToDestination("capabilities") },
-          onOpenThreatDb = { navigateToDestination("quarantine") }
+          onOpenThreatDb = { navigateToDestination("quarantine") },
+          onOpenPrivacy = { navigateToDestination("privacy") },
+          onOpenSettings = { navigateToDestination("settings") }
+         )
+         "privacy" -> PrivacyDashboardScreen()
+         "about" -> AboutUsScreen(
+          onOpenWebsite = { openExternalLink("https://vibesyncro.com/") },
+          onOpenStore = openExternalLink
          )
          "scan" -> V17ScanLabScreen(
           isDark = appTheme != com.vibesync.antivirus.ui.theme.AppTheme.LIGHT,
@@ -937,7 +965,9 @@ import kotlinx.coroutines.launch
           onImportYara = { pendingYaraPicker.launch(arrayOf("text/plain", "application/octet-stream", "application/x-yara")) },
           onThreatFeedSync = { requestPrivacyAcknowledgement { vm.requestThreatFeedSync() } },
           onBenchmarks = { navigateToDestination("scan") },
-          onOpenPro = openProSafely
+          onOpenPro = openProSafely,
+          onOpenPrivacy = { navigateToDestination("privacy") },
+          onOpenAbout = { navigateToDestination("about") }
          )
          else -> Column(
           Modifier.fillMaxSize().verticalScroll(contentScrollState)
@@ -1333,6 +1363,92 @@ import kotlinx.coroutines.launch
  }
  }
 
+ pendingNotificationDetails?.let { item ->
+  ThreatDetailsDialog(
+   item = item,
+   onDismiss = { pendingNotificationDetails = null },
+   onScan = {
+    pendingNotificationDetails = null
+    navigateToDestination("scan")
+    val packageName = item.packageName
+     ?: item.fileUri?.removePrefix("package:")?.takeIf { item.fileUri.startsWith("package:") }
+    if (!packageName.isNullOrBlank()) {
+     requestPrivacyAcknowledgement { vm.scanInstalledPackageNow(packageName) }
+    } else {
+     val uri = item.fileUri?.let { runCatching { Uri.parse(it) }.getOrNull() }
+     if (uri != null) {
+      runCatching { context.contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION) }
+      requestPrivacyAcknowledgement { vm.scanSelected(uri) }
+     } else Toast.makeText(context, R.string.notification_details_scan_unavailable, Toast.LENGTH_LONG).show()
+    }
+   },
+   onDelete = {
+    val packageName = item.packageName
+     ?: item.fileUri?.removePrefix("package:")?.takeIf { item.fileUri.startsWith("package:") }
+    if (!packageName.isNullOrBlank()) {
+     pendingNotificationDetails = null
+     lastUninstallPackage = packageName
+     pendingUninstallPackage = packageName
+     when (vm.requestUninstall(context, packageName,
+      launchDelete = { intent -> deleteLauncher.launch(intent) },
+      openAppInfo = { intent -> context.startActivity(intent) })) {
+      UninstallResult.Success, UninstallResult.RequiresUserAction -> Unit
+      is UninstallResult.BlockedSystemApp -> showUninstallSnackbar(context.getString(R.string.uninstall_protected), packageName)
+      UninstallResult.NotFound -> showUninstallSnackbar(context.getString(R.string.uninstall_not_found), null)
+      UninstallResult.OpenedAppInfo -> showUninstallSnackbar(context.getString(R.string.uninstall_opened_app_info), packageName)
+      UninstallResult.HandlerUnavailable -> showUninstallSnackbar(context.getString(R.string.uninstall_launch_failed), packageName)
+     }
+    } else if (!item.fileUri.isNullOrBlank()) {
+     notificationDeleteTarget = item
+     pendingNotificationDetails = null
+    } else Toast.makeText(context, R.string.notification_details_delete_failed, Toast.LENGTH_LONG).show()
+   },
+   onWhitelist = {
+    val packageName = item.packageName
+     ?: item.fileUri?.removePrefix("package:")?.takeIf { item.fileUri.startsWith("package:") }
+    if (!packageName.isNullOrBlank()) vm.trustPackageName(packageName)
+    else {
+     val match = state.results.lastOrNull { result ->
+      (item.fileUri != null && result.sourceUri == item.fileUri) ||
+       (item.fileName != null && result.displayName.equals(item.fileName, ignoreCase = true)) ||
+       (item.filePath != null && result.packageOrPath == item.filePath)
+     }
+     if (match != null) vm.trustFileHash(match)
+     else Toast.makeText(context, R.string.notification_details_whitelist_scan_first, Toast.LENGTH_LONG).show()
+    }
+    pendingNotificationDetails = null
+   }
+  )
+ }
+ notificationDeleteTarget?.let { item ->
+  AlertDialog(
+   onDismissRequest = { notificationDeleteTarget = null },
+   title = { Text(stringResource(R.string.notification_details_delete_confirm_title)) },
+   text = { Text(stringResource(R.string.notification_details_delete_confirm_body)) },
+   confirmButton = {
+    TextButton(onClick = {
+     notificationDeleteTarget = null
+     val uri = runCatching { Uri.parse(item.fileUri.orEmpty()) }.getOrNull()
+     uiScope.launch {
+      val deleted = withContext(Dispatchers.IO) {
+       when (uri?.scheme) {
+        "file" -> uri.path?.let { File(it).takeIf(File::isFile)?.delete() } == true
+        "content" -> runCatching {
+         if (DocumentsContract.isDocumentUri(context, uri)) DocumentsContract.deleteDocument(context.contentResolver, uri)
+         else context.contentResolver.delete(uri, null, null) > 0
+        }.getOrDefault(false)
+        else -> false
+       }
+      }
+      Toast.makeText(context,
+       if (deleted) R.string.notification_details_deleted else R.string.notification_details_delete_failed,
+       Toast.LENGTH_LONG).show()
+     }
+    }) { Text(stringResource(R.string.notification_details_delete)) }
+   },
+   dismissButton = { TextButton(onClick = { notificationDeleteTarget = null }) { Text(stringResource(R.string.close)) } }
+  )
+ }
  if (showAdminPermissionDisclosure) {
   DeviceAdminPermissionDisclosureDialog(
    onConfirm = {

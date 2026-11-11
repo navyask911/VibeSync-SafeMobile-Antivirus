@@ -293,6 +293,10 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
         listOf(repository.scanUri(uri))
     }
 
+    fun scanInstalledPackageNow(packageName: String) = runScan(manualScan = true) { _ ->
+        listOfNotNull(repository.scanInstalledPackage(packageName))
+    }
+
     /** Use the existing hash/YARA/ML scan pipeline for a user-selected folder tree. */
     fun scanFolderTree(uri: Uri) = runScan(manualScan = true) { onProgress ->
         repository.scanFolderTree(uri, onProgress)
