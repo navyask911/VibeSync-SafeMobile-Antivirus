@@ -4,6 +4,7 @@ import android.content.res.AssetManager
 import java.io.ByteArrayOutputStream
 import java.nio.charset.CodingErrorAction
 import java.nio.charset.StandardCharsets
+import java.util.zip.GZIPInputStream
 
 data class YaraCapability(val active: Boolean, val ruleCount: Int, val reason: String)
 
@@ -12,14 +13,14 @@ data class YaraCapability(val active: Boolean, val ruleCount: Int, val reason: S
  * Content is authenticated by the signed APK, not by a remote rule service.
  */
 object BundledYaraEngine {
-    private const val ASSET_PATH = "yara/safemobile_android_dex.yar"
+    private const val ASSET_PATH = "yara/safemobile_android_dex.yar.gz"
     @Volatile private var engine: YaraScanner = YaraScanner()
     @Volatile var capability: YaraCapability = YaraCapability(false, 0, YaraScanner.DISABLED_REASON)
         private set
 
     fun initialize(assets: AssetManager) {
         try {
-            val bytes = assets.open(ASSET_PATH).use { input ->
+            val bytes = GZIPInputStream(assets.open(ASSET_PATH)).use { input ->
                 val output = ByteArrayOutputStream()
                 val buffer = ByteArray(4096)
                 while (true) {

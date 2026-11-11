@@ -4,6 +4,7 @@ import android.content.Context
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.Locale
+import java.util.zip.GZIPInputStream
 
 /**
  * Loads the bundled, line-oriented hash signature format:
@@ -17,8 +18,10 @@ class SignatureDatabaseParser {
 
     suspend fun parseDatabase(context: Context, fileName: String): List<String> =
         withContext(Dispatchers.IO) {
-            context.applicationContext.assets.open(fileName)
-                .bufferedReader(Charsets.UTF_8)
+            val assets = context.applicationContext.assets
+            val compressed = runCatching { assets.open("$fileName.gz") }.getOrNull()
+            val stream = compressed?.let(::GZIPInputStream) ?: assets.open(fileName)
+            stream.bufferedReader(Charsets.UTF_8)
                 .useLines { lines ->
                     lines.mapNotNull { raw ->
                         val hash = raw.substringBefore(':').trim().lowercase(Locale.ROOT)

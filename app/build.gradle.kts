@@ -399,6 +399,51 @@ tasks.matching {
     dependsOn(buildYaraXNative)
 }
 
+// Keep readable rule/definition sources for review and unit tests, but ship only
+// compressed copies in the APK/AAB so their raw signature strings are not plain-text assets.
+val protectedSecurityAssetDirectory = layout.buildDirectory.dir("generated/protected-security-assets/assets")
+val protectedSecurityAssetInputs = listOf(
+    layout.projectDirectory.file("src/main/assets/yara/safemobile_android_dex.yar").asFile,
+    layout.projectDirectory.file("src/main/assets/offline-threat-definitions.json").asFile,
+    layout.projectDirectory.file("src/main/assets/signatures/mock_signatures.hsb").asFile
+)
+val packageProtectedSecurityAssets = tasks.register("packageProtectedSecurityAssets") {
+    group = "build setup"
+    description = "GZIP bundled threat signatures and definitions before APK/AAB packaging."
+    inputs.files(protectedSecurityAssetInputs)
+    outputs.dir(protectedSecurityAssetDirectory)
+    doLast {
+        val outputRoot = protectedSecurityAssetDirectory.get().asFile
+        outputRoot.deleteRecursively()
+        check(outputRoot.mkdirs() || outputRoot.isDirectory) {
+            "Could not create protected security asset output directory."
+        }
+        val relativeOutputs = listOf(
+            "yara/safemobile_android_dex.yar.gz",
+            "offline-threat-definitions.json.gz",
+            "signatures/mock_signatures.hsb.gz"
+        )
+        protectedSecurityAssetInputs.zip(relativeOutputs).forEach { (source, relativePath) ->
+            check(source.isFile) { "Required security asset source is missing: ${source.path}" }
+            val target = outputRoot.resolve(relativePath)
+            check(target.parentFile.mkdirs() || target.parentFile.isDirectory) {
+                "Could not create protected security asset directory: ${target.parent}"
+            }
+            java.util.zip.GZIPOutputStream(target.outputStream().buffered()).use { gzip ->
+                source.inputStream().use { input -> input.copyTo(gzip) }
+            }
+            check(target.length() > 0L) { "Protected security asset is empty: $relativePath" }
+        }
+    }
+}
+val mainAssetSources = android.sourceSets.getByName("main").assets
+mainAssetSources.exclude(
+    "yara/safemobile_android_dex.yar",
+    "offline-threat-definitions.json",
+    "signatures/mock_signatures.hsb"
+)
+mainAssetSources.srcDir(packageProtectedSecurityAssets)
+
 // docs/BENCHMARK_REPORT.md is canonical: the hidden card reads its build-time asset copy.
 // Generated assets are not committed and never contain APK samples.
 val benchmarkAssetDirectory = layout.buildDirectory.dir("generated/benchmark-report/assets")
