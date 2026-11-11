@@ -57,7 +57,23 @@ data class SafeMobileUiState(
 class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel() {
     private val mutableState = MutableStateFlow(SafeMobileUiState())
     val state = mutableState.asStateFlow()
+    private val mutableProtectionAdvisorState = MutableStateFlow(
+        ProtectionAdvisorState(score = 0, pendingCount = 0, issues = emptyList())
+    )
+    val protectionAdvisorState = mutableProtectionAdvisorState.asStateFlow()
+    private var protectionAdvisorJob: Job? = null
     private var scanJob: Job? = null
+
+    /** Run the CPU-only score rubric off the main thread; UI state is published on Main. */
+    fun updateProtectionAdvisor(inputs: ProtectionAdvisorInputs, snoozedIds: Set<String>) {
+        protectionAdvisorJob?.cancel()
+        protectionAdvisorJob = viewModelScope.launch {
+            val calculated = withContext(Dispatchers.Default) {
+                ProtectionAdvisorEngine.evaluate(inputs, snoozedIds)
+            }
+            mutableProtectionAdvisorState.value = calculated
+        }
+    }
 
     init {
         repository.loadScanSummary()?.let { summary ->

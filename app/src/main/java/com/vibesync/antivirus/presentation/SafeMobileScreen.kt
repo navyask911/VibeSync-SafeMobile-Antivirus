@@ -328,25 +328,38 @@ import kotlinx.coroutines.launch
  }
  val advisorStore = remember(context) { ProtectionAdvisorStore(context) }
  val snoozedAdvisorIds by advisorStore.snoozedIssueIds.collectAsStateWithLifecycle(initialValue = emptySet())
- val advisorState = ProtectionAdvisorEngine.evaluate(
+ val folderSentinelConfigured = StorageAccessPreferences.hasRole(context, StorageAccessPreferences.DOWNLOADS) ||
+  StorageAccessPreferences.hasRole(context, StorageAccessPreferences.WHATSAPP) || customFolderUris.isNotEmpty()
+ val databaseUpdatedAt = com.vibesync.antivirus.core.hashdb.HashDatabaseFreshness.updatedAt(context, state.hashDatabaseCapability.version)
+ val installSentinelEnabled = securityPrefs.getBoolean(SafeMobileApp.KEY_INSTALL_SENTINEL_ENABLED, false)
+ val voiceAlertsEnabled = securityPrefs.getBoolean(SafeMobileApp.KEY_VOICE_ALERTS_ENABLED, false)
+ val advisorInputs = remember(
+  state.completedScans, state.scanSummary, state.threatCount, folderSentinelConfigured,
+  postureState.report?.highRiskAppCount, notificationsGranted, securityAlertsEnabled,
+  batteryUnrestricted, fullScreenAlertsGranted, databaseUpdatedAt, installSentinelEnabled,
+  state.securityAssessment?.signals?.playProtectEnabled,
+  state.securityAssessment?.signals?.usbDebuggingEnabled, voiceAlertsEnabled, adminActive
+ ) {
   ProtectionAdvisorInputs(
    totalScans = maxOf(state.completedScans, if (state.scanSummary != null) 1 else 0),
    threatsDetected = state.scanSummary?.threats ?: state.threatCount,
-   folderSentinelConfigured = StorageAccessPreferences.hasRole(context, StorageAccessPreferences.DOWNLOADS) ||
-    StorageAccessPreferences.hasRole(context, StorageAccessPreferences.WHATSAPP) || customFolderUris.isNotEmpty(),
+   folderSentinelConfigured = folderSentinelConfigured,
    highRiskPostureCount = postureState.report?.highRiskAppCount,
    notificationsEnabled = notificationsGranted && securityAlertsEnabled,
    batteryUnrestricted = batteryUnrestricted,
    fullScreenIntentEnabled = fullScreenAlertsGranted,
-   databaseUpdatedAt = com.vibesync.antivirus.core.hashdb.HashDatabaseFreshness.updatedAt(context, state.hashDatabaseCapability.version),
-   installSentinelEnabled = securityPrefs.getBoolean(SafeMobileApp.KEY_INSTALL_SENTINEL_ENABLED, false),
+   databaseUpdatedAt = databaseUpdatedAt,
+   installSentinelEnabled = installSentinelEnabled,
    playProtectEnabled = state.securityAssessment?.signals?.playProtectEnabled,
    usbDebuggingEnabled = state.securityAssessment?.signals?.usbDebuggingEnabled,
-   voiceAlertsEnabled = securityPrefs.getBoolean(SafeMobileApp.KEY_VOICE_ALERTS_ENABLED, false),
+   voiceAlertsEnabled = voiceAlertsEnabled,
    deviceAdminActive = adminActive
-  ),
-  snoozedAdvisorIds
- )
+  )
+ }
+ val advisorState by vm.protectionAdvisorState.collectAsStateWithLifecycle()
+ LaunchedEffect(advisorInputs, snoozedAdvisorIds) {
+  vm.updateProtectionAdvisor(advisorInputs, snoozedAdvisorIds)
+ }
  val snackbarHostState = remember { SnackbarHostState() }
  val uiScope = rememberCoroutineScope()
  var lastHandledManualScanSequence by remember { mutableStateOf(state.manualScanCompletionSequence) }

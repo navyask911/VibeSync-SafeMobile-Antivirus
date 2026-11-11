@@ -250,18 +250,22 @@ internal fun V17ShieldScreen(
     Column(Modifier.fillMaxSize().background(c.device).verticalScroll(rememberScrollState()).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)) {
         V17HeroCard(isDark) {
-            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-                V17ScoreRing(if (activeGuards >= 4) 100 else securityScore.coerceIn(0, 99), isDark)
-                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        V17IconBadge(Icons.Default.Shield, c.green, size = 36.dp, iconSize = 21.dp, contentDescription = null)
-                        V17Pill(if (isPro) "PROTECTED · PRO" else "PROTECTION STATUS", c.green, isDark)
-                    }
-                    V17Title("DeviceSecurityScore")
-                    V17Body("Real-time heuristic, YARA and signature shields active.")
-                    V17Body("$activeGuards/4 protection guards active")
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                V17ScoreRing(securityScore.coerceIn(0, 100), isDark)
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    V17IconBadge(Icons.Default.Shield, c.green, size = 36.dp, iconSize = 21.dp, contentDescription = null)
+                    V17Pill(if (isPro) "PROTECTED · PRO" else "PROTECTION STATUS", c.green, isDark)
                 }
+                V17Title("DeviceSecurityScore")
+                V17Body("Real-time heuristic, YARA and signature shields active.")
+                V17Body("$activeGuards/4 protection guards active")
             }
         }
         TrustPillarCarousel(
@@ -304,22 +308,60 @@ internal fun V17ShieldScreen(
 @Composable
 private fun V17ScoreRing(score: Int, isDark: Boolean) {
     val c = v17Colors(isDark)
-    val progress by animateFloatAsState(score / 100f, tween(550), label = score.toString())
-    Box(Modifier.size(96.dp), contentAlignment = Alignment.Center) {
+    val targetScore = score.coerceIn(0, 100)
+    val progress by animateFloatAsState(
+        targetValue = targetScore / 100f,
+        animationSpec = tween(500),
+        label = "security-score-gauge"
+    )
+    val displayedScore by androidx.compose.animation.core.animateIntAsState(
+        targetValue = targetScore,
+        animationSpec = tween(500),
+        label = "security-score-value"
+    )
+    Box(Modifier.size(216.dp), contentAlignment = Alignment.Center) {
         Canvas(Modifier.fillMaxSize()) {
-            val sw = 9.dp.toPx()
-            val arcSize = androidx.compose.ui.geometry.Size(size.width - sw, size.height - sw)
-            val offset = androidx.compose.ui.geometry.Offset(sw / 2, sw / 2)
-            drawArc(c.border, -90f, 360f, false, offset, arcSize, style = Stroke(sw, cap = StrokeCap.Round))
-            drawArc(c.green, -90f, progress * 360f, false, offset, arcSize, style = Stroke(sw, cap = StrokeCap.Round))
+            val strokeWidth = 18.dp.toPx()
+            val arcSize = androidx.compose.ui.geometry.Size(size.width - strokeWidth, size.height - strokeWidth)
+            val topLeft = androidx.compose.ui.geometry.Offset(strokeWidth / 2, strokeWidth / 2)
+            drawArc(
+                color = c.border.copy(alpha = 0.55f),
+                startAngle = -90f,
+                sweepAngle = 360f,
+                useCenter = false,
+                topLeft = topLeft,
+                size = arcSize,
+                style = Stroke(strokeWidth, cap = StrokeCap.Round)
+            )
+            val rainbow = Brush.sweepGradient(
+                colors = listOf(
+                    Color(0xFFEF4444),
+                    Color(0xFFF97316),
+                    Color(0xFFFACC15),
+                    Color(0xFF84CC16),
+                    Color(0xFF22C55E),
+                    Color(0xFFEF4444)
+                ),
+                center = center
+            )
+            drawArc(
+                brush = rainbow,
+                startAngle = -90f,
+                sweepAngle = progress * 360f,
+                useCenter = false,
+                topLeft = topLeft,
+                size = arcSize,
+                style = Stroke(strokeWidth, cap = StrokeCap.Round)
+            )
         }
         Column(
-            Modifier.fillMaxWidth().padding(horizontal = 7.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 26.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(3.dp)
         ) {
             Text(
-                score.toString(),
-                style = MaterialTheme.typography.headlineMedium.copy(fontSize = 24.sp),
+                displayedScore.toString(),
+                style = MaterialTheme.typography.displayLarge.copy(fontSize = 54.sp, lineHeight = 60.sp),
                 fontWeight = FontWeight.ExtraBold,
                 color = c.text,
                 maxLines = 1
@@ -327,7 +369,7 @@ private fun V17ScoreRing(score: Int, isDark: Boolean) {
             Text(
                 stringResource(R.string.ui_score_title),
                 Modifier.fillMaxWidth(),
-                style = MaterialTheme.typography.labelSmall.copy(fontSize = 8.sp, lineHeight = 9.sp),
+                style = MaterialTheme.typography.labelMedium,
                 color = c.muted,
                 textAlign = TextAlign.Center,
                 maxLines = 2,
