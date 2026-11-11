@@ -18,7 +18,7 @@
     <string name="privacy_hash_detail">Scan hashes stay on your device for local verdicts. A hash may be shared only after you separately enable Global Threat Intelligence or approve a one-time contribution.</string>
     <string name="privacy_history_title">Scan History</string>
     <string name="privacy_stored_on_device">Stored on Device</string>
-    <string name="privacy_history_detail">Scan history and audit entries are stored in the app's local database on this device.</string>
+    <string name="privacy_history_detail">Scan history and audit entries are stored in the local app database on this device.</string>
     <string name="privacy_dashboard_control_title">Your choice matters</string>
     <string name="privacy_dashboard_control_detail">Optional threat contributions require a separate opt-in. Core file scanning and verdict generation remain on-device.</string>
 
@@ -53,7 +53,7 @@
     <string name="notification_details_scan_unavailable">This notification does not include a readable file URI. Open Scan &amp; Lab to choose the file.</string>
     <string name="notification_details_whitelist_scan_first">Scan this item first. You can then add the resulting app or file hash to your local trusted list.</string>
     <string name="notification_details_package_action">Package</string>
-    <string name="device_admin_activation_failed">Android's Device Administrator activation page could not be opened. Check that the SafeMobile admin receiver is installed and try again.</string>
+    <string name="device_admin_activation_failed">Android could not open the Device Administrator activation page. Check that the SafeMobile admin receiver is installed and try again.</string>
     <string name="trusted_file_saved">File hash added to the local trusted list.</string>
     <string name="trusted_file_invalid">A valid SHA-256 hash is required before this file can be trusted.</string>
     <string name="settings_privacy_link_detail">Review local processing and optional data sharing.</string>
