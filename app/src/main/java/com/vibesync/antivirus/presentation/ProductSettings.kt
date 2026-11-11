@@ -84,6 +84,10 @@ import com.vibesync.antivirus.core.observer.ThreatDetectedActivity
 import android.content.Intent
 import android.util.Log
 import com.vibesync.antivirus.R
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.appupdate.AppUpdateOptions
+import com.google.android.play.core.appupdate.AppUpdateType
+import com.google.android.play.core.install.model.UpdateAvailability
 import com.vibesync.antivirus.core.locale.LocalePreferences
 import com.vibesync.antivirus.core.security.GlobalThreatIntelligenceConsent
 import com.vibesync.antivirus.data.local.ScanAudit
@@ -172,6 +176,109 @@ private fun ThemeOptionButton(
                     maxLines = 1,
                     softWrap = false,
                     overflow = TextOverflow.Ellipsis
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun SelfUpdateCard() {
+    val context = LocalContext.current
+    val appUpdateManager = remember(context) {
+        AppUpdateManagerFactory.create(context.applicationContext)
+    }
+    var updateMessage by remember { mutableStateOf<Int?>(null) }
+    val updateLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.StartIntentSenderForResult()
+    ) { result ->
+        updateMessage = when (result.resultCode) {
+            Activity.RESULT_OK -> R.string.self_update_started
+            Activity.RESULT_CANCELED -> R.string.self_update_cancelled
+            else -> R.string.self_update_check_failed
+        }
+    }
+
+    Card(
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        shape = RoundedCornerShape(20.dp)
+    ) {
+        Column(
+            Modifier.fillMaxWidth().padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Text(
+                stringResource(R.string.self_update_title),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold
+            )
+            SettingsDescription(R.string.self_update_description)
+            Button(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = {
+                    updateMessage = null
+                    appUpdateManager.appUpdateInfo
+                        .addOnSuccessListener { info ->
+                            val availability = info.updateAvailability()
+                            val updateAllowed = info.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
+                            if (availability == UpdateAvailability.UPDATE_AVAILABLE && updateAllowed) {
+                                runCatching {
+                                    val started = appUpdateManager.startUpdateFlowForResult(
+                                        info,
+                                        updateLauncher,
+                                        AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build()
+                                    )
+                                    if (!started) updateMessage = R.string.self_update_check_failed
+                                }.onFailure {
+                                    updateMessage = R.string.self_update_check_failed
+                                }
+                            } else if (availability == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
+                                runCatching {
+                                    val started = appUpdateManager.startUpdateFlowForResult(
+                                        info,
+                                        updateLauncher,
+                                        AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build()
+                                    )
+                                    if (!started) updateMessage = R.string.self_update_check_failed
+                                }.onFailure {
+                                    updateMessage = R.string.self_update_check_failed
+                                }
+                            } else {
+                                updateMessage = if (availability == UpdateAvailability.UPDATE_AVAILABLE) {
+                                    R.string.self_update_not_allowed
+                                } else {
+                                    R.string.self_update_no_update
+                                }
+                            }
+                        }
+                        .addOnFailureListener {
+                            updateMessage = R.string.self_update_unavailable
+                        }
+                }
+            ) {
+                Text(stringResource(R.string.self_update_title))
+            }
+            TextButton(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = {
+                    val marketUri = android.net.Uri.parse("market://details?id=${context.packageName}")
+                    val webUri = android.net.Uri.parse(
+                        "https://play.google.com/store/apps/details?id=${context.packageName}"
+                    )
+                    runCatching {
+                        context.startActivity(Intent(Intent.ACTION_VIEW, marketUri))
+                    }.onFailure {
+                        runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, webUri)) }
+                    }
+                }
+            ) {
+                Text(stringResource(R.string.self_update_open_play_store))
+            }
+            updateMessage?.let { message ->
+                Text(
+                    stringResource(message),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -637,6 +744,7 @@ internal fun SafeMobileSettingsPanel(
             Text(stringResource(R.string.theme_appearance_description),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant)
+            SelfUpdateCard()
             Text(stringResource(R.string.appearance_title),
                 style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),

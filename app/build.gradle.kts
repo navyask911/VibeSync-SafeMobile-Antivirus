@@ -622,6 +622,7 @@ dependencies {
  implementation("com.google.crypto.tink:tink-android:1.16.0")
  // Google Android SDK License: Play Billing is only for explicit checkout, never scanning.
  implementation("com.android.billingclient:billing-ktx:8.3.0")
+ implementation("com.google.android.play:app-update-ktx:2.1.0")
  // Google Mobile Ads Next-Gen SDK and UMP consent platform.
  implementation("com.google.android.libraries.ads.mobile.sdk:ads-mobile-sdk:1.6.0")
  implementation("com.google.android.ump:user-messaging-platform:4.0.0")
