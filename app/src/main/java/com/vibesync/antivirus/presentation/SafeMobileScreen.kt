@@ -16,6 +16,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import android.os.PowerManager
 import android.provider.Settings
+import android.provider.DocumentsContract
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.navigation.NavHostController
@@ -1403,6 +1404,73 @@ import kotlinx.coroutines.launch
  }
  }
 
+ notificationIncidentDetails?.let { details ->
+  ThreatDetailsDialog(
+   details = details,
+   onDismiss = { notificationIncidentDetails = null },
+   onScan = {
+    val uri = details.fileUri?.let { raw -> runCatching { Uri.parse(raw) }.getOrNull() }
+     ?.takeIf { it.scheme == "content" }
+    notificationIncidentDetails = null
+    when {
+     uri != null -> vm.scanSelected(uri)
+     !details.sourcePackage.isNullOrBlank() -> vm.scanInstalledPackageNow(details.sourcePackage)
+     else -> vm.scanFull()
+    }
+    navigateToDestination("scan")
+   },
+   onDelete = {
+    val uri = details.fileUri?.let { raw -> runCatching { Uri.parse(raw) }.getOrNull() }
+     ?.takeIf { it.scheme == "content" }
+    val packageName = details.sourcePackage
+    notificationIncidentDetails = null
+    when {
+     uri != null -> {
+      val isGrantedChild = StorageAccessPreferences.accessibleTreeUris(context).any { root ->
+       runCatching {
+        uri == root || DocumentsContract.isChildDocument(context.contentResolver, root, uri)
+       }.getOrDefault(false)
+      }
+      val deleted = isGrantedChild &&
+       runCatching { DocumentFile.fromSingleUri(context, uri)?.delete() == true }.getOrDefault(false)
+      Toast.makeText(context,
+       if (deleted) R.string.notification_deleted else R.string.notification_delete_failed,
+       Toast.LENGTH_LONG).show()
+     }
+     !packageName.isNullOrBlank() -> when (vm.requestUninstall(
+      context, packageName,
+      launchDelete = { intent -> deleteLauncher.launch(intent) },
+      openAppInfo = { intent -> context.startActivity(intent) }
+     )) {
+      UninstallResult.Success, UninstallResult.RequiresUserAction -> Unit
+      is UninstallResult.BlockedSystemApp -> Toast.makeText(context, R.string.uninstall_protected, Toast.LENGTH_LONG).show()
+      UninstallResult.NotFound -> Toast.makeText(context, R.string.uninstall_not_found, Toast.LENGTH_LONG).show()
+      UninstallResult.OpenedAppInfo -> Unit
+      UninstallResult.HandlerUnavailable -> Toast.makeText(context, R.string.uninstall_launch_failed, Toast.LENGTH_LONG).show()
+     }
+     else -> Toast.makeText(context, R.string.notification_delete_failed, Toast.LENGTH_LONG).show()
+    }
+   },
+   onWhitelist = {
+    val packageName = details.sourcePackage
+    if (packageName.isNullOrBlank()) {
+     Toast.makeText(context, R.string.notification_whitelist_unavailable, Toast.LENGTH_LONG).show()
+    } else {
+     notificationIncidentDetails = null
+     uiScope.launch {
+      val saved = runCatching {
+       kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+        TrustedAppStore(context).trust(packageName)
+       }
+      }.getOrDefault(false)
+      Toast.makeText(context,
+       if (saved) R.string.notification_whitelist_saved else R.string.notification_whitelist_failed,
+       Toast.LENGTH_LONG).show()
+     }
+    }
+   }
+  )
+ }
  if (showAdminPermissionDisclosure) {
   DeviceAdminPermissionDisclosureDialog(
    onConfirm = {
