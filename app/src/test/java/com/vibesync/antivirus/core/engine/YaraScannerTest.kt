@@ -14,8 +14,8 @@ class YaraScannerTest {
 
     private fun bundle(): YaraScanner {
         val paths = listOf(
-            File("src/main/assets/yara/safemobile_android_dex.yar"),
-            File("app/src/main/assets/yara/safemobile_android_dex.yar")
+            File("src/main/raw_assets/yara/safemobile_android_dex.yar"),
+            File("app/src/main/raw_assets/yara/safemobile_android_dex.yar")
         )
         val source = paths.firstOrNull { it.isFile } ?: error("Missing checked-in DEX rule asset.")
         return YaraScanner.fromRules(source.readText(Charsets.UTF_8))
