@@ -1,5 +1,5 @@
 name: Build and publish signed SafeMobile APK and Play AAB
-# [release-v1.7.5] Contextual permission staging and narrowed R8 keep rules.
+# [release-v1.8.0] Brand identity, privacy dashboard, notification routing and Device Admin fixes.
 
 on:
   workflow_dispatch:
@@ -24,6 +24,7 @@ on:
       - "v1.7.2"
       - "v1.7.4"
       - "v1.7.5"
+      - "v1.8.0"
 
 permissions:
   contents: write
@@ -34,7 +35,7 @@ concurrency:
 
 jobs:
   release:
-    if: github.repository == 'navyask911/VibeSync-SafeMobile-Antivirus' && (github.event_name == 'workflow_dispatch' || github.ref_type != 'branch' || github.ref_name != 'main' || contains(github.event.head_commit.message, '[release-v1.7.5]'))
+    if: github.repository == 'navyask911/VibeSync-SafeMobile-Antivirus' && (github.event_name == 'workflow_dispatch' || github.ref_type != 'branch' || github.ref_name != 'main' || contains(github.event.head_commit.message, '[release-v1.8.0]'))
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
@@ -105,7 +106,7 @@ jobs:
           test "$(git hash-object app/src/main/res/font/inter_variable.ttf)" = 4ab79e0102bbe0ffa1ed879b13e52ac8c6487833
           test "$(git hash-object app/src/main/assets/licenses/Inter-OFL.txt)" = 9b2ca37b3ffc77391d8b2ebef4a974ef32bf46ea
 
-      - name: Record Paparazzi screenshots for all four v1.7.5 tabs
+      - name: Record Paparazzi screenshots for SafeMobile v1.8.0
         run: ./gradlew --no-daemon recordPaparazziDebug
 
       - name: Test bundled YARA rules before production build
@@ -320,7 +321,7 @@ jobs:
             echo "SAFE STOP: Expected Paparazzi PNG screenshots for the four tabs; found $snapshot_count." >&2
             exit 1
           fi
-          zip -qr build/ui-screenshots-v1.7.5.zip app/src/test/snapshots
+          zip -qr build/ui-screenshots-v1.8.0.zip app/src/test/snapshots
           echo "Packaged $snapshot_count Paparazzi screenshots."
 
       - name: Upload four-tab screenshots artifact
@@ -343,14 +344,14 @@ jobs:
           version_name="${{ steps.verify-aab.outputs.version_name }}"
           version_code="${{ steps.verify-aab.outputs.version_code }}"
           if [[ "${GITHUB_REF_TYPE:-}" == "branch" && "${GITHUB_REF_NAME:-}" == "main" ]]; then
-            if [[ "$version_name" != "1.7.5" || "$version_code" != "20261145" ]]; then
-              echo "SAFE STOP: main release trigger expected v1.7.5 / 20261145, got $version_name / $version_code." >&2
+            if [[ "$version_name" != "1.8.0" || "$version_code" != "20261146" ]]; then
+              echo "SAFE STOP: main release trigger expected v1.8.0 / 20261146, got $version_name / $version_code." >&2
               exit 1
             fi
           fi
-          if [[ "${GITHUB_REF_TYPE:-}" == "tag" && "${GITHUB_REF_NAME:-}" == "v1.7.5" ]] ||
-             [[ "${GITHUB_REF_TYPE:-}" == "branch" && "${GITHUB_REF_NAME:-}" == "main" && "$version_name" == "1.7.5" && "$version_code" == "20261145" ]]; then
-            tag="v1.7.5"
+          if [[ "${GITHUB_REF_TYPE:-}" == "tag" && "${GITHUB_REF_NAME:-}" == "v1.8.0" ]] ||
+             [[ "${GITHUB_REF_TYPE:-}" == "branch" && "${GITHUB_REF_NAME:-}" == "main" && "$version_name" == "1.8.0" && "$version_code" == "20261146" ]]; then
+            tag="v1.8.0"
           else
             tag="safemobile-v${{ steps.verify-aab.outputs.version_name }}-code${{ steps.verify-aab.outputs.version_code }}-run${GITHUB_RUN_NUMBER}"
           fi
@@ -362,7 +363,7 @@ jobs:
           Built from commit ${GITHUB_SHA}.
           v1.6.1: Added new launcher icons and splash screen. Fixed text wrapping and added back navigation. Added inline Crown subscription toggle.
           v1.6.2: Accept all file types in the scan document picker for .txt/EICAR testing; preserve the originating screen when backing out of Pro; make the paywall and shared app toolbar wrap and scroll at larger font scales.
-          v1.7.5: Requests Device Administrator and overlay access only after feature-specific consent; removes overlay access from onboarding and narrows R8 keep rules to required YARA-X JNI names.
+          v1.8.0: Adds Pillars of Trust swipe cards, a transparent Privacy Dashboard, About Us and mobile-app ecosystem links; routes notification taps to local incident details with Scan/Delete/Whitelist actions; fixes the Device Admin setup-checkbox toggle while preserving explicit Android consent.
           v1.7.4: Declares Android overlay special access, fixes Device Administrator consent launch from Compose contexts, and adds manifest regression coverage. Existing offline scanning, quarantine, and privacy boundaries remain unchanged.
           v1.7.2: Adds recursive SAF Deep Scan starting at Android/media with text and extensionless EICAR payload coverage; a live, system-backed setup checklist and four security guards; Scan & Lab metrics; instant Dark Slate, Midnight Navy and OLED themes; outlined Material icons; and a fixed 56dp AdMob banner with one-line label.
           v1.7.1: Fix Advanced Telemetry wrapping, Kannada score-ring clipping, persisted theme selection, Device Admin activation, SAF tree permission mapping and verified encrypted quarantine fallback. Release APK and Play AAB are signed and Paparazzi screenshots are attached separately.

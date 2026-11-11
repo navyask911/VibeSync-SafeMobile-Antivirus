@@ -193,6 +193,28 @@ for locale in LOCALES:
         if formats(value) != formats(original):
             errors.append(f"{locale}: AdMob/UMP placeholder mismatch {key}")
 
+# v1.8.0 trust, privacy dashboard, About Us and notification incident copy.
+base_trust, _ = read_resources(BASE / "values" / "trust_experience.xml")
+kn_trust, _ = read_resources(BASE / "values-kn" / "trust_experience.xml")
+if not base_trust:
+    errors.append("base trust_experience.xml: missing trust and brand resources")
+if set(kn_trust) != set(base_trust):
+    errors.append("Kannada trust_experience.xml: key set differs from base trust_experience.xml")
+TRUST_BRAND_KEYS = {
+    "about_app_pdf_title", "about_app_drawing_title", "about_app_developer_title"
+}
+for key, source in base_trust.items():
+    target = kn_trust.get(key)
+    if target is None:
+        errors.append(f"Kannada trust_experience.xml: missing {key}")
+        continue
+    value = "".join(target.itertext()).strip()
+    original = "".join(source.itertext()).strip()
+    if not value or (key not in TRUST_BRAND_KEYS and value == original):
+        errors.append(f"Kannada trust_experience.xml: empty or English fallback {key}")
+    if formats(value) != formats(original):
+        errors.append(f"Kannada trust_experience.xml: placeholder mismatch {key}")
+
 # Preserve previous invariant: every existing locale must provide a voice warning.
 # Paid purchase disclosures must never fall back to English in any supported locale.
 # SafeMobile Pro and Google Play are product brands, not untranslated sentences.

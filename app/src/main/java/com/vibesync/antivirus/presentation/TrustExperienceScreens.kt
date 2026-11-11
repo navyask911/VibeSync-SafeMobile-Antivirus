@@ -65,7 +65,7 @@ internal fun TrustPillarCarousel(
         TrustPillar(
             stringResource(R.string.trust_pillar_control_title),
             stringResource(R.string.trust_pillar_control_body),
-            Icons.Outlined.Sliders,
+            Icons.Outlined.Tune,
             listOf(Color(0xFF3B176C), Color(0xFF8B5CF6)),
             "settings"
         )
@@ -315,7 +315,7 @@ internal fun ThreatDetailsDialog(
         confirmButton = {
             Column(horizontalAlignment = Alignment.End) {
                 TextButton(onClick = onScan) { Text(stringResource(R.string.notification_scan_action)) }
-                TextButton(onClick = onDelete) { Text(stringResource(R.string.notification_delete_action)) }
+                TextButton(onClick = onDelete, enabled = details.fileUri != null || details.sourcePackage != null) { Text(stringResource(R.string.notification_delete_action)) }
                 TextButton(onClick = onWhitelist, enabled = details.sourcePackage != null) {
                     Text(stringResource(R.string.notification_whitelist_action))
                 }
