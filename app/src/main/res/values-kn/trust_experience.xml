@@ -55,4 +55,6 @@
     <string name="notification_reason_suspicious_app">ಸ್ಥಳೀಯ ಸ್ಕ್ಯಾನ್ ಈ ಸ್ಥಾಪಿತ ಆ್ಯಪ್‌ನಲ್ಲಿ ಪರಿಶೀಲಿಸಬೇಕಾದ ಸೂಚಕಗಳನ್ನು ಕಂಡಿದೆ.</string>
     <string name="notification_reason_download_malicious">ಸ್ಥಳೀಯ ಫೈಲ್ ಸ್ಕ್ಯಾನ್ ಮಾಲ್‌ವೇರ್ ಸಹಿಯನ್ನು ದೃಢಪಡಿಸಿದೆ.</string>
     <string name="notification_reason_download_quarantined">ಸ್ಥಳೀಯ ಫೈಲ್ ಅನ್ನು ಹೆಚ್ಚಿನ ಪರಿಶೀಲನೆಗಾಗಿ ಪ್ರತ್ಯೇಕಿಸಲಾಗಿದೆ.</string>
+    <string name="notification_reason_install_progress">ಈ ಆ್ಯಪ್‌ಗಾಗಿ ಸ್ಥಾಪನೆಯ ನಂತರದ ಪರಿಶೀಲನೆಯನ್ನು ಸಿದ್ಧಪಡಿಸಲಾಗುತ್ತಿದೆ.</string>
+    <string name="notification_reason_install_trusted">ಈ ಆ್ಯಪ್ ಪ್ರಸ್ತುತ ನಿಮ್ಮ ವಿಶ್ವಾಸಾರ್ಹ ಆ್ಯಪ್‌ಗಳ ಪಟ್ಟಿಯಲ್ಲಿದೆ.</string>
 </resources>

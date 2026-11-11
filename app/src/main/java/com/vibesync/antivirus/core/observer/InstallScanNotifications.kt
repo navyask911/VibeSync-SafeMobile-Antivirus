@@ -26,7 +26,7 @@ internal object InstallScanNotifications {
     }
     @Synchronized private fun wasEscalated(eventId: String) = eventId in alerts
 
-    fun received(context: Context, label: String, eventId: String, trusted: Boolean = false) {
+    fun received(context: Context, label: String, eventId: String, trusted: Boolean = false, packageName: String? = null) {
         val local = LocalePreferences.wrap(context)
         val manager = context.getSystemService(NotificationManager::class.java) ?: return
         manager.createNotificationChannel(NotificationChannel(CHANNEL,
@@ -44,7 +44,7 @@ internal object InstallScanNotifications {
                 context,
                 if (trusted) NotificationDeepLinkContract.TYPE_INSTALL_TRUSTED
                 else NotificationDeepLinkContract.TYPE_INSTALL_PROGRESS,
-                fileUri = null, logId = eventId
+                fileUri = packageName?.let { android.net.Uri.fromParts("package", it, null).toString() }, logId = eventId
             ),
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )

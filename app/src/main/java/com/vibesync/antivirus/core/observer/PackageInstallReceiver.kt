@@ -52,7 +52,7 @@ class PackageInstallReceiver(
    try {
     withTimeout(8_000L) {
      val trusted = TrustedAppStore(app).isTrusted(name)
-     InstallScanNotifications.received(app, label(app, name), eventId, trusted)
+     InstallScanNotifications.received(app, label(app, name), eventId, trusted, name)
      if (trusted) { Log.d(TAG, "Trusted package: engines, siren and threat alerts bypassed"); return@withTimeout }
      if (!TrustedPackageWhitelist.isEligibleForReview(app, name)) {
       InstallScanNotifications.finish(app, eventId)

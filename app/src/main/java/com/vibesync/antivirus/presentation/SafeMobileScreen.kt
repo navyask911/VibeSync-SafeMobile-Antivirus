@@ -280,6 +280,8 @@ import kotlinx.coroutines.launch
     }.getOrNull()
    }
    val reasonResource = when (payload.notificationType) {
+    NotificationDeepLinkContract.TYPE_INSTALL_PROGRESS -> R.string.notification_reason_install_progress
+    NotificationDeepLinkContract.TYPE_INSTALL_TRUSTED -> R.string.notification_reason_install_trusted
     NotificationDeepLinkContract.TYPE_MALWARE_APP -> R.string.notification_reason_malware_app
     NotificationDeepLinkContract.TYPE_SUSPICIOUS_APP -> R.string.notification_reason_suspicious_app
     NotificationDeepLinkContract.TYPE_DOWNLOAD_MALICIOUS -> R.string.notification_reason_download_malicious
@@ -306,6 +308,7 @@ import kotlinx.coroutines.launch
   } catch (_: Exception) { Toast.makeText(context, R.string.pro_navigation_unavailable, Toast.LENGTH_LONG).show() }
  }
  LaunchedEffect(currentRoute, currentBackStackEntry?.arguments?.getString("screen")) {
+  if (notificationDeepLink != null) return@LaunchedEffect
   selectedDestination = when (currentRoute) {
    "dashboard" -> "home"
    "scan" -> "scan"

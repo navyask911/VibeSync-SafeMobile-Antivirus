@@ -55,4 +55,6 @@
     <string name="notification_reason_suspicious_app">A local scan found indicators that need review in this installed app.</string>
     <string name="notification_reason_download_malicious">A local file scan confirmed a malware signature.</string>
     <string name="notification_reason_download_quarantined">A local file was isolated for further review.</string>
+    <string name="notification_reason_install_progress">Post-install inspection is being prepared for this app.</string>
+    <string name="notification_reason_install_trusted">This app is currently on your trusted-app list.</string>
 </resources>
