@@ -693,4 +693,5 @@
     <string name="play_integrity_status_server_unconfigured">Token received. Server-side verification is not configured.</string>
     <string name="play_integrity_status_error">Integrity verification is currently unavailable.</string>
     <string name="play_integrity_status_not_checked">Waiting for a Play Integrity check.</string>
+    <string name="posture_audit_success">All Audit Successful</string>
 </resources>

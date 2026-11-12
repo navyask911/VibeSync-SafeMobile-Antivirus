@@ -191,7 +191,9 @@ import kotlinx.coroutines.launch
   else -> "dashboard"
  }
  fun navigateToDestination(destination: String, parentTabOverride: String? = null) {
-  val rootRoute = when (destination) {
+   // Advisor is part of Shield now; old deep links are routed to the Shield page.
+   val targetDestination = if (destination == "advisor") "home" else destination
+  val rootRoute = when (targetDestination) {
    "home" -> "dashboard"
    "scan" -> "scan"
    "tools" -> "tools"
@@ -206,9 +208,9 @@ import kotlinx.coroutines.launch
      restoreState = true
     }
    }
-   selectedDestination = destination
+   selectedDestination = targetDestination
   } else {
-   val parentTab = parentTabOverride ?: if (destination == "pro") "settings" else
+   val parentTab = parentTabOverride ?: if (targetDestination == "pro") "settings" else
     (currentBackStackEntry?.arguments?.getString("parentTab")
     ?: when (currentRoute) {
      "tools" -> "tools"
@@ -216,8 +218,8 @@ import kotlinx.coroutines.launch
      "settings" -> "settings"
      else -> "dashboard"
     })
-   tabNavController.navigate("detail/$parentTab/$destination") { launchSingleTop = true }
-   selectedDestination = destination
+   tabNavController.navigate("detail/$parentTab/$targetDestination") { launchSingleTop = true }
+   selectedDestination = targetDestination
   }
  }
  val openProSafely: () -> Unit = {
@@ -236,7 +238,7 @@ import kotlinx.coroutines.launch
    "scan" -> "scan"
    "tools" -> "tools"
    "settings" -> "settings"
-   "detail/{parentTab}/{screen}" -> currentBackStackEntry?.arguments?.getString("screen") ?: "home"
+   "detail/{parentTab}/{screen}" -> (currentBackStackEntry?.arguments?.getString("screen") ?: "home").let { if (it == "advisor") "home" else it }
    else -> "home"
   }
  }
@@ -327,7 +329,9 @@ import kotlinx.coroutines.launch
   postureState.report?.highRiskAppCount, notificationsGranted, securityAlertsEnabled,
   batteryUnrestricted, fullScreenAlertsGranted, databaseUpdatedAt, installSentinelEnabled,
   state.securityAssessment?.signals?.playProtectEnabled,
-  state.securityAssessment?.signals?.usbDebuggingEnabled, voiceAlertsEnabled, integrityState.meetsDeviceIntegrity
+   state.securityAssessment?.signals?.usbDebuggingEnabled,
+   state.securityAssessment?.signals?.developerOptionsEnabled,
+   voiceAlertsEnabled, integrityState.meetsDeviceIntegrity
  ) {
   ProtectionAdvisorInputs(
    totalScans = maxOf(state.completedScans, if (state.scanSummary != null) 1 else 0),
@@ -341,6 +345,7 @@ import kotlinx.coroutines.launch
    installSentinelEnabled = installSentinelEnabled,
    playProtectEnabled = state.securityAssessment?.signals?.playProtectEnabled,
    usbDebuggingEnabled = state.securityAssessment?.signals?.usbDebuggingEnabled,
+    developerOptionsEnabled = state.securityAssessment?.signals?.developerOptionsEnabled,
    voiceAlertsEnabled = voiceAlertsEnabled,
    meetsDeviceIntegrity = integrityState.meetsDeviceIntegrity
   )
@@ -806,6 +811,25 @@ import kotlinx.coroutines.launch
           isDark = appTheme != com.vibesync.antivirus.ui.theme.AppTheme.LIGHT,
           securityScore = advisorState.score,
           integrityState = integrityState,
+          advisorState = advisorState,
+          onOpenAdvisorIssue = { issue ->
+           if (issue.destination == "settings") {
+            settingsSubRoute = when (issue.id) {
+             "notifications_on", "fullscreen_alert", "voice_alert_tts" -> SettingsSubRoute.NOTIFICATIONS
+             else -> SettingsSubRoute.SECURITY
+            }
+            navigateToDestination("settings")
+           } else {
+            navigateToDestination(issue.destination)
+            if (issue.destination == "posture" && privacyAccepted) postureVm.refresh()
+           }
+          },
+          onSnoozeAdvisorIssue = { issueId ->
+           uiScope.launch { advisorStore.setSnoozed(issueId, true) }
+          },
+          onRestoreAdvisorIssue = { issueId ->
+           uiScope.launch { advisorStore.setSnoozed(issueId, false) }
+          },
           isPro = adMobState.isPro,
           activeGuards = listOf(batteryUnrestricted, storageAccessGranted).count { it },
           liveSentinelActive = installSentinelRunning,
@@ -933,22 +957,6 @@ import kotlinx.coroutines.launch
            .padding(horizontal = 16.dp, vertical = 16.dp),
           verticalArrangement = Arrangement.spacedBy(14.dp)
          ) {
-          if (selectedDestination == "advisor") {
-           SecurityAdvisorScreen(
-            state = advisorState,
-            onOpenIssue = { issue ->
-             if (issue.destination == "settings") {
-              settingsSubRoute = when (issue.id) {
-               "notifications_on", "fullscreen_alert", "voice_alert_tts" -> SettingsSubRoute.NOTIFICATIONS
-               else -> SettingsSubRoute.SECURITY
-              }
-              navigateToDestination("settings")
-             } else navigateToDestination(issue.destination)
-            },
-            onSnooze = { issueId -> uiScope.launch { advisorStore.setSnoozed(issueId, true) } },
-            onRestore = { issueId -> uiScope.launch { advisorStore.setSnoozed(issueId, false) } }
-           )
-          }
         if (privacyAccepted && !notificationsGranted && Build.VERSION.SDK_INT >= 33) {
            Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer)) {
              Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {

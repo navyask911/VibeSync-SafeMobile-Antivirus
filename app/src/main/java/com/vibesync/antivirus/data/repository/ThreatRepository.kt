@@ -209,8 +209,11 @@ class ThreatRepository(
 
 
  /** Deep-scan readable files below one user-selected SAF tree, without widening the grant. */
- suspend fun scanFolderTree(treeUri: Uri, progress: suspend (Int, Int) -> Unit = { _, _ -> }): List<ScanResult> =
-  withContext(Dispatchers.IO) {
+ suspend fun scanFolderTree(
+  treeUri: Uri,
+  progress: suspend (Int, Int) -> Unit = { _, _ -> },
+  onFileStarted: suspend (String) -> Unit = {}
+ ): List<ScanResult> = withContext(Dispatchers.IO) {
    val root = DocumentFile.fromTreeUri(context, treeUri)
    require(root != null && root.isDirectory && root.canRead()) {
     "The selected folder is not readable. Re-select a folder using Android's document picker."
@@ -225,6 +228,7 @@ class ThreatRepository(
    candidates.forEachIndexed { index, candidate ->
     currentCoroutineContext().ensureActive()
     val label = candidate.name?.take(250) ?: context.getString(R.string.unknown_file)
+    onFileStarted(label)
     val stream = runCatching { context.contentResolver.openInputStream(candidate.uri) }.getOrNull()
     val assessed = if (stream != null) {
      scanner.scanStream(label, stream, scanSessionId, persistAudit = false)

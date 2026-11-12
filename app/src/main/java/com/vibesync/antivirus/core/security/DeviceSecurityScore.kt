@@ -6,6 +6,8 @@ data class DeviceSecuritySignals(
     val databaseUpdatedAt: Long? = null,
     val nonSystemAccessibilityApps: Int? = null,
     val usbDebuggingEnabled: Boolean? = null,
+    /** Android's global Developer Options master switch; independent of ADB debugging. */
+    val developerOptionsEnabled: Boolean? = null,
     /** Only SafeMobile's own install-unknown-apps grant; no device-wide API exists. */
     val safeMobileUnknownSourcesGrant: Boolean? = null,
     val backgroundRestricted: Boolean? = null,

@@ -9,9 +9,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.layout.size
 import androidx.compose.animation.animateContentSize
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.Button
@@ -22,6 +24,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Switch
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import android.content.Context
 import androidx.compose.runtime.Composable
@@ -131,6 +134,9 @@ fun DevicePostureScreen(
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
+    val auditSuccessful = state.report?.let { report ->
+        !state.refreshing && !state.failed && report.unavailable.isEmpty() && report.highRiskAppCount == 0
+    } == true
     DisposableEffect(lifecycleOwner, onRefresh) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) onRefresh()
@@ -148,8 +154,32 @@ fun DevicePostureScreen(
             Text(stringResource(if (state.refreshing) R.string.posture_checking else R.string.posture_refresh))
         }
         if (state.failed) Text(stringResource(R.string.posture_failed), color = PostureWarning, maxLines = 2, overflow = TextOverflow.Ellipsis)
-        Text(stringResource(R.string.v140_pending_actions, actionableActionsCount), style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.SemiBold, maxLines = 2, overflow = TextOverflow.Ellipsis)
+        if (auditSuccessful) {
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                color = Color(0xFFE8F5E9),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Row(
+                    Modifier.padding(12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Icon(Icons.Outlined.CheckCircle, contentDescription = null, tint = Color(0xFF1B5E20))
+                    Text(
+                        stringResource(R.string.posture_audit_success),
+                        color = Color(0xFF1B5E20),
+                        fontWeight = FontWeight.Bold,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            }
+        } else {
+            Text(stringResource(R.string.v140_pending_actions, actionableActionsCount),
+                style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold,
+                maxLines = 2, overflow = TextOverflow.Ellipsis)
+        }
         state.report?.let { report ->
             Text(stringResource(R.string.posture_checked_at, displayPostureTime(report.checkedAt)),
                 style = MaterialTheme.typography.labelSmall, maxLines = 2, overflow = TextOverflow.Ellipsis)

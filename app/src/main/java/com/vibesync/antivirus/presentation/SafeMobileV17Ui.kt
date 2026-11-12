@@ -3,7 +3,11 @@ package com.vibesync.antivirus.presentation
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
@@ -11,6 +15,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -27,6 +34,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.*
 import androidx.core.graphics.drawable.toBitmap
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -245,6 +254,10 @@ internal fun V17BottomNavigationBar(selectedTab: String, isDark: Boolean, onSele
 internal fun V17ShieldScreen(
     isDark: Boolean, securityScore: Int, isPro: Boolean, activeGuards: Int,
     integrityState: SecurityVerificationState,
+    advisorState: ProtectionAdvisorState,
+    onOpenAdvisorIssue: (AdvisorIssueItem) -> Unit,
+    onSnoozeAdvisorIssue: (String) -> Unit,
+    onRestoreAdvisorIssue: (String) -> Unit,
     liveSentinelActive: Boolean, posturePassed: Int?, quarantinedFilesCount: Int,
     onOpenSetup: () -> Unit, onOpenLiveSentinel: () -> Unit, onOpenPosture: () -> Unit,
     onOpenDetection: () -> Unit, onOpenThreatDb: () -> Unit,
@@ -273,6 +286,12 @@ internal fun V17ShieldScreen(
                 V17Body("$activeGuards/3 protection guards active")
             }
         }
+        SecurityAdvisorScreen(
+            state = advisorState,
+            onOpenIssue = onOpenAdvisorIssue,
+            onSnooze = onSnoozeAdvisorIssue,
+            onRestore = onRestoreAdvisorIssue
+        )
         TrustPillarCarousel(
             onOpenPrivacy = onOpenPrivacy,
             onOpenSettings = onOpenSettings
@@ -476,6 +495,116 @@ internal fun V17ProtectionSetupSheet(
 }
 
 @Composable
+private fun V17RadarScan(
+    isDark: Boolean,
+    currentFile: String?,
+    recentFiles: List<String>
+) {
+    val c = v17Colors(isDark)
+    val transition = rememberInfiniteTransition(label = "safe_mobile_radar")
+    val sweepDegrees by transition.animateFloat(
+        initialValue = 0f,
+        targetValue = 360f,
+        animationSpec = infiniteRepeatable(animation = tween(1_100, easing = LinearEasing)),
+        label = "safe_mobile_radar_sweep"
+    )
+    val listState = rememberLazyListState()
+    LaunchedEffect(recentFiles) {
+        if (recentFiles.isNotEmpty()) listState.animateScrollToItem(recentFiles.lastIndex)
+    }
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Canvas(Modifier.fillMaxWidth().height(220.dp)) {
+            val radius = minOf(size.width, size.height) * 0.43f
+            val centerPoint = Offset(size.width / 2f, size.height / 2f)
+            val topLeft = Offset(centerPoint.x - radius, centerPoint.y - radius)
+            val radarSize = Size(radius * 2f, radius * 2f)
+            val stroke = 1.2.dp.toPx()
+            listOf(0.34f, 0.67f, 1f).forEach { fraction ->
+                drawCircle(
+                    c.accent.copy(alpha = if (fraction == 1f) 0.46f else 0.20f),
+                    radius * fraction,
+                    centerPoint,
+                    style = Stroke(stroke)
+                )
+            }
+            drawLine(c.accent.copy(alpha = 0.12f), Offset(centerPoint.x - radius, centerPoint.y),
+                Offset(centerPoint.x + radius, centerPoint.y), strokeWidth = stroke)
+            drawLine(c.accent.copy(alpha = 0.12f), Offset(centerPoint.x, centerPoint.y - radius),
+                Offset(centerPoint.x, centerPoint.y + radius), strokeWidth = stroke)
+
+            val headRadians = Math.toRadians(sweepDegrees.toDouble())
+            val tailRadians = Math.toRadians((sweepDegrees - 48f).toDouble())
+            val head = Offset(
+                centerPoint.x + kotlin.math.cos(headRadians).toFloat() * radius,
+                centerPoint.y + kotlin.math.sin(headRadians).toFloat() * radius
+            )
+            val tail = Offset(
+                centerPoint.x + kotlin.math.cos(tailRadians).toFloat() * radius,
+                centerPoint.y + kotlin.math.sin(tailRadians).toFloat() * radius
+            )
+            drawArc(
+                brush = Brush.linearGradient(
+                    colors = listOf(Color.Transparent, c.accent.copy(alpha = 0.05f), c.accent.copy(alpha = 0.26f)),
+                    start = tail,
+                    end = head
+                ),
+                startAngle = sweepDegrees - 48f,
+                sweepAngle = 48f,
+                useCenter = true,
+                topLeft = topLeft,
+                size = radarSize
+            )
+            for (step in 12 downTo 1) {
+                val angle = Math.toRadians((sweepDegrees - step * 3.8f).toDouble())
+                val end = Offset(
+                    centerPoint.x + kotlin.math.cos(angle).toFloat() * radius,
+                    centerPoint.y + kotlin.math.sin(angle).toFloat() * radius
+                )
+                drawLine(
+                    c.accent.copy(alpha = ((13 - step).toFloat() / 13f) * 0.24f),
+                    centerPoint,
+                    end,
+                    strokeWidth = 1.4.dp.toPx()
+                )
+            }
+            drawLine(c.accent, centerPoint, head, strokeWidth = 2.8.dp.toPx())
+            drawCircle(Color.White, radius = 3.5.dp.toPx(), center = centerPoint)
+            drawCircle(c.accent, radius = 2.4.dp.toPx(), center = head)
+        }
+        Text(
+            text = currentFile?.let { "Scanning: $it" } ?: "Preparing scan queue…",
+            modifier = Modifier.fillMaxWidth(),
+            style = MaterialTheme.typography.bodySmall,
+            color = c.text,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+        if (recentFiles.isNotEmpty()) {
+            LazyColumn(
+                state = listState,
+                modifier = Modifier.fillMaxWidth().heightIn(max = 120.dp),
+                verticalArrangement = Arrangement.spacedBy(3.dp)
+            ) {
+                itemsIndexed(recentFiles, key = { index, file -> "$index:$file" }) { _, file ->
+                    Text(
+                        text = if (file == currentFile) "Scanning: $file" else "Scanned: $file",
+                        modifier = Modifier.fillMaxWidth(),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = if (file == currentFile) c.accent else c.muted,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
 internal fun V17ScanLabScreen(
     isDark: Boolean, state: SafeMobileUiState, repository: ThreatRepository? = null,
     onStartQuickScan: () -> Unit, onStartDeepScan: () -> Unit,
@@ -495,8 +624,12 @@ internal fun V17ScanLabScreen(
                 V17ModeButton("Quick App Scan", Icons.Outlined.Apps, !deep, isDark, Modifier.weight(1f)) { deep = false }
                 V17ModeButton("Deep Storage (Worker)", Icons.Outlined.FolderOpen, deep, isDark, Modifier.weight(1f)) { deep = true }
             }
-            Button(onClick = { if (deep) onStartDeepScan() else onStartQuickScan() },
-                enabled = !state.isScanning, modifier = Modifier.fillMaxWidth()) {
+            Button(
+                onClick = { if (deep) onStartDeepScan() else onStartQuickScan() },
+                enabled = !state.isScanning,
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 if (state.isScanning) {
                     CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp, color = Color.White)
                     Spacer(Modifier.width(8.dp))
@@ -508,6 +641,11 @@ internal fun V17ScanLabScreen(
                 }
             }
             if (state.isScanning) {
+                V17RadarScan(
+                    isDark = isDark,
+                    currentFile = state.currentScanFile,
+                    recentFiles = state.recentScanFiles
+                )
                 if (state.totalItems > 0) LinearProgressIndicator(
                     progress = { (state.processedItems.toFloat() / state.totalItems).coerceIn(0f, 1f) },
                     modifier = Modifier.fillMaxWidth()
@@ -720,8 +858,7 @@ internal fun V17ToolsHubScreen(isDark: Boolean, onOpen: (String) -> Unit) {
         Tool("Link Checker", "Phishing and URL risk scanner", Icons.Default.Link, "phishing", c.green),
         Tool("Quarantine Vault", "Isolate and purge suspicious files", Icons.Default.Lock, "quarantine", c.amber),
         Tool("Folder Monitor", "SAF directory watch", Icons.Default.Folder, "sentinel", c.accent),
-        Tool("System App Guard", "Pre-installed package integrity", Icons.Default.Settings, "guardian", c.green),
-        Tool("Security Advisor", "Step-by-step hardening guide", Icons.Default.Lightbulb, "advisor", c.accent)
+        Tool("System App Guard", "Pre-installed package integrity", Icons.Default.Settings, "guardian", c.green)
     )
     Column(Modifier.fillMaxSize().background(c.device).padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
         V17SectionHeading("Tools Hub", "Security controls and investigation tools.", Icons.Default.Build, c.accent)

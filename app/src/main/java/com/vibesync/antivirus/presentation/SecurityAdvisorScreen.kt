@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ExpandLess
 import androidx.compose.material.icons.outlined.ExpandMore
@@ -30,6 +31,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.vibesync.antivirus.R
@@ -45,6 +47,7 @@ internal fun SecurityAdvisorScreen(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
+        Text("Security Advisor", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
         Text(stringResource(R.string.v140_pending_actions, state.pendingCount), style = MaterialTheme.typography.headlineMedium)
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
             Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -169,7 +172,10 @@ private fun AdvisorAccordion(
                             Text(stringResource(item.detailResource), style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant)
                             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                Button(onClick = { onOpenIssue(item) }) {
+                                Button(
+                                    onClick = { onOpenIssue(item) },
+                                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp)
+                                ) {
                                     Text(stringResource(
                                         when (item.destination) {
                                             "scan" -> R.string.security_scan_now
@@ -182,12 +188,26 @@ private fun AdvisorAccordion(
                                     ))
                                 }
                                 if (item.group == AdvisorIssueGroup.SNOOZED) {
-                                    OutlinedButton(onClick = { onRestore(item.id) }) {
-                                        Text(stringResource(R.string.v140_done_return_to_audit))
+                                    OutlinedButton(
+                                        onClick = { onRestore(item.id) },
+                                        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp)
+                                    ) {
+                                        Text(
+                                            stringResource(R.string.v140_done_return_to_audit),
+                                            maxLines = 2,
+                                            overflow = TextOverflow.Ellipsis
+                                        )
                                     }
                                 } else if (item.canSnooze && item.group != AdvisorIssueGroup.COMPLETED) {
-                                    OutlinedButton(onClick = { onSnooze(item.id) }) {
-                                        Text(stringResource(R.string.v140_snooze_warning))
+                                    OutlinedButton(
+                                        onClick = { onSnooze(item.id) },
+                                        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp)
+                                    ) {
+                                        Text(
+                                            stringResource(R.string.v140_snooze_warning),
+                                            maxLines = 2,
+                                            overflow = TextOverflow.Ellipsis
+                                        )
                                     }
                                 } else if (item.group == AdvisorIssueGroup.COMPLETED) {
                                     Text(

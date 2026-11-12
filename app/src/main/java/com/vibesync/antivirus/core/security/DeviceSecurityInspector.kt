@@ -30,6 +30,10 @@ object DeviceSecurityInspector {
             Settings.Global.getInt(context.contentResolver, Settings.Global.ADB_ENABLED, -1)
                 .takeIf { it >= 0 }?.let { it != 0 }
         }.getOrNull()
+        val developerOptions = runCatching {
+            Settings.Global.getInt(context.contentResolver, Settings.Global.DEVELOPMENT_SETTINGS_ENABLED, -1)
+                .takeIf { it >= 0 }?.let { it != 0 }
+        }.getOrNull()
         // Android 8+ has per-installer grants; reading our own grant cannot audit every installer.
         val ownInstallerGrant = runCatching {
             context.packageManager.canRequestPackageInstalls()
@@ -44,6 +48,7 @@ object DeviceSecurityInspector {
             databaseUpdatedAt = databaseUpdatedAt,
             nonSystemAccessibilityApps = accessibility,
             usbDebuggingEnabled = adb,
+            developerOptionsEnabled = developerOptions,
             safeMobileUnknownSourcesGrant = ownInstallerGrant,
             backgroundRestricted = backgroundRestricted,
             meetsDeviceIntegrity = meetsDeviceIntegrity
