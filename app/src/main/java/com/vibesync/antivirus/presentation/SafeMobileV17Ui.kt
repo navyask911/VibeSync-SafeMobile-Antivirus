@@ -725,6 +725,7 @@ internal fun V17ConsoleSettingsScreen(
     batteryActive: Boolean, adminActive: Boolean, safActive: Boolean,
     onBatteryToggle: (Boolean) -> Unit, onAdminToggle: (Boolean) -> Unit,
     onSafToggle: (Boolean) -> Unit,
+    onLockDeviceNow: () -> Unit = {},
     onImportYara: () -> Unit,
     onThreatFeedSync: () -> Unit, onBenchmarks: () -> Unit, onOpenPro: () -> Unit,
     onOpenPrivacy: () -> Unit = {}, onOpenAbout: () -> Unit = {},
@@ -735,6 +736,7 @@ internal fun V17ConsoleSettingsScreen(
     var advanced by rememberSaveable { mutableStateOf(false) }
     var languageOpen by rememberSaveable { mutableStateOf(false) }
     var selectedLanguage by rememberSaveable { mutableStateOf(LocalePreferences.overrideTag(context)) }
+    var showLockDeviceConfirmation by rememberSaveable { mutableStateOf(false) }
     Column(Modifier.fillMaxSize().background(c.device).verticalScroll(rememberScrollState()).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)) {
         V17Card(isDark) {
@@ -821,10 +823,38 @@ internal fun V17ConsoleSettingsScreen(
             V17Switch(stringResource(R.string.security_guard_admin),
                 stringResource(R.string.security_guard_admin_desc), adminActive, "console.guard.admin",
                 Icons.Outlined.Security, isDark, onAdminToggle)
+            if (adminActive) {
+                OutlinedButton(
+                    onClick = { showLockDeviceConfirmation = true },
+                    modifier = Modifier.fillMaxWidth().testTag("console.device-admin.lock")
+                ) {
+                    Icon(Icons.Outlined.Lock, contentDescription = null, modifier = Modifier.size(17.dp))
+                    Spacer(Modifier.width(6.dp))
+                    Text(stringResource(R.string.device_admin_lock_now))
+                }
+            }
             HorizontalDivider(color = c.border)
             V17Switch(stringResource(R.string.security_guard_saf),
                 stringResource(R.string.security_guard_saf_desc), safActive, "console.guard.saf",
                 Icons.Outlined.Storage, isDark, onSafToggle)
+        }
+        if (showLockDeviceConfirmation) {
+            AlertDialog(
+                onDismissRequest = { showLockDeviceConfirmation = false },
+                title = { Text(stringResource(R.string.device_admin_lock_confirm_title)) },
+                text = { Text(stringResource(R.string.device_admin_lock_confirm_message)) },
+                confirmButton = {
+                    TextButton(onClick = {
+                        showLockDeviceConfirmation = false
+                        onLockDeviceNow()
+                    }) { Text(stringResource(R.string.device_admin_lock_confirm)) }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showLockDeviceConfirmation = false }) {
+                        Text(stringResource(R.string.device_admin_lock_cancel))
+                    }
+                }
+            )
         }
         V17Card(isDark) {
             Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp))
