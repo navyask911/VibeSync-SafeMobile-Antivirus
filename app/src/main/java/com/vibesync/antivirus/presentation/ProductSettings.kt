@@ -185,9 +185,6 @@ private fun ThemeOptionButton(
 @Composable
 private fun SelfUpdateCard() {
     val context = LocalContext.current
-    val appUpdateManager = remember(context) {
-        AppUpdateManagerFactory.create(context.applicationContext)
-    }
     var updateMessage by remember { mutableStateOf<Int?>(null) }
     val updateLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartIntentSenderForResult()
@@ -217,43 +214,50 @@ private fun SelfUpdateCard() {
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
                     updateMessage = null
-                    appUpdateManager.appUpdateInfo
-                        .addOnSuccessListener { info ->
-                            val availability = info.updateAvailability()
-                            val updateAllowed = info.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
-                            if (availability == UpdateAvailability.UPDATE_AVAILABLE && updateAllowed) {
-                                runCatching {
-                                    val started = appUpdateManager.startUpdateFlowForResult(
-                                        info,
-                                        updateLauncher,
-                                        AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build()
-                                    )
-                                    if (!started) updateMessage = R.string.self_update_check_failed
-                                }.onFailure {
-                                    updateMessage = R.string.self_update_check_failed
-                                }
-                            } else if (availability == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
-                                runCatching {
-                                    val started = appUpdateManager.startUpdateFlowForResult(
-                                        info,
-                                        updateLauncher,
-                                        AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build()
-                                    )
-                                    if (!started) updateMessage = R.string.self_update_check_failed
-                                }.onFailure {
-                                    updateMessage = R.string.self_update_check_failed
-                                }
-                            } else {
-                                updateMessage = if (availability == UpdateAvailability.UPDATE_AVAILABLE) {
-                                    R.string.self_update_not_allowed
+                    val manager = runCatching {
+                        AppUpdateManagerFactory.create(context.applicationContext)
+                    }.getOrNull()
+                    if (manager == null) {
+                        updateMessage = R.string.self_update_unavailable
+                    } else {
+                        manager.appUpdateInfo
+                            .addOnSuccessListener { info ->
+                                val availability = info.updateAvailability()
+                                val updateAllowed = info.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
+                                if (availability == UpdateAvailability.UPDATE_AVAILABLE && updateAllowed) {
+                                    runCatching {
+                                        val started = manager.startUpdateFlowForResult(
+                                            info,
+                                            updateLauncher,
+                                            AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build()
+                                        )
+                                        if (!started) updateMessage = R.string.self_update_check_failed
+                                    }.onFailure {
+                                        updateMessage = R.string.self_update_check_failed
+                                    }
+                                } else if (availability == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
+                                    runCatching {
+                                        val started = manager.startUpdateFlowForResult(
+                                            info,
+                                            updateLauncher,
+                                            AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build()
+                                        )
+                                        if (!started) updateMessage = R.string.self_update_check_failed
+                                    }.onFailure {
+                                        updateMessage = R.string.self_update_check_failed
+                                    }
                                 } else {
-                                    R.string.self_update_no_update
+                                    updateMessage = if (availability == UpdateAvailability.UPDATE_AVAILABLE) {
+                                        R.string.self_update_not_allowed
+                                    } else {
+                                        R.string.self_update_no_update
+                                    }
                                 }
                             }
-                        }
-                        .addOnFailureListener {
-                            updateMessage = R.string.self_update_unavailable
-                        }
+                            .addOnFailureListener {
+                                updateMessage = R.string.self_update_unavailable
+                            }
+                    }
                 }
             ) {
                 Text(stringResource(R.string.self_update_title))
