@@ -176,20 +176,38 @@ object SecurityAlertNotifier {
         val builder = NotificationCompat.Builder(app, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_launcher).setContentTitle(title).setContentText(body)
             .setStyle(NotificationCompat.BigTextStyle().bigText(body)).setContentIntent(content)
-            .setVisibility(NotificationCompat.VISIBILITY_PRIVATE).setPriority(NotificationCompat.PRIORITY_MAX)
+            .setVisibility(NotificationCompat.VISIBILITY_PRIVATE).setPriority(NotificationCompat.PRIORITY_HIGH)
             .setCategory(if (confirmed) NotificationCompat.CATEGORY_ALARM else NotificationCompat.CATEGORY_STATUS)
             .setAutoCancel(true).setOnlyAlertOnce(false).setDeleteIntent(dismiss)
             .addAction(R.drawable.ic_launcher, app.getString(if (packageName != null)
                 R.string.incident_review_threat else R.string.security_alert_open_vault), content)
             .addAction(0, app.getString(R.string.incident_dismiss), dismiss)
-        if (confirmed && (packageName != null || testMode) &&
-            FullScreenAlertAccess.isGranted(app)) {
+        val fullScreenRequested = confirmed && (packageName != null || testMode) &&
+            FullScreenAlertAccess.isGranted(app)
+        if (fullScreenRequested) {
             builder.setFullScreenIntent(content, true)
         } else if (confirmed && packageName != null) {
-            Log.d(TAG, "Full-screen access unavailable; using heads-up incident notification")
+            // Android 14+ may deny full-screen access to apps outside calling/alarm use cases.
+            // The channel is IMPORTANCE_HIGH and this builder always requests PRIORITY_HIGH,
+            // so the ordinary notification remains eligible for a heads-up presentation.
+            Log.i(TAG, "Full-screen access unavailable; using high-priority heads-up incident notification")
         }
-        runCatching { NotificationManagerCompat.from(app).notify(notificationId(eventId), builder.build()) }
-            .onFailure { Log.w(TAG, "Unable to post local security alert", it) }
+
+        val notificationManager = NotificationManagerCompat.from(app)
+        val id = notificationId(eventId)
+        val posted = runCatching { notificationManager.notify(id, builder.build()) }
+        if (posted.isFailure && fullScreenRequested) {
+            // Some Android/OEM builds can still reject a full-screen notification at post
+            // time. Remove the full-screen intent and retry the same incident as heads-up.
+            Log.w(TAG, "Full-screen incident notification was rejected; retrying without full-screen intent",
+                posted.exceptionOrNull())
+            builder.setFullScreenIntent(null, false)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+            runCatching { notificationManager.notify(id, builder.build()) }
+                .onFailure { Log.w(TAG, "Unable to post heads-up incident fallback", it) }
+        } else {
+            posted.onFailure { Log.w(TAG, "Unable to post local security alert", it) }
+        }
     }
 
     fun stopIncidentAudio() {

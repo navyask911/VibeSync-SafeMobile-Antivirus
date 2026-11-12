@@ -39,6 +39,18 @@ for field in ('"packageName"', '"deviceId"', '"androidId"', '"location"'):
         errors.append("A personal or device identifier field was added to the JSON payload.")
 if "global_threat_intelligence_title" not in settings:
     errors.append("Settings must expose the optional contribution switch.")
+
+for path in ("docs/PRIVACY_POLICY.md", "app/src/main/assets/privacy-policy.md"):
+    policy = Path(path).read_text(encoding="utf-8")
+    lowered = policy.lower()
+    if "when the global threat intelligence master switch is enabled, sha-256 hashes of confirmed threats are automatically and anonymously contributed" not in lowered:
+        errors.append(f"{path} must disclose automatic contribution after master opt-in.")
+    if "no apk files or personal identifiers are uploaded" not in lowered:
+        errors.append(f"{path} must say APKs and personal identifiers are not uploaded.")
+    if "separately taps **donate** for a confirmed malicious apk" in lowered:
+        errors.append(f"{path} still claims a separate Donate tap is required for master opt-in.")
+    if "enabling the settings switch alone sends nothing" in lowered:
+        errors.append(f"{path} still describes the obsolete contribution consent model.")
 if "global_threat_intelligence_donate_message" not in incident:
     errors.append("The install incident must expose a per-sample consent prompt.")
 if "vm.contributeThreatHash(" not in screen or "oneTimeConsent = !GlobalThreatIntelligenceConsent.isEnabled(context)" not in screen:
@@ -88,4 +100,4 @@ if errors:
     print("Global Threat Intelligence privacy guard FAILED:", file=sys.stderr)
     print("\n".join("- " + item for item in errors), file=sys.stderr)
     raise SystemExit(1)
-print("Global Threat Intelligence guard passed: OFF by default, per-sample consent, fixed HTTPS Worker, 215 binary features, no Android GitHub credentials.")
+print("Global Threat Intelligence guard passed: OFF by default, accurate master-opt-in disclosure, fixed HTTPS Worker and payload privacy boundary.")

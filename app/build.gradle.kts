@@ -45,10 +45,9 @@ android {
   applicationId = "com.vibesync.antivirus"
   minSdk = 26
   targetSdk = 36
-  versionCode = 20261146
-  // [release-v1.7.5] Signed release authorized after Android CI #1437 and API 26/28/33/34/36 passed.
-  versionName = "1.8.0"
-  // [release-v1.7.5] Stages Device Administrator and overlay access behind contextual consent.
+  versionCode = 20261147
+  // [release-v1.8.1] Compliance hardening: truthful posture score, minimized Device Admin, no own overlay permission.
+  versionName = "1.8.1"
   testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   buildConfigField("String", "FEED_MANIFEST_PUBLIC_KEY_B64", cfg(feedManifestPublicKey))
   buildConfigField("Boolean", "FEED_MANIFEST_KEY_CONFIGURED", (!feedManifestPublicKey.isBlank()).toString())

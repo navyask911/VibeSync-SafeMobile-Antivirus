@@ -106,7 +106,7 @@ jobs:
         run: ./gradlew --no-daemon testOfflineDebugUnitTest verifyPaparazziDebug
       - name: Android lint
         run: ./gradlew --no-daemon lintOfflineDebug lintFeedDebug lintVitalOfflineRelease lintVitalFeedRelease
-      - name: Explicit debug lint requested for v1.8.0 (Offline + Feed flavors)
+      - name: Explicit debug lint requested for v1.8.1 (Offline + Feed flavors)
         run: ./gradlew --no-daemon :app:lintOfflineDebug :app:lintFeedDebug
       - name: Print Android lint error locations when lint fails
         if: failure()

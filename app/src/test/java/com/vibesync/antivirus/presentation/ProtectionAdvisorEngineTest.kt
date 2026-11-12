@@ -6,7 +6,7 @@ import org.junit.Test
 
 class ProtectionAdvisorEngineTest {
     @Test
-    fun pendingCountMatchesOnlyActionableCriticalAndMinorIssues() {
+    fun pendingCountIncludesSnoozedUnresolvedIssues() {
         val now = 1_800_000_000_000L
         val state = ProtectionAdvisorEngine.evaluate(
             inputs = ProtectionAdvisorInputs(
@@ -29,11 +29,12 @@ class ProtectionAdvisorEngineTest {
             snoozedIds = setOf("folder_sentinel", "notifications_on")
         )
 
-        assertEquals(state.critical.size + state.minor.size, state.pendingCount)
+        assertEquals(state.critical.size + state.minor.size + state.snoozed.size, state.pendingCount)
         assertTrue(state.snoozed.any { it.id == "folder_sentinel" })
         assertTrue(state.snoozed.any { it.id == "notifications_on" })
-        assertEquals(2, state.pendingCount)
-        assertEquals(83, state.score)
+        assertEquals(4, state.pendingCount)
+        assertEquals(2, state.snoozed.size)
+        assertEquals(67, state.score)
     }
     @Test
     fun maximumUnresolvedDeductionsNormalizeToExactlyOneHundred() {
@@ -60,7 +61,7 @@ class ProtectionAdvisorEngineTest {
         assertEquals(100, state.issues.sumOf { it.points })
         assertEquals(0, state.score)
         assertEquals(100, state.issues.filter {
-            it.group == AdvisorIssueGroup.CRITICAL || it.group == AdvisorIssueGroup.MINOR
+            it.group != AdvisorIssueGroup.COMPLETED
         }.sumOf { it.points })
     }
 

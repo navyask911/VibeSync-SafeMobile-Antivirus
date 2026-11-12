@@ -28,25 +28,3 @@ internal fun DeviceAdminPermissionDisclosureDialog(
         }
     )
 }
-
-@Composable
-internal fun OverlayPermissionDisclosureDialog(
-    onConfirm: () -> Unit,
-    onDismiss: () -> Unit
-) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.security_guard_overlay_consent_title)) },
-        text = { Text(stringResource(R.string.security_guard_overlay_consent_body)) },
-        confirmButton = {
-            TextButton(onClick = onConfirm) {
-                Text(stringResource(R.string.security_guard_consent_continue))
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text(stringResource(R.string.security_guard_consent_cancel))
-            }
-        }
-    )
-}
