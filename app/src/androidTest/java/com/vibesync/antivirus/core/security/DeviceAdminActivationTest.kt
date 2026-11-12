@@ -29,20 +29,17 @@ class DeviceAdminActivationTest {
         val activation = DeviceAdminManager(context).activationIntent()
         assertEquals(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN, activation.action)
 
-        // API 26 uses the legacy Parcelable getter. Set the framework Parcelable loader
-        // explicitly before reading the ComponentName, and report the complete captured
-        // intent metadata if the extra is missing or cannot be decoded.
-        activation.extras?.classLoader = AdminReceiver::class.java.classLoader
-        val diagnostic = "action=${activation.action}, hasExtra=${activation.hasExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN)}, " +
-            "extraKeys=${activation.extras?.keySet()}, extras=${activation.extras}"
-        assertTrue(
-            "ACTION_ADD_DEVICE_ADMIN must contain EXTRA_DEVICE_ADMIN; $diagnostic",
-            activation.hasExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN)
-        )
-
+        // API 26 uses the legacy Parcelable getter. The extra is a framework ComponentName,
+        // so use that framework type's class loader (not the app receiver's loader). Read the
+        // value before formatting diagnostics; stringifying a lazy Bundle can force an
+        // unnecessary unparcel before its Parcelable loader is configured correctly.
+        activation.extras?.classLoader = ComponentName::class.java.classLoader
         val adminComponent = activation.getParcelableExtra<ComponentName>(
             DevicePolicyManager.EXTRA_DEVICE_ADMIN
         )
+        val diagnostic = "action=${activation.action}, " +
+            "hasExtra=${activation.hasExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN)}, " +
+            "decodedType=${adminComponent?.javaClass?.name}"
         assertNotNull("EXTRA_DEVICE_ADMIN must decode as ComponentName; $diagnostic", adminComponent)
         assertEquals(receiver, adminComponent)
         assertEquals(context.packageName, receiver.packageName)
