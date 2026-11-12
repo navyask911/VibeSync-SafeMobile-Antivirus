@@ -161,6 +161,10 @@ for resource_file in sorted((ROOT / "app/src/main/res").glob("values*/strings.xm
         errors.append(f"{resource_file.relative_to(ROOT)} is invalid XML: {error}.")
     if re.search(r"\\u(?![0-9a-fA-F]{4})", resource_text, re.IGNORECASE):
         errors.append(f"{resource_file.relative_to(ROOT)} contains a malformed Unicode escape.")
+    if resource_file.parent.name == "values-tr":
+        turkish_values = re.findall(r"<string\\b[^>]*>([\\s\\S]*?)</string>", resource_text)
+        if any(re.search(r"(?<!\\\\)'", value) for value in turkish_values):
+            errors.append("values-tr/strings.xml contains an unescaped ASCII apostrophe; escape it as \\\\' in Android string resources.")
     names = set(re.findall(r'<string\s+name="([^"]+)"', resource_text))
     missing = required_lock_strings - names
     if missing:
