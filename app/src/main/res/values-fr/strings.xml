@@ -684,4 +684,17 @@
     <string name="ui_status_at_risk">À risque</string>
     <string name="scan_detected_by">Détecté par : %1$s</string>
     <string name="scan_detected_by_confidence">Détecté par : %1$s (%2$d%%)</string>
+
+    <!-- v1.8.0 security-score voice and Play in-app update copy. -->
+    <string name="security_score_100_voice">Félicitations ! Votre appareil est entièrement protégé avec un score de sécurité de 100 %. Nous effectuerons des analyses quotidiennes pour assurer votre sécurité. N’oubliez pas : installez uniquement des applications depuis le Play Store et laissez Play Protect activé. Merci d’utiliser Safe Mobile Antivirus. Partagez et installez notre application avec votre famille et vos amis pour construire un monde numérique plus sûr.</string>
+    <string name="self_update_title">Rechercher des mises à jour (mise à jour de l’application)</string>
+    <string name="self_update_description">Le mode administrateur de l’appareil ne bloque normalement pas les mises à jour Google Play. Ce bouton recherche une mise à jour intégrée à Google Play et demande à Android de l’installer.</string>
+    <string name="self_update_started">Le processus de mise à jour a été ouvert. Suivez les instructions du système pour terminer la mise à jour.</string>
+    <string name="self_update_cancelled">La mise à jour a été annulée.</string>
+    <string name="self_update_check_failed">Impossible de démarrer la mise à jour. Vérifiez votre connexion à Google Play, puis réessayez.</string>
+    <string name="self_update_unavailable">Les mises à jour intégrées à Google Play ne sont pas disponibles pour cette installation. Ouvrez Google Play pour vérifier manuellement.</string>
+    <string name="self_update_no_update">Aucune mise à jour plus récente n’est actuellement disponible sur Google Play.</string>
+    <string name="self_update_not_allowed">Une mise à jour est disponible, mais Google Play n’autorise pas le processus de mise à jour immédiate pour cette installation.</string>
+    <string name="self_update_open_play_store">Ouvrir Google Play</string>
+
 </resources>

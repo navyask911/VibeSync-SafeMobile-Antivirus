@@ -305,6 +305,9 @@ internal fun V17ShieldScreen(
     }
 }
 
+private const val SCORE_GAUGE_ANIMATION_LABEL = "security-score-gauge"
+private const val SCORE_VALUE_ANIMATION_LABEL = "security-score-value"
+
 @Composable
 private fun V17ScoreRing(score: Int, isDark: Boolean) {
     val c = v17Colors(isDark)
@@ -312,12 +315,12 @@ private fun V17ScoreRing(score: Int, isDark: Boolean) {
     val progress by animateFloatAsState(
         targetValue = targetScore / 100f,
         animationSpec = tween(500),
-        label = "security-score-gauge"
+        label = SCORE_GAUGE_ANIMATION_LABEL
     )
     val displayedScore by androidx.compose.animation.core.animateIntAsState(
         targetValue = targetScore,
         animationSpec = tween(500),
-        label = "security-score-value"
+        label = SCORE_VALUE_ANIMATION_LABEL
     )
     Box(Modifier.size(216.dp), contentAlignment = Alignment.Center) {
         Canvas(Modifier.fillMaxSize()) {
