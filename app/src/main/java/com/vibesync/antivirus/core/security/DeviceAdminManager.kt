@@ -26,7 +26,9 @@ class DeviceAdminManager(context: Context) {
      * be verified independently of launching Android's protected confirmation activity.
      */
     fun activationIntent(): Intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).apply {
-        putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, component)
+        // The Intent receiver exposes its own nullable "component" property. Qualify the
+        // manager's receiver explicitly so the system extra never receives Intent.component.
+        putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, this@DeviceAdminManager.component)
         putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, appContext.getString(R.string.security_guard_admin_consent_body))
         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     }
