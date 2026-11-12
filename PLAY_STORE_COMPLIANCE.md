@@ -40,7 +40,7 @@ This document is a source-backed draft for the Play Console declarations. It is 
 
 **Suggested Play Console declaration**
 
-> Install Sentinel is an optional, user-enabled antivirus feature. After the user enables it in SafeMobile, a foreground service registers for Android package-install and package-replacement events and passes those events to local post-install security inspection. Inspection runs on-device and does not upload APKs or scan results. An ongoing notification tells the user that monitoring is active and contains a Stop action. The user can also disable the feature in SafeMobile.
+> Install Sentinel is an optional, configurable antivirus feature. After the user accepts SafeMobile's privacy disclosure, while the Install Sentinel setting remains enabled (it is enabled by default unless the user turns it off), SafeMobile starts the foreground service from its visible UI. The service registers for Android package-install and package-replacement events and passes those events to local post-install security inspection. Inspection runs on-device and does not upload APKs or scan results. An ongoing notification tells the user that monitoring is active and contains a Stop action. The user can also disable the feature in SafeMobile.
 >
 > **Impact if deferred:** If Android delays service startup or package-event delivery, the post-install inspection and any resulting alert are delayed. The newly installed app may be opened before its local inspection completes; SafeMobile does not block the installation.
 >
