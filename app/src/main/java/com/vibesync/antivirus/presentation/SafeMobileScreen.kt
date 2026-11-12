@@ -589,6 +589,12 @@ import kotlinx.coroutines.launch
     .onFailure { Toast.makeText(context, R.string.device_admin_explanation, Toast.LENGTH_LONG).show() }
   }
  }
+ val requestDeviceLock: () -> Unit = {
+  runCatching { deviceAdminManager.lockDeviceNow() }
+   .onFailure {
+    Toast.makeText(context, R.string.device_admin_lock_failed, Toast.LENGTH_LONG).show()
+   }
+ }
  val toggleSafGuard: (Boolean) -> Unit = { enabled ->
   if (enabled) {
    requestPrivacyAcknowledgement {
@@ -940,6 +946,7 @@ import kotlinx.coroutines.launch
           safActive = storageAccessGranted,
           onBatteryToggle = toggleBatteryGuard,
           onAdminToggle = toggleAdminGuard,
+          onLockDeviceNow = requestDeviceLock,
           onSafToggle = toggleSafGuard,
           onImportYara = { pendingYaraPicker.launch(arrayOf("text/plain", "application/octet-stream", "application/x-yara")) },
           onThreatFeedSync = { requestPrivacyAcknowledgement { vm.requestThreatFeedSync() } },
