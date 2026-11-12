@@ -155,6 +155,12 @@ required_lock_strings = {
 }
 for resource_file in sorted((ROOT / "app/src/main/res").glob("values*/strings.xml")):
     resource_text = read(str(resource_file.relative_to(ROOT)))
+    try:
+        ET.fromstring(resource_text)
+    except ET.ParseError as error:
+        errors.append(f"{resource_file.relative_to(ROOT)} is invalid XML: {error}.")
+    if "\\'" in resource_text:
+        errors.append(f"{resource_file.relative_to(ROOT)} contains an unsupported backslash-apostrophe escape.")
     names = set(re.findall(r'<string\s+name="([^"]+)"', resource_text))
     missing = required_lock_strings - names
     if missing:
