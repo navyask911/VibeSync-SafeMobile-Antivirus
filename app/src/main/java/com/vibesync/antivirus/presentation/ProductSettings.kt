@@ -86,7 +86,7 @@ import android.util.Log
 import com.vibesync.antivirus.R
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.appupdate.AppUpdateOptions
-import com.google.android.play.core.appupdate.AppUpdateType
+import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.vibesync.antivirus.core.locale.LocalePreferences
 import com.vibesync.antivirus.core.security.GlobalThreatIntelligenceConsent
