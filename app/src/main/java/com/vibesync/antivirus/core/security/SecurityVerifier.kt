@@ -28,13 +28,21 @@ enum class SecurityVerificationStatus {
     AWAITING_SERVER_VERDICT,
     VERIFIED,
     NOT_VERIFIED,
-    ERROR
+    ERROR,
+    LOCAL_BASELINE_PASSED,
+    LOCAL_BASELINE_FAILED
 }
 
 data class SecurityVerificationState(
     val status: SecurityVerificationStatus = SecurityVerificationStatus.NOT_CHECKED,
-    val meetsDeviceIntegrity: Boolean? = null
-)
+    /** A decoded Google Play verdict; local checks never populate this field. */
+    val meetsDeviceIntegrity: Boolean? = null,
+    /** Device-local fallback only; this is not Google Play Integrity attestation. */
+    val localBaselineTrusted: Boolean? = null,
+    val localBaselineReasons: List<String> = emptyList()
+) {
+    val integrityCheckPassed: Boolean? get() = meetsDeviceIntegrity ?: localBaselineTrusted
+}
 
 /**
  * Requests the Play Integrity token on app launch.
@@ -43,8 +51,9 @@ data class SecurityVerificationState(
  * a configured HTTPS backend must call Google's decodeIntegrityToken endpoint, validate the
  * nonce and package name, then return the decoded Google response as tokenPayloadExternal.
  *
- * Set PLAY_INTEGRITY_VERIFICATION_URL in the build environment to enable that backend flow.
- * With no endpoint configured, the result remains unknown and does not receive score credit.
+ * Set PLAY_INTEGRITY_VERIFICATION_URL in the build environment to enable server-decoded
+ * Google Play verdicts. When the URL is missing or validated internet is unavailable, the
+ * verifier reports a separate conservative local baseline; it never labels that as attestation.
  */
 class SecurityVerifier(context: Context) {
     private val app = context.applicationContext
@@ -56,24 +65,22 @@ class SecurityVerifier(context: Context) {
     val state = mutableState.asStateFlow()
 
     suspend fun requestIntegrityTokenAndVerify() {
-        mutableState.value = mutableState.value.copy(
-            status = SecurityVerificationStatus.REQUESTING_TOKEN
-        )
+        val endpoint = BuildConfig.PLAY_INTEGRITY_VERIFICATION_URL.trim()
+        val online = withContext(Dispatchers.IO) { LocalBaselineTrust.hasValidatedInternet(app) }
+        if (LocalBaselineTrust.shouldUseLocalBaseline(endpoint, online)) {
+            applyLocalBaselineFallback(
+                reason = if (endpoint.isBlank()) "No remote verification endpoint is configured."
+                    else "No validated internet connection is available."
+            )
+            return
+        }
+
+        mutableState.value = SecurityVerificationState(status = SecurityVerificationStatus.REQUESTING_TOKEN)
         try {
             val nonce = createNonce()
             val token = manager.requestIntegrityToken(
                 IntegrityTokenRequest.builder().setNonce(nonce).build()
             ).awaitTask().token()
-
-            val endpoint = BuildConfig.PLAY_INTEGRITY_VERIFICATION_URL.trim()
-            if (endpoint.isEmpty()) {
-                mutableState.value = mutableState.value.copy(
-                    status = SecurityVerificationStatus.AWAITING_SERVER_VERDICT
-                )
-                Log.w(TAG, "Integrity token obtained; no server decode endpoint is configured.")
-                return
-            }
-
             val meetsDeviceIntegrity = withContext(Dispatchers.IO) {
                 decodeAtTrustedBackend(endpoint, token, nonce)
             }
@@ -87,9 +94,28 @@ class SecurityVerifier(context: Context) {
                 meetsDeviceIntegrity = meetsDeviceIntegrity
             )
         } catch (error: Exception) {
-            mutableState.value = mutableState.value.copy(status = SecurityVerificationStatus.ERROR)
-            Log.w(TAG, "Play Integrity verification did not complete.", error)
+            val stillOffline = withContext(Dispatchers.IO) {
+                !LocalBaselineTrust.hasValidatedInternet(app)
+            }
+            if (stillOffline) {
+                applyLocalBaselineFallback("Connectivity was lost before remote verification completed.")
+            } else {
+                mutableState.value = SecurityVerificationState(status = SecurityVerificationStatus.ERROR)
+                Log.w(TAG, "Play Integrity verification did not complete.", error)
+            }
         }
+    }
+
+    private suspend fun applyLocalBaselineFallback(reason: String) {
+        val report = withContext(Dispatchers.IO) { LocalBaselineTrust.evaluate(app) }
+        mutableState.value = SecurityVerificationState(
+            status = if (report.trusted) SecurityVerificationStatus.LOCAL_BASELINE_PASSED
+                else SecurityVerificationStatus.LOCAL_BASELINE_FAILED,
+            meetsDeviceIntegrity = null,
+            localBaselineTrusted = report.trusted,
+            localBaselineReasons = report.reasons
+        )
+        Log.i(TAG, "Using local baseline fallback: $reason Trusted=${report.trusted}.")
     }
 
     private fun createNonce(): String {

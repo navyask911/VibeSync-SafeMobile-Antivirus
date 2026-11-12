@@ -433,14 +433,14 @@ internal fun V17ShieldScreen(
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 Icon(
-                    imageVector = if (integrityState.meetsDeviceIntegrity == true)
+                    imageVector = if (integrityState.integrityCheckPassed == true)
                         Icons.Outlined.CheckCircle else Icons.Outlined.Security,
                     contentDescription = null,
-                    tint = if (integrityState.meetsDeviceIntegrity == true) c.green else c.muted,
+                    tint = if (integrityState.integrityCheckPassed == true) c.green else c.muted,
                     modifier = Modifier.size(26.dp)
                 )
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
-                    V17Title(stringResource(R.string.play_integrity_verified_title))
+                    V17Title(stringResource(R.string.device_integrity_title))
                     V17Body(stringResource(when (integrityState.status) {
                         SecurityVerificationStatus.VERIFIED -> R.string.play_integrity_status_verified
                         SecurityVerificationStatus.NOT_VERIFIED -> R.string.play_integrity_status_not_verified
@@ -448,6 +448,8 @@ internal fun V17ShieldScreen(
                         SecurityVerificationStatus.AWAITING_SERVER_VERDICT -> R.string.play_integrity_status_server_unconfigured
                         SecurityVerificationStatus.ERROR -> R.string.play_integrity_status_error
                         SecurityVerificationStatus.NOT_CHECKED -> R.string.play_integrity_status_not_checked
+                        SecurityVerificationStatus.LOCAL_BASELINE_PASSED -> R.string.device_integrity_status_local_passed
+                        SecurityVerificationStatus.LOCAL_BASELINE_FAILED -> R.string.device_integrity_status_local_failed
                     }), color = c.muted)
                 }
             }
@@ -1112,14 +1114,14 @@ internal fun V17ConsoleSettingsScreen(
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 Icon(
-                    imageVector = if (integrityState.meetsDeviceIntegrity == true)
+                    imageVector = if (integrityState.integrityCheckPassed == true)
                         Icons.Outlined.CheckCircle else Icons.Outlined.Security,
                     contentDescription = null,
-                    tint = if (integrityState.meetsDeviceIntegrity == true) c.green else c.muted,
+                    tint = if (integrityState.integrityCheckPassed == true) c.green else c.muted,
                     modifier = Modifier.size(26.dp)
                 )
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
-                    V17Title(stringResource(R.string.play_integrity_verified_title))
+                    V17Title(stringResource(R.string.device_integrity_title))
                     V17Body(stringResource(when (integrityState.status) {
                         SecurityVerificationStatus.VERIFIED -> R.string.play_integrity_status_verified
                         SecurityVerificationStatus.NOT_VERIFIED -> R.string.play_integrity_status_not_verified
@@ -1127,6 +1129,8 @@ internal fun V17ConsoleSettingsScreen(
                         SecurityVerificationStatus.AWAITING_SERVER_VERDICT -> R.string.play_integrity_status_server_unconfigured
                         SecurityVerificationStatus.ERROR -> R.string.play_integrity_status_error
                         SecurityVerificationStatus.NOT_CHECKED -> R.string.play_integrity_status_not_checked
+                        SecurityVerificationStatus.LOCAL_BASELINE_PASSED -> R.string.device_integrity_status_local_passed
+                        SecurityVerificationStatus.LOCAL_BASELINE_FAILED -> R.string.device_integrity_status_local_failed
                     }), color = c.muted)
                 }
             }

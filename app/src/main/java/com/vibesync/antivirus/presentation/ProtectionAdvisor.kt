@@ -95,7 +95,9 @@ object ProtectionAdvisorEngine {
                 inputs.developerOptionsEnabled != true, "guardian"),
             issue("voice_alert_tts", R.string.voice_alerts_title, R.string.voice_alerts_description,
                 2, inputs.voiceAlertsEnabled, "settings"),
-            issue("play_integrity", R.string.play_integrity_verified_title, R.string.play_integrity_verified_description,
+            // A remote Google verdict or the separate local baseline can satisfy this check.
+            // Keep the existing ID so saved snooze and reminder state remains stable.
+            issue("play_integrity", R.string.device_integrity_title, R.string.device_integrity_description,
                 12, inputs.meetsDeviceIntegrity == true, "settings")
         )
         val mapped = raw.map { item ->

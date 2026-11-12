@@ -692,7 +692,11 @@
     <string name="play_integrity_status_requesting">Requesting an integrity token from Google Play…</string>
     <string name="play_integrity_status_server_unconfigured">Token received. Server-side verification is not configured.</string>
     <string name="play_integrity_status_error">Integrity verification is currently unavailable.</string>
-    <string name="play_integrity_status_not_checked">Waiting for a Play Integrity check.</string>
+    <string name="play_integrity_status_not_checked">Waiting for an integrity check.</string>
+    <string name="device_integrity_title" translatable="false">Device Integrity Check</string>
+    <string name="device_integrity_description" translatable="false">SafeMobile checked local build and bootloader state, ADB debugging and Google Play Services. This baseline is not a Google Play Integrity attestation.</string>
+    <string name="device_integrity_status_local_passed" translatable="false">Local baseline passed: locked verified boot, production build tags, ADB disabled and Google Play Services available. This is not a Google Play Integrity attestation.</string>
+    <string name="device_integrity_status_local_failed" translatable="false">Local baseline did not pass. Review bootloader lock, build tags, ADB debugging and Google Play Services.</string>
     <string name="posture_audit_success">All Audit Successful</string>
 
     <string name="play_protect_status_title">Play Protect Status</string>

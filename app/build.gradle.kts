@@ -31,6 +31,7 @@ if (signingValues.any { !it.isNullOrBlank() } && !releaseSigningEnabled) {
 android {
  namespace = "com.vibesync.antivirus"
  compileSdk = 36
+ ndkVersion = "28.2.13676358"
  flavorDimensions += "network"
  productFlavors {
   create("offline") {
@@ -46,8 +47,8 @@ android {
   applicationId = "com.vibesync.antivirus"
   minSdk = 26
   targetSdk = 36
-  versionCode = 20261148
-  // [release-v1.9.0] Device Admin removed; Play Integrity verification replaces it.
+  versionCode = 20261149
+  // [release-v1.9.0] Local integrity fallback, LiteRT 16 KB JNI and edge-to-edge compliance.
   versionName = "1.9.0"
   testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   buildConfigField("String", "FEED_MANIFEST_PUBLIC_KEY_B64", cfg(feedManifestPublicKey))
@@ -630,9 +631,8 @@ dependencies {
  implementation("com.google.android.ump:user-messaging-platform:4.0.0")
  // Apache-2.0: KeyStore-backed encrypted local device-bound entitlement.
  implementation("androidx.security:security-crypto:1.1.0")
- // TensorFlow Lite 2.17.0 is local inference only; no model training or network calls.
- implementation("org.tensorflow:tensorflow-lite:2.14.0")
- implementation("org.tensorflow:tensorflow-lite-support:0.4.4")
+ // LiteRT 1.4.2 preserves the org.tensorflow.lite Interpreter API with 16 KB-compatible JNI.
+ implementation("com.google.ai.edge.litert:litert:1.4.2")
  // Apache-2.0 OkHttp is confined to the opt-in weekly model download worker.
  implementation("com.squareup.okhttp3:okhttp:4.12.0")
  // BSD-3-Clause: structured read-only DEX parsing of 215 research features.

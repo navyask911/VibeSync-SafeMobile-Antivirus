@@ -1,5 +1,5 @@
 name: Build and publish signed SafeMobile APK and Play AAB
-# [release-v1.8.1] Play policy hardening: truthful score, minimized Device Admin, and permission cleanup.
+# [release-v1.9.0] Offline integrity fallback, 16 KB native compliance and SDK edge-to-edge.
 
 on:
   workflow_dispatch:
@@ -10,6 +10,8 @@ on:
     paths:
       - "app/build.gradle.kts"
       - "scripts/check_admob_privacy.py"
+      - "scripts/check_android_release_readiness.py"
+      - "scripts/check_16kb_alignment.py"
       - "app/src/main/res/**"
       - "app/src/main/AndroidManifest.xml"
       - "app/src/main/java/**"
@@ -26,6 +28,7 @@ on:
       - "v1.7.5"
       - "v1.8.0"
       - "v1.8.1"
+      - "v1.9.0"
 
 permissions:
   contents: write
@@ -36,7 +39,7 @@ concurrency:
 
 jobs:
   release:
-    if: github.repository == 'navyask911/VibeSync-SafeMobile-Antivirus' && (github.event_name == 'workflow_dispatch' || github.ref_type != 'branch' || github.ref_name != 'main' || contains(github.event.head_commit.message, '[release-v1.8.1]'))
+    if: github.repository == 'navyask911/VibeSync-SafeMobile-Antivirus' && (github.event_name == 'workflow_dispatch' || github.ref_type != 'branch' || github.ref_name != 'main' || contains(github.event.head_commit.message, '[release-v1.9.0]'))
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
@@ -86,8 +89,20 @@ jobs:
           rustup target add armv7-linux-androideabi aarch64-linux-android
           SDK_ROOT="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-}}"
           test -n "$SDK_ROOT"
-          NDK_DIR="$(find "$SDK_ROOT/ndk" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -n 1)"
-          test -n "$NDK_DIR"
+          NDK_VERSION="28.2.13676358"
+          NDK_DIR="$SDK_ROOT/ndk/$NDK_VERSION"
+          SDKMANAGER="$SDK_ROOT/cmdline-tools/latest/bin/sdkmanager"
+          if [[ ! -x "$SDKMANAGER" ]]; then
+            SDKMANAGER="$(find "$SDK_ROOT/cmdline-tools" -type f -name sdkmanager | sort -V | tail -n 1)"
+          fi
+          test -x "$SDKMANAGER"
+          if [[ ! -d "$NDK_DIR" ]]; then
+            "$SDKMANAGER" --install "ndk;$NDK_VERSION"
+          fi
+          if [[ ! -x "$SDK_ROOT/build-tools/35.0.0/zipalign" ]]; then
+            "$SDKMANAGER" --install "build-tools;35.0.0"
+          fi
+          test -d "$NDK_DIR"
           echo "ANDROID_NDK_HOME=$NDK_DIR" >> "$GITHUB_ENV"
           echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
           cargo install cargo-ndk --locked
@@ -103,6 +118,7 @@ jobs:
           python3 scripts/check_ja_kn_and_siren.py
           python3 scripts/check_global_threat_intelligence.py
           python3 scripts/check_admob_privacy.py
+          python3 scripts/check_android_release_readiness.py
           python3 scripts/check_proprietary_safety.py
           test "$(git hash-object app/src/main/res/font/inter_variable.ttf)" = 4ab79e0102bbe0ffa1ed879b13e52ac8c6487833
           test "$(git hash-object app/src/main/assets/licenses/Inter-OFL.txt)" = 9b2ca37b3ffc77391d8b2ebef4a974ef32bf46ea
@@ -123,6 +139,12 @@ jobs:
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           SAFE_MOBILE_HASHDB_ED25519_PUBLIC_KEY_B64: ${{ secrets.DB_SIGNING_PUBLIC_KEY }}
         run: ./gradlew --no-daemon assembleOfflineRelease bundleOfflineRelease
+
+      - name: Verify 16 KB ELF and APK alignment
+        run: >-
+          python3 scripts/check_16kb_alignment.py
+          app/build/outputs/apk/offline/release/*.apk
+          app/build/outputs/bundle/offlineRelease/*.aab
 
       - name: Verify signed AAB and APK, model schema, YARA and no bundled malware databases
         id: verify-aab
@@ -146,7 +168,7 @@ jobs:
               for required in (
                   b"com.android.vending.BILLING",
                   b"com.google.android.play.billingclient.version",
-                  b"8.3.0",
+                  b"9.1.0",
                   b"com.google.android.gms.ads.APPLICATION_ID",
                   b"ca-app-pub-4783826505860771~8485727119",
                   b"com.google.android.gms.permission.AD_ID",
@@ -189,7 +211,10 @@ jobs:
                              "MODEL_DUMMY_UNTRAINED = false")
               if any(item not in scanner for item in required_gate):
                   raise SystemExit("SAFE STOP: source-pinned research model gate was changed.")
-              print("Signed AAB contains Billing 8.3.0, AdMob app ID/AD_ID, pinned model, 215 schema, reviewed YARA and no hash DB.")
+              litert_jni = [name for name in names if name.endswith("/libtensorflowlite_jni.so")]
+              if not litert_jni:
+                  raise SystemExit("SAFE STOP: 16 KB-compatible LiteRT JNI library is missing from the AAB.")
+              print("Signed AAB contains Billing 9.1.0, LiteRT 1.4.2 JNI, AdMob app ID/AD_ID, pinned model, 215 schema, reviewed YARA and no hash DB.")
           PY
           version_name="$(sed -nE 's/^[[:space:]]*versionName = "([^"]+)".*/\1/p' app/build.gradle.kts | head -n 1)"
           version_code="$(sed -nE 's/^[[:space:]]*versionCode = ([0-9]+).*/\1/p' app/build.gradle.kts | head -n 1)"
@@ -322,14 +347,14 @@ jobs:
             echo "SAFE STOP: Expected Paparazzi PNG screenshots for the four tabs; found $snapshot_count." >&2
             exit 1
           fi
-          zip -qr build/ui-screenshots-v1.8.1.zip app/src/test/snapshots
+          zip -qr build/ui-screenshots-v1.9.0.zip app/src/test/snapshots
           echo "Packaged $snapshot_count Paparazzi screenshots."
 
       - name: Upload four-tab screenshots artifact
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: SafeMobile-v1.8.1-UI-Screenshots-${{ github.run_id }}
-          path: build/ui-screenshots-v1.8.1.zip
+          name: SafeMobile-v1.9.0-UI-Screenshots-${{ github.run_id }}
+          path: build/ui-screenshots-v1.9.0.zip
           if-no-files-found: error
           retention-days: 30
 
@@ -345,14 +370,14 @@ jobs:
           version_name="${{ steps.verify-aab.outputs.version_name }}"
           version_code="${{ steps.verify-aab.outputs.version_code }}"
           if [[ "${GITHUB_REF_TYPE:-}" == "branch" && "${GITHUB_REF_NAME:-}" == "main" ]]; then
-            if [[ "$version_name" != "1.8.1" || "$version_code" != "20261147" ]]; then
-              echo "SAFE STOP: main release trigger expected v1.8.1 / 20261147, got $version_name / $version_code." >&2
+            if [[ "$version_name" != "1.9.0" || "$version_code" != "20261149" ]]; then
+              echo "SAFE STOP: main release trigger expected v1.9.0 / 20261149, got $version_name / $version_code." >&2
               exit 1
             fi
           fi
-          if [[ "${GITHUB_REF_TYPE:-}" == "tag" && "${GITHUB_REF_NAME:-}" == "v1.8.1" ]] ||
-             [[ "${GITHUB_REF_TYPE:-}" == "branch" && "${GITHUB_REF_NAME:-}" == "main" && "$version_name" == "1.8.1" && "$version_code" == "20261147" ]]; then
-            tag="v1.8.1"
+          if [[ "${GITHUB_REF_TYPE:-}" == "tag" && "${GITHUB_REF_NAME:-}" == "v1.9.0" ]] ||
+             [[ "${GITHUB_REF_TYPE:-}" == "branch" && "${GITHUB_REF_NAME:-}" == "main" && "$version_name" == "1.9.0" && "$version_code" == "20261149" ]]; then
+            tag="v1.9.0"
           else
             tag="safemobile-v${{ steps.verify-aab.outputs.version_name }}-code${{ steps.verify-aab.outputs.version_code }}-run${GITHUB_RUN_NUMBER}"
           fi
@@ -364,6 +389,7 @@ jobs:
           Built from commit ${GITHUB_SHA}.
           v1.6.1: Added new launcher icons and splash screen. Fixed text wrapping and added back navigation. Added inline Crown subscription toggle.
           v1.6.2: Accept all file types in the scan document picker for .txt/EICAR testing; preserve the originating screen when backing out of Pro; make the paywall and shared app toolbar wrap and scroll at larger font scales.
+          v1.9.0: Adds a clearly labeled offline local-baseline fallback for integrity scoring, NDK r28 build alignment, LiteRT 1.4.2 16 KB-compatible JNI, and explicit edge-to-edge/cutout handling. Uses Play versionCode 20261149.
           v1.8.1: Corrects the Device Security Score and voice wording, retains deductions for snoozed issues, narrows Device Admin declarations to force-lock, removes SafeMobile overlay special access, reconciles Global Threat Intelligence disclosures, and adds high-priority incident notification fallback. Uses Play versionCode 20261147.\nv1.8.0: Adds notification deep links with contextual file actions, direct Device Admin activation, trust pillar swipe cards, Privacy Dashboard and About Us ecosystem page. Uses a monotonic Play versionCode 20261146.\nv1.7.5: Requests Device Administrator and overlay access only after feature-specific consent; removes overlay access from onboarding and narrows R8 keep rules to required YARA-X JNI names.
           v1.7.4: Declares Android overlay special access, fixes Device Administrator consent launch from Compose contexts, and adds manifest regression coverage. Existing offline scanning, quarantine, and privacy boundaries remain unchanged.
           v1.7.2: Adds recursive SAF Deep Scan starting at Android/media with text and extensionless EICAR payload coverage; a live, system-backed setup checklist and four security guards; Scan & Lab metrics; instant Dark Slate, Midnight Navy and OLED themes; outlined Material icons; and a fixed 56dp AdMob banner with one-line label.
@@ -397,7 +423,7 @@ jobs:
           release_files=(
             "${{ steps.verify-aab.outputs.aab_path }}"
             "${{ steps.verify-aab.outputs.apk_path }}"
-            "build/ui-screenshots-v1.8.1.zip"
+            "build/ui-screenshots-v1.9.0.zip"
             "build/siren-test/SafeMobile-Siren-Test.apk"
             "build/siren-test/siren-test-definitions.json"
             "build/siren-test/SHA256SUMS.txt"

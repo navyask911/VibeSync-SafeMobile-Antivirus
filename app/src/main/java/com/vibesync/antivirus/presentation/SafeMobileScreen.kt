@@ -165,7 +165,7 @@ import kotlinx.coroutines.launch
  val vm:SafeMobileViewModel=viewModel(factory=SafeMobileViewModel.Factory(repository, context.applicationContext))
  val state by vm.state.collectAsStateWithLifecycle()
  val integrityState by safeMobileApp.securityVerifier.state.collectAsStateWithLifecycle()
- LaunchedEffect(integrityState.meetsDeviceIntegrity) { vm.refreshSecurityScore() }
+ LaunchedEffect(integrityState.meetsDeviceIntegrity, integrityState.localBaselineTrusted) { vm.refreshSecurityScore() }
  val installSentinelRunning by com.vibesync.antivirus.core.observer.InstallSentinelService.running.collectAsStateWithLifecycle()
  val postureVm:DevicePostureViewModel=viewModel(factory=DevicePostureViewModel.Factory(safeMobileApp.devicePostureRepository))
  val postureState by postureVm.state.collectAsStateWithLifecycle()
@@ -332,7 +332,7 @@ import kotlinx.coroutines.launch
   state.securityAssessment?.signals?.playProtectEnabled,
    state.securityAssessment?.signals?.usbDebuggingEnabled,
    state.securityAssessment?.signals?.developerOptionsEnabled,
-   voiceAlertsEnabled, integrityState.meetsDeviceIntegrity
+   voiceAlertsEnabled, integrityState.meetsDeviceIntegrity, integrityState.localBaselineTrusted
  ) {
   ProtectionAdvisorInputs(
    totalScans = maxOf(state.completedScans, if (state.scanSummary != null) 1 else 0),
@@ -348,7 +348,7 @@ import kotlinx.coroutines.launch
    usbDebuggingEnabled = state.securityAssessment?.signals?.usbDebuggingEnabled,
     developerOptionsEnabled = state.securityAssessment?.signals?.developerOptionsEnabled,
    voiceAlertsEnabled = voiceAlertsEnabled,
-   meetsDeviceIntegrity = integrityState.meetsDeviceIntegrity
+   meetsDeviceIntegrity = integrityState.integrityCheckPassed
   )
  }
  val advisorState by vm.protectionAdvisorState.collectAsStateWithLifecycle()

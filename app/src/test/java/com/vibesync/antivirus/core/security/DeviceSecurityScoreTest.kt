@@ -26,6 +26,40 @@ class DeviceSecurityScoreTest {
         assertEquals(0, DeviceSecurityScore.evaluate(signals, now).score)
     }
 
+    @Test fun passingLocalBaselineEarnsIntegrityPointsWithoutClaimingRemoteVerdict() {
+        val signals = DeviceSecuritySignals(
+            playProtectEnabled = true,
+            databaseUpdatedAt = now - 1,
+            nonSystemAccessibilityApps = 0,
+            meetsDeviceIntegrity = null,
+            localBaselineTrusted = true,
+            usbDebuggingEnabled = false,
+            safeMobileUnknownSourcesGrant = false,
+            backgroundRestricted = false
+        )
+        val result = DeviceSecurityScore.evaluate(signals, now)
+        assertEquals(100, result.score)
+        assertNull(signals.meetsDeviceIntegrity)
+        assertEquals(true, signals.integrityCheckPassed)
+        assertEquals(0, result.unknownChecks)
+    }
+
+    @Test fun failedLocalBaselineRetainsTheTwentyPointIntegrityDeduction() {
+        val signals = DeviceSecuritySignals(
+            playProtectEnabled = true,
+            databaseUpdatedAt = now - 1,
+            nonSystemAccessibilityApps = 0,
+            meetsDeviceIntegrity = null,
+            localBaselineTrusted = false,
+            usbDebuggingEnabled = false,
+            safeMobileUnknownSourcesGrant = false,
+            backgroundRestricted = false
+        )
+        val result = DeviceSecurityScore.evaluate(signals, now)
+        assertEquals(80, result.score)
+        assertEquals(false, signals.integrityCheckPassed)
+    }
+
     @Test fun unknownNeverCountsAsVerified() {
         val result = DeviceSecurityScore.evaluate(DeviceSecuritySignals(), now)
         assertEquals(70, result.score)

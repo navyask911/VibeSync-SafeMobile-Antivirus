@@ -6,6 +6,7 @@ import android.os.PowerManager
 import android.provider.Settings
 import android.content.pm.ApplicationInfo
 import android.view.accessibility.AccessibilityManager
+import com.vibesync.antivirus.BuildConfig
 
 /** Reads accessibility-service and system posture metadata without requesting special access. */
 object DeviceSecurityInspector {
@@ -42,7 +43,12 @@ object DeviceSecurityInspector {
             val power = context.getSystemService(PowerManager::class.java)
             power?.let { !it.isIgnoringBatteryOptimizations(context.packageName) }
         }.getOrNull()
-        val meetsDeviceIntegrity = SecurityVerifier.readStoredVerdict(context)
+        val endpoint = BuildConfig.PLAY_INTEGRITY_VERIFICATION_URL.trim()
+        val useLocalBaseline = LocalBaselineTrust.shouldUseLocalBaseline(
+            endpoint, LocalBaselineTrust.hasValidatedInternet(context)
+        )
+        val meetsDeviceIntegrity = if (useLocalBaseline) null else SecurityVerifier.readStoredVerdict(context)
+        val localBaselineTrusted = if (useLocalBaseline) LocalBaselineTrust.evaluate(context).trusted else null
         return DeviceSecuritySignals(
             playProtectEnabled = reportedPlayProtect,
             databaseUpdatedAt = databaseUpdatedAt,
@@ -51,7 +57,8 @@ object DeviceSecurityInspector {
             developerOptionsEnabled = developerOptions,
             safeMobileUnknownSourcesGrant = ownInstallerGrant,
             backgroundRestricted = backgroundRestricted,
-            meetsDeviceIntegrity = meetsDeviceIntegrity
+            meetsDeviceIntegrity = meetsDeviceIntegrity,
+            localBaselineTrusted = localBaselineTrusted
         )
     }
     private fun isNonSystem(flags: Int) = flags and (ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) == 0
