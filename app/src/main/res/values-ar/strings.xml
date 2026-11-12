@@ -238,12 +238,19 @@
     <string name="security_filter_sentinel">المراقبة</string>
     <string name="security_filter_vault">الخزنة</string>
     <string name="device_admin_title">مسؤول الجهاز</string>
-    <string name="device_admin_description">حماية اختيارية لقفل الشاشة وسياسات كلمة المرور. لا تمنع تثبيت ملفات APK ولا تجعل SafeMobile مالك الجهاز.</string>
+    <string name="device_admin_description">تضيف صلاحية مسؤول الجهاز الاختيارية تأكيدًا من Android قبل إلغاء تفعيل SafeMobile. لا تمنع إزالة التطبيق بعد إلغاء التفعيل أو تثبيت ملفات APK، ولا تجعل SafeMobile مالك الجهاز.</string>
     <string name="device_admin_enable">تفعيل مسؤول الجهاز</string>
     <string name="device_admin_disable">إيقاف مسؤول الجهاز</string>
     <string name="device_admin_active">مسؤول الجهاز مفعّل على هذا الجهاز.</string>
     <string name="device_admin_inactive">مسؤول الجهاز غير مفعّل.</string>
-    <string name="device_admin_explanation">تفعيل عناصر التحكم الاختيارية في قفل الشاشة وكلمة المرور. لا يمسح SafeMobile بيانات الجهاز ولا يمنع تثبيت APK.</string>
+    <string name="device_admin_explanation">فعّل تأكيد مسؤول الجهاز الاختياري في SafeMobile. لا يفرض التطبيق قواعد كلمات المرور ولا يمسح بيانات جهازك ولا يمنع تثبيت APK.</string>
+    <string name="device_admin_lock_now">اقفل الجهاز الآن</string>
+    <string name="device_admin_lock_confirm_title">هل تريد قفل هذا الجهاز الآن؟</string>
+    <string name="device_admin_lock_confirm_message">سيطلب SafeMobile من Android قفل الشاشة فورًا. يظل رمز PIN أو النمط أو كلمة المرور الحالية لشاشة Android تحت سيطرتك؛ لا يعيّن SafeMobile هذه البيانات ولا يغيّرها.</string>
+    <string name="device_admin_lock_confirm">قفل الجهاز</string>
+    <string name="device_admin_lock_cancel">إلغاء</string>
+    <string name="device_admin_lock_failed">تعذّر طلب قفل الجهاز. تأكد من أن مسؤول الجهاز في SafeMobile لا يزال مفعّلًا.</string>
+
     <string name="installer_accessibility_service_title">تنبيه المثبّت من SafeMobile</string>
     <string name="installer_accessibility_service_description">تنبيه اختياري عند ظهور مثبت حزم Android. لا يحظر المثبّت ولا ينقر أو يتداخل معه. فعّله فقط إذا رغبت في هذا التذكير.</string>
     <string name="installer_unscanned_warning">تحذير: لم يتم فحص ملف APK هذا. ارجع إلى SafeMobile لفحصه أولاً.</string>
@@ -682,7 +689,7 @@
     <string name="ui_status_at_risk">معرّض للخطر</string>
     <string name="scan_detected_by">تم الاكتشاف بواسطة: %1$s</string>
     <string name="scan_detected_by_confidence">تم الاكتشاف بواسطة: %1$s (%2$d%%)</string>
-    <string name="security_score_100_voice" formatted="false">Congratulations! Your device is fully protected with a 100% security score. We will run daily scans to keep you safe. Remember: only install apps from the Play Store and keep Play Protect on. Thank you for using Safe Mobile Antivirus. Share and install our app with your family and friends to build a safer digital world.</string>
+    <string name="security_score_100_voice" formatted="false">Your security configuration is fully optimized. We will continue to monitor your device to keep you safe. Thank you for using Safe Mobile Antivirus.</string>
         <string name="self_update_title">Check for Updates (Self-Update)</string>
         <string name="self_update_description">Device Administrator mode does not normally block Google Play updates. This button checks for a Play in-app update and asks Android to install it.</string>
         <string name="self_update_started">The update flow was opened. Follow the system prompts to finish updating.</string>

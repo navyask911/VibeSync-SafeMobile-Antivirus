@@ -160,8 +160,6 @@ import kotlinx.coroutines.launch
  val adMobManager = remember(safeMobileApp) { safeMobileApp.adMobManager }
  val adMobState by adMobManager.state.collectAsStateWithLifecycle()
  var fullScreenAlertsGranted by remember(context) { mutableStateOf(FullScreenAlertAccess.isGranted(context)) }
- var overlayAccessGranted by remember(context) { mutableStateOf(Settings.canDrawOverlays(context)) }
- var overlaySettingsRequestPending by rememberSaveable { mutableStateOf(false) }
  val powerManager = remember(context) { context.getSystemService(Context.POWER_SERVICE) as? PowerManager }
  var batteryUnrestricted by remember(context) {
   mutableStateOf(powerManager?.isIgnoringBatteryOptimizations(context.packageName) == true)
@@ -181,7 +179,6 @@ import kotlinx.coroutines.launch
  val deviceAdminManager = remember(context) { DeviceAdminManager(context) }
  var adminActive by remember(context) { mutableStateOf(deviceAdminManager.isAdminActive()) }
  var showAdminPermissionDisclosure by rememberSaveable { mutableStateOf(false) }
- var showOverlayPermissionDisclosure by rememberSaveable { mutableStateOf(false) }
  var showV17ProtectionSetupSheet by rememberSaveable { mutableStateOf(false) }
  var selectedDestination by rememberSaveable { mutableStateOf("home") }
  var isSubscriptionExpanded by rememberSaveable { mutableStateOf(false) }
@@ -318,11 +315,11 @@ import kotlinx.coroutines.launch
  var voiceAlertsEnabled by remember(context) { mutableStateOf(securityPrefs.getBoolean(SafeMobileApp.KEY_VOICE_ALERTS_ENABLED, false)) }
  var installSentinelEnabled by remember(context) { mutableStateOf(InstallSentinelService.enabled(context)) }
  var globalDefenseEnabled by remember(context) { mutableStateOf(GlobalThreatIntelligenceConsent.isEnabled(context)) }
- LaunchedEffect(batteryUnrestricted, adminActive, overlayAccessGranted, storageAccessGranted) {
+ LaunchedEffect(batteryUnrestricted, adminActive, storageAccessGranted) {
   securityPrefs.edit()
    .putBoolean("guard_battery_optimization", batteryUnrestricted)
    .putBoolean("guard_device_admin", adminActive)
-   .putBoolean("guard_overlay_alert", overlayAccessGranted)
+   
    .putBoolean("guard_saf_directory_watch", storageAccessGranted)
    .apply()
  }
@@ -592,33 +589,11 @@ import kotlinx.coroutines.launch
     .onFailure { Toast.makeText(context, R.string.device_admin_explanation, Toast.LENGTH_LONG).show() }
   }
  }
- val openOverlaySettings: (Boolean) -> Unit = { forceOpen ->
-  overlayAccessGranted = Settings.canDrawOverlays(context)
-  if ((!overlayAccessGranted || forceOpen) && !overlaySettingsRequestPending) {
-   overlaySettingsRequestPending = true
-   val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION).apply {
-    data = Uri.parse("package:${context.packageName}")
-    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+ val requestDeviceLock: () -> Unit = {
+  runCatching { deviceAdminManager.lockDeviceNow() }
+   .onFailure {
+    Toast.makeText(context, R.string.device_admin_lock_failed, Toast.LENGTH_LONG).show()
    }
-   try { context.startActivity(intent) }
-   catch (_: ActivityNotFoundException) {
-    try { context.startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-     Uri.parse("package:${context.packageName}")).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }
-    catch (_: Exception) { overlaySettingsRequestPending = false; Toast.makeText(context, R.string.full_screen_settings_unavailable, Toast.LENGTH_LONG).show() }
-   } catch (_: Exception) {
-    overlaySettingsRequestPending = false
-    Toast.makeText(context, R.string.full_screen_settings_unavailable, Toast.LENGTH_LONG).show()
-   }
-  }
- }
- val toggleOverlayGuard: (Boolean) -> Unit = { enabled ->
-  overlayAccessGranted = Settings.canDrawOverlays(context)
-  if (enabled && !overlayAccessGranted) {
-   // The system special-access page is opened only after the user opts in here.
-   showOverlayPermissionDisclosure = true
-  } else {
-   openOverlaySettings(true)
-  }
  }
  val toggleSafGuard: (Boolean) -> Unit = { enabled ->
   if (enabled) {
@@ -683,11 +658,9 @@ import kotlinx.coroutines.launch
     if (privacyAccepted) vm.refreshTrustOverrides()
     fullScreenAlertsGranted = FullScreenAlertAccess.isGranted(context)
     adminActive = deviceAdminManager.isAdminActive()
-    overlaySettingsRequestPending = false
     voiceAlertsEnabled = securityPrefs.getBoolean(SafeMobileApp.KEY_VOICE_ALERTS_ENABLED, false)
     installSentinelEnabled = InstallSentinelService.enabled(context)
     batteryUnrestricted = powerManager?.isIgnoringBatteryOptimizations(context.packageName) == true
-    overlayAccessGranted = Settings.canDrawOverlays(context)
     folderUris = StorageAccessPreferences.accessibleTreeUris(context)
     storageAccessGranted = folderUris.isNotEmpty()
     vm.refreshSecurityScore()
@@ -742,7 +715,6 @@ import kotlinx.coroutines.launch
    while (true) {
     fullScreenAlertsGranted = FullScreenAlertAccess.isGranted(context)
     batteryUnrestricted = powerManager?.isIgnoringBatteryOptimizations(context.packageName) == true
-    overlayAccessGranted = Settings.canDrawOverlays(context)
     folderUris = StorageAccessPreferences.accessibleTreeUris(context)
     storageAccessGranted = folderUris.isNotEmpty()
     monitoringRunning = isStorageSentinelRunning(context) && storageAccessGranted
@@ -860,7 +832,7 @@ import kotlinx.coroutines.launch
           isDark = appTheme != com.vibesync.antivirus.ui.theme.AppTheme.LIGHT,
           securityScore = advisorState.score,
           isPro = adMobState.isPro,
-          activeGuards = listOf(batteryUnrestricted, adminActive, overlayAccessGranted, storageAccessGranted).count { it },
+          activeGuards = listOf(batteryUnrestricted, adminActive, storageAccessGranted).count { it },
           liveSentinelActive = installSentinelRunning,
           posturePassed = postureState.report?.highRiskAppCount?.let { (8 - it.coerceIn(0, 8)).coerceIn(0, 8) },
           quarantinedFilesCount = state.quarantinedFiles.size,
@@ -971,11 +943,10 @@ import kotlinx.coroutines.launch
           },
           batteryActive = batteryUnrestricted,
           adminActive = adminActive,
-          overlayActive = overlayAccessGranted,
           safActive = storageAccessGranted,
           onBatteryToggle = toggleBatteryGuard,
           onAdminToggle = toggleAdminGuard,
-          onOverlayToggle = toggleOverlayGuard,
+          onLockDeviceNow = requestDeviceLock,
           onSafToggle = toggleSafGuard,
           onImportYara = { pendingYaraPicker.launch(arrayOf("text/plain", "application/octet-stream", "application/x-yara")) },
           onThreatFeedSync = { requestPrivacyAcknowledgement { vm.requestThreatFeedSync() } },
@@ -1363,12 +1334,10 @@ import kotlinx.coroutines.launch
      isDark = appTheme != com.vibesync.antivirus.ui.theme.AppTheme.LIGHT,
      batteryActive = batteryUnrestricted,
      adminActive = adminActive,
-     overlayActive = overlayAccessGranted,
      safActive = storageAccessGranted,
      onDismiss = { showV17ProtectionSetupSheet = false },
      onBatteryToggle = toggleBatteryGuard,
      onAdminToggle = toggleAdminGuard,
-     onOverlayToggle = toggleOverlayGuard,
      onSafToggle = toggleSafGuard
     )
    }
@@ -1478,16 +1447,6 @@ import kotlinx.coroutines.launch
    onDismiss = { showAdminPermissionDisclosure = false }
   )
  }
- if (showOverlayPermissionDisclosure) {
-  OverlayPermissionDisclosureDialog(
-   onConfirm = {
-    showOverlayPermissionDisclosure = false
-    openOverlaySettings(true)
-   },
-   onDismiss = { showOverlayPermissionDisclosure = false }
-  )
- }
-
  if (showDefinitionImportWarning) AlertDialog(
   properties = DialogProperties(dismissOnClickOutside = true, dismissOnBackPress = true),
   onDismissRequest = { showDefinitionImportWarning = false },

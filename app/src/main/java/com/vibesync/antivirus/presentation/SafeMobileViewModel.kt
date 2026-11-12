@@ -83,16 +83,16 @@ class SafeMobileViewModel(
         }
     }
 
-    /** Speak the completed score only after the user has enabled Voice Alerts. */
+    /** Speak the measured, optimized security configuration only after Voice Alerts are enabled. */
     fun onProtectionScoreChanged(score: Int, voiceAlertsEnabled: Boolean) {
         val previous = lastAnnouncedProtectionScore
         lastAnnouncedProtectionScore = score
         if (score == 100 && previous != 100 && voiceAlertsEnabled) {
-            speakPerfectProtectionScore()
+            speakOptimizedSecurityConfiguration()
         }
     }
 
-    private fun speakPerfectProtectionScore() {
+    private fun speakOptimizedSecurityConfiguration() {
         val context = appContext ?: return
         scoreTts?.shutdown()
         scoreTts = TextToSpeech(context) { status ->

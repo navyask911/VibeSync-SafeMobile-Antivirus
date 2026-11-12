@@ -46,11 +46,9 @@ class SettingsWiringTest {
             onGlobalIntelChanged = {},
             batteryActive = false,
             adminActive = false,
-            overlayActive = false,
             safActive = false,
             onBatteryToggle = {},
             onAdminToggle = {},
-            onOverlayToggle = {},
             onSafToggle = {},
             onImportYara = {},
             onThreatFeedSync = {},
@@ -95,11 +93,9 @@ class SettingsWiringTest {
                 onGlobalIntelChanged = {},
                 batteryActive = false,
                 adminActive = false,
-                overlayActive = false,
                 safActive = false,
                 onBatteryToggle = {},
                 onAdminToggle = {},
-                onOverlayToggle = {},
                 onSafToggle = {},
                 onImportYara = {},
                 onThreatFeedSync = {},
@@ -137,11 +133,9 @@ class SettingsWiringTest {
                 onGlobalIntelChanged = {},
                 batteryActive = false,
                 adminActive = false,
-                overlayActive = false,
                 safActive = false,
                 onBatteryToggle = {},
                 onAdminToggle = {},
-                onOverlayToggle = {},
                 onSafToggle = {},
                 onImportYara = {},
                 onThreatFeedSync = {},
@@ -181,11 +175,9 @@ class SettingsWiringTest {
                 onGlobalIntelChanged = { optedIn = it },
                 batteryActive = false,
                 adminActive = false,
-                overlayActive = false,
                 safActive = false,
                 onBatteryToggle = {},
                 onAdminToggle = {},
-                onOverlayToggle = {},
                 onSafToggle = {},
                 onImportYara = {},
                 onThreatFeedSync = {},
@@ -220,11 +212,9 @@ class SettingsWiringTest {
                 onGlobalIntelChanged = {},
                 batteryActive = false,
                 adminActive = false,
-                overlayActive = false,
                 safActive = false,
                 onBatteryToggle = {},
                 onAdminToggle = {},
-                onOverlayToggle = {},
                 onSafToggle = {},
                 onImportYara = { yaraImports++ },
                 onThreatFeedSync = { threatSyncs++ },
@@ -259,22 +249,48 @@ class SettingsWiringTest {
         assertEquals(true, confirmed)
     }
 
+
     @Test
-    fun overlayDisclosureRequiresExplicitConfirmation() {
-        var confirmed = false
+    fun forceLockActionRequiresExplicitConfirmation() {
+        var lockRequests = 0
         render {
-            OverlayPermissionDisclosureDialog(
-                onConfirm = { confirmed = true },
-                onDismiss = {}
+            V17ConsoleSettingsScreen(
+                isDark = false,
+                appTheme = AppTheme.LIGHT,
+                onAppThemeChanged = {},
+                sirenEnabled = false,
+                onSirenChanged = {},
+                voiceEnabled = false,
+                onVoiceChanged = {},
+                installSentinelEnabled = false,
+                installSentinelRunning = false,
+                onInstallSentinelChanged = {},
+                globalIntelEnabled = false,
+                onGlobalIntelChanged = {},
+                batteryActive = false,
+                adminActive = true,
+                safActive = false,
+                onBatteryToggle = {},
+                onAdminToggle = {},
+                onSafToggle = {},
+                onLockDeviceNow = { lockRequests++ },
+                onImportYara = {},
+                onThreatFeedSync = {},
+                onBenchmarks = {},
+                onOpenPro = {}
             )
         }
 
-        composeRule.onNodeWithText(context.getString(com.vibesync.antivirus.R.string.security_guard_overlay_consent_body))
+        composeRule.onNodeWithTag("console.device-admin.lock")
+            .performScrollTo()
             .assertIsDisplayed()
-        assertEquals(false, confirmed)
-        composeRule.onNodeWithText(context.getString(com.vibesync.antivirus.R.string.security_guard_consent_continue))
             .performClick()
-        assertEquals(true, confirmed)
+        assertEquals(0, lockRequests)
+
+        composeRule.onNodeWithText(context.getString(com.vibesync.antivirus.R.string.device_admin_lock_confirm))
+            .assertIsDisplayed()
+            .performClick()
+        assertEquals(1, lockRequests)
     }
 
 }

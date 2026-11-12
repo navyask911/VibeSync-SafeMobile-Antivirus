@@ -238,12 +238,19 @@
 <string name="security_filter_sentinel">감시</string>
     <string name="security_filter_vault">격리 보관함</string>
     <string name="device_admin_title">기기 관리자</string>
-    <string name="device_admin_description">선택적 보호 기능은 화면 잠금과 비밀번호 정책을 지원합니다. APK 설치를 차단하거나 SafeMobile을 기기 소유자로 만들 수는 없습니다.</string>
+    <string name="device_admin_description">선택적 기기 관리자 권한은 SafeMobile을 비활성화하기 전에 Android 확인 절차를 추가합니다. 비활성화 후 앱 제거 또는 APK 설치를 막지 않으며 SafeMobile을 기기 소유자로 만들지 않습니다.</string>
     <string name="device_admin_enable">기기 관리자 사용</string>
     <string name="device_admin_disable">기기 관리자 사용 중지</string>
     <string name="device_admin_active">이 기기에서 기기 관리자가 활성화되어 있습니다.</string>
     <string name="device_admin_inactive">기기 관리자가 비활성화되어 있습니다.</string>
-    <string name="device_admin_explanation">SafeMobile의 선택적 화면 잠금 및 비밀번호 제어를 사용합니다. SafeMobile은 기기 데이터를 지우거나 APK 설치를 차단하지 않습니다.</string>
+    <string name="device_admin_explanation">SafeMobile의 선택적 기기 관리자 확인을 사용합니다. SafeMobile은 비밀번호 정책을 적용하거나 기기 데이터를 지우거나 APK 설치를 차단하지 않습니다.</string>
+    <string name="device_admin_lock_now">지금 기기 잠그기</string>
+    <string name="device_admin_lock_confirm_title">지금 이 기기를 잠글까요?</string>
+    <string name="device_admin_lock_confirm_message">SafeMobile은 Android에 즉시 화면을 잠그도록 요청합니다. 기존 Android 화면 잠금 PIN, 패턴 또는 비밀번호는 계속 사용자가 관리하며 SafeMobile은 이를 설정하거나 변경하지 않습니다.</string>
+    <string name="device_admin_lock_confirm">기기 잠그기</string>
+    <string name="device_admin_lock_cancel">취소</string>
+    <string name="device_admin_lock_failed">기기 잠금을 요청할 수 없습니다. SafeMobile 기기 관리자가 아직 활성화되어 있는지 확인하세요.</string>
+
     <string name="installer_accessibility_service_title">SafeMobile 설치 프로그램 알림</string>
     <string name="installer_accessibility_service_description">Android 패키지 설치 프로그램이 표시될 때의 선택적 알림입니다. 설치 프로그램을 차단하거나 클릭하거나 방해하지 않습니다. 알림이 필요할 때만 사용 설정하세요.</string>
     <string name="installer_unscanned_warning">경고: 이 APK는 아직 검사되지 않았습니다. 먼저 검사하려면 SafeMobile로 돌아가세요.</string>
@@ -683,7 +690,7 @@
     <string name="ui_status_at_risk">위험</string>
     <string name="scan_detected_by">탐지 출처: %1$s</string>
     <string name="scan_detected_by_confidence">탐지 출처: %1$s (%2$d%%)</string>
-    <string name="security_score_100_voice" formatted="false">Congratulations! Your device is fully protected with a 100% security score. We will run daily scans to keep you safe. Remember: only install apps from the Play Store and keep Play Protect on. Thank you for using Safe Mobile Antivirus. Share and install our app with your family and friends to build a safer digital world.</string>
+    <string name="security_score_100_voice" formatted="false">Your security configuration is fully optimized. We will continue to monitor your device to keep you safe. Thank you for using Safe Mobile Antivirus.</string>
     <string name="self_update_title">Check for Updates (Self-Update)</string>
     <string name="self_update_description">Device Administrator mode does not normally block Google Play updates. This button checks for a Play in-app update and asks Android to install it.</string>
     <string name="self_update_started">The update flow was opened. Follow the system prompts to finish updating.</string>

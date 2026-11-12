@@ -25,11 +25,11 @@ class NetworkPermissionBoundaryTest {
         assertFalse(Manifest.permission.MANAGE_EXTERNAL_STORAGE in requested)
         assertFalse(Manifest.permission.READ_EXTERNAL_STORAGE in requested)
     }
-    @Test fun overlaySpecialAccessAndDeviceAdminReceiverAreDeclared() {
+    @Test fun overlaySpecialAccessIsAbsentAndDeviceAdminReceiverIsDeclared() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val packageInfo = context.packageManager.getPackageInfo(context.packageName, PackageManager.GET_PERMISSIONS)
         val requested = packageInfo.requestedPermissions.orEmpty().toSet()
-        assertTrue(Manifest.permission.SYSTEM_ALERT_WINDOW in requested)
+        assertFalse(Manifest.permission.SYSTEM_ALERT_WINDOW in requested)
 
         val receiver = context.packageManager.getReceiverInfo(
             ComponentName(context, AdminReceiver::class.java),

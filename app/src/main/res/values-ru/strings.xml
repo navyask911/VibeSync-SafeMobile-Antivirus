@@ -238,12 +238,19 @@
     <string name="security_filter_sentinel">Наблюдение</string>
     <string name="security_filter_vault">Карантин</string>
     <string name="device_admin_title">Администратор устройства</string>
-    <string name="device_admin_description">Дополнительная защита поддерживает блокировку экрана и правила паролей. Она не может блокировать установку APK и не делает SafeMobile владельцем устройства.</string>
+    <string name="device_admin_description">Необязательное разрешение администратора устройства добавляет подтверждение Android перед отключением SafeMobile. Оно не предотвращает удаление приложения после отключения или установку APK и не делает SafeMobile владельцем устройства.</string>
     <string name="device_admin_enable">Включить администратора устройства</string>
     <string name="device_admin_disable">Отключить администратора устройства</string>
     <string name="device_admin_active">Администратор устройства включён.</string>
     <string name="device_admin_inactive">Администратор устройства выключен.</string>
-    <string name="device_admin_explanation">Включает дополнительные настройки блокировки экрана и пароля. SafeMobile не удаляет данные устройства и не блокирует установку APK.</string>
+    <string name="device_admin_explanation">Включите необязательное подтверждение администратора устройства SafeMobile. SafeMobile не применяет правила паролей, не стирает данные устройства и не блокирует установку APK.</string>
+    <string name="device_admin_lock_now">Заблокировать устройство сейчас</string>
+    <string name="device_admin_lock_confirm_title">Заблокировать это устройство сейчас?</string>
+    <string name="device_admin_lock_confirm_message">SafeMobile попросит Android немедленно заблокировать экран. Существующий PIN-код, графический ключ или пароль блокировки Android остаётся под вашим контролем; SafeMobile не задаёт и не изменяет его.</string>
+    <string name="device_admin_lock_confirm">Заблокировать устройство</string>
+    <string name="device_admin_lock_cancel">Отмена</string>
+    <string name="device_admin_lock_failed">Не удалось запросить блокировку устройства. Убедитесь, что администратор устройства SafeMobile всё ещё включён.</string>
+
     <string name="installer_accessibility_service_title">Предупреждение установщика SafeMobile</string>
     <string name="installer_accessibility_service_description">Необязательное предупреждение при появлении установщика пакетов Android. Оно не блокирует установщик, не нажимает кнопки и не мешает ему. Включайте только при необходимости.</string>
     <string name="installer_unscanned_warning">Внимание: этот APK ещё не проверен. Вернитесь в SafeMobile, чтобы сначала выполнить проверку.</string>
@@ -682,7 +689,7 @@
     <string name="ui_status_at_risk">Под угрозой</string>
     <string name="scan_detected_by">Обнаружено с помощью: %1$s</string>
     <string name="scan_detected_by_confidence">Обнаружено с помощью: %1$s (%2$d%%)</string>
-    <string name="security_score_100_voice" formatted="false">Congratulations! Your device is fully protected with a 100% security score. We will run daily scans to keep you safe. Remember: only install apps from the Play Store and keep Play Protect on. Thank you for using Safe Mobile Antivirus. Share and install our app with your family and friends to build a safer digital world.</string>
+    <string name="security_score_100_voice" formatted="false">Your security configuration is fully optimized. We will continue to monitor your device to keep you safe. Thank you for using Safe Mobile Antivirus.</string>
     <string name="self_update_title">Check for Updates (Self-Update)</string>
     <string name="self_update_description">Device Administrator mode does not normally block Google Play updates. This button checks for a Play in-app update and asks Android to install it.</string>
     <string name="self_update_started">The update flow was opened. Follow the system prompts to finish updating.</string>

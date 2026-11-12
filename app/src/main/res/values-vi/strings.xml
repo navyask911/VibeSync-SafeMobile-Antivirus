@@ -238,12 +238,19 @@
 <string name="security_filter_sentinel">Giám sát</string>
     <string name="security_filter_vault">Kho cách ly</string>
     <string name="device_admin_title">Quản trị viên thiết bị</string>
-    <string name="device_admin_description">Bảo vệ tùy chọn hỗ trợ khóa màn hình và chính sách mật khẩu. Tính năng này không thể chặn cài đặt APK và không biến SafeMobile thành chủ sở hữu thiết bị.</string>
+    <string name="device_admin_description">Quyền Quản trị viên thiết bị tùy chọn thêm bước xác nhận của Android trước khi tắt SafeMobile. Quyền này không ngăn gỡ cài đặt sau khi tắt hoặc cài APK, và không biến SafeMobile thành chủ sở hữu thiết bị.</string>
     <string name="device_admin_enable">Bật quản trị viên thiết bị</string>
     <string name="device_admin_disable">Tắt quản trị viên thiết bị</string>
     <string name="device_admin_active">Quản trị viên thiết bị đang hoạt động.</string>
     <string name="device_admin_inactive">Quản trị viên thiết bị không hoạt động.</string>
-    <string name="device_admin_explanation">Bật các điều khiển khóa màn hình và mật khẩu tùy chọn của SafeMobile. SafeMobile không xóa dữ liệu thiết bị hoặc chặn cài đặt APK.</string>
+    <string name="device_admin_explanation">Bật xác nhận Quản trị viên thiết bị tùy chọn của SafeMobile. SafeMobile không áp dụng chính sách mật khẩu, xóa dữ liệu thiết bị hoặc chặn cài đặt APK.</string>
+    <string name="device_admin_lock_now">Khóa thiết bị ngay</string>
+    <string name="device_admin_lock_confirm_title">Khóa thiết bị này ngay bây giờ?</string>
+    <string name="device_admin_lock_confirm_message">SafeMobile sẽ yêu cầu Android khóa màn hình ngay lập tức. PIN, hình vẽ hoặc mật khẩu khóa màn hình Android hiện tại vẫn do bạn kiểm soát; SafeMobile không đặt hoặc thay đổi thông tin đó.</string>
+    <string name="device_admin_lock_confirm">Khóa thiết bị</string>
+    <string name="device_admin_lock_cancel">Hủy</string>
+    <string name="device_admin_lock_failed">Không thể yêu cầu khóa thiết bị. Hãy kiểm tra xem Quản trị viên thiết bị của SafeMobile còn được bật hay không.</string>
+
     <string name="installer_accessibility_service_title">Cảnh báo trình cài đặt SafeMobile</string>
     <string name="installer_accessibility_service_description">Cảnh báo tùy chọn khi trình cài gói Android xuất hiện. Cảnh báo không chặn, nhấp hoặc can thiệp vào trình cài đặt. Chỉ bật nếu bạn muốn lời nhắc này.</string>
     <string name="installer_unscanned_warning">Cảnh báo: APK này chưa được quét. Hãy quay lại SafeMobile để quét trước.</string>
@@ -683,7 +690,7 @@
     <string name="ui_status_at_risk">Có rủi ro</string>
     <string name="scan_detected_by">Được phát hiện bởi: %1$s</string>
     <string name="scan_detected_by_confidence">Được phát hiện bởi: %1$s (%2$d%%)</string>
-    <string name="security_score_100_voice" formatted="false">Congratulations! Your device is fully protected with a 100% security score. We will run daily scans to keep you safe. Remember: only install apps from the Play Store and keep Play Protect on. Thank you for using Safe Mobile Antivirus. Share and install our app with your family and friends to build a safer digital world.</string>
+    <string name="security_score_100_voice" formatted="false">Your security configuration is fully optimized. We will continue to monitor your device to keep you safe. Thank you for using Safe Mobile Antivirus.</string>
     <string name="self_update_title">Check for Updates (Self-Update)</string>
     <string name="self_update_description">Device Administrator mode does not normally block Google Play updates. This button checks for a Play in-app update and asks Android to install it.</string>
     <string name="self_update_started">The update flow was opened. Follow the system prompts to finish updating.</string>

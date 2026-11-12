@@ -238,12 +238,19 @@
     <string name="security_filter_sentinel">监控</string>
     <string name="security_filter_vault">隔离库</string>
     <string name="device_admin_title">设备管理员</string>
-    <string name="device_admin_description">可选保护功能支持屏幕锁定和密码策略，但无法阻止 APK 安装，也不会让 SafeMobile 成为设备所有者。</string>
+    <string name="device_admin_description">可选的设备管理权限会在停用 SafeMobile 前添加 Android 确认步骤。停用后它无法阻止卸载应用或安装 APK，也不会让 SafeMobile 成为设备所有者。</string>
     <string name="device_admin_enable">启用设备管理员</string>
     <string name="device_admin_disable">停用设备管理员</string>
     <string name="device_admin_active">此设备上的设备管理员已启用。</string>
     <string name="device_admin_inactive">设备管理员未启用。</string>
-    <string name="device_admin_explanation">启用 SafeMobile 的可选屏幕锁定和密码控制。SafeMobile 不会擦除设备数据，也不会阻止 APK 安装。</string>
+    <string name="device_admin_explanation">启用 SafeMobile 的可选设备管理确认。SafeMobile 不会强制执行密码策略、擦除设备数据或阻止 APK 安装。</string>
+    <string name="device_admin_lock_now">立即锁定设备</string>
+    <string name="device_admin_lock_confirm_title">现在锁定此设备吗？</string>
+    <string name="device_admin_lock_confirm_message">SafeMobile 将请求 Android 立即锁定屏幕。您现有的 Android 屏幕锁定 PIN、图案或密码仍由您控制；SafeMobile 不会设置或更改它。</string>
+    <string name="device_admin_lock_confirm">锁定设备</string>
+    <string name="device_admin_lock_cancel">取消</string>
+    <string name="device_admin_lock_failed">无法请求锁定设备。请检查 SafeMobile 设备管理权限是否仍处于启用状态。</string>
+
     <string name="installer_accessibility_service_title">SafeMobile 安装程序提示</string>
     <string name="installer_accessibility_service_description">Android 软件包安装程序出现时显示的可选提示。它不会阻止、点击或干扰安装程序。仅在需要提醒时启用。</string>
     <string name="installer_unscanned_warning">警告：此 APK 尚未扫描。请返回 SafeMobile，先进行扫描。</string>
@@ -682,7 +689,7 @@
     <string name="ui_status_at_risk">有风险</string>
     <string name="scan_detected_by">检测来源：%1$s</string>
     <string name="scan_detected_by_confidence">检测来源：%1$s（%2$d%%）</string>
-    <string name="security_score_100_voice" formatted="false">Congratulations! Your device is fully protected with a 100% security score. We will run daily scans to keep you safe. Remember: only install apps from the Play Store and keep Play Protect on. Thank you for using Safe Mobile Antivirus. Share and install our app with your family and friends to build a safer digital world.</string>
+    <string name="security_score_100_voice" formatted="false">Your security configuration is fully optimized. We will continue to monitor your device to keep you safe. Thank you for using Safe Mobile Antivirus.</string>
     <string name="self_update_title">Check for Updates (Self-Update)</string>
     <string name="self_update_description">Device Administrator mode does not normally block Google Play updates. This button checks for a Play in-app update and asks Android to install it.</string>
     <string name="self_update_started">The update flow was opened. Follow the system prompts to finish updating.</string>

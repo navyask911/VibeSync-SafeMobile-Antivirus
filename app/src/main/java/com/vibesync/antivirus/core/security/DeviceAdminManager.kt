@@ -39,6 +39,12 @@ class DeviceAdminManager(context: Context) {
         appContext.startActivity(activationIntent())
     }
 
+    /** Requests an immediate screen lock after the user explicitly selects Lock Device Now. */
+    fun lockDeviceNow() {
+        check(isAdminActive()) { "Enable SafeMobile Device Administrator before requesting a device lock." }
+        policyManager.lockNow()
+    }
+
     /** Invokes Android's confirmation flow; actual state is refreshed when the app resumes. */
     fun removeAdmin() {
         if (isAdminActive()) policyManager.removeActiveAdmin(component)

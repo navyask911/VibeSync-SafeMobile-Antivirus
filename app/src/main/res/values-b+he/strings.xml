@@ -238,12 +238,19 @@
     <string name="security_filter_sentinel">Sentinel</string>
     <string name="security_filter_vault">כספת</string>
     <string name="device_admin_title">מנהל מכשיר</string>
-    <string name="device_admin_description">הגנה אופציונלית יכולה לתמוך בנעילת מסך ובמדיניות סיסמאות. היא אינה יכולה לחסום התקנת APK ואינה הופכת את SafeMobile לבעלים של המכשיר.</string>
+    <string name="device_admin_description">הרשאת מנהל המכשיר האופציונלית מוסיפה אישור של Android לפני השבתת SafeMobile. היא אינה מונעת הסרה לאחר ההשבתה, חסימת התקנת APK או הופכת את SafeMobile לבעל המכשיר.</string>
     <string name="device_admin_enable">הפעלת מנהל מכשיר</string>
     <string name="device_admin_disable">השבתת מנהל מכשיר</string>
     <string name="device_admin_active">מנהל המכשיר פעיל במכשיר זה.</string>
     <string name="device_admin_inactive">מנהל המכשיר אינו פעיל.</string>
-    <string name="device_admin_explanation">הפעלת בקרות הנעילה והסיסמה האופציונליות של SafeMobile. האפליקציה אינה מוחקת נתונים ואינה חוסמת התקנות APK.</string>
+    <string name="device_admin_explanation">הפעלת אישור מנהל המכשיר האופציונלי של SafeMobile. האפליקציה אינה אוכפת כללי סיסמאות, מוחקת נתונים או חוסמת התקנת APK.</string>
+    <string name="device_admin_lock_now">נעל את המכשיר עכשיו</string>
+    <string name="device_admin_lock_confirm_title">לנעול את המכשיר עכשיו?</string>
+    <string name="device_admin_lock_confirm_message">SafeMobile יבקש מ-Android לנעול את המסך מיד. קוד ה-PIN, התבנית או הסיסמה הקיימים של Android נשארים בשליטתך; SafeMobile אינו מגדיר או משנה אותם.</string>
+    <string name="device_admin_lock_confirm">נעל את המכשיר</string>
+    <string name="device_admin_lock_cancel">ביטול</string>
+    <string name="device_admin_lock_failed">לא ניתן לבקש נעילת מכשיר. ודא שמנהל המכשיר של SafeMobile עדיין מופעל.</string>
+
     <string name="installer_accessibility_service_title">התראת מתקין של SafeMobile</string>
     <string name="installer_accessibility_service_description">התראה אופציונלית בעת הופעת מתקין החבילות של Android. היא אינה חוסמת את המתקין, לוחצת או מפריעה לו. הפעילו רק אם התזכורת רצויה.</string>
     <string name="installer_unscanned_warning">אזהרה: קובץ APK זה עדיין לא נסרק. חזרו ל‑SafeMobile כדי לסרוק תחילה.</string>
@@ -683,7 +690,7 @@
     <string name="ui_status_at_risk">בסיכון</string>
     <string name="scan_detected_by">זוהה על ידי: %1$s</string>
     <string name="scan_detected_by_confidence">זוהה על ידי: %1$s (%2$d%%)</string>
-    <string name="security_score_100_voice" formatted="false">Congratulations! Your device is fully protected with a 100% security score. We will run daily scans to keep you safe. Remember: only install apps from the Play Store and keep Play Protect on. Thank you for using Safe Mobile Antivirus. Share and install our app with your family and friends to build a safer digital world.</string>
+    <string name="security_score_100_voice" formatted="false">Your security configuration is fully optimized. We will continue to monitor your device to keep you safe. Thank you for using Safe Mobile Antivirus.</string>
         <string name="self_update_title">Check for Updates (Self-Update)</string>
         <string name="self_update_description">Device Administrator mode does not normally block Google Play updates. This button checks for a Play in-app update and asks Android to install it.</string>
         <string name="self_update_started">The update flow was opened. Follow the system prompts to finish updating.</string>

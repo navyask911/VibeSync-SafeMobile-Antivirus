@@ -261,18 +261,19 @@ internal fun V17ShieldScreen(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     V17IconBadge(Icons.Default.Shield, c.green, size = 36.dp, iconSize = 21.dp, contentDescription = null)
-                    V17Pill(if (isPro) "PROTECTED · PRO" else "PROTECTION STATUS", c.green, isDark)
+                    V17Pill(if (isPro) "PRO · AD-FREE" else "PROTECTION STATUS", c.green, isDark)
                 }
-                V17Title("DeviceSecurityScore")
-                V17Body("Real-time heuristic, YARA and signature shields active.")
-                V17Body("$activeGuards/4 protection guards active")
+                V17Title(stringResource(R.string.ui_score_title))
+                V17Body(stringResource(R.string.v116_score_meaning))
+                V17Body(stringResource(R.string.ui_score_explanation))
+                V17Body("$activeGuards/3 protection guards active")
             }
         }
         TrustPillarCarousel(
             onOpenPrivacy = onOpenPrivacy,
             onOpenSettings = onOpenSettings
         )
-        if (activeGuards < 4) Surface(
+        if (activeGuards < 3) Surface(
             Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp)).clickable(onClick = onOpenSetup),
             color = c.amber.copy(alpha = .14f), shape = RoundedCornerShape(16.dp),
             border = BorderStroke(1.dp, c.amber.copy(alpha = .4f))
@@ -281,7 +282,7 @@ internal fun V17ShieldScreen(
                 horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 V17IconBadge(Icons.Outlined.Tune, c.amber, size = 40.dp, iconSize = 22.dp, contentDescription = null)
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
-                    V17Title("Protection Setup: $activeGuards/4 Active", color = c.text)
+                    V17Title("Protection Setup: $activeGuards/3 Active", color = c.text)
                     V17Body("Tap to grant the remaining recommended protection permissions.", color = c.muted)
                 }
                 V17Pill("FINISH", c.amber, isDark)
@@ -404,9 +405,9 @@ private fun V17Tile(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun V17ProtectionSetupSheet(
-    isDark: Boolean, batteryActive: Boolean, adminActive: Boolean, overlayActive: Boolean, safActive: Boolean,
+    isDark: Boolean, batteryActive: Boolean, adminActive: Boolean, safActive: Boolean,
     onDismiss: () -> Unit, onBatteryToggle: (Boolean) -> Unit, onAdminToggle: (Boolean) -> Unit,
-    onOverlayToggle: (Boolean) -> Unit, onSafToggle: (Boolean) -> Unit
+    onSafToggle: (Boolean) -> Unit
 ) {
     val c = v17Colors(isDark)
     ModalBottomSheet(onDismissRequest = onDismiss, containerColor = c.surface,
@@ -418,13 +419,11 @@ internal fun V17ProtectionSetupSheet(
             listOf(
                 Triple(stringResource(R.string.setup_checklist_battery), batteryActive, onBatteryToggle),
                 Triple(stringResource(R.string.setup_checklist_admin), adminActive, onAdminToggle),
-                Triple(stringResource(R.string.setup_checklist_overlay), overlayActive, onOverlayToggle),
                 Triple(stringResource(R.string.setup_checklist_saf), safActive, onSafToggle)
             ).forEachIndexed { index, (title, checked, onToggle) ->
                 val icon = when (index) {
                     0 -> Icons.Outlined.BatteryChargingFull
                     1 -> Icons.Outlined.Security
-                    2 -> Icons.Outlined.NotificationsActive
                     else -> Icons.Outlined.Storage
                 }
                 Surface(
@@ -723,9 +722,10 @@ internal fun V17ConsoleSettingsScreen(
     onVoiceChanged: (Boolean) -> Unit, installSentinelEnabled: Boolean, installSentinelRunning: Boolean,
     onInstallSentinelChanged: (Boolean) -> Unit, globalIntelEnabled: Boolean,
     onGlobalIntelChanged: (Boolean) -> Unit,
-    batteryActive: Boolean, adminActive: Boolean, overlayActive: Boolean, safActive: Boolean,
+    batteryActive: Boolean, adminActive: Boolean, safActive: Boolean,
     onBatteryToggle: (Boolean) -> Unit, onAdminToggle: (Boolean) -> Unit,
-    onOverlayToggle: (Boolean) -> Unit, onSafToggle: (Boolean) -> Unit,
+    onSafToggle: (Boolean) -> Unit,
+    onLockDeviceNow: () -> Unit = {},
     onImportYara: () -> Unit,
     onThreatFeedSync: () -> Unit, onBenchmarks: () -> Unit, onOpenPro: () -> Unit,
     onOpenPrivacy: () -> Unit = {}, onOpenAbout: () -> Unit = {},
@@ -736,6 +736,7 @@ internal fun V17ConsoleSettingsScreen(
     var advanced by rememberSaveable { mutableStateOf(false) }
     var languageOpen by rememberSaveable { mutableStateOf(false) }
     var selectedLanguage by rememberSaveable { mutableStateOf(LocalePreferences.overrideTag(context)) }
+    var showLockDeviceConfirmation by rememberSaveable { mutableStateOf(false) }
     Column(Modifier.fillMaxSize().background(c.device).verticalScroll(rememberScrollState()).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)) {
         V17Card(isDark) {
@@ -822,14 +823,38 @@ internal fun V17ConsoleSettingsScreen(
             V17Switch(stringResource(R.string.security_guard_admin),
                 stringResource(R.string.security_guard_admin_desc), adminActive, "console.guard.admin",
                 Icons.Outlined.Security, isDark, onAdminToggle)
-            HorizontalDivider(color = c.border)
-            V17Switch(stringResource(R.string.security_guard_overlay),
-                stringResource(R.string.security_guard_overlay_desc), overlayActive, "console.guard.overlay",
-                Icons.Outlined.NotificationsActive, isDark, onOverlayToggle)
+            if (adminActive) {
+                OutlinedButton(
+                    onClick = { showLockDeviceConfirmation = true },
+                    modifier = Modifier.fillMaxWidth().testTag("console.device-admin.lock")
+                ) {
+                    Icon(Icons.Outlined.Lock, contentDescription = null, modifier = Modifier.size(17.dp))
+                    Spacer(Modifier.width(6.dp))
+                    Text(stringResource(R.string.device_admin_lock_now))
+                }
+            }
             HorizontalDivider(color = c.border)
             V17Switch(stringResource(R.string.security_guard_saf),
                 stringResource(R.string.security_guard_saf_desc), safActive, "console.guard.saf",
                 Icons.Outlined.Storage, isDark, onSafToggle)
+        }
+        if (showLockDeviceConfirmation) {
+            AlertDialog(
+                onDismissRequest = { showLockDeviceConfirmation = false },
+                title = { Text(stringResource(R.string.device_admin_lock_confirm_title)) },
+                text = { Text(stringResource(R.string.device_admin_lock_confirm_message)) },
+                confirmButton = {
+                    TextButton(onClick = {
+                        showLockDeviceConfirmation = false
+                        onLockDeviceNow()
+                    }) { Text(stringResource(R.string.device_admin_lock_confirm)) }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showLockDeviceConfirmation = false }) {
+                        Text(stringResource(R.string.device_admin_lock_cancel))
+                    }
+                }
+            )
         }
         V17Card(isDark) {
             Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp))

@@ -238,12 +238,19 @@
 <string name="security_filter_sentinel">প্রহরী</string>
     <string name="security_filter_vault">ভল্ট</string>
     <string name="device_admin_title">ডিভাইস প্রশাসক</string>
-    <string name="device_admin_description">ঐচ্ছিক সুরক্ষা স্ক্রিন লক ও পাসওয়ার্ড নীতি সমর্থন করে। এটি APK ইনস্টলেশন আটকাতে পারে না এবং SafeMobile-কে ডিভাইসের মালিক করে না।</string>
+    <string name="device_admin_description">ঐচ্ছিক ডিভাইস অ্যাডমিনিস্ট্রেটর অনুমতি SafeMobile নিষ্ক্রিয় করার আগে Android-এর একটি নিশ্চিতকরণ যোগ করে। নিষ্ক্রিয় করার পর অ্যাপ আনইনস্টল বা APK ইনস্টল আটকায় না এবং SafeMobile-কে ডিভাইসের মালিক করে না।</string>
     <string name="device_admin_enable">ডিভাইস প্রশাসক চালু করুন</string>
     <string name="device_admin_disable">ডিভাইস প্রশাসক বন্ধ করুন</string>
     <string name="device_admin_active">এই ডিভাইসে ডিভাইস প্রশাসক সক্রিয়।</string>
     <string name="device_admin_inactive">ডিভাইস প্রশাসক নিষ্ক্রিয়।</string>
-    <string name="device_admin_explanation">SafeMobile-এর ঐচ্ছিক স্ক্রিন-লক ও পাসওয়ার্ড নিয়ন্ত্রণ চালু করুন। SafeMobile ডিভাইসের ডেটা মুছে না এবং APK ইনস্টলেশন আটকায় না।</string>
+    <string name="device_admin_explanation">SafeMobile-এর ঐচ্ছিক ডিভাইস অ্যাডমিনিস্ট্রেটর নিশ্চিতকরণ চালু করুন। SafeMobile পাসওয়ার্ড নীতি প্রয়োগ করে না, ডিভাইসের ডেটা মুছে না বা APK ইনস্টল আটকায় না।</string>
+    <string name="device_admin_lock_now">এখনই ডিভাইস লক করুন</string>
+    <string name="device_admin_lock_confirm_title">এখনই এই ডিভাইসটি লক করবেন?</string>
+    <string name="device_admin_lock_confirm_message">SafeMobile Android-কে অবিলম্বে স্ক্রিন লক করতে বলবে। আপনার বিদ্যমান Android স্ক্রিন-লক PIN, প্যাটার্ন বা পাসওয়ার্ড আপনার নিয়ন্ত্রণেই থাকবে; SafeMobile এটি সেট বা পরিবর্তন করে না।</string>
+    <string name="device_admin_lock_confirm">ডিভাইস লক করুন</string>
+    <string name="device_admin_lock_cancel">বাতিল</string>
+    <string name="device_admin_lock_failed">ডিভাইস লকের অনুরোধ করা যায়নি। SafeMobile ডিভাইস অ্যাডমিনিস্ট্রেটর এখনও সক্রিয় আছে কি না দেখুন.</string>
+
     <string name="installer_accessibility_service_title">SafeMobile ইনস্টলার সতর্কতা</string>
     <string name="installer_accessibility_service_description">Android প্যাকেজ ইনস্টলার দেখা গেলে ঐচ্ছিক সতর্কবার্তা। এটি ইনস্টলারকে আটকায় না, ক্লিক করে না বা বাধা দেয় না। শুধু এই স্মরণিকা চাইলে চালু করুন।</string>
     <string name="installer_unscanned_warning">সতর্কতা: এই APK স্ক্যান করা হয়নি। আগে স্ক্যান করতে SafeMobile-এ ফিরে যান।</string>
@@ -683,7 +690,7 @@
     <string name="ui_status_at_risk">ঝুঁকিতে</string>
     <string name="scan_detected_by">শনাক্ত করেছে: %1$s</string>
     <string name="scan_detected_by_confidence">শনাক্ত করেছে: %1$s (%2$d%%)</string>
-    <string name="security_score_100_voice" formatted="false">Congratulations! Your device is fully protected with a 100% security score. We will run daily scans to keep you safe. Remember: only install apps from the Play Store and keep Play Protect on. Thank you for using Safe Mobile Antivirus. Share and install our app with your family and friends to build a safer digital world.</string>
+    <string name="security_score_100_voice" formatted="false">Your security configuration is fully optimized. We will continue to monitor your device to keep you safe. Thank you for using Safe Mobile Antivirus.</string>
         <string name="self_update_title">Check for Updates (Self-Update)</string>
         <string name="self_update_description">Device Administrator mode does not normally block Google Play updates. This button checks for a Play in-app update and asks Android to install it.</string>
         <string name="self_update_started">The update flow was opened. Follow the system prompts to finish updating.</string>

@@ -52,7 +52,7 @@ class DashboardWiringTest {
             )
         }
 
-        composeRule.onNodeWithText("Protection Setup: 2/4 Active")
+        composeRule.onNodeWithText("Protection Setup: 2/3 Active")
             .performScrollTo().performClick()
         assertTrue(opened)
     }
@@ -65,7 +65,7 @@ class DashboardWiringTest {
                 isDark = true,
                 securityScore = 85,
                 isPro = true,
-                activeGuards = 4,
+                activeGuards = 3,
                 liveSentinelActive = true,
                 posturePassed = 7,
                 quarantinedFilesCount = 1,

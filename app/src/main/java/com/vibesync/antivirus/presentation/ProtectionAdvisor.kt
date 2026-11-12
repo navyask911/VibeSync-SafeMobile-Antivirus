@@ -103,14 +103,12 @@ object ProtectionAdvisorEngine {
                 else -> item.copy(group = AdvisorIssueGroup.MINOR)
             }
         }
-        val pendingDeductions = mapped.filter {
-            it.group == AdvisorIssueGroup.CRITICAL || it.group == AdvisorIssueGroup.MINOR
-        }.sumOf { it.points }
-        // Scores are direct deductions from 100. Snoozed/completed actions do not
-        // lower the score; the aggregate is clamped because pending penalties can
-        // exceed the available range when several high-risk actions coexist.
+        // Snoozing changes presentation/reminder state only. Every unresolved
+        // issue continues to contribute its deduction until its condition is fixed.
+        val unresolved = mapped.filter { it.group != AdvisorIssueGroup.COMPLETED }
+        val pendingDeductions = unresolved.sumOf { it.points }
         val score = (SCORE_MAX - pendingDeductions).coerceIn(0, SCORE_MAX)
-        val pending = mapped.count { it.group == AdvisorIssueGroup.CRITICAL || it.group == AdvisorIssueGroup.MINOR }
+        val pending = unresolved.size
         return ProtectionAdvisorState(score, pending, mapped)
     }
 

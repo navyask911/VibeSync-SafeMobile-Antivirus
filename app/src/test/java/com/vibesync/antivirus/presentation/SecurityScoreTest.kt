@@ -101,13 +101,25 @@ class SecurityScoreTest {
     }
 
     @Test
-    fun snoozedActionDoesNotReduceCurrentScore() {
+    fun snoozedUnresolvedActionKeepsItsDeduction() {
         val state = ProtectionAdvisorEngine.evaluate(
             healthyInputs(folderSentinelConfigured = false),
             setOf("folder_sentinel")
         )
 
-        assertEquals(100, state.score)
-        assertEquals(0, state.pendingCount)
+        assertEquals(90, state.score)
+        assertEquals(1, state.pendingCount)
+    }
+    @Test
+    fun snoozedInstallSentinelKeepsItsTwelvePointDeduction() {
+        val state = ProtectionAdvisorEngine.evaluate(
+            healthyInputs(installSentinelEnabled = false),
+            setOf("install_sentinel")
+        )
+
+        assertEquals(88, state.score)
+        assertEquals(1, state.pendingCount)
+        assertEquals(AdvisorIssueGroup.SNOOZED, state.issues.single { it.id == "install_sentinel" }.group)
     }
 }
+

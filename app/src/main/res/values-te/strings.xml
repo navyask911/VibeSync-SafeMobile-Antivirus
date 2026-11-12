@@ -238,12 +238,19 @@
 <string name="security_filter_sentinel">కాపరి</string>
     <string name="security_filter_vault">క్వారంటైన్ వాల్ట్</string>
     <string name="device_admin_title">పరికర నిర్వాహకుడు</string>
-    <string name="device_admin_description">ఐచ్ఛిక రక్షణ స్క్రీన్ లాక్ మరియు పాస్‌వర్డ్ విధానాలకు సహాయపడుతుంది. ఇది APK ఇన్‌స్టాలేషన్‌ను ఆపలేడు; SafeMobile‌ను పరికర యజమానిగా చేయలేడు.</string>
+    <string name="device_admin_description">ఐచ్ఛిక పరికర నిర్వాహక అనుమతి SafeMobile నిలిపివేయడానికి ముందు Android నిర్ధారణను జోడిస్తుంది. నిలిపివేసిన తర్వాత యాప్ తొలగింపు లేదా APK ఇన్‌స్టాలేషన్‌ను ఆపదు; SafeMobile‌ను పరికర యజమానిగా చేయదు.</string>
     <string name="device_admin_enable">పరికర నిర్వాహకుడిని ప్రారంభించు</string>
     <string name="device_admin_disable">పరికర నిర్వాహకుడిని నిలిపివేయి</string>
     <string name="device_admin_active">ఈ పరికరంలో పరికర నిర్వాహకుడు చురుకుగా ఉన్నాడు.</string>
     <string name="device_admin_inactive">పరికర నిర్వాహకుడు నిష్క్రియంగా ఉన్నాడు.</string>
-    <string name="device_admin_explanation">SafeMobile యొక్క ఐచ్ఛిక స్క్రీన్-లాక్ మరియు పాస్‌వర్డ్ నియంత్రణలను ప్రారంభించండి. SafeMobile పరికర డేటాను చెరపదు లేదా APK ఇన్‌స్టాలేషన్‌ను ఆపదు.</string>
+    <string name="device_admin_explanation">SafeMobile యొక్క ఐచ్ఛిక పరికర నిర్వాహక నిర్ధారణను ప్రారంభించండి. SafeMobile పాస్‌వర్డ్ విధానాలను అమలు చేయదు, పరికర డేటాను చెరపదు లేదా APK ఇన్‌స్టాలేషన్‌ను నిరోధించదు.</string>
+    <string name="device_admin_lock_now">పరికరాన్ని ఇప్పుడే లాక్ చేయండి</string>
+    <string name="device_admin_lock_confirm_title">ఈ పరికరాన్ని ఇప్పుడే లాక్ చేయాలా?</string>
+    <string name="device_admin_lock_confirm_message">స్క్రీన్‌ను వెంటనే లాక్ చేయమని SafeMobile Android‌ను అడుగుతుంది. మీ ప్రస్తుత Android స్క్రీన్-లాక్ PIN, నమూనా లేదా పాస్‌వర్డ్ మీ నియంత్రణలోనే ఉంటుంది; SafeMobile దాన్ని సెట్ చేయదు లేదా మార్చదు.</string>
+    <string name="device_admin_lock_confirm">పరికరాన్ని లాక్ చేయండి</string>
+    <string name="device_admin_lock_cancel">రద్దు చేయండి</string>
+    <string name="device_admin_lock_failed">పరికర లాక్‌ను అభ్యర్థించలేకపోయాం. SafeMobile పరికర నిర్వాహకుడు ఇంకా ప్రారంభించబడి ఉన్నాడో చూడండి.</string>
+
     <string name="installer_accessibility_service_title">SafeMobile ఇన్‌స్టాలర్ హెచ్చరిక</string>
     <string name="installer_accessibility_service_description">Android ప్యాకేజీ ఇన్‌స్టాలర్ కనిపించినప్పుడు ఐచ్ఛిక హెచ్చరిక. ఇది ఇన్‌స్టాలర్‌ను ఆపదు, క్లిక్ చేయదు లేదా జోక్యం చేసుకోదు. ఈ గుర్తుచూపు కావాలంటే మాత్రమే ప్రారంభించండి.</string>
     <string name="installer_unscanned_warning">హెచ్చరిక: ఈ APK ఇంకా స్కాన్ చేయబడలేదు. ముందుగా స్కాన్ చేయడానికి SafeMobile‌కు తిరిగి వెళ్లండి.</string>
@@ -683,7 +690,7 @@
     <string name="ui_status_at_risk">ప్రమాదంలో ఉంది</string>
     <string name="scan_detected_by">గుర్తించినది: %1$s</string>
     <string name="scan_detected_by_confidence">గుర్తించినది: %1$s (%2$d%%)</string>
-    <string name="security_score_100_voice" formatted="false">Congratulations! Your device is fully protected with a 100% security score. We will run daily scans to keep you safe. Remember: only install apps from the Play Store and keep Play Protect on. Thank you for using Safe Mobile Antivirus. Share and install our app with your family and friends to build a safer digital world.</string>
+    <string name="security_score_100_voice" formatted="false">Your security configuration is fully optimized. We will continue to monitor your device to keep you safe. Thank you for using Safe Mobile Antivirus.</string>
     <string name="self_update_title">Check for Updates (Self-Update)</string>
     <string name="self_update_description">Device Administrator mode does not normally block Google Play updates. This button checks for a Play in-app update and asks Android to install it.</string>
     <string name="self_update_started">The update flow was opened. Follow the system prompts to finish updating.</string>
