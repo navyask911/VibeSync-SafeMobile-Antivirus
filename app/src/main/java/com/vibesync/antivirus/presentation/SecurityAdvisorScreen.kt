@@ -11,12 +11,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ExpandLess
 import androidx.compose.material.icons.outlined.ExpandMore
+import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -24,6 +26,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -120,13 +124,50 @@ private fun AdvisorAccordion(
                             modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
                             verticalArrangement = Arrangement.spacedBy(7.dp)
                         ) {
-                            Text(stringResource(item.titleResource), style = MaterialTheme.typography.titleMedium)
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                Text(
+                                    stringResource(item.titleResource),
+                                    modifier = Modifier.weight(1f),
+                                    style = MaterialTheme.typography.titleMedium
+                                )
+                                if (item.group == AdvisorIssueGroup.COMPLETED) {
+                                    Surface(
+                                        color = Color(0xFFE5F5EA),
+                                        contentColor = Color(0xFF16753A),
+                                        shape = RoundedCornerShape(50)
+                                    ) {
+                                        Row(
+                                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                                        ) {
+                                            Icon(Icons.Outlined.CheckCircle, contentDescription = null)
+                                            Text(stringResource(R.string.v140_completed), style = MaterialTheme.typography.labelMedium,
+                                                fontWeight = FontWeight.Bold)
+                                        }
+                                    }
+                                } else {
+                                    Surface(
+                                        color = MaterialTheme.colorScheme.errorContainer,
+                                        contentColor = MaterialTheme.colorScheme.onErrorContainer,
+                                        shape = RoundedCornerShape(50)
+                                    ) {
+                                        Text(
+                                            "−${item.points} pts",
+                                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),
+                                            style = MaterialTheme.typography.labelMedium,
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                    }
+                                }
+                            }
                             Text(stringResource(R.string.v140_security_risk_explained), style = MaterialTheme.typography.titleSmall)
                             Text(stringResource(item.detailResource), style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant)
-                            Text(stringResource(R.string.v140_posture_score_impact), style = MaterialTheme.typography.titleSmall)
-                            Text(stringResource(R.string.ui_score_checks, item.points, 100),
-                                style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
                             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                 Button(onClick = { onOpenIssue(item) }) {
                                     Text(stringResource(

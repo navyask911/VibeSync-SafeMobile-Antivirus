@@ -23,6 +23,7 @@ class SecurityScoreTest {
         playProtectEnabled = true,
         usbDebuggingEnabled = false,
         voiceAlertsEnabled = true,
+        deviceAdminActive = true,
         apiLevel = 34,
         nowMillis = now
     )
@@ -49,15 +50,15 @@ class SecurityScoreTest {
     }
 
     @Test
-    fun disablingInstallSentinelDeductsExactlyFifteenPoints() {
+    fun disablingInstallSentinelDeductsExactlyTwelvePoints() {
         val state = ProtectionAdvisorEngine.evaluate(
             healthyInputs(installSentinelEnabled = false),
             emptySet()
         )
         val issue = state.issues.single { it.id == "install_sentinel" }
 
-        assertEquals(15, issue.points)
-        assertEquals(85, state.score)
+        assertEquals(12, issue.points)
+        assertEquals(88, state.score)
         assertEquals(1, state.pendingCount)
     }
 
@@ -71,7 +72,7 @@ class SecurityScoreTest {
             emptySet()
         )
 
-        assertEquals(75, state.score)
+        assertEquals(78, state.score)
         assertEquals(2, state.pendingCount)
     }
 

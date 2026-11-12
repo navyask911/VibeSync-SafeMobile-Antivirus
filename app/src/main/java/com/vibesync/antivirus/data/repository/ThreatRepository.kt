@@ -61,6 +61,36 @@ class ThreatRepository(
   return trustedAppStore.trust(name)
  }
 
+ suspend fun trustPackageName(packageName: String): Boolean = withContext(Dispatchers.IO) {
+  if (!isEligibleInstalledApp(packageName)) return@withContext false
+  trustedAppStore.trust(packageName)
+ }
+
+ suspend fun trustFileHash(sha256: String): Boolean = withContext(Dispatchers.IO) {
+  val normalized = sha256.trim().lowercase()
+  if (!normalized.matches(Regex("^[0-9a-f]{64}$"))) return@withContext false
+  val prefs = context.getSharedPreferences(TRUSTED_FILE_HASHES_PREFS, Context.MODE_PRIVATE)
+  val current = prefs.getStringSet(TRUSTED_FILE_HASHES_KEY, emptySet()).orEmpty()
+  prefs.edit().putStringSet(TRUSTED_FILE_HASHES_KEY, current + normalized).commit()
+ }
+
+ private fun applyTrustedFileHash(result: ScanResult): ScanResult {
+  val hash = result.sha256?.lowercase()?.takeIf { it.matches(Regex("^[0-9a-f]{64}$")) } ?: return result
+  val trusted = context.getSharedPreferences(TRUSTED_FILE_HASHES_PREFS, Context.MODE_PRIVATE)
+   .getStringSet(TRUSTED_FILE_HASHES_KEY, emptySet()).orEmpty().contains(hash)
+  if (!trusted) return result
+  return result.copy(
+   verdict = ScanVerdict.NO_MATCH,
+   riskScore = 0f,
+   reasons = listOf("User-approved local file hash."),
+   reasonTexts = emptyList(),
+   riskReport = null,
+   mlProbability = null,
+   threatEventId = null,
+   trustedByUser = true
+  )
+ }
+
  suspend fun removeTrust(packageName: String) {
   trustedAppStore.untrust(packageName)
  }
@@ -234,7 +264,7 @@ class ThreatRepository(
  }
  suspend fun scanFile(file: File): ScanResult = withContext(Dispatchers.IO) {
   definitionLoader.importBundledIfEmpty()
-  scanner.scanFile(file)
+  applyTrustedFileHash(scanner.scanFile(file))
  }
  suspend fun scanUri(uri: Uri): ScanResult = withContext(Dispatchers.IO) {
   val quarantineManager = LocalQuarantineManager(context)
@@ -258,7 +288,7 @@ class ThreatRepository(
     context.getString(R.string.file_stream_failed),
     scanSessionId
    )
-  scanner.scanStream(label, stream, scanSessionId).copy(sourceUri = uri.toString())
+  applyTrustedFileHash(scanner.scanStream(label, stream, scanSessionId).copy(sourceUri = uri.toString()))
  }
 
  private suspend fun recordUnscannedUri(label: String, reason: String, scanSessionId: String): ScanResult {
@@ -358,5 +388,10 @@ suspend fun importOfflineDefinitions(uri: Uri): UiText = withContext(Dispatchers
   database.threatDao().countSignatures()
  }
  suspend fun deepScan(): List<ScanResult> = scanFull()
+
+ companion object {
+  private const val TRUSTED_FILE_HASHES_PREFS = "safemobile_trusted_file_hashes"
+  private const val TRUSTED_FILE_HASHES_KEY = "sha256"
+ }
 }
 

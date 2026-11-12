@@ -6,6 +6,8 @@ on:
       - "main"
       - "feat/phase4-final-v1.5.1"
       - "fix/donation-smart-onboarding-v1.6.6"
+      - "feat/v1.8.0-brand-privacy-notifications"
+      - "release/v1.8.0-final"
       - "feat/v1.6.7-ui-ux-deep-scan"
 
 permissions:

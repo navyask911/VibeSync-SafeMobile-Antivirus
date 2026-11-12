@@ -8,3 +8,16 @@
 -keepattributes *Annotation*,Signature,InnerClasses,EnclosingMethod
 # R8 renames classes and members; it does not encrypt string literals or raw assets.
 # Keep YARA definitions and the 215-feature schema auditable and byte-for-byte pinned.
+
+# --- TFLite & ML ---
+-keep class org.tensorflow.lite.** { *; }
+-keep class com.vibesync.antivirus.engine.ml.** { *; }
+# --- Room Database ---
+-keep class * extends androidx.room.RoomDatabase
+-keep @androidx.room.Entity class *
+# --- YARA & Native ---
+-keep class com.vibesync.antivirus.core.engine.yara.** { *; }
+-keep class com.vibesync.antivirus.core.engine.BundledYaraEngine { *; }
+-keepclasseswithmembernames class * { native <methods>; }
+# --- Device Admin (CRITICAL for OEMs) ---
+-keep class com.vibesync.antivirus.core.security.** { *; }

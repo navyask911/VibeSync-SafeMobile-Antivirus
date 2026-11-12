@@ -22,6 +22,7 @@ class ProtectionAdvisorEngineTest {
                 playProtectEnabled = true,
                 usbDebuggingEnabled = false,
                 voiceAlertsEnabled = true,
+                deviceAdminActive = true,
                 apiLevel = 36,
                 nowMillis = now
             ),
@@ -32,6 +33,35 @@ class ProtectionAdvisorEngineTest {
         assertTrue(state.snoozed.any { it.id == "folder_sentinel" })
         assertTrue(state.snoozed.any { it.id == "notifications_on" })
         assertEquals(2, state.pendingCount)
-        assertEquals(79, state.score)
+        assertEquals(83, state.score)
     }
+    @Test
+    fun maximumUnresolvedDeductionsNormalizeToExactlyOneHundred() {
+        val state = ProtectionAdvisorEngine.evaluate(
+            inputs = ProtectionAdvisorInputs(
+                totalScans = 0,
+                threatsDetected = 0,
+                folderSentinelConfigured = false,
+                highRiskPostureCount = null,
+                notificationsEnabled = false,
+                batteryUnrestricted = false,
+                fullScreenIntentEnabled = false,
+                databaseUpdatedAt = null,
+                installSentinelEnabled = false,
+                playProtectEnabled = false,
+                usbDebuggingEnabled = true,
+                voiceAlertsEnabled = false,
+                deviceAdminActive = false,
+                apiLevel = 36
+            ),
+            snoozedIds = emptySet()
+        )
+
+        assertEquals(100, state.issues.sumOf { it.points })
+        assertEquals(0, state.score)
+        assertEquals(100, state.issues.filter {
+            it.group == AdvisorIssueGroup.CRITICAL || it.group == AdvisorIssueGroup.MINOR
+        }.sumOf { it.points })
+    }
+
 }

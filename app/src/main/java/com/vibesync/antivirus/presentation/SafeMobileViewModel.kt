@@ -2,6 +2,8 @@ package com.vibesync.antivirus.presentation
 
 import android.net.Uri
 import android.content.Context
+import android.speech.tts.TextToSpeech
+import java.util.Locale
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -54,10 +56,67 @@ data class SafeMobileUiState(
     val suspiciousCount get() = results.count { it.verdict == ScanVerdict.SUSPICIOUS }
 }
 
-class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel() {
+class SafeMobileViewModel(
+    private val repository: ThreatRepository,
+    appContext: Context? = null
+) : ViewModel() {
+    private val appContext = appContext?.applicationContext
+    private var scoreTts: TextToSpeech? = null
+    private var lastAnnouncedProtectionScore: Int? = null
     private val mutableState = MutableStateFlow(SafeMobileUiState())
     val state = mutableState.asStateFlow()
+    private val mutableProtectionAdvisorState = MutableStateFlow(
+        ProtectionAdvisorState(score = 0, pendingCount = 0, issues = emptyList())
+    )
+    val protectionAdvisorState = mutableProtectionAdvisorState.asStateFlow()
+    private var protectionAdvisorJob: Job? = null
     private var scanJob: Job? = null
+
+    /** Run the CPU-only score rubric off the main thread; UI state is published on Main. */
+    fun updateProtectionAdvisor(inputs: ProtectionAdvisorInputs, snoozedIds: Set<String>) {
+        protectionAdvisorJob?.cancel()
+        protectionAdvisorJob = viewModelScope.launch {
+            val calculated = withContext(Dispatchers.Default) {
+                ProtectionAdvisorEngine.evaluate(inputs, snoozedIds)
+            }
+            mutableProtectionAdvisorState.value = calculated
+        }
+    }
+
+    /** Speak the completed score only after the user has enabled Voice Alerts. */
+    fun onProtectionScoreChanged(score: Int, voiceAlertsEnabled: Boolean) {
+        val previous = lastAnnouncedProtectionScore
+        lastAnnouncedProtectionScore = score
+        if (score == 100 && previous != 100 && voiceAlertsEnabled) {
+            speakPerfectProtectionScore()
+        }
+    }
+
+    private fun speakPerfectProtectionScore() {
+        val context = appContext ?: return
+        scoreTts?.shutdown()
+        scoreTts = TextToSpeech(context) { status ->
+            if (status == TextToSpeech.SUCCESS) {
+                val engine = scoreTts ?: return@TextToSpeech
+                val currentLocale = context.resources.configuration.locales[0]
+                val result = engine.setLanguage(currentLocale)
+                if (result == TextToSpeech.LANG_MISSING_DATA ||
+                    result == TextToSpeech.LANG_NOT_SUPPORTED
+                ) {
+                    engine.setLanguage(Locale.US)
+                }
+                val textToSpeak = context.getString(R.string.security_score_100_voice)
+                engine.speak(textToSpeak, TextToSpeech.QUEUE_FLUSH, null, "100_score_alert")
+            }
+        }
+    }
+
+    override fun onCleared() {
+        scoreTts?.stop()
+        scoreTts?.shutdown()
+        scoreTts = null
+        super.onCleared()
+    }
 
     init {
         repository.loadScanSummary()?.let { summary ->
@@ -202,6 +261,52 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
         }
     }
 
+    fun trustPackageName(packageName: String) {
+        viewModelScope.launch {
+            try {
+                if (repository.trustPackageName(packageName)) {
+                    mutableState.update { old -> old.copy(messageResource = R.string.trusted_app_saved,
+                        results = old.results.map { item ->
+                            if (item.packageName == packageName) item.copy(
+                                verdict = ScanVerdict.NO_MATCH, riskScore = 0f, reasons = emptyList(),
+                                reasonTexts = emptyList(), riskReport = null, mlProbability = null,
+                                threatEventId = null, trustedByUser = true
+                            ) else item
+                        })
+                    }
+                } else mutableState.update { it.copy(messageResource = R.string.trusted_app_denied) }
+            } catch (cancelled: CancellationException) { throw cancelled }
+            catch (_: Exception) { mutableState.update { it.copy(messageResource = R.string.trusted_app_denied) } }
+        }
+    }
+
+    fun trustFileHash(result: ScanResult) = trustFileHash(result.sha256)
+
+    fun trustFileHash(sha256Value: String?) {
+        val sha256 = sha256Value?.lowercase()?.takeIf { it.matches(Regex("^[0-9a-f]{64}$")) }
+        if (sha256 == null) {
+            mutableState.update { it.copy(messageResource = R.string.trusted_file_invalid) }
+            return
+        }
+        viewModelScope.launch {
+            try {
+                if (repository.trustFileHash(sha256)) {
+                    mutableState.update { old -> old.copy(
+                        messageResource = R.string.trusted_file_saved,
+                        results = old.results.map { item ->
+                            if (item.sha256?.equals(sha256, ignoreCase = true) == true) item.copy(
+                                verdict = ScanVerdict.NO_MATCH, riskScore = 0f, reasons = emptyList(),
+                                reasonTexts = emptyList(), riskReport = null, mlProbability = null,
+                                threatEventId = null, trustedByUser = true
+                            ) else item
+                        }
+                    ) }
+                } else mutableState.update { it.copy(messageResource = R.string.trusted_file_invalid) }
+            } catch (cancelled: CancellationException) { throw cancelled }
+            catch (_: Exception) { mutableState.update { it.copy(messageResource = R.string.trusted_file_invalid) } }
+        }
+    }
+
     fun removeTrust(packageName: String) {
         viewModelScope.launch {
             try {
@@ -247,6 +352,10 @@ class SafeMobileViewModel(private val repository: ThreatRepository) : ViewModel(
 
     fun scanSelected(uri: Uri) = runScan(manualScan = true) { _ ->
         listOf(repository.scanUri(uri))
+    }
+
+    fun scanInstalledPackageNow(packageName: String) = runScan(manualScan = true) { _ ->
+        listOfNotNull(repository.scanInstalledPackage(packageName))
     }
 
     /** Use the existing hash/YARA/ML scan pipeline for a user-selected folder tree. */
@@ -444,11 +553,14 @@ fun importOfflineDefinitions(uri: Uri) {
         }
     }
 
-    class Factory(private val repository: ThreatRepository) : ViewModelProvider.Factory {
+    class Factory(
+        private val repository: ThreatRepository,
+        private val appContext: Context? = null
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             require(modelClass.isAssignableFrom(SafeMobileViewModel::class.java))
-            return SafeMobileViewModel(repository) as T
+            return SafeMobileViewModel(repository, appContext) as T
         }
     }
 }

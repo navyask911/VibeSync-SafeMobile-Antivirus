@@ -15,24 +15,28 @@ import com.vibesync.antivirus.R
 class DeviceAdminManager(context: Context) {
     private val appContext = context.applicationContext
     private val policyManager = appContext.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
-    private val component = ComponentName(appContext, AdminReceiver::class.java)
+    private val component = ComponentName(appContext.packageName, AdminReceiver::class.java.name)
 
     fun isAdminActive(): Boolean = runCatching {
         policyManager.isAdminActive(component)
     }.getOrDefault(false)
 
     /**
-     * Launches Android's explicit user-consent screen. Using the application context plus
-     * NEW_TASK avoids a silent no-op when Compose supplies a ContextWrapper instead of Activity.
+     * Build the explicit system activation request so the exact action and component can
+     * be verified independently of launching Android's protected confirmation activity.
      */
+    fun activationIntent(): Intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).apply {
+        // The Intent receiver exposes its own nullable "component" property. Qualify the
+        // manager's receiver explicitly so the system extra never receives Intent.component.
+        putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, this@DeviceAdminManager.component)
+        putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, appContext.getString(R.string.security_guard_admin_consent_body))
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    }
+
+    /** Launches Android's user-consent screen; activation state is refreshed on resume. */
     fun requestAdminPermission() {
         if (isAdminActive()) return
-        val intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).apply {
-            putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, component)
-            putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, appContext.getString(R.string.security_guard_admin_consent_body))
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        }
-        appContext.startActivity(intent)
+        appContext.startActivity(activationIntent())
     }
 
     /** Invokes Android's confirmation flow; actual state is refreshed when the app resumes. */

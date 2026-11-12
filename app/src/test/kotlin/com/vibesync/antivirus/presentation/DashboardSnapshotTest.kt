@@ -36,6 +36,12 @@ enum class SnapshotPalette(val appTheme: AppTheme) {
     OLED(AppTheme.OLED)
 }
 
+enum class TrustPillarPage(val page: Int) {
+    PRIVACY(0),
+    LOCAL_INSPECTION(1),
+    USER_CONTROL(2)
+}
+
 enum class SetupWizardPage(val page: Int) {
     NOTIFICATIONS(0),
     GLOBAL_DEFENSE(1),
@@ -47,6 +53,40 @@ enum class SetupWizardPage(val page: Int) {
 class DashboardSnapshotTest {
     @get:Rule
     val paparazzi = Paparazzi(deviceConfig = DeviceConfig.PIXEL_6.copy(screenHeight = 2200))
+
+    @Test
+    fun trustPillarCarousel(
+        @TestParameter palette: SnapshotPalette,
+        @TestParameter page: TrustPillarPage
+    ) {
+        paparazzi.snapshot {
+            themed(palette) {
+                TrustPillarCarousel(
+                    onOpenPrivacy = {},
+                    onOpenSettings = {},
+                    initialPage = page.page
+                )
+            }
+        }
+    }
+
+    @Test
+    fun privacyDashboard(@TestParameter palette: SnapshotPalette) {
+        paparazzi.snapshot {
+            themed(palette) {
+                PrivacyDashboardScreen()
+            }
+        }
+    }
+
+    @Test
+    fun aboutUsEcosystem(@TestParameter palette: SnapshotPalette) {
+        paparazzi.snapshot {
+            themed(palette) {
+                AboutUsScreen(onOpenWebsite = {}, onOpenStore = {})
+            }
+        }
+    }
 
     @Test
     fun securityDashboard(@TestParameter palette: SnapshotPalette) {
