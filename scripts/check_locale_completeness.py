@@ -19,9 +19,11 @@ SOURCE_DIRS = (
     Path("app/src/main/java/com/vibesync/antivirus/presentation"),
     Path("app/src/main/java/com/vibesync/antivirus/ui"),
 )
+# Compose animation `label` parameters are trace/debug metadata, not UI text.
+# Check visible Text, accessibility content descriptions, and Toast messages instead.
 DIRECT_LITERALS = (
     re.compile(r'\bText\s*\(\s*(?:text\s*=\s*)?"([A-Za-z][^"]*)"'),
-    re.compile(r'\b(?:contentDescription|label)\s*=\s*"([A-Za-z][^"]*)"'),
+    re.compile(r'\bcontentDescription\s*=\s*"([A-Za-z][^"]*)"'),
     re.compile(r'\bToast\.makeText\s*\([^,]*,\s*"([A-Za-z][^"]*)"'),
 )
 errors = []
