@@ -46,11 +46,9 @@ class SettingsWiringTest {
             onGlobalIntelChanged = {},
             batteryActive = false,
             adminActive = false,
-            overlayActive = false,
             safActive = false,
             onBatteryToggle = {},
             onAdminToggle = {},
-            onOverlayToggle = {},
             onSafToggle = {},
             onImportYara = {},
             onThreatFeedSync = {},
@@ -95,11 +93,9 @@ class SettingsWiringTest {
                 onGlobalIntelChanged = {},
                 batteryActive = false,
                 adminActive = false,
-                overlayActive = false,
                 safActive = false,
                 onBatteryToggle = {},
                 onAdminToggle = {},
-                onOverlayToggle = {},
                 onSafToggle = {},
                 onImportYara = {},
                 onThreatFeedSync = {},
@@ -137,11 +133,9 @@ class SettingsWiringTest {
                 onGlobalIntelChanged = {},
                 batteryActive = false,
                 adminActive = false,
-                overlayActive = false,
                 safActive = false,
                 onBatteryToggle = {},
                 onAdminToggle = {},
-                onOverlayToggle = {},
                 onSafToggle = {},
                 onImportYara = {},
                 onThreatFeedSync = {},
@@ -181,11 +175,9 @@ class SettingsWiringTest {
                 onGlobalIntelChanged = { optedIn = it },
                 batteryActive = false,
                 adminActive = false,
-                overlayActive = false,
                 safActive = false,
                 onBatteryToggle = {},
                 onAdminToggle = {},
-                onOverlayToggle = {},
                 onSafToggle = {},
                 onImportYara = {},
                 onThreatFeedSync = {},
@@ -220,11 +212,9 @@ class SettingsWiringTest {
                 onGlobalIntelChanged = {},
                 batteryActive = false,
                 adminActive = false,
-                overlayActive = false,
                 safActive = false,
                 onBatteryToggle = {},
                 onAdminToggle = {},
-                onOverlayToggle = {},
                 onSafToggle = {},
                 onImportYara = { yaraImports++ },
                 onThreatFeedSync = { threatSyncs++ },
@@ -259,22 +249,5 @@ class SettingsWiringTest {
         assertEquals(true, confirmed)
     }
 
-    @Test
-    fun overlayDisclosureRequiresExplicitConfirmation() {
-        var confirmed = false
-        render {
-            OverlayPermissionDisclosureDialog(
-                onConfirm = { confirmed = true },
-                onDismiss = {}
-            )
-        }
-
-        composeRule.onNodeWithText(context.getString(com.vibesync.antivirus.R.string.security_guard_overlay_consent_body))
-            .assertIsDisplayed()
-        assertEquals(false, confirmed)
-        composeRule.onNodeWithText(context.getString(com.vibesync.antivirus.R.string.security_guard_consent_continue))
-            .performClick()
-        assertEquals(true, confirmed)
-    }
 
 }
