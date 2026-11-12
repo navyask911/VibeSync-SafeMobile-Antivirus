@@ -176,6 +176,7 @@ import kotlinx.coroutines.launch
  val securityIncidents by repository.observeRecentSecurityIncidents().collectAsStateWithLifecycle(initialValue = emptyList())
  var showV17ProtectionSetupSheet by rememberSaveable { mutableStateOf(false) }
  var selectedDestination by rememberSaveable { mutableStateOf("home") }
+ var showLanguagePicker by rememberSaveable { mutableStateOf(false) }
  var isSubscriptionExpanded by rememberSaveable { mutableStateOf(false) }
  var settingsSubRoute by rememberSaveable { mutableStateOf(SettingsSubRoute.ROOT) }
  val tabNavController = rememberNavController()
@@ -784,6 +785,7 @@ import kotlinx.coroutines.launch
         com.vibesync.antivirus.ui.theme.AppTheme.MIDNIGHT -> com.vibesync.antivirus.ui.theme.AppTheme.OLED
        })
       },
+      onLanguageClick = { showLanguagePicker = true },
       onProClick = openProSafely,
       onBack = { if (!tabNavController.popBackStack()) navigateToDestination("home") }
      )
@@ -1309,6 +1311,9 @@ import kotlinx.coroutines.launch
     composable("tools") { navScreenContent() }
     composable("settings") { navScreenContent() }
     composable("detail/{parentTab}/{screen}") { navScreenContent() }
+   }
+   if (showLanguagePicker) {
+    V17LanguageSelectionDialog(onDismiss = { showLanguagePicker = false })
    }
    if (showV17ProtectionSetupSheet) {
     V17ProtectionSetupSheet(

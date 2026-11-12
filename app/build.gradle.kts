@@ -623,6 +623,8 @@ dependencies {
  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
  implementation("com.google.crypto.tink:tink-android:1.16.0")
  // Google Android SDK License: Play Billing is only for explicit checkout, never scanning.
+ // Billing 8.3.0 is already above the requested 7.0.0 baseline. Keep it because
+ // SafeMobileBillingManager uses the Billing 8 QueryProductDetailsResult API and auto-reconnection.
  implementation("com.android.billingclient:billing-ktx:8.3.0")
  implementation("com.google.android.play:app-update-ktx:2.1.0")
  // Google Mobile Ads Next-Gen SDK and UMP consent platform.

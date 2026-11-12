@@ -28,4 +28,10 @@
     <string name="pro_fewer_years">Fewer years</string>
     <string name="pro_more_years">More years</string>
     <string name="pro_subscription_offer" formatted="false">Unlock SafeMobile Pro — ₹299 / Year (Auto-renewing). Cancel anytime in Google Play.</string>
+
+    <string name="pro_auto_renewal_terms">Your subscription renews automatically each year at %1$s unless canceled before the renewal date. Manage or cancel it in Google Play under Payments & subscriptions.</string>
+    <string name="pro_prepaid_terms">Prepaid annual passes do not auto-renew. Google Play will show the quantity and final total before you confirm. Select the same number of years in the Google Play purchase sheet as shown in this estimate.</string>
+    <string name="pro_subscribe_annual">Subscribe for 1 year</string>
+    <string name="pro_prepaid_checkout">Buy prepaid years</string>
+    <string name="pro_prepaid_offer">Prepaid multi-year Pro access. Does not auto-renew; Google Play confirms the final quantity and price.</string>
 </resources>

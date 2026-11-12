@@ -12,6 +12,7 @@ import androidx.compose.material.icons.outlined.WorkspacePremium
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -29,7 +30,11 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.vibesync.antivirus.R
 import com.vibesync.antivirus.core.billing.SafeMobileBillingManager
 import java.text.DateFormat
+import java.text.NumberFormat
+import java.util.Currency
 import java.util.Date
+import java.util.Locale
+import kotlin.math.roundToInt
 
 /**
  * Subscription paywall. Core offline protection remains free and experimental ML
@@ -42,10 +47,24 @@ fun SafeMobileProPaywallScreen(
 ) {
     val context = LocalContext.current
     val activity = remember(context) { context.paywallActivity() }
-    val locale = LocalConfiguration.current.locales[0]
+    val locale = LocalConfiguration.current.locales.let { locales ->
+        if (locales.size() == 0) Locale.getDefault() else locales[0]
+    }
+    var selectedYears by rememberSaveable { mutableIntStateOf(1) }
     val manager = remember(context) { SafeMobileBillingManager(context) }
     val state by manager.state.collectAsStateWithLifecycle()
     val owner = LocalLifecycleOwner.current
+    val canLaunchPurchase = activity != null && !activity.isFinishing && !activity.isDestroyed
+    val selectedUnitPrice = if (selectedYears == 1) state.playPriceMicros else state.legacyPriceMicros
+    val selectedCurrency = if (selectedYears == 1) state.playCurrency else state.legacyCurrency
+    val yearsDescription = stringResource(R.string.pro_years)
+    val estimatedTotal = selectedUnitPrice?.let { micros ->
+        runCatching {
+            val formatter = NumberFormat.getCurrencyInstance(locale)
+            if (!selectedCurrency.isNullOrBlank()) formatter.currency = Currency.getInstance(selectedCurrency)
+            formatter.format((micros.toDouble() / 1_000_000.0) * selectedYears)
+        }.getOrNull()
+    }
     BackHandler(onBack = onBack)
 
     DisposableEffect(manager) {
@@ -86,10 +105,61 @@ fun SafeMobileProPaywallScreen(
         }
         Text(stringResource(R.string.pro_truthful_summary), style = MaterialTheme.typography.bodyMedium)
         Text(
-            stringResource(R.string.pro_subscription_offer),
+            stringResource(
+                if (selectedYears == 1) R.string.pro_subscription_offer
+                else R.string.pro_prepaid_offer
+            ),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.primary
         )
+
+        Text(stringResource(R.string.pro_years), style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.SemiBold)
+        Slider(
+            value = selectedYears.toFloat(),
+            onValueChange = { selectedYears = it.roundToInt().coerceIn(1, 10) },
+            valueRange = 1f..10f,
+            steps = 8,
+            modifier = Modifier.fillMaxWidth().semantics {
+                contentDescription = yearsDescription
+            }
+        )
+        estimatedTotal?.let { total ->
+            Text(
+                stringResource(R.string.pro_price_preview, total, selectedYears),
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.primary
+            )
+        } ?: Text(
+            stringResource(R.string.pro_price_unavailable),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        if (selectedYears == 1) {
+            state.playUnitPrice?.let { unitPrice ->
+                Text(
+                    stringResource(R.string.pro_auto_renewal_terms, unitPrice),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        } else {
+            Text(
+                stringResource(R.string.pro_cart_quantity_warning),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Text(
+                stringResource(R.string.pro_prepaid_terms),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Text(
+                stringResource(R.string.pro_non_restorable_warning),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.error
+            )
+        }
         listOf(
             R.string.pro_feature_free,
             R.string.pro_feature_research,
@@ -104,12 +174,17 @@ fun SafeMobileProPaywallScreen(
 
         HorizontalDivider()
         Button(
-            onClick = { activity?.let { manager.launchPurchase(it) } },
-            enabled = activity != null && state.connected && state.playPriceMicros != null &&
+            onClick = {
+                activity?.takeIf { !it.isFinishing && !it.isDestroyed }?.let { host ->
+                    if (selectedYears == 1) manager.launchPurchase(host)
+                    else manager.launchMultiYearPassPurchase(host)
+                }
+            },
+            enabled = canLaunchPurchase && state.connected && selectedUnitPrice != null &&
                 !state.processing,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(stringResource(R.string.pro_unlock))
+            Text(stringResource(if (selectedYears == 1) R.string.pro_subscribe_annual else R.string.pro_prepaid_checkout))
         }
         OutlinedButton(
             onClick = { manager.restoreProLicenseFromPlayStore() },
@@ -155,8 +230,21 @@ fun SafeMobileProPaywallScreen(
     }
 }
 
-private tailrec fun Context.paywallActivity(): Activity? = when (this) {
-    is Activity -> this
-    is ContextWrapper -> baseContext.paywallActivity()
-    else -> null
+private fun Context.paywallActivity(): Activity? {
+    var current: Context? = this
+    val seen = java.util.Collections.newSetFromMap(
+        java.util.IdentityHashMap<Context, Boolean>()
+    )
+    while (current != null && seen.add(current)) {
+        when (current) {
+            is Activity -> return current
+            is ContextWrapper -> {
+                val next = current.baseContext
+                if (next === current) return null
+                current = next
+            }
+            else -> return null
+        }
+    }
+    return null
 }

@@ -10,12 +10,15 @@ Version code: **20261121**
 - Product type: **SUBS**, with an annual auto-renewing base plan. The Play Console product and its annual ₹299 price must be activated and tested on the Play internal track before rollout.
 - The app queries subscription ProductDetails and uses a returned subscription offer token at checkout. The Play Billing offer and price are authoritative; the in-app paywall discloses the annual auto-renewing offer and cancellation through Google Play.
 - Subscription purchases are **never consumed**. An initial purchased subscription is acknowledged with `acknowledgePurchase()` when `Purchase.isAcknowledged` is false. Already-acknowledged renewals do not need another acknowledgement.
-- The 1–10 year consumable quantity selector and one-time repurchase warning have been removed from the paywall.
+- The Pro paywall's one-year selection uses the annual auto-renewing SUBS product. Selections of 2–10 years use the former annual one-time consumable SKU `safemobile_pro_1_year` as a prepaid pass.
+- The multi-year value in the slider is an estimate. Google Play Billing does not expose a client-side quantity parameter in `BillingFlowParams.ProductDetailsParams.Builder`; the user must select the matching quantity in Google's purchase cart. The app grants years from the actual `Purchase.quantity` returned by Google Play, not from the slider.
+- Multi-quantity must be enabled for the one-time product in Play Console. It is only supported for eligible consumable one-time purchase options, not subscription plans or discount offers. The app selects the buy purchase option and excludes offer/rental entries.
+- The one-time pass does not auto-renew. The annual SUBS plan does auto-renew until canceled in Google Play.
 
 ## Restore and legacy migration
 
 - `restoreProLicenseFromPlayStore()` queries `ProductType.SUBS` for the active subscription product and rehydrates local access from a purchased result.
-- The manager also performs a one-time `ProductType.INAPP` compatibility lookup for the former SKU `safemobile_pro_1_year`. It grants only a still-owned, purchased legacy transaction and consumes that old transaction after recording it, preventing repeated migration grants.
+- The manager performs a `ProductType.INAPP` compatibility lookup for the former SKU `safemobile_pro_1_year`. It grants only a still-owned, purchased legacy transaction and consumes that old transaction after recording it, preventing repeated migration grants. The same product's eligible buy purchase option is priced for the prepaid multi-year checkout.
 - Existing encrypted local entitlements and redeemed-token markers retain their original preference store and keys, so an app update does not discard the existing local pass.
 - **Important migration limit:** the former product was consumable. Google Play does not return an already-consumed one-time purchase from `queryPurchasesAsync`; the fallback can therefore only discover a legacy transaction that is still owned and unconsumed. Previously credited local legacy access remains available while its encrypted local data remains intact. A consumed legacy purchase cannot be reconstructed after local app data or its Keystore key is lost.
 - The restore/check action can restore an active subscription from Google Play after reinstall when the user is signed in and Play can return the subscription. Offline status checks continue to use the encrypted local cache.

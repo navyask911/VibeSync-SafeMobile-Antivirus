@@ -44,6 +44,9 @@ class SafeMobileBillingManager(context: Context) : PurchasesUpdatedListener {
         val playUnitPrice: String? = null,
         val playPriceMicros: Long? = null,
         val playCurrency: String? = null,
+        val legacyUnitPrice: String? = null,
+        val legacyPriceMicros: Long? = null,
+        val legacyCurrency: String? = null,
         val notice: Notice = Notice.NONE,
     )
 
@@ -69,6 +72,7 @@ class SafeMobileBillingManager(context: Context) : PurchasesUpdatedListener {
         if (billingClient.isReady) {
             _state.value = _state.value.copy(connected = true)
             queryPrice()
+            queryLegacyPassPrice()
             recoverPurchases()
             return
         }
@@ -93,6 +97,7 @@ class SafeMobileBillingManager(context: Context) : PurchasesUpdatedListener {
                 }
                 _state.value = _state.value.copy(connected = true)
                 queryPrice()
+                queryLegacyPassPrice()
                 recoverPurchases()
             }
         })
@@ -182,8 +187,92 @@ class SafeMobileBillingManager(context: Context) : PurchasesUpdatedListener {
         }
     }
 
+    /**
+     * Starts the old annual consumable as an optional prepaid multi-year pass.
+     * Google Play owns the quantity control in its purchase sheet; the app cannot
+     * inject the slider value into BillingFlowParams. The returned Purchase.quantity
+     * is authoritative and is used by processLegacyPurchase() to grant actual years.
+     */
+    fun launchMultiYearPassPurchase(activity: Activity) {
+        if (closed || !billingClient.isReady || activity.isFinishing || activity.isDestroyed) {
+            _state.value = _state.value.copy(processing = false, notice = Notice.UNAVAILABLE)
+            if (!closed && !billingClient.isReady) start()
+            return
+        }
+        _state.value = _state.value.copy(processing = true, notice = Notice.NONE)
+        queryLegacyPassPrice { selection ->
+            if (selection == null) {
+                _state.value = _state.value.copy(processing = false, notice = Notice.UNAVAILABLE)
+                return@queryLegacyPassPrice
+            }
+            val paramsBuilder = BillingFlowParams.ProductDetailsParams.newBuilder()
+                .setProductDetails(selection.details)
+            selection.offer.offerToken.takeIf { it.isNotBlank() }?.let(paramsBuilder::setOfferToken)
+            val params = BillingFlowParams.newBuilder()
+                .setProductDetailsParamsList(listOf(paramsBuilder.build()))
+                .build()
+            val result = billingClient.launchBillingFlow(activity, params)
+            if (result.responseCode != BillingClient.BillingResponseCode.OK) {
+                _state.value = _state.value.copy(processing = false, notice = Notice.UNAVAILABLE)
+            }
+        }
+    }
+
+    private data class LegacyPassProduct(
+        val details: ProductDetails,
+        val offer: ProductDetails.OneTimePurchaseOfferDetails
+    )
+
+    private fun queryLegacyPassPrice(callback: ((LegacyPassProduct?) -> Unit)? = null) {
+        if (!billingClient.isReady || closed) {
+            callback?.invoke(null)
+            return
+        }
+        val product = QueryProductDetailsParams.Product.newBuilder()
+            .setProductId(LEGACY_PRODUCT_ID)
+            .setProductType(BillingClient.ProductType.INAPP)
+            .build()
+        billingClient.queryProductDetailsAsync(
+            QueryProductDetailsParams.newBuilder().setProductList(listOf(product)).build()
+        ) { result, products ->
+            scope.launch {
+                if (closed) return@launch
+                val detail = if (result.responseCode == BillingClient.BillingResponseCode.OK) {
+                    products.productDetailsList.firstOrNull { it.productId == LEGACY_PRODUCT_ID }
+                } else null
+                // Multi-quantity is supported for eligible buy purchase options,
+                // not discount/preorder offers or rentals. The Play Console product must
+                // also have Multi-quantity enabled before the cart exposes the quantity picker.
+                val eligiblePurchaseOption = detail?.oneTimePurchaseOfferDetailsList
+                    ?.firstOrNull { option ->
+                        option.priceAmountMicros > 0L &&
+                            option.offerId == null &&
+                            option.rentalDetails == null &&
+                            !option.purchaseOptionId.isNullOrBlank()
+                    }
+                    ?: detail?.oneTimePurchaseOfferDetails?.takeIf { option ->
+                        option.priceAmountMicros > 0L &&
+                            option.offerId == null &&
+                            option.rentalDetails == null
+                    }
+                val selection = if (detail != null && eligiblePurchaseOption != null) {
+                    LegacyPassProduct(detail, eligiblePurchaseOption)
+                } else null
+                val priorNotice = _state.value.notice
+                _state.value = _state.value.copy(
+                    legacyUnitPrice = offer?.formattedPrice,
+                    legacyPriceMicros = offer?.priceAmountMicros,
+                    legacyCurrency = offer?.priceCurrencyCode,
+                    notice = if (selection != null && priorNotice == Notice.UNAVAILABLE) Notice.NONE
+                        else priorNotice
+                )
+                callback?.invoke(selection)
+            }
+        }
+    }
+
     fun launchPurchase(activity: Activity) {
-        if (closed || !billingClient.isReady) {
+        if (closed || !billingClient.isReady || activity.isFinishing || activity.isDestroyed) {
             _state.value = _state.value.copy(notice = Notice.UNAVAILABLE)
             return
         }

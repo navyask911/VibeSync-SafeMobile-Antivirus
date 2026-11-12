@@ -1,5 +1,14 @@
 package com.vibesync.antivirus.presentation
 
+import android.content.Context
+import android.database.ContentObserver
+import android.net.Uri
+import android.os.Handler
+import android.os.Looper
+import android.provider.Settings
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
@@ -172,7 +181,8 @@ private fun V17HeroCard(dark: Boolean, content: @Composable ColumnScope.() -> Un
 @Composable
 internal fun V17TopBar(
     appTheme: AppTheme, isPro: Boolean, showBack: Boolean,
-    onThemeToggle: () -> Unit, onProClick: () -> Unit, onBack: () -> Unit
+    onThemeToggle: () -> Unit, onLanguageClick: () -> Unit,
+    onProClick: () -> Unit, onBack: () -> Unit
 ) {
     val c = v17Colors(appTheme != AppTheme.LIGHT)
     Surface(color = c.device, border = BorderStroke(0.dp, Color.Transparent)) {
@@ -194,6 +204,14 @@ internal fun V17TopBar(
                 Icon(
                     if (appTheme == AppTheme.LIGHT) Icons.Default.DarkMode else Icons.Default.LightMode,
                     "Toggle theme", tint = c.muted, modifier = Modifier.size(23.dp)
+                )
+            }
+            IconButton(onClick = onLanguageClick, modifier = Modifier.size(40.dp)) {
+                Icon(
+                    Icons.Outlined.Language,
+                    contentDescription = stringResource(R.string.language_settings),
+                    tint = c.muted,
+                    modifier = Modifier.size(23.dp)
                 )
             }
             Surface(Modifier.clip(CircleShape).clickable(role = Role.Button, onClick = onProClick),
@@ -250,6 +268,120 @@ internal fun V17BottomNavigationBar(selectedTab: String, isDark: Boolean, onSele
     }
 }
 
+private fun readSystemPlayProtectEnabled(context: Context): Boolean = runCatching {
+    Settings.Global.getInt(context.contentResolver, "package_verifier_enable", 1) == 1
+}.getOrDefault(true)
+
+@Composable
+private fun V17PlayProtectStatusCard(isDark: Boolean) {
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+    var isEnabled by remember(context) { mutableStateOf(readSystemPlayProtectEnabled(context)) }
+
+    DisposableEffect(context, lifecycleOwner) {
+        val uri: Uri = Settings.Global.getUriFor("package_verifier_enable")
+        val contentObserver = object : ContentObserver(Handler(Looper.getMainLooper())) {
+            override fun onChange(selfChange: Boolean, uri: Uri?) {
+                isEnabled = readSystemPlayProtectEnabled(context)
+            }
+        }
+        val lifecycleObserver = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                isEnabled = readSystemPlayProtectEnabled(context)
+            }
+        }
+        context.contentResolver.registerContentObserver(uri, false, contentObserver)
+        lifecycleOwner.lifecycle.addObserver(lifecycleObserver)
+        isEnabled = readSystemPlayProtectEnabled(context)
+        onDispose {
+            context.contentResolver.unregisterContentObserver(contentObserver)
+            lifecycleOwner.lifecycle.removeObserver(lifecycleObserver)
+        }
+    }
+
+    val c = v17Colors(isDark)
+    V17Card(isDark, Modifier.fillMaxWidth()) {
+        Row(
+            Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Icon(
+                imageVector = if (isEnabled) Icons.Outlined.CheckCircle else Icons.Outlined.Warning,
+                contentDescription = null,
+                tint = if (isEnabled) c.green else c.amber,
+                modifier = Modifier.size(26.dp)
+            )
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                V17Title(stringResource(R.string.play_protect_status_title))
+                V17Body(
+                    stringResource(if (isEnabled) R.string.play_protect_status_enabled else R.string.play_protect_status_disabled),
+                    color = c.muted
+                )
+            }
+        }
+    }
+}
+
+@Composable
+internal fun V17LanguageSelectionDialog(onDismiss: () -> Unit) {
+    val context = LocalContext.current
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { V17Title(stringResource(R.string.language_settings)) },
+        text = {
+            Column(
+                Modifier.fillMaxWidth().heightIn(max = 420.dp).verticalScroll(rememberScrollState())
+            ) {
+                TextButton(
+                    onClick = {
+                        LocalePreferences.saveOverride(context, "")
+                        onDismiss()
+                        context.v17ActivityOrNull()?.recreate()
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(stringResource(R.string.language_system_default))
+                }
+                LocalePreferences.choices.forEach { choice ->
+                    TextButton(
+                        onClick = {
+                            LocalePreferences.saveOverride(context, choice.tag)
+                            onDismiss()
+                            context.v17ActivityOrNull()?.recreate()
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(context.getString(choice.labelResource))
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.close)) }
+        }
+    )
+}
+
+private fun Context.v17ActivityOrNull(): android.app.Activity? {
+    var current: Context? = this
+    val seen = java.util.Collections.newSetFromMap(
+        java.util.IdentityHashMap<Context, Boolean>()
+    )
+    while (current != null && seen.add(current)) {
+        when (current) {
+            is android.app.Activity -> return current
+            is android.content.ContextWrapper -> {
+                val next = current.baseContext
+                if (next === current) return null
+                current = next
+            }
+            else -> return null
+        }
+    }
+    return null
+}
+
 @Composable
 internal fun V17ShieldScreen(
     isDark: Boolean, securityScore: Int, isPro: Boolean, activeGuards: Int,
@@ -296,6 +428,7 @@ internal fun V17ShieldScreen(
             onOpenPrivacy = onOpenPrivacy,
             onOpenSettings = onOpenSettings
         )
+        V17PlayProtectStatusCard(isDark)
         V17Card(isDark) {
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(10.dp)) {
