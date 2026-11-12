@@ -11,6 +11,7 @@ import com.google.android.libraries.ads.mobile.sdk.MobileAds
 import com.google.android.libraries.ads.mobile.sdk.initialization.InitializationConfig
 import com.vibesync.antivirus.core.ads.AdMobManager
 import com.vibesync.antivirus.core.billing.ProEntitlementStore
+import com.vibesync.antivirus.core.billing.SafeMobileBillingManager
 import android.util.Log
 import androidx.room.Room
 import androidx.work.Constraints
@@ -55,6 +56,8 @@ class SafeMobileApp : Application() {
     val devicePostureRepository by lazy { DevicePostureRepository(this) }
 
     val adMobManager by lazy { AdMobManager(this) }
+    /** Process-wide BillingClient restores device-bound prepaid subscriptions at launch. */
+    val proBillingManager by lazy { SafeMobileBillingManager(this) }
     private val mobileAdsInitializationMutex = Mutex()
     @Volatile private var mobileAdsInitialized = false
 
@@ -89,6 +92,8 @@ class SafeMobileApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        // Start Play subscription recovery during application startup.
+        proBillingManager.start()
         securityVerifier = com.vibesync.antivirus.core.security.SecurityVerifier(this)
         appScope.launch { securityVerifier.requestIntegrityTokenAndVerify() }
         // Only ~2 KiB of signed-APK text is loaded; all APK scanning stays on Dispatchers.IO.
@@ -162,6 +167,7 @@ class SafeMobileApp : Application() {
     }
 
     override fun onTerminate() {
+        proBillingManager.close()
         appScope.cancel()
         super.onTerminate()
     }

@@ -1,39 +1,47 @@
-# SafeMobile Pro subscription billing review
+# SafeMobile Pro prepaid subscription and device-binding review
 
-Branch: `feat/billing-subs-v1.4.2`  
-App version: **1.4.2**  
-Version code: **20261121**
+Branch: `release/v1.9.0-final`  
+Target app: **1.9.0**
 
-## Subscription product
+## Google Play Console configuration required
 
-- New Google Play product ID: `safemobile_pro_1y_subs`.
-- Product type: **SUBS**, with an annual auto-renewing base plan. The Play Console product and its annual ₹299 price must be activated and tested on the Play internal track before rollout.
-- The app queries subscription ProductDetails and uses a returned subscription offer token at checkout. The Play Billing offer and price are authoritative; the in-app paywall discloses the annual auto-renewing offer and cancellation through Google Play.
-- Subscription purchases are **never consumed**. An initial purchased subscription is acknowledged with `acknowledgePurchase()` when `Purchase.isAcknowledged` is false. Already-acknowledged renewals do not need another acknowledgement.
-- The Pro paywall's one-year selection uses the annual auto-renewing SUBS product. Selections of 2–10 years use the former annual one-time consumable SKU `safemobile_pro_1_year` as a prepaid pass.
-- The multi-year value in the slider is an estimate. Google Play Billing does not expose a client-side quantity parameter in `BillingFlowParams.ProductDetailsParams.Builder`; the user must select the matching quantity in Google's purchase cart. The app grants years from the actual `Purchase.quantity` returned by Google Play, not from the slider.
-- Multi-quantity must be enabled for the one-time product in Play Console. It is only supported for eligible consumable one-time purchase options, not subscription plans or discount offers. The app selects the buy purchase option and excludes offer/rental entries.
-- The one-time pass does not auto-renew. The annual SUBS plan does auto-renew until canceled in Google Play.
+Create a subscription product with:
 
-## Restore and legacy migration
+- Product ID: `pro_access`
+- Prepaid base plan ID: `prepaid-1-year`
+- Billing period: `P1Y` (one year)
+- Plan type: **Prepaid**, not auto-renewing
+- Enable the prepaid-plan extension/top-up option for the base plan
+- Configure country availability and price, then activate it for the intended testing/release tracks
 
-- `restoreProLicenseFromPlayStore()` queries `ProductType.SUBS` for the active subscription product and rehydrates local access from a purchased result.
-- The manager performs a `ProductType.INAPP` compatibility lookup for the former SKU `safemobile_pro_1_year`. It grants only a still-owned, purchased legacy transaction and consumes that old transaction after recording it, preventing repeated migration grants. The same product's eligible buy purchase option is priced for the prepaid multi-year checkout.
-- Existing encrypted local entitlements and redeemed-token markers retain their original preference store and keys, so an app update does not discard the existing local pass.
-- **Important migration limit:** the former product was consumable. Google Play does not return an already-consumed one-time purchase from `queryPurchasesAsync`; the fallback can therefore only discover a legacy transaction that is still owned and unconsumed. Previously credited local legacy access remains available while its encrypted local data remains intact. A consumed legacy purchase cannot be reconstructed after local app data or its Keystore key is lost.
-- The restore/check action can restore an active subscription from Google Play after reinstall when the user is signed in and Play can return the subscription. Offline status checks continue to use the encrypted local cache.
+**Google Play does not support a single 2–10-year prepaid base plan.** The maximum prepaid base-plan duration is one year. The app therefore sells one prepaid year at a time. The same active plan can be purchased again to top it up by another year. Do not create or advertise `prepaid-2-year` through `prepaid-10-year` plans; Play Console does not offer those durations.
 
-## Local entitlement and privacy boundaries
+The app queries only `pro_access` as `SUBS` and accepts only the `prepaid-1-year` offer whose last pricing phase is non-recurring and has billing period `P1Y`. Auto-renewing plans and other base-plan IDs are not silently substituted.
 
-- The existing device fingerprint and `EncryptedSharedPreferences` store remain in place. The Android ID is hashed locally and is not uploaded or logged.
-- Subscription cache expiry is calculated as `Purchase.purchaseTime + 365 days + 1 day` (the requested local grace buffer). The cache is an offline gating approximation, not an independent receipt-verification service. The app does not call the Google Play Developer API and cannot independently detect server-side refunds or revocations while offline.
-- The encrypted device-bound cache drives the existing Pro status consumed by AdMob. The Free tier remains eligible for consent-gated ads; a locally active Pro entitlement excludes Pro users from ad requests and preloaded interstitials. Billing changes do not alter the AdMob manager, UMP consent logic, or privacy disclosures.
-- Billing code remains isolated under `core/billing`; no Pro entitlement gate is introduced into scanning, YARA, hash matching, posture checks, quarantine, or the siren/incident-response pipeline.
-- No Android ID, purchase token, APK, scan data, or verdict is sent to a developer server.
+## Device binding in the Android client
+
+- The app derives a non-personal, 64-character SHA-256 identifier from the Android ID, app package name and a SafeMobile namespace. It never uploads or logs the raw Android ID.
+- Android 8+ Android ID normally survives uninstall/reinstall when package name and signing key remain unchanged; factory reset or signing-key changes can change the ID.
+- Checkout passes the hash through `BillingFlowParams.setObfuscatedAccountId()`.
+- Every confirmed `pro_access` purchase and restore is checked against `Purchase.accountIdentifiers.obfuscatedAccountId` before granting access.
+- A missing identifier is rejected as un-verifiable. A different identifier clears the local entitlement and displays **Subscription active on another device**.
+- Prepaid purchases and top-ups are acknowledged after a successful local grant. They are never consumed.
+- Pending prepaid purchases are enabled with `PendingPurchasesParams.enablePrepaidPlans()`. Entitlement is not granted until Play reports `PURCHASED`.
+
+This is client-side device enforcement, not a server-enforced anti-transfer guarantee. A modified/rooted client can bypass local checks. A production one-device policy should validate purchase tokens and the obfuscated account ID through a secure backend using the Google Play Developer API.
+
+## Restore and prepaid top-up behavior
+
+- The application-scoped billing manager runs `queryPurchasesAsync(ProductType.SUBS)` during application startup and again when the Pro screen resumes.
+- A same-device reinstall retains the Android ID and can restore the current active Play purchase through its matching obfuscated account ID.
+- The encrypted local ledger accumulates each distinct prepaid top-up while app data is present. Repeated callbacks for the same token are idempotent.
+- **Important restore boundary:** Android's encrypted local ledger is removed when the app is uninstalled (the app disables backup). A Play client purchase query exposes the latest purchase metadata, but does not return a complete server-authoritative expiry ledger for every previous prepaid top-up. After reinstall, the client can rebuild the latest one-year prepaid period, but cannot reliably reconstruct multiple prior top-ups from client-only purchase data. Accurate restoration of the entire accumulated multi-year term requires a secure backend to query the Google Play Developer API and persist/derive the authoritative subscription expiry.
+- The historical auto-renewing product `safemobile_pro_1y_subs` was created before device IDs were passed to Play. It is not migrated into the new device-bound product automatically. Existing encrypted local entitlement remains device-local until its recorded expiry; old Play subscriptions and billing must be reviewed in Play Console before rollout to avoid unintended continued renewals.
 
 ## Validation and rollout
 
-- CI must pass the unit/lint/build job and instrumented test jobs on API 26, 33, 34, and 36.
-- Encrypted-ledger tests cover legacy quantity idempotency, subscription expiry plus grace buffer, repeated subscription-query idempotency, renewal expiry movement, invalid inputs, and clock rollback.
-- CI cannot validate a real paid order. Before public rollout, activate the subscription product and test pending, canceled, purchased, acknowledged, restore-after-reinstall, renewal, and cancellation behavior with licensed Play internal-track testers.
-- This change does not trigger the signed production release workflow or publish to Google Play.
+- Billing dependency: Google Play Billing Library Kotlin extensions **9.1.0**.
+- Source checks should confirm no one-time product type, consumable purchase, consume call or quantity-based grant remains in the active billing manager.
+- Instrumented tests cover one-year prepaid grants, top-up accumulation, token idempotency, mismatch clearing and invalid purchase metadata.
+- CI/build and instrumented tests must pass before release. A real Play internal-track test is still required for prepaid purchase, pending payment, top-up, acknowledgement, same-device reinstall and a different-device mismatch.
+- The Play Console product/base plan and prices are not created by this repository change. No production release or Play Store upload is triggered by this commit.
