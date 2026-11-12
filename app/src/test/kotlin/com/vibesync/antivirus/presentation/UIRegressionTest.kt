@@ -1,5 +1,6 @@
 package com.vibesync.antivirus.presentation
 
+import androidx.activity.compose.LocalActivityResultRegistryOwner
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
@@ -130,9 +131,11 @@ abstract class UIRegressionTestBase(private val testFontScale: Float) {
                 }
             }
         }
+        val activityResultRegistryOwner = remember { SnapshotActivityResultRegistryOwner() }
         CompositionLocalProvider(
             LocalContext provides snapshotContext,
-            LocalLifecycleOwner provides lifecycleOwner
+            LocalLifecycleOwner provides lifecycleOwner,
+            LocalActivityResultRegistryOwner provides activityResultRegistryOwner
         ) {
             SafeMobileTheme(theme = AppTheme.MIDNIGHT) {
                 Surface(modifier = Modifier.fillMaxSize()) { content() }

@@ -1,5 +1,6 @@
 package com.vibesync.antivirus.presentation
 
+import androidx.activity.compose.LocalActivityResultRegistryOwner
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
@@ -286,9 +287,11 @@ class DashboardSnapshotTest {
         }
         val baseContext = LocalContext.current
         val snapshotContext = remember(baseContext) { SnapshotContextWrapper(baseContext) }
+        val activityResultRegistryOwner = remember { SnapshotActivityResultRegistryOwner() }
         CompositionLocalProvider(
             LocalLifecycleOwner provides lifecycleOwner,
-            LocalContext provides snapshotContext
+            LocalContext provides snapshotContext,
+            LocalActivityResultRegistryOwner provides activityResultRegistryOwner
         ) {
             SafeMobileTheme(theme = palette.appTheme) {
                 Surface(
