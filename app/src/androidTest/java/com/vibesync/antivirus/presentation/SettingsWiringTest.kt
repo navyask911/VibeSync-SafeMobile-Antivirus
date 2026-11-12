@@ -250,4 +250,47 @@ class SettingsWiringTest {
     }
 
 
+    @Test
+    fun forceLockActionRequiresExplicitConfirmation() {
+        var lockRequests = 0
+        render {
+            V17ConsoleSettingsScreen(
+                isDark = false,
+                appTheme = AppTheme.LIGHT,
+                onAppThemeChanged = {},
+                sirenEnabled = false,
+                onSirenChanged = {},
+                voiceEnabled = false,
+                onVoiceChanged = {},
+                installSentinelEnabled = false,
+                installSentinelRunning = false,
+                onInstallSentinelChanged = {},
+                globalIntelEnabled = false,
+                onGlobalIntelChanged = {},
+                batteryActive = false,
+                adminActive = true,
+                safActive = false,
+                onBatteryToggle = {},
+                onAdminToggle = {},
+                onSafToggle = {},
+                onLockDeviceNow = { lockRequests++ },
+                onImportYara = {},
+                onThreatFeedSync = {},
+                onBenchmarks = {},
+                onOpenPro = {}
+            )
+        }
+
+        composeRule.onNodeWithTag("console.device-admin.lock")
+            .assertIsDisplayed()
+            .performScrollTo()
+            .performClick()
+        assertEquals(0, lockRequests)
+
+        composeRule.onNodeWithText(context.getString(com.vibesync.antivirus.R.string.device_admin_lock_confirm))
+            .assertIsDisplayed()
+            .performClick()
+        assertEquals(1, lockRequests)
+    }
+
 }
