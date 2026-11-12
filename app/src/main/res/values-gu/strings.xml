@@ -400,18 +400,19 @@
 <string name="security_filter_sentinel">રક્ષક</string>
 <string name="security_filter_vault">તિજોરી</string>
 <string name="device_admin_title">ઉપકરણ સંચાલક</string>
-<string name="device_admin_description">વૈકલ્પિક Device Administrator પરવાનગીથી તમે Lock Device Now દબાવો ત્યારે SafeMobile સ્ક્રીન લોકની વિનંતી કરી શકે છે. તે પાસવર્ડ સેટ કરી શકતું નથી, ડેટા મિટાવી શકતું નથી, APK ઇન્સ્ટોલેશન અટકાવી શકતું નથી કે SafeMobileને ઉપકરણનો માલિક બનાવી શકતું નથી.</string>
+<string name="device_admin_description">વૈકલ્પિક ડિવાઇસ એડમિનિસ્ટ્રેટર પરવાનગી SafeMobile નિષ્ક્રિય કરતાં પહેલાં Androidની પુષ્ટિ ઉમેરે છે. નિષ્ક્રિય કર્યા પછી એપ અનઇન્સ્ટોલ કરવાનું અથવા APK ઇન્સ્ટોલ કરવાનું અટકાવતી નથી અને SafeMobileને ડિવાઇસનો માલિક બનાવતી નથી.</string>
 <string name="device_admin_enable">ઉપકરણ સંચાલક ચાલુ કરો</string>
 <string name="device_admin_disable">ઉપકરણ સંચાલક બંધ કરો</string>
 <string name="device_admin_active">આ ઉપકરણમાં સંચાલક સક્રિય છે.</string>
 <string name="device_admin_inactive">ઉપકરણ સંચાલક નિષ્ક્રિય છે.</string>
-<string name="device_admin_explanation">SafeMobileની વૈકલ્પિક વપરાશકર્તા-શરૂ કરેલી Lock Device Now ક્રિયા ચાલુ કરો. તમારી પુષ્ટિ પછી જ SafeMobile સ્ક્રીન લોકની વિનંતી કરે છે; Androidની હાલની સ્ક્રીન-લોક સેટિંગ્સ યથાવત રહે છે. SafeMobile ડેટા મિટાવતું નથી કે પાસવર્ડ બદલે નથી.</string>
+<string name="device_admin_explanation">SafeMobileની વૈકલ્પિક ડિવાઇસ એડમિનિસ્ટ્રેટર પુષ્ટિ ચાલુ કરો. SafeMobile પાસવર્ડ નીતિઓ લાગુ કરતું નથી, ડેટા ભૂંસતું નથી અથવા APK ઇન્સ્ટોલેશન અટકાવતું નથી.</string>
     <string name="device_admin_lock_now">Lock Device Now</string>
     <string name="device_admin_lock_confirm_title">Lock this device now?</string>
     <string name="device_admin_lock_confirm_message">SafeMobile will ask Android to lock the screen immediately. Your existing Android screen-lock PIN, pattern, or password remains in control; SafeMobile does not set or change it.</string>
     <string name="device_admin_lock_confirm">Lock device</string>
     <string name="device_admin_lock_cancel">Cancel</string>
     <string name="device_admin_lock_failed">Unable to request a device lock. Check that Device Administrator is still enabled.</string>
+
 <string name="installer_accessibility_service_title">SafeMobile સ્થાપન સલાહ</string>
 <string name="installer_accessibility_service_description">Android સ્થાપક વિન્ડો માટે વૈકલ્પિક સલાહ પટ્ટી. સિસ્ટમ સ્થાપકને રોકતી, ક્લિક કરતી કે અવરોધતી નથી. યાદ જોઈએ તો જ ચાલુ કરો.</string>
 <string name="installer_unscanned_warning">ચેતવણી. આ APK તપાસેલી નથી. પહેલાં SafeMobileમાં તપાસો.</string>

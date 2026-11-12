@@ -238,18 +238,19 @@
     <string name="security_filter_sentinel">Monitorização</string>
     <string name="security_filter_vault">Quarentena</string>
     <string name="device_admin_title">Administrador do dispositivo</string>
-    <string name="device_admin_description">A permissão opcional de administrador do dispositivo permite ao SafeMobile solicitar o bloqueio do ecrã quando toca em Bloquear dispositivo agora. Não pode definir palavras-passe, apagar dados, bloquear instalações de APK nem tornar o SafeMobile proprietário do dispositivo.</string>
+    <string name="device_admin_description">A permissão opcional de administrador do dispositivo adiciona uma confirmação do Android antes de desativar o SafeMobile. Ela não impede a desinstalação após a desativação nem a instalação de APK e não torna o SafeMobile proprietário do dispositivo.</string>
     <string name="device_admin_enable">Ativar administrador do dispositivo</string>
     <string name="device_admin_disable">Desativar administrador do dispositivo</string>
     <string name="device_admin_active">O administrador do dispositivo está ativo.</string>
     <string name="device_admin_inactive">O administrador do dispositivo está inativo.</string>
-    <string name="device_admin_explanation">Ative a ação opcional Bloquear dispositivo agora, iniciada pelo utilizador. O SafeMobile só solicita o bloqueio do ecrã após a sua confirmação; as definições de bloqueio existentes do Android continuam em vigor. O SafeMobile não apaga dados nem altera a sua palavra-passe.</string>
-    <string name="device_admin_lock_now">Lock Device Now</string>
-    <string name="device_admin_lock_confirm_title">Lock this device now?</string>
-    <string name="device_admin_lock_confirm_message">SafeMobile will ask Android to lock the screen immediately. Your existing Android screen-lock PIN, pattern, or password remains in control; SafeMobile does not set or change it.</string>
-    <string name="device_admin_lock_confirm">Lock device</string>
-    <string name="device_admin_lock_cancel">Cancel</string>
-    <string name="device_admin_lock_failed">Unable to request a device lock. Check that Device Administrator is still enabled.</string>
+    <string name="device_admin_explanation">Ative a confirmação opcional de administrador do dispositivo do SafeMobile. O SafeMobile não aplica políticas de senha, não apaga dados do dispositivo nem bloqueia instalações de APK.</string>
+    <string name="device_admin_lock_now">Bloquear dispositivo agora</string>
+    <string name="device_admin_lock_confirm_title">Bloquear este dispositivo agora?</string>
+    <string name="device_admin_lock_confirm_message">O SafeMobile pedirá ao Android que bloqueie o ecrã imediatamente. O PIN, padrão ou palavra-passe de bloqueio do Android existente permanece sob o seu controlo; o SafeMobile não o define nem altera.</string>
+    <string name="device_admin_lock_confirm">Bloquear dispositivo</string>
+    <string name="device_admin_lock_cancel">Cancelar</string>
+    <string name="device_admin_lock_failed">Não foi possível pedir o bloqueio do dispositivo. Verifique se o Administrador do dispositivo do SafeMobile continua ativado.</string>
+
     <string name="installer_accessibility_service_title">Aviso do instalador SafeMobile</string>
     <string name="installer_accessibility_service_description">Aviso opcional quando o instalador de pacotes do Android aparece. Ele não bloqueia, clica ou interfere no instalador. Ative apenas se quiser esse lembrete.</string>
     <string name="installer_unscanned_warning">Aviso: este APK ainda não foi verificado. Volte ao SafeMobile para verificá-lo primeiro.</string>

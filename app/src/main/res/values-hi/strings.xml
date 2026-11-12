@@ -238,18 +238,19 @@
     <string name="security_filter_sentinel">निगरानी</string>
     <string name="security_filter_vault">क्वारंटीन वॉल्ट</string>
     <string name="device_admin_title">डिवाइस प्रशासक</string>
-    <string name="device_admin_description">वैकल्पिक Device Administrator अनुमति से SafeMobile, आपके Lock Device Now चुनने पर स्क्रीन लॉक करने का अनुरोध कर सकता है। यह पासवर्ड सेट नहीं कर सकता, डेटा मिटा नहीं सकता, APK इंस्टॉलेशन रोक नहीं सकता और SafeMobile को डिवाइस का मालिक नहीं बनाता।</string>
+    <string name="device_admin_description">वैकल्पिक डिवाइस एडमिनिस्ट्रेटर अनुमति SafeMobile को निष्क्रिय करने से पहले Android की पुष्टि जोड़ती है। निष्क्रिय करने के बाद यह ऐप अनइंस्टॉल या APK इंस्टॉल रोकती नहीं है और SafeMobile को डिवाइस का मालिक नहीं बनाती।</string>
     <string name="device_admin_enable">डिवाइस प्रशासक सक्षम करें</string>
     <string name="device_admin_disable">डिवाइस प्रशासक अक्षम करें</string>
     <string name="device_admin_active">इस डिवाइस पर डिवाइस प्रशासक सक्रिय है।</string>
     <string name="device_admin_inactive">डिवाइस प्रशासक निष्क्रिय है।</string>
-    <string name="device_admin_explanation">SafeMobile की वैकल्पिक, उपयोगकर्ता द्वारा शुरू की गई Lock Device Now सुविधा सक्षम करें। आपकी पुष्टि के बाद ही SafeMobile स्क्रीन लॉक का अनुरोध करता है; Android की मौजूदा स्क्रीन-लॉक सेटिंग लागू रहती हैं। SafeMobile डेटा नहीं मिटाता और पासवर्ड नहीं बदलता।</string>
-    <string name="device_admin_lock_now">Lock Device Now</string>
-    <string name="device_admin_lock_confirm_title">Lock this device now?</string>
-    <string name="device_admin_lock_confirm_message">SafeMobile will ask Android to lock the screen immediately. Your existing Android screen-lock PIN, pattern, or password remains in control; SafeMobile does not set or change it.</string>
-    <string name="device_admin_lock_confirm">Lock device</string>
-    <string name="device_admin_lock_cancel">Cancel</string>
-    <string name="device_admin_lock_failed">Unable to request a device lock. Check that Device Administrator is still enabled.</string>
+    <string name="device_admin_explanation">SafeMobile की वैकल्पिक डिवाइस एडमिनिस्ट्रेटर पुष्टि सक्षम करें। SafeMobile पासवर्ड नीतियां लागू नहीं करता, डिवाइस का डेटा नहीं मिटाता और APK इंस्टॉलेशन नहीं रोकता।</string>
+    <string name="device_admin_lock_now">डिवाइस अभी लॉक करें</string>
+    <string name="device_admin_lock_confirm_title">क्या इस डिवाइस को अभी लॉक करना है?</string>
+    <string name="device_admin_lock_confirm_message">SafeMobile Android से तुरंत स्क्रीन लॉक करने का अनुरोध करेगा। आपका मौजूदा Android स्क्रीन-लॉक PIN, पैटर्न या पासवर्ड आपके नियंत्रण में रहेगा; SafeMobile इसे सेट या बदलता नहीं है।</string>
+    <string name="device_admin_lock_confirm">डिवाइस लॉक करें</string>
+    <string name="device_admin_lock_cancel">रद्द करें</string>
+    <string name="device_admin_lock_failed">डिवाइस लॉक का अनुरोध नहीं किया जा सका। जांचें कि SafeMobile डिवाइस एडमिनिस्ट्रेटर अभी भी सक्षम है।</string>
+
     <string name="installer_accessibility_service_title">SafeMobile इंस्टॉलर चेतावनी</string>
     <string name="installer_accessibility_service_description">Android पैकेज इंस्टॉलर दिखने पर वैकल्पिक सूचना। यह इंस्टॉलर को रोकती, क्लिक करती या उसमें हस्तक्षेप नहीं करती। केवल याद दिलाने के लिए इसे सक्षम करें।</string>
     <string name="installer_unscanned_warning">चेतावनी: इस APK को अभी स्कैन नहीं किया गया है। पहले स्कैन करने के लिए SafeMobile पर लौटें।</string>

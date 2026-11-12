@@ -238,18 +238,19 @@
     <string name="security_filter_sentinel">Sentinel</string>
     <string name="security_filter_vault">כספת</string>
     <string name="device_admin_title">מנהל מכשיר</string>
-    <string name="device_admin_description">הרשאת מנהל המכשיר האופציונלית מאפשרת ל‑SafeMobile לבקש נעילת מסך בעת בחירה ב„נעל את המכשיר עכשיו“. היא אינה יכולה להגדיר סיסמאות, למחוק נתונים, לחסום התקנת APK או להפוך את SafeMobile לבעלים של המכשיר.</string>
+    <string name="device_admin_description">הרשאת מנהל המכשיר האופציונלית מוסיפה אישור של Android לפני השבתת SafeMobile. היא אינה מונעת הסרה לאחר ההשבתה, חסימת התקנת APK או הופכת את SafeMobile לבעל המכשיר.</string>
     <string name="device_admin_enable">הפעלת מנהל מכשיר</string>
     <string name="device_admin_disable">השבתת מנהל מכשיר</string>
     <string name="device_admin_active">מנהל המכשיר פעיל במכשיר זה.</string>
     <string name="device_admin_inactive">מנהל המכשיר אינו פעיל.</string>
-    <string name="device_admin_explanation">הפעל את פעולת הנעילה האופציונלית ביוזמת המשתמש. SafeMobile מבקשת לנעול את המסך רק לאחר אישורך; הגדרות נעילת המסך הקיימות ב‑Android ממשיכות לחול. SafeMobile אינה מוחקת נתונים ואינה משנה את הסיסמה.</string>
-    <string name="device_admin_lock_now">Lock Device Now</string>
-    <string name="device_admin_lock_confirm_title">Lock this device now?</string>
-    <string name="device_admin_lock_confirm_message">SafeMobile will ask Android to lock the screen immediately. Your existing Android screen-lock PIN, pattern, or password remains in control; SafeMobile does not set or change it.</string>
-    <string name="device_admin_lock_confirm">Lock device</string>
-    <string name="device_admin_lock_cancel">Cancel</string>
-    <string name="device_admin_lock_failed">Unable to request a device lock. Check that Device Administrator is still enabled.</string>
+    <string name="device_admin_explanation">הפעלת אישור מנהל המכשיר האופציונלי של SafeMobile. האפליקציה אינה אוכפת כללי סיסמאות, מוחקת נתונים או חוסמת התקנת APK.</string>
+    <string name="device_admin_lock_now">נעל את המכשיר עכשיו</string>
+    <string name="device_admin_lock_confirm_title">לנעול את המכשיר עכשיו?</string>
+    <string name="device_admin_lock_confirm_message">SafeMobile יבקש מ-Android לנעול את המסך מיד. קוד ה-PIN, התבנית או הסיסמה הקיימים של Android נשארים בשליטתך; SafeMobile אינו מגדיר או משנה אותם.</string>
+    <string name="device_admin_lock_confirm">נעל את המכשיר</string>
+    <string name="device_admin_lock_cancel">ביטול</string>
+    <string name="device_admin_lock_failed">לא ניתן לבקש נעילת מכשיר. ודא שמנהל המכשיר של SafeMobile עדיין מופעל.</string>
+
     <string name="installer_accessibility_service_title">התראת מתקין של SafeMobile</string>
     <string name="installer_accessibility_service_description">התראה אופציונלית בעת הופעת מתקין החבילות של Android. היא אינה חוסמת את המתקין, לוחצת או מפריעה לו. הפעילו רק אם התזכורת רצויה.</string>
     <string name="installer_unscanned_warning">אזהרה: קובץ APK זה עדיין לא נסרק. חזרו ל‑SafeMobile כדי לסרוק תחילה.</string>

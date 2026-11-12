@@ -238,18 +238,19 @@
     <string name="security_filter_sentinel">監視</string>
     <string name="security_filter_vault">隔離庫</string>
     <string name="device_admin_title">デバイス管理者</string>
-    <string name="device_admin_description">オプションのデバイス管理者権限により、[今すぐデバイスをロック] をタップしたときに SafeMobile が画面ロックを要求できます。パスワードの設定、データの消去、APK のインストールのブロック、SafeMobile をデバイス所有者にすることはできません。</string>
+    <string name="device_admin_description">任意のデバイス管理者権限により、SafeMobile を無効にする前に Android の確認が追加されます。無効化後のアプリ削除や APK のインストールを防ぐことはできず、SafeMobile がデバイス所有者になることもありません。</string>
     <string name="device_admin_enable">デバイス管理者を有効にする</string>
     <string name="device_admin_disable">デバイス管理者を無効にする</string>
     <string name="device_admin_active">このデバイスではデバイス管理者が有効です。</string>
     <string name="device_admin_inactive">デバイス管理者は無効です。</string>
-    <string name="device_admin_explanation">ユーザーが開始するオプションの [今すぐデバイスをロック] 操作を有効にします。SafeMobile は確認後にのみ画面ロックを要求します。既存の Android 画面ロック設定が適用され、SafeMobile がデータやパスワードを変更することはありません。</string>
-    <string name="device_admin_lock_now">Lock Device Now</string>
-    <string name="device_admin_lock_confirm_title">Lock this device now?</string>
-    <string name="device_admin_lock_confirm_message">SafeMobile will ask Android to lock the screen immediately. Your existing Android screen-lock PIN, pattern, or password remains in control; SafeMobile does not set or change it.</string>
-    <string name="device_admin_lock_confirm">Lock device</string>
-    <string name="device_admin_lock_cancel">Cancel</string>
-    <string name="device_admin_lock_failed">Unable to request a device lock. Check that Device Administrator is still enabled.</string>
+    <string name="device_admin_explanation">SafeMobile の任意のデバイス管理者確認を有効にします。SafeMobile はパスワードポリシーを適用せず、端末データを消去せず、APK のインストールもブロックしません。</string>
+    <string name="device_admin_lock_now">今すぐデバイスをロック</string>
+    <string name="device_admin_lock_confirm_title">このデバイスを今すぐロックしますか？</string>
+    <string name="device_admin_lock_confirm_message">SafeMobile は Android に画面を直ちにロックするよう要求します。既存の Android 画面ロック PIN、パターン、パスワードは引き続きユーザーが管理し、SafeMobile が設定や変更を行うことはありません。</string>
+    <string name="device_admin_lock_confirm">デバイスをロック</string>
+    <string name="device_admin_lock_cancel">キャンセル</string>
+    <string name="device_admin_lock_failed">デバイスのロックを要求できませんでした。SafeMobile のデバイス管理者が有効か確認してください。</string>
+
     <string name="installer_accessibility_service_title">SafeMobile インストーラー通知</string>
     <string name="installer_accessibility_service_description">Android のパッケージインストーラー表示時に出す任意の通知です。インストーラーをブロック、クリック、妨害しません。必要な場合のみ有効にしてください。</string>
     <string name="installer_unscanned_warning">警告: この APK はまだスキャンされていません。先にスキャンするには SafeMobile に戻ってください。</string>

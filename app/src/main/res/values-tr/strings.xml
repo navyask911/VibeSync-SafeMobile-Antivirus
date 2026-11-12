@@ -238,18 +238,19 @@
 <string name="security_filter_sentinel">Nöbetçi</string>
     <string name="security_filter_vault">Karantina kasası</string>
     <string name="device_admin_title">Cihaz yöneticisi</string>
-    <string name="device_admin_description">İsteğe bağlı Cihaz Yöneticisi izni, Şimdi Cihazı Kilitle'ye dokunduğunuzda SafeMobile'ın ekran kilidi istemesine olanak tanır. Parola belirleyemez, verileri silemez, APK yüklemelerini engelleyemez veya SafeMobile'ı cihaz sahibi yapamaz.</string>
+    <string name="device_admin_description">İsteğe bağlı Cihaz Yöneticisi izni, SafeMobile devre dışı bırakılmadan önce Android onayı ekler. Devre dışı bırakıldıktan sonra uygulamanın kaldırılmasını veya APK yüklenmesini engellemez ve SafeMobile'ı cihaz sahibi yapmaz.</string>
     <string name="device_admin_enable">Cihaz yöneticisini etkinleştir</string>
     <string name="device_admin_disable">Cihaz yöneticisini devre dışı bırak</string>
     <string name="device_admin_active">Cihaz yöneticisi bu cihazda etkin.</string>
     <string name="device_admin_inactive">Cihaz yöneticisi devre dışı.</string>
-    <string name="device_admin_explanation">Kullanıcının başlattığı isteğe bağlı Şimdi Cihazı Kilitle işlemini etkinleştirin. SafeMobile ekran kilidini yalnızca onayınızdan sonra ister; Android'in mevcut ekran kilidi ayarları geçerliliğini korur. SafeMobile verileri silmez veya parolanızı değiştirmez.</string>
-    <string name="device_admin_lock_now">Lock Device Now</string>
-    <string name="device_admin_lock_confirm_title">Lock this device now?</string>
-    <string name="device_admin_lock_confirm_message">SafeMobile will ask Android to lock the screen immediately. Your existing Android screen-lock PIN, pattern, or password remains in control; SafeMobile does not set or change it.</string>
-    <string name="device_admin_lock_confirm">Lock device</string>
-    <string name="device_admin_lock_cancel">Cancel</string>
-    <string name="device_admin_lock_failed">Unable to request a device lock. Check that Device Administrator is still enabled.</string>
+    <string name="device_admin_explanation">SafeMobile'ın isteğe bağlı Cihaz Yöneticisi onayını etkinleştirin. SafeMobile parola ilkelerini uygulamaz, cihaz verilerini silmez veya APK yüklemesini engellemez.</string>
+    <string name="device_admin_lock_now">Cihazı Şimdi Kilitle</string>
+    <string name="device_admin_lock_confirm_title">Bu cihaz şimdi kilitlensin mi?</string>
+    <string name="device_admin_lock_confirm_message">SafeMobile, Android'den ekranı hemen kilitlemesini isteyecek. Mevcut Android ekran kilidi PIN'iniz, deseniniz veya parolanız denetiminizde kalır; SafeMobile bunu ayarlamaz veya değiştirmez.</string>
+    <string name="device_admin_lock_confirm">Cihazı kilitle</string>
+    <string name="device_admin_lock_cancel">İptal</string>
+    <string name="device_admin_lock_failed">Cihaz kilidi isteği gönderilemedi. SafeMobile Cihaz Yöneticisi'nin hâlâ etkin olduğunu kontrol edin.</string>
+
     <string name="installer_accessibility_service_title">SafeMobile yükleyici uyarısı</string>
     <string name="installer_accessibility_service_description">Android paket yükleyicisi göründüğünde isteğe bağlı uyarı. Yükleyiciyi engellemez, tıklamaz veya müdahale etmez. Yalnızca bu hatırlatmayı istiyorsanız etkinleştirin.</string>
     <string name="installer_unscanned_warning">Uyarı: Bu APK henüz taranmadı. Önce taramak için SafeMobile’a dönün.</string>

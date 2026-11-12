@@ -400,18 +400,19 @@
 <string name="security_filter_sentinel">Sentinel</string>
 <string name="security_filter_vault">Vault</string>
 <string name="device_admin_title">Device Administrator</string>
-<string name="device_admin_description">Optional Device Administrator access lets SafeMobile request a screen lock when you tap Lock Device Now. It cannot set passwords, erase data, block APK installation, or make SafeMobile the Device Owner.</string>
+<string name="device_admin_description">Optional Device Administrator adds an Android confirmation before SafeMobile is deactivated. It does not prevent uninstall after deactivation, block APK installation, or make SafeMobile the Device Owner.</string>
 <string name="device_admin_enable">Enable Device Administrator</string>
 <string name="device_admin_disable">Disable Device Administrator</string>
 <string name="device_admin_active">Device Administrator is active on this device.</string>
 <string name="device_admin_inactive">Device Administrator is inactive.</string>
-<string name="device_admin_explanation">Enable SafeMobile’s optional user-initiated Lock Device Now action. SafeMobile requests a screen lock only after you confirm; Android’s existing screen-lock settings still apply. SafeMobile does not wipe your device or change your password.</string>
+<string name="device_admin_explanation">Enable SafeMobile’s optional Device Administrator confirmation. SafeMobile does not enforce password rules, wipe your device, or block APK installation.</string>
     <string name="device_admin_lock_now">Lock Device Now</string>
     <string name="device_admin_lock_confirm_title">Lock this device now?</string>
     <string name="device_admin_lock_confirm_message">SafeMobile will ask Android to lock the screen immediately. Your existing Android screen-lock PIN, pattern, or password remains in control; SafeMobile does not set or change it.</string>
     <string name="device_admin_lock_confirm">Lock device</string>
     <string name="device_admin_lock_cancel">Cancel</string>
     <string name="device_admin_lock_failed">Unable to request a device lock. Check that Device Administrator is still enabled.</string>
+
 <string name="installer_accessibility_service_title">SafeMobile installer advisory</string>
 <string name="installer_accessibility_service_description">Optional advisory banner for Android package-installer windows. It does not block, click, or interfere with the system installer. Enable only if you want this reminder.</string>
 <string name="installer_unscanned_warning">Warning. This APK has not been scanned. Return to SafeMobile to scan first.</string>

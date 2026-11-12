@@ -238,18 +238,19 @@
     <string name="security_filter_sentinel">المراقبة</string>
     <string name="security_filter_vault">الخزنة</string>
     <string name="device_admin_title">مسؤول الجهاز</string>
-    <string name="device_admin_description">يتيح إذن مسؤول الجهاز الاختياري لـ SafeMobile طلب قفل الشاشة عند الضغط على Lock Device Now. لا يمكنه تعيين كلمات المرور أو محو البيانات أو حظر تثبيت APK أو جعل SafeMobile مالك الجهاز.</string>
+    <string name="device_admin_description">تضيف صلاحية مسؤول الجهاز الاختيارية تأكيدًا من Android قبل إلغاء تفعيل SafeMobile. لا تمنع إزالة التطبيق بعد إلغاء التفعيل أو تثبيت ملفات APK، ولا تجعل SafeMobile مالك الجهاز.</string>
     <string name="device_admin_enable">تفعيل مسؤول الجهاز</string>
     <string name="device_admin_disable">إيقاف مسؤول الجهاز</string>
     <string name="device_admin_active">مسؤول الجهاز مفعّل على هذا الجهاز.</string>
     <string name="device_admin_inactive">مسؤول الجهاز غير مفعّل.</string>
-    <string name="device_admin_explanation">فعّل إجراء Lock Device Now الاختياري الذي يبدأه المستخدم. يطلب SafeMobile قفل الشاشة بعد تأكيدك فقط؛ وتظل إعدادات قفل الشاشة الحالية في Android سارية. لا يمسح SafeMobile بيانات جهازك ولا يغيّر كلمة المرور.</string>
-    <string name="device_admin_lock_now">Lock Device Now</string>
-    <string name="device_admin_lock_confirm_title">Lock this device now?</string>
-    <string name="device_admin_lock_confirm_message">SafeMobile will ask Android to lock the screen immediately. Your existing Android screen-lock PIN, pattern, or password remains in control; SafeMobile does not set or change it.</string>
-    <string name="device_admin_lock_confirm">Lock device</string>
-    <string name="device_admin_lock_cancel">Cancel</string>
-    <string name="device_admin_lock_failed">Unable to request a device lock. Check that Device Administrator is still enabled.</string>
+    <string name="device_admin_explanation">فعّل تأكيد مسؤول الجهاز الاختياري في SafeMobile. لا يفرض التطبيق قواعد كلمات المرور ولا يمسح بيانات جهازك ولا يمنع تثبيت APK.</string>
+    <string name="device_admin_lock_now">اقفل الجهاز الآن</string>
+    <string name="device_admin_lock_confirm_title">هل تريد قفل هذا الجهاز الآن؟</string>
+    <string name="device_admin_lock_confirm_message">سيطلب SafeMobile من Android قفل الشاشة فورًا. يظل رمز PIN أو النمط أو كلمة المرور الحالية لشاشة Android تحت سيطرتك؛ لا يعيّن SafeMobile هذه البيانات ولا يغيّرها.</string>
+    <string name="device_admin_lock_confirm">قفل الجهاز</string>
+    <string name="device_admin_lock_cancel">إلغاء</string>
+    <string name="device_admin_lock_failed">تعذّر طلب قفل الجهاز. تأكد من أن مسؤول الجهاز في SafeMobile لا يزال مفعّلًا.</string>
+
     <string name="installer_accessibility_service_title">تنبيه المثبّت من SafeMobile</string>
     <string name="installer_accessibility_service_description">تنبيه اختياري عند ظهور مثبت حزم Android. لا يحظر المثبّت ولا ينقر أو يتداخل معه. فعّله فقط إذا رغبت في هذا التذكير.</string>
     <string name="installer_unscanned_warning">تحذير: لم يتم فحص ملف APK هذا. ارجع إلى SafeMobile لفحصه أولاً.</string>
