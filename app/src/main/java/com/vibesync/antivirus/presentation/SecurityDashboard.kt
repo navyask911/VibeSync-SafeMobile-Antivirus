@@ -70,7 +70,7 @@ internal fun SecurityDashboard(assessment: DeviceSecurityAssessment?, onCheckPla
                         }
                     }
                     Text(if (assessment == null) stringResource(R.string.ui_score_checking) else
-                        stringResource(R.string.ui_score_checks, 7 - assessment.unknownChecks, 7),
+                        stringResource(R.string.ui_score_checks, 6 - assessment.unknownChecks, 6),
                         style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
@@ -99,11 +99,9 @@ internal fun SecurityDashboard(assessment: DeviceSecurityAssessment?, onCheckPla
                         ScoreRow(stringResource(R.string.ui_score_play_protect), when(signals.playProtectEnabled) { true -> stringResource(R.string.ui_on); false -> stringResource(R.string.ui_off_20); null -> stringResource(R.string.ui_not_verified) })
                         ScoreRow(stringResource(R.string.ui_score_database), if (assessment.databaseStale) stringResource(R.string.ui_stale_10) else stringResource(R.string.ui_updated_24))
                         ScoreRow(stringResource(R.string.ui_score_accessibility), signals.nonSystemAccessibilityApps?.let { pluralStringResource(R.plurals.l10n_enabled_apps, it, it) } ?: stringResource(R.string.ui_unavailable))
-                        ScoreRow(stringResource(R.string.ui_score_admin), signals.nonSystemDeviceAdmins?.let { pluralStringResource(R.plurals.l10n_enabled_apps, it, it) } ?: stringResource(R.string.ui_unavailable))
+                        ScoreRow(stringResource(R.string.play_integrity_verified_title), settingsFlag(signals.meetsDeviceIntegrity))
                         ScoreRow(stringResource(R.string.guardian_adb_state), settingsFlag(signals.usbDebuggingEnabled))
                         ScoreRow(stringResource(R.string.risk_install), settingsFlag(signals.safeMobileUnknownSourcesGrant))
-                        ScoreRow(stringResource(R.string.posture_overlays), signals.activeNonSystemOverlays?.let {
-                            pluralStringResource(R.plurals.l10n_enabled_apps, it, it) } ?: stringResource(R.string.ui_not_verified))
                         ScoreRow(stringResource(R.string.battery_review_title), settingsFlag(signals.backgroundRestricted))
                         ExpandableText(stringResource(R.string.v116_score_meaning), maxLines = 3)
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -123,13 +121,12 @@ internal fun SecurityDashboard(assessment: DeviceSecurityAssessment?, onCheckPla
                 Text(stringResource(R.string.ui_score_play_protect) + " · −20")
                 Text(stringResource(R.string.guardian_adb_state) + " · −15")
                 Text(stringResource(R.string.risk_install) + " · −10")
-                Text(stringResource(R.string.posture_overlays) + " · −15")
+                Text(stringResource(R.string.play_integrity_verified_title) + " · −20 until verified")
                 Text(stringResource(R.string.battery_review_title) + " · −15")
                 Text(stringResource(R.string.ui_score_database) + " · −10")
                 Text(stringResource(R.string.ui_score_accessibility) + " · −10")
-                Text(stringResource(R.string.ui_score_admin) + " · −5")
                 if (assessment != null) {
-                    Text(stringResource(R.string.ui_score_checks, 7 - assessment.unknownChecks, 7))
+                    Text(stringResource(R.string.ui_score_checks, 6 - assessment.unknownChecks, 6))
                 }
                 Spacer(Modifier.height(16.dp))
             }

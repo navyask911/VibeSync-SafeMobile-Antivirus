@@ -48,6 +48,8 @@ import com.vibesync.antivirus.core.engine.DetectionSource
 import com.vibesync.antivirus.core.engine.ScanResult
 import com.vibesync.antivirus.core.engine.ScanVerdict
 import com.vibesync.antivirus.core.locale.LocalePreferences
+import com.vibesync.antivirus.core.security.SecurityVerificationState
+import com.vibesync.antivirus.core.security.SecurityVerificationStatus
 import com.vibesync.antivirus.ui.theme.AppTheme
 
 private data class V17Colors(
@@ -241,6 +243,7 @@ internal fun V17BottomNavigationBar(selectedTab: String, isDark: Boolean, onSele
 @Composable
 internal fun V17ShieldScreen(
     isDark: Boolean, securityScore: Int, isPro: Boolean, activeGuards: Int,
+    integrityState: SecurityVerificationState,
     liveSentinelActive: Boolean, posturePassed: Int?, quarantinedFilesCount: Int,
     onOpenSetup: () -> Unit, onOpenLiveSentinel: () -> Unit, onOpenPosture: () -> Unit,
     onOpenDetection: () -> Unit, onOpenThreatDb: () -> Unit,
@@ -273,6 +276,29 @@ internal fun V17ShieldScreen(
             onOpenPrivacy = onOpenPrivacy,
             onOpenSettings = onOpenSettings
         )
+        V17Card(isDark) {
+            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                Icon(
+                    imageVector = if (integrityState.meetsDeviceIntegrity == true)
+                        Icons.Outlined.CheckCircle else Icons.Outlined.Security,
+                    contentDescription = null,
+                    tint = if (integrityState.meetsDeviceIntegrity == true) c.green else c.muted,
+                    modifier = Modifier.size(26.dp)
+                )
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                    V17Title(stringResource(R.string.play_integrity_verified_title))
+                    V17Body(stringResource(when (integrityState.status) {
+                        SecurityVerificationStatus.VERIFIED -> R.string.play_integrity_status_verified
+                        SecurityVerificationStatus.NOT_VERIFIED -> R.string.play_integrity_status_not_verified
+                        SecurityVerificationStatus.REQUESTING_TOKEN -> R.string.play_integrity_status_requesting
+                        SecurityVerificationStatus.AWAITING_SERVER_VERDICT -> R.string.play_integrity_status_server_unconfigured
+                        SecurityVerificationStatus.ERROR -> R.string.play_integrity_status_error
+                        SecurityVerificationStatus.NOT_CHECKED -> R.string.play_integrity_status_not_checked
+                    }), color = c.muted)
+                }
+            }
+        }
         if (activeGuards < 3) Surface(
             Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp)).clickable(onClick = onOpenSetup),
             color = c.amber.copy(alpha = .14f), shape = RoundedCornerShape(16.dp),
@@ -405,8 +431,8 @@ private fun V17Tile(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun V17ProtectionSetupSheet(
-    isDark: Boolean, batteryActive: Boolean, adminActive: Boolean, safActive: Boolean,
-    onDismiss: () -> Unit, onBatteryToggle: (Boolean) -> Unit, onAdminToggle: (Boolean) -> Unit,
+    isDark: Boolean, batteryActive: Boolean, safActive: Boolean,
+    onDismiss: () -> Unit, onBatteryToggle: (Boolean) -> Unit,
     onSafToggle: (Boolean) -> Unit
 ) {
     val c = v17Colors(isDark)
@@ -418,7 +444,6 @@ internal fun V17ProtectionSetupSheet(
             V17Body(stringResource(R.string.setup_checklist_body))
             listOf(
                 Triple(stringResource(R.string.setup_checklist_battery), batteryActive, onBatteryToggle),
-                Triple(stringResource(R.string.setup_checklist_admin), adminActive, onAdminToggle),
                 Triple(stringResource(R.string.setup_checklist_saf), safActive, onSafToggle)
             ).forEachIndexed { index, (title, checked, onToggle) ->
                 val icon = when (index) {
@@ -722,10 +747,10 @@ internal fun V17ConsoleSettingsScreen(
     onVoiceChanged: (Boolean) -> Unit, installSentinelEnabled: Boolean, installSentinelRunning: Boolean,
     onInstallSentinelChanged: (Boolean) -> Unit, globalIntelEnabled: Boolean,
     onGlobalIntelChanged: (Boolean) -> Unit,
-    batteryActive: Boolean, adminActive: Boolean, safActive: Boolean,
-    onBatteryToggle: (Boolean) -> Unit, onAdminToggle: (Boolean) -> Unit,
+    batteryActive: Boolean, safActive: Boolean,
+    integrityState: SecurityVerificationState,
+    onBatteryToggle: (Boolean) -> Unit,
     onSafToggle: (Boolean) -> Unit,
-    onLockDeviceNow: () -> Unit = {},
     onImportYara: () -> Unit,
     onThreatFeedSync: () -> Unit, onBenchmarks: () -> Unit, onOpenPro: () -> Unit,
     onOpenPrivacy: () -> Unit = {}, onOpenAbout: () -> Unit = {},
@@ -736,7 +761,6 @@ internal fun V17ConsoleSettingsScreen(
     var advanced by rememberSaveable { mutableStateOf(false) }
     var languageOpen by rememberSaveable { mutableStateOf(false) }
     var selectedLanguage by rememberSaveable { mutableStateOf(LocalePreferences.overrideTag(context)) }
-    var showLockDeviceConfirmation by rememberSaveable { mutableStateOf(false) }
     Column(Modifier.fillMaxSize().background(c.device).verticalScroll(rememberScrollState()).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)) {
         V17Card(isDark) {
@@ -814,47 +838,38 @@ internal fun V17ConsoleSettingsScreen(
             }
         }
         V17Card(isDark) {
+            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                Icon(
+                    imageVector = if (integrityState.meetsDeviceIntegrity == true)
+                        Icons.Outlined.CheckCircle else Icons.Outlined.Security,
+                    contentDescription = null,
+                    tint = if (integrityState.meetsDeviceIntegrity == true) c.green else c.muted,
+                    modifier = Modifier.size(26.dp)
+                )
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                    V17Title(stringResource(R.string.play_integrity_verified_title))
+                    V17Body(stringResource(when (integrityState.status) {
+                        SecurityVerificationStatus.VERIFIED -> R.string.play_integrity_status_verified
+                        SecurityVerificationStatus.NOT_VERIFIED -> R.string.play_integrity_status_not_verified
+                        SecurityVerificationStatus.REQUESTING_TOKEN -> R.string.play_integrity_status_requesting
+                        SecurityVerificationStatus.AWAITING_SERVER_VERDICT -> R.string.play_integrity_status_server_unconfigured
+                        SecurityVerificationStatus.ERROR -> R.string.play_integrity_status_error
+                        SecurityVerificationStatus.NOT_CHECKED -> R.string.play_integrity_status_not_checked
+                    }), color = c.muted)
+                }
+            }
+        }
+        V17Card(isDark) {
             V17SectionHeading(stringResource(R.string.security_guards_title),
                 stringResource(R.string.security_guards_description), Icons.Outlined.Tune, c.accent)
             V17Switch(stringResource(R.string.security_guard_battery),
                 stringResource(R.string.security_guard_battery_desc), batteryActive, "console.guard.battery",
                 Icons.Outlined.BatteryChargingFull, isDark, onBatteryToggle)
             HorizontalDivider(color = c.border)
-            V17Switch(stringResource(R.string.security_guard_admin),
-                stringResource(R.string.security_guard_admin_desc), adminActive, "console.guard.admin",
-                Icons.Outlined.Security, isDark, onAdminToggle)
-            if (adminActive) {
-                OutlinedButton(
-                    onClick = { showLockDeviceConfirmation = true },
-                    modifier = Modifier.fillMaxWidth().testTag("console.device-admin.lock")
-                ) {
-                    Icon(Icons.Outlined.Lock, contentDescription = null, modifier = Modifier.size(17.dp))
-                    Spacer(Modifier.width(6.dp))
-                    Text(stringResource(R.string.device_admin_lock_now))
-                }
-            }
-            HorizontalDivider(color = c.border)
             V17Switch(stringResource(R.string.security_guard_saf),
                 stringResource(R.string.security_guard_saf_desc), safActive, "console.guard.saf",
                 Icons.Outlined.Storage, isDark, onSafToggle)
-        }
-        if (showLockDeviceConfirmation) {
-            AlertDialog(
-                onDismissRequest = { showLockDeviceConfirmation = false },
-                title = { Text(stringResource(R.string.device_admin_lock_confirm_title)) },
-                text = { Text(stringResource(R.string.device_admin_lock_confirm_message)) },
-                confirmButton = {
-                    TextButton(onClick = {
-                        showLockDeviceConfirmation = false
-                        onLockDeviceNow()
-                    }) { Text(stringResource(R.string.device_admin_lock_confirm)) }
-                },
-                dismissButton = {
-                    TextButton(onClick = { showLockDeviceConfirmation = false }) {
-                        Text(stringResource(R.string.device_admin_lock_cancel))
-                    }
-                }
-            )
         }
         V17Card(isDark) {
             Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp))

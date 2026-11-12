@@ -77,7 +77,7 @@ class DevicePostureIntegrationTest {
     }
 
     @Test fun settingsLinksUseReviewDestinationsAndNeverAnAdministratorActivation() {
-        for (access in PostureAccess.entries) {
+        for (access in listOf(PostureAccess.ACCESSIBILITY, PostureAccess.NOTIFICATION_LISTENER)) {
             val intents = PostureSettingsLinks.candidates(finding.copy(access = access))
             assertTrue(intents.isNotEmpty())
             assertTrue(intents.all { it.action?.startsWith("android.settings.") == true })
@@ -88,7 +88,6 @@ class DevicePostureIntegrationTest {
         @Suppress("DEPRECATION")
         val component = accessibility.getParcelableExtra<ComponentName>(Intent.EXTRA_COMPONENT_NAME)
         assertEquals(ComponentName.unflattenFromString(finding.componentName!!), component)
-        assertEquals("package:example.reader", PostureSettingsLinks.candidates(finding.copy(access = PostureAccess.OVERLAY)).first().data.toString())
     }
 
     @Test fun notificationDetailUsesTheStringComponentContractWhenSupported() {
@@ -105,9 +104,10 @@ class DevicePostureIntegrationTest {
         assertTrue(report.checkedAt > 0)
         assertEquals(report.findings.size, report.findings.distinctBy { Triple(it.access, it.packageName, it.componentName) }.size)
         assertTrue(report.findings.all { it.packageName.isNotBlank() && it.appName.isNotBlank() })
-        assertTrue(report.findings.filter { it.access != PostureAccess.OVERLAY }.all { it.state == PostureGrantState.ENABLED })
-        val monitored = DevicePostureInspector(context).inspect(includeOverlay = false)
-        assertFalse(monitored.findings.any { it.access == PostureAccess.OVERLAY })
+        assertTrue(report.findings.all { it.state == PostureGrantState.ENABLED })
+        assertTrue(report.findings.all {
+            it.access == PostureAccess.ACCESSIBILITY || it.access == PostureAccess.NOTIFICATION_LISTENER
+        })
     }
 
     private fun deleteFixture(file: File) {

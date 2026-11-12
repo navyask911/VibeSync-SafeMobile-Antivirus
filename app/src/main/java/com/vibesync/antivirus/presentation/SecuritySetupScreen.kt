@@ -197,12 +197,6 @@ internal fun SecuritySetupScreen(
                                 modifier = Modifier.fillMaxWidth(),
                                 verticalArrangement = Arrangement.spacedBy(10.dp)
                             ) {
-                                Text(
-                                    stringResource(R.string.security_guard_overlay_onboarding_note),
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    textAlign = TextAlign.Center
-                                )
                                 Button(
                                     onClick = onRequestBatteryOptimization,
                                     enabled = !batteryOptimizationExempt,

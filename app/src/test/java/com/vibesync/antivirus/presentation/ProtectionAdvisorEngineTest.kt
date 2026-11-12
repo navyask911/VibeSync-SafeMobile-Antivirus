@@ -22,7 +22,7 @@ class ProtectionAdvisorEngineTest {
                 playProtectEnabled = true,
                 usbDebuggingEnabled = false,
                 voiceAlertsEnabled = true,
-                deviceAdminActive = true,
+                meetsDeviceIntegrity = true,
                 apiLevel = 36,
                 nowMillis = now
             ),
@@ -52,7 +52,7 @@ class ProtectionAdvisorEngineTest {
                 playProtectEnabled = false,
                 usbDebuggingEnabled = true,
                 voiceAlertsEnabled = false,
-                deviceAdminActive = false,
+                meetsDeviceIntegrity = false,
                 apiLevel = 36
             ),
             snoozedIds = emptySet()

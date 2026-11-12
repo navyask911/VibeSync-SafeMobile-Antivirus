@@ -684,4 +684,13 @@
     <string name="self_update_no_update">No newer Google Play update is currently available.</string>
     <string name="self_update_not_allowed">An update is available, but Google Play does not allow the immediate update flow for this installation.</string>
     <string name="self_update_open_play_store">Open Google Play</string>
+
+    <string name="play_integrity_verified_title">Play Integrity Verified</string>
+    <string name="play_integrity_verified_description">A trusted server verifies the device verdict returned by Google Play.</string>
+    <string name="play_integrity_status_verified">Google Play confirms MEETS_DEVICE_INTEGRITY.</string>
+    <string name="play_integrity_status_not_verified">Google Play did not return MEETS_DEVICE_INTEGRITY.</string>
+    <string name="play_integrity_status_requesting">Requesting an integrity token from Google Play…</string>
+    <string name="play_integrity_status_server_unconfigured">Token received. Server-side verification is not configured.</string>
+    <string name="play_integrity_status_error">Integrity verification is currently unavailable.</string>
+    <string name="play_integrity_status_not_checked">Waiting for a Play Integrity check.</string>
 </resources>

@@ -180,12 +180,11 @@ fun DevicePostureScreen(
                 }
             }
         }
-        PostureAccess.entries.forEachIndexed { sectionIndex, access ->
+        listOf(PostureAccess.ACCESSIBILITY, PostureAccess.NOTIFICATION_LISTENER).forEachIndexed { sectionIndex, access ->
             Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 if (sectionIndex > 0) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                 Text(stringResource(PostureText.title(access)), style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold, maxLines = 2, overflow = TextOverflow.Ellipsis)
-                if (access == PostureAccess.OVERLAY) ExpandableText(stringResource(R.string.posture_overlay_limit), maxLines = 3)
                 val report = state.report
                 if (report == null) Text(stringResource(R.string.posture_not_checked), style = MaterialTheme.typography.bodySmall,
                     maxLines = 3, overflow = TextOverflow.Ellipsis)
@@ -227,9 +226,7 @@ private fun PostureFindingRow(finding: PostureFinding, onFix: () -> Unit) {
         if (finding.stale) Text(stringResource(R.string.posture_stale), color = PostureWarning,
             style = MaterialTheme.typography.bodySmall)
         ExpandableText(stringResource(PostureText.explanation(finding)), maxLines = 3)
-        if (finding.access != PostureAccess.OVERLAY || (finding.state == PostureGrantState.ENABLED && !finding.stale)) {
-            OutlinedButton(onClick = onFix) { Text(stringResource(R.string.posture_fix)) }
-        }
+        OutlinedButton(onClick = onFix) { Text(stringResource(R.string.posture_fix)) }
     }
 }
 

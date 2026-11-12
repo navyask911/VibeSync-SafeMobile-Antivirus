@@ -9,9 +9,9 @@ class DeviceSecurityScoreTest {
     @Test fun allObservedSafeSignalsScore100() {
         val signals = DeviceSecuritySignals(
             playProtectEnabled = true, databaseUpdatedAt = now - 1,
-            nonSystemAccessibilityApps = 0, nonSystemDeviceAdmins = 0,
+            nonSystemAccessibilityApps = 0, meetsDeviceIntegrity = true,
             usbDebuggingEnabled = false, safeMobileUnknownSourcesGrant = false,
-            activeNonSystemOverlays = 0, backgroundRestricted = false)
+            backgroundRestricted = false)
         val result = DeviceSecurityScore.evaluate(signals, now)
         assertEquals(100, result.score)
         assertEquals(0, result.unknownChecks)
@@ -20,16 +20,16 @@ class DeviceSecurityScoreTest {
     @Test fun everyFactorDeductsExactlyItsDeclaredWeight() {
         val signals = DeviceSecuritySignals(
             playProtectEnabled = false, databaseUpdatedAt = null,
-            nonSystemAccessibilityApps = 3, nonSystemDeviceAdmins = 4,
+            nonSystemAccessibilityApps = 3, meetsDeviceIntegrity = false,
             usbDebuggingEnabled = true, safeMobileUnknownSourcesGrant = true,
-            activeNonSystemOverlays = 2, backgroundRestricted = true)
+            backgroundRestricted = true)
         assertEquals(0, DeviceSecurityScore.evaluate(signals, now).score)
     }
 
     @Test fun unknownNeverCountsAsVerified() {
         val result = DeviceSecurityScore.evaluate(DeviceSecuritySignals(), now)
-        assertEquals(90, result.score)
-        assertEquals(7, result.unknownChecks)
+        assertEquals(70, result.score)
+        assertEquals(6, result.unknownChecks)
         assertTrue(result.databaseStale)
     }
 

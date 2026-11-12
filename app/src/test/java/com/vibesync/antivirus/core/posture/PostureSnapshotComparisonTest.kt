@@ -5,25 +5,24 @@ import org.junit.Test
 
 class PostureSnapshotComparisonTest {
     private val a = PostureFinding(PostureAccess.ACCESSIBILITY, "example.reader", "Reader", systemApp = false)
-    private val admin = a.copy(access = PostureAccess.DEVICE_ADMIN)
     private val listener = a.copy(access = PostureAccess.NOTIFICATION_LISTENER)
     private fun report(vararg findings: PostureFinding, unavailable: Set<PostureAccess> = emptySet(), at: Long = 100L) =
         DevicePostureReport(findings.toList(), unavailable, at)
 
     @Test fun firstCompleteSnapshotIsSilentEvenWithExistingPowerfulApps() {
-        val first = PostureSnapshotComparison.advance(PostureSnapshot(), report(a, admin, listener))
+        val first = PostureSnapshotComparison.advance(PostureSnapshot(), report(a, listener))
         assertEquals(PostureSnapshotComparison.monitored, first.initialized)
-        assertEquals(3, first.grants.size)
+        assertEquals(2, first.grants.size)
         assertTrue(first.pending.isEmpty())
         assertEquals(100L, first.lastCompleteCheckAt)
     }
 
     @Test fun eachNewCapabilityCreatesOneChangeAndUnchangedReadsDoNotDuplicateIt() {
         val baseline = PostureSnapshotComparison.advance(PostureSnapshot(), report())
-        val next = PostureSnapshotComparison.advance(baseline, report(a, admin, listener, at = 200))
-        assertEquals(3, next.pending.size)
+        val next = PostureSnapshotComparison.advance(baseline, report(a, listener, at = 200))
+        assertEquals(2, next.pending.size)
         assertTrue(next.pending.all { it.observedAt == 200L })
-        assertEquals(next.pending, PostureSnapshotComparison.advance(next, report(a, admin, listener, at = 300)).pending)
+        assertEquals(next.pending, PostureSnapshotComparison.advance(next, report(a, listener, at = 300)).pending)
     }
 
     @Test fun revocationDropsUndeliveredChangeAndLaterGrantIsANewEvent() {
@@ -46,10 +45,10 @@ class PostureSnapshotComparisonTest {
     }
 
     @Test fun firstSuccessfulReadOfPreviouslyMissingCategoryIsItsSilentBaseline() {
-        val first = PostureSnapshotComparison.advance(PostureSnapshot(), report(admin,
+        val first = PostureSnapshotComparison.advance(PostureSnapshot(), report(
             unavailable = setOf(PostureAccess.ACCESSIBILITY)))
         assertFalse(PostureAccess.ACCESSIBILITY in first.initialized)
-        val next = PostureSnapshotComparison.advance(first, report(a, admin))
+        val next = PostureSnapshotComparison.advance(first, report(a))
         assertTrue(next.pending.isEmpty())
         assertEquals(PostureSnapshotComparison.monitored, next.initialized)
     }
@@ -62,23 +61,11 @@ class PostureSnapshotComparisonTest {
         assertEquals(1, next.pending.size)
     }
 
-    @Test fun overlayDeclarationsNeverEnterBackgroundComparison() {
-        val first = PostureSnapshotComparison.advance(PostureSnapshot(), report())
-        val next = PostureSnapshotComparison.advance(first, report(a.copy(access = PostureAccess.OVERLAY),
-            unavailable = setOf(PostureAccess.OVERLAY), at = 200))
-        assertTrue(next.grants.isEmpty())
-        assertTrue(next.pending.isEmpty())
-        assertEquals(200L, next.lastCompleteCheckAt)
-    }
-
     @Test fun bothSystemMetadataAndProtectedVendorNamespacesSuppressRisk() {
         assertFalse(a.copy(packageName = "com.google.fake.reader").highRisk)
         assertFalse(a.copy(systemApp = true).highRisk)
         assertFalse(a.copy(systemApp = null).highRisk)
-        assertFalse(a.copy(access = PostureAccess.OVERLAY, systemApp = true).highRisk)
-        assertFalse(a.copy(access = PostureAccess.OVERLAY, state = PostureGrantState.UNKNOWN).highRisk)
-        assertFalse(a.copy(access = PostureAccess.OVERLAY, state = PostureGrantState.NOT_GRANTED).highRisk)
-        assertEquals(1, report(a, admin, listener).highRiskAppCount)
+        assertEquals(1, report(a, listener).highRiskAppCount)
     }
 
     @Test fun staleRiskRemainsUntilItsCategoryCanConfirmRevocation() {
@@ -89,11 +76,5 @@ class PostureSnapshotComparisonTest {
         assertEquals(0, report().retainingUnavailable(partial).highRiskAppCount)
     }
 
-    @Test fun knownOverlayRevocationWinsEvenWhenSystemClassificationIsUnavailable() {
-        val old = report(a.copy(access = PostureAccess.OVERLAY))
-        val fresh = report(a.copy(access = PostureAccess.OVERLAY, state = PostureGrantState.NOT_GRANTED, systemApp = null),
-            unavailable = setOf(PostureAccess.OVERLAY)).retainingUnavailable(old)
-        assertEquals(0, fresh.highRiskAppCount)
-        assertEquals(PostureGrantState.NOT_GRANTED, fresh.findings.single().state)
-    }
+
 }

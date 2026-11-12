@@ -1,16 +1,13 @@
 package com.vibesync.antivirus.core.security
 
 import android.accessibilityservice.AccessibilityServiceInfo
-import android.app.admin.DevicePolicyManager
 import android.content.Context
 import android.os.PowerManager
 import android.provider.Settings
-import com.vibesync.antivirus.core.posture.DevicePostureInspector
-import com.vibesync.antivirus.core.posture.PostureAccess
 import android.content.pm.ApplicationInfo
 import android.view.accessibility.AccessibilityManager
 
-/** Reads enabled services/admins only. Does not request accessibility or device-admin privileges. */
+/** Reads accessibility-service and system posture metadata without requesting special access. */
 object DeviceSecurityInspector {
     private const val PREFS = "safe_mobile_play_protect_report"
     fun reportPlayProtect(context: Context, enabled: Boolean) {
@@ -29,14 +26,6 @@ object DeviceSecurityInspector {
                 .mapNotNull { it.resolveInfo?.serviceInfo?.applicationInfo }
                 .filter { isNonSystem(it.flags) }.map { it.packageName }.distinct().size
         }.getOrNull()
-        val admins = runCatching {
-            val manager = context.getSystemService(Context.DEVICE_POLICY_SERVICE) as? DevicePolicyManager
-                ?: return@runCatching null
-            manager.activeAdmins.orEmpty().map { component ->
-                @Suppress("DEPRECATION")
-                context.packageManager.getApplicationInfo(component.packageName, 0)
-            }.filter { isNonSystem(it.flags) }.map { it.packageName }.distinct().size
-        }.getOrNull()
         val adb = runCatching {
             Settings.Global.getInt(context.contentResolver, Settings.Global.ADB_ENABLED, -1)
                 .takeIf { it >= 0 }?.let { it != 0 }
@@ -49,13 +38,16 @@ object DeviceSecurityInspector {
             val power = context.getSystemService(PowerManager::class.java)
             power?.let { !it.isIgnoringBatteryOptimizations(context.packageName) }
         }.getOrNull()
-        val overlays = runCatching {
-            val report = DevicePostureInspector(context).inspect(includeOverlay = true)
-            if (PostureAccess.OVERLAY in report.unavailable) null
-            else report.grants(PostureAccess.OVERLAY).map { it.packageName }.distinct().size
-        }.getOrNull()
-        return DeviceSecuritySignals(reportedPlayProtect, databaseUpdatedAt, accessibility, admins,
-            adb, ownInstallerGrant, overlays, backgroundRestricted)
+        val meetsDeviceIntegrity = SecurityVerifier.readStoredVerdict(context)
+        return DeviceSecuritySignals(
+            playProtectEnabled = reportedPlayProtect,
+            databaseUpdatedAt = databaseUpdatedAt,
+            nonSystemAccessibilityApps = accessibility,
+            usbDebuggingEnabled = adb,
+            safeMobileUnknownSourcesGrant = ownInstallerGrant,
+            backgroundRestricted = backgroundRestricted,
+            meetsDeviceIntegrity = meetsDeviceIntegrity
+        )
     }
     private fun isNonSystem(flags: Int) = flags and (ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) == 0
 }

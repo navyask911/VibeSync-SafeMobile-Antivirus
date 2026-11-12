@@ -22,7 +22,6 @@ import com.vibesync.antivirus.core.crypto.HashCalculator
 import com.vibesync.antivirus.core.engine.PackageScanner
 import com.vibesync.antivirus.core.engine.BundledYaraEngine
 import com.vibesync.antivirus.core.hashdb.HashDatabaseManager
-import com.vibesync.antivirus.core.security.DeviceOwnerManager
 import com.vibesync.antivirus.core.posture.DevicePostureMonitor
 import com.vibesync.antivirus.core.posture.DevicePostureRepository
 import com.vibesync.antivirus.core.worker.DeepScanWorker
@@ -90,9 +89,10 @@ class SafeMobileApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        securityVerifier = com.vibesync.antivirus.core.security.SecurityVerifier(this)
+        appScope.launch { securityVerifier.requestIntegrityTokenAndVerify() }
         // Only ~2 KiB of signed-APK text is loaded; all APK scanning stays on Dispatchers.IO.
         BundledYaraEngine.initialize(assets)
-        runCatching { DeviceOwnerManager(this).applyEnterpriseDefaults() }
         database = Room.databaseBuilder(this, ThreatDatabase::class.java, "safe_mobile_threats.db")
             .addMigrations(
                 ThreatDatabase.MIGRATION_1_2, ThreatDatabase.MIGRATION_2_3,
@@ -165,6 +165,9 @@ class SafeMobileApp : Application() {
         appScope.cancel()
         super.onTerminate()
     }
+
+    lateinit var securityVerifier: com.vibesync.antivirus.core.security.SecurityVerifier
+        private set
 
     companion object {
         const val SECURITY_PREFS = "safe_mobile_security_settings"

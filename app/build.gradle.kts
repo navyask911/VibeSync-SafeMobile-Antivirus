@@ -17,6 +17,7 @@ fun cfg(value: String): String = "\"" + value.replace("\\", "\\\\").replace("\""
 
 val feedManifestPublicKey = providers.environmentVariable("SAFE_MOBILE_FEED_ED25519_PUBLIC_KEY_B64").orNull?.trim().orEmpty()
 val hashDatabasePublicKey = providers.environmentVariable("SAFE_MOBILE_HASHDB_ED25519_PUBLIC_KEY_B64").orNull?.trim().orEmpty()
+val playIntegrityVerificationUrl = providers.environmentVariable("PLAY_INTEGRITY_VERIFICATION_URL").orNull?.trim().orEmpty()
 val releaseStoreBase64 = providers.environmentVariable("KEYSTORE_BASE64").orNull
 val releaseStorePassword = providers.environmentVariable("KEYSTORE_PASSWORD").orNull
 val releaseKeyAlias = providers.environmentVariable("KEY_ALIAS").orNull
@@ -45,14 +46,15 @@ android {
   applicationId = "com.vibesync.antivirus"
   minSdk = 26
   targetSdk = 36
-  versionCode = 20261147
-  // [release-v1.8.1] Compliance hardening: truthful posture score, minimized Device Admin, no own overlay permission.
-  versionName = "1.8.1"
+  versionCode = 20261148
+  // [release-v1.9.0] Device Admin removed; Play Integrity verification replaces it.
+  versionName = "1.9.0"
   testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   buildConfigField("String", "FEED_MANIFEST_PUBLIC_KEY_B64", cfg(feedManifestPublicKey))
   buildConfigField("Boolean", "FEED_MANIFEST_KEY_CONFIGURED", (!feedManifestPublicKey.isBlank()).toString())
   buildConfigField("String", "HASHDB_PUBLIC_KEY_B64", cfg(hashDatabasePublicKey))
   buildConfigField("Boolean", "HASHDB_PUBLIC_KEY_CONFIGURED", (!hashDatabasePublicKey.isBlank()).toString())
+  buildConfigField("String", "PLAY_INTEGRITY_VERIFICATION_URL", cfg(playIntegrityVerificationUrl))
  }
  signingConfigs {
   if (releaseSigningEnabled) {
@@ -594,6 +596,7 @@ tasks.matching {
 
 kapt { correctErrorTypes = true }
 dependencies {
+ implementation("com.google.android.play:integrity:1.3.0")
  implementation("androidx.core:core-ktx:1.16.0")
  implementation("androidx.core:core-splashscreen:1.2.0")
  implementation("androidx.datastore:datastore-preferences:1.3.0")

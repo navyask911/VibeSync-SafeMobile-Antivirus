@@ -51,7 +51,7 @@ data class ProtectionAdvisorInputs(
     val playProtectEnabled: Boolean?,
     val usbDebuggingEnabled: Boolean?,
     val voiceAlertsEnabled: Boolean,
-    val deviceAdminActive: Boolean = false,
+    val meetsDeviceIntegrity: Boolean?,
     val apiLevel: Int = Build.VERSION.SDK_INT,
     val nowMillis: Long = System.currentTimeMillis()
 )
@@ -91,8 +91,8 @@ object ProtectionAdvisorEngine {
                 inputs.playProtectEnabled == true && inputs.usbDebuggingEnabled == false, "guardian"),
             issue("voice_alert_tts", R.string.voice_alerts_title, R.string.voice_alerts_description,
                 2, inputs.voiceAlertsEnabled, "settings"),
-            issue("device_admin", R.string.device_admin_title, R.string.device_admin_description,
-                12, inputs.deviceAdminActive, "settings")
+            issue("play_integrity", R.string.play_integrity_verified_title, R.string.play_integrity_verified_description,
+                12, inputs.meetsDeviceIntegrity == true, "settings")
         )
         val mapped = raw.map { item ->
             when {
