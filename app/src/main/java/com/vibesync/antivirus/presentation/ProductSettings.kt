@@ -51,6 +51,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.compose.LocalActivityResultRegistryOwner
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.app.NotificationManagerCompat
@@ -186,14 +187,20 @@ private fun ThemeOptionButton(
 private fun SelfUpdateCard() {
     val context = LocalContext.current
     var updateMessage by remember { mutableStateOf<Int?>(null) }
-    val updateLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.StartIntentSenderForResult()
-    ) { result ->
-        updateMessage = when (result.resultCode) {
-            Activity.RESULT_OK -> R.string.self_update_started
-            Activity.RESULT_CANCELED -> R.string.self_update_cancelled
-            else -> R.string.self_update_check_failed
+    // Settings previews/snapshot tests may render without an Activity Result owner.
+    // Only register the Play update launcher when a real host can receive its result.
+    val updateLauncher = if (LocalActivityResultRegistryOwner.current != null) {
+        rememberLauncherForActivityResult(
+            ActivityResultContracts.StartIntentSenderForResult()
+        ) { result ->
+            updateMessage = when (result.resultCode) {
+                Activity.RESULT_OK -> R.string.self_update_started
+                Activity.RESULT_CANCELED -> R.string.self_update_cancelled
+                else -> R.string.self_update_check_failed
+            }
         }
+    } else {
+        null
     }
 
     Card(
@@ -216,6 +223,10 @@ private fun SelfUpdateCard() {
                     updateMessage = null
                     // Create the Play update manager only when the user explicitly opens
                     // the update flow. This keeps previews/Paparazzi independent of Play services.
+                    val launcher = updateLauncher ?: run {
+                        updateMessage = R.string.self_update_unavailable
+                        return@Button
+                    }
                     val appUpdateManager = try {
                         AppUpdateManagerFactory.create(context.applicationContext)
                     } catch (_: Exception) {
@@ -230,7 +241,7 @@ private fun SelfUpdateCard() {
                                 runCatching {
                                     val started = appUpdateManager.startUpdateFlowForResult(
                                         info,
-                                        updateLauncher,
+                                        launcher,
                                         AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build()
                                     )
                                     if (!started) updateMessage = R.string.self_update_check_failed
@@ -241,7 +252,7 @@ private fun SelfUpdateCard() {
                                 runCatching {
                                     val started = appUpdateManager.startUpdateFlowForResult(
                                         info,
-                                        updateLauncher,
+                                        launcher,
                                         AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build()
                                     )
                                     if (!started) updateMessage = R.string.self_update_check_failed
