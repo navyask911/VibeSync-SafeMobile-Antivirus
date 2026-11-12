@@ -311,13 +311,11 @@ private fun V17ScoreRing(score: Int, isDark: Boolean) {
     val targetScore = score.coerceIn(0, 100)
     val progress by animateFloatAsState(
         targetValue = targetScore / 100f,
-        animationSpec = tween(500),
-        label = "security-score-gauge"
+        animationSpec = tween(500)
     )
     val displayedScore by androidx.compose.animation.core.animateIntAsState(
         targetValue = targetScore,
-        animationSpec = tween(500),
-        label = "security-score-value"
+        animationSpec = tween(500)
     )
     Box(Modifier.size(216.dp), contentAlignment = Alignment.Center) {
         Canvas(Modifier.fillMaxSize()) {

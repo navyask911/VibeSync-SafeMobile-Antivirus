@@ -146,7 +146,7 @@ private fun AdvisorAccordion(
                                             horizontalArrangement = Arrangement.spacedBy(4.dp)
                                         ) {
                                             Icon(Icons.Outlined.CheckCircle, contentDescription = null)
-                                            Text("Resolved", style = MaterialTheme.typography.labelMedium,
+                                            Text(stringResource(R.string.v140_completed), style = MaterialTheme.typography.labelMedium,
                                                 fontWeight = FontWeight.Bold)
                                         }
                                     }
