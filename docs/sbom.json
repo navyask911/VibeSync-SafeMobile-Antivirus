@@ -1,10 +1,10 @@
 {
   "bomFormat" : "CycloneDX",
   "specVersion" : "1.6",
-  "serialNumber" : "urn:uuid:20be2cfd-15c3-4a7f-9df1-64cf3bd0c2a0",
+  "serialNumber" : "urn:uuid:45780918-de1d-4718-a21a-86cf663f33ee",
   "version" : 1,
   "metadata" : {
-    "timestamp" : "2026-11-05T15:22:13Z",
+    "timestamp" : "2026-11-12T05:26:32Z",
     "tools" : {
       "components" : [
         {
@@ -26,7 +26,7 @@
       "externalReferences" : [
         {
           "type" : "build-system",
-          "url" : "https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/actions/runs/42054130490"
+          "url" : "https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/actions/runs/43161317943"
         },
         {
           "type" : "vcs",
@@ -14052,6 +14052,177 @@
         }
       ],
       "purl" : "pkg:maven/com.google.android.odml/image@1.0.0-beta1?type=aar",
+      "modified" : false,
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/com.google.android.play/app-update-ktx@2.1.0?type=aar",
+      "group" : "com.google.android.play",
+      "name" : "app-update-ktx",
+      "version" : "2.1.0",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "5819f2ea702d4871818a5b69e6c401c9"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "4bf19be706cabbaa2a19a00bf79a0df48a6e3756"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "cb87bec6a740bf91f3ee45b57c9853a0a77887116a6cabfba29a2c46f6679244"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "016e54c8a943ea60dc3d34659eb9a965d096934de9d8312febdf14881ad666eea08be5c713f3e68ed123d57d97a31e59aa740df1f85431881d9d9f62e508f06a"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "2ab748a61dd84ed126468d7725a55d09d4700b9272840f5812b99d2e4c5b9c77"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "97105b75a13fe95c4641902a3cd91b38d5b08b50032f9f5e3be362c1402e4f983d20248e106f0c84072102720277ea3e39cc89eca20b4ed9c275e56790584a0f"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "9ba5cdc18d43823990f665e376ae88190d97493723fa18394789a1241d846d6798e2a4e8dd63e482c18fd15956676c20"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "b0ba7109a406f0155cc5979bc08c76b12f82b95c25f9af0e8d8acefdd5533f3c751622137b92924a2d107ced5b025b93"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "name" : "Play Core Software Development Kit Terms of Service",
+            "url" : "https://developer.android.com/guide/playcore/license"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/com.google.android.play/app-update-ktx@2.1.0?type=aar",
+      "modified" : false,
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/com.google.android.play/app-update@2.1.0?type=aar",
+      "group" : "com.google.android.play",
+      "name" : "app-update",
+      "version" : "2.1.0",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "3e9bc3aba48b250653fff82ac80c8e7f"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "49532e9ad050346e76707aa8c3838278b13b8514"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "1565e9ef014f7cb7193f0462e4d817480aff4b333fc7f7e0052bb932cc28820d"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "f69215a7d6bdcf8e859a995626f269fa20980ad4380078016d5dc239e75f84e55dcee6a9f09bae7766c27b1e04cc69af2b6b5559bc43f79b95541e5bb89ef6a8"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "246776dcbd2e3f2cf481206b176bd469a4604b973090aef2604f97084ba27d6a"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "f89fd6394709a9bf0ed196cd628008e37f5d6f4a5ceede882a394d71d8b7b86f99243e1c134e08f2a7ded1e19876e78320d63aba161f3d8fe23eec71b860afc9"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "cf3671ff35defc5c0096c3eebd668a94bec40d49e35c5906218e239a018b1f58c58278230e0bcbc1ebec1cce6618befc"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "19eb13fc1fde4c394984ef2fd0e51727fd515af1502d1ecb9dbac7a4d0ac5c9e16d0e32c4fb674efc91baba90598d696"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "name" : "Play Core Software Development Kit Terms of Service",
+            "url" : "https://developer.android.com/guide/playcore/license"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/com.google.android.play/app-update@2.1.0?type=aar",
+      "modified" : false,
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/com.google.android.play/core-common@2.0.3?type=aar",
+      "group" : "com.google.android.play",
+      "name" : "core-common",
+      "version" : "2.0.3",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "1181a5d12b3d42e98c69c16b7d8ad177"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "ab0c1fdc9606f9421764504cd59b0b2a512a9d0c"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "4303255f152c59b954919bb471d14ee5fed2df783565dea8528b08083ba7342b"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "1b0cc40e4a51778a9f390daf6c46bdb5129896f630bf58537e0d214a56448b5c156ee3d5b17865eb149235dce1955b24df418118deffef6f6452a71084207a39"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "af41709658f08e9bcdc8ad0cff7027804ec33792efc3f4583931806f4f16687a"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "02f97f9f47c044165d5cc318de81bdb92ea6d2fd2d54d856f5f95543bfec779041ba488bbbbee0048d731df2d4e55c497993509557a2cc64b420a8a642a888c6"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "b792c3af82abf8b075ea9c8d86b857dd49d0f00aa5a9f0f9d13bc8b12fe9b5d842c593486cf2057436048eecc14896a1"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "b9dea864c470dac203902e87ca080dd3e7cb50aece417b0f70a35d66db2bee7d361e1fbf53ed3c0c2974a5475e29d0ab"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "name" : "Play Core Software Development Kit Terms of Service",
+            "url" : "https://developer.android.com/guide/playcore/license"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/com.google.android.play/core-common@2.0.3?type=aar",
       "modified" : false,
       "properties" : [
         {
@@ -31523,6 +31694,33 @@
       "dependsOn" : [ ]
     },
     {
+      "ref" : "pkg:maven/com.google.android.play/app-update-ktx@2.1.0?type=aar",
+      "dependsOn" : [
+        "pkg:maven/androidx.core/core@1.16.0?type=aar",
+        "pkg:maven/androidx.fragment/fragment@1.8.9?type=aar",
+        "pkg:maven/com.google.android.gms/play-services-basement@18.9.0?type=aar",
+        "pkg:maven/com.google.android.gms/play-services-tasks@18.2.0?type=aar",
+        "pkg:maven/com.google.android.play/app-update@2.1.0?type=aar",
+        "pkg:maven/com.google.android.play/core-common@2.0.3?type=aar",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-jdk7@1.8.21?type=jar",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-jdk7@2.1.21?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-android@1.10.2?type=jar",
+        "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.10.2?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/com.google.android.play/app-update@2.1.0?type=aar",
+      "dependsOn" : [
+        "pkg:maven/com.google.android.gms/play-services-basement@18.9.0?type=aar",
+        "pkg:maven/com.google.android.gms/play-services-tasks@18.2.0?type=aar",
+        "pkg:maven/com.google.android.play/core-common@2.0.3?type=aar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/com.google.android.play/core-common@2.0.3?type=aar",
+      "dependsOn" : [ ]
+    },
+    {
       "ref" : "pkg:maven/com.google.android.play/hsdp@2.2.0?type=aar",
       "dependsOn" : [
         "pkg:maven/androidx.appcompat/appcompat-resources@1.4.1?type=aar",
@@ -32094,6 +32292,7 @@
         "pkg:maven/com.android.tools.utp/android-test-plugin-host-logcat@31.13.2?type=jar",
         "pkg:maven/com.android.tools.utp/android-test-plugin-result-listener-gradle@31.13.2?type=jar",
         "pkg:maven/com.google.android.libraries.ads.mobile.sdk/ads-mobile-sdk@1.6.0?type=aar",
+        "pkg:maven/com.google.android.play/app-update-ktx@2.1.0?type=aar",
         "pkg:maven/com.google.android.ump/user-messaging-platform@4.0.0?type=aar",
         "pkg:maven/com.google.crypto.tink/tink-android@1.20.0?type=jar",
         "pkg:maven/com.google.guava/guava@33.4.8-android?type=jar",
