@@ -40,7 +40,11 @@ This document is a source-backed draft for the Play Console declarations. It is 
 
 **Suggested Play Console declaration**
 
-> Install Sentinel is an optional, user-enabled antivirus feature. After the user enables it in SafeMobile, a foreground service registers for Android package-install and package-replacement events and queues local post-install security inspection for newly installed or updated applications. The service runs on-device and does not upload APKs or scan results. An ongoing notification tells the user that monitoring is active and provides a Stop action. The user can disable the feature in SafeMobile or stop it from its notification.
+> Install Sentinel is an optional, user-enabled antivirus feature. After the user enables it in SafeMobile, a foreground service registers for Android package-install and package-replacement events and passes those events to local post-install security inspection. Inspection runs on-device and does not upload APKs or scan results. An ongoing notification tells the user that monitoring is active and contains a Stop action. The user can also disable the feature in SafeMobile.
+>
+> **Impact if deferred:** If Android delays service startup or package-event delivery, the post-install inspection and any resulting alert are delayed. The newly installed app may be opened before its local inspection completes; SafeMobile does not block the installation.
+>
+> **Impact if interrupted:** While the service is stopped, new package events may not be processed by the live monitor until the service is started again. Users can still open SafeMobile and run a manual app scan. Do not represent this service as an installation blocker or guaranteed real-time protection.
 
 ### Service B — Storage Sentinel
 
@@ -50,7 +54,11 @@ This document is a source-backed draft for the Play Console declarations. It is 
 
 **Suggested Play Console declaration**
 
-> Storage Sentinel is an optional, user-enabled antivirus feature for a folder the user explicitly selects using Android's Storage Access Framework. While enabled and while the persisted folder grant remains valid, the foreground service checks accessible files in that selected folder and scans supported APKs locally against installed threat definitions. It does not request all-files access and does not scan arbitrary shared storage. The foreground notification makes monitoring visible; the user can turn the feature off or revoke the selected-folder grant.
+> Storage Sentinel is an optional, user-enabled antivirus feature for a folder the user explicitly selects using Android's Storage Access Framework. While enabled and while the persisted folder grant remains valid, the foreground service periodically checks accessible files in that selected folder and scans supported APKs locally against installed threat definitions. It does not request all-files access and does not scan arbitrary shared storage. An ongoing foreground notification makes monitoring visible; the user can turn the feature off in SafeMobile or revoke the selected-folder grant.
+>
+> **Impact if deferred:** Newly downloaded or copied supported files remain uninspected until the next folder sweep and local scan complete. The delay can be longer if Android delays service execution or the device is busy.
+>
+> **Impact if interrupted:** Folder monitoring pauses while the service is stopped. After the user re-enables it and the selected-folder grant is still valid, the service starts a new sweep of the selected folder. Files created while monitoring was paused are not guaranteed to be inspected until that restart and sweep. Manual scanning remains available.
 
 **Reviewer evidence**
 
@@ -131,11 +139,12 @@ For each relevant category, answer whether the data is collected, shared, proces
 
 ## 7. Official references
 
-- [Google Play: Permissions and APIs that access sensitive information](https://support.google.com/googleplay/android-developer/answer/16558241)
+- [Google Play: QUERY_ALL_PACKAGES policy and declaration](https://support.google.com/googleplay/android-developer/answer/10158779)
 - [Android: Declare package visibility needs](https://developer.android.com/training/package-visibility/declaring)
-- [Google Play: Permissions for Foreground Services](https://support.google.com/googleplay/android-developer/answer/18265346)
-- [Android: Optimize for Doze and App Standby](https://developer.android.com/training/monitoring-device-state/doze-standby)
-- [Google Play: Full-screen intent requirements](https://support.google.com/googleplay/android-developer/answer/13392821)
+- [Google Play: Foreground service and full-screen intent declarations](https://support.google.com/googleplay/android-developer/answer/13392821)
+- [Google Play: Permissions for Foreground Services](https://support.google.com/googleplay/android-developer/answer/16559646)
+- [Android: Optimize for Doze and App Standby, including battery exemption eligibility](https://developer.android.com/training/monitoring-device-state/doze-standby)
+- [Android: Battery optimization exemption intent API](https://developer.android.com/reference/android/provider/Settings#ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)
 - [Google: Google Mobile Ads Next-Gen Play data disclosure](https://developers.google.com/ad-manager/mobile-ads-sdk/android/next-gen/privacy/play-data-disclosure)
 
 **Maintenance:** Re-check these official references and the latest version-specific SDK disclosures each time permissions, SDK versions, data flows or foreground-service behaviour change.
