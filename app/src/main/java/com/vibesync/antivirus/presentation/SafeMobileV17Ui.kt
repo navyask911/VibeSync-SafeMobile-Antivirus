@@ -1,6 +1,7 @@
 package com.vibesync.antivirus.presentation
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -349,6 +350,17 @@ private fun V17ScoreRing(score: Int, isDark: Boolean) {
         animationSpec = tween(500),
         label = SCORE_VALUE_ANIMATION_LABEL
     )
+    val targetRingColor = when (targetScore) {
+        in 0..30 -> Color(0xFFEF4444) // Critical: red
+        in 31..60 -> Color(0xFFF97316) // Warning: orange
+        in 61..80 -> Color(0xFF84CC16) // Good: light green
+        else -> Color(0xFF16A34A) // Excellent: full green
+    }
+    val ringColor by animateColorAsState(
+        targetValue = targetRingColor,
+        animationSpec = tween(500),
+        label = "score_ring_color"
+    )
     Box(Modifier.size(216.dp), contentAlignment = Alignment.Center) {
         Canvas(Modifier.fillMaxSize()) {
             val strokeWidth = 18.dp.toPx()
@@ -363,19 +375,8 @@ private fun V17ScoreRing(score: Int, isDark: Boolean) {
                 size = arcSize,
                 style = Stroke(strokeWidth, cap = StrokeCap.Round)
             )
-            val rainbow = Brush.sweepGradient(
-                colors = listOf(
-                    Color(0xFFEF4444),
-                    Color(0xFFF97316),
-                    Color(0xFFFACC15),
-                    Color(0xFF84CC16),
-                    Color(0xFF22C55E),
-                    Color(0xFFEF4444)
-                ),
-                center = center
-            )
             drawArc(
-                brush = rainbow,
+                color = ringColor,
                 startAngle = -90f,
                 sweepAngle = progress * 360f,
                 useCenter = false,
