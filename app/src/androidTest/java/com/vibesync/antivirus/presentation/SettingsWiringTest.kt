@@ -282,8 +282,8 @@ class SettingsWiringTest {
         }
 
         composeRule.onNodeWithTag("console.device-admin.lock")
-            .assertIsDisplayed()
             .performScrollTo()
+            .assertIsDisplayed()
             .performClick()
         assertEquals(0, lockRequests)
 
