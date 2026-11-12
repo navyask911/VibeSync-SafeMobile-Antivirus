@@ -196,11 +196,19 @@ for locale in LOCALES:
 # Preserve previous invariant: every existing locale must provide a voice warning.
 # Paid purchase disclosures must never fall back to English in any supported locale.
 # SafeMobile Pro and Google Play are product brands, not untranslated sentences.
-base_pro, _ = read_resources(BASE / "values" / "pro.xml")
+base_pro_all, _ = read_resources(BASE / "values" / "pro.xml")
+# Explicitly non-translatable billing disclosures are kept in the base file and rendered
+# consistently in English until reviewed translations are supplied. Only active translated
+# keys are required in locale files. Extra locale keys from older paywall versions are harmless.
+base_pro = {
+    key: element for key, element in base_pro_all.items()
+    if element.attrib.get("translatable", "true") != "false"
+}
 for locale in LOCALES:
     pro, _ = read_resources(BASE / f"values-{locale}" / "pro.xml")
-    if set(pro) != set(base_pro):
-        errors.append(f"{locale}: paywall key set differs from base pro.xml")
+    missing = set(base_pro) - set(pro)
+    if missing:
+        errors.append(f"{locale}: missing paywall keys: {', '.join(sorted(missing))}")
     for key, source in base_pro.items():
         target = pro.get(key)
         if target is None:

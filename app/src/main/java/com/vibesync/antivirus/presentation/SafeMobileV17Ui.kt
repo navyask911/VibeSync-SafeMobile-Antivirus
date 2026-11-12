@@ -513,7 +513,7 @@ private fun V17ScoreRing(score: Int, isDark: Boolean) {
     val ringColor by animateColorAsState(
         targetValue = targetRingColor,
         animationSpec = tween(500),
-        label = "score_ring_color"
+        label = "scoreringcolor"
     )
     Box(Modifier.size(216.dp), contentAlignment = Alignment.Center) {
         Canvas(Modifier.fillMaxSize()) {
@@ -636,12 +636,12 @@ private fun V17RadarScan(
     recentFiles: List<String>
 ) {
     val c = v17Colors(isDark)
-    val transition = rememberInfiniteTransition(label = "safe_mobile_radar")
+    val transition = rememberInfiniteTransition(label = "safemobileradar")
     val sweepDegrees by transition.animateFloat(
         initialValue = 0f,
         targetValue = 360f,
         animationSpec = infiniteRepeatable(animation = tween(1_100, easing = LinearEasing)),
-        label = "safe_mobile_radar_sweep"
+        label = "safemobileradarsweep"
     )
     val listState = rememberLazyListState()
     LaunchedEffect(recentFiles) {

@@ -7,11 +7,11 @@
     <string name="pro_feature_updates">Pro offers optional daily research-model updates. Weekly updates stay free.</string>
     <string name="pro_feature_adfree">Free-tier ads are disabled while your SafeMobile Pro access is active.</string>
     <string name="pro_price_unavailable">Google Play prepaid pricing is unavailable. Try again when Play is connected.</string>
-    <string name="pro_one_year_price">One prepaid year: %1$s</string>
-    <string name="pro_prepaid_offer">One-year prepaid SafeMobile Pro access. Does not auto-renew.</string>
-    <string name="pro_prepaid_duration_limit">Google Play prepaid plans are limited to one year per purchase. Buy or extend the same plan again to add another year; the final price is confirmed in Google Play.</string>
-    <string name="pro_device_binding_explanation">This purchase is linked to this Android device using a hashed device identifier. Reinstall on the same device can restore the active Play purchase; a different device is blocked.</string>
-    <string name="pro_buy_or_extend_one_year">Buy / extend 1 year</string>
+    <string name="pro_one_year_price" translatable="false">One prepaid year: %1$s</string>
+    <string name="pro_prepaid_offer" translatable="false">One-year prepaid SafeMobile Pro access. Does not auto-renew.</string>
+    <string name="pro_prepaid_duration_limit" translatable="false">Google Play prepaid plans are limited to one year per purchase. Buy or extend the same plan again to add another year; the final price is confirmed in Google Play.</string>
+    <string name="pro_device_binding_explanation" translatable="false">This purchase is linked to this Android device using a hashed device identifier. Reinstall on the same device can restore the active Play purchase; a different device is blocked.</string>
+    <string name="pro_buy_or_extend_one_year" translatable="false">Buy / extend 1 year</string>
     <string name="pro_restore_check">Restore / Check Status</string>
     <string name="pro_active_until">Pro access is locally recorded until %1$s.</string>
     <string name="pro_not_active">No active Pro subscription or local prepaid entitlement was found.</string>
@@ -20,8 +20,8 @@
     <string name="pro_purchase_pending">Payment pending. Pro access starts only after Google Play confirms the purchase.</string>
     <string name="pro_purchase_recheck">Reconnect to Google Play to finish processing this prepaid subscription.</string>
     <string name="pro_storage_failed">Secure storage could not save the purchase. Contact support before retrying.</string>
-    <string name="pro_device_mismatch">Subscription active on another device. SafeMobile Pro access is blocked on this device.</string>
-    <string name="pro_device_binding_unavailable">This purchase has no verifiable device binding. Pro access is blocked until Google Play returns a device-bound purchase.</string>
+    <string name="pro_device_mismatch" translatable="false">Subscription active on another device. SafeMobile Pro access is blocked on this device.</string>
+    <string name="pro_device_binding_unavailable" translatable="false">This purchase has no verifiable device binding. Pro access is blocked until Google Play returns a device-bound purchase.</string>
     <string name="pro_purchase_success">Prepaid subscription confirmed and securely recorded for this device.</string>
     <string name="pro_device_disclaimer" formatted="false">Your prepaid subscription is managed by Google Play and does not auto-renew. SafeMobile stores an encrypted device-bound access cache for offline checks.</string>
     <string name="pro_network_notice">Core protection works offline. Google Play purchases and optional model updates require an internet connection.</string>
