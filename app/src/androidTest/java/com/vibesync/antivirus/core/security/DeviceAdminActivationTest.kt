@@ -29,11 +29,8 @@ class DeviceAdminActivationTest {
         val activation = DeviceAdminManager(context).activationIntent()
         assertEquals(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN, activation.action)
 
-        // API 26 uses the legacy Parcelable getter. The extra is a framework ComponentName,
-        // so use that framework type's class loader (not the app receiver's loader). Read the
-        // value before formatting diagnostics; stringifying a lazy Bundle can force an
-        // unnecessary unparcel before its Parcelable loader is configured correctly.
-        activation.extras?.classLoader = ComponentName::class.java.classLoader
+        // DevicePolicyManager requires the declared AdminReceiver ComponentName as a
+        // Parcelable extra. Read the value through the API 26-compatible getter.
         val adminComponent = activation.getParcelableExtra<ComponentName>(
             DevicePolicyManager.EXTRA_DEVICE_ADMIN
         )
