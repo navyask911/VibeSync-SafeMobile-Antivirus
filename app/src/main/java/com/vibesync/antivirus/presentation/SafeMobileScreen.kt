@@ -331,8 +331,6 @@ import kotlinx.coroutines.launch
  val folderSentinelConfigured = StorageAccessPreferences.hasRole(context, StorageAccessPreferences.DOWNLOADS) ||
   StorageAccessPreferences.hasRole(context, StorageAccessPreferences.WHATSAPP) || customFolderUris.isNotEmpty()
  val databaseUpdatedAt = com.vibesync.antivirus.core.hashdb.HashDatabaseFreshness.updatedAt(context, state.hashDatabaseCapability.version)
- val installSentinelEnabled = securityPrefs.getBoolean(SafeMobileApp.KEY_INSTALL_SENTINEL_ENABLED, false)
- val voiceAlertsEnabled = securityPrefs.getBoolean(SafeMobileApp.KEY_VOICE_ALERTS_ENABLED, false)
  val advisorInputs = remember(
   state.completedScans, state.scanSummary, state.threatCount, folderSentinelConfigured,
   postureState.report?.highRiskAppCount, notificationsGranted, securityAlertsEnabled,
