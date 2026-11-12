@@ -185,9 +185,6 @@ private fun ThemeOptionButton(
 @Composable
 private fun SelfUpdateCard() {
     val context = LocalContext.current
-    val appUpdateManager = remember(context) {
-        AppUpdateManagerFactory.create(context.applicationContext)
-    }
     var updateMessage by remember { mutableStateOf<Int?>(null) }
     val updateLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartIntentSenderForResult()
@@ -217,6 +214,14 @@ private fun SelfUpdateCard() {
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
                     updateMessage = null
+                    // Create the Play update manager only when the user explicitly opens
+                    // the update flow. This keeps previews/Paparazzi independent of Play services.
+                    val appUpdateManager = try {
+                        AppUpdateManagerFactory.create(context.applicationContext)
+                    } catch (_: Exception) {
+                        updateMessage = R.string.self_update_unavailable
+                        return@Button
+                    }
                     appUpdateManager.appUpdateInfo
                         .addOnSuccessListener { info ->
                             val availability = info.updateAvailability()
