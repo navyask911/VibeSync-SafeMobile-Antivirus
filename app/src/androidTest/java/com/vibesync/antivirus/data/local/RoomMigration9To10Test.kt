@@ -60,6 +60,12 @@ class RoomMigration9To10Test {
             assertTrue(columns.contains("completed_at"))
             assertTrue(columns.contains("scan_type"))
 
+            db.query("SELECT scan_type, status FROM scan_sessions WHERE session_id='legacy-session'").use { cursor ->
+                assertTrue(cursor.moveToFirst())
+                assertEquals("LEGACY", cursor.getString(0))
+                assertEquals("COMPLETED", cursor.getString(1))
+            }
+
             db.execSQL(
                 "INSERT INTO scan_sessions(session_id,scan_type,started_at,completed_at,status) " +
                     "VALUES ('session-1','MANUAL',200,NULL,'IN_PROGRESS')"
