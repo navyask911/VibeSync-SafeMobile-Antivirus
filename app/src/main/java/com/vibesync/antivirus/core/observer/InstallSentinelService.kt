@@ -66,7 +66,8 @@ class InstallSentinelService : Service() {
         val local = LocalePreferences.wrap(this)
         val manager = getSystemService(NotificationManager::class.java)
         manager.createNotificationChannel(NotificationChannel(CHANNEL,
-            local.getString(R.string.install_sentinel_title), NotificationManager.IMPORTANCE_LOW).apply {
+            local.getString(R.string.install_sentinel_title), NotificationManager.IMPORTANCE_HIGH).apply {
+            // A visible, ongoing service status without repeated sound or vibration.
             setSound(null, null); enableVibration(false)
         })
         val open = PendingIntent.getActivity(this, 0, Intent(this, MainActivity::class.java),
@@ -77,7 +78,7 @@ class InstallSentinelService : Service() {
             .setContentTitle(local.getString(R.string.install_sentinel_active))
             .setContentText(local.getString(R.string.install_sentinel_description)).setContentIntent(open)
             .setOngoing(true).setSilent(true).setOnlyAlertOnce(true)
-            .setCategory(NotificationCompat.CATEGORY_SERVICE).setPriority(NotificationCompat.PRIORITY_LOW)
+            .setCategory(NotificationCompat.CATEGORY_SERVICE).setPriority(NotificationCompat.PRIORITY_HIGH)
             .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
             .addAction(0, local.getString(R.string.install_sentinel_stop), stop).build()
         return notification
@@ -107,7 +108,7 @@ class InstallSentinelService : Service() {
 
     companion object {
         private const val TAG = "SafeMobileInstallSentinel"
-        private const val CHANNEL = "install_sentinel_service_v1"
+        private const val CHANNEL = "install_sentinel_service_v2"
         private const val ID = 2_100_001
         private const val STOP = "com.vibesync.antivirus.STOP_INSTALL_SENTINEL"
         private val active = MutableStateFlow(false)
