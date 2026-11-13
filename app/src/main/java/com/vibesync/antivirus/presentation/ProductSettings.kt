@@ -745,7 +745,7 @@ internal fun SafeMobileSettingsPanel(
                 SettingsSubRoute.SUBSCRIPTION -> {
                     Text(stringResource(R.string.pro_title), style = MaterialTheme.typography.titleLarge)
                     Button(onClick = onOpenPro, modifier = Modifier.fillMaxWidth()) {
-                        Text(stringResource(R.string.pro_unlock))
+                        Text(stringResource(R.string.pro_buy_or_extend_one_year))
                     }
                     Text(stringResource(R.string.pro_truthful_summary), style = MaterialTheme.typography.bodySmall)
                 }

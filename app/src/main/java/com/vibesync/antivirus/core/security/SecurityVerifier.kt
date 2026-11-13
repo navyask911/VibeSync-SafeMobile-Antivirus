@@ -176,7 +176,7 @@ class SecurityVerifier(context: Context) {
             }
             val verdicts = payload.getJSONObject("deviceIntegrity")
                 .optJSONArray("deviceRecognitionVerdict")
-            (0 until (verdicts?.length() ?: 0)).any { index ->
+            return (0 until (verdicts?.length() ?: 0)).any { index ->
                 verdicts?.optString(index) == MEETS_DEVICE_INTEGRITY
             }
         } finally {

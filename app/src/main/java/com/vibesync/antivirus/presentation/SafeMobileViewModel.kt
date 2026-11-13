@@ -361,9 +361,8 @@ class SafeMobileViewModel(
     }
 
     /** Use the existing hash/YARA/ML scan pipeline for a user-selected folder tree. */
-    fun scanFolderTree(uri: Uri) = runScan(
-        manualScan = true,
-        onFileStarted = { fileName ->
+    fun scanFolderTree(uri: Uri) {
+        val onFileStarted: suspend (String) -> Unit = { fileName ->
             mutableState.update { state ->
                 state.copy(
                     currentScanFile = fileName,
@@ -371,8 +370,9 @@ class SafeMobileViewModel(
                 )
             }
         }
-    ) { onProgress ->
-        repository.scanFolderTree(uri, onProgress, onFileStarted = onFileStarted)
+        runScan(manualScan = true, onFileStarted = onFileStarted) { onProgress ->
+            repository.scanFolderTree(uri, onProgress, onFileStarted = onFileStarted)
+        }
     }
 
     fun cancelScan() {
