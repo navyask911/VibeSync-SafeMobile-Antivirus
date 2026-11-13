@@ -18,6 +18,25 @@ class StorageAccessPreferencesTest {
         assertFalse(StorageAccessPreferences.persistSelectedFolder(context, root))
         assertEquals(Intent.ACTION_OPEN_DOCUMENT_TREE, StorageAccessPreferences.pickerIntent(StorageAccessPreferences.DOWNLOADS).action)
     }
+    @Test fun messagingShortcutsOpenTheRequestedAndroidMediaDirectories() {
+        val whatsapp = StorageAccessPreferences.pickerIntent(StorageAccessPreferences.WHATSAPP)
+            .getParcelableExtra<Uri>(android.provider.DocumentsContract.EXTRA_INITIAL_URI)
+        val telegram = StorageAccessPreferences.pickerIntent(StorageAccessPreferences.TELEGRAM)
+            .getParcelableExtra<Uri>(android.provider.DocumentsContract.EXTRA_INITIAL_URI)
+        assertEquals(
+            "primary:Android/media/com.whatsapp/WhatsApp/Media/WhatsApp Documents",
+            android.provider.DocumentsContract.getDocumentId(whatsapp!!)
+        )
+        assertEquals(
+            "primary:Android/media/org.telegram.messenger/Telegram/Telegram Documents",
+            android.provider.DocumentsContract.getDocumentId(telegram!!)
+        )
+        assertTrue(StorageAccessPreferences.matchesRole(
+            Uri.parse("content://com.android.externalstorage.documents/tree/primary%3AAndroid%2Fmedia%2Forg.telegram.messenger%2FTelegram%2FTelegram%20Documents"),
+            StorageAccessPreferences.TELEGRAM
+        ))
+    }
+
     @Test fun customFolderPickerUsesPersistableSafReadGrantAndEnforcesTenFolderLimit() {
         val picker = StorageAccessPreferences.pickerIntent(StorageAccessPreferences.CUSTOM)
         assertEquals(Intent.ACTION_OPEN_DOCUMENT_TREE, picker.action)
