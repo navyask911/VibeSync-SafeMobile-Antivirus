@@ -7,6 +7,8 @@
 <string name="brand_title">SafeMobile Antivirus</string><string name="brand_subtitle">VibeSync</string>
 <string name="scan_status">Local protection dashboard</string><string name="scan_running">Scanning device…</string><string name="threat_found">Threat match detected</string>
 <string name="signature_count">Local signatures: %1$d · Scan sessions: %2$d</string>
+    <string name="scan_sessions_in_progress">Scan sessions in progress: %1$d</string>
+    <string name="scan_sessions_completed">Completed scan sessions: %1$d</string>
 <string name="scan_explanation">Checks readable installed APKs against locally stored definitions and reviews files you select. Detection is limited by operating-system access and the definitions installed on this device.</string>
 <string name="scan_installed">Scan installed apps</string><string name="scan_selected">Choose APK file</string>
 <string name="monitor_title">Alerts &amp; monitoring</string>
