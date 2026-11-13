@@ -1,10 +1,6 @@
 package com.vibesync.antivirus.presentation
 
 import android.content.Context
-import android.database.ContentObserver
-import android.net.Uri
-import android.os.Handler
-import android.os.Looper
 import android.provider.Settings
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -280,33 +276,17 @@ private fun V17PlayProtectStatusCard(isDark: Boolean) {
     var isEnabled by remember(context) { mutableStateOf(readSystemPlayProtectEnabled(context)) }
 
     DisposableEffect(context, lifecycleOwner) {
-        // Paparazzi and restricted host contexts can lack a functional resolver.
-        // Keep the status card renderable in those environments while retaining
-        // live settings updates whenever Android provides the observer service.
-        val contentResolver = runCatching { context.contentResolver }.getOrNull()
-        val uri = runCatching {
-            Settings.Global.getUriFor("package_verifier_enable")
-        }.getOrNull()
-        val contentObserver = object : ContentObserver(Handler(Looper.getMainLooper())) {
-            override fun onChange(selfChange: Boolean, uri: Uri?) {
-                isEnabled = readSystemPlayProtectEnabled(context)
-            }
-        }
+        // Re-read the system setting when the Activity resumes. Avoid a
+        // ContentObserver/Handler here: Paparazzi's host JVM has no guaranteed
+        // Android main Looper or real ContentResolver.
         val lifecycleObserver = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
                 isEnabled = readSystemPlayProtectEnabled(context)
             }
         }
-        val observerRegistered = contentResolver != null && uri != null &&
-            runCatching {
-                contentResolver.registerContentObserver(uri, false, contentObserver)
-            }.isSuccess
         lifecycleOwner.lifecycle.addObserver(lifecycleObserver)
         isEnabled = readSystemPlayProtectEnabled(context)
         onDispose {
-            if (observerRegistered) {
-                runCatching { contentResolver?.unregisterContentObserver(contentObserver) }
-            }
             lifecycleOwner.lifecycle.removeObserver(lifecycleObserver)
         }
     }
@@ -414,7 +394,12 @@ internal fun V17ShieldScreen(
     val context = LocalContext.current
     var mlModelAvailable by remember(context) { mutableStateOf(false) }
     LaunchedEffect(context) {
-        mlModelAvailable = MachineLearningScanner(context).isAvailable()
+        // Unsupported host contexts (for example Paparazzi) may not expose an
+        // Android application context/assets manager. Treat that as unavailable
+        // rather than allowing an optional status probe to crash the whole screen.
+        mlModelAvailable = runCatching {
+            MachineLearningScanner(context).isAvailable()
+        }.getOrDefault(false)
     }
     val guardCapacity = totalGuardChecks.coerceAtLeast(0)
     val activeGuardCount = activeGuards.coerceIn(0, guardCapacity)
