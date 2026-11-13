@@ -505,10 +505,10 @@ fun importOfflineDefinitions(uri: Uri) {
                     messageText = null
                 )
             }
+            val scanSessionId = UUID.randomUUID().toString()
+            var sessionStarted = false
+            var sessionCompleted = false
             try {
-                var sessionStarted = false
-                var sessionCompleted = false
-                val scanSessionId = UUID.randomUUID().toString()
                 sessionStarted = runCatching {
                     repository.startScanSession(scanSessionId, scanType)
                 }.isSuccess
