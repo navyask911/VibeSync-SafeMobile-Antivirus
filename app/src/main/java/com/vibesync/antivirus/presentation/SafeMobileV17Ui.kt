@@ -280,7 +280,13 @@ private fun V17PlayProtectStatusCard(isDark: Boolean) {
     var isEnabled by remember(context) { mutableStateOf(readSystemPlayProtectEnabled(context)) }
 
     DisposableEffect(context, lifecycleOwner) {
-        val uri: Uri = Settings.Global.getUriFor("package_verifier_enable")
+        // Paparazzi and restricted host contexts can lack a functional resolver.
+        // Keep the status card renderable in those environments while retaining
+        // live settings updates whenever Android provides the observer service.
+        val contentResolver = runCatching { context.contentResolver }.getOrNull()
+        val uri = runCatching {
+            Settings.Global.getUriFor("package_verifier_enable")
+        }.getOrNull()
         val contentObserver = object : ContentObserver(Handler(Looper.getMainLooper())) {
             override fun onChange(selfChange: Boolean, uri: Uri?) {
                 isEnabled = readSystemPlayProtectEnabled(context)
@@ -291,11 +297,16 @@ private fun V17PlayProtectStatusCard(isDark: Boolean) {
                 isEnabled = readSystemPlayProtectEnabled(context)
             }
         }
-        context.contentResolver.registerContentObserver(uri, false, contentObserver)
+        val observerRegistered = contentResolver != null && uri != null &&
+            runCatching {
+                contentResolver.registerContentObserver(uri, false, contentObserver)
+            }.isSuccess
         lifecycleOwner.lifecycle.addObserver(lifecycleObserver)
         isEnabled = readSystemPlayProtectEnabled(context)
         onDispose {
-            context.contentResolver.unregisterContentObserver(contentObserver)
+            if (observerRegistered) {
+                runCatching { contentResolver?.unregisterContentObserver(contentObserver) }
+            }
             lifecycleOwner.lifecycle.removeObserver(lifecycleObserver)
         }
     }
