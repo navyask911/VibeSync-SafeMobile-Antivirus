@@ -103,7 +103,8 @@ class SafeMobileApp : Application() {
                 ThreatDatabase.MIGRATION_1_2, ThreatDatabase.MIGRATION_2_3,
                 ThreatDatabase.MIGRATION_3_4, ThreatDatabase.MIGRATION_4_5,
                 ThreatDatabase.MIGRATION_5_6, ThreatDatabase.MIGRATION_6_7,
-                ThreatDatabase.MIGRATION_7_8, ThreatDatabase.MIGRATION_8_9
+                ThreatDatabase.MIGRATION_7_8, ThreatDatabase.MIGRATION_8_9,
+                ThreatDatabase.MIGRATION_9_10
             )
             .build()
         hashDatabaseManager = HashDatabaseManager(this, database)
@@ -121,6 +122,12 @@ class SafeMobileApp : Application() {
             this, database, scanner, loader, intelligence,
             hashDatabaseManager = hashDatabaseManager
         )
+
+        // Any scan still marked active after process death is no longer running.
+        appScope.launch {
+            runCatching { database.threatDao().markInProgressAsInterrupted() }
+                .onFailure { Log.e("SafeMobileApp", "Could not reconcile interrupted scan sessions.", it) }
+        }
 
         if (BuildConfig.OPTIONAL_FEED_ENABLED) ThreatFeedSyncScheduler.ensurePeriodic(this)
         HashDatabaseSyncScheduler.ensurePeriodic(this)
