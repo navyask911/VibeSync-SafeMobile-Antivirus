@@ -90,6 +90,7 @@ class SecurityScoreTest {
             installSentinelEnabled = false,
             playProtectEnabled = false,
             usbDebuggingEnabled = true,
+            developerOptionsEnabled = true,
             meetsDeviceIntegrity = false,
             voiceAlertsEnabled = false,
             apiLevel = 34,
