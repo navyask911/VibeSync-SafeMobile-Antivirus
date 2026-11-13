@@ -2,6 +2,8 @@ package com.vibesync.antivirus.core.locale
 
 import android.content.Context
 import android.content.res.Configuration
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import com.vibesync.antivirus.R
 import java.util.Locale
 
@@ -83,6 +85,16 @@ object LocalePreferences {
             .edit()
             .putString(OVERRIDE_KEY, tag)
             .apply()
+    }
+
+    fun applyOverride(context: Context, tag: String) {
+        saveOverride(context, tag)
+        val locales = if (tag.isBlank()) {
+            LocaleListCompat.getEmptyLocaleList()
+        } else {
+            LocaleListCompat.forLanguageTags(tag)
+        }
+        AppCompatDelegate.setApplicationLocales(locales)
     }
 
     fun labelResource(tag: String): Int =
