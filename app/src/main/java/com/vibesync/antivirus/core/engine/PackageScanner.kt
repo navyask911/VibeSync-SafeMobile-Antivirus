@@ -209,14 +209,13 @@ class PackageScanner(
    InstalledAppItem(info.packageName, label)
   }.distinctBy { it.packageName }.sortedBy { it.displayName.lowercase(java.util.Locale.getDefault()) }.toList()
  }
- suspend fun scanInstalledApps(progress: suspend (processed: Int, total: Int) -> Unit = { _, _ -> }): List<ScanResult> {
+ suspend fun scanInstalledApps(progress: suspend (processed: Int, total: Int) -> Unit = { _, _ -> }, scanSessionId: String = UUID.randomUUID().toString()): List<ScanResult> {
   val flags = PackageManager.GET_PERMISSIONS or PackageManager.GET_SERVICES or PackageManager.GET_ACTIVITIES or PackageManager.GET_RECEIVERS or PackageManager.GET_PROVIDERS or signingFlags()
   val packages = pm.getInstalledPackages(flags).filter { info ->
    val appInfo = info.applicationInfo
    appInfo != null && ProtectedPackagePolicy.isUserInstalled(appInfo.flags, info.packageName, context.packageName)
   }
-  val scanSessionId = UUID.randomUUID().toString()
-  val results = mutableListOf<ScanResult>()
+    val results = mutableListOf<ScanResult>()
   progress(0, packages.size)
   for ((index, info) in packages.withIndex()) {
    currentCoroutineContext().ensureActive()
@@ -248,11 +247,10 @@ class PackageScanner(
    ScanVerdict.NO_MATCH -> 3
   } }
  }
- suspend fun scanInstalledPackage(name: String): ScanResult? {
-  if (trustedAppStore.isTrusted(name)) return trustedResult(name, UUID.randomUUID().toString(), System.nanoTime())
+ suspend fun scanInstalledPackage(name: String, scanSessionId: String = UUID.randomUUID().toString()): ScanResult? {
+  if (trustedAppStore.isTrusted(name)) return trustedResult(name, scanSessionId, System.nanoTime())
   if (TrustedPackageWhitelist.hasProtectedNamespace(name)) return null
-  val scanSessionId = UUID.randomUUID().toString()
-  val info = try {
+    val info = try {
    pm.getPackageInfo(name, PackageManager.GET_PERMISSIONS or PackageManager.GET_SERVICES or signingFlags())
   } catch (_: PackageManager.NameNotFoundException) {
    return null
