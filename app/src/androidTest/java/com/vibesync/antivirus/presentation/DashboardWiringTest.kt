@@ -11,6 +11,7 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.unit.dp
 import com.vibesync.antivirus.core.engine.ScanResult
 import com.vibesync.antivirus.core.engine.ScanVerdict
+import com.vibesync.antivirus.core.security.SecurityVerificationState
 import com.vibesync.antivirus.ui.theme.AppTheme
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -40,6 +41,11 @@ class DashboardWiringTest {
                 isDark = true,
                 securityScore = 72,
                 isPro = false,
+                integrityState = SecurityVerificationState(),
+                advisorState = ProtectionAdvisorState(score = 100, pendingCount = 0, issues = emptyList()),
+                onOpenAdvisorIssue = {},
+                onSnoozeAdvisorIssue = {},
+                onRestoreAdvisorIssue = {},
                 activeGuards = 2,
                 liveSentinelActive = false,
                 posturePassed = null,
@@ -65,6 +71,11 @@ class DashboardWiringTest {
                 isDark = true,
                 securityScore = 85,
                 isPro = true,
+                integrityState = SecurityVerificationState(),
+                advisorState = ProtectionAdvisorState(score = 100, pendingCount = 0, issues = emptyList()),
+                onOpenAdvisorIssue = {},
+                onSnoozeAdvisorIssue = {},
+                onRestoreAdvisorIssue = {},
                 activeGuards = 3,
                 liveSentinelActive = true,
                 posturePassed = 7,
@@ -151,7 +162,7 @@ class DashboardWiringTest {
     }
 
     @Test
-    fun toolsHubCardsNavigateToAllSixTools() {
+    fun toolsHubCardsNavigateToAllFiveTools() {
         var destination = ""
         render {
             V17ToolsHubScreen(isDark = true, onOpen = { destination = it })
@@ -163,7 +174,6 @@ class DashboardWiringTest {
             "Quarantine Vault" to "quarantine",
             "Folder Monitor" to "sentinel",
             "System App Guard" to "guardian",
-            "Security Advisor" to "advisor"
         ).forEach { (label, expected) ->
             composeRule.onNodeWithText(label).performScrollTo().performClick()
             assertEquals(expected, destination)
