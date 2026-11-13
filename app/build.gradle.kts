@@ -195,9 +195,38 @@ val prepareYaraXPatches = tasks.register("prepareYaraXPatches") {
         val nativeSourceDirectory = yaraXSourceDirectory.get().asFile
         project.exec {
             workingDir = nativeSourceDirectory
-            commandLine("git", "checkout", "--", "Cargo.toml", "src/lib.rs")
+            commandLine("git", "checkout", "--", "Cargo.toml", "src/lib.rs", "build.rs")
         }.assertNormalExitValue()
 
+        // The Android NDK/toolchain may still emit 4 KB PT_LOAD segments for Rust cdylibs
+        // (notably armeabi-v7a). Apply the Android 16 KB page-size flags in the JNI
+        // crate build script so they reach the final libyarax_android.so link.
+        // Keep this target-scoped: host build scripts and non-Android outputs are untouched.
+        val nativeBuildScript = nativeSourceDirectory.resolve("build.rs")
+        val nativeBuildScriptText = nativeBuildScript.readText()
+        val androidLinkerFlags = """
+            if std::env::var("CARGO_CFG_TARGET_OS")
+                .map(|target| target == "android")
+                .unwrap_or(false)
+            {
+                println!("cargo:rustc-link-arg=-Wl,-z,max-page-size=16384");
+                println!("cargo:rustc-link-arg=-Wl,-z,common-page-size=16384");
+            }
+        """.trimIndent()
+        val buildScriptMarker = "fn main() {"
+        check(nativeBuildScriptText.windowed(buildScriptMarker.length).count { it == buildScriptMarker } == 1) {
+            "Pinned YARA-X JNI build.rs entry point changed; refusing to apply the 16 KB linker patch."
+        }
+        nativeBuildScript.writeText(nativeBuildScriptText.replace(
+            buildScriptMarker,
+            buildScriptMarker + "\n    " + androidLinkerFlags.replace("\n", "\n    ")
+        ))
+        val patchedBuildScript = nativeBuildScript.readText()
+        check(patchedBuildScript.contains("CARGO_CFG_TARGET_OS") &&
+            patchedBuildScript.contains("cargo:rustc-link-arg=-Wl,-z,max-page-size=16384") &&
+            patchedBuildScript.contains("cargo:rustc-link-arg=-Wl,-z,common-page-size=16384")) {
+            "Android 16 KB linker flags were not added to the YARA-X JNI build script."
+        }
         val nativeManifest = nativeSourceDirectory.resolve("Cargo.toml")
         val nativeManifestText = nativeManifest.readText()
         val defaultYaraXDependency = "yara-x = { path = \"./yarax_patches/yara-x/lib\", default-features = false, features = [\"dex-module\", \"hash-module\", \"crypto\", \"pe-module\", \"elf-module\", \"generate-proto-code\"]}"
@@ -349,6 +378,11 @@ val prepareYaraXPatches = tasks.register("prepareYaraXPatches") {
         wasmRuntime.writeText(finalWasmRuntime)
 
         // Verify the Android runtime patch in the exact source tree consumed by cargo.
+        check(nativeBuildScript.readText().contains("CARGO_CFG_TARGET_OS") &&
+            nativeBuildScript.readText().contains("max-page-size=16384") &&
+            nativeBuildScript.readText().contains("common-page-size=16384")) {
+            "Android 16 KB ELF linker patch was not completely applied."
+        }
         check(nativeManifest.readText().contains("\"pulley\"") &&
             nativeJniSource.readText().contains("yara_x::set_android_api_level") &&
             yaraRoot.readText().contains("pub fn set_android_api_level") &&
