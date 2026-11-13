@@ -142,6 +142,9 @@ class ThreatRepository(
    .putInt("review", summary.review).putInt("unreadable", summary.unreadable).putLong("completed_at", summary.completedAt).putBoolean("signed_definitions_used", summary.signedDefinitionsUsed).apply()
  }
 
+ fun observeCompletedScanSessionCount(): Flow<Int> =
+  database.threatDao().observeCompletedScanSessionCount()
+
  fun observeRecentAudits(): Flow<List<ScanAudit>> =
   database.threatDao().observeRecentAudits().map { rows ->
    rows.map { row -> row.copy(packageOrPath = revealPrivateTextSafely(row.packageOrPath, "scan-label")) }
