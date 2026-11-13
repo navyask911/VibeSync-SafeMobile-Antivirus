@@ -700,4 +700,8 @@
         <string name="self_update_no_update">No newer Google Play update is currently available.</string>
         <string name="self_update_not_allowed">An update is available, but Google Play does not allow the immediate update flow for this installation.</string>
         <string name="self_update_open_play_store">Open Google Play</string>
+    <string name="scan_sessions_in_progress">চলমান স্ক্যান সেশন: %1$d</string>
+    <string name="scan_sessions_completed">সম্পন্ন স্ক্যান সেশন: %1$d</string>
+    <string name="ui_sentinel_telegram_folder">Telegram নথির ফোল্ডার</string>
+    <string name="ui_sentinel_enable_telegram">Telegram নথি পর্যবেক্ষণ করুন</string>
 </resources>
