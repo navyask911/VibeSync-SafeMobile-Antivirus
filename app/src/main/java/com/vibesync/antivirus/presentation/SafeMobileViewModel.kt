@@ -4,6 +4,7 @@ import android.net.Uri
 import android.content.Context
 import android.speech.tts.TextToSpeech
 import java.util.Locale
+import java.util.UUID
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -345,19 +346,19 @@ class SafeMobileViewModel(
 
     fun scanInstalled() {
         refreshInstalledInventory()
-        runScan(manualScan = true) { onProgress -> repository.scanInstalledApps(onProgress) }
+        runScan(manualScan = true, scanType = "INSTALLED_APPS") { scanSessionId, onProgress -> repository.scanInstalledApps(onProgress, scanSessionId) }
     }
 
-    fun scanFull(manualScan: Boolean = true) = runScan(manualScan) { onProgress ->
-        repository.scanFull(onProgress)
+    fun scanFull(manualScan: Boolean = true) = runScan(manualScan, scanType = "FULL_DEVICE") { scanSessionId, onProgress ->
+        repository.scanFull(onProgress, scanSessionId)
     }
 
-    fun scanSelected(uri: Uri) = runScan(manualScan = true) { _ ->
-        listOf(repository.scanUri(uri))
+    fun scanSelected(uri: Uri) = runScan(manualScan = true, scanType = "SELECTED_FILE") { scanSessionId, _ ->
+        listOf(repository.scanUri(uri, scanSessionId))
     }
 
-    fun scanInstalledPackageNow(packageName: String) = runScan(manualScan = true) { _ ->
-        listOfNotNull(repository.scanInstalledPackage(packageName))
+    fun scanInstalledPackageNow(packageName: String) = runScan(manualScan = true, scanType = "INSTALLED_PACKAGE") { scanSessionId, _ ->
+        listOfNotNull(repository.scanInstalledPackage(packageName, scanSessionId))
     }
 
     /** Use the existing hash/YARA/ML scan pipeline for a user-selected folder tree. */
@@ -370,8 +371,8 @@ class SafeMobileViewModel(
                 )
             }
         }
-        runScan(manualScan = true, onFileStarted = onFileStarted) { onProgress ->
-            repository.scanFolderTree(uri, onProgress, onFileStarted = onFileStarted)
+        runScan(manualScan = true, scanType = "SELECTED_FOLDER", onFileStarted = onFileStarted) { scanSessionId, onProgress ->
+            repository.scanFolderTree(uri, onProgress, onFileStarted = onFileStarted, scanSessionId = scanSessionId)
         }
     }
 
@@ -478,8 +479,9 @@ fun importOfflineDefinitions(uri: Uri) {
 
     private fun runScan(
         manualScan: Boolean = true,
+        scanType: String = "MANUAL_SCAN",
         onFileStarted: suspend (String) -> Unit = {},
-        task: suspend (suspend (Int, Int) -> Unit) -> List<ScanResult>
+        task: suspend (String, suspend (Int, Int) -> Unit) -> List<ScanResult>
     ) {
         if (mutableState.value.isScanning || scanJob?.isActive == true) return
         scanJob = viewModelScope.launch {
@@ -495,8 +497,14 @@ fun importOfflineDefinitions(uri: Uri) {
                 )
             }
             try {
+                var sessionStarted = false
+                var sessionCompleted = false
+                val scanSessionId = UUID.randomUUID().toString()
+                sessionStarted = runCatching {
+                    repository.startScanSession(scanSessionId, scanType)
+                }.isSuccess
                 val signedDefinitionsUsed = repository.currentHashDatabaseCapability()?.enabled == true
-                val results = task { processed, total ->
+                val results = task(scanSessionId) { processed, total ->
                     mutableState.update { state ->
                         state.copy(
                             processedItems = processed.coerceAtLeast(0),
@@ -512,6 +520,10 @@ fun importOfflineDefinitions(uri: Uri) {
                 val summary = com.vibesync.antivirus.core.engine.ScanCompletionSummary.from(
                     results, mutableState.value.processedItems, System.currentTimeMillis()).copy(signedDefinitionsUsed = signedDefinitionsUsed)
                 repository.saveScanSummary(summary)
+                if (sessionStarted) {
+                    runCatching { repository.completeScanSession(scanSessionId) }
+                }
+                sessionCompleted = true
                 val shouldAlertManualThreat = ManualThreatAlertPolicy.shouldAlert(
                     isManualScan = manualScan,
                     hasConfirmedThreat = results.any { it.verdict == ScanVerdict.THREAT }
@@ -559,6 +571,9 @@ fun importOfflineDefinitions(uri: Uri) {
                     )
                 }
             } finally {
+                if (sessionStarted && !sessionCompleted) {
+                    runCatching { repository.interruptScanSession(scanSessionId) }
+                }
                 scanJob = null
             }
         }
