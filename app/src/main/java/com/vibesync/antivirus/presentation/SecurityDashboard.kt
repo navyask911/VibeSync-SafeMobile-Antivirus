@@ -152,7 +152,17 @@ private fun ScoreRow(label: String, value: String) {
 @Composable
 internal fun ScanFeedbackCard(state: SafeMobileUiState, onResults: () -> Unit, onCancel: () -> Unit) {
     val summary = state.scanSummary
-    if (!state.isScanning && summary == null) return
+    if (!state.isScanning && summary == null && state.lastScanAt == null) return
+    val sessionStatusResource = if (state.activeScanSessions > 0) {
+        R.string.scan_sessions_in_progress
+    } else {
+        R.string.scan_sessions_completed
+    }
+    val sessionStatusCount = if (state.activeScanSessions > 0) {
+        state.activeScanSessions
+    } else {
+        state.completedScans
+    }
     GlassCard(Modifier.fillMaxWidth()) {
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             if (state.isScanning) {
@@ -165,6 +175,11 @@ internal fun ScanFeedbackCard(state: SafeMobileUiState, onResults: () -> Unit, o
                     }
                 }
                 TextButton(onClick = onCancel) { Text(stringResource(R.string.ui_cancel_scan)) }
+                Text(
+                    stringResource(sessionStatusResource, sessionStatusCount),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             } else if (summary != null) {
                 Text(stringResource(R.string.v116_scan_title), style = MaterialTheme.typography.headlineSmall,
                     color = if (summary.threats > 0) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary)
@@ -179,8 +194,25 @@ internal fun ScanFeedbackCard(state: SafeMobileUiState, onResults: () -> Unit, o
                 else if (summary.threats == 0) Text(stringResource(R.string.system_app_scan_complete))
                 if (!summary.signedDefinitionsUsed) Text(stringResource(R.string.ui_unsigned_definitions_warning), color = MaterialTheme.colorScheme.tertiary)
                 state.results.filter { it.verdict == ScanVerdict.THREAT }.take(3).forEach { Text(stringResource(R.string.format_bullet, it.displayName), color = MaterialTheme.colorScheme.error) }
-                Text(localizedDate(summary.completedAt), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(localizedDate(state.lastScanAt ?: summary.completedAt), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(
+                    stringResource(sessionStatusResource, sessionStatusCount),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
                 TextButton(onClick = onResults) { Text(stringResource(R.string.ui_view_scan_results)) }
+            } else {
+                state.lastScanAt?.let { timestamp ->
+                    Text(
+                        stringResource(R.string.security_last_scan, localizedDate(timestamp)),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+                Text(
+                    stringResource(sessionStatusResource, sessionStatusCount),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
         }
     }
