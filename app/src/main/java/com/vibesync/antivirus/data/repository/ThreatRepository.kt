@@ -191,13 +191,25 @@ class ThreatRepository(
  fun observeActiveSignatureCount(): Flow<Int> = threatIntelligence.observeActiveSignatureCount()
  fun observeLastSuccessfulThreatFeedSyncTime(): Flow<Long?> = threatIntelligence.observeLastSuccessfulSyncTime()
  fun syncThreatFeeds() = requestThreatFeedSync()
- suspend fun scanInstalledApps(progress: suspend (Int, Int) -> Unit = { _, _ -> }, scanSessionId: String = UUID.randomUUID().toString()): List<ScanResult> = withContext(Dispatchers.IO) {
+ suspend fun scanInstalledApps(progress: suspend (Int, Int) -> Unit = { _, _ -> }): List<ScanResult> =
+  scanInstalledAppsForSession(UUID.randomUUID().toString(), progress)
+
+ suspend fun scanInstalledAppsForSession(
+  scanSessionId: String,
+  progress: suspend (Int, Int) -> Unit = { _, _ -> }
+ ): List<ScanResult> = withContext(Dispatchers.IO) {
   definitionLoader.importBundledIfEmpty()
-  scanner.scanInstalledApps(progress, scanSessionId)
+  scanner.scanInstalledAppsForSession(scanSessionId, progress)
  }
 
  /** Scan installed APKs and files in the user's persisted SAF folder, with bounded traversal. */
- suspend fun scanFull(progress: suspend (Int, Int) -> Unit = { _, _ -> }, scanSessionId: String = UUID.randomUUID().toString()): List<ScanResult> = withContext(Dispatchers.IO) {
+ suspend fun scanFull(progress: suspend (Int, Int) -> Unit = { _, _ -> }): List<ScanResult> =
+  scanFullForSession(UUID.randomUUID().toString(), progress)
+
+ suspend fun scanFullForSession(
+  scanSessionId: String,
+  progress: suspend (Int, Int) -> Unit = { _, _ -> }
+ ): List<ScanResult> = withContext(Dispatchers.IO) {
   definitionLoader.importBundledIfEmpty()
   var fileCount = 0
   for (ignored in selectedFolderFiles()) {
@@ -205,10 +217,10 @@ class ThreatRepository(
    if (fileCount < maxSafScanFiles) fileCount++
   }
   var installedCount = 0
-  val installedResults = scanner.scanInstalledApps({ processed, total ->
+  val installedResults = scanner.scanInstalledAppsForSession(scanSessionId) { processed, total ->
    installedCount = total
    progress(processed, (total.toLong() + fileCount).coerceAtMost(Int.MAX_VALUE.toLong()).toInt())
-  }, scanSessionId)
+  }
   val findings = ArrayList<ScanResult>()
   var filesProcessed = 0
   for (candidate in selectedFolderFiles()) {
@@ -230,11 +242,18 @@ class ThreatRepository(
 
  /** Deep-scan readable files below one user-selected SAF tree, without widening the grant. */
  suspend fun scanFolderTree(
-  treeUri: Uri,
-  progress: suspend (Int, Int) -> Unit = { _, _ -> },
-  onFileStarted: suspend (String) -> Unit = {},
-   scanSessionId: String = UUID.randomUUID().toString()
- ): List<ScanResult> = withContext(Dispatchers.IO) {
+   treeUri: Uri,
+   progress: suspend (Int, Int) -> Unit = { _, _ -> },
+   onFileStarted: suspend (String) -> Unit = {}
+  ): List<ScanResult> =
+   scanFolderTreeForSession(treeUri, UUID.randomUUID().toString(), progress, onFileStarted)
+
+ suspend fun scanFolderTreeForSession(
+   treeUri: Uri,
+   scanSessionId: String,
+   progress: suspend (Int, Int) -> Unit = { _, _ -> },
+   onFileStarted: suspend (String) -> Unit = {}
+  ): List<ScanResult> = withContext(Dispatchers.IO) {
    val root = DocumentFile.fromTreeUri(context, treeUri)
    require(root != null && root.isDirectory && root.canRead()) {
     "The selected folder is not readable. Re-select a folder using Android's document picker."
@@ -410,7 +429,7 @@ suspend fun importOfflineDefinitions(uri: Uri): UiText = withContext(Dispatchers
   definitionLoader.importBundledIfEmpty()
   database.threatDao().countSignatures()
  }
- suspend fun deepScan(scanSessionId: String = UUID.randomUUID().toString()): List<ScanResult> = scanFull(scanSessionId = scanSessionId)
+ suspend fun deepScan(scanSessionId: String = UUID.randomUUID().toString()): List<ScanResult> = scanFullForSession(scanSessionId)
 
  companion object {
   private const val TRUSTED_FILE_HASHES_PREFS = "safemobile_trusted_file_hashes"
