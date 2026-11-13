@@ -35,6 +35,29 @@ activity = manifest.find(f'.//activity[@{ANDROID}name=".core.observer.ThreatDete
 if activity is None or activity.get(ANDROID + "exported") != "false":
     errors.append("ThreatDetectedActivity must remain non-exported")
 
+# These technical integrity/Play Protect messages are kept as explicit English
+# fallback resources for the remaining locales, but are translated in the two
+# UI regression locales (Kannada and Japanese) and validated below.
+KANNADA_JAPANESE_OVERRIDE_KEYS = {
+    "play_integrity_verified_title",
+    "play_integrity_verified_description",
+    "play_integrity_status_verified",
+    "play_integrity_status_not_verified",
+    "play_integrity_status_requesting",
+    "play_integrity_status_server_unconfigured",
+    "play_integrity_status_error",
+    "play_integrity_status_not_checked",
+    "device_integrity_title",
+    "security_advisor_heading",
+    "device_integrity_description",
+    "device_integrity_status_local_passed",
+    "device_integrity_status_local_failed",
+    "posture_audit_success",
+    "play_protect_status_title",
+    "play_protect_status_enabled",
+    "play_protect_status_disabled"
+}
+
 files = ("strings.xml", "device_posture.xml", "incident_response.xml",
          "sentinel_security.xml", "system_app_protection.xml",
          "detection_capabilities.xml", "siren_diagnostics.xml")
@@ -42,7 +65,9 @@ files = ("strings.xml", "device_posture.xml", "incident_response.xml",
 for file in files:
     default_xml = ET.parse(res / "values" / file).getroot()
     forbidden = [x.attrib["name"] for x in default_xml.findall("string")
-                 if x.attrib.get("translatable") == "false" and not x.attrib["name"].startswith("locale_")]
+                 if x.attrib.get("translatable") == "false"
+                 and not x.attrib["name"].startswith("locale_")
+                 and not (file == "strings.xml" and x.attrib["name"] in KANNADA_JAPANESE_OVERRIDE_KEYS)]
     if forbidden:
         errors.append(f"Untranslatable UI strings in {file}: {', '.join(forbidden)}")
 

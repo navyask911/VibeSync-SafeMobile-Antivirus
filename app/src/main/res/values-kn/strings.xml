@@ -723,4 +723,21 @@
     <string name="self_update_no_update">No newer Google Play update is currently available.</string>
     <string name="self_update_not_allowed">An update is available, but Google Play does not allow the immediate update flow for this installation.</string>
     <string name="self_update_open_play_store">Open Google Play</string>
+    <string name="play_integrity_verified_title">Play Integrity ಪರಿಶೀಲಿಸಲಾಗಿದೆ</string>
+    <string name="play_integrity_verified_description">Google Play ನೀಡಿದ ಸಾಧನದ ತೀರ್ಪನ್ನು ವಿಶ್ವಾಸಾರ್ಹ ಸರ್ವರ್ ಪರಿಶೀಲಿಸುತ್ತದೆ.</string>
+    <string name="play_integrity_status_verified">Google Play MEETS_DEVICE_INTEGRITY ಅನ್ನು ದೃಢೀಕರಿಸುತ್ತದೆ.</string>
+    <string name="play_integrity_status_not_verified">Google Play MEETS_DEVICE_INTEGRITY ಅನ್ನು ಹಿಂತಿರುಗಿಸಲಿಲ್ಲ.</string>
+    <string name="play_integrity_status_requesting">Google Play ನಿಂದ Integrity ಟೋಕನ್ ವಿನಂತಿಸಲಾಗುತ್ತಿದೆ…</string>
+    <string name="play_integrity_status_server_unconfigured">ಟೋಕನ್ ಸ್ವೀಕರಿಸಲಾಗಿದೆ. ಸರ್ವರ್-ಬದಿಯ ಪರಿಶೀಲನೆ ಸಂರಚಿಸಲಾಗಿಲ್ಲ.</string>
+    <string name="play_integrity_status_error">Integrity ಪರಿಶೀಲನೆ ಪ್ರಸ್ತುತ ಲಭ್ಯವಿಲ್ಲ.</string>
+    <string name="play_integrity_status_not_checked">Integrity ಪರಿಶೀಲನೆಗಾಗಿ ಕಾಯಲಾಗುತ್ತಿದೆ.</string>
+    <string name="device_integrity_title">ಸಾಧನದ ಸಮಗ್ರತಾ ಪರಿಶೀಲನೆ</string>
+    <string name="security_advisor_heading">ಭದ್ರತಾ ಸಲಹೆಗಾರ</string>
+    <string name="device_integrity_description">SafeMobile ಸ್ಥಳೀಯ ಬಿಲ್ಡ್ ಮತ್ತು ಬೂಟ್‌ಲೋಡರ್ ಸ್ಥಿತಿ, ADB ಡೀಬಗ್ಗಿಂಗ್ ಮತ್ತು Google Play ಸೇವೆಗಳನ್ನು ಪರಿಶೀಲಿಸಿದೆ. ಈ ಸ್ಥಳೀಯ ಮೂಲ ಪರಿಶೀಲನೆ Google Play Integrity ದೃಢೀಕರಣವಲ್ಲ.</string>
+    <string name="device_integrity_status_local_passed">ಸ್ಥಳೀಯ ಮೂಲ ಪರಿಶೀಲನೆ ಯಶಸ್ವಿಯಾಗಿದೆ: ಲಾಕ್ ಮಾಡಿದ verified boot, production build tags, ADB ನಿಷ್ಕ್ರಿಯ ಮತ್ತು Google Play ಸೇವೆಗಳು ಲಭ್ಯ. ಇದು Google Play Integrity ದೃಢೀಕರಣವಲ್ಲ.</string>
+    <string name="device_integrity_status_local_failed">ಸ್ಥಳೀಯ ಮೂಲ ಪರಿಶೀಲನೆ ಯಶಸ್ವಿಯಾಗಲಿಲ್ಲ. ಬೂಟ್‌ಲೋಡರ್ ಲಾಕ್, build tags, ADB ಡೀಬಗ್ಗಿಂಗ್ ಮತ್ತು Google Play ಸೇವೆಗಳನ್ನು ಪರಿಶೀಲಿಸಿ.</string>
+    <string name="posture_audit_success">ಎಲ್ಲಾ ಪರಿಶೀಲನೆಗಳು ಯಶಸ್ವಿಯಾಗಿವೆ</string>
+    <string name="play_protect_status_title">Play Protect ಸ್ಥಿತಿ</string>
+    <string name="play_protect_status_enabled">ಈ ಸಾಧನದಲ್ಲಿ Google Play ಪ್ಯಾಕೇಜ್ ಪರಿಶೀಲನೆ ಸಕ್ರಿಯವಾಗಿದೆ.</string>
+    <string name="play_protect_status_disabled">Android ಸೆಟ್ಟಿಂಗ್‌ಗಳಲ್ಲಿ Google Play ಪ್ಯಾಕೇಜ್ ಪರಿಶೀಲನೆ ನಿಷ್ಕ್ರಿಯವಾಗಿದೆ.</string>
 </resources>

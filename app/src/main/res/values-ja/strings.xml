@@ -701,4 +701,21 @@
     <string name="self_update_no_update">No newer Google Play update is currently available.</string>
     <string name="self_update_not_allowed">An update is available, but Google Play does not allow the immediate update flow for this installation.</string>
     <string name="self_update_open_play_store">Open Google Play</string>
+    <string name="play_integrity_verified_title">Play Integrity の確認済み</string>
+    <string name="play_integrity_verified_description">Google Play が返したデバイス判定を信頼できるサーバーが検証します。</string>
+    <string name="play_integrity_status_verified">Google Play は MEETS_DEVICE_INTEGRITY を確認しました。</string>
+    <string name="play_integrity_status_not_verified">Google Play は MEETS_DEVICE_INTEGRITY を返しませんでした。</string>
+    <string name="play_integrity_status_requesting">Google Play から Integrity トークンをリクエストしています…</string>
+    <string name="play_integrity_status_server_unconfigured">トークンを受信しました。サーバー側の検証は設定されていません。</string>
+    <string name="play_integrity_status_error">Integrity の検証は現在利用できません。</string>
+    <string name="play_integrity_status_not_checked">Integrity チェックを待機しています。</string>
+    <string name="device_integrity_title">デバイス整合性チェック</string>
+    <string name="security_advisor_heading">セキュリティアドバイザー</string>
+    <string name="device_integrity_description">SafeMobile はローカルのビルドとブートローダーの状態、ADB デバッグ、Google Play 開発者サービスを確認しました。このローカルベースラインは Google Play Integrity の証明ではありません。</string>
+    <string name="device_integrity_status_local_passed">ローカルベースラインに合格しました：検証済みブートがロックされ、製品版ビルドタグが使用され、ADB が無効で、Google Play 開発者サービスが利用可能です。これは Google Play Integrity の証明ではありません。</string>
+    <string name="device_integrity_status_local_failed">ローカルベースラインを満たしていません。ブートローダーのロック、ビルドタグ、ADB デバッグ、Google Play 開発者サービスを確認してください。</string>
+    <string name="posture_audit_success">すべての監査に合格しました</string>
+    <string name="play_protect_status_title">Play Protect の状態</string>
+    <string name="play_protect_status_enabled">このデバイスでは Google Play のパッケージ検証が有効です。</string>
+    <string name="play_protect_status_disabled">Android の設定で Google Play のパッケージ検証が無効になっています。</string>
 </resources>
