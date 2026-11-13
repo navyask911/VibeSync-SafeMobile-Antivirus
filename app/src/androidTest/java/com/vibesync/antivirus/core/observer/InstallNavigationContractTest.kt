@@ -21,12 +21,14 @@ class InstallNavigationContractTest {
         assertNull(PackageInstallReceiver.packageFrom(null))
     }
 
-    @Test fun overlayIntentUsesEachFlaggedPackageWithNewTaskBeforeCategoryFallback() {
+    @Test fun accessibilitySettingsCandidatesUseDetailsThenCategoryFallback() {
         for (name in listOf("example.first", "example.second")) {
-            val first = PostureSettingsLinks.candidates(PostureFinding(PostureAccess.OVERLAY, name, name)).first()
-            assertEquals(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, first.action)
-            assertEquals("package:$name", first.dataString)
-            assertTrue(first.flags and Intent.FLAG_ACTIVITY_NEW_TASK != 0)
+            val component = "$name/.ExampleAccessibilityService"
+            val candidates = PostureSettingsLinks.candidates(
+                PostureFinding(PostureAccess.ACCESSIBILITY, name, name, componentName = component)
+            )
+            assertEquals("android.settings.ACCESSIBILITY_DETAILS_SETTINGS", candidates.first().action)
+            assertEquals(Settings.ACTION_ACCESSIBILITY_SETTINGS, candidates[1].action)
         }
     }
 }
