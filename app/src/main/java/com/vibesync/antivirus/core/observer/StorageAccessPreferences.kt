@@ -22,6 +22,7 @@ object StorageAccessPreferences {
     private const val TREES = "sentinel_tree_uris_v2"
     const val DOWNLOADS = "downloads"
     const val WHATSAPP = "whatsapp"
+    const val TELEGRAM = "telegram"
     const val CUSTOM = "custom"
     const val MAX_CUSTOM_FOLDERS = 10
     private val CUSTOM_TREE_URIS = stringSetPreferencesKey("custom_tree_uris")
@@ -59,6 +60,7 @@ object StorageAccessPreferences {
         return when (role) {
             DOWNLOADS -> parts.any { it == "download" || it == "downloads" }
             WHATSAPP -> parts.any { it == "whatsapp" || it == "whatsapp business" || it == "whatsapp documents" }
+            TELEGRAM -> parts.any { it == "telegram" || it == "telegram documents" }
             else -> false
         }
     }
@@ -70,9 +72,17 @@ object StorageAccessPreferences {
     fun pickerIntent(role: String): Intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION or
             Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION or Intent.FLAG_GRANT_PREFIX_URI_PERMISSION)
-        if (role != CUSTOM) {
-            val path = if (role == WHATSAPP) "primary:Android/media/com.whatsapp/WhatsApp/Media/WhatsApp Documents" else "primary:Download"
-            putExtra(DocumentsContract.EXTRA_INITIAL_URI, DocumentsContract.buildDocumentUri("com.android.externalstorage.documents", path))
+        val initialPath = when (role) {
+            WHATSAPP -> "primary:Android/media/com.whatsapp/WhatsApp/Media/WhatsApp Documents"
+            TELEGRAM -> "primary:Android/media/org.telegram.messenger/Telegram/Telegram Documents"
+            DOWNLOADS -> "primary:Download"
+            else -> null
+        }
+        initialPath?.let { path ->
+            putExtra(
+                DocumentsContract.EXTRA_INITIAL_URI,
+                DocumentsContract.buildDocumentUri("com.android.externalstorage.documents", path)
+            )
         }
     }
 
@@ -147,7 +157,7 @@ object StorageAccessPreferences {
     fun removeFolder(context: Context, uri: Uri) {
         val editor = prefs(context).edit().putString(TREES,
             JSONArray(selectedTreeUris(context).filterNot { it == uri }.map(Uri::toString)).toString()).remove(LEGACY_TREE)
-        for (role in listOf(DOWNLOADS, WHATSAPP)) if (roleUri(context, role) == uri) editor.remove("sentinel_role_$role")
+        for (role in listOf(DOWNLOADS, WHATSAPP, TELEGRAM)) if (roleUri(context, role) == uri) editor.remove("sentinel_role_$role")
         if (!editor.commit()) return
         runCatching { context.contentResolver.releasePersistableUriPermission(uri,
             Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION) }
