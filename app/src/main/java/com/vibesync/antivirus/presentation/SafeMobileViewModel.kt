@@ -129,7 +129,16 @@ class SafeMobileViewModel(
         refreshSignatureCount()
         refreshQuarantine()
         observeThreatFeedState()
+        observeScanSessionCount()
         refreshHashDatabaseCapability()
+    }
+
+    private fun observeScanSessionCount() {
+        viewModelScope.launch {
+            repository.observeCompletedScanSessionCount().collect { count ->
+                mutableState.update { it.copy(completedScans = count) }
+            }
+        }
     }
 
     private fun observeThreatFeedState() {
