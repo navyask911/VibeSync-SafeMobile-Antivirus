@@ -23,6 +23,7 @@ import com.vibesync.antivirus.core.worker.LocalDefinitionLoader
 import com.vibesync.antivirus.data.local.ThreatDatabase
 import com.vibesync.antivirus.data.local.ScanAudit
 import com.vibesync.antivirus.data.local.ScanSessionEntity
+import com.vibesync.antivirus.data.local.ScanSessionCounts
 import com.vibesync.antivirus.data.local.ThreatFeedSyncStateEntity
 import com.vibesync.antivirus.core.worker.ThreatFeedSyncScheduler
 import kotlinx.coroutines.flow.Flow
@@ -108,8 +109,11 @@ class ThreatRepository(
   )
  }
 
- suspend fun completeScanSession(sessionId: String) = withContext(Dispatchers.IO) {
-  database.threatDao().markScanSessionCompleted(sessionId, System.currentTimeMillis())
+ suspend fun completeScanSession(
+  sessionId: String,
+  completedAt: Long = System.currentTimeMillis()
+ ) = withContext(Dispatchers.IO) {
+  database.threatDao().markScanSessionCompleted(sessionId, completedAt)
  }
 
  suspend fun interruptScanSession(sessionId: String) = withContext(Dispatchers.IO) {
@@ -142,8 +146,15 @@ class ThreatRepository(
    .putInt("review", summary.review).putInt("unreadable", summary.unreadable).putLong("completed_at", summary.completedAt).putBoolean("signed_definitions_used", summary.signedDefinitionsUsed).apply()
  }
 
- fun observeCompletedScanSessionCount(): Flow<Int> =
-  database.threatDao().observeCompletedScanSessionCount()
+ fun observeScanSessionCounts(): Flow<ScanSessionCounts> =
+  database.threatDao().observeScanSessionCounts()
+
+ fun observeLatestCompletedScanAt(): Flow<Long?> =
+  database.threatDao().observeLatestCompletedScanAt()
+
+ suspend fun latestCompletedScanAt(): Long? = withContext(Dispatchers.IO) {
+  database.threatDao().latestCompletedScanAt()
+ }
 
  fun observeRecentAudits(): Flow<List<ScanAudit>> =
   database.threatDao().observeRecentAudits().map { rows ->
