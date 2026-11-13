@@ -118,6 +118,40 @@ jobs:
       # Keep verification on a later push so CI checks the committed images, not a pre-record checkout.
       - name: Unit tests and Paparazzi snapshot verification
         run: ./gradlew --no-daemon testOfflineDebugUnitTest verifyPaparazziDebug
+      - name: Print unit-test failure stack traces
+        if: failure()
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import xml.etree.ElementTree as ET
+
+          roots = [
+              Path("app/build/test-results/testOfflineDebugUnitTest"),
+              Path("app/build/test-results/verifyPaparazziDebug"),
+          ]
+          found = False
+          for root in roots:
+              if not root.exists():
+                  continue
+              for report in sorted(root.glob("TEST-*.xml")):
+                  try:
+                      suite = ET.parse(report).getroot()
+                  except ET.ParseError as error:
+                      print(f"Could not parse {report}: {error}")
+                      continue
+                  for case in suite.iter("testcase"):
+                      for tag in ("failure", "error"):
+                          detail = case.find(tag)
+                          if detail is None:
+                              continue
+                          found = True
+                          print(f"=== {case.get('classname')}.{case.get('name')} [{tag}] ===")
+                          print((detail.get("message") or "")[:12000])
+                          print((detail.text or "")[:24000])
+          if not found:
+              print("No JUnit failure XML found in the expected Gradle test-result directories.")
+          PY
       - name: Android lint
         run: ./gradlew --no-daemon lintOfflineDebug lintFeedDebug lintVitalOfflineRelease lintVitalFeedRelease
       - name: Explicit debug lint requested for v1.8.1 (Offline + Feed flavors)
