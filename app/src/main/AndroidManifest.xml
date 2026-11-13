@@ -36,6 +36,16 @@
   <service android:name=".core.observer.StorageSentinelService" android:exported="false" android:foregroundServiceType="specialUse">
    <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE" android:value="User-enabled local Downloads folder monitoring to scan new APK files against local threat hashes." />
   </service>
+  <service
+   android:name="androidx.work.impl.foreground.SystemForegroundService"
+   android:exported="false"
+   android:foregroundServiceType="specialUse"
+   tools:node="merge"
+   tools:replace="android:foregroundServiceType">
+   <property
+    android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+    android:value="User-visible WorkManager tasks perform on-device antivirus scans of installed apps and user-selected local files." />
+  </service>
   <activity android:name=".core.observer.ThreatBlockedActivity" android:exported="false" android:excludeFromRecents="true" />
   <activity android:name=".core.observer.ThreatDetectedActivity" android:exported="false" android:excludeFromRecents="true" android:launchMode="singleTop" />
   <receiver android:name=".core.observer.SecurityAlertDismissReceiver" android:exported="false" />
