@@ -471,9 +471,11 @@
     <string name="ui_sentinel_scoped">On Android 11+, choose an accessible subfolder rather than the protected Download root.</string>
     <string name="ui_sentinel_select_tip">Android may block the main Download folder and storage root. Select an accessible Download subfolder or individual files. Messaging Apps Documents may be under Android/media/com.Messaging Apps/Messaging Apps/Media. Only granted folders are monitored.</string>
     <string name="ui_sentinel_download_folder">Download folder (browser downloads)</string>
-    <string name="ui_sentinel_whatsapp_folder">Messaging Apps Documents folder (chat APKs)</string>
+    <string name="ui_sentinel_whatsapp_folder">WhatsApp Documents folder</string>
+    <string name="ui_sentinel_telegram_folder">Telegram Documents folder</string>
+    <string name="ui_sentinel_enable_telegram">Monitor Telegram Documents</string>
     <string name="ui_sentinel_enable_download">Enable Download Monitoring</string>
-    <string name="ui_sentinel_enable_whatsapp">Enable Messaging Apps Monitoring</string>
+    <string name="ui_sentinel_enable_whatsapp">Monitor WhatsApp Documents</string>
     <string name="ui_sentinel_remove_folder">Remove monitored folder</string>
     <string name="ui_sentinel_running">Monitoring authorized folders recursively</string>
     <string name="ui_sentinel_stopped">Folder monitoring is stopped</string>
