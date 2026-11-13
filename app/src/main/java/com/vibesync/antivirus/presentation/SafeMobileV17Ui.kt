@@ -335,7 +335,7 @@ internal fun V17LanguageSelectionDialog(onDismiss: () -> Unit) {
             ) {
                 TextButton(
                     onClick = {
-                        LocalePreferences.saveOverride(context, "")
+                        LocalePreferences.applyOverride(context, "")
                         onDismiss()
                         context.v17ActivityOrNull()?.recreate()
                     },
@@ -346,7 +346,7 @@ internal fun V17LanguageSelectionDialog(onDismiss: () -> Unit) {
                 LocalePreferences.choices.forEach { choice ->
                     TextButton(
                         onClick = {
-                            LocalePreferences.saveOverride(context, choice.tag)
+                            LocalePreferences.applyOverride(context, choice.tag)
                             onDismiss()
                             context.v17ActivityOrNull()?.recreate()
                         },
@@ -385,6 +385,7 @@ private fun Context.v17ActivityOrNull(): android.app.Activity? {
 @Composable
 internal fun V17ShieldScreen(
     isDark: Boolean, securityScore: Int, isPro: Boolean, activeGuards: Int,
+    totalGuardChecks: Int, isScanning: Boolean, onStartScan: () -> Unit,
     integrityState: SecurityVerificationState,
     advisorState: ProtectionAdvisorState,
     onOpenAdvisorIssue: (AdvisorIssueItem) -> Unit,
@@ -396,6 +397,8 @@ internal fun V17ShieldScreen(
     onOpenPrivacy: () -> Unit = {}, onOpenSettings: () -> Unit = {}
 ) {
     val c = v17Colors(isDark)
+    val guardCapacity = totalGuardChecks.coerceAtLeast(0)
+    val activeGuardCount = activeGuards.coerceIn(0, guardCapacity)
     Column(Modifier.fillMaxSize().background(c.device).verticalScroll(rememberScrollState()).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)) {
         V17HeroCard(isDark) {
@@ -415,8 +418,26 @@ internal fun V17ShieldScreen(
                 V17Title(stringResource(R.string.ui_score_title))
                 V17Body(stringResource(R.string.v116_score_meaning))
                 V17Body(stringResource(R.string.ui_score_explanation))
-                V17Body("$activeGuards/3 protection guards active")
+                V17Body("$activeGuardCount/$guardCapacity protection guards active")
             }
+        }
+        Button(
+            onClick = onStartScan,
+            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            enabled = !isScanning,
+            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 14.dp)
+        ) {
+            if (isScanning) {
+                CircularProgressIndicator(
+                    Modifier.size(18.dp),
+                    strokeWidth = 2.dp,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            } else {
+                Icon(Icons.Outlined.Security, contentDescription = null)
+            }
+            Spacer(Modifier.width(8.dp))
+            Text(stringResource(if (isScanning) R.string.scan_running else R.string.security_scan_now))
         }
         SecurityAdvisorScreen(
             state = advisorState,
@@ -454,7 +475,7 @@ internal fun V17ShieldScreen(
                 }
             }
         }
-        if (activeGuards < 3) Surface(
+        if (activeGuardCount < guardCapacity) Surface(
             Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp)).clickable(onClick = onOpenSetup),
             color = c.amber.copy(alpha = .14f), shape = RoundedCornerShape(16.dp),
             border = BorderStroke(1.dp, c.amber.copy(alpha = .4f))
@@ -463,7 +484,7 @@ internal fun V17ShieldScreen(
                 horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 V17IconBadge(Icons.Outlined.Tune, c.amber, size = 40.dp, iconSize = 22.dp, contentDescription = null)
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
-                    V17Title("Protection Setup: $activeGuards/3 Active", color = c.text)
+                    V17Title("Protection Setup: $activeGuardCount/$guardCapacity Active", color = c.text)
                     V17Body("Tap to grant the remaining recommended protection permissions.", color = c.muted)
                 }
                 V17Pill("FINISH", c.amber, isDark)
@@ -1206,15 +1227,20 @@ internal fun V17ConsoleSettingsScreen(
         title = { V17Title("App Language") },
         text = {
             Column(Modifier.fillMaxWidth().heightIn(max = 420.dp).verticalScroll(rememberScrollState())) {
-                TextButton(onClick = { selectedLanguage = ""; LocalePreferences.saveOverride(context, ""); languageOpen = false }) {
+                TextButton(onClick = {
+                    selectedLanguage = ""
+                    LocalePreferences.applyOverride(context, "")
+                    languageOpen = false
+                    context.v17ActivityOrNull()?.recreate()
+                }) {
                     Text(stringResource(R.string.language_system_default))
                 }
                 LocalePreferences.choices.forEach { choice ->
                     TextButton(onClick = {
                         selectedLanguage = choice.tag
-                        LocalePreferences.saveOverride(context, choice.tag)
+                        LocalePreferences.applyOverride(context, choice.tag)
                         languageOpen = false
-                        (context as? android.app.Activity)?.recreate()
+                        context.v17ActivityOrNull()?.recreate()
                     }, modifier = Modifier.fillMaxWidth()) { Text(context.getString(choice.labelResource)) }
                 }
             }
