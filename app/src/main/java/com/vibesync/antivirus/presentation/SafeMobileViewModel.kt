@@ -529,10 +529,11 @@ fun importOfflineDefinitions(uri: Uri) {
                 val summary = com.vibesync.antivirus.core.engine.ScanCompletionSummary.from(
                     results, mutableState.value.processedItems, System.currentTimeMillis()).copy(signedDefinitionsUsed = signedDefinitionsUsed)
                 repository.saveScanSummary(summary)
-                if (sessionStarted) {
-                    runCatching { repository.completeScanSession(scanSessionId) }
+                sessionCompleted = if (sessionStarted) {
+                    runCatching { repository.completeScanSession(scanSessionId) }.isSuccess
+                } else {
+                    true
                 }
-                sessionCompleted = true
                 val shouldAlertManualThreat = ManualThreatAlertPolicy.shouldAlert(
                     isManualScan = manualScan,
                     hasConfirmedThreat = results.any { it.verdict == ScanVerdict.THREAT }
@@ -543,7 +544,6 @@ fun importOfflineDefinitions(uri: Uri) {
                         isScanning = false,
                         currentScanFile = null,
                         results = results,
-                        completedScans = state.completedScans + 1,
                         manualScanCompletionSequence = state.manualScanCompletionSequence +
                             if (manualScan) 1L else 0L,
                         manualThreatAlertSequence = state.manualThreatAlertSequence +
