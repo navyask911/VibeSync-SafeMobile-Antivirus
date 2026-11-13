@@ -53,6 +53,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.painterResource
 import com.vibesync.antivirus.BuildConfig
 import com.vibesync.antivirus.R
+import com.vibesync.antivirus.core.engine.MachineLearningScanner
 import com.vibesync.antivirus.data.repository.ThreatRepository
 import com.vibesync.antivirus.data.local.AnalyticsWeek
 import com.vibesync.antivirus.data.local.ScanAnalytics
@@ -386,6 +387,8 @@ private fun Context.v17ActivityOrNull(): android.app.Activity? {
 internal fun V17ShieldScreen(
     isDark: Boolean, securityScore: Int, isPro: Boolean, activeGuards: Int,
     totalGuardChecks: Int, isScanning: Boolean, onStartScan: () -> Unit,
+    folderMonitorActive: Boolean, monitoredFolderCount: Int,
+    hashDatabaseActive: Boolean, signedThreatIndicatorCount: Int, yaraEngineActive: Boolean,
     integrityState: SecurityVerificationState,
     advisorState: ProtectionAdvisorState,
     onOpenAdvisorIssue: (AdvisorIssueItem) -> Unit,
@@ -397,10 +400,27 @@ internal fun V17ShieldScreen(
     onOpenPrivacy: () -> Unit = {}, onOpenSettings: () -> Unit = {}
 ) {
     val c = v17Colors(isDark)
+    val context = LocalContext.current
+    var mlModelAvailable by remember(context) { mutableStateOf(false) }
+    LaunchedEffect(context) {
+        mlModelAvailable = MachineLearningScanner(context).isAvailable()
+    }
     val guardCapacity = totalGuardChecks.coerceAtLeast(0)
     val activeGuardCount = activeGuards.coerceIn(0, guardCapacity)
+    val activeLocalLayers = listOf(hashDatabaseActive, yaraEngineActive, true).count { it }
+    val liveSentinelStatus = buildString {
+        append(if (folderMonitorActive) "Folder monitoring active" else "Folder monitoring stopped")
+        append(" · $monitoredFolderCount granted folders")
+        append(" · Install observer ${if (liveSentinelActive) "active" else "inactive"}")
+    }
     Column(Modifier.fillMaxSize().background(c.device).verticalScroll(rememberScrollState()).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        V17SectionHeading(
+            "Security Advisor Hub",
+            "Protection status, live monitoring, device posture and threat defense.",
+            Icons.Default.Shield,
+            c.green
+        )
         V17HeroCard(isDark) {
             Column(
                 modifier = Modifier.fillMaxWidth(),
@@ -492,19 +512,38 @@ internal fun V17ShieldScreen(
             }
         }
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            V17Tile("Live Sentinel", "Install & download observer", if (liveSentinelActive) "ACTIVE" else "INACTIVE",
+            V17Tile("Live Sentinel Status", liveSentinelStatus,
+                if (folderMonitorActive || liveSentinelActive) "ACTIVE" else "STOPPED",
                 Icons.Default.Security, c.green, isDark, Modifier.weight(1f), onOpenLiveSentinel)
             V17Tile("Device Posture", "Bootloader, SELinux, ADB & Play Protect",
                 posturePassed?.let { "$it/8 PASSED" } ?: "CHECK", Icons.Default.Smartphone,
                 c.accent, isDark, Modifier.weight(1f), onOpenPosture)
         }
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            V17Tile("AI & YARA Engine", "Four-layer ensemble analysis", "4-LAYER",
-                Icons.Default.Psychology, c.accent, isDark, Modifier.weight(1f), onOpenDetection)
+            V17Tile(
+                "AI Engine Status",
+                "Hash DB ${if (hashDatabaseActive) "active" else "inactive"} · YARA ${if (yaraEngineActive) "active" else "inactive"} · TFLite ${if (mlModelAvailable) "active" else "disabled"}",
+                if (mlModelAvailable) "ML ACTIVE" else "$activeLocalLayers/3 LOCAL",
+                Icons.Default.Psychology, c.accent, isDark, Modifier.weight(1f), onOpenDetection
+            )
             V17Tile("Threat DB & Vault", "Local threat data and isolation",
                 if (quarantinedFilesCount > 0) "$quarantinedFilesCount ISOLATED" else "READY",
                 Icons.Default.Lock, c.amber, isDark, Modifier.weight(1f), onOpenThreatDb)
         }
+        V17SectionHeading(
+            "Threat Defense World",
+            "Live intelligence metrics alongside the signed on-device threat database.",
+            Icons.Outlined.Hub,
+            c.accent
+        )
+        V17Card(isDark) {
+            V17Title("On-device threat definitions")
+            V17Body(
+                if (hashDatabaseActive) "$signedThreatIndicatorCount signed local indicators are active."
+                else "No signed local hash database is active on this device."
+            )
+        }
+        ThreatIntelligenceCard()
     }
 }
 
