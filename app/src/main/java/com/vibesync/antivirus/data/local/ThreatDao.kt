@@ -47,6 +47,19 @@ interface ThreatDao {
  @Query("UPDATE scan_sessions SET status = 'INTERRUPTED' WHERE status = 'IN_PROGRESS'")
  suspend fun markInProgressAsInterrupted()
 
- @Query("SELECT COUNT(*) FROM scan_sessions WHERE status = 'COMPLETED'")
- fun observeCompletedScanSessionCount(): Flow<Int>
+ @Query("""
+  SELECT
+   COUNT(*) AS total,
+   COALESCE(SUM(CASE WHEN status = 'COMPLETED' THEN 1 ELSE 0 END), 0) AS completed,
+   COALESCE(SUM(CASE WHEN status = 'IN_PROGRESS' THEN 1 ELSE 0 END), 0) AS inProgress,
+   COALESCE(SUM(CASE WHEN status = 'INTERRUPTED' THEN 1 ELSE 0 END), 0) AS interrupted
+  FROM scan_sessions
+ """)
+ fun observeScanSessionCounts(): Flow<ScanSessionCounts>
+
+ @Query("SELECT MAX(completed_at) FROM scan_sessions WHERE status = 'COMPLETED'")
+ fun observeLatestCompletedScanAt(): Flow<Long?>
+
+ @Query("SELECT MAX(completed_at) FROM scan_sessions WHERE status = 'COMPLETED'")
+ suspend fun latestCompletedScanAt(): Long?
 }
