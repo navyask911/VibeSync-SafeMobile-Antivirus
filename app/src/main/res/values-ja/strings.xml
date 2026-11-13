@@ -720,6 +720,10 @@
     <string name="play_protect_status_disabled">Android の設定で Google Play のパッケージ検証が無効になっています。</string>
     <string name="scan_sessions_in_progress">進行中のスキャンセッション: %1$d</string>
     <string name="scan_sessions_completed">完了したスキャンセッション: %1$d</string>
+    <string name="scan_foreground_channel_name">スキャン中</string>
+    <string name="scan_foreground_channel_description">端末上で実行中のウイルス対策スキャンの状態を継続的に表示します。</string>
+    <string name="scan_foreground_notification_title">スキャン中</string>
+    <string name="scan_foreground_notification_body">SafeMobile がこの端末にインストールされたアプリとローカルファイルをスキャンしています。</string>
     <string name="ui_sentinel_telegram_folder">Telegram ドキュメントフォルダ</string>
     <string name="ui_sentinel_enable_telegram">Telegram ドキュメントを監視</string>
 </resources>
