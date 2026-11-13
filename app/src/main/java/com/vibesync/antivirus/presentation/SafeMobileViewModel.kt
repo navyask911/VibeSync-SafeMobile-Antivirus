@@ -38,6 +38,8 @@ data class SafeMobileUiState(
     val inventoryLoading: Boolean = false,
     val inventoryLoaded: Boolean = false,
     val completedScans: Int = 0,
+    val totalScanSessions: Int = 0,
+    val activeScanSessions: Int = 0,
     val manualScanCompletionSequence: Long = 0L,
     val manualThreatAlertSequence: Long = 0L,
     val lastScanAt: Long? = null,
@@ -129,14 +131,53 @@ class SafeMobileViewModel(
         refreshSignatureCount()
         refreshQuarantine()
         observeThreatFeedState()
-        observeScanSessionCount()
+        observeScanSessionCounts()
+        observeLatestCompletedScanAt()
+        refreshScanHistory()
         refreshHashDatabaseCapability()
     }
 
-    private fun observeScanSessionCount() {
+    private fun observeScanSessionCounts() {
         viewModelScope.launch {
-            repository.observeCompletedScanSessionCount().collect { count ->
-                mutableState.update { it.copy(completedScans = count) }
+            repository.observeScanSessionCounts().collect { counts ->
+                mutableState.update {
+                    it.copy(
+                        completedScans = counts.completed,
+                        totalScanSessions = counts.total,
+                        activeScanSessions = counts.inProgress
+                    )
+                }
+            }
+        }
+    }
+
+    private fun observeLatestCompletedScanAt() {
+        viewModelScope.launch {
+            repository.observeLatestCompletedScanAt().collect { timestamp ->
+                if (timestamp != null && timestamp > 0L) {
+                    mutableState.update { current ->
+                        current.copy(lastScanAt = maxOf(current.lastScanAt ?: 0L, timestamp))
+                    }
+                }
+            }
+        }
+    }
+
+    /** Re-read preferences and Room when the app returns to the foreground. */
+    fun refreshScanHistory() {
+        viewModelScope.launch {
+            val storedSummary = repository.loadScanSummary()
+            val latestRoomTimestamp = runCatching { repository.latestCompletedScanAt() }.getOrNull()
+            mutableState.update { current ->
+                val latestTimestamp = listOfNotNull(
+                    current.lastScanAt,
+                    storedSummary?.completedAt,
+                    latestRoomTimestamp
+                ).maxOrNull()
+                current.copy(
+                    scanSummary = storedSummary ?: current.scanSummary,
+                    lastScanAt = latestTimestamp
+                )
             }
         }
     }
@@ -530,7 +571,9 @@ fun importOfflineDefinitions(uri: Uri) {
                     results, mutableState.value.processedItems, System.currentTimeMillis()).copy(signedDefinitionsUsed = signedDefinitionsUsed)
                 repository.saveScanSummary(summary)
                 sessionCompleted = if (sessionStarted) {
-                    runCatching { repository.completeScanSession(scanSessionId) }.isSuccess
+                    runCatching {
+                        repository.completeScanSession(scanSessionId, summary.completedAt)
+                    }.isSuccess
                 } else {
                     true
                 }
@@ -548,7 +591,7 @@ fun importOfflineDefinitions(uri: Uri) {
                             if (manualScan) 1L else 0L,
                         manualThreatAlertSequence = state.manualThreatAlertSequence +
                             if (shouldAlertManualThreat) 1L else 0L,
-                        lastScanAt = System.currentTimeMillis(),
+                        lastScanAt = summary.completedAt,
                         messageResource = R.string.scan_complete,
                         messageText = null,
                         processedItems = if (state.totalItems > 0) state.totalItems else state.processedItems
