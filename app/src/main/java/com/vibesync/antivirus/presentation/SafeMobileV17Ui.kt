@@ -407,7 +407,7 @@ internal fun V17ShieldScreen(
     }
     val guardCapacity = totalGuardChecks.coerceAtLeast(0)
     val activeGuardCount = activeGuards.coerceIn(0, guardCapacity)
-    val activeLocalLayers = listOf(hashDatabaseActive, yaraEngineActive, true).count { it }
+    val activeLocalLayers = listOf(hashDatabaseActive, yaraEngineActive, mlModelAvailable).count { it }
     val liveSentinelStatus = buildString {
         append(if (folderMonitorActive) "Folder monitoring active" else "Folder monitoring stopped")
         append(" · $monitoredFolderCount granted folders")
@@ -522,8 +522,8 @@ internal fun V17ShieldScreen(
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
             V17Tile(
                 "AI Engine Status",
-                "Hash DB ${if (hashDatabaseActive) "active" else "inactive"} · YARA ${if (yaraEngineActive) "active" else "inactive"} · TFLite ${if (mlModelAvailable) "active" else "disabled"}",
-                if (mlModelAvailable) "ML ACTIVE" else "$activeLocalLayers/3 LOCAL",
+                "Static heuristics active · Hash DB ${if (hashDatabaseActive) "active" else "inactive"} · YARA ${if (yaraEngineActive) "active" else "inactive"} · TFLite ${if (mlModelAvailable) "active" else "disabled"}",
+                if (mlModelAvailable) "ML ACTIVE" else "$activeLocalLayers/3 ACTIVE",
                 Icons.Default.Psychology, c.accent, isDark, Modifier.weight(1f), onOpenDetection
             )
             V17Tile("Threat DB & Vault", "Local threat data and isolation",
