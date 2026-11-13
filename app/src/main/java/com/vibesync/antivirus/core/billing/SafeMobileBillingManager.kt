@@ -32,7 +32,10 @@ class SafeMobileBillingManager(context: Context) : PurchasesUpdatedListener {
     private val billingClient = BillingClient.newBuilder(app)
         .setListener(this)
         .enablePendingPurchases(
-            PendingPurchasesParams.newBuilder().enablePrepaidPlans().build()
+            PendingPurchasesParams.newBuilder()
+                .enableOneTimeProducts()
+                .enablePrepaidPlans()
+                .build()
         )
         .enableAutoServiceReconnection()
         .build()
