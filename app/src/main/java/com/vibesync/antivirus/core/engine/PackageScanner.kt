@@ -209,7 +209,10 @@ class PackageScanner(
    InstalledAppItem(info.packageName, label)
   }.distinctBy { it.packageName }.sortedBy { it.displayName.lowercase(java.util.Locale.getDefault()) }.toList()
  }
- suspend fun scanInstalledApps(progress: suspend (processed: Int, total: Int) -> Unit = { _, _ -> }, scanSessionId: String = UUID.randomUUID().toString()): List<ScanResult> {
+ suspend fun scanInstalledApps(progress: suspend (processed: Int, total: Int) -> Unit = { _, _ -> }): List<ScanResult> =
+   scanInstalledAppsForSession(UUID.randomUUID().toString(), progress)
+
+  suspend fun scanInstalledAppsForSession(scanSessionId: String, progress: suspend (processed: Int, total: Int) -> Unit = { _, _ -> }): List<ScanResult> {
   val flags = PackageManager.GET_PERMISSIONS or PackageManager.GET_SERVICES or PackageManager.GET_ACTIVITIES or PackageManager.GET_RECEIVERS or PackageManager.GET_PROVIDERS or signingFlags()
   val packages = pm.getInstalledPackages(flags).filter { info ->
    val appInfo = info.applicationInfo
