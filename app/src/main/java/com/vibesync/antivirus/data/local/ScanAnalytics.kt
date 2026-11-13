@@ -23,3 +23,11 @@ data class AnalyticsWeek(val monday: LocalDate, val zone: ZoneId) {
             AnalyticsWeek(date.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)), zone)
     }
 }
+
+/** Aggregate lifecycle counts for the live scan-session counter. */
+data class ScanSessionCounts(
+    val total: Int = 0,
+    val completed: Int = 0,
+    val inProgress: Int = 0,
+    val interrupted: Int = 0
+)
