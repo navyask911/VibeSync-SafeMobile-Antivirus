@@ -25,7 +25,7 @@ import java.io.File
 internal object PostInstallScanProcessor {
  private val scanLock = Mutex()
 
- suspend fun scan(context: Context, name: String, eventId: String, updated: Boolean) = scanLock.withLock {
+ suspend fun scan(context: Context, name: String, eventId: String, updated: Boolean, scanSessionId: String = eventId) = scanLock.withLock {
   if (TrustedAppStore(context).isTrusted(name)) {
    InstallScanNotifications.finish(context, eventId)
    return@withLock
@@ -58,7 +58,7 @@ internal object PostInstallScanProcessor {
    // A package broadcast may cold-start the process before Application's async restore finishes.
    app.hashDatabaseManager.restoreActiveDatabase()
    Log.d("SafeMobileScan", "Post-install worker scanning package=$name event=$eventId")
-   val scan = app.repository.scanInstalledPackage(name)
+   val scan = app.repository.scanInstalledPackage(name, scanSessionId)
    if (scan == null) {
     Log.d("SafeMobileScan", "Final scan result: package=$name unavailable")
     val prior = dao.findById(eventId)
