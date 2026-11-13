@@ -260,7 +260,7 @@ class SettingsWiringTest {
         }
         composeRule.onNodeWithText(
             context.getString(com.vibesync.antivirus.R.string.device_integrity_status_local_passed)
-        ).assertIsDisplayed()
+        ).performScrollTo().assertIsDisplayed()
     }
 
 }
