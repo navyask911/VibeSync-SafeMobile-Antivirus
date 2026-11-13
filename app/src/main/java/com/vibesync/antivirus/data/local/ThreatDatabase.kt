@@ -87,6 +87,11 @@ abstract class ThreatDatabase : RoomDatabase() {
     )
     database.execSQL("CREATE INDEX IF NOT EXISTS index_scan_sessions_started_at ON scan_sessions(started_at)")
     database.execSQL("CREATE INDEX IF NOT EXISTS index_scan_sessions_status ON scan_sessions(status)")
+    database.execSQL(
+     "INSERT OR IGNORE INTO scan_sessions(session_id, scan_type, started_at, completed_at, status) " +
+      "SELECT scan_session_id, 'LEGACY', MIN(scan_timestamp), MAX(scan_timestamp), 'COMPLETED' " +
+      "FROM scan_audits WHERE scan_session_id != '' GROUP BY scan_session_id"
+    )
    }
   }
  }
