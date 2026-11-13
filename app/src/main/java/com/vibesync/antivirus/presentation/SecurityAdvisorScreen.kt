@@ -68,20 +68,24 @@ internal fun SecurityAdvisorScreen(
             onSnooze = onSnooze,
             onRestore = onRestore
         )
-        AdvisorAccordion(
-            titleResource = R.string.v140_minor,
-            items = state.minor,
-            onOpenIssue = onOpenIssue,
-            onSnooze = onSnooze,
-            onRestore = onRestore
-        )
-        AdvisorAccordion(
-            titleResource = R.string.v140_snoozed,
-            items = state.snoozed,
-            onOpenIssue = onOpenIssue,
-            onSnooze = onSnooze,
-            onRestore = onRestore
-        )
+        if (state.minor.isNotEmpty()) {
+            AdvisorAccordion(
+                titleResource = R.string.v140_minor,
+                items = state.minor,
+                onOpenIssue = onOpenIssue,
+                onSnooze = onSnooze,
+                onRestore = onRestore
+            )
+        }
+        if (state.snoozed.isNotEmpty()) {
+            AdvisorAccordion(
+                titleResource = R.string.v140_snoozed,
+                items = state.snoozed,
+                onOpenIssue = onOpenIssue,
+                onSnooze = onSnooze,
+                onRestore = onRestore
+            )
+        }
         AdvisorAccordion(
             titleResource = R.string.v140_completed,
             items = state.completed,
@@ -172,20 +176,21 @@ private fun AdvisorAccordion(
                             Text(stringResource(item.detailResource), style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant)
                             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                Button(
-                                    onClick = { onOpenIssue(item) },
-                                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp)
-                                ) {
-                                    Text(stringResource(
-                                        when (item.destination) {
-                                            "scan" -> R.string.security_scan_now
-                                            "sentinel" -> R.string.ui_sentinel_setup
-                                            "posture" -> R.string.posture_refresh
-                                            "capabilities" -> R.string.detection_capabilities_title
-                                            "guardian" -> R.string.guardian_review_settings
-                                            else -> R.string.posture_fix
-                                        }
-                                    ))
+                                if (item.destination != "scan") {
+                                    Button(
+                                        onClick = { onOpenIssue(item) },
+                                        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp)
+                                    ) {
+                                        Text(stringResource(
+                                            when (item.destination) {
+                                                "sentinel" -> R.string.ui_sentinel_setup
+                                                "posture" -> R.string.posture_refresh
+                                                "capabilities" -> R.string.detection_capabilities_title
+                                                "guardian" -> R.string.guardian_review_settings
+                                                else -> R.string.posture_fix
+                                            }
+                                        ))
+                                    }
                                 }
                                 if (item.group == AdvisorIssueGroup.SNOOZED) {
                                     OutlinedButton(
