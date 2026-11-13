@@ -1064,7 +1064,7 @@ import kotlinx.coroutines.launch
            androidx.compose.material3.Icon(statusIcon,contentDescription=null,tint=statusTint,modifier=Modifier.size(30.dp))
            Column(Modifier.padding(start=10.dp).weight(1f)) {
             Text(stringResource(statusResource),style=MaterialTheme.typography.titleMedium,fontWeight=FontWeight.Bold,color=statusTint)
-            Text(stringResource(R.string.signature_count,state.signatureCount,state.completedScans),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(stringResource(R.string.signature_count,state.signatureCount,state.totalScanSessions),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
            }
           }
           ExpandableText(stringResource(R.string.scan_explanation), maxLines = 3)
