@@ -704,4 +704,8 @@
     <string name="self_update_not_allowed">Une mise à jour est disponible, mais Google Play n’autorise pas le processus de mise à jour immédiate pour cette installation.</string>
     <string name="self_update_open_play_store">Ouvrir Google Play</string>
 
+    <string name="scan_sessions_in_progress">Sessions d’analyse en cours : %1$d</string>
+    <string name="scan_sessions_completed">Sessions d’analyse terminées : %1$d</string>
+    <string name="ui_sentinel_telegram_folder">Dossier des documents Telegram</string>
+    <string name="ui_sentinel_enable_telegram">Surveiller les documents Telegram</string>
 </resources>
