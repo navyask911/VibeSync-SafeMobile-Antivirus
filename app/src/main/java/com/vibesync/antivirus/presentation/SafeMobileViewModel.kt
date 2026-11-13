@@ -45,6 +45,8 @@ data class SafeMobileUiState(
     val signatureCount: Int = 0,
     val processedItems: Int = 0,
     val totalItems: Int = 0,
+    val currentScanFile: String? = null,
+    val recentScanFiles: List<String> = emptyList(),
     val quarantinedFiles: List<File> = emptyList(),
     val activeThreatIndicatorCount: Int = 0,
     val lastThreatFeedSyncAt: Long? = null,
@@ -359,8 +361,18 @@ class SafeMobileViewModel(
     }
 
     /** Use the existing hash/YARA/ML scan pipeline for a user-selected folder tree. */
-    fun scanFolderTree(uri: Uri) = runScan(manualScan = true) { onProgress ->
-        repository.scanFolderTree(uri, onProgress)
+    fun scanFolderTree(uri: Uri) {
+        val onFileStarted: suspend (String) -> Unit = { fileName ->
+            mutableState.update { state ->
+                state.copy(
+                    currentScanFile = fileName,
+                    recentScanFiles = (state.recentScanFiles + fileName).takeLast(8)
+                )
+            }
+        }
+        runScan(manualScan = true, onFileStarted = onFileStarted) { onProgress ->
+            repository.scanFolderTree(uri, onProgress, onFileStarted = onFileStarted)
+        }
     }
 
     fun cancelScan() {
@@ -466,6 +478,7 @@ fun importOfflineDefinitions(uri: Uri) {
 
     private fun runScan(
         manualScan: Boolean = true,
+        onFileStarted: suspend (String) -> Unit = {},
         task: suspend (suspend (Int, Int) -> Unit) -> List<ScanResult>
     ) {
         if (mutableState.value.isScanning || scanJob?.isActive == true) return
@@ -475,6 +488,8 @@ fun importOfflineDefinitions(uri: Uri) {
                     isScanning = true,
                     processedItems = 0,
                     totalItems = 0,
+                    currentScanFile = null,
+                    recentScanFiles = emptyList(),
                     messageResource = null,
                     messageText = null
                 )
@@ -505,6 +520,7 @@ fun importOfflineDefinitions(uri: Uri) {
                     state.copy(
                         scanSummary = summary,
                         isScanning = false,
+                        currentScanFile = null,
                         results = results,
                         completedScans = state.completedScans + 1,
                         manualScanCompletionSequence = state.manualScanCompletionSequence +
@@ -525,6 +541,7 @@ fun importOfflineDefinitions(uri: Uri) {
                         isScanning = false,
                         processedItems = 0,
                         totalItems = 0,
+                        currentScanFile = null,
                         messageResource = R.string.scan_cancelled,
                         messageText = null
                     )
@@ -536,6 +553,7 @@ fun importOfflineDefinitions(uri: Uri) {
                         isScanning = false,
                         processedItems = 0,
                         totalItems = 0,
+                        currentScanFile = null,
                         messageResource = R.string.scan_failed,
                         messageText = null
                     )

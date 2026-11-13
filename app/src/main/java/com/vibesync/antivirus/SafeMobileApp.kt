@@ -11,6 +11,7 @@ import com.google.android.libraries.ads.mobile.sdk.MobileAds
 import com.google.android.libraries.ads.mobile.sdk.initialization.InitializationConfig
 import com.vibesync.antivirus.core.ads.AdMobManager
 import com.vibesync.antivirus.core.billing.ProEntitlementStore
+import com.vibesync.antivirus.core.billing.SafeMobileBillingManager
 import android.util.Log
 import androidx.room.Room
 import androidx.work.Constraints
@@ -22,7 +23,6 @@ import com.vibesync.antivirus.core.crypto.HashCalculator
 import com.vibesync.antivirus.core.engine.PackageScanner
 import com.vibesync.antivirus.core.engine.BundledYaraEngine
 import com.vibesync.antivirus.core.hashdb.HashDatabaseManager
-import com.vibesync.antivirus.core.security.DeviceOwnerManager
 import com.vibesync.antivirus.core.posture.DevicePostureMonitor
 import com.vibesync.antivirus.core.posture.DevicePostureRepository
 import com.vibesync.antivirus.core.worker.DeepScanWorker
@@ -56,6 +56,8 @@ class SafeMobileApp : Application() {
     val devicePostureRepository by lazy { DevicePostureRepository(this) }
 
     val adMobManager by lazy { AdMobManager(this) }
+    /** Process-wide BillingClient restores device-bound prepaid subscriptions at launch. */
+    val proBillingManager by lazy { SafeMobileBillingManager(this) }
     private val mobileAdsInitializationMutex = Mutex()
     @Volatile private var mobileAdsInitialized = false
 
@@ -90,9 +92,12 @@ class SafeMobileApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        // Start Play subscription recovery during application startup.
+        proBillingManager.start()
+        securityVerifier = com.vibesync.antivirus.core.security.SecurityVerifier(this)
+        appScope.launch { securityVerifier.requestIntegrityTokenAndVerify() }
         // Only ~2 KiB of signed-APK text is loaded; all APK scanning stays on Dispatchers.IO.
         BundledYaraEngine.initialize(assets)
-        runCatching { DeviceOwnerManager(this).applyEnterpriseDefaults() }
         database = Room.databaseBuilder(this, ThreatDatabase::class.java, "safe_mobile_threats.db")
             .addMigrations(
                 ThreatDatabase.MIGRATION_1_2, ThreatDatabase.MIGRATION_2_3,
@@ -162,9 +167,13 @@ class SafeMobileApp : Application() {
     }
 
     override fun onTerminate() {
+        proBillingManager.close()
         appScope.cancel()
         super.onTerminate()
     }
+
+    lateinit var securityVerifier: com.vibesync.antivirus.core.security.SecurityVerifier
+        private set
 
     companion object {
         const val SECURITY_PREFS = "safe_mobile_security_settings"

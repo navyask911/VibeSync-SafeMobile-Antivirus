@@ -12,8 +12,13 @@ class PostureSnapshotCodecTest {
     @Test fun unsupportedSchemaIsRejectedWithoutRebaselining() {
         reject(String(PostureSnapshotCodec.encode(snapshot)).replace("\"schema\":1", "\"schema\":2"))
     }
-    @Test fun overlayCannotEnterMonitoredSnapshot() {
-        reject(String(PostureSnapshotCodec.encode(snapshot)).replace("ACCESSIBILITY", "OVERLAY"))
+    @Test fun legacyDeviceAdminAndOverlayEntriesAreDiscardedWithoutLosingCurrentCoverage() {
+        val legacy = """{"schema":1,"last_complete_check_at":300,"initialized":["ACCESSIBILITY","DEVICE_ADMIN","OVERLAY"],"grants":[{"access":"ACCESSIBILITY","package":"example.reader"},{"access":"DEVICE_ADMIN","package":"legacy.admin"},{"access":"OVERLAY","package":"legacy.overlay"}],"pending":[{"access":"DEVICE_ADMIN","package":"legacy.admin","observed_at":300}]}"""
+        val decoded = PostureSnapshotCodec.decode(legacy.toByteArray())
+        assertEquals(setOf(PostureAccess.ACCESSIBILITY), decoded.initialized)
+        assertEquals(setOf(grant), decoded.grants)
+        assertTrue(decoded.pending.isEmpty())
+        assertEquals(300L, decoded.lastCompleteCheckAt)
     }
     @Test fun incompleteOrMalformedStateIsRejected() {
         reject("{}")

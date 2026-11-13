@@ -1,8 +1,22 @@
 package com.vibesync.antivirus.presentation
 
+import android.content.Context
+import android.database.ContentObserver
+import android.net.Uri
+import android.os.Handler
+import android.os.Looper
+import android.provider.Settings
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
@@ -10,6 +24,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -26,6 +43,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.*
 import androidx.core.graphics.drawable.toBitmap
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -48,6 +67,8 @@ import com.vibesync.antivirus.core.engine.DetectionSource
 import com.vibesync.antivirus.core.engine.ScanResult
 import com.vibesync.antivirus.core.engine.ScanVerdict
 import com.vibesync.antivirus.core.locale.LocalePreferences
+import com.vibesync.antivirus.core.security.SecurityVerificationState
+import com.vibesync.antivirus.core.security.SecurityVerificationStatus
 import com.vibesync.antivirus.ui.theme.AppTheme
 
 private data class V17Colors(
@@ -160,7 +181,8 @@ private fun V17HeroCard(dark: Boolean, content: @Composable ColumnScope.() -> Un
 @Composable
 internal fun V17TopBar(
     appTheme: AppTheme, isPro: Boolean, showBack: Boolean,
-    onThemeToggle: () -> Unit, onProClick: () -> Unit, onBack: () -> Unit
+    onThemeToggle: () -> Unit, onLanguageClick: () -> Unit,
+    onProClick: () -> Unit, onBack: () -> Unit
 ) {
     val c = v17Colors(appTheme != AppTheme.LIGHT)
     Surface(color = c.device, border = BorderStroke(0.dp, Color.Transparent)) {
@@ -182,6 +204,14 @@ internal fun V17TopBar(
                 Icon(
                     if (appTheme == AppTheme.LIGHT) Icons.Default.DarkMode else Icons.Default.LightMode,
                     "Toggle theme", tint = c.muted, modifier = Modifier.size(23.dp)
+                )
+            }
+            IconButton(onClick = onLanguageClick, modifier = Modifier.size(40.dp)) {
+                Icon(
+                    Icons.Outlined.Language,
+                    contentDescription = stringResource(R.string.language_settings),
+                    tint = c.muted,
+                    modifier = Modifier.size(23.dp)
                 )
             }
             Surface(Modifier.clip(CircleShape).clickable(role = Role.Button, onClick = onProClick),
@@ -238,9 +268,128 @@ internal fun V17BottomNavigationBar(selectedTab: String, isDark: Boolean, onSele
     }
 }
 
+private fun readSystemPlayProtectEnabled(context: Context): Boolean = runCatching {
+    Settings.Global.getInt(context.contentResolver, "package_verifier_enable", 1) == 1
+}.getOrDefault(true)
+
+@Composable
+private fun V17PlayProtectStatusCard(isDark: Boolean) {
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+    var isEnabled by remember(context) { mutableStateOf(readSystemPlayProtectEnabled(context)) }
+
+    DisposableEffect(context, lifecycleOwner) {
+        val uri: Uri = Settings.Global.getUriFor("package_verifier_enable")
+        val contentObserver = object : ContentObserver(Handler(Looper.getMainLooper())) {
+            override fun onChange(selfChange: Boolean, uri: Uri?) {
+                isEnabled = readSystemPlayProtectEnabled(context)
+            }
+        }
+        val lifecycleObserver = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                isEnabled = readSystemPlayProtectEnabled(context)
+            }
+        }
+        context.contentResolver.registerContentObserver(uri, false, contentObserver)
+        lifecycleOwner.lifecycle.addObserver(lifecycleObserver)
+        isEnabled = readSystemPlayProtectEnabled(context)
+        onDispose {
+            context.contentResolver.unregisterContentObserver(contentObserver)
+            lifecycleOwner.lifecycle.removeObserver(lifecycleObserver)
+        }
+    }
+
+    val c = v17Colors(isDark)
+    V17Card(isDark, Modifier.fillMaxWidth()) {
+        Row(
+            Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Icon(
+                imageVector = if (isEnabled) Icons.Outlined.CheckCircle else Icons.Outlined.Warning,
+                contentDescription = null,
+                tint = if (isEnabled) c.green else c.amber,
+                modifier = Modifier.size(26.dp)
+            )
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                V17Title(stringResource(R.string.play_protect_status_title))
+                V17Body(
+                    stringResource(if (isEnabled) R.string.play_protect_status_enabled else R.string.play_protect_status_disabled),
+                    color = c.muted
+                )
+            }
+        }
+    }
+}
+
+@Composable
+internal fun V17LanguageSelectionDialog(onDismiss: () -> Unit) {
+    val context = LocalContext.current
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { V17Title(stringResource(R.string.language_settings)) },
+        text = {
+            Column(
+                Modifier.fillMaxWidth().heightIn(max = 420.dp).verticalScroll(rememberScrollState())
+            ) {
+                TextButton(
+                    onClick = {
+                        LocalePreferences.saveOverride(context, "")
+                        onDismiss()
+                        context.v17ActivityOrNull()?.recreate()
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(stringResource(R.string.language_system_default))
+                }
+                LocalePreferences.choices.forEach { choice ->
+                    TextButton(
+                        onClick = {
+                            LocalePreferences.saveOverride(context, choice.tag)
+                            onDismiss()
+                            context.v17ActivityOrNull()?.recreate()
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(context.getString(choice.labelResource))
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.close)) }
+        }
+    )
+}
+
+private fun Context.v17ActivityOrNull(): android.app.Activity? {
+    var current: Context? = this
+    val seen = java.util.Collections.newSetFromMap(
+        java.util.IdentityHashMap<Context, Boolean>()
+    )
+    while (current != null && seen.add(current)) {
+        when (current) {
+            is android.app.Activity -> return current
+            is android.content.ContextWrapper -> {
+                val next = current.baseContext
+                if (next === current) return null
+                current = next
+            }
+            else -> return null
+        }
+    }
+    return null
+}
+
 @Composable
 internal fun V17ShieldScreen(
     isDark: Boolean, securityScore: Int, isPro: Boolean, activeGuards: Int,
+    integrityState: SecurityVerificationState,
+    advisorState: ProtectionAdvisorState,
+    onOpenAdvisorIssue: (AdvisorIssueItem) -> Unit,
+    onSnoozeAdvisorIssue: (String) -> Unit,
+    onRestoreAdvisorIssue: (String) -> Unit,
     liveSentinelActive: Boolean, posturePassed: Int?, quarantinedFilesCount: Int,
     onOpenSetup: () -> Unit, onOpenLiveSentinel: () -> Unit, onOpenPosture: () -> Unit,
     onOpenDetection: () -> Unit, onOpenThreatDb: () -> Unit,
@@ -269,10 +418,42 @@ internal fun V17ShieldScreen(
                 V17Body("$activeGuards/3 protection guards active")
             }
         }
+        SecurityAdvisorScreen(
+            state = advisorState,
+            onOpenIssue = onOpenAdvisorIssue,
+            onSnooze = onSnoozeAdvisorIssue,
+            onRestore = onRestoreAdvisorIssue
+        )
         TrustPillarCarousel(
             onOpenPrivacy = onOpenPrivacy,
             onOpenSettings = onOpenSettings
         )
+        V17PlayProtectStatusCard(isDark)
+        V17Card(isDark) {
+            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                Icon(
+                    imageVector = if (integrityState.integrityCheckPassed == true)
+                        Icons.Outlined.CheckCircle else Icons.Outlined.Security,
+                    contentDescription = null,
+                    tint = if (integrityState.integrityCheckPassed == true) c.green else c.muted,
+                    modifier = Modifier.size(26.dp)
+                )
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                    V17Title(stringResource(R.string.device_integrity_title))
+                    V17Body(stringResource(when (integrityState.status) {
+                        SecurityVerificationStatus.VERIFIED -> R.string.play_integrity_status_verified
+                        SecurityVerificationStatus.NOT_VERIFIED -> R.string.play_integrity_status_not_verified
+                        SecurityVerificationStatus.REQUESTING_TOKEN -> R.string.play_integrity_status_requesting
+                        SecurityVerificationStatus.AWAITING_SERVER_VERDICT -> R.string.play_integrity_status_server_unconfigured
+                        SecurityVerificationStatus.ERROR -> R.string.play_integrity_status_error
+                        SecurityVerificationStatus.NOT_CHECKED -> R.string.play_integrity_status_not_checked
+                        SecurityVerificationStatus.LOCAL_BASELINE_PASSED -> R.string.device_integrity_status_local_passed
+                        SecurityVerificationStatus.LOCAL_BASELINE_FAILED -> R.string.device_integrity_status_local_failed
+                    }), color = c.muted)
+                }
+            }
+        }
         if (activeGuards < 3) Surface(
             Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp)).clickable(onClick = onOpenSetup),
             color = c.amber.copy(alpha = .14f), shape = RoundedCornerShape(16.dp),
@@ -323,6 +504,17 @@ private fun V17ScoreRing(score: Int, isDark: Boolean) {
         animationSpec = tween(500),
         label = SCORE_VALUE_ANIMATION_LABEL
     )
+    val targetRingColor = when (targetScore) {
+        in 0..30 -> Color(0xFFEF4444) // Critical: red
+        in 31..60 -> Color(0xFFF97316) // Warning: orange
+        in 61..80 -> Color(0xFF84CC16) // Good: light green
+        else -> Color(0xFF16A34A) // Excellent: full green
+    }
+    val ringColor by animateColorAsState(
+        targetValue = targetRingColor,
+        animationSpec = tween(500),
+        label = "scoreringcolor"
+    )
     Box(Modifier.size(216.dp), contentAlignment = Alignment.Center) {
         Canvas(Modifier.fillMaxSize()) {
             val strokeWidth = 18.dp.toPx()
@@ -337,19 +529,8 @@ private fun V17ScoreRing(score: Int, isDark: Boolean) {
                 size = arcSize,
                 style = Stroke(strokeWidth, cap = StrokeCap.Round)
             )
-            val rainbow = Brush.sweepGradient(
-                colors = listOf(
-                    Color(0xFFEF4444),
-                    Color(0xFFF97316),
-                    Color(0xFFFACC15),
-                    Color(0xFF84CC16),
-                    Color(0xFF22C55E),
-                    Color(0xFFEF4444)
-                ),
-                center = center
-            )
             drawArc(
-                brush = rainbow,
+                color = ringColor,
                 startAngle = -90f,
                 sweepAngle = progress * 360f,
                 useCenter = false,
@@ -405,8 +586,8 @@ private fun V17Tile(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun V17ProtectionSetupSheet(
-    isDark: Boolean, batteryActive: Boolean, adminActive: Boolean, safActive: Boolean,
-    onDismiss: () -> Unit, onBatteryToggle: (Boolean) -> Unit, onAdminToggle: (Boolean) -> Unit,
+    isDark: Boolean, batteryActive: Boolean, safActive: Boolean,
+    onDismiss: () -> Unit, onBatteryToggle: (Boolean) -> Unit,
     onSafToggle: (Boolean) -> Unit
 ) {
     val c = v17Colors(isDark)
@@ -418,7 +599,6 @@ internal fun V17ProtectionSetupSheet(
             V17Body(stringResource(R.string.setup_checklist_body))
             listOf(
                 Triple(stringResource(R.string.setup_checklist_battery), batteryActive, onBatteryToggle),
-                Triple(stringResource(R.string.setup_checklist_admin), adminActive, onAdminToggle),
                 Triple(stringResource(R.string.setup_checklist_saf), safActive, onSafToggle)
             ).forEachIndexed { index, (title, checked, onToggle) ->
                 val icon = when (index) {
@@ -450,6 +630,116 @@ internal fun V17ProtectionSetupSheet(
 }
 
 @Composable
+private fun V17RadarScan(
+    isDark: Boolean,
+    currentFile: String?,
+    recentFiles: List<String>
+) {
+    val c = v17Colors(isDark)
+    val transition = rememberInfiniteTransition(label = "safemobileradar")
+    val sweepDegrees by transition.animateFloat(
+        initialValue = 0f,
+        targetValue = 360f,
+        animationSpec = infiniteRepeatable(animation = tween(1_100, easing = LinearEasing)),
+        label = "safemobileradarsweep"
+    )
+    val listState = rememberLazyListState()
+    LaunchedEffect(recentFiles) {
+        if (recentFiles.isNotEmpty()) listState.animateScrollToItem(recentFiles.lastIndex)
+    }
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Canvas(Modifier.fillMaxWidth().height(220.dp)) {
+            val radius = minOf(size.width, size.height) * 0.43f
+            val centerPoint = Offset(size.width / 2f, size.height / 2f)
+            val topLeft = Offset(centerPoint.x - radius, centerPoint.y - radius)
+            val radarSize = Size(radius * 2f, radius * 2f)
+            val stroke = 1.2.dp.toPx()
+            listOf(0.34f, 0.67f, 1f).forEach { fraction ->
+                drawCircle(
+                    c.accent.copy(alpha = if (fraction == 1f) 0.46f else 0.20f),
+                    radius * fraction,
+                    centerPoint,
+                    style = Stroke(stroke)
+                )
+            }
+            drawLine(c.accent.copy(alpha = 0.12f), Offset(centerPoint.x - radius, centerPoint.y),
+                Offset(centerPoint.x + radius, centerPoint.y), strokeWidth = stroke)
+            drawLine(c.accent.copy(alpha = 0.12f), Offset(centerPoint.x, centerPoint.y - radius),
+                Offset(centerPoint.x, centerPoint.y + radius), strokeWidth = stroke)
+
+            val headRadians = Math.toRadians(sweepDegrees.toDouble())
+            val tailRadians = Math.toRadians((sweepDegrees - 48f).toDouble())
+            val head = Offset(
+                centerPoint.x + kotlin.math.cos(headRadians).toFloat() * radius,
+                centerPoint.y + kotlin.math.sin(headRadians).toFloat() * radius
+            )
+            val tail = Offset(
+                centerPoint.x + kotlin.math.cos(tailRadians).toFloat() * radius,
+                centerPoint.y + kotlin.math.sin(tailRadians).toFloat() * radius
+            )
+            drawArc(
+                brush = Brush.linearGradient(
+                    colors = listOf(Color.Transparent, c.accent.copy(alpha = 0.05f), c.accent.copy(alpha = 0.26f)),
+                    start = tail,
+                    end = head
+                ),
+                startAngle = sweepDegrees - 48f,
+                sweepAngle = 48f,
+                useCenter = true,
+                topLeft = topLeft,
+                size = radarSize
+            )
+            for (step in 12 downTo 1) {
+                val angle = Math.toRadians((sweepDegrees - step * 3.8f).toDouble())
+                val end = Offset(
+                    centerPoint.x + kotlin.math.cos(angle).toFloat() * radius,
+                    centerPoint.y + kotlin.math.sin(angle).toFloat() * radius
+                )
+                drawLine(
+                    c.accent.copy(alpha = ((13 - step).toFloat() / 13f) * 0.24f),
+                    centerPoint,
+                    end,
+                    strokeWidth = 1.4.dp.toPx()
+                )
+            }
+            drawLine(c.accent, centerPoint, head, strokeWidth = 2.8.dp.toPx())
+            drawCircle(Color.White, radius = 3.5.dp.toPx(), center = centerPoint)
+            drawCircle(c.accent, radius = 2.4.dp.toPx(), center = head)
+        }
+        Text(
+            text = currentFile?.let { "Scanning: $it" } ?: "Preparing scan queue…",
+            modifier = Modifier.fillMaxWidth(),
+            style = MaterialTheme.typography.bodySmall,
+            color = c.text,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+        if (recentFiles.isNotEmpty()) {
+            LazyColumn(
+                state = listState,
+                modifier = Modifier.fillMaxWidth().heightIn(max = 120.dp),
+                verticalArrangement = Arrangement.spacedBy(3.dp)
+            ) {
+                itemsIndexed(recentFiles, key = { index, file -> "$index:$file" }) { _, file ->
+                    Text(
+                        text = if (file == currentFile) "Scanning: $file" else "Scanned: $file",
+                        modifier = Modifier.fillMaxWidth(),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = if (file == currentFile) c.accent else c.muted,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
 internal fun V17ScanLabScreen(
     isDark: Boolean, state: SafeMobileUiState, repository: ThreatRepository? = null,
     onStartQuickScan: () -> Unit, onStartDeepScan: () -> Unit,
@@ -469,8 +759,12 @@ internal fun V17ScanLabScreen(
                 V17ModeButton("Quick App Scan", Icons.Outlined.Apps, !deep, isDark, Modifier.weight(1f)) { deep = false }
                 V17ModeButton("Deep Storage (Worker)", Icons.Outlined.FolderOpen, deep, isDark, Modifier.weight(1f)) { deep = true }
             }
-            Button(onClick = { if (deep) onStartDeepScan() else onStartQuickScan() },
-                enabled = !state.isScanning, modifier = Modifier.fillMaxWidth()) {
+            Button(
+                onClick = { if (deep) onStartDeepScan() else onStartQuickScan() },
+                enabled = !state.isScanning,
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 if (state.isScanning) {
                     CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp, color = Color.White)
                     Spacer(Modifier.width(8.dp))
@@ -482,6 +776,11 @@ internal fun V17ScanLabScreen(
                 }
             }
             if (state.isScanning) {
+                V17RadarScan(
+                    isDark = isDark,
+                    currentFile = state.currentScanFile,
+                    recentFiles = state.recentScanFiles
+                )
                 if (state.totalItems > 0) LinearProgressIndicator(
                     progress = { (state.processedItems.toFloat() / state.totalItems).coerceIn(0f, 1f) },
                     modifier = Modifier.fillMaxWidth()
@@ -694,8 +993,7 @@ internal fun V17ToolsHubScreen(isDark: Boolean, onOpen: (String) -> Unit) {
         Tool("Link Checker", "Phishing and URL risk scanner", Icons.Default.Link, "phishing", c.green),
         Tool("Quarantine Vault", "Isolate and purge suspicious files", Icons.Default.Lock, "quarantine", c.amber),
         Tool("Folder Monitor", "SAF directory watch", Icons.Default.Folder, "sentinel", c.accent),
-        Tool("System App Guard", "Pre-installed package integrity", Icons.Default.Settings, "guardian", c.green),
-        Tool("Security Advisor", "Step-by-step hardening guide", Icons.Default.Lightbulb, "advisor", c.accent)
+        Tool("System App Guard", "Pre-installed package integrity", Icons.Default.Settings, "guardian", c.green)
     )
     Column(Modifier.fillMaxSize().background(c.device).padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
         V17SectionHeading("Tools Hub", "Security controls and investigation tools.", Icons.Default.Build, c.accent)
@@ -722,10 +1020,10 @@ internal fun V17ConsoleSettingsScreen(
     onVoiceChanged: (Boolean) -> Unit, installSentinelEnabled: Boolean, installSentinelRunning: Boolean,
     onInstallSentinelChanged: (Boolean) -> Unit, globalIntelEnabled: Boolean,
     onGlobalIntelChanged: (Boolean) -> Unit,
-    batteryActive: Boolean, adminActive: Boolean, safActive: Boolean,
-    onBatteryToggle: (Boolean) -> Unit, onAdminToggle: (Boolean) -> Unit,
+    batteryActive: Boolean, safActive: Boolean,
+    integrityState: SecurityVerificationState,
+    onBatteryToggle: (Boolean) -> Unit,
     onSafToggle: (Boolean) -> Unit,
-    onLockDeviceNow: () -> Unit = {},
     onImportYara: () -> Unit,
     onThreatFeedSync: () -> Unit, onBenchmarks: () -> Unit, onOpenPro: () -> Unit,
     onOpenPrivacy: () -> Unit = {}, onOpenAbout: () -> Unit = {},
@@ -736,7 +1034,6 @@ internal fun V17ConsoleSettingsScreen(
     var advanced by rememberSaveable { mutableStateOf(false) }
     var languageOpen by rememberSaveable { mutableStateOf(false) }
     var selectedLanguage by rememberSaveable { mutableStateOf(LocalePreferences.overrideTag(context)) }
-    var showLockDeviceConfirmation by rememberSaveable { mutableStateOf(false) }
     Column(Modifier.fillMaxSize().background(c.device).verticalScroll(rememberScrollState()).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)) {
         V17Card(isDark) {
@@ -814,47 +1111,40 @@ internal fun V17ConsoleSettingsScreen(
             }
         }
         V17Card(isDark) {
+            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                Icon(
+                    imageVector = if (integrityState.integrityCheckPassed == true)
+                        Icons.Outlined.CheckCircle else Icons.Outlined.Security,
+                    contentDescription = null,
+                    tint = if (integrityState.integrityCheckPassed == true) c.green else c.muted,
+                    modifier = Modifier.size(26.dp)
+                )
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                    V17Title(stringResource(R.string.device_integrity_title))
+                    V17Body(stringResource(when (integrityState.status) {
+                        SecurityVerificationStatus.VERIFIED -> R.string.play_integrity_status_verified
+                        SecurityVerificationStatus.NOT_VERIFIED -> R.string.play_integrity_status_not_verified
+                        SecurityVerificationStatus.REQUESTING_TOKEN -> R.string.play_integrity_status_requesting
+                        SecurityVerificationStatus.AWAITING_SERVER_VERDICT -> R.string.play_integrity_status_server_unconfigured
+                        SecurityVerificationStatus.ERROR -> R.string.play_integrity_status_error
+                        SecurityVerificationStatus.NOT_CHECKED -> R.string.play_integrity_status_not_checked
+                        SecurityVerificationStatus.LOCAL_BASELINE_PASSED -> R.string.device_integrity_status_local_passed
+                        SecurityVerificationStatus.LOCAL_BASELINE_FAILED -> R.string.device_integrity_status_local_failed
+                    }), color = c.muted)
+                }
+            }
+        }
+        V17Card(isDark) {
             V17SectionHeading(stringResource(R.string.security_guards_title),
                 stringResource(R.string.security_guards_description), Icons.Outlined.Tune, c.accent)
             V17Switch(stringResource(R.string.security_guard_battery),
                 stringResource(R.string.security_guard_battery_desc), batteryActive, "console.guard.battery",
                 Icons.Outlined.BatteryChargingFull, isDark, onBatteryToggle)
             HorizontalDivider(color = c.border)
-            V17Switch(stringResource(R.string.security_guard_admin),
-                stringResource(R.string.security_guard_admin_desc), adminActive, "console.guard.admin",
-                Icons.Outlined.Security, isDark, onAdminToggle)
-            if (adminActive) {
-                OutlinedButton(
-                    onClick = { showLockDeviceConfirmation = true },
-                    modifier = Modifier.fillMaxWidth().testTag("console.device-admin.lock")
-                ) {
-                    Icon(Icons.Outlined.Lock, contentDescription = null, modifier = Modifier.size(17.dp))
-                    Spacer(Modifier.width(6.dp))
-                    Text(stringResource(R.string.device_admin_lock_now))
-                }
-            }
-            HorizontalDivider(color = c.border)
             V17Switch(stringResource(R.string.security_guard_saf),
                 stringResource(R.string.security_guard_saf_desc), safActive, "console.guard.saf",
                 Icons.Outlined.Storage, isDark, onSafToggle)
-        }
-        if (showLockDeviceConfirmation) {
-            AlertDialog(
-                onDismissRequest = { showLockDeviceConfirmation = false },
-                title = { Text(stringResource(R.string.device_admin_lock_confirm_title)) },
-                text = { Text(stringResource(R.string.device_admin_lock_confirm_message)) },
-                confirmButton = {
-                    TextButton(onClick = {
-                        showLockDeviceConfirmation = false
-                        onLockDeviceNow()
-                    }) { Text(stringResource(R.string.device_admin_lock_confirm)) }
-                },
-                dismissButton = {
-                    TextButton(onClick = { showLockDeviceConfirmation = false }) {
-                        Text(stringResource(R.string.device_admin_lock_cancel))
-                    }
-                }
-            )
         }
         V17Card(isDark) {
             Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp))

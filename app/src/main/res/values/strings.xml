@@ -684,4 +684,23 @@
     <string name="self_update_no_update">No newer Google Play update is currently available.</string>
     <string name="self_update_not_allowed">An update is available, but Google Play does not allow the immediate update flow for this installation.</string>
     <string name="self_update_open_play_store">Open Google Play</string>
+
+    <string name="play_integrity_verified_title" translatable="false">Play Integrity Verified</string>
+    <string name="play_integrity_verified_description" translatable="false">A trusted server verifies the device verdict returned by Google Play.</string>
+    <string name="play_integrity_status_verified" translatable="false">Google Play confirms MEETS_DEVICE_INTEGRITY.</string>
+    <string name="play_integrity_status_not_verified" translatable="false">Google Play did not return MEETS_DEVICE_INTEGRITY.</string>
+    <string name="play_integrity_status_requesting" translatable="false">Requesting an integrity token from Google Play…</string>
+    <string name="play_integrity_status_server_unconfigured" translatable="false">Token received. Server-side verification is not configured.</string>
+    <string name="play_integrity_status_error" translatable="false">Integrity verification is currently unavailable.</string>
+    <string name="play_integrity_status_not_checked" translatable="false">Waiting for an integrity check.</string>
+    <string name="device_integrity_title" translatable="false">Device Integrity Check</string>
+    <string name="security_advisor_heading" translatable="false">Security Advisor</string>
+    <string name="device_integrity_description" translatable="false">SafeMobile checked local build and bootloader state, ADB debugging and Google Play Services. This baseline is not a Google Play Integrity attestation.</string>
+    <string name="device_integrity_status_local_passed" translatable="false">Local baseline passed: locked verified boot, production build tags, ADB disabled and Google Play Services available. This is not a Google Play Integrity attestation.</string>
+    <string name="device_integrity_status_local_failed" translatable="false">Local baseline did not pass. Review bootloader lock, build tags, ADB debugging and Google Play Services.</string>
+    <string name="posture_audit_success" translatable="false">All Audit Successful</string>
+
+    <string name="play_protect_status_title" translatable="false">Play Protect Status</string>
+    <string name="play_protect_status_enabled" translatable="false">Google Play package verification is enabled on this device.</string>
+    <string name="play_protect_status_disabled" translatable="false">Google Play package verification is disabled in Android settings.</string>
 </resources>

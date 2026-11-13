@@ -50,8 +50,9 @@ data class ProtectionAdvisorInputs(
     val installSentinelEnabled: Boolean,
     val playProtectEnabled: Boolean?,
     val usbDebuggingEnabled: Boolean?,
+    val developerOptionsEnabled: Boolean? = null,
     val voiceAlertsEnabled: Boolean,
-    val deviceAdminActive: Boolean = false,
+    val meetsDeviceIntegrity: Boolean?,
     val apiLevel: Int = Build.VERSION.SDK_INT,
     val nowMillis: Long = System.currentTimeMillis()
 )
@@ -86,13 +87,18 @@ object ProtectionAdvisorEngine {
                 databaseFresh, "capabilities"),
             issue("install_sentinel", R.string.setup_sentinel_title, R.string.setup_sentinel_body,
                 12, inputs.installSentinelEnabled, "sentinel"),
-            issue("play_protect_adb", R.string.guardian_developer_settings,
+            // This 3-point Advisor item is specifically the Developer Options master switch.
+            // ADB debugging is measured separately; only an enabled Developer Options switch
+            // creates this deduction. Disabled or unavailable never earns a penalty.
+            issue("developer_options_enabled", R.string.guardian_developer_settings,
                 R.string.guardian_settings_limit, 3,
-                inputs.playProtectEnabled == true && inputs.usbDebuggingEnabled == false, "guardian"),
+                inputs.developerOptionsEnabled != true, "guardian"),
             issue("voice_alert_tts", R.string.voice_alerts_title, R.string.voice_alerts_description,
                 2, inputs.voiceAlertsEnabled, "settings"),
-            issue("device_admin", R.string.device_admin_title, R.string.device_admin_description,
-                12, inputs.deviceAdminActive, "settings")
+            // A remote Google verdict or the separate local baseline can satisfy this check.
+            // Keep the existing ID so saved snooze and reminder state remains stable.
+            issue("play_integrity", R.string.device_integrity_title, R.string.device_integrity_description,
+                12, inputs.meetsDeviceIntegrity == true, "settings")
         )
         val mapped = raw.map { item ->
             when {

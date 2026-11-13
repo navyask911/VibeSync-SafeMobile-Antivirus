@@ -125,8 +125,8 @@ def check_permissions(apk):
             fail(apk.name + " must explicitly set android:" + attribute + "=false.")
     if "android:dataExtractionRules" not in manifest.stdout:
         fail(apk.name + " must reference dataExtractionRules.")
-    if "com.google.android.play.billingclient.version" not in manifest.stdout or "8.3.0" not in manifest.stdout:
-        fail(apk.name + " must contain the supported Play Billing 8.3.0 manifest metadata.")
+    if "com.google.android.play.billingclient.version" not in manifest.stdout or "9.1.0" not in manifest.stdout:
+        fail(apk.name + " must contain the supported Play Billing 9.1.0 manifest metadata.")
     if "com.google.android.gms.ads.APPLICATION_ID" not in manifest.stdout or "ca-app-pub-4783826505860771~8485727119" not in manifest.stdout:
         fail(apk.name + " must contain the configured AdMob application ID.")
     if "com.google.android.gms.permission.AD_ID" not in result.stdout:

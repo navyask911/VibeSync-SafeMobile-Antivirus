@@ -5,22 +5,27 @@ data class DeviceSecuritySignals(
     val playProtectEnabled: Boolean? = null,
     val databaseUpdatedAt: Long? = null,
     val nonSystemAccessibilityApps: Int? = null,
-    val nonSystemDeviceAdmins: Int? = null,
     val usbDebuggingEnabled: Boolean? = null,
+    /** Android's global Developer Options master switch; independent of ADB debugging. */
+    val developerOptionsEnabled: Boolean? = null,
     /** Only SafeMobile's own install-unknown-apps grant; no device-wide API exists. */
     val safeMobileUnknownSourcesGrant: Boolean? = null,
-    val activeNonSystemOverlays: Int? = null,
-    val backgroundRestricted: Boolean? = null
-)
+    val backgroundRestricted: Boolean? = null,
+    /** Server-decoded Google verdict; local checks never populate this field. */
+    val meetsDeviceIntegrity: Boolean? = null,
+    /** Local fallback used only when remote attestation is unconfigured or offline. */
+    val localBaselineTrusted: Boolean? = null
+) {
+    val integrityCheckPassed: Boolean? get() = meetsDeviceIntegrity ?: localBaselineTrusted
+}
 data class DeviceSecurityAssessment(
     val score: Int,
     val signals: DeviceSecuritySignals,
     val databaseStale: Boolean
 ) {
     val unknownChecks: Int get() = listOf(
-        signals.playProtectEnabled, signals.nonSystemAccessibilityApps,
-        signals.nonSystemDeviceAdmins, signals.usbDebuggingEnabled,
-        signals.safeMobileUnknownSourcesGrant, signals.activeNonSystemOverlays,
+        signals.playProtectEnabled, signals.integrityCheckPassed, signals.nonSystemAccessibilityApps,
+        signals.usbDebuggingEnabled, signals.safeMobileUnknownSourcesGrant,
         signals.backgroundRestricted
     ).count { it == null }
 }
@@ -35,13 +40,12 @@ object DeviceSecurityScore {
         val stale = updated == null || updated <= 0L || updated > now || now - updated >= FRESHNESS_MS
         val deductions =
             (if (signals.playProtectEnabled == false) 20 else 0) +
+            (if (signals.integrityCheckPassed != true) 20 else 0) +
             (if (signals.usbDebuggingEnabled == true) 15 else 0) +
             (if (signals.safeMobileUnknownSourcesGrant == true) 10 else 0) +
-            (if ((signals.activeNonSystemOverlays ?: 0) > 0) 15 else 0) +
             (if (signals.backgroundRestricted == true) 15 else 0) +
             (if (stale) 10 else 0) +
-            (if ((signals.nonSystemAccessibilityApps ?: 0) > 0) 10 else 0) +
-            (if ((signals.nonSystemDeviceAdmins ?: 0) > 0) 5 else 0)
+            (if ((signals.nonSystemAccessibilityApps ?: 0) > 0) 10 else 0)
         return DeviceSecurityAssessment((100 - deductions).coerceIn(0, 100), signals, stale)
     }
 }

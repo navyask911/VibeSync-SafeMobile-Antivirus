@@ -23,7 +23,7 @@ class SecurityScoreTest {
         playProtectEnabled = true,
         usbDebuggingEnabled = false,
         voiceAlertsEnabled = true,
-        deviceAdminActive = true,
+        meetsDeviceIntegrity = true,
         apiLevel = 34,
         nowMillis = now
     )
@@ -90,6 +90,8 @@ class SecurityScoreTest {
             installSentinelEnabled = false,
             playProtectEnabled = false,
             usbDebuggingEnabled = true,
+            developerOptionsEnabled = true,
+            meetsDeviceIntegrity = false,
             voiceAlertsEnabled = false,
             apiLevel = 34,
             nowMillis = now

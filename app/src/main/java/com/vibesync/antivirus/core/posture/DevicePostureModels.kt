@@ -2,7 +2,7 @@ package com.vibesync.antivirus.core.posture
 
 import com.vibesync.antivirus.core.security.TrustedPackageWhitelist
 
-enum class PostureAccess { ACCESSIBILITY, DEVICE_ADMIN, NOTIFICATION_LISTENER, OVERLAY }
+enum class PostureAccess { ACCESSIBILITY, NOTIFICATION_LISTENER }
 enum class PostureGrantState { ENABLED, NOT_GRANTED, UNKNOWN }
 
 /** A capability observation, never a malware verdict or a claim that content was accessed. */
@@ -59,13 +59,17 @@ data class PostureSnapshot(
 )
 
 object PostureSnapshotComparison {
-    val monitored = setOf(PostureAccess.ACCESSIBILITY, PostureAccess.DEVICE_ADMIN, PostureAccess.NOTIFICATION_LISTENER)
+    val monitored = setOf(PostureAccess.ACCESSIBILITY, PostureAccess.NOTIFICATION_LISTENER)
 
     /** Missing categories retain their old baseline. First successful reads initialize silently. */
     fun advance(previous: PostureSnapshot, report: DevicePostureReport): PostureSnapshot {
         val initialized = previous.initialized.toMutableSet()
         val grants = previous.grants.toMutableSet()
         val pending = previous.pending.toMutableSet()
+        // Drop legacy Device Admin/Overlay observations from snapshots written by older app builds.
+        initialized.retainAll(monitored)
+        grants.removeAll { it.access !in monitored }
+        pending.removeAll { it.capability.access !in monitored }
         for (access in monitored - report.unavailable) {
             val current = report.grants(access)
             val old = grants.filter { it.access == access }.toSet()

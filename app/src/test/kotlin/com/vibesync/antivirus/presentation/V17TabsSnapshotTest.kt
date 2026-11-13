@@ -20,6 +20,7 @@ import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
 import com.vibesync.antivirus.core.engine.ScanResult
 import com.vibesync.antivirus.core.engine.ScanVerdict
+import com.vibesync.antivirus.core.security.SecurityVerificationState
 import com.vibesync.antivirus.ui.theme.AppTheme
 import org.junit.Rule
 import org.junit.Test
@@ -39,6 +40,11 @@ class V17TabsSnapshotTest {
                     securityScore = 85,
                     isPro = false,
                     activeGuards = 3,
+                    integrityState = SecurityVerificationState(),
+                    advisorState = ProtectionAdvisorState(score = 100, pendingCount = 0, issues = emptyList()),
+                    onOpenAdvisorIssue = {},
+                    onSnoozeAdvisorIssue = {},
+                    onRestoreAdvisorIssue = {},
                     liveSentinelActive = true,
                     posturePassed = 7,
                     quarantinedFilesCount = 2,
@@ -112,10 +118,9 @@ class V17TabsSnapshotTest {
                     globalIntelEnabled = false,
                     onGlobalIntelChanged = {},
                     batteryActive = false,
-                    adminActive = false,
                     safActive = false,
+                    integrityState = SecurityVerificationState(),
                     onBatteryToggle = {},
-                    onAdminToggle = {},
                     onSafToggle = {},
                     onImportYara = {},
                     onThreatFeedSync = {},
@@ -150,6 +155,7 @@ class V17TabsSnapshotTest {
                             isPro = false,
                             showBack = false,
                             onThemeToggle = {},
+                            onLanguageClick = {},
                             onProClick = {},
                             onBack = {}
                         )

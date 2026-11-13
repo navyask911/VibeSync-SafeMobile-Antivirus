@@ -115,9 +115,6 @@ import com.vibesync.antivirus.core.observer.StorageSentinelService
 import com.vibesync.antivirus.core.observer.StorageAccessPreferences
 import com.vibesync.antivirus.core.observer.FullScreenAlertAccess
 import com.vibesync.antivirus.core.observer.SecurityAlertNotifier
-import com.vibesync.antivirus.core.worker.OverlayRiskReviewManager
-import com.vibesync.antivirus.core.security.DeviceOwnerManager
-import com.vibesync.antivirus.core.security.DeviceAdminManager
 import com.vibesync.antivirus.core.observer.InstallSentinelService
 import com.vibesync.antivirus.core.observer.SecurityVoiceAlert
 import com.vibesync.antivirus.core.observer.SecurityIncidentSiren
@@ -167,6 +164,8 @@ import kotlinx.coroutines.launch
  val activity=context as? Activity
  val vm:SafeMobileViewModel=viewModel(factory=SafeMobileViewModel.Factory(repository, context.applicationContext))
  val state by vm.state.collectAsStateWithLifecycle()
+ val integrityState by safeMobileApp.securityVerifier.state.collectAsStateWithLifecycle()
+ LaunchedEffect(integrityState.meetsDeviceIntegrity, integrityState.localBaselineTrusted) { vm.refreshSecurityScore() }
  val installSentinelRunning by com.vibesync.antivirus.core.observer.InstallSentinelService.running.collectAsStateWithLifecycle()
  val postureVm:DevicePostureViewModel=viewModel(factory=DevicePostureViewModel.Factory(safeMobileApp.devicePostureRepository))
  val postureState by postureVm.state.collectAsStateWithLifecycle()
@@ -175,12 +174,9 @@ import kotlinx.coroutines.launch
  }
  val auditEntries by repository.observeRecentAudits().collectAsStateWithLifecycle(initialValue = emptyList())
  val securityIncidents by repository.observeRecentSecurityIncidents().collectAsStateWithLifecycle(initialValue = emptyList())
- val ownerManager = remember(context) { DeviceOwnerManager(context) }
- val deviceAdminManager = remember(context) { DeviceAdminManager(context) }
- var adminActive by remember(context) { mutableStateOf(deviceAdminManager.isAdminActive()) }
- var showAdminPermissionDisclosure by rememberSaveable { mutableStateOf(false) }
  var showV17ProtectionSetupSheet by rememberSaveable { mutableStateOf(false) }
  var selectedDestination by rememberSaveable { mutableStateOf("home") }
+ var showLanguagePicker by rememberSaveable { mutableStateOf(false) }
  var isSubscriptionExpanded by rememberSaveable { mutableStateOf(false) }
  var settingsSubRoute by rememberSaveable { mutableStateOf(SettingsSubRoute.ROOT) }
  val tabNavController = rememberNavController()
@@ -196,7 +192,9 @@ import kotlinx.coroutines.launch
   else -> "dashboard"
  }
  fun navigateToDestination(destination: String, parentTabOverride: String? = null) {
-  val rootRoute = when (destination) {
+   // Advisor is part of Shield now; old deep links are routed to the Shield page.
+   val targetDestination = if (destination == "advisor") "home" else destination
+  val rootRoute = when (targetDestination) {
    "home" -> "dashboard"
    "scan" -> "scan"
    "tools" -> "tools"
@@ -211,9 +209,9 @@ import kotlinx.coroutines.launch
      restoreState = true
     }
    }
-   selectedDestination = destination
+   selectedDestination = targetDestination
   } else {
-   val parentTab = parentTabOverride ?: if (destination == "pro") "settings" else
+   val parentTab = parentTabOverride ?: if (targetDestination == "pro") "settings" else
     (currentBackStackEntry?.arguments?.getString("parentTab")
     ?: when (currentRoute) {
      "tools" -> "tools"
@@ -221,8 +219,8 @@ import kotlinx.coroutines.launch
      "settings" -> "settings"
      else -> "dashboard"
     })
-   tabNavController.navigate("detail/$parentTab/$destination") { launchSingleTop = true }
-   selectedDestination = destination
+   tabNavController.navigate("detail/$parentTab/$targetDestination") { launchSingleTop = true }
+   selectedDestination = targetDestination
   }
  }
  val openProSafely: () -> Unit = {
@@ -241,7 +239,7 @@ import kotlinx.coroutines.launch
    "scan" -> "scan"
    "tools" -> "tools"
    "settings" -> "settings"
-   "detail/{parentTab}/{screen}" -> currentBackStackEntry?.arguments?.getString("screen") ?: "home"
+   "detail/{parentTab}/{screen}" -> (currentBackStackEntry?.arguments?.getString("screen") ?: "home").let { if (it == "advisor") "home" else it }
    else -> "home"
   }
  }
@@ -315,10 +313,9 @@ import kotlinx.coroutines.launch
  var voiceAlertsEnabled by remember(context) { mutableStateOf(securityPrefs.getBoolean(SafeMobileApp.KEY_VOICE_ALERTS_ENABLED, false)) }
  var installSentinelEnabled by remember(context) { mutableStateOf(InstallSentinelService.enabled(context)) }
  var globalDefenseEnabled by remember(context) { mutableStateOf(GlobalThreatIntelligenceConsent.isEnabled(context)) }
- LaunchedEffect(batteryUnrestricted, adminActive, storageAccessGranted) {
+ LaunchedEffect(batteryUnrestricted, storageAccessGranted) {
   securityPrefs.edit()
    .putBoolean("guard_battery_optimization", batteryUnrestricted)
-   .putBoolean("guard_device_admin", adminActive)
    
    .putBoolean("guard_saf_directory_watch", storageAccessGranted)
    .apply()
@@ -333,7 +330,9 @@ import kotlinx.coroutines.launch
   postureState.report?.highRiskAppCount, notificationsGranted, securityAlertsEnabled,
   batteryUnrestricted, fullScreenAlertsGranted, databaseUpdatedAt, installSentinelEnabled,
   state.securityAssessment?.signals?.playProtectEnabled,
-  state.securityAssessment?.signals?.usbDebuggingEnabled, voiceAlertsEnabled, adminActive
+   state.securityAssessment?.signals?.usbDebuggingEnabled,
+   state.securityAssessment?.signals?.developerOptionsEnabled,
+   voiceAlertsEnabled, integrityState.meetsDeviceIntegrity, integrityState.localBaselineTrusted
  ) {
   ProtectionAdvisorInputs(
    totalScans = maxOf(state.completedScans, if (state.scanSummary != null) 1 else 0),
@@ -347,8 +346,9 @@ import kotlinx.coroutines.launch
    installSentinelEnabled = installSentinelEnabled,
    playProtectEnabled = state.securityAssessment?.signals?.playProtectEnabled,
    usbDebuggingEnabled = state.securityAssessment?.signals?.usbDebuggingEnabled,
+    developerOptionsEnabled = state.securityAssessment?.signals?.developerOptionsEnabled,
    voiceAlertsEnabled = voiceAlertsEnabled,
-   deviceAdminActive = adminActive
+   meetsDeviceIntegrity = integrityState.integrityCheckPassed
   )
  }
  val advisorState by vm.protectionAdvisorState.collectAsStateWithLifecycle()
@@ -578,23 +578,6 @@ import kotlinx.coroutines.launch
     .onFailure { Toast.makeText(context, R.string.battery_review_unavailable, Toast.LENGTH_LONG).show() }
   }
  }
- val toggleAdminGuard: (Boolean) -> Unit = { enabled ->
-  if (enabled) {
-   if (!deviceAdminManager.isAdminActive()) {
-    runCatching { deviceAdminManager.requestAdminPermission() }
-     .onFailure { Toast.makeText(context, R.string.device_admin_activation_failed, Toast.LENGTH_LONG).show() }
-   }
-  } else {
-   runCatching { deviceAdminManager.removeAdmin() }
-    .onFailure { Toast.makeText(context, R.string.device_admin_explanation, Toast.LENGTH_LONG).show() }
-  }
- }
- val requestDeviceLock: () -> Unit = {
-  runCatching { deviceAdminManager.lockDeviceNow() }
-   .onFailure {
-    Toast.makeText(context, R.string.device_admin_lock_failed, Toast.LENGTH_LONG).show()
-   }
- }
  val toggleSafGuard: (Boolean) -> Unit = { enabled ->
   if (enabled) {
    requestPrivacyAcknowledgement {
@@ -657,7 +640,6 @@ import kotlinx.coroutines.launch
    if (event == Lifecycle.Event.ON_RESUME) {
     if (privacyAccepted) vm.refreshTrustOverrides()
     fullScreenAlertsGranted = FullScreenAlertAccess.isGranted(context)
-    adminActive = deviceAdminManager.isAdminActive()
     voiceAlertsEnabled = securityPrefs.getBoolean(SafeMobileApp.KEY_VOICE_ALERTS_ENABLED, false)
     installSentinelEnabled = InstallSentinelService.enabled(context)
     batteryUnrestricted = powerManager?.isIgnoringBatteryOptimizations(context.packageName) == true
@@ -665,7 +647,6 @@ import kotlinx.coroutines.launch
     storageAccessGranted = folderUris.isNotEmpty()
     vm.refreshSecurityScore()
     if (privacyAccepted) postureVm.refreshAuditSilently()
-    ownerManager.refreshState()
     sentinelDesired = securityPrefs.getBoolean(SafeMobileApp.KEY_DOWNLOAD_SENTINEL_ENABLED, false)
     sentinelOptIn = sentinelDesired
     strictMode = securityPrefs.getBoolean(SafeMobileApp.KEY_STRICT_MODE, false)
@@ -684,7 +665,6 @@ import kotlinx.coroutines.launch
     }
     notificationsGranted = hasNotificationAccess(context)
     vm.refreshQuarantine()
-    OverlayRiskReviewManager.requestForegroundReview(context)
     pendingUninstallPackage?.let { packageName -> vm.refreshInstalledPackage(packageName); pendingUninstallPackage = null }
    }
   }
@@ -805,6 +785,7 @@ import kotlinx.coroutines.launch
         com.vibesync.antivirus.ui.theme.AppTheme.MIDNIGHT -> com.vibesync.antivirus.ui.theme.AppTheme.OLED
        })
       },
+      onLanguageClick = { showLanguagePicker = true },
       onProClick = openProSafely,
       onBack = { if (!tabNavController.popBackStack()) navigateToDestination("home") }
      )
@@ -831,8 +812,28 @@ import kotlinx.coroutines.launch
          "home" -> V17ShieldScreen(
           isDark = appTheme != com.vibesync.antivirus.ui.theme.AppTheme.LIGHT,
           securityScore = advisorState.score,
+          integrityState = integrityState,
+          advisorState = advisorState,
+          onOpenAdvisorIssue = { issue ->
+           if (issue.destination == "settings") {
+            settingsSubRoute = when (issue.id) {
+             "notifications_on", "fullscreen_alert", "voice_alert_tts" -> SettingsSubRoute.NOTIFICATIONS
+             else -> SettingsSubRoute.SECURITY
+            }
+            navigateToDestination("settings")
+           } else {
+            navigateToDestination(issue.destination)
+            if (issue.destination == "posture" && privacyAccepted) postureVm.refresh()
+           }
+          },
+          onSnoozeAdvisorIssue = { issueId ->
+           uiScope.launch { advisorStore.setSnoozed(issueId, true) }
+          },
+          onRestoreAdvisorIssue = { issueId ->
+           uiScope.launch { advisorStore.setSnoozed(issueId, false) }
+          },
           isPro = adMobState.isPro,
-          activeGuards = listOf(batteryUnrestricted, adminActive, storageAccessGranted).count { it },
+          activeGuards = listOf(batteryUnrestricted, storageAccessGranted).count { it },
           liveSentinelActive = installSentinelRunning,
           posturePassed = postureState.report?.highRiskAppCount?.let { (8 - it.coerceIn(0, 8)).coerceIn(0, 8) },
           quarantinedFilesCount = state.quarantinedFiles.size,
@@ -942,11 +943,9 @@ import kotlinx.coroutines.launch
            }
           },
           batteryActive = batteryUnrestricted,
-          adminActive = adminActive,
+          integrityState = integrityState,
           safActive = storageAccessGranted,
           onBatteryToggle = toggleBatteryGuard,
-          onAdminToggle = toggleAdminGuard,
-          onLockDeviceNow = requestDeviceLock,
           onSafToggle = toggleSafGuard,
           onImportYara = { pendingYaraPicker.launch(arrayOf("text/plain", "application/octet-stream", "application/x-yara")) },
           onThreatFeedSync = { requestPrivacyAcknowledgement { vm.requestThreatFeedSync() } },
@@ -960,22 +959,6 @@ import kotlinx.coroutines.launch
            .padding(horizontal = 16.dp, vertical = 16.dp),
           verticalArrangement = Arrangement.spacedBy(14.dp)
          ) {
-          if (selectedDestination == "advisor") {
-           SecurityAdvisorScreen(
-            state = advisorState,
-            onOpenIssue = { issue ->
-             if (issue.destination == "settings") {
-              settingsSubRoute = when (issue.id) {
-               "notifications_on", "fullscreen_alert", "voice_alert_tts" -> SettingsSubRoute.NOTIFICATIONS
-               else -> SettingsSubRoute.SECURITY
-              }
-              navigateToDestination("settings")
-             } else navigateToDestination(issue.destination)
-            },
-            onSnooze = { issueId -> uiScope.launch { advisorStore.setSnoozed(issueId, true) } },
-            onRestore = { issueId -> uiScope.launch { advisorStore.setSnoozed(issueId, false) } }
-           )
-          }
         if (privacyAccepted && !notificationsGranted && Build.VERSION.SDK_INT >= 33) {
            Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer)) {
              Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -1329,15 +1312,16 @@ import kotlinx.coroutines.launch
     composable("settings") { navScreenContent() }
     composable("detail/{parentTab}/{screen}") { navScreenContent() }
    }
+   if (showLanguagePicker) {
+    V17LanguageSelectionDialog(onDismiss = { showLanguagePicker = false })
+   }
    if (showV17ProtectionSetupSheet) {
     V17ProtectionSetupSheet(
      isDark = appTheme != com.vibesync.antivirus.ui.theme.AppTheme.LIGHT,
      batteryActive = batteryUnrestricted,
-     adminActive = adminActive,
      safActive = storageAccessGranted,
      onDismiss = { showV17ProtectionSetupSheet = false },
      onBatteryToggle = toggleBatteryGuard,
-     onAdminToggle = toggleAdminGuard,
      onSafToggle = toggleSafGuard
     )
    }
@@ -1435,16 +1419,6 @@ import kotlinx.coroutines.launch
     }) { Text(stringResource(R.string.notification_details_delete)) }
    },
    dismissButton = { TextButton(onClick = { notificationDeleteTarget = null }) { Text(stringResource(R.string.close)) } }
-  )
- }
- if (showAdminPermissionDisclosure) {
-  DeviceAdminPermissionDisclosureDialog(
-   onConfirm = {
-    showAdminPermissionDisclosure = false
-    runCatching { deviceAdminManager.requestAdminPermission() }
-     .onFailure { Toast.makeText(context, R.string.device_admin_explanation, Toast.LENGTH_LONG).show() }
-   },
-   onDismiss = { showAdminPermissionDisclosure = false }
   )
  }
  if (showDefinitionImportWarning) AlertDialog(

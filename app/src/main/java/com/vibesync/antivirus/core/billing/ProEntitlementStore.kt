@@ -7,9 +7,8 @@ import androidx.security.crypto.MasterKey
 import java.security.MessageDigest
 
 /**
- * Encrypted, device-bound entitlement cache for offline Pro gating.
- * Active subscriptions can be rehydrated from Google Play; legacy consumed INAPP grants
- * remain local-only because Google Play no longer returns consumed one-time purchases.
+ * Encrypted, device-bound local cache for prepaid subscription access.
+ * It accumulates distinct prepaid top-ups while application data is present.
  */
 class ProEntitlementStore(
     private val context: Context,
@@ -50,12 +49,8 @@ class ProEntitlementStore(
         if (checkProStatusForThisDevice(nowMs)) preferences.getLong(KEY_EXPIRY, 0) else 0L
     }
 
-    /**
-     * Store the subscription purchase timestamp plus its annual term and a one-day
-     * local buffer. Re-reading the same purchase is idempotent. A longer legacy
-     * local entitlement is never shortened during migration.
-     */
-    fun grantSubscription(
+    /** Apply one confirmed one-year prepaid purchase/top-up; each Play token grants once. */
+    fun grantPrepaidSubscription(
         purchaseToken: String,
         purchaseTimeMs: Long,
         nowMs: Long = System.currentTimeMillis()
@@ -63,57 +58,42 @@ class ProEntitlementStore(
         if (purchaseToken.isBlank() || purchaseTimeMs <= 0L) return@synchronized false
         val fingerprint = DeviceUtils.fingerprint(context) ?: return@synchronized false
         runCatching {
-            val duration = Math.addExact(MILLIS_PER_YEAR, GOOGLE_GRACE_BUFFER_MS)
-            val subscriptionExpiry = Math.addExact(purchaseTimeMs, duration)
-            val oldExpiry = if (preferences.getString(KEY_FINGERPRINT, null) == fingerprint) {
-                preferences.getLong(KEY_EXPIRY, 0L)
-            } else {
-                0L
-            }
-            preferences.edit()
-                .putString(KEY_FINGERPRINT, fingerprint)
-                .putLong(KEY_EXPIRY, maxOf(oldExpiry, subscriptionExpiry))
-                .putLong(KEY_LAST_SEEN, nowMs)
-                .commit()
-        }.getOrDefault(false)
-    }
-
-    /**
-     * Migration-only grant for the previous consumable INAPP product.
-     * Token digest prevents duplicate callbacks from extending the legacy grant twice.
-     */
-    fun grant(
-        purchaseToken: String,
-        quantityFromPlay: Int,
-        nowMs: Long = System.currentTimeMillis()
-    ): Boolean = synchronized(lock) {
-        if (purchaseToken.isBlank() || quantityFromPlay <= 0) return@synchronized false
-        val fingerprint = DeviceUtils.fingerprint(context) ?: return@synchronized false
-        runCatching {
             val tokenHash = MessageDigest.getInstance("SHA-256")
                 .digest(purchaseToken.toByteArray(Charsets.UTF_8))
                 .joinToString("") { "%02x".format(it) }
             val redeemed = preferences.getStringSet(KEY_REDEEMED, emptySet())?.toSet().orEmpty()
             if (tokenHash in redeemed) return@synchronized true
+
             val oldExpiry = if (preferences.getString(KEY_FINGERPRINT, null) == fingerprint) {
-                preferences.getLong(KEY_EXPIRY, 0)
+                preferences.getLong(KEY_EXPIRY, 0L)
             } else {
                 0L
             }
-            val base = maxOf(oldExpiry, nowMs)
-            val duration = Math.multiplyExact(quantityFromPlay.toLong(), MILLIS_PER_YEAR)
-            if (base > Long.MAX_VALUE - duration) return@synchronized false
+            val base = maxOf(oldExpiry, purchaseTimeMs)
+            val duration = Math.addExact(MILLIS_PER_YEAR, GOOGLE_GRACE_BUFFER_MS)
+            val newExpiry = Math.addExact(base, duration)
             preferences.edit()
                 .putString(KEY_FINGERPRINT, fingerprint)
-                .putLong(KEY_EXPIRY, base + duration)
+                .putLong(KEY_EXPIRY, newExpiry)
                 .putLong(KEY_LAST_SEEN, nowMs)
                 .putStringSet(KEY_REDEEMED, redeemed + tokenHash)
                 .commit()
         }.getOrDefault(false)
     }
 
+    /** Clear local access if Play reports an active purchase linked to another device. */
+    fun clearForDeviceMismatch(): Boolean = synchronized(lock) {
+        runCatching {
+            preferences.edit()
+                .remove(KEY_FINGERPRINT)
+                .remove(KEY_EXPIRY)
+                .remove(KEY_LAST_SEEN)
+                .remove(KEY_REDEEMED)
+                .commit()
+        }.getOrDefault(false)
+    }
+
     companion object {
-        const val MAX_YEARS = 10 // Legacy price-estimate/test compatibility; new subscriptions have quantity one.
         const val MILLIS_PER_YEAR = 365L * 24 * 60 * 60 * 1000
         const val GOOGLE_GRACE_BUFFER_MS = 24L * 60 * 60 * 1000
         private const val CLOCK_TOLERANCE_MS = 5L * 60 * 1000

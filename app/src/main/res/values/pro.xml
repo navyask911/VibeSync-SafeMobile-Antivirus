@@ -1,31 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- SafeMobile Pro is the product brand; all purchase copy below is localized. -->
     <string name="pro_title">SafeMobile Pro</string>
     <string name="pro_truthful_summary">Less clutter. Same detection.</string>
     <string name="pro_feature_free">Offline hash, YARA and sideload detection stay free.</string>
     <string name="pro_feature_research">Experimental machine learning is not validated or enabled.</string>
     <string name="pro_feature_updates">Pro offers optional daily research-model updates. Weekly updates stay free.</string>
-    <string name="pro_feature_adfree">Free-tier ads are disabled while your SafeMobile Pro subscription is active.</string>
-    <string name="pro_years">Years for the estimate (1–10)</string>
-    <string name="pro_price_preview">Estimated total: %1$s. Years: %2$d. Confirm in Google Play.</string>
-    <string name="pro_price_unavailable">Waiting for Google Play pricing; purchases are unavailable.</string>
-    <string name="pro_cart_quantity_warning">Choose the purchase quantity in Google Play. The confirmed quantity determines the years credited to this device.</string>
-    <string name="pro_non_restorable_warning">Device-only purchase. Reinstalling, resetting or losing encryption keys can permanently remove your remaining Pro access.</string>
-    <string name="pro_unlock">Unlock SafeMobile Pro</string>
+    <string name="pro_feature_adfree">Free-tier ads are disabled while your SafeMobile Pro access is active.</string>
+    <string name="pro_price_unavailable">Google Play prepaid pricing is unavailable. Try again when Play is connected.</string>
+    <string name="pro_one_year_price" translatable="false">One prepaid year: %1$s</string>
+    <string name="pro_prepaid_offer" translatable="false">One-year prepaid SafeMobile Pro access. Does not auto-renew.</string>
+    <string name="pro_prepaid_duration_limit" translatable="false">Google Play prepaid plans are limited to one year per purchase. Buy or extend the same plan again to add another year; the final price is confirmed in Google Play.</string>
+    <string name="pro_device_binding_explanation" translatable="false">This purchase is linked to this Android device using a hashed device identifier. Reinstall on the same device can restore the active Play purchase; a different device is blocked.</string>
+    <string name="pro_buy_or_extend_one_year" translatable="false">Buy / extend 1 year</string>
     <string name="pro_restore_check">Restore / Check Status</string>
-    <string name="pro_active_until">Subscription access is locally active until %1$s.</string>
-    <string name="pro_not_active">No active Pro subscription or legacy access was found on this device.</string>
-    <string name="pro_purchase_unavailable">Google Play is unavailable or the product is not configured.</string>
+    <string name="pro_active_until">Pro access is locally recorded until %1$s.</string>
+    <string name="pro_not_active">No active Pro subscription or local prepaid entitlement was found.</string>
+    <string name="pro_purchase_unavailable">Google Play is unavailable or the prepaid product is not configured.</string>
     <string name="pro_purchase_canceled">Purchase canceled.</string>
-    <string name="pro_purchase_pending">Payment pending. Pro access starts after Google Play confirms the purchase.</string>
-    <string name="pro_purchase_recheck">Reconnect to Google Play to finish processing your subscription.</string>
+    <string name="pro_purchase_pending">Payment pending. Pro access starts only after Google Play confirms the purchase.</string>
+    <string name="pro_purchase_recheck">Reconnect to Google Play to finish processing this prepaid subscription.</string>
     <string name="pro_storage_failed">Secure storage could not save the purchase. Contact support before retrying.</string>
-    <string name="pro_purchase_success">Subscription confirmed. Pro access is saved securely on this device.</string>
-    <string name="pro_restore_local_only">Local status checked. Google Play cannot restore consumed passes.</string>
-    <string name="pro_device_disclaimer" formatted="false">Your subscription is managed by Google Play. Active subscriptions can be restored after reinstalling. SafeMobile keeps an encrypted, device-bound record for offline Pro checks.</string>
+    <string name="pro_device_mismatch" translatable="false">Subscription active on another device. SafeMobile Pro access is blocked on this device.</string>
+    <string name="pro_device_binding_unavailable" translatable="false">This purchase has no verifiable device binding. Pro access is blocked until Google Play returns a device-bound purchase.</string>
+    <string name="pro_purchase_success">Prepaid subscription confirmed and securely recorded for this device.</string>
+    <string name="pro_device_disclaimer" formatted="false">Your prepaid subscription is managed by Google Play and does not auto-renew. SafeMobile stores an encrypted device-bound access cache for offline checks.</string>
     <string name="pro_network_notice">Core protection works offline. Google Play purchases and optional model updates require an internet connection.</string>
+    <string name="pro_years">Years (1–10)</string>
+    <string name="pro_price_preview">Estimated total: %1$s. Years: %2$d. Confirm in Google Play.</string>
+    <string name="pro_cart_quantity_warning">Choose the purchase quantity in Google Play. The confirmed quantity determines the years added to this device.</string>
+    <string name="pro_non_restorable_warning">Device-only purchase. Reinstalling, resetting, or losing encryption keys may permanently erase your remaining Pro access.</string>
+    <string name="pro_unlock">Unlock SafeMobile Pro</string>
+    <string name="pro_restore_local_only">Local status checked. Google Play cannot restore consumed passes.</string>
     <string name="pro_fewer_years">Fewer years</string>
     <string name="pro_more_years">More years</string>
-    <string name="pro_subscription_offer" formatted="false">Unlock SafeMobile Pro — ₹299 / Year (Auto-renewing). Cancel anytime in Google Play.</string>
+    <string name="pro_subscription_offer" formatted="false">Unlock SafeMobile Pro — ₹299 / year (auto-renewing). Cancel anytime in Google Play.</string>
 </resources>

@@ -3,8 +3,6 @@
     <style name="Theme.SafeMobile" parent="android:style/Theme.Material.NoActionBar">
         <item name="android:fontFamily">sans</item>
         <item name="android:colorAccent">@color/safe_cyan</item>
-        <item name="android:statusBarColor">@color/safe_navy</item>
-        <item name="android:navigationBarColor">@color/safe_navy</item>
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowBackground">@color/safe_navy</item>
     </style>
@@ -12,15 +10,13 @@
     <style name="Theme.SafeMobile.Light" parent="android:style/Theme.Material.Light.NoActionBar">
         <item name="android:fontFamily">sans</item>
         <item name="android:colorAccent">@color/safe_cyan</item>
-        <item name="android:statusBarColor">#F4F7FA</item>
-        <item name="android:navigationBarColor">#FFFFFF</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowBackground">#F4F7FA</item>
     </style>
 
     <style name="Theme.SafeMobile.Splash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">#D9E2E9</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_center_icon</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
         <item name="windowSplashScreenIconBackgroundColor">#D9E2E9</item>
         <item name="postSplashScreenTheme">@style/Theme.SafeMobile</item>
         <item name="android:windowBackground">#D9E2E9</item>

@@ -12,27 +12,31 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.security.MessageDigest
 
 /**
- * Google Play auto-renewing subscription with an encrypted, device-bound local expiry cache.
- * The legacy one-time SKU is queried once per manager lifetime to migrate still-owned purchases.
- * No purchase token, Android ID, scan data or entitlement is sent to a developer server.
+ * Device-bound, non-renewing Google Play prepaid subscription.
+ * The Play base plan is one year; buying it again tops up another year.
  */
 class SafeMobileBillingManager(context: Context) : PurchasesUpdatedListener {
     private val app = context.applicationContext
     private val ledger = ProEntitlementStore(app)
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
-    private val _state = MutableStateFlow(BillingUiState())
+    private val _state = MutableStateFlow(
+        BillingUiState(deviceIdAvailable = DeviceUtils.fingerprint(app) != null)
+    )
     val state: StateFlow<BillingUiState> = _state.asStateFlow()
     private var closed = false
     private var connecting = false
-    private var legacyRecoveryInFlight = false
-    private var legacyRecoveryCompleted = false
 
     private val billingClient = BillingClient.newBuilder(app)
         .setListener(this)
-        // Keep one-time pending support only for the legacy consumable migration query.
-        .enablePendingPurchases(PendingPurchasesParams.newBuilder().enableOneTimeProducts().build())
+        .enablePendingPurchases(
+            PendingPurchasesParams.newBuilder()
+                .enableOneTimeProducts()
+                .enablePrepaidPlans()
+                .build()
+        )
         .enableAutoServiceReconnection()
         .build()
 
@@ -41,6 +45,7 @@ class SafeMobileBillingManager(context: Context) : PurchasesUpdatedListener {
         val processing: Boolean = false,
         val proActive: Boolean = false,
         val expiresAt: Long = 0L,
+        val deviceIdAvailable: Boolean = false,
         val playUnitPrice: String? = null,
         val playPriceMicros: Long? = null,
         val playCurrency: String? = null,
@@ -48,7 +53,8 @@ class SafeMobileBillingManager(context: Context) : PurchasesUpdatedListener {
     )
 
     enum class Notice {
-        NONE, UNAVAILABLE, CANCELED, PENDING, RECHECK, DEVICE_STORAGE_ERROR, SUCCESS
+        NONE, UNAVAILABLE, CANCELED, PENDING, RECHECK, DEVICE_STORAGE_ERROR,
+        DEVICE_MISMATCH, DEVICE_BINDING_UNAVAILABLE, SUCCESS
     }
 
     fun checkProStatusForThisDevice(): Boolean = ledger.checkProStatusForThisDevice()
@@ -58,17 +64,19 @@ class SafeMobileBillingManager(context: Context) : PurchasesUpdatedListener {
             val expiry = withContext(Dispatchers.IO) { ledger.expiresAt() }
             _state.value = _state.value.copy(
                 proActive = expiry > System.currentTimeMillis(),
-                expiresAt = expiry
+                expiresAt = expiry,
+                deviceIdAvailable = DeviceUtils.fingerprint(app) != null
             )
         }
     }
 
+    /** Called from Application on process launch and when the paywall resumes. */
     fun start() {
         if (closed || connecting) return
         refreshLocalStatus()
         if (billingClient.isReady) {
             _state.value = _state.value.copy(connected = true)
-            queryPrice()
+            queryPrepaidPlan()
             recoverPurchases()
             return
         }
@@ -78,9 +86,7 @@ class SafeMobileBillingManager(context: Context) : PurchasesUpdatedListener {
                 if (closed) return
                 connecting = false
                 _state.value = _state.value.copy(
-                    connected = false,
-                    processing = false,
-                    notice = Notice.UNAVAILABLE
+                    connected = false, processing = false, notice = Notice.UNAVAILABLE
                 )
             }
 
@@ -92,13 +98,13 @@ class SafeMobileBillingManager(context: Context) : PurchasesUpdatedListener {
                     return
                 }
                 _state.value = _state.value.copy(connected = true)
-                queryPrice()
+                queryPrepaidPlan()
                 recoverPurchases()
             }
         })
     }
 
-    /** Recover current subscriptions first, then attempt the one-time legacy SKU migration. */
+    /** Restore active prepaid purchases from Play every time the app starts. */
     private fun recoverPurchases() {
         if (closed || !billingClient.isReady) return
         billingClient.queryPurchasesAsync(
@@ -108,41 +114,26 @@ class SafeMobileBillingManager(context: Context) : PurchasesUpdatedListener {
         ) { result, purchases ->
             if (closed) return@queryPurchasesAsync
             if (result.responseCode == BillingClient.BillingResponseCode.OK) {
-                purchases.filter { PRODUCT_ID in it.products }.forEach(::processSubscriptionPurchase)
-            }
-            // Still run the legacy lookup if the SUBS lookup succeeded or failed.
-            queryLegacyInAppOnce()
-        }
-    }
-
-    /**
-     * Migration lookup for the old consumable SKU. Successful lookup is cached for this
-     * manager lifetime; a failed lookup is retried on the next app resume/recovery attempt.
-     */
-    private fun queryLegacyInAppOnce() {
-        if (closed || !billingClient.isReady || legacyRecoveryCompleted || legacyRecoveryInFlight) return
-        legacyRecoveryInFlight = true
-        billingClient.queryPurchasesAsync(
-            QueryPurchasesParams.newBuilder()
-                .setProductType(BillingClient.ProductType.INAPP)
-                .build()
-        ) { result, purchases ->
-            legacyRecoveryInFlight = false
-            if (closed) return@queryPurchasesAsync
-            if (result.responseCode == BillingClient.BillingResponseCode.OK) {
-                legacyRecoveryCompleted = true
-                purchases.filter { LEGACY_PRODUCT_ID in it.products }.forEach(::processLegacyPurchase)
+                val active = purchases.filter { PRODUCT_ID in it.products }
+                if (active.isNotEmpty()) active.forEach(::processPrepaidPurchase)
+                else refreshLocalStatus()
+            } else {
+                _state.value = _state.value.copy(notice = Notice.UNAVAILABLE)
             }
         }
     }
 
-    private data class PurchasableProduct(
+    private data class PrepaidPlan(
         val details: ProductDetails,
         val offer: ProductDetails.SubscriptionOfferDetails,
-        val recurringPrice: ProductDetails.PricingPhase
+        val phase: ProductDetails.PricingPhase
     )
 
-    private fun queryPrice(callback: ((PurchasableProduct?) -> Unit)? = null) {
+    /**
+     * Accept only the configured one-year, non-recurring prepaid base plan.
+     * Auto-renewing plans and other base-plan IDs are not used as fallbacks.
+     */
+    private fun queryPrepaidPlan(callback: ((PrepaidPlan?) -> Unit)? = null) {
         if (!billingClient.isReady || closed) {
             callback?.invoke(null)
             return
@@ -154,60 +145,77 @@ class SafeMobileBillingManager(context: Context) : PurchasesUpdatedListener {
         billingClient.queryProductDetailsAsync(
             QueryProductDetailsParams.newBuilder().setProductList(listOf(product)).build()
         ) { result, products ->
-            // Billing 8 returns QueryProductDetailsResult, including unfetched products.
             scope.launch {
                 if (closed) return@launch
                 val detail = if (result.responseCode == BillingClient.BillingResponseCode.OK) {
                     products.productDetailsList.firstOrNull { it.productId == PRODUCT_ID }
                 } else null
-                val offerAndPrice = detail?.subscriptionOfferDetails.orEmpty()
+                val match = detail?.subscriptionOfferDetails.orEmpty()
                     .asSequence()
+                    .filter { it.basePlanId == PREPAID_BASE_PLAN_ID && it.offerId == null }
                     .mapNotNull { offer ->
-                        offer.pricingPhases.pricingPhaseList.lastOrNull()?.let { offer to it }
+                        val phase = offer.pricingPhases.pricingPhaseList.lastOrNull()
+                        if (phase != null &&
+                            phase.billingPeriod == PREPAID_BILLING_PERIOD &&
+                            phase.recurrenceMode == ProductDetails.RecurrenceMode.NON_RECURRING &&
+                            offer.offerToken.isNotBlank()
+                        ) offer to phase else null
                     }
                     .firstOrNull()
-                val selection = if (detail != null && offerAndPrice != null) {
-                    PurchasableProduct(detail, offerAndPrice.first, offerAndPrice.second)
+                val selection = if (detail != null && match != null) {
+                    PrepaidPlan(detail, match.first, match.second)
                 } else null
-                val previousNotice = _state.value.notice
+                val oldNotice = _state.value.notice
                 _state.value = _state.value.copy(
-                    playUnitPrice = selection?.recurringPrice?.formattedPrice,
-                    playPriceMicros = selection?.recurringPrice?.priceAmountMicros,
-                    playCurrency = selection?.recurringPrice?.priceCurrencyCode,
+                    playUnitPrice = selection?.phase?.formattedPrice,
+                    playPriceMicros = selection?.phase?.priceAmountMicros,
+                    playCurrency = selection?.phase?.priceCurrencyCode,
                     notice = if (selection == null) Notice.UNAVAILABLE
-                        else if (previousNotice == Notice.UNAVAILABLE) Notice.NONE else previousNotice
+                        else if (oldNotice == Notice.UNAVAILABLE) Notice.NONE else oldNotice
                 )
                 callback?.invoke(selection)
             }
         }
     }
 
+    /** Buy one prepaid year. Buying again while active is a one-year top-up. */
     fun launchPurchase(activity: Activity) {
-        if (closed || !billingClient.isReady) {
-            _state.value = _state.value.copy(notice = Notice.UNAVAILABLE)
+        if (closed || !billingClient.isReady || activity.isFinishing || activity.isDestroyed) {
+            _state.value = _state.value.copy(processing = false, notice = Notice.UNAVAILABLE)
+            if (!closed && !billingClient.isReady) start()
+            return
+        }
+        val deviceId = DeviceUtils.fingerprint(app)
+        if (deviceId.isNullOrBlank()) {
+            _state.value = _state.value.copy(
+                processing = false,
+                deviceIdAvailable = false,
+                notice = Notice.DEVICE_BINDING_UNAVAILABLE
+            )
             return
         }
         _state.value = _state.value.copy(processing = true, notice = Notice.NONE)
-        queryPrice { selection ->
-            if (selection == null) {
+        queryPrepaidPlan { selected ->
+            if (selected == null) {
                 _state.value = _state.value.copy(processing = false, notice = Notice.UNAVAILABLE)
-                return@queryPrice
+                return@queryPrepaidPlan
             }
             val item = BillingFlowParams.ProductDetailsParams.newBuilder()
-                .setProductDetails(selection.details)
-                .setOfferToken(selection.offer.offerToken)
+                .setProductDetails(selected.details)
+                .setOfferToken(selected.offer.offerToken)
                 .build()
             val params = BillingFlowParams.newBuilder()
+                .setObfuscatedAccountId(deviceId)
                 .setProductDetailsParamsList(listOf(item))
                 .build()
-            val result = billingClient.launchBillingFlow(activity, params)
-            if (result.responseCode != BillingClient.BillingResponseCode.OK) {
+            val launch = billingClient.launchBillingFlow(activity, params)
+            if (launch.responseCode != BillingClient.BillingResponseCode.OK) {
                 _state.value = _state.value.copy(processing = false, notice = Notice.UNAVAILABLE)
             }
         }
     }
 
-    /** Explicit restore/check action. Current subscriptions restore from Play; legacy data is local. */
+    /** Explicit Restore / Check action. */
     fun restoreProLicenseFromPlayStore() {
         if (closed) return
         if (!billingClient.isReady) {
@@ -226,14 +234,13 @@ class SafeMobileBillingManager(context: Context) : PurchasesUpdatedListener {
                 _state.value = _state.value.copy(processing = false, notice = Notice.UNAVAILABLE)
                 return@queryPurchasesAsync
             }
-            val currentSubscriptions = purchases.filter { PRODUCT_ID in it.products }
-            if (currentSubscriptions.isEmpty()) {
+            val active = purchases.filter { PRODUCT_ID in it.products }
+            if (active.isEmpty()) {
+                refreshLocalStatus()
                 _state.value = _state.value.copy(processing = false, notice = Notice.NONE)
             } else {
-                currentSubscriptions.forEach(::processSubscriptionPurchase)
+                active.forEach(::processPrepaidPurchase)
             }
-            queryLegacyInAppOnce()
-            refreshLocalStatus()
         }
     }
 
@@ -241,15 +248,11 @@ class SafeMobileBillingManager(context: Context) : PurchasesUpdatedListener {
         if (closed) return
         when (result.responseCode) {
             BillingClient.BillingResponseCode.OK -> {
-                if (purchases.isNullOrEmpty()) {
+                val matching = purchases.orEmpty().filter { PRODUCT_ID in it.products }
+                if (matching.isEmpty()) {
                     _state.value = _state.value.copy(processing = false, notice = Notice.RECHECK)
                 } else {
-                    purchases.forEach { purchase ->
-                        when {
-                            PRODUCT_ID in purchase.products -> processSubscriptionPurchase(purchase)
-                            LEGACY_PRODUCT_ID in purchase.products -> processLegacyPurchase(purchase)
-                        }
-                    }
+                    matching.forEach(::processPrepaidPurchase)
                 }
             }
             BillingClient.BillingResponseCode.USER_CANCELED ->
@@ -258,19 +261,33 @@ class SafeMobileBillingManager(context: Context) : PurchasesUpdatedListener {
         }
     }
 
-    private fun processSubscriptionPurchase(purchase: Purchase) {
+    private fun processPrepaidPurchase(purchase: Purchase) {
         if (PRODUCT_ID !in purchase.products) return
         if (purchase.purchaseState != Purchase.PurchaseState.PURCHASED) {
             _state.value = _state.value.copy(processing = false, notice = Notice.PENDING)
             return
         }
-        if (purchase.purchaseTime <= 0L) {
-            _state.value = _state.value.copy(processing = false, notice = Notice.RECHECK)
-            return
+
+        val currentDeviceId = DeviceUtils.fingerprint(app)
+        val purchasedDeviceId = purchase.accountIdentifiers?.obfuscatedAccountId
+        when {
+            currentDeviceId.isNullOrBlank() || purchasedDeviceId.isNullOrBlank() -> {
+                rejectDeviceBinding(Notice.DEVICE_BINDING_UNAVAILABLE)
+                return
+            }
+            !sameIdentifier(currentDeviceId, purchasedDeviceId) -> {
+                rejectDeviceBinding(Notice.DEVICE_MISMATCH)
+                return
+            }
+            purchase.purchaseTime <= 0L -> {
+                _state.value = _state.value.copy(processing = false, notice = Notice.RECHECK)
+                return
+            }
         }
+
         scope.launch {
             val granted = withContext(Dispatchers.IO) {
-                ledger.grantSubscription(purchase.purchaseToken, purchase.purchaseTime)
+                ledger.grantPrepaidSubscription(purchase.purchaseToken, purchase.purchaseTime)
             }
             if (!granted) {
                 _state.value = _state.value.copy(processing = false, notice = Notice.DEVICE_STORAGE_ERROR)
@@ -278,12 +295,31 @@ class SafeMobileBillingManager(context: Context) : PurchasesUpdatedListener {
             }
             refreshLocalStatus()
             com.vibesync.antivirus.core.worker.ModelUpdateScheduler.ensureCadence(app, pro = true)
-            acknowledgeSubscriptionPurchase(purchase)
+            acknowledgePrepaidPurchase(purchase)
         }
     }
 
-    /** Initial subscription purchases must be acknowledged; renewals are already acknowledged. */
-    private fun acknowledgeSubscriptionPurchase(purchase: Purchase) {
+    private fun rejectDeviceBinding(notice: Notice) {
+        scope.launch {
+            withContext(Dispatchers.IO) { ledger.clearForDeviceMismatch() }
+            _state.value = _state.value.copy(
+                processing = false,
+                proActive = false,
+                expiresAt = 0L,
+                deviceIdAvailable = DeviceUtils.fingerprint(app) != null,
+                notice = notice
+            )
+        }
+    }
+
+    private fun sameIdentifier(first: String, second: String): Boolean =
+        MessageDigest.isEqual(
+            first.toByteArray(Charsets.US_ASCII),
+            second.toByteArray(Charsets.US_ASCII)
+        )
+
+    /** Every confirmed prepaid purchase/top-up is acknowledged, never consumed. */
+    private fun acknowledgePrepaidPurchase(purchase: Purchase) {
         if (purchase.isAcknowledged) {
             _state.value = _state.value.copy(processing = false, notice = Notice.SUCCESS)
             return
@@ -309,41 +345,6 @@ class SafeMobileBillingManager(context: Context) : PurchasesUpdatedListener {
         }
     }
 
-    /** One-time compatibility grant for an old, still-owned consumable annual pass. */
-    private fun processLegacyPurchase(purchase: Purchase) {
-        if (LEGACY_PRODUCT_ID !in purchase.products) return
-        if (purchase.purchaseState != Purchase.PurchaseState.PURCHASED) {
-            _state.value = _state.value.copy(processing = false, notice = Notice.PENDING)
-            return
-        }
-        if (purchase.quantity <= 0) {
-            _state.value = _state.value.copy(processing = false, notice = Notice.RECHECK)
-            return
-        }
-        scope.launch {
-            val granted = withContext(Dispatchers.IO) {
-                ledger.grant(purchase.purchaseToken, purchase.quantity)
-            }
-            if (!granted) {
-                _state.value = _state.value.copy(processing = false, notice = Notice.DEVICE_STORAGE_ERROR)
-                return@launch
-            }
-            refreshLocalStatus()
-            com.vibesync.antivirus.core.worker.ModelUpdateScheduler.ensureCadence(app, pro = true)
-            _state.value = _state.value.copy(processing = false, notice = Notice.SUCCESS)
-            // Only old INAPP consumables are consumed. SUBS are never consumed.
-            if (!closed && billingClient.isReady) {
-                billingClient.consumeAsync(
-                    ConsumeParams.newBuilder().setPurchaseToken(purchase.purchaseToken).build()
-                ) { consumption, _ ->
-                    if (consumption.responseCode != BillingClient.BillingResponseCode.OK) {
-                        _state.value = _state.value.copy(notice = Notice.RECHECK)
-                    }
-                }
-            }
-        }
-    }
-
     fun close() {
         closed = true
         connecting = false
@@ -352,7 +353,8 @@ class SafeMobileBillingManager(context: Context) : PurchasesUpdatedListener {
     }
 
     companion object {
-        const val PRODUCT_ID = "safemobile_pro_1y_subs"
-        const val LEGACY_PRODUCT_ID = "safemobile_pro_1_year"
+        const val PRODUCT_ID = "pro_access"
+        const val PREPAID_BASE_PLAN_ID = "prepaid-1-year"
+        const val PREPAID_BILLING_PERIOD = "P1Y"
     }
 }

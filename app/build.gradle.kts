@@ -17,6 +17,7 @@ fun cfg(value: String): String = "\"" + value.replace("\\", "\\\\").replace("\""
 
 val feedManifestPublicKey = providers.environmentVariable("SAFE_MOBILE_FEED_ED25519_PUBLIC_KEY_B64").orNull?.trim().orEmpty()
 val hashDatabasePublicKey = providers.environmentVariable("SAFE_MOBILE_HASHDB_ED25519_PUBLIC_KEY_B64").orNull?.trim().orEmpty()
+val playIntegrityVerificationUrl = providers.environmentVariable("PLAY_INTEGRITY_VERIFICATION_URL").orNull?.trim().orEmpty()
 val releaseStoreBase64 = providers.environmentVariable("KEYSTORE_BASE64").orNull
 val releaseStorePassword = providers.environmentVariable("KEYSTORE_PASSWORD").orNull
 val releaseKeyAlias = providers.environmentVariable("KEY_ALIAS").orNull
@@ -30,6 +31,7 @@ if (signingValues.any { !it.isNullOrBlank() } && !releaseSigningEnabled) {
 android {
  namespace = "com.vibesync.antivirus"
  compileSdk = 36
+ ndkVersion = "28.2.13676358"
  flavorDimensions += "network"
  productFlavors {
   create("offline") {
@@ -45,14 +47,15 @@ android {
   applicationId = "com.vibesync.antivirus"
   minSdk = 26
   targetSdk = 36
-  versionCode = 20261147
-  // [release-v1.8.1] Compliance hardening: truthful posture score, minimized Device Admin, no own overlay permission.
-  versionName = "1.8.1"
+  versionCode = 20261149
+  // [release-v1.9.0] Local integrity fallback, LiteRT 16 KB JNI and edge-to-edge compliance.
+  versionName = "1.9.0"
   testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   buildConfigField("String", "FEED_MANIFEST_PUBLIC_KEY_B64", cfg(feedManifestPublicKey))
   buildConfigField("Boolean", "FEED_MANIFEST_KEY_CONFIGURED", (!feedManifestPublicKey.isBlank()).toString())
   buildConfigField("String", "HASHDB_PUBLIC_KEY_B64", cfg(hashDatabasePublicKey))
   buildConfigField("Boolean", "HASHDB_PUBLIC_KEY_CONFIGURED", (!hashDatabasePublicKey.isBlank()).toString())
+  buildConfigField("String", "PLAY_INTEGRITY_VERIFICATION_URL", cfg(playIntegrityVerificationUrl))
  }
  signingConfigs {
   if (releaseSigningEnabled) {
@@ -192,9 +195,38 @@ val prepareYaraXPatches = tasks.register("prepareYaraXPatches") {
         val nativeSourceDirectory = yaraXSourceDirectory.get().asFile
         project.exec {
             workingDir = nativeSourceDirectory
-            commandLine("git", "checkout", "--", "Cargo.toml", "src/lib.rs")
+            commandLine("git", "checkout", "--", "Cargo.toml", "src/lib.rs", "build.rs")
         }.assertNormalExitValue()
 
+        // The Android NDK/toolchain may still emit 4 KB PT_LOAD segments for Rust cdylibs
+        // (notably armeabi-v7a). Apply the Android 16 KB page-size flags in the JNI
+        // crate build script so they reach the final libyarax_android.so link.
+        // Keep this target-scoped: host build scripts and non-Android outputs are untouched.
+        val nativeBuildScript = nativeSourceDirectory.resolve("build.rs")
+        val nativeBuildScriptText = nativeBuildScript.readText()
+        val androidLinkerFlags = """
+            if std::env::var("CARGO_CFG_TARGET_OS")
+                .map(|target| target == "android")
+                .unwrap_or(false)
+            {
+                println!("cargo:rustc-link-arg=-Wl,-z,max-page-size=16384");
+                println!("cargo:rustc-link-arg=-Wl,-z,common-page-size=16384");
+            }
+        """.trimIndent()
+        val buildScriptMarker = "fn main() {"
+        check(nativeBuildScriptText.windowed(buildScriptMarker.length).count { it == buildScriptMarker } == 1) {
+            "Pinned YARA-X JNI build.rs entry point changed; refusing to apply the 16 KB linker patch."
+        }
+        nativeBuildScript.writeText(nativeBuildScriptText.replace(
+            buildScriptMarker,
+            buildScriptMarker + "\n    " + androidLinkerFlags.replace("\n", "\n    ")
+        ))
+        val patchedBuildScript = nativeBuildScript.readText()
+        check(patchedBuildScript.contains("CARGO_CFG_TARGET_OS") &&
+            patchedBuildScript.contains("cargo:rustc-link-arg=-Wl,-z,max-page-size=16384") &&
+            patchedBuildScript.contains("cargo:rustc-link-arg=-Wl,-z,common-page-size=16384")) {
+            "Android 16 KB linker flags were not added to the YARA-X JNI build script."
+        }
         val nativeManifest = nativeSourceDirectory.resolve("Cargo.toml")
         val nativeManifestText = nativeManifest.readText()
         val defaultYaraXDependency = "yara-x = { path = \"./yarax_patches/yara-x/lib\", default-features = false, features = [\"dex-module\", \"hash-module\", \"crypto\", \"pe-module\", \"elf-module\", \"generate-proto-code\"]}"
@@ -346,6 +378,11 @@ val prepareYaraXPatches = tasks.register("prepareYaraXPatches") {
         wasmRuntime.writeText(finalWasmRuntime)
 
         // Verify the Android runtime patch in the exact source tree consumed by cargo.
+        check(nativeBuildScript.readText().contains("CARGO_CFG_TARGET_OS") &&
+            nativeBuildScript.readText().contains("max-page-size=16384") &&
+            nativeBuildScript.readText().contains("common-page-size=16384")) {
+            "Android 16 KB ELF linker patch was not completely applied."
+        }
         check(nativeManifest.readText().contains("\"pulley\"") &&
             nativeJniSource.readText().contains("yara_x::set_android_api_level") &&
             yaraRoot.readText().contains("pub fn set_android_api_level") &&
@@ -594,6 +631,7 @@ tasks.matching {
 
 kapt { correctErrorTypes = true }
 dependencies {
+ implementation("com.google.android.play:integrity:1.3.0")
  implementation("androidx.core:core-ktx:1.16.0")
  implementation("androidx.core:core-splashscreen:1.2.0")
  implementation("androidx.datastore:datastore-preferences:1.3.0")
@@ -619,17 +657,16 @@ dependencies {
  implementation("androidx.work:work-runtime-ktx:2.10.2")
  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
  implementation("com.google.crypto.tink:tink-android:1.16.0")
- // Google Android SDK License: Play Billing is only for explicit checkout, never scanning.
- implementation("com.android.billingclient:billing-ktx:8.3.0")
+ // Google Play prepaid subscriptions; device-bound prepaid base-plan checkout.
+ implementation("com.android.billingclient:billing-ktx:9.1.0")
  implementation("com.google.android.play:app-update-ktx:2.1.0")
  // Google Mobile Ads Next-Gen SDK and UMP consent platform.
  implementation("com.google.android.libraries.ads.mobile.sdk:ads-mobile-sdk:1.6.0")
  implementation("com.google.android.ump:user-messaging-platform:4.0.0")
  // Apache-2.0: KeyStore-backed encrypted local device-bound entitlement.
  implementation("androidx.security:security-crypto:1.1.0")
- // TensorFlow Lite 2.17.0 is local inference only; no model training or network calls.
- implementation("org.tensorflow:tensorflow-lite:2.14.0")
- implementation("org.tensorflow:tensorflow-lite-support:0.4.4")
+ // LiteRT 1.4.2 preserves the org.tensorflow.lite Interpreter API with 16 KB-compatible JNI.
+ implementation("com.google.ai.edge.litert:litert:1.4.2")
  // Apache-2.0 OkHttp is confined to the opt-in weekly model download worker.
  implementation("com.squareup.okhttp3:okhttp:4.12.0")
  // BSD-3-Clause: structured read-only DEX parsing of 215 research features.

@@ -41,7 +41,7 @@ class DevicePostureRepository(context: Context) {
     suspend fun monitor(): Boolean = withContext(Dispatchers.IO) {
         monitorMutex.withLock {
             if (!consented() || !DevicePostureMonitor.isEnabled(app)) return@withLock true
-            val observed = inspector.inspect(includeOverlay = false)
+            val observed = inspector.inspect()
             val next = PostureMonitorComparison(store).check(observed) { change, finding ->
                 PostureChangeNotifier.notify(app, change, finding)
             }
