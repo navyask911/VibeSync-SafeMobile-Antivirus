@@ -132,27 +132,22 @@ for path, text in (
     if re.search(r"(?i)zero telemetry|zero scan telemetry|no trackers|no mobile advertising sdk|no ad sdk is added", text):
         errors.append(f"{path} still contains an obsolete zero-telemetry/no-ad claim.")
 
-# Play-policy regression gates for permission minimisation and user-confirmed locking.
-try:
-    admin_xml = ET.fromstring(read("app/src/main/res/xml/device_admin_receiver.xml"))
-    policy_nodes = admin_xml.find("uses-policies")
-    admin_policies = [node.tag for node in policy_nodes] if policy_nodes is not None else []
-    if admin_policies != ["force-lock"]:
-        errors.append("Device Admin must request only the force-lock policy.")
-except ET.ParseError as error:
-    errors.append(f"Device Admin policy XML is invalid: {error}.")
+# v1.9.0 removed Device Admin entirely. Keep the manifest free of the
+# device-admin binding permission, activation intent, and receiver declaration.
+for obsolete_admin_marker in (
+    "android.permission.BIND_DEVICE_ADMIN",
+    "android.app.action.DEVICE_ADMIN_ENABLED",
+    "DeviceAdminReceiver",
+):
+    if obsolete_admin_marker in manifest:
+        errors.append(
+            f"SafeMobile v1.9.0 must not declare legacy Device Admin capability: {obsolete_admin_marker}."
+        )
+if (ROOT / "app/src/main/res/xml/device_admin_receiver.xml").exists():
+    errors.append("Obsolete Device Admin receiver policy XML must be removed.")
 
 if "android.permission.SYSTEM_ALERT_WINDOW" in manifest:
     errors.append("SafeMobile must not declare its unused own-overlay permission.")
-
-required_lock_strings = {
-    "device_admin_lock_now",
-    "device_admin_lock_confirm_title",
-    "device_admin_lock_confirm_message",
-    "device_admin_lock_confirm",
-    "device_admin_lock_cancel",
-    "device_admin_lock_failed",
-}
 for resource_file in sorted((ROOT / "app/src/main/res").glob("values*/strings.xml")):
     resource_text = read(str(resource_file.relative_to(ROOT)))
     try:
@@ -165,10 +160,6 @@ for resource_file in sorted((ROOT / "app/src/main/res").glob("values*/strings.xm
         turkish_values = re.findall(r"<string\b[^>]*>([\s\S]*?)</string>", resource_text)
         if any(re.search(r"(?<!\\)'", value) for value in turkish_values):
             errors.append("values-tr/strings.xml contains an unescaped ASCII apostrophe; escape it as \\\\' in Android string resources.")
-    names = set(re.findall(r'<string\s+name="([^"]+)"', resource_text))
-    missing = required_lock_strings - names
-    if missing:
-        errors.append(f"{resource_file.relative_to(ROOT)} is missing Device Admin lock strings: {', '.join(sorted(missing))}.")
     if re.search(r"(?i)fully protected with a 100% security score", resource_text):
         errors.append(f"{resource_file.relative_to(ROOT)} retains the obsolete fully-protected score announcement.")
     if "force-lock and password policies" in resource_text or "screen-lock and password policy controls" in resource_text:
