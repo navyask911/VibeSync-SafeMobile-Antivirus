@@ -18,6 +18,8 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.height
 import androidx.test.platform.app.InstrumentationRegistry
+import com.vibesync.antivirus.core.security.SecurityVerificationState
+import com.vibesync.antivirus.core.security.SecurityVerificationStatus
 import com.vibesync.antivirus.ui.theme.AppTheme
 import org.junit.Assert.assertEquals
 import org.junit.Rule
@@ -45,10 +47,9 @@ class SettingsWiringTest {
             globalIntelEnabled = false,
             onGlobalIntelChanged = {},
             batteryActive = false,
-            adminActive = false,
             safActive = false,
+            integrityState = SecurityVerificationState(),
             onBatteryToggle = {},
-            onAdminToggle = {},
             onSafToggle = {},
             onImportYara = {},
             onThreatFeedSync = {},
@@ -92,11 +93,10 @@ class SettingsWiringTest {
                 globalIntelEnabled = false,
                 onGlobalIntelChanged = {},
                 batteryActive = false,
-                adminActive = false,
-                safActive = false,
+                    safActive = false,
+            integrityState = SecurityVerificationState(),
                 onBatteryToggle = {},
-                onAdminToggle = {},
-                onSafToggle = {},
+                    onSafToggle = {},
                 onImportYara = {},
                 onThreatFeedSync = {},
                 onBenchmarks = {},
@@ -132,11 +132,10 @@ class SettingsWiringTest {
                 globalIntelEnabled = false,
                 onGlobalIntelChanged = {},
                 batteryActive = false,
-                adminActive = false,
-                safActive = false,
+                    safActive = false,
+            integrityState = SecurityVerificationState(),
                 onBatteryToggle = {},
-                onAdminToggle = {},
-                onSafToggle = {},
+                    onSafToggle = {},
                 onImportYara = {},
                 onThreatFeedSync = {},
                 onBenchmarks = {},
@@ -174,11 +173,10 @@ class SettingsWiringTest {
                 globalIntelEnabled = optedIn,
                 onGlobalIntelChanged = { optedIn = it },
                 batteryActive = false,
-                adminActive = false,
-                safActive = false,
+                    safActive = false,
+            integrityState = SecurityVerificationState(),
                 onBatteryToggle = {},
-                onAdminToggle = {},
-                onSafToggle = {},
+                    onSafToggle = {},
                 onImportYara = {},
                 onThreatFeedSync = {},
                 onBenchmarks = {},
@@ -211,11 +209,10 @@ class SettingsWiringTest {
                 globalIntelEnabled = false,
                 onGlobalIntelChanged = {},
                 batteryActive = false,
-                adminActive = false,
-                safActive = false,
+                    safActive = false,
+            integrityState = SecurityVerificationState(),
                 onBatteryToggle = {},
-                onAdminToggle = {},
-                onSafToggle = {},
+                    onSafToggle = {},
                 onImportYara = { yaraImports++ },
                 onThreatFeedSync = { threatSyncs++ },
                 onBenchmarks = { benchmarks++ },
@@ -232,27 +229,7 @@ class SettingsWiringTest {
         assertEquals(1, benchmarks)
     }
     @Test
-    fun deviceAdminDisclosureRequiresExplicitConfirmation() {
-        var confirmed = false
-        render {
-            DeviceAdminPermissionDisclosureDialog(
-                onConfirm = { confirmed = true },
-                onDismiss = {}
-            )
-        }
-
-        composeRule.onNodeWithText(context.getString(com.vibesync.antivirus.R.string.security_guard_admin_consent_body))
-            .assertIsDisplayed()
-        assertEquals(false, confirmed)
-        composeRule.onNodeWithText(context.getString(com.vibesync.antivirus.R.string.security_guard_consent_continue))
-            .performClick()
-        assertEquals(true, confirmed)
-    }
-
-
-    @Test
-    fun forceLockActionRequiresExplicitConfirmation() {
-        var lockRequests = 0
+    fun offlineIntegrityFallbackIsPresentedAsItsOwnStatus() {
         render {
             V17ConsoleSettingsScreen(
                 isDark = false,
@@ -268,29 +245,22 @@ class SettingsWiringTest {
                 globalIntelEnabled = false,
                 onGlobalIntelChanged = {},
                 batteryActive = false,
-                adminActive = true,
                 safActive = false,
+                integrityState = SecurityVerificationState(
+                    status = SecurityVerificationStatus.LOCAL_BASELINE_PASSED,
+                    localBaselineTrusted = true
+                ),
                 onBatteryToggle = {},
-                onAdminToggle = {},
                 onSafToggle = {},
-                onLockDeviceNow = { lockRequests++ },
                 onImportYara = {},
                 onThreatFeedSync = {},
                 onBenchmarks = {},
                 onOpenPro = {}
             )
         }
-
-        composeRule.onNodeWithTag("console.device-admin.lock")
-            .performScrollTo()
-            .assertIsDisplayed()
-            .performClick()
-        assertEquals(0, lockRequests)
-
-        composeRule.onNodeWithText(context.getString(com.vibesync.antivirus.R.string.device_admin_lock_confirm))
-            .assertIsDisplayed()
-            .performClick()
-        assertEquals(1, lockRequests)
+        composeRule.onNodeWithText(
+            context.getString(com.vibesync.antivirus.R.string.device_integrity_status_local_passed)
+        ).assertIsDisplayed()
     }
 
 }
