@@ -1,10 +1,10 @@
 {
   "bomFormat" : "CycloneDX",
   "specVersion" : "1.6",
-  "serialNumber" : "urn:uuid:45780918-de1d-4718-a21a-86cf663f33ee",
+  "serialNumber" : "urn:uuid:5a9cc22f-2371-4650-bddc-267023f89d66",
   "version" : 1,
   "metadata" : {
-    "timestamp" : "2026-11-12T05:26:32Z",
+    "timestamp" : "2026-11-13T09:29:18Z",
     "tools" : {
       "components" : [
         {
@@ -26,7 +26,7 @@
       "externalReferences" : [
         {
           "type" : "build-system",
-          "url" : "https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/actions/runs/43161317943"
+          "url" : "https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/actions/runs/43401617731"
         },
         {
           "type" : "vcs",
@@ -10850,42 +10850,42 @@
     },
     {
       "type" : "library",
-      "bom-ref" : "pkg:maven/com.android.billingclient/billing-ktx@8.3.0?type=aar",
+      "bom-ref" : "pkg:maven/com.android.billingclient/billing-ktx@9.1.0?type=aar",
       "group" : "com.android.billingclient",
       "name" : "billing-ktx",
-      "version" : "8.3.0",
+      "version" : "9.1.0",
       "hashes" : [
         {
           "alg" : "MD5",
-          "content" : "717ddab3c7157c48632a719b8da5df5c"
+          "content" : "2b5cf408f2dc3366837c6f0f48d51b58"
         },
         {
           "alg" : "SHA-1",
-          "content" : "92ae726bad252ea9819216d0ec9d9721193d40a0"
+          "content" : "72f2f15c3c8c457348ecc37de431284964a291ca"
         },
         {
           "alg" : "SHA-256",
-          "content" : "2a8b1c7ad98429b4245ffaba1db48f1bdc78f6cd097aec256d3d6e0baf1b7cae"
+          "content" : "21883d01509e984c2555374d710700e1cfa56996f95c7cb4cb7b384e167aa41c"
         },
         {
           "alg" : "SHA-512",
-          "content" : "70a1e8d67724846a1877b7f91859603e4563a555ce36792586766a37c539a3e3f0c0e968288eca3546c4de163e0d6e7ffde76505b9c4c11c83483881f3301e5f"
+          "content" : "a8863e027d5dff32612b90f8988cb9897ef4499a26d1086132d0195ea36486f36ed2e2032c54c6c0c1592f11d0e1be8f7c541c7abb282f1f9d4a8dc9a2037d80"
         },
         {
           "alg" : "SHA3-256",
-          "content" : "06aff53124e1a6f98950382199f57e7b43ad8529742adec04c39df79c356ad8c"
+          "content" : "a42e033768a22fbb86693d6341729cc2954db2173d8e734c36836e3c2abc4b3f"
         },
         {
           "alg" : "SHA3-512",
-          "content" : "84345d797c2403fcd8da723ab4e3520aa6460f1638b84e1e31fe1aa649a2bd1a90f05b2261f66a3f49372888f0a48e78c7b5542992c5a6f6671b39867d39e6a0"
+          "content" : "b2471bd20e62001a0e2a7ababbcd7c1abec37de8f0e2a4b3a24af2a490479ecd167ad322c7f23dabb47230b43cd279ff84423474ebdf68578c3c7ab5fc6a23fb"
         },
         {
           "alg" : "SHA-384",
-          "content" : "f97e6f0eff0060b3deef7995793ad2d2577e6fdf222219454bd69402a4d818ae2f519c53f9c29af0f6329502022dd1d7"
+          "content" : "93a9ca098a461897154bc425c90a77e6539f567058034e43a6896e41cedd1e7ad39127a8e575bbc0d2ada2b107d6904e"
         },
         {
           "alg" : "SHA3-384",
-          "content" : "bd4650ca045d339cbcf0f80700050e5878a2e7e2b111d0c8953c6ecaf24f1481511a2c8ad62211531eb9603dbc9c994a"
+          "content" : "b1a27db2df9664170014aad2688dfe067e405a1746934846b4b1633101de7e7a269cfad3a48a8b121073ce592df50030"
         }
       ],
       "licenses" : [
@@ -10896,7 +10896,7 @@
           }
         }
       ],
-      "purl" : "pkg:maven/com.android.billingclient/billing-ktx@8.3.0?type=aar",
+      "purl" : "pkg:maven/com.android.billingclient/billing-ktx@9.1.0?type=aar",
       "modified" : false,
       "properties" : [
         {
@@ -10907,42 +10907,42 @@
     },
     {
       "type" : "library",
-      "bom-ref" : "pkg:maven/com.android.billingclient/billing@8.3.0?type=aar",
+      "bom-ref" : "pkg:maven/com.android.billingclient/billing@9.1.0?type=aar",
       "group" : "com.android.billingclient",
       "name" : "billing",
-      "version" : "8.3.0",
+      "version" : "9.1.0",
       "hashes" : [
         {
           "alg" : "MD5",
-          "content" : "851ba0281ecf72635dae34fac0fd9a57"
+          "content" : "3f15d1207209e8f5468f7283adcd2bb8"
         },
         {
           "alg" : "SHA-1",
-          "content" : "db89e11a0b3b2929b37eabcb6fd14beaefda1702"
+          "content" : "0df0528975494b56c68e178ce5ee9aee52a4479f"
         },
         {
           "alg" : "SHA-256",
-          "content" : "9810b5cd47e20bc82b354f3583c9d3bf7c42b33e64e192dce0495d036a85f505"
+          "content" : "d28286d4e4c18725510980de01211d9b72501e7146d96817fa0c9999af9b0d22"
         },
         {
           "alg" : "SHA-512",
-          "content" : "e364c3e23de039dbd5d1ecfd2abbc7481fa1d39272b660288fa25ce006fd63298692e7e89f9b5c5d1c10d60535de651a505d0889d13e6f59567e9872eef6e995"
+          "content" : "217e4971c8c2397551efeb8881bd39ab9dabf8fd65b22f7cc89f7461c6e594a63e99fffbff750aa5685338af8e88178dc23c528aa87f7e1472917975692c6f9f"
         },
         {
           "alg" : "SHA3-256",
-          "content" : "16b0649c634315092ea66cd5937487b5b1fa4366473b9b63e3e03c1261f37c52"
+          "content" : "b1991759f9c5900516b1a1874829f742fa3a4bc30208e252a34ae355a97f31fa"
         },
         {
           "alg" : "SHA3-512",
-          "content" : "d3db8ff404e9381376c22fb540feb524724a2e20ba047d2f5cfc4a54c4a6656cd405bd5d04e872e4258e357295565c81daac88356889d82ee741030735086b17"
+          "content" : "72a83216a491a898d33c442d3d1b33a84890d6580cbe3ca6e7474f1f5f8e95156bde279c41ff64eafda9ea712b4fe32a42567ee97dd780774ee4c032271aba1f"
         },
         {
           "alg" : "SHA-384",
-          "content" : "fdafe730ac1f33245cdc77abc356ac717b90e2667c0b8df4a0ee0f066c1ff22fde41ea7a41f404512038b756f9f3a294"
+          "content" : "2cbc320776749164fdf0eab03824cb3da3e7abf2a78eafcdb52c577adbf5a0cd2b039adf880713e727dc1b40e9a29e4a"
         },
         {
           "alg" : "SHA3-384",
-          "content" : "92a4b4eb13c1a9c06c06f2ec0ec6d55ae08687ac5d89a3e1c8737a61e56f87cbcbf674a5884f9554f12f1f3313016723"
+          "content" : "148e8b4f8f27fcb8daa34d798c3cb566fdbbbe5491ad2d2515da8c5f9132a470de96b348e736b05b22ec74c2bfb90b49"
         }
       ],
       "licenses" : [
@@ -10953,7 +10953,7 @@
           }
         }
       ],
-      "purl" : "pkg:maven/com.android.billingclient/billing@8.3.0?type=aar",
+      "purl" : "pkg:maven/com.android.billingclient/billing@9.1.0?type=aar",
       "modified" : false,
       "properties" : [
         {
@@ -13381,6 +13381,132 @@
     },
     {
       "type" : "library",
+      "bom-ref" : "pkg:maven/com.google.ai.edge.litert/litert-api@1.4.2?type=aar",
+      "group" : "com.google.ai.edge.litert",
+      "name" : "litert-api",
+      "version" : "1.4.2",
+      "description" : "A library that helps deploy machine learning models on mobile devices",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "649a0c86e2384c87dd9d0fe32266a48d"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "5fe427c2280937eec7d22370da7463814d99273c"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "66c2ba8086bd5cbf89bec2bd81c3de6c1a852312829cd55bc30c9dd26ffa357c"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "62f4f69ae57778516795fa1da5dd2516b7f99bd0edda06405cae31843f948e4b391e13e654cb124185a93d714f31ae2ab01db90b4ba21d34555467d75a1f2d2d"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "38082f88637afc7e860065bf60f447fab4a431d68a9c7dfc5badfed4a2e8c8b4"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "d6f860fbfa7ff27317a9bc7e95cb93f796e0c146fe2b4018c99ba541ab07b20f35d21d6f34469eea9e358431016bd1fedcb74a06c6f2c85a0f3b9fd0188c4812"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "903a832507704d33ba60d0c54d7e6edf8c51ddcbe058933019983a86784db5b45930f1fa1b6aa036448c36fa2140b229"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "0f630df445d86a428af5a1c508e284816e904b3aabb9d3f6645f14a5818f995233788592db9c8d83547da0b6a8793e73"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/com.google.ai.edge.litert/litert-api@1.4.2?type=aar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://github.com/tensorflow/tensorflow/tree/master/"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/com.google.ai.edge.litert/litert@1.4.2?type=aar",
+      "group" : "com.google.ai.edge.litert",
+      "name" : "litert",
+      "version" : "1.4.2",
+      "description" : "A library that helps deploy machine learning models on mobile devices",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "89b6ce29b45b7d28cf3bd635a5e1ed16"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "7d56d65bea6eab856c924c19cdf3c34d61bc76a4"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "9b02cdf9db0a698b341b59e75c54ab8221d6304577cc43830d01024caf1fca74"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "cdaa5a9b835687ac6ad570f1484b442c4c1bfbf08771e085d8484cbead7c6cc9ce0c681a7b30f919ba484370312f1ddccbb1a5c140ae7c493f11e1c27fb7e507"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "477b4abedcd4076d9777003e7d9fca788dc8cb4e90d23a435df5de00d6acf153"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "a2efcfbd961f81e7d401dbc8bb12548a56bed6872aca888ddb3e1aeb9f88eb9699ce71af8a47db02ec0537304b9d62eb2f54ee1654e60fb4b36fb3ade6ec4366"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "909a7c70b4f6b45f6372de259089bd194784d6542e21754d7418a795ebd617084197042f95d4d9946dcfee23f7b9d230"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "662d6176f7e82bc5ba82a440d669ae442b43963671b18fc5cef0782c28998f6e4f75041775eee7d6551270524f7d1a9c"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/com.google.ai.edge.litert/litert@1.4.2?type=aar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://github.com/tensorflow/tensorflow/tree/master/"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
       "bom-ref" : "pkg:maven/com.google.android.datatransport/transport-api@3.0.0?type=aar",
       "group" : "com.google.android.datatransport",
       "name" : "transport-api",
@@ -14005,63 +14131,6 @@
     },
     {
       "type" : "library",
-      "bom-ref" : "pkg:maven/com.google.android.odml/image@1.0.0-beta1?type=aar",
-      "group" : "com.google.android.odml",
-      "name" : "image",
-      "version" : "1.0.0-beta1",
-      "hashes" : [
-        {
-          "alg" : "MD5",
-          "content" : "eee049dd9b864d118568c59745d4f169"
-        },
-        {
-          "alg" : "SHA-1",
-          "content" : "a508729dbdb2a0d27728b0ef42223bba53013d1c"
-        },
-        {
-          "alg" : "SHA-256",
-          "content" : "2e71aa31f83a9415277f119de67195726f07d1760e9542c111778c320e3aa1f2"
-        },
-        {
-          "alg" : "SHA-512",
-          "content" : "954d95a7091258b31b6075999d6f54f50e2a1e490df5efacaceb562fb1b2fda886f680f615e5a55d305e5a53745c3f4e0a43a5cf6a93822860c657f509072967"
-        },
-        {
-          "alg" : "SHA3-256",
-          "content" : "b3082e1f99e28b875c3b4e79c9ea5bae07c63879d97e59d62a394b40cd5d38cd"
-        },
-        {
-          "alg" : "SHA3-512",
-          "content" : "8fb8dcb8d99189ef0938271e7cd3e8f7fa809158d72be405a0d14559d399e04881a6d928742bc8089046c6c21aaab4d838e5f40427c5911c0239004e6aef0b8c"
-        },
-        {
-          "alg" : "SHA-384",
-          "content" : "5d1593e965082f8a28c118da87387641e7b4b4fa5c329ddbf62f0520c72be69bcbd89a34f7d746d8d90b62826fb5f5f2"
-        },
-        {
-          "alg" : "SHA3-384",
-          "content" : "35b8bebf0eaaed7affe79597485d6a4241bbdf2521ffa4907410a7c7ed1de29da0832e107302cb198d9fb8ca65859875"
-        }
-      ],
-      "licenses" : [
-        {
-          "license" : {
-            "name" : "Android Software Development Kit License",
-            "url" : "https://developer.android.com/studio/terms.html"
-          }
-        }
-      ],
-      "purl" : "pkg:maven/com.google.android.odml/image@1.0.0-beta1?type=aar",
-      "modified" : false,
-      "properties" : [
-        {
-          "name" : "cdx:maven:package:test",
-          "value" : "false"
-        }
-      ]
-    },
-    {
-      "type" : "library",
       "bom-ref" : "pkg:maven/com.google.android.play/app-update-ktx@2.1.0?type=aar",
       "group" : "com.google.android.play",
       "name" : "app-update-ktx",
@@ -14280,6 +14349,63 @@
         }
       ],
       "purl" : "pkg:maven/com.google.android.play/hsdp@2.2.0?type=aar",
+      "modified" : false,
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/com.google.android.play/integrity@1.3.0?type=aar",
+      "group" : "com.google.android.play",
+      "name" : "integrity",
+      "version" : "1.3.0",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "f1efb0775f5d3481a67c00eb74bf71f7"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "5d085d3269ae8f34eaf67c9ce08d0fbba7fb6886"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "36abfc439750b825eddb3f5707e7ef021c4b38ece1dc72826685aebbd7004c33"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "7a2dc786aaa843082cb3026983a25bcce6a651620e04d88ea61f72cc859f384572b6aef09b6ffc04dbdee226250f25bd3d590a362610c6f91cd32cbb83cc8068"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "332b6c5f11baa6babd2a4a0d9bba34a55d10448d16800055062e4f1f74e190be"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "5d0d94c9784cc133cacbe1d2b50268107ac93f9f8c637cc03f3492fa7705df989e3806464cff8ecb6da6d109dd8bf0b00daffd75b6f9257a158bfacfe2827993"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "0a55a70ae9223f12c2bf8c2e7aeac808ad9a3737940d40729eec0f3a82c5a42f0773d2dcf2714b6e0678696338b85fb1"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "ddbb36dcb5623699fdc194697142bfd797d9882d73dd473a039c67e94127a6af631dc6aa7b9f807c149a6e84272e4aee"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "name" : "Play Integrity API Terms of Service",
+            "url" : "https://developer.android.com/google/play/integrity/overview#tos"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/com.google.android.play/integrity@1.3.0?type=aar",
       "modified" : false,
       "properties" : [
         {
@@ -22983,69 +23109,6 @@
     },
     {
       "type" : "library",
-      "bom-ref" : "pkg:maven/org.checkerframework/checker-qual@2.5.8?type=jar",
-      "group" : "org.checkerframework",
-      "name" : "checker-qual",
-      "version" : "2.5.8",
-      "description" : "Checker Qual is the set of annotations (qualifiers) and supporting classes used by the Checker Framework to type check Java source code. Please see artifact: org.checkerframework:checker",
-      "hashes" : [
-        {
-          "alg" : "MD5",
-          "content" : "b03cb4466d6840985cf35119a4f6b729"
-        },
-        {
-          "alg" : "SHA-1",
-          "content" : "41c6fa63cba0fea55ebd3581d42b3d2c5cca98b2"
-        },
-        {
-          "alg" : "SHA-256",
-          "content" : "bd655da535df1eeb96fc8874d05d0f7029209de95096e4f84bd07c66688a210d"
-        },
-        {
-          "alg" : "SHA-512",
-          "content" : "6c0e829a9ab21e07b0c13db770d4b822f877cc1ea339bab4fc2123eb4b5fef16c833aa4ea5d9205f0798492f637478f5315a9e13b348a46fe53aa52f7ceaac52"
-        },
-        {
-          "alg" : "SHA3-256",
-          "content" : "3998035f35d6f718c5276e86fa9af6b0228a805bcc325da55b23ef8fb8d63d02"
-        },
-        {
-          "alg" : "SHA3-512",
-          "content" : "f5a11d53b4e138ce0d293ed0dcf6d81207985f3267218dc381ffd139f4d505be4457495a4dec7c3bfea4cd034b2fe7c58658dc66b051fc74944e9fa208cc73fb"
-        },
-        {
-          "alg" : "SHA-384",
-          "content" : "bfabf22bded3b4e14cd096ba564b3db1d81cacc23b81509c5624bb10d80a4aab6d3069e0944abce070b9c014a9181e43"
-        },
-        {
-          "alg" : "SHA3-384",
-          "content" : "04b91cd22910887d0fc4a35cc5582d8421bf7e7053dedfa559c597b2d2aebec5f6a3729f7dc69f12fd68e0137ff8555c"
-        }
-      ],
-      "licenses" : [
-        {
-          "license" : {
-            "id" : "MIT"
-          }
-        }
-      ],
-      "purl" : "pkg:maven/org.checkerframework/checker-qual@2.5.8?type=jar",
-      "modified" : false,
-      "externalReferences" : [
-        {
-          "type" : "vcs",
-          "url" : "https://github.com/typetools/checker-framework.git"
-        }
-      ],
-      "properties" : [
-        {
-          "name" : "cdx:maven:package:test",
-          "value" : "false"
-        }
-      ]
-    },
-    {
-      "type" : "library",
       "bom-ref" : "pkg:maven/org.checkerframework/checker-qual@3.33.0?type=jar",
       "group" : "org.checkerframework",
       "name" : "checker-qual",
@@ -28984,258 +29047,6 @@
     },
     {
       "type" : "library",
-      "bom-ref" : "pkg:maven/org.tensorflow/tensorflow-lite-api@2.14.0?type=aar",
-      "group" : "org.tensorflow",
-      "name" : "tensorflow-lite-api",
-      "version" : "2.14.0",
-      "description" : "A library helps deploy machine learning models on mobile devices",
-      "hashes" : [
-        {
-          "alg" : "MD5",
-          "content" : "b2a6369bf3cdc204472f722f67a6298f"
-        },
-        {
-          "alg" : "SHA-1",
-          "content" : "b9fa4f69c9bfe85c9afea0355863b342c7e25f4f"
-        },
-        {
-          "alg" : "SHA-256",
-          "content" : "1d1ffffe9d15969882c856249a3018ccd2199319e195a63b7b58699fc8cb836f"
-        },
-        {
-          "alg" : "SHA-512",
-          "content" : "02ac0d372b08b8ebc7abc40dca3985ac30d77e7bd62e141846fa043fd6d19b79195ce0b555c4ae229f3dca8d3433685c6e040f9696af30f6f2364a4a0496515b"
-        },
-        {
-          "alg" : "SHA3-256",
-          "content" : "167264e5fdf82c89a7e562d791b983740ac5ada8c8782bb513fba3f814eabc7e"
-        },
-        {
-          "alg" : "SHA3-512",
-          "content" : "b5ea3b5efbe38c06a7bd8a30d06ec305b84d5ec2db90796186d990b6e7f1d8acdec22292d58198f2b5bc1d2be27c964ac1aa4a7aecf32f72a4841c93e453c4f0"
-        },
-        {
-          "alg" : "SHA-384",
-          "content" : "c07fa835865505bc5755c9025c3b8ba08ef41ee18e6ec1618a05cb586ab9d48bc828de4b0e85a7306178fb304b27be83"
-        },
-        {
-          "alg" : "SHA3-384",
-          "content" : "2d389db0de6617ed08fd617cda1cec3d7e82bd90d0c6871d9a5e7388f581b11e011f8e12048afcac5c9416a5f71451ff"
-        }
-      ],
-      "licenses" : [
-        {
-          "license" : {
-            "id" : "Apache-2.0"
-          }
-        }
-      ],
-      "purl" : "pkg:maven/org.tensorflow/tensorflow-lite-api@2.14.0?type=aar",
-      "modified" : false,
-      "externalReferences" : [
-        {
-          "type" : "vcs",
-          "url" : "https://github.com/tensorflow/tensorflow/tree/master/"
-        }
-      ],
-      "properties" : [
-        {
-          "name" : "cdx:maven:package:test",
-          "value" : "false"
-        }
-      ]
-    },
-    {
-      "type" : "library",
-      "bom-ref" : "pkg:maven/org.tensorflow/tensorflow-lite-support-api@0.4.4?type=aar",
-      "group" : "org.tensorflow",
-      "name" : "tensorflow-lite-support-api",
-      "version" : "0.4.4",
-      "description" : "A library with utilities and data structures to deploy TFLite models on-device. It doesn't have TFLite interpreter dependency unlike \"tensorflow-lite-support\".",
-      "hashes" : [
-        {
-          "alg" : "MD5",
-          "content" : "6d6bfc2c4ffc2cc7fd49e62cf984d383"
-        },
-        {
-          "alg" : "SHA-1",
-          "content" : "136db9594d4ae528bced44d6ccf225df82bd397f"
-        },
-        {
-          "alg" : "SHA-256",
-          "content" : "072481f7f3822074996a06afb1d784efd8287319b38e3e48572bb299079298e4"
-        },
-        {
-          "alg" : "SHA-512",
-          "content" : "3322ac11d9e283d2e9334bf1016ece90025159badf3bc27f1a157a1504b83b58e180ed72035583fc025777a0d339109e61907426a991aad2ac32cfb26cb2fc6f"
-        },
-        {
-          "alg" : "SHA3-256",
-          "content" : "f294d94d012edbbe008dab65d89458cf7ed1abbc8ac0e65bc53ac0f7f8abb7a8"
-        },
-        {
-          "alg" : "SHA3-512",
-          "content" : "6477542b7a5f2e551a7b6fc6dd74ee0a703f426793c4f4f29a5a88ed0bf119f96362070090992ce285b4bb113c09efa4bf671b8da2738cae58ef5510cee5bf55"
-        },
-        {
-          "alg" : "SHA-384",
-          "content" : "3e472ebb86fa1d536c9d3af12dac6cddd233cf956c400599f667bf84865eff36d7a06bae3574261a9180ce0b203c27a2"
-        },
-        {
-          "alg" : "SHA3-384",
-          "content" : "0cf8dd1bb342849df1159755a4a9a267c7808ad7e1dd1b12786c416c41c36acdcbedfc4991390dff2e5c9520da09a0d9"
-        }
-      ],
-      "licenses" : [
-        {
-          "license" : {
-            "id" : "Apache-2.0"
-          }
-        }
-      ],
-      "purl" : "pkg:maven/org.tensorflow/tensorflow-lite-support-api@0.4.4?type=aar",
-      "modified" : false,
-      "externalReferences" : [
-        {
-          "type" : "vcs",
-          "url" : "https://github.com/tensorflow/tflite-support/tree/master/"
-        }
-      ],
-      "properties" : [
-        {
-          "name" : "cdx:maven:package:test",
-          "value" : "false"
-        }
-      ]
-    },
-    {
-      "type" : "library",
-      "bom-ref" : "pkg:maven/org.tensorflow/tensorflow-lite-support@0.4.4?type=aar",
-      "group" : "org.tensorflow",
-      "name" : "tensorflow-lite-support",
-      "version" : "0.4.4",
-      "description" : "A library with utilities and data structures to deploy TFLite models on-device",
-      "hashes" : [
-        {
-          "alg" : "MD5",
-          "content" : "161e35fe2f11a1dec437867e26d8f3bf"
-        },
-        {
-          "alg" : "SHA-1",
-          "content" : "db19d9dabe7ad60aeff56b4870bde8c5d55e88f5"
-        },
-        {
-          "alg" : "SHA-256",
-          "content" : "1c1d10b8cec85efbe8024e755641cb044f1f10e204db773f868c327d398fc5fa"
-        },
-        {
-          "alg" : "SHA-512",
-          "content" : "37f2b09715d105d6e222646600108fa53928e33b126c4eca54a7667bac478da540b9f16b4606e2851db5c64990eacb62f61721343db0349003bb8d480a4ae97f"
-        },
-        {
-          "alg" : "SHA3-256",
-          "content" : "8aa7afdc54e175dd5fa6e3d1658a5657e5b1c6196a46c5c8dcd8313fdb036546"
-        },
-        {
-          "alg" : "SHA3-512",
-          "content" : "ce0bfa296b114a1813646d4d53ada37b4a9f10d195d2a799b68043da72140fc4c6e9248ebcd061d1a239dd85fa02ac2d90da1f65eb72bc7019a7c0ddf0ef3412"
-        },
-        {
-          "alg" : "SHA-384",
-          "content" : "e07622bc60ee9145331e15e5101af558102c5f505f28d4269cb210fa1b74fbe86c6f11b41199dbeaaf79dc7c58ab5329"
-        },
-        {
-          "alg" : "SHA3-384",
-          "content" : "289fe22c64867af668ec620853f73d3511916e93234169595c4518a4006318d37a690fbe32006e275afaff6a51ea047e"
-        }
-      ],
-      "licenses" : [
-        {
-          "license" : {
-            "id" : "Apache-2.0"
-          }
-        }
-      ],
-      "purl" : "pkg:maven/org.tensorflow/tensorflow-lite-support@0.4.4?type=aar",
-      "modified" : false,
-      "externalReferences" : [
-        {
-          "type" : "vcs",
-          "url" : "https://github.com/tensorflow/tflite-support/tree/master/"
-        }
-      ],
-      "properties" : [
-        {
-          "name" : "cdx:maven:package:test",
-          "value" : "false"
-        }
-      ]
-    },
-    {
-      "type" : "library",
-      "bom-ref" : "pkg:maven/org.tensorflow/tensorflow-lite@2.14.0?type=aar",
-      "group" : "org.tensorflow",
-      "name" : "tensorflow-lite",
-      "version" : "2.14.0",
-      "description" : "A library helps deploy machine learning models on mobile devices",
-      "hashes" : [
-        {
-          "alg" : "MD5",
-          "content" : "8d021619e4e573d87b40cede7b759b75"
-        },
-        {
-          "alg" : "SHA-1",
-          "content" : "ef56a7801678e6fb8ae07750d16564651df55740"
-        },
-        {
-          "alg" : "SHA-256",
-          "content" : "709db81fbfba461b1ed27e9c1e83817c2d7cc60469074eaa36c88fb8dbea4886"
-        },
-        {
-          "alg" : "SHA-512",
-          "content" : "59fd64a99c40d075021333723eb840d67d8281f853b60d06621566deb63db65600475945e9c15e167c8902153149f2b2894d1c766b7f85cf1698641d62c59a18"
-        },
-        {
-          "alg" : "SHA3-256",
-          "content" : "0856dabc49522bb46188ec97bedace63c63444c0c6cdf62d87bf6acdfb6768a6"
-        },
-        {
-          "alg" : "SHA3-512",
-          "content" : "39029526338f74f87015166d09150a6c58705fb4f54c12bfd865567d47cd995244abe517c8e433e848160e6b372fdc7c215d64bed8015d74c3aca95396cae477"
-        },
-        {
-          "alg" : "SHA-384",
-          "content" : "08705791b85b2b189d881c878e97459233f2f8c955dc524f0928ad02ceb6269ebe7beba6cf101643b7853953ea774ae5"
-        },
-        {
-          "alg" : "SHA3-384",
-          "content" : "6277732d89a5f3500fccdc664fc5c1068894ac1004e8aae3797a7ce53b8daaaaea63b8bd3eedb0a644a8fbfd98fe468b"
-        }
-      ],
-      "licenses" : [
-        {
-          "license" : {
-            "id" : "Apache-2.0"
-          }
-        }
-      ],
-      "purl" : "pkg:maven/org.tensorflow/tensorflow-lite@2.14.0?type=aar",
-      "modified" : false,
-      "externalReferences" : [
-        {
-          "type" : "vcs",
-          "url" : "https://github.com/tensorflow/tensorflow/tree/master/"
-        }
-      ],
-      "properties" : [
-        {
-          "name" : "cdx:maven:package:test",
-          "value" : "false"
-        }
-      ]
-    },
-    {
-      "type" : "library",
       "bom-ref" : "pkg:maven/org.xerial/sqlite-jdbc@3.41.2.2?type=jar",
       "group" : "org.xerial",
       "name" : "sqlite-jdbc",
@@ -31183,17 +30994,18 @@
       ]
     },
     {
-      "ref" : "pkg:maven/com.android.billingclient/billing-ktx@8.3.0?type=aar",
+      "ref" : "pkg:maven/com.android.billingclient/billing-ktx@9.1.0?type=aar",
       "dependsOn" : [
-        "pkg:maven/com.android.billingclient/billing@8.3.0?type=aar",
+        "pkg:maven/com.android.billingclient/billing@9.1.0?type=aar",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
         "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.10.2?type=jar"
       ]
     },
     {
-      "ref" : "pkg:maven/com.android.billingclient/billing@8.3.0?type=aar",
+      "ref" : "pkg:maven/com.android.billingclient/billing@9.1.0?type=aar",
       "dependsOn" : [
         "pkg:maven/androidx.activity/activity@1.10.1?type=aar",
+        "pkg:maven/androidx.core/core@1.16.0?type=aar",
         "pkg:maven/com.google.android.datatransport/transport-api@3.0.0?type=aar",
         "pkg:maven/com.google.android.datatransport/transport-backend-cct@3.1.8?type=aar",
         "pkg:maven/com.google.android.datatransport/transport-runtime@3.1.8?type=aar",
@@ -31568,6 +31380,16 @@
       ]
     },
     {
+      "ref" : "pkg:maven/com.google.ai.edge.litert/litert-api@1.4.2?type=aar",
+      "dependsOn" : [ ]
+    },
+    {
+      "ref" : "pkg:maven/com.google.ai.edge.litert/litert@1.4.2?type=aar",
+      "dependsOn" : [
+        "pkg:maven/com.google.ai.edge.litert/litert-api@1.4.2?type=aar"
+      ]
+    },
+    {
       "ref" : "pkg:maven/com.google.android.datatransport/transport-api@3.0.0?type=aar",
       "dependsOn" : [
         "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
@@ -31690,10 +31512,6 @@
       ]
     },
     {
-      "ref" : "pkg:maven/com.google.android.odml/image@1.0.0-beta1?type=aar",
-      "dependsOn" : [ ]
-    },
-    {
       "ref" : "pkg:maven/com.google.android.play/app-update-ktx@2.1.0?type=aar",
       "dependsOn" : [
         "pkg:maven/androidx.core/core@1.16.0?type=aar",
@@ -31726,6 +31544,14 @@
         "pkg:maven/androidx.appcompat/appcompat-resources@1.4.1?type=aar",
         "pkg:maven/androidx.appcompat/appcompat-resources@1.7.0?type=aar",
         "pkg:maven/com.google.android.gms/play-services-basement@18.9.0?type=aar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/com.google.android.play/integrity@1.3.0?type=aar",
+      "dependsOn" : [
+        "pkg:maven/com.google.android.gms/play-services-basement@18.9.0?type=aar",
+        "pkg:maven/com.google.android.gms/play-services-tasks@18.2.0?type=aar",
+        "pkg:maven/com.google.android.play/core-common@2.0.3?type=aar"
       ]
     },
     {
@@ -32280,7 +32106,7 @@
         "pkg:maven/androidx.test/runner@1.6.2?type=aar",
         "pkg:maven/androidx.work/work-runtime-ktx@2.10.2?type=aar",
         "pkg:maven/app.cash.paparazzi/paparazzi@2.0.0-alpha02?type=jar",
-        "pkg:maven/com.android.billingclient/billing-ktx@8.3.0?type=aar",
+        "pkg:maven/com.android.billingclient/billing-ktx@9.1.0?type=aar",
         "pkg:maven/com.android.tools.layoutlib/layoutlib-resources@15.2.3?type=jar",
         "pkg:maven/com.android.tools.layoutlib/layoutlib-runtime@15.2.3?type=jar",
         "pkg:maven/com.android.tools.utp/android-device-provider-ddmlib@31.13.2?type=jar",
@@ -32291,8 +32117,10 @@
         "pkg:maven/com.android.tools.utp/android-test-plugin-host-emulator-control@31.13.2?type=jar",
         "pkg:maven/com.android.tools.utp/android-test-plugin-host-logcat@31.13.2?type=jar",
         "pkg:maven/com.android.tools.utp/android-test-plugin-result-listener-gradle@31.13.2?type=jar",
+        "pkg:maven/com.google.ai.edge.litert/litert@1.4.2?type=aar",
         "pkg:maven/com.google.android.libraries.ads.mobile.sdk/ads-mobile-sdk@1.6.0?type=aar",
         "pkg:maven/com.google.android.play/app-update-ktx@2.1.0?type=aar",
+        "pkg:maven/com.google.android.play/integrity@1.3.0?type=aar",
         "pkg:maven/com.google.android.ump/user-messaging-platform@4.0.0?type=aar",
         "pkg:maven/com.google.crypto.tink/tink-android@1.20.0?type=jar",
         "pkg:maven/com.google.guava/guava@33.4.8-android?type=jar",
@@ -32319,9 +32147,7 @@
         "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-android@1.10.2?type=jar",
         "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-test@1.10.2?type=jar",
         "pkg:maven/org.json/json@20240303?type=jar",
-        "pkg:maven/org.smali/dexlib2@2.5.2?type=jar",
-        "pkg:maven/org.tensorflow/tensorflow-lite-support@0.4.4?type=aar",
-        "pkg:maven/org.tensorflow/tensorflow-lite@2.14.0?type=aar"
+        "pkg:maven/org.smali/dexlib2@2.5.2?type=jar"
       ]
     },
     {
@@ -32848,10 +32674,6 @@
       "dependsOn" : [
         "pkg:maven/org.bouncycastle/bcprov-jdk18on@1.80.2?type=jar"
       ]
-    },
-    {
-      "ref" : "pkg:maven/org.checkerframework/checker-qual@2.5.8?type=jar",
-      "dependsOn" : [ ]
     },
     {
       "ref" : "pkg:maven/org.checkerframework/checker-qual@3.33.0?type=jar",
@@ -33516,31 +33338,6 @@
         "pkg:maven/com.google.code.findbugs/jsr305@3.0.2?type=jar",
         "pkg:maven/com.google.guava/guava@33.4.8-android?type=jar",
         "pkg:maven/com.google.guava/guava@33.4.8-jre?type=jar"
-      ]
-    },
-    {
-      "ref" : "pkg:maven/org.tensorflow/tensorflow-lite-api@2.14.0?type=aar",
-      "dependsOn" : [ ]
-    },
-    {
-      "ref" : "pkg:maven/org.tensorflow/tensorflow-lite-support-api@0.4.4?type=aar",
-      "dependsOn" : [
-        "pkg:maven/com.google.android.odml/image@1.0.0-beta1?type=aar",
-        "pkg:maven/org.checkerframework/checker-qual@2.5.8?type=jar",
-        "pkg:maven/org.tensorflow/tensorflow-lite-api@2.14.0?type=aar"
-      ]
-    },
-    {
-      "ref" : "pkg:maven/org.tensorflow/tensorflow-lite-support@0.4.4?type=aar",
-      "dependsOn" : [
-        "pkg:maven/org.tensorflow/tensorflow-lite-support-api@0.4.4?type=aar",
-        "pkg:maven/org.tensorflow/tensorflow-lite@2.14.0?type=aar"
-      ]
-    },
-    {
-      "ref" : "pkg:maven/org.tensorflow/tensorflow-lite@2.14.0?type=aar",
-      "dependsOn" : [
-        "pkg:maven/org.tensorflow/tensorflow-lite-api@2.14.0?type=aar"
       ]
     },
     {

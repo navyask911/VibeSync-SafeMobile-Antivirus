@@ -1,6 +1,6 @@
 # Third-party dependency notices
 
-Generated from the CycloneDX SBOM by `scripts/render_third_party_notices.py`. Components: 487.
+Generated from the CycloneDX SBOM by `scripts/render_third_party_notices.py`. Components: 484.
 
 Regenerate this file with the CI SBOM refresh workflow; do not hand-edit dependency rows.
 
@@ -78,13 +78,12 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | bcprov-jdk18on | 1.86 | [Bouncy Castle Licence](https://www.bouncycastle.org/licence.html) | https://github.com/bcgit/bc-java |
 | bcutil-jdk18on | 1.79 | [Bouncy Castle Licence](https://www.bouncycastle.org/licence.html) | https://github.com/bcgit/bc-java |
 | bcutil-jdk18on | 1.80.2 | [Bouncy Castle Licence](https://www.bouncycastle.org/licence.html) | https://github.com/bcgit/bc-java |
-| billing | 8.3.0 | [Android Software Development Kit License](https://developer.android.com/studio/terms.html) | Package URL: pkg:maven/com.android.billingclient/billing@8.3.0?type=aar |
-| billing-ktx | 8.3.0 | [Android Software Development Kit License](https://developer.android.com/studio/terms.html) | Package URL: pkg:maven/com.android.billingclient/billing-ktx@8.3.0?type=aar |
+| billing | 9.1.0 | [Android Software Development Kit License](https://developer.android.com/studio/terms.html) | Package URL: pkg:maven/com.android.billingclient/billing@9.1.0?type=aar |
+| billing-ktx | 9.1.0 | [Android Software Development Kit License](https://developer.android.com/studio/terms.html) | Package URL: pkg:maven/com.android.billingclient/billing-ktx@9.1.0?type=aar |
 | browser | 1.8.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | byte-buddy | 1.17.6 | Apache-2.0 | Package URL: pkg:maven/net.bytebuddy/byte-buddy@1.17.6?type=jar |
 | byte-buddy-agent | 1.17.6 | Apache-2.0 | Package URL: pkg:maven/net.bytebuddy/byte-buddy-agent@1.17.6?type=jar |
 | caffeine | 2.9.3 | Apache-2.0 | https://github.com/ben-manes/caffeine |
-| checker-qual | 2.5.8 | MIT | https://github.com/typetools/checker-framework.git |
 | checker-qual | 3.33.0 | MIT | https://github.com/typetools/checker-framework.git |
 | checker-qual | 3.42.0 | MIT | https://github.com/typetools/checker-framework.git |
 | checker-qual | 3.43.0 | MIT | https://github.com/typetools/checker-framework.git |
@@ -199,7 +198,7 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | httpcore | 4.4.16 | Apache-2.0 | Package URL: pkg:maven/org.apache.httpcomponents/httpcore@4.4.16?type=jar |
 | httpengine-native-provider | 500.1.0 | [Android Software Development Kit License](https://developer.android.com/studio/terms.html) | Package URL: pkg:maven/org.chromium.net/httpengine-native-provider@500.1.0?type=aar |
 | httpmime | 4.5.6 | Apache-2.0 | Package URL: pkg:maven/org.apache.httpcomponents/httpmime@4.5.6?type=jar |
-| image | 1.0.0-beta1 | [Android Software Development Kit License](https://developer.android.com/studio/terms.html) | Package URL: pkg:maven/com.google.android.odml/image@1.0.0-beta1?type=aar |
+| integrity | 1.3.0 | [Play Integrity API Terms of Service](https://developer.android.com/google/play/integrity/overview#tos) | Package URL: pkg:maven/com.google.android.play/integrity@1.3.0?type=aar |
 | interpolator | 1.0.0 | Apache-2.0 | http://source.android.com |
 | istack-commons-runtime | 3.0.8 | BSD-3-Clause | Package URL: pkg:maven/com.sun.istack/istack-commons-runtime@3.0.8?type=jar |
 | j2objc-annotations | 2.8 | Apache-2.0 | Package URL: pkg:maven/com.google.j2objc/j2objc-annotations@2.8?type=jar |
@@ -328,6 +327,8 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | lifecycle-viewmodel-savedstate-android | 2.9.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | listenablefuture | 1.0 | Apache-2.0 | Package URL: pkg:maven/com.google.guava/listenablefuture@1.0?type=jar |
 | listenablefuture | 9999.0-empty-to-avoid-conflict-with-guava | Apache-2.0 | Package URL: pkg:maven/com.google.guava/listenablefuture@9999.0-empty-to-avoid-conflict-with-guava?type=jar |
+| litert | 1.4.2 | Apache-2.0 | https://github.com/tensorflow/tensorflow/tree/master/ |
+| litert-api | 1.4.2 | Apache-2.0 | https://github.com/tensorflow/tensorflow/tree/master/ |
 | loader | 1.0.0 | Apache-2.0 | http://source.android.com |
 | material | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | material-android | 1.8.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
@@ -445,10 +446,6 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | storage | 1.5.0 | Apache-2.0 | Package URL: pkg:maven/androidx.test.services/storage@1.5.0?type=aar |
 | swift-export-embeddable | 2.2.21 | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0) | https://github.com/JetBrains/kotlin |
 | symbol-processing-api | 2.0.10-1.0.24 | Apache-2.0 | https://github.com/google/ksp |
-| tensorflow-lite | 2.14.0 | Apache-2.0 | https://github.com/tensorflow/tensorflow/tree/master/ |
-| tensorflow-lite-api | 2.14.0 | Apache-2.0 | https://github.com/tensorflow/tensorflow/tree/master/ |
-| tensorflow-lite-support | 0.4.4 | Apache-2.0 | https://github.com/tensorflow/tflite-support/tree/master/ |
-| tensorflow-lite-support-api | 0.4.4 | Apache-2.0 | https://github.com/tensorflow/tflite-support/tree/master/ |
 | test-parameter-injector | 1.25 | Apache-2.0 | Package URL: pkg:maven/com.google.testparameterinjector/test-parameter-injector@1.25?type=jar |
 | tink | 1.7.0 | Apache-2.0 | https://github.com/google/tink.git |
 | tink-android | 1.20.0 | Apache-2.0 | https://github.com/tink-crypto/tink-java.git |
@@ -494,7 +491,7 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | work-runtime | 2.10.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | work-runtime-ktx | 2.10.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 
-Metadata completeness: 483/487 components have both a declared licence and a source/package reference.
+Metadata completeness: 480/484 components have both a declared licence and a source/package reference.
 
 ## Metadata requiring manual review
 
