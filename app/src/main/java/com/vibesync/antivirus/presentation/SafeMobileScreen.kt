@@ -39,6 +39,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.WindowInsets
@@ -1492,7 +1493,13 @@ pendingQuarantine?.let { flagged ->
   properties = DialogProperties(dismissOnClickOutside = true, dismissOnBackPress = true),
    onDismissRequest = { pendingGlobalDonationResults = pendingGlobalDonationResults.drop(1) },
    title = { Text(stringResource(R.string.global_threat_intelligence_title)) },
-   text = { Text(stringResource(R.string.global_threat_intelligence_donate_message)) },
+   text = {
+    Column(
+     Modifier.fillMaxWidth().heightIn(max = 200.dp).verticalScroll(rememberScrollState())
+    ) {
+     Text(stringResource(R.string.global_threat_intelligence_donate_message))
+    }
+   },
    confirmButton = {
     TextButton(onClick = {
      pendingGlobalDonationResults = pendingGlobalDonationResults.drop(1)
@@ -1514,7 +1521,13 @@ pendingQuarantine?.let { flagged ->
   properties = DialogProperties(dismissOnClickOutside = true, dismissOnBackPress = true),
    onDismissRequest = { showNotificationPermissionPrompt = false; pendingAlertEnable = false },
    title = { Text(stringResource(R.string.security_alerts_title)) },
-   text = { Text(stringResource(R.string.incident_alerts_explanation)) },
+   text = {
+    Column(
+     Modifier.fillMaxWidth().heightIn(max = 200.dp).verticalScroll(rememberScrollState())
+    ) {
+     Text(stringResource(R.string.incident_alerts_explanation))
+    }
+   },
    confirmButton = {
     TextButton(onClick = {
      showNotificationPermissionPrompt = false
