@@ -346,11 +346,11 @@ class SafeMobileViewModel(
 
     fun scanInstalled() {
         refreshInstalledInventory()
-        runScan(manualScan = true, scanType = "INSTALLED_APPS") { scanSessionId, onProgress -> repository.scanInstalledApps(onProgress, scanSessionId) }
+        runScan(manualScan = true, scanType = "INSTALLED_APPS") { scanSessionId, onProgress -> repository.scanInstalledAppsForSession(scanSessionId, onProgress) }
     }
 
     fun scanFull(manualScan: Boolean = true) = runScan(manualScan, scanType = "FULL_DEVICE") { scanSessionId, onProgress ->
-        repository.scanFull(onProgress, scanSessionId)
+        repository.scanFullForSession(scanSessionId, onProgress)
     }
 
     fun scanSelected(uri: Uri) = runScan(manualScan = true, scanType = "SELECTED_FILE") { scanSessionId, _ ->
@@ -372,7 +372,7 @@ class SafeMobileViewModel(
             }
         }
         runScan(manualScan = true, scanType = "SELECTED_FOLDER", onFileStarted = onFileStarted) { scanSessionId, onProgress ->
-            repository.scanFolderTree(uri, onProgress, onFileStarted = onFileStarted, scanSessionId = scanSessionId)
+            repository.scanFolderTreeForSession(uri, scanSessionId, onProgress, onFileStarted)
         }
     }
 
