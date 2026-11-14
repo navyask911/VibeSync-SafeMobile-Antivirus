@@ -1,5 +1,5 @@
 name: Build and publish signed SafeMobile APK and Play AAB
-# [release-v1.9.2] Compose Scan Lab crash fix, gradient onboarding and audible notifications.
+# [release-v1.10.0] Billing hardening, official branding, incremental SHA-256 caching, bounded parallel scans and efficient APK streaming.
 
 on:
   workflow_dispatch:
@@ -31,6 +31,7 @@ on:
       - "v1.9.0"
       - "v1.9.1"
       - "v1.9.2"
+      - "v1.10.0"
 
 permissions:
   contents: write
@@ -41,7 +42,7 @@ concurrency:
 
 jobs:
   release:
-    if: github.repository == 'navyask911/VibeSync-SafeMobile-Antivirus' && (github.event_name == 'workflow_dispatch' || github.ref_type != 'branch' || github.ref_name != 'main' || contains(github.event.head_commit.message, '[release-v1.9.2]'))
+    if: github.repository == 'navyask911/VibeSync-SafeMobile-Antivirus' && (github.event_name == 'workflow_dispatch' || github.ref_type != 'branch' || github.ref_name != 'main' || contains(github.event.head_commit.message, '[release-v1.10.0]'))
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
@@ -349,13 +350,13 @@ jobs:
             echo "SAFE STOP: Expected Paparazzi PNG screenshots for the four tabs; found $snapshot_count." >&2
             exit 1
           fi
-          zip -qr build/ui-screenshots-v1.9.2.zip app/src/test/snapshots
+          zip -qr build/ui-screenshots-v1.10.0.zip app/src/test/snapshots
           echo "Packaged $snapshot_count Paparazzi screenshots."
 
       - name: Upload four-tab screenshots artifact
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: SafeMobile-v1.9.2-UI-Screenshots-${{ github.run_id }}
+          name: SafeMobile-v1.10.0-UI-Screenshots-${{ github.run_id }}
           path: build/ui-screenshots-v1.9.2.zip
           if-no-files-found: error
           retention-days: 30
@@ -372,14 +373,14 @@ jobs:
           version_name="${{ steps.verify-aab.outputs.version_name }}"
           version_code="${{ steps.verify-aab.outputs.version_code }}"
           if [[ "${GITHUB_REF_TYPE:-}" == "branch" && "${GITHUB_REF_NAME:-}" == "main" ]]; then
-            if [[ "$version_name" != "1.9.2" || "$version_code" != "20261151" ]]; then
-              echo "SAFE STOP: main release trigger expected v1.9.2 / 20261151, got $version_name / $version_code." >&2
+            if [[ "$version_name" != "1.10.0" || "$version_code" != "20261152" ]]; then
+              echo "SAFE STOP: main release trigger expected v1.10.0 / 20261152, got $version_name / $version_code." >&2
               exit 1
             fi
           fi
-          if [[ "${GITHUB_REF_TYPE:-}" == "tag" && "${GITHUB_REF_NAME:-}" == "v1.9.2" ]] ||
-             [[ "${GITHUB_REF_TYPE:-}" == "branch" && "${GITHUB_REF_NAME:-}" == "main" && "$version_name" == "1.9.2" && "$version_code" == "20261151" ]]; then
-            tag="v1.9.2"
+          if [[ "${GITHUB_REF_TYPE:-}" == "tag" && "${GITHUB_REF_NAME:-}" == "v1.10.0" ]] ||
+             [[ "${GITHUB_REF_TYPE:-}" == "branch" && "${GITHUB_REF_NAME:-}" == "main" && "$version_name" == "1.10.0" && "$version_code" == "20261152" ]]; then
+            tag="v1.10.0"
           else
             tag="safemobile-v${{ steps.verify-aab.outputs.version_name }}-code${{ steps.verify-aab.outputs.version_code }}-run${GITHUB_RUN_NUMBER}"
           fi
@@ -391,6 +392,7 @@ jobs:
           Built from commit ${GITHUB_SHA}.
           v1.6.1: Added new launcher icons and splash screen. Fixed text wrapping and added back navigation. Added inline Crown subscription toggle.
           v1.6.2: Accept all file types in the scan document picker for .txt/EICAR testing; preserve the originating screen when backing out of Pro; make the paywall and shared app toolbar wrap and scroll at larger font scales.
+          v1.10.0: Hardens Play Billing failures, integrates the official logo, adds incremental SHA-256 scan caching, semaphore-bounded parallel scanning and streamed APK manifest/DEX YARA inspection. Uses Play versionCode 20261152.
           v1.9.2: Fixes the Scan Lab Compose scroll crash, adds full-screen animated gradient onboarding, and enables the system notification sound on a new high-priority alert channel. Uses Play versionCode 20261151.
           v1.9.1: Adds persistent Room scan history and interrupted-session recovery, scroll-safe onboarding, immediate AppCompat locale updates, corrected protection counts, OEM manifest hardening, SAF WhatsApp/Telegram folder shortcuts and the centralized Security Advisor Hub. Uses Play versionCode 20261150.
           v1.8.1: Corrects the Device Security Score and voice wording, retains deductions for snoozed issues, narrows Device Admin declarations to force-lock, removes SafeMobile overlay special access, reconciles Global Threat Intelligence disclosures, and adds high-priority incident notification fallback. Uses Play versionCode 20261147.\nv1.8.0: Adds notification deep links with contextual file actions, direct Device Admin activation, trust pillar swipe cards, Privacy Dashboard and About Us ecosystem page. Uses a monotonic Play versionCode 20261146.\nv1.7.5: Requests Device Administrator and overlay access only after feature-specific consent; removes overlay access from onboarding and narrows R8 keep rules to required YARA-X JNI names.
