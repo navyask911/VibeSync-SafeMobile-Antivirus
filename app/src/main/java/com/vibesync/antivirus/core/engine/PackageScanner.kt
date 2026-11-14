@@ -320,8 +320,33 @@ class PackageScanner(
    return failed.copy(sourceLocalPath = file.absolutePath, scanSessionId = scanSessionId)
   }
   return try {
-   // Read only package identity before any hash, DEX, model or heuristic work.
-   val identity = pm.getPackageArchiveInfo(file.absolutePath, 0)?.packageName
+   val isApk = file.extension.equals("apk", ignoreCase = true)
+   // PackageManager parses the APK binary manifest directly; no app-side ZIP unpacking is needed.
+   val apkPackageInfo = if (isApk) {
+    try {
+     val archiveFlags = PackageManager.GET_PERMISSIONS or PackageManager.GET_SERVICES or
+      PackageManager.GET_ACTIVITIES or PackageManager.GET_RECEIVERS or
+      PackageManager.GET_PROVIDERS or signingFlags()
+     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      pm.getPackageArchiveInfo(
+       file.absolutePath,
+       PackageManager.PackageInfoFlags.of(archiveFlags.toLong())
+      )
+     } else {
+      @Suppress("DEPRECATION")
+      pm.getPackageArchiveInfo(file.absolutePath, archiveFlags)
+     }
+    } catch (cancelled: CancellationException) {
+     throw cancelled
+    } catch (_: Exception) {
+     null
+    }
+   } else null
+   apkPackageInfo?.applicationInfo?.apply {
+    sourceDir = file.absolutePath
+    publicSourceDir = file.absolutePath
+   }
+   val identity = apkPackageInfo?.packageName
    if (identity != null && trustedAppStore.isTrusted(identity)) {
     return trustedResult(identity, scanSessionId, start).copy(sourceLocalPath = file.absolutePath)
    }
@@ -358,21 +383,16 @@ class PackageScanner(
    )
   }
 
-  val mlProbability = if (file.extension.equals("apk", ignoreCase = true)) {
-   runMachineLearning(file)
-  } else null
-  val staticReport = if (file.extension.equals("apk", ignoreCase = true)) {
-    val archiveInfo = try {
-     val flags = PackageManager.GET_PERMISSIONS or PackageManager.GET_SERVICES or PackageManager.GET_ACTIVITIES or PackageManager.GET_RECEIVERS or PackageManager.GET_PROVIDERS or signingFlags()
-     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-      pm.getPackageArchiveInfo(file.absolutePath, PackageManager.PackageInfoFlags.of(flags.toLong()))
-     } else {
-      @Suppress("DEPRECATION")
-      pm.getPackageArchiveInfo(file.absolutePath, flags)
-     }
-    } catch (_: Exception) { null }
-    archiveInfo?.applicationInfo?.apply { sourceDir = file.absolutePath; publicSourceDir = file.absolutePath }
-    val baseReport = deepStaticAnalyzer.analyze(archiveInfo, file, archiveInfo?.let(::isDebugSigned) == true)
+   val mlProbability = if (isApk) {
+    runMachineLearning(file)
+   } else null
+   val staticReport = if (isApk) {
+    // Reuse the early PackageManager manifest/permission parse instead of parsing the APK twice.
+    val baseReport = deepStaticAnalyzer.analyze(
+     apkPackageInfo,
+     file,
+     apkPackageInfo?.let(::isDebugSigned) == true
+    )
     val mergedReport = yaraXResult?.let { mergeYaraXFindings(baseReport, it) } ?: baseReport
     mergedReport.copy(mlProbability = mlProbability)
    } else null
