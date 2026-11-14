@@ -26,6 +26,7 @@ import androidx.compose.material.icons.outlined.FolderOpen
 import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material.icons.outlined.SettingsSuggest
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -45,6 +46,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -86,181 +89,226 @@ internal fun SecurityOnboardingScreen(
         onFinish()
     }
 
+    val indigo = Color(0xFF312E81)
+    val violet = Color(0xFF7C3AED)
+    val sky = Color(0xFF0284C7)
+    val blue = Color(0xFF1D4ED8)
+    val emerald = Color(0xFF047857)
+    val green = Color(0xFF16A34A)
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        containerColor = MaterialTheme.colorScheme.background
+        containerColor = Color.Transparent
     ) { insets ->
         if (showPermissionPrimer) {
-            Column(
-                modifier = Modifier.fillMaxSize().padding(insets).padding(horizontal = 24.dp, vertical = 20.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+            Box(
+                modifier = Modifier.fillMaxSize()
+                    .background(Brush.verticalGradient(listOf(indigo, violet)))
             ) {
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                    TextButton(onClick = onSkipSetup) { Text(stringResource(R.string.setup_skip)) }
-                }
-                Spacer(Modifier.height(18.dp))
-                Surface(
-                    modifier = Modifier.fillMaxWidth(),
-                    color = MaterialTheme.colorScheme.tertiaryContainer,
-                    shape = RoundedCornerShape(24.dp)
+                Column(
+                    modifier = Modifier.fillMaxSize().padding(insets)
+                        .padding(horizontal = 24.dp, vertical = 20.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    Column(
-                        Modifier.padding(24.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        Icon(
-                            Icons.Outlined.Security,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.tertiary,
-                            modifier = Modifier.size(58.dp)
-                        )
-                        Text(
-                            stringResource(R.string.security_alerts_title),
-                            style = MaterialTheme.typography.headlineMedium,
-                            textAlign = TextAlign.Center
-                        )
-                        Text(
-                            stringResource(R.string.incident_alerts_explanation),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            textAlign = TextAlign.Center
-                        )
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                        TextButton(
+                            onClick = onSkipSetup,
+                            colors = ButtonDefaults.textButtonColors(contentColor = Color.White)
+                        ) { Text(stringResource(R.string.setup_skip)) }
                     }
-                }
-                Text(
-                    appVisibilitySummary,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    textAlign = TextAlign.Center,
-                    maxLines = 2,
-                    overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
-                )
-                if (initialSyncPending) InitialSyncNotice()
-                Spacer(Modifier.weight(1f))
-                Button(
-                    onClick = {
-                        if (hasNotificationAccess(context)) onFinish()
-                        else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                            notificationLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-                        } else onFinish()
-                    },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(stringResource(R.string.setup_allow_notifications))
+                    Spacer(Modifier.height(8.dp))
+                    Surface(
+                        modifier = Modifier.fillMaxWidth(),
+                        color = Color.White.copy(alpha = 0.14f),
+                        shape = RoundedCornerShape(24.dp)
+                    ) {
+                        Column(
+                            Modifier.padding(24.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            Icon(
+                                Icons.Outlined.Security,
+                                contentDescription = null,
+                                tint = Color.White,
+                                modifier = Modifier.size(58.dp)
+                            )
+                            Text(
+                                stringResource(R.string.security_alerts_title),
+                                style = MaterialTheme.typography.headlineMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White,
+                                textAlign = TextAlign.Center
+                            )
+                            Text(
+                                stringResource(R.string.incident_alerts_explanation),
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = Color.White.copy(alpha = 0.9f),
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                    Text(
+                        appVisibilitySummary,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color.White.copy(alpha = 0.9f),
+                        textAlign = TextAlign.Center,
+                        maxLines = 2,
+                        overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
+                    )
+                    if (initialSyncPending) InitialSyncNotice(onGradient = true)
+                    Spacer(Modifier.weight(1f))
+                    Button(
+                        onClick = {
+                            if (hasNotificationAccess(context)) onFinish()
+                            else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                notificationLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                            } else onFinish()
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color.White,
+                            contentColor = indigo
+                        )
+                    ) {
+                        Text(stringResource(R.string.setup_allow_notifications))
+                    }
                 }
             }
         } else {
-            Column(
-                modifier = Modifier.fillMaxSize().padding(insets).padding(horizontal = 24.dp, vertical = 20.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                    TextButton(onClick = onSkipSetup) { Text(stringResource(R.string.setup_skip)) }
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier.fillMaxSize(),
+                pageSpacing = 0.dp
+            ) { page ->
+                val pageGradient = when (page) {
+                    0 -> listOf(indigo, violet)
+                    1 -> listOf(sky, blue)
+                    else -> listOf(emerald, green)
                 }
-                Icon(
-                    Icons.Outlined.Security,
-                    contentDescription = stringResource(R.string.app_name),
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(52.dp)
-                )
-                Text(
-                    stringResource(R.string.setup_title),
-                    style = MaterialTheme.typography.headlineMedium,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center
-                )
-                HorizontalPager(
-                    state = pagerState,
-                    modifier = Modifier.weight(1f).fillMaxWidth(),
-                    pageSpacing = 12.dp
-                ) { page ->
-                    val (icon, title, body) = when (page) {
-                        0 -> Triple(
-                            Icons.Outlined.Security,
-                            R.string.security_dashboard_title,
-                            R.string.security_scan_coverage
-                        )
-                        1 -> Triple(
-                            Icons.Outlined.FolderOpen,
-                            R.string.setup_sentinel_title,
-                            R.string.setup_sentinel_body
-                        )
-                        else -> Triple(
-                            Icons.Outlined.SettingsSuggest,
-                            R.string.posture_title,
-                            R.string.posture_intro
-                        )
-                    }
+                val (icon, title, body) = when (page) {
+                    0 -> Triple(
+                        Icons.Outlined.Security,
+                        R.string.security_dashboard_title,
+                        R.string.security_scan_coverage
+                    )
+                    1 -> Triple(
+                        Icons.Outlined.FolderOpen,
+                        R.string.setup_sentinel_title,
+                        R.string.setup_sentinel_body
+                    )
+                    else -> Triple(
+                        Icons.Outlined.SettingsSuggest,
+                        R.string.posture_title,
+                        R.string.posture_intro
+                    )
+                }
+                Box(
+                    modifier = Modifier.fillMaxSize()
+                        .background(Brush.verticalGradient(pageGradient))
+                ) {
                     Column(
-                        modifier = Modifier.fillMaxSize().padding(vertical = 20.dp),
+                        modifier = Modifier.fillMaxSize().padding(insets)
+                            .padding(horizontal = 24.dp, vertical = 20.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
+                        verticalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                stringResource(R.string.app_name),
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White
+                            )
+                            TextButton(
+                                onClick = onSkipSetup,
+                                colors = ButtonDefaults.textButtonColors(contentColor = Color.White)
+                            ) {
+                                Text(stringResource(R.string.setup_skip))
+                            }
+                        }
+                        Spacer(Modifier.weight(1f))
                         Surface(
-                            modifier = Modifier.size(210.dp),
-                            color = MaterialTheme.colorScheme.secondaryContainer,
-                            shape = RoundedCornerShape(36.dp)
+                            modifier = Modifier.size(168.dp),
+                            color = Color.White.copy(alpha = 0.16f),
+                            shape = RoundedCornerShape(40.dp)
                         ) {
                             Box(contentAlignment = Alignment.Center) {
                                 Icon(
                                     icon,
                                     contentDescription = null,
-                                    modifier = Modifier.size(100.dp),
-                                    tint = MaterialTheme.colorScheme.secondary
+                                    modifier = Modifier.size(88.dp),
+                                    tint = Color.White
                                 )
                             }
                         }
-                        Spacer(Modifier.height(24.dp))
                         Text(
                             stringResource(title),
-                            style = MaterialTheme.typography.titleLarge,
+                            style = MaterialTheme.typography.headlineMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White,
                             textAlign = TextAlign.Center
                         )
-                        Spacer(Modifier.height(10.dp))
                         Text(
                             stringResource(body),
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = MaterialTheme.typography.bodyLarge,
                             textAlign = TextAlign.Center,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            color = Color.White.copy(alpha = 0.92f)
                         )
-                    }
-                }
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(bottom = 16.dp)
-                ) {
-                    repeat(3) { page ->
-                        Box(
-                            Modifier.size(if (pagerState.currentPage == page) 9.dp else 7.dp)
-                                .background(
-                                    if (pagerState.currentPage == page) MaterialTheme.colorScheme.primary
-                                    else MaterialTheme.colorScheme.outlineVariant,
-                                    CircleShape
+                        Spacer(Modifier.weight(1f))
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(bottom = 2.dp)
+                        ) {
+                            repeat(3) { pageIndex ->
+                                Box(
+                                    Modifier.size(if (pagerState.currentPage == pageIndex) 10.dp else 7.dp)
+                                        .background(
+                                            if (pagerState.currentPage == pageIndex) Color.White
+                                            else Color.White.copy(alpha = 0.42f),
+                                            CircleShape
+                                        )
                                 )
-                        )
-                    }
-                }
-                if (initialSyncPending) InitialSyncNotice()
-                Button(
-                    onClick = {
-                        if (pagerState.currentPage < 2) {
-                            coroutineScope.launch { pagerState.animateScrollToPage(pagerState.currentPage + 1) }
-                        } else {
-                            showPermissionPrimer = true
+                            }
                         }
-                    },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(stringResource(if (pagerState.currentPage < 2) R.string.setup_finish else R.string.setup_allow_notifications))
-                }
-                TextButton(
-                    onClick = { showPrivacyDisclosure = true },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(stringResource(R.string.privacy_title))
+                        if (initialSyncPending) InitialSyncNotice(onGradient = true)
+                        Button(
+                            onClick = {
+                                if (pagerState.currentPage < 2) {
+                                    coroutineScope.launch {
+                                        pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                                    }
+                                } else {
+                                    showPermissionPrimer = true
+                                }
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color.White,
+                                contentColor = pageGradient.first()
+                            )
+                        ) {
+                            Text(
+                                stringResource(
+                                    if (pagerState.currentPage < 2) R.string.setup_finish
+                                    else R.string.setup_allow_notifications
+                                )
+                            )
+                        }
+                        TextButton(
+                            onClick = { showPrivacyDisclosure = true },
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = ButtonDefaults.textButtonColors(contentColor = Color.White)
+                        ) {
+                            Text(stringResource(R.string.privacy_title))
+                        }
+                    }
                 }
             }
         }
@@ -280,9 +328,12 @@ internal fun SecurityOnboardingScreen(
 }
 
 @Composable
-private fun InitialSyncNotice() {
+private fun InitialSyncNotice(onGradient: Boolean = false) {
     androidx.compose.material3.Card(
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+        colors = CardDefaults.cardColors(
+            containerColor = if (onGradient) Color.White.copy(alpha = 0.14f)
+            else MaterialTheme.colorScheme.primaryContainer
+        ),
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -291,8 +342,16 @@ private fun InitialSyncNotice() {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            androidx.compose.material3.CircularProgressIndicator(modifier = Modifier.size(18.dp), strokeWidth = 2.dp)
-            Text(stringResource(R.string.hash_database_initial_syncing), style = MaterialTheme.typography.bodyMedium)
+            androidx.compose.material3.CircularProgressIndicator(
+                modifier = Modifier.size(18.dp),
+                strokeWidth = 2.dp,
+                color = if (onGradient) Color.White else MaterialTheme.colorScheme.primary
+            )
+            Text(
+                stringResource(R.string.hash_database_initial_syncing),
+                style = MaterialTheme.typography.bodyMedium,
+                color = if (onGradient) Color.White else MaterialTheme.colorScheme.onPrimaryContainer
+            )
         }
     }
 }

@@ -701,13 +701,19 @@ private fun V17RadarScan(
     )
     val listState = rememberLazyListState()
     LaunchedEffect(recentFiles) {
-        if (recentFiles.isNotEmpty()) listState.animateScrollToItem(recentFiles.lastIndex)
+        if (recentFiles.isNotEmpty()) listState.animateScrollToItem(recentFiles.size)
     }
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
+    LazyColumn(
+        state = listState,
+        modifier = Modifier.fillMaxWidth().heightIn(max = 360.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
+        item(key = "radar-header") {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
         Canvas(Modifier.fillMaxWidth().height(220.dp)) {
             val radius = minOf(size.width, size.height) * 0.43f
             val centerPoint = Offset(size.width / 2f, size.height / 2f)
@@ -774,23 +780,17 @@ private fun V17RadarScan(
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
-        if (recentFiles.isNotEmpty()) {
-            LazyColumn(
-                state = listState,
-                modifier = Modifier.fillMaxWidth().heightIn(max = 120.dp),
-                verticalArrangement = Arrangement.spacedBy(3.dp)
-            ) {
-                itemsIndexed(recentFiles, key = { index, file -> "$index:$file" }) { _, file ->
-                    Text(
-                        text = if (file == currentFile) "Scanning: $file" else "Scanned: $file",
-                        modifier = Modifier.fillMaxWidth(),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = if (file == currentFile) c.accent else c.muted,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
             }
+        }
+        itemsIndexed(recentFiles, key = { index, file -> "$index:$file" }) { _, file ->
+            Text(
+                text = if (file == currentFile) "Scanning: $file" else "Scanned: $file",
+                modifier = Modifier.fillMaxWidth(),
+                style = MaterialTheme.typography.labelSmall,
+                color = if (file == currentFile) c.accent else c.muted,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
         }
     }
 }
@@ -804,79 +804,88 @@ internal fun V17ScanLabScreen(
 ) {
     val c = v17Colors(isDark)
     var deep by rememberSaveable { mutableStateOf(false) }
-    Column(Modifier.fillMaxSize().background(c.device).verticalScroll(rememberScrollState()).padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        V17Card(isDark) {
-            V17SectionHeading("Run Smart Scan",
-                "Progressive four-layer inspection using the on-device scan pipeline.",
-                Icons.Outlined.Science, c.accent)
-            Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp)).background(c.elevated).padding(4.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                V17ModeButton("Quick App Scan", Icons.Outlined.Apps, !deep, isDark, Modifier.weight(1f)) { deep = false }
-                V17ModeButton("Deep Storage (Worker)", Icons.Outlined.FolderOpen, deep, isDark, Modifier.weight(1f)) { deep = true }
-            }
-            Button(
-                onClick = { if (deep) onStartDeepScan() else onStartQuickScan() },
-                enabled = !state.isScanning,
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                if (state.isScanning) {
-                    CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp, color = Color.White)
-                    Spacer(Modifier.width(8.dp))
-                    Text(stringResource(R.string.scan_running))
-                } else {
-                    Icon(Icons.Default.PlayArrow, contentDescription = null, modifier = Modifier.size(21.dp))
-                    Spacer(Modifier.width(8.dp))
-                    Text(stringResource(if (deep) R.string.cleaner_scan_storage else R.string.scan_installed))
+    LazyColumn(
+        modifier = Modifier.fillMaxSize().background(c.device),
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        item(key = "scan-controls") {
+            V17Card(isDark) {
+                V17SectionHeading("Run Smart Scan",
+                    "Progressive four-layer inspection using the on-device scan pipeline.",
+                    Icons.Outlined.Science, c.accent)
+                Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp)).background(c.elevated).padding(4.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    V17ModeButton("Quick App Scan", Icons.Outlined.Apps, !deep, isDark, Modifier.weight(1f)) { deep = false }
+                    V17ModeButton("Deep Storage (Worker)", Icons.Outlined.FolderOpen, deep, isDark, Modifier.weight(1f)) { deep = true }
                 }
-            }
-            if (state.isScanning) {
-                V17RadarScan(
-                    isDark = isDark,
-                    currentFile = state.currentScanFile,
-                    recentFiles = state.recentScanFiles
-                )
-                if (state.totalItems > 0) LinearProgressIndicator(
-                    progress = { (state.processedItems.toFloat() / state.totalItems).coerceIn(0f, 1f) },
+                Button(
+                    onClick = { if (deep) onStartDeepScan() else onStartQuickScan() },
+                    enabled = !state.isScanning,
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
                     modifier = Modifier.fillMaxWidth()
-                ) else LinearProgressIndicator(Modifier.fillMaxWidth())
-                V17Body(if (state.totalItems > 0) "Scanning ${state.processedItems} of ${state.totalItems}"
-                    else stringResource(R.string.scan_running))
-                TextButton(onClick = onCancelScan) { Text(stringResource(R.string.scan_cancel)) }
-            }
-        }
-        V17Card(isDark) {
-            V17SectionHeading("Scan Results", "Tap a result to inspect the four detection layers.",
-                Icons.Outlined.Assessment, c.amber)
-            if (state.results.isEmpty()) {
-                Row(Modifier.fillMaxWidth().padding(vertical = 12.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    V17IconBadge(Icons.Outlined.Search, c.muted, size = 44.dp, iconSize = 25.dp,
-                        contentDescription = null)
-                    V17Body("No scan results yet. Run Quick App Scan or choose a folder for deep scanning.")
+                ) {
+                    if (state.isScanning) {
+                        CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp, color = Color.White)
+                        Spacer(Modifier.width(8.dp))
+                        Text(stringResource(R.string.scan_running))
+                    } else {
+                        Icon(Icons.Default.PlayArrow, contentDescription = null, modifier = Modifier.size(21.dp))
+                        Spacer(Modifier.width(8.dp))
+                        Text(stringResource(if (deep) R.string.cleaner_scan_storage else R.string.scan_installed))
+                    }
+                }
+                if (state.isScanning) {
+                    V17RadarScan(
+                        isDark = isDark,
+                        currentFile = state.currentScanFile,
+                        recentFiles = state.recentScanFiles
+                    )
+                    if (state.totalItems > 0) LinearProgressIndicator(
+                        progress = { (state.processedItems.toFloat() / state.totalItems).coerceIn(0f, 1f) },
+                        modifier = Modifier.fillMaxWidth()
+                    ) else LinearProgressIndicator(Modifier.fillMaxWidth())
+                    V17Body(if (state.totalItems > 0) "Scanning ${state.processedItems} of ${state.totalItems}"
+                        else stringResource(R.string.scan_running))
+                    TextButton(onClick = onCancelScan) { Text(stringResource(R.string.scan_cancel)) }
                 }
             }
-            state.results.take(80).forEach { result ->
-                V17ScanResultRow(result, isDark, onUninstall, onAppInfo,
-                    { onQuarantine(result) }, { onTrust(result) }, { result.packageName?.let(onRemoveTrust) })
-            }
         }
-        V17Card(isDark) {
-            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                V17IconBadge(Icons.Outlined.Assessment, c.accent, size = 40.dp, iconSize = 22.dp,
-                    contentDescription = stringResource(R.string.scan_lab_metrics_title))
-                Column(Modifier.weight(1f)) {
-                    V17Title(stringResource(R.string.scan_lab_metrics_title))
-                    V17Body(stringResource(R.string.scan_lab_metrics_body))
+        item(key = "scan-results") {
+            V17Card(isDark) {
+                V17SectionHeading("Scan Results", "Tap a result to inspect the four detection layers.",
+                    Icons.Outlined.Assessment, c.amber)
+                if (state.results.isEmpty()) {
+                    Row(Modifier.fillMaxWidth().padding(vertical = 12.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                        V17IconBadge(Icons.Outlined.Search, c.muted, size = 44.dp, iconSize = 25.dp,
+                            contentDescription = null)
+                        V17Body("No scan results yet. Run Quick App Scan or choose a folder for deep scanning.")
+                    }
+                }
+                state.results.take(80).forEach { result ->
+                    V17ScanResultRow(result, isDark, onUninstall, onAppInfo,
+                        { onQuarantine(result) }, { onTrust(result) }, { result.packageName?.let(onRemoveTrust) })
                 }
             }
-            HorizontalDivider(color = c.border)
-            BenchmarkResultsPanel()
-            if (repository != null) AnalyticsCharts(repository, state.results)
-            else AnalyticsChartContent(ScanAnalytics(), AnalyticsWeek.current(), state.results)
+        }
+        item(key = "scan-metrics") {
+            V17Card(isDark) {
+                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    V17IconBadge(Icons.Outlined.Assessment, c.accent, size = 40.dp, iconSize = 22.dp,
+                        contentDescription = stringResource(R.string.scan_lab_metrics_title))
+                    Column(Modifier.weight(1f)) {
+                        V17Title(stringResource(R.string.scan_lab_metrics_title))
+                        V17Body(stringResource(R.string.scan_lab_metrics_body))
+                    }
+                }
+                HorizontalDivider(color = c.border)
+                BenchmarkResultsPanel()
+                if (repository != null) AnalyticsCharts(repository, state.results)
+                else AnalyticsChartContent(ScanAnalytics(), AnalyticsWeek.current(), state.results)
+            }
         }
     }
 }

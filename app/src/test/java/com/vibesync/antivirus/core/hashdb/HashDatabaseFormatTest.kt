@@ -8,8 +8,8 @@ class HashDatabaseFormatTest {
     @Test fun parsesMultiAlgorithmSignedDatabase() {
         val source = """
             # SAFEHASH version=7 source=UnitTest license=CC0-1.0
-            md5:44d88612fea8a8f36de82e1278abb02f:EICAR test marker
-            sha1:3395856ce81f2b7382dee72602f798b642f14140:EICAR test marker
+            md5:900150983cd24fb0d6963f7d28e17f72:Sample test record
+            sha1:a9993e364706816aba3e25717850c26c9cd0d89d:Sample test record
             sha256:275a021bbfb6489e54d471899f7db9d1663fc695ec2fe2a2c4538aabf651fd0f:EICAR test marker
         """.trimIndent().toByteArray(Charsets.UTF_8)
 
@@ -17,13 +17,14 @@ class HashDatabaseFormatTest {
         assertEquals(7L, parsed.version)
         assertEquals(3, parsed.records.size)
         assertEquals(HashAlgorithm.SHA1, parsed.records[1].algorithm)
-        assertEquals("eicar test marker", parsed.records[0].threatName.lowercase())
+        assertEquals(HashAlgorithm.SHA256, parsed.records[2].algorithm)
+        assertEquals("eicar test marker", parsed.records[2].threatName.lowercase())
     }
 
     @Test fun parsesClamAvStyleHdbAndHsbRecords() {
         val md5 = """
             # SAFEHASH version=8 source=ClamCompat license=CC0-1.0
-            44d88612fea8a8f36de82e1278abb02f:68:EICAR-Test-File
+            900150983cd24fb0d6963f7d28e17f72:3:Sample-Test-File
         """.trimIndent().toByteArray(Charsets.UTF_8)
         val sha256 = """
             # SAFEHASH version=9 source=ClamCompat license=CC0-1.0
@@ -32,14 +33,14 @@ class HashDatabaseFormatTest {
 
         assertEquals(HashAlgorithm.MD5, HashDatabaseFormat.parse(md5, HashAlgorithm.MD5).records.single().algorithm)
         assertEquals(HashAlgorithm.SHA256, HashDatabaseFormat.parse(sha256, HashAlgorithm.SHA256).records.single().algorithm)
-        assertEquals(68L, HashDatabaseFormat.parse(md5, HashAlgorithm.MD5).records.single().fileSize)
+        assertEquals(3L, HashDatabaseFormat.parse(md5, HashAlgorithm.MD5).records.single().fileSize)
     }
 
     @Test fun rejectsDuplicateAndMalformedRows() {
         val duplicate = """
             # SAFEHASH version=1 source=UnitTest license=CC0-1.0
-            md5:44d88612fea8a8f36de82e1278abb02f:one
-            md5:44d88612fea8a8f36de82e1278abb02f:two
+            md5:900150983cd24fb0d6963f7d28e17f72:one
+            md5:900150983cd24fb0d6963f7d28e17f72:two
         """.trimIndent().toByteArray(Charsets.UTF_8)
         val malformed = """
             # SAFEHASH version=1 source=UnitTest license=CC0-1.0

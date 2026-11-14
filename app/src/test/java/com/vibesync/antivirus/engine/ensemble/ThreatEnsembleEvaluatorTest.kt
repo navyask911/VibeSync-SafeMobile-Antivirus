@@ -92,17 +92,12 @@ class ThreatEnsembleEvaluatorTest {
     }
 
     @Test
-    fun eicarPayloadIsDetectedForTxtAndExtensionlessFiles() {
-        val marker = "X5O!P%@AP[4\\PZX54(P^)7CC)7}\$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!\$H+H*"
-        listOf("eicar.txt", "sample", "test-data.txt").forEach { label ->
-            val output = ThreatEnsembleEvaluator.evaluateTextPayload(
-                result().copy(packageOrPath = label, displayName = label),
-                ("prefix\n" + marker + "\n").toByteArray(Charsets.US_ASCII)
-            )
-            assertEquals(ScanVerdict.THREAT, output.verdict)
-            assertEquals(DetectionSource.HASH, output.detectionSource)
-            assertEquals(1.0f, output.confidence, 0.0f)
-        }
+    fun ordinaryTextPayloadDoesNotMatchPinnedEicarSha256() {
+        val output = ThreatEnsembleEvaluator.evaluateTextPayload(
+            result().copy(packageOrPath = "sample.txt", displayName = "sample.txt"),
+            "ordinary text content".toByteArray(Charsets.US_ASCII)
+        )
+        assertEquals(ScanVerdict.NO_MATCH, output.verdict)
     }
 
     @Test

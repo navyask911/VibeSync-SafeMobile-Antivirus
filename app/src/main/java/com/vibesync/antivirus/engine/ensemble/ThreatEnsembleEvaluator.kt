@@ -4,27 +4,29 @@ import com.vibesync.antivirus.core.engine.DetectionSource
 import com.vibesync.antivirus.core.engine.ScanResult
 import com.vibesync.antivirus.core.engine.ScanVerdict
 import com.vibesync.antivirus.core.engine.hash.HashMatcher
+import java.security.MessageDigest
 import java.util.UUID
 
 /**
  * Deterministic, local-only fusion of the exact-hash, YARA and Drebin-215 signals.
  *
  * The model is advisory: a high ML score is not sufficient by itself to create a
- * threat verdict. A YARA suspicious signal is required for that escalation.
+ * threat verdict.
  */
 object ThreatEnsembleEvaluator {
-    private val eicarTextSignature = "X5O!P%@AP[4\\PZX54(P^)7CC)7}\$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!\$H+H*"
-        .toByteArray(Charsets.US_ASCII)
-
-    /** Detects the harmless EICAR test marker in actual file bytes, independent of filename. */
+    /**
+     * Detects the harmless EICAR test file using its pinned SHA-256 digest.
+     * No test-payload bytes are embedded in application code.
+     */
     fun containsEicarTestPayload(payload: ByteArray): Boolean {
-        if (payload.size < eicarTextSignature.size) return false
-        return (0..payload.size - eicarTextSignature.size).any { offset ->
-            eicarTextSignature.indices.all { index -> payload[offset + index] == eicarTextSignature[index] }
+        val digest = MessageDigest.getInstance("SHA-256").digest(payload)
+        val sha256 = digest.joinToString("") { byte ->
+            "%02x".format(byte.toInt() and 0xff)
         }
+        return sha256 == HashMatcher.EICAR_SHA256
     }
 
-    /** Applies the local EICAR test signature without allowing a trusted-app override. */
+    /** Applies the local SHA-256 test signature without allowing a trusted-app override. */
     fun evaluateTextPayload(scanResult: ScanResult, payload: ByteArray): ScanResult {
         if (scanResult.trustedByUser || !containsEicarTestPayload(payload)) return scanResult
         val label = HashMatcher.EICAR_MALWARE_NAME

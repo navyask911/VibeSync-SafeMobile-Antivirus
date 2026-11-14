@@ -9,6 +9,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.media.AudioAttributes
+import android.media.RingtoneManager
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
@@ -21,7 +23,7 @@ import com.vibesync.antivirus.presentation.SystemPackageGuard
 
 /** Opt-in local alerts. Only exact malware matches receive the five-second incident siren. */
 object SecurityAlertNotifier {
-    const val CHANNEL_ID = "security_incident_v3"
+    const val CHANNEL_ID = "security_alerts_channel_v4"
     const val EXTRA_OPEN_QUARANTINE = "com.vibesync.antivirus.OPEN_QUARANTINE"
     internal const val EXTRA_EVENT_ID = "security.incident.event_id"
     internal const val EXTRA_SHA256 = "security.incident.detected_sha256"
@@ -30,13 +32,17 @@ object SecurityAlertNotifier {
     fun ensureChannel(context: Context) {
         val local = com.vibesync.antivirus.core.locale.LocalePreferences.wrap(context)
         val manager = context.getSystemService(NotificationManager::class.java) ?: return
+        val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+        val audioAttributes = AudioAttributes.Builder()
+            .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+            .build()
         manager.createNotificationChannel(NotificationChannel(
             CHANNEL_ID, local.getString(R.string.security_alert_channel_name), NotificationManager.IMPORTANCE_HIGH
         ).apply {
             description = local.getString(R.string.incident_channel_description)
             lockscreenVisibility = android.app.Notification.VISIBILITY_PRIVATE
-            // Channel audio cannot be stopped by our timer. MediaPlayer owns alarm audio.
-            setSound(null, null)
+            setSound(defaultSoundUri, audioAttributes)
             enableVibration(true)
         })
     }
@@ -173,10 +179,12 @@ object SecurityAlertNotifier {
         val dismiss = PendingIntent.getBroadcast(app, eventId.hashCode(),
             Intent(app, SecurityAlertDismissReceiver::class.java).putExtra(EXTRA_EVENT_ID, eventId)
                 .setData(Uri.fromParts("safemobile-dismiss", eventId, null)), flags)
+        val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val builder = NotificationCompat.Builder(app, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_launcher).setContentTitle(title).setContentText(body)
             .setStyle(NotificationCompat.BigTextStyle().bigText(body)).setContentIntent(content)
-            .setVisibility(NotificationCompat.VISIBILITY_PRIVATE).setPriority(NotificationCompat.PRIORITY_MAX)
+            .setVisibility(NotificationCompat.VISIBILITY_PRIVATE).setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setSound(defaultSoundUri)
             .setCategory(if (confirmed) NotificationCompat.CATEGORY_ALARM else NotificationCompat.CATEGORY_STATUS)
             .setAutoCancel(true).setOnlyAlertOnce(false).setDeleteIntent(dismiss)
             .addAction(R.drawable.ic_launcher, app.getString(if (packageName != null)
@@ -202,7 +210,7 @@ object SecurityAlertNotifier {
             Log.w(TAG, "Full-screen incident notification was rejected; retrying without full-screen intent",
                 posted.exceptionOrNull())
             builder.setFullScreenIntent(null, false)
-                .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
             runCatching { notificationManager.notify(id, builder.build()) }
                 .onFailure { Log.w(TAG, "Unable to post heads-up incident fallback", it) }
         } else {

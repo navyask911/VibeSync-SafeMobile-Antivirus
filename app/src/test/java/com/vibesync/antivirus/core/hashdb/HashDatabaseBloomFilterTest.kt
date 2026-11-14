@@ -7,7 +7,7 @@ import org.junit.Test
 class HashDatabaseBloomFilterTest {
     @Test fun insertedValuesAlwaysPassPrefilterAndDistinctValueUsuallyDoesNot() {
         val rows = listOf(
-            HashDatabaseRecord(HashAlgorithm.MD5, "44d88612fea8a8f36de82e1278abb02f", "test"),
+            HashDatabaseRecord(HashAlgorithm.MD5, "900150983cd24fb0d6963f7d28e17f72", "test"),
             HashDatabaseRecord(HashAlgorithm.SHA256, "275a021bbfb6489e54d471899f7db9d1663fc695ec2fe2a2c4538aabf651fd0f", "test")
         )
         val filter = HashDatabaseBloomFilter.fromRecords(rows)
