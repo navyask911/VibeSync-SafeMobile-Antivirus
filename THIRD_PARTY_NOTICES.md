@@ -1,6 +1,6 @@
 # Third-party dependency notices
 
-Generated from the CycloneDX SBOM by `scripts/render_third_party_notices.py`. Components: 484.
+Generated from the CycloneDX SBOM by `scripts/render_third_party_notices.py`. Components: 488.
 
 Regenerate this file with the CI SBOM refresh workflow; do not hand-edit dependency rows.
 
@@ -57,8 +57,8 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | app | 1.5.1 | UNKNOWN — review required | Package URL: pkg:maven/com.vibesync.antivirus/app@1.5.1?project_path=%3Aapp |
 | app-update | 2.1.0 | [Play Core Software Development Kit Terms of Service](https://developer.android.com/guide/playcore/license) | Package URL: pkg:maven/com.google.android.play/app-update@2.1.0?type=aar |
 | app-update-ktx | 2.1.0 | [Play Core Software Development Kit Terms of Service](https://developer.android.com/guide/playcore/license) | Package URL: pkg:maven/com.google.android.play/app-update-ktx@2.1.0?type=aar |
-| appcompat-resources | 1.4.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
-| appcompat-resources | 1.7.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| appcompat | 1.7.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| appcompat-resources | 1.7.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | atomicfu | 0.21.0 | Apache-2.0 | https://github.com/Kotlin/kotlinx.atomicfu |
 | atomicfu | 0.22.0 | Apache-2.0 | https://github.com/Kotlin/kotlinx.atomicfu |
 | atomicfu | 0.23.1 | Apache-2.0 | https://github.com/Kotlin/kotlinx.atomicfu |
@@ -121,6 +121,7 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | cronet-common | 500.1.0 | [Android Software Development Kit License](https://developer.android.com/studio/terms.html) | Package URL: pkg:maven/org.chromium.net/cronet-common@500.1.0?type=aar |
 | cronet-fallback | 500.1.0 | [Android Software Development Kit License](https://developer.android.com/studio/terms.html) | Package URL: pkg:maven/org.chromium.net/cronet-fallback@500.1.0?type=aar |
 | cronet-shared | 500.1.0 | [Android Software Development Kit License](https://developer.android.com/studio/terms.html) | Package URL: pkg:maven/org.chromium.net/cronet-shared@500.1.0?type=aar |
+| cursoradapter | 1.0.0 | Apache-2.0 | http://source.android.com |
 | customview | 1.0.0 | Apache-2.0 | http://source.android.com |
 | customview-poolingcontainer | 1.0.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | dagger | 2.48 | Apache-2.0 | https://github.com/google/dagger/ |
@@ -140,8 +141,10 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | ddmlib | 31.13.2 | Apache-2.0 | Package URL: pkg:maven/com.android.tools.ddms/ddmlib@31.13.2?type=jar |
 | dexlib2 | 2.5.2 | BSD-3-Clause | https://github.com/JesusFreke/smali/tree/master/dexlib2 |
 | documentfile | 1.0.1 | Apache-2.0 | http://source.android.com |
+| drawerlayout | 1.0.0 | Apache-2.0 | http://source.android.com |
 | dvlib | 31.10.1 | Apache-2.0 | Package URL: pkg:maven/com.android.tools/dvlib@31.10.1?type=jar |
 | emoji2 | 1.4.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
+| emoji2-views-helper | 1.4.0 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | error_prone_annotations | 2.23.0 | Apache-2.0 | Package URL: pkg:maven/com.google.errorprone/error_prone_annotations@2.23.0?type=jar |
 | error_prone_annotations | 2.26.1 | Apache-2.0 | Package URL: pkg:maven/com.google.errorprone/error_prone_annotations@2.26.1?type=jar |
 | error_prone_annotations | 2.28.0 | Apache-2.0 | Package URL: pkg:maven/com.google.errorprone/error_prone_annotations@2.28.0?type=jar |
@@ -407,6 +410,7 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | protobuf-kotlin | 3.24.4 | [BSD-3-Clause](https://opensource.org/licenses/BSD-3-Clause) | Package URL: pkg:maven/com.google.protobuf/protobuf-kotlin@3.24.4?type=jar |
 | protos | 31.10.1 | Apache-2.0 | Package URL: pkg:maven/com.android.tools.analytics-library/protos@31.10.1?type=jar |
 | repository | 31.10.1 | Apache-2.0 | Package URL: pkg:maven/com.android.tools/repository@31.10.1?type=jar |
+| resourceinspection-annotation | 1.0.1 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | room-common | 2.7.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | room-common-jvm | 2.7.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | room-compiler | 2.7.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
@@ -491,7 +495,7 @@ Regenerate this file with the CI SBOM refresh workflow; do not hand-edit depende
 | work-runtime | 2.10.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 | work-runtime-ktx | 2.10.2 | Apache-2.0 | https://cs.android.com/androidx/platform/frameworks/support |
 
-Metadata completeness: 480/484 components have both a declared licence and a source/package reference.
+Metadata completeness: 484/488 components have both a declared licence and a source/package reference.
 
 ## Metadata requiring manual review
 

@@ -1,10 +1,10 @@
 {
   "bomFormat" : "CycloneDX",
   "specVersion" : "1.6",
-  "serialNumber" : "urn:uuid:5a9cc22f-2371-4650-bddc-267023f89d66",
+  "serialNumber" : "urn:uuid:b63453bb-dc5e-4971-a2b9-a213b2c52324",
   "version" : 1,
   "metadata" : {
-    "timestamp" : "2026-11-13T09:29:18Z",
+    "timestamp" : "2026-11-14T06:08:38Z",
     "tools" : {
       "components" : [
         {
@@ -26,7 +26,7 @@
       "externalReferences" : [
         {
           "type" : "build-system",
-          "url" : "https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/actions/runs/43401617731"
+          "url" : "https://github.com/navyask911/VibeSync-SafeMobile-Antivirus/actions/runs/43564794965"
         },
         {
           "type" : "vcs",
@@ -580,43 +580,44 @@
     },
     {
       "type" : "library",
-      "bom-ref" : "pkg:maven/androidx.appcompat/appcompat-resources@1.4.1?type=aar",
+      "bom-ref" : "pkg:maven/androidx.appcompat/appcompat-resources@1.7.1?type=aar",
+      "publisher" : "The Android Open Source Project",
       "group" : "androidx.appcompat",
       "name" : "appcompat-resources",
-      "version" : "1.4.1",
-      "description" : "The Resources Library is a static library that you can add to your Android application in order to use resource APIs that backport the latest APIs to older versions of the platform. Compatible on devices running API 14 or later.",
+      "version" : "1.7.1",
+      "description" : "Provides backward-compatible implementations of resource-related Android SDKfunctionality, including color state list theming.",
       "hashes" : [
         {
           "alg" : "MD5",
-          "content" : "d0c265f75a956920a45e125fde6f1e1d"
+          "content" : "c958c7fb99e287a845ce663bd693b0ec"
         },
         {
           "alg" : "SHA-1",
-          "content" : "527d93d44bb18bc7dcf5213df8d4d069f0ceff61"
+          "content" : "a0696fa573503263c7d5570ecd5e6032d397a287"
         },
         {
           "alg" : "SHA-256",
-          "content" : "c324f0a157e3cf2decd8448107de487420cb4f4fb4853cd634d71ec1f2226224"
+          "content" : "8e2db31224ca53b108c784da2b361959062716d416b210cfef3d5a3828306df0"
         },
         {
           "alg" : "SHA-512",
-          "content" : "dd512ea62da31a6f8f9cef72680a2582c7a5ffaf0ee3e54ffd21a9a0b2ce6c1c4b703f04c92830a37f79babc78440fa214b440ce84aac086bec0d17d3dd117ba"
+          "content" : "9f3f8334ccb2bc0aa3507881009104446d0c1aece093fb62e5366df8c816cdf9b3292ae24a0c8f315580d7617b47d6d2d6e6cd16cf8cc5cd1520f12a79e0452d"
         },
         {
           "alg" : "SHA3-256",
-          "content" : "3e9b5a6dffc893fc01dc5d7c9f9cf3bee94a10de84a605bd6fb55bf318eec9f7"
+          "content" : "6194e718d9fd94ddbc2cdf434d5148b0a2a78ce1042600a451fa12d726086a6d"
         },
         {
           "alg" : "SHA3-512",
-          "content" : "3ac4137b5f4f380b155f4c22eec29f4d20917ea0f3fa9154ddf18bf15373211a2b631d9c0fd8bc539cdd6f476cac5bfdc107d9fffb0e34c86caccbf6a4f39289"
+          "content" : "1778fa929c901c9813018ca34c3b876c83b9dcbe29d8a4ac56ca4ed637e3987efeae5803e508d07afd2661fe94c46ec9c1d3f94ddabd0c3ef9b87e9ddc3954e4"
         },
         {
           "alg" : "SHA-384",
-          "content" : "0881ae800131b16fe6a8b0b87098546fbae8fbf1c161e7ce09181c79b290f89b4bd0db57e9571127e62e0c5ddfb7d1e5"
+          "content" : "a3a8022ca1be5bd8043029ecd976cdb192e293536c3e31e74e5d80e22f6d0817c39b3dac83ddc699fa6270dd3500b80e"
         },
         {
           "alg" : "SHA3-384",
-          "content" : "01907e3b318dcbfa33fe5c5e41dfab15cb99bf0ff639580ced9cccdc80634d0658d4be0348de87e2b3a2de3a7fa1696d"
+          "content" : "10b42c7b737e54932e496e36d1b8d5f59533c36f258ecc1e8c86e4bd899d8d31b35911cfbdb0c840f93b979d971775b0"
         }
       ],
       "licenses" : [
@@ -626,7 +627,7 @@
           }
         }
       ],
-      "purl" : "pkg:maven/androidx.appcompat/appcompat-resources@1.4.1?type=aar",
+      "purl" : "pkg:maven/androidx.appcompat/appcompat-resources@1.7.1?type=aar",
       "modified" : false,
       "externalReferences" : [
         {
@@ -643,44 +644,44 @@
     },
     {
       "type" : "library",
-      "bom-ref" : "pkg:maven/androidx.appcompat/appcompat-resources@1.7.0?type=aar",
+      "bom-ref" : "pkg:maven/androidx.appcompat/appcompat@1.7.1?type=aar",
       "publisher" : "The Android Open Source Project",
       "group" : "androidx.appcompat",
-      "name" : "appcompat-resources",
-      "version" : "1.7.0",
-      "description" : "Provides backward-compatible implementations of resource-related Android SDKfunctionality, including color state list theming.",
+      "name" : "appcompat",
+      "version" : "1.7.1",
+      "description" : "Provides backwards-compatible implementations of UI-related Android SDK functionality, including dark mode and Material theming.",
       "hashes" : [
         {
           "alg" : "MD5",
-          "content" : "d27cef78f3124062a7a39483ad87b38b"
+          "content" : "e60eb556bcaec4b65b67789ff433e070"
         },
         {
           "alg" : "SHA-1",
-          "content" : "2a42c0283578a8a40fc83b45b5cd06924bd1a385"
+          "content" : "6c5b56046c7b08e7bf94b6dd14cb616453e6be11"
         },
         {
           "alg" : "SHA-256",
-          "content" : "55b6778602680f3c288ce350a2c2d3dd158d97dbffc63476275826655582c388"
+          "content" : "2ad334a323b28046e89b738c77d184cb3dcca32a551ab048851b2fda23a3ba26"
         },
         {
           "alg" : "SHA-512",
-          "content" : "b189ccafe5dcc6972789770bfe87f7b067c4762592e525d113dca16ff3bed5e4f1949a2a56cc08180a1bd1fb1809e44874dfee063e6853d81c09a1fadfc2a0ca"
+          "content" : "27fe0fb4042f9de44261a55eacf9a4da65cc31006db5c4cc9fa3d04ee6c460adb7e146f92a6c318419c4dc0a6bb9be56d119a5ac4c34972c7f294da232ae0067"
         },
         {
           "alg" : "SHA3-256",
-          "content" : "b6f83cbab3e0ea4f220197a8d82ab111ef5bc741e226470b2ac1a5190c6052d7"
+          "content" : "0e06277bb1dbb924ed4af27de5115279351625cb84915a32eae96be42d2fc658"
         },
         {
           "alg" : "SHA3-512",
-          "content" : "319074b17c3548e2a3cad060e4f6cd408eea83f41ef60bf045a0ea13fbe2834647ddb5924c5b229c00724b17e5f51263e7ed4493bb5bc4382d3528caf70aef5a"
+          "content" : "869c0a86feee04098457382f1e4737af852774a1396e1299e7c8fde08ca560760d4e8d22878138831cd34786ae541fb3a03a1e5f6339d74bf58b91f3fe730bf0"
         },
         {
           "alg" : "SHA-384",
-          "content" : "0815f5daade3b4ea09146123ebf9320b9a882df2c7acd6b20d3c5d39d3dd1bbc32e2628128b25644155e135148ce8842"
+          "content" : "982ba0bd5101658775369b1d54652196749798c36fad55d631e611a8f69344b57fe3ea38ef42f7cb857c3002b69f60bd"
         },
         {
           "alg" : "SHA3-384",
-          "content" : "8269119cc1c2bcffffabf0be382707fe03e8d70b809425b90acfd784bbbede36c0beb5f30aeab1693a2139b92c63f0a9"
+          "content" : "a99b62787764d37c0bde05f718d3fb8bb7a2679d5d3c5d521ad1732c2ddadb11593d20dd6becea5b4d0b91724f507973"
         }
       ],
       "licenses" : [
@@ -690,7 +691,7 @@
           }
         }
       ],
-      "purl" : "pkg:maven/androidx.appcompat/appcompat-resources@1.7.0?type=aar",
+      "purl" : "pkg:maven/androidx.appcompat/appcompat@1.7.1?type=aar",
       "modified" : false,
       "externalReferences" : [
         {
@@ -4556,6 +4557,69 @@
     },
     {
       "type" : "library",
+      "bom-ref" : "pkg:maven/androidx.cursoradapter/cursoradapter@1.0.0?type=aar",
+      "group" : "androidx.cursoradapter",
+      "name" : "cursoradapter",
+      "version" : "1.0.0",
+      "description" : "The Support Library is a static library that you can add to your Android application in order to use APIs that are either not available for older platform versions or utility APIs that aren't a part of the framework APIs. Compatible on devices running API 14 or later.",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "7db84f5847edcd4556f6c5a43394073b"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "74014983a86b83cbce534dec4e7aa9312f5f5d82"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "a81c8fe78815fa47df5b749deb52727ad11f9397da58b16017f4eb2c11e28564"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "176ac8e4604749ef5bb7f444c24add479f1d2cc5caab1046bbb35f937bf1cfc4329786cd1fdac3d6ee92fec78cb55ab89e5169ae5c6ee24dd4d20243aa867891"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "c0d6244769e0224cbd848aff3b74e6a2b579aaab6ff3b475dfc3d8640f9b1eeb"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "5fa6161291da89e7d262a4470610210d9a0ffce33ae4857dc48fdcd3c92575164a122a9931118575f1af7d76af3979a8da47f618f5f7ff931fcf75e92005d59f"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "533f21b5977b013f5317f803f2eb5b7ac54d3c16729c3a378b9d8dc4efaee8360d95dd1fb080ad2f6eb5b3f6afc7d25b"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "d7221eaf37df6459d15838c3a8c998caad426df8dcdf5de833d6d6f836e72b8336996002e907ae1f0b639eb4911e64fb"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/androidx.cursoradapter/cursoradapter@1.0.0?type=aar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "http://source.android.com"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
       "bom-ref" : "pkg:maven/androidx.customview/customview-poolingcontainer@1.0.0?type=aar",
       "group" : "androidx.customview",
       "name" : "customview-poolingcontainer",
@@ -5503,6 +5567,132 @@
         {
           "type" : "vcs",
           "url" : "http://source.android.com"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/androidx.drawerlayout/drawerlayout@1.0.0?type=aar",
+      "group" : "androidx.drawerlayout",
+      "name" : "drawerlayout",
+      "version" : "1.0.0",
+      "description" : "The Support Library is a static library that you can add to your Android application in order to use APIs that are either not available for older platform versions or utility APIs that aren't a part of the framework APIs. Compatible on devices running API 14 or later.",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "8c4e87d298c8f10193afe7e8c66ddc66"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "dd02c7e207136e1272b33815cc61e57676ed13a2"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "9402442cdc5a43cf62fb14f8cf98c63342d4d9d9b805c8033c6cf7e802749ac1"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "c3a92947b15af89d55a2268526579b7ad43cefde589f8824de0a9bf0dd1e3058e1853c046beb64be2df6a3a74ddf5ba494bafaf534e81c963b6fa9270e05a8ef"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "8beb9ba740abc748d5320d04010be157dcd615cbf447a4d55b952da47149a47c"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "11c9045e7b6db9e95b6017d517a571b4d525ea066d32783a82c1c48c175aa9ccaf5db457c6762b390507ea343455b89a84820d64a56838d17ea10cdd6bb7b7e5"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "f3324411bf43da984bd8408b550b5f6e09c76b3472a88b13c7a66f3aec6f26aa7306f76c01f2c176e4ee68ba74231fc1"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "ac5caa88e5d1f11d4b2ca371b244e20fecaab2d815911200512a3153525ce38c069e9d4a7adbfea4fb7e37e5f56a9de1"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/androidx.drawerlayout/drawerlayout@1.0.0?type=aar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "http://source.android.com"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/androidx.emoji2/emoji2-views-helper@1.4.0?type=aar",
+      "group" : "androidx.emoji2",
+      "name" : "emoji2-views-helper",
+      "version" : "1.4.0",
+      "description" : "Provide helper classes for Emoji2 views.",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "894a1b24ac8a170ec8f3bdb8f9e94b29"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "63a447404800465b7713c3359f64562b99d1a9f1"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "ed5d3ed772a5fbf0d570f7526f585cd61a180e60f9372584c328a68e2cff3375"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "8664552f362a7f7ae00d4ab6ed500805c60714aa7f2bc6e0ed89b604efb3f68522150b4c54733d2d62be68639cdaccb561c484518cb90a6cc92d3279a56de030"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "69484bfb9727f7bbea783f47021b5ef65e820d16a2e85112ca67dd774b19e604"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "4557f209e1f0581d32517c3323281fb04d93b0fc2a0e9c9ea8d7bca8357d32a368286f1f4ca8dbcaeee5deb83aa409051f0947613dca1d51baa7133501faecc0"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "9e43c78dcf02f2e07cc7cb7a4cd5ca51b6e070c9d6b5307da4daa29d46666a5f0a57a8f3787bbc15377ab035f4bb0263"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "0f57d02ebf4071471af1a93742d3fdbf2a12fe56fa48db184f726a14ca2018aa28bd1bec09a670e12f51052598ca2a09"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/androidx.emoji2/emoji2-views-helper@1.4.0?type=aar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://cs.android.com/androidx/platform/frameworks/support"
         }
       ],
       "properties" : [
@@ -7927,6 +8117,69 @@
         }
       ],
       "purl" : "pkg:maven/androidx.profileinstaller/profileinstaller@1.4.0?type=aar",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://cs.android.com/androidx/platform/frameworks/support"
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/androidx.resourceinspection/resourceinspection-annotation@1.0.1?type=jar",
+      "group" : "androidx.resourceinspection",
+      "name" : "resourceinspection-annotation",
+      "version" : "1.0.1",
+      "description" : "Annotation processors for Android resource and layout inspection",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "76145035148c5ffbf408b41ee8d58da7"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "8c21f8ff5d96d5d52c948707f7e4d6ca6773feef"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "8cff870ec6fb31db48a52f4a792335b4bf8de07e03bd37823181526433ccd5cb"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "f827446c6aaeaf1187eeeb39c63f2f25179f492826d35c23208990d8a16557a829ab33c76e2fd446c6fe4d6b9e8d8391c570dd6e16776ccf3335140738b8b29a"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "b900f3f0f298a84f1efd5128e181c0f10eb2e70e923a23cc92a9a4e9a2d7f5f3"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "14f81ff21116d3e1e84b73234377369dd8dfa6e491a10e9f94a7b4c2920b48f540ec45272a3e61f973d785039d283404c857fbec4fbdda426393dae02e1945a5"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "40d9a4bb653a7edc0bfa69462f92d99bb5fae69a05b7632b20d66189ad2365f33bbb6a2dc2a4d902e77167d5a3b340ca"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "2308a9576e92d563849f8eb94799ca2023ea7f6460a08ecdf131075a511c31e63002dfc89f969c1ef311922136d253de"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/androidx.resourceinspection/resourceinspection-annotation@1.0.1?type=jar",
       "modified" : false,
       "externalReferences" : [
         {
@@ -29259,23 +29512,37 @@
       ]
     },
     {
-      "ref" : "pkg:maven/androidx.appcompat/appcompat-resources@1.4.1?type=aar",
+      "ref" : "pkg:maven/androidx.appcompat/appcompat-resources@1.7.1?type=aar",
       "dependsOn" : [
         "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
+        "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
         "pkg:maven/androidx.core/core@1.16.0?type=aar",
         "pkg:maven/androidx.vectordrawable/vectordrawable-animated@1.1.0?type=aar",
         "pkg:maven/androidx.vectordrawable/vectordrawable@1.1.0?type=aar"
       ]
     },
     {
-      "ref" : "pkg:maven/androidx.appcompat/appcompat-resources@1.7.0?type=aar",
+      "ref" : "pkg:maven/androidx.appcompat/appcompat@1.7.1?type=aar",
       "dependsOn" : [
+        "pkg:maven/androidx.activity/activity@1.10.1?type=aar",
         "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
+        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
+        "pkg:maven/androidx.appcompat/appcompat-resources@1.7.1?type=aar",
         "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
+        "pkg:maven/androidx.core/core-ktx@1.16.0?type=aar",
         "pkg:maven/androidx.core/core@1.16.0?type=aar",
-        "pkg:maven/androidx.vectordrawable/vectordrawable-animated@1.1.0?type=aar",
-        "pkg:maven/androidx.vectordrawable/vectordrawable@1.1.0?type=aar"
+        "pkg:maven/androidx.cursoradapter/cursoradapter@1.0.0?type=aar",
+        "pkg:maven/androidx.drawerlayout/drawerlayout@1.0.0?type=aar",
+        "pkg:maven/androidx.emoji2/emoji2-views-helper@1.4.0?type=aar",
+        "pkg:maven/androidx.emoji2/emoji2@1.4.0?type=aar",
+        "pkg:maven/androidx.fragment/fragment@1.8.9?type=aar",
+        "pkg:maven/androidx.lifecycle/lifecycle-runtime@2.9.1?type=jar",
+        "pkg:maven/androidx.lifecycle/lifecycle-viewmodel@2.9.1?type=aar",
+        "pkg:maven/androidx.profileinstaller/profileinstaller@1.4.0?type=aar",
+        "pkg:maven/androidx.resourceinspection/resourceinspection-annotation@1.0.1?type=jar",
+        "pkg:maven/androidx.savedstate/savedstate@1.3.0?type=jar",
+        "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar"
       ]
     },
     {
@@ -29900,7 +30167,7 @@
       "ref" : "pkg:maven/androidx.core/core-splashscreen@1.2.0?type=aar",
       "dependsOn" : [
         "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
-        "pkg:maven/androidx.appcompat/appcompat-resources@1.7.0?type=aar",
+        "pkg:maven/androidx.appcompat/appcompat-resources@1.7.1?type=aar",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar"
       ]
     },
@@ -29925,6 +30192,13 @@
         "pkg:maven/androidx.versionedparcelable/versionedparcelable@1.1.1?type=aar",
         "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.2.21?type=jar",
         "pkg:maven/org.jspecify/jspecify@1.0.0?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/androidx.cursoradapter/cursoradapter@1.0.0?type=aar",
+      "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
+        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar"
       ]
     },
     {
@@ -30063,6 +30337,23 @@
       "dependsOn" : [
         "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
         "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/androidx.drawerlayout/drawerlayout@1.0.0?type=aar",
+      "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom",
+        "pkg:maven/androidx.annotation/annotation@1.9.1?type=jar",
+        "pkg:maven/androidx.core/core@1.16.0?type=aar",
+        "pkg:maven/androidx.customview/customview@1.0.0?type=aar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/androidx.emoji2/emoji2-views-helper@1.4.0?type=aar",
+      "dependsOn" : [
+        "pkg:maven/androidx.collection/collection@1.6.0?type=pom",
+        "pkg:maven/androidx.core/core@1.16.0?type=aar",
+        "pkg:maven/androidx.emoji2/emoji2@1.4.0?type=aar"
       ]
     },
     {
@@ -30491,6 +30782,12 @@
         "pkg:maven/androidx.concurrent/concurrent-futures@1.1.0?type=jar",
         "pkg:maven/androidx.startup/startup-runtime@1.1.1?type=aar",
         "pkg:maven/com.google.guava/listenablefuture@9999.0-empty-to-avoid-conflict-with-guava?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/androidx.resourceinspection/resourceinspection-annotation@1.0.1?type=jar",
+      "dependsOn" : [
+        "pkg:maven/androidx.annotation/annotation@1.10.0?type=pom"
       ]
     },
     {
@@ -31541,8 +31838,7 @@
     {
       "ref" : "pkg:maven/com.google.android.play/hsdp@2.2.0?type=aar",
       "dependsOn" : [
-        "pkg:maven/androidx.appcompat/appcompat-resources@1.4.1?type=aar",
-        "pkg:maven/androidx.appcompat/appcompat-resources@1.7.0?type=aar",
+        "pkg:maven/androidx.appcompat/appcompat-resources@1.7.1?type=aar",
         "pkg:maven/com.google.android.gms/play-services-basement@18.9.0?type=aar"
       ]
     },
@@ -32076,6 +32372,7 @@
       "ref" : "pkg:maven/com.vibesync.antivirus/app@1.5.1?project_path=%3Aapp",
       "dependsOn" : [
         "pkg:maven/androidx.activity/activity-compose@1.10.1?type=aar",
+        "pkg:maven/androidx.appcompat/appcompat@1.7.1?type=aar",
         "pkg:maven/androidx.compose.foundation/foundation@1.8.2?type=jar",
         "pkg:maven/androidx.compose.material/material-icons-extended@1.7.8?type=jar",
         "pkg:maven/androidx.compose.material3/material3@1.3.2?type=jar",
