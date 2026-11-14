@@ -59,7 +59,14 @@ KANNADA_JAPANESE_OVERRIDE_KEYS = {
     "scan_foreground_channel_name",
     "scan_foreground_channel_description",
     "scan_foreground_notification_title",
-    "scan_foreground_notification_body"
+    "scan_foreground_notification_body",
+    "console_full_screen_alerts_title",
+    "console_full_screen_alerts_allowed",
+    "console_full_screen_alerts_permission_needed",
+    "console_full_screen_alerts_not_required",
+    "console_full_screen_alerts_manage",
+    "console_full_screen_alerts_grant",
+    "scan_stop_action"
 }
 
 files = ("strings.xml", "device_posture.xml", "incident_response.xml",

@@ -726,4 +726,11 @@
     <string name="scan_foreground_notification_body">SafeMobile がこの端末にインストールされたアプリとローカルファイルをスキャンしています。</string>
     <string name="ui_sentinel_telegram_folder">Telegram ドキュメントフォルダ</string>
     <string name="ui_sentinel_enable_telegram">Telegram ドキュメントを監視</string>
+    <string name="console_full_screen_alerts_title">全画面アラート</string>
+    <string name="console_full_screen_alerts_allowed">許可済み。SafeMobile は緊急インシデントアラートを全画面で表示できます。</string>
+    <string name="console_full_screen_alerts_permission_needed">権限が必要です。緊急インシデントアラートを全画面で表示するには、SafeMobile に許可してください。</string>
+    <string name="console_full_screen_alerts_not_required">この Android バージョンでは不要です。</string>
+    <string name="console_full_screen_alerts_manage">管理</string>
+    <string name="console_full_screen_alerts_grant">アクセスを許可</string>
+    <string name="scan_stop_action">スキャンを停止</string>
 </resources>

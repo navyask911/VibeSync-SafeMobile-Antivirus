@@ -748,4 +748,11 @@
     <string name="scan_foreground_notification_body">SafeMobile ಈ ಸಾಧನದಲ್ಲಿನ ಇನ್‌ಸ್ಟಾಲ್ ಮಾಡಿದ ಆ್ಯಪ್‌ಗಳು ಮತ್ತು ಸ್ಥಳೀಯ ಫೈಲ್‌ಗಳನ್ನು ಸ್ಕ್ಯಾನ್ ಮಾಡುತ್ತಿದೆ.</string>
     <string name="ui_sentinel_telegram_folder">Telegram ಡಾಕ್ಯುಮೆಂಟ್‌ಗಳ ಫೋಲ್ಡರ್</string>
     <string name="ui_sentinel_enable_telegram">Telegram ಡಾಕ್ಯುಮೆಂಟ್‌ಗಳನ್ನು ಮೇಲ್ವಿಚಾರಣೆ ಮಾಡಿ</string>
+    <string name="console_full_screen_alerts_title">ಪೂರ್ಣ-ಪರದೆ ಎಚ್ಚರಿಕೆಗಳು</string>
+    <string name="console_full_screen_alerts_allowed">ಅನುಮತಿಸಲಾಗಿದೆ. ತುರ್ತು ಘಟನೆ ಎಚ್ಚರಿಕೆಗಳನ್ನು ಪೂರ್ಣ ಪರದೆಯಲ್ಲಿ SafeMobile ತೆರೆಯಬಹುದು.</string>
+    <string name="console_full_screen_alerts_permission_needed">ಅನುಮತಿ ಅಗತ್ಯವಿದೆ. ತುರ್ತು ಘಟನೆ ಎಚ್ಚರಿಕೆಗಳನ್ನು ಪೂರ್ಣ ಪರದೆಯಲ್ಲಿ ತೆರೆಯಲು SafeMobile ಗೆ ಅನುಮತಿ ನೀಡಿ.</string>
+    <string name="console_full_screen_alerts_not_required">ಈ Android ಆವೃತ್ತಿಯಲ್ಲಿ ಅಗತ್ಯವಿಲ್ಲ.</string>
+    <string name="console_full_screen_alerts_manage">ನಿರ್ವಹಿಸಿ</string>
+    <string name="console_full_screen_alerts_grant">ಪ್ರವೇಶ ನೀಡಿ</string>
+    <string name="scan_stop_action">ಸ್ಕ್ಯಾನ್ ನಿಲ್ಲಿಸಿ</string>
 </resources>
