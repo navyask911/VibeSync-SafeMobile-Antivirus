@@ -18,7 +18,9 @@ object FullScreenAlertAccess {
     }
 
     fun settingsIntent(context: Context): Intent? = if (Build.VERSION.SDK_INT >= 34) {
-        Intent(Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT,
-            Uri.fromParts("package", context.packageName, null))
+        Intent(
+            Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT,
+            Uri.parse("package:${context.packageName}")
+        )
     } else null
 }
