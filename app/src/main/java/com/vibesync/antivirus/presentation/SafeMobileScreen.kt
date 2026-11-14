@@ -181,6 +181,7 @@ import kotlinx.coroutines.launch
  var showLanguagePicker by rememberSaveable { mutableStateOf(false) }
  var isSubscriptionExpanded by rememberSaveable { mutableStateOf(false) }
  var settingsSubRoute by rememberSaveable { mutableStateOf(SettingsSubRoute.ROOT) }
+ var focusFullScreenAlerts by rememberSaveable { mutableStateOf(false) }
  val tabNavController = rememberNavController()
  val currentBackStackEntry by tabNavController.currentBackStackEntryAsState()
  val currentDestination = currentBackStackEntry?.destination
@@ -832,6 +833,9 @@ import kotlinx.coroutines.launch
              "notifications_on", "fullscreen_alert", "voice_alert_tts" -> SettingsSubRoute.NOTIFICATIONS
              else -> SettingsSubRoute.SECURITY
             }
+            // The active Console uses V17ConsoleSettingsScreen, not the legacy ProductSettings
+            // sub-route. Focus the actual full-screen permission row for this Advisor action.
+            focusFullScreenAlerts = issue.id == "fullscreen_alert"
             navigateToDestination("settings")
            } else {
             navigateToDestination(issue.destination)
@@ -972,7 +976,9 @@ import kotlinx.coroutines.launch
           onBenchmarks = { navigateToDestination("scan") },
           onOpenPro = openProSafely,
           onOpenPrivacy = { navigateToDestination("privacy") },
-          onOpenAbout = { navigateToDestination("about") }
+          onOpenAbout = { navigateToDestination("about") },
+          focusFullScreenAlerts = focusFullScreenAlerts,
+          onFullScreenAlertFocusHandled = { focusFullScreenAlerts = false }
          )
          else -> Column(
           Modifier.fillMaxSize().verticalScroll(contentScrollState)
