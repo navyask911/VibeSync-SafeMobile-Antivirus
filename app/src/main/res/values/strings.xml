@@ -7,6 +7,8 @@
 <string name="brand_title">SafeMobile Antivirus</string><string name="brand_subtitle">VibeSync</string>
 <string name="scan_status">Local protection dashboard</string><string name="scan_running">Scanning device…</string><string name="threat_found">Threat match detected</string>
 <string name="signature_count">Local signatures: %1$d · Scan sessions: %2$d</string>
+    <string name="scan_sessions_in_progress">Scan sessions in progress: %1$d</string>
+    <string name="scan_sessions_completed">Completed scan sessions: %1$d</string>
 <string name="scan_explanation">Checks readable installed APKs against locally stored definitions and reviews files you select. Detection is limited by operating-system access and the definitions installed on this device.</string>
 <string name="scan_installed">Scan installed apps</string><string name="scan_selected">Choose APK file</string>
 <string name="monitor_title">Alerts &amp; monitoring</string>
@@ -25,7 +27,11 @@
 <string name="not_configured">Offline definitions currently contain only the EICAR antivirus test signature; this does not protect against real-world malware. Import a curated, licensed local signature database.</string>
 <string name="update_available">An app update is available in Google Play.</string><string name="update_downloaded">Update downloaded. Restart the app to finish updating.</string><string name="close">Close</string>
 <string name="file_hash_label">SHA-256: %1$s…</string>
-<string name="service_channel_name">SafeMobile file monitoring</string><string name="service_channel_description">Notifications for user-enabled local APK checks.</string><string name="service_notification_title">SafeMobile monitoring is active</string><string name="service_notification_body">Watching Downloads for newly written APK files.</string>
+<string name="service_channel_name">SafeMobile file monitoring</string>
+    <string name="scan_foreground_channel_name" translatable="false">Scanning in progress</string>
+    <string name="scan_foreground_channel_description" translatable="false">Persistent status for on-device antivirus scans.</string>
+    <string name="scan_foreground_notification_title" translatable="false">Scanning in progress</string>
+    <string name="scan_foreground_notification_body" translatable="false">SafeMobile is scanning installed apps and local files on this device.</string><string name="service_channel_description">Notifications for user-enabled local APK checks.</string><string name="service_notification_title">SafeMobile monitoring is active</string><string name="service_notification_body">Watching Downloads for newly written APK files.</string>
 
 <string name="unknown_file">selected file</string>
 <string name="local_files_only">For privacy, this scanner only opens files from recognized on-device storage providers. Cloud or third-party document providers are not opened.</string>
@@ -465,9 +471,11 @@
     <string name="ui_sentinel_scoped">On Android 11+, choose an accessible subfolder rather than the protected Download root.</string>
     <string name="ui_sentinel_select_tip">Android may block the main Download folder and storage root. Select an accessible Download subfolder or individual files. Messaging Apps Documents may be under Android/media/com.Messaging Apps/Messaging Apps/Media. Only granted folders are monitored.</string>
     <string name="ui_sentinel_download_folder">Download folder (browser downloads)</string>
-    <string name="ui_sentinel_whatsapp_folder">Messaging Apps Documents folder (chat APKs)</string>
+    <string name="ui_sentinel_whatsapp_folder">WhatsApp Documents folder</string>
+    <string name="ui_sentinel_telegram_folder">Telegram Documents folder</string>
+    <string name="ui_sentinel_enable_telegram">Monitor Telegram Documents</string>
     <string name="ui_sentinel_enable_download">Enable Download Monitoring</string>
-    <string name="ui_sentinel_enable_whatsapp">Enable Messaging Apps Monitoring</string>
+    <string name="ui_sentinel_enable_whatsapp">Monitor WhatsApp Documents</string>
     <string name="ui_sentinel_remove_folder">Remove monitored folder</string>
     <string name="ui_sentinel_running">Monitoring authorized folders recursively</string>
     <string name="ui_sentinel_stopped">Folder monitoring is stopped</string>

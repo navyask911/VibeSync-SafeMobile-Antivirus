@@ -700,4 +700,8 @@
     <string name="self_update_no_update">No newer Google Play update is currently available.</string>
     <string name="self_update_not_allowed">An update is available, but Google Play does not allow the immediate update flow for this installation.</string>
     <string name="self_update_open_play_store">Open Google Play</string>
+    <string name="scan_sessions_in_progress">ప్రస్తుతం జరుగుతున్న స్కాన్ సెషన్‌లు: %1$d</string>
+    <string name="scan_sessions_completed">పూర్తయిన స్కాన్ సెషన్‌లు: %1$d</string>
+    <string name="ui_sentinel_telegram_folder">Telegram పత్రాల ఫోల్డర్</string>
+    <string name="ui_sentinel_enable_telegram">Telegram పత్రాలను పర్యవేక్షించండి</string>
 </resources>

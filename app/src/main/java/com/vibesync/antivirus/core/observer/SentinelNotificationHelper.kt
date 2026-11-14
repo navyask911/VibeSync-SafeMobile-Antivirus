@@ -17,7 +17,7 @@ import com.vibesync.antivirus.MainActivity
 import com.vibesync.antivirus.R
 
 object SentinelNotificationHelper {
-    const val SERVICE_CHANNEL = "safe_mobile_sentinel_service"
+    const val SERVICE_CHANNEL = "safe_mobile_sentinel_service_v2"
     const val ALERT_CHANNEL = "safe_mobile_sentinel_alerts"
     const val SERVICE_ID = 7021
 
@@ -25,7 +25,11 @@ object SentinelNotificationHelper {
         if (Build.VERSION.SDK_INT < 26) return
         val manager = context.getSystemService(NotificationManager::class.java) ?: return
         manager.createNotificationChannel(
-            NotificationChannel(SERVICE_CHANNEL, context.getString(R.string.service_channel_name), NotificationManager.IMPORTANCE_LOW)
+            NotificationChannel(SERVICE_CHANNEL, context.getString(R.string.service_channel_name), NotificationManager.IMPORTANCE_HIGH).apply {
+                // Keep the always-on status visible without making routine service startup noisy.
+                setSound(null, null)
+                enableVibration(false)
+            }
         )
         manager.createNotificationChannel(
             NotificationChannel(ALERT_CHANNEL, context.getString(R.string.notification_sentinel_channel), NotificationManager.IMPORTANCE_HIGH)
@@ -44,7 +48,8 @@ object SentinelNotificationHelper {
             .setContentTitle(context.getString(R.string.notification_service_title))
             .setContentText(context.getString(R.string.notification_service_body))
             .setContentIntent(pending).setOngoing(true).setOnlyAlertOnce(true)
-            .setCategory(NotificationCompat.CATEGORY_SERVICE).build()
+            .setCategory(NotificationCompat.CATEGORY_SERVICE)
+            .setPriority(NotificationCompat.PRIORITY_HIGH).build()
     }
 
     fun malicious(context: Context, name: String?, removed: Boolean, id: String,

@@ -6,8 +6,8 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 
 @Database(
- entities = [ThreatSignature::class, ScanAudit::class, WhiteListEntry::class, MalwareHashEntity::class, ThreatFeedSyncStateEntity::class, ThreatFeedStagingEntity::class, SecurityIncidentEntity::class, QuarantineVaultEntity::class],
- version = 9, exportSchema = false
+ entities = [ThreatSignature::class, ScanAudit::class, WhiteListEntry::class, MalwareHashEntity::class, ThreatFeedSyncStateEntity::class, ThreatFeedStagingEntity::class, SecurityIncidentEntity::class, QuarantineVaultEntity::class, ScanSessionEntity::class],
+ version = 10, exportSchema = false
 )
 abstract class ThreatDatabase : RoomDatabase() {
  abstract fun threatDao(): ThreatDao
@@ -75,6 +75,23 @@ abstract class ThreatDatabase : RoomDatabase() {
     database.execSQL("CREATE INDEX IF NOT EXISTS index_malware_hashes_sha1_hash ON malware_hashes(sha1_hash)")
     database.execSQL("ALTER TABLE threat_feed_staging ADD COLUMN sha1_hash TEXT")
     database.execSQL("ALTER TABLE threat_feed_staging ADD COLUMN file_size INTEGER")
+   }
+  }
+  /** Adds persisted scan lifecycle rows without touching existing audit history. */
+  val MIGRATION_9_10: Migration = object : Migration(9, 10) {
+   override fun migrate(database: SupportSQLiteDatabase) {
+    database.execSQL(
+     "CREATE TABLE IF NOT EXISTS scan_sessions (" +
+      "session_id TEXT NOT NULL, scan_type TEXT NOT NULL, started_at INTEGER NOT NULL, " +
+      "completed_at INTEGER, status TEXT NOT NULL, PRIMARY KEY(session_id))"
+    )
+    database.execSQL("CREATE INDEX IF NOT EXISTS index_scan_sessions_started_at ON scan_sessions(started_at)")
+    database.execSQL("CREATE INDEX IF NOT EXISTS index_scan_sessions_status ON scan_sessions(status)")
+    database.execSQL(
+     "INSERT OR IGNORE INTO scan_sessions(session_id, scan_type, started_at, completed_at, status) " +
+      "SELECT scan_session_id, 'LEGACY', MIN(scan_timestamp), MAX(scan_timestamp), 'COMPLETED' " +
+      "FROM scan_audits WHERE scan_session_id != '' GROUP BY scan_session_id"
+    )
    }
   }
  }

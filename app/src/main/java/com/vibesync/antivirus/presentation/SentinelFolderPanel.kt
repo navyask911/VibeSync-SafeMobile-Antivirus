@@ -52,8 +52,7 @@ internal fun SentinelFolderPanel(
     onAddCustom: () -> Unit,
     onRemove: (Uri) -> Unit,
     onStart: () -> Unit,
-    onStop: () -> Unit,
-    onSkip: () -> Unit
+    onStop: () -> Unit
 ) {
     val customCount = customFolders.size
     GlassCard(Modifier.fillMaxWidth()) {
@@ -76,6 +75,13 @@ internal fun SentinelFolderPanel(
                 Text(stringResource(R.string.ui_sentinel_whatsapp_folder))
             }
             Button(onClick = { onAdd(StorageAccessPreferences.WHATSAPP) }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) { Text(stringResource(R.string.ui_sentinel_enable_whatsapp)) }
+            val telegramActive = running && StorageAccessPreferences.hasRole(context, StorageAccessPreferences.TELEGRAM)
+            Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Icon(if (telegramActive) Icons.Outlined.CheckCircle else Icons.Outlined.RadioButtonUnchecked,
+                    contentDescription = null, tint = if (telegramActive) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(R.string.ui_sentinel_telegram_folder))
+            }
+            Button(onClick = { onAdd(StorageAccessPreferences.TELEGRAM) }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) { Text(stringResource(R.string.ui_sentinel_enable_telegram)) }
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
             Text(stringResource(R.string.ui_sentinel_custom_folders), style = MaterialTheme.typography.titleMedium)
             Text(stringResource(R.string.ui_sentinel_folder_limit), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -103,8 +109,6 @@ internal fun SentinelFolderPanel(
             if (running) OutlinedButton(onClick = onStop, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) { Text(stringResource(R.string.ui_sentinel_stop)) }
             else if (folders.isNotEmpty()) OutlinedButton(onClick = onStart, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) { Text(stringResource(R.string.ui_sentinel_start)) }
             ExpandableText(stringResource(R.string.ui_sentinel_best_effort), maxLines = 3)
-            OutlinedButton(onClick = onSkip, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) { Text(stringResource(R.string.ui_sentinel_continue)) }
-            TextButton(onClick = onSkip, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) { Text(stringResource(R.string.setup_skip)) }
         }
     }
 }

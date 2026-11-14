@@ -11,6 +11,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.SharedPreferences
+import java.io.File
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -308,8 +309,16 @@ class DashboardSnapshotTest {
 // reproduces that contract without touching device storage or production persistence code.
 internal class SnapshotContextWrapper(base: Context) : ContextWrapper(base) {
     private val preferences = mutableMapOf<String, SharedPreferences>()
+    private val snapshotFilesDirectory = File(
+        System.getProperty("java.io.tmpdir") ?: ".",
+        "safemobile-paparazzi-files"
+    ).apply { mkdirs() }
 
     override fun getApplicationContext(): Context = this
+
+    // Host-side Paparazzi contexts may return null from Context.getFilesDir().
+    // Supply a real temporary directory for Android/library code that probes it.
+    override fun getFilesDir(): File = snapshotFilesDirectory
 
     override fun getSharedPreferences(name: String, mode: Int): SharedPreferences =
         preferences.getOrPut(name) { SnapshotSharedPreferences() }

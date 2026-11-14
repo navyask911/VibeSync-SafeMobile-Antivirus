@@ -55,7 +55,11 @@ KANNADA_JAPANESE_OVERRIDE_KEYS = {
     "posture_audit_success",
     "play_protect_status_title",
     "play_protect_status_enabled",
-    "play_protect_status_disabled"
+    "play_protect_status_disabled",
+    "scan_foreground_channel_name",
+    "scan_foreground_channel_description",
+    "scan_foreground_notification_title",
+    "scan_foreground_notification_body"
 }
 
 files = ("strings.xml", "device_posture.xml", "incident_response.xml",

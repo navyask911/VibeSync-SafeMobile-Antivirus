@@ -34,4 +34,32 @@ interface ThreatDao {
    CASE WHEN scan_session_id = '' THEN 'legacy:' || id ELSE 'session:' || scan_session_id END)
   WHERE firstScan >= :start AND firstScan < :end GROUP BY day ORDER BY day""")
  fun observeWeeklySessions(start: Long, end: Long): Flow<List<ScanDayCount>>
+
+ @Insert(onConflict = OnConflictStrategy.REPLACE)
+ suspend fun upsertScanSession(session: ScanSessionEntity)
+
+ @Query("UPDATE scan_sessions SET status = 'COMPLETED', completed_at = :completedAt WHERE session_id = :sessionId")
+ suspend fun markScanSessionCompleted(sessionId: String, completedAt: Long)
+
+ @Query("UPDATE scan_sessions SET status = 'INTERRUPTED', completed_at = :interruptedAt WHERE session_id = :sessionId")
+ suspend fun markScanSessionInterrupted(sessionId: String, interruptedAt: Long)
+
+ @Query("UPDATE scan_sessions SET status = 'INTERRUPTED' WHERE status = 'IN_PROGRESS'")
+ suspend fun markInProgressAsInterrupted()
+
+ @Query("""
+  SELECT
+   COUNT(*) AS total,
+   COALESCE(SUM(CASE WHEN status = 'COMPLETED' THEN 1 ELSE 0 END), 0) AS completed,
+   COALESCE(SUM(CASE WHEN status = 'IN_PROGRESS' THEN 1 ELSE 0 END), 0) AS inProgress,
+   COALESCE(SUM(CASE WHEN status = 'INTERRUPTED' THEN 1 ELSE 0 END), 0) AS interrupted
+  FROM scan_sessions
+ """)
+ fun observeScanSessionCounts(): Flow<ScanSessionCounts>
+
+ @Query("SELECT MAX(completed_at) FROM scan_sessions WHERE status = 'COMPLETED'")
+ fun observeLatestCompletedScanAt(): Flow<Long?>
+
+ @Query("SELECT MAX(completed_at) FROM scan_sessions WHERE status = 'COMPLETED'")
+ suspend fun latestCompletedScanAt(): Long?
 }

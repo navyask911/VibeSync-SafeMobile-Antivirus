@@ -9,11 +9,12 @@
  <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
  <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
- <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+ <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" tools:ignore="BatteryLife" />
  <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
  <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
  <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
  <queries>
+  <intent><action android:name="android.intent.action.MAIN" /></intent>
   <intent><action android:name="android.intent.action.DELETE" /><data android:scheme="package" /></intent>
   <intent><action android:name="android.intent.action.TTS_SERVICE" /></intent>
  </queries>
@@ -34,6 +35,16 @@
   </service>
   <service android:name=".core.observer.StorageSentinelService" android:exported="false" android:foregroundServiceType="specialUse">
    <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE" android:value="User-enabled local Downloads folder monitoring to scan new APK files against local threat hashes." />
+  </service>
+  <service
+   android:name="androidx.work.impl.foreground.SystemForegroundService"
+   android:exported="false"
+   android:foregroundServiceType="specialUse"
+   tools:node="merge"
+   tools:replace="android:foregroundServiceType">
+   <property
+    android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+    android:value="User-visible WorkManager tasks perform on-device antivirus scans of installed apps and user-selected local files." />
   </service>
   <activity android:name=".core.observer.ThreatBlockedActivity" android:exported="false" android:excludeFromRecents="true" />
   <activity android:name=".core.observer.ThreatDetectedActivity" android:exported="false" android:excludeFromRecents="true" android:launchMode="singleTop" />

@@ -47,9 +47,9 @@ android {
   applicationId = "com.vibesync.antivirus"
   minSdk = 26
   targetSdk = 36
-  versionCode = 20261149
-  // [release-v1.9.0] Local integrity fallback, LiteRT 16 KB JNI and edge-to-edge compliance.
-  versionName = "1.9.0"
+  versionCode = 20261150
+  // [release-v1.9.1] Scan history recovery, folder monitoring, OEM and Shield UI hardening.
+  versionName = "1.9.1"
   testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   buildConfigField("String", "FEED_MANIFEST_PUBLIC_KEY_B64", cfg(feedManifestPublicKey))
   buildConfigField("Boolean", "FEED_MANIFEST_KEY_CONFIGURED", (!feedManifestPublicKey.isBlank()).toString())
@@ -637,6 +637,7 @@ dependencies {
  implementation("androidx.datastore:datastore-preferences:1.3.0")
  implementation("androidx.documentfile:documentfile:1.0.1")
  implementation("androidx.activity:activity-compose:1.10.1")
+ implementation("androidx.appcompat:appcompat:1.7.1")
  implementation("androidx.navigation:navigation-compose:2.9.8")
     implementation("androidx.fragment:fragment-ktx:1.8.9")
  implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.9.1")

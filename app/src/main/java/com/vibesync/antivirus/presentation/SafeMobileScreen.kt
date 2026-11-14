@@ -39,6 +39,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.WindowInsets
@@ -119,6 +120,7 @@ import com.vibesync.antivirus.core.observer.InstallSentinelService
 import com.vibesync.antivirus.core.observer.SecurityVoiceAlert
 import com.vibesync.antivirus.core.observer.SecurityIncidentSiren
 import com.vibesync.antivirus.core.engine.ScanResult
+import com.vibesync.antivirus.core.engine.BundledYaraEngine
 import com.vibesync.antivirus.core.engine.DetectionSource
 import com.vibesync.antivirus.core.quarantine.LocalQuarantineManager
 import com.vibesync.antivirus.core.engine.ScanVerdict
@@ -303,7 +305,6 @@ import kotlinx.coroutines.launch
  var pendingUninstallPackage by remember { mutableStateOf<String?>(null) }
  var showNotificationPermissionPrompt by remember { mutableStateOf(false) }
   val notificationPermissionPromptKey = "notification_permission_first_prompted"
- var showStoragePermissionPrompt by remember { mutableStateOf(false) }
  var pendingAlertEnable by remember { mutableStateOf(false) }
  var pendingSentinelEnable by remember { mutableStateOf(false) }
  val securityPrefs = remember(context) { context.getSharedPreferences(SafeMobileApp.SECURITY_PREFS, Context.MODE_PRIVATE) }
@@ -323,7 +324,8 @@ import kotlinx.coroutines.launch
  val advisorStore = remember(context) { ProtectionAdvisorStore(context) }
  val snoozedAdvisorIds by advisorStore.snoozedIssueIds.collectAsStateWithLifecycle(initialValue = emptySet())
  val folderSentinelConfigured = StorageAccessPreferences.hasRole(context, StorageAccessPreferences.DOWNLOADS) ||
-  StorageAccessPreferences.hasRole(context, StorageAccessPreferences.WHATSAPP) || customFolderUris.isNotEmpty()
+  StorageAccessPreferences.hasRole(context, StorageAccessPreferences.WHATSAPP) ||
+  StorageAccessPreferences.hasRole(context, StorageAccessPreferences.TELEGRAM) || customFolderUris.isNotEmpty()
  val databaseUpdatedAt = com.vibesync.antivirus.core.hashdb.HashDatabaseFreshness.updatedAt(context, state.hashDatabaseCapability.version)
  val advisorInputs = remember(
   state.completedScans, state.scanSummary, state.threatCount, folderSentinelConfigured,
@@ -542,6 +544,15 @@ import kotlinx.coroutines.launch
    }
   }
  }
+ val launchStorageFolderPicker: (String) -> Unit = { role ->
+  pendingFolderRole = role
+  pendingSentinelEnable = true
+  runCatching { storageTreeLauncher.launch(StorageAccessPreferences.pickerIntent(role)) }
+   .onFailure {
+    pendingSentinelEnable = false
+    Toast.makeText(context, R.string.ui_folder_picker_unavailable, Toast.LENGTH_LONG).show()
+   }
+ }
  val requestStorage: () -> Unit = { navigateToDestination("sentinel") }
  val enableSentinel: () -> Unit = {
   if (!StorageAccessPreferences.hasAccess(context)) requestStorage()
@@ -638,6 +649,7 @@ import kotlinx.coroutines.launch
  DisposableEffect(lifecycleOwner, context, privacyAccepted) {
   val observer = LifecycleEventObserver { _, event ->
    if (event == Lifecycle.Event.ON_RESUME) {
+    vm.refreshScanHistory()
     if (privacyAccepted) vm.refreshTrustOverrides()
     fullScreenAlertsGranted = FullScreenAlertAccess.isGranted(context)
     voiceAlertsEnabled = securityPrefs.getBoolean(SafeMobileApp.KEY_VOICE_ALERTS_ENABLED, false)
@@ -834,11 +846,19 @@ import kotlinx.coroutines.launch
           },
           isPro = adMobState.isPro,
           activeGuards = listOf(batteryUnrestricted, storageAccessGranted).count { it },
+          totalGuardChecks = listOf(batteryUnrestricted, storageAccessGranted).size,
+          folderMonitorActive = monitoringRunning,
+          monitoredFolderCount = folderUris.size,
+          hashDatabaseActive = state.hashDatabaseCapability.enabled,
+          signedThreatIndicatorCount = state.hashDatabaseCapability.indicatorCount,
+          yaraEngineActive = BundledYaraEngine.capability.active,
+          isScanning = state.isScanning,
+          onStartScan = { requestPrivacyAcknowledgement { vm.scanFull() } },
           liveSentinelActive = installSentinelRunning,
           posturePassed = postureState.report?.highRiskAppCount?.let { (8 - it.coerceIn(0, 8)).coerceIn(0, 8) },
           quarantinedFilesCount = state.quarantinedFiles.size,
           onOpenSetup = { showV17ProtectionSetupSheet = true },
-          onOpenLiveSentinel = { navigateToDestination("sources") },
+          onOpenLiveSentinel = { navigateToDestination("sentinel") },
           onOpenPosture = { navigateToDestination("posture"); if (privacyAccepted) postureVm.refreshAuditSilently() },
           onOpenDetection = { navigateToDestination("capabilities") },
           onOpenThreatDb = { navigateToDestination("quarantine") },
@@ -1063,7 +1083,7 @@ import kotlinx.coroutines.launch
            androidx.compose.material3.Icon(statusIcon,contentDescription=null,tint=statusTint,modifier=Modifier.size(30.dp))
            Column(Modifier.padding(start=10.dp).weight(1f)) {
             Text(stringResource(statusResource),style=MaterialTheme.typography.titleMedium,fontWeight=FontWeight.Bold,color=statusTint)
-            Text(stringResource(R.string.signature_count,state.signatureCount,state.completedScans),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(stringResource(R.string.signature_count,state.signatureCount,state.totalScanSessions),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
            }
           }
           ExpandableText(stringResource(R.string.scan_explanation), maxLines = 3)
@@ -1158,13 +1178,9 @@ import kotlinx.coroutines.launch
         if (selectedDestination == "sentinel") {
          SentinelFolderPanel(context, folderUris, monitoringRunning,
           customFolders = customFolderUris.filter { it in folderUris },
-          onAdd = { role -> requestPrivacyAcknowledgement {
-           pendingFolderRole = role; pendingSentinelEnable = true; showStoragePermissionPrompt = true
-          } },
+          onAdd = { role -> requestPrivacyAcknowledgement { launchStorageFolderPicker(role) } },
           onAddCustom = { requestPrivacyAcknowledgement {
-           pendingFolderRole = StorageAccessPreferences.CUSTOM
-           pendingSentinelEnable = true
-           showStoragePermissionPrompt = true
+           launchStorageFolderPicker(StorageAccessPreferences.CUSTOM)
           } },
           onRemove = { uri -> uiScope.launch {
            kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { StorageAccessPreferences.removeSelectedFolder(context, uri) }
@@ -1172,8 +1188,7 @@ import kotlinx.coroutines.launch
            storageAccessGranted = folderUris.isNotEmpty()
            if (!storageAccessGranted) disableSentinel()
           } },
-          onStart = { requestPrivacyAcknowledgement { enableSentinel() } }, onStop = disableSentinel,
-          onSkip = { navigateToDestination("home") })
+          onStart = { requestPrivacyAcknowledgement { enableSentinel() } }, onStop = disableSentinel)
         }
         if (selectedDestination == "guardian") GuardianPanel()
         if (selectedDestination == "posture") DevicePostureScreen(
@@ -1271,10 +1286,8 @@ import kotlinx.coroutines.launch
            isProForAds = adMobState.isPro,
            onManageFolders = { navigateToDestination("sentinel") },
            onAddCustomFolder = { requestPrivacyAcknowledgement {
-            navigateToDestination("sentinel")
-            pendingFolderRole = StorageAccessPreferences.CUSTOM
-            pendingSentinelEnable = true
-            showStoragePermissionPrompt = true
+             navigateToDestination("sentinel")
+            launchStorageFolderPicker(StorageAccessPreferences.CUSTOM)
            } },
            onShowAdPrivacyOptions = {
             activity?.let { host -> uiScope.launch { adMobManager.showPrivacyOptions(host) } }
@@ -1488,7 +1501,13 @@ pendingQuarantine?.let { flagged ->
   properties = DialogProperties(dismissOnClickOutside = true, dismissOnBackPress = true),
    onDismissRequest = { pendingGlobalDonationResults = pendingGlobalDonationResults.drop(1) },
    title = { Text(stringResource(R.string.global_threat_intelligence_title)) },
-   text = { Text(stringResource(R.string.global_threat_intelligence_donate_message)) },
+   text = {
+    Column(
+     Modifier.fillMaxWidth().heightIn(max = 200.dp).verticalScroll(rememberScrollState())
+    ) {
+     Text(stringResource(R.string.global_threat_intelligence_donate_message))
+    }
+   },
    confirmButton = {
     TextButton(onClick = {
      pendingGlobalDonationResults = pendingGlobalDonationResults.drop(1)
@@ -1510,7 +1529,13 @@ pendingQuarantine?.let { flagged ->
   properties = DialogProperties(dismissOnClickOutside = true, dismissOnBackPress = true),
    onDismissRequest = { showNotificationPermissionPrompt = false; pendingAlertEnable = false },
    title = { Text(stringResource(R.string.security_alerts_title)) },
-   text = { Text(stringResource(R.string.incident_alerts_explanation)) },
+   text = {
+    Column(
+     Modifier.fillMaxWidth().heightIn(max = 200.dp).verticalScroll(rememberScrollState())
+    ) {
+     Text(stringResource(R.string.incident_alerts_explanation))
+    }
+   },
    confirmButton = {
     TextButton(onClick = {
      showNotificationPermissionPrompt = false
@@ -1528,30 +1553,6 @@ pendingQuarantine?.let { flagged ->
      showNotificationPermissionPrompt = false
      pendingAlertEnable = false
     }) { Text(stringResource(R.string.setup_notifications_not_now)) }
-   }
-  )
-  if (showStoragePermissionPrompt) AlertDialog(
-  properties = DialogProperties(dismissOnClickOutside = true, dismissOnBackPress = true),
-   onDismissRequest = { showStoragePermissionPrompt = false; pendingSentinelEnable = false; navigateToDestination("home") },
-   title = { Text(stringResource(R.string.setup_sentinel_title)) },
-   text = { Text(stringResource(R.string.ui_folder_picker_explanation)) },
-   confirmButton = {
-    TextButton(onClick = {
-     showStoragePermissionPrompt = false
-     runCatching { storageTreeLauncher.launch(StorageAccessPreferences.pickerIntent(pendingFolderRole)) }
-      .onFailure {
-       pendingSentinelEnable = false; navigateToDestination("home")
-       Toast.makeText(context, R.string.ui_folder_picker_unavailable, Toast.LENGTH_LONG).show()
-      }
-    }) { Text(stringResource(R.string.setup_allow_storage)) }
-   },
-   dismissButton = {
-    TextButton(onClick = {
-     showStoragePermissionPrompt = false
-     pendingSentinelEnable = false
-     storageAccessGranted = StorageAccessPreferences.hasAccess(context)
-     navigateToDestination("home")
-    }) { Text(stringResource(R.string.setup_continue_limited)) }
    }
   )
   if (showPlayProtectDialog) AlertDialog(
