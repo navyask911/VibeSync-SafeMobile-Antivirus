@@ -93,6 +93,7 @@ abstract class ThreatDatabase : RoomDatabase() {
       "FROM scan_audits WHERE scan_session_id != '' GROUP BY scan_session_id"
     )
    }
+  }
   /** Adds the installed-APK incremental scan cache without modifying prior scan history. */
   val MIGRATION_10_11: Migration = object : Migration(10, 11) {
    override fun migrate(database: SupportSQLiteDatabase) {
@@ -103,7 +104,6 @@ abstract class ThreatDatabase : RoomDatabase() {
       "threatName TEXT, PRIMARY KEY(packageName))"
     )
    }
-  }
   }
  }
 }

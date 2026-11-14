@@ -422,9 +422,14 @@ class PackageScanner(
   val appInfo = info.applicationInfo
   val apk = appInfo?.sourceDir?.let(::File)
   val fileSize = apk?.let { source -> runCatching { source.length() }.getOrNull() }
-  val cached = runCatching { dao.findAppScanCache(info.packageName) }
-   .onFailure { Log.w(TAG, "Could not read the installed-app scan cache.", it) }
-   .getOrNull()
+  val cached = try {
+   dao.findAppScanCache(info.packageName)
+  } catch (cancelled: CancellationException) {
+   throw cancelled
+  } catch (error: Exception) {
+   Log.w(TAG, "Could not read the installed-app scan cache.", error)
+   null
+  }
 
   if (fileSize != null && cached != null &&
    cached.lastUpdateTime == info.lastUpdateTime && cached.fileSize == fileSize
@@ -447,12 +452,31 @@ class PackageScanner(
      malwareName = cached.threatName
     )
     // Keep scan history complete even though expensive file engines were bypassed.
-    audit(cachedResult, start, scanSessionId)
+    auditSafely(cachedResult, start, scanSessionId)
     return cachedResult
    }
   }
 
-  val scanned = scanPackageUncached(info, scanSessionId)
+  val scanned = try {
+   scanPackageUncached(info, scanSessionId)
+  } catch (cancelled: CancellationException) {
+   throw cancelled
+  } catch (error: Exception) {
+   Log.w(TAG, "Installed-app scan failed; caching a not-scanned result.", error)
+   val label = runCatching { appInfo?.loadLabel(pm)?.toString() }
+    .getOrNull().orEmpty().ifBlank { info.packageName }
+   result(
+    info.packageName,
+    label,
+    null,
+    null,
+    ScanVerdict.NOT_SCANNED,
+    listOf(context.getString(R.string.file_could_not_read)),
+    start
+   ).copy(packageName = info.packageName, scanSessionId = scanSessionId).also {
+    auditSafely(it, start, scanSessionId)
+   }
+  }
   if (fileSize != null) {
    try {
     dao.upsertAppScanCache(
@@ -465,6 +489,8 @@ class PackageScanner(
       threatName = scanned.malwareName
      )
     )
+   } catch (cancelled: CancellationException) {
+    throw cancelled
    } catch (error: Exception) {
     Log.w(TAG, "Could not update the installed-app scan cache; scan result is still valid.", error)
    }
