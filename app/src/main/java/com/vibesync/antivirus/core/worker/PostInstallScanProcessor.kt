@@ -21,6 +21,9 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import java.io.File
 
+private const val SAFE_SYSTEM_PACKAGE_LABEL = "Safe (System App)"
+private const val SAFE_TRUSTED_CERTIFICATE_LABEL = "Safe (Trusted Certificate)"
+
 /** Serial local scan shared by the live sentinel and its durable WorkManager fallback. */
 internal object PostInstallScanProcessor {
  private val scanLock = Mutex()
@@ -68,6 +71,23 @@ internal object PostInstallScanProcessor {
    if (scan.trustedByUser) return@withLock
    // Exact threats must alert even if a later optional heuristic/audit step fails.
    if (scan.verdict == ScanVerdict.THREAT) SecurityAlertNotifier.notifyMaliciousApp(context,name,eventId,scan.sha256)
+   val platformSafe = scan.verdict == ScanVerdict.NO_MATCH &&
+    scan.reasons.any { it == SAFE_SYSTEM_PACKAGE_LABEL || it == SAFE_TRUSTED_CERTIFICATE_LABEL }
+   if (platformSafe) {
+    val previous = dao.findById(eventId)
+    if (previous != null) {
+     val reason = appendReason(context, previous.reason, scan.reasons.joinToString())
+     dao.updateAssessment(
+      eventId,
+      scan.sha256,
+      reason,
+      "POST_INSTALL_PLATFORM_PACKAGE_SKIPPED",
+      (previous.status + "|SCAN_COMPLETE").take(200)
+     )
+    }
+    Log.d("SafeMobileScan", "Deep post-install analysis skipped for platform-trusted package=$name")
+    return@withLock
+   }
    val static = StaticAnalyzer(context).analyze(name)
    val apk = static?.apkPath?.let(::File)
    val dex = apk?.let { DexPatternScanner().scan(it) }.orEmpty()

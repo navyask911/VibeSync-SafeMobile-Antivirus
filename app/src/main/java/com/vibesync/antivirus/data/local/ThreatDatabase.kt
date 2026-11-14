@@ -6,8 +6,8 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 
 @Database(
- entities = [ThreatSignature::class, ScanAudit::class, WhiteListEntry::class, MalwareHashEntity::class, ThreatFeedSyncStateEntity::class, ThreatFeedStagingEntity::class, SecurityIncidentEntity::class, QuarantineVaultEntity::class, ScanSessionEntity::class],
- version = 10, exportSchema = false
+ entities = [ThreatSignature::class, ScanAudit::class, WhiteListEntry::class, MalwareHashEntity::class, ThreatFeedSyncStateEntity::class, ThreatFeedStagingEntity::class, SecurityIncidentEntity::class, QuarantineVaultEntity::class, ScanSessionEntity::class, AppScanCache::class],
+ version = 11, exportSchema = false
 )
 abstract class ThreatDatabase : RoomDatabase() {
  abstract fun threatDao(): ThreatDao
@@ -91,6 +91,17 @@ abstract class ThreatDatabase : RoomDatabase() {
      "INSERT OR IGNORE INTO scan_sessions(session_id, scan_type, started_at, completed_at, status) " +
       "SELECT scan_session_id, 'LEGACY', MIN(scan_timestamp), MAX(scan_timestamp), 'COMPLETED' " +
       "FROM scan_audits WHERE scan_session_id != '' GROUP BY scan_session_id"
+    )
+   }
+  }
+  /** Adds the installed-APK incremental scan cache without modifying prior scan history. */
+  val MIGRATION_10_11: Migration = object : Migration(10, 11) {
+   override fun migrate(database: SupportSQLiteDatabase) {
+    database.execSQL(
+     "CREATE TABLE IF NOT EXISTS app_scan_cache (" +
+      "packageName TEXT NOT NULL, lastUpdateTime INTEGER NOT NULL, " +
+      "fileSize INTEGER NOT NULL, sha256 TEXT NOT NULL, verdict TEXT NOT NULL, " +
+      "threatName TEXT, PRIMARY KEY(packageName))"
     )
    }
   }

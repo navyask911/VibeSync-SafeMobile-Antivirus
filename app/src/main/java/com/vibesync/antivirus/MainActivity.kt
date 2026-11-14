@@ -14,6 +14,21 @@ import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.delay
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -52,28 +67,47 @@ class MainActivity : ComponentActivity() {
         openDevicePosture = intent.getBooleanExtra(PostureChangeNotifier.EXTRA_OPEN_POSTURE, false)
         notificationDeepLink = NotificationDeepLink.fromIntent(intent)
         setContent {
-            SafeMobileTheme(theme = selectedTheme) {
-                SafeMobileScreen(
-                    repository = (application as SafeMobileApp).repository,
-                    batteryStatusEpoch = batteryStatusEpoch,
-                    appTheme = selectedTheme,
-                    onAppThemeChanged = { choice ->
-                        selectedTheme = choice
-                        applySystemBars(choice)
-                        lifecycleScope.launch {
-                            runCatching { themePreferences.save(choice) }
-                                .onFailure { Log.e("SafeMobileTheme", "Could not save theme", it) }
-                        }
-                    },
-                    sharedText = sharedText,
-                    onSharedTextConsumed = { sharedText = null },
-                    openQuarantine = openQuarantine,
-                    onOpenQuarantineConsumed = { openQuarantine = false },
-                    openDevicePosture = openDevicePosture,
-                    onOpenDevicePostureConsumed = { openDevicePosture = false },
-                    notificationDeepLink = notificationDeepLink,
-                    onNotificationDeepLinkConsumed = { notificationDeepLink = null }
-                )
+            var showBrandSplash by remember { mutableStateOf(true) }
+            LaunchedEffect(Unit) {
+                delay(350)
+                showBrandSplash = false
+            }
+            if (showBrandSplash) {
+                Box(
+                    modifier = Modifier.fillMaxSize().background(Color.White),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.vibesync_official_logo),
+                        contentDescription = stringResource(R.string.app_name),
+                        modifier = Modifier.size(120.dp),
+                        contentScale = ContentScale.Fit
+                    )
+                }
+            } else {
+                SafeMobileTheme(theme = selectedTheme) {
+                    SafeMobileScreen(
+                        repository = (application as SafeMobileApp).repository,
+                        batteryStatusEpoch = batteryStatusEpoch,
+                        appTheme = selectedTheme,
+                        onAppThemeChanged = { choice ->
+                            selectedTheme = choice
+                            applySystemBars(choice)
+                            lifecycleScope.launch {
+                                runCatching { themePreferences.save(choice) }
+                                    .onFailure { Log.e("SafeMobileTheme", "Could not save theme", it) }
+                            }
+                        },
+                        sharedText = sharedText,
+                        onSharedTextConsumed = { sharedText = null },
+                        openQuarantine = openQuarantine,
+                        onOpenQuarantineConsumed = { openQuarantine = false },
+                        openDevicePosture = openDevicePosture,
+                        onOpenDevicePostureConsumed = { openDevicePosture = false },
+                        notificationDeepLink = notificationDeepLink,
+                        onNotificationDeepLinkConsumed = { notificationDeepLink = null }
+                    )
+                }
             }
         }
         // Refresh UMP consent on every app launch. AdMobManager verifies Pro first,
