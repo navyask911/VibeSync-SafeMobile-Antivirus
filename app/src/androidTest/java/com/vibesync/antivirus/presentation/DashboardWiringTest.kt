@@ -55,7 +55,7 @@ class DashboardWiringTest {
                 onOpenAdvisorIssue = {},
                 onSnoozeAdvisorIssue = {},
                 onRestoreAdvisorIssue = {},
-                activeGuards = 2,
+2,
                 liveSentinelActive = false,
                 posturePassed = null,
                 quarantinedFilesCount = 0,
