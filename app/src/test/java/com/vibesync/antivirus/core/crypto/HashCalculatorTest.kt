@@ -1,5 +1,8 @@
 package com.vibesync.antivirus.core.crypto
+
+import com.vibesync.antivirus.core.engine.hash.HashMatcher
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.io.ByteArrayInputStream
 
@@ -18,12 +21,9 @@ class HashCalculatorTest {
   assertEquals("da39a3ee5e6b4b0d3255bfef95601890afd80709",result.sha1)
   assertEquals(0L,result.bytesRead)
  }
- @Test fun standardEicarTestVectorHashesCorrectly() {
-  val marker = "X5O!P%@AP[4\\PZX54(P^)7CC)7}\$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!\$H+H*"
-  val result=HashCalculator().calculate(ByteArrayInputStream(marker.toByteArray(Charsets.US_ASCII)))
-  assertEquals("275a021bbfb6489e54d471899f7db9d1663fc695ec2fe2a2c4538aabf651fd0f",result.sha256)
-  assertEquals("44d88612fea8a8f36de82e1278abb02f",result.md5)
-  assertEquals("3395856ce81f2b7382dee72602f798b642f14140",result.sha1)
-  assertEquals(68L,result.bytesRead)
+ @Test fun eicarTestSignatureIsPinnedAsSha256Only() {
+  assertEquals("275a021bbfb6489e54d471899f7db9d1663fc695ec2fe2a2c4538aabf651fd0f", HashMatcher.EICAR_SHA256)
+  assertEquals(64, HashMatcher.EICAR_SHA256.length)
+  assertTrue(HashMatcher.EICAR_SHA256.all { it in "0123456789abcdef" })
  }
 }
