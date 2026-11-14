@@ -1,6 +1,7 @@
 package com.vibesync.antivirus.presentation
 
 import android.content.Context
+import android.os.Build
 import android.provider.Settings
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -65,6 +66,7 @@ import com.vibesync.antivirus.core.engine.DetectionSource
 import com.vibesync.antivirus.core.engine.ScanResult
 import com.vibesync.antivirus.core.engine.ScanVerdict
 import com.vibesync.antivirus.core.locale.LocalePreferences
+import com.vibesync.antivirus.core.observer.FullScreenAlertAccess
 import com.vibesync.antivirus.core.security.SecurityVerificationState
 import com.vibesync.antivirus.core.security.SecurityVerificationStatus
 import com.vibesync.antivirus.ui.theme.AppTheme
@@ -1097,6 +1099,34 @@ internal fun V17ConsoleSettingsScreen(
     onTestSiren: () -> Unit = {}, onTestVoice: () -> Unit = {}
 ) {
     val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+    var fullScreenAlertGranted by remember(context) {
+        mutableStateOf(FullScreenAlertAccess.isGranted(context))
+    }
+    DisposableEffect(context, lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                fullScreenAlertGranted = FullScreenAlertAccess.isGranted(context)
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
+    val openFullScreenAlertSettings = {
+        if (Build.VERSION.SDK_INT >= 34) {
+            runCatching {
+                val settingsIntent = FullScreenAlertAccess.settingsIntent(context)
+                    ?: error("Full-screen alert settings are unavailable on this Android version.")
+                context.startActivity(settingsIntent)
+            }.onFailure {
+                android.widget.Toast.makeText(
+                    context,
+                    R.string.full_screen_settings_unavailable,
+                    android.widget.Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+    }
     val c = v17Colors(isDark)
     var advanced by rememberSaveable { mutableStateOf(false) }
     var languageOpen by rememberSaveable { mutableStateOf(false) }
@@ -1159,6 +1189,39 @@ internal fun V17ConsoleSettingsScreen(
         V17Card(isDark) {
             V17SectionHeading("Active Defense", "Local alarms and on-device monitoring.", Icons.Outlined.Security, c.green)
             V17Switch("Incident Siren", "Local incident alarm and notifications", sirenEnabled, "console.siren", Icons.Outlined.Notifications, isDark, onSirenChanged)
+            HorizontalDivider(color = c.border)
+            Row(
+                Modifier.fillMaxWidth().padding(vertical = 5.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                    V17Title(stringResource(R.string.console_full_screen_alerts_title))
+                    V17Body(
+                        stringResource(
+                            when {
+                                Build.VERSION.SDK_INT < 34 -> R.string.console_full_screen_alerts_not_required
+                                fullScreenAlertGranted -> R.string.console_full_screen_alerts_allowed
+                                else -> R.string.console_full_screen_alerts_permission_needed
+                            }
+                        ),
+                        color = c.muted
+                    )
+                }
+                if (Build.VERSION.SDK_INT >= 34) {
+                    OutlinedButton(
+                        onClick = openFullScreenAlertSettings,
+                        modifier = Modifier.testTag("console.full-screen-alerts")
+                    ) {
+                        Text(
+                            stringResource(
+                                if (fullScreenAlertGranted) R.string.console_full_screen_alerts_manage
+                                else R.string.console_full_screen_alerts_grant
+                            )
+                        )
+                    }
+                }
+            }
             HorizontalDivider(color = c.border)
             V17Switch("Voice Threat Alert", "Offline text-to-speech threat narration", voiceEnabled, "console.voice", Icons.Outlined.VolumeUp, isDark, onVoiceChanged)
             HorizontalDivider(color = c.border)
