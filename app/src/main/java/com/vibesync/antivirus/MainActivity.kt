@@ -86,27 +86,27 @@ class MainActivity : ComponentActivity() {
                 }
             } else {
                 SafeMobileTheme(theme = selectedTheme) {
-                SafeMobileScreen(
-                    repository = (application as SafeMobileApp).repository,
-                    batteryStatusEpoch = batteryStatusEpoch,
-                    appTheme = selectedTheme,
-                    onAppThemeChanged = { choice ->
-                        selectedTheme = choice
-                        applySystemBars(choice)
-                        lifecycleScope.launch {
-                            runCatching { themePreferences.save(choice) }
-                                .onFailure { Log.e("SafeMobileTheme", "Could not save theme", it) }
-                        }
-                    },
-                    sharedText = sharedText,
-                    onSharedTextConsumed = { sharedText = null },
-                    openQuarantine = openQuarantine,
-                    onOpenQuarantineConsumed = { openQuarantine = false },
-                    openDevicePosture = openDevicePosture,
-                    onOpenDevicePostureConsumed = { openDevicePosture = false },
-                    notificationDeepLink = notificationDeepLink,
-                    onNotificationDeepLinkConsumed = { notificationDeepLink = null }
-                )
+                    SafeMobileScreen(
+                        repository = (application as SafeMobileApp).repository,
+                        batteryStatusEpoch = batteryStatusEpoch,
+                        appTheme = selectedTheme,
+                        onAppThemeChanged = { choice ->
+                            selectedTheme = choice
+                            applySystemBars(choice)
+                            lifecycleScope.launch {
+                                runCatching { themePreferences.save(choice) }
+                                    .onFailure { Log.e("SafeMobileTheme", "Could not save theme", it) }
+                            }
+                        },
+                        sharedText = sharedText,
+                        onSharedTextConsumed = { sharedText = null },
+                        openQuarantine = openQuarantine,
+                        onOpenQuarantineConsumed = { openQuarantine = false },
+                        openDevicePosture = openDevicePosture,
+                        onOpenDevicePostureConsumed = { openDevicePosture = false },
+                        notificationDeepLink = notificationDeepLink,
+                        onNotificationDeepLinkConsumed = { notificationDeepLink = null }
+                    )
                 }
             }
         }
