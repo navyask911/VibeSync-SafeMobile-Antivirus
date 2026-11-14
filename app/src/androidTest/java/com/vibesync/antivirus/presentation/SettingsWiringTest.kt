@@ -1,5 +1,6 @@
 package com.vibesync.antivirus.presentation
 
+import android.os.Build
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.getValue
@@ -32,7 +33,10 @@ class SettingsWiringTest {
     private val context
         get() = InstrumentationRegistry.getInstrumentation().targetContext
 
-    private fun render(content: @androidx.compose.runtime.Composable () -> Unit = {
+    private fun render(
+        focusFullScreenAlerts: Boolean = false,
+        onFullScreenAlertFocusHandled: () -> Unit = {},
+        content: @androidx.compose.runtime.Composable () -> Unit = {
         V17ConsoleSettingsScreen(
             isDark = false,
             appTheme = AppTheme.LIGHT,
@@ -54,7 +58,9 @@ class SettingsWiringTest {
             onImportYara = {},
             onThreatFeedSync = {},
             onBenchmarks = {},
-            onOpenPro = {}
+            onOpenPro = {},
+            focusFullScreenAlerts = focusFullScreenAlerts,
+            onFullScreenAlertFocusHandled = onFullScreenAlertFocusHandled
         )
     }) {
         composeRule.setContent {
@@ -261,6 +267,28 @@ class SettingsWiringTest {
         composeRule.onNodeWithText(
             context.getString(com.vibesync.antivirus.R.string.device_integrity_status_local_passed)
         ).performScrollTo().assertIsDisplayed()
+    }
+
+    @Test
+    fun advisorFocusBringsFullScreenAlertPermissionIntoView() {
+        var focusHandled = false
+        render(
+            focusFullScreenAlerts = true,
+            onFullScreenAlertFocusHandled = { focusHandled = true }
+        )
+
+        composeRule.waitForIdle()
+        composeRule.onNodeWithText(
+            context.getString(com.vibesync.antivirus.R.string.console_full_screen_alerts_title)
+        ).assertIsDisplayed()
+        if (Build.VERSION.SDK_INT >= 34) {
+            composeRule.onNodeWithTag("console.full-screen-alerts").assertIsDisplayed()
+        } else {
+            composeRule.onNodeWithText(
+                context.getString(com.vibesync.antivirus.R.string.console_full_screen_alerts_not_required)
+            ).assertIsDisplayed()
+        }
+        assertEquals(true, focusHandled)
     }
 
 }
