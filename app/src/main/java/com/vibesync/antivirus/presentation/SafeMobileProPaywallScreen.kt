@@ -69,6 +69,7 @@ fun SafeMobileProPaywallScreen(
     }
 
     val state by manager.state.collectAsStateWithLifecycle()
+    val owner = LocalLifecycleOwner.current
     val canLaunchPurchase = activity != null && !activity.isFinishing && !activity.isDestroyed
 
     LaunchedEffect(manager) {
@@ -81,8 +82,7 @@ fun SafeMobileProPaywallScreen(
             Toast.makeText(context, BILLING_UNAVAILABLE_MESSAGE, Toast.LENGTH_LONG).show()
         }
     }
-    DisposableEffect(manager, LocalLifecycleOwner.current) {
-        val owner = LocalLifecycleOwner.current
+    DisposableEffect(manager, owner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) manager.start()
         }
