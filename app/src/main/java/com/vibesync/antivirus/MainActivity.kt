@@ -36,6 +36,7 @@ import com.vibesync.antivirus.core.locale.LocalePreferences
 import com.vibesync.antivirus.core.observer.SecurityAlertNotifier
 import com.vibesync.antivirus.core.observer.NotificationDeepLink
 import com.vibesync.antivirus.core.posture.PostureChangeNotifier
+import com.vibesync.antivirus.core.worker.ScanForegroundService
 import com.vibesync.antivirus.presentation.SafeMobileScreen
 import com.vibesync.antivirus.presentation.SafeMobileTheme
 
@@ -131,6 +132,12 @@ class MainActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
         batteryStatusEpoch++
+        lifecycleScope.launch {
+            val repository = (application as SafeMobileApp).repository
+            if (runCatching { repository.hasIncompleteManualScanSession() }.getOrDefault(false)) {
+                ScanForegroundService.resume(this@MainActivity)
+            }
+        }
         com.vibesync.antivirus.core.observer.InstallSentinelService.startFromVisibleUi(this)
         SecurityAlertNotifier.stopIncidentAudio()
     }

@@ -231,60 +231,49 @@ class PackageScanner(
    scanInstalledAppsForSession(UUID.randomUUID().toString(), progress)
 
  suspend fun scanInstalledAppsForSession(
-  scanSessionId: String,
-  progress: suspend (processed: Int, total: Int) -> Unit = { _, _ -> }
+  scanSessionId: String, progress: suspend (processed: Int, total: Int) -> Unit = { _, _ -> }
+ ): List<ScanResult> = scanInstalledAppsForSession(scanSessionId, emptySet(), {}, progress)
+
+ suspend fun scanInstalledAppsForSession(
+  scanSessionId: String, completedPackageNames: Set<String>,
+  onItemCompleted: suspend (ScanResult) -> Unit,
+  progress: suspend (processed: Int, total: Int) -> Unit
  ): List<ScanResult> = coroutineScope {
   val flags = PackageManager.GET_PERMISSIONS or PackageManager.GET_SERVICES or
-   PackageManager.GET_ACTIVITIES or PackageManager.GET_RECEIVERS or
-   PackageManager.GET_PROVIDERS or signingFlags()
-  val packages = pm.getInstalledPackages(flags).filter { info ->
-   val appInfo = info.applicationInfo
-   val isSystemApp = appInfo != null &&
-    (appInfo.flags and ApplicationInfo.FLAG_SYSTEM) != 0
-   val isUpdatedSystemApp = appInfo != null &&
-    (appInfo.flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0
-   appInfo != null && info.packageName != context.packageName &&
-    (isSystemApp || isUpdatedSystemApp ||
-     ProtectedPackagePolicy.isUserInstalled(appInfo.flags, info.packageName, context.packageName) ||
-     isSignedByKnownTrustedCertificate(info))
-  }
-
-  // Keep CPU-heavy work bounded on older devices to avoid parallel APK/DEX memory spikes.
+   PackageManager.GET_ACTIVITIES or PackageManager.GET_RECEIVERS or PackageManager.GET_PROVIDERS or signingFlags()
+  val all = pm.getInstalledPackages(flags).filter { info ->
+   val app = info.applicationInfo
+   val system = app != null && (app.flags and ApplicationInfo.FLAG_SYSTEM) != 0
+   val updatedSystem = app != null && (app.flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0
+   app != null && info.packageName != context.packageName &&
+    (system || updatedSystem || ProtectedPackagePolicy.isUserInstalled(app.flags, info.packageName, context.packageName) || isSignedByKnownTrustedCertificate(info))
+  }.sortedBy { it.packageName }
+  val completed = all.count { it.packageName in completedPackageNames }
+  val pending = all.filterNot { it.packageName in completedPackageNames }
   val semaphore = Semaphore(Runtime.getRuntime().availableProcessors().coerceAtMost(4))
-  val processedCount = AtomicInteger(0)
-  val progressMutex = Mutex()
-  progress(0, packages.size)
-
-  val results = packages.map { info ->
+  val count = AtomicInteger(0)
+  val mutex = Mutex()
+  progress(completed, all.size)
+  val results = pending.map { info ->
    async(Dispatchers.Default) {
-    val scanned = semaphore.withPermit {
+    val result = semaphore.withPermit {
      currentCoroutineContext().ensureActive()
-     val packageStart = System.nanoTime()
-     try {
-      scanPackage(info, scanSessionId)
-     } catch (cancelled: CancellationException) {
-      throw cancelled
-     } catch (_: Exception) {
-      val failed = result(
-       info.packageName,
-       info.packageName,
-       null,
-       null,
-       ScanVerdict.NOT_SCANNED,
-       listOf(context.getString(R.string.file_could_not_read)),
-       packageStart
-      ).copy(packageName = info.packageName, scanSessionId = scanSessionId)
-      auditSafely(failed, packageStart, scanSessionId)
+     val start = System.nanoTime()
+     try { scanPackage(info, scanSessionId) }
+     catch (cancelled: CancellationException) { throw cancelled }
+     catch (_: Exception) {
+      val failed = result(info.packageName, info.packageName, null, null, ScanVerdict.NOT_SCANNED,
+       listOf(context.getString(R.string.file_could_not_read)), start)
+       .copy(packageName = info.packageName, scanSessionId = scanSessionId)
+      auditSafely(failed, start, scanSessionId)
       failed
      }
     }
-    progressMutex.withLock {
-     progress(processedCount.incrementAndGet(), packages.size)
-    }
-    scanned
+    onItemCompleted(result)
+    mutex.withLock { progress(completed + count.incrementAndGet(), all.size) }
+    result
    }
   }.awaitAll()
-
   results.sortedBy { when (it.verdict) {
    ScanVerdict.THREAT -> 0
    ScanVerdict.SUSPICIOUS -> 1

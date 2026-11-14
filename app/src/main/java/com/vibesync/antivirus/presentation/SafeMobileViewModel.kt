@@ -4,7 +4,6 @@ import android.net.Uri
 import android.content.Context
 import android.speech.tts.TextToSpeech
 import java.util.Locale
-import java.util.UUID
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -15,6 +14,8 @@ import com.vibesync.antivirus.core.engine.ScanResult
 import com.vibesync.antivirus.core.engine.InstalledAppItem
 import com.vibesync.antivirus.core.engine.ScanVerdict
 import com.vibesync.antivirus.core.observer.ManualThreatAlertPolicy
+import com.vibesync.antivirus.core.worker.ScanForegroundService
+import com.vibesync.antivirus.core.worker.ScanForegroundEvents
 import com.vibesync.antivirus.core.hashdb.HashDatabaseCapability
 import com.vibesync.antivirus.data.repository.ThreatRepository
 import com.vibesync.antivirus.core.security.GlobalThreatIntelligenceConsent
@@ -75,7 +76,6 @@ class SafeMobileViewModel(
     )
     val protectionAdvisorState = mutableProtectionAdvisorState.asStateFlow()
     private var protectionAdvisorJob: Job? = null
-    private var scanJob: Job? = null
 
     /** Run the CPU-only score rubric off the main thread; UI state is published on Main. */
     fun updateProtectionAdvisor(inputs: ProtectionAdvisorInputs, snoozedIds: Set<String>) {
@@ -133,6 +133,9 @@ class SafeMobileViewModel(
         observeThreatFeedState()
         observeScanSessionCounts()
         observeLatestCompletedScanAt()
+        observeScanProgress()
+        observeScanCompletionEvents()
+        restoreLatestScanResults()
         refreshScanHistory()
         refreshHashDatabaseCapability()
     }
@@ -396,60 +399,81 @@ class SafeMobileViewModel(
 
     fun scanInstalled() {
         refreshInstalledInventory()
-        runScan(manualScan = true, scanType = "INSTALLED_APPS") { scanSessionId, onProgress -> repository.scanInstalledAppsForSession(scanSessionId, onProgress) }
+        startBackgroundScan(ScanForegroundService.OP_INSTALLED_APPS, manualScan = true)
     }
-
-    fun scanFull(manualScan: Boolean = true) = runScan(manualScan, scanType = "FULL_DEVICE") { scanSessionId, onProgress ->
-        repository.scanFullForSession(scanSessionId, onProgress)
+    fun scanFull(manualScan: Boolean = true) {
+        startBackgroundScan(ScanForegroundService.OP_FULL_DEVICE, manualScan = manualScan)
     }
-
-    fun scanSelected(uri: Uri) = runScan(manualScan = true, scanType = "SELECTED_FILE") { scanSessionId, _ ->
-        listOf(repository.scanUri(uri, scanSessionId))
+    fun scanSelected(uri: Uri) {
+        startBackgroundScan(ScanForegroundService.OP_SELECTED_FILE, uri.toString(), manualScan = true)
     }
-
-    fun scanInstalledPackageNow(packageName: String) = runScan(manualScan = true, scanType = "INSTALLED_PACKAGE") { scanSessionId, _ ->
-        listOfNotNull(repository.scanInstalledPackage(packageName, scanSessionId))
+    fun scanInstalledPackageNow(packageName: String) {
+        startBackgroundScan(ScanForegroundService.OP_INSTALLED_PACKAGE, packageName = packageName, manualScan = true)
     }
-
-    /** Use the existing hash/YARA/ML scan pipeline for a user-selected folder tree. */
     fun scanFolderTree(uri: Uri) {
-        val onFileStarted: suspend (String) -> Unit = { fileName ->
-            mutableState.update { state ->
-                state.copy(
-                    currentScanFile = fileName,
-                    recentScanFiles = (state.recentScanFiles + fileName).takeLast(8)
-                )
+        startBackgroundScan(ScanForegroundService.OP_SELECTED_FOLDER, uri.toString(), manualScan = true)
+    }
+    fun cancelScan() { appContext?.let(ScanForegroundService::stop) }
+
+    private fun startBackgroundScan(operation: String, sourceUri: String? = null,
+        packageName: String? = null, manualScan: Boolean) {
+        val context = appContext ?: run {
+            mutableState.update { it.copy(isScanning = false, messageResource = R.string.scan_failed) }
+            return
+        }
+        mutableState.update { it.copy(isScanning = true, processedItems = 0, totalItems = 0,
+            currentScanFile = null, recentScanFiles = emptyList(), messageResource = null, messageText = null) }
+        runCatching { ScanForegroundService.start(context, operation, manualScan, sourceUri, packageName) }
+            .onFailure { mutableState.update { state -> state.copy(isScanning = false, messageResource = R.string.scan_failed, messageText = null) } }
+    }
+
+    private fun observeScanProgress() {
+        viewModelScope.launch {
+            repository.observeLatestManualScanState().collect { scan ->
+                if (scan != null) mutableState.update { state ->
+                    val path = if (scan.isComplete) null else scan.currentItemPath
+                    val recent = path?.takeIf { it != state.currentScanFile }?.let { (state.recentScanFiles + it).takeLast(8) } ?: state.recentScanFiles
+                    state.copy(isScanning = !scan.isComplete, processedItems = scan.scannedItems,
+                        totalItems = scan.totalItems, currentScanFile = path, recentScanFiles = recent)
+                }
             }
         }
-        runScan(manualScan = true, scanType = "SELECTED_FOLDER", onFileStarted = onFileStarted) { scanSessionId, onProgress ->
-            repository.scanFolderTreeForSession(uri, scanSessionId, onProgress, onFileStarted)
+    }
+
+    private fun observeScanCompletionEvents() {
+        viewModelScope.launch {
+            ScanForegroundEvents.completed.collect { event ->
+                val alert = ManualThreatAlertPolicy.shouldAlert(event.manualScan,
+                    event.results.any { it.verdict == ScanVerdict.THREAT })
+                mutableState.update { state -> state.copy(scanSummary = event.summary, isScanning = false,
+                    processedItems = maxOf(state.processedItems, state.totalItems), currentScanFile = null,
+                    results = event.results,
+                    manualScanCompletionSequence = state.manualScanCompletionSequence + if (event.manualScan) 1L else 0L,
+                    manualThreatAlertSequence = state.manualThreatAlertSequence + if (alert) 1L else 0L,
+                    lastScanAt = event.summary.completedAt, messageResource = R.string.scan_complete, messageText = null) }
+                refreshSignatureCount()
+                refreshSecurityScore()
+            }
+        }
+        viewModelScope.launch {
+            ScanForegroundEvents.cancelled.collect {
+                mutableState.update { it.copy(isScanning = false, currentScanFile = null,
+                    messageResource = R.string.scan_cancelled, messageText = null) }
+            }
         }
     }
 
-    fun cancelScan() {
-        scanJob?.cancel()
+    private fun restoreLatestScanResults() {
+        viewModelScope.launch {
+            runCatching { repository.latestCompletedManualScanResults() }.onSuccess { results ->
+                if (results.isNotEmpty()) mutableState.update { state -> if (state.results.isEmpty()) state.copy(results = results) else state }
+            }
+        }
     }
 
     /** Re-check one package after Android's uninstall confirmation flow returns. */
     fun refreshInstalledPackage(packageName: String) {
-        viewModelScope.launch {
-            val outcome = runCatching { repository.scanInstalledPackage(packageName) }
-            mutableState.update { old ->
-                if (outcome.isFailure) {
-                    old.copy(messageResource = R.string.scan_failed, messageText = null)
-                } else {
-                    val refreshed = outcome.getOrNull()
-                    val updated = if (refreshed == null) {
-                        old.results.filterNot { it.packageName == packageName }
-                    } else if (old.results.any { it.packageName == packageName }) {
-                        old.results.map { if (it.packageName == packageName) refreshed else it }
-                    } else {
-                        old.results
-                    }
-                    old.copy(results = updated)
-                }
-            }
-        }
+        startBackgroundScan(ScanForegroundService.OP_INSTALLED_PACKAGE, packageName = packageName, manualScan = true)
     }
 
     fun refreshQuarantine() {
@@ -524,110 +548,6 @@ fun importOfflineDefinitions(uri: Uri) {
                     refreshSignatureCount()
                 }
                 .onFailure { mutableState.update { it.copy(messageText = null, messageResource = R.string.import_failed) } }
-        }
-    }
-
-    private fun runScan(
-        manualScan: Boolean = true,
-        scanType: String = "MANUAL_SCAN",
-        onFileStarted: suspend (String) -> Unit = {},
-        task: suspend (String, suspend (Int, Int) -> Unit) -> List<ScanResult>
-    ) {
-        if (mutableState.value.isScanning || scanJob?.isActive == true) return
-        scanJob = viewModelScope.launch {
-            mutableState.update {
-                it.copy(
-                    isScanning = true,
-                    processedItems = 0,
-                    totalItems = 0,
-                    currentScanFile = null,
-                    recentScanFiles = emptyList(),
-                    messageResource = null,
-                    messageText = null
-                )
-            }
-            val scanSessionId = UUID.randomUUID().toString()
-            var sessionStarted = false
-            var sessionCompleted = false
-            try {
-                sessionStarted = runCatching {
-                    repository.startScanSession(scanSessionId, scanType)
-                }.isSuccess
-                val signedDefinitionsUsed = repository.currentHashDatabaseCapability()?.enabled == true
-                val results = task(scanSessionId) { processed, total ->
-                    mutableState.update { state ->
-                        state.copy(
-                            processedItems = processed.coerceAtLeast(0),
-                            totalItems = total.coerceAtLeast(0)
-                        )
-                    }
-                }.filter { repository.isReviewableResult(it) }.sortedBy { result -> when (result.verdict) {
-                    ScanVerdict.THREAT -> 0
-                    ScanVerdict.SUSPICIOUS -> 1
-                    ScanVerdict.NOT_SCANNED -> 2
-                    ScanVerdict.NO_MATCH -> 3
-                } }
-                val summary = com.vibesync.antivirus.core.engine.ScanCompletionSummary.from(
-                    results, mutableState.value.processedItems, System.currentTimeMillis()).copy(signedDefinitionsUsed = signedDefinitionsUsed)
-                repository.saveScanSummary(summary)
-                sessionCompleted = if (sessionStarted) {
-                    runCatching {
-                        repository.completeScanSession(scanSessionId, summary.completedAt)
-                    }.isSuccess
-                } else {
-                    true
-                }
-                val shouldAlertManualThreat = ManualThreatAlertPolicy.shouldAlert(
-                    isManualScan = manualScan,
-                    hasConfirmedThreat = results.any { it.verdict == ScanVerdict.THREAT }
-                )
-                mutableState.update { state ->
-                    state.copy(
-                        scanSummary = summary,
-                        isScanning = false,
-                        currentScanFile = null,
-                        results = results,
-                        manualScanCompletionSequence = state.manualScanCompletionSequence +
-                            if (manualScan) 1L else 0L,
-                        manualThreatAlertSequence = state.manualThreatAlertSequence +
-                            if (shouldAlertManualThreat) 1L else 0L,
-                        lastScanAt = summary.completedAt,
-                        messageResource = R.string.scan_complete,
-                        messageText = null,
-                        processedItems = if (state.totalItems > 0) state.totalItems else state.processedItems
-                    )
-                }
-                refreshSignatureCount()
-                refreshSecurityScore()
-            } catch (cancelled: CancellationException) {
-                mutableState.update {
-                    it.copy(
-                        isScanning = false,
-                        processedItems = 0,
-                        totalItems = 0,
-                        currentScanFile = null,
-                        messageResource = R.string.scan_cancelled,
-                        messageText = null
-                    )
-                }
-                throw cancelled
-            } catch (_: Exception) {
-                mutableState.update {
-                    it.copy(
-                        isScanning = false,
-                        processedItems = 0,
-                        totalItems = 0,
-                        currentScanFile = null,
-                        messageResource = R.string.scan_failed,
-                        messageText = null
-                    )
-                }
-            } finally {
-                if (sessionStarted && !sessionCompleted) {
-                    runCatching { repository.interruptScanSession(scanSessionId) }
-                }
-                scanJob = null
-            }
         }
     }
 

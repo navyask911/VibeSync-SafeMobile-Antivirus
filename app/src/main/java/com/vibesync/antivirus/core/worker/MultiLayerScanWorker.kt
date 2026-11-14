@@ -29,7 +29,7 @@ class MultiLayerScanWorker(context: Context, params: WorkerParameters) : Corouti
 
   setForeground(getForegroundInfo())
   try {
-   app.repository.startScanSession(sessionId, "POST_INSTALL")
+   app.repository.startScanSession(sessionId, "POST_INSTALL", isManual = false)
    PostInstallScanProcessor.scan(
     applicationContext,
     name,

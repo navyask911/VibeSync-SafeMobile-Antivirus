@@ -21,7 +21,7 @@ class DeepScanWorker(context: Context, params: WorkerParameters) : CoroutineWork
   val sessionId = id.toString()
   return try {
    setForeground(getForegroundInfo())
-   app.repository.startScanSession(sessionId, "PERIODIC_DEEP_SCAN")
+   app.repository.startScanSession(sessionId, "PERIODIC_DEEP_SCAN", isManual = false)
    app.repository.deepScan(sessionId)
    app.repository.completeScanSession(sessionId)
    Result.success()
