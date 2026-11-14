@@ -18,18 +18,21 @@ data class ApkComponent(
 )
 
 sealed class ApkExtractionOutcome {
-    data class Complete(val components: List<ApkComponent>) : ApkExtractionOutcome()
+    data class Complete(val entryNames: List<String>) : ApkExtractionOutcome()
     data class Incomplete(val reason: String) : ApkExtractionOutcome()
 }
 
 /**
- * Streams the APK's local ZIP entries and buffers only the root binary manifest
- * and root DEX files for YARA-X. Non-target entries are drained and discarded;
- * no archive contents are written to disk.
+ * Streams the APK's local ZIP entries and hands only the root binary manifest
+ * and root DEX files to the consumer, one component at a time. Non-target entries
+ * are drained and discarded; no archive contents are written to disk.
  */
 class ApkContentExtractor {
 
-    suspend fun extract(apk: File): ApkExtractionOutcome = withContext(Dispatchers.IO) {
+    suspend fun forEachComponent(
+        apk: File,
+        onComponent: suspend (ApkComponent) -> Boolean
+    ): ApkExtractionOutcome = withContext(Dispatchers.IO) {
         if (!apk.isFile || !apk.canRead()) {
             return@withContext ApkExtractionOutcome.Incomplete("APK is not a readable file.")
         }
@@ -39,9 +42,10 @@ class ApkContentExtractor {
 
         try {
             ZipInputStream(BufferedInputStream(FileInputStream(apk), BUFFER_SIZE)).use { zip ->
-                var manifest: ApkComponent? = null
-                val dexComponents = mutableListOf<ApkComponent>()
+                var manifestSeen = false
+                var dexCount = 0
                 val seenTargets = HashSet<String>()
+                val targetNames = mutableListOf<String>()
                 var totalExtracted = 0L
                 var inspectedEntries = 0
 
@@ -100,19 +104,21 @@ class ApkContentExtractor {
                     }
                     totalExtracted += bytes.size
 
-                    val component = ApkComponent(entry.name, bytes)
-                    if (isManifest) manifest = component else dexComponents += component
+                    // The callback consumes this single bounded byte array before the next ZIP entry is read.
+                    if (!onComponent(ApkComponent(entry.name, bytes))) {
+                        return@withContext ApkExtractionOutcome.Incomplete("APK component processing stopped.")
+                    }
+                    targetNames += entry.name
+                    if (isManifest) manifestSeen = true else dexCount++
                 }
 
-                val manifestComponent = manifest
-                    ?: return@withContext ApkExtractionOutcome.Incomplete("AndroidManifest.xml is missing.")
-                if (dexComponents.isEmpty()) {
+                if (!manifestSeen) {
+                    return@withContext ApkExtractionOutcome.Incomplete("AndroidManifest.xml is missing.")
+                }
+                if (dexCount == 0) {
                     return@withContext ApkExtractionOutcome.Incomplete("No classes*.dex entry was found.")
                 }
-
-                ApkExtractionOutcome.Complete(
-                    listOf(manifestComponent) + dexComponents.sortedBy { it.entryName }
-                )
+                ApkExtractionOutcome.Complete(targetNames)
             }
         } catch (cancelled: CancellationException) {
             throw cancelled
