@@ -103,7 +103,7 @@ interface ThreatDao {
  suspend fun markScanSessionStateComplete(sessionId: String, scannedItems: Int)
  @Query("""SELECT EXISTS(SELECT 1 FROM scan_session_state WHERE is_complete = 0
   AND operation_type IN ('FULL_DEVICE','DEEP_SCAN','INSTALLED_APPS','SELECTED_FILE','INSTALLED_PACKAGE','SELECTED_FOLDER'))""")
- suspend fun hasIncompleteManualScanSession()
+ suspend fun hasIncompleteManualScanSession(): Boolean
 
  @Query("SELECT * FROM app_scan_cache WHERE packageName = :packageName LIMIT 1")
  suspend fun findAppScanCache(packageName: String): AppScanCache?

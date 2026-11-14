@@ -712,10 +712,10 @@
     <string name="play_protect_status_enabled" translatable="false">Google Play package verification is enabled on this device.</string>
     <string name="play_protect_status_disabled" translatable="false">Google Play package verification is disabled in Android settings.</string>
 
-    <string name="console_full_screen_alerts_title">Full-screen alerts</string>
-    <string name="console_full_screen_alerts_allowed">Allowed. SafeMobile can open urgent incident alerts full-screen.</string>
-    <string name="console_full_screen_alerts_permission_needed">Permission needed. Allow SafeMobile to open urgent incident alerts full-screen.</string>
-    <string name="console_full_screen_alerts_not_required">Not required on this Android version.</string>
-    <string name="console_full_screen_alerts_manage">Manage</string>
-    <string name="console_full_screen_alerts_grant">Grant access</string>
+    <string name="console_full_screen_alerts_title" translatable="false">Full-screen alerts</string>
+    <string name="console_full_screen_alerts_allowed" translatable="false">Allowed. SafeMobile can open urgent incident alerts full-screen.</string>
+    <string name="console_full_screen_alerts_permission_needed" translatable="false">Permission needed. Allow SafeMobile to open urgent incident alerts full-screen.</string>
+    <string name="console_full_screen_alerts_not_required" translatable="false">Not required on this Android version.</string>
+    <string name="console_full_screen_alerts_manage" translatable="false">Manage</string>
+    <string name="console_full_screen_alerts_grant" translatable="false">Grant access</string>
 </resources>
