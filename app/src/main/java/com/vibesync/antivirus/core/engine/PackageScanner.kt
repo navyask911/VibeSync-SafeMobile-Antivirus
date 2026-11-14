@@ -2,6 +2,15 @@ package com.vibesync.antivirus.core.engine
 import android.content.Context
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.content.pm.ApplicationInfo
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
+import java.security.MessageDigest
+import java.util.concurrent.atomic.AtomicInteger
 import android.os.Build
 import android.util.Log
 import com.vibesync.antivirus.R
@@ -23,7 +32,6 @@ import com.vibesync.antivirus.engine.ensemble.ThreatEnsembleEvaluator
 import com.vibesync.antivirus.core.heuristics.PermissionRiskAnalyzer
 import com.vibesync.antivirus.core.security.IntegrityChecker
 import com.vibesync.antivirus.core.security.ProtectedPackagePolicy
-import com.vibesync.antivirus.core.security.TrustedPackageWhitelist
 import com.vibesync.antivirus.core.security.TrustedAppStore
 import kotlin.math.roundToInt
 import com.vibesync.antivirus.data.local.AppScanCache
@@ -41,6 +49,13 @@ import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+
+private const val SAFE_SYSTEM_PACKAGE_LABEL = "Safe (System App)"
+private const val SAFE_TRUSTED_CERTIFICATE_LABEL = "Safe (Trusted Certificate)"
+private val TRUSTED_CERTIFICATE_ANCHOR_PACKAGES = listOf(
+ "com.google.android.gms",
+ "com.android.vending"
+)
 
 class PackageScanner(
  private val context: Context,
@@ -215,38 +230,62 @@ class PackageScanner(
  suspend fun scanInstalledApps(progress: suspend (processed: Int, total: Int) -> Unit = { _, _ -> }): List<ScanResult> =
    scanInstalledAppsForSession(UUID.randomUUID().toString(), progress)
 
-  suspend fun scanInstalledAppsForSession(scanSessionId: String, progress: suspend (processed: Int, total: Int) -> Unit = { _, _ -> }): List<ScanResult> {
-  val flags = PackageManager.GET_PERMISSIONS or PackageManager.GET_SERVICES or PackageManager.GET_ACTIVITIES or PackageManager.GET_RECEIVERS or PackageManager.GET_PROVIDERS or signingFlags()
+ suspend fun scanInstalledAppsForSession(
+  scanSessionId: String,
+  progress: suspend (processed: Int, total: Int) -> Unit = { _, _ -> }
+ ): List<ScanResult> = coroutineScope {
+  val flags = PackageManager.GET_PERMISSIONS or PackageManager.GET_SERVICES or
+   PackageManager.GET_ACTIVITIES or PackageManager.GET_RECEIVERS or
+   PackageManager.GET_PROVIDERS or signingFlags()
   val packages = pm.getInstalledPackages(flags).filter { info ->
    val appInfo = info.applicationInfo
-   appInfo != null && ProtectedPackagePolicy.isUserInstalled(appInfo.flags, info.packageName, context.packageName)
+   val isSystemApp = appInfo != null &&
+    (appInfo.flags and ApplicationInfo.FLAG_SYSTEM) != 0
+   val isUpdatedSystemApp = appInfo != null &&
+    (appInfo.flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0
+   appInfo != null && info.packageName != context.packageName &&
+    (isSystemApp || isUpdatedSystemApp ||
+     ProtectedPackagePolicy.isUserInstalled(appInfo.flags, info.packageName, context.packageName) ||
+     isSignedByKnownTrustedCertificate(info))
   }
-    val results = mutableListOf<ScanResult>()
+
+  // Keep CPU-heavy work bounded on older devices to avoid parallel APK/DEX memory spikes.
+  val semaphore = Semaphore(Runtime.getRuntime().availableProcessors().coerceAtMost(4))
+  val processedCount = AtomicInteger(0)
+  val progressMutex = Mutex()
   progress(0, packages.size)
-  for ((index, info) in packages.withIndex()) {
-   currentCoroutineContext().ensureActive()
-   val packageStart = System.nanoTime()
-   val scanned = try {
-    scanPackage(info, scanSessionId)
-   } catch (cancelled: CancellationException) {
-    throw cancelled
-   } catch (_: Exception) {
-    val failed = result(
-     info.packageName,
-     info.packageName,
-     null,
-     null,
-     ScanVerdict.NOT_SCANNED,
-     listOf(context.getString(R.string.file_could_not_read)),
-     packageStart
-    ).copy(packageName = info.packageName, scanSessionId = scanSessionId)
-    auditSafely(failed, packageStart, scanSessionId)
-    failed
+
+  val results = packages.map { info ->
+   async(Dispatchers.Default) {
+    val scanned = semaphore.withPermit {
+     currentCoroutineContext().ensureActive()
+     val packageStart = System.nanoTime()
+     try {
+      scanPackage(info, scanSessionId)
+     } catch (cancelled: CancellationException) {
+      throw cancelled
+     } catch (_: Exception) {
+      val failed = result(
+       info.packageName,
+       info.packageName,
+       null,
+       null,
+       ScanVerdict.NOT_SCANNED,
+       listOf(context.getString(R.string.file_could_not_read)),
+       packageStart
+      ).copy(packageName = info.packageName, scanSessionId = scanSessionId)
+      auditSafely(failed, packageStart, scanSessionId)
+      failed
+     }
+    }
+    progressMutex.withLock {
+     progress(processedCount.incrementAndGet(), packages.size)
+    }
+    scanned
    }
-   results += scanned
-   progress(index + 1, packages.size)
-  }
-  return results.sortedBy { when (it.verdict) {
+  }.awaitAll()
+
+  results.sortedBy { when (it.verdict) {
    ScanVerdict.THREAT -> 0
    ScanVerdict.SUSPICIOUS -> 1
    ScanVerdict.NOT_SCANNED -> 2
@@ -255,7 +294,7 @@ class PackageScanner(
  }
  suspend fun scanInstalledPackage(name: String, scanSessionId: String = UUID.randomUUID().toString()): ScanResult? {
   if (trustedAppStore.isTrusted(name)) return trustedResult(name, scanSessionId, System.nanoTime())
-  if (TrustedPackageWhitelist.hasProtectedNamespace(name)) return null
+  if (name == context.packageName) return null
   val info = try {
    pm.getPackageInfo(name, PackageManager.GET_PERMISSIONS or PackageManager.GET_SERVICES or signingFlags())
   } catch (_: PackageManager.NameNotFoundException) {
@@ -264,7 +303,12 @@ class PackageScanner(
    return result(name, name, null, null, ScanVerdict.NOT_SCANNED, listOf(context.getString(R.string.package_metadata_missing)), System.nanoTime()).copy(packageName = name, scanSessionId = scanSessionId)
   }
   val appInfo = info.applicationInfo ?: return null
-  if (!ProtectedPackagePolicy.isUserInstalled(appInfo.flags, info.packageName, context.packageName)) return null
+  val isSystemApp = (appInfo.flags and ApplicationInfo.FLAG_SYSTEM) != 0
+  val isUpdatedSystemApp = (appInfo.flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0
+  val isTrustedCertificate = isSignedByKnownTrustedCertificate(info)
+  if (!ProtectedPackagePolicy.isUserInstalled(appInfo.flags, info.packageName, context.packageName) &&
+   !isSystemApp && !isUpdatedSystemApp && !isTrustedCertificate
+  ) return null
   return scanPackage(info, scanSessionId)
  }
  suspend fun scanFile(file: File, persistAllAudit: Boolean = true): ScanResult {
@@ -418,8 +462,16 @@ class PackageScanner(
    return trustedResult(info.packageName, scanSessionId, start)
   }
 
-  // PackageInfo and sourceDir metadata are read before any hash, DEX, YARA or ML work.
+  // System and known platform-signed apps are safe-listed before any file hashing or deep analysis.
   val appInfo = info.applicationInfo
+  val isSystemApp = appInfo != null &&
+   (appInfo.flags and ApplicationInfo.FLAG_SYSTEM) != 0
+  val isUpdatedSystemApp = appInfo != null &&
+   (appInfo.flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0
+  val isTrustedCertificate = appInfo != null && !isSystemApp && !isUpdatedSystemApp &&
+   isSignedByKnownTrustedCertificate(info)
+
+  // PackageInfo and sourceDir metadata are read before any hash, DEX, YARA or ML work.
   val apk = appInfo?.sourceDir?.let(::File)
   val fileSize = apk?.let { source -> runCatching { source.length() }.getOrNull() }
   val cached = try {
@@ -429,6 +481,33 @@ class PackageScanner(
   } catch (error: Exception) {
    Log.w(TAG, "Could not read the installed-app scan cache.", error)
    null
+  }
+
+  if (isSystemApp || isUpdatedSystemApp || isTrustedCertificate) {
+   val safeLabel = if (isSystemApp || isUpdatedSystemApp) {
+    SAFE_SYSTEM_PACKAGE_LABEL
+   } else {
+    SAFE_TRUSTED_CERTIFICATE_LABEL
+   }
+   if (fileSize != null && cached != null &&
+    cached.lastUpdateTime == info.lastUpdateTime && cached.fileSize == fileSize &&
+    cached.verdict == ScanVerdict.NO_MATCH.name && cached.threatName == safeLabel
+   ) {
+    val label = runCatching { appInfo?.loadLabel(pm)?.toString() }
+     .getOrNull().orEmpty().ifBlank { info.packageName }
+    val cachedResult = ScanResult(
+     packageOrPath = info.packageName,
+     displayName = label,
+     sha256 = cached.sha256.takeIf { it.isNotBlank() },
+     md5 = null,
+     verdict = ScanVerdict.NO_MATCH,
+     reasons = listOf(safeLabel),
+     durationMs = elapsed(start)
+    ).copy(packageName = info.packageName, scanSessionId = scanSessionId)
+    auditSafely(cachedResult, start, scanSessionId)
+    return cachedResult
+   }
+   return safePlatformPackageResult(info, scanSessionId, start, fileSize, safeLabel)
   }
 
   if (fileSize != null && cached != null &&
@@ -496,6 +575,48 @@ class PackageScanner(
    }
   }
   return scanned
+ }
+
+ private suspend fun safePlatformPackageResult(
+  info: PackageInfo,
+  scanSessionId: String,
+  start: Long,
+  fileSize: Long?,
+  safeLabel: String
+ ): ScanResult {
+  val displayName = runCatching { info.applicationInfo?.loadLabel(pm)?.toString() }
+   .getOrNull().orEmpty().ifBlank { info.packageName }
+  val safeResult = ScanResult(
+   packageOrPath = info.packageName,
+   displayName = displayName,
+   sha256 = null,
+   md5 = null,
+   verdict = ScanVerdict.NO_MATCH,
+   reasons = listOf(safeLabel),
+   durationMs = elapsed(start)
+  ).copy(packageName = info.packageName, scanSessionId = scanSessionId)
+
+  // No digest is computed for an early-exit package; the empty value is deliberately non-hash data.
+  if (fileSize != null) {
+   try {
+    dao.upsertAppScanCache(
+     AppScanCache(
+      packageName = info.packageName,
+      lastUpdateTime = info.lastUpdateTime,
+      fileSize = fileSize,
+      sha256 = "",
+      verdict = ScanVerdict.NO_MATCH.name,
+      threatName = safeLabel
+     )
+    )
+   } catch (cancelled: CancellationException) {
+    throw cancelled
+   } catch (error: Exception) {
+    Log.w(TAG, "Could not cache the safe platform package result.", error)
+   }
+  }
+  auditSafely(safeResult, start, scanSessionId)
+  return safeResult
  }
 
  private suspend fun scanPackageUncached(info: PackageInfo, scanSessionId: String): ScanResult {
@@ -705,6 +826,47 @@ class PackageScanner(
  }
  private fun revealMetadataOrPlaintext(value: String, purpose: String): String =
   runCatching { hashStore.revealMetadata(value, purpose) }.getOrDefault(value)
+
+ private val trustedSignerDigests: Set<String> by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
+  loadTrustedSignerDigests()
+ }
+
+ /** Trust is based on certificate equality with the installed Play Services/Play Store signers. */
+ private fun isSignedByKnownTrustedCertificate(info: PackageInfo): Boolean {
+  val trusted = trustedSignerDigests
+  if (trusted.isEmpty()) return false
+  return signingCertificateDigests(info).any { it in trusted }
+ }
+
+ private fun loadTrustedSignerDigests(): Set<String> =
+  TRUSTED_CERTIFICATE_ANCHOR_PACKAGES.flatMap { packageName ->
+   val anchor = try {
+    pm.getPackageInfo(packageName, signingFlags())
+   } catch (_: Exception) {
+    null
+   }
+   anchor?.let(::signingCertificateDigests).orEmpty()
+  }.toSet()
+
+ private fun signingCertificateDigests(info: PackageInfo): Set<String> {
+  val signatures = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+   val signingInfo = info.signingInfo
+   if (signingInfo == null) emptyList()
+   else (
+    signingInfo.apkContentsSigners?.toList().orEmpty() +
+     signingInfo.signingCertificateHistory?.toList().orEmpty()
+    ).distinct()
+  } else {
+   @Suppress("DEPRECATION")
+   info.signatures?.toList().orEmpty()
+  }
+  return signatures.mapNotNull { signature ->
+   runCatching {
+    MessageDigest.getInstance("SHA-256").digest(signature.toByteArray())
+     .joinToString("") { byte -> "%02x".format(byte.toInt() and 0xff) }
+   }.getOrNull()
+  }.toSet()
+ }
 
  private fun isDebugSigned(info: PackageInfo): Boolean = runCatching {
   val signatureBytes = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
