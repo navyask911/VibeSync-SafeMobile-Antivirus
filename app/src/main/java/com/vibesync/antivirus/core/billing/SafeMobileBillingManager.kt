@@ -115,8 +115,13 @@ class SafeMobileBillingManager(context: Context) : PurchasesUpdatedListener {
             BillingClient.BillingResponseCode.SERVICE_UNAVAILABLE -> Notice.UNAVAILABLE
             else -> Notice.UNAVAILABLE
         }
+        val connected = when (notice) {
+            Notice.NONE -> true
+            Notice.UNAVAILABLE -> false
+            else -> _state.value.connected
+        }
         _state.value = _state.value.copy(
-            connected = responseCode == BillingClient.BillingResponseCode.OK,
+            connected = connected,
             processing = processing,
             notice = notice
         )
