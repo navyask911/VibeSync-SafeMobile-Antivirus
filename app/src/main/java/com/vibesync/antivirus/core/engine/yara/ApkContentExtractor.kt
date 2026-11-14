@@ -74,7 +74,7 @@ class ApkContentExtractor {
                     }
 
                     val limit = if (isManifest) MAX_MANIFEST_BYTES else MAX_SINGLE_DEX_BYTES
-                    if (entry.size > limit) {
+                    if (entry.size > limit.toLong()) {
                         return@withContext ApkExtractionOutcome.Incomplete("APK scan entry exceeds its declared size bound.")
                     }
                     if (entry.compressedSize == 0L && entry.size > 0L) {
