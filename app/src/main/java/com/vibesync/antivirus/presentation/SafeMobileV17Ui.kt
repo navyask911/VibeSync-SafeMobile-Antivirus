@@ -28,6 +28,8 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -1096,10 +1098,13 @@ internal fun V17ConsoleSettingsScreen(
     onImportYara: () -> Unit,
     onThreatFeedSync: () -> Unit, onBenchmarks: () -> Unit, onOpenPro: () -> Unit,
     onOpenPrivacy: () -> Unit = {}, onOpenAbout: () -> Unit = {},
-    onTestSiren: () -> Unit = {}, onTestVoice: () -> Unit = {}
+    onTestSiren: () -> Unit = {}, onTestVoice: () -> Unit = {},
+    focusFullScreenAlerts: Boolean = false,
+    onFullScreenAlertFocusHandled: () -> Unit = {}
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
+    val fullScreenAlertBringIntoViewRequester = remember { BringIntoViewRequester() }
     var fullScreenAlertGranted by remember(context) {
         mutableStateOf(FullScreenAlertAccess.isGranted(context))
     }
@@ -1111,6 +1116,12 @@ internal fun V17ConsoleSettingsScreen(
         }
         lifecycleOwner.lifecycle.addObserver(observer)
         onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
+    LaunchedEffect(focusFullScreenAlerts) {
+        if (focusFullScreenAlerts) {
+            fullScreenAlertBringIntoViewRequester.bringIntoView()
+            onFullScreenAlertFocusHandled()
+        }
     }
     val openFullScreenAlertSettings = {
         if (Build.VERSION.SDK_INT >= 34) {
@@ -1191,7 +1202,9 @@ internal fun V17ConsoleSettingsScreen(
             V17Switch("Incident Siren", "Local incident alarm and notifications", sirenEnabled, "console.siren", Icons.Outlined.Notifications, isDark, onSirenChanged)
             HorizontalDivider(color = c.border)
             Row(
-                Modifier.fillMaxWidth().padding(vertical = 5.dp),
+                Modifier.fillMaxWidth()
+                    .bringIntoViewRequester(fullScreenAlertBringIntoViewRequester)
+                    .padding(vertical = 5.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
