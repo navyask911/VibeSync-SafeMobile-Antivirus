@@ -41,6 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.graphics.*
 import androidx.core.graphics.drawable.toBitmap
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -188,9 +189,10 @@ internal fun V17TopBar(
             if (showBack) IconButton(onClick = onBack, modifier = Modifier.size(34.dp)) {
                 Icon(Icons.Outlined.ArrowBack, "Back", tint = c.text)
             } else Image(
-                painter = painterResource(R.drawable.ic_launcher_foreground),
-                contentDescription = null,
-                modifier = Modifier.size(40.dp)
+                painter = painterResource(R.drawable.vibesync_official_logo),
+                contentDescription = stringResource(R.string.app_name),
+                modifier = Modifier.height(36.dp).aspectRatio(1f),
+                contentScale = ContentScale.Fit
             )
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(1.dp)) {
                 Text(stringResource(R.string.brand_subtitle), style = MaterialTheme.typography.titleMedium.copy(fontSize = 15.sp),
