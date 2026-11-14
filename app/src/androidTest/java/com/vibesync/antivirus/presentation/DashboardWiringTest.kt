@@ -105,9 +105,9 @@ class DashboardWiringTest {
         }
 
         listOf(
-            "Live Sentinel" to "sentinel",
+            "Live Sentinel Status" to "sentinel",
             "Device Posture" to "posture",
-            "AI & YARA Engine" to "capabilities",
+            "AI Engine Status" to "capabilities",
             "Threat DB & Vault" to "quarantine"
         ).forEach { (label, expected) ->
             composeRule.onNodeWithText(label).performScrollTo().performClick()
