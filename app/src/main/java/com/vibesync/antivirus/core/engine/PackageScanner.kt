@@ -3,6 +3,7 @@ import android.content.Context
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Build
+import android.util.Log
 import com.vibesync.antivirus.R
 import com.vibesync.antivirus.core.locale.UiText
 import com.vibesync.antivirus.core.locale.SecurityText
@@ -25,6 +26,7 @@ import com.vibesync.antivirus.core.security.ProtectedPackagePolicy
 import com.vibesync.antivirus.core.security.TrustedPackageWhitelist
 import com.vibesync.antivirus.core.security.TrustedAppStore
 import kotlin.math.roundToInt
+import com.vibesync.antivirus.data.local.AppScanCache
 import com.vibesync.antivirus.data.local.ScanAudit
 import com.vibesync.antivirus.data.local.ThreatDao
 import com.vibesync.antivirus.data.repository.ThreatIntelligenceRepository
@@ -50,6 +52,7 @@ class PackageScanner(
  private val hashDatabaseManager: HashDatabaseManager? = null
 ) {
  private val pm = context.packageManager
+ private val TAG = "PackageScanner"
  private val eicarProbeBytes = 64 * 1024
  private val integrityChecker = IntegrityChecker(context)
  private val trustedAppStore = TrustedAppStore(context)
@@ -411,7 +414,66 @@ class PackageScanner(
  }
  private suspend fun scanPackage(info: PackageInfo, scanSessionId: String): ScanResult {
   val start = System.nanoTime()
-  if (trustedAppStore.isTrusted(info.packageName)) return trustedResult(info.packageName, scanSessionId, start)
+  if (trustedAppStore.isTrusted(info.packageName)) {
+   return trustedResult(info.packageName, scanSessionId, start)
+  }
+
+  // PackageInfo and sourceDir metadata are read before any hash, DEX, YARA or ML work.
+  val appInfo = info.applicationInfo
+  val apk = appInfo?.sourceDir?.let(::File)
+  val fileSize = apk?.let { source -> runCatching { source.length() }.getOrNull() }
+  val cached = runCatching { dao.findAppScanCache(info.packageName) }
+   .onFailure { Log.w(TAG, "Could not read the installed-app scan cache.", it) }
+   .getOrNull()
+
+  if (fileSize != null && cached != null &&
+   cached.lastUpdateTime == info.lastUpdateTime && cached.fileSize == fileSize
+  ) {
+   val cachedVerdict = runCatching { ScanVerdict.valueOf(cached.verdict) }.getOrNull()
+   if (cachedVerdict != null) {
+    val label = runCatching { appInfo?.loadLabel(pm)?.toString() }
+     .getOrNull().orEmpty().ifBlank { info.packageName }
+    val cachedResult = ScanResult(
+     packageOrPath = info.packageName,
+     displayName = label,
+     sha256 = cached.sha256.takeIf { it.isNotBlank() },
+     md5 = null,
+     verdict = cachedVerdict,
+     reasons = cached.threatName?.let(::listOf).orEmpty(),
+     durationMs = elapsed(start)
+    ).copy(
+     packageName = info.packageName,
+     scanSessionId = scanSessionId,
+     malwareName = cached.threatName
+    )
+    // Keep scan history complete even though expensive file engines were bypassed.
+    audit(cachedResult, start, scanSessionId)
+    return cachedResult
+   }
+  }
+
+  val scanned = scanPackageUncached(info, scanSessionId)
+  if (fileSize != null) {
+   try {
+    dao.upsertAppScanCache(
+     AppScanCache(
+      packageName = info.packageName,
+      lastUpdateTime = info.lastUpdateTime,
+      fileSize = fileSize,
+      sha256 = scanned.sha256.orEmpty(),
+      verdict = scanned.verdict.name,
+      threatName = scanned.malwareName
+     )
+    )
+   } catch (error: Exception) {
+    Log.w(TAG, "Could not update the installed-app scan cache; scan result is still valid.", error)
+   }
+  }
+  return scanned
+ }
+
+ private suspend fun scanPackageUncached(info: PackageInfo, scanSessionId: String): ScanResult {
+  val start = System.nanoTime()
   val appInfo = info.applicationInfo ?: run {
    val failed = result(info.packageName, info.packageName, null, null, ScanVerdict.NOT_SCANNED, listOf(context.getString(R.string.package_metadata_missing)), start).copy(packageName = info.packageName, scanSessionId = scanSessionId)
    auditSafely(failed, start, scanSessionId)

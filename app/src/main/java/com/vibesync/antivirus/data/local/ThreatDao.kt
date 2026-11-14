@@ -62,4 +62,10 @@ interface ThreatDao {
 
  @Query("SELECT MAX(completed_at) FROM scan_sessions WHERE status = 'COMPLETED'")
  suspend fun latestCompletedScanAt(): Long?
+ @Query("SELECT * FROM app_scan_cache WHERE packageName = :packageName LIMIT 1")
+ suspend fun findAppScanCache(packageName: String): AppScanCache?
+
+ @Insert(onConflict = OnConflictStrategy.REPLACE)
+ suspend fun upsertAppScanCache(cache: AppScanCache)
+
 }
