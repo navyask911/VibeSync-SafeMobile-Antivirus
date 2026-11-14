@@ -253,7 +253,7 @@ class PackageScanner(
  suspend fun scanInstalledPackage(name: String, scanSessionId: String = UUID.randomUUID().toString()): ScanResult? {
   if (trustedAppStore.isTrusted(name)) return trustedResult(name, scanSessionId, System.nanoTime())
   if (TrustedPackageWhitelist.hasProtectedNamespace(name)) return null
-    val info = try {
+  val info = try {
    pm.getPackageInfo(name, PackageManager.GET_PERMISSIONS or PackageManager.GET_SERVICES or signingFlags())
   } catch (_: PackageManager.NameNotFoundException) {
    return null
