@@ -888,7 +888,6 @@ internal fun V17ScanLabScreen(
             }
         }
     }
-    }
 }
 
 @Composable
