@@ -225,7 +225,7 @@ class PackageScanner(
 
  private suspend fun runMachineLearning(apk: File): Float? {
   val features = drebinFeatureExtractor.extractFeaturesAsync(apk)
-  // Phase 3 records the research probability only. Phase 4 owns any verdict fusion.
+  // TFLite returns an advisory probability; the ensemble alone assigns the final verdict.
   return tfliteInferenceEngine.runInference(features)
  }
 
@@ -708,7 +708,9 @@ class PackageScanner(
    )
   }
 
-  val mlProbability = runMachineLearning(apk)
+  // Platform packages are safe-listed before this method; keep a local backstop here too.
+  val mlProbability = if (isProtectedPlatformPackage(info.packageName, appInfo)) null
+   else runMachineLearning(apk)
   val baseDeepReport = deepStaticAnalyzer.analyze(info, apk, debugSigned)
   val mergedDeepReport = mergeYaraXFindings(baseDeepReport, yaraXResult)
   val deepReport = mergedDeepReport.copy(mlProbability = mlProbability)
