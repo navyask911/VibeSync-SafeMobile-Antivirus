@@ -140,6 +140,27 @@ class ThreatEnsembleEvaluatorTest {
     }
 
     @Test
+    fun systemAppMlSignalIsForcedToNoMatch() {
+        val output = ThreatEnsembleEvaluator.evaluate(
+            result(mlProbability = 0.95f),
+            isSystemApp = true
+        )
+        assertEquals(ScanVerdict.NO_MATCH, output.verdict)
+        assertEquals(DetectionSource.NONE, output.detectionSource)
+        assertNull(output.mlProbability)
+    }
+
+    @Test
+    fun googlePlayServicesMlSignalIsForcedToNoMatch() {
+        val output = ThreatEnsembleEvaluator.evaluate(
+            result(mlProbability = 0.95f).copy(packageName = "com.google.android.gms")
+        )
+        assertEquals(ScanVerdict.NO_MATCH, output.verdict)
+        assertEquals(DetectionSource.NONE, output.detectionSource)
+        assertNull(output.mlProbability)
+    }
+
+    @Test
     fun allCleanSignalsProduceNoMatch() {
         val output = ThreatEnsembleEvaluator.evaluate(
             result(

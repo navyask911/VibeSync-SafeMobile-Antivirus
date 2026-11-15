@@ -50,6 +50,7 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
+private const val GOOGLE_PLAY_SERVICES_PACKAGE = "com.google.android.gms"
 private const val SAFE_SYSTEM_PACKAGE_LABEL = "Safe (System App)"
 private const val SAFE_TRUSTED_CERTIFICATE_LABEL = "Safe (Trusted Certificate)"
 private val TRUSTED_CERTIFICATE_ANCHOR_PACKAGES = listOf(
@@ -75,6 +76,15 @@ class PackageScanner(
  private val drebinFeatureExtractor = com.vibesync.antivirus.engine.ml.DrebinFeatureExtractor(context)
  private val tfliteInferenceEngine = com.vibesync.antivirus.engine.ml.TfliteInferenceEngine(context)
  private val yaraXScanner = YaraXScanner(context)
+
+ private fun isProtectedPlatformPackage(packageName: String?, applicationInfo: ApplicationInfo?): Boolean {
+  if (packageName == GOOGLE_PLAY_SERVICES_PACKAGE) return true
+  val installedFlags = packageName?.let { name ->
+   runCatching { pm.getApplicationInfo(name, 0).flags }.getOrNull()
+  } ?: 0
+  val flags = (applicationInfo?.flags ?: 0) or installedFlags
+  return flags and (ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0
+ }
 
  private data class BundledHashSnapshot(
   val hashes: Set<String>,
@@ -206,9 +216,11 @@ class PackageScanner(
 
  private fun evaluateWithEnsemble(
   result: ScanResult,
-  yaraResult: YaraXScanResult? = null
+  yaraResult: YaraXScanResult? = null,
+  isSystemApp: Boolean = false
  ): ScanResult = ThreatEnsembleEvaluator.evaluate(
-  result.copy(yaraVerdict = rawYaraVerdict(yaraResult))
+  result.copy(yaraVerdict = rawYaraVerdict(yaraResult)),
+  isSystemApp = isSystemApp
  )
 
  private suspend fun runMachineLearning(apk: File): Float? {
@@ -248,7 +260,9 @@ class PackageScanner(
    val system = app != null && (app.flags and ApplicationInfo.FLAG_SYSTEM) != 0
    val updatedSystem = app != null && (app.flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0
    app != null && info.packageName != context.packageName &&
-    (system || updatedSystem || ProtectedPackagePolicy.isUserInstalled(app.flags, info.packageName, context.packageName) || isSignedByKnownTrustedCertificate(info))
+    (system || updatedSystem || info.packageName == GOOGLE_PLAY_SERVICES_PACKAGE ||
+     ProtectedPackagePolicy.isUserInstalled(app.flags, info.packageName, context.packageName) ||
+     isSignedByKnownTrustedCertificate(info))
   }.sortedBy { it.packageName }
   val completed = all.count { it.packageName in completedPackageNames }
   val pending = all.filterNot { it.packageName in completedPackageNames }
@@ -336,6 +350,7 @@ class PackageScanner(
     publicSourceDir = file.absolutePath
    }
    val identity = apkPackageInfo?.packageName
+   val protectedPlatformApk = isProtectedPlatformPackage(identity, apkPackageInfo?.applicationInfo)
    if (identity != null && trustedAppStore.isTrusted(identity)) {
     return trustedResult(identity, scanSessionId, start).copy(sourceLocalPath = file.absolutePath)
    }
@@ -372,7 +387,8 @@ class PackageScanner(
    )
   }
 
-   val mlProbability = if (isApk) {
+   // Do not execute the Drebin model for installed system apps or Google Play Services.
+   val mlProbability = if (isApk && !protectedPlatformApk) {
     runMachineLearning(file)
    } else null
    val staticReport = if (isApk) {
@@ -396,7 +412,7 @@ class PackageScanner(
      malwareName = firstSuspiciousYara.malwareName ?: firstSuspiciousYara.ruleIdentifier
     )
    }
-   output = evaluateWithEnsemble(output, yaraXResult)
+   output = evaluateWithEnsemble(output, yaraXResult, isSystemApp = protectedPlatformApk)
    output = markIncompleteYaraIfOtherwiseClean(output, yaraXResult)
    if (!isApk) {
     val prefix = file.inputStream().buffered().use(::readBoundedPrefix)
@@ -477,8 +493,8 @@ class PackageScanner(
    (appInfo.flags and ApplicationInfo.FLAG_SYSTEM) != 0
   val isUpdatedSystemApp = appInfo != null &&
    (appInfo.flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0
-  val isTrustedCertificate = appInfo != null && !isSystemApp && !isUpdatedSystemApp &&
-   isSignedByKnownTrustedCertificate(info)
+  val isTrustedCertificate = info.packageName == GOOGLE_PLAY_SERVICES_PACKAGE ||
+   (appInfo != null && !isSystemApp && !isUpdatedSystemApp && isSignedByKnownTrustedCertificate(info))
 
   // PackageInfo and sourceDir metadata are read before any hash, DEX, YARA or ML work.
   val apk = appInfo?.sourceDir?.let(::File)
@@ -708,7 +724,11 @@ class PackageScanner(
     malwareName = firstSuspiciousYara.malwareName ?: firstSuspiciousYara.ruleIdentifier
    )
   }
-  output = evaluateWithEnsemble(output, yaraXResult)
+  output = evaluateWithEnsemble(
+   output,
+   yaraXResult,
+   isSystemApp = isProtectedPlatformPackage(info.packageName, appInfo)
+  )
   output = markIncompleteYaraIfOtherwiseClean(output, yaraXResult)
   audit(output, start, scanSessionId)
   return output.copy(durationMs = elapsed(start), packageName = info.packageName, scanSessionId = scanSessionId)

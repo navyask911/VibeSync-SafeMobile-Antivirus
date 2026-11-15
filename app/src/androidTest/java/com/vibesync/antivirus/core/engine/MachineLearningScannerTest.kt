@@ -21,7 +21,7 @@ class MachineLearningScannerTest {
         // Gradle downloads the immutable ML Repo release before preBuild.
         val scanner = MachineLearningScanner(context)
         assertTrue(scanner.isAvailable())
-        assertTrue(scanner.isResearchCandidateAvailable())
+        assertFalse(scanner.isResearchCandidateAvailable())
 
         val model = context.assets.open("model.tflite").use { it.readBytes() }
         assertEquals(18_584, model.size)

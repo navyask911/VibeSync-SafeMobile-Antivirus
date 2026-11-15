@@ -48,7 +48,11 @@ class MachineLearningScanner(context: Context) {
 
     suspend fun isResearchCandidateAvailable(): Boolean = withContext(Dispatchers.IO) {
         val schema = DrebinFeatureContract.loadSchema(app.assets)
-        schema != null && runCatching { validatedModelBytes(schema, allowResearch = true) != null }.getOrDefault(false)
+        val researchMetadataEnabled = MODEL_TRAINED && !MODEL_VALIDATED &&
+            !MODEL_PRODUCTION_READY && !MODEL_DUMMY_UNTRAINED &&
+            MODEL_STATUS == "research_candidate"
+        schema != null && researchMetadataEnabled &&
+            runCatching { validatedModelBytes(schema, allowResearch = true) != null }.getOrDefault(false)
     }
 
     suspend fun scan(apk: File, @Suppress("UNUSED_PARAMETER") info: PackageInfo?): Prediction? =
@@ -99,7 +103,7 @@ class MachineLearningScanner(context: Context) {
      * advisory and must be fused with independent detection signals before threat escalation.
      */
     private fun validatedModelBytes(schema: List<String>, allowResearch: Boolean = false): ByteArray? {
-        val approvedProduction = MODEL_VALIDATED && MODEL_PRODUCTION_READY &&
+        val approvedProduction = !allowResearch && MODEL_VALIDATED && MODEL_PRODUCTION_READY &&
             MODEL_STATUS == "active"
         val approvedResearch = allowResearch && MODEL_TRAINED &&
             !MODEL_VALIDATED && !MODEL_PRODUCTION_READY &&
@@ -149,6 +153,6 @@ class MachineLearningScanner(context: Context) {
         private const val MODEL_VALIDATED = true
         private const val MODEL_PRODUCTION_READY = true
         private const val MODEL_DUMMY_UNTRAINED = false
-        const val THRESHOLD = 0.85f // Legacy advisory threshold; never used while production-disabled.
+        const val THRESHOLD = 0.85f // Legacy model metadata; ensemble verdict thresholds are authoritative.
     }
 }

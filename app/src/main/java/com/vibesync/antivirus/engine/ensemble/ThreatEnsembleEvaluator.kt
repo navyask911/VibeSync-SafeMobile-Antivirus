@@ -61,7 +61,7 @@ object ThreatEnsembleEvaluator {
         return hasMediumOrHighSeverity || lowSeverityCount >= 2
     }
 
-    fun evaluate(scanResult: ScanResult): ScanResult {
+    fun evaluate(scanResult: ScanResult, isSystemApp: Boolean = false): ScanResult {
         if (scanResult.detectionSource == DetectionSource.HASH &&
             scanResult.verdict == ScanVerdict.THREAT
         ) {
@@ -85,6 +85,21 @@ object ThreatEnsembleEvaluator {
         // Never turn an inaccessible/partial scan or a user-approved app into clean.
         if (scanResult.verdict == ScanVerdict.NOT_SCANNED || scanResult.trustedByUser) {
             return scanResult
+        }
+
+        // Exact hash/YARA threats above retain precedence. Otherwise, model scores for
+        // platform apps are ignored so they cannot produce ML-derived false positives.
+        if ((isSystemApp || scanResult.packageName == "com.google.android.gms") &&
+            scanResult.mlProbability != null
+        ) {
+            return scanResult.copy(
+                verdict = ScanVerdict.NO_MATCH,
+                detectionSource = DetectionSource.NONE,
+                confidence = 0.0f,
+                riskScore = 0.0f,
+                mlProbability = null,
+                threatEventId = null
+            )
         }
 
         val probability = scanResult.mlProbability
