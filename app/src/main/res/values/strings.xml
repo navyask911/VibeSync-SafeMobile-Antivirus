@@ -30,8 +30,8 @@
 <string name="service_channel_name">SafeMobile file monitoring</string>
     <string name="scan_foreground_channel_name" translatable="false">Scanning in progress</string>
     <string name="scan_foreground_channel_description" translatable="false">Persistent status for on-device antivirus scans.</string>
-    <string name="scan_foreground_notification_title" translatable="false">Scanning in progress</string>
-    <string name="scan_foreground_notification_body" translatable="false">SafeMobile is scanning installed apps and local files on this device.</string><string name="service_channel_description">Notifications for user-enabled local APK checks.</string><string name="service_notification_title">SafeMobile monitoring is active</string><string name="service_notification_body">Watching Downloads for newly written APK files.</string>
+    <string name="scan_foreground_notification_title" translatable="false">Scanning for threats...</string>
+    <string name="scan_foreground_notification_body" translatable="false">SafeMobile is scanning installed apps and local files on this device.</string><string name="scan_stop_action" translatable="false">Stop Scan</string><string name="service_channel_description">Notifications for user-enabled local APK checks.</string><string name="service_notification_title">SafeMobile monitoring is active</string><string name="service_notification_body">Watching Downloads for newly written APK files.</string>
 
 <string name="unknown_file">selected file</string>
 <string name="local_files_only">For privacy, this scanner only opens files from recognized on-device storage providers. Cloud or third-party document providers are not opened.</string>
@@ -663,6 +663,7 @@
     <string name="ml_probability">ML threat probability: %1$d%%</string>
     <string name="ml_high_finding">ML static heuristic: high score from permissions and API patterns; advisory only, not proof of malware.</string>
     <string name="ml_active_body">Validated on-device static ML model available. Results are advisory and do not prove malware.</string>
+    <string name="ml_engine_active_status" translatable="false">AI Engine: Active</string>
 
     <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
     <string name="threat_intelligence_title">Threat Intelligence Engine</string>
@@ -711,4 +712,11 @@
     <string name="play_protect_status_title" translatable="false">Play Protect Status</string>
     <string name="play_protect_status_enabled" translatable="false">Google Play package verification is enabled on this device.</string>
     <string name="play_protect_status_disabled" translatable="false">Google Play package verification is disabled in Android settings.</string>
+
+    <string name="console_full_screen_alerts_title" translatable="false">Full-screen alerts</string>
+    <string name="console_full_screen_alerts_allowed" translatable="false">Allowed. SafeMobile can open urgent incident alerts full-screen.</string>
+    <string name="console_full_screen_alerts_permission_needed" translatable="false">Permission needed. Allow SafeMobile to open urgent incident alerts full-screen.</string>
+    <string name="console_full_screen_alerts_not_required" translatable="false">Not required on this Android version.</string>
+    <string name="console_full_screen_alerts_manage" translatable="false">Manage</string>
+    <string name="console_full_screen_alerts_grant" translatable="false">Grant access</string>
 </resources>

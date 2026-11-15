@@ -44,8 +44,14 @@ interface ThreatDao {
  @Query("UPDATE scan_sessions SET status = 'INTERRUPTED', completed_at = :interruptedAt WHERE session_id = :sessionId")
  suspend fun markScanSessionInterrupted(sessionId: String, interruptedAt: Long)
 
- @Query("UPDATE scan_sessions SET status = 'INTERRUPTED' WHERE status = 'IN_PROGRESS'")
+ @Query("""UPDATE scan_sessions SET status = 'INTERRUPTED'
+  WHERE status = 'IN_PROGRESS'
+   AND session_id NOT IN (SELECT session_id FROM scan_session_state
+    WHERE is_complete = 0 AND operation_type IN
+     ('FULL_DEVICE','DEEP_SCAN','INSTALLED_APPS','SELECTED_FILE','INSTALLED_PACKAGE','SELECTED_FOLDER'))""")
  suspend fun markInProgressAsInterrupted()
+ @Query("UPDATE scan_sessions SET status = 'IN_PROGRESS', completed_at = NULL WHERE session_id = :sessionId")
+ suspend fun markScanSessionResumed(sessionId: String)
 
  @Query("""
   SELECT
@@ -62,4 +68,47 @@ interface ThreatDao {
 
  @Query("SELECT MAX(completed_at) FROM scan_sessions WHERE status = 'COMPLETED'")
  suspend fun latestCompletedScanAt(): Long?
+ @Insert(onConflict = OnConflictStrategy.REPLACE)
+ suspend fun upsertScanSessionState(state: ScanSessionState)
+ @Query("SELECT * FROM scan_session_state WHERE session_id = :sessionId LIMIT 1")
+ suspend fun findScanSessionState(sessionId: String): ScanSessionState?
+ @Query("""SELECT state.* FROM scan_session_state AS state JOIN scan_sessions AS session ON session.session_id = state.session_id
+  WHERE state.is_complete = 0 AND state.operation_type IN ('FULL_DEVICE','DEEP_SCAN','INSTALLED_APPS','SELECTED_FILE','INSTALLED_PACKAGE','SELECTED_FOLDER')
+  ORDER BY session.started_at DESC LIMIT 1""")
+ suspend fun latestIncompleteManualScanState(): ScanSessionState?
+ @Query("""SELECT state.* FROM scan_session_state AS state JOIN scan_sessions AS session ON session.session_id = state.session_id
+  WHERE state.operation_type IN ('FULL_DEVICE','DEEP_SCAN','INSTALLED_APPS','SELECTED_FILE','INSTALLED_PACKAGE','SELECTED_FOLDER')
+  ORDER BY session.started_at DESC LIMIT 1""")
+ fun observeLatestManualScanState(): Flow<ScanSessionState?>
+ @Query("""SELECT state.* FROM scan_session_state AS state JOIN scan_sessions AS session ON session.session_id = state.session_id
+  WHERE state.is_complete = 1 AND session.status = 'COMPLETED'
+   AND state.operation_type IN ('FULL_DEVICE','DEEP_SCAN','INSTALLED_APPS','SELECTED_FILE','INSTALLED_PACKAGE','SELECTED_FOLDER')
+  ORDER BY session.started_at DESC LIMIT 1""")
+ suspend fun latestCompletedManualScanState(): ScanSessionState?
+ @Insert(onConflict = OnConflictStrategy.IGNORE)
+ suspend fun insertScanSessionItem(item: ScanSessionItemEntity)
+ @Query("SELECT item_key FROM scan_session_items WHERE session_id = :sessionId")
+ suspend fun scanSessionItemKeys(sessionId: String): List<String>
+ @Query("SELECT * FROM scan_session_items WHERE session_id = :sessionId ORDER BY completed_at ASC")
+ suspend fun scanSessionItems(sessionId: String): List<ScanSessionItemEntity>
+ @Query("SELECT COUNT(*) FROM scan_session_items WHERE session_id = :sessionId")
+ suspend fun countScanSessionItems(sessionId: String): Int
+ @Query("UPDATE scan_session_state SET total_items = :totalItems WHERE session_id = :sessionId")
+ suspend fun updateScanSessionTotal(sessionId: String, totalItems: Int)
+ @Query("UPDATE scan_session_state SET scanned_items = :scannedItems, current_item_path = :currentItemPath WHERE session_id = :sessionId")
+ suspend fun updateScanSessionProgress(sessionId: String, scannedItems: Int, currentItemPath: String?)
+ @Query("""UPDATE scan_session_state SET is_complete = 1,
+  total_items = CASE WHEN total_items > :scannedItems THEN total_items ELSE :scannedItems END,
+  scanned_items = :scannedItems, current_item_path = NULL WHERE session_id = :sessionId""")
+ suspend fun markScanSessionStateComplete(sessionId: String, scannedItems: Int)
+ @Query("""SELECT EXISTS(SELECT 1 FROM scan_session_state WHERE is_complete = 0
+  AND operation_type IN ('FULL_DEVICE','DEEP_SCAN','INSTALLED_APPS','SELECTED_FILE','INSTALLED_PACKAGE','SELECTED_FOLDER'))""")
+ suspend fun hasIncompleteManualScanSession(): Boolean
+
+ @Query("SELECT * FROM app_scan_cache WHERE packageName = :packageName LIMIT 1")
+ suspend fun findAppScanCache(packageName: String): AppScanCache?
+
+ @Insert(onConflict = OnConflictStrategy.REPLACE)
+ suspend fun upsertAppScanCache(cache: AppScanCache)
+
 }

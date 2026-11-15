@@ -3,7 +3,6 @@ package com.vibesync.antivirus.core.engine
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import java.io.File
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.security.MessageDigest
@@ -18,13 +17,12 @@ import org.tensorflow.lite.Interpreter
 
 @RunWith(AndroidJUnit4::class)
 class MachineLearningScannerTest {
-    @Test fun downloadedResearchModelHas215InputsButIsNotProductionActivated() = runBlocking {
+    @Test fun approvedModelIsProductionActiveAndHasThe215InputContract() = runBlocking {
         val context = ApplicationProvider.getApplicationContext<Context>()
         // Gradle downloads the immutable ML Repo release before preBuild.
-        // Historical Drebin holdout is research only; it is not enabled in production risk scoring.
         val scanner = MachineLearningScanner(context)
-        assertFalse(scanner.isAvailable())
-        assertTrue(scanner.isResearchCandidateAvailable())
+        assertTrue(scanner.isAvailable())
+        assertFalse(scanner.isResearchCandidateAvailable())
 
         val model = context.assets.open("model.tflite").use { it.readBytes() }
         assertEquals(18_584, model.size)
@@ -41,25 +39,13 @@ class MachineLearningScannerTest {
             interpreter.allocateTensors()
             assertArrayEquals(intArrayOf(1, 215), interpreter.getInputTensor(0).shape())
             assertArrayEquals(intArrayOf(1, 1), interpreter.getOutputTensor(0).shape())
+            assertEquals(org.tensorflow.lite.DataType.FLOAT32, interpreter.getInputTensor(0).dataType())
+            assertEquals(org.tensorflow.lite.DataType.FLOAT32, interpreter.getOutputTensor(0).dataType())
             val output = Array(1) { FloatArray(1) }
             interpreter.run(arrayOf(FloatArray(215)), output)
             assertTrue(output[0][0].isFinite())
+            assertTrue(output[0][0] in 0.0f..1.0f)
         }
     }
 
-    @Test fun aStagedResearchCandidateCannotEnableProductionClassification() = runBlocking {
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        val folder = File(context.filesDir, "ml-research-candidates")
-        assertTrue(folder.isDirectory || folder.mkdirs())
-        val file = File(folder, "model.tflite")
-        // A private copy cannot switch the source-pinned, production-disabled metadata gate.
-        val model = context.assets.open("model.tflite").use { it.readBytes() }
-        file.writeBytes(model)
-        try {
-            assertFalse(MachineLearningScanner(context).isAvailable())
-            assertTrue(MachineLearningScanner(context).isResearchCandidateAvailable())
-        } finally {
-            file.delete()
-        }
-    }
 }

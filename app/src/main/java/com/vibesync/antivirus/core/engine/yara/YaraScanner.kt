@@ -45,8 +45,8 @@ data class YaraXScanResult(
 }
 
 /**
- * Full YARA-X APK scan. Every match is evidence; only explicit trusted rule
- * metadata classifications can become THREAT or SUSPICIOUS.
+ * Full YARA-X APK scan. Each selected ZIP component is passed to the native
+ * YARA engine immediately after bounded streaming; unrelated ZIP entries are not buffered.
  */
 class YaraScanner(context: Context) {
 
@@ -54,55 +54,61 @@ class YaraScanner(context: Context) {
     private val ruleManager = YaraRuleManager(context.applicationContext)
 
     suspend fun scanApk(apk: java.io.File): YaraXScanResult {
-        val extracted = try {
-            extractor.extract(apk)
+        val allMatches = mutableListOf<YaraXRuleMatch>()
+        var abortedResult: YaraXScanResult? = null
+
+        val extraction = try {
+            extractor.forEachComponent(apk) { component ->
+                val response = try {
+                    ruleManager.scanBytes(component.bytes)
+                } catch (cancelled: CancellationException) {
+                    throw cancelled
+                } catch (error: LinkageError) {
+                    abortedResult = YaraXScanResult(
+                        YaraXScanState.DISABLED,
+                        allMatches.toList(),
+                        "YARA-X native library is unavailable: ${error.javaClass.simpleName}."
+                    )
+                    return@forEachComponent false
+                } catch (error: Exception) {
+                    abortedResult = YaraXScanResult(
+                        YaraXScanState.DISABLED,
+                        allMatches.toList(),
+                        "YARA-X rules could not be initialized or executed: ${error.javaClass.simpleName}."
+                    )
+                    return@forEachComponent false
+                }
+
+                val parsed = try {
+                    parseResponse(response, component.entryName)
+                } catch (error: Exception) {
+                    abortedResult = YaraXScanResult(
+                        YaraXScanState.NOT_SCANNED,
+                        allMatches.toList(),
+                        "YARA-X returned an invalid or failed scan response: ${error.javaClass.simpleName}."
+                    )
+                    return@forEachComponent false
+                }
+                allMatches += parsed
+                true
+            }
         } catch (cancelled: CancellationException) {
             throw cancelled
         } catch (error: Exception) {
             return YaraXScanResult(
                 YaraXScanState.NOT_SCANNED,
-                reason = "APK extraction failed: ${error.javaClass.simpleName}."
+                allMatches.toList(),
+                "APK streaming failed: ${error.javaClass.simpleName}."
             )
         }
 
-        val components = when (extracted) {
-            is ApkExtractionOutcome.Complete -> extracted.components
-            is ApkExtractionOutcome.Incomplete -> return YaraXScanResult(
+        abortedResult?.let { return it }
+        if (extraction is ApkExtractionOutcome.Incomplete) {
+            return YaraXScanResult(
                 YaraXScanState.NOT_SCANNED,
-                reason = extracted.reason
+                allMatches.toList(),
+                extraction.reason
             )
-        }
-
-        val allMatches = mutableListOf<YaraXRuleMatch>()
-        for (component in components) {
-            val response = try {
-                ruleManager.scanBytes(component.bytes)
-            } catch (cancelled: CancellationException) {
-                throw cancelled
-            } catch (error: LinkageError) {
-                return YaraXScanResult(
-                    YaraXScanState.DISABLED,
-                    allMatches.toList(),
-                    "YARA-X native library is unavailable: ${error.javaClass.simpleName}."
-                )
-            } catch (error: Exception) {
-                return YaraXScanResult(
-                    YaraXScanState.DISABLED,
-                    allMatches.toList(),
-                    "YARA-X rules could not be initialized or executed: ${error.javaClass.simpleName}."
-                )
-            }
-
-            val parsed = try {
-                parseResponse(response, component.entryName)
-            } catch (error: Exception) {
-                return YaraXScanResult(
-                    YaraXScanState.NOT_SCANNED,
-                    allMatches.toList(),
-                    "YARA-X returned an invalid or failed scan response: ${error.javaClass.simpleName}."
-                )
-            }
-            allMatches += parsed
         }
 
         return YaraXScanResult(

@@ -6,8 +6,8 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 
 @Database(
- entities = [ThreatSignature::class, ScanAudit::class, WhiteListEntry::class, MalwareHashEntity::class, ThreatFeedSyncStateEntity::class, ThreatFeedStagingEntity::class, SecurityIncidentEntity::class, QuarantineVaultEntity::class, ScanSessionEntity::class],
- version = 10, exportSchema = false
+ entities = [ThreatSignature::class, ScanAudit::class, WhiteListEntry::class, MalwareHashEntity::class, ThreatFeedSyncStateEntity::class, ThreatFeedStagingEntity::class, SecurityIncidentEntity::class, QuarantineVaultEntity::class, ScanSessionEntity::class, AppScanCache::class, ScanSessionState::class, ScanSessionItemEntity::class],
+ version = 12, exportSchema = false
 )
 abstract class ThreatDatabase : RoomDatabase() {
  abstract fun threatDao(): ThreatDao
@@ -92,6 +92,26 @@ abstract class ThreatDatabase : RoomDatabase() {
       "SELECT scan_session_id, 'LEGACY', MIN(scan_timestamp), MAX(scan_timestamp), 'COMPLETED' " +
       "FROM scan_audits WHERE scan_session_id != '' GROUP BY scan_session_id"
     )
+   }
+  }
+  /** Adds the installed-APK incremental scan cache without modifying prior scan history. */
+  val MIGRATION_10_11: Migration = object : Migration(10, 11) {
+   override fun migrate(database: SupportSQLiteDatabase) {
+    database.execSQL(
+     "CREATE TABLE IF NOT EXISTS app_scan_cache (" +
+      "packageName TEXT NOT NULL, lastUpdateTime INTEGER NOT NULL, " +
+      "fileSize INTEGER NOT NULL, sha256 TEXT NOT NULL, verdict TEXT NOT NULL, " +
+      "threatName TEXT, PRIMARY KEY(packageName))"
+    )
+   }
+  }
+  /** Adds durable foreground scan progress and per-item resume checkpoints. */
+  val MIGRATION_11_12: Migration = object : Migration(11, 12) {
+   override fun migrate(database: SupportSQLiteDatabase) {
+    database.execSQL("CREATE TABLE IF NOT EXISTS scan_session_state (session_id TEXT NOT NULL, total_items INTEGER NOT NULL, scanned_items INTEGER NOT NULL, current_item_path TEXT, scan_type TEXT NOT NULL, is_complete INTEGER NOT NULL, operation_type TEXT NOT NULL, source_uri TEXT, package_name TEXT, is_manual INTEGER NOT NULL, PRIMARY KEY(session_id))")
+    database.execSQL("CREATE TABLE IF NOT EXISTS scan_session_items (session_id TEXT NOT NULL, item_key TEXT NOT NULL, item_type TEXT NOT NULL, item_path TEXT NOT NULL, verdict TEXT NOT NULL, package_name TEXT, sha256_hash TEXT, md5_hash TEXT, reasons TEXT NOT NULL, risk_score REAL NOT NULL, detection_source TEXT NOT NULL, malware_name TEXT, threat_event_id TEXT, duration_ms INTEGER NOT NULL, source_uri TEXT, completed_at INTEGER NOT NULL, PRIMARY KEY(session_id, item_key))")
+    database.execSQL("CREATE INDEX IF NOT EXISTS index_scan_session_items_session_id ON scan_session_items(session_id)")
+    database.execSQL("CREATE INDEX IF NOT EXISTS index_scan_session_items_completed_at ON scan_session_items(completed_at)")
    }
   }
  }

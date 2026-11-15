@@ -671,6 +671,7 @@
     <string name="ml_probability">機械学習による脅威の確率: %1$d%%</string>
     <string name="ml_high_finding">静的機械学習の推定: 権限と API パターンによる高スコアです。参考情報であり、マルウェアの証拠ではありません。</string>
     <string name="ml_active_body">検証済みの端末内静的機械学習モデルを利用できます。結果は参考情報であり、マルウェアの存在を証明しません。</string>
+    <string name="ml_engine_active_status">AIエンジン：有効</string>
 
     <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
     <string name="threat_intelligence_title">脅威インテリジェンスエンジン</string>
@@ -726,4 +727,11 @@
     <string name="scan_foreground_notification_body">SafeMobile がこの端末にインストールされたアプリとローカルファイルをスキャンしています。</string>
     <string name="ui_sentinel_telegram_folder">Telegram ドキュメントフォルダ</string>
     <string name="ui_sentinel_enable_telegram">Telegram ドキュメントを監視</string>
+    <string name="console_full_screen_alerts_title">全画面アラート</string>
+    <string name="console_full_screen_alerts_allowed">許可済み。SafeMobile は緊急インシデントアラートを全画面で表示できます。</string>
+    <string name="console_full_screen_alerts_permission_needed">権限が必要です。緊急インシデントアラートを全画面で表示するには、SafeMobile に許可してください。</string>
+    <string name="console_full_screen_alerts_not_required">この Android バージョンでは不要です。</string>
+    <string name="console_full_screen_alerts_manage">管理</string>
+    <string name="console_full_screen_alerts_grant">アクセスを許可</string>
+    <string name="scan_stop_action">スキャンを停止</string>
 </resources>

@@ -3,6 +3,7 @@ package com.vibesync.antivirus.presentation
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -31,6 +32,9 @@ import java.text.DateFormat
 import java.util.Date
 import java.util.Locale
 
+private const val BILLING_UNAVAILABLE_MESSAGE =
+    "Billing is currently unavailable. Please ensure you are using the Play Store version."
+
 /** SafeMobile Pro prepaid plan. Google Play prepaid periods are limited to one year. */
 @Composable
 fun SafeMobileProPaywallScreen(
@@ -42,19 +46,42 @@ fun SafeMobileProPaywallScreen(
     val locale = LocalConfiguration.current.locales.let { locales ->
         if (locales.size() == 0) Locale.getDefault() else locales[0]
     }
+    // Use a safe cast so an unexpected application context cannot crash the paywall.
     val manager = remember(context.applicationContext) {
-        (context.applicationContext as SafeMobileApp).proBillingManager
+        (context.applicationContext as? SafeMobileApp)?.proBillingManager
     }
+
+    BackHandler(onBack = onBack)
+
+    if (manager == null) {
+        LaunchedEffect(context) {
+            Toast.makeText(context, BILLING_UNAVAILABLE_MESSAGE, Toast.LENGTH_LONG).show()
+        }
+        Column(
+            modifier = Modifier.fillMaxWidth().padding(18.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Text(stringResource(R.string.pro_title), style = MaterialTheme.typography.headlineSmall)
+            Text(BILLING_UNAVAILABLE_MESSAGE, color = MaterialTheme.colorScheme.error)
+            TextButton(onClick = onBack) { Text(stringResource(R.string.close)) }
+        }
+        return
+    }
+
     val state by manager.state.collectAsStateWithLifecycle()
     val owner = LocalLifecycleOwner.current
     val canLaunchPurchase = activity != null && !activity.isFinishing && !activity.isDestroyed
 
-    BackHandler(onBack = onBack)
     LaunchedEffect(manager) {
         manager.start()
         manager.refreshLocalStatus()
     }
     LaunchedEffect(state.proActive) { onProStatusChanged(state.proActive) }
+    LaunchedEffect(state.notice) {
+        if (state.notice == SafeMobileBillingManager.Notice.UNAVAILABLE) {
+            Toast.makeText(context, BILLING_UNAVAILABLE_MESSAGE, Toast.LENGTH_LONG).show()
+        }
+    }
     DisposableEffect(manager, owner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) manager.start()
@@ -102,13 +129,30 @@ fun SafeMobileProPaywallScreen(
 
         HorizontalDivider()
         Button(
-            onClick = { activity?.takeIf { !it.isFinishing && !it.isDestroyed }?.let(manager::launchPurchase) },
+            onClick = {
+                val currentActivity = activity
+                if (currentActivity == null || currentActivity.isFinishing || currentActivity.isDestroyed) {
+                    Toast.makeText(context, BILLING_UNAVAILABLE_MESSAGE, Toast.LENGTH_LONG).show()
+                } else {
+                    try {
+                        manager.launchPurchase(currentActivity)
+                    } catch (_: Exception) {
+                        Toast.makeText(context, BILLING_UNAVAILABLE_MESSAGE, Toast.LENGTH_LONG).show()
+                    }
+                }
+            },
             enabled = canLaunchPurchase && state.connected && state.deviceIdAvailable &&
                 state.playPriceMicros != null && !state.processing,
             modifier = Modifier.fillMaxWidth()
         ) { Text(stringResource(R.string.pro_buy_or_extend_one_year)) }
         OutlinedButton(
-            onClick = { manager.restoreProLicenseFromPlayStore() },
+            onClick = {
+                try {
+                    manager.restoreProLicenseFromPlayStore()
+                } catch (_: Exception) {
+                    Toast.makeText(context, BILLING_UNAVAILABLE_MESSAGE, Toast.LENGTH_LONG).show()
+                }
+            },
             enabled = !state.processing, modifier = Modifier.fillMaxWidth()
         ) { Text(stringResource(R.string.pro_restore_check)) }
 

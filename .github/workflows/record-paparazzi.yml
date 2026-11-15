@@ -11,6 +11,7 @@ on:
       - "release/v1.8.1"
       - "release/v1.9.0-final"
       - "release/v1.9.1-final"
+      - "release/v1.10.0-final"
       - "feat/v1.6.7-ui-ux-deep-scan"
 
 permissions:

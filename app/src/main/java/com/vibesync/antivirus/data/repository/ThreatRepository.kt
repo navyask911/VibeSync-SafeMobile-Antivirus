@@ -23,6 +23,8 @@ import com.vibesync.antivirus.core.worker.LocalDefinitionLoader
 import com.vibesync.antivirus.data.local.ThreatDatabase
 import com.vibesync.antivirus.data.local.ScanAudit
 import com.vibesync.antivirus.data.local.ScanSessionEntity
+import com.vibesync.antivirus.data.local.ScanSessionState
+import com.vibesync.antivirus.data.local.ScanSessionItemEntity
 import com.vibesync.antivirus.data.local.ScanSessionCounts
 import com.vibesync.antivirus.data.local.ThreatFeedSyncStateEntity
 import com.vibesync.antivirus.core.worker.ThreatFeedSyncScheduler
@@ -42,6 +44,7 @@ import kotlinx.coroutines.ensureActive
 import java.io.File
 import java.io.IOException
 import java.util.UUID
+import java.security.MessageDigest
 
 class ThreatRepository(
  private val context: Context,
@@ -98,26 +101,100 @@ class ThreatRepository(
  }
  suspend fun isTrusted(packageName: String): Boolean = trustedAppStore.isTrusted(packageName)
 
- suspend fun startScanSession(sessionId: String, scanType: String) = withContext(Dispatchers.IO) {
-  database.threatDao().upsertScanSession(
-   ScanSessionEntity(
-    sessionId = sessionId,
-    scanType = scanType,
-    startedAt = System.currentTimeMillis(),
-    status = ScanSessionEntity.IN_PROGRESS
-   )
-  )
+ suspend fun startScanSession(sessionId: String, scanType: String,
+  operationType: String = scanType, sourceUri: String? = null, packageName: String? = null,
+  isManual: Boolean = true) = withContext(Dispatchers.IO) {
+  database.withTransaction {
+   val dao = database.threatDao()
+   dao.upsertScanSession(ScanSessionEntity(sessionId, scanType, System.currentTimeMillis(), status = ScanSessionEntity.IN_PROGRESS))
+   val existing = dao.findScanSessionState(sessionId)
+   val normalized = if (scanType.equals("DEEP_SCAN", true) || scanType.equals("PERIODIC_DEEP_SCAN", true) || scanType.equals("SELECTED_FOLDER", true)) "deep" else "full"
+   val encryptedUri = sourceUri?.let { privateTextStore.protectPrivateText(it.take(4096), "scan-resume-uri") }
+   dao.upsertScanSessionState(if (existing == null) ScanSessionState(
+    sessionId = sessionId, scanType = normalized, operationType = operationType,
+    sourceUri = encryptedUri, packageName = packageName, isManual = isManual
+   ) else existing.copy(scanType = normalized, operationType = operationType,
+    sourceUri = existing.sourceUri ?: encryptedUri, packageName = packageName ?: existing.packageName,
+    isManual = isManual, isComplete = false))
+  }
  }
-
- suspend fun completeScanSession(
-  sessionId: String,
-  completedAt: Long = System.currentTimeMillis()
- ) = withContext(Dispatchers.IO) {
-  database.threatDao().markScanSessionCompleted(sessionId, completedAt)
+ suspend fun resumeScanSession(sessionId: String) = withContext(Dispatchers.IO) {
+  database.threatDao().markScanSessionResumed(sessionId)
  }
-
+ suspend fun scanSessionState(sessionId: String): ScanSessionState? = withContext(Dispatchers.IO) {
+  database.threatDao().findScanSessionState(sessionId)?.let { state ->
+   state.copy(currentItemPath = state.currentItemPath?.let { revealPrivateTextSafely(it, "scan-progress-path") },
+    sourceUri = state.sourceUri?.let { revealPrivateTextSafely(it, "scan-resume-uri") })
+  }
+ }
+ suspend fun latestIncompleteManualScanState(): ScanSessionState? = withContext(Dispatchers.IO) {
+  database.threatDao().latestIncompleteManualScanState()?.let { state ->
+   state.copy(currentItemPath = state.currentItemPath?.let { revealPrivateTextSafely(it, "scan-progress-path") },
+    sourceUri = state.sourceUri?.let { revealPrivateTextSafely(it, "scan-resume-uri") })
+  }
+ }
+ suspend fun hasIncompleteManualScanSession(): Boolean = withContext(Dispatchers.IO) {
+  database.threatDao().hasIncompleteManualScanSession()
+ }
+ fun observeLatestManualScanState(): Flow<ScanSessionState?> =
+  database.threatDao().observeLatestManualScanState().map { state ->
+   state?.copy(currentItemPath = state.currentItemPath?.let { revealPrivateTextSafely(it, "scan-progress-path") })
+  }.flowOn(Dispatchers.IO)
+ suspend fun updateScanSessionTotal(sessionId: String, totalItems: Int) = withContext(Dispatchers.IO) {
+  database.threatDao().updateScanSessionTotal(sessionId, totalItems.coerceAtLeast(0))
+ }
+ suspend fun recordScanItemCompleted(sessionId: String, itemKey: String, itemType: String, result: ScanResult) = withContext(Dispatchers.IO) {
+  database.withTransaction {
+   val dao = database.threatDao()
+   val path = privateTextStore.protectPrivateText(result.displayName.take(250), "scan-progress-path")
+   val reasons = privateTextStore.protectPrivateText(result.reasons.joinToString("\n").take(1024), "scan-progress-reasons")
+   val uri = result.sourceUri?.let { privateTextStore.protectPrivateText(it.take(4096), "scan-progress-uri") }
+   dao.insertScanSessionItem(ScanSessionItemEntity(sessionId, itemKey, itemType, path,
+    result.verdict.name, result.packageName, result.sha256, result.md5, reasons, result.riskScore,
+    result.detectionSource.name, result.malwareName, result.threatEventId, result.durationMs,
+    uri, System.currentTimeMillis()))
+   dao.updateScanSessionProgress(sessionId, dao.countScanSessionItems(sessionId), path)
+  }
+ }
+ suspend fun loadScanSessionResults(sessionId: String): List<ScanResult> = withContext(Dispatchers.IO) {
+  database.threatDao().scanSessionItems(sessionId).mapNotNull { item ->
+   val verdict = runCatching { ScanVerdict.valueOf(item.verdict) }.getOrNull() ?: return@mapNotNull null
+   val path = revealPrivateTextSafely(item.itemPath, "scan-progress-path")
+   val reasons = revealPrivateTextSafely(item.reasons, "scan-progress-reasons").split("\n").filter { it.isNotBlank() }
+   val uri = item.sourceUri?.let { revealPrivateTextSafely(it, "scan-progress-uri") }
+   val source = runCatching { com.vibesync.antivirus.core.engine.DetectionSource.valueOf(item.detectionSource) }
+    .getOrDefault(com.vibesync.antivirus.core.engine.DetectionSource.NONE)
+   ScanResult(path, path, item.sha256Hash, item.md5Hash, verdict, reasons, item.durationMs,
+    packageName = item.packageName, sourceUri = uri, scanSessionId = sessionId,
+    threatEventId = item.threatEventId, riskScore = item.riskScore,
+    detectionSource = source, malwareName = item.malwareName)
+  }
+ }
+ suspend fun latestCompletedManualScanResults(): List<ScanResult> = withContext(Dispatchers.IO) {
+  val state = database.threatDao().latestCompletedManualScanState() ?: return@withContext emptyList()
+  loadScanSessionResults(state.sessionId)
+ }
+ suspend fun completeScanSession(sessionId: String, completedAt: Long = System.currentTimeMillis()) = withContext(Dispatchers.IO) {
+  database.withTransaction {
+   val dao = database.threatDao()
+   dao.markScanSessionCompleted(sessionId, completedAt)
+   dao.markScanSessionStateComplete(sessionId, dao.countScanSessionItems(sessionId))
+  }
+ }
  suspend fun interruptScanSession(sessionId: String) = withContext(Dispatchers.IO) {
   database.threatDao().markScanSessionInterrupted(sessionId, System.currentTimeMillis())
+ }
+ /** Explicit Stop Scan is terminal; process/service interruptions remain resumable. */
+ suspend fun cancelScanSession(sessionId: String) = withContext(Dispatchers.IO) {
+  database.withTransaction {
+   val dao = database.threatDao()
+   dao.markScanSessionInterrupted(sessionId, System.currentTimeMillis())
+   dao.markScanSessionStateComplete(sessionId, dao.countScanSessionItems(sessionId))
+  }
+ }
+ private fun fileItemKey(uri: Uri): String {
+  val hash = MessageDigest.getInstance("SHA-256").digest(uri.toString().toByteArray(Charsets.UTF_8))
+  return "file:" + hash.joinToString("") { "%02x".format(it) }
  }
 
  fun currentHashDatabaseCapability() = hashDatabaseManager?.capability
@@ -209,11 +286,16 @@ class ThreatRepository(
   scanInstalledAppsForSession(UUID.randomUUID().toString(), progress)
 
  suspend fun scanInstalledAppsForSession(
-  scanSessionId: String,
-  progress: suspend (Int, Int) -> Unit = { _, _ -> }
+  scanSessionId: String, progress: suspend (Int, Int) -> Unit = { _, _ -> }
  ): List<ScanResult> = withContext(Dispatchers.IO) {
   definitionLoader.importBundledIfEmpty()
-  scanner.scanInstalledAppsForSession(scanSessionId, progress)
+  val done = database.threatDao().scanSessionItemKeys(scanSessionId)
+   .filter { it.startsWith("app:") }.map { it.removePrefix("app:") }.toSet()
+  scanner.scanInstalledAppsForSession(scanSessionId, completedPackageNames = done,
+   onItemCompleted = { result ->
+    recordScanItemCompleted(scanSessionId, "app:" + (result.packageName ?: result.displayName), "app", result)
+   },
+   progress = { scanned, total -> updateScanSessionTotal(scanSessionId, total); progress(scanned, total) })
  }
 
  /** Scan installed APKs and files in the user's persisted SAF folder, with bounded traversal. */
@@ -221,38 +303,44 @@ class ThreatRepository(
   scanFullForSession(UUID.randomUUID().toString(), progress)
 
  suspend fun scanFullForSession(
-  scanSessionId: String,
-  progress: suspend (Int, Int) -> Unit = { _, _ -> }
+  scanSessionId: String, progress: suspend (Int, Int) -> Unit = { _, _ -> }
  ): List<ScanResult> = withContext(Dispatchers.IO) {
   definitionLoader.importBundledIfEmpty()
-  var fileCount = 0
-  for (ignored in selectedFolderFiles()) {
+  val files = selectedFolderFiles().distinctBy { it.uri.toString() }.toList()
+  val done = database.threatDao().scanSessionItemKeys(scanSessionId).toSet()
+  val doneFiles = files.count { fileItemKey(it.uri) in done }
+  val doneApps = done.filter { it.startsWith("app:") }.map { it.removePrefix("app:") }.toSet()
+  var appProgress = doneApps.size
+  var appTotal = 0
+  val appResults = scanner.scanInstalledAppsForSession(scanSessionId,
+   completedPackageNames = doneApps,
+   onItemCompleted = { result ->
+    recordScanItemCompleted(scanSessionId, "app:" + (result.packageName ?: result.displayName), "app", result)
+   },
+   progress = { scanned, total ->
+    appProgress = scanned; appTotal = total
+    val all = (total.toLong() + files.size).coerceAtMost(Int.MAX_VALUE.toLong()).toInt()
+    updateScanSessionTotal(scanSessionId, all)
+    progress((scanned.toLong() + doneFiles).coerceAtMost(Int.MAX_VALUE.toLong()).toInt(), all)
+   })
+  val fileResults = ArrayList<ScanResult>()
+  var fileProgress = doneFiles
+  for (file in files) {
    currentCoroutineContext().ensureActive()
-   if (fileCount < maxSafScanFiles) fileCount++
+   if (fileItemKey(file.uri) in done) continue
+   val result = runCatching { context.contentResolver.openInputStream(file.uri) }.getOrNull()?.let { stream ->
+    scanner.scanStream(file.displayName, stream, scanSessionId, persistAudit = false).copy(sourceUri = file.uri.toString())
+   } ?: recordUnscannedUri(file.displayName, context.getString(R.string.file_stream_failed), scanSessionId)
+   recordScanItemCompleted(scanSessionId, fileItemKey(file.uri), "file", result)
+   if (result.verdict != ScanVerdict.NO_MATCH) fileResults += result
+   fileProgress++
+   val all = (appTotal.toLong() + files.size).coerceAtMost(Int.MAX_VALUE.toLong()).toInt()
+   progress((appProgress.toLong() + fileProgress).coerceAtMost(Int.MAX_VALUE.toLong()).toInt(), all)
   }
-  var installedCount = 0
-  val installedResults = scanner.scanInstalledAppsForSession(scanSessionId) { processed, total ->
-   installedCount = total
-   progress(processed, (total.toLong() + fileCount).coerceAtMost(Int.MAX_VALUE.toLong()).toInt())
-  }
-  val findings = ArrayList<ScanResult>()
-  var filesProcessed = 0
-  for (candidate in selectedFolderFiles()) {
-   currentCoroutineContext().ensureActive()
-   val assessed = runCatching { context.contentResolver.openInputStream(candidate.uri) }.getOrNull()?.let { stream ->
-    scanner.scanStream(candidate.displayName, stream, scanSessionId, persistAudit = false)
-    .copy(sourceUri = candidate.uri.toString())
-   } ?: recordUnscannedUri(candidate.displayName, context.getString(R.string.file_stream_failed), scanSessionId)
-   if (assessed.verdict != ScanVerdict.NO_MATCH) findings += assessed
-   filesProcessed++
-   progress((installedCount.toLong() + filesProcessed).coerceAtMost(Int.MAX_VALUE.toLong()).toInt(),
-    (installedCount.toLong() + fileCount).coerceAtMost(Int.MAX_VALUE.toLong()).toInt())
-  }
-  val total = (installedCount.toLong() + fileCount).coerceAtMost(Int.MAX_VALUE.toLong()).toInt()
+  val total = (appTotal.toLong() + files.size).coerceAtMost(Int.MAX_VALUE.toLong()).toInt()
   progress(total, total)
-  installedResults + findings
+  appResults + fileResults
  }
-
 
  /** Deep-scan readable files below one user-selected SAF tree, without widening the grant. */
  suspend fun scanFolderTree(
@@ -263,8 +351,7 @@ class ThreatRepository(
    scanFolderTreeForSession(treeUri, UUID.randomUUID().toString(), progress, onFileStarted)
 
  suspend fun scanFolderTreeForSession(
-   treeUri: Uri,
-   scanSessionId: String,
+   treeUri: Uri, scanSessionId: String,
    progress: suspend (Int, Int) -> Unit = { _, _ -> },
    onFileStarted: suspend (String) -> Unit = {}
   ): List<ScanResult> = withContext(Dispatchers.IO) {
@@ -273,23 +360,26 @@ class ThreatRepository(
     "The selected folder is not readable. Re-select a folder using Android's document picker."
    }
    definitionLoader.importBundledIfEmpty()
-   val candidates = com.vibesync.antivirus.core.observer.SafTreeWalker
-    .files(context, listOf(treeUri)).take(maxSafScanFiles).toList()
+   val candidates = com.vibesync.antivirus.core.observer.SafTreeWalker.files(context, listOf(treeUri))
+    .take(maxSafScanFiles).distinctBy { it.uri.toString() }.toList()
+   val done = database.threatDao().scanSessionItemKeys(scanSessionId).toSet()
+   val count = candidates.count { fileItemKey(it.uri) in done }
+   val pending = candidates.filterNot { fileItemKey(it.uri) in done }
    val total = candidates.size
-      val findings = ArrayList<ScanResult>()
-   progress(0, total)
-   candidates.forEachIndexed { index, candidate ->
+   updateScanSessionTotal(scanSessionId, total)
+   val findings = ArrayList<ScanResult>()
+   progress(count, total)
+   pending.forEachIndexed { index, file ->
     currentCoroutineContext().ensureActive()
-    val label = candidate.name?.take(250) ?: context.getString(R.string.unknown_file)
+    val label = file.name?.take(250) ?: context.getString(R.string.unknown_file)
     onFileStarted(label)
-    val stream = runCatching { context.contentResolver.openInputStream(candidate.uri) }.getOrNull()
-    val assessed = if (stream != null) {
-     scanner.scanStream(label, stream, scanSessionId, persistAudit = false)
-    } else {
-     recordUnscannedUri(label, context.getString(R.string.file_stream_failed), scanSessionId)
-    }
-    if (assessed.verdict != ScanVerdict.NO_MATCH) findings += assessed.copy(sourceUri = candidate.uri.toString())
-    progress(index + 1, total)
+    val stream = runCatching { context.contentResolver.openInputStream(file.uri) }.getOrNull()
+    val result = if (stream != null) {
+     scanner.scanStream(label, stream, scanSessionId, persistAudit = false).copy(sourceUri = file.uri.toString())
+    } else recordUnscannedUri(label, context.getString(R.string.file_stream_failed), scanSessionId)
+    recordScanItemCompleted(scanSessionId, fileItemKey(file.uri), "file", result)
+    if (result.verdict != ScanVerdict.NO_MATCH) findings += result
+    progress(count + index + 1, total)
    }
    findings
   }
@@ -345,6 +435,19 @@ class ThreatRepository(
     scanSessionId
    )
   applyTrustedFileHash(scanner.scanStream(label, stream, scanSessionId).copy(sourceUri = uri.toString()))
+ }
+
+ suspend fun scanUriForSession(uri: Uri, scanSessionId: String): ScanResult = withContext(Dispatchers.IO) {
+  updateScanSessionTotal(scanSessionId, 1)
+  val result = scanUri(uri, scanSessionId)
+  recordScanItemCompleted(scanSessionId, fileItemKey(uri), "file", result)
+  result
+ }
+ suspend fun scanInstalledPackageForSession(packageName: String, scanSessionId: String): ScanResult? = withContext(Dispatchers.IO) {
+  updateScanSessionTotal(scanSessionId, 1)
+  val result = scanInstalledPackage(packageName, scanSessionId)
+  if (result != null) recordScanItemCompleted(scanSessionId, "app:$packageName", "app", result)
+  result
  }
 
  private suspend fun recordUnscannedUri(label: String, reason: String, scanSessionId: String): ScanResult {

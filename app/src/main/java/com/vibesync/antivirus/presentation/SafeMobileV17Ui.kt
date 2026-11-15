@@ -1,6 +1,7 @@
 package com.vibesync.antivirus.presentation
 
 import android.content.Context
+import android.os.Build
 import android.provider.Settings
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -27,6 +28,8 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -41,6 +44,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.graphics.*
 import androidx.core.graphics.drawable.toBitmap
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -64,6 +68,7 @@ import com.vibesync.antivirus.core.engine.DetectionSource
 import com.vibesync.antivirus.core.engine.ScanResult
 import com.vibesync.antivirus.core.engine.ScanVerdict
 import com.vibesync.antivirus.core.locale.LocalePreferences
+import com.vibesync.antivirus.core.observer.FullScreenAlertAccess
 import com.vibesync.antivirus.core.security.SecurityVerificationState
 import com.vibesync.antivirus.core.security.SecurityVerificationStatus
 import com.vibesync.antivirus.ui.theme.AppTheme
@@ -188,9 +193,10 @@ internal fun V17TopBar(
             if (showBack) IconButton(onClick = onBack, modifier = Modifier.size(34.dp)) {
                 Icon(Icons.Outlined.ArrowBack, "Back", tint = c.text)
             } else Image(
-                painter = painterResource(R.drawable.ic_launcher_foreground),
-                contentDescription = null,
-                modifier = Modifier.size(40.dp)
+                painter = painterResource(R.drawable.vibesync_official_logo),
+                contentDescription = stringResource(R.string.app_name),
+                modifier = Modifier.height(36.dp).aspectRatio(1f),
+                contentScale = ContentScale.Fit
             )
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(1.dp)) {
                 Text(stringResource(R.string.brand_subtitle), style = MaterialTheme.typography.titleMedium.copy(fontSize = 15.sp),
@@ -1092,9 +1098,49 @@ internal fun V17ConsoleSettingsScreen(
     onImportYara: () -> Unit,
     onThreatFeedSync: () -> Unit, onBenchmarks: () -> Unit, onOpenPro: () -> Unit,
     onOpenPrivacy: () -> Unit = {}, onOpenAbout: () -> Unit = {},
-    onTestSiren: () -> Unit = {}, onTestVoice: () -> Unit = {}
+    onTestSiren: () -> Unit = {}, onTestVoice: () -> Unit = {},
+    focusFullScreenAlerts: Boolean = false,
+    onFullScreenAlertFocusHandled: () -> Unit = {}
 ) {
     val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val fullScreenAlertBringIntoViewRequester = remember { BringIntoViewRequester() }
+    var fullScreenAlertGranted by remember(context) {
+        mutableStateOf(FullScreenAlertAccess.isGranted(context))
+    }
+    DisposableEffect(context, lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                fullScreenAlertGranted = FullScreenAlertAccess.isGranted(context)
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
+    LaunchedEffect(focusFullScreenAlerts) {
+        if (focusFullScreenAlerts) {
+            // Wait for the first layout frame so BringIntoViewRequester is attached
+            // to a measured target before requesting the settings row to scroll into view.
+            withFrameNanos { }
+            fullScreenAlertBringIntoViewRequester.bringIntoView()
+            onFullScreenAlertFocusHandled()
+        }
+    }
+    val openFullScreenAlertSettings = {
+        if (Build.VERSION.SDK_INT >= 34) {
+            runCatching {
+                val settingsIntent = FullScreenAlertAccess.settingsIntent(context)
+                    ?: error("Full-screen alert settings are unavailable on this Android version.")
+                context.startActivity(settingsIntent)
+            }.onFailure {
+                android.widget.Toast.makeText(
+                    context,
+                    R.string.full_screen_settings_unavailable,
+                    android.widget.Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+    }
     val c = v17Colors(isDark)
     var advanced by rememberSaveable { mutableStateOf(false) }
     var languageOpen by rememberSaveable { mutableStateOf(false) }
@@ -1157,6 +1203,41 @@ internal fun V17ConsoleSettingsScreen(
         V17Card(isDark) {
             V17SectionHeading("Active Defense", "Local alarms and on-device monitoring.", Icons.Outlined.Security, c.green)
             V17Switch("Incident Siren", "Local incident alarm and notifications", sirenEnabled, "console.siren", Icons.Outlined.Notifications, isDark, onSirenChanged)
+            HorizontalDivider(color = c.border)
+            Row(
+                Modifier.fillMaxWidth()
+                    .bringIntoViewRequester(fullScreenAlertBringIntoViewRequester)
+                    .padding(vertical = 5.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                    V17Title(stringResource(R.string.console_full_screen_alerts_title))
+                    V17Body(
+                        stringResource(
+                            when {
+                                Build.VERSION.SDK_INT < 34 -> R.string.console_full_screen_alerts_not_required
+                                fullScreenAlertGranted -> R.string.console_full_screen_alerts_allowed
+                                else -> R.string.console_full_screen_alerts_permission_needed
+                            }
+                        ),
+                        color = c.muted
+                    )
+                }
+                if (Build.VERSION.SDK_INT >= 34) {
+                    OutlinedButton(
+                        onClick = openFullScreenAlertSettings,
+                        modifier = Modifier.testTag("console.full-screen-alerts")
+                    ) {
+                        Text(
+                            stringResource(
+                                if (fullScreenAlertGranted) R.string.console_full_screen_alerts_manage
+                                else R.string.console_full_screen_alerts_grant
+                            )
+                        )
+                    }
+                }
+            }
             HorizontalDivider(color = c.border)
             V17Switch("Voice Threat Alert", "Offline text-to-speech threat narration", voiceEnabled, "console.voice", Icons.Outlined.VolumeUp, isDark, onVoiceChanged)
             HorizontalDivider(color = c.border)
