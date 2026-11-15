@@ -84,7 +84,7 @@ fun DetectionCapabilitiesScreen(
             val layer = DetectionCoverage.status(declared.id) ?: declared
             val statusText = when (layer.id) {
                 "signed-multi-hash-database" -> if (hashDatabaseCapability.enabled) stringResource(R.string.detection_capabilities_enabled) else stringResource(R.string.detection_capabilities_disabled)
-                "tflite-permission-model" -> if (mlAvailable) stringResource(R.string.detection_capabilities_enabled) else stringResource(R.string.detection_capabilities_disabled)
+                "tflite-permission-model" -> if (mlAvailable) stringResource(R.string.ml_engine_active_status) else stringResource(R.string.detection_capabilities_disabled)
                 else -> when (layer.state) {
                     DetectionLayerState.ACTIVE_LIMITED -> stringResource(R.string.detection_capabilities_limited)
                     DetectionLayerState.HEURISTIC -> stringResource(R.string.detection_capabilities_advisory)

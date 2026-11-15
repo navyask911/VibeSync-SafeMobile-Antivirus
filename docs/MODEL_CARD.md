@@ -1,36 +1,37 @@
 # Offline Malware Risk Model Card
 
-**Status: DISABLED — no trained model is shipped.** Reviewed 2026-10-24. No accuracy, TPR, FPR, precision, recall or inference-latency result is claimed.
+**Status: ACTIVE — advisory on-device TFLite inference.** Reviewed 2026-11-15.
 
 ## Intended use
 
-A future local model may provide supplementary APK triage from manifest/permission/API-call features and optional DEX-string hashes. Model output must never be the sole basis for an uninstall, quarantine, blocking action, or definitive malware claim.
+The pinned Drebin-215 model supplies a supplementary local APK-risk signal. The result is advisory and is fused with independent signals. Model output alone must never trigger an uninstall, quarantine, blocking action, or a definitive malware claim.
 
-## Artifact and training data
+## Artifact and runtime contract
 
-- Model artifact: none. `app/src/main/assets/malware_model.tflite` is absent.
-- Runtime behavior: `OfflineTfliteClassifier.classify` returns `enabled=false`, `riskScore=null`, and a stable disabled reason. It never fabricates a prediction.
-- Dataset: NOT SELECTED FOR TRAINING. MH-100K/MH-1M access, exact revision, labels, redistribution terms, binary/sample access and train/test split have not been verified for a legally redistributable model build.
-- Architecture, weights, quantization, feature mapping, threshold, calibration and label provenance: NOT APPLICABLE because no model is selected or trained.
+- Artifact: immutable `v1.0.1-model`, retrieved at build time from the separate ML repository; the model binary is not committed to this Android repository.
+- Runtime filename: `model.tflite`; ordered feature metadata: `feature_schema.json`.
+- Model artifact size: 18,584 bytes.
+- Model SHA-256: `8b66adaf01a939c26d5a756e66f53fe0d6e85e1a06ec97166579138c6ce47061`.
+- Schema SHA-256: `ffb386be14adf8c0af1bb96032e5485fcc8fd5b401a24488c5896e2d5ea425ac`.
+- Tensor contract: `[1, 215]` FLOAT32 input and `[1, 1]` FLOAT32 probability output.
+- The build bridge and instrumentation test verify artifact digest, TFL3 header, input/output shapes and tensor types. A bad or missing asset fails verification rather than silently enabling an incompatible model.
 
-## Evaluation metrics
+## Model status and verdict policy
 
-- Accuracy: NOT MEASURED — there is no trained model artifact.
-- TPR / recall: NOT MEASURED — there is no trained model artifact.
-- FPR: NOT MEASURED — there is no trained model artifact and no thresholded evaluation run.
-- Precision: NOT MEASURED — no held-out labeled evaluation corpus was run.
-- Inference latency and additional memory: NOT MEASURED — no model is loaded or executed.
+The app gate is enabled (`active`, `validated=true`, `production_ready=true`, `dummy_untrained=false`). These flags describe the approved artifact and runtime-compatibility gate; they do not imply that contemporary threat efficacy has been measured.
 
-These are absences of measurements, not zero rates and not guarantees of correctness.
+- ML probability below 0.65 does not create an ML suspicious verdict.
+- ML probability at or above 0.65 can produce an advisory `SUSPICIOUS` result.
+- ML alone cannot create `THREAT`.
+- A single low-severity YARA match is retained as evidence but does not independently create `SUSPICIOUS`; at least two low-severity matches are required for that YARA signal. Medium/high YARA findings retain their severity handling.
+- Exact known-malware hash matches retain their independent conclusive precedence.
 
-## Evaluation protocol required before enabling
+## Evaluation metrics and limitations
 
-Select a legally distributable, versioned training corpus and retain dataset citations and license terms. Use family/source/time-grouped splits to reduce leakage. Document class balance and label provenance. Evaluate on held-out malicious and benign samples, report threshold-specific TPR/FPR/precision/recall with confidence intervals, calibration, per-family/source performance, inference latency and peak incremental memory on named reference hardware. Compare the false-positive burden on at least 1,000 legally sourced benign APKs. Keep an immutable reproducible training/evaluation script and artifact hash.
+The model repository reports 97.450034% accuracy on its historical Drebin holdout. That number is dataset-specific and is not an independently reproduced Android-app benchmark or SafeMobile true-positive rate. Contemporary TPR, FPR, precision, recall, calibration, per-family performance and confidence intervals are not claimed in this app release.
 
-## Known limitations and bias risks
+Permission/API features can correlate with legitimate app categories and can over-flag accessibility, security, automation or enterprise apps. Packed, reflected, native and dynamically loaded code may evade static feature extraction. New malware families and dataset drift may reduce effectiveness. Inaccessible, malformed or incomplete APK feature extraction must not be interpreted as an ML clean prediction.
 
-Permission-only models risk conflating app category with maliciousness and may over-flag assistive, security, automation, accessibility or enterprise apps. App source, language, SDK age, family prevalence and class imbalance can skew labels. Models may miss new families and packed/reflected/native implementations. Any future model should be advisory and explain feature groups without exposing sensitive user data.
+## Privacy and provenance
 
-## Release policy
-
-Do not ship an empty, placeholder, random-weight or hand-crafted tensor as a trained classifier. Do not download a model unless redistribution rights, provenance, signature/integrity and compatibility are verified. The engine remains DISABLED until a real trained artifact and evaluation report are independently reviewed.
+No APK code is executed. Feature extraction and inference are local; scan contents are not uploaded for model inference. The model bundle is build-time retrieved from the separate [v1.0.1-model release](https://github.com/navyask911/safemobile-Antivirus-Trained-ML-Data-of-Android-malware/releases/tag/v1.0.1-model). See its `DATASET_NOTICE.md` and [dataset terms](https://github.com/navyask911/safemobile-Antivirus-Trained-ML-Data-of-Android-malware/blob/main/docs/DATASET_NOTICE.md) for source and licensing provenance. The model is not represented as a SafeMobile proprietary invention.

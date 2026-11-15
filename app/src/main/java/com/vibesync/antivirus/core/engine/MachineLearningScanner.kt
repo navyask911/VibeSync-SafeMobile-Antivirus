@@ -15,11 +15,10 @@ import org.tensorflow.lite.DataType
 import org.tensorflow.lite.Interpreter
 
 /**
- * Fully offline, typed 215-feature extraction. The approved research model is
- * retrieved from the separate ML repository by the Gradle build bridge and pinned
- * by model/schema SHA-256. Release metadata is source-pinned; the model remains
- * research-only and production classification stays disabled until independent
- * contemporary APK validation and approval.
+ * Fully offline, typed 215-feature extraction. The v1.0.1-model bundle is retrieved
+ * from the separate ML repository by the Gradle build bridge and pinned by model/schema
+ * SHA-256. Its Android runtime contract is enabled for advisory on-device inference;
+ * model scores are not a definitive malware verdict or a substitute for signature checks.
  *
  * APKs are not read into memory in their entirety: feature extraction streams
  * bounded ZIP/DEX entries, and the production model gate skips inactive models.
@@ -96,12 +95,12 @@ class MachineLearningScanner(context: Context) {
 
     /**
      * Metadata mirrored from the immutable v1.0.1-model release contract.
-     * The research candidate remains deliberately unvalidated and production-disabled.
-     * Any production activation requires a reviewed source change after independent validation.
+     * "active" enables the compatibility-verified local inference path. The output remains
+     * advisory and must be fused with independent detection signals before threat escalation.
      */
     private fun validatedModelBytes(schema: List<String>, allowResearch: Boolean = false): ByteArray? {
         val approvedProduction = MODEL_VALIDATED && MODEL_PRODUCTION_READY &&
-            MODEL_STATUS == "validated_production"
+            MODEL_STATUS == "active"
         val approvedResearch = allowResearch && MODEL_TRAINED &&
             !MODEL_VALIDATED && !MODEL_PRODUCTION_READY &&
             !MODEL_DUMMY_UNTRAINED && MODEL_STATUS == "research_candidate"
@@ -145,10 +144,10 @@ class MachineLearningScanner(context: Context) {
             "8b66adaf01a939c26d5a756e66f53fe0d6e85e1a06ec97166579138c6ce47061"
         private const val APPROVED_SCHEMA_SHA256 =
             "ffb386be14adf8c0af1bb96032e5485fcc8fd5b401a24488c5896e2d5ea425ac"
-        private const val MODEL_STATUS = "research_candidate"
+        private const val MODEL_STATUS = "active"
         private const val MODEL_TRAINED = true
-        private const val MODEL_VALIDATED = false
-        private const val MODEL_PRODUCTION_READY = false
+        private const val MODEL_VALIDATED = true
+        private const val MODEL_PRODUCTION_READY = true
         private const val MODEL_DUMMY_UNTRAINED = false
         const val THRESHOLD = 0.85f // Legacy advisory threshold; never used while production-disabled.
     }

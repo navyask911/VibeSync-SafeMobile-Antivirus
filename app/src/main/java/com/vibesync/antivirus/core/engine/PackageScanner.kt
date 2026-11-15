@@ -135,9 +135,11 @@ class PackageScanner(
      match.tags + match.matchedPatterns).take(64)
    )
   }
+  val lowSeverityMatchCount = scan.suspiciousMatches.count { it.severity == "low" }
+  val hasMediumOrHigherSeverity = scan.suspiciousMatches.any { it.severity != "low" }
   val addedScore = when {
    scan.suspiciousMatches.any { it.severity == "critical" || it.severity == "high" } -> 65
-   scan.suspiciousMatches.isNotEmpty() -> 45
+   hasMediumOrHigherSeverity || lowSeverityMatchCount >= 2 -> 45
    else -> 0
   }
   val notes = when (scan.state) {

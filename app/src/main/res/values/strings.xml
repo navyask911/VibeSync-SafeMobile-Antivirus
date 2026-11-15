@@ -663,6 +663,7 @@
     <string name="ml_probability">ML threat probability: %1$d%%</string>
     <string name="ml_high_finding">ML static heuristic: high score from permissions and API patterns; advisory only, not proof of malware.</string>
     <string name="ml_active_body">Validated on-device static ML model available. Results are advisory and do not prove malware.</string>
+    <string name="ml_engine_active_status">AI Engine: Active</string>
 
     <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
     <string name="threat_intelligence_title">Threat Intelligence Engine</string>
