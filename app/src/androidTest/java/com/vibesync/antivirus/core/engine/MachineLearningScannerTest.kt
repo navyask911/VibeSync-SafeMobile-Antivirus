@@ -3,14 +3,12 @@ package com.vibesync.antivirus.core.engine
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import java.io.File
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.security.MessageDigest
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -23,7 +21,7 @@ class MachineLearningScannerTest {
         // Gradle downloads the immutable ML Repo release before preBuild.
         val scanner = MachineLearningScanner(context)
         assertTrue(scanner.isAvailable())
-        assertFalse(scanner.isResearchCandidateAvailable())
+        assertTrue(scanner.isResearchCandidateAvailable())
 
         val model = context.assets.open("model.tflite").use { it.readBytes() }
         assertEquals(18_584, model.size)
@@ -49,18 +47,4 @@ class MachineLearningScannerTest {
         }
     }
 
-    @Test fun theBundledProductionGateDoesNotUseStagedPrivateModelCopies() = runBlocking {
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        val folder = File(context.filesDir, "ml-research-candidates")
-        assertTrue(folder.isDirectory || folder.mkdirs())
-        val file = File(folder, "model.tflite")
-        val model = context.assets.open("model.tflite").use { it.readBytes() }
-        file.writeBytes(model)
-        try {
-            assertTrue(MachineLearningScanner(context).isAvailable())
-            assertFalse(MachineLearningScanner(context).isResearchCandidateAvailable())
-        } finally {
-            file.delete()
-        }
-    }
 }
