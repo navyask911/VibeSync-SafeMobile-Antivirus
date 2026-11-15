@@ -292,12 +292,9 @@ class PackageScanner(
    return result(name, name, null, null, ScanVerdict.NOT_SCANNED, listOf(context.getString(R.string.package_metadata_missing)), System.nanoTime()).copy(packageName = name, scanSessionId = scanSessionId)
   }
   val appInfo = info.applicationInfo ?: return null
-  val isSystemApp = (appInfo.flags and ApplicationInfo.FLAG_SYSTEM) != 0
-  val isUpdatedSystemApp = (appInfo.flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0
-  val isTrustedCertificate = isSignedByKnownTrustedCertificate(info)
-  if (!ProtectedPackagePolicy.isUserInstalled(appInfo.flags, info.packageName, context.packageName) &&
-   !isSystemApp && !isUpdatedSystemApp && !isTrustedCertificate
-  ) return null
+  // Direct package lookup remains restricted to user-installed apps. Platform packages
+  // are represented by the bulk scan's explicit safe-system result and never enter ML.
+  if (!ProtectedPackagePolicy.isUserInstalled(appInfo.flags, info.packageName, context.packageName)) return null
   return scanPackage(info, scanSessionId)
  }
  suspend fun scanFile(file: File, persistAllAudit: Boolean = true): ScanResult {
@@ -309,28 +306,29 @@ class PackageScanner(
    return failed.copy(sourceLocalPath = file.absolutePath, scanSessionId = scanSessionId)
   }
   return try {
-   val isApk = file.extension.equals("apk", ignoreCase = true)
-   // PackageManager parses the APK binary manifest directly; no app-side ZIP unpacking is needed.
-   val apkPackageInfo = if (isApk) {
-    try {
-     val archiveFlags = PackageManager.GET_PERMISSIONS or PackageManager.GET_SERVICES or
-      PackageManager.GET_ACTIVITIES or PackageManager.GET_RECEIVERS or
-      PackageManager.GET_PROVIDERS or signingFlags()
-     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-      pm.getPackageArchiveInfo(
-       file.absolutePath,
-       PackageManager.PackageInfoFlags.of(archiveFlags.toLong())
-      )
-     } else {
-      @Suppress("DEPRECATION")
-      pm.getPackageArchiveInfo(file.absolutePath, archiveFlags)
-     }
-    } catch (cancelled: CancellationException) {
-     throw cancelled
-    } catch (_: Exception) {
-     null
+   // Ask PackageManager for an APK manifest regardless of the filename extension. A
+   // renamed APK must still resolve its signed package identity before any scanning.
+   val archiveFlags = PackageManager.GET_PERMISSIONS or PackageManager.GET_SERVICES or
+    PackageManager.GET_ACTIVITIES or PackageManager.GET_RECEIVERS or
+    PackageManager.GET_PROVIDERS or signingFlags()
+   val apkPackageInfo = try {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+     pm.getPackageArchiveInfo(
+      file.absolutePath,
+      PackageManager.PackageInfoFlags.of(archiveFlags.toLong())
+     )
+    } else {
+     @Suppress("DEPRECATION")
+     pm.getPackageArchiveInfo(file.absolutePath, archiveFlags)
     }
-   } else null
+   } catch (cancelled: CancellationException) {
+    throw cancelled
+   } catch (_: Exception) {
+    null
+   }
+   // Keep malformed .apk files on the APK diagnostic path, even when PackageManager
+   // cannot parse their manifest. Non-APK files with unrelated extensions stay file-only.
+   val isApk = apkPackageInfo != null || file.extension.equals("apk", ignoreCase = true)
    apkPackageInfo?.applicationInfo?.apply {
     sourceDir = file.absolutePath
     publicSourceDir = file.absolutePath
@@ -352,7 +350,7 @@ class PackageScanner(
     sourceLocalPath = file.absolutePath, scanSessionId = scanSessionId)
   }
 
-  val yaraXResult = if (file.extension.equals("apk", ignoreCase = true)) {
+  val yaraXResult = if (isApk) {
    yaraXScanner.scanApk(file)
   } else null
   val yaraThreat = yaraXResult?.threatMatches?.firstOrNull()
@@ -398,7 +396,7 @@ class PackageScanner(
    }
    output = evaluateWithEnsemble(output, yaraXResult)
    output = markIncompleteYaraIfOtherwiseClean(output, yaraXResult)
-   if (!file.extension.equals("apk", ignoreCase = true)) {
+   if (!isApk) {
     val prefix = file.inputStream().buffered().use(::readBoundedPrefix)
     output = ThreatEnsembleEvaluator.evaluateTextPayload(output, prefix)
    }

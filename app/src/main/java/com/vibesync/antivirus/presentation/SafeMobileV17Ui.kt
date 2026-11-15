@@ -1119,6 +1119,9 @@ internal fun V17ConsoleSettingsScreen(
     }
     LaunchedEffect(focusFullScreenAlerts) {
         if (focusFullScreenAlerts) {
+            // Wait for the first layout frame so BringIntoViewRequester is attached
+            // to a measured target before requesting the settings row to scroll into view.
+            withFrameNanos { }
             fullScreenAlertBringIntoViewRequester.bringIntoView()
             onFullScreenAlertFocusHandled()
         }
