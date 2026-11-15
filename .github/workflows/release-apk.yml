@@ -132,7 +132,7 @@ jobs:
       - name: Test bundled YARA rules before production build
         run: ./gradlew --no-daemon testOfflineDebugUnitTest
 
-      # Gradle already stages the SHA-pinned research model into generated assets.
+      # Gradle already stages the SHA-pinned active advisory model into generated assets.
       # Do not also download into src/main/assets (duplicate merge entry).
       - name: Build signed offline APK and Play AAB
         env:
@@ -209,11 +209,11 @@ jobs:
                   "8b66adaf01a939c26d5a756e66f53fe0d6e85e1a06ec97166579138c6ce47061"):
                   raise SystemExit("SAFE STOP: bundled model differs from pinned v1.0.1.")
               scanner=Path("app/src/main/java/com/vibesync/antivirus/core/engine/MachineLearningScanner.kt").read_text(encoding="utf-8")
-              required_gate=('MODEL_STATUS = "research_candidate"', "MODEL_TRAINED = true",
-                             "MODEL_VALIDATED = false", "MODEL_PRODUCTION_READY = false",
-                             "MODEL_DUMMY_UNTRAINED = false")
+              required_gate=('MODEL_STATUS = "active"', "MODEL_TRAINED = true",
+                             "MODEL_VALIDATED = true", "MODEL_PRODUCTION_READY = true",
+                             "MODEL_DUMMY_UNTRAINED = false", 'MODEL_STATUS == "active"')
               if any(item not in scanner for item in required_gate):
-                  raise SystemExit("SAFE STOP: source-pinned research model gate was changed.")
+                  raise SystemExit("SAFE STOP: active, SHA-pinned advisory TFLite model gate is missing.")
               litert_jni = [name for name in names if name.endswith("/libtensorflowlite_jni.so")]
               if not litert_jni:
                   raise SystemExit("SAFE STOP: 16 KB-compatible LiteRT JNI library is missing from the AAB.")
