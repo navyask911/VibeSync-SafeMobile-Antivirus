@@ -66,7 +66,8 @@ KANNADA_JAPANESE_OVERRIDE_KEYS = {
     "console_full_screen_alerts_not_required",
     "console_full_screen_alerts_manage",
     "console_full_screen_alerts_grant",
-    "scan_stop_action"
+    "scan_stop_action",
+    "ml_engine_active_status"
 }
 
 files = ("strings.xml", "device_posture.xml", "incident_response.xml",
