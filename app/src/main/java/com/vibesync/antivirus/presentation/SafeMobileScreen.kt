@@ -981,7 +981,8 @@ import kotlinx.coroutines.launch
           onFullScreenAlertFocusHandled = { focusFullScreenAlerts = false }
          )
          else -> Column(
-          Modifier.fillMaxSize().verticalScroll(contentScrollState)
+          Modifier.fillMaxSize()
+           .then(if (selectedDestination == "pro") Modifier else Modifier.verticalScroll(contentScrollState))
            .padding(horizontal = 16.dp, vertical = 16.dp),
           verticalArrangement = Arrangement.spacedBy(14.dp)
          ) {
@@ -1302,6 +1303,7 @@ import kotlinx.coroutines.launch
         }
         if (selectedDestination == "pro") {
          SafeMobileProPaywallScreen(
+          modifier = Modifier.weight(1f),
           onBack = { if (!tabNavController.popBackStack()) navigateToDestination("home") },
           onProStatusChanged = { isPro -> if (isPro) adMobManager.disableForPro() }
          )

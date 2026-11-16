@@ -39,6 +39,7 @@ import com.vibesync.antivirus.core.security.TrustedAppStore
 import com.vibesync.antivirus.core.engine.InstalledAppItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import com.vibesync.antivirus.core.worker.withInstalledAppScanTimeout
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import java.io.File
@@ -184,6 +185,14 @@ class ThreatRepository(
  suspend fun interruptScanSession(sessionId: String) = withContext(Dispatchers.IO) {
   database.threatDao().markScanSessionInterrupted(sessionId, System.currentTimeMillis())
  }
+ /** Runtime failure is terminal for this attempt; Room items remain available for review. */
+ suspend fun failScanSession(sessionId: String) = withContext(Dispatchers.IO) {
+  database.withTransaction {
+   val dao = database.threatDao()
+   dao.markScanSessionInterrupted(sessionId, System.currentTimeMillis())
+   dao.markScanSessionStateComplete(sessionId, dao.countScanSessionItems(sessionId))
+  }
+ }
  /** Explicit Stop Scan is terminal; process/service interruptions remain resumable. */
  suspend fun cancelScanSession(sessionId: String) = withContext(Dispatchers.IO) {
   database.withTransaction {
@@ -291,11 +300,13 @@ class ThreatRepository(
   definitionLoader.importBundledIfEmpty()
   val done = database.threatDao().scanSessionItemKeys(scanSessionId)
    .filter { it.startsWith("app:") }.map { it.removePrefix("app:") }.toSet()
-  scanner.scanInstalledAppsForSession(scanSessionId, completedPackageNames = done,
-   onItemCompleted = { result ->
-    recordScanItemCompleted(scanSessionId, "app:" + (result.packageName ?: result.displayName), "app", result)
-   },
-   progress = { scanned, total -> updateScanSessionTotal(scanSessionId, total); progress(scanned, total) })
+  withInstalledAppScanTimeout {
+   scanner.scanInstalledAppsForSession(scanSessionId, completedPackageNames = done,
+    onItemCompleted = { result ->
+     recordScanItemCompleted(scanSessionId, "app:" + (result.packageName ?: result.displayName), "app", result)
+    },
+    progress = { scanned, total -> updateScanSessionTotal(scanSessionId, total); progress(scanned, total) })
+  }
  }
 
  /** Scan installed APKs and files in the user's persisted SAF folder, with bounded traversal. */
@@ -312,17 +323,19 @@ class ThreatRepository(
   val doneApps = done.filter { it.startsWith("app:") }.map { it.removePrefix("app:") }.toSet()
   var appProgress = doneApps.size
   var appTotal = 0
-  val appResults = scanner.scanInstalledAppsForSession(scanSessionId,
-   completedPackageNames = doneApps,
-   onItemCompleted = { result ->
-    recordScanItemCompleted(scanSessionId, "app:" + (result.packageName ?: result.displayName), "app", result)
-   },
-   progress = { scanned, total ->
-    appProgress = scanned; appTotal = total
-    val all = (total.toLong() + files.size).coerceAtMost(Int.MAX_VALUE.toLong()).toInt()
-    updateScanSessionTotal(scanSessionId, all)
-    progress((scanned.toLong() + doneFiles).coerceAtMost(Int.MAX_VALUE.toLong()).toInt(), all)
-   })
+  val appResults = withInstalledAppScanTimeout {
+   scanner.scanInstalledAppsForSession(scanSessionId,
+    completedPackageNames = doneApps,
+    onItemCompleted = { result ->
+     recordScanItemCompleted(scanSessionId, "app:" + (result.packageName ?: result.displayName), "app", result)
+    },
+    progress = { scanned, total ->
+     appProgress = scanned; appTotal = total
+     val all = (total.toLong() + files.size).coerceAtMost(Int.MAX_VALUE.toLong()).toInt()
+     updateScanSessionTotal(scanSessionId, all)
+     progress((scanned.toLong() + doneFiles).coerceAtMost(Int.MAX_VALUE.toLong()).toInt(), all)
+    })
+  }
   val fileResults = ArrayList<ScanResult>()
   var fileProgress = doneFiles
   for (file in files) {

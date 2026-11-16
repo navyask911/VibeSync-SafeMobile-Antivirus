@@ -193,7 +193,7 @@ internal fun V17TopBar(
             if (showBack) IconButton(onClick = onBack, modifier = Modifier.size(34.dp)) {
                 Icon(Icons.Outlined.ArrowBack, "Back", tint = c.text)
             } else Image(
-                painter = painterResource(R.drawable.vibesync_official_logo),
+                painter = painterResource(R.drawable.vibesync_logo),
                 contentDescription = stringResource(R.string.app_name),
                 modifier = Modifier.height(36.dp).aspectRatio(1f),
                 contentScale = ContentScale.Fit
