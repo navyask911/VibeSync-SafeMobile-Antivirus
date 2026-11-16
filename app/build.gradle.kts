@@ -47,9 +47,9 @@ android {
   applicationId = "com.vibesync.antivirus"
   minSdk = 26
   targetSdk = 36
-  versionCode = 20261154
-  // [release-v1.10.2] Isolate scan result publication, bound package scans, and wire the VibeSync splash and shield assets.
-  versionName = "1.10.2"
+  versionCode = 20261155
+  // [release-v1.10.3] Harden SAF metadata, bounded traversal, skipped-file reporting and checkpoint recovery.
+  versionName = "1.10.3"
   testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   buildConfigField("String", "FEED_MANIFEST_PUBLIC_KEY_B64", cfg(feedManifestPublicKey))
   buildConfigField("Boolean", "FEED_MANIFEST_KEY_CONFIGURED", (!feedManifestPublicKey.isBlank()).toString())
