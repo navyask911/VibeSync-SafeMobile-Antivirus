@@ -443,6 +443,8 @@ class SafeMobileViewModel(
         // Subscribe before starting the service so a very fast scan cannot beat the observer.
         scanTimeoutJob = viewModelScope.launch(start = CoroutineStart.UNDISPATCHED) {
             try {
+                // This outer deadline also covers foreground-service/session setup, so the
+                // UI cannot remain indefinitely in "Preparing scan queue" before item progress begins.
                 withTimeout(300_000L) {
                     merge(
                         ScanForegroundEvents.completed.map { Unit },
