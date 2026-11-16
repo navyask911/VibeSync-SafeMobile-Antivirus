@@ -23,12 +23,18 @@ import com.vibesync.antivirus.core.security.GlobalThreatIntelligenceConsent
 import com.vibesync.antivirus.core.security.GlobalThreatIntelligenceDonationScheduler
 import java.io.File
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
 
 data class SafeMobileUiState(
@@ -78,6 +84,8 @@ class SafeMobileViewModel(
     val protectionAdvisorState = mutableProtectionAdvisorState.asStateFlow()
     private var protectionAdvisorJob: Job? = null
     @Volatile private var failedScanSessionId: String? = null
+    private var scanTimeoutJob: Job? = null
+    @Volatile private var viewModelScanTimedOut = false
 
     /** Run the CPU-only score rubric off the main thread; UI state is published on Main. */
     fun updateProtectionAdvisor(inputs: ProtectionAdvisorInputs, snoozedIds: Set<String>) {
@@ -119,6 +127,8 @@ class SafeMobileViewModel(
     }
 
     override fun onCleared() {
+        scanTimeoutJob?.cancel()
+        scanTimeoutJob = null
         scoreTts?.stop()
         scoreTts?.shutdown()
         scoreTts = null
@@ -424,10 +434,47 @@ class SafeMobileViewModel(
             return
         }
         failedScanSessionId = null
+        viewModelScanTimedOut = false
+        scanTimeoutJob?.cancel()
         mutableState.update { it.copy(isScanning = true, processedItems = 0, totalItems = 0,
             currentScanFile = null, recentScanFiles = emptyList(), messageResource = null, messageText = null) }
-        runCatching { ScanForegroundService.start(context, operation, manualScan, sourceUri, packageName) }
-            .onFailure { mutableState.update { state -> state.copy(isScanning = false, messageResource = R.string.scan_failed, messageText = null) } }
+
+        // The service owns the scan work; this ViewModel watchdog waits for its terminal event.
+        // Subscribe before starting the service so a very fast scan cannot beat the observer.
+        scanTimeoutJob = viewModelScope.launch(start = CoroutineStart.UNDISPATCHED) {
+            try {
+                withTimeout(300_000L) {
+                    merge(
+                        ScanForegroundEvents.completed.map { Unit },
+                        ScanForegroundEvents.cancelled,
+                        ScanForegroundEvents.failed.map { Unit }
+                    ).first()
+                }
+            } catch (timeout: TimeoutCancellationException) {
+                viewModelScanTimedOut = true
+                Log.e("ScanDebug", "Scan did not complete within 300000 ms.", timeout)
+                ScanForegroundService.stop(context)
+                mutableState.update { it.copy(isScanning = false, currentScanFile = null,
+                    messageResource = R.string.scan_failed, messageText = null) }
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (error: Exception) {
+                Log.e("ScanDebug", "Could not monitor scan completion.", error)
+                ScanForegroundService.stop(context)
+                mutableState.update { it.copy(isScanning = false, currentScanFile = null,
+                    messageResource = R.string.scan_failed, messageText = null) }
+            }
+        }
+
+        val startFailure = runCatching {
+            ScanForegroundService.start(context, operation, manualScan, sourceUri, packageName)
+        }.exceptionOrNull()
+        if (startFailure != null) {
+            scanTimeoutJob?.cancel()
+            scanTimeoutJob = null
+            Log.e("ScanDebug", "Could not start the foreground scan service.", startFailure)
+            mutableState.update { it.copy(isScanning = false, messageResource = R.string.scan_failed, messageText = null) }
+        }
     }
 
     private fun observeScanProgress() {
@@ -464,8 +511,11 @@ class SafeMobileViewModel(
         viewModelScope.launch {
             ScanForegroundEvents.cancelled.collect {
                 failedScanSessionId = null
+                val timedOut = viewModelScanTimedOut
+                viewModelScanTimedOut = false
                 mutableState.update { it.copy(isScanning = false, currentScanFile = null,
-                    messageResource = R.string.scan_cancelled, messageText = null) }
+                    messageResource = if (timedOut) R.string.scan_failed else R.string.scan_cancelled,
+                    messageText = null) }
             }
         }
         viewModelScope.launch {
