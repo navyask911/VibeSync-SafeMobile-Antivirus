@@ -268,7 +268,7 @@ import kotlinx.coroutines.launch
   state.isScanning -> R.string.scan_running
   state.threatCount > 0 -> R.string.threat_found
   state.suspiciousCount > 0 -> R.string.review_recommended
-  state.results.any { it.verdict == ScanVerdict.NOT_SCANNED } -> R.string.verdict_not_scanned
+  state.results.any { it.verdict == ScanVerdict.NOT_SCANNED } || (state.scanSummary?.skippedFiles ?: 0) > 0 -> R.string.verdict_not_scanned
   state.scanSummary != null -> R.string.scan_complete
   else -> R.string.scan_status
  }
@@ -276,13 +276,13 @@ import kotlinx.coroutines.launch
   state.isScanning -> MaterialTheme.colorScheme.primary
   state.threatCount > 0 -> MaterialTheme.colorScheme.error
   state.suspiciousCount > 0 -> MaterialTheme.colorScheme.tertiary
-  state.results.any { it.verdict == ScanVerdict.NOT_SCANNED } -> MaterialTheme.colorScheme.onSurfaceVariant
+  state.results.any { it.verdict == ScanVerdict.NOT_SCANNED } || (state.scanSummary?.skippedFiles ?: 0) > 0 -> MaterialTheme.colorScheme.onSurfaceVariant
   state.lastScanAt == null || state.results.isEmpty() -> MaterialTheme.colorScheme.onSurfaceVariant
   else -> successStatusColor()
  }
  val statusIcon = when {
   state.isScanning -> Icons.Outlined.Security
-  state.threatCount > 0 || state.suspiciousCount > 0 || state.results.any { it.verdict == ScanVerdict.NOT_SCANNED } -> Icons.Outlined.Warning
+  state.threatCount > 0 || state.suspiciousCount > 0 || state.results.any { it.verdict == ScanVerdict.NOT_SCANNED } || (state.scanSummary?.skippedFiles ?: 0) > 0 -> Icons.Outlined.Warning
   state.lastScanAt == null || state.results.isEmpty() -> Icons.Outlined.Security
   else -> Icons.Outlined.CheckCircle
  }
