@@ -82,7 +82,7 @@ object ProtectionAdvisorEngine {
                 5, inputs.batteryUnrestricted, "settings"),
             issue("fullscreen_alert", R.string.incident_full_screen_settings,
                 R.string.incident_full_screen_explanation, 3,
-                inputs.apiLevel < 34 || inputs.fullScreenIntentEnabled, "settings"),
+                inputs.fullScreenIntentEnabled, "settings"),
             issue("db_freshness", R.string.ui_score_database, R.string.ui_stale_10, 3,
                 databaseFresh, "capabilities"),
             issue("install_sentinel", R.string.setup_sentinel_title, R.string.setup_sentinel_body,
@@ -99,10 +99,11 @@ object ProtectionAdvisorEngine {
             // Keep the existing ID so saved snooze and reminder state remains stable.
             issue("play_integrity", R.string.device_integrity_title, R.string.device_integrity_description,
                 12, inputs.meetsDeviceIntegrity == true, "settings")
-        )
-        val mapped = raw.map { item ->
+        ).filterNot { inputs.apiLevel < 34 && it.id == "fullscreen_alert" }
+        // Only unresolved items belong in the Advisor checklist. A fixed
+        // condition is removed rather than shown in a separate Completed group.
+        val mapped = raw.filterNot { it.completed }.map { item ->
             when {
-                item.completed -> item.copy(group = AdvisorIssueGroup.COMPLETED)
                 item.activeThreat -> item.copy(group = AdvisorIssueGroup.CRITICAL)
                 item.id in snoozedIds && item.canSnooze -> item.copy(group = AdvisorIssueGroup.SNOOZED)
                 item.points >= 12 -> item.copy(group = AdvisorIssueGroup.CRITICAL)
@@ -111,11 +112,9 @@ object ProtectionAdvisorEngine {
         }
         // Snoozing changes presentation/reminder state only. Every unresolved
         // issue continues to contribute its deduction until its condition is fixed.
-        val unresolved = mapped.filter { it.group != AdvisorIssueGroup.COMPLETED }
-        val pendingDeductions = unresolved.sumOf { it.points }
+        val pendingDeductions = mapped.sumOf { it.points }
         val score = (SCORE_MAX - pendingDeductions).coerceIn(0, SCORE_MAX)
-        val pending = unresolved.size
-        return ProtectionAdvisorState(score, pending, mapped)
+        return ProtectionAdvisorState(score, mapped.size, mapped)
     }
 
     private data class RawIssue(

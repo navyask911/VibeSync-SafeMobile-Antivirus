@@ -266,30 +266,74 @@ class PackageScanner(
   }.sortedBy { it.packageName }
   val completed = all.count { it.packageName in completedPackageNames }
   val pending = all.filterNot { it.packageName in completedPackageNames }
-  val semaphore = Semaphore(Runtime.getRuntime().availableProcessors().coerceAtMost(4))
+  val semaphore = Semaphore(3)
   val count = AtomicInteger(0)
   val mutex = Mutex()
   progress(completed, all.size)
-  val results = pending.map { info ->
-   async(Dispatchers.Default) {
-    val result = semaphore.withPermit {
-     currentCoroutineContext().ensureActive()
-     val start = System.nanoTime()
-     try { scanPackage(info, scanSessionId) }
-     catch (cancelled: CancellationException) { throw cancelled }
-     catch (_: Exception) {
-      val failed = result(info.packageName, info.packageName, null, null, ScanVerdict.NOT_SCANNED,
-       listOf(context.getString(R.string.file_could_not_read)), start)
-       .copy(packageName = info.packageName, scanSessionId = scanSessionId)
-      auditSafely(failed, start, scanSessionId)
-      failed
+  val results = try {
+   pending.map { info ->
+    val packageName = info.packageName
+    Log.d("ScanDebug", "Starting scan for package: $packageName")
+    async(Dispatchers.Default) {
+     val scanResult = try {
+      semaphore.withPermit {
+       currentCoroutineContext().ensureActive()
+       val start = System.nanoTime()
+       try {
+        scanPackage(info, scanSessionId)
+       } catch (cancelled: CancellationException) {
+        throw cancelled
+       } catch (error: Exception) {
+        Log.e("ScanDebug", "Package scan failed: $packageName", error)
+        val failed = result(packageName, packageName, null, null, ScanVerdict.NOT_SCANNED,
+         listOf(context.getString(R.string.file_could_not_read)), start)
+         .copy(packageName = packageName, scanSessionId = scanSessionId)
+        try {
+         auditSafely(failed, start, scanSessionId)
+        } catch (cancelled: CancellationException) {
+         throw cancelled
+        } catch (auditError: Exception) {
+         Log.w("ScanDebug", "Could not persist failed scan for package: $packageName", auditError)
+        }
+        failed
+       }
+      }
+     } catch (cancelled: CancellationException) {
+      throw cancelled
+     } catch (error: Exception) {
+      Log.e("ScanDebug", "Scan task failed before package analysis: $packageName", error)
+      result(packageName, packageName, null, null, ScanVerdict.NOT_SCANNED,
+       listOf(context.getString(R.string.file_could_not_read)), System.nanoTime())
+       .copy(packageName = packageName, scanSessionId = scanSessionId)
      }
+     try {
+      onItemCompleted(scanResult)
+     } catch (cancelled: CancellationException) {
+      throw cancelled
+     } catch (error: Exception) {
+      Log.e("ScanDebug", "Could not publish scan result for package: $packageName", error)
+     }
+     try {
+      mutex.withLock { progress(completed + count.incrementAndGet(), all.size) }
+     } catch (cancelled: CancellationException) {
+      throw cancelled
+     } catch (error: Exception) {
+      Log.e("ScanDebug", "Could not update scan progress for package: $packageName", error)
+     }
+     scanResult
     }
-    onItemCompleted(result)
-    mutex.withLock { progress(completed + count.incrementAndGet(), all.size) }
-    result
+   }.awaitAll()
+  } catch (cancelled: CancellationException) {
+   throw cancelled
+  } catch (error: Exception) {
+   Log.e("ScanDebug", "Installed-app scan queue failed while awaiting package tasks.", error)
+   pending.map { info ->
+    val packageName = info.packageName
+    result(packageName, packageName, null, null, ScanVerdict.NOT_SCANNED,
+     listOf(context.getString(R.string.file_could_not_read)), System.nanoTime())
+     .copy(packageName = packageName, scanSessionId = scanSessionId)
    }
-  }.awaitAll()
+  }
   results.sortedBy { when (it.verdict) {
    ScanVerdict.THREAT -> 0
    ScanVerdict.SUSPICIOUS -> 1

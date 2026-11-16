@@ -719,4 +719,5 @@
     <string name="console_full_screen_alerts_not_required" translatable="false">Not required on this Android version.</string>
     <string name="console_full_screen_alerts_manage" translatable="false">Manage</string>
     <string name="console_full_screen_alerts_grant" translatable="false">Grant access</string>
+    <string name="security_advisor_all_secure" translatable="false">All Secure</string>
 </resources>

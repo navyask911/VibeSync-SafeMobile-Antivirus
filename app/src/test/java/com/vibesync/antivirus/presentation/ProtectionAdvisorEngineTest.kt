@@ -31,6 +31,8 @@ class ProtectionAdvisorEngineTest {
         )
 
         assertEquals(state.critical.size + state.minor.size + state.snoozed.size, state.pendingCount)
+        assertEquals(state.pendingCount, state.issues.size)
+        assertTrue(state.completed.isEmpty())
         assertTrue(state.snoozed.any { it.id == "folder_sentinel" })
         assertTrue(state.snoozed.any { it.id == "notifications_on" })
         assertEquals(4, state.pendingCount)
@@ -96,8 +98,7 @@ class ProtectionAdvisorEngineTest {
         val disabled = evaluate(false)
         assertEquals(100, disabled.score)
         assertEquals(0, disabled.pendingCount)
-        assertEquals(AdvisorIssueGroup.COMPLETED,
-            disabled.issues.single { it.id == "developer_options_enabled" }.group)
+        assertTrue(disabled.issues.none { it.id == "developer_options_enabled" })
 
         val enabled = evaluate(true)
         assertEquals(97, enabled.score)
@@ -107,7 +108,35 @@ class ProtectionAdvisorEngineTest {
             enabled.issues.single { it.id == "developer_options_enabled" }.group)
 
         // A read failure/unavailable setting must not produce a Developer Options deduction.
-        assertEquals(100, evaluate(null).score)
+        val unavailable = evaluate(null)
+        assertEquals(100, unavailable.score)
+        assertTrue(unavailable.issues.none { it.id == "developer_options_enabled" })
+    }
+
+    @Test
+    fun fullscreenAlertIsExcludedBelowApi34AndDeductedFromApi34() {
+        val now = 1_800_000_000_000L
+        fun evaluate(apiLevel: Int) = ProtectionAdvisorEngine.evaluate(
+            inputs = ProtectionAdvisorInputs(
+                totalScans = 1, threatsDetected = 0, folderSentinelConfigured = true,
+                highRiskPostureCount = 0, notificationsEnabled = true, batteryUnrestricted = true,
+                fullScreenIntentEnabled = false, databaseUpdatedAt = now, installSentinelEnabled = true,
+                playProtectEnabled = true, usbDebuggingEnabled = false, developerOptionsEnabled = false,
+                voiceAlertsEnabled = true, meetsDeviceIntegrity = true, apiLevel = apiLevel, nowMillis = now
+            ),
+            snoozedIds = emptySet()
+        )
+
+        val api33 = evaluate(33)
+        assertEquals(100, api33.score)
+        assertEquals(0, api33.pendingCount)
+        assertTrue(api33.issues.none { it.id == "fullscreen_alert" })
+        assertTrue(api33.issues.isEmpty())
+
+        val api34 = evaluate(34)
+        assertEquals(97, api34.score)
+        assertEquals(1, api34.pendingCount)
+        assertEquals("fullscreen_alert", api34.issues.single().id)
     }
 
 }

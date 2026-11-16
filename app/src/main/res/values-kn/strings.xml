@@ -756,4 +756,5 @@
     <string name="console_full_screen_alerts_manage">ನಿರ್ವಹಿಸಿ</string>
     <string name="console_full_screen_alerts_grant">ಪ್ರವೇಶ ನೀಡಿ</string>
     <string name="scan_stop_action">ಸ್ಕ್ಯಾನ್ ನಿಲ್ಲಿಸಿ</string>
+    <string name="security_advisor_all_secure">ಎಲ್ಲವೂ ಸುರಕ್ಷಿತವಾಗಿದೆ</string>
 </resources>
