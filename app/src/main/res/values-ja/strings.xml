@@ -734,4 +734,5 @@
     <string name="console_full_screen_alerts_manage">管理</string>
     <string name="console_full_screen_alerts_grant">アクセスを許可</string>
     <string name="scan_stop_action">スキャンを停止</string>
+    <string name="security_advisor_all_secure">すべて安全です</string>
 </resources>
