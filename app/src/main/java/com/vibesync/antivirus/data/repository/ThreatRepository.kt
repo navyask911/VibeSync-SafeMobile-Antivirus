@@ -2,6 +2,8 @@ package com.vibesync.antivirus.data.repository
 import android.content.Context
 import android.net.Uri
 import android.provider.OpenableColumns
+import android.provider.DocumentsContract
+import android.util.Log
 import com.vibesync.antivirus.R
 import com.vibesync.antivirus.core.locale.UiText
 import com.vibesync.antivirus.core.engine.PackageScanner
@@ -41,11 +43,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import com.vibesync.antivirus.core.worker.withInstalledAppScanTimeout
 import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ensureActive
 import java.io.File
 import java.io.IOException
 import java.util.UUID
 import java.security.MessageDigest
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.atomic.AtomicInteger
 
 class ThreatRepository(
  private val context: Context,
@@ -56,8 +61,76 @@ class ThreatRepository(
  private val hashDatabaseManager: HashDatabaseManager? = null
 ) {
  private val privateTextStore by lazy(LazyThreadSafetyMode.SYNCHRONIZED) { EncryptedHashStore(context) }
- private val maxSafScanFiles = 10_000
+ private val maxSafScanFiles = 1_000
  private val trustedAppStore = TrustedAppStore(context)
+ private val skippedSafFileCounts = ConcurrentHashMap<String, AtomicInteger>()
+
+ private fun recordSkippedSafFile(sessionId: String, uri: Uri, error: Exception) {
+  Log.e("ScanDebug", "Skipping file: $uri", error)
+  if (error is SecurityException || error is IllegalArgumentException) {
+   skippedSafFileCounts.computeIfAbsent(sessionId) { AtomicInteger(0) }.incrementAndGet()
+  }
+ }
+
+ fun skippedSafFileCount(sessionId: String): Int = skippedSafFileCounts[sessionId]?.get() ?: 0
+
+ fun clearSkippedSafFileCount(sessionId: String) { skippedSafFileCounts.remove(sessionId) }
+
+ suspend fun clearScanSessionStateCheckpoints() = withContext(Dispatchers.IO) {
+  database.threatDao().clearAllScanSessionStates()
+ }
+
+ private fun querySafDisplayName(uri: Uri, fallback: String): String {
+  fun read(projection: Array<String>): String? =
+   context.contentResolver.query(uri, projection, null, null, null)?.use { cursor ->
+    if (!cursor.moveToFirst()) null else {
+     val column = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+     if (column >= 0) cursor.getString(column)?.takeIf { it.isNotBlank() } else null
+    }
+   }
+
+  val safeProjection = arrayOf(
+   OpenableColumns.DISPLAY_NAME,
+   OpenableColumns.SIZE,
+   DocumentsContract.Document.COLUMN_MIME_TYPE
+  )
+  return try {
+   read(safeProjection) ?: fallback
+  } catch (firstError: Exception) {
+   // Some providers only return the standard display-name column; retry that column alone.
+   try {
+    read(arrayOf(OpenableColumns.DISPLAY_NAME)) ?: fallback
+   } catch (fallbackError: Exception) {
+    fallbackError.addSuppressed(firstError)
+    throw fallbackError
+   }
+  }
+ }
+
+ private suspend fun scanSafFile(uri: Uri, fallbackName: String, scanSessionId: String): ScanResult {
+  return try {
+   val displayName = querySafDisplayName(uri, fallbackName).take(250)
+   val stream = context.contentResolver.openInputStream(uri)
+   if (stream == null) {
+    recordUnscannedUri(displayName, context.getString(R.string.file_stream_failed), scanSessionId)
+   } else {
+    stream.use {
+     scanner.scanStream(displayName, it, scanSessionId, persistAudit = false).copy(sourceUri = uri.toString())
+    }
+   }
+  } catch (cancelled: CancellationException) {
+   throw cancelled
+  } catch (error: SecurityException) {
+   recordSkippedSafFile(scanSessionId, uri, error)
+   recordUnscannedUri(fallbackName, context.getString(R.string.file_stream_failed), scanSessionId)
+  } catch (error: IllegalArgumentException) {
+   recordSkippedSafFile(scanSessionId, uri, error)
+   recordUnscannedUri(fallbackName, context.getString(R.string.file_stream_failed), scanSessionId)
+  } catch (error: Exception) {
+   Log.e("ScanDebug", "Skipping file: $uri", error)
+   recordUnscannedUri(fallbackName, context.getString(R.string.file_stream_failed), scanSessionId)
+  }
+ }
  suspend fun installedAppInventory(): List<InstalledAppItem> = withContext(Dispatchers.IO) {
   scanner.installedAppInventory()
  }
@@ -224,12 +297,15 @@ class ThreatRepository(
   val p = context.getSharedPreferences("safe_mobile_last_scan", Context.MODE_PRIVATE)
   val time = p.getLong("completed_at", 0L)
   if (time <= 0L) null else com.vibesync.antivirus.core.engine.ScanCompletionSummary(
-   p.getInt("apps", 0), p.getInt("files", 0), p.getInt("threats", 0), p.getInt("review", 0), p.getInt("unreadable", 0), time, p.getBoolean("signed_definitions_used", false))
+   p.getInt("apps", 0), p.getInt("files", 0), p.getInt("threats", 0), p.getInt("review", 0), p.getInt("unreadable", 0), time,
+   p.getBoolean("signed_definitions_used", false), p.getInt("skipped_files", 0))
  }.getOrNull()
  fun saveScanSummary(summary: com.vibesync.antivirus.core.engine.ScanCompletionSummary) {
   context.getSharedPreferences("safe_mobile_last_scan", Context.MODE_PRIVATE).edit()
    .putInt("apps", summary.appCount).putInt("files", summary.fileCount).putInt("threats", summary.threats)
-   .putInt("review", summary.review).putInt("unreadable", summary.unreadable).putLong("completed_at", summary.completedAt).putBoolean("signed_definitions_used", summary.signedDefinitionsUsed).apply()
+   .putInt("review", summary.review).putInt("unreadable", summary.unreadable)
+   .putInt("skipped_files", summary.skippedFiles).putLong("completed_at", summary.completedAt)
+   .putBoolean("signed_definitions_used", summary.signedDefinitionsUsed).apply()
  }
 
  fun observeScanSessionCounts(): Flow<ScanSessionCounts> =
@@ -317,7 +393,7 @@ class ThreatRepository(
   scanSessionId: String, progress: suspend (Int, Int) -> Unit = { _, _ -> }
  ): List<ScanResult> = withContext(Dispatchers.IO) {
   definitionLoader.importBundledIfEmpty()
-  val files = selectedFolderFiles().distinctBy { it.uri.toString() }.toList()
+  val files = selectedFolderFiles(scanSessionId).distinctBy { it.uri.toString() }.toList()
   val done = database.threatDao().scanSessionItemKeys(scanSessionId).toSet()
   val doneFiles = files.count { fileItemKey(it.uri) in done }
   val doneApps = done.filter { it.startsWith("app:") }.map { it.removePrefix("app:") }.toSet()
@@ -341,9 +417,7 @@ class ThreatRepository(
   for (file in files) {
    currentCoroutineContext().ensureActive()
    if (fileItemKey(file.uri) in done) continue
-   val result = runCatching { context.contentResolver.openInputStream(file.uri) }.getOrNull()?.let { stream ->
-    scanner.scanStream(file.displayName, stream, scanSessionId, persistAudit = false).copy(sourceUri = file.uri.toString())
-   } ?: recordUnscannedUri(file.displayName, context.getString(R.string.file_stream_failed), scanSessionId)
+   val result = scanSafFile(file.uri, file.displayName, scanSessionId)
    recordScanItemCompleted(scanSessionId, fileItemKey(file.uri), "file", result)
    if (result.verdict != ScanVerdict.NO_MATCH) fileResults += result
    fileProgress++
@@ -373,8 +447,10 @@ class ThreatRepository(
     "The selected folder is not readable. Re-select a folder using Android's document picker."
    }
    definitionLoader.importBundledIfEmpty()
-   val candidates = com.vibesync.antivirus.core.observer.SafTreeWalker.files(context, listOf(treeUri))
-    .take(maxSafScanFiles).distinctBy { it.uri.toString() }.toList()
+   val candidates = com.vibesync.antivirus.core.observer.SafTreeWalker.files(
+    context, listOf(treeUri), maxDepth = 10, maxFiles = maxSafScanFiles,
+    onFileError = { uri, error -> recordSkippedSafFile(scanSessionId, uri, error) }
+   ).distinctBy { it.uri.toString() }.toList()
    val done = database.threatDao().scanSessionItemKeys(scanSessionId).toSet()
    val count = candidates.count { fileItemKey(it.uri) in done }
    val pending = candidates.filterNot { fileItemKey(it.uri) in done }
@@ -386,10 +462,7 @@ class ThreatRepository(
     currentCoroutineContext().ensureActive()
     val label = file.name?.take(250) ?: context.getString(R.string.unknown_file)
     onFileStarted(label)
-    val stream = runCatching { context.contentResolver.openInputStream(file.uri) }.getOrNull()
-    val result = if (stream != null) {
-     scanner.scanStream(label, stream, scanSessionId, persistAudit = false).copy(sourceUri = file.uri.toString())
-    } else recordUnscannedUri(label, context.getString(R.string.file_stream_failed), scanSessionId)
+    val result = scanSafFile(file.uri, label, scanSessionId)
     recordScanItemCompleted(scanSessionId, fileItemKey(file.uri), "file", result)
     if (result.verdict != ScanVerdict.NO_MATCH) findings += result
     progress(count + index + 1, total)
@@ -403,12 +476,17 @@ class ThreatRepository(
   * Requires an explicitly persisted SAF grant, recurses at most 4 directory levels, and visits at
   * most 10,000 items per pass. It never probes or enumerates shared storage outside that grant.
   */
- private fun selectedFolderFiles(): Sequence<SelectedFolderFile> = sequence {
+ private fun selectedFolderFiles(scanSessionId: String): Sequence<SelectedFolderFile> = sequence {
   var count = 0
-  for (file in com.vibesync.antivirus.core.observer.SafTreeWalker.files(context,
-      StorageAccessPreferences.accessibleTreeUris(context))) {
+  for (file in com.vibesync.antivirus.core.observer.SafTreeWalker.files(
+      context, StorageAccessPreferences.accessibleTreeUris(context), maxDepth = 10,
+      maxFiles = maxSafScanFiles,
+      onFileError = { uri, error -> recordSkippedSafFile(scanSessionId, uri, error) })) {
    if (++count > maxSafScanFiles) break
-   yield(SelectedFolderFile(file.uri, file.name?.take(250) ?: context.getString(R.string.unknown_file)))
+   val displayName = try { file.name?.take(250) }
+    catch (error: SecurityException) { Log.e("ScanDebug", "Could not read SAF display name for " + file.uri, error); null }
+    catch (error: IllegalArgumentException) { Log.e("ScanDebug", "Could not read SAF display name for " + file.uri, error); null }
+   yield(SelectedFolderFile(file.uri, displayName ?: context.getString(R.string.unknown_file)))
   }
  }
 
@@ -428,26 +506,12 @@ class ThreatRepository(
  }
  suspend fun scanUri(uri: Uri, scanSessionId: String = UUID.randomUUID().toString()): ScanResult = withContext(Dispatchers.IO) {
   val quarantineManager = LocalQuarantineManager(context)
-  val label = runCatching {
-   context.contentResolver.query(uri,arrayOf(OpenableColumns.DISPLAY_NAME),null,null,null)?.use { c ->
-    if (c.moveToFirst()) c.getString(0) else null
-   }
-  }.getOrNull() ?: uri.lastPathSegment ?: context.getString(R.string.unknown_file)
+  val label = uri.lastPathSegment?.takeIf { it.isNotBlank() } ?: context.getString(R.string.unknown_file)
   if (!quarantineManager.supportsLocalUri(uri)) {
-   return@withContext recordUnscannedUri(
-    label,
-    context.getString(R.string.local_files_only),
-    scanSessionId
-   )
+   return@withContext recordUnscannedUri(label, context.getString(R.string.local_files_only), scanSessionId)
   }
   definitionLoader.importBundledIfEmpty()
-  val stream = runCatching { context.contentResolver.openInputStream(uri) }.getOrNull()
-   ?: return@withContext recordUnscannedUri(
-    label,
-    context.getString(R.string.file_stream_failed),
-    scanSessionId
-   )
-  applyTrustedFileHash(scanner.scanStream(label, stream, scanSessionId).copy(sourceUri = uri.toString()))
+  applyTrustedFileHash(scanSafFile(uri, label, scanSessionId))
  }
 
  suspend fun scanUriForSession(uri: Uri, scanSessionId: String): ScanResult = withContext(Dispatchers.IO) {
