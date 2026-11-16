@@ -69,7 +69,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             var showBrandSplash by remember { mutableStateOf(true) }
             LaunchedEffect(Unit) {
-                delay(350)
+                delay(3_000L)
                 showBrandSplash = false
             }
             if (showBrandSplash) {
@@ -81,7 +81,7 @@ class MainActivity : ComponentActivity() {
                         painter = painterResource(R.drawable.splash_screen_vibesync),
                         contentDescription = stringResource(R.string.app_name),
                         modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Fit
+                        contentScale = ContentScale.Crop
                     )
                 }
             } else {
