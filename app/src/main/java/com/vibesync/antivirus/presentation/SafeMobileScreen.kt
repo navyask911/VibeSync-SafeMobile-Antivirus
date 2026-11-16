@@ -478,13 +478,30 @@ import kotlinx.coroutines.launch
    vm.scanSelected(selectedUri)
   }
  }
- val deepFolderPicker = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri: Uri? ->
-  uri?.let { treeUri ->
-   runCatching { context.contentResolver.takePersistableUriPermission(treeUri, Intent.FLAG_GRANT_READ_URI_PERMISSION) }
-    .onFailure { error -> android.util.Log.w("SafeMobileDeepScan", "Could not persist selected tree grant; scan uses the current grant", error) }
-   navigateToDestination("scan")
-   vm.scanFolderTree(treeUri)
+ val deepScanPreferences = remember(context) { context.getSharedPreferences("safemobile_deep_scan", Context.MODE_PRIVATE) }
+ var savedDeepScanTreeUri by remember(context) {
+  mutableStateOf(deepScanPreferences.getString("tree_uri", null)?.let { runCatching { Uri.parse(it) }.getOrNull() })
+ }
+ val deepFolderPicker = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+  val data = result.data
+  val treeUri = data?.data
+  if (result.resultCode != Activity.RESULT_OK || data == null || treeUri == null) return@rememberLauncherForActivityResult
+  val takeFlags = data.flags and (Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+  val resolver = context.contentResolver
+  val alreadyPersisted = resolver.persistedUriPermissions.any { it.uri == treeUri && it.isReadPermission }
+  if (!alreadyPersisted && takeFlags != 0) {
+   try {
+    resolver.takePersistableUriPermission(treeUri, takeFlags)
+   } catch (error: SecurityException) {
+    android.util.Log.w("SafeMobileDeepScan", "The SAF provider rejected the selected tree permission flags.", error)
+   }
   }
+  val persisted = resolver.persistedUriPermissions.any { it.uri == treeUri && it.isReadPermission }
+  savedDeepScanTreeUri = treeUri.takeIf { persisted }
+  if (persisted) deepScanPreferences.edit().putString("tree_uri", treeUri.toString()).apply()
+  else deepScanPreferences.edit().remove("tree_uri").apply()
+  navigateToDestination("scan")
+  vm.scanFolderTree(treeUri)
  }
  val definitionsPicker=rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri:Uri? -> uri?.let(vm::importOfflineDefinitions) }
   val pendingYaraPicker=rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri:Uri? -> uri?.let(vm::importPendingYaraRule) }
@@ -880,7 +897,21 @@ import kotlinx.coroutines.launch
           repository = repository,
           onStartQuickScan = { requestPrivacyAcknowledgement { vm.scanInstalled() } },
           onStartDeepScan = { requestPrivacyAcknowledgement {
-           deepFolderPicker.launch(StorageAccessPreferences.deepScanInitialUri())
+           val savedTree = savedDeepScanTreeUri
+           val hasPersistedGrant = savedTree != null &&
+            context.contentResolver.persistedUriPermissions.any { it.uri == savedTree && it.isReadPermission }
+           if (hasPersistedGrant && savedTree != null) {
+            vm.scanFolderTree(savedTree)
+           } else {
+            savedDeepScanTreeUri = null
+            deepScanPreferences.edit().remove("tree_uri").apply()
+            val pickerIntent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
+             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION or
+              Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION or Intent.FLAG_GRANT_PREFIX_URI_PERMISSION)
+             putExtra(DocumentsContract.EXTRA_INITIAL_URI, StorageAccessPreferences.deepScanInitialUri())
+            }
+            deepFolderPicker.launch(pickerIntent)
+           }
           } },
           onCancelScan = vm::cancelScan,
           onUninstall = { packageName ->
