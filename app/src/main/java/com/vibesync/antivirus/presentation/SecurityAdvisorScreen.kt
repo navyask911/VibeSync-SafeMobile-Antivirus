@@ -61,38 +61,31 @@ internal fun SecurityAdvisorScreen(
                     color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
-        AdvisorAccordion(
-            titleResource = R.string.v140_critical,
-            items = state.critical,
-            onOpenIssue = onOpenIssue,
-            onSnooze = onSnooze,
-            onRestore = onRestore
-        )
-        if (state.minor.isNotEmpty()) {
-            AdvisorAccordion(
-                titleResource = R.string.v140_minor,
-                items = state.minor,
-                onOpenIssue = onOpenIssue,
-                onSnooze = onSnooze,
-                onRestore = onRestore
-            )
+        if (state.pendingCount == 0) {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Icon(Icons.Outlined.CheckCircle, contentDescription = null, tint = Color(0xFF10B981))
+                Text(
+                    stringResource(R.string.security_advisor_all_secure),
+                    color = Color(0xFF10B981),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        } else {
+            if (state.critical.isNotEmpty()) {
+                AdvisorAccordion(R.string.v140_critical, state.critical, onOpenIssue, onSnooze, onRestore)
+            }
+            if (state.minor.isNotEmpty()) {
+                AdvisorAccordion(R.string.v140_minor, state.minor, onOpenIssue, onSnooze, onRestore)
+            }
+            if (state.snoozed.isNotEmpty()) {
+                AdvisorAccordion(R.string.v140_snoozed, state.snoozed, onOpenIssue, onSnooze, onRestore)
+            }
         }
-        if (state.snoozed.isNotEmpty()) {
-            AdvisorAccordion(
-                titleResource = R.string.v140_snoozed,
-                items = state.snoozed,
-                onOpenIssue = onOpenIssue,
-                onSnooze = onSnooze,
-                onRestore = onRestore
-            )
-        }
-        AdvisorAccordion(
-            titleResource = R.string.v140_completed,
-            items = state.completed,
-            onOpenIssue = onOpenIssue,
-            onSnooze = onSnooze,
-            onRestore = onRestore
-        )
     }
 }
 
@@ -192,7 +185,7 @@ private fun AdvisorAccordion(
                                         ))
                                     }
                                 }
-                                if (item.group == AdvisorIssueGroup.SNOOZED) {
+                                if (state.pendingCount > 0 && item.group == AdvisorIssueGroup.SNOOZED) {
                                     OutlinedButton(
                                         onClick = { onRestore(item.id) },
                                         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp)
