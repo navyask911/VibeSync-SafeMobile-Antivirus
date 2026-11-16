@@ -2,6 +2,7 @@ package com.vibesync.antivirus.presentation
 
 import android.net.Uri
 import android.content.Context
+import android.util.Log
 import android.speech.tts.TextToSpeech
 import java.util.Locale
 import androidx.lifecycle.ViewModel
