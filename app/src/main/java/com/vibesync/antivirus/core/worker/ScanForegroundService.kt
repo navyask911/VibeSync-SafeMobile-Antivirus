@@ -73,6 +73,7 @@ class ScanForegroundService : Service() {
     repo.scanSessionState(newId) ?: error("Room scan state missing.")
    }
    sessionId = session.sessionId
+   repo.clearSkippedSafFileCount(session.sessionId)
    if (stopRequested) {
     repo.cancelScanSession(session.sessionId); ScanForegroundEvents.publishCancelled(); return
    }
@@ -95,12 +96,15 @@ class ScanForegroundService : Service() {
      ScanVerdict.NO_MATCH -> 3
     } }
    val current = repo.scanSessionState(session.sessionId)
-   val summary = ScanCompletionSummary.from(results, current?.scannedItems ?: results.size,
-    System.currentTimeMillis()).copy(signedDefinitionsUsed = repo.currentHashDatabaseCapability()?.enabled == true)
+   val summary = ScanCompletionSummary.from(results, current?.scannedItems ?: results.size, System.currentTimeMillis(),
+    skippedFiles = repo.skippedSafFileCount(session.sessionId)).copy(signedDefinitionsUsed = repo.currentHashDatabaseCapability()?.enabled == true)
    repo.saveScanSummary(summary)
    repo.completeScanSession(session.sessionId, summary.completedAt)
    ScanForegroundEvents.publish(ScanCompletedEvent(session.sessionId, results, summary, session.isManual))
+   repo.clearSkippedSafFileCount(session.sessionId)
   } catch (timeout: TimeoutCancellationException) {
+   runCatching { repo.clearScanSessionStateCheckpoints() }
+    .onFailure { Log.e("SafeMobileScan", "Could not clear corrupted scan checkpoints after timeout.", it) }
    sessionId?.let { id ->
     runCatching { repo.failScanSession(id) }
      .onFailure { Log.e("SafeMobileScan", "Could not persist timed-out scan state.", it) }
@@ -114,11 +118,13 @@ class ScanForegroundService : Service() {
    }
    throw cancelled
   } catch (error: Exception) {
+   runCatching { repo.clearScanSessionStateCheckpoints() }
+    .onFailure { Log.e("SafeMobileScan", "Could not clear corrupted scan checkpoints after failure.", it) }
    sessionId?.let { id ->
     runCatching { repo.failScanSession(id) }
      .onFailure { Log.e("SafeMobileScan", "Could not persist failed scan state.", it) }
    }
-   Log.e("SafeMobileScan", "Scan failed; Room checkpoints retained.", error)
+   Log.e("SafeMobileScan", "Scan failed; corrupted Room scan checkpoints were cleared.", error)
    ScanForegroundEvents.publishFailed(sessionId)
   } finally { stopServiceAfterRun() }
  }
