@@ -16,6 +16,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -24,13 +25,17 @@ import kotlinx.coroutines.withContext
 import java.util.UUID
 
 data class ScanCompletedEvent(val sessionId: String, val results: List<ScanResult>, val summary: ScanCompletionSummary, val manualScan: Boolean)
+data class ScanFailedEvent(val sessionId: String?)
 object ScanForegroundEvents {
  private val done = MutableSharedFlow<ScanCompletedEvent>(extraBufferCapacity = 1)
  private val stopped = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+ private val failures = MutableSharedFlow<ScanFailedEvent>(extraBufferCapacity = 1)
  val completed = done.asSharedFlow()
  val cancelled = stopped.asSharedFlow()
+ val failed = failures.asSharedFlow()
  fun publish(event: ScanCompletedEvent) { done.tryEmit(event) }
  fun publishCancelled() { stopped.tryEmit(Unit) }
+ fun publishFailed(sessionId: String?) { failures.tryEmit(ScanFailedEvent(sessionId)) }
 }
 
 /** Scan lifetime is owned by this service, not an Activity or ViewModel. Room is the resume ledger. */
@@ -95,6 +100,13 @@ class ScanForegroundService : Service() {
    repo.saveScanSummary(summary)
    repo.completeScanSession(session.sessionId, summary.completedAt)
    ScanForegroundEvents.publish(ScanCompletedEvent(session.sessionId, results, summary, session.isManual))
+  } catch (timeout: TimeoutCancellationException) {
+   sessionId?.let { id ->
+    runCatching { repo.failScanSession(id) }
+     .onFailure { Log.e("SafeMobileScan", "Could not persist timed-out scan state.", it) }
+   }
+   Log.e("SafeMobileScan", "Installed-app scan exceeded the 300000 ms timeout.", timeout)
+   ScanForegroundEvents.publishFailed(sessionId)
   } catch (cancelled: CancellationException) {
    sessionId?.let { id ->
     if (stopRequested) { runCatching { repo.cancelScanSession(id) }; ScanForegroundEvents.publishCancelled() }
@@ -102,8 +114,12 @@ class ScanForegroundService : Service() {
    }
    throw cancelled
   } catch (error: Exception) {
-   sessionId?.let { runCatching { repo.interruptScanSession(it) } }
-   Log.e("SafeMobileScan", "Scan failed; Room checkpoints retained for resume.", error)
+   sessionId?.let { id ->
+    runCatching { repo.failScanSession(id) }
+     .onFailure { Log.e("SafeMobileScan", "Could not persist failed scan state.", it) }
+   }
+   Log.e("SafeMobileScan", "Scan failed; Room checkpoints retained.", error)
+   ScanForegroundEvents.publishFailed(sessionId)
   } finally { stopServiceAfterRun() }
  }
  private fun stopScan() {

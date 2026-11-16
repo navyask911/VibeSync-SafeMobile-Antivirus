@@ -76,6 +76,7 @@ class SafeMobileViewModel(
     )
     val protectionAdvisorState = mutableProtectionAdvisorState.asStateFlow()
     private var protectionAdvisorJob: Job? = null
+    @Volatile private var failedScanSessionId: String? = null
 
     /** Run the CPU-only score rubric off the main thread; UI state is published on Main. */
     fun updateProtectionAdvisor(inputs: ProtectionAdvisorInputs, snoozedIds: Set<String>) {
@@ -421,6 +422,7 @@ class SafeMobileViewModel(
             mutableState.update { it.copy(isScanning = false, messageResource = R.string.scan_failed) }
             return
         }
+        failedScanSessionId = null
         mutableState.update { it.copy(isScanning = true, processedItems = 0, totalItems = 0,
             currentScanFile = null, recentScanFiles = emptyList(), messageResource = null, messageText = null) }
         runCatching { ScanForegroundService.start(context, operation, manualScan, sourceUri, packageName) }
@@ -431,10 +433,13 @@ class SafeMobileViewModel(
         viewModelScope.launch {
             repository.observeLatestManualScanState().collect { scan ->
                 if (scan != null) mutableState.update { state ->
-                    val path = if (scan.isComplete) null else scan.currentItemPath
+                    val failed = scan.sessionId == failedScanSessionId
+                    val path = if (scan.isComplete || failed) null else scan.currentItemPath
                     val recent = path?.takeIf { it != state.currentScanFile }?.let { (state.recentScanFiles + it).takeLast(8) } ?: state.recentScanFiles
-                    state.copy(isScanning = !scan.isComplete, processedItems = scan.scannedItems,
-                        totalItems = scan.totalItems, currentScanFile = path, recentScanFiles = recent)
+                    state.copy(isScanning = !scan.isComplete && !failed, processedItems = scan.scannedItems,
+                        totalItems = scan.totalItems, currentScanFile = path, recentScanFiles = recent,
+                        messageResource = if (failed) R.string.scan_failed else state.messageResource,
+                        messageText = if (failed) null else state.messageText)
                 }
             }
         }
@@ -457,8 +462,16 @@ class SafeMobileViewModel(
         }
         viewModelScope.launch {
             ScanForegroundEvents.cancelled.collect {
+                failedScanSessionId = null
                 mutableState.update { it.copy(isScanning = false, currentScanFile = null,
                     messageResource = R.string.scan_cancelled, messageText = null) }
+            }
+        }
+        viewModelScope.launch {
+            ScanForegroundEvents.failed.collect { event ->
+                failedScanSessionId = event.sessionId
+                mutableState.update { it.copy(isScanning = false, currentScanFile = null,
+                    messageResource = R.string.scan_failed, messageText = null) }
             }
         }
     }

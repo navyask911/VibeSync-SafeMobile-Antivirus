@@ -6,7 +6,9 @@ import android.content.pm.ApplicationInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.supervisorScope
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import java.security.MessageDigest
@@ -53,6 +55,28 @@ import kotlinx.coroutines.sync.withLock
 private const val GOOGLE_PLAY_SERVICES_PACKAGE = "com.google.android.gms"
 private const val SAFE_SYSTEM_PACKAGE_LABEL = "Safe (System App)"
 private const val SAFE_TRUSTED_CERTIFICATE_LABEL = "Safe (Trusted Certificate)"
+
+/**
+ * Room/UI publication is an item boundary: a failed insert or observer callback
+ * must not cancel sibling scans. Only cancellation of the parent scan is rethrown.
+ */
+internal suspend fun publishScanResultSafely(
+ packageName: String,
+ publish: suspend () -> Unit,
+ logFailure: (String, Throwable) -> Unit = { pkg, error ->
+  Log.e("ScanDebug", "Failed to publish result for $pkg", error)
+ }
+) {
+ try {
+  publish()
+ } catch (cancelled: CancellationException) {
+  if (!currentCoroutineContext().isActive) throw cancelled
+  logFailure(packageName, cancelled)
+ } catch (error: Exception) {
+  logFailure(packageName, error)
+ }
+}
+
 private val TRUSTED_CERTIFICATE_ANCHOR_PACKAGES = listOf(
  "com.google.android.gms",
  "com.android.vending"
@@ -252,29 +276,41 @@ class PackageScanner(
   scanSessionId: String, completedPackageNames: Set<String>,
   onItemCompleted: suspend (ScanResult) -> Unit,
   progress: suspend (processed: Int, total: Int) -> Unit
- ): List<ScanResult> = coroutineScope {
+ ): List<ScanResult> = supervisorScope {
   val flags = PackageManager.GET_PERMISSIONS or PackageManager.GET_SERVICES or
    PackageManager.GET_ACTIVITIES or PackageManager.GET_RECEIVERS or PackageManager.GET_PROVIDERS or signingFlags()
-  val all = pm.getInstalledPackages(flags).filter { info ->
-   val app = info.applicationInfo
-   val system = app != null && (app.flags and ApplicationInfo.FLAG_SYSTEM) != 0
-   val updatedSystem = app != null && (app.flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0
-   app != null && info.packageName != context.packageName &&
-    (system || updatedSystem || info.packageName == GOOGLE_PLAY_SERVICES_PACKAGE ||
-     ProtectedPackagePolicy.isUserInstalled(app.flags, info.packageName, context.packageName) ||
-     isSignedByKnownTrustedCertificate(info))
-  }.sortedBy { it.packageName }
+  val all = withContext(Dispatchers.IO) {
+   @Suppress("DEPRECATION")
+   pm.getInstalledPackages(flags).filter { info ->
+    runCatching {
+     val app = info.applicationInfo
+     val system = app != null && (app.flags and ApplicationInfo.FLAG_SYSTEM) != 0
+     val updatedSystem = app != null && (app.flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0
+     app != null && info.packageName != context.packageName &&
+      (system || updatedSystem || info.packageName == GOOGLE_PLAY_SERVICES_PACKAGE ||
+       ProtectedPackagePolicy.isUserInstalled(app.flags, info.packageName, context.packageName) ||
+       isSignedByKnownTrustedCertificate(info))
+    }.getOrDefault(false)
+   }.sortedBy { it.packageName }
+  }
   val completed = all.count { it.packageName in completedPackageNames }
   val pending = all.filterNot { it.packageName in completedPackageNames }
   val semaphore = Semaphore(3)
   val count = AtomicInteger(0)
   val mutex = Mutex()
-  progress(completed, all.size)
+  try {
+   progress(completed, all.size)
+  } catch (cancelled: CancellationException) {
+   if (!currentCoroutineContext().isActive) throw cancelled
+   Log.e("ScanDebug", "Initial scan progress callback cancelled.", cancelled)
+  } catch (error: Exception) {
+   Log.e("ScanDebug", "Could not publish initial scan progress.", error)
+  }
   val results = try {
    pending.map { info ->
     val packageName = info.packageName
     Log.d("ScanDebug", "Starting scan for package: $packageName")
-    async(Dispatchers.Default) {
+    async(Dispatchers.IO) {
      val scanResult = try {
       semaphore.withPermit {
        currentCoroutineContext().ensureActive()
@@ -282,7 +318,11 @@ class PackageScanner(
        try {
         scanPackage(info, scanSessionId)
        } catch (cancelled: CancellationException) {
-        throw cancelled
+        if (!currentCoroutineContext().isActive) throw cancelled
+        Log.e("ScanDebug", "Package scan cancelled locally: $packageName", cancelled)
+        result(packageName, packageName, null, null, ScanVerdict.NOT_SCANNED,
+         listOf(context.getString(R.string.file_could_not_read)), start)
+         .copy(packageName = packageName, scanSessionId = scanSessionId)
        } catch (error: Exception) {
         Log.e("ScanDebug", "Package scan failed: $packageName", error)
         val failed = result(packageName, packageName, null, null, ScanVerdict.NOT_SCANNED,
@@ -299,24 +339,23 @@ class PackageScanner(
        }
       }
      } catch (cancelled: CancellationException) {
-      throw cancelled
+      if (!currentCoroutineContext().isActive) throw cancelled
+      Log.e("ScanDebug", "Scan task cancelled before package analysis: $packageName", cancelled)
+      result(packageName, packageName, null, null, ScanVerdict.NOT_SCANNED,
+       listOf(context.getString(R.string.file_could_not_read)), System.nanoTime())
+       .copy(packageName = packageName, scanSessionId = scanSessionId)
      } catch (error: Exception) {
       Log.e("ScanDebug", "Scan task failed before package analysis: $packageName", error)
       result(packageName, packageName, null, null, ScanVerdict.NOT_SCANNED,
        listOf(context.getString(R.string.file_could_not_read)), System.nanoTime())
        .copy(packageName = packageName, scanSessionId = scanSessionId)
      }
-     try {
-      onItemCompleted(scanResult)
-     } catch (cancelled: CancellationException) {
-      throw cancelled
-     } catch (error: Exception) {
-      Log.e("ScanDebug", "Could not publish scan result for package: $packageName", error)
-     }
+     publishScanResultSafely(packageName, { onItemCompleted(scanResult) })
      try {
       mutex.withLock { progress(completed + count.incrementAndGet(), all.size) }
      } catch (cancelled: CancellationException) {
-      throw cancelled
+      if (!currentCoroutineContext().isActive) throw cancelled
+      Log.e("ScanDebug", "Scan progress callback cancelled for package: $packageName", cancelled)
      } catch (error: Exception) {
       Log.e("ScanDebug", "Could not update scan progress for package: $packageName", error)
      }
@@ -324,7 +363,14 @@ class PackageScanner(
     }
    }.awaitAll()
   } catch (cancelled: CancellationException) {
-   throw cancelled
+   if (!currentCoroutineContext().isActive) throw cancelled
+   Log.e("ScanDebug", "A package task was cancelled independently; retaining per-package outcomes.", cancelled)
+   pending.map { info ->
+    val packageName = info.packageName
+    result(packageName, packageName, null, null, ScanVerdict.NOT_SCANNED,
+     listOf(context.getString(R.string.file_could_not_read)), System.nanoTime())
+     .copy(packageName = packageName, scanSessionId = scanSessionId)
+   }
   } catch (error: Exception) {
    Log.e("ScanDebug", "Installed-app scan queue failed while awaiting package tasks.", error)
    pending.map { info ->
@@ -398,7 +444,7 @@ class PackageScanner(
    if (identity != null && trustedAppStore.isTrusted(identity)) {
     return trustedResult(identity, scanSessionId, start).copy(sourceLocalPath = file.absolutePath)
    }
-   val hash = calculator.calculate(file)
+   val hash = withContext(Dispatchers.Default) { calculator.calculate(file) }
    // Skip ZIP/DEX, bundled YARA and ML when any exact local threat hash matches.
   // The conclusive signature verdict is still recorded in the normal audit.
   val exactThreat = findExactHashThreat(file.name, file.name,
@@ -412,7 +458,7 @@ class PackageScanner(
   }
 
   val yaraXResult = if (isApk) {
-   yaraXScanner.scanApk(file)
+   withContext(Dispatchers.Default) { yaraXScanner.scanApk(file) }
   } else null
   val yaraThreat = yaraXResult?.threatMatches?.firstOrNull()
   if (yaraThreat != null) {
@@ -511,7 +557,7 @@ class PackageScanner(
     inputStream.mark(eicarProbeBytes)
     readBoundedPrefix(inputStream).also { inputStream.reset() }
    }
-   val hash = inputStream.use { calculator.calculate(it) }
+   val hash = inputStream.use { withContext(Dispatchers.Default) { calculator.calculate(it) } }
    var output = evaluate(label, label, hash.sha256, hash.md5, emptyList(), 0, sha1 = hash.sha1, fileSize = hash.bytesRead)
    if (eicarProbe != null) output = ThreatEnsembleEvaluator.evaluateTextPayload(output, eicarProbe)
    if (persistAudit || output.verdict == ScanVerdict.THREAT ||
@@ -716,8 +762,13 @@ class PackageScanner(
    auditSafely(failed, start, scanSessionId)
    return failed
   }
-  val hashes = runCatching { calculator.calculate(apk) }.getOrNull()
-   ?: run {
+  val hashes = try {
+   withContext(Dispatchers.Default) { calculator.calculate(apk) }
+  } catch (cancelled: CancellationException) {
+   throw cancelled
+  } catch (_: Exception) {
+   null
+  } ?: run {
     val failed = result(info.packageName, label, null, null, ScanVerdict.NOT_SCANNED, reasons + context.getString(R.string.file_could_not_read), start).copy(packageName = info.packageName, scanSessionId = scanSessionId)
     auditSafely(failed, start, scanSessionId)
     return failed
@@ -734,7 +785,7 @@ class PackageScanner(
     packageName = info.packageName, scanSessionId = scanSessionId)
   }
 
-  val yaraXResult = yaraXScanner.scanApk(apk)
+  val yaraXResult = withContext(Dispatchers.Default) { yaraXScanner.scanApk(apk) }
   val yaraThreat = yaraXResult.threatMatches.firstOrNull()
   if (yaraThreat != null) {
    val detected = evaluateWithEnsemble(

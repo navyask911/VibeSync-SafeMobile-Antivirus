@@ -16,7 +16,7 @@
 
     <style name="Theme.SafeMobile.Splash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">#FFFFFF</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/vibesync_official_logo</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_transparent</item>
         <item name="windowSplashScreenIconBackgroundColor">#FFFFFF</item>
         <item name="postSplashScreenTheme">@style/Theme.SafeMobile</item>
         <item name="android:windowBackground">#FFFFFF</item>
