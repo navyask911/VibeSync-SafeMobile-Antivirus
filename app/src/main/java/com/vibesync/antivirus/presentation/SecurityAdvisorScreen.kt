@@ -185,7 +185,7 @@ private fun AdvisorAccordion(
                                         ))
                                     }
                                 }
-                                if (state.pendingCount > 0 && item.group == AdvisorIssueGroup.SNOOZED) {
+                                if (item.group == AdvisorIssueGroup.SNOOZED) {
                                     OutlinedButton(
                                         onClick = { onRestore(item.id) },
                                         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp)
