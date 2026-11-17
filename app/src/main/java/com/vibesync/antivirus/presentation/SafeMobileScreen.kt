@@ -1,4 +1,5 @@
 package com.vibesync.antivirus.presentation
+import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import com.vibesync.antivirus.core.locale.SecurityText
 import androidx.compose.ui.res.pluralStringResource
@@ -491,7 +492,9 @@ import kotlinx.coroutines.launch
   val alreadyPersisted = resolver.persistedUriPermissions.any { it.uri == treeUri && it.isReadPermission }
   if (!alreadyPersisted && takeFlags != 0) {
    try {
-    resolver.takePersistableUriPermission(treeUri, takeFlags)
+    // takeFlags is explicitly masked to the only two permissions accepted by this API.
+   @SuppressLint("WrongConstant")
+   resolver.takePersistableUriPermission(treeUri, takeFlags)
    } catch (error: SecurityException) {
     android.util.Log.w("SafeMobileDeepScan", "The SAF provider rejected the selected tree permission flags.", error)
    }
