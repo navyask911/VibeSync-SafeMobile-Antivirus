@@ -19,33 +19,47 @@ class MultiLayerScanWorker(context: Context, params: WorkerParameters) : Corouti
    ScanForegroundNotifications.notificationId(id)
   )
 
- override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
-  val name = inputData.getString(KEY_PACKAGE_NAME)?.takeIf { it.isNotBlank() }
-   ?: return@withContext Result.failure()
-  val eventId = inputData.getString(KEY_EVENT_ID)?.takeIf { it.isNotBlank() }
-   ?: return@withContext Result.failure()
-  val app = applicationContext as? SafeMobileApp ?: return@withContext Result.failure()
-  val sessionId = id.toString()
-
-  setForeground(getForegroundInfo())
-  try {
-   app.repository.startScanSession(sessionId, "POST_INSTALL", isManual = false)
-   PostInstallScanProcessor.scan(
-    applicationContext,
-    name,
-    eventId,
-    inputData.getBoolean(KEY_UPDATED, false),
-    scanSessionId = sessionId
-   )
-   app.repository.completeScanSession(sessionId)
-   Result.success()
+ override suspend fun doWork(): Result {
+  Log.d("SafeMobileScan", "Post-install worker STARTED for: $tags")
+  return try {
+   withContext(Dispatchers.IO) {
+    val name = inputData.getString(KEY_PACKAGE_NAME)?.takeIf { it.isNotBlank() }
+     ?: return@withContext Result.failure()
+    val eventId = inputData.getString(KEY_EVENT_ID)?.takeIf { it.isNotBlank() }
+     ?: return@withContext Result.failure()
+    val app = applicationContext as? SafeMobileApp
+     ?: throw IllegalStateException("SafeMobileApp application is unavailable.")
+    val sessionId = id.toString()
+    try {
+     setForeground(getForegroundInfo())
+     app.repository.startScanSession(sessionId, "POST_INSTALL", isManual = false)
+     PostInstallScanProcessor.scan(
+      applicationContext,
+      name,
+      eventId,
+      inputData.getBoolean(KEY_UPDATED, false),
+      scanSessionId = sessionId
+     )
+     app.repository.completeScanSession(sessionId)
+     val result = Result.success()
+     Log.d("SafeMobileScan", "Post-install worker FINISHED with result: $result")
+     result
+    } catch (cancelled: CancellationException) {
+     runCatching { app.repository.interruptScanSession(sessionId) }
+     throw cancelled
+    } catch (error: Exception) {
+     runCatching { app.repository.interruptScanSession(sessionId) }
+     Log.e("SafeMobileScan", "Worker CRASHED", error)
+     val result = Result.failure()
+     Log.d("SafeMobileScan", "Post-install worker FINISHED with result: $result")
+     result
+    }
+   }
   } catch (cancelled: CancellationException) {
-   runCatching { app.repository.interruptScanSession(sessionId) }
    throw cancelled
   } catch (error: Exception) {
-   runCatching { app.repository.interruptScanSession(sessionId) }
-   Log.e("SafeMobileScan", "Post-install scan failed; attempt=$runAttemptCount", error)
-   if (runAttemptCount < 2) Result.retry() else Result.failure()
+   Log.e("SafeMobileScan", "Worker CRASHED", error)
+   Result.failure()
   }
  }
 
