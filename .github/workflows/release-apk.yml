@@ -386,6 +386,8 @@ jobs:
           if [[ "${GITHUB_REF_TYPE:-}" == "tag" && "${GITHUB_REF_NAME:-}" == "v1.10.5" ]] ||
              [[ "${GITHUB_REF_TYPE:-}" == "branch" && "${GITHUB_REF_NAME:-}" == "main" && "$version_name" == "1.10.5" && "$version_code" == "20261158" ]]; then
             tag="v1.10.5"
+          elif [[ "${GITHUB_REF_TYPE:-}" == "tag" && "${GITHUB_REF_NAME:-}" == "v1.10.4" ]]; then
+            tag="v1.10.4"
           elif [[ "${GITHUB_REF_TYPE:-}" == "tag" && "${GITHUB_REF_NAME:-}" == "v1.10.3" ]]; then
             tag="v1.10.3"
           elif [[ "${GITHUB_REF_TYPE:-}" == "tag" && "${GITHUB_REF_NAME:-}" == "v1.10.1" ]]; then
