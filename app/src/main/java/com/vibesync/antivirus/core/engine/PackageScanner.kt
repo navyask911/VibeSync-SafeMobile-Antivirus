@@ -388,16 +388,14 @@ class PackageScanner(
   } catch (cancelled: CancellationException) {
    if (!currentCoroutineContext().isActive) throw cancelled
    Log.e("ScanDebug", "A package task was cancelled independently; retaining per-package outcomes.", cancelled)
-   pending.map { info ->
-    val packageName = info.packageName
+   pending.map { packageName ->
     result(packageName, packageName, null, null, ScanVerdict.NOT_SCANNED,
      listOf(context.getString(R.string.file_could_not_read)), System.nanoTime())
      .copy(packageName = packageName, scanSessionId = scanSessionId)
    }
   } catch (error: Exception) {
    Log.e("ScanDebug", "Installed-app scan queue failed while awaiting package tasks.", error)
-   pending.map { info ->
-    val packageName = info.packageName
+   pending.map { packageName ->
     result(packageName, packageName, null, null, ScanVerdict.NOT_SCANNED,
      listOf(context.getString(R.string.file_could_not_read)), System.nanoTime())
      .copy(packageName = packageName, scanSessionId = scanSessionId)
