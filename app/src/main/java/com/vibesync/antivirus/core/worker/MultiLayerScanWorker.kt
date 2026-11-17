@@ -9,6 +9,7 @@ import com.vibesync.antivirus.SafeMobileApp
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.sync.withLock
 
 /** Durable post-install scan fallback; stays visible as a foreground task while scanning. */
 class MultiLayerScanWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
@@ -22,7 +23,8 @@ class MultiLayerScanWorker(context: Context, params: WorkerParameters) : Corouti
  override suspend fun doWork(): Result {
   Log.d("SafeMobileScan", "Post-install worker STARTED for: $tags")
   return try {
-   withContext(Dispatchers.IO) {
+   ScanExecutionCoordinator.mutex.withLock {
+    withContext(Dispatchers.IO) {
     val name = inputData.getString(KEY_PACKAGE_NAME)?.takeIf { it.isNotBlank() }
      ?: return@withContext Result.failure()
     val eventId = inputData.getString(KEY_EVENT_ID)?.takeIf { it.isNotBlank() }
