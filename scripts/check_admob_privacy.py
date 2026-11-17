@@ -78,12 +78,16 @@ if "hasConfirmedThreats" not in manager or "state.threatCount > 0" not in screen
     errors.append("Interstitial must be suppressed when confirmed threats are found.")
 if "scanFull(manualScan = false)" not in screen:
     errors.append("Automatic first-run scans must not be treated as manual ad-trigger scans.")
+bottom_bar = screen.split("bottomBar = {", 1)[1].split("snackbarHost", 1)[0] if "bottomBar = {" in screen else ""
 if (
-    "bottomBar = {" not in screen
-    or "adMobState.adsReady && !adMobState.isPro" not in screen
-    or "AdMobBanner(adMobManager)" not in screen
+    "AdMobBanner(adMobManager)" not in screen
+    or "AdMobBanner(adMobManager)" in bottom_bar
+    or "AdSize.LEADERBOARD" not in banner
+    or "adWidthDp >= 970" not in banner
+    or "getCurrentOrientationAnchoredAdaptiveBannerAdSize(context" not in banner
+    or "modifier = Modifier.weight(1f).fillMaxWidth()" not in screen
 ):
-    errors.append("AdMob banner must persist in the shared Scaffold bottom bar and stay hidden for Pro.")
+    errors.append("AdMob banner must sit above the weighted content, use the 970 dp leaderboard threshold, and remain excluded for Pro.")
 
 for path, text in (
     ("docs/PRIVACY_POLICY.md", privacy),
@@ -115,8 +119,8 @@ if (
     or version_name_match is None
 ):
     errors.append("The Android app must declare a positive versionCode and a semantic versionName.")
-elif version_name_match.group(1) != "1.10.5" or int(version_code_match.group(1)) != 20261158:
-    errors.append("SafeMobile v1.10.5 must use versionName 1.10.5 and Play versionCode 20261158.")
+elif version_name_match.group(1) != "1.10.5" or int(version_code_match.group(1)) != 20261159:
+    errors.append("SafeMobile v1.10.5 must use versionName 1.10.5 and Play versionCode 20261159.")
 if "On-device Malware Scanning. Ad-supported Free Tier. No AdMob Ads with Pro." not in readme:
     errors.append("README must use the requested Free/Pro advertising tagline.")
 if "Ad-supported Free Tier" not in store or "Advertising ID" not in store or "IP address" not in store or "analytics" not in store:
