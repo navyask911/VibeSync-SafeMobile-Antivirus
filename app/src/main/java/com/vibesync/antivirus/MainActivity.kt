@@ -81,7 +81,7 @@ class MainActivity : ComponentActivity() {
                         painter = painterResource(R.drawable.splash_screen_vibesync),
                         contentDescription = stringResource(R.string.app_name),
                         modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
+                        contentScale = ContentScale.Fit
                     )
                 }
             } else {

@@ -94,10 +94,14 @@ object StorageAccessPreferences {
         val root = runCatching { DocumentFile.fromTreeUri(context, uri) }.getOrNull() ?: return false
         if (!root.isDirectory || !root.canRead()) return false
         val resolver = context.contentResolver
-        try { resolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION) }
-        catch (_: SecurityException) { return false }
-        if (grantFlags and Intent.FLAG_GRANT_WRITE_URI_PERMISSION != 0) {
-            runCatching { resolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION) }
+        val takeFlags = grantFlags and
+            (Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+        if (takeFlags and Intent.FLAG_GRANT_READ_URI_PERMISSION == 0) return false
+        try {
+            resolver.takePersistableUriPermission(uri, takeFlags)
+        } catch (error: SecurityException) {
+            android.util.Log.w("StorageAccess", "The document provider rejected the selected folder permission flags.", error)
+            return false
         }
         val uris = (selectedTreeUris(context).map(Uri::toString) + uri.toString()).distinct()
         return prefs(context).edit().putString(TREES, JSONArray(uris).toString())

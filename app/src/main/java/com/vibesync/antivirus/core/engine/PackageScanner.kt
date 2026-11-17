@@ -254,8 +254,13 @@ class PackageScanner(
  }
 
  fun installedAppInventory(): List<InstalledAppItem> {
-  @Suppress("DEPRECATION")
-  val packages = pm.getInstalledPackages(0)
+  val packages = try {
+   @Suppress("DEPRECATION")
+   pm.getInstalledPackages(0)
+  } catch (error: Exception) {
+   Log.e(TAG, "PackageManager could not enumerate the installed-app inventory.", error)
+   return emptyList()
+  }
   return packages.asSequence().filter { info ->
    val flags = info.applicationInfo?.flags ?: return@filter false
    ProtectedPackagePolicy.isUserInstalled(flags, info.packageName, context.packageName)
@@ -277,20 +282,30 @@ class PackageScanner(
   onItemCompleted: suspend (ScanResult) -> Unit,
   progress: suspend (processed: Int, total: Int) -> Unit
  ): List<ScanResult> = supervisorScope {
-  val flags = PackageManager.GET_PERMISSIONS or PackageManager.GET_SERVICES or
-   PackageManager.GET_ACTIVITIES or PackageManager.GET_RECEIVERS or PackageManager.GET_PROVIDERS or signingFlags()
+  // Enumerate only base package/application metadata first. Detailed permission,
+  // component and signer reads are performed per package below so one OEM provider
+  // failure cannot abort the entire installed-app scan.
   val all = withContext(Dispatchers.IO) {
-   @Suppress("DEPRECATION")
-   pm.getInstalledPackages(flags).filter { info ->
-    runCatching {
-     val app = info.applicationInfo
-     val system = app != null && (app.flags and ApplicationInfo.FLAG_SYSTEM) != 0
-     val updatedSystem = app != null && (app.flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0
-     app != null && info.packageName != context.packageName &&
+   val packages = try {
+    @Suppress("DEPRECATION")
+    pm.getInstalledPackages(0)
+   } catch (error: Exception) {
+    Log.e(TAG, "PackageManager could not enumerate installed packages.", error)
+    emptyList()
+   }
+   packages.filter { info ->
+    try {
+     val app = info.applicationInfo ?: return@filter false
+     val system = app.flags and ApplicationInfo.FLAG_SYSTEM != 0
+     val updatedSystem = app.flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP != 0
+     info.packageName != context.packageName &&
       (system || updatedSystem || info.packageName == GOOGLE_PLAY_SERVICES_PACKAGE ||
        ProtectedPackagePolicy.isUserInstalled(app.flags, info.packageName, context.packageName) ||
-       isSignedByKnownTrustedCertificate(info))
-    }.getOrDefault(false)
+       isSignedByKnownTrustedCertificate(info.packageName))
+    } catch (error: Exception) {
+     Log.w(TAG, "Skipping package whose base metadata could not be evaluated: " + info.packageName, error)
+     false
+    }
    }.sortedBy { it.packageName }
   }
   val completed = all.count { it.packageName in completedPackageNames }
@@ -316,7 +331,7 @@ class PackageScanner(
        currentCoroutineContext().ensureActive()
        val start = System.nanoTime()
        try {
-        scanPackage(info, scanSessionId)
+        scanPackage(loadPackageInfoForScan(packageName), scanSessionId)
        } catch (cancelled: CancellationException) {
         if (!currentCoroutineContext().isActive) throw cancelled
         Log.e("ScanDebug", "Package scan cancelled locally: $packageName", cancelled)
@@ -391,11 +406,20 @@ class PackageScanner(
   if (trustedAppStore.isTrusted(name)) return trustedResult(name, scanSessionId, System.nanoTime())
   if (name == context.packageName) return null
   val info = try {
-   pm.getPackageInfo(name, PackageManager.GET_PERMISSIONS or PackageManager.GET_SERVICES or signingFlags())
+   loadPackageInfoForScan(name)
   } catch (_: PackageManager.NameNotFoundException) {
    return null
-  } catch (_: SecurityException) {
-   return result(name, name, null, null, ScanVerdict.NOT_SCANNED, listOf(context.getString(R.string.package_metadata_missing)), System.nanoTime()).copy(packageName = name, scanSessionId = scanSessionId)
+  } catch (cancelled: CancellationException) {
+   throw cancelled
+  } catch (error: Exception) {
+   val start = System.nanoTime()
+   Log.e(TAG, "Skipping installed package because PackageManager metadata retrieval failed: " + name, error)
+   val failed = result(
+    name, name, null, null, ScanVerdict.NOT_SCANNED,
+    listOf(context.getString(R.string.package_metadata_missing)), start
+   ).copy(packageName = name, scanSessionId = scanSessionId)
+   auditSafely(failed, start, scanSessionId)
+   return failed
   }
   val appInfo = info.applicationInfo ?: return null
   // Direct package lookup remains restricted to user-installed apps. Platform packages
@@ -957,7 +981,52 @@ class PackageScanner(
   loadTrustedSignerDigests()
  }
 
+ /**
+  * Fetches only the package fields consumed by risk analysis. Signing data is
+  * intentionally requested in a separate guarded PackageManager call because
+  * some OEM package providers fail when signing and component metadata are
+  * requested together.
+  */
+ private fun loadPackageInfoForScan(packageName: String): PackageInfo {
+  val scanFlags = PackageManager.GET_PERMISSIONS or PackageManager.GET_SERVICES or
+   PackageManager.GET_ACTIVITIES or PackageManager.GET_RECEIVERS or PackageManager.GET_PROVIDERS
+  val info = getPackageInfoCompat(packageName, scanFlags)
+  val signerInfo = loadPackageSigningInfo(packageName)
+  if (signerInfo != null) {
+   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+    info.signingInfo = signerInfo.signingInfo
+   } else {
+    @Suppress("DEPRECATION")
+    run { info.signatures = signerInfo.signatures }
+   }
+  }
+  return info
+ }
+
+ private fun getPackageInfoCompat(packageName: String, flags: Int): PackageInfo =
+  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+   pm.getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(flags.toLong()))
+  } else {
+   @Suppress("DEPRECATION")
+   pm.getPackageInfo(packageName, flags)
+  }
+
+ /** Signing metadata is optional for the scan; unreadable signers never abort package enumeration. */
+ private fun loadPackageSigningInfo(packageName: String): PackageInfo? = try {
+  getPackageInfoCompat(packageName, signingFlags())
+ } catch (error: Exception) {
+  Log.w(TAG, "Package signing metadata unavailable for " + packageName + "; scanning without signer trust.", error)
+  null
+ }
+
  /** Trust is based on certificate equality with the installed Play Services/Play Store signers. */
+ private fun isSignedByKnownTrustedCertificate(packageName: String): Boolean {
+  val trusted = trustedSignerDigests
+  if (trusted.isEmpty()) return false
+  val signerInfo = loadPackageSigningInfo(packageName) ?: return false
+  return signingCertificateDigests(signerInfo).any { it in trusted }
+ }
+
  private fun isSignedByKnownTrustedCertificate(info: PackageInfo): Boolean {
   val trusted = trustedSignerDigests
   if (trusted.isEmpty()) return false
@@ -966,11 +1035,7 @@ class PackageScanner(
 
  private fun loadTrustedSignerDigests(): Set<String> =
   TRUSTED_CERTIFICATE_ANCHOR_PACKAGES.flatMap { packageName ->
-   val anchor = try {
-    pm.getPackageInfo(packageName, signingFlags())
-   } catch (_: Exception) {
-    null
-   }
+   val anchor = loadPackageSigningInfo(packageName)
    anchor?.let(::signingCertificateDigests).orEmpty()
   }.toSet()
 
