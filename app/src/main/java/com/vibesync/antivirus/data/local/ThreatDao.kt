@@ -85,7 +85,7 @@ interface ThreatDao {
    AND state.operation_type IN ('FULL_DEVICE','DEEP_SCAN','INSTALLED_APPS','SELECTED_FILE','INSTALLED_PACKAGE','SELECTED_FOLDER')
   ORDER BY session.started_at DESC LIMIT 1""")
  suspend fun latestCompletedManualScanState(): ScanSessionState?
- @Insert(onConflict = OnConflictStrategy.IGNORE)
+ @Insert(onConflict = OnConflictStrategy.REPLACE)
  suspend fun insertScanSessionItem(item: ScanSessionItemEntity)
  @Query("SELECT item_key FROM scan_session_items WHERE session_id = :sessionId")
  suspend fun scanSessionItemKeys(sessionId: String): List<String>
