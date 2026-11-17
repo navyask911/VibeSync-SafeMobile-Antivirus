@@ -56,17 +56,8 @@ object SafTreeWalker {
                         }
                         child.isFile && visitedFiles.add(childUri.toString()) -> {
                             inspectedFiles += 1
-                            // Read document metadata via DocumentFile's standard SAF API.
-                            // Keep scanning even when a provider rejects optional name/size metadata.
-                            val childName = try { child.name } catch (error: Exception) {
-                                Log.w("ScanDebug", "Could not read SAF display name for " + childUri, error)
-                                null
-                            }
-                            val childSizeBytes = try { child.length().coerceAtLeast(0L) } catch (error: Exception) {
-                                Log.w("ScanDebug", "Could not read SAF size for " + childUri, error)
-                                -1L
-                            }
-                            Log.v("ScanDebug", "Enumerated SAF document '" + childName.orEmpty() + "' (" + childSizeBytes + " bytes).")
+                            // Keep enumeration independent of optional provider name/size metadata.
+                            Log.v("ScanDebug", "Enumerated SAF document: " + childUri)
                             if (child.canRead()) yield(child)
                             else onFileError(childUri, SecurityException("The selected SAF document is not readable."))
                         }
