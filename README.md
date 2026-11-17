@@ -2,7 +2,7 @@
   <img src="docs/assets/safemobile-shield.svg" alt="SafeMobile Antivirus shield logo" width="116" height="116">
 </p>
 
-<h1 align="center">SafeMobile Antivirus</h1>
+<h1 align="center">VibeSync SafeMobile Antivirus</h1>
 
 <p align="center">
   <strong>Cybersecurity that stays on your device.</strong><br>
