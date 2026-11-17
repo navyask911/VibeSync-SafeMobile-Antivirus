@@ -205,8 +205,9 @@ class ScanForegroundService : Service() {
   const val OP_INSTALLED_PACKAGE = "INSTALLED_PACKAGE"
   const val OP_SELECTED_FOLDER = "SELECTED_FOLDER"
   /**
-   * Intent extras below are strings/booleans only. Never pass PackageInfo,
-   * ApplicationInfo, Drawable, Bitmap, Bundle or other OEM parcelable metadata.
+   * Service commands intentionally carry only scalar values: operation name,
+   * manual-scan flag, URI text and package name. Keep framework metadata and
+   * UI objects out of Intent extras.
    */
   fun start(context: Context, operation: String, manual: Boolean = true, uri: String? = null, packageName: String? = null) {
    runCatching { DeepScanScheduler.resetBeforeManualScan(context) }
