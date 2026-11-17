@@ -83,7 +83,7 @@ if '.cancelAllWorkByTag(WORK_TAG)' not in scheduler or 'const val WORK_TAG = "Sc
 if ".addTag(WORK_TAG)" not in scheduler:
     errors.append("Periodic deep-scan work must carry the ScanWorker tag.")
 coordinator = source["coordinator"]
-if "ScanExecutionCoordinator.mutex.withLock" not in service or "ScanExecutionCoordinator.mutex.withLock" not in worker:
+if "ScanExecutionCoordinator.mutex.withLock" not in source["service"] or "ScanExecutionCoordinator.mutex.withLock" not in worker:
     errors.append("Foreground and periodic scans must share the process scan mutex.")
 service = source["service"]
 if "operation == OP_RESUME || operation == null" not in service:
