@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Static release guard for SafeMobile v1.10.4 integrity, 16 KB and edge-to-edge requirements."""
+"""Static release guard for SafeMobile v1.10.5 scan, SAF, 16 KB and edge-to-edge requirements."""
 from pathlib import Path
 import re
 import sys
@@ -12,6 +12,16 @@ FILES = {
     "verifier": "app/src/main/java/com/vibesync/antivirus/core/security/SecurityVerifier.kt",
     "baseline": "app/src/main/java/com/vibesync/antivirus/core/security/LocalBaselineTrust.kt",
     "score": "app/src/main/java/com/vibesync/antivirus/core/security/DeviceSecurityScore.kt",
+    "worker": "app/src/main/java/com/vibesync/antivirus/core/worker/DeepScanWorker.kt",
+    "postInstallWorker": "app/src/main/java/com/vibesync/antivirus/core/worker/MultiLayerScanWorker.kt",
+    "scheduler": "app/src/main/java/com/vibesync/antivirus/core/worker/DeepScanScheduler.kt",
+    "service": "app/src/main/java/com/vibesync/antivirus/core/worker/ScanForegroundService.kt",
+    "dao": "app/src/main/java/com/vibesync/antivirus/data/local/ThreatDao.kt",
+    "repository": "app/src/main/java/com/vibesync/antivirus/data/repository/ThreatRepository.kt",
+    "coordinator": "app/src/main/java/com/vibesync/antivirus/core/worker/ScanExecutionCoordinator.kt",
+    "packageScanner": "app/src/main/java/com/vibesync/antivirus/core/engine/PackageScanner.kt",
+    "banner": "app/src/main/java/com/vibesync/antivirus/presentation/AdMobBanner.kt",
+    "proguard": "app/proguard-rules.pro",
 }
 errors = []
 source = {}
@@ -26,10 +36,10 @@ gradle = source["gradle"]
 version_name = re.search(r'\bversionName\s*=\s*"([^"]+)"', gradle)
 version_code = re.search(r"\bversionCode\s*=\s*(\d+)", gradle)
 ndk = re.search(r'\bndkVersion\s*=\s*"([^"]+)"', gradle)
-if not version_name or version_name.group(1) != "1.10.4":
-    errors.append("Gradle versionName must be 1.10.4.")
-if not version_code or version_code.group(1) != "20261156":
-    errors.append("Gradle versionCode must be 20261156.")
+if not version_name or version_name.group(1) != "1.10.5":
+    errors.append("Gradle versionName must be 1.10.5.")
+if not version_code or version_code.group(1) != "20261159":
+    errors.append("Gradle versionCode must be 20261159.")
 if not ndk or tuple(int(part) for part in ndk.group(1).split(".")[:1]) < (28,):
     errors.append("Gradle must pin Android NDK r28 or higher.")
 if "com.google.ai.edge.litert:litert:1.4.2" not in gradle:
@@ -60,6 +70,65 @@ if "endpoint.isBlank() || !validatedInternet" not in baseline:
     errors.append("Local fallback must apply when the remote URL is absent or internet is not validated.")
 if "LOCAL_BASELINE_PASSED" not in source["verifier"] or "applyLocalBaselineFallback" not in source["verifier"]:
     errors.append("SecurityVerifier does not publish the local-baseline fallback result.")
+package_scanner = source["packageScanner"]
+if 'Log.e("SafeMobileScan", "Publish failed", error)' not in package_scanner:
+    errors.append("Package scan result publication failures must be isolated and logged.")
+if "OnConflictStrategy.REPLACE" not in source["dao"] or "insertScanSessionItem" not in source["dao"]:
+    errors.append("Scan-session item persistence must use REPLACE on Room conflicts.")
+if "contentResolver.query(" in source["repository"] or "fromSingleUri(" in source["repository"]:
+    errors.append("SAF scanning must not query or request optional single-document metadata.")
+if "contentResolver.openInputStream(uri)" not in source["repository"]:
+    errors.append("SAF payloads must be read through ContentResolver.openInputStream().")
+if 'Log.e("SafeMobileScan", "SAF file scan failed; continuing with the next document: $uri", error)' not in source["repository"]:
+    errors.append("SAF read failures must be logged and isolated to the current document.")
+if "-keep @androidx.room.Entity class * { *; }" not in source["proguard"]:
+    errors.append("R8 must keep Room entity classes and members.")
+if "return try" not in source["worker"]:
+    errors.append("DeepScanWorker must wrap the entire doWork body in a top-level try/catch.")
+if "return try" not in source["postInstallWorker"] or 'Log.e("SafeMobileScan", "Worker CRASHED", error)' not in source["postInstallWorker"]:
+    errors.append("The post-install scan worker must contain uncaught exceptions and return Result.failure().")
+if "ScanExecutionCoordinator.mutex.withLock" not in source["postInstallWorker"]:
+    errors.append("Post-install scans must share the process scan mutex with foreground and periodic scans.")
+banner = source["banner"]
+if "AdSize.LEADERBOARD" not in banner or "adWidthDp >= 970" not in banner:
+    errors.append("AdMob banner must use LEADERBOARD at the 970 dp width threshold.")
+worker = source["worker"]
+if 'Log.d("ScanDebug", "Worker STARTED for: $tags")' not in worker:
+    errors.append("DeepScanWorker must log its WorkManager tags when it starts.")
+if 'Log.e("ScanDebug", "Worker CRASHED", error)' not in worker:
+    errors.append("DeepScanWorker must log caught worker failures.")
+if 'Log.d("ScanDebug", "Worker FINISHED with result: $result")' not in worker:
+    errors.append("DeepScanWorker must log its terminal result.")
+if "clearScanSessionStateCheckpoints()" not in worker:
+    errors.append("DeepScanWorker must clear Room checkpoints before a fresh session.")
+scheduler = source["scheduler"]
+if ".setRequiredNetworkType(NetworkType.NOT_REQUIRED)" not in scheduler:
+    errors.append("Periodic scans must explicitly use NetworkType.NOT_REQUIRED.")
+if '.cancelAllWorkByTag(WORK_TAG)' not in scheduler or 'const val WORK_TAG = "ScanWorker"' not in scheduler:
+    errors.append("New scans must reset stale tagged ScanWorker work.")
+if ".addTag(WORK_TAG)" not in scheduler:
+    errors.append("Periodic deep-scan work must carry the ScanWorker tag.")
+coordinator = source["coordinator"]
+if "Mutex()" not in coordinator:
+    errors.append("Foreground and periodic scans must share a coroutine mutex.")
+if "ScanExecutionCoordinator.mutex.withLock" not in source["service"] or "ScanExecutionCoordinator.mutex.withLock" not in worker:
+    errors.append("Foreground and periodic scans must share the process scan mutex.")
+service = source["service"]
+if "operation == OP_RESUME || operation == null" not in service:
+    errors.append("Only explicit/system service redelivery may resume an interrupted scan.")
+if "repo.clearScanSessionStateCheckpoints()" not in service:
+    errors.append("Fresh foreground scans must clear stale Room checkpoints.")
+dao = source["dao"]
+if '@Query("DELETE FROM scan_session_state")' not in dao or "suspend fun clearAllSessions()" not in dao:
+    errors.append("ThreatDao must expose clearAllSessions() for scan_session_state.")
+repository = source["repository"]
+if 'Log.d("ScanDebug", "Scanning: ${result.packageName ?: result.displayName}")' not in repository:
+    errors.append("Installed-app scan loops must emit per-item ScanDebug logs.")
+if 'Log.d("ScanDebug", "Scanning: ${file.displayName}")' not in repository:
+    errors.append("SAF file scan loops must emit per-item ScanDebug logs.")
+if "persistedUriPermissions" not in source["screen"] or "persistedReadGrants.isNotEmpty()" not in source["screen"]:
+    errors.append("Deep scan must revalidate persisted SAF read grants and reprompt when absent.")
+
 if "integrityCheckPassed" not in source["score"]:
     errors.append("Device Security Score does not consume the effective remote-or-local integrity result.")
 
@@ -67,4 +136,4 @@ if errors:
     print(f"Android release readiness FAILED ({len(errors)} issue(s)):")
     print("\n".join(f"- {error}" for error in errors), file=sys.stderr)
     sys.exit(1)
-print("Android release readiness passed: v1.10.4/20261156, NDK r28+, LiteRT 1.4.2, offline baseline and edge-to-edge.")
+print("Android release readiness passed: v1.10.5/20261159, NDK r28+, LiteRT 1.4.2, offline scan work and SAF grants.")

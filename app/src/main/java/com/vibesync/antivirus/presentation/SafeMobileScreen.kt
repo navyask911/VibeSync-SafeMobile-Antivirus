@@ -489,7 +489,9 @@ import kotlinx.coroutines.launch
   if (result.resultCode != Activity.RESULT_OK || data == null || treeUri == null) return@rememberLauncherForActivityResult
   val takeFlags = data.flags and (Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
   val resolver = context.contentResolver
-  val alreadyPersisted = resolver.persistedUriPermissions.any { it.uri == treeUri && it.isReadPermission }
+  val alreadyPersisted = runCatching {
+   resolver.persistedUriPermissions.any { it.uri == treeUri && it.isReadPermission }
+  }.getOrDefault(false)
   if (!alreadyPersisted) {
    if (takeFlags == 0) {
     android.util.Log.w("SafeMobileDeepScan", "The document picker returned no persistable permission flags.")
@@ -503,7 +505,9 @@ import kotlinx.coroutines.launch
     }
    }
   }
-  val persisted = resolver.persistedUriPermissions.any { it.uri == treeUri && it.isReadPermission }
+  val persisted = runCatching {
+   resolver.persistedUriPermissions.any { it.uri == treeUri && it.isReadPermission }
+  }.getOrDefault(false)
   savedDeepScanTreeUri = treeUri.takeIf { persisted }
   if (!persisted) {
    deepScanPreferences.edit().remove("tree_uri").apply()
@@ -833,21 +837,19 @@ import kotlinx.coroutines.launch
      )
     },
     bottomBar = {
-     Column {
-      if (adMobState.adsReady && !adMobState.isPro) AdMobBanner(adMobManager)
-      if (selectedDestination in setOf("home", "scan", "tools", "settings")) {
-       V17BottomNavigationBar(
-        selectedTab = if (activeTopTab == "dashboard") "home" else activeTopTab,
-        isDark = appTheme != com.vibesync.antivirus.ui.theme.AppTheme.LIGHT,
-        onSelect = { navigateToDestination(it) }
-       )
-      }
+     if (selectedDestination in setOf("home", "scan", "tools", "settings")) {
+      V17BottomNavigationBar(
+       selectedTab = if (activeTopTab == "dashboard") "home" else activeTopTab,
+       isDark = appTheme != com.vibesync.antivirus.ui.theme.AppTheme.LIGHT,
+       onSelect = { navigateToDestination(it) }
+      )
      }
     },
     snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
     containerColor = MaterialTheme.colorScheme.background
    ) { scaffoldPadding ->
     Column(Modifier.fillMaxSize().padding(scaffoldPadding)) {
+     if (adMobState.adsReady && !adMobState.isPro) AdMobBanner(adMobManager)
    val navScreenContent: @Composable () -> Unit = {
        Box(Modifier.fillMaxSize()) {
         when (selectedDestination) {
@@ -910,11 +912,16 @@ import kotlinx.coroutines.launch
           onStartQuickScan = { requestPrivacyAcknowledgement { vm.scanInstalled() } },
           onStartDeepScan = { requestPrivacyAcknowledgement {
            val savedTree = savedDeepScanTreeUri
-           val hasPersistedGrant = savedTree != null &&
-            context.contentResolver.persistedUriPermissions.any { it.uri == savedTree && it.isReadPermission }
-           if (hasPersistedGrant && savedTree != null) {
+           val persistedReadGrants = runCatching {
+            context.contentResolver.persistedUriPermissions.filter { it.isReadPermission }
+           }.getOrDefault(emptyList())
+           val hasPersistedGrant = savedTree != null && persistedReadGrants.any { it.uri == savedTree }
+           if (savedTree != null && persistedReadGrants.isNotEmpty() && hasPersistedGrant) {
             vm.scanFolderTree(savedTree)
            } else {
+            if (persistedReadGrants.isEmpty()) {
+             android.util.Log.w("SafeMobileDeepScan", "No persisted SAF read permissions; asking the user to select the deep-scan folder again.")
+            }
             savedDeepScanTreeUri = null
             deepScanPreferences.edit().remove("tree_uri").apply()
             val pickerIntent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {

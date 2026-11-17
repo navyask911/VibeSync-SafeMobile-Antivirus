@@ -14,10 +14,6 @@ import com.vibesync.antivirus.core.billing.ProEntitlementStore
 import com.vibesync.antivirus.core.billing.SafeMobileBillingManager
 import android.util.Log
 import androidx.room.Room
-import androidx.work.Constraints
-import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkManager
 import com.vibesync.antivirus.core.crypto.EncryptedHashStore
 import com.vibesync.antivirus.core.crypto.HashCalculator
 import com.vibesync.antivirus.core.engine.PackageScanner
@@ -25,9 +21,9 @@ import com.vibesync.antivirus.core.engine.BundledYaraEngine
 import com.vibesync.antivirus.core.hashdb.HashDatabaseManager
 import com.vibesync.antivirus.core.posture.DevicePostureMonitor
 import com.vibesync.antivirus.core.posture.DevicePostureRepository
-import com.vibesync.antivirus.core.worker.DeepScanWorker
 import com.vibesync.antivirus.core.worker.ModelUpdateScheduler
 import com.vibesync.antivirus.core.worker.HashDatabaseSyncScheduler
+import com.vibesync.antivirus.core.worker.DeepScanScheduler
 import com.vibesync.antivirus.core.worker.LocalDefinitionLoader
 import com.vibesync.antivirus.core.worker.ThreatFeedSyncScheduler
 import com.vibesync.antivirus.data.local.ThreatDatabase
@@ -41,7 +37,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import java.util.concurrent.TimeUnit
 
 class SafeMobileApp : Application() {
     lateinit var database: ThreatDatabase
@@ -166,12 +161,7 @@ class SafeMobileApp : Application() {
             }.getOrDefault(false)
             ModelUpdateScheduler.ensureCadence(this@SafeMobileApp, pro)
         }
-        val request = PeriodicWorkRequestBuilder<DeepScanWorker>(6, TimeUnit.HOURS)
-            .setConstraints(Constraints.Builder().setRequiresBatteryNotLow(true).build())
-            .build()
-        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
-            DeepScanWorker.UNIQUE_NAME, ExistingPeriodicWorkPolicy.UPDATE, request
-        )
+        DeepScanScheduler.ensureScheduled(this)
     }
 
     override fun onTerminate() {

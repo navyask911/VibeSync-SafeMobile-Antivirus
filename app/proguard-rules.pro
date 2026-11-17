@@ -14,7 +14,11 @@
 -keep class com.vibesync.antivirus.engine.ml.** { *; }
 # --- Room Database ---
 -keep class * extends androidx.room.RoomDatabase
--keep @androidx.room.Entity class *
+-keep @androidx.room.Entity class * { *; }
+-keep class com.vibesync.antivirus.data.local.ScanSessionState { *; }
+-keep class com.vibesync.antivirus.data.local.ScanSessionItemEntity { *; }
+-keep class com.vibesync.antivirus.data.local.ScanSessionEntity { *; }
+-keep class com.vibesync.antivirus.data.local.ScanAudit { *; }
 # --- YARA & Native ---
 -keep class com.vibesync.antivirus.core.engine.yara.** { *; }
 -keep class com.vibesync.antivirus.core.engine.BundledYaraEngine { *; }

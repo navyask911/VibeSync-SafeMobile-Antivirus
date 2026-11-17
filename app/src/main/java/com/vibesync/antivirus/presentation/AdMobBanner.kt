@@ -30,20 +30,27 @@ import com.google.android.libraries.ads.mobile.sdk.common.LoadAdError
 import com.vibesync.antivirus.R
 import com.vibesync.antivirus.core.ads.AdMobManager
 
-/** Home-only adaptive banner. Re-checks Pro entitlement and UMP consent immediately before load. */
+/** Top-of-content banner. Re-checks Pro entitlement and UMP consent immediately before load. */
 @Composable
 internal fun AdMobBanner(manager: AdMobManager) {
     val context = LocalContext.current
-    val widthDp = LocalConfiguration.current.screenWidthDp.coerceAtLeast(1)
-    val adView = remember(context, widthDp) { AdView(context) }
+    val adWidthDp = LocalConfiguration.current.screenWidthDp
+    val adSize = remember(context, adWidthDp) {
+        if (adWidthDp >= 970) {
+            AdSize.LEADERBOARD
+        } else {
+            AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(context, adWidthDp.coerceAtLeast(1))
+        }
+    }
+    val adHeightDp = adSize.height.dp
+    val adView = remember(context, adWidthDp, adSize) { AdView(context) }
     var loaded by remember(adView) { mutableStateOf(false) }
 
-    LaunchedEffect(adView, manager, widthDp) {
+    LaunchedEffect(adView, manager, adWidthDp, adSize) {
         loaded = false
         if (!manager.canRequestAdsNow()) return@LaunchedEffect
         runCatching {
-            val size = AdSize.getLargeAnchoredAdaptiveBannerAdSize(context, widthDp)
-            val request = BannerAdRequest.Builder(manager.bannerUnitId, size).build()
+            val request = BannerAdRequest.Builder(manager.bannerUnitId, adSize).build()
             adView.loadAd(request, object : AdLoadCallback<BannerAd> {
                 override fun onAdLoaded(ad: BannerAd) { loaded = true }
                 override fun onAdFailedToLoad(adError: LoadAdError) { loaded = false }
@@ -65,12 +72,12 @@ internal fun AdMobBanner(manager: AdMobManager) {
                 overflow = TextOverflow.Ellipsis
             )
             Surface(
-                modifier = Modifier.fillMaxWidth().height(56.dp),
+                modifier = Modifier.fillMaxWidth().height(adHeightDp),
                 color = MaterialTheme.colorScheme.surface
             ) {
                 AndroidView(
                     factory = { adView },
-                    modifier = Modifier.fillMaxWidth().height(56.dp),
+                    modifier = Modifier.fillMaxWidth().height(adHeightDp),
                     update = {}
                 )
             }

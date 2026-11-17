@@ -21,6 +21,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import java.util.UUID
 
@@ -53,29 +54,63 @@ class ScanForegroundService : Service() {
   if (scanJob?.isActive == true) return START_STICKY
   stopRequested = false
   scanJob = scope.launch {
-   runScan(intent?.getStringExtra(EXTRA_OPERATION_TYPE), intent?.getStringExtra(EXTRA_SOURCE_URI),
-    intent?.getStringExtra(EXTRA_PACKAGE_NAME), intent?.getBooleanExtra(EXTRA_MANUAL_SCAN, true) ?: true)
+   try {
+    ScanExecutionCoordinator.mutex.withLock {
+     runScan(intent?.getStringExtra(EXTRA_OPERATION_TYPE), intent?.getStringExtra(EXTRA_SOURCE_URI),
+      intent?.getStringExtra(EXTRA_PACKAGE_NAME), intent?.getBooleanExtra(EXTRA_MANUAL_SCAN, true) ?: true)
+    }
+   } catch (cancelled: CancellationException) {
+    throw cancelled
+   } catch (error: Exception) {
+    Log.e("SafeMobileScan", "Worker CRASHED", error)
+    ScanForegroundEvents.publishFailed(null)
+    stopServiceAfterRun()
+   }
   }
   return START_STICKY
  }
  private suspend fun runScan(operation: String?, uriValue: String?, packageValue: String?, manual: Boolean) {
-  val repo = (application as? SafeMobileApp)?.repository ?: run { stopServiceAfterRun(); return }
+  Log.d("ScanDebug", "Worker STARTED for: ScanForegroundService/${operation ?: OP_RESUME}")
+  val repo = (application as? SafeMobileApp)?.repository ?: run {
+   val error = IllegalStateException("SafeMobileApp repository is unavailable.")
+   Log.e("ScanDebug", "Worker CRASHED", error)
+   Log.d("ScanDebug", "Worker FINISHED with result: failure")
+   stopServiceAfterRun()
+   return
+  }
   var sessionId: String? = null
   try {
-   val previous = repo.latestIncompleteManualScanState()
-   val session = if (previous != null) {
-    repo.resumeScanSession(previous.sessionId); previous
+   val session = if (operation == OP_RESUME || operation == null) {
+    val previous = repo.latestIncompleteManualScanState()
+    if (previous == null) {
+     if (operation == OP_RESUME) {
+      val error = IllegalStateException("No interrupted scan session is available to resume.")
+      Log.e("ScanDebug", "Worker CRASHED", error)
+      ScanForegroundEvents.publishFailed(null)
+     }
+     Log.d("ScanDebug", "Worker FINISHED with result: no resumable session")
+     return
+    }
+    Log.d("ScanDebug", "Resuming interrupted scan session: ${previous.sessionId}")
+    repo.resumeScanSession(previous.sessionId)
+    previous
    } else {
-    val op = operation?.takeIf { it != OP_RESUME } ?: run { stopServiceAfterRun(); return }
+    // ACTION_START represents a fresh request; don't attach it to an unrelated stale session.
+    repo.clearScanSessionStateCheckpoints()
+    Log.d("ScanDebug", "Cleared stale Room scan checkpoints before starting a new scan.")
     val newId = UUID.randomUUID().toString()
-    val kind = if (op == OP_DEEP_SCAN || op == OP_SELECTED_FOLDER) "DEEP_SCAN" else "FULL_SCAN"
-    repo.startScanSession(newId, kind, op, uriValue, packageValue, manual)
+    val kind = if (operation == OP_DEEP_SCAN || operation == OP_SELECTED_FOLDER) "DEEP_SCAN" else "FULL_SCAN"
+    repo.startScanSession(newId, kind, operation, uriValue, packageValue, manual)
     repo.scanSessionState(newId) ?: error("Room scan state missing.")
    }
    sessionId = session.sessionId
+   Log.d("ScanDebug", "Active scan session: ${session.sessionId}; operation=${session.operationType}")
    repo.clearSkippedSafFileCount(session.sessionId)
    if (stopRequested) {
-    repo.cancelScanSession(session.sessionId); ScanForegroundEvents.publishCancelled(); return
+    repo.cancelScanSession(session.sessionId)
+    ScanForegroundEvents.publishCancelled()
+    Log.d("ScanDebug", "Worker FINISHED with result: cancelled")
+    return
    }
    when (session.operationType) {
     OP_FULL_DEVICE, OP_DEEP_SCAN -> repo.scanFullForSession(session.sessionId)
@@ -86,7 +121,10 @@ class ScanForegroundService : Service() {
     else -> error("Unsupported scan operation: " + session.operationType)
    }
    if (stopRequested) {
-    repo.cancelScanSession(session.sessionId); ScanForegroundEvents.publishCancelled(); return
+    repo.cancelScanSession(session.sessionId)
+    ScanForegroundEvents.publishCancelled()
+    Log.d("ScanDebug", "Worker FINISHED with result: cancelled")
+    return
    }
    val results = repo.loadScanSessionResults(session.sessionId).filter { repo.isReviewableResult(it) }
     .sortedBy { when (it.verdict) {
@@ -100,6 +138,7 @@ class ScanForegroundService : Service() {
     skippedFiles = repo.skippedSafFileCount(session.sessionId)).copy(signedDefinitionsUsed = repo.currentHashDatabaseCapability()?.enabled == true)
    repo.saveScanSummary(summary)
    repo.completeScanSession(session.sessionId, summary.completedAt)
+   Log.d("ScanDebug", "Worker FINISHED with result: success; scanned=${(summary.appCount + summary.fileCount)}")
    ScanForegroundEvents.publish(ScanCompletedEvent(session.sessionId, results, summary, session.isManual))
    repo.clearSkippedSafFileCount(session.sessionId)
   } catch (timeout: TimeoutCancellationException) {
@@ -109,13 +148,18 @@ class ScanForegroundService : Service() {
     runCatching { repo.failScanSession(id) }
      .onFailure { Log.e("SafeMobileScan", "Could not persist timed-out scan state.", it) }
    }
+   Log.e("ScanDebug", "Worker CRASHED", timeout)
    Log.e("SafeMobileScan", "Installed-app scan exceeded the 300000 ms timeout.", timeout)
+   Log.d("ScanDebug", "Worker FINISHED with result: timeout failure")
    ScanForegroundEvents.publishFailed(sessionId)
   } catch (cancelled: CancellationException) {
    sessionId?.let { id ->
-    if (stopRequested) { runCatching { repo.cancelScanSession(id) }; ScanForegroundEvents.publishCancelled() }
-    else runCatching { repo.interruptScanSession(id) }
+    if (stopRequested) {
+     runCatching { repo.cancelScanSession(id) }
+     ScanForegroundEvents.publishCancelled()
+    } else runCatching { repo.interruptScanSession(id) }
    }
+   Log.d("ScanDebug", "Worker FINISHED with result: cancelled")
    throw cancelled
   } catch (error: Exception) {
    runCatching { repo.clearScanSessionStateCheckpoints() }
@@ -124,7 +168,9 @@ class ScanForegroundService : Service() {
     runCatching { repo.failScanSession(id) }
      .onFailure { Log.e("SafeMobileScan", "Could not persist failed scan state.", it) }
    }
+   Log.e("ScanDebug", "Worker CRASHED", error)
    Log.e("SafeMobileScan", "Scan failed; corrupted Room scan checkpoints were cleared.", error)
+   Log.d("ScanDebug", "Worker FINISHED with result: failure")
    ScanForegroundEvents.publishFailed(sessionId)
   } finally { stopServiceAfterRun() }
  }
@@ -159,6 +205,8 @@ class ScanForegroundService : Service() {
   const val OP_INSTALLED_PACKAGE = "INSTALLED_PACKAGE"
   const val OP_SELECTED_FOLDER = "SELECTED_FOLDER"
   fun start(context: Context, operation: String, manual: Boolean = true, uri: String? = null, packageName: String? = null) {
+   runCatching { DeepScanScheduler.resetBeforeManualScan(context) }
+    .onFailure { Log.e("ScanDebug", "Could not reset tagged WorkManager scan jobs before a new scan.", it) }
    val i = Intent(context, ScanForegroundService::class.java).setAction(ACTION_START)
     .putExtra(EXTRA_OPERATION_TYPE, operation).putExtra(EXTRA_MANUAL_SCAN, manual)
    uri?.let { i.putExtra(EXTRA_SOURCE_URI, it) }

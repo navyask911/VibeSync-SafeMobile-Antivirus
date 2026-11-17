@@ -64,7 +64,7 @@ internal suspend fun publishScanResultSafely(
  packageName: String,
  publish: suspend () -> Unit,
  logFailure: (String, Throwable) -> Unit = { pkg, error ->
-  Log.e("ScanDebug", "Failed to publish result for $pkg", error)
+  Log.e("SafeMobileScan", "Publish failed", error)
  }
 ) {
  try {
