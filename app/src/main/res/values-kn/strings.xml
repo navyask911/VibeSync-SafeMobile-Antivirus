@@ -41,6 +41,7 @@
     <string name="file_stream_failed">Android ಆಯ್ದ ಫೈಲ್ ತೆರೆಯಲಾಗಲಿಲ್ಲ.</string>
     <string name="debug_certificate">ಪ್ರಮಾಣಪತ್ರದ ವಿಷಯವು Android ಡಿಬಗ್ ಪ್ರಮಾಣಪತ್ರವನ್ನು ಹೋಲುತ್ತದೆ.</string>
     <string name="scan_complete">ಸ್ಕ್ಯಾನ್ ಪೂರ್ಣಗೊಂಡಿದೆ. ಸ್ಥಳೀಯ ಹೊಂದಾಣಿಕೆ ಇಲ್ಲದಿರುವುದು ಫೈಲ್ ಸುರಕ್ಷಿತವೆಂಬ ಭರವಸೆ ಅಲ್ಲ.</string>
+    <string name="scan_complete_skipped">ಸ್ಕ್ಯಾನ್ ಪೂರ್ಣಗೊಂಡಿದೆ. ಆಪರೇಟಿಂಗ್ ಸಿಸ್ಟಮ್ ನಿರ್ಬಂಧಗಳಿಂದ %1$d ಫೈಲ್‌ಗಳನ್ನು ಬಿಟ್ಟುಬಿಡಲಾಗಿದೆ.</string>
     <string name="scan_failed">ಸ್ಕ್ಯಾನ್ ವಿಫಲವಾಗಿದೆ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.</string>
     <string name="ads_label">ಜಾಹೀರಾತು</string>
     <string name="privacy_options">ಗೌಪ್ಯತೆ / ಜಾಹೀರಾತು ಆಯ್ಕೆಗಳು</string>

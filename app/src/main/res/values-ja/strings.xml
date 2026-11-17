@@ -40,6 +40,7 @@
 <string name="file_stream_failed">選択したファイルを Android で開けませんでした。</string>
 <string name="debug_certificate">Android デバッグ証明書のように見えます。</string>
 <string name="scan_complete">スキャン完了。ローカル一致なしは安全の保証ではありません。</string>
+<string name="scan_complete_skipped">スキャンが完了しました。OS の制限により %1$d 個のファイルをスキップしました。</string>
 <string name="scan_failed">スキャンに失敗しました。もう一度お試しください。</string>
 <string name="ads_label">広告</string>
 <string name="privacy_options">プライバシー / 広告設定</string>
