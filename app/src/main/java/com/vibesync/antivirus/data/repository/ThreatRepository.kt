@@ -75,7 +75,12 @@ class ThreatRepository(
  fun clearSkippedSafFileCount(sessionId: String) { skippedSafFileCounts.remove(sessionId) }
 
  suspend fun clearScanSessionStateCheckpoints() = withContext(Dispatchers.IO) {
-  database.threatDao().clearAllSessions()
+  database.withTransaction {
+   val dao = database.threatDao()
+   dao.clearAllSessions()
+   // Once state rows are removed, any orphaned IN_PROGRESS session is no longer resumable.
+   dao.markInProgressAsInterrupted()
+  }
  }
 
  private suspend fun scanSafFile(
