@@ -148,7 +148,8 @@ viewmodel = source["viewmodel"]
 inventory_model = source["inventoryModel"]
 scan_result = source["scanResult"]
 for label, text_value in (("SafeMobileViewModel", viewmodel), ("ScanResult", scan_result)):
-    if re.search(r"\\b(PackageInfo|ApplicationInfo|Drawable|Bitmap|Bundle|Parcelable|SavedStateHandle)\\b", text_value):
+    forbidden = ("PackageInfo", "ApplicationInfo", "Drawable", "Bitmap", "Bundle", "Parcelable", "SavedStateHandle")
+    if any(token in text_value for token in forbidden):
         errors.append(f"{label} must not retain PackageManager, graphics, Bundle or saved-state parcelable objects.")
 required_inventory_fields = (
     "val packageName: String", "val appLabel: String", "val verdict: String",
@@ -160,14 +161,20 @@ if "pending.map { packageName ->" not in package_scanner or "val pending = all.f
     errors.append("PackageInfo records must be collapsed to package-name strings before worker coroutine fan-out.")
 for label in ("service", "foregroundNotifications"):
     text_value = source[label]
-    if re.search(r"\\b(PackageInfo|ApplicationInfo|Drawable|Bitmap|Parcelable|Bundle)\\b|putParcelable\\s*\\(|putSerializable\\s*\\(", text_value):
+    forbidden = ("PackageInfo", "ApplicationInfo", "Drawable", "Bitmap", "Parcelable", "Bundle", "putParcelable(", "putSerializable(")
+    if any(token in text_value for token in forbidden):
         errors.append(f"{label} must not pass Android package/graphics objects or parcelables through service/PendingIntent payloads.")
 room_scalar_types = {"String", "Int", "Long", "Boolean", "Float", "Double"}
 for label in ("scanItemEntity", "scanAudit", "scanSessionEntity", "scanSessionState", "appScanCache"):
     entity_source = source[label]
-    if re.search(r"\\b(Bundle|Parcelable|Serializable|PackageInfo|ApplicationInfo|Drawable|Bitmap)\\b", entity_source):
+    forbidden = ("Bundle", "Parcelable", "Serializable", "PackageInfo", "ApplicationInfo", "Drawable", "Bitmap")
+    if any(token in entity_source for token in forbidden):
         errors.append(f"{label} must not contain Bundle, Parcelable, Serializable or Android framework columns.")
-    for field_type in re.findall(r"\\bval\\s+\\w+\\s*:\\s*([A-Za-z_][A-Za-z0-9_]*)", entity_source):
+    for line in entity_source.splitlines():
+        declaration = line.strip()
+        if not declaration.startswith("val ") or ":" not in declaration:
+            continue
+        field_type = declaration.split(":", 1)[1].split("=", 1)[0].strip().rstrip("?")
         if field_type not in room_scalar_types:
             errors.append(f"{label} contains a non-scalar Room column type: {field_type}.")
             break
