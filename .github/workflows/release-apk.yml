@@ -378,13 +378,13 @@ jobs:
           version_name="${{ steps.verify-aab.outputs.version_name }}"
           version_code="${{ steps.verify-aab.outputs.version_code }}"
           if [[ "${GITHUB_REF_TYPE:-}" == "branch" && "${GITHUB_REF_NAME:-}" == "main" ]]; then
-            if [[ "$version_name" != "1.10.5" || "$version_code" != "20261158" ]]; then
-              echo "SAFE STOP: main release trigger expected v1.10.5 / 20261158, got $version_name / $version_code." >&2
+            if [[ "$version_name" != "1.10.5" || "$version_code" != "20261159" ]]; then
+              echo "SAFE STOP: main release trigger expected v1.10.5 / 20261159, got $version_name / $version_code." >&2
               exit 1
             fi
           fi
           if [[ "${GITHUB_REF_TYPE:-}" == "tag" && "${GITHUB_REF_NAME:-}" == "v1.10.5" ]] ||
-             [[ "${GITHUB_REF_TYPE:-}" == "branch" && "${GITHUB_REF_NAME:-}" == "main" && "$version_name" == "1.10.5" && "$version_code" == "20261158" ]]; then
+             [[ "${GITHUB_REF_TYPE:-}" == "branch" && "${GITHUB_REF_NAME:-}" == "main" && "$version_name" == "1.10.5" && "$version_code" == "20261159" ]]; then
             tag="v1.10.5"
           elif [[ "${GITHUB_REF_TYPE:-}" == "tag" && "${GITHUB_REF_NAME:-}" == "v1.10.4" ]]; then
             tag="v1.10.4"
@@ -405,7 +405,7 @@ jobs:
           Built from commit ${GITHUB_SHA}.
           v1.6.1: Added new launcher icons and splash screen. Fixed text wrapping and added back navigation. Added inline Crown subscription toggle.
           v1.6.2: Accept all file types in the scan document picker for .txt/EICAR testing; preserve the originating screen when backing out of Pro; make the paywall and shared app toolbar wrap and scroll at larger font scales.
-          v1.10.5: Resets stale foreground scan sessions and tagged WorkManager scans, explicitly allows offline scan work, clears Room checkpoints before new sessions, adds worker/per-item ScanDebug logs, and revalidates persisted SAF read grants. Uses Play versionCode 20261158.
+          v1.10.5: Resets stale foreground scan sessions and tagged WorkManager scans, explicitly allows offline scan work, clears Room checkpoints before new sessions, adds worker/per-item ScanDebug logs, and revalidates persisted SAF read grants. Uses Play versionCode 20261159.
           v1.10.4: Fits the full VibeSync splash graphic without cropping, retains the white splash background and 3-second display, and replaces the in-app Top App Bar logo resource with the transparent 3D shield. Uses Play versionCode 20261156.
           v1.10.3: Uses portable SAF metadata columns with fallback, counts OS-restricted skipped files, caps SAF traversal to depth 10 and 1,000 files, reuses persisted tree permissions, blocks concurrent scans, and clears corrupted scan-session checkpoints after fatal exceptions. Uses Play versionCode 20261155.
           v1.10.2: Uses supervisorScope and IO-bound package tasks, isolates Room/UI result publication, runs hash/YARA work on Default, and times out stuck installed-app scans with a visible UI error. Uses Play versionCode 20261154.
