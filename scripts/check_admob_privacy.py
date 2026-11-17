@@ -115,8 +115,8 @@ if (
     or version_name_match is None
 ):
     errors.append("The Android app must declare a positive versionCode and a semantic versionName.")
-elif version_name_match.group(1) != "1.10.2" or int(version_code_match.group(1)) != 20261154:
-    errors.append("SafeMobile v1.10.2 must use versionName 1.10.2 and Play versionCode 20261154.")
+elif version_name_match.group(1) != "1.10.3" or int(version_code_match.group(1)) != 20261155:
+    errors.append("SafeMobile v1.10.3 must use versionName 1.10.3 and Play versionCode 20261155.")
 if "On-device Malware Scanning. Ad-supported Free Tier. No AdMob Ads with Pro." not in readme:
     errors.append("README must use the requested Free/Pro advertising tagline.")
 if "Ad-supported Free Tier" not in store or "Advertising ID" not in store or "IP address" not in store or "analytics" not in store:

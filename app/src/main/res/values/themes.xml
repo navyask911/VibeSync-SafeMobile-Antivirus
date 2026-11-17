@@ -15,10 +15,10 @@
     </style>
 
     <style name="Theme.SafeMobile.Splash" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">#FFFFFF</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_transparent</item>
-        <item name="windowSplashScreenIconBackgroundColor">#FFFFFF</item>
+        <item name="windowSplashScreenBackground">#0F2942</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_screen_vibesync</item>
+        <item name="windowSplashScreenIconBackgroundColor">#0F2942</item>
         <item name="postSplashScreenTheme">@style/Theme.SafeMobile</item>
-        <item name="android:windowBackground">#FFFFFF</item>
+        <item name="android:windowBackground">#0F2942</item>
     </style>
 </resources>
