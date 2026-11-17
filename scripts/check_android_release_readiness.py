@@ -172,8 +172,9 @@ for label in ("scanItemEntity", "scanAudit", "scanSessionEntity", "scanSessionSt
         errors.append(f"{label} must not contain Bundle, Parcelable, Serializable or Android framework columns.")
     for line in entity_source.splitlines():
         declaration = line.strip()
-        if not declaration.startswith("val ") or ":" not in declaration:
+        if "val " not in declaration or ":" not in declaration:
             continue
+        declaration = declaration.split("val ", 1)[1]
         field_type = declaration.split(":", 1)[1].split("=", 1)[0].strip().rstrip("?,")
         if field_type not in room_scalar_types:
             errors.append(f"{label} contains a non-scalar Room column type: {field_type}.")
