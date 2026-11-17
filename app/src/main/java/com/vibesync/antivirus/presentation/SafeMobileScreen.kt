@@ -490,19 +490,28 @@ import kotlinx.coroutines.launch
   val takeFlags = data.flags and (Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
   val resolver = context.contentResolver
   val alreadyPersisted = resolver.persistedUriPermissions.any { it.uri == treeUri && it.isReadPermission }
-  if (!alreadyPersisted && takeFlags != 0) {
-   try {
-    // takeFlags is explicitly masked to the only two permissions accepted by this API.
-   @SuppressLint("WrongConstant")
-   resolver.takePersistableUriPermission(treeUri, takeFlags)
-   } catch (error: SecurityException) {
-    android.util.Log.w("SafeMobileDeepScan", "The SAF provider rejected the selected tree permission flags.", error)
+  if (!alreadyPersisted) {
+   if (takeFlags == 0) {
+    android.util.Log.w("SafeMobileDeepScan", "The document picker returned no persistable permission flags.")
+   } else {
+    try {
+     // Persist exactly the READ/WRITE flags granted by the document picker.
+     @SuppressLint("WrongConstant")
+     resolver.takePersistableUriPermission(treeUri, takeFlags)
+    } catch (error: SecurityException) {
+     android.util.Log.w("SafeMobileDeepScan", "The SAF provider rejected the selected tree permission flags.", error)
+    }
    }
   }
   val persisted = resolver.persistedUriPermissions.any { it.uri == treeUri && it.isReadPermission }
   savedDeepScanTreeUri = treeUri.takeIf { persisted }
-  if (persisted) deepScanPreferences.edit().putString("tree_uri", treeUri.toString()).apply()
-  else deepScanPreferences.edit().remove("tree_uri").apply()
+  if (!persisted) {
+   deepScanPreferences.edit().remove("tree_uri").apply()
+   navigateToDestination("scan")
+   Toast.makeText(context, R.string.ui_folder_access_not_granted, Toast.LENGTH_LONG).show()
+   return@rememberLauncherForActivityResult
+  }
+  deepScanPreferences.edit().putString("tree_uri", treeUri.toString()).apply()
   navigateToDestination("scan")
   vm.scanFolderTree(treeUri)
  }

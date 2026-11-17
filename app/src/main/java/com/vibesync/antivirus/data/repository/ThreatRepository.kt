@@ -1,8 +1,6 @@
 package com.vibesync.antivirus.data.repository
 import android.content.Context
 import android.net.Uri
-import android.provider.OpenableColumns
-import android.provider.DocumentsContract
 import android.util.Log
 import com.vibesync.antivirus.R
 import com.vibesync.antivirus.core.locale.UiText
@@ -80,36 +78,43 @@ class ThreatRepository(
   database.threatDao().clearAllScanSessionStates()
  }
 
- private fun querySafDisplayName(uri: Uri, fallback: String): String {
-  fun read(projection: Array<String>): String? =
-   context.contentResolver.query(uri, projection, null, null, null)?.use { cursor ->
-    if (!cursor.moveToFirst()) null else {
-     val column = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-     if (column >= 0) cursor.getString(column)?.takeIf { it.isNotBlank() } else null
-    }
-   }
-
-  val safeProjection = arrayOf(
-   OpenableColumns.DISPLAY_NAME,
-   OpenableColumns.SIZE,
-   DocumentsContract.Document.COLUMN_MIME_TYPE
-  )
+ private suspend fun scanSafFile(
+  uri: Uri,
+  fallbackName: String,
+  scanSessionId: String,
+  knownSizeBytes: Long? = null
+ ): ScanResult {
   return try {
-   read(safeProjection) ?: fallback
-  } catch (firstError: Exception) {
-   // Some providers only return the standard display-name column; retry that column alone.
-   try {
-    read(arrayOf(OpenableColumns.DISPLAY_NAME)) ?: fallback
-   } catch (fallbackError: Exception) {
-    fallbackError.addSuppressed(firstError)
-    throw fallbackError
+   // Read SAF metadata through DocumentFile's standard document contract rather
+   // than custom ContentResolver projections rejected by some OEM providers.
+   val document = try {
+    DocumentFile.fromSingleUri(context, uri)
+   } catch (error: SecurityException) {
+    Log.w("ScanDebug", "Cannot read SAF metadata for " + uri + "; using the picker label.", error)
+    null
+   } catch (error: IllegalArgumentException) {
+    Log.w("ScanDebug", "SAF provider rejected document metadata for " + uri + "; using the picker label.", error)
+    null
    }
-  }
- }
-
- private suspend fun scanSafFile(uri: Uri, fallbackName: String, scanSessionId: String): ScanResult {
-  return try {
-   val displayName = querySafDisplayName(uri, fallbackName).take(250)
+   val displayName = try {
+    document?.name?.takeIf { it.isNotBlank() }?.take(250)
+   } catch (error: SecurityException) {
+    Log.w("ScanDebug", "Cannot read SAF display name for " + uri + "; using the picker label.", error)
+    null
+   } catch (error: IllegalArgumentException) {
+    Log.w("ScanDebug", "SAF provider rejected display-name access for " + uri + "; using the picker label.", error)
+    null
+   } ?: fallbackName.take(250)
+   val sizeBytes = knownSizeBytes ?: try {
+    document?.length()?.takeIf { it >= 0L }
+   } catch (error: SecurityException) {
+    Log.w("ScanDebug", "Cannot read SAF file size for " + uri + "; continuing without size metadata.", error)
+    null
+   } catch (error: IllegalArgumentException) {
+    Log.w("ScanDebug", "SAF provider rejected file-size access for " + uri + "; continuing without size metadata.", error)
+    null
+   }
+   Log.v("ScanDebug", "Scanning SAF document '" + displayName + "' (" + (sizeBytes ?: -1L) + " bytes).")
    val stream = context.contentResolver.openInputStream(uri)
    if (stream == null) {
     recordUnscannedUri(displayName, context.getString(R.string.file_stream_failed), scanSessionId)
@@ -417,7 +422,7 @@ class ThreatRepository(
   for (file in files) {
    currentCoroutineContext().ensureActive()
    if (fileItemKey(file.uri) in done) continue
-   val result = scanSafFile(file.uri, file.displayName, scanSessionId)
+   val result = scanSafFile(file.uri, file.displayName, scanSessionId, file.sizeBytes)
    recordScanItemCompleted(scanSessionId, fileItemKey(file.uri), "file", result)
    if (result.verdict != ScanVerdict.NO_MATCH) fileResults += result
    fileProgress++
@@ -462,7 +467,15 @@ class ThreatRepository(
     currentCoroutineContext().ensureActive()
     val label = file.name?.take(250) ?: context.getString(R.string.unknown_file)
     onFileStarted(label)
-    val result = scanSafFile(file.uri, label, scanSessionId)
+    val sizeBytes = try { file.length().takeIf { it >= 0L } }
+     catch (error: SecurityException) {
+      Log.w("ScanDebug", "Could not read SAF size for " + file.uri + "; continuing without size metadata.", error)
+      null
+     } catch (error: IllegalArgumentException) {
+      Log.w("ScanDebug", "SAF provider rejected size metadata for " + file.uri + "; continuing without size metadata.", error)
+      null
+     }
+    val result = scanSafFile(file.uri, label, scanSessionId, sizeBytes)
     recordScanItemCompleted(scanSessionId, fileItemKey(file.uri), "file", result)
     if (result.verdict != ScanVerdict.NO_MATCH) findings += result
     progress(count + index + 1, total)
@@ -470,7 +483,7 @@ class ThreatRepository(
    findings
   }
 
- private data class SelectedFolderFile(val uri: Uri, val displayName: String)
+ private data class SelectedFolderFile(val uri: Uri, val displayName: String, val sizeBytes: Long?)
 
  /**
   * Requires an explicitly persisted SAF grant, recurses at most 4 directory levels, and visits at
@@ -486,7 +499,10 @@ class ThreatRepository(
    val displayName = try { file.name?.take(250) }
     catch (error: SecurityException) { Log.e("ScanDebug", "Could not read SAF display name for " + file.uri, error); null }
     catch (error: IllegalArgumentException) { Log.e("ScanDebug", "Could not read SAF display name for " + file.uri, error); null }
-   yield(SelectedFolderFile(file.uri, displayName ?: context.getString(R.string.unknown_file)))
+   val sizeBytes = try { file.length().takeIf { it >= 0L } }
+    catch (error: SecurityException) { Log.w("ScanDebug", "Could not read SAF file size for " + file.uri, error); null }
+    catch (error: IllegalArgumentException) { Log.w("ScanDebug", "SAF provider rejected file-size metadata for " + file.uri, error); null }
+   yield(SelectedFolderFile(file.uri, displayName ?: context.getString(R.string.unknown_file), sizeBytes))
   }
  }
 
