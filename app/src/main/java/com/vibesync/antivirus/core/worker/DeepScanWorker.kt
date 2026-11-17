@@ -1,6 +1,7 @@
 package com.vibesync.antivirus.core.worker
 
 import android.content.Context
+import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
@@ -17,20 +18,30 @@ class DeepScanWorker(context: Context, params: WorkerParameters) : CoroutineWork
   )
 
  override suspend fun doWork(): Result {
-  val app = applicationContext as? SafeMobileApp ?: return Result.failure()
-  val sessionId = id.toString()
-  return try {
+  Log.d("ScanDebug", "Worker STARTED for: $tags")
+  val app = applicationContext as? SafeMobileApp
+  var sessionId: String? = null
+  try {
+   val safeApp = app ?: throw IllegalStateException("SafeMobileApp application is unavailable.")
+   sessionId = id.toString()
    setForeground(getForegroundInfo())
-   app.repository.startScanSession(sessionId, "PERIODIC_DEEP_SCAN", isManual = false)
-   app.repository.deepScan(sessionId)
-   app.repository.completeScanSession(sessionId)
-   Result.success()
+   safeApp.repository.clearScanSessionStateCheckpoints()
+   safeApp.repository.startScanSession(sessionId, "PERIODIC_DEEP_SCAN", isManual = false)
+   safeApp.repository.deepScan(sessionId)
+   safeApp.repository.completeScanSession(sessionId)
+   val result = Result.success()
+   Log.d("ScanDebug", "Worker FINISHED with result: $result")
+   return result
   } catch (cancelled: CancellationException) {
-   runCatching { app.repository.interruptScanSession(sessionId) }
+   sessionId?.let { activeId -> runCatching { app?.repository?.interruptScanSession(activeId) } }
    throw cancelled
-  } catch (_: Exception) {
-   runCatching { app.repository.interruptScanSession(sessionId) }
-   if (runAttemptCount < 3) Result.retry() else Result.failure()
+  } catch (error: Exception) {
+   sessionId?.let { activeId -> runCatching { app?.repository?.interruptScanSession(activeId) } }
+   runCatching { app?.repository?.clearScanSessionStateCheckpoints() }
+   Log.e("ScanDebug", "Worker CRASHED", error)
+   val result = Result.failure()
+   Log.d("ScanDebug", "Worker FINISHED with result: $result")
+   return result
   }
  }
 
