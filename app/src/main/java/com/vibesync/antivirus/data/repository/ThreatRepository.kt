@@ -75,7 +75,7 @@ class ThreatRepository(
  fun clearSkippedSafFileCount(sessionId: String) { skippedSafFileCounts.remove(sessionId) }
 
  suspend fun clearScanSessionStateCheckpoints() = withContext(Dispatchers.IO) {
-  database.threatDao().clearAllScanSessionStates()
+  database.threatDao().clearAllSessions()
  }
 
  private suspend fun scanSafFile(
@@ -384,6 +384,7 @@ class ThreatRepository(
   withInstalledAppScanTimeout {
    scanner.scanInstalledAppsForSession(scanSessionId, completedPackageNames = done,
     onItemCompleted = { result ->
+     Log.d("ScanDebug", "Scanning: ${result.packageName ?: result.displayName}")
      recordScanItemCompleted(scanSessionId, "app:" + (result.packageName ?: result.displayName), "app", result)
     },
     progress = { scanned, total -> updateScanSessionTotal(scanSessionId, total); progress(scanned, total) })
@@ -408,6 +409,7 @@ class ThreatRepository(
    scanner.scanInstalledAppsForSession(scanSessionId,
     completedPackageNames = doneApps,
     onItemCompleted = { result ->
+     Log.d("ScanDebug", "Scanning: ${result.packageName ?: result.displayName}")
      recordScanItemCompleted(scanSessionId, "app:" + (result.packageName ?: result.displayName), "app", result)
     },
     progress = { scanned, total ->
@@ -422,6 +424,7 @@ class ThreatRepository(
   for (file in files) {
    currentCoroutineContext().ensureActive()
    if (fileItemKey(file.uri) in done) continue
+   Log.d("ScanDebug", "Scanning: ${file.displayName}")
    val result = scanSafFile(file.uri, file.displayName, scanSessionId, file.sizeBytes)
    recordScanItemCompleted(scanSessionId, fileItemKey(file.uri), "file", result)
    if (result.verdict != ScanVerdict.NO_MATCH) fileResults += result
@@ -475,6 +478,7 @@ class ThreatRepository(
       Log.w("ScanDebug", "SAF provider rejected size metadata for " + file.uri + "; continuing without size metadata.", error)
       null
      }
+    Log.d("ScanDebug", "Scanning: $label")
     val result = scanSafFile(file.uri, label, scanSessionId, sizeBytes)
     recordScanItemCompleted(scanSessionId, fileItemKey(file.uri), "file", result)
     if (result.verdict != ScanVerdict.NO_MATCH) findings += result
