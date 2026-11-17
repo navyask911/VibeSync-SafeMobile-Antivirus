@@ -54,9 +54,17 @@ class ScanForegroundService : Service() {
   if (scanJob?.isActive == true) return START_STICKY
   stopRequested = false
   scanJob = scope.launch {
-   ScanExecutionCoordinator.mutex.withLock {
-    runScan(intent?.getStringExtra(EXTRA_OPERATION_TYPE), intent?.getStringExtra(EXTRA_SOURCE_URI),
-     intent?.getStringExtra(EXTRA_PACKAGE_NAME), intent?.getBooleanExtra(EXTRA_MANUAL_SCAN, true) ?: true)
+   try {
+    ScanExecutionCoordinator.mutex.withLock {
+     runScan(intent?.getStringExtra(EXTRA_OPERATION_TYPE), intent?.getStringExtra(EXTRA_SOURCE_URI),
+      intent?.getStringExtra(EXTRA_PACKAGE_NAME), intent?.getBooleanExtra(EXTRA_MANUAL_SCAN, true) ?: true)
+    }
+   } catch (cancelled: CancellationException) {
+    throw cancelled
+   } catch (error: Exception) {
+    Log.e("SafeMobileScan", "Worker CRASHED", error)
+    ScanForegroundEvents.publishFailed(null)
+    stopServiceAfterRun()
    }
   }
   return START_STICKY
