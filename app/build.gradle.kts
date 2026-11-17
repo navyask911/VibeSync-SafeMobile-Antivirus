@@ -47,7 +47,7 @@ android {
   applicationId = "com.vibesync.antivirus"
   minSdk = 26
   targetSdk = 36
-  versionCode = 20261158
+  versionCode = 20261159
   // [release-v1.10.5] Reset stuck scan work and checkpoints; enforce offline WorkManager and SAF grants.
   versionName = "1.10.5"
   testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
