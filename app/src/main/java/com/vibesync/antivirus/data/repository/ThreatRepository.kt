@@ -449,14 +449,6 @@ class ThreatRepository(
     val label = file.uri.lastPathSegment?.take(250)?.takeIf { it.isNotBlank() }
      ?: context.getString(R.string.unknown_file)
     onFileStarted(label)
-    val sizeBytes = try { file.length().takeIf { it >= 0L } }
-     catch (error: SecurityException) {
-      Log.w("ScanDebug", "Could not read SAF size for " + file.uri + "; continuing without size metadata.", error)
-      null
-     } catch (error: IllegalArgumentException) {
-      Log.w("ScanDebug", "SAF provider rejected size metadata for " + file.uri + "; continuing without size metadata.", error)
-      null
-     }
     Log.d("ScanDebug", "Scanning: $label")
     val result = scanSafFile(file.uri, label, scanSessionId)
     try {
