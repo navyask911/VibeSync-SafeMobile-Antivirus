@@ -837,21 +837,19 @@ import kotlinx.coroutines.launch
      )
     },
     bottomBar = {
-     Column {
-      if (adMobState.adsReady && !adMobState.isPro) AdMobBanner(adMobManager)
-      if (selectedDestination in setOf("home", "scan", "tools", "settings")) {
-       V17BottomNavigationBar(
-        selectedTab = if (activeTopTab == "dashboard") "home" else activeTopTab,
-        isDark = appTheme != com.vibesync.antivirus.ui.theme.AppTheme.LIGHT,
-        onSelect = { navigateToDestination(it) }
-       )
-      }
+     if (selectedDestination in setOf("home", "scan", "tools", "settings")) {
+      V17BottomNavigationBar(
+       selectedTab = if (activeTopTab == "dashboard") "home" else activeTopTab,
+       isDark = appTheme != com.vibesync.antivirus.ui.theme.AppTheme.LIGHT,
+       onSelect = { navigateToDestination(it) }
+      )
      }
     },
     snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
     containerColor = MaterialTheme.colorScheme.background
    ) { scaffoldPadding ->
     Column(Modifier.fillMaxSize().padding(scaffoldPadding)) {
+     if (adMobState.adsReady && !adMobState.isPro) AdMobBanner(adMobManager)
    val navScreenContent: @Composable () -> Unit = {
        Box(Modifier.fillMaxSize()) {
         when (selectedDestination) {
