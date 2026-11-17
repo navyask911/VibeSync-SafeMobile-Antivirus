@@ -1,5 +1,5 @@
 name: Build and publish signed SafeMobile APK and Play AAB
-# [release-v1.10.4] Fit full VibeSync splash image and replace the in-app shield drawable.
+# [release-v1.10.5] Fix scan lifecycle resets, explicit offline WorkManager constraints and SAF grant validation.
 
 on:
   workflow_dispatch:
@@ -36,6 +36,7 @@ on:
       - "v1.10.2"
       - "v1.10.3"
       - "v1.10.4"
+      - "v1.10.5"
 
 permissions:
   contents: write
@@ -46,7 +47,7 @@ concurrency:
 
 jobs:
   release:
-    if: github.repository == 'navyask911/VibeSync-SafeMobile-Antivirus' && (github.event_name == 'workflow_dispatch' || github.ref_type != 'branch' || github.ref_name != 'main' || contains(github.event.head_commit.message, '[release-v1.10.4]'))
+    if: github.repository == 'navyask911/VibeSync-SafeMobile-Antivirus' && (github.event_name == 'workflow_dispatch' || github.ref_type != 'branch' || github.ref_name != 'main' || contains(github.event.head_commit.message, '[release-v1.10.5]'))
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
@@ -354,14 +355,14 @@ jobs:
             echo "SAFE STOP: Expected Paparazzi PNG screenshots for the four tabs; found $snapshot_count." >&2
             exit 1
           fi
-          zip -qr build/ui-screenshots-v1.10.4.zip app/src/test/snapshots
+          zip -qr build/ui-screenshots-v1.10.5.zip app/src/test/snapshots
           echo "Packaged $snapshot_count Paparazzi screenshots."
 
       - name: Upload four-tab screenshots artifact
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: SafeMobile-v1.10.4-UI-Screenshots-${{ github.run_id }}
-          path: build/ui-screenshots-v1.10.4.zip
+          name: SafeMobile-v1.10.5-UI-Screenshots-${{ github.run_id }}
+          path: build/ui-screenshots-v1.10.5.zip
           if-no-files-found: error
           retention-days: 30
 
@@ -377,14 +378,14 @@ jobs:
           version_name="${{ steps.verify-aab.outputs.version_name }}"
           version_code="${{ steps.verify-aab.outputs.version_code }}"
           if [[ "${GITHUB_REF_TYPE:-}" == "branch" && "${GITHUB_REF_NAME:-}" == "main" ]]; then
-            if [[ "$version_name" != "1.10.4" || "$version_code" != "20261156" ]]; then
-              echo "SAFE STOP: main release trigger expected v1.10.4 / 20261156, got $version_name / $version_code." >&2
+            if [[ "$version_name" != "1.10.5" || "$version_code" != "20261158" ]]; then
+              echo "SAFE STOP: main release trigger expected v1.10.5 / 20261158, got $version_name / $version_code." >&2
               exit 1
             fi
           fi
-          if [[ "${GITHUB_REF_TYPE:-}" == "tag" && "${GITHUB_REF_NAME:-}" == "v1.10.4" ]] ||
-             [[ "${GITHUB_REF_TYPE:-}" == "branch" && "${GITHUB_REF_NAME:-}" == "main" && "$version_name" == "1.10.4" && "$version_code" == "20261156" ]]; then
-            tag="v1.10.4"
+          if [[ "${GITHUB_REF_TYPE:-}" == "tag" && "${GITHUB_REF_NAME:-}" == "v1.10.5" ]] ||
+             [[ "${GITHUB_REF_TYPE:-}" == "branch" && "${GITHUB_REF_NAME:-}" == "main" && "$version_name" == "1.10.5" && "$version_code" == "20261158" ]]; then
+            tag="v1.10.5"
           elif [[ "${GITHUB_REF_TYPE:-}" == "tag" && "${GITHUB_REF_NAME:-}" == "v1.10.3" ]]; then
             tag="v1.10.3"
           elif [[ "${GITHUB_REF_TYPE:-}" == "tag" && "${GITHUB_REF_NAME:-}" == "v1.10.1" ]]; then
@@ -402,6 +403,7 @@ jobs:
           Built from commit ${GITHUB_SHA}.
           v1.6.1: Added new launcher icons and splash screen. Fixed text wrapping and added back navigation. Added inline Crown subscription toggle.
           v1.6.2: Accept all file types in the scan document picker for .txt/EICAR testing; preserve the originating screen when backing out of Pro; make the paywall and shared app toolbar wrap and scroll at larger font scales.
+          v1.10.5: Resets stale foreground scan sessions and tagged WorkManager scans, explicitly allows offline scan work, clears Room checkpoints before new sessions, adds worker/per-item ScanDebug logs, and revalidates persisted SAF read grants. Uses Play versionCode 20261158.
           v1.10.4: Fits the full VibeSync splash graphic without cropping, retains the white splash background and 3-second display, and replaces the in-app Top App Bar logo resource with the transparent 3D shield. Uses Play versionCode 20261156.
           v1.10.3: Uses portable SAF metadata columns with fallback, counts OS-restricted skipped files, caps SAF traversal to depth 10 and 1,000 files, reuses persisted tree permissions, blocks concurrent scans, and clears corrupted scan-session checkpoints after fatal exceptions. Uses Play versionCode 20261155.
           v1.10.2: Uses supervisorScope and IO-bound package tasks, isolates Room/UI result publication, runs hash/YARA work on Default, and times out stuck installed-app scans with a visible UI error. Uses Play versionCode 20261154.
@@ -442,7 +444,7 @@ jobs:
           release_files=(
             "${{ steps.verify-aab.outputs.aab_path }}"
             "${{ steps.verify-aab.outputs.apk_path }}"
-            "build/ui-screenshots-v1.10.4.zip"
+            "build/ui-screenshots-v1.10.5.zip"
             "build/siren-test/SafeMobile-Siren-Test.apk"
             "build/siren-test/siren-test-definitions.json"
             "build/siren-test/SHA256SUMS.txt"
