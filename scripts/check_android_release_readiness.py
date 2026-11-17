@@ -18,6 +18,9 @@ FILES = {
     "dao": "app/src/main/java/com/vibesync/antivirus/data/local/ThreatDao.kt",
     "repository": "app/src/main/java/com/vibesync/antivirus/data/repository/ThreatRepository.kt",
     "coordinator": "app/src/main/java/com/vibesync/antivirus/core/worker/ScanExecutionCoordinator.kt",
+    "packageScanner": "app/src/main/java/com/vibesync/antivirus/core/engine/PackageScanner.kt",
+    "banner": "app/src/main/java/com/vibesync/antivirus/presentation/AdMobBanner.kt",
+    "proguard": "app/proguard-rules.pro",
 }
 errors = []
 source = {}
@@ -34,8 +37,8 @@ version_code = re.search(r"\bversionCode\s*=\s*(\d+)", gradle)
 ndk = re.search(r'\bndkVersion\s*=\s*"([^"]+)"', gradle)
 if not version_name or version_name.group(1) != "1.10.5":
     errors.append("Gradle versionName must be 1.10.5.")
-if not version_code or version_code.group(1) != "20261158":
-    errors.append("Gradle versionCode must be 20261158.")
+if not version_code or version_code.group(1) != "20261159":
+    errors.append("Gradle versionCode must be 20261159.")
 if not ndk or tuple(int(part) for part in ndk.group(1).split(".")[:1]) < (28,):
     errors.append("Gradle must pin Android NDK r28 or higher.")
 if "com.google.ai.edge.litert:litert:1.4.2" not in gradle:
@@ -66,6 +69,24 @@ if "endpoint.isBlank() || !validatedInternet" not in baseline:
     errors.append("Local fallback must apply when the remote URL is absent or internet is not validated.")
 if "LOCAL_BASELINE_PASSED" not in source["verifier"] or "applyLocalBaselineFallback" not in source["verifier"]:
     errors.append("SecurityVerifier does not publish the local-baseline fallback result.")
+package_scanner = source["packageScanner"]
+if 'Log.e("SafeMobileScan", "Publish failed", error)' not in package_scanner:
+    errors.append("Package scan result publication failures must be isolated and logged.")
+if "OnConflictStrategy.REPLACE" not in dao or "insertScanSessionItem" not in dao:
+    errors.append("Scan-session item persistence must use REPLACE on Room conflicts.")
+if "contentResolver.query(" in repository or "fromSingleUri(" in repository:
+    errors.append("SAF scanning must not query or request optional single-document metadata.")
+if "contentResolver.openInputStream(uri)" not in repository:
+    errors.append("SAF payloads must be read through ContentResolver.openInputStream().")
+if 'Log.e("SafeMobileScan", "SAF file scan failed; continuing with the next document: $uri", error)' not in repository:
+    errors.append("SAF read failures must be logged and isolated to the current document.")
+if "-keep @androidx.room.Entity class * { *; }" not in source["proguard"]:
+    errors.append("R8 must keep Room entity classes and members.")
+if "return try" not in worker:
+    errors.append("DeepScanWorker must wrap the entire doWork body in a top-level try/catch.")
+banner = source["banner"]
+if "AdSize.LEADERBOARD" not in banner or "adWidthDp >= 970" not in banner:
+    errors.append("AdMob banner must use LEADERBOARD at the 970 dp width threshold.")
 worker = source["worker"]
 if 'Log.d("ScanDebug", "Worker STARTED for: $tags")' not in worker:
     errors.append("DeepScanWorker must log its WorkManager tags when it starts.")
@@ -110,4 +131,4 @@ if errors:
     print(f"Android release readiness FAILED ({len(errors)} issue(s)):")
     print("\n".join(f"- {error}" for error in errors), file=sys.stderr)
     sys.exit(1)
-print("Android release readiness passed: v1.10.5/20261158, NDK r28+, LiteRT 1.4.2, offline scan work and SAF grants.")
+print("Android release readiness passed: v1.10.5/20261159, NDK r28+, LiteRT 1.4.2, offline scan work and SAF grants.")
