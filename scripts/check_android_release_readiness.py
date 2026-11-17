@@ -17,6 +17,7 @@ FILES = {
     "service": "app/src/main/java/com/vibesync/antivirus/core/worker/ScanForegroundService.kt",
     "dao": "app/src/main/java/com/vibesync/antivirus/data/local/ThreatDao.kt",
     "repository": "app/src/main/java/com/vibesync/antivirus/data/repository/ThreatRepository.kt",
+    "coordinator": "app/src/main/java/com/vibesync/antivirus/core/worker/ScanExecutionCoordinator.kt",
 }
 errors = []
 source = {}
@@ -81,6 +82,9 @@ if '.cancelAllWorkByTag(WORK_TAG)' not in scheduler or 'const val WORK_TAG = "Sc
     errors.append("New scans must reset stale tagged ScanWorker work.")
 if ".addTag(WORK_TAG)" not in scheduler:
     errors.append("Periodic deep-scan work must carry the ScanWorker tag.")
+coordinator = source["coordinator"]
+if "ScanExecutionCoordinator.mutex.withLock" not in service or "ScanExecutionCoordinator.mutex.withLock" not in worker:
+    errors.append("Foreground and periodic scans must share the process scan mutex.")
 service = source["service"]
 if "operation == OP_RESUME || operation == null" not in service:
     errors.append("Only explicit/system service redelivery may resume an interrupted scan.")
