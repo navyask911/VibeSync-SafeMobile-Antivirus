@@ -138,7 +138,7 @@ class ScanForegroundService : Service() {
     skippedFiles = repo.skippedSafFileCount(session.sessionId)).copy(signedDefinitionsUsed = repo.currentHashDatabaseCapability()?.enabled == true)
    repo.saveScanSummary(summary)
    repo.completeScanSession(session.sessionId, summary.completedAt)
-   Log.d("ScanDebug", "Worker FINISHED with result: success; scanned=${summary.scannedCount}")
+   Log.d("ScanDebug", "Worker FINISHED with result: success; scanned=${(summary.appCount + summary.fileCount)}")
    ScanForegroundEvents.publish(ScanCompletedEvent(session.sessionId, results, summary, session.isManual))
    repo.clearSkippedSafFileCount(session.sessionId)
   } catch (timeout: TimeoutCancellationException) {
