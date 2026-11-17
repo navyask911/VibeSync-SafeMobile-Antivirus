@@ -87,6 +87,8 @@ if "return try" not in source["worker"]:
     errors.append("DeepScanWorker must wrap the entire doWork body in a top-level try/catch.")
 if "return try" not in source["postInstallWorker"] or 'Log.e("SafeMobileScan", "Worker CRASHED", error)' not in source["postInstallWorker"]:
     errors.append("The post-install scan worker must contain uncaught exceptions and return Result.failure().")
+if "ScanExecutionCoordinator.mutex.withLock" not in source["postInstallWorker"]:
+    errors.append("Post-install scans must share the process scan mutex with foreground and periodic scans.")
 banner = source["banner"]
 if "AdSize.LEADERBOARD" not in banner or "adWidthDp >= 970" not in banner:
     errors.append("AdMob banner must use LEADERBOARD at the 970 dp width threshold.")
