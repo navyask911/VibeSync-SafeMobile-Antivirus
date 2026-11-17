@@ -21,6 +21,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import java.util.UUID
 
@@ -53,8 +54,10 @@ class ScanForegroundService : Service() {
   if (scanJob?.isActive == true) return START_STICKY
   stopRequested = false
   scanJob = scope.launch {
-   runScan(intent?.getStringExtra(EXTRA_OPERATION_TYPE), intent?.getStringExtra(EXTRA_SOURCE_URI),
-    intent?.getStringExtra(EXTRA_PACKAGE_NAME), intent?.getBooleanExtra(EXTRA_MANUAL_SCAN, true) ?: true)
+   ScanExecutionCoordinator.mutex.withLock {
+    runScan(intent?.getStringExtra(EXTRA_OPERATION_TYPE), intent?.getStringExtra(EXTRA_SOURCE_URI),
+     intent?.getStringExtra(EXTRA_PACKAGE_NAME), intent?.getBooleanExtra(EXTRA_MANUAL_SCAN, true) ?: true)
+   }
   }
   return START_STICKY
  }
