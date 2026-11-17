@@ -37,6 +37,10 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
 
+/**
+ * Presentation state uses Kotlin values only; PackageManager and Android graphics
+ * objects are not retained by this ViewModel or exposed through StateFlow.
+ */
 data class SafeMobileUiState(
     val scanSummary: com.vibesync.antivirus.core.engine.ScanCompletionSummary? = null,
     val securityAssessment: com.vibesync.antivirus.core.security.DeviceSecurityAssessment? = null,

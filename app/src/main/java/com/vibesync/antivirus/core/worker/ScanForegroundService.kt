@@ -204,6 +204,10 @@ class ScanForegroundService : Service() {
   const val OP_SELECTED_FILE = "SELECTED_FILE"
   const val OP_INSTALLED_PACKAGE = "INSTALLED_PACKAGE"
   const val OP_SELECTED_FOLDER = "SELECTED_FOLDER"
+  /**
+   * Intent extras below are strings/booleans only. Never pass PackageInfo,
+   * ApplicationInfo, Drawable, Bitmap, Bundle or other OEM parcelable metadata.
+   */
   fun start(context: Context, operation: String, manual: Boolean = true, uri: String? = null, packageName: String? = null) {
    runCatching { DeepScanScheduler.resetBeforeManualScan(context) }
     .onFailure { Log.e("ScanDebug", "Could not reset tagged WorkManager scan jobs before a new scan.", it) }

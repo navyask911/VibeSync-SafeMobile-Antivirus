@@ -3,7 +3,10 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 
-/** Completed work ledger; stable item keys support resume after process death. */
+/**
+ * Completed work ledger with scalar Room columns only. Framework objects,
+ * Android parcelables and OEM-private package metadata are never persisted here.
+ */
 @Entity(tableName = "scan_session_items", primaryKeys = ["session_id", "item_key"],
  indices = [Index(value = ["session_id"]), Index(value = ["completed_at"])])
 data class ScanSessionItemEntity(
