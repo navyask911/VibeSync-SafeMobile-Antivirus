@@ -174,7 +174,7 @@ for label in ("scanItemEntity", "scanAudit", "scanSessionEntity", "scanSessionSt
         declaration = line.strip()
         if not declaration.startswith("val ") or ":" not in declaration:
             continue
-        field_type = declaration.split(":", 1)[1].split("=", 1)[0].strip().rstrip("?")
+        field_type = declaration.split(":", 1)[1].split("=", 1)[0].strip().rstrip("?,")
         if field_type not in room_scalar_types:
             errors.append(f"{label} contains a non-scalar Room column type: {field_type}.")
             break
