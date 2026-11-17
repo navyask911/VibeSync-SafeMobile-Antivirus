@@ -13,6 +13,7 @@ FILES = {
     "baseline": "app/src/main/java/com/vibesync/antivirus/core/security/LocalBaselineTrust.kt",
     "score": "app/src/main/java/com/vibesync/antivirus/core/security/DeviceSecurityScore.kt",
     "worker": "app/src/main/java/com/vibesync/antivirus/core/worker/DeepScanWorker.kt",
+    "postInstallWorker": "app/src/main/java/com/vibesync/antivirus/core/worker/MultiLayerScanWorker.kt",
     "scheduler": "app/src/main/java/com/vibesync/antivirus/core/worker/DeepScanScheduler.kt",
     "service": "app/src/main/java/com/vibesync/antivirus/core/worker/ScanForegroundService.kt",
     "dao": "app/src/main/java/com/vibesync/antivirus/data/local/ThreatDao.kt",
@@ -84,6 +85,8 @@ if "-keep @androidx.room.Entity class * { *; }" not in source["proguard"]:
     errors.append("R8 must keep Room entity classes and members.")
 if "return try" not in source["worker"]:
     errors.append("DeepScanWorker must wrap the entire doWork body in a top-level try/catch.")
+if "return try" not in source["postInstallWorker"] or 'Log.e("SafeMobileScan", "Worker CRASHED", error)' not in source["postInstallWorker"]:
+    errors.append("The post-install scan worker must contain uncaught exceptions and return Result.failure().")
 banner = source["banner"]
 if "AdSize.LEADERBOARD" not in banner or "adWidthDp >= 970" not in banner:
     errors.append("AdMob banner must use LEADERBOARD at the 970 dp width threshold.")
