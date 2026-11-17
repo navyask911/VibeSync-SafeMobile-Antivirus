@@ -72,17 +72,17 @@ if "LOCAL_BASELINE_PASSED" not in source["verifier"] or "applyLocalBaselineFallb
 package_scanner = source["packageScanner"]
 if 'Log.e("SafeMobileScan", "Publish failed", error)' not in package_scanner:
     errors.append("Package scan result publication failures must be isolated and logged.")
-if "OnConflictStrategy.REPLACE" not in dao or "insertScanSessionItem" not in dao:
+if "OnConflictStrategy.REPLACE" not in source["dao"] or "insertScanSessionItem" not in source["dao"]:
     errors.append("Scan-session item persistence must use REPLACE on Room conflicts.")
-if "contentResolver.query(" in repository or "fromSingleUri(" in repository:
+if "contentResolver.query(" in source["repository"] or "fromSingleUri(" in source["repository"]:
     errors.append("SAF scanning must not query or request optional single-document metadata.")
-if "contentResolver.openInputStream(uri)" not in repository:
+if "contentResolver.openInputStream(uri)" not in source["repository"]:
     errors.append("SAF payloads must be read through ContentResolver.openInputStream().")
-if 'Log.e("SafeMobileScan", "SAF file scan failed; continuing with the next document: $uri", error)' not in repository:
+if 'Log.e("SafeMobileScan", "SAF file scan failed; continuing with the next document: $uri", error)' not in source["repository"]:
     errors.append("SAF read failures must be logged and isolated to the current document.")
 if "-keep @androidx.room.Entity class * { *; }" not in source["proguard"]:
     errors.append("R8 must keep Room entity classes and members.")
-if "return try" not in worker:
+if "return try" not in source["worker"]:
     errors.append("DeepScanWorker must wrap the entire doWork body in a top-level try/catch.")
 banner = source["banner"]
 if "AdSize.LEADERBOARD" not in banner or "adWidthDp >= 970" not in banner:
