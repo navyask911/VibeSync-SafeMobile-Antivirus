@@ -34,6 +34,7 @@ import com.vibesync.antivirus.engine.ensemble.ThreatEnsembleEvaluator
 import com.vibesync.antivirus.core.heuristics.PermissionRiskAnalyzer
 import com.vibesync.antivirus.core.security.IntegrityChecker
 import com.vibesync.antivirus.core.security.ProtectedPackagePolicy
+import com.vibesync.antivirus.core.security.TrustedPackageWhitelist
 import com.vibesync.antivirus.core.security.TrustedAppStore
 import kotlin.math.roundToInt
 import com.vibesync.antivirus.data.local.AppScanCache
@@ -64,7 +65,7 @@ internal suspend fun publishScanResultSafely(
  packageName: String,
  publish: suspend () -> Unit,
  logFailure: (String, Throwable) -> Unit = { pkg, error ->
-  val userId = android.os.UserHandle.getUserId(android.os.Process.myUid())
+  val userId = android.os.UserHandle.myUserHandle().identifier
   Log.e("ScanDebug", "pkg_fail pkg=$pkg stage=publish userId=$userId", error)
  }
 ): Boolean {
@@ -117,7 +118,7 @@ class PackageScanner(
    } catch (error: Exception) {
     if (diagnostics != null) diagnostics.fail(name, "resolve", error)
     else {
-     val userId = android.os.UserHandle.getUserId(android.os.Process.myUid())
+     val userId = android.os.UserHandle.myUserHandle().identifier
      Log.e("ScanDebug", "pkg_fail pkg=$name stage=resolve userId=$userId", error)
     }
     0
@@ -271,7 +272,7 @@ class PackageScanner(
  }
 
  fun installedAppInventory(): List<InstalledAppItem> {
-  val userId = android.os.UserHandle.getUserId(android.os.Process.myUid())
+  val userId = android.os.UserHandle.myUserHandle().identifier
   val packages = try {
    @Suppress("DEPRECATION")
    pm.getInstalledPackages(0)
@@ -1072,8 +1073,8 @@ class PackageScanner(
  private fun logPackageMetadata(info: PackageInfo, diagnostics: PackageScanDiagnostics) {
   val app = info.applicationInfo
   val flags = app?.flags ?: 0
-  val archived = android.os.Build.VERSION.SDK_INT >= 35 &&
-   flags and ApplicationInfo.FLAG_ARCHIVED != 0
+  // getInstalledPackages(0) does not request MATCH_ARCHIVED_PACKAGES.
+  val archivedQuery = "not_requested"
   val splitCount = try {
    app?.splitSourceDirs?.size ?: 0
   } catch (error: Exception) {
@@ -1092,7 +1093,7 @@ class PackageScanner(
     " system=${flags and ApplicationInfo.FLAG_SYSTEM != 0}" +
     " updatedSystem=${flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP != 0}" +
     " external=${flags and ApplicationInfo.FLAG_EXTERNAL_STORAGE != 0}" +
-    " archived=$archived" +
+    " archivedQuery=$archivedQuery" +
     " splitCount=$splitCount" +
     " apkBytes=$apkBytes"
   )
@@ -1128,7 +1129,7 @@ class PackageScanner(
    if (diagnostics != null) {
     diagnostics.fail(packageName, stage, error.cause ?: error)
    } else {
-    val userId = android.os.UserHandle.getUserId(android.os.Process.myUid())
+    val userId = android.os.UserHandle.myUserHandle().identifier
     Log.e("ScanDebug", "pkg_fail pkg=$packageName stage=$stage userId=$userId", error)
    }
   }
@@ -1165,7 +1166,7 @@ class PackageScanner(
   try {
    hashStore.revealMetadata(value, purpose)
   } catch (error: Exception) {
-   val userId = android.os.UserHandle.getUserId(android.os.Process.myUid())
+   val userId = android.os.UserHandle.myUserHandle().identifier
    Log.e("ScanDebug", "metadata_decode_failed purpose=$purpose userId=$userId", error)
    value
   }
@@ -1216,7 +1217,7 @@ class PackageScanner(
  } catch (error: Exception) {
   if (diagnostics != null) diagnostics.fail(packageName, "resolve", error)
   else {
-   val userId = android.os.UserHandle.getUserId(android.os.Process.myUid())
+   val userId = android.os.UserHandle.myUserHandle().identifier
    Log.e("ScanDebug", "pkg_fail pkg=$packageName stage=resolve userId=$userId", error)
   }
   Log.w(TAG, "Package signing metadata unavailable for " + packageName + "; scanning without signer trust.", error)
@@ -1271,7 +1272,7 @@ class PackageScanner(
    } catch (error: Exception) {
     if (diagnostics != null) diagnostics.fail(info.packageName, "resolve", error)
     else {
-     val userId = android.os.UserHandle.getUserId(android.os.Process.myUid())
+     val userId = android.os.UserHandle.myUserHandle().identifier
      Log.e("ScanDebug", "pkg_fail pkg=${info.packageName} stage=resolve userId=$userId", error)
     }
     null
@@ -1295,7 +1296,7 @@ class PackageScanner(
  } catch (error: Exception) {
   if (diagnostics != null) diagnostics.fail(info.packageName, "resolve", error)
   else {
-   val userId = android.os.UserHandle.getUserId(android.os.Process.myUid())
+   val userId = android.os.UserHandle.myUserHandle().identifier
    Log.e("ScanDebug", "pkg_fail pkg=${info.packageName} stage=resolve userId=$userId", error)
   }
   false
