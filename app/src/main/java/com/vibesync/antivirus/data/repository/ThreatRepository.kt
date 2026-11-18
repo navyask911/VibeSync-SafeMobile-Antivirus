@@ -377,7 +377,7 @@ class ThreatRepository(
     TrustedPackageWhitelist.hasProtectedNamespace(packageName) -> "consumer_review_filter_protected_namespace"
     else -> "consumer_review_filter_system_flags_or_package_lookup"
    }
-   val userId = android.os.UserHandle.getUserId(android.os.Process.myUid())
+   val userId = android.os.UserHandle.myUserHandle().identifier
    Log.i("ScanDebug", "pkg_skipped pkg=$packageName reason=$reason userId=$userId source=review_filter")
   }
   eligible
