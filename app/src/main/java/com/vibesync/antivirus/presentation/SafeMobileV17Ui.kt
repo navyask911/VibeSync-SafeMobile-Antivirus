@@ -1,8 +1,10 @@
 package com.vibesync.antivirus.presentation
 
 import android.content.Context
+import android.content.pm.PackageInfo
 import android.os.Build
 import android.provider.Settings
+import android.util.LruCache
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -72,6 +74,10 @@ import com.vibesync.antivirus.core.observer.FullScreenAlertAccess
 import com.vibesync.antivirus.core.security.SecurityVerificationState
 import com.vibesync.antivirus.core.security.SecurityVerificationStatus
 import com.vibesync.antivirus.ui.theme.AppTheme
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
+import kotlinx.coroutines.withContext
 
 private data class V17Colors(
     val device: Color, val surface: Color, val elevated: Color, val text: Color,
@@ -918,6 +924,49 @@ private fun V17ModeButton(
     }
 }
 
+private data class V17AppIconCacheKey(
+    val packageName: String,
+    val versionCode: Long
+)
+
+@Suppress("DEPRECATION")
+private fun compatibleAppVersionCode(info: PackageInfo): Long =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) info.longVersionCode
+    else info.versionCode.toLong()
+
+/**
+ * App icons are presentation-only. PackageManager OEM theme hooks can block,
+ * so both metadata lookup and drawable decoding are confined to a bounded IO
+ * lane. The cache key changes when an installed package is updated.
+ */
+private object V17AppIconLoader {
+    private const val ICON_SIZE_PX = 72
+    private val cache = LruCache<V17AppIconCacheKey, ImageBitmap>(96)
+    private val loadPermits = Semaphore(2)
+
+    suspend fun load(context: Context, packageName: String): ImageBitmap? =
+        withContext(Dispatchers.IO) {
+            loadPermits.withPermit {
+                try {
+                    val packageManager = context.packageManager
+                    @Suppress("DEPRECATION")
+                    val packageInfo = packageManager.getPackageInfo(packageName, 0)
+                    val key = V17AppIconCacheKey(
+                        packageName = packageName,
+                        versionCode = compatibleAppVersionCode(packageInfo)
+                    )
+                    cache.get(key) ?: packageManager.getApplicationIcon(packageName)
+                        .toBitmap(ICON_SIZE_PX, ICON_SIZE_PX)
+                        .asImageBitmap()
+                        .also { cache.put(key, it) }
+                } catch (_: Exception) {
+                    // Missing/unreadable OEM icon resources must not affect scan results.
+                    null
+                }
+            }
+        }
+}
+
 @Composable
 private fun V17ScanResultRow(
     result: ScanResult, dark: Boolean, onUninstall: (String) -> Unit, onAppInfo: (String) -> Unit,
@@ -927,12 +976,11 @@ private fun V17ScanResultRow(
     val c = v17Colors(dark)
     var expanded by rememberSaveable(result.packageName, result.packageOrPath) { mutableStateOf(false) }
     var heuristicsExpanded by rememberSaveable(result.packageName, result.packageOrPath) { mutableStateOf(false) }
-    val appIcon = remember(context, result.packageName) {
-        result.packageName?.let { name ->
-            runCatching {
-                context.packageManager.getApplicationIcon(name).toBitmap(72, 72).asImageBitmap()
-            }.getOrNull()
-        }
+    var appIcon by remember(result.packageName) { mutableStateOf<ImageBitmap?>(null) }
+    LaunchedEffect(context.applicationContext, result.packageName) {
+        val packageName = result.packageName
+        appIcon = if (packageName == null) null else
+            V17AppIconLoader.load(context.applicationContext, packageName)
     }
     val uninstallAllowed = result.packageName?.let { name ->
         name != context.packageName &&
