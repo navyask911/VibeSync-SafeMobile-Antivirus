@@ -692,7 +692,7 @@ class PackageScanner(
      reasons = listOf(safeLabel),
      durationMs = elapsed(start)
     ).copy(packageName = info.packageName, scanSessionId = scanSessionId)
-    auditSafely(cachedResult, start, scanSessionId)
+    auditSafely(cachedResult, start, scanSessionId, diagnostics)
     return cachedResult
    }
    return safePlatformPackageResult(info, scanSessionId, start, fileSize, safeLabel, diagnostics, onStageChange)
@@ -718,7 +718,7 @@ class PackageScanner(
      malwareName = cached.threatName
     )
     // Keep scan history complete even though expensive file engines were bypassed.
-    auditSafely(cachedResult, start, scanSessionId)
+    auditSafely(cachedResult, start, scanSessionId, diagnostics)
     return cachedResult
    }
   }
@@ -1016,26 +1016,69 @@ class PackageScanner(
   findExactHashThreat(key, label, sha, md5, sha1, fileSize)
    ?: evaluateUnmatched(key, label, sha, md5, heuristic, score, sha1, report)
  )
- private suspend fun auditSafely(result: ScanResult, start: Long, scanSessionId: String) {
-  try {
-   audit(result, start, scanSessionId)
-  } catch (cancelled: CancellationException) {
-   throw cancelled
-  } catch (_: Exception) {
-   // A diagnostic-row failure must not turn an inaccessible file into a clean verdict.
+ private fun loadPackageLabelOrFallback(
+  info: PackageInfo,
+  diagnostics: PackageScanDiagnostics?,
+  onStageChange: (String) -> Unit
+ ): String {
+  onStageChange("label")
+  return try {
+   info.applicationInfo?.loadLabel(pm)?.toString().orEmpty().ifBlank { info.packageName }
+  } catch (error: Exception) {
+   diagnostics?.fail(info.packageName, "label", error)
+   info.packageName
   }
  }
- private suspend fun audit(result: ScanResult, start: Long, scanSessionId: String) {
-  dao.insertAudit(ScanAudit(
-   packageOrPath=hashStore.protectPrivateText(result.packageOrPath.take(250), "scan-label"),
-   hash=result.sha256?.let(hashStore::protectHash).orEmpty(),
-   scanTimestamp=System.currentTimeMillis(),
-   verdict=result.verdict.name,
-   scanDuration=elapsed(start),
-   scanSessionId=scanSessionId,
-    threatEventId=result.threatEventId.orEmpty()
-  ))
+
+ private suspend fun auditSafely(
+  result: ScanResult,
+  start: Long,
+  scanSessionId: String,
+  diagnostics: PackageScanDiagnostics? = null
+ ) {
+  try {
+   audit(result, start, scanSessionId, diagnostics)
+  } catch (cancelled: CancellationException) {
+   throw cancelled
+  } catch (error: Exception) {
+   val stage = (error as? ScanPublishStageException)?.stage ?: "room_insert"
+   val packageName = result.packageName ?: result.packageOrPath
+   if (diagnostics != null) {
+    diagnostics.fail(packageName, stage, error.cause ?: error)
+   } else {
+    val userId = android.os.UserHandle.getUserId(android.os.Process.myUid())
+    Log.e("ScanDebug", "pkg_fail pkg=$packageName stage=$stage userId=$userId", error)
+   }
+  }
  }
+
+ private suspend fun audit(
+  result: ScanResult,
+  start: Long,
+  scanSessionId: String,
+  diagnostics: PackageScanDiagnostics? = null
+ ) {
+  var stage = "encrypt"
+  try {
+   val encryptedLabel = hashStore.protectPrivateText(result.packageOrPath.take(250), "scan-label")
+   val encryptedHash = result.sha256?.let(hashStore::protectHash).orEmpty()
+   stage = "room_insert"
+   dao.insertAudit(ScanAudit(
+    packageOrPath = encryptedLabel,
+    hash = encryptedHash,
+    scanTimestamp = System.currentTimeMillis(),
+    verdict = result.verdict.name,
+    scanDuration = elapsed(start),
+    scanSessionId = scanSessionId,
+    threatEventId = result.threatEventId.orEmpty()
+   ))
+  } catch (cancelled: CancellationException) {
+   throw cancelled
+  } catch (error: Exception) {
+   throw ScanPublishStageException(stage, error)
+  }
+ }
+
  private fun revealMetadataOrPlaintext(value: String, purpose: String): String =
   runCatching { hashStore.revealMetadata(value, purpose) }.getOrDefault(value)
 
