@@ -244,18 +244,29 @@ class ThreatRepository(
  }
  suspend fun loadScanSessionResults(sessionId: String): List<ScanResult> = withContext(Dispatchers.IO) {
   database.threatDao().scanSessionItems(sessionId).mapNotNull { item ->
-   val verdict = runCatching { ScanVerdict.valueOf(item.verdict) }.getOrNull() ?: return@mapNotNull null
+   val packageName = item.packageName ?: item.itemKey
+   val verdict = try {
+    ScanVerdict.valueOf(item.verdict)
+   } catch (error: Exception) {
+    Log.e("ScanDebug", "session_row_skip sessionId=$sessionId itemKey=${item.itemKey} pkg=$packageName reason=invalid_verdict value=${item.verdict}", error)
+    return@mapNotNull null
+   }
    val path = revealPrivateTextSafely(item.itemPath, "scan-progress-path")
    val reasons = revealPrivateTextSafely(item.reasons, "scan-progress-reasons").split("\n").filter { it.isNotBlank() }
    val uri = item.sourceUri?.let { revealPrivateTextSafely(it, "scan-progress-uri") }
-   val source = runCatching { com.vibesync.antivirus.core.engine.DetectionSource.valueOf(item.detectionSource) }
-    .getOrDefault(com.vibesync.antivirus.core.engine.DetectionSource.NONE)
+   val source = try {
+    com.vibesync.antivirus.core.engine.DetectionSource.valueOf(item.detectionSource)
+   } catch (error: Exception) {
+    Log.e("ScanDebug", "session_row_metadata_fallback sessionId=$sessionId itemKey=${item.itemKey} pkg=$packageName field=detection_source value=${item.detectionSource}", error)
+    com.vibesync.antivirus.core.engine.DetectionSource.NONE
+   }
    ScanResult(path, path, item.sha256Hash, item.md5Hash, verdict, reasons, item.durationMs,
     packageName = item.packageName, sourceUri = uri, scanSessionId = sessionId,
     threatEventId = item.threatEventId, riskScore = item.riskScore,
     detectionSource = source, malwareName = item.malwareName)
   }
  }
+ 
  suspend fun latestCompletedManualScanResults(): List<ScanResult> = withContext(Dispatchers.IO) {
   val state = database.threatDao().latestCompletedManualScanState() ?: return@withContext emptyList()
   loadScanSessionResults(state.sessionId)
@@ -358,15 +369,30 @@ class ThreatRepository(
 
  /** Raw downloaded files have no installed-package identity and keep exact-hash detection. */
  suspend fun isReviewableResult(result: ScanResult): Boolean = withContext(Dispatchers.IO) {
-  result.packageName?.let(::isEligibleInstalledApp) ?: true
+  val packageName = result.packageName ?: return@withContext true
+  val eligible = isEligibleInstalledApp(packageName)
+  if (!eligible) {
+   val reason = when {
+    packageName == context.packageName -> "consumer_review_filter_own_package"
+    TrustedPackageWhitelist.hasProtectedNamespace(packageName) -> "consumer_review_filter_protected_namespace"
+    else -> "consumer_review_filter_system_flags_or_package_lookup"
+   }
+   val userId = android.os.UserHandle.getUserId(android.os.Process.myUid())
+   Log.i("ScanDebug", "pkg_skipped pkg=$packageName reason=$reason userId=$userId source=review_filter")
+  }
+  eligible
  }
 
  private fun isEligibleInstalledApp(name: String): Boolean =
   TrustedPackageWhitelist.isEligibleForReview(context, name)
 
  private fun revealPrivateTextSafely(value: String, purpose: String): String =
-  runCatching { privateTextStore.revealPrivateText(value, purpose) }
-   .getOrDefault("[Encrypted local metadata unavailable]")
+  try {
+   privateTextStore.revealPrivateText(value, purpose)
+  } catch (error: Exception) {
+   Log.e("ScanDebug", "session_metadata_decode_failed purpose=$purpose", error)
+   "[Encrypted local metadata unavailable]"
+  }
  fun observeActiveThreatIndicatorCount(): Flow<Int> = threatIntelligence.observeActiveIndicatorCount()
  fun observeLastSuccessfulThreatFeedSyncAt(): Flow<Long?> = threatIntelligence.observeLastSuccessfulSyncAt()
  fun observeLatestThreatFeedSyncState(): Flow<ThreatFeedSyncStateEntity?> = threatIntelligence.observeLatestSyncState()
