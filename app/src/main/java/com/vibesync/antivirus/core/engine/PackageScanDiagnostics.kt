@@ -33,8 +33,8 @@ internal class PackageScanDiagnostics(
         totalCount.set(value.coerceAtLeast(0))
     }
 
-    fun markPublished() {
-        publishedCount.incrementAndGet()
+    fun markPublished(count: Int = 1) {
+        if (count > 0) publishedCount.addAndGet(count)
     }
 
     fun fail(packageName: String, stage: String, error: Throwable) {
