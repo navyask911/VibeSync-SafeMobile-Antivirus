@@ -585,7 +585,7 @@ class PackageScanner(
     val baseReport = deepStaticAnalyzer.analyze(
      apkPackageInfo,
      file,
-     apkPackageInfo?.let(::isDebugSigned) == true
+     apkPackageInfo?.let { isDebugSigned(it) } == true
     )
     val mergedReport = yaraXResult?.let { mergeYaraXFindings(baseReport, it) } ?: baseReport
     mergedReport.copy(mlProbability = mlProbability)
@@ -1206,7 +1206,7 @@ class PackageScanner(
  private fun loadTrustedSignerDigests(): Set<String> =
   TRUSTED_CERTIFICATE_ANCHOR_PACKAGES.flatMap { packageName ->
    val anchor = loadPackageSigningInfo(packageName)
-   anchor?.let(::signingCertificateDigests).orEmpty()
+   anchor?.let { signingCertificateDigests(it) }.orEmpty()
   }.toSet()
 
  private fun signingCertificateDigests(
