@@ -25,6 +25,7 @@ internal class PackageScanDiagnostics(
     val total: Int get() = totalCount.get()
     val published: Int get() = publishedCount.get()
     val failed: Int get() = failureCount.get()
+    val failedPackageNames: Set<String> get() = failedPackages.toSet()
     val skipped: Int get() = skippedReasons.size
 
     fun setTotal(value: Int) {
@@ -36,9 +37,8 @@ internal class PackageScanDiagnostics(
     }
 
     fun fail(packageName: String, stage: String, error: Throwable) {
-        if (failedPackages.add(packageName)) {
-            failureCount.incrementAndGet()
-        }
+        failedPackages.add(packageName)
+        failureCount.incrementAndGet()
         Log.e(
             "ScanDebug",
             "pkg_fail pkg=$packageName stage=$stage userId=$userId",
