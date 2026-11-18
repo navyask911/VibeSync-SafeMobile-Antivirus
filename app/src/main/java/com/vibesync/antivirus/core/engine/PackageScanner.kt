@@ -65,7 +65,7 @@ internal suspend fun publishScanResultSafely(
  packageName: String,
  publish: suspend () -> Unit,
  logFailure: (String, Throwable) -> Unit = { pkg, error ->
-  val userId = android.os.UserHandle.myUserHandle().identifier
+  val userId = android.os.Process.myUid() / 100000
   Log.e("ScanDebug", "pkg_fail pkg=$pkg stage=publish userId=$userId", error)
  }
 ): Boolean {
@@ -118,7 +118,7 @@ class PackageScanner(
    } catch (error: Exception) {
     if (diagnostics != null) diagnostics.fail(name, "resolve", error)
     else {
-     val userId = android.os.UserHandle.myUserHandle().identifier
+     val userId = android.os.Process.myUid() / 100000
      Log.e("ScanDebug", "pkg_fail pkg=$name stage=resolve userId=$userId", error)
     }
     0
@@ -272,7 +272,7 @@ class PackageScanner(
  }
 
  fun installedAppInventory(): List<InstalledAppItem> {
-  val userId = android.os.UserHandle.myUserHandle().identifier
+  val userId = android.os.Process.myUid() / 100000
   val packages = try {
    @Suppress("DEPRECATION")
    pm.getInstalledPackages(0)
@@ -1129,7 +1129,7 @@ class PackageScanner(
    if (diagnostics != null) {
     diagnostics.fail(packageName, stage, error.cause ?: error)
    } else {
-    val userId = android.os.UserHandle.myUserHandle().identifier
+    val userId = android.os.Process.myUid() / 100000
     Log.e("ScanDebug", "pkg_fail pkg=$packageName stage=$stage userId=$userId", error)
    }
   }
@@ -1166,7 +1166,7 @@ class PackageScanner(
   try {
    hashStore.revealMetadata(value, purpose)
   } catch (error: Exception) {
-   val userId = android.os.UserHandle.myUserHandle().identifier
+   val userId = android.os.Process.myUid() / 100000
    Log.e("ScanDebug", "metadata_decode_failed purpose=$purpose userId=$userId", error)
    value
   }
@@ -1217,7 +1217,7 @@ class PackageScanner(
  } catch (error: Exception) {
   if (diagnostics != null) diagnostics.fail(packageName, "resolve", error)
   else {
-   val userId = android.os.UserHandle.myUserHandle().identifier
+   val userId = android.os.Process.myUid() / 100000
    Log.e("ScanDebug", "pkg_fail pkg=$packageName stage=resolve userId=$userId", error)
   }
   Log.w(TAG, "Package signing metadata unavailable for " + packageName + "; scanning without signer trust.", error)
@@ -1272,7 +1272,7 @@ class PackageScanner(
    } catch (error: Exception) {
     if (diagnostics != null) diagnostics.fail(info.packageName, "resolve", error)
     else {
-     val userId = android.os.UserHandle.myUserHandle().identifier
+     val userId = android.os.Process.myUid() / 100000
      Log.e("ScanDebug", "pkg_fail pkg=${info.packageName} stage=resolve userId=$userId", error)
     }
     null
@@ -1296,7 +1296,7 @@ class PackageScanner(
  } catch (error: Exception) {
   if (diagnostics != null) diagnostics.fail(info.packageName, "resolve", error)
   else {
-   val userId = android.os.UserHandle.myUserHandle().identifier
+   val userId = android.os.Process.myUid() / 100000
    Log.e("ScanDebug", "pkg_fail pkg=${info.packageName} stage=resolve userId=$userId", error)
   }
   false
