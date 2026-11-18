@@ -1072,9 +1072,8 @@ class PackageScanner(
  private fun logPackageMetadata(info: PackageInfo, diagnostics: PackageScanDiagnostics) {
   val app = info.applicationInfo
   val flags = app?.flags ?: 0
-  val archivedFlag = runCatching {
-   ApplicationInfo::class.java.getField("FLAG_ARCHIVED").getInt(null)
-  }.getOrDefault(0)
+  val archived = android.os.Build.VERSION.SDK_INT >= 35 &&
+   flags and ApplicationInfo.FLAG_ARCHIVED != 0
   val apkBytes = app?.sourceDir?.let { path -> File(path).takeIf { it.isFile }?.length() } ?: -1L
   Log.i(
    "ScanDebug",
@@ -1082,7 +1081,7 @@ class PackageScanner(
     " system=${flags and ApplicationInfo.FLAG_SYSTEM != 0}" +
     " updatedSystem=${flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP != 0}" +
     " external=${flags and ApplicationInfo.FLAG_EXTERNAL_STORAGE != 0}" +
-    " archived=${archivedFlag != 0 && flags and archivedFlag != 0}" +
+    " archived=$archived" +
     " splitCount=${app?.splitSourceDirs?.size ?: 0}" +
     " apkBytes=$apkBytes"
   )
