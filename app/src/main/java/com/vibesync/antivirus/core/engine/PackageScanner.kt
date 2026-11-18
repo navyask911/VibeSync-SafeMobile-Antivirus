@@ -891,7 +891,11 @@ class PackageScanner(
   val apk = appInfo.sourceDir?.let(::File)
   if (apk == null || !apk.isFile || !apk.canRead()) {
    reasons += context.getString(R.string.apk_unreadable)
-   val failed = result(info.packageName, label, null, null, if (adjustedRiskScore >= 45) ScanVerdict.SUSPICIOUS else ScanVerdict.NOT_SCANNED, reasons, start).copy(
+   val unreadableVerdict = if (adjustedRiskScore >= 45) ScanVerdict.SUSPICIOUS else ScanVerdict.NOT_SCANNED
+   if (unreadableVerdict == ScanVerdict.NOT_SCANNED) {
+    diagnostics?.skip(info.packageName, "apk_source_missing_or_unreadable")
+   }
+   val failed = result(info.packageName, label, null, null, unreadableVerdict, reasons, start).copy(
     packageName = info.packageName,
     scanSessionId = scanSessionId,
     detectionSource = if (adjustedRiskScore >= 45) DetectionSource.HEURISTIC else DetectionSource.NONE
