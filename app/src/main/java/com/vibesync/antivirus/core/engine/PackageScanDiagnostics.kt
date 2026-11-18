@@ -10,8 +10,9 @@ import java.util.concurrent.atomic.AtomicInteger
  * Per-run, log-only accounting for installed-package scans.
  *
  * A package can be both failed and published: for example, hashing can fail but
- * the NOT_SCANNED result can still be persisted. "failed" counts distinct package
- * names with at least one failed stage; "published" counts successful Room callbacks.
+ * the NOT_SCANNED result can still be persisted. failureCount counts failed stages;
+ * failedPackageNames exposes the distinct package set. published counts successful
+ * Room session-row callbacks.
  */
 internal class PackageScanDiagnostics(
     val userId: Int = UserHandle.getUserId(Process.myUid())
