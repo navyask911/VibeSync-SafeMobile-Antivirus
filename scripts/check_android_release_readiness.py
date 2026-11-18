@@ -29,6 +29,8 @@ FILES = {
     "scanSessionState": "app/src/main/java/com/vibesync/antivirus/data/local/ScanSessionState.kt",
     "appScanCache": "app/src/main/java/com/vibesync/antivirus/data/local/AppScanCache.kt",
     "foregroundNotifications": "app/src/main/java/com/vibesync/antivirus/core/worker/ScanForegroundNotifications.kt",
+    "installNotifications": "app/src/main/java/com/vibesync/antivirus/core/observer/InstallScanNotifications.kt",
+    "releaseWorkflow": ".github/workflows/release-apk.yml",
     "banner": "app/src/main/java/com/vibesync/antivirus/presentation/AdMobBanner.kt",
     "proguard": "app/proguard-rules.pro",
 }
@@ -159,7 +161,7 @@ if not all(field in inventory_model for field in required_inventory_fields):
     errors.append("InstalledAppItem must expose packageName/appLabel/verdict/fileSize/isSystem scalar fields only.")
 if "pending.map { packageName ->" not in package_scanner or "val pending = all.filterNot { it in completedPackageNames }" not in package_scanner:
     errors.append("PackageInfo records must be collapsed to package-name strings before worker coroutine fan-out.")
-for label in ("service", "foregroundNotifications"):
+for label in ("service", "foregroundNotifications", "installNotifications"):
     text_value = source[label]
     forbidden = ("PackageInfo", "ApplicationInfo", "Drawable", "Bitmap", "Parcelable", "Bundle", "putParcelable(", "putSerializable(")
     if any(token in text_value for token in forbidden):
@@ -179,6 +181,9 @@ for label in ("scanItemEntity", "scanAudit", "scanSessionEntity", "scanSessionSt
         if field_type not in room_scalar_types:
             errors.append(f"{label} contains a non-scalar Room column type: {field_type}.")
             break
+
+if "zip -qr build/ui-screenshots-v1.10.6.zip" not in source["releaseWorkflow"] or "path: build/ui-screenshots-v1.10.6.zip" not in source["releaseWorkflow"]:
+    errors.append("The v1.10.6 release workflow must upload the screenshot archive it actually creates.")
 
 if errors:
     print(f"Android release readiness FAILED ({len(errors)} issue(s)):")

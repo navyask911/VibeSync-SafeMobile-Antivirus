@@ -363,7 +363,7 @@ jobs:
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: SafeMobile-v1.10.6-UI-Screenshots-${{ github.run_id }}
-          path: build/ui-screenshots-v1.10.5.zip
+          path: build/ui-screenshots-v1.10.6.zip
           if-no-files-found: error
           retention-days: 30
 
