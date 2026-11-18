@@ -223,12 +223,12 @@ class ThreatRepository(
   counters.totalPackages.incrementAndGet()
   var stage = "encrypt"
   try {
-   val path = privateTextStore.protectPrivateText(result.displayName.take(250), "scan-progress-path")
-   val reasons = privateTextStore.protectPrivateText(result.reasons.joinToString("\n").take(1024), "scan-progress-reasons")
-   val uri = result.sourceUri?.let { privateTextStore.protectPrivateText(it.take(4096), "scan-progress-uri") }
-   stage = "room_insert"
    database.withTransaction {
     val dao = database.threatDao()
+    val path = privateTextStore.protectPrivateText(result.displayName.take(250), "scan-progress-path")
+    val reasons = privateTextStore.protectPrivateText(result.reasons.joinToString("\n").take(1024), "scan-progress-reasons")
+    val uri = result.sourceUri?.let { privateTextStore.protectPrivateText(it.take(4096), "scan-progress-uri") }
+    stage = "room_insert"
     dao.insertScanSessionItem(ScanSessionItemEntity(sessionId, itemKey, itemType, path,
      result.verdict.name, result.packageName, result.sha256, result.md5, reasons, result.riskScore,
      result.detectionSource.name, result.malwareName, result.threatEventId, result.durationMs,
@@ -242,6 +242,7 @@ class ThreatRepository(
    throw ScanPublishStageException(stage, error)
   }
  }
+
  suspend fun loadScanSessionResults(sessionId: String): List<ScanResult> = withContext(Dispatchers.IO) {
   database.threatDao().scanSessionItems(sessionId).mapNotNull { item ->
    val packageName = item.packageName ?: item.itemKey
