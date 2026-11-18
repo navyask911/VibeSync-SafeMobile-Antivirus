@@ -105,10 +105,23 @@ class PackageScanner(
  private val tfliteInferenceEngine = com.vibesync.antivirus.engine.ml.TfliteInferenceEngine(context)
  private val yaraXScanner = YaraXScanner(context)
 
- private fun isProtectedPlatformPackage(packageName: String?, applicationInfo: ApplicationInfo?): Boolean {
+ private fun isProtectedPlatformPackage(
+  packageName: String?,
+  applicationInfo: ApplicationInfo?,
+  diagnostics: PackageScanDiagnostics? = null
+ ): Boolean {
   if (packageName == GOOGLE_PLAY_SERVICES_PACKAGE) return true
   val installedFlags = packageName?.let { name ->
-   runCatching { pm.getApplicationInfo(name, 0).flags }.getOrNull()
+   try {
+    pm.getApplicationInfo(name, 0).flags
+   } catch (error: Exception) {
+    if (diagnostics != null) diagnostics.fail(name, "resolve", error)
+    else {
+     val userId = android.os.UserHandle.getUserId(android.os.Process.myUid())
+     Log.e("ScanDebug", "pkg_fail pkg=$name stage=resolve userId=$userId", error)
+    }
+    0
+   }
   } ?: 0
   val flags = (applicationInfo?.flags ?: 0) or installedFlags
   return flags and (ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0
@@ -346,7 +359,7 @@ class PackageScanner(
      val include = system || updatedSystem ||
       packageName == GOOGLE_PLAY_SERVICES_PACKAGE ||
       ProtectedPackagePolicy.isUserInstalled(app.flags, packageName, context.packageName) ||
-      isSignedByKnownTrustedCertificate(packageName)
+      isSignedByKnownTrustedCertificate(packageName, diagnostics)
      if (!include) {
       diagnostics.skip(
        packageName,
@@ -389,7 +402,7 @@ class PackageScanner(
        currentCoroutineContext().ensureActive()
        val start = System.nanoTime()
        try {
-        val packageInfo = loadPackageInfoForScan(packageName)
+        val packageInfo = loadPackageInfoForScan(packageName, diagnostics)
         scanPackage(packageInfo, scanSessionId, diagnostics) { nextStage -> stage = nextStage }
        } catch (cancelled: CancellationException) {
         if (!currentCoroutineContext().isActive) throw cancelled
@@ -856,7 +869,7 @@ class PackageScanner(
   val adjustedRiskScore = (risk.score * deviceIntegrity.riskMultiplier).roundToInt().coerceIn(0, 100)
   val reasons = risk.reasonResourceIds.map(context::getString).toMutableList()
   if (deviceIntegrity.isUntrusted) reasons += deviceIntegrity.reasons
-  val debugSigned = isDebugSigned(info)
+  val debugSigned = isDebugSigned(info, diagnostics)
   if (debugSigned) reasons += context.getString(R.string.debug_certificate)
   val apk = appInfo.sourceDir?.let(::File)
   if (apk == null || !apk.isFile || !apk.canRead()) {
@@ -914,7 +927,7 @@ class PackageScanner(
   }
 
   // Platform packages are safe-listed before this method; keep a local backstop here too.
-  val mlProbability = if (isProtectedPlatformPackage(info.packageName, appInfo)) null
+  val mlProbability = if (isProtectedPlatformPackage(info.packageName, appInfo, diagnostics)) null
    else runMachineLearning(apk)
   val baseDeepReport = deepStaticAnalyzer.analyze(info, apk, debugSigned)
   val mergedDeepReport = mergeYaraXFindings(baseDeepReport, yaraXResult)
@@ -1116,11 +1129,14 @@ class PackageScanner(
   * some OEM package providers fail when signing and component metadata are
   * requested together.
   */
- private fun loadPackageInfoForScan(packageName: String): PackageInfo {
+ private fun loadPackageInfoForScan(
+  packageName: String,
+  diagnostics: PackageScanDiagnostics? = null
+ ): PackageInfo {
   val scanFlags = PackageManager.GET_PERMISSIONS or PackageManager.GET_SERVICES or
    PackageManager.GET_ACTIVITIES or PackageManager.GET_RECEIVERS or PackageManager.GET_PROVIDERS
   val info = getPackageInfoCompat(packageName, scanFlags)
-  val signerInfo = loadPackageSigningInfo(packageName)
+  val signerInfo = loadPackageSigningInfo(packageName, diagnostics)
   if (signerInfo != null) {
    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
     info.signingInfo = signerInfo.signingInfo
@@ -1141,25 +1157,39 @@ class PackageScanner(
   }
 
  /** Signing metadata is optional for the scan; unreadable signers never abort package enumeration. */
- private fun loadPackageSigningInfo(packageName: String): PackageInfo? = try {
+ private fun loadPackageSigningInfo(
+  packageName: String,
+  diagnostics: PackageScanDiagnostics? = null
+ ): PackageInfo? = try {
   getPackageInfoCompat(packageName, signingFlags())
  } catch (error: Exception) {
+  if (diagnostics != null) diagnostics.fail(packageName, "resolve", error)
+  else {
+   val userId = android.os.UserHandle.getUserId(android.os.Process.myUid())
+   Log.e("ScanDebug", "pkg_fail pkg=$packageName stage=resolve userId=$userId", error)
+  }
   Log.w(TAG, "Package signing metadata unavailable for " + packageName + "; scanning without signer trust.", error)
   null
  }
 
  /** Trust is based on certificate equality with the installed Play Services/Play Store signers. */
- private fun isSignedByKnownTrustedCertificate(packageName: String): Boolean {
+ private fun isSignedByKnownTrustedCertificate(
+  packageName: String,
+  diagnostics: PackageScanDiagnostics? = null
+ ): Boolean {
   val trusted = trustedSignerDigests
   if (trusted.isEmpty()) return false
-  val signerInfo = loadPackageSigningInfo(packageName) ?: return false
-  return signingCertificateDigests(signerInfo).any { it in trusted }
+  val signerInfo = loadPackageSigningInfo(packageName, diagnostics) ?: return false
+  return signingCertificateDigests(signerInfo, diagnostics).any { it in trusted }
  }
 
- private fun isSignedByKnownTrustedCertificate(info: PackageInfo): Boolean {
+ private fun isSignedByKnownTrustedCertificate(
+  info: PackageInfo,
+  diagnostics: PackageScanDiagnostics? = null
+ ): Boolean {
   val trusted = trustedSignerDigests
   if (trusted.isEmpty()) return false
-  return signingCertificateDigests(info).any { it in trusted }
+  return signingCertificateDigests(info, diagnostics).any { it in trusted }
  }
 
  private fun loadTrustedSignerDigests(): Set<String> =
@@ -1168,7 +1198,10 @@ class PackageScanner(
    anchor?.let(::signingCertificateDigests).orEmpty()
   }.toSet()
 
- private fun signingCertificateDigests(info: PackageInfo): Set<String> {
+ private fun signingCertificateDigests(
+  info: PackageInfo,
+  diagnostics: PackageScanDiagnostics? = null
+ ): Set<String> {
   val signatures = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
    val signingInfo = info.signingInfo
    if (signingInfo == null) emptyList()
@@ -1181,14 +1214,24 @@ class PackageScanner(
    info.signatures?.toList().orEmpty()
   }
   return signatures.mapNotNull { signature ->
-   runCatching {
+   try {
     MessageDigest.getInstance("SHA-256").digest(signature.toByteArray())
      .joinToString("") { byte -> "%02x".format(byte.toInt() and 0xff) }
-   }.getOrNull()
+   } catch (error: Exception) {
+    if (diagnostics != null) diagnostics.fail(info.packageName, "resolve", error)
+    else {
+     val userId = android.os.UserHandle.getUserId(android.os.Process.myUid())
+     Log.e("ScanDebug", "pkg_fail pkg=${info.packageName} stage=resolve userId=$userId", error)
+    }
+    null
+   }
   }.toSet()
  }
 
- private fun isDebugSigned(info: PackageInfo): Boolean = runCatching {
+ private fun isDebugSigned(
+  info: PackageInfo,
+  diagnostics: PackageScanDiagnostics? = null
+ ): Boolean = try {
   val signatureBytes = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
    info.signingInfo?.apkContentsSigners?.firstOrNull()?.toByteArray()
   } else {
@@ -1198,7 +1241,15 @@ class PackageScanner(
   val cert = CertificateFactory.getInstance("X.509").generateCertificate(ByteArrayInputStream(signatureBytes)) as X509Certificate
   val subject = cert.subjectX500Principal.name
   subject.contains("CN=Android Debug", true) || subject.contains("CN=AndroidDebug", true)
- }.getOrDefault(false)
+ } catch (error: Exception) {
+  if (diagnostics != null) diagnostics.fail(info.packageName, "resolve", error)
+  else {
+   val userId = android.os.UserHandle.getUserId(android.os.Process.myUid())
+   Log.e("ScanDebug", "pkg_fail pkg=${info.packageName} stage=resolve userId=$userId", error)
+  }
+  false
+ }
+
  private fun signingFlags(): Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) PackageManager.GET_SIGNING_CERTIFICATES else {
   @Suppress("DEPRECATION")
   PackageManager.GET_SIGNATURES
