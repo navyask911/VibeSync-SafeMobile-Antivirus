@@ -292,9 +292,11 @@ class PackageScanner(
   onItemCompleted: suspend (ScanResult) -> Unit,
   progress: suspend (processed: Int, total: Int) -> Unit
  ): List<ScanResult> = supervisorScope {
-  // Enumerate only base package/application metadata first. Detailed permission,
-  // component and signer reads are performed per package below so one OEM provider
-  // failure cannot abort the entire installed-app scan.
+  val diagnostics = PackageScanDiagnostics()
+  var enumeratedTotal = 0
+
+  // Keep the installed-package query and existing inclusion predicates unchanged.
+  // The diagnostic records each item filtered out before the per-package loop.
   val all = withContext(Dispatchers.IO) {
    val packages = try {
     @Suppress("DEPRECATION")
@@ -303,25 +305,43 @@ class PackageScanner(
     Log.e(TAG, "PackageManager could not enumerate installed packages.", error)
     emptyList()
    }
-   // Strip the PackageInfo/ApplicationInfo carrier at the enumeration boundary.
-   // The concurrent scan tasks receive only stable package-name strings.
+   enumeratedTotal = packages.size
    packages.mapNotNull { info ->
+    val packageName = info.packageName
     try {
-     val app = info.applicationInfo ?: return@mapNotNull null
+     val app = info.applicationInfo ?: run {
+      diagnostics.skip(packageName, "application_info_missing")
+      return@mapNotNull null
+     }
      val system = app.flags and ApplicationInfo.FLAG_SYSTEM != 0
      val updatedSystem = app.flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP != 0
-     val include = info.packageName != context.packageName &&
-      (system || updatedSystem || info.packageName == GOOGLE_PLAY_SERVICES_PACKAGE ||
-       ProtectedPackagePolicy.isUserInstalled(app.flags, info.packageName, context.packageName) ||
-       isSignedByKnownTrustedCertificate(info.packageName))
-     info.packageName.takeIf { include }
+     if (packageName == context.packageName) {
+      diagnostics.skip(packageName, "scanner_own_package")
+      return@mapNotNull null
+     }
+     val include = system || updatedSystem ||
+      packageName == GOOGLE_PLAY_SERVICES_PACKAGE ||
+      ProtectedPackagePolicy.isUserInstalled(app.flags, packageName, context.packageName) ||
+      isSignedByKnownTrustedCertificate(packageName)
+     if (!include) {
+      diagnostics.skip(
+       packageName,
+       "excluded_by_scan_policy flags=${app.flags} system=$system updatedSystem=$updatedSystem"
+      )
+     }
+     packageName.takeIf { include }
     } catch (error: Exception) {
-     Log.w(TAG, "Skipping package whose base metadata could not be evaluated: " + info.packageName, error)
+     diagnostics.fail(packageName, "resolve", error)
      null
     }
    }.distinct().sorted()
   }
+  diagnostics.setTotal(enumeratedTotal)
+
   val completed = all.count { it in completedPackageNames }
+  all.filter { it in completedPackageNames }.forEach { packageName ->
+   diagnostics.skip(packageName, "already_completed_in_this_session")
+  }
   val pending = all.filterNot { it in completedPackageNames }
   val semaphore = Semaphore(3)
   val count = AtomicInteger(0)
@@ -338,46 +358,51 @@ class PackageScanner(
    pending.map { packageName ->
     Log.d("ScanDebug", "Starting scan for package: $packageName")
     async(Dispatchers.IO) {
+     var stage = "resolve"
+     diagnostics.iconNotApplicable(packageName)
      val scanResult = try {
       semaphore.withPermit {
        currentCoroutineContext().ensureActive()
        val start = System.nanoTime()
        try {
-        scanPackage(loadPackageInfoForScan(packageName), scanSessionId)
+        val packageInfo = loadPackageInfoForScan(packageName)
+        scanPackage(packageInfo, scanSessionId, diagnostics) { nextStage -> stage = nextStage }
        } catch (cancelled: CancellationException) {
         if (!currentCoroutineContext().isActive) throw cancelled
+        diagnostics.fail(packageName, stage, cancelled)
         Log.e("ScanDebug", "Package scan cancelled locally: $packageName", cancelled)
         result(packageName, packageName, null, null, ScanVerdict.NOT_SCANNED,
          listOf(context.getString(R.string.file_could_not_read)), start)
          .copy(packageName = packageName, scanSessionId = scanSessionId)
        } catch (error: Exception) {
+        diagnostics.fail(packageName, stage, error)
         Log.e("ScanDebug", "Package scan failed: $packageName", error)
         val failed = result(packageName, packageName, null, null, ScanVerdict.NOT_SCANNED,
          listOf(context.getString(R.string.file_could_not_read)), start)
          .copy(packageName = packageName, scanSessionId = scanSessionId)
-        try {
-         auditSafely(failed, start, scanSessionId)
-        } catch (cancelled: CancellationException) {
-         throw cancelled
-        } catch (auditError: Exception) {
-         Log.w("ScanDebug", "Could not persist failed scan for package: $packageName", auditError)
-        }
+        auditSafely(failed, start, scanSessionId, diagnostics)
         failed
        }
       }
      } catch (cancelled: CancellationException) {
       if (!currentCoroutineContext().isActive) throw cancelled
+      diagnostics.fail(packageName, stage, cancelled)
       Log.e("ScanDebug", "Scan task cancelled before package analysis: $packageName", cancelled)
       result(packageName, packageName, null, null, ScanVerdict.NOT_SCANNED,
        listOf(context.getString(R.string.file_could_not_read)), System.nanoTime())
        .copy(packageName = packageName, scanSessionId = scanSessionId)
      } catch (error: Exception) {
+      diagnostics.fail(packageName, stage, error)
       Log.e("ScanDebug", "Scan task failed before package analysis: $packageName", error)
       result(packageName, packageName, null, null, ScanVerdict.NOT_SCANNED,
        listOf(context.getString(R.string.file_could_not_read)), System.nanoTime())
        .copy(packageName = packageName, scanSessionId = scanSessionId)
      }
-     publishScanResultSafely(packageName, { onItemCompleted(scanResult) })
+     val didPublish = publishScanResultSafely(packageName, { onItemCompleted(scanResult) }) { pkg, error ->
+      val failureStage = (error as? ScanPublishStageException)?.stage ?: "publish"
+      diagnostics.fail(pkg, failureStage, error.cause ?: error)
+     }
+     if (didPublish) diagnostics.markPublished()
      try {
       mutex.withLock { progress(completed + count.incrementAndGet(), all.size) }
      } catch (cancelled: CancellationException) {
@@ -391,6 +416,7 @@ class PackageScanner(
    }.awaitAll()
   } catch (cancelled: CancellationException) {
    if (!currentCoroutineContext().isActive) throw cancelled
+   pending.forEach { packageName -> diagnostics.fail(packageName, "publish", cancelled) }
    Log.e("ScanDebug", "A package task was cancelled independently; retaining per-package outcomes.", cancelled)
    pending.map { packageName ->
     result(packageName, packageName, null, null, ScanVerdict.NOT_SCANNED,
@@ -398,6 +424,7 @@ class PackageScanner(
      .copy(packageName = packageName, scanSessionId = scanSessionId)
    }
   } catch (error: Exception) {
+   pending.forEach { packageName -> diagnostics.fail(packageName, "publish", error) }
    Log.e("ScanDebug", "Installed-app scan queue failed while awaiting package tasks.", error)
    pending.map { packageName ->
     result(packageName, packageName, null, null, ScanVerdict.NOT_SCANNED,
@@ -405,6 +432,7 @@ class PackageScanner(
      .copy(packageName = packageName, scanSessionId = scanSessionId)
    }
   }
+  diagnostics.logSummary()
   results.sortedBy { when (it.verdict) {
    ScanVerdict.THREAT -> 0
    ScanVerdict.SUSPICIOUS -> 1
