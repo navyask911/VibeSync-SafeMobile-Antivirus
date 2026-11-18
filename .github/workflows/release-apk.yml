@@ -39,6 +39,7 @@ on:
       - "v1.10.5"
       - "v1.10.6"
       - "v1.10.7"
+      - "v1.10.8"
 
 permissions:
   contents: write
@@ -386,7 +387,14 @@ jobs:
               exit 1
             fi
           fi
-          if [[ "${GITHUB_REF_TYPE:-}" == "tag" && "${GITHUB_REF_NAME:-}" == "v1.10.7" ]] ||
+          if [[ "${GITHUB_REF_TYPE:-}" == "tag" && "${GITHUB_REF_NAME:-}" == "v1.10.8" ]]; then
+            if [[ "$version_name" != "1.10.8" || "$version_code" != "20261162" ]]; then
+              echo "SAFE STOP: v1.10.8 tag expected 1.10.8 / 20261162, got $version_name / $version_code." >&2
+              exit 1
+            fi
+          fi
+          if [[ "${GITHUB_REF_TYPE:-}" == "tag" && "${GITHUB_REF_NAME:-}" == "v1.10.8" ]] ||
+             [[ "${GITHUB_REF_TYPE:-}" == "tag" && "${GITHUB_REF_NAME:-}" == "v1.10.7" ]] ||
              [[ "${GITHUB_REF_TYPE:-}" == "branch" && "${GITHUB_REF_NAME:-}" == "main" && "$version_name" == "1.10.7" && "$version_code" == "20261161" ]]; then
             tag="v1.10.7"
           elif [[ "${GITHUB_REF_TYPE:-}" == "tag" && "${GITHUB_REF_NAME:-}" == "v1.10.6" ]]; then
@@ -410,6 +418,7 @@ jobs:
           Built from commit ${GITHUB_SHA}.
           v1.6.1: Added new launcher icons and splash screen. Fixed text wrapping and added back navigation. Added inline Crown subscription toggle.
           v1.6.2: Accept all file types in the scan document picker for .txt/EICAR testing; preserve the originating screen when backing out of Pro; make the paywall and shared app toolbar wrap and scroll at larger font scales.
+          v1.10.8: Moves installed-app icons to bounded asynchronous IO loading with a package/version LRU cache and adds per-package scan/publish diagnostics. Includes the v1.10.6 scalar-only ViewModel, service/PendingIntent and Room boundary guards. Uses Play versionCode 20261162.
           v1.10.7: Fixes ColorOS scan publication by allowing scan-progress-path/reasons/URI and scan-resume-URI encrypted metadata purposes; counts Room publish failures and fails scans with zero persisted results or any item publication loss. Uses Play versionCode 20261161.
           v1.10.6: Collapses PackageManager results to scalar package rows before concurrent scan work; keeps OEM-private PackageInfo/ApplicationInfo confined to PackageScanner; asserts primitive-only ViewModel, service Intent/PendingIntent and Room boundaries. Uses Play versionCode 20261160.
           v1.10.5: Resets stale foreground scan sessions and tagged WorkManager scans, explicitly allows offline scan work, clears Room checkpoints before new sessions, adds worker/per-item ScanDebug logs, and revalidates persisted SAF read grants. Uses Play versionCode 20261159.
@@ -458,6 +467,17 @@ jobs:
             "build/siren-test/siren-test-definitions.json"
             "build/siren-test/SHA256SUMS.txt"
           )
+          checksum_manifest="SHA256SUMS-v${version_name}.txt"
+          sha256sum \
+            "${{ steps.verify-aab.outputs.aab_path }}" \
+            "${{ steps.verify-aab.outputs.apk_path }}" \
+            "build/ui-screenshots-v${version_name}.zip" \
+            "build/siren-test/SafeMobile-Siren-Test.apk" \
+            "build/siren-test/siren-test-definitions.json" \
+            "build/siren-test/SHA256SUMS.txt" \
+            > "$checksum_manifest"
+          sha256sum --check "$checksum_manifest"
+          release_files+=("$checksum_manifest")
           if gh release view "$tag" >/dev/null 2>&1; then
             gh release upload "$tag" "${release_files[@]}" --clobber
           else
