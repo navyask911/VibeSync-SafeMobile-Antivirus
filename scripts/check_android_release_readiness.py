@@ -182,8 +182,14 @@ for label in ("scanItemEntity", "scanAudit", "scanSessionEntity", "scanSessionSt
             errors.append(f"{label} contains a non-scalar Room column type: {field_type}.")
             break
 
-if "zip -qr build/ui-screenshots-v1.10.6.zip" not in source["releaseWorkflow"] or "path: build/ui-screenshots-v1.10.6.zip" not in source["releaseWorkflow"]:
-    errors.append("The v1.10.6 release workflow must upload the screenshot archive it actually creates.")
+screenshot_archive = 'build/ui-screenshots-v${{ steps.verify-aab.outputs.version_name }}.zip'
+if (
+    'screenshots_zip="' + screenshot_archive + '"' not in source["releaseWorkflow"]
+    or 'zip -qr "$screenshots_zip" app/src/test/snapshots' not in source["releaseWorkflow"]
+    or "path: " + screenshot_archive not in source["releaseWorkflow"]
+    or '"' + screenshot_archive + '"' not in source["releaseWorkflow"]
+):
+    errors.append("The release workflow must package, upload and attach the same version-derived Paparazzi screenshot archive.")
 
 if errors:
     print(f"Android release readiness FAILED ({len(errors)} issue(s)):")
