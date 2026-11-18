@@ -258,6 +258,7 @@ class PackageScanner(
  }
 
  fun installedAppInventory(): List<InstalledAppItem> {
+  val userId = android.os.UserHandle.getUserId(android.os.Process.myUid())
   val packages = try {
    @Suppress("DEPRECATION")
    pm.getInstalledPackages(0)
@@ -266,15 +267,38 @@ class PackageScanner(
    return emptyList()
   }
   return packages.asSequence().filter { info ->
-   val flags = info.applicationInfo?.flags ?: return@filter false
-   ProtectedPackagePolicy.isUserInstalled(flags, info.packageName, context.packageName)
+   val appInfo = info.applicationInfo ?: run {
+    Log.i("ScanDebug", "pkg_skipped pkg=${info.packageName} reason=inventory_application_info_missing userId=$userId source=all_apps_inventory")
+    return@filter false
+   }
+   val flags = appInfo.flags
+   val included = ProtectedPackagePolicy.isUserInstalled(flags, info.packageName, context.packageName)
+   if (!included) {
+    val reason = when {
+     info.packageName == context.packageName -> "inventory_own_package"
+     TrustedPackageWhitelist.hasProtectedNamespace(info.packageName) -> "inventory_protected_namespace"
+     else -> "inventory_system_flags"
+    }
+    Log.i("ScanDebug", "pkg_skipped pkg=${info.packageName} reason=$reason flags=$flags userId=$userId source=all_apps_inventory")
+   }
+   included
   }.mapNotNull { info ->
-   val appInfo = info.applicationInfo ?: return@mapNotNull null
-   val label = runCatching { appInfo.loadLabel(pm)?.toString() }
-    .getOrNull().orEmpty().ifBlank { info.packageName }
-   val apkSize = runCatching {
+   val appInfo = info.applicationInfo ?: run {
+    Log.i("ScanDebug", "pkg_skipped pkg=${info.packageName} reason=inventory_application_info_missing userId=$userId source=all_apps_inventory")
+    return@mapNotNull null
+   }
+   val label = try {
+    appInfo.loadLabel(pm)?.toString().orEmpty().ifBlank { info.packageName }
+   } catch (error: Exception) {
+    Log.e("ScanDebug", "pkg_fail pkg=${info.packageName} stage=label userId=$userId", error)
+    info.packageName
+   }
+   val apkSize = try {
     File(appInfo.sourceDir).takeIf { it.isFile }?.length() ?: 0L
-   }.getOrDefault(0L)
+   } catch (error: Exception) {
+    Log.e("ScanDebug", "pkg_fail pkg=${info.packageName} stage=resolve userId=$userId", error)
+    0L
+   }
    val isSystem = appInfo.flags and
     (ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0
    InstalledAppItem(info.packageName, label, ScanVerdict.NOT_SCANNED.name, apkSize, isSystem)
