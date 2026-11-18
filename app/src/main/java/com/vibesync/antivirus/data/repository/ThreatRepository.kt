@@ -50,6 +50,13 @@ import java.security.MessageDigest
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 
+data class ScanPublishSummary(val failureCount: Int, val totalPackages: Int)
+
+private class ScanPublishCounters {
+ val failureCount = AtomicInteger(0)
+ val totalPackages = AtomicInteger(0)
+}
+
 class ThreatRepository(
  private val context: Context,
  private val database: ThreatDatabase,
@@ -62,6 +69,7 @@ class ThreatRepository(
  private val maxSafScanFiles = 1_000
  private val trustedAppStore = TrustedAppStore(context)
  private val skippedSafFileCounts = ConcurrentHashMap<String, AtomicInteger>()
+ private val scanPublishCounters = ConcurrentHashMap<String, ScanPublishCounters>()
 
  private fun recordSkippedSafFile(sessionId: String, uri: Uri, error: Exception) {
   Log.e("ScanDebug", "Skipping file: $uri", error)
@@ -73,6 +81,18 @@ class ThreatRepository(
  fun skippedSafFileCount(sessionId: String): Int = skippedSafFileCounts[sessionId]?.get() ?: 0
 
  fun clearSkippedSafFileCount(sessionId: String) { skippedSafFileCounts.remove(sessionId) }
+
+ fun scanPublishSummary(sessionId: String): ScanPublishSummary {
+  val counters = scanPublishCounters[sessionId]
+  return ScanPublishSummary(
+   failureCount = counters?.failureCount?.get() ?: 0,
+   totalPackages = counters?.totalPackages?.get() ?: 0
+  )
+ }
+
+ fun clearScanPublishSummary(sessionId: String) {
+  scanPublishCounters.remove(sessionId)
+ }
 
  suspend fun clearScanSessionStateCheckpoints() = withContext(Dispatchers.IO) {
   database.withTransaction {
@@ -198,16 +218,25 @@ class ThreatRepository(
   database.threatDao().updateScanSessionTotal(sessionId, totalItems.coerceAtLeast(0))
  }
  suspend fun recordScanItemCompleted(sessionId: String, itemKey: String, itemType: String, result: ScanResult) = withContext(Dispatchers.IO) {
-  database.withTransaction {
-   val dao = database.threatDao()
-   val path = privateTextStore.protectPrivateText(result.displayName.take(250), "scan-progress-path")
-   val reasons = privateTextStore.protectPrivateText(result.reasons.joinToString("\n").take(1024), "scan-progress-reasons")
-   val uri = result.sourceUri?.let { privateTextStore.protectPrivateText(it.take(4096), "scan-progress-uri") }
-   dao.insertScanSessionItem(ScanSessionItemEntity(sessionId, itemKey, itemType, path,
-    result.verdict.name, result.packageName, result.sha256, result.md5, reasons, result.riskScore,
-    result.detectionSource.name, result.malwareName, result.threatEventId, result.durationMs,
-    uri, System.currentTimeMillis()))
-   dao.updateScanSessionProgress(sessionId, dao.countScanSessionItems(sessionId), path)
+  val counters = scanPublishCounters.computeIfAbsent(sessionId) { ScanPublishCounters() }
+  counters.totalPackages.incrementAndGet()
+  try {
+   database.withTransaction {
+    val dao = database.threatDao()
+    val path = privateTextStore.protectPrivateText(result.displayName.take(250), "scan-progress-path")
+    val reasons = privateTextStore.protectPrivateText(result.reasons.joinToString("\n").take(1024), "scan-progress-reasons")
+    val uri = result.sourceUri?.let { privateTextStore.protectPrivateText(it.take(4096), "scan-progress-uri") }
+    dao.insertScanSessionItem(ScanSessionItemEntity(sessionId, itemKey, itemType, path,
+     result.verdict.name, result.packageName, result.sha256, result.md5, reasons, result.riskScore,
+     result.detectionSource.name, result.malwareName, result.threatEventId, result.durationMs,
+     uri, System.currentTimeMillis()))
+    dao.updateScanSessionProgress(sessionId, dao.countScanSessionItems(sessionId), path)
+   }
+  } catch (cancelled: CancellationException) {
+   throw cancelled
+  } catch (error: Exception) {
+   counters.failureCount.incrementAndGet()
+   throw error
   }
  }
  suspend fun loadScanSessionResults(sessionId: String): List<ScanResult> = withContext(Dispatchers.IO) {
