@@ -20,16 +20,19 @@ class ScanResultPublisherTest {
             logged += packageName to error
         }
 
-        publishScanResultSafely(
+        val firstPublished = publishScanResultSafely(
             packageName = "com.example.room-failure",
             publish = { throw IllegalStateException("Room insert failed") },
             logFailure = logger
         )
-        publishScanResultSafely(
+        val nextPublished = publishScanResultSafely(
             packageName = "com.example.next",
             publish = { nextPackagePublished = true },
             logFailure = logger
         )
+
+        assertFalse(firstPublished)
+        assertTrue(nextPublished)
 
         assertTrue(nextPackagePublished)
         assertEquals(1, logged.size)
