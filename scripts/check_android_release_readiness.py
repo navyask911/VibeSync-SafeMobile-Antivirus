@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Static release guard for SafeMobile v1.10.5 scan, SAF, 16 KB and edge-to-edge requirements."""
+"""Static release guard for SafeMobile v1.10.6 scan, SAF, 16 KB and edge-to-edge requirements."""
 from pathlib import Path
 import re
 import sys
@@ -20,6 +20,17 @@ FILES = {
     "repository": "app/src/main/java/com/vibesync/antivirus/data/repository/ThreatRepository.kt",
     "coordinator": "app/src/main/java/com/vibesync/antivirus/core/worker/ScanExecutionCoordinator.kt",
     "packageScanner": "app/src/main/java/com/vibesync/antivirus/core/engine/PackageScanner.kt",
+    "viewmodel": "app/src/main/java/com/vibesync/antivirus/presentation/SafeMobileViewModel.kt",
+    "inventoryModel": "app/src/main/java/com/vibesync/antivirus/core/engine/InstalledAppItem.kt",
+    "scanResult": "app/src/main/java/com/vibesync/antivirus/core/engine/ScanResult.kt",
+    "scanItemEntity": "app/src/main/java/com/vibesync/antivirus/data/local/ScanSessionItemEntity.kt",
+    "scanAudit": "app/src/main/java/com/vibesync/antivirus/data/local/ScanAudit.kt",
+    "scanSessionEntity": "app/src/main/java/com/vibesync/antivirus/data/local/ScanSessionEntity.kt",
+    "scanSessionState": "app/src/main/java/com/vibesync/antivirus/data/local/ScanSessionState.kt",
+    "appScanCache": "app/src/main/java/com/vibesync/antivirus/data/local/AppScanCache.kt",
+    "foregroundNotifications": "app/src/main/java/com/vibesync/antivirus/core/worker/ScanForegroundNotifications.kt",
+    "installNotifications": "app/src/main/java/com/vibesync/antivirus/core/observer/InstallScanNotifications.kt",
+    "releaseWorkflow": ".github/workflows/release-apk.yml",
     "banner": "app/src/main/java/com/vibesync/antivirus/presentation/AdMobBanner.kt",
     "proguard": "app/proguard-rules.pro",
 }
@@ -36,10 +47,10 @@ gradle = source["gradle"]
 version_name = re.search(r'\bversionName\s*=\s*"([^"]+)"', gradle)
 version_code = re.search(r"\bversionCode\s*=\s*(\d+)", gradle)
 ndk = re.search(r'\bndkVersion\s*=\s*"([^"]+)"', gradle)
-if not version_name or version_name.group(1) != "1.10.5":
-    errors.append("Gradle versionName must be 1.10.5.")
-if not version_code or version_code.group(1) != "20261159":
-    errors.append("Gradle versionCode must be 20261159.")
+if not version_name or version_name.group(1) != "1.10.6":
+    errors.append("Gradle versionName must be 1.10.6.")
+if not version_code or version_code.group(1) != "20261160":
+    errors.append("Gradle versionCode must be 20261160.")
 if not ndk or tuple(int(part) for part in ndk.group(1).split(".")[:1]) < (28,):
     errors.append("Gradle must pin Android NDK r28 or higher.")
 if "com.google.ai.edge.litert:litert:1.4.2" not in gradle:
@@ -132,8 +143,50 @@ if "persistedUriPermissions" not in source["screen"] or "persistedReadGrants.isN
 if "integrityCheckPassed" not in source["score"]:
     errors.append("Device Security Score does not consume the effective remote-or-local integrity result.")
 
+
+# v1.10.6 ColorOS boundary: platform package metadata is deliberately confined
+# to PackageScanner and collapsed to scalar values before crossing app layers.
+viewmodel = source["viewmodel"]
+inventory_model = source["inventoryModel"]
+scan_result = source["scanResult"]
+for label, text_value in (("SafeMobileViewModel", viewmodel), ("ScanResult", scan_result)):
+    forbidden = ("PackageInfo", "ApplicationInfo", "Drawable", "Bitmap", "Bundle", "Parcelable", "SavedStateHandle")
+    if any(token in text_value for token in forbidden):
+        errors.append(f"{label} must not retain PackageManager, graphics, Bundle or saved-state parcelable objects.")
+required_inventory_fields = (
+    "val packageName: String", "val appLabel: String", "val verdict: String",
+    "val fileSize: Long", "val isSystem: Boolean",
+)
+if not all(field in inventory_model for field in required_inventory_fields):
+    errors.append("InstalledAppItem must expose packageName/appLabel/verdict/fileSize/isSystem scalar fields only.")
+if "pending.map { packageName ->" not in package_scanner or "val pending = all.filterNot { it in completedPackageNames }" not in package_scanner:
+    errors.append("PackageInfo records must be collapsed to package-name strings before worker coroutine fan-out.")
+for label in ("service", "foregroundNotifications", "installNotifications"):
+    text_value = source[label]
+    forbidden = ("PackageInfo", "ApplicationInfo", "Drawable", "Bitmap", "Parcelable", "Bundle", "putParcelable(", "putSerializable(")
+    if any(token in text_value for token in forbidden):
+        errors.append(f"{label} must not pass Android package/graphics objects or parcelables through service/PendingIntent payloads.")
+room_scalar_types = {"String", "Int", "Long", "Boolean", "Float", "Double"}
+for label in ("scanItemEntity", "scanAudit", "scanSessionEntity", "scanSessionState", "appScanCache"):
+    entity_source = source[label]
+    forbidden = ("Bundle", "Parcelable", "Serializable", "PackageInfo", "ApplicationInfo", "Drawable", "Bitmap")
+    if any(token in entity_source for token in forbidden):
+        errors.append(f"{label} must not contain Bundle, Parcelable, Serializable or Android framework columns.")
+    for line in entity_source.splitlines():
+        declaration = line.strip()
+        if "val " not in declaration or ":" not in declaration:
+            continue
+        declaration = declaration.split("val ", 1)[1]
+        field_type = declaration.split(":", 1)[1].split("=", 1)[0].strip().rstrip("?,")
+        if field_type not in room_scalar_types:
+            errors.append(f"{label} contains a non-scalar Room column type: {field_type}.")
+            break
+
+if "zip -qr build/ui-screenshots-v1.10.6.zip" not in source["releaseWorkflow"] or "path: build/ui-screenshots-v1.10.6.zip" not in source["releaseWorkflow"]:
+    errors.append("The v1.10.6 release workflow must upload the screenshot archive it actually creates.")
+
 if errors:
     print(f"Android release readiness FAILED ({len(errors)} issue(s)):")
     print("\n".join(f"- {error}" for error in errors), file=sys.stderr)
     sys.exit(1)
-print("Android release readiness passed: v1.10.5/20261159, NDK r28+, LiteRT 1.4.2, offline scan work and SAF grants.")
+print("Android release readiness passed: v1.10.6/20261160, NDK r28+, LiteRT 1.4.2, offline scan work and SAF grants.")

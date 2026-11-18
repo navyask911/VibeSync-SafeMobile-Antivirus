@@ -47,9 +47,9 @@ android {
   applicationId = "com.vibesync.antivirus"
   minSdk = 26
   targetSdk = 36
-  versionCode = 20261159
-  // [release-v1.10.5] Reset stuck scan work and checkpoints; enforce offline WorkManager and SAF grants.
-  versionName = "1.10.5"
+  versionCode = 20261160
+  // [release-v1.10.6] Keep OEM PackageManager metadata out of UI, service and Room boundaries.
+  versionName = "1.10.6"
   testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   buildConfigField("String", "FEED_MANIFEST_PUBLIC_KEY_B64", cfg(feedManifestPublicKey))
   buildConfigField("Boolean", "FEED_MANIFEST_KEY_CONFIGURED", (!feedManifestPublicKey.isBlank()).toString())

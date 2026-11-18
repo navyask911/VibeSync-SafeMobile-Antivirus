@@ -1171,7 +1171,7 @@ import kotlinx.coroutines.launch
             Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surface), modifier=Modifier.fillMaxWidth()) {
              Row(Modifier.fillMaxWidth().padding(12.dp), verticalAlignment=Alignment.CenterVertically, horizontalArrangement=Arrangement.spacedBy(8.dp)) {
               Column(Modifier.weight(1f)) {
-               Text(item.displayName, style=MaterialTheme.typography.titleSmall)
+               Text(item.appLabel, style=MaterialTheme.typography.titleSmall)
                Text(item.packageName, style=MaterialTheme.typography.labelSmall, color=MaterialTheme.colorScheme.onSurfaceVariant)
               }
               TextButton(onClick={ runCatching { context.startActivity(UninstallHandler.buildAppInfoIntent(item.packageName)) }

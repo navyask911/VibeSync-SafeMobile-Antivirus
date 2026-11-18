@@ -204,6 +204,11 @@ class ScanForegroundService : Service() {
   const val OP_SELECTED_FILE = "SELECTED_FILE"
   const val OP_INSTALLED_PACKAGE = "INSTALLED_PACKAGE"
   const val OP_SELECTED_FOLDER = "SELECTED_FOLDER"
+  /**
+   * Service commands intentionally carry only scalar values: operation name,
+   * manual-scan flag, URI text and package name. Keep framework metadata and
+   * UI objects out of Intent extras.
+   */
   fun start(context: Context, operation: String, manual: Boolean = true, uri: String? = null, packageName: String? = null) {
    runCatching { DeepScanScheduler.resetBeforeManualScan(context) }
     .onFailure { Log.e("ScanDebug", "Could not reset tagged WorkManager scan jobs before a new scan.", it) }

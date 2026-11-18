@@ -264,11 +264,17 @@ class PackageScanner(
   return packages.asSequence().filter { info ->
    val flags = info.applicationInfo?.flags ?: return@filter false
    ProtectedPackagePolicy.isUserInstalled(flags, info.packageName, context.packageName)
-  }.map { info ->
-   val label = runCatching { info.applicationInfo?.loadLabel(pm)?.toString() }
+  }.mapNotNull { info ->
+   val appInfo = info.applicationInfo ?: return@mapNotNull null
+   val label = runCatching { appInfo.loadLabel(pm)?.toString() }
     .getOrNull().orEmpty().ifBlank { info.packageName }
-   InstalledAppItem(info.packageName, label)
-  }.distinctBy { it.packageName }.sortedBy { it.displayName.lowercase(java.util.Locale.getDefault()) }.toList()
+   val apkSize = runCatching {
+    File(appInfo.sourceDir).takeIf { it.isFile }?.length() ?: 0L
+   }.getOrDefault(0L)
+   val isSystem = appInfo.flags and
+    (ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0
+   InstalledAppItem(info.packageName, label, ScanVerdict.NOT_SCANNED.name, apkSize, isSystem)
+  }.distinctBy { it.packageName }.sortedBy { it.appLabel.lowercase(java.util.Locale.getDefault()) }.toList()
  }
  suspend fun scanInstalledApps(progress: suspend (processed: Int, total: Int) -> Unit = { _, _ -> }): List<ScanResult> =
    scanInstalledAppsForSession(UUID.randomUUID().toString(), progress)
@@ -293,23 +299,26 @@ class PackageScanner(
     Log.e(TAG, "PackageManager could not enumerate installed packages.", error)
     emptyList()
    }
-   packages.filter { info ->
+   // Strip the PackageInfo/ApplicationInfo carrier at the enumeration boundary.
+   // The concurrent scan tasks receive only stable package-name strings.
+   packages.mapNotNull { info ->
     try {
-     val app = info.applicationInfo ?: return@filter false
+     val app = info.applicationInfo ?: return@mapNotNull null
      val system = app.flags and ApplicationInfo.FLAG_SYSTEM != 0
      val updatedSystem = app.flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP != 0
-     info.packageName != context.packageName &&
+     val include = info.packageName != context.packageName &&
       (system || updatedSystem || info.packageName == GOOGLE_PLAY_SERVICES_PACKAGE ||
        ProtectedPackagePolicy.isUserInstalled(app.flags, info.packageName, context.packageName) ||
        isSignedByKnownTrustedCertificate(info.packageName))
+     info.packageName.takeIf { include }
     } catch (error: Exception) {
      Log.w(TAG, "Skipping package whose base metadata could not be evaluated: " + info.packageName, error)
-     false
+     null
     }
-   }.sortedBy { it.packageName }
+   }.distinct().sorted()
   }
-  val completed = all.count { it.packageName in completedPackageNames }
-  val pending = all.filterNot { it.packageName in completedPackageNames }
+  val completed = all.count { it in completedPackageNames }
+  val pending = all.filterNot { it in completedPackageNames }
   val semaphore = Semaphore(3)
   val count = AtomicInteger(0)
   val mutex = Mutex()
@@ -322,8 +331,7 @@ class PackageScanner(
    Log.e("ScanDebug", "Could not publish initial scan progress.", error)
   }
   val results = try {
-   pending.map { info ->
-    val packageName = info.packageName
+   pending.map { packageName ->
     Log.d("ScanDebug", "Starting scan for package: $packageName")
     async(Dispatchers.IO) {
      val scanResult = try {
@@ -380,16 +388,14 @@ class PackageScanner(
   } catch (cancelled: CancellationException) {
    if (!currentCoroutineContext().isActive) throw cancelled
    Log.e("ScanDebug", "A package task was cancelled independently; retaining per-package outcomes.", cancelled)
-   pending.map { info ->
-    val packageName = info.packageName
+   pending.map { packageName ->
     result(packageName, packageName, null, null, ScanVerdict.NOT_SCANNED,
      listOf(context.getString(R.string.file_could_not_read)), System.nanoTime())
      .copy(packageName = packageName, scanSessionId = scanSessionId)
    }
   } catch (error: Exception) {
    Log.e("ScanDebug", "Installed-app scan queue failed while awaiting package tasks.", error)
-   pending.map { info ->
-    val packageName = info.packageName
+   pending.map { packageName ->
     result(packageName, packageName, null, null, ScanVerdict.NOT_SCANNED,
      listOf(context.getString(R.string.file_could_not_read)), System.nanoTime())
      .copy(packageName = packageName, scanSessionId = scanSessionId)
