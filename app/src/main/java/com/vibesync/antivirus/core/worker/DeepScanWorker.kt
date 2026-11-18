@@ -33,15 +33,36 @@ class DeepScanWorker(context: Context, params: WorkerParameters) : CoroutineWork
      safeApp.repository.clearScanSessionStateCheckpoints()
      safeApp.repository.startScanSession(sessionId, "PERIODIC_DEEP_SCAN", isManual = false)
      safeApp.repository.deepScan(sessionId)
-     safeApp.repository.completeScanSession(sessionId)
-     val result = Result.success()
-     Log.d("ScanDebug", "Worker FINISHED with result: $result")
-     result
+     val scanState = safeApp.repository.scanSessionState(sessionId)
+     val publishSummary = safeApp.repository.scanPublishSummary(sessionId)
+     Log.e("ScanDebug", "Total publish failures: ${publishSummary.failureCount} / ${publishSummary.totalPackages}")
+     val scannedItems = scanState?.scannedItems ?: 0
+     if (ScanPublishPolicy.shouldFail(scannedItems, publishSummary.failureCount)) {
+      safeApp.repository.failScanSession(sessionId)
+      safeApp.repository.clearScanPublishSummary(sessionId)
+      Log.e("ScanDebug", "Rejecting deep scan completion: persisted=$scannedItems, publishFailures=${publishSummary.failureCount}")
+      val result = Result.failure()
+      Log.d("ScanDebug", "Worker FINISHED with result: $result")
+      result
+     } else {
+      safeApp.repository.completeScanSession(sessionId)
+      safeApp.repository.clearScanPublishSummary(sessionId)
+      val result = Result.success()
+      Log.d("ScanDebug", "Worker FINISHED with result: $result")
+      result
+     }
     } catch (cancelled: CancellationException) {
      sessionId?.let { activeId -> runCatching { app?.repository?.interruptScanSession(activeId) } }
      throw cancelled
     } catch (error: Exception) {
-     sessionId?.let { activeId -> runCatching { app?.repository?.interruptScanSession(activeId) } }
+     sessionId?.let { activeId ->
+      val publishSummary = runCatching { app?.repository?.scanPublishSummary(activeId) }.getOrNull()
+      if (publishSummary != null) {
+       Log.e("ScanDebug", "Total publish failures: ${publishSummary.failureCount} / ${publishSummary.totalPackages}")
+      }
+      runCatching { app?.repository?.clearScanPublishSummary(activeId) }
+      runCatching { app?.repository?.interruptScanSession(activeId) }
+     }
      runCatching { app?.repository?.clearScanSessionStateCheckpoints() }
      Log.e("ScanDebug", "Worker CRASHED", error)
      val result = Result.failure()
