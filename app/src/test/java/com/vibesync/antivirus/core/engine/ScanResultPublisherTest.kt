@@ -41,6 +41,27 @@ class ScanResultPublisherTest {
     }
 
     @Test
+    fun publishFailureRetainsPreciseStageForDiagnostics() = runTest {
+        val logged = mutableListOf<Throwable>()
+        val roomFailure = ScanPublishStageException(
+            stage = "room_insert",
+            cause = IllegalStateException("insertScanSessionItem failed")
+        )
+
+        val published = publishScanResultSafely(
+            packageName = "com.example.room-stage",
+            publish = { throw roomFailure },
+            logFailure = { _, error -> logged += error }
+        )
+
+        assertFalse(published)
+        assertEquals(1, logged.size)
+        assertTrue(logged.single() is ScanPublishStageException)
+        assertEquals("room_insert", (logged.single() as ScanPublishStageException).stage)
+        assertTrue(logged.single().cause is IllegalStateException)
+    }
+
+    @Test
     fun callbackCancellationIsContainedWhileParentScanRemainsActive() = runTest {
         val logged = mutableListOf<Throwable>()
 
