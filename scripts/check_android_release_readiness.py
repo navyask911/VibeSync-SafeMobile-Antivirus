@@ -84,8 +84,12 @@ if "endpoint.isBlank() || !validatedInternet" not in baseline:
 if "LOCAL_BASELINE_PASSED" not in source["verifier"] or "applyLocalBaselineFallback" not in source["verifier"]:
     errors.append("SecurityVerifier does not publish the local-baseline fallback result.")
 package_scanner = source["packageScanner"]
-if 'Log.e("SafeMobileScan", "Publish failed", error)' not in package_scanner:
-    errors.append("Package scan result publication failures must be isolated and logged.")
+if (
+    "publishScanResultSafely(" not in package_scanner
+    or 'Log.e("ScanDebug", "pkg_fail pkg=$pkg stage=publish userId=$userId", error)' not in package_scanner
+    or "ScanPublishStageException" not in source["repository"]
+):
+    errors.append("Package scan result publication failures must be isolated, stage-labelled and logged.")
 if "OnConflictStrategy.REPLACE" not in source["dao"] or "insertScanSessionItem" not in source["dao"]:
     errors.append("Scan-session item persistence must use REPLACE on Room conflicts.")
 if "contentResolver.query(" in source["repository"] or "fromSingleUri(" in source["repository"]:
