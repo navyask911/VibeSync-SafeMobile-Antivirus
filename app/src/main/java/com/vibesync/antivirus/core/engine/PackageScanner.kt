@@ -738,7 +738,12 @@ class PackageScanner(
   if (fileSize != null && cached != null &&
    cached.lastUpdateTime == info.lastUpdateTime && cached.fileSize == fileSize
   ) {
-   val cachedVerdict = runCatching { ScanVerdict.valueOf(cached.verdict) }.getOrNull()
+   val cachedVerdict = try {
+    ScanVerdict.valueOf(cached.verdict)
+   } catch (error: Exception) {
+    diagnostics?.fail(info.packageName, "resolve", error)
+    null
+   }
    if (cachedVerdict != null) {
     val label = loadPackageLabelOrFallback(info, diagnostics, onStageChange)
     val cachedResult = ScanResult(
@@ -947,7 +952,7 @@ class PackageScanner(
   output = evaluateWithEnsemble(
    output,
    yaraXResult,
-   isSystemApp = isProtectedPlatformPackage(info.packageName, appInfo)
+   isSystemApp = isProtectedPlatformPackage(info.packageName, appInfo, diagnostics)
   )
   output = markIncompleteYaraIfOtherwiseClean(output, yaraXResult)
   audit(output, start, scanSessionId, diagnostics)
@@ -1117,7 +1122,13 @@ class PackageScanner(
  }
 
  private fun revealMetadataOrPlaintext(value: String, purpose: String): String =
-  runCatching { hashStore.revealMetadata(value, purpose) }.getOrDefault(value)
+  try {
+   hashStore.revealMetadata(value, purpose)
+  } catch (error: Exception) {
+   val userId = android.os.UserHandle.getUserId(android.os.Process.myUid())
+   Log.e("ScanDebug", "metadata_decode_failed purpose=$purpose userId=$userId", error)
+   value
+  }
 
  private val trustedSignerDigests: Set<String> by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
   loadTrustedSignerDigests()
