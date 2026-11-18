@@ -15,6 +15,7 @@ import androidx.documentfile.provider.DocumentFile
 import androidx.room.withTransaction
 import com.vibesync.antivirus.core.engine.ScanResult
 import com.vibesync.antivirus.core.engine.ScanVerdict
+import com.vibesync.antivirus.core.engine.ScanPublishStageException
 import com.vibesync.antivirus.core.quarantine.LocalQuarantineManager
 import com.vibesync.antivirus.core.quarantine.QuarantineDeleteOperation
 import com.vibesync.antivirus.core.quarantine.QuarantineDeleteOutcome
@@ -220,12 +221,14 @@ class ThreatRepository(
  suspend fun recordScanItemCompleted(sessionId: String, itemKey: String, itemType: String, result: ScanResult) = withContext(Dispatchers.IO) {
   val counters = scanPublishCounters.computeIfAbsent(sessionId) { ScanPublishCounters() }
   counters.totalPackages.incrementAndGet()
+  var stage = "encrypt"
   try {
+   val path = privateTextStore.protectPrivateText(result.displayName.take(250), "scan-progress-path")
+   val reasons = privateTextStore.protectPrivateText(result.reasons.joinToString("\n").take(1024), "scan-progress-reasons")
+   val uri = result.sourceUri?.let { privateTextStore.protectPrivateText(it.take(4096), "scan-progress-uri") }
+   stage = "room_insert"
    database.withTransaction {
     val dao = database.threatDao()
-    val path = privateTextStore.protectPrivateText(result.displayName.take(250), "scan-progress-path")
-    val reasons = privateTextStore.protectPrivateText(result.reasons.joinToString("\n").take(1024), "scan-progress-reasons")
-    val uri = result.sourceUri?.let { privateTextStore.protectPrivateText(it.take(4096), "scan-progress-uri") }
     dao.insertScanSessionItem(ScanSessionItemEntity(sessionId, itemKey, itemType, path,
      result.verdict.name, result.packageName, result.sha256, result.md5, reasons, result.riskScore,
      result.detectionSource.name, result.malwareName, result.threatEventId, result.durationMs,
@@ -236,7 +239,7 @@ class ThreatRepository(
    throw cancelled
   } catch (error: Exception) {
    counters.failureCount.incrementAndGet()
-   throw error
+   throw ScanPublishStageException(stage, error)
   }
  }
  suspend fun loadScanSessionResults(sessionId: String): List<ScanResult> = withContext(Dispatchers.IO) {
