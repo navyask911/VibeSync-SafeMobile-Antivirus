@@ -1074,7 +1074,18 @@ class PackageScanner(
   val flags = app?.flags ?: 0
   val archived = android.os.Build.VERSION.SDK_INT >= 35 &&
    flags and ApplicationInfo.FLAG_ARCHIVED != 0
-  val apkBytes = app?.sourceDir?.let { path -> File(path).takeIf { it.isFile }?.length() } ?: -1L
+  val splitCount = try {
+   app?.splitSourceDirs?.size ?: 0
+  } catch (error: Exception) {
+   Log.w("ScanDebug", "pkg_meta_read_failed pkg=${info.packageName} field=splitCount userId=${diagnostics.userId}", error)
+   -1
+  }
+  val apkBytes = try {
+   app?.sourceDir?.let { path -> File(path).takeIf { it.isFile }?.length() } ?: -1L
+  } catch (error: Exception) {
+   Log.w("ScanDebug", "pkg_meta_read_failed pkg=${info.packageName} field=apkBytes userId=${diagnostics.userId}", error)
+   -1L
+  }
   Log.i(
    "ScanDebug",
    "pkg_meta pkg=${info.packageName} userId=${diagnostics.userId}" +
@@ -1082,7 +1093,7 @@ class PackageScanner(
     " updatedSystem=${flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP != 0}" +
     " external=${flags and ApplicationInfo.FLAG_EXTERNAL_STORAGE != 0}" +
     " archived=$archived" +
-    " splitCount=${app?.splitSourceDirs?.size ?: 0}" +
+    " splitCount=$splitCount" +
     " apkBytes=$apkBytes"
   )
  }
