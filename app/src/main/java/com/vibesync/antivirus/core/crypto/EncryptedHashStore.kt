@@ -48,7 +48,7 @@ class EncryptedHashStore(context: Context) {
  /** Protect user-visible local labels/paths before storing them in the unencrypted Room database. */
  fun protectPrivateText(value: String, purpose: String): String {
   require(purpose in PRIVATE_TEXT_PURPOSES) { "Unsupported private metadata field." }
-  require(value.length <= 1024) { "Private metadata is too long." }
+  require(value.length <= maxPrivateTextLength(purpose)) { "Private metadata is too long." }
   val encrypted = primitive.encryptDeterministically(
    value.toByteArray(StandardCharsets.UTF_8), privateTextAad(purpose)
   )
@@ -68,6 +68,9 @@ class EncryptedHashStore(context: Context) {
   )
  }
 
+ private fun maxPrivateTextLength(purpose: String): Int =
+  if (purpose in PRIVATE_TEXT_URI_PURPOSES) MAX_PRIVATE_URI_LENGTH else MAX_PRIVATE_TEXT_LENGTH
+
  private fun privateTextAad(purpose: String) =
   ("vibesync.safe.mobile.private." + purpose + ".v1").toByteArray(StandardCharsets.UTF_8)
 
@@ -76,8 +79,12 @@ class EncryptedHashStore(context: Context) {
 
  companion object {
   private const val PRIVATE_TEXT_PREFIX = "sm-enc-v1:"
+  private const val MAX_PRIVATE_TEXT_LENGTH = 1024
+  private const val MAX_PRIVATE_URI_LENGTH = 4096
+  private val PRIVATE_TEXT_URI_PURPOSES = setOf("scan-progress-uri", "scan-resume-uri")
   private val PRIVATE_TEXT_PURPOSES = setOf(
-   "scan-label", "incident-installer", "incident-source", "incident-filename",
+   "scan-label", "scan-progress-path", "scan-progress-reasons", "scan-progress-uri", "scan-resume-uri",
+   "incident-installer", "incident-source", "incident-filename",
    "incident-path", "incident-reason", "vault-filename", "vault-path", "vault-copy-path"
   )
   private val AAD = "vibesync.safe.mobile.hash.v1".toByteArray(StandardCharsets.UTF_8)

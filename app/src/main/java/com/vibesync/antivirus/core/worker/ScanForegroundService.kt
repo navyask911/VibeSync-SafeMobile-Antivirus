@@ -126,6 +126,19 @@ class ScanForegroundService : Service() {
     Log.d("ScanDebug", "Worker FINISHED with result: cancelled")
     return
    }
+   val current = repo.scanSessionState(session.sessionId)
+   val publishSummary = repo.scanPublishSummary(session.sessionId)
+   Log.e("ScanDebug", "Total publish failures: ${publishSummary.failureCount} / ${publishSummary.totalPackages}")
+   val scannedItems = current?.scannedItems ?: 0
+   if (ScanPublishPolicy.shouldFail(scannedItems, publishSummary.failureCount)) {
+    repo.failScanSession(session.sessionId)
+    repo.clearScanPublishSummary(session.sessionId)
+    repo.clearSkippedSafFileCount(session.sessionId)
+    Log.e("ScanDebug", "Rejecting scan completion: persisted=$scannedItems, publishFailures=${publishSummary.failureCount}")
+    Log.d("ScanDebug", "Worker FINISHED with result: failure; scanned=$scannedItems")
+    ScanForegroundEvents.publishFailed(session.sessionId)
+    return
+   }
    val results = repo.loadScanSessionResults(session.sessionId).filter { repo.isReviewableResult(it) }
     .sortedBy { when (it.verdict) {
      ScanVerdict.THREAT -> 0
@@ -133,18 +146,21 @@ class ScanForegroundService : Service() {
      ScanVerdict.NOT_SCANNED -> 2
      ScanVerdict.NO_MATCH -> 3
     } }
-   val current = repo.scanSessionState(session.sessionId)
-   val summary = ScanCompletionSummary.from(results, current?.scannedItems ?: results.size, System.currentTimeMillis(),
+   val summary = ScanCompletionSummary.from(results, scannedItems, System.currentTimeMillis(),
     skippedFiles = repo.skippedSafFileCount(session.sessionId)).copy(signedDefinitionsUsed = repo.currentHashDatabaseCapability()?.enabled == true)
    repo.saveScanSummary(summary)
    repo.completeScanSession(session.sessionId, summary.completedAt)
    Log.d("ScanDebug", "Worker FINISHED with result: success; scanned=${(summary.appCount + summary.fileCount)}")
    ScanForegroundEvents.publish(ScanCompletedEvent(session.sessionId, results, summary, session.isManual))
    repo.clearSkippedSafFileCount(session.sessionId)
+   repo.clearScanPublishSummary(session.sessionId)
   } catch (timeout: TimeoutCancellationException) {
    runCatching { repo.clearScanSessionStateCheckpoints() }
     .onFailure { Log.e("SafeMobileScan", "Could not clear corrupted scan checkpoints after timeout.", it) }
    sessionId?.let { id ->
+    val publishSummary = repo.scanPublishSummary(id)
+    Log.e("ScanDebug", "Total publish failures: ${publishSummary.failureCount} / ${publishSummary.totalPackages}")
+    repo.clearScanPublishSummary(id)
     runCatching { repo.failScanSession(id) }
      .onFailure { Log.e("SafeMobileScan", "Could not persist timed-out scan state.", it) }
    }
@@ -158,6 +174,7 @@ class ScanForegroundService : Service() {
      runCatching { repo.cancelScanSession(id) }
      ScanForegroundEvents.publishCancelled()
     } else runCatching { repo.interruptScanSession(id) }
+    repo.clearScanPublishSummary(id)
    }
    Log.d("ScanDebug", "Worker FINISHED with result: cancelled")
    throw cancelled
@@ -165,6 +182,9 @@ class ScanForegroundService : Service() {
    runCatching { repo.clearScanSessionStateCheckpoints() }
     .onFailure { Log.e("SafeMobileScan", "Could not clear corrupted scan checkpoints after failure.", it) }
    sessionId?.let { id ->
+    val publishSummary = repo.scanPublishSummary(id)
+    Log.e("ScanDebug", "Total publish failures: ${publishSummary.failureCount} / ${publishSummary.totalPackages}")
+    repo.clearScanPublishSummary(id)
     runCatching { repo.failScanSession(id) }
      .onFailure { Log.e("SafeMobileScan", "Could not persist failed scan state.", it) }
    }

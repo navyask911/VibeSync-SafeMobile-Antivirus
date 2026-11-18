@@ -22,6 +22,24 @@ class EncryptedPrivateTextTest {
         assertTrue(runCatching { store.revealPrivateText(cipher, "incident-path") }.isFailure)
     }
 
+    @Test fun scanSessionMetadataPurposesAreEncryptedAndRoundTrip() {
+        val store = EncryptedHashStore(ApplicationProvider.getApplicationContext())
+        val longUri = "content://com.example.provider/tree/" + "segment/".repeat(180)
+
+        val samples = linkedMapOf(
+            "scan-progress-path" to "/data/app/com.example.target/base.apk",
+            "scan-progress-reasons" to "manifest risk\\npermission risk",
+            "scan-progress-uri" to longUri,
+            "scan-resume-uri" to longUri
+        )
+        samples.forEach { (purpose, value) ->
+            val encrypted = store.protectPrivateText(value, purpose)
+            assertNotEquals(value, encrypted)
+            assertTrue(encrypted.startsWith("sm-enc-v1:$purpose:"))
+            assertEquals(value, store.revealPrivateText(encrypted, purpose))
+        }
+    }
+
     @Test fun oldPlaintextAuditRowsRemainReadableDuringMigration() {
         val store = EncryptedHashStore(ApplicationProvider.getApplicationContext())
         assertEquals("com.example.legacy", store.revealPrivateText("com.example.legacy", "scan-label"))
