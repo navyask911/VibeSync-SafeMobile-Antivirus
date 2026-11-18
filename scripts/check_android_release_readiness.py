@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Static release guard for SafeMobile v1.10.6 scan, SAF, 16 KB and edge-to-edge requirements."""
+"""Static release guard for SafeMobile v1.10.7 scan publishing, SAF, 16 KB and edge-to-edge requirements."""
 from pathlib import Path
 import re
 import sys
@@ -33,6 +33,8 @@ FILES = {
     "releaseWorkflow": ".github/workflows/release-apk.yml",
     "banner": "app/src/main/java/com/vibesync/antivirus/presentation/AdMobBanner.kt",
     "proguard": "app/proguard-rules.pro",
+    "encryptedHashStore": "app/src/main/java/com/vibesync/antivirus/core/crypto/EncryptedHashStore.kt",
+    "scanPublishPolicy": "app/src/main/java/com/vibesync/antivirus/core/worker/ScanPublishPolicy.kt",
 }
 errors = []
 source = {}
@@ -47,10 +49,10 @@ gradle = source["gradle"]
 version_name = re.search(r'\bversionName\s*=\s*"([^"]+)"', gradle)
 version_code = re.search(r"\bversionCode\s*=\s*(\d+)", gradle)
 ndk = re.search(r'\bndkVersion\s*=\s*"([^"]+)"', gradle)
-if not version_name or version_name.group(1) != "1.10.6":
-    errors.append("Gradle versionName must be 1.10.6.")
-if not version_code or version_code.group(1) != "20261160":
-    errors.append("Gradle versionCode must be 20261160.")
+if not version_name or version_name.group(1) != "1.10.7":
+    errors.append("Gradle versionName must be 1.10.7.")
+if not version_code or version_code.group(1) != "20261161":
+    errors.append("Gradle versionCode must be 20261161.")
 if not ndk or tuple(int(part) for part in ndk.group(1).split(".")[:1]) < (28,):
     errors.append("Gradle must pin Android NDK r28 or higher.")
 if "com.google.ai.edge.litert:litert:1.4.2" not in gradle:
@@ -144,7 +146,7 @@ if "integrityCheckPassed" not in source["score"]:
     errors.append("Device Security Score does not consume the effective remote-or-local integrity result.")
 
 
-# v1.10.6 ColorOS boundary: platform package metadata is deliberately confined
+# v1.10.7 ColorOS boundary: platform package metadata is deliberately confined
 # to PackageScanner and collapsed to scalar values before crossing app layers.
 viewmodel = source["viewmodel"]
 inventory_model = source["inventoryModel"]
@@ -182,6 +184,21 @@ for label in ("scanItemEntity", "scanAudit", "scanSessionEntity", "scanSessionSt
             errors.append(f"{label} contains a non-scalar Room column type: {field_type}.")
             break
 
+encrypted_store = source["encryptedHashStore"]
+required_private_purposes = (
+    "scan-progress-path", "scan-progress-reasons", "scan-progress-uri", "scan-resume-uri"
+)
+if not all(f'"{purpose}"' in encrypted_store for purpose in required_private_purposes):
+    errors.append("EncryptedHashStore must allow all scan-session private metadata purposes.")
+if "MAX_PRIVATE_URI_LENGTH = 4096" not in encrypted_store:
+    errors.append("EncryptedHashStore must preserve bounded long SAF URI metadata.")
+if "failureCount.incrementAndGet()" not in repository or "scanPublishSummary" not in repository:
+    errors.append("ThreatRepository must count per-item Room publication failures.")
+if "ScanPublishPolicy.shouldFail" not in source["service"] or "ScanPublishPolicy.shouldFail" not in source["worker"]:
+    errors.append("Foreground and WorkManager scans must reject zero-persisted or partially unpublished results.")
+if 'Log.e("ScanDebug", "Total publish failures:' not in source["service"] or 'Log.e("ScanDebug", "Total publish failures:' not in source["worker"]:
+    errors.append("Foreground and WorkManager scans must log the total publish failure summary.")
+
 screenshot_archive = 'build/ui-screenshots-v${{ steps.verify-aab.outputs.version_name }}.zip'
 if (
     'screenshots_zip="' + screenshot_archive + '"' not in source["releaseWorkflow"]
@@ -195,4 +212,4 @@ if errors:
     print(f"Android release readiness FAILED ({len(errors)} issue(s)):")
     print("\n".join(f"- {error}" for error in errors), file=sys.stderr)
     sys.exit(1)
-print("Android release readiness passed: v1.10.6/20261160, NDK r28+, LiteRT 1.4.2, offline scan work and SAF grants.")
+print("Android release readiness passed: v1.10.7/20261161, encrypted scan publishing, NDK r28+, LiteRT 1.4.2 and SAF grants.")
