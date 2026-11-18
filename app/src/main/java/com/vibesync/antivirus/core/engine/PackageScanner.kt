@@ -376,8 +376,14 @@ class PackageScanner(
   diagnostics.setTotal(enumeratedTotal)
 
   val completed = all.count { it in completedPackageNames }
+  // Resumed rows already exist in the Room session; count them as published,
+  // but keep them out of this pass's per-package work queue.
+  diagnostics.markPublished(completed)
   all.filter { it in completedPackageNames }.forEach { packageName ->
-   diagnostics.skip(packageName, "already_completed_in_this_session")
+   Log.i(
+    "ScanDebug",
+    "pkg_resume pkg=$packageName reason=already_completed_in_this_session userId=${diagnostics.userId}"
+   )
   }
   val pending = all.filterNot { it in completedPackageNames }
   val semaphore = Semaphore(3)
