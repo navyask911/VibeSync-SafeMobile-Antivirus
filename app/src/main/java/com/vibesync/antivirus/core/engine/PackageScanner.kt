@@ -633,7 +633,13 @@ class PackageScanner(
    result(label, label, null, null, ScanVerdict.NOT_SCANNED, listOf(context.getString(R.string.file_stream_failed)), start).copy(scanSessionId = scanSessionId).also { auditSafely(it, start, scanSessionId) }
   } finally { runCatching { stream.close() } }
  }
- private suspend fun scanPackage(info: PackageInfo, scanSessionId: String): ScanResult {
+ private suspend fun scanPackage(
+  info: PackageInfo,
+  scanSessionId: String,
+  diagnostics: PackageScanDiagnostics? = null,
+  onStageChange: (String) -> Unit = {}
+ ): ScanResult {
+  onStageChange("resolve")
   val start = System.nanoTime()
   if (trustedAppStore.isTrusted(info.packageName)) {
    return trustedResult(info.packageName, scanSessionId, start)
@@ -650,12 +656,18 @@ class PackageScanner(
 
   // PackageInfo and sourceDir metadata are read before any hash, DEX, YARA or ML work.
   val apk = appInfo?.sourceDir?.let(::File)
-  val fileSize = apk?.let { source -> runCatching { source.length() }.getOrNull() }
+  val fileSize = try {
+   apk?.length()
+  } catch (error: Exception) {
+   diagnostics?.fail(info.packageName, "resolve", error)
+   null
+  }
   val cached = try {
    dao.findAppScanCache(info.packageName)
   } catch (cancelled: CancellationException) {
    throw cancelled
   } catch (error: Exception) {
+   diagnostics?.fail(info.packageName, "resolve", error)
    Log.w(TAG, "Could not read the installed-app scan cache.", error)
    null
   }
@@ -670,8 +682,7 @@ class PackageScanner(
     cached.lastUpdateTime == info.lastUpdateTime && cached.fileSize == fileSize &&
     cached.verdict == ScanVerdict.NO_MATCH.name && cached.threatName == safeLabel
    ) {
-    val label = runCatching { appInfo?.loadLabel(pm)?.toString() }
-     .getOrNull().orEmpty().ifBlank { info.packageName }
+    val label = loadPackageLabelOrFallback(info, diagnostics, onStageChange)
     val cachedResult = ScanResult(
      packageOrPath = info.packageName,
      displayName = label,
@@ -684,7 +695,7 @@ class PackageScanner(
     auditSafely(cachedResult, start, scanSessionId)
     return cachedResult
    }
-   return safePlatformPackageResult(info, scanSessionId, start, fileSize, safeLabel)
+   return safePlatformPackageResult(info, scanSessionId, start, fileSize, safeLabel, diagnostics, onStageChange)
   }
 
   if (fileSize != null && cached != null &&
@@ -692,8 +703,7 @@ class PackageScanner(
   ) {
    val cachedVerdict = runCatching { ScanVerdict.valueOf(cached.verdict) }.getOrNull()
    if (cachedVerdict != null) {
-    val label = runCatching { appInfo?.loadLabel(pm)?.toString() }
-     .getOrNull().orEmpty().ifBlank { info.packageName }
+    val label = loadPackageLabelOrFallback(info, diagnostics, onStageChange)
     val cachedResult = ScanResult(
      packageOrPath = info.packageName,
      displayName = label,
@@ -714,13 +724,14 @@ class PackageScanner(
   }
 
   val scanned = try {
-   scanPackageUncached(info, scanSessionId)
+   scanPackageUncached(info, scanSessionId, diagnostics, onStageChange)
   } catch (cancelled: CancellationException) {
    throw cancelled
   } catch (error: Exception) {
+   val failedStage = (error as? ScanPublishStageException)?.stage ?: "resolve"
+   diagnostics?.fail(info.packageName, failedStage, error.cause ?: error)
    Log.w(TAG, "Installed-app scan failed; caching a not-scanned result.", error)
-   val label = runCatching { appInfo?.loadLabel(pm)?.toString() }
-    .getOrNull().orEmpty().ifBlank { info.packageName }
+   val label = loadPackageLabelOrFallback(info, diagnostics, onStageChange)
    result(
     info.packageName,
     label,
@@ -730,7 +741,7 @@ class PackageScanner(
     listOf(context.getString(R.string.file_could_not_read)),
     start
    ).copy(packageName = info.packageName, scanSessionId = scanSessionId).also {
-    auditSafely(it, start, scanSessionId)
+    auditSafely(it, start, scanSessionId, diagnostics)
    }
   }
   if (fileSize != null) {
@@ -748,6 +759,7 @@ class PackageScanner(
    } catch (cancelled: CancellationException) {
     throw cancelled
    } catch (error: Exception) {
+    diagnostics?.fail(info.packageName, "room_insert", error)
     Log.w(TAG, "Could not update the installed-app scan cache; scan result is still valid.", error)
    }
   }
