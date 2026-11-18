@@ -356,14 +356,15 @@ jobs:
             echo "SAFE STOP: Expected Paparazzi PNG screenshots for the four tabs; found $snapshot_count." >&2
             exit 1
           fi
-          zip -qr build/ui-screenshots-v1.10.6.zip app/src/test/snapshots
+          screenshots_zip="build/ui-screenshots-v${{ steps.verify-aab.outputs.version_name }}.zip"
+          zip -qr "$screenshots_zip" app/src/test/snapshots
           echo "Packaged $snapshot_count Paparazzi screenshots."
 
       - name: Upload four-tab screenshots artifact
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: SafeMobile-v1.10.6-UI-Screenshots-${{ github.run_id }}
-          path: build/ui-screenshots-v1.10.6.zip
+          path: build/ui-screenshots-v${{ steps.verify-aab.outputs.version_name }}.zip
           if-no-files-found: error
           retention-days: 30
 
@@ -448,7 +449,7 @@ jobs:
           release_files=(
             "${{ steps.verify-aab.outputs.aab_path }}"
             "${{ steps.verify-aab.outputs.apk_path }}"
-            "build/ui-screenshots-v1.10.5.zip"
+            "build/ui-screenshots-v${{ steps.verify-aab.outputs.version_name }}.zip"
             "build/siren-test/SafeMobile-Siren-Test.apk"
             "build/siren-test/siren-test-definitions.json"
             "build/siren-test/SHA256SUMS.txt"
