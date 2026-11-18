@@ -47,9 +47,9 @@ android {
   applicationId = "com.vibesync.antivirus"
   minSdk = 26
   targetSdk = 36
-  versionCode = 20261160
-  // [release-v1.10.6] Keep OEM PackageManager metadata out of UI, service and Room boundaries.
-  versionName = "1.10.6"
+  versionCode = 20261161
+  // [release-v1.10.7] Keep scan publish metadata encrypted and framework-object-free.
+  versionName = "1.10.7"
   testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   buildConfigField("String", "FEED_MANIFEST_PUBLIC_KEY_B64", cfg(feedManifestPublicKey))
   buildConfigField("Boolean", "FEED_MANIFEST_KEY_CONFIGURED", (!feedManifestPublicKey.isBlank()).toString())
