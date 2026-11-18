@@ -771,10 +771,11 @@ class PackageScanner(
   scanSessionId: String,
   start: Long,
   fileSize: Long?,
-  safeLabel: String
+  safeLabel: String,
+  diagnostics: PackageScanDiagnostics? = null,
+  onStageChange: (String) -> Unit = {}
  ): ScanResult {
-  val displayName = runCatching { info.applicationInfo?.loadLabel(pm)?.toString() }
-   .getOrNull().orEmpty().ifBlank { info.packageName }
+  val displayName = loadPackageLabelOrFallback(info, diagnostics, onStageChange)
   val safeResult = ScanResult(
    packageOrPath = info.packageName,
    displayName = displayName,
@@ -801,20 +802,28 @@ class PackageScanner(
    } catch (cancelled: CancellationException) {
     throw cancelled
    } catch (error: Exception) {
+    diagnostics?.fail(info.packageName, "room_insert", error)
     Log.w(TAG, "Could not cache the safe platform package result.", error)
    }
   }
-  auditSafely(safeResult, start, scanSessionId)
+  auditSafely(safeResult, start, scanSessionId, diagnostics)
   return safeResult
  }
 
- private suspend fun scanPackageUncached(info: PackageInfo, scanSessionId: String): ScanResult {
+ private suspend fun scanPackageUncached(
+  info: PackageInfo,
+  scanSessionId: String,
+  diagnostics: PackageScanDiagnostics? = null,
+  onStageChange: (String) -> Unit = {}
+ ): ScanResult {
   val start = System.nanoTime()
   val appInfo = info.applicationInfo ?: run {
+   diagnostics?.fail(info.packageName, "resolve", IllegalStateException("PackageInfo.applicationInfo is null"))
    val failed = result(info.packageName, info.packageName, null, null, ScanVerdict.NOT_SCANNED, listOf(context.getString(R.string.package_metadata_missing)), start).copy(packageName = info.packageName, scanSessionId = scanSessionId)
-   auditSafely(failed, start, scanSessionId)
+   auditSafely(failed, start, scanSessionId, diagnostics)
    return failed
   }
+  onStageChange("label")
   val label = appInfo.loadLabel(pm).toString()
   val permissions = info.requestedPermissions?.toSet().orEmpty()
   val accessibility = info.services.orEmpty().any { it.permission == PermissionRiskAnalyzer.BIND_ACCESSIBILITY }
@@ -833,20 +842,23 @@ class PackageScanner(
     scanSessionId = scanSessionId,
     detectionSource = if (adjustedRiskScore >= 45) DetectionSource.HEURISTIC else DetectionSource.NONE
    )
-   auditSafely(failed, start, scanSessionId)
+   auditSafely(failed, start, scanSessionId, diagnostics)
    return failed
   }
+  onStageChange("hash")
   val hashes = try {
    withContext(Dispatchers.Default) { calculator.calculate(apk) }
   } catch (cancelled: CancellationException) {
    throw cancelled
-  } catch (_: Exception) {
+  } catch (error: Exception) {
+   diagnostics?.fail(info.packageName, "hash", error)
    null
   } ?: run {
     val failed = result(info.packageName, label, null, null, ScanVerdict.NOT_SCANNED, reasons + context.getString(R.string.file_could_not_read), start).copy(packageName = info.packageName, scanSessionId = scanSessionId)
     auditSafely(failed, start, scanSessionId)
     return failed
    }
+  onStageChange("resolve")
   // The hash engine must run before expensive DEX/YARA/ML work. Preserve the
   // existing signed DB, local DB and optional feed ordering and threat evidence.
   val exactThreat = findExactHashThreat(info.packageName, label,
@@ -854,7 +866,7 @@ class PackageScanner(
   if (exactThreat != null) {
    // Exact hash matches remain an immediate short-circuit: no YARA or ML work runs.
    val evaluated = evaluateWithEnsemble(exactThreat)
-   audit(evaluated, start, scanSessionId)
+   audit(evaluated, start, scanSessionId, diagnostics)
    return evaluated.copy(durationMs = elapsed(start),
     packageName = info.packageName, scanSessionId = scanSessionId)
   }
@@ -869,7 +881,7 @@ class PackageScanner(
     ),
     yaraXResult
    )
-   audit(detected, start, scanSessionId)
+   audit(detected, start, scanSessionId, diagnostics)
    return detected.copy(
     durationMs = elapsed(start),
     packageName = info.packageName,
@@ -901,7 +913,7 @@ class PackageScanner(
    isSystemApp = isProtectedPlatformPackage(info.packageName, appInfo)
   )
   output = markIncompleteYaraIfOtherwiseClean(output, yaraXResult)
-  audit(output, start, scanSessionId)
+  audit(output, start, scanSessionId, diagnostics)
   return output.copy(durationMs = elapsed(start), packageName = info.packageName, scanSessionId = scanSessionId)
  }
  private fun readBoundedPrefix(input: InputStream): ByteArray {
