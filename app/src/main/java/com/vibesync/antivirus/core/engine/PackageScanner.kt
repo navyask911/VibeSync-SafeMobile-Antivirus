@@ -64,16 +64,20 @@ internal suspend fun publishScanResultSafely(
  packageName: String,
  publish: suspend () -> Unit,
  logFailure: (String, Throwable) -> Unit = { pkg, error ->
-  Log.e("SafeMobileScan", "Publish failed", error)
+  val userId = android.os.UserHandle.getUserId(android.os.Process.myUid())
+  Log.e("ScanDebug", "pkg_fail pkg=$pkg stage=publish userId=$userId", error)
  }
-) {
- try {
+): Boolean {
+ return try {
   publish()
+  true
  } catch (cancelled: CancellationException) {
   if (!currentCoroutineContext().isActive) throw cancelled
   logFailure(packageName, cancelled)
+  false
  } catch (error: Exception) {
   logFailure(packageName, error)
+  false
  }
 }
 
