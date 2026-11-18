@@ -982,6 +982,7 @@ private fun V17ScanResultRow(
         appIcon = if (packageName == null) null else
             V17AppIconLoader.load(context.applicationContext, packageName)
     }
+    val loadedAppIcon = appIcon
     val uninstallAllowed = result.packageName?.let { name ->
         name != context.packageName &&
             result.verdict in setOf(ScanVerdict.THREAT, ScanVerdict.SUSPICIOUS) &&
@@ -1010,7 +1011,7 @@ private fun V17ScanResultRow(
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             Surface(Modifier.size(42.dp), shape = RoundedCornerShape(11.dp), color = c.surface,
                 border = BorderStroke(1.dp, c.border)) {
-                if (appIcon != null) Image(appIcon, contentDescription = result.displayName, modifier = Modifier.fillMaxSize())
+                if (loadedAppIcon != null) Image(loadedAppIcon, contentDescription = result.displayName, modifier = Modifier.fillMaxSize())
                 else Box(contentAlignment = Alignment.Center) {
                     Icon(Icons.Outlined.Apps, "App icon", tint = c.accent, modifier = Modifier.size(26.dp))
                 }
