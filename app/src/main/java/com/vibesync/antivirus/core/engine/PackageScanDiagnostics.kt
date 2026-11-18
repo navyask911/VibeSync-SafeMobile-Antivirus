@@ -1,6 +1,5 @@
 package com.vibesync.antivirus.core.engine
 
-import android.os.Process
 import android.os.UserHandle
 import android.util.Log
 import java.util.concurrent.ConcurrentHashMap
@@ -15,7 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger
  * Room session-row callbacks.
  */
 internal class PackageScanDiagnostics(
-    val userId: Int = UserHandle.getUserId(Process.myUid())
+    val userId: Int = UserHandle.myUserHandle().identifier
 ) {
     private val totalCount = AtomicInteger(0)
     private val publishedCount = AtomicInteger(0)
