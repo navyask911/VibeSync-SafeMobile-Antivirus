@@ -855,7 +855,7 @@ class PackageScanner(
    null
   } ?: run {
     val failed = result(info.packageName, label, null, null, ScanVerdict.NOT_SCANNED, reasons + context.getString(R.string.file_could_not_read), start).copy(packageName = info.packageName, scanSessionId = scanSessionId)
-    auditSafely(failed, start, scanSessionId)
+    auditSafely(failed, start, scanSessionId, diagnostics)
     return failed
    }
   onStageChange("resolve")
