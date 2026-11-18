@@ -6,6 +6,7 @@ on:
   push:
     branches:
       - "release-apk/**"
+      - "release/v1.10.8-final"
       - "main"
     paths:
       - "app/build.gradle.kts"
@@ -42,6 +43,7 @@ on:
       - "v1.10.8"
 
 permissions:
+  actions: read
   contents: write
 
 concurrency:
@@ -52,12 +54,37 @@ jobs:
   release:
     if: github.repository == 'navyask911/VibeSync-SafeMobile-Antivirus' && (github.event_name == 'workflow_dispatch' || github.ref_type != 'branch' || github.ref_name != 'main' || contains(github.event.head_commit.message, '[release-v1.10.7]'))
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 90
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Wait for same-commit Android CI matrix to pass
+        if: github.ref_type == 'branch' && github.ref_name == 'release/v1.10.8-final'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          for attempt in $(seq 1 80); do
+            runs="$(gh run list --repo "$GITHUB_REPOSITORY" --workflow "Android CI" --commit "$GITHUB_SHA" --json databaseId,status,conclusion,headSha --limit 20)"
+            state="$(jq -r --arg sha "$GITHUB_SHA" '[.[] | select(.headSha == $sha)] | sort_by(.databaseId) | last // {} | [.status // "", .conclusion // ""] | @tsv' <<< "$runs")"
+            IFS=$'\t' read -r status conclusion <<< "$state"
+            if [[ "$status" == "completed" ]]; then
+              if [[ "$conclusion" == "success" ]]; then
+                echo "Android CI passed for release commit $GITHUB_SHA."
+                exit 0
+              fi
+              echo "SAFE STOP: Android CI ended with conclusion '$conclusion' for $GITHUB_SHA." >&2
+              exit 1
+            fi
+            echo "Android CI for $GITHUB_SHA is '${status:-not yet listed}'; waiting (attempt $attempt/80)."
+            sleep 30
+          done
+          echo "SAFE STOP: Android CI did not complete successfully before the release gate timed out." >&2
+          exit 1
 
       - name: Require production signing configuration
         shell: bash
@@ -387,15 +414,15 @@ jobs:
               exit 1
             fi
           fi
-          if [[ "${GITHUB_REF_TYPE:-}" == "tag" && "${GITHUB_REF_NAME:-}" == "v1.10.8" ]]; then
+          if [[ "${GITHUB_REF_TYPE:-}" == "tag" && "${GITHUB_REF_NAME:-}" == "v1.10.8" ]] ||
+             [[ "${GITHUB_REF_TYPE:-}" == "branch" && "${GITHUB_REF_NAME:-}" == "release/v1.10.8-final" ]]; then
             if [[ "$version_name" != "1.10.8" || "$version_code" != "20261162" ]]; then
-              echo "SAFE STOP: v1.10.8 tag expected 1.10.8 / 20261162, got $version_name / $version_code." >&2
+              echo "SAFE STOP: v1.10.8 release expected 1.10.8 / 20261162, got $version_name / $version_code." >&2
               exit 1
             fi
-          fi
-          if [[ "${GITHUB_REF_TYPE:-}" == "tag" && "${GITHUB_REF_NAME:-}" == "v1.10.8" ]] ||
-             [[ "${GITHUB_REF_TYPE:-}" == "tag" && "${GITHUB_REF_NAME:-}" == "v1.10.7" ]] ||
-             [[ "${GITHUB_REF_TYPE:-}" == "branch" && "${GITHUB_REF_NAME:-}" == "main" && "$version_name" == "1.10.7" && "$version_code" == "20261161" ]]; then
+            tag="v1.10.8"
+          elif [[ "${GITHUB_REF_TYPE:-}" == "tag" && "${GITHUB_REF_NAME:-}" == "v1.10.7" ]] ||
+               [[ "${GITHUB_REF_TYPE:-}" == "branch" && "${GITHUB_REF_NAME:-}" == "main" && "$version_name" == "1.10.7" && "$version_code" == "20261161" ]]; then
             tag="v1.10.7"
           elif [[ "${GITHUB_REF_TYPE:-}" == "tag" && "${GITHUB_REF_NAME:-}" == "v1.10.6" ]]; then
             tag="v1.10.6"
