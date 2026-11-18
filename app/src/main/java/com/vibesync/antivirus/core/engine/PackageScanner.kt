@@ -409,6 +409,7 @@ class PackageScanner(
        val start = System.nanoTime()
        try {
         val packageInfo = loadPackageInfoForScan(packageName, diagnostics)
+        logPackageMetadata(packageInfo, diagnostics)
         scanPackage(packageInfo, scanSessionId, diagnostics) { nextStage -> stage = nextStage }
        } catch (cancelled: CancellationException) {
         if (!currentCoroutineContext().isActive) throw cancelled
@@ -872,7 +873,11 @@ class PackageScanner(
    return failed
   }
   onStageChange("label")
-  val label = appInfo.loadLabel(pm).toString()
+  val label = try {
+   appInfo.loadLabel(pm).toString()
+  } catch (error: Exception) {
+   throw ScanPublishStageException("label", error)
+  }
   val permissions = info.requestedPermissions?.toSet().orEmpty()
   val accessibility = info.services.orEmpty().any { it.permission == PermissionRiskAnalyzer.BIND_ACCESSIBILITY }
   val risk = riskAnalyzer.assess(permissions, accessibility)
@@ -1064,6 +1069,25 @@ class PackageScanner(
   findExactHashThreat(key, label, sha, md5, sha1, fileSize)
    ?: evaluateUnmatched(key, label, sha, md5, heuristic, score, sha1, report)
  )
+ private fun logPackageMetadata(info: PackageInfo, diagnostics: PackageScanDiagnostics) {
+  val app = info.applicationInfo
+  val flags = app?.flags ?: 0
+  val archivedFlag = runCatching {
+   ApplicationInfo::class.java.getField("FLAG_ARCHIVED").getInt(null)
+  }.getOrDefault(0)
+  val apkBytes = app?.sourceDir?.let { path -> File(path).takeIf { it.isFile }?.length() } ?: -1L
+  Log.i(
+   "ScanDebug",
+   "pkg_meta pkg=${info.packageName} userId=${diagnostics.userId}" +
+    " system=${flags and ApplicationInfo.FLAG_SYSTEM != 0}" +
+    " updatedSystem=${flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP != 0}" +
+    " external=${flags and ApplicationInfo.FLAG_EXTERNAL_STORAGE != 0}" +
+    " archived=${archivedFlag != 0 && flags and archivedFlag != 0}" +
+    " splitCount=${app?.splitSourceDirs?.size ?: 0}" +
+    " apkBytes=$apkBytes"
+  )
+ }
+
  private fun loadPackageLabelOrFallback(
   info: PackageInfo,
   diagnostics: PackageScanDiagnostics?,
