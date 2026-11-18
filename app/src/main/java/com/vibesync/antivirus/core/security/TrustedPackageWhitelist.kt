@@ -2,6 +2,7 @@ package com.vibesync.antivirus.core.security
 
 import android.content.pm.ApplicationInfo
 import android.content.Context
+import android.util.Log
 
 /**
  * Installed-package exclusions from consumer app review/removal. This is a management policy,
@@ -22,10 +23,14 @@ object TrustedPackageWhitelist {
 
     fun isEligibleForReview(context: Context, packageName: String): Boolean {
         if (packageName == context.packageName || hasProtectedNamespace(packageName)) return false
-        return runCatching {
+        return try {
             @Suppress("DEPRECATION")
             val info = context.packageManager.getApplicationInfo(packageName, 0)
             !isProtected(info.flags, packageName)
-        }.getOrDefault(false)
+        } catch (error: Exception) {
+            val userId = android.os.UserHandle.getUserId(android.os.Process.myUid())
+            Log.e("ScanDebug", "pkg_fail pkg=$packageName stage=resolve userId=$userId", error)
+            false
+        }
     }
 }
