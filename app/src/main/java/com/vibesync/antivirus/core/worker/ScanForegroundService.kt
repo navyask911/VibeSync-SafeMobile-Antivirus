@@ -174,6 +174,7 @@ class ScanForegroundService : Service() {
      runCatching { repo.cancelScanSession(id) }
      ScanForegroundEvents.publishCancelled()
     } else runCatching { repo.interruptScanSession(id) }
+    repo.clearScanPublishSummary(id)
    }
    Log.d("ScanDebug", "Worker FINISHED with result: cancelled")
    throw cancelled
