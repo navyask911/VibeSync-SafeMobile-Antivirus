@@ -28,7 +28,7 @@ object TrustedPackageWhitelist {
             val info = context.packageManager.getApplicationInfo(packageName, 0)
             !isProtected(info.flags, packageName)
         } catch (error: Exception) {
-            val userId = android.os.UserHandle.myUserHandle().identifier
+            val userId = android.os.Process.myUid() / 100000
             Log.e("ScanDebug", "pkg_fail pkg=$packageName stage=resolve userId=$userId", error)
             false
         }
