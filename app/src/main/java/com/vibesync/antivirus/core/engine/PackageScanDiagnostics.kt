@@ -57,8 +57,8 @@ internal class PackageScanDiagnostics(
         else completedVerdictCount.incrementAndGet()
         if (result.scanSource == ScanSource.CACHE_HIT) cacheHitCount.incrementAndGet()
         val pkg = result.packageName ?: result.packageOrPath
-        Log.i("ScanDebug", "pkg_complete pkg=$pkg verdict=\${result.verdict} source=\${result.scanSource} " +
-            "durationMs=\${result.durationMs} apkBytes=\${result.apkSizeBytes ?: -1L} stages=\${result.analysisStages.joinToString(",")}")
+        Log.i("ScanDebug", "pkg_complete pkg=$pkg verdict=${result.verdict} source=${result.scanSource} " +
+            "durationMs=${result.durationMs} apkBytes=${result.apkSizeBytes ?: -1L} stages=${result.analysisStages.joinToString(",")}")
     }
 
     fun markResumedCompleted(count: Int) {
