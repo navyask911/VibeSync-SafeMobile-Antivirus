@@ -501,12 +501,7 @@ class PackageScanner(
    }
   }
   diagnostics.logSummary()
-  results.sortedBy { when (it.verdict) {
-   ScanVerdict.THREAT -> 0
-   ScanVerdict.SUSPICIOUS -> 1
-   ScanVerdict.NOT_SCANNED -> 2
-   ScanVerdict.NO_MATCH -> 3
-  } }
+  ScanResultOrdering.sort(results)
  }
  suspend fun scanInstalledPackage(name: String, scanSessionId: String = UUID.randomUUID().toString()): ScanResult? {
   if (trustedAppStore.isTrusted(name)) return trustedResult(name, scanSessionId, System.nanoTime())
