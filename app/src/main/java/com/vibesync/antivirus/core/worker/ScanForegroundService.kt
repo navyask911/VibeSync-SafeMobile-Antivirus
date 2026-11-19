@@ -202,7 +202,7 @@ class ScanForegroundService : Service() {
      .onFailure { Log.e("SafeMobileScan", "Could not persist failed scan state.", it) }
    }
    Log.e("ScanDebug", "Worker CRASHED", error)
-   Log.e("SafeMobileScan", "Scan failed; corrupted Room scan checkpoints were cleared.", error)
+   Log.e("SafeMobileScan", "Scan failed; this session's Room checkpoints were retained for diagnosis.", error)
    Log.d("ScanDebug", "Worker FINISHED with result: failure")
    ScanForegroundEvents.publishFailed(sessionId)
   } finally { stopServiceAfterRun() }
