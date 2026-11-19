@@ -36,7 +36,7 @@ class DeepScanWorker(context: Context, params: WorkerParameters) : CoroutineWork
                             cooldownMs = DUPLICATE_COOLDOWN_MS
                         )
                     ) {
-                        Log.i("ScanDebug", "scan_dedup_skipped reason=recent_completed_clean_session ageMs=\${wallNow - (lastCompletedAt ?: wallNow)}")
+                        Log.i("ScanDebug", "scan_dedup_skipped reason=recent_completed_clean_session ageMs=${wallNow - (lastCompletedAt ?: wallNow)}")
                         return@withLock Result.success()
                     }
 
