@@ -185,10 +185,12 @@ class SafeMobileViewModel(
                     } catch (_: Exception) {
                         null
                     }
+                    val latestSummary = repository.loadScanSummary()
                     mutableState.update { current ->
                         if (timestamp > (current.lastScanAt ?: 0L)) {
                             current.copy(
                                 lastScanAt = timestamp,
+                                scanSummary = latestSummary ?: current.scanSummary,
                                 results = latestResults?.takeIf { it.isNotEmpty() } ?: current.results
                             )
                         } else current
