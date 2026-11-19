@@ -68,13 +68,30 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          # Android CI intentionally serializes its five emulator API jobs (max-parallel: 1).
-          # With a 40-minute build job and up to 55 minutes per API job, allow 340 minutes
-          # for the complete same-commit matrix, plus 20 minutes for release-job overhead.
+          # The emulator matrix is deliberately serialized (max-parallel: 1).
+          # test-lint-build can take 40 minutes; each of five API jobs can take 55.
+          # Give the same-commit matrix 340 minutes and reserve 20 minutes for release setup.
           for attempt in $(seq 1 680); do
-            runs="$(gh run list --repo "$GITHUB_REPOSITORY" --workflow "Android CI" --commit "$GITHUB_SHA" --json databaseId,status,conclusion,headSha --limit 20)"
-            state="$(jq -r --arg sha "$GITHUB_SHA" '[.[] | select(.headSha == $sha)] | sort_by(.databaseId) | last // {} | [.status // "", .conclusion // ""] | @tsv' <<< "$runs")"
-            IFS=
+            if ! runs="$(gh run list --repo "$GITHUB_REPOSITORY" --workflow "Android CI" --commit "$GITHUB_SHA" --json databaseId,status,conclusion,headSha --limit 20 2>&1)"; then
+              echo "WARN: Could not query Android CI state (attempt $attempt/680): $runs" >&2
+              sleep 30
+              continue
+            fi
+            status="$(jq -r --arg sha "$GITHUB_SHA" '[.[] | select(.headSha == $sha)] | sort_by(.databaseId) | last // {} | .status // empty' <<< "$runs")"
+            conclusion="$(jq -r --arg sha "$GITHUB_SHA" '[.[] | select(.headSha == $sha)] | sort_by(.databaseId) | last // {} | .conclusion // empty' <<< "$runs")"
+            if [[ "$status" == "completed" ]]; then
+              if [[ "$conclusion" == "success" ]]; then
+                echo "Android CI passed for release commit $GITHUB_SHA."
+                exit 0
+              fi
+              echo "SAFE STOP: Android CI ended with conclusion '${conclusion:-unknown}' for $GITHUB_SHA." >&2
+              exit 1
+            fi
+            echo "Android CI for $GITHUB_SHA is '${status:-not yet listed}'; waiting (attempt $attempt/680; 340-minute gate)."
+            sleep 30
+          done
+          echo "SAFE STOP: Android CI did not complete successfully within the 340-minute gate." >&2
+          exit 1
 
       - name: Require production signing configuration
         shell: bash
