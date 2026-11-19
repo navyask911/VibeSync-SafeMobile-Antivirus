@@ -12,6 +12,25 @@ class OfficialGoogleAppPolicyTest {
         assertFalse(OfficialGoogleAppPolicy.isGooglePackageName("com.example.google.maps"))
     }
 
+    @Test fun onlySignerVerifiedGoogleSystemAppsAreIncluded() {
+        val systemFlags = android.content.pm.ApplicationInfo.FLAG_SYSTEM
+        assertTrue(OfficialGoogleAppPolicy.isEligibleForInstalledScan(
+            "com.google.android.gms", "com.vibesync.antivirus", systemFlags, officialGoogle = true
+        ))
+        assertFalse(OfficialGoogleAppPolicy.isEligibleForInstalledScan(
+            "com.google.android.gms", "com.vibesync.antivirus", systemFlags, officialGoogle = false
+        ))
+        assertFalse(OfficialGoogleAppPolicy.isEligibleForInstalledScan(
+            "com.oem.settings", "com.vibesync.antivirus", systemFlags, officialGoogle = false
+        ))
+        assertTrue(OfficialGoogleAppPolicy.isEligibleForInstalledScan(
+            "com.example.app", "com.vibesync.antivirus", 0, officialGoogle = false
+        ))
+        assertFalse(OfficialGoogleAppPolicy.isEligibleForInstalledScan(
+            "com.vibesync.antivirus", "com.vibesync.antivirus", 0, officialGoogle = false
+        ))
+    }
+
     @Test fun packageNameAloneNeverEstablishesGoogleTrust() {
         val trusted = setOf("trusted-google-release-cert")
         assertFalse(OfficialGoogleAppPolicy.hasTrustedSigner(
