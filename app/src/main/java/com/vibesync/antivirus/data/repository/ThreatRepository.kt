@@ -301,7 +301,7 @@ class ThreatRepository(
   for (result in loadScanSessionResults(state.sessionId)) {
    if (isReviewableResult(result)) visible += result
   }
-  visible
+  com.vibesync.antivirus.core.engine.ScanResultOrdering.sort(visible)
  }
 
  private fun normalizeOfficialGoogleResult(result: ScanResult): ScanResult {
