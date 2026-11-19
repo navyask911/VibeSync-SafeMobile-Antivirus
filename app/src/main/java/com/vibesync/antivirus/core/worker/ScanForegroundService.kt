@@ -132,14 +132,14 @@ class ScanForegroundService : Service() {
    var retryPass = 0
    while (pendingRows > 0 && retryPass < 2 && !stopRequested) {
     retryPass++
-    Log.w("ScanDebug", "manual_scan_retry pass=$retryPass pending=$pendingRows sessionId=\${session.sessionId}")
+    Log.w("ScanDebug", "manual_scan_retry pass=$retryPass pending=$pendingRows sessionId=${session.sessionId}")
     repo.clearScanPublishSummary(session.sessionId)
     executeSessionPass()
     retryResults = repo.loadScanSessionResults(session.sessionId).filter { repo.isReviewableResult(it) }
     pendingRows = retryResults.count { it.verdict == ScanVerdict.NOT_SCANNED }
    }
    if (pendingRows > 0) {
-    Log.w("ScanDebug", "manual_scan_retry_exhausted pending=$pendingRows sessionId=\${session.sessionId}")
+    Log.w("ScanDebug", "manual_scan_retry_exhausted pending=$pendingRows sessionId=${session.sessionId}")
    }
    repo.addScanSessionElapsedMs(
     session.sessionId,
