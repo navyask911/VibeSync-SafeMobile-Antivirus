@@ -61,8 +61,9 @@ class DeepScanWorker(context: Context, params: WorkerParameters) : CoroutineWork
                         return@withLock Result.failure()
                     }
 
-                    val rows = safeApp.repository.loadScanSessionResults(sessionId)
-                        .filter { safeApp.repository.isReviewableResult(it) }
+                    val rows = safeApp.repository.reviewableScanResults(
+                        safeApp.repository.loadScanSessionResults(sessionId)
+                    )
                     val completedAt = System.currentTimeMillis()
                     val summary = ScanCompletionSummary.from(
                         results = rows,
