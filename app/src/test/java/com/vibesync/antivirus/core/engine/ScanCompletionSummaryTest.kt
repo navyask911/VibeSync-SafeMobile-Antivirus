@@ -13,7 +13,8 @@ class ScanCompletionSummaryTest {
         "fixture", "fixture", null, null, verdict, emptyList(), 1,
         packageName = if (app) "example.fixture" else null,
         apkSizeBytes = apkBytes,
-        scanSource = source
+        scanSource = source,
+        analysisStages = if (source == ScanSource.FRESH) listOf("HASH") else listOf("CACHE_HIT")
     )
 
     @Test
@@ -83,6 +84,24 @@ class ScanCompletionSummaryTest {
         assertEquals(0L, summary.totalApkBytes)
         assertTrue(summary.appsPerSecond.isFinite())
         assertTrue(summary.mbPerSecond.isFinite())
+    }
+
+    @Test
+    fun bytesAreNotCountedWhenFreshAttemptNeverCompletedHashStage() {
+        val result = ScanResult(
+            "failed", "failed", null, null, ScanVerdict.NOT_SCANNED, emptyList(), 1,
+            packageName = "example.failed",
+            apkSizeBytes = 8L * 1024L * 1024L,
+            scanSource = ScanSource.FRESH,
+            analysisStages = listOf("HASH_FAILED", "VERDICT_PENDING")
+        )
+        val summary = ScanCompletionSummary.from(
+            listOf(result), processed = 1, now = 2_000L,
+            startedAt = 1_000L, elapsedMsOverride = 1_000L
+        )
+        assertEquals(0L, summary.scannedApkBytes)
+        assertEquals(8L * 1024L * 1024L, summary.totalApkBytes)
+        assertEquals(0.0, summary.mbPerSecond, 0.0)
     }
 
     @Test
