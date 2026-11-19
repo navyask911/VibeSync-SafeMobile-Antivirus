@@ -118,6 +118,7 @@ jobs:
       # Keep verification on a later push so CI checks the committed images, not a pre-record checkout.
       - name: Unit tests and Paparazzi snapshot verification
         # Verify the refreshed Scan & Lab goldens and compile Room retry instrumentation tests.
+        # Keep this validation restartable independently from release/publish workflows.
         run: ./gradlew --no-daemon testOfflineDebugUnitTest verifyPaparazziDebug compileOfflineDebugAndroidTestKotlin
       - name: Print unit-test failure stack traces
         if: failure()
