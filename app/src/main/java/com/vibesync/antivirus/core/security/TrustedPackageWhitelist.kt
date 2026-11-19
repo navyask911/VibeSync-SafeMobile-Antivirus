@@ -25,17 +25,34 @@ object TrustedPackageWhitelist {
     fun isProtected(flags: Int, packageName: String): Boolean =
         hasSystemFlags(flags) || hasProtectedNamespace(packageName)
 
+    /**
+     * Pure package eligibility seam shared with the Context/PackageManager adapter.
+     * Unverified Google-named user APKs may be scanned as ordinary apps, but are never
+     * treated as official Google apps or normalized to Clean & Safe.
+     */
+    fun isEligibleForReview(
+        packageName: String,
+        scannerPackageName: String,
+        applicationFlags: Int,
+        officialGoogle: Boolean
+    ): Boolean {
+        if (packageName == scannerPackageName) return false
+        val system = hasSystemFlags(applicationFlags)
+        val googleNamespace = OfficialGoogleAppPolicy.isGooglePackageName(packageName)
+        return (googleNamespace && officialGoogle) ||
+            (googleNamespace && !system) ||
+            (!system && !hasProtectedNamespace(packageName))
+    }
+
     fun isEligibleForReview(context: Context, packageName: String): Boolean {
         if (packageName == context.packageName) return false
         return try {
             @Suppress("DEPRECATION")
             val info = context.packageManager.getApplicationInfo(packageName, 0)
-            val system = hasSystemFlags(info.flags)
             val googleNamespace = OfficialGoogleAppPolicy.isGooglePackageName(packageName)
             val officialGoogle = googleNamespace &&
                 OfficialGoogleAppPolicy.isOfficialGooglePackage(context, packageName)
-            officialGoogle || (googleNamespace && !system) ||
-                (!system && !hasProtectedNamespace(packageName))
+            isEligibleForReview(packageName, context.packageName, info.flags, officialGoogle)
         } catch (error: Exception) {
             val userId = android.os.Process.myUid() / 100000
             Log.e("ScanDebug", "pkg_fail pkg=$packageName stage=resolve userId=$userId", error)
