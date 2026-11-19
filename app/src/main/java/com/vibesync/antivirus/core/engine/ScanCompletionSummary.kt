@@ -57,7 +57,8 @@ data class ScanCompletionSummary(
                 }
             val elapsed = (elapsedMsOverride ?: (now - startedAt)).coerceAtLeast(0L)
             val seconds = elapsed / 1_000.0
-            val appsPerSecond = if (seconds > 0.0) freshApps / seconds else 0.0
+            val completedFreshApps = appResults.count { it.scanSource == ScanSource.FRESH && it.verdict != ScanVerdict.NOT_SCANNED }
+            val appsPerSecond = if (seconds > 0.0) completedFreshApps / seconds else 0.0
             val mbPerSecond = if (seconds > 0.0) scannedBytes / (1024.0 * 1024.0) / seconds else 0.0
             return ScanCompletionSummary(
                 appCount = apps,
