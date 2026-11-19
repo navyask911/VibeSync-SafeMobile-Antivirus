@@ -915,7 +915,7 @@ internal fun V17ScanLabScreen(
                     V17Body(
                         "Apps: ${summary.appCount} · completed: ${summary.completedAppCount} · fresh: ${summary.freshAppCount} · " +
                             "cache: ${summary.cachedAppCount} · Google verified: ${summary.verifiedGoogleAppCount} · " +
-                            "pending retries: ${summary.pendingRetries}",
+                            "pending retries: ${summary.pendingRetries} · unreadable/incomplete: ${summary.unreadable}",
                         color = c.text
                     )
                     V17Body(
