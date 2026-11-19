@@ -77,7 +77,9 @@ class DeepScanWorker(context: Context, params: WorkerParameters) : CoroutineWork
                             Log.w("ScanDebug", "scan_retry scheduled pendingRetries=${summary.pendingRetries} attempt=$runAttemptCount sessionId=$sessionId")
                             return@withLock Result.retry()
                         }
-                        safeApp.repository.failScanSession(sessionId)
+                        // The run is terminal after its retry budget, but keep the partial
+                        // report visible so pending applications are not hidden from Scan & Lab.
+                        safeApp.repository.completeScanSession(sessionId, completedAt)
                         Log.e("ScanDebug", "scan_retry_exhausted pendingRetries=${summary.pendingRetries} attempt=$runAttemptCount")
                         return@withLock Result.failure()
                     }
