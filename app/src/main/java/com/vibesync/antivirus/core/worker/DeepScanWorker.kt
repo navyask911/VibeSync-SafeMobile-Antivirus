@@ -17,7 +17,8 @@ class DeepScanWorker(context: Context, params: WorkerParameters) : CoroutineWork
         ScanForegroundNotifications.create(applicationContext, ScanForegroundNotifications.notificationId(id))
 
     override suspend fun doWork(): Result {
-        Log.d("ScanDebug", "Worker STARTED for: $tags attempt=$runAttemptCount")
+        Log.d("ScanDebug", "Worker STARTED for: $tags")
+        Log.d("ScanDebug", "Worker attempt=$runAttemptCount id=$id")
         return try {
             ScanExecutionCoordinator.mutex.withLock {
                 val safeApp = applicationContext as? SafeMobileApp
