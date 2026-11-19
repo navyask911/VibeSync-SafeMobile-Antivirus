@@ -53,6 +53,54 @@ import java.util.concurrent.atomic.AtomicInteger
 
 data class ScanPublishSummary(val failureCount: Int, val totalPackages: Int)
 
+/**
+ * Shared policy for rows restored from Room into Scan & Lab and scan reports.
+ * Package eligibility remains supplied by ThreatRepository so PackageManager,
+ * protected-namespace and signer checks stay centralized at the repository boundary.
+ */
+internal object PersistedScanResultPolicy {
+    fun normalizeOfficialGoogleResult(
+        result: ScanResult,
+        signerVerified: Boolean
+    ): ScanResult {
+        val googleNamespace = result.packageName?.let {
+            com.vibesync.antivirus.core.security.OfficialGoogleAppPolicy.isGooglePackageName(it)
+        } == true
+        if (!signerVerified || !googleNamespace) return result
+
+        return result.copy(
+            verdict = ScanVerdict.NO_MATCH,
+            reasons = listOf("Official Google app verified by trusted signing certificate. Clean & Safe."),
+            riskScore = 0f,
+            riskReport = null,
+            mlProbability = null,
+            threatEventId = null,
+            detectionSource = com.vibesync.antivirus.core.engine.DetectionSource.NONE,
+            malwareName = null,
+            yaraVerdict = null,
+            confidence = 1f,
+            scanSource = com.vibesync.antivirus.core.engine.ScanSource.GOOGLE_VERIFIED,
+            analysisStages = listOf("SIGNER_VERIFIED", "VERDICT"),
+            trustedByUser = false,
+            reasonTexts = emptyList()
+        )
+    }
+
+    suspend fun selectVisiblePersistedResults(
+        results: List<ScanResult>,
+        isReviewable: suspend (ScanResult) -> Boolean
+    ): List<ScanResult> {
+        val visible = ArrayList<ScanResult>(results.size)
+        results.forEach { result ->
+            // File/folder scan entries have no installed-package identity.
+            if (result.packageName == null || isReviewable(result)) {
+                visible += result
+            }
+        }
+        return com.vibesync.antivirus.core.engine.ScanResultOrdering.sort(visible)
+    }
+}
+
 private class ScanPublishCounters {
  val failureCount = AtomicInteger(0)
  val totalPackages = AtomicInteger(0)
@@ -282,42 +330,34 @@ class ThreatRepository(
    val sourceKind = runCatching {
     com.vibesync.antivirus.core.engine.ScanSource.valueOf(item.scanSource)
    }.getOrDefault(com.vibesync.antivirus.core.engine.ScanSource.FRESH)
-   normalizeOfficialGoogleResult(
-    ScanResult(
-     path, path, item.sha256Hash, item.md5Hash, verdict, reasons, item.durationMs,
-     packageName = item.packageName, sourceUri = uri, scanSessionId = sessionId,
-     threatEventId = item.threatEventId, riskScore = item.riskScore,
-     detectionSource = source, malwareName = item.malwareName,
-     apkSizeBytes = item.apkSizeBytes, scanSource = sourceKind,
-     analysisStages = item.analysisStages.split(",").filter { it.isNotBlank() }
-    )
+   val restored = ScanResult(
+    path, path, item.sha256Hash, item.md5Hash, verdict, reasons, item.durationMs,
+    packageName = item.packageName, sourceUri = uri, scanSessionId = sessionId,
+    threatEventId = item.threatEventId, riskScore = item.riskScore,
+    detectionSource = source, malwareName = item.malwareName,
+    apkSizeBytes = item.apkSizeBytes, scanSource = sourceKind,
+    analysisStages = item.analysisStages.split(",").filter { it.isNotBlank() }
+   )
+   PersistedScanResultPolicy.normalizeOfficialGoogleResult(
+    restored,
+    item.packageName?.let {
+     com.vibesync.antivirus.core.security.OfficialGoogleAppPolicy.isOfficialGooglePackage(context, it)
+    } == true
    )
   }
  }
  
+ /**
+  * One persisted-row selector for restored Scan & Lab results and scan-report summaries.
+  */
+ suspend fun reviewableScanResults(results: List<ScanResult>): List<ScanResult> =
+  PersistedScanResultPolicy.selectVisiblePersistedResults(results) { result ->
+   isReviewableResult(result)
+  }
+
  suspend fun latestCompletedScanResults(): List<ScanResult> = withContext(Dispatchers.IO) {
   val state = database.threatDao().latestCompletedScanState() ?: return@withContext emptyList()
-  val visible = mutableListOf<ScanResult>()
-  for (result in loadScanSessionResults(state.sessionId)) {
-   if (isReviewableResult(result)) visible += result
-  }
-  com.vibesync.antivirus.core.engine.ScanResultOrdering.sort(visible)
- }
-
- private fun normalizeOfficialGoogleResult(result: ScanResult): ScanResult {
-  val name = result.packageName ?: return result
-  if (!com.vibesync.antivirus.core.security.OfficialGoogleAppPolicy
-    .isOfficialGooglePackage(context, name)
-  ) return result
-  return result.copy(
-   verdict = ScanVerdict.NO_MATCH,
-   reasons = listOf("Official Google app verified by trusted signing certificate. Clean & Safe."),
-   riskScore = 0f, riskReport = null, mlProbability = null, threatEventId = null,
-   detectionSource = com.vibesync.antivirus.core.engine.DetectionSource.NONE,
-   malwareName = null, yaraVerdict = null, confidence = 1f,
-   scanSource = com.vibesync.antivirus.core.engine.ScanSource.GOOGLE_VERIFIED,
-   analysisStages = listOf("SIGNER_VERIFIED", "VERDICT")
-  )
+  reviewableScanResults(loadScanSessionResults(state.sessionId))
  }
  suspend fun scanSessionStartedAt(sessionId: String): Long? = withContext(Dispatchers.IO) {
   database.threatDao().findScanSession(sessionId)?.startedAt
