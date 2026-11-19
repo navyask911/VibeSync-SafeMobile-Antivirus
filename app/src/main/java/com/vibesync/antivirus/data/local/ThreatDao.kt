@@ -77,8 +77,7 @@ interface ThreatDao {
   ORDER BY session.started_at DESC LIMIT 1""")
  suspend fun latestIncompleteManualScanState(): ScanSessionState?
  @Query("""SELECT state.* FROM scan_session_state AS state JOIN scan_sessions AS session ON session.session_id = state.session_id
-  WHERE session.status IN ('IN_PROGRESS','COMPLETED')
-   AND state.operation_type IN ('FULL_DEVICE','DEEP_SCAN','INSTALLED_APPS','SELECTED_FILE','INSTALLED_PACKAGE','SELECTED_FOLDER','PERIODIC_DEEP_SCAN')
+  WHERE state.operation_type IN ('FULL_DEVICE','DEEP_SCAN','INSTALLED_APPS','SELECTED_FILE','INSTALLED_PACKAGE','SELECTED_FOLDER','PERIODIC_DEEP_SCAN')
   ORDER BY session.started_at DESC LIMIT 1""")
  fun observeLatestScanState(): Flow<ScanSessionState?>
  @Query("""SELECT state.* FROM scan_session_state AS state JOIN scan_sessions AS session ON session.session_id = state.session_id
