@@ -68,6 +68,24 @@ class ScanCompletionSummaryTest {
     }
 
     @Test
+    fun oneMillisecondAndMissingApkSizesRemainFiniteAndSafe() {
+        val summary = ScanCompletionSummary.from(
+            listOf(item(ScanVerdict.NO_MATCH, apkBytes = null), item(ScanVerdict.NO_MATCH, apkBytes = 0L)),
+            processed = 2,
+            now = 1_001L,
+            startedAt = 1_000L,
+            elapsedMsOverride = 1L
+        )
+        assertEquals(1L, summary.elapsedMs)
+        assertEquals(2, summary.completedAppCount)
+        assertEquals(2_000.0, summary.appsPerSecond, 0.0)
+        assertEquals(0.0, summary.mbPerSecond, 0.0)
+        assertEquals(0L, summary.totalApkBytes)
+        assertTrue(summary.appsPerSecond.isFinite())
+        assertTrue(summary.mbPerSecond.isFinite())
+    }
+
+    @Test
     fun emptyScanAndZeroElapsedTimeHaveZeroRates() {
         val summary = ScanCompletionSummary.from(
             emptyList(), processed = 0, now = 5_000L,
