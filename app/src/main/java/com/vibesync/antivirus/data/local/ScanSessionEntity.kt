@@ -21,7 +21,7 @@ data class ScanSessionEntity(
     val completedAt: Long? = null,
     @ColumnInfo(name = "status")
     val status: String,
-    @ColumnInfo(name = "elapsed_ms")
+    @ColumnInfo(name = "elapsed_ms", defaultValue = "0")
     val elapsedMs: Long = 0L
 ) {
     companion object {
