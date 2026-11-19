@@ -49,8 +49,10 @@ data class ScanCompletionSummary(
                 val next = (result.apkSizeBytes ?: 0L).coerceAtLeast(0L)
                 if (Long.MAX_VALUE - accumulated < next) Long.MAX_VALUE else accumulated + next
             }
+            // Count bytes only where the Hash stage confirms that the APK was read.
+            // A later YARA/ML retry can remain pending while its hashed bytes were processed.
             val scannedBytes = appResults.asSequence()
-                .filter { it.scanSource == ScanSource.FRESH }
+                .filter { it.scanSource == ScanSource.FRESH && "HASH" in it.analysisStages }
                 .fold(0L) { accumulated, result ->
                     val next = (result.apkSizeBytes ?: 0L).coerceAtLeast(0L)
                     if (Long.MAX_VALUE - accumulated < next) Long.MAX_VALUE else accumulated + next
