@@ -100,7 +100,7 @@ class SafeMobileApp : Application() {
                 ThreatDatabase.MIGRATION_5_6, ThreatDatabase.MIGRATION_6_7,
                 ThreatDatabase.MIGRATION_7_8, ThreatDatabase.MIGRATION_8_9,
                 ThreatDatabase.MIGRATION_9_10, ThreatDatabase.MIGRATION_10_11,
-                ThreatDatabase.MIGRATION_11_12
+                ThreatDatabase.MIGRATION_11_12, ThreatDatabase.MIGRATION_12_13
             )
             .build()
         hashDatabaseManager = HashDatabaseManager(this, database)

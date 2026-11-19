@@ -20,7 +20,9 @@ data class ScanSessionEntity(
     @ColumnInfo(name = "completed_at")
     val completedAt: Long? = null,
     @ColumnInfo(name = "status")
-    val status: String
+    val status: String,
+    @ColumnInfo(name = "elapsed_ms")
+    val elapsedMs: Long = 0L
 ) {
     companion object {
         const val IN_PROGRESS = "IN_PROGRESS"
