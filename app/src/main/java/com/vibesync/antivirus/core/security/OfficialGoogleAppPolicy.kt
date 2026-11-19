@@ -33,7 +33,7 @@ object OfficialGoogleAppPolicy {
         if (packageName == scannerPackageName) return false
         val platformFlags = ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP
         val isPlatformApp = applicationFlags and platformFlags != 0
-        return officialGoogle || !isPlatformApp
+        return (officialGoogle && isGooglePackageName(packageName)) || !isPlatformApp
     }
 
     fun hasTrustedSigner(
