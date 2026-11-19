@@ -164,13 +164,9 @@ class ScanForegroundService : Service() {
     ScanForegroundEvents.publishFailed(session.sessionId)
     return
    }
-   val results = repo.loadScanSessionResults(session.sessionId).filter { repo.isReviewableResult(it) }
-    .sortedBy { when (it.verdict) {
-     ScanVerdict.THREAT -> 0
-     ScanVerdict.SUSPICIOUS -> 1
-     ScanVerdict.NOT_SCANNED -> 2
-     ScanVerdict.NO_MATCH -> 3
-    } }
+   val results = com.vibesync.antivirus.core.engine.ScanResultOrdering.sort(
+    repo.loadScanSessionResults(session.sessionId).filter { repo.isReviewableResult(it) }
+   )
    val completedAt = System.currentTimeMillis()
    val summary = ScanCompletionSummary.from(
     results = results,
