@@ -116,8 +116,12 @@ if 'Log.e("ScanDebug", "Worker CRASHED", error)' not in worker:
     errors.append("DeepScanWorker must log caught worker failures.")
 if 'Log.d("ScanDebug", "Worker FINISHED with result: $result")' not in worker:
     errors.append("DeepScanWorker must log its terminal result.")
-if "clearScanSessionStateCheckpoints()" not in worker:
-    errors.append("DeepScanWorker must clear Room checkpoints before a fresh session.")
+if "clearScanSessionStateCheckpoints()" in worker:
+    errors.append("DeepScanWorker must not clear unrelated Room sessions; retry checkpoints must remain session-scoped.")
+if "scanSessionItemKeys" not in source["dao"] or "verdict != 'NOT_SCANNED'" not in source["dao"]:
+    errors.append("DeepScanWorker retries must exclude NOT_SCANNED rows from completed session checkpoints.")
+if "Result.retry()" not in worker or "pendingRetries" not in worker:
+    errors.append("DeepScanWorker must retry unresolved app verdicts before reporting success.")
 scheduler = source["scheduler"]
 if ".setRequiredNetworkType(NetworkType.NOT_REQUIRED)" not in scheduler:
     errors.append("Periodic scans must explicitly use NetworkType.NOT_REQUIRED.")
@@ -133,8 +137,10 @@ if "ScanExecutionCoordinator.mutex.withLock" not in source["service"] or "ScanEx
 service = source["service"]
 if "operation == OP_RESUME || operation == null" not in service:
     errors.append("Only explicit/system service redelivery may resume an interrupted scan.")
-if "repo.clearScanSessionStateCheckpoints()" not in service:
-    errors.append("Fresh foreground scans must clear stale Room checkpoints.")
+if "repo.clearScanSessionStateCheckpoints()" in service:
+    errors.append("Fresh foreground scans must preserve unrelated Room sessions instead of globally deleting checkpoints.")
+if "NOT_SCANNED" not in service or "manual_scan_retry" not in service:
+    errors.append("Foreground scans must retry incomplete result rows before finalizing Scan & Lab.")
 dao = source["dao"]
 if '@Query("DELETE FROM scan_session_state")' not in dao or "suspend fun clearAllSessions()" not in dao:
     errors.append("ThreatDao must expose clearAllSessions() for scan_session_state.")
