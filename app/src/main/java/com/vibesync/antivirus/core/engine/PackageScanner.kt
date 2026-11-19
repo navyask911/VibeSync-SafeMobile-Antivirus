@@ -357,17 +357,24 @@ class PackageScanner(
       diagnostics.skip(packageName, "scanner_own_package")
       return@mapNotNull null
      }
-     val include = system || updatedSystem ||
-      packageName == GOOGLE_PLAY_SERVICES_PACKAGE ||
-      ProtectedPackagePolicy.isUserInstalled(app.flags, packageName, context.packageName) ||
-      isSignedByKnownTrustedCertificate(packageName, diagnostics)
-     if (!include) {
+     val includeReason = when {
+      system -> "system_app"
+      updatedSystem -> "updated_system_app"
+      packageName == GOOGLE_PLAY_SERVICES_PACKAGE -> "google_play_services"
+      ProtectedPackagePolicy.isUserInstalled(app.flags, packageName, context.packageName) ->
+       "user_installed_app"
+      isSignedByKnownTrustedCertificate(packageName, diagnostics) -> "trusted_signer"
+      else -> null
+     }
+     if (includeReason == null) {
       diagnostics.skip(
        packageName,
        "excluded_by_scan_policy flags=${app.flags} system=$system updatedSystem=$updatedSystem"
       )
+     } else {
+      diagnostics.queue(packageName, includeReason, app.flags)
      }
-     packageName.takeIf { include }
+     packageName.takeIf { includeReason != null }
     } catch (error: Exception) {
      diagnostics.fail(packageName, "resolve", error)
      null
@@ -375,16 +382,14 @@ class PackageScanner(
    }.distinct().sorted()
   }
   diagnostics.setTotal(enumeratedTotal)
+  Log.i("ScanDebug", "pkg_inventory enumerated=$enumeratedTotal eligible=${all.size} userId=${diagnostics.userId}")
 
   val completed = all.count { it in completedPackageNames }
   // Resumed rows already exist in the Room session; count them as published,
   // but keep them out of this pass's per-package work queue.
   diagnostics.markPublished(completed)
   all.filter { it in completedPackageNames }.forEach { packageName ->
-   Log.i(
-    "ScanDebug",
-    "pkg_resume pkg=$packageName reason=already_completed_in_this_session userId=${diagnostics.userId}"
-   )
+   diagnostics.resume(packageName)
   }
   val pending = all.filterNot { it in completedPackageNames }
   val semaphore = Semaphore(3)
@@ -752,7 +757,11 @@ class PackageScanner(
     diagnostics?.fail(info.packageName, "resolve", error)
     null
    }
-   if (cachedVerdict != null) {
+   if (cachedVerdict != null && AppScanCachePolicy.canReuse(cachedVerdict)) {
+    Log.i(
+     "ScanDebug",
+     "pkg_cache_hit pkg=${info.packageName} verdict=$cachedVerdict reason=unchanged_apk userId=${diagnostics?.userId ?: (android.os.Process.myUid() / 100000)}"
+    )
     val label = loadPackageLabelOrFallback(info, diagnostics, onStageChange)
     val cachedResult = ScanResult(
      packageOrPath = info.packageName,
@@ -770,6 +779,12 @@ class PackageScanner(
     // Keep scan history complete even though expensive file engines were bypassed.
     auditSafely(cachedResult, start, scanSessionId, diagnostics)
     return cachedResult
+   }
+   if (cachedVerdict == ScanVerdict.NOT_SCANNED) {
+    Log.i(
+     "ScanDebug",
+     "pkg_cache_bypass pkg=${info.packageName} reason=previous_not_scanned_retry_required userId=${diagnostics?.userId ?: (android.os.Process.myUid() / 100000)}"
+    )
    }
   }
 
@@ -794,7 +809,7 @@ class PackageScanner(
     auditSafely(it, start, scanSessionId, diagnostics)
    }
   }
-  if (fileSize != null) {
+  if (fileSize != null && AppScanCachePolicy.shouldPersist(scanned.verdict)) {
    try {
     dao.upsertAppScanCache(
      AppScanCache(
@@ -812,6 +827,11 @@ class PackageScanner(
     diagnostics?.fail(info.packageName, "room_insert", error)
     Log.w(TAG, "Could not update the installed-app scan cache; scan result is still valid.", error)
    }
+  } else if (fileSize != null) {
+   Log.i(
+    "ScanDebug",
+    "pkg_cache_skip pkg=${info.packageName} reason=not_scanned_result will_retry_next_pass userId=${diagnostics?.userId ?: (android.os.Process.myUid() / 100000)}"
+   )
   }
   return scanned
  }

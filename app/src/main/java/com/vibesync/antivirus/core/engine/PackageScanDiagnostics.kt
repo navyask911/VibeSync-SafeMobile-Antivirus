@@ -20,12 +20,16 @@ internal class PackageScanDiagnostics(
     private val publishedCount = AtomicInteger(0)
     private val failureCount = AtomicInteger(0)
     private val skippedReasons = ConcurrentHashMap<String, String>()
+    private val queuedReasons = ConcurrentHashMap<String, String>()
+    private val resumedPackages = ConcurrentHashMap.newKeySet<String>()
     private val failedPackages = ConcurrentHashMap.newKeySet<String>()
 
     val total: Int get() = totalCount.get()
     val published: Int get() = publishedCount.get()
     val failed: Int get() = failureCount.get()
     val failedPackageNames: Set<String> get() = failedPackages.toSet()
+    val queued: Int get() = queuedReasons.size
+    val resumed: Int get() = resumedPackages.size
     val skipped: Int get() = skippedReasons.size
 
     fun setTotal(value: Int) {
@@ -46,8 +50,24 @@ internal class PackageScanDiagnostics(
         )
     }
 
+    fun queue(packageName: String, reason: String, flags: Int) {
+        val safeReason = reason.replace('\n', ' ').take(120)
+        if (queuedReasons.putIfAbsent(packageName, safeReason) == null) {
+            Log.i("ScanDebug", "pkg_queued pkg=$packageName reason=$safeReason flags=$flags userId=$userId")
+        }
+    }
+
+    fun resume(packageName: String) {
+        if (resumedPackages.add(packageName)) {
+            Log.i("ScanDebug", "pkg_resume pkg=$packageName reason=already_completed_in_this_session userId=$userId")
+        }
+    }
+
     fun skip(packageName: String, reason: String) {
-        skippedReasons.putIfAbsent(packageName, reason.replace('\n', ' ').take(240))
+        val safeReason = reason.replace('\n', ' ').take(240)
+        if (skippedReasons.putIfAbsent(packageName, safeReason) == null) {
+            Log.i("ScanDebug", "pkg_skipped pkg=$packageName reason=$safeReason userId=$userId")
+        }
     }
 
     fun iconNotApplicable(packageName: String) {
@@ -61,14 +81,8 @@ internal class PackageScanDiagnostics(
     fun logSummary() {
         Log.i(
             "ScanDebug",
-            "scan_summary total=$total published=$published failed=$failed skipped=$skipped"
+            "scan_summary enumerated=$total queued=$queued resumed=$resumed pending=${(queued - resumed).coerceAtLeast(0)} published=$published failed=$failed skipped=$skipped userId=$userId"
         )
-        skippedReasons.toSortedMap().forEach { (packageName, reason) ->
-            Log.i(
-                "ScanDebug",
-                "pkg_skipped pkg=$packageName reason=$reason userId=$userId"
-            )
-        }
     }
 }
 

@@ -211,8 +211,8 @@ class ThreatRepository(
  suspend fun hasIncompleteManualScanSession(): Boolean = withContext(Dispatchers.IO) {
   database.threatDao().hasIncompleteManualScanSession()
  }
- fun observeLatestManualScanState(): Flow<ScanSessionState?> =
-  database.threatDao().observeLatestManualScanState().map { state ->
+ fun observeLatestScanState(): Flow<ScanSessionState?> =
+  database.threatDao().observeLatestScanState().map { state ->
    state?.copy(currentItemPath = state.currentItemPath?.let { revealPrivateTextSafely(it, "scan-progress-path") })
   }.flowOn(Dispatchers.IO)
  suspend fun updateScanSessionTotal(sessionId: String, totalItems: Int) = withContext(Dispatchers.IO) {
@@ -268,8 +268,8 @@ class ThreatRepository(
   }
  }
  
- suspend fun latestCompletedManualScanResults(): List<ScanResult> = withContext(Dispatchers.IO) {
-  val state = database.threatDao().latestCompletedManualScanState() ?: return@withContext emptyList()
+ suspend fun latestCompletedScanResults(): List<ScanResult> = withContext(Dispatchers.IO) {
+  val state = database.threatDao().latestCompletedScanState() ?: return@withContext emptyList()
   loadScanSessionResults(state.sessionId)
  }
  suspend fun completeScanSession(sessionId: String, completedAt: Long = System.currentTimeMillis()) = withContext(Dispatchers.IO) {

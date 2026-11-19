@@ -175,9 +175,23 @@ class SafeMobileViewModel(
     private fun observeLatestCompletedScanAt() {
         viewModelScope.launch {
             repository.observeLatestCompletedScanAt().collect { timestamp ->
-                if (timestamp != null && timestamp > 0L) {
+                if (timestamp != null && timestamp > 0L &&
+                    timestamp > (mutableState.value.lastScanAt ?: 0L)
+                ) {
+                    val latestResults = try {
+                        repository.latestCompletedScanResults()
+                    } catch (cancelled: CancellationException) {
+                        throw cancelled
+                    } catch (_: Exception) {
+                        null
+                    }
                     mutableState.update { current ->
-                        current.copy(lastScanAt = maxOf(current.lastScanAt ?: 0L, timestamp))
+                        if (timestamp > (current.lastScanAt ?: 0L)) {
+                            current.copy(
+                                lastScanAt = timestamp,
+                                results = latestResults?.takeIf { it.isNotEmpty() } ?: current.results
+                            )
+                        } else current
                     }
                 }
             }
@@ -496,7 +510,7 @@ class SafeMobileViewModel(
 
     private fun observeScanProgress() {
         viewModelScope.launch {
-            repository.observeLatestManualScanState().collect { scan ->
+            repository.observeLatestScanState().collect { scan ->
                 if (scan != null) mutableState.update { state ->
                     val failed = scan.sessionId == failedScanSessionId
                     val path = if (scan.isComplete || failed) null else scan.currentItemPath
@@ -552,7 +566,7 @@ class SafeMobileViewModel(
 
     private fun restoreLatestScanResults() {
         viewModelScope.launch {
-            runCatching { repository.latestCompletedManualScanResults() }.onSuccess { results ->
+            runCatching { repository.latestCompletedScanResults() }.onSuccess { results ->
                 if (results.isNotEmpty()) mutableState.update { state -> if (state.results.isEmpty()) state.copy(results = results) else state }
             }
         }

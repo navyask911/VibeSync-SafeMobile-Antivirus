@@ -70,4 +70,49 @@ class ScanSessionPersistenceTest {
             database.close()
         }
     }
+
+ 
+    @Test
+    fun periodicDeepScanIsVisibleToScanLabButIsNotAResumableManualSession() = runBlocking {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val database = Room.inMemoryDatabaseBuilder(context, ThreatDatabase::class.java)
+            .allowMainThreadQueries()
+            .build()
+        try {
+            val dao = database.threatDao()
+            val sessionId = "periodic-deep-scan-visible"
+            dao.upsertScanSession(
+                ScanSessionEntity(
+                    sessionId = sessionId,
+                    scanType = "PERIODIC_DEEP_SCAN",
+                    startedAt = 3_000L,
+                    status = ScanSessionEntity.IN_PROGRESS
+                )
+            )
+            dao.upsertScanSessionState(
+                ScanSessionState(
+                    sessionId = sessionId,
+                    totalItems = 2,
+                    scannedItems = 1,
+                    scanType = "deep",
+                    operationType = "PERIODIC_DEEP_SCAN",
+                    isManual = false
+                )
+            )
+
+            assertEquals(sessionId, dao.observeLatestScanState().first()?.sessionId)
+            assertEquals(null, dao.latestIncompleteManualScanState())
+
+            // Scheduled sessions remain active for WorkManager, not manual-session cleanup.
+            dao.markInProgressAsInterrupted()
+            assertEquals(1, dao.observeScanSessionCounts().first().inProgress)
+
+            dao.markScanSessionStateComplete(sessionId, 1)
+            dao.markScanSessionCompleted(sessionId, 4_000L)
+            assertEquals(sessionId, dao.latestCompletedScanState()?.sessionId)
+            assertEquals(sessionId, dao.observeLatestScanState().first()?.sessionId)
+        } finally {
+            database.close()
+        }
+    }
 }
