@@ -27,6 +27,6 @@ data class ScanSessionItemEntity(
  @ColumnInfo(name = "source_uri") val sourceUri: String? = null,
  @ColumnInfo(name = "completed_at") val completedAt: Long,
  @ColumnInfo(name = "apk_size_bytes") val apkSizeBytes: Long? = null,
- @ColumnInfo(name = "scan_source") val scanSource: String = "FRESH",
- @ColumnInfo(name = "analysis_stages") val analysisStages: String = ""
+ @ColumnInfo(name = "scan_source", defaultValue = "'FRESH'") val scanSource: String = "FRESH",
+ @ColumnInfo(name = "analysis_stages", defaultValue = "''") val analysisStages: String = ""
 )
