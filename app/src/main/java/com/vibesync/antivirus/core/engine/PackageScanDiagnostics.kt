@@ -19,6 +19,9 @@ internal class PackageScanDiagnostics(
     private val totalCount = AtomicInteger(0)
     private val publishedCount = AtomicInteger(0)
     private val failureCount = AtomicInteger(0)
+    private val completedVerdictCount = AtomicInteger(0)
+    private val pendingRetryCount = AtomicInteger(0)
+    private val cacheHitCount = AtomicInteger(0)
     private val skippedReasons = ConcurrentHashMap<String, String>()
     private val queuedReasons = ConcurrentHashMap<String, String>()
     private val resumedPackages = ConcurrentHashMap.newKeySet<String>()
@@ -27,6 +30,9 @@ internal class PackageScanDiagnostics(
     val total: Int get() = totalCount.get()
     val published: Int get() = publishedCount.get()
     val failed: Int get() = failureCount.get()
+    val completed: Int get() = completedVerdictCount.get()
+    val pendingRetries: Int get() = pendingRetryCount.get()
+    val cacheHits: Int get() = cacheHitCount.get()
     val failedPackageNames: Set<String> get() = failedPackages.toSet()
     val queued: Int get() = queuedReasons.size
     val resumed: Int get() = resumedPackages.size
@@ -38,6 +44,25 @@ internal class PackageScanDiagnostics(
 
     fun markPublished(count: Int = 1) {
         if (count > 0) publishedCount.addAndGet(count)
+    }
+
+    fun stage(packageName: String, stage: String, status: String) {
+        val safeStage = stage.lowercase().replace(Regex("[^a-z0-9_]+"), "_").take(40)
+        val safeStatus = status.lowercase().replace(Regex("[^a-z0-9_]+"), "_").take(40)
+        Log.i("ScanDebug", "pkg_stage pkg=$packageName stage=$safeStage status=$safeStatus userId=$userId")
+    }
+
+    fun recordResult(result: ScanResult) {
+        if (result.verdict == ScanVerdict.NOT_SCANNED) pendingRetryCount.incrementAndGet()
+        else completedVerdictCount.incrementAndGet()
+        if (result.scanSource == ScanSource.CACHE_HIT) cacheHitCount.incrementAndGet()
+        val pkg = result.packageName ?: result.packageOrPath
+        Log.i("ScanDebug", "pkg_complete pkg=$pkg verdict=\${result.verdict} source=\${result.scanSource} " +
+            "durationMs=\${result.durationMs} apkBytes=\${result.apkSizeBytes ?: -1L} stages=\${result.analysisStages.joinToString(",")}")
+    }
+
+    fun markResumedCompleted(count: Int) {
+        if (count > 0) completedVerdictCount.addAndGet(count)
     }
 
     fun fail(packageName: String, stage: String, error: Throwable) {
@@ -81,7 +106,7 @@ internal class PackageScanDiagnostics(
     fun logSummary() {
         Log.i(
             "ScanDebug",
-            "scan_summary enumerated=$total queued=$queued resumed=$resumed pending=${(queued - resumed).coerceAtLeast(0)} published=$published failed=$failed skipped=$skipped userId=$userId"
+            "scan_summary enumerated=$total queued=$queued resumed=$resumed pending=${(queued - resumed).coerceAtLeast(0)} published=$published completed=$completed pendingRetries=$pendingRetries cacheHits=$cacheHits failed=$failed skipped=$skipped userId=$userId"
         )
     }
 }
