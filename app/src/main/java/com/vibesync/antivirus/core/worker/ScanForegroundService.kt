@@ -112,14 +112,34 @@ class ScanForegroundService : Service() {
     Log.d("ScanDebug", "Worker FINISHED with result: cancelled")
     return
    }
+   suspend fun executeSessionPass() {
+    when (session.operationType) {
+     OP_FULL_DEVICE, OP_DEEP_SCAN -> repo.scanFullForSession(session.sessionId)
+     OP_INSTALLED_APPS -> repo.scanInstalledAppsForSession(session.sessionId)
+     OP_SELECTED_FILE -> repo.scanUriForSession(session.sourceUri?.let(Uri::parse) ?: error("Selected file URI missing."), session.sessionId)
+     OP_INSTALLED_PACKAGE -> repo.scanInstalledPackageForSession(session.packageName ?: error("Package name missing."), session.sessionId)
+     OP_SELECTED_FOLDER -> repo.scanFolderTreeForSession(session.sourceUri?.let(Uri::parse) ?: error("Selected folder URI missing."), session.sessionId)
+     else -> error("Unsupported scan operation: " + session.operationType)
+    }
+   }
    val scanStartedElapsed = SystemClock.elapsedRealtime()
-   when (session.operationType) {
-    OP_FULL_DEVICE, OP_DEEP_SCAN -> repo.scanFullForSession(session.sessionId)
-    OP_INSTALLED_APPS -> repo.scanInstalledAppsForSession(session.sessionId)
-    OP_SELECTED_FILE -> repo.scanUriForSession(session.sourceUri?.let(Uri::parse) ?: error("Selected file URI missing."), session.sessionId)
-    OP_INSTALLED_PACKAGE -> repo.scanInstalledPackageForSession(session.packageName ?: error("Package name missing."), session.sessionId)
-    OP_SELECTED_FOLDER -> repo.scanFolderTreeForSession(session.sourceUri?.let(Uri::parse) ?: error("Selected folder URI missing."), session.sessionId)
-    else -> error("Unsupported scan operation: " + session.operationType)
+   executeSessionPass()
+
+   // scanSessionItemKeys() deliberately excludes NOT_SCANNED rows. Re-entering the
+   // same operation therefore reprocesses only incomplete items and REPLACEs those rows.
+   var retryResults = repo.loadScanSessionResults(session.sessionId).filter { repo.isReviewableResult(it) }
+   var pendingRows = retryResults.count { it.verdict == ScanVerdict.NOT_SCANNED }
+   var retryPass = 0
+   while (pendingRows > 0 && retryPass < 2 && !stopRequested) {
+    retryPass++
+    Log.w("ScanDebug", "manual_scan_retry pass=$retryPass pending=$pendingRows sessionId=\${session.sessionId}")
+    repo.clearScanPublishSummary(session.sessionId)
+    executeSessionPass()
+    retryResults = repo.loadScanSessionResults(session.sessionId).filter { repo.isReviewableResult(it) }
+    pendingRows = retryResults.count { it.verdict == ScanVerdict.NOT_SCANNED }
+   }
+   if (pendingRows > 0) {
+    Log.w("ScanDebug", "manual_scan_retry_exhausted pending=$pendingRows sessionId=\${session.sessionId}")
    }
    repo.addScanSessionElapsedMs(
     session.sessionId,
