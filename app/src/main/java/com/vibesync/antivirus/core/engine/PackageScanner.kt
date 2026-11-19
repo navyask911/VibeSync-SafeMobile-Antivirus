@@ -378,7 +378,7 @@ class PackageScanner(
       else -> null
      }
      if (includeReason == null) {
-      diagnostics.skip(packageName, "non_google_system_or_oem_app flags=\${app.flags} system=$system updatedSystem=$updatedSystem")
+      diagnostics.skip(packageName, "non_google_system_or_oem_app flags=${app.flags} system=$system updatedSystem=$updatedSystem")
      } else diagnostics.queue(packageName, includeReason, app.flags)
      packageName.takeIf { includeReason != null }
     } catch (error: Exception) {
@@ -390,7 +390,7 @@ class PackageScanner(
   diagnostics.setTotal(enumeratedTotal)
   try { dao.updateScanSessionInventory(scanSessionId, enumeratedTotal, all.size, diagnostics.skipped) }
   catch (error: Exception) { diagnostics.fail("*", "inventory_persist", error) }
-  Log.i("ScanDebug", "pkg_inventory enumerated=$enumeratedTotal eligible=\${all.size} excluded=\${diagnostics.skipped} userId=\${diagnostics.userId}")
+  Log.i("ScanDebug", "pkg_inventory enumerated=$enumeratedTotal eligible=${all.size} excluded=${diagnostics.skipped} userId=${diagnostics.userId}")
 
   val completed = all.count { it in completedPackageNames }
   // Resumed rows already exist in the Room session; count them as published,
@@ -704,7 +704,12 @@ class PackageScanner(
   diagnostics: PackageScanDiagnostics? = null,
   onStageChange: (String) -> Unit = {}
  ): ScanResult {
-  onStageChange("resolve")
+  var activeStage = "resolve"
+  val stageCallback: (String) -> Unit = { nextStage ->
+   activeStage = nextStage
+   onStageChange(nextStage)
+  }
+  stageCallback("resolve")
   val start = System.nanoTime()
   val appInfo = info.applicationInfo
   val fileSize = installedApkBytes(appInfo)
@@ -734,7 +739,7 @@ class PackageScanner(
   if (officialGoogle) {
    return safePlatformPackageResult(
     info, scanSessionId, start, fileSize, SAFE_GOOGLE_PACKAGE_LABEL,
-    diagnostics, onStageChange, ScanSource.GOOGLE_VERIFIED,
+    diagnostics, stageCallback, ScanSource.GOOGLE_VERIFIED,
     listOf("SIGNER_VERIFIED", "VERDICT")
    )
   }
@@ -743,7 +748,7 @@ class PackageScanner(
   if (isSystemApp || isUpdatedSystemApp) {
    return safePlatformPackageResult(
     info, scanSessionId, start, fileSize, SAFE_SYSTEM_PACKAGE_LABEL,
-    diagnostics, onStageChange, ScanSource.FRESH,
+    diagnostics, stageCallback, ScanSource.FRESH,
     listOf("SYSTEM_POLICY", "VERDICT")
    )
   }
@@ -751,7 +756,7 @@ class PackageScanner(
   if (cached?.verdict == ScanVerdict.NOT_SCANNED.name) {
    try {
     dao.deleteAppScanCache(info.packageName)
-    Log.i("ScanDebug", "pkg_cache_bypass pkg=\${info.packageName} reason=legacy_not_scanned_cache_removed userId=\${diagnostics?.userId ?: (android.os.Process.myUid() / 100000)}")
+    Log.i("ScanDebug", "pkg_cache_bypass pkg=${info.packageName} reason=legacy_not_scanned_cache_removed userId=${diagnostics?.userId ?: (android.os.Process.myUid() / 100000)}")
    } catch (cancelled: CancellationException) {
     throw cancelled
    } catch (error: Exception) {
@@ -769,8 +774,8 @@ class PackageScanner(
     null
    }
    if (cachedVerdict != null && AppScanCachePolicy.canReuse(cachedVerdict)) {
-    Log.i("ScanDebug", "pkg_cache_hit pkg=\${info.packageName} verdict=$cachedVerdict reason=unchanged_apk userId=\${diagnostics?.userId ?: (android.os.Process.myUid() / 100000)}")
-    val label = loadPackageLabelOrFallback(info, diagnostics, onStageChange)
+    Log.i("ScanDebug", "pkg_cache_hit pkg=${info.packageName} verdict=$cachedVerdict reason=unchanged_apk userId=${diagnostics?.userId ?: (android.os.Process.myUid() / 100000)}")
+    val label = loadPackageLabelOrFallback(info, diagnostics, stageCallback)
     val cachedResult = ScanResult(
      packageOrPath = info.packageName, displayName = label,
      sha256 = cached.sha256.takeIf { it.isNotBlank() }, md5 = null,
@@ -787,11 +792,11 @@ class PackageScanner(
   }
 
   val scanned = try {
-   scanPackageUncached(info, scanSessionId, diagnostics, onStageChange)
+   scanPackageUncached(info, scanSessionId, diagnostics, stageCallback)
   } catch (cancelled: CancellationException) {
    throw cancelled
   } catch (error: Exception) {
-   val failedStage = (error as? ScanPublishStageException)?.stage ?: "resolve"
+   val failedStage = (error as? ScanPublishStageException)?.stage ?: activeStage
    diagnostics?.fail(info.packageName, failedStage, error.cause ?: error)
    Log.w(TAG, "Installed-app scan failed; retaining an explicit retryable result.", error)
    val label = loadPackageLabelOrFallback(info, diagnostics, onStageChange)
@@ -799,7 +804,7 @@ class PackageScanner(
     listOf(context.getString(R.string.file_could_not_read)), start).copy(
      packageName = info.packageName, scanSessionId = scanSessionId,
      apkSizeBytes = fileSize, scanSource = ScanSource.FRESH,
-     analysisStages = listOf("\${failedStage.uppercase()}_FAILED", "VERDICT_PENDING")
+     analysisStages = listOf("${failedStage.uppercase()}_FAILED", "VERDICT_PENDING")
     ).also { auditSafely(it, start, scanSessionId, diagnostics) }
   }
 
@@ -818,7 +823,7 @@ class PackageScanner(
     Log.w(TAG, "Could not update installed-app cache; scan result remains valid.", error)
    }
   } else if (finalResult.verdict == ScanVerdict.NOT_SCANNED) {
-   Log.i("ScanDebug", "pkg_retry_required pkg=\${info.packageName} reason=incomplete_analysis_not_cached userId=\${diagnostics?.userId ?: (android.os.Process.myUid() / 100000)}")
+   Log.i("ScanDebug", "pkg_retry_required pkg=${info.packageName} reason=incomplete_analysis_not_cached userId=${diagnostics?.userId ?: (android.os.Process.myUid() / 100000)}")
   }
   return finalResult
  }
@@ -979,7 +984,9 @@ class PackageScanner(
   val mlProbability = if (isProtectedPlatformPackage(info.packageName, appInfo, diagnostics)) null else runMachineLearning(apk)
   completedStages += if (mlProbability != null) "ML" else "ML_UNAVAILABLE"
   diagnostics?.stage(info.packageName, "ml", if (mlProbability != null) "completed" else "unavailable")
+  onStageChange("static_analysis")
   val baseDeepReport = deepStaticAnalyzer.analyze(info, apk, debugSigned)
+  completedStages += "STATIC_ANALYSIS"
   val mergedDeepReport = mergeYaraXFindings(baseDeepReport, yaraXResult)
   val deepReport = mergedDeepReport.copy(mlProbability = mlProbability)
   val deepReasons = deepReport.findings.map { "[${it.ruleId}] ${it.evidence} (confidence ${it.confidence}%)" }
