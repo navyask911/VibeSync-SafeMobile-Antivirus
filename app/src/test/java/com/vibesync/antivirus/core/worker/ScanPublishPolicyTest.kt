@@ -22,4 +22,13 @@ class ScanPublishPolicyTest {
     @Test fun completedOrEmptyVerdictsDoNotScheduleRetry() {
         assertFalse(ScanPublishPolicy.shouldRetry(0, 0))
     }
+    @Test fun cleanRecentSessionMayDeduplicateWithinTheCooldown() {
+        assertTrue(ScanPublishPolicy.shouldDeduplicate(10_000L, 11_000L, 0, 0, 120_000L))
+    }
+    @Test fun recentSessionWithPendingRetriesMustNotSuppressAnotherScan() {
+        assertFalse(ScanPublishPolicy.shouldDeduplicate(10_000L, 11_000L, 3, 0, 120_000L))
+    }
+    @Test fun laterRetryAttemptMustNotBeDeduplicated() {
+        assertFalse(ScanPublishPolicy.shouldDeduplicate(10_000L, 11_000L, 0, 1, 120_000L))
+    }
 }
