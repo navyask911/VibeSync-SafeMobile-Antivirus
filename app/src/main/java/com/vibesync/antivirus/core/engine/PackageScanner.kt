@@ -35,6 +35,7 @@ import com.vibesync.antivirus.core.heuristics.PermissionRiskAnalyzer
 import com.vibesync.antivirus.core.security.IntegrityChecker
 import com.vibesync.antivirus.core.security.ProtectedPackagePolicy
 import com.vibesync.antivirus.core.security.TrustedPackageWhitelist
+import com.vibesync.antivirus.core.security.OfficialGoogleAppPolicy
 import com.vibesync.antivirus.core.security.TrustedAppStore
 import kotlin.math.roundToInt
 import com.vibesync.antivirus.data.local.AppScanCache
@@ -55,7 +56,7 @@ import kotlinx.coroutines.sync.withLock
 
 private const val GOOGLE_PLAY_SERVICES_PACKAGE = "com.google.android.gms"
 private const val SAFE_SYSTEM_PACKAGE_LABEL = "Safe (System App)"
-private const val SAFE_TRUSTED_CERTIFICATE_LABEL = "Safe (Trusted Certificate)"
+private const val SAFE_GOOGLE_PACKAGE_LABEL = "Official Google app — Clean & Safe"
 
 /**
  * Room/UI publication is an item boundary: a failed insert or observer callback
@@ -286,7 +287,12 @@ class PackageScanner(
     return@filter false
    }
    val flags = appInfo.flags
-   val included = ProtectedPackagePolicy.isUserInstalled(flags, info.packageName, context.packageName)
+   val system = flags and (ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0
+   val verifiedGoogle = OfficialGoogleAppPolicy.isOfficialGooglePackage(context, info.packageName, info)
+   val googleCandidate = OfficialGoogleAppPolicy.isGooglePackageName(info.packageName)
+   val included = info.packageName != context.packageName &&
+    (verifiedGoogle || (!system && (googleCandidate ||
+     ProtectedPackagePolicy.isUserInstalled(flags, info.packageName, context.packageName))))
    if (!included) {
     val reason = when {
      info.packageName == context.packageName -> "inventory_own_package"
@@ -308,14 +314,19 @@ class PackageScanner(
     info.packageName
    }
    val apkSize = try {
-    File(appInfo.sourceDir).takeIf { it.isFile }?.length() ?: 0L
+    installedApkBytes(appInfo) ?: 0L
    } catch (error: Exception) {
     Log.e("ScanDebug", "pkg_fail pkg=${info.packageName} stage=resolve userId=$userId", error)
     0L
    }
    val isSystem = appInfo.flags and
     (ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0
-   InstalledAppItem(info.packageName, label, ScanVerdict.NOT_SCANNED.name, apkSize, isSystem)
+   InstalledAppItem(
+    info.packageName, label,
+    if (OfficialGoogleAppPolicy.isOfficialGooglePackage(context, info.packageName, info)) ScanVerdict.NO_MATCH.name
+    else ScanVerdict.NOT_SCANNED.name,
+    apkSize, isSystem
+   )
   }.distinctBy { it.packageName }.sortedBy { it.appLabel.lowercase(java.util.Locale.getDefault()) }.toList()
  }
  suspend fun scanInstalledApps(progress: suspend (processed: Int, total: Int) -> Unit = { _, _ -> }): List<ScanResult> =
@@ -357,23 +368,18 @@ class PackageScanner(
       diagnostics.skip(packageName, "scanner_own_package")
       return@mapNotNull null
      }
+     val googleCandidate = OfficialGoogleAppPolicy.isGooglePackageName(packageName)
+     val verifiedGoogle = OfficialGoogleAppPolicy.isOfficialGooglePackage(context, packageName, info)
      val includeReason = when {
-      system -> "system_app"
-      updatedSystem -> "updated_system_app"
-      packageName == GOOGLE_PLAY_SERVICES_PACKAGE -> "google_play_services"
-      ProtectedPackagePolicy.isUserInstalled(app.flags, packageName, context.packageName) ->
-       "user_installed_app"
-      isSignedByKnownTrustedCertificate(packageName, diagnostics) -> "trusted_signer"
+      verifiedGoogle -> "verified_google_app"
+      system || updatedSystem -> null
+      googleCandidate -> "unverified_google_namespace_user_app"
+      ProtectedPackagePolicy.isUserInstalled(app.flags, packageName, context.packageName) -> "user_installed_app"
       else -> null
      }
      if (includeReason == null) {
-      diagnostics.skip(
-       packageName,
-       "excluded_by_scan_policy flags=${app.flags} system=$system updatedSystem=$updatedSystem"
-      )
-     } else {
-      diagnostics.queue(packageName, includeReason, app.flags)
-     }
+      diagnostics.skip(packageName, "non_google_system_or_oem_app flags=\${app.flags} system=$system updatedSystem=$updatedSystem")
+     } else diagnostics.queue(packageName, includeReason, app.flags)
      packageName.takeIf { includeReason != null }
     } catch (error: Exception) {
      diagnostics.fail(packageName, "resolve", error)
@@ -382,12 +388,15 @@ class PackageScanner(
    }.distinct().sorted()
   }
   diagnostics.setTotal(enumeratedTotal)
-  Log.i("ScanDebug", "pkg_inventory enumerated=$enumeratedTotal eligible=${all.size} userId=${diagnostics.userId}")
+  try { dao.updateScanSessionInventory(scanSessionId, enumeratedTotal, all.size, diagnostics.skipped) }
+  catch (error: Exception) { diagnostics.fail("*", "inventory_persist", error) }
+  Log.i("ScanDebug", "pkg_inventory enumerated=$enumeratedTotal eligible=\${all.size} excluded=\${diagnostics.skipped} userId=\${diagnostics.userId}")
 
   val completed = all.count { it in completedPackageNames }
   // Resumed rows already exist in the Room session; count them as published,
   // but keep them out of this pass's per-package work queue.
   diagnostics.markPublished(completed)
+  diagnostics.markResumedCompleted(completed)
   all.filter { it in completedPackageNames }.forEach { packageName ->
    diagnostics.resume(packageName)
   }
@@ -416,7 +425,10 @@ class PackageScanner(
        try {
         val packageInfo = loadPackageInfoForScan(packageName, diagnostics)
         logPackageMetadata(packageInfo, diagnostics)
-        scanPackage(packageInfo, scanSessionId, diagnostics) { nextStage -> stage = nextStage }
+        scanPackage(packageInfo, scanSessionId, diagnostics) { nextStage ->
+         stage = nextStage
+         diagnostics.stage(packageName, nextStage, "started")
+        }
        } catch (cancelled: CancellationException) {
         if (!currentCoroutineContext().isActive) throw cancelled
         diagnostics.fail(packageName, stage, cancelled)
@@ -452,7 +464,10 @@ class PackageScanner(
       val failureStage = (error as? ScanPublishStageException)?.stage ?: "publish"
       diagnostics.fail(pkg, failureStage, error.cause ?: error)
      }
-     if (didPublish) diagnostics.markPublished()
+     if (didPublish) {
+      diagnostics.markPublished()
+      diagnostics.recordResult(scanResult)
+     }
      try {
       mutex.withLock { progress(completed + count.incrementAndGet(), all.size) }
      } catch (cancelled: CancellationException) {
@@ -691,27 +706,20 @@ class PackageScanner(
  ): ScanResult {
   onStageChange("resolve")
   val start = System.nanoTime()
-  if (trustedAppStore.isTrusted(info.packageName)) {
-   return trustedResult(info.packageName, scanSessionId, start)
-  }
-
-  // System and known platform-signed apps are safe-listed before any file hashing or deep analysis.
   val appInfo = info.applicationInfo
-  val isSystemApp = appInfo != null &&
-   (appInfo.flags and ApplicationInfo.FLAG_SYSTEM) != 0
-  val isUpdatedSystemApp = appInfo != null &&
-   (appInfo.flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0
-  val isTrustedCertificate = info.packageName == GOOGLE_PLAY_SERVICES_PACKAGE ||
-   (appInfo != null && !isSystemApp && !isUpdatedSystemApp && isSignedByKnownTrustedCertificate(info))
+  val fileSize = installedApkBytes(appInfo)
 
-  // PackageInfo and sourceDir metadata are read before any hash, DEX, YARA or ML work.
-  val apk = appInfo?.sourceDir?.let(::File)
-  val fileSize = try {
-   apk?.length()
-  } catch (error: Exception) {
-   diagnostics?.fail(info.packageName, "resolve", error)
-   null
+  if (trustedAppStore.isTrusted(info.packageName)) {
+   return trustedResult(info.packageName, scanSessionId, start).copy(
+    apkSizeBytes = fileSize, scanSource = ScanSource.USER_TRUSTED,
+    analysisStages = listOf("USER_TRUSTED", "VERDICT")
+   )
   }
+
+  val flags = appInfo?.flags ?: 0
+  val isSystemApp = flags and ApplicationInfo.FLAG_SYSTEM != 0
+  val isUpdatedSystemApp = flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP != 0
+  val officialGoogle = OfficialGoogleAppPolicy.isOfficialGooglePackage(context, info.packageName, info)
   val cached = try {
    dao.findAppScanCache(info.packageName)
   } catch (cancelled: CancellationException) {
@@ -722,30 +730,33 @@ class PackageScanner(
    null
   }
 
-  if (isSystemApp || isUpdatedSystemApp || isTrustedCertificate) {
-   val safeLabel = if (isSystemApp || isUpdatedSystemApp) {
-    SAFE_SYSTEM_PACKAGE_LABEL
-   } else {
-    SAFE_TRUSTED_CERTIFICATE_LABEL
+  // Verified Google apps are normalized before cache reuse; stale cache verdicts cannot taint them.
+  if (officialGoogle) {
+   return safePlatformPackageResult(
+    info, scanSessionId, start, fileSize, SAFE_GOOGLE_PACKAGE_LABEL,
+    diagnostics, onStageChange, ScanSource.GOOGLE_VERIFIED,
+    listOf("SIGNER_VERIFIED", "VERDICT")
+   )
+  }
+
+  // Defensive direct-scan guard; bulk enumeration excludes all other platform/OEM apps.
+  if (isSystemApp || isUpdatedSystemApp) {
+   return safePlatformPackageResult(
+    info, scanSessionId, start, fileSize, SAFE_SYSTEM_PACKAGE_LABEL,
+    diagnostics, onStageChange, ScanSource.FRESH,
+    listOf("SYSTEM_POLICY", "VERDICT")
+   )
+  }
+
+  if (cached?.verdict == ScanVerdict.NOT_SCANNED.name) {
+   try {
+    dao.deleteAppScanCache(info.packageName)
+    Log.i("ScanDebug", "pkg_cache_bypass pkg=\${info.packageName} reason=legacy_not_scanned_cache_removed userId=\${diagnostics?.userId ?: (android.os.Process.myUid() / 100000)}")
+   } catch (cancelled: CancellationException) {
+    throw cancelled
+   } catch (error: Exception) {
+    diagnostics?.fail(info.packageName, "cache_delete", error)
    }
-   if (fileSize != null && cached != null &&
-    cached.lastUpdateTime == info.lastUpdateTime && cached.fileSize == fileSize &&
-    cached.verdict == ScanVerdict.NO_MATCH.name && cached.threatName == safeLabel
-   ) {
-    val label = loadPackageLabelOrFallback(info, diagnostics, onStageChange)
-    val cachedResult = ScanResult(
-     packageOrPath = info.packageName,
-     displayName = label,
-     sha256 = cached.sha256.takeIf { it.isNotBlank() },
-     md5 = null,
-     verdict = ScanVerdict.NO_MATCH,
-     reasons = listOf(safeLabel),
-     durationMs = elapsed(start)
-    ).copy(packageName = info.packageName, scanSessionId = scanSessionId)
-    auditSafely(cachedResult, start, scanSessionId, diagnostics)
-    return cachedResult
-   }
-   return safePlatformPackageResult(info, scanSessionId, start, fileSize, safeLabel, diagnostics, onStageChange)
   }
 
   if (fileSize != null && cached != null &&
@@ -758,33 +769,20 @@ class PackageScanner(
     null
    }
    if (cachedVerdict != null && AppScanCachePolicy.canReuse(cachedVerdict)) {
-    Log.i(
-     "ScanDebug",
-     "pkg_cache_hit pkg=${info.packageName} verdict=$cachedVerdict reason=unchanged_apk userId=${diagnostics?.userId ?: (android.os.Process.myUid() / 100000)}"
-    )
+    Log.i("ScanDebug", "pkg_cache_hit pkg=\${info.packageName} verdict=$cachedVerdict reason=unchanged_apk userId=\${diagnostics?.userId ?: (android.os.Process.myUid() / 100000)}")
     val label = loadPackageLabelOrFallback(info, diagnostics, onStageChange)
     val cachedResult = ScanResult(
-     packageOrPath = info.packageName,
-     displayName = label,
-     sha256 = cached.sha256.takeIf { it.isNotBlank() },
-     md5 = null,
-     verdict = cachedVerdict,
-     reasons = cached.threatName?.let(::listOf).orEmpty(),
+     packageOrPath = info.packageName, displayName = label,
+     sha256 = cached.sha256.takeIf { it.isNotBlank() }, md5 = null,
+     verdict = cachedVerdict, reasons = cached.threatName?.let(::listOf).orEmpty(),
      durationMs = elapsed(start)
     ).copy(
-     packageName = info.packageName,
-     scanSessionId = scanSessionId,
-     malwareName = cached.threatName
+     packageName = info.packageName, scanSessionId = scanSessionId,
+     malwareName = cached.threatName, apkSizeBytes = fileSize,
+     scanSource = ScanSource.CACHE_HIT, analysisStages = listOf("CACHE_HIT")
     )
-    // Keep scan history complete even though expensive file engines were bypassed.
     auditSafely(cachedResult, start, scanSessionId, diagnostics)
     return cachedResult
-   }
-   if (cachedVerdict == ScanVerdict.NOT_SCANNED) {
-    Log.i(
-     "ScanDebug",
-     "pkg_cache_bypass pkg=${info.packageName} reason=previous_not_scanned_retry_required userId=${diagnostics?.userId ?: (android.os.Process.myUid() / 100000)}"
-    )
    }
   }
 
@@ -795,45 +793,34 @@ class PackageScanner(
   } catch (error: Exception) {
    val failedStage = (error as? ScanPublishStageException)?.stage ?: "resolve"
    diagnostics?.fail(info.packageName, failedStage, error.cause ?: error)
-   Log.w(TAG, "Installed-app scan failed; caching a not-scanned result.", error)
+   Log.w(TAG, "Installed-app scan failed; retaining an explicit retryable result.", error)
    val label = loadPackageLabelOrFallback(info, diagnostics, onStageChange)
-   result(
-    info.packageName,
-    label,
-    null,
-    null,
-    ScanVerdict.NOT_SCANNED,
-    listOf(context.getString(R.string.file_could_not_read)),
-    start
-   ).copy(packageName = info.packageName, scanSessionId = scanSessionId).also {
-    auditSafely(it, start, scanSessionId, diagnostics)
-   }
+   result(info.packageName, label, null, null, ScanVerdict.NOT_SCANNED,
+    listOf(context.getString(R.string.file_could_not_read)), start).copy(
+     packageName = info.packageName, scanSessionId = scanSessionId,
+     apkSizeBytes = fileSize, scanSource = ScanSource.FRESH,
+     analysisStages = listOf("\${failedStage.uppercase()}_FAILED", "VERDICT_PENDING")
+    ).also { auditSafely(it, start, scanSessionId, diagnostics) }
   }
-  if (fileSize != null && AppScanCachePolicy.shouldPersist(scanned.verdict)) {
+
+  val finalResult = scanned.copy(apkSizeBytes = fileSize, scanSource = ScanSource.FRESH)
+  if (fileSize != null && AppScanCachePolicy.shouldPersist(finalResult.verdict)) {
    try {
-    dao.upsertAppScanCache(
-     AppScanCache(
-      packageName = info.packageName,
-      lastUpdateTime = info.lastUpdateTime,
-      fileSize = fileSize,
-      sha256 = scanned.sha256.orEmpty(),
-      verdict = scanned.verdict.name,
-      threatName = scanned.malwareName
-     )
-    )
+    dao.upsertAppScanCache(AppScanCache(
+     packageName = info.packageName, lastUpdateTime = info.lastUpdateTime,
+     fileSize = fileSize, sha256 = finalResult.sha256.orEmpty(),
+     verdict = finalResult.verdict.name, threatName = finalResult.malwareName
+    ))
    } catch (cancelled: CancellationException) {
     throw cancelled
    } catch (error: Exception) {
     diagnostics?.fail(info.packageName, "room_insert", error)
-    Log.w(TAG, "Could not update the installed-app scan cache; scan result is still valid.", error)
+    Log.w(TAG, "Could not update installed-app cache; scan result remains valid.", error)
    }
-  } else if (fileSize != null) {
-   Log.i(
-    "ScanDebug",
-    "pkg_cache_skip pkg=${info.packageName} reason=not_scanned_result will_retry_next_pass userId=${diagnostics?.userId ?: (android.os.Process.myUid() / 100000)}"
-   )
+  } else if (finalResult.verdict == ScanVerdict.NOT_SCANNED) {
+   Log.i("ScanDebug", "pkg_retry_required pkg=\${info.packageName} reason=incomplete_analysis_not_cached userId=\${diagnostics?.userId ?: (android.os.Process.myUid() / 100000)}")
   }
-  return scanned
+  return finalResult
  }
 
  private suspend fun safePlatformPackageResult(
@@ -843,7 +830,9 @@ class PackageScanner(
   fileSize: Long?,
   safeLabel: String,
   diagnostics: PackageScanDiagnostics? = null,
-  onStageChange: (String) -> Unit = {}
+  onStageChange: (String) -> Unit = {},
+  scanSource: ScanSource = ScanSource.FRESH,
+  analysisStages: List<String> = listOf("PLATFORM_POLICY", "VERDICT")
  ): ScanResult {
   val displayName = loadPackageLabelOrFallback(info, diagnostics, onStageChange)
   val safeResult = ScanResult(
@@ -854,7 +843,10 @@ class PackageScanner(
    verdict = ScanVerdict.NO_MATCH,
    reasons = listOf(safeLabel),
    durationMs = elapsed(start)
-  ).copy(packageName = info.packageName, scanSessionId = scanSessionId)
+  ).copy(
+   packageName = info.packageName, scanSessionId = scanSessionId,
+   apkSizeBytes = fileSize, scanSource = scanSource, analysisStages = analysisStages
+  )
 
   // No digest is computed for an early-exit package; the empty value is deliberately non-hash data.
   if (fileSize != null) {
@@ -893,6 +885,7 @@ class PackageScanner(
    auditSafely(failed, start, scanSessionId, diagnostics)
    return failed
   }
+  val completedStages = mutableListOf<String>()
   onStageChange("label")
   val label = try {
    appInfo.loadLabel(pm).toString()
@@ -916,9 +909,9 @@ class PackageScanner(
     diagnostics?.skip(info.packageName, "apk_source_missing_or_unreadable")
    }
    val failed = result(info.packageName, label, null, null, unreadableVerdict, reasons, start).copy(
-    packageName = info.packageName,
-    scanSessionId = scanSessionId,
-    detectionSource = if (adjustedRiskScore >= 45) DetectionSource.HEURISTIC else DetectionSource.NONE
+    packageName = info.packageName, scanSessionId = scanSessionId,
+    detectionSource = if (adjustedRiskScore >= 45) DetectionSource.HEURISTIC else DetectionSource.NONE,
+    analysisStages = listOf("RESOLVE_FAILED", "VERDICT_PENDING")
    )
    auditSafely(failed, start, scanSessionId, diagnostics)
    return failed
@@ -934,8 +927,10 @@ class PackageScanner(
   } ?: run {
     val failed = result(info.packageName, label, null, null, ScanVerdict.NOT_SCANNED, reasons + context.getString(R.string.file_could_not_read), start).copy(packageName = info.packageName, scanSessionId = scanSessionId)
     auditSafely(failed, start, scanSessionId, diagnostics)
-    return failed
+    return failed.copy(analysisStages = listOf("HASH_FAILED", "VERDICT_PENDING"))
    }
+  completedStages += "HASH"
+  diagnostics?.stage(info.packageName, "hash", "completed")
   onStageChange("resolve")
   // The hash engine must run before expensive DEX/YARA/ML work. Preserve the
   // existing signed DB, local DB and optional feed ordering and threat evidence.
@@ -945,11 +940,23 @@ class PackageScanner(
    // Exact hash matches remain an immediate short-circuit: no YARA or ML work runs.
    val evaluated = evaluateWithEnsemble(exactThreat)
    audit(evaluated, start, scanSessionId, diagnostics)
-   return evaluated.copy(durationMs = elapsed(start),
-    packageName = info.packageName, scanSessionId = scanSessionId)
+   onStageChange("verdict")
+   diagnostics?.stage(info.packageName, "verdict", "completed")
+   return evaluated.copy(
+    durationMs = elapsed(start), packageName = info.packageName, scanSessionId = scanSessionId,
+    analysisStages = completedStages + "VERDICT"
+   )
   }
 
+  onStageChange("yara")
   val yaraXResult = withContext(Dispatchers.Default) { yaraXScanner.scanApk(apk) }
+  if (yaraXResult.isComplete) {
+   completedStages += "YARA"
+   diagnostics?.stage(info.packageName, "yara", "completed")
+  } else {
+   completedStages += "YARA_INCOMPLETE"
+   diagnostics?.stage(info.packageName, "yara", "incomplete")
+  }
   val yaraThreat = yaraXResult.threatMatches.firstOrNull()
   if (yaraThreat != null) {
    val detected = evaluateWithEnsemble(
@@ -960,16 +967,18 @@ class PackageScanner(
     yaraXResult
    )
    audit(detected, start, scanSessionId, diagnostics)
+   onStageChange("verdict")
+   diagnostics?.stage(info.packageName, "verdict", "completed")
    return detected.copy(
-    durationMs = elapsed(start),
-    packageName = info.packageName,
-    scanSessionId = scanSessionId
+    durationMs = elapsed(start), packageName = info.packageName, scanSessionId = scanSessionId,
+    analysisStages = completedStages + "VERDICT"
    )
   }
 
-  // Platform packages are safe-listed before this method; keep a local backstop here too.
-  val mlProbability = if (isProtectedPlatformPackage(info.packageName, appInfo, diagnostics)) null
-   else runMachineLearning(apk)
+  onStageChange("ml")
+  val mlProbability = if (isProtectedPlatformPackage(info.packageName, appInfo, diagnostics)) null else runMachineLearning(apk)
+  completedStages += if (mlProbability != null) "ML" else "ML_UNAVAILABLE"
+  diagnostics?.stage(info.packageName, "ml", if (mlProbability != null) "completed" else "unavailable")
   val baseDeepReport = deepStaticAnalyzer.analyze(info, apk, debugSigned)
   val mergedDeepReport = mergeYaraXFindings(baseDeepReport, yaraXResult)
   val deepReport = mergedDeepReport.copy(mlProbability = mlProbability)
@@ -990,9 +999,15 @@ class PackageScanner(
    yaraXResult,
    isSystemApp = isProtectedPlatformPackage(info.packageName, appInfo, diagnostics)
   )
+  onStageChange("verdict")
   output = markIncompleteYaraIfOtherwiseClean(output, yaraXResult)
+  val finalStage = if (output.verdict == ScanVerdict.NOT_SCANNED) "VERDICT_PENDING" else "VERDICT"
+  diagnostics?.stage(info.packageName, "verdict", if (finalStage == "VERDICT") "completed" else "pending_retry")
   audit(output, start, scanSessionId, diagnostics)
-  return output.copy(durationMs = elapsed(start), packageName = info.packageName, scanSessionId = scanSessionId)
+  return output.copy(
+   durationMs = elapsed(start), packageName = info.packageName, scanSessionId = scanSessionId,
+   analysisStages = completedStages + finalStage
+  )
  }
  private fun readBoundedPrefix(input: InputStream): ByteArray {
   val buffer = ByteArray(eicarProbeBytes)
@@ -1008,7 +1023,8 @@ class PackageScanner(
  private fun trustedResult(name: String, session: String, start: Long) =
   result(name, name, null, null, ScanVerdict.NO_MATCH,
    listOf(context.getString(R.string.trusted_app_explanation)), start).copy(
-    packageName = name, scanSessionId = session, trustedByUser = true)
+    packageName = name, scanSessionId = session, trustedByUser = true,
+    scanSource = ScanSource.USER_TRUSTED, analysisStages = listOf("USER_TRUSTED", "VERDICT"))
  private suspend fun findExactHashThreat(
   key: String, label: String, sha: String, md5: String, sha1: String?, fileSize: Long?
  ): ScanResult? {
@@ -1094,6 +1110,24 @@ class PackageScanner(
   findExactHashThreat(key, label, sha, md5, sha1, fileSize)
    ?: evaluateUnmatched(key, label, sha, md5, heuristic, score, sha1, report)
  )
+ private fun installedApkBytes(appInfo: ApplicationInfo?): Long? {
+  appInfo ?: return null
+  val paths = (listOfNotNull(appInfo.sourceDir) + appInfo.splitSourceDirs.orEmpty()).distinct()
+  var bytes = 0L
+  var readable = false
+  paths.forEach { path ->
+   try {
+    val file = File(path)
+    if (file.isFile && file.canRead()) {
+     val size = file.length().coerceAtLeast(0L)
+     bytes = if (Long.MAX_VALUE - bytes < size) Long.MAX_VALUE else bytes + size
+     readable = true
+    }
+   } catch (_: Exception) { }
+  }
+  return if (readable) bytes else null
+ }
+
  private fun logPackageMetadata(info: PackageInfo, diagnostics: PackageScanDiagnostics) {
   val app = info.applicationInfo
   val flags = app?.flags ?: 0
@@ -1106,7 +1140,7 @@ class PackageScanner(
    -1
   }
   val apkBytes = try {
-   app?.sourceDir?.let { path -> File(path).takeIf { it.isFile }?.length() } ?: -1L
+   installedApkBytes(app) ?: -1L
   } catch (error: Exception) {
    Log.w("ScanDebug", "pkg_meta_read_failed pkg=${info.packageName} field=apkBytes userId=${diagnostics.userId}", error)
    -1L
@@ -1119,7 +1153,7 @@ class PackageScanner(
     " external=${flags and ApplicationInfo.FLAG_EXTERNAL_STORAGE != 0}" +
     " archivedQuery=$archivedQuery" +
     " splitCount=$splitCount" +
-    " apkBytes=$apkBytes"
+    " apkBytesIncludingSplits=$apkBytes"
   )
  }
 
