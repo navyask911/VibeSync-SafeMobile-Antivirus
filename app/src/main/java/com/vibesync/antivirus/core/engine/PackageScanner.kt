@@ -370,9 +370,12 @@ class PackageScanner(
      }
      val googleCandidate = OfficialGoogleAppPolicy.isGooglePackageName(packageName)
      val verifiedGoogle = OfficialGoogleAppPolicy.isOfficialGooglePackage(context, packageName, info)
+     val eligibleByPlatformPolicy = OfficialGoogleAppPolicy.isEligibleForInstalledScan(
+      packageName, context.packageName, app.flags, verifiedGoogle
+     )
      val includeReason = when {
       verifiedGoogle -> "verified_google_app"
-      system || updatedSystem -> null
+      !eligibleByPlatformPolicy -> null
       googleCandidate -> "unverified_google_namespace_user_app"
       ProtectedPackagePolicy.isUserInstalled(app.flags, packageName, context.packageName) -> "user_installed_app"
       else -> null
