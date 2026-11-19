@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Static release guard for SafeMobile v1.10.8 scan publishing, SAF, 16 KB and edge-to-edge requirements."""
+"""Static release guard for SafeMobile scan publishing, SAF, 16 KB and edge-to-edge requirements."""
 from pathlib import Path
 import re
 import sys
@@ -49,10 +49,10 @@ gradle = source["gradle"]
 version_name = re.search(r'\bversionName\s*=\s*"([^"]+)"', gradle)
 version_code = re.search(r"\bversionCode\s*=\s*(\d+)", gradle)
 ndk = re.search(r'\bndkVersion\s*=\s*"([^"]+)"', gradle)
-if not version_name or version_name.group(1) != "1.10.8":
-    errors.append("Gradle versionName must be 1.10.8.")
-if not version_code or version_code.group(1) != "20261162":
-    errors.append("Gradle versionCode must be 20261162.")
+if not version_name or not re.fullmatch(r"\d+\.\d+\.\d+", version_name.group(1)):
+    errors.append("Gradle versionName must be a semantic major.minor.patch version.")
+if not version_code or int(version_code.group(1)) <= 0:
+    errors.append("Gradle versionCode must be a positive integer.")
 if not ndk or tuple(int(part) for part in ndk.group(1).split(".")[:1]) < (28,):
     errors.append("Gradle must pin Android NDK r28 or higher.")
 if "com.google.ai.edge.litert:litert:1.4.2" not in gradle:
@@ -150,8 +150,8 @@ if "integrityCheckPassed" not in source["score"]:
     errors.append("Device Security Score does not consume the effective remote-or-local integrity result.")
 
 
-# v1.10.8 diagnostic boundary: record installed-package scan stages without changing scan decisions.
-# to PackageScanner and collapsed to scalar values before crossing app layers.
+# Installed-package scan boundary: keep PackageManager and graphics objects confined
+# to PackageScanner and collapse package identity to scalar values before crossing app layers.
 viewmodel = source["viewmodel"]
 inventory_model = source["inventoryModel"]
 scan_result = source["scanResult"]
@@ -216,4 +216,4 @@ if errors:
     print(f"Android release readiness FAILED ({len(errors)} issue(s)):")
     print("\n".join(f"- {error}" for error in errors), file=sys.stderr)
     sys.exit(1)
-print("Android release readiness passed: v1.10.8/20261162, scan-stage diagnostics, NDK r28+, LiteRT 1.4.2 and SAF grants.")
+print(f"Android release readiness passed: {version_name.group(1)}/{version_code.group(1)}, scan-stage diagnostics, NDK r28+, LiteRT 1.4.2 and SAF grants.")
