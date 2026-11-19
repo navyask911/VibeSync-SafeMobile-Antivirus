@@ -61,3 +61,16 @@ data class ScanResult(
  /** Explicit completed/incomplete analysis stages for the report. */
  val analysisStages: List<String> = emptyList()
 )
+
+
+/** Shared severity order for Scan & Lab active results and restored completed sessions. */
+object ScanResultOrdering {
+    fun sort(results: List<ScanResult>): List<ScanResult> = results.sortedBy { result ->
+        when (result.verdict) {
+            ScanVerdict.THREAT -> 0
+            ScanVerdict.SUSPICIOUS -> 1
+            ScanVerdict.NOT_SCANNED -> 2
+            ScanVerdict.NO_MATCH -> 3
+        }
+    }
+}
