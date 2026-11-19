@@ -191,7 +191,7 @@ class SafeMobileViewModel(
                             current.copy(
                                 lastScanAt = timestamp,
                                 scanSummary = latestSummary ?: current.scanSummary,
-                                results = latestResults?.takeIf { it.isNotEmpty() } ?: current.results
+                                results = latestResults ?: current.results
                             )
                         } else current
                     }
