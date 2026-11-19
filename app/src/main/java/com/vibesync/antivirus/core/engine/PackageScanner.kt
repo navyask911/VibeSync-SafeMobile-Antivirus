@@ -528,9 +528,12 @@ class PackageScanner(
    return failed
   }
   val appInfo = info.applicationInfo ?: return null
-  // Direct package lookup remains restricted to user-installed apps. Platform packages
-  // are represented by the bulk scan's explicit safe-system result and never enter ML.
-  if (!ProtectedPackagePolicy.isUserInstalled(appInfo.flags, info.packageName, context.packageName)) return null
+  // Apply the same signer-aware eligibility policy as bulk inventory. Only verified
+  // Google system apps may pass the platform-flag guard; other system/OEM packages stay out.
+  val officialGoogle = OfficialGoogleAppPolicy.isOfficialGooglePackage(context, info.packageName, info)
+  if (!OfficialGoogleAppPolicy.isEligibleForInstalledScan(
+      info.packageName, context.packageName, appInfo.flags, officialGoogle
+  )) return null
   return scanPackage(info, scanSessionId)
  }
  suspend fun scanFile(file: File, persistAllAudit: Boolean = true): ScanResult {
