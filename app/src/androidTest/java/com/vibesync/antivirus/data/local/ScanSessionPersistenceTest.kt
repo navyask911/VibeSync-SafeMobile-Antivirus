@@ -73,6 +73,54 @@ class ScanSessionPersistenceTest {
 
  
     @Test
+    fun notScannedRowsAreRetryableAndReplacementPersistsTechnicalMetadata() = runBlocking {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val database = Room.inMemoryDatabaseBuilder(context, ThreatDatabase::class.java)
+            .allowMainThreadQueries().build()
+        try {
+            val dao = database.threatDao()
+            val sessionId = "not-scanned-retry"
+            val pendingKey = "app:com.example.pending"
+            val doneKey = "app:com.example.done"
+            dao.upsertScanSession(
+                ScanSessionEntity(sessionId, "PERIODIC_DEEP_SCAN", 1000L, status = ScanSessionEntity.IN_PROGRESS)
+            )
+            dao.upsertScanSessionState(
+                ScanSessionState(sessionId, totalItems = 2, scanType = "deep",
+                    operationType = "PERIODIC_DEEP_SCAN", isManual = false)
+            )
+            dao.insertScanSessionItem(
+                ScanSessionItemEntity(sessionId, pendingKey, "app", "Pending app", "NOT_SCANNED",
+                    packageName = "com.example.pending", completedAt = 1100L)
+            )
+            dao.insertScanSessionItem(
+                ScanSessionItemEntity(sessionId, doneKey, "app", "Done app", "NO_MATCH",
+                    packageName = "com.example.done", completedAt = 1120L)
+            )
+            assertEquals(listOf(doneKey), dao.scanSessionItemKeys(sessionId))
+
+            dao.insertScanSessionItem(
+                ScanSessionItemEntity(
+                    sessionId, pendingKey, "app", "Pending app", "NO_MATCH",
+                    packageName = "com.example.pending", durationMs = 37L, completedAt = 1200L,
+                    apkSizeBytes = 4096L, scanSource = "FRESH",
+                    analysisStages = "HASH,YARA,ML,VERDICT"
+                )
+            )
+            val rows = dao.scanSessionItems(sessionId)
+            assertEquals(2, rows.size)
+            val replaced = rows.single { it.itemKey == pendingKey }
+            assertEquals("NO_MATCH", replaced.verdict)
+            assertEquals(37L, replaced.durationMs)
+            assertEquals(4096L, replaced.apkSizeBytes)
+            assertEquals("HASH,YARA,ML,VERDICT", replaced.analysisStages)
+            assertEquals(setOf(pendingKey, doneKey), dao.scanSessionItemKeys(sessionId).toSet())
+        } finally {
+            database.close()
+        }
+    }
+
+    @Test
     fun periodicDeepScanIsVisibleToScanLabButIsNotAResumableManualSession() = runBlocking {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val database = Room.inMemoryDatabaseBuilder(context, ThreatDatabase::class.java)
