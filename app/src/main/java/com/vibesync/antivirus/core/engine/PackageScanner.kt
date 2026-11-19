@@ -886,7 +886,10 @@ class PackageScanner(
   val start = System.nanoTime()
   val appInfo = info.applicationInfo ?: run {
    diagnostics?.fail(info.packageName, "resolve", IllegalStateException("PackageInfo.applicationInfo is null"))
-   val failed = result(info.packageName, info.packageName, null, null, ScanVerdict.NOT_SCANNED, listOf(context.getString(R.string.package_metadata_missing)), start).copy(packageName = info.packageName, scanSessionId = scanSessionId)
+   val failed = result(info.packageName, info.packageName, null, null, ScanVerdict.NOT_SCANNED, listOf(context.getString(R.string.package_metadata_missing)), start).copy(
+    packageName = info.packageName, scanSessionId = scanSessionId,
+    analysisStages = listOf("RESOLVE_FAILED", "VERDICT_PENDING")
+   )
    auditSafely(failed, start, scanSessionId, diagnostics)
    return failed
   }
