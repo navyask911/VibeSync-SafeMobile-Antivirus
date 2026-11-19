@@ -23,6 +23,9 @@ class OfficialGoogleAppPolicyTest {
         assertFalse(OfficialGoogleAppPolicy.isEligibleForInstalledScan(
             "com.oem.settings", "com.vibesync.antivirus", systemFlags, officialGoogle = false
         ))
+        assertFalse(OfficialGoogleAppPolicy.isEligibleForInstalledScan(
+            "com.oem.settings", "com.vibesync.antivirus", systemFlags, officialGoogle = true
+        ))
         assertTrue(OfficialGoogleAppPolicy.isEligibleForInstalledScan(
             "com.example.app", "com.vibesync.antivirus", 0, officialGoogle = false
         ))
