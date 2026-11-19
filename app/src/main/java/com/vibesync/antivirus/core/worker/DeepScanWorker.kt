@@ -26,11 +26,17 @@ class DeepScanWorker(context: Context, params: WorkerParameters) : CoroutineWork
                 val sessionId = id.toString()
                 try {
                     val lastCompletedAt = safeApp.repository.latestCompletedScanAt()
+                    val latestSummary = safeApp.repository.loadScanSummary()
                     val wallNow = System.currentTimeMillis()
-                    if (runAttemptCount == 0 && lastCompletedAt != null &&
-                        wallNow >= lastCompletedAt && wallNow - lastCompletedAt < DUPLICATE_COOLDOWN_MS
+                    if (ScanPublishPolicy.shouldDeduplicate(
+                            lastCompletedAt = lastCompletedAt,
+                            now = wallNow,
+                            pendingRetries = latestSummary?.pendingRetries ?: 0,
+                            runAttemptCount = runAttemptCount,
+                            cooldownMs = DUPLICATE_COOLDOWN_MS
+                        )
                     ) {
-                        Log.i("ScanDebug", "scan_dedup_skipped reason=recent_completed_session ageMs=${wallNow - lastCompletedAt}")
+                        Log.i("ScanDebug", "scan_dedup_skipped reason=recent_completed_clean_session ageMs=\${wallNow - (lastCompletedAt ?: wallNow)}")
                         return@withLock Result.success()
                     }
 
