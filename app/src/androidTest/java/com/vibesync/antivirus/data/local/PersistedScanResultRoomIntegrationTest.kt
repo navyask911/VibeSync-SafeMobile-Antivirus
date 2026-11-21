@@ -35,6 +35,7 @@ class PersistedScanResultRoomIntegrationTest {
             val sideloadedGooglePrefix = "com.google.fake.userapp"
             val spoofedGoogleSystemPackage = "com.google.fake.systemapp"
             val oemSystemPackage = "com.oem.settings"
+            val legacyOemSystemPackage = "com.oem.legacy.system"
             val platformFlags = ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP
             val flagsByPackage = mapOf(
                 googlePackage to platformFlags,
@@ -42,6 +43,7 @@ class PersistedScanResultRoomIntegrationTest {
                 sideloadedGooglePrefix to 0,
                 spoofedGoogleSystemPackage to ApplicationInfo.FLAG_SYSTEM,
                 oemSystemPackage to platformFlags,
+                legacyOemSystemPackage to platformFlags,
                 scannerPackage to 0
             )
             val trustedGoogleSigner = setOf("trusted-google-release-certificate")
@@ -80,6 +82,10 @@ class PersistedScanResultRoomIntegrationTest {
                     packageName = oemSystemPackage, riskScore = 75f, completedAt = 1_150L
                 ),
                 ScanSessionItemEntity(
+                    sessionId, "app:$legacyOemSystemPackage", "app", "Legacy OEM settings", "SUSPICIOUS",
+                    packageName = null, riskScore = 80f, completedAt = 1_155L
+                ),
+                ScanSessionItemEntity(
                     sessionId, "app:$scannerPackage", "app", "SafeMobile", "NO_MATCH",
                     packageName = scannerPackage, completedAt = 1_160L
                 ),
@@ -94,6 +100,11 @@ class PersistedScanResultRoomIntegrationTest {
             // and visibility policy used by ThreatRepository and DeepScanWorker.
             val restored = dao.scanSessionItems(sessionId).map { item ->
                 val verdict = ScanVerdict.valueOf(item.verdict)
+                val packageName = PersistedScanResultPolicy.packageNameFromPersistedRow(
+                    itemType = item.itemType,
+                    itemKey = item.itemKey,
+                    storedPackageName = item.packageName
+                )
                 val restoredResult = ScanResult(
                     packageOrPath = item.itemPath,
                     displayName = item.itemPath,
@@ -102,7 +113,7 @@ class PersistedScanResultRoomIntegrationTest {
                     verdict = verdict,
                     reasons = item.reasons.split("\n").filter { it.isNotBlank() },
                     durationMs = item.durationMs,
-                    packageName = item.packageName,
+                    packageName = packageName,
                     threatEventId = item.threatEventId,
                     riskScore = item.riskScore,
                     malwareName = item.malwareName,
@@ -110,7 +121,6 @@ class PersistedScanResultRoomIntegrationTest {
                     scanSource = ScanSource.valueOf(item.scanSource),
                     analysisStages = item.analysisStages.split(",").filter { it.isNotBlank() }
                 )
-                val packageName = item.packageName
                 val signerVerified = packageName != null &&
                     OfficialGoogleAppPolicy.hasTrustedSigner(
                         packageName,
@@ -140,6 +150,7 @@ class PersistedScanResultRoomIntegrationTest {
             )
             assertEquals(1, visible.count { it.packageName == null })
             assertTrue(visible.none { it.packageName == oemSystemPackage })
+            assertTrue(visible.none { it.packageName == legacyOemSystemPackage })
             assertTrue(visible.none { it.packageName == spoofedGoogleSystemPackage })
             assertTrue(visible.none { it.packageName == scannerPackage })
 
