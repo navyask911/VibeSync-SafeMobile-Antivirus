@@ -59,6 +59,16 @@ data class ScanPublishSummary(val failureCount: Int, val totalPackages: Int)
  * protected-namespace and signer checks stay centralized at the repository boundary.
  */
 internal object PersistedScanResultPolicy {
+    fun packageNameFromPersistedRow(
+        itemType: String,
+        itemKey: String,
+        storedPackageName: String?
+    ): String? {
+        if (!storedPackageName.isNullOrBlank()) return storedPackageName
+        if (itemType != "app" || !itemKey.startsWith("app:")) return null
+        return itemKey.removePrefix("app:").takeIf { it.isNotBlank() }
+    }
+
     fun normalizeOfficialGoogleResult(
         result: ScanResult,
         signerVerified: Boolean
@@ -311,7 +321,11 @@ class ThreatRepository(
 
  suspend fun loadScanSessionResults(sessionId: String): List<ScanResult> = withContext(Dispatchers.IO) {
   database.threatDao().scanSessionItems(sessionId).mapNotNull { item ->
-   val packageName = item.packageName ?: item.itemKey
+   val packageName = PersistedScanResultPolicy.packageNameFromPersistedRow(
+    itemType = item.itemType,
+    itemKey = item.itemKey,
+    storedPackageName = item.packageName
+   )
    val verdict = try {
     ScanVerdict.valueOf(item.verdict)
    } catch (error: Exception) {
@@ -332,7 +346,7 @@ class ThreatRepository(
    }.getOrDefault(com.vibesync.antivirus.core.engine.ScanSource.FRESH)
    val restored = ScanResult(
     path, path, item.sha256Hash, item.md5Hash, verdict, reasons, item.durationMs,
-    packageName = item.packageName, sourceUri = uri, scanSessionId = sessionId,
+    packageName = packageName, sourceUri = uri, scanSessionId = sessionId,
     threatEventId = item.threatEventId, riskScore = item.riskScore,
     detectionSource = source, malwareName = item.malwareName,
     apkSizeBytes = item.apkSizeBytes, scanSource = sourceKind,
