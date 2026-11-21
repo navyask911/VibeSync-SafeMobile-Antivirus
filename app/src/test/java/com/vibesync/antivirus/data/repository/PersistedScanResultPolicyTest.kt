@@ -46,6 +46,33 @@ class PersistedScanResultPolicyTest {
     )
 
     @Test
+    fun persistedAppRowsRecoverPackageNameFromStableItemKey() {
+        assertEquals(
+            "com.oem.legacy",
+            PersistedScanResultPolicy.packageNameFromPersistedRow(
+                itemType = "app",
+                itemKey = "app:com.oem.legacy",
+                storedPackageName = null
+            )
+        )
+        assertNull(
+            PersistedScanResultPolicy.packageNameFromPersistedRow(
+                itemType = "file",
+                itemKey = "file:selected-document",
+                storedPackageName = null
+            )
+        )
+        assertEquals(
+            "com.example.current",
+            PersistedScanResultPolicy.packageNameFromPersistedRow(
+                itemType = "app",
+                itemKey = "app:com.example.old",
+                storedPackageName = "com.example.current"
+            )
+        )
+    }
+
+    @Test
     fun verifiedGoogleSignerOverridesStaleSuspiciousPersistedVerdict() {
         val signerVerified = OfficialGoogleAppPolicy.hasTrustedSigner(
             googlePackage,
