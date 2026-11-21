@@ -69,6 +69,8 @@ import androidx.compose.ui.unit.sp
 import com.vibesync.antivirus.core.engine.DetectionSource
 import com.vibesync.antivirus.core.engine.ScanResult
 import com.vibesync.antivirus.core.engine.ScanVerdict
+import com.vibesync.antivirus.core.engine.ScanSource
+import com.vibesync.antivirus.core.engine.ScanReportFormatter
 import com.vibesync.antivirus.core.locale.LocalePreferences
 import com.vibesync.antivirus.core.observer.FullScreenAlertAccess
 import com.vibesync.antivirus.core.security.SecurityVerificationState
@@ -78,6 +80,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
+
+private fun formatScanBytes(bytes: Long): String {
+    val safe = bytes.coerceAtLeast(0L).toDouble()
+    return when {
+        safe >= 1024.0 * 1024.0 -> String.format(java.util.Locale.getDefault(), "%.2f MB", safe / (1024.0 * 1024.0))
+        safe >= 1024.0 -> String.format(java.util.Locale.getDefault(), "%.1f KB", safe / 1024.0)
+        else -> "${bytes.coerceAtLeast(0L)} B"
+    }
+}
+
+private fun formatScanRate(value: Double): String =
+    String.format(java.util.Locale.getDefault(), "%.2f", value.takeIf { it.isFinite() && it > 0.0 } ?: 0.0)
 
 private data class V17Colors(
     val device: Color, val surface: Color, val elevated: Color, val text: Color,
@@ -882,6 +896,36 @@ internal fun V17ScanLabScreen(
                 }
             }
         }
+        item(key = "scan-report-summary") {
+            state.scanSummary?.let { summary ->
+                V17Card(isDark) {
+                    V17Title("Scan Report")
+                    V17Body("Started: ${ScanReportFormatter.formatTimestamp(summary.startedAt)}", color = c.text)
+                    V17Body("Completed: ${ScanReportFormatter.formatTimestamp(summary.completedAt)}", color = c.text)
+                    V17Body(
+                        "Elapsed: ${summary.elapsedMs} ms · ${formatScanRate(summary.appsPerSecond)} apps/sec · " +
+                            "${formatScanRate(summary.mbPerSecond)} MB/sec",
+                        color = c.text
+                    )
+                    V17Body(
+                        "APK volume: ${formatScanBytes(summary.scannedApkBytes)} fresh-scan bytes · " +
+                            "${formatScanBytes(summary.totalApkBytes)} total app APK bytes",
+                        color = c.muted
+                    )
+                    V17Body(
+                        "Apps: ${summary.appCount} · completed: ${summary.completedAppCount} · fresh: ${summary.freshAppCount} · " +
+                            "cache: ${summary.cachedAppCount} · Google verified: ${summary.verifiedGoogleAppCount} · " +
+                            "pending retries: ${summary.pendingRetries} · unreadable/incomplete: ${summary.unreadable}",
+                        color = c.text
+                    )
+                    V17Body(
+                        "Packages: ${summary.enumeratedPackages} enumerated · ${summary.queuedPackages} eligible · " +
+                            "${summary.excludedPackages} excluded · ${summary.skippedFiles} files skipped",
+                        color = c.muted
+                    )
+                }
+            }
+        }
         item(key = "scan-metrics") {
             V17Card(isDark) {
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
@@ -992,6 +1036,7 @@ private fun V17ScanResultRow(
             }.getOrDefault(false)
     } == true
     val (label, tint) = when {
+        result.scanSource == ScanSource.GOOGLE_VERIFIED -> "CLEAN & SAFE" to c.green
         result.trustedByUser -> "WHITELISTED" to c.green
         result.verdict == ScanVerdict.THREAT -> "MALWARE" to c.red
         result.verdict == ScanVerdict.SUSPICIOUS -> "SUSPICIOUS" to c.amber
@@ -1029,10 +1074,28 @@ private fun V17ScanResultRow(
             Column(Modifier.fillMaxWidth().padding(top = 6.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 val report = result.riskReport
                 V17Body(
-                    "ThreatEnsembleEvaluator · ${result.detectionSource}" +
-                        if (result.confidence > 0f) " · ${(result.confidence * 100).toInt().coerceIn(0, 100)}% confidence" else
-                            " · Risk ${report?.riskScore ?: result.riskScore.toInt()}/100",
+                    if (result.scanSource == ScanSource.GOOGLE_VERIFIED) {
+                        "Official Google app · trusted signing certificate verified · Clean & Safe"
+                    } else {
+                        "ThreatEnsembleEvaluator · ${result.detectionSource}" +
+                            if (result.confidence > 0f) " · ${(result.confidence * 100).toInt().coerceIn(0, 100)}% confidence" else
+                                " · Risk ${report?.riskScore ?: result.riskScore.toInt()}/100"
+                    },
                     color = c.text
+                )
+                V17Body(
+                    "Per-app time: ${result.durationMs} ms · APK size: ${result.apkSizeBytes?.let(::formatScanBytes) ?: "Unavailable"}",
+                    color = c.muted
+                )
+                val sourceLabel = when (result.scanSource) {
+                    ScanSource.FRESH -> "Fresh scan"
+                    ScanSource.CACHE_HIT -> "Cache hit"
+                    ScanSource.GOOGLE_VERIFIED -> "Google signer verified"
+                    ScanSource.USER_TRUSTED -> "User trusted"
+                }
+                V17Body(
+                    "Source: $sourceLabel · Stages: ${result.analysisStages.joinToString(" → ").ifBlank { "not recorded" }}",
+                    color = c.muted
                 )
                 val hashDetails = if (result.detectionSource in setOf(
                     DetectionSource.HASH, DetectionSource.SIGNED_DATABASE, DetectionSource.THREAT_INTELLIGENCE_FEED

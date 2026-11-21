@@ -53,6 +53,64 @@ import java.util.concurrent.atomic.AtomicInteger
 
 data class ScanPublishSummary(val failureCount: Int, val totalPackages: Int)
 
+/**
+ * Shared policy for rows restored from Room into Scan & Lab and scan reports.
+ * Package eligibility remains supplied by ThreatRepository so PackageManager,
+ * protected-namespace and signer checks stay centralized at the repository boundary.
+ */
+internal object PersistedScanResultPolicy {
+    fun packageNameFromPersistedRow(
+        itemType: String,
+        itemKey: String,
+        storedPackageName: String?
+    ): String? {
+        if (!storedPackageName.isNullOrBlank()) return storedPackageName
+        if (itemType != "app" || !itemKey.startsWith("app:")) return null
+        return itemKey.removePrefix("app:").takeIf { it.isNotBlank() }
+    }
+
+    fun normalizeOfficialGoogleResult(
+        result: ScanResult,
+        signerVerified: Boolean
+    ): ScanResult {
+        val googleNamespace = result.packageName?.let {
+            com.vibesync.antivirus.core.security.OfficialGoogleAppPolicy.isGooglePackageName(it)
+        } == true
+        if (!signerVerified || !googleNamespace) return result
+
+        return result.copy(
+            verdict = ScanVerdict.NO_MATCH,
+            reasons = listOf("Official Google app verified by trusted signing certificate. Clean & Safe."),
+            riskScore = 0f,
+            riskReport = null,
+            mlProbability = null,
+            threatEventId = null,
+            detectionSource = com.vibesync.antivirus.core.engine.DetectionSource.NONE,
+            malwareName = null,
+            yaraVerdict = null,
+            confidence = 1f,
+            scanSource = com.vibesync.antivirus.core.engine.ScanSource.GOOGLE_VERIFIED,
+            analysisStages = listOf("SIGNER_VERIFIED", "VERDICT"),
+            trustedByUser = false,
+            reasonTexts = emptyList()
+        )
+    }
+
+    suspend fun selectVisiblePersistedResults(
+        results: List<ScanResult>,
+        isReviewable: suspend (ScanResult) -> Boolean
+    ): List<ScanResult> {
+        val visible = ArrayList<ScanResult>(results.size)
+        results.forEach { result ->
+            // File/folder scan entries have no installed-package identity.
+            if (result.packageName == null || isReviewable(result)) {
+                visible += result
+            }
+        }
+        return com.vibesync.antivirus.core.engine.ScanResultOrdering.sort(visible)
+    }
+}
+
 private class ScanPublishCounters {
  val failureCount = AtomicInteger(0)
  val totalPackages = AtomicInteger(0)
@@ -181,7 +239,17 @@ class ThreatRepository(
   isManual: Boolean = true) = withContext(Dispatchers.IO) {
   database.withTransaction {
    val dao = database.threatDao()
-   dao.upsertScanSession(ScanSessionEntity(sessionId, scanType, System.currentTimeMillis(), status = ScanSessionEntity.IN_PROGRESS))
+   val priorSession = dao.findScanSession(sessionId)
+   dao.upsertScanSession(
+    ScanSessionEntity(
+     sessionId = sessionId,
+     scanType = scanType,
+     startedAt = priorSession?.startedAt ?: System.currentTimeMillis(),
+     completedAt = null,
+     status = ScanSessionEntity.IN_PROGRESS,
+     elapsedMs = priorSession?.elapsedMs ?: 0L
+    )
+   )
    val existing = dao.findScanSessionState(sessionId)
    val normalized = if (scanType.equals("DEEP_SCAN", true) || scanType.equals("PERIODIC_DEEP_SCAN", true) || scanType.equals("SELECTED_FOLDER", true)) "deep" else "full"
    val encryptedUri = sourceUri?.let { privateTextStore.protectPrivateText(it.take(4096), "scan-resume-uri") }
@@ -211,8 +279,8 @@ class ThreatRepository(
  suspend fun hasIncompleteManualScanSession(): Boolean = withContext(Dispatchers.IO) {
   database.threatDao().hasIncompleteManualScanSession()
  }
- fun observeLatestManualScanState(): Flow<ScanSessionState?> =
-  database.threatDao().observeLatestManualScanState().map { state ->
+ fun observeLatestScanState(): Flow<ScanSessionState?> =
+  database.threatDao().observeLatestScanState().map { state ->
    state?.copy(currentItemPath = state.currentItemPath?.let { revealPrivateTextSafely(it, "scan-progress-path") })
   }.flowOn(Dispatchers.IO)
  suspend fun updateScanSessionTotal(sessionId: String, totalItems: Int) = withContext(Dispatchers.IO) {
@@ -229,10 +297,18 @@ class ThreatRepository(
     val reasons = privateTextStore.protectPrivateText(result.reasons.joinToString("\n").take(1024), "scan-progress-reasons")
     val uri = result.sourceUri?.let { privateTextStore.protectPrivateText(it.take(4096), "scan-progress-uri") }
     stage = "room_insert"
-    dao.insertScanSessionItem(ScanSessionItemEntity(sessionId, itemKey, itemType, path,
-     result.verdict.name, result.packageName, result.sha256, result.md5, reasons, result.riskScore,
-     result.detectionSource.name, result.malwareName, result.threatEventId, result.durationMs,
-     uri, System.currentTimeMillis()))
+    dao.insertScanSessionItem(
+     ScanSessionItemEntity(
+      sessionId = sessionId, itemKey = itemKey, itemType = itemType, itemPath = path,
+      verdict = result.verdict.name, packageName = result.packageName,
+      sha256Hash = result.sha256, md5Hash = result.md5, reasons = reasons,
+      riskScore = result.riskScore, detectionSource = result.detectionSource.name,
+      malwareName = result.malwareName, threatEventId = result.threatEventId,
+      durationMs = result.durationMs, sourceUri = uri,
+      completedAt = System.currentTimeMillis(), apkSizeBytes = result.apkSizeBytes,
+      scanSource = result.scanSource.name, analysisStages = result.analysisStages.joinToString(",")
+     )
+    )
     dao.updateScanSessionProgress(sessionId, dao.countScanSessionItems(sessionId), path)
    }
   } catch (cancelled: CancellationException) {
@@ -245,7 +321,11 @@ class ThreatRepository(
 
  suspend fun loadScanSessionResults(sessionId: String): List<ScanResult> = withContext(Dispatchers.IO) {
   database.threatDao().scanSessionItems(sessionId).mapNotNull { item ->
-   val packageName = item.packageName ?: item.itemKey
+   val packageName = PersistedScanResultPolicy.packageNameFromPersistedRow(
+    itemType = item.itemType,
+    itemKey = item.itemKey,
+    storedPackageName = item.packageName
+   )
    val verdict = try {
     ScanVerdict.valueOf(item.verdict)
    } catch (error: Exception) {
@@ -261,17 +341,48 @@ class ThreatRepository(
     Log.e("ScanDebug", "session_row_metadata_fallback sessionId=$sessionId itemKey=${item.itemKey} pkg=$packageName field=detection_source value=${item.detectionSource}", error)
     com.vibesync.antivirus.core.engine.DetectionSource.NONE
    }
-   ScanResult(path, path, item.sha256Hash, item.md5Hash, verdict, reasons, item.durationMs,
-    packageName = item.packageName, sourceUri = uri, scanSessionId = sessionId,
+   val sourceKind = runCatching {
+    com.vibesync.antivirus.core.engine.ScanSource.valueOf(item.scanSource)
+   }.getOrDefault(com.vibesync.antivirus.core.engine.ScanSource.FRESH)
+   val restored = ScanResult(
+    path, path, item.sha256Hash, item.md5Hash, verdict, reasons, item.durationMs,
+    packageName = packageName, sourceUri = uri, scanSessionId = sessionId,
     threatEventId = item.threatEventId, riskScore = item.riskScore,
-    detectionSource = source, malwareName = item.malwareName)
+    detectionSource = source, malwareName = item.malwareName,
+    apkSizeBytes = item.apkSizeBytes, scanSource = sourceKind,
+    analysisStages = item.analysisStages.split(",").filter { it.isNotBlank() }
+   )
+   PersistedScanResultPolicy.normalizeOfficialGoogleResult(
+    restored,
+    item.packageName?.let {
+     com.vibesync.antivirus.core.security.OfficialGoogleAppPolicy.isOfficialGooglePackage(context, it)
+    } == true
+   )
   }
  }
  
- suspend fun latestCompletedManualScanResults(): List<ScanResult> = withContext(Dispatchers.IO) {
-  val state = database.threatDao().latestCompletedManualScanState() ?: return@withContext emptyList()
-  loadScanSessionResults(state.sessionId)
+ /**
+  * One persisted-row selector for restored Scan & Lab results and scan-report summaries.
+  */
+ suspend fun reviewableScanResults(results: List<ScanResult>): List<ScanResult> =
+  PersistedScanResultPolicy.selectVisiblePersistedResults(results) { result ->
+   isReviewableResult(result)
+  }
+
+ suspend fun latestCompletedScanResults(): List<ScanResult> = withContext(Dispatchers.IO) {
+  val state = database.threatDao().latestCompletedScanState() ?: return@withContext emptyList()
+  reviewableScanResults(loadScanSessionResults(state.sessionId))
  }
+ suspend fun scanSessionStartedAt(sessionId: String): Long? = withContext(Dispatchers.IO) {
+  database.threatDao().findScanSession(sessionId)?.startedAt
+ }
+ suspend fun scanSessionElapsedMs(sessionId: String): Long? = withContext(Dispatchers.IO) {
+  database.threatDao().findScanSession(sessionId)?.elapsedMs
+ }
+ suspend fun addScanSessionElapsedMs(sessionId: String, elapsedMs: Long) = withContext(Dispatchers.IO) {
+  if (elapsedMs > 0L) database.threatDao().addScanSessionElapsedMs(sessionId, elapsedMs)
+ }
+
  suspend fun completeScanSession(sessionId: String, completedAt: Long = System.currentTimeMillis()) = withContext(Dispatchers.IO) {
   database.withTransaction {
    val dao = database.threatDao()
@@ -321,14 +432,37 @@ class ThreatRepository(
   val p = context.getSharedPreferences("safe_mobile_last_scan", Context.MODE_PRIVATE)
   val time = p.getLong("completed_at", 0L)
   if (time <= 0L) null else com.vibesync.antivirus.core.engine.ScanCompletionSummary(
-   p.getInt("apps", 0), p.getInt("files", 0), p.getInt("threats", 0), p.getInt("review", 0), p.getInt("unreadable", 0), time,
-   p.getBoolean("signed_definitions_used", false), p.getInt("skipped_files", 0))
+   appCount = p.getInt("apps", 0), fileCount = p.getInt("files", 0),
+   threats = p.getInt("threats", 0), review = p.getInt("review", 0),
+   unreadable = p.getInt("unreadable", 0), completedAt = time,
+   signedDefinitionsUsed = p.getBoolean("signed_definitions_used", false),
+   skippedFiles = p.getInt("skipped_files", 0),
+   startedAt = p.getLong("started_at", time), elapsedMs = p.getLong("elapsed_ms", 0L),
+   totalApkBytes = p.getLong("total_apk_bytes", 0L), scannedApkBytes = p.getLong("scanned_apk_bytes", 0L),
+   completedAppCount = p.getInt("completed_app_count", p.getInt("apps", 0)),
+   appsPerSecond = p.getFloat("apps_per_second", 0f).toDouble(),
+   mbPerSecond = p.getFloat("mb_per_second", 0f).toDouble(),
+   pendingRetries = p.getInt("pending_retries", p.getInt("unreadable", 0)),
+   cachedAppCount = p.getInt("cached_apps", 0), freshAppCount = p.getInt("fresh_apps", 0),
+   verifiedGoogleAppCount = p.getInt("google_verified_apps", 0),
+   enumeratedPackages = p.getInt("enumerated_packages", 0),
+   queuedPackages = p.getInt("queued_packages", 0), excludedPackages = p.getInt("excluded_packages", 0))
  }.getOrNull()
  fun saveScanSummary(summary: com.vibesync.antivirus.core.engine.ScanCompletionSummary) {
   context.getSharedPreferences("safe_mobile_last_scan", Context.MODE_PRIVATE).edit()
    .putInt("apps", summary.appCount).putInt("files", summary.fileCount).putInt("threats", summary.threats)
    .putInt("review", summary.review).putInt("unreadable", summary.unreadable)
    .putInt("skipped_files", summary.skippedFiles).putLong("completed_at", summary.completedAt)
+   .putLong("started_at", summary.startedAt).putLong("elapsed_ms", summary.elapsedMs)
+   .putLong("total_apk_bytes", summary.totalApkBytes).putLong("scanned_apk_bytes", summary.scannedApkBytes)
+   .putInt("completed_app_count", summary.completedAppCount)
+   .putFloat("apps_per_second", summary.appsPerSecond.toFloat())
+   .putFloat("mb_per_second", summary.mbPerSecond.toFloat())
+   .putInt("pending_retries", summary.pendingRetries)
+   .putInt("cached_apps", summary.cachedAppCount).putInt("fresh_apps", summary.freshAppCount)
+   .putInt("google_verified_apps", summary.verifiedGoogleAppCount)
+   .putInt("enumerated_packages", summary.enumeratedPackages)
+   .putInt("queued_packages", summary.queuedPackages).putInt("excluded_packages", summary.excludedPackages)
    .putBoolean("signed_definitions_used", summary.signedDefinitionsUsed).apply()
  }
 

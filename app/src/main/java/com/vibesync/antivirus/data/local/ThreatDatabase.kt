@@ -7,7 +7,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 
 @Database(
  entities = [ThreatSignature::class, ScanAudit::class, WhiteListEntry::class, MalwareHashEntity::class, ThreatFeedSyncStateEntity::class, ThreatFeedStagingEntity::class, SecurityIncidentEntity::class, QuarantineVaultEntity::class, ScanSessionEntity::class, AppScanCache::class, ScanSessionState::class, ScanSessionItemEntity::class],
- version = 12, exportSchema = false
+ version = 13, exportSchema = false
 )
 abstract class ThreatDatabase : RoomDatabase() {
  abstract fun threatDao(): ThreatDao
@@ -112,6 +112,19 @@ abstract class ThreatDatabase : RoomDatabase() {
     database.execSQL("CREATE TABLE IF NOT EXISTS scan_session_items (session_id TEXT NOT NULL, item_key TEXT NOT NULL, item_type TEXT NOT NULL, item_path TEXT NOT NULL, verdict TEXT NOT NULL, package_name TEXT, sha256_hash TEXT, md5_hash TEXT, reasons TEXT NOT NULL, risk_score REAL NOT NULL, detection_source TEXT NOT NULL, malware_name TEXT, threat_event_id TEXT, duration_ms INTEGER NOT NULL, source_uri TEXT, completed_at INTEGER NOT NULL, PRIMARY KEY(session_id, item_key))")
     database.execSQL("CREATE INDEX IF NOT EXISTS index_scan_session_items_session_id ON scan_session_items(session_id)")
     database.execSQL("CREATE INDEX IF NOT EXISTS index_scan_session_items_completed_at ON scan_session_items(completed_at)")
+   }
+  }
+
+  /** Additive defaults keep existing scan sessions and item rows readable. */
+  val MIGRATION_12_13: Migration = object : Migration(12, 13) {
+   override fun migrate(database: SupportSQLiteDatabase) {
+    database.execSQL("ALTER TABLE scan_session_items ADD COLUMN apk_size_bytes INTEGER")
+    database.execSQL("ALTER TABLE scan_session_items ADD COLUMN scan_source TEXT NOT NULL DEFAULT 'FRESH'")
+    database.execSQL("ALTER TABLE scan_session_items ADD COLUMN analysis_stages TEXT NOT NULL DEFAULT ''")
+    database.execSQL("ALTER TABLE scan_sessions ADD COLUMN elapsed_ms INTEGER NOT NULL DEFAULT 0")
+    database.execSQL("ALTER TABLE scan_session_state ADD COLUMN enumerated_items INTEGER NOT NULL DEFAULT 0")
+    database.execSQL("ALTER TABLE scan_session_state ADD COLUMN eligible_items INTEGER NOT NULL DEFAULT 0")
+    database.execSQL("ALTER TABLE scan_session_state ADD COLUMN excluded_items INTEGER NOT NULL DEFAULT 0")
    }
   }
  }

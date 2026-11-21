@@ -47,9 +47,9 @@ android {
   applicationId = "com.vibesync.antivirus"
   minSdk = 26
   targetSdk = 36
-  versionCode = 20261162
-  // [release-v1.10.8] Diagnostic-only package scan stage logging; no scan behavior changes.
-  versionName = "1.10.8"
+  versionCode = 20261163
+  // [release-v1.10.9] Surface periodic scan results and retry transient package failures.
+  versionName = "1.10.9"
   testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   buildConfigField("String", "FEED_MANIFEST_PUBLIC_KEY_B64", cfg(feedManifestPublicKey))
   buildConfigField("Boolean", "FEED_MANIFEST_KEY_CONFIGURED", (!feedManifestPublicKey.isBlank()).toString())

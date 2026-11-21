@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.IBinder
+import android.os.SystemClock
 import android.util.Log
 import androidx.core.content.ContextCompat
 import com.vibesync.antivirus.SafeMobileApp
@@ -96,8 +97,7 @@ class ScanForegroundService : Service() {
     previous
    } else {
     // ACTION_START represents a fresh request; don't attach it to an unrelated stale session.
-    repo.clearScanSessionStateCheckpoints()
-    Log.d("ScanDebug", "Cleared stale Room scan checkpoints before starting a new scan.")
+    Log.d("ScanDebug", "Starting a new scan session without deleting prior session checkpoints.")
     val newId = UUID.randomUUID().toString()
     val kind = if (operation == OP_DEEP_SCAN || operation == OP_SELECTED_FOLDER) "DEEP_SCAN" else "FULL_SCAN"
     repo.startScanSession(newId, kind, operation, uriValue, packageValue, manual)
@@ -112,14 +112,39 @@ class ScanForegroundService : Service() {
     Log.d("ScanDebug", "Worker FINISHED with result: cancelled")
     return
    }
-   when (session.operationType) {
-    OP_FULL_DEVICE, OP_DEEP_SCAN -> repo.scanFullForSession(session.sessionId)
-    OP_INSTALLED_APPS -> repo.scanInstalledAppsForSession(session.sessionId)
-    OP_SELECTED_FILE -> repo.scanUriForSession(session.sourceUri?.let(Uri::parse) ?: error("Selected file URI missing."), session.sessionId)
-    OP_INSTALLED_PACKAGE -> repo.scanInstalledPackageForSession(session.packageName ?: error("Package name missing."), session.sessionId)
-    OP_SELECTED_FOLDER -> repo.scanFolderTreeForSession(session.sourceUri?.let(Uri::parse) ?: error("Selected folder URI missing."), session.sessionId)
-    else -> error("Unsupported scan operation: " + session.operationType)
+   suspend fun executeSessionPass() {
+    when (session.operationType) {
+     OP_FULL_DEVICE, OP_DEEP_SCAN -> repo.scanFullForSession(session.sessionId)
+     OP_INSTALLED_APPS -> repo.scanInstalledAppsForSession(session.sessionId)
+     OP_SELECTED_FILE -> repo.scanUriForSession(session.sourceUri?.let(Uri::parse) ?: error("Selected file URI missing."), session.sessionId)
+     OP_INSTALLED_PACKAGE -> repo.scanInstalledPackageForSession(session.packageName ?: error("Package name missing."), session.sessionId)
+     OP_SELECTED_FOLDER -> repo.scanFolderTreeForSession(session.sourceUri?.let(Uri::parse) ?: error("Selected folder URI missing."), session.sessionId)
+     else -> error("Unsupported scan operation: " + session.operationType)
+    }
    }
+   val scanStartedElapsed = SystemClock.elapsedRealtime()
+   executeSessionPass()
+
+   // scanSessionItemKeys() deliberately excludes NOT_SCANNED rows. Re-entering the
+   // same operation therefore reprocesses only incomplete items and REPLACEs those rows.
+   var retryResults = repo.loadScanSessionResults(session.sessionId).filter { repo.isReviewableResult(it) }
+   var pendingRows = retryResults.count { it.verdict == ScanVerdict.NOT_SCANNED }
+   var retryPass = 0
+   while (pendingRows > 0 && retryPass < 2 && !stopRequested) {
+    retryPass++
+    Log.w("ScanDebug", "manual_scan_retry pass=$retryPass pending=$pendingRows sessionId=${session.sessionId}")
+    repo.clearScanPublishSummary(session.sessionId)
+    executeSessionPass()
+    retryResults = repo.loadScanSessionResults(session.sessionId).filter { repo.isReviewableResult(it) }
+    pendingRows = retryResults.count { it.verdict == ScanVerdict.NOT_SCANNED }
+   }
+   if (pendingRows > 0) {
+    Log.w("ScanDebug", "manual_scan_retry_exhausted pending=$pendingRows sessionId=${session.sessionId}")
+   }
+   repo.addScanSessionElapsedMs(
+    session.sessionId,
+    (SystemClock.elapsedRealtime() - scanStartedElapsed).coerceAtLeast(0L)
+   )
    if (stopRequested) {
     repo.cancelScanSession(session.sessionId)
     ScanForegroundEvents.publishCancelled()
@@ -139,15 +164,21 @@ class ScanForegroundService : Service() {
     ScanForegroundEvents.publishFailed(session.sessionId)
     return
    }
-   val results = repo.loadScanSessionResults(session.sessionId).filter { repo.isReviewableResult(it) }
-    .sortedBy { when (it.verdict) {
-     ScanVerdict.THREAT -> 0
-     ScanVerdict.SUSPICIOUS -> 1
-     ScanVerdict.NOT_SCANNED -> 2
-     ScanVerdict.NO_MATCH -> 3
-    } }
-   val summary = ScanCompletionSummary.from(results, scannedItems, System.currentTimeMillis(),
-    skippedFiles = repo.skippedSafFileCount(session.sessionId)).copy(signedDefinitionsUsed = repo.currentHashDatabaseCapability()?.enabled == true)
+   val results = com.vibesync.antivirus.core.engine.ScanResultOrdering.sort(
+    repo.loadScanSessionResults(session.sessionId).filter { repo.isReviewableResult(it) }
+   )
+   val completedAt = System.currentTimeMillis()
+   val summary = ScanCompletionSummary.from(
+    results = results,
+    processed = scannedItems,
+    now = completedAt,
+    skippedFiles = repo.skippedSafFileCount(session.sessionId),
+    startedAt = repo.scanSessionStartedAt(session.sessionId) ?: completedAt,
+    elapsedMsOverride = repo.scanSessionElapsedMs(session.sessionId),
+    enumeratedPackages = current?.enumeratedItems ?: 0,
+    queuedPackages = current?.eligibleItems ?: 0,
+    excludedPackages = current?.excludedItems ?: 0
+   ).copy(signedDefinitionsUsed = repo.currentHashDatabaseCapability()?.enabled == true)
    repo.saveScanSummary(summary)
    repo.completeScanSession(session.sessionId, summary.completedAt)
    Log.d("ScanDebug", "Worker FINISHED with result: success; scanned=${(summary.appCount + summary.fileCount)}")
@@ -155,8 +186,7 @@ class ScanForegroundService : Service() {
    repo.clearSkippedSafFileCount(session.sessionId)
    repo.clearScanPublishSummary(session.sessionId)
   } catch (timeout: TimeoutCancellationException) {
-   runCatching { repo.clearScanSessionStateCheckpoints() }
-    .onFailure { Log.e("SafeMobileScan", "Could not clear corrupted scan checkpoints after timeout.", it) }
+   Log.w("SafeMobileScan", "Retaining unrelated Room scan sessions after this timeout.")
    sessionId?.let { id ->
     val publishSummary = repo.scanPublishSummary(id)
     Log.e("ScanDebug", "Total publish failures: ${publishSummary.failureCount} / ${publishSummary.totalPackages}")
@@ -179,8 +209,7 @@ class ScanForegroundService : Service() {
    Log.d("ScanDebug", "Worker FINISHED with result: cancelled")
    throw cancelled
   } catch (error: Exception) {
-   runCatching { repo.clearScanSessionStateCheckpoints() }
-    .onFailure { Log.e("SafeMobileScan", "Could not clear corrupted scan checkpoints after failure.", it) }
+   Log.w("SafeMobileScan", "Retaining unrelated Room scan sessions after this failure.")
    sessionId?.let { id ->
     val publishSummary = repo.scanPublishSummary(id)
     Log.e("ScanDebug", "Total publish failures: ${publishSummary.failureCount} / ${publishSummary.totalPackages}")
@@ -189,7 +218,7 @@ class ScanForegroundService : Service() {
      .onFailure { Log.e("SafeMobileScan", "Could not persist failed scan state.", it) }
    }
    Log.e("ScanDebug", "Worker CRASHED", error)
-   Log.e("SafeMobileScan", "Scan failed; corrupted Room scan checkpoints were cleared.", error)
+   Log.e("SafeMobileScan", "Scan failed; this session's Room checkpoints were retained for diagnosis.", error)
    Log.d("ScanDebug", "Worker FINISHED with result: failure")
    ScanForegroundEvents.publishFailed(sessionId)
   } finally { stopServiceAfterRun() }

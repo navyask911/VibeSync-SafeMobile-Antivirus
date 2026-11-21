@@ -15,5 +15,8 @@ data class ScanSessionState(
  @ColumnInfo(name = "operation_type") val operationType: String = "FULL_DEVICE",
  @ColumnInfo(name = "source_uri") val sourceUri: String? = null,
  @ColumnInfo(name = "package_name") val packageName: String? = null,
- @ColumnInfo(name = "is_manual") val isManual: Boolean = true
+ @ColumnInfo(name = "is_manual") val isManual: Boolean = true,
+ @ColumnInfo(name = "enumerated_items", defaultValue = "0") val enumeratedItems: Int = 0,
+ @ColumnInfo(name = "eligible_items", defaultValue = "0") val eligibleItems: Int = 0,
+ @ColumnInfo(name = "excluded_items", defaultValue = "0") val excludedItems: Int = 0
 )
