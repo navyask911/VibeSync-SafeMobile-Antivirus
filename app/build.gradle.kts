@@ -60,6 +60,9 @@ android {
  signingConfigs {
   if (releaseSigningEnabled) {
    create("release") {
+    // Require modern APK signing schemes for Play and Android 7+ installs.
+    enableV2Signing = true
+    enableV3Signing = true
     val keystoreFile = layout.buildDirectory.file("signing/safemobile-release.jks").get().asFile
     if (!keystoreFile.isFile) {
      keystoreFile.parentFile.mkdirs()
