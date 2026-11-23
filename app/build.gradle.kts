@@ -104,6 +104,8 @@ android {
 val yaraXSourceRevision = "b666fbc15ff67fba1ceaf5deb68d071b44a1cbfe"
 val yaraXSourceDirectory = layout.buildDirectory.dir("native/yarax_android")
 val yaraXGeneratedJniDirectory = layout.buildDirectory.dir("generated/yarax-jniLibs")
+// Keep Cargo incremental outputs outside the cloned source tree, which can be replaced during setup.
+val yaraXCargoTargetDirectory = layout.buildDirectory.dir("cargo-target/yarax-android")
 val yaraXAndroidAbis = providers.gradleProperty("yaraxAndroidAbis").orNull
     ?.split(",")?.map { it.trim() }?.filter { it.isNotEmpty() }?.distinct()
     ?: listOf("arm64-v8a", "armeabi-v7a")
@@ -416,6 +418,7 @@ val buildYaraXNative = tasks.register<Exec>("buildYaraXNative") {
     inputs.dir(yaraXSourceDirectory)
     inputs.property("androidAbis", yaraXAndroidAbis)
     outputs.dir(yaraXGeneratedJniDirectory)
+    environment("CARGO_TARGET_DIR", yaraXCargoTargetDirectory.get().asFile.absolutePath)
     doFirst {
         val outputDirectory = yaraXGeneratedJniDirectory.get().asFile
         outputDirectory.deleteRecursively()

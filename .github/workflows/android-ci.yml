@@ -9,7 +9,8 @@ permissions:
   contents: read
 concurrency:
   group: safemobile-android-ci-${{ github.ref }}
-  cancel-in-progress: true
+  # Keep an active serial emulator matrix alive when a newer branch commit is pushed.
+  cancel-in-progress: false
 jobs:
   test-lint-build:
     name: Test, lint, and build Android artifacts
@@ -210,6 +211,14 @@ jobs:
           SAFE_MOBILE_FEED_ED25519_PUBLIC_KEY_B64: ${{ vars.SAFE_MOBILE_FEED_ED25519_PUBLIC_KEY_B64 }}
           SAFE_MOBILE_HASHDB_ED25519_PUBLIC_KEY_B64: ${{ secrets.DB_SIGNING_PUBLIC_KEY }}
         run: ./gradlew --no-daemon assembleOfflineDebug assembleOfflineRelease assembleFeedRelease bundleOfflineRelease bundleFeedRelease
+      - name: Capture the Cargo-resolved YARA-X lockfile for a reproducible follow-up
+        run: |
+          set -euo pipefail
+          lock="app/build/native/yarax_android/Cargo.lock"
+          test -s "$lock"
+          mkdir -p build
+          cp "$lock" build/yarax-android-Cargo.lock
+          sha256sum build/yarax-android-Cargo.lock > build/yarax-android-Cargo.lock.sha256
       - name: Verify 16 KB ELF and APK alignment (Offline + Feed)
         run: >-
           python3 scripts/check_16kb_alignment.py
@@ -269,6 +278,8 @@ jobs:
             build/generated-third-party-notices.md
             build/detection-benchmark.json
             build/release-artifact-sha256.txt
+            build/yarax-android-Cargo.lock
+            build/yarax-android-Cargo.lock.sha256
           if-no-files-found: warn
           retention-days: 14
 
@@ -308,7 +319,7 @@ jobs:
             ~/.cargo/registry
             ~/.cargo/git
             ~/.cargo/bin/cargo-ndk
-            app/build/native/yarax_android/target
+            app/build/cargo-target/yarax-android
           key: ${{ runner.os }}-yarax-x86_64-${{ hashFiles('app/build.gradle.kts') }}
           restore-keys: |
             ${{ runner.os }}-yarax-x86_64-
