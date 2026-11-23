@@ -84,7 +84,10 @@ wait_for_runtime() {
   return 1
 }
 
-adb start-server || true
+if ! timeout 15s adb start-server; then
+  echo "ADB server did not start within 15 seconds." >&2
+  exit 2
+fi
 if ! wait_for_runtime 180 "initial emulator startup"; then
   echo "Emulator booted at the ADB level but Android framework services did not become ready; capturing pre-reboot diagnostics."
   capture_diagnostics "-pre-reboot"
@@ -116,7 +119,11 @@ benchmark_class="com.vibesync.antivirus.core.engine.IndustryBenchmarkInstrumente
 fixture_args=("-Pandroid.testInstrumentationRunnerArguments.notClass=$benchmark_class")
 instrument_fixture_args=(-e notClass "$benchmark_class")
 if [[ -f build/siren-test/SafeMobile-Siren-Test.apk ]]; then
-  adb push build/siren-test/SafeMobile-Siren-Test.apk /data/local/tmp/SafeMobile-Siren-Test.apk
+  if ! timeout 60s adb push build/siren-test/SafeMobile-Siren-Test.apk /data/local/tmp/SafeMobile-Siren-Test.apk; then
+    echo "Could not stage the harmless siren fixture within 60 seconds." >&2
+    capture_diagnostics "-fixture-push-failed"
+    exit 3
+  fi
   fixture_args+=("-Pandroid.testInstrumentationRunnerArguments.sirenFixturePath=/data/local/tmp/SafeMobile-Siren-Test.apk")
   instrument_fixture_args+=(-e sirenFixturePath /data/local/tmp/SafeMobile-Siren-Test.apk)
 elif [[ "${GITHUB_ACTIONS:-false}" == "true" ]]; then
