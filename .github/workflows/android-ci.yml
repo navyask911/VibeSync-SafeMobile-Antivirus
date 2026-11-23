@@ -279,7 +279,7 @@ jobs:
     env:
       ORG_GRADLE_PROJECT_yaraxAndroidAbis: x86_64
     runs-on: ubuntu-latest
-    timeout-minutes: 55
+    timeout-minutes: 75
     strategy:
       fail-fast: false
       max-parallel: 1
@@ -299,6 +299,19 @@ jobs:
           java-version: "17"
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
+      # Keep Cargo sources and the native compiler output across emulator job reruns.
+      # The YARA-X source revision and native build logic are pinned in the app build script.
+      - name: Cache YARA-X Rust dependencies and native outputs
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            ~/.cargo/bin/cargo-ndk
+            app/build/native/yarax_android/target
+          key: ${{ runner.os }}-yarax-x86_64-${{ hashFiles('app/build.gradle.kts') }}
+          restore-keys: |
+            ${{ runner.os }}-yarax-x86_64-
       - name: Set up Rust and cargo-ndk for YARA-X
         shell: bash
         run: |
@@ -331,6 +344,7 @@ jobs:
       # Keeping dexing/packaging off the AVD startup window avoids system_server/ADB starvation
       # on API 33 and 36 runners.
       - name: Prebuild instrumentation APKs before emulator startup
+        timeout-minutes: 45
         env:
           SAFE_MOBILE_FEED_ED25519_PUBLIC_KEY_B64: ${{ vars.SAFE_MOBILE_FEED_ED25519_PUBLIC_KEY_B64 }}
         run: |
@@ -357,6 +371,7 @@ jobs:
             echo "::warning::KVM unavailable: Android emulator runner will use software emulation. Instrumented tests remain required."
           fi
       - name: Run instrumented tests on local emulator
+        timeout-minutes: 25
         uses: reactivecircus/android-emulator-runner@v2
         env:
           EXPECTED_API_LEVEL: ${{ matrix.api-level }}
@@ -385,7 +400,8 @@ jobs:
           cores: ${{ matrix.api-level >= 34 && 2 || 4 }}
           # android-emulator-runner passes script to /usr/bin/sh -c, which expects
           # a single command; the Bash wrapper installs the Crashpad EXIT trap.
-          # Keep its readiness checks, diagnostics and connectedOfflineDebugAndroidTest.
+          # API 26 uses prebuilt APK installation + adb am instrument to avoid
+          # invoking Gradle/Cargo a second time after prebuild.
           script: bash scripts/run_instrumented_tests.sh
       # The action can fail during emulator startup before 'script' ever runs.
       # This unconditional cleanup complements the EXIT trap above.
