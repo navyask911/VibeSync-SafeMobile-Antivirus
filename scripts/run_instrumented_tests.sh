@@ -150,7 +150,7 @@ run_prebuilt_instrumentation() {
   # Require a nonzero executed test count, AndroidJUnitRunner success code,
   # and no failure/abort markers. Empty/no-device runs are never treated as pass.
   if [[ "$instrument_status" -eq 0 ]] &&
-     grep -Eq 'OK \\([1-9][0-9]* tests?\\)' "$instrument_log" &&
+     grep -Eq 'OK \([1-9][0-9]* tests?\)' "$instrument_log" &&
      grep -Eq 'INSTRUMENTATION_CODE: -1' "$instrument_log" &&
      ! grep -Eq 'FAILURES!!!|INSTRUMENTATION_FAILED|INSTRUMENTATION_ABORTED|Process crashed|FAILURE:' "$instrument_log"; then
     echo "API $api instrumented test suite executed successfully using prebuilt APKs."
