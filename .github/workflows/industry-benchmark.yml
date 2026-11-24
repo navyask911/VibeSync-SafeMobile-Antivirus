@@ -63,7 +63,7 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: '21'
       - uses: gradle/actions/setup-gradle@v4
       - name: Install encrypted ZIP support
         run: python3 -m pip install --disable-pip-version-check pyzipper==0.3.6
