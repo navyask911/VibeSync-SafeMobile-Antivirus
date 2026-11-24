@@ -8,8 +8,8 @@ import java.nio.file.StandardCopyOption
 import java.nio.file.AtomicMoveNotSupportedException
 plugins {
  id("com.android.application")
- id("org.jetbrains.kotlin.android")
- id("org.jetbrains.kotlin.kapt")
+ // Android Kotlin compilation is provided by AGP 9 built-in Kotlin support.
+ id("com.android.legacy-kapt")
  id("org.jetbrains.kotlin.plugin.compose")
  id("app.cash.paparazzi")
 }

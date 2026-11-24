@@ -28,6 +28,14 @@ jobs:
           java-version: "17"
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
+      - name: Verify AGP 9, Gradle 9.1 and Paparazzi plugin versions
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -F 'id("com.android.application") version "9.0.1"' build.gradle.kts
+          grep -F 'id("app.cash.paparazzi") version "2.0.0-alpha05.1"' build.gradle.kts
+          grep -F 'gradle-9.1.0-bin.zip' gradle/wrapper/gradle-wrapper.properties
+          ./gradlew --no-daemon help
       - name: Set up Rust and cargo-ndk for YARA-X
         shell: bash
         run: |
@@ -47,8 +55,8 @@ jobs:
           if [[ ! -d "$NDK_DIR" ]]; then
             "$SDKMANAGER" --install "ndk;$NDK_VERSION"
           fi
-          if [[ ! -x "$SDK_ROOT/build-tools/35.0.0/zipalign" ]]; then
-            "$SDKMANAGER" --install "build-tools;35.0.0"
+          if [[ ! -x "$SDK_ROOT/build-tools/36.0.0/zipalign" ]]; then
+            "$SDKMANAGER" --install "build-tools;36.0.0"
           fi
           test -d "$NDK_DIR"
           echo "ANDROID_NDK_HOME=$NDK_DIR" >> "$GITHUB_ENV"
@@ -230,21 +238,31 @@ jobs:
         run: bash scripts/test_siren.sh
       - name: Verify release artifact privacy boundary
         run: python3 scripts/check_release_artifact_privacy.py
-      - name: Verify configured release APK and AAB signatures
+      - name: Verify configured release APK v2/v3 and AAB signatures
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          GITHUB_REF: ${{ github.ref }}
         shell: bash
         run: |
           set -euo pipefail
           if [[ -z "${KEYSTORE_BASE64:-}" ]]; then
+            if [[ "$GITHUB_REF" == "refs/heads/release/v1.10.9-scan-results" ]]; then
+              echo "::error::Release signing secrets are required to publish v1.10.9 candidate artifacts."
+              exit 1
+            fi
             echo "Signing secrets unavailable for this CI context; outputs are test artifacts only."
             exit 0
           fi
           apksigner="$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -n 1)"
           test -x "$apksigner"
           for flavor in offline feed; do
-            "$apksigner" verify --verbose --print-certs "app/build/outputs/apk/$flavor/release/app-$flavor-release.apk"
-            jarsigner -verify "app/build/outputs/bundle/${flavor}Release/app-$flavor-release.aab" | grep -qi 'jar verified'
+            apk="app/build/outputs/apk/$flavor/release/app-$flavor-release.apk"
+            aab="app/build/outputs/bundle/${flavor}Release/app-$flavor-release.aab"
+            verification="$("$apksigner" verify --verbose "$apk" 2>&1)"
+            printf '%s\n' "$verification"
+            grep -Fq 'Verified using v2 scheme: true' <<< "$verification"
+            grep -Fq 'Verified using v3 scheme: true' <<< "$verification"
+            jarsigner -verify "$aab" | grep -qi 'jar verified'
           done
           sha256sum app/build/outputs/apk/{offline,feed}/release/*.apk \
             app/build/outputs/bundle/{offline,feed}Release/*.aab > build/release-artifact-sha256.txt
@@ -265,7 +283,7 @@ jobs:
         if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: safe-mobile-android-artifacts
+          name: safe-mobile-android-artifacts-v1.10.9-${{ github.sha }}
           path: |
             app/build/outputs/apk/offline/debug/*.apk
             app/build/outputs/apk/offline/release/*.apk
@@ -342,8 +360,8 @@ jobs:
           if [[ ! -d "$NDK_DIR" ]]; then
             "$SDKMANAGER" --install "ndk;$NDK_VERSION"
           fi
-          if [[ ! -x "$SDK_ROOT/build-tools/35.0.0/zipalign" ]]; then
-            "$SDKMANAGER" --install "build-tools;35.0.0"
+          if [[ ! -x "$SDK_ROOT/build-tools/36.0.0/zipalign" ]]; then
+            "$SDKMANAGER" --install "build-tools;36.0.0"
           fi
           test -d "$NDK_DIR"
           echo "ANDROID_NDK_HOME=$NDK_DIR" >> "$GITHUB_ENV"
@@ -481,8 +499,8 @@ jobs:
           if [[ ! -d "$NDK_DIR" ]]; then
             "$SDKMANAGER" --install "ndk;$NDK_VERSION"
           fi
-          if [[ ! -x "$SDK_ROOT/build-tools/35.0.0/zipalign" ]]; then
-            "$SDKMANAGER" --install "build-tools;35.0.0"
+          if [[ ! -x "$SDK_ROOT/build-tools/36.0.0/zipalign" ]]; then
+            "$SDKMANAGER" --install "build-tools;36.0.0"
           fi
           test -d "$NDK_DIR"
           echo "ANDROID_NDK_HOME=$NDK_DIR" >> "$GITHUB_ENV"
