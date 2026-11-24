@@ -262,7 +262,19 @@ jobs:
             printf '%s\n' "$verification"
             grep -Fq 'Verified using v2 scheme: true' <<< "$verification"
             grep -Fq 'Verified using v3 scheme: true' <<< "$verification"
-            jarsigner -verify "$aab" | grep -qi 'jar verified'
+            aab_verify_log="$(mktemp)"
+            if ! jarsigner -verify "$aab" >"$aab_verify_log" 2>&1; then
+              echo "::error::AAB signature verification command failed for the $flavor variant."
+              grep -Ei 'jar|unsigned|signer|digest|signature|error|exception|warning' "$aab_verify_log" | tail -n 30 || true
+              exit 1
+            fi
+            if ! grep -qi 'jar verified' "$aab_verify_log"; then
+              echo "::error::AAB verifier did not report a verified JAR signature for the $flavor variant."
+              grep -Ei 'jar|unsigned|signer|digest|signature|error|exception|warning' "$aab_verify_log" | tail -n 30 || true
+              exit 1
+            fi
+            echo "$flavor AAB JAR signature: verified."
+            rm -f "$aab_verify_log"
           done
           sha256sum app/build/outputs/apk/{offline,feed}/release/*.apk \
             app/build/outputs/bundle/{offline,feed}Release/*.aab > build/release-artifact-sha256.txt
