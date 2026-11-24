@@ -21,6 +21,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   group: safemobile-paparazzi-record-${{ github.event.pull_request.head.ref || github.ref_name }}
@@ -83,3 +84,7 @@ jobs:
           git fetch origin "${TARGET_BRANCH}"
           git rebase FETCH_HEAD
           git push origin "HEAD:${TARGET_BRANCH}"
+          # GITHUB_TOKEN pushes do not start ordinary push-triggered workflows.
+          # Explicitly queue the full Android verification against the updated snapshots.
+          echo "Dispatching Android CI for ${TARGET_BRANCH} after Paparazzi goldens were updated."
+          gh workflow run android-ci.yml --ref "${TARGET_BRANCH}"
