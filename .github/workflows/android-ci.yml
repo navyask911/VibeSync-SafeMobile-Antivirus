@@ -261,8 +261,9 @@ jobs:
             echo "Verifying $flavor APK v2/v3 signature."
             verification="$("$apksigner" verify --verbose "$apk" 2>&1)"
             printf '%s\n' "$verification"
-            grep -Eq '^Verified using v2 scheme[^:]*: true
-            grep -Eq '^Verified using v3 scheme[^:]*: true
+            grep -Eq '^Verified using v2 scheme[^:]*: true$' <<< "$verification"
+            grep -Eq '^Verified using v3 scheme[^:]*: true$' <<< "$verification"
+            echo "$flavor APK signature: v2 and v3 verified."
             aab_verify_log="$(mktemp)"
             if ! jarsigner -verify "$aab" >"$aab_verify_log" 2>&1; then
               echo "::error::AAB signature verification command failed for the $flavor variant."
