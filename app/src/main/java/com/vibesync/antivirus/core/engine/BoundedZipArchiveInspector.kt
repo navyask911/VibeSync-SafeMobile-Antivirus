@@ -84,10 +84,20 @@ internal object BoundedZipArchiveInspector {
             // they are outside embedded-archive analysis and are never inflated.
             if (!includeAllLeafEntries && !isApk && !isZipName) continue
             if (!entryWithinBounds(entry, name, budget)) return false
-            val bytes = zip.getInputStream(entry).use { readBounded(it, name, budget) }
+            val bytes = try {
+                zip.getInputStream(entry).use { readBounded(it, name, budget) }
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (error: Exception) {
+                budget.reason = budget.reason
+                    ?: "Archive entry could not be read: ${error.javaClass.simpleName}: $name."
+                if (budget.hardLimitExceeded) return false
+                continue
+            }
             if (!hasValidCrc(entry, bytes)) {
                 budget.reason = budget.reason ?: "Archive entry checksum mismatch: $name."
-                return false
+                // The central directory lets us continue to independent sibling entries.
+                continue
             }
             val entryPath = if (prefix.isBlank()) name else "$prefix!/$name"
             if (!inspectPayload(bytes, entryPath, isApk, depth, maxDepth, budget, onEntry)) return false

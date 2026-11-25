@@ -129,6 +129,24 @@ class BoundedZipArchiveInspectorTest {
         }
     }
 
+
+    @Test
+    fun corruptInspectedEntryMarksPartialButDoesNotHideReadableSiblings() = runBlocking {
+        val root = zipFileWithCorruptStoredFirstEntry(
+            "payload.bin", ByteArray(256) { it.toByte() },
+            "readme.txt" to "still readable".toByteArray()
+        )
+        try {
+            val found = mutableListOf<ArchiveEntryPayload>()
+            val outcome = BoundedZipArchiveInspector.inspect(root, includeAllLeafEntries = true) {
+                found += it
+            }
+            assertFalse(outcome.complete)
+            assertTrue(outcome.reason.orEmpty().isNotBlank())
+            assertTrue(found.any { it.entryName.endsWith("readme.txt") })
+        } finally { root.delete() }
+    }
+
     @Test
     fun corruptRootArchiveDoesNotReportCompleteInspection() = runBlocking {
         val root = File.createTempFile("safe-mobile-corrupt-archive-", ".zip")
