@@ -79,16 +79,29 @@ class ApkContentExtractorTest {
     }
 
     @Test
-    fun oversizedTargetDexReturnsIncompleteBeforeBufferingTheEntry() = runBlocking {
+    fun dexLargerThanTheLegacyLimitIsScannedWithinTheExpandedBound() = runBlocking {
+        val dex = ByteArray(16 * 1024 * 1024 + 1)
+        java.util.Random(42L).nextBytes(dex)
         val apk = createApk(
             "AndroidManifest.xml" to byteArrayOf(1),
-            "classes.dex" to ByteArray(16 * 1024 * 1024 + 1)
+            "classes.dex" to dex
         )
         try {
             val outcome = ApkContentExtractor().forEachComponent(apk) { true }
-            assertTrue(outcome is ApkExtractionOutcome.Incomplete)
+            assertTrue(outcome is ApkExtractionOutcome.Complete)
         } finally {
             apk.delete()
+        }
+    }
+
+    @Test
+    fun splitWithoutDexCanBeInspectedAsManifestOnly() = runBlocking {
+        val split = createApk("AndroidManifest.xml" to byteArrayOf(1, 2, 3))
+        try {
+            val outcome = ApkContentExtractor().forEachComponent(split, allowManifestOnly = true) { true }
+            assertTrue(outcome is ApkExtractionOutcome.Complete)
+        } finally {
+            split.delete()
         }
     }
 

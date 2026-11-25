@@ -32,6 +32,7 @@ class PersistedScanResultRoomIntegrationTest {
             val scannerPackage = context.packageName
             val googlePackage = "com.google.android.apps.maps"
             val ordinaryUserPackage = "com.example.userapp"
+            val retryableUserPackage = "com.example.retryableapp"
             val sideloadedGooglePrefix = "com.google.fake.userapp"
             val spoofedGoogleSystemPackage = "com.google.fake.systemapp"
             val oemSystemPackage = "com.oem.settings"
@@ -40,6 +41,7 @@ class PersistedScanResultRoomIntegrationTest {
             val flagsByPackage = mapOf(
                 googlePackage to platformFlags,
                 ordinaryUserPackage to 0,
+                retryableUserPackage to 0,
                 sideloadedGooglePrefix to 0,
                 spoofedGoogleSystemPackage to ApplicationInfo.FLAG_SYSTEM,
                 oemSystemPackage to platformFlags,
@@ -66,6 +68,11 @@ class PersistedScanResultRoomIntegrationTest {
                     sessionId, "app:$ordinaryUserPackage", "app", "User app", "NO_MATCH",
                     packageName = ordinaryUserPackage, completedAt = 1_120L,
                     durationMs = 52L, apkSizeBytes = 4_096L
+                ),
+                ScanSessionItemEntity(
+                    sessionId, "app:$retryableUserPackage", "app", "Retryable app", "NOT_SCANNED",
+                    packageName = retryableUserPackage, reasons = "temporary APK read failure",
+                    completedAt = 1_125L
                 ),
                 ScanSessionItemEntity(
                     sessionId, "app:$sideloadedGooglePrefix", "app", "Sideloaded prefix", "SUSPICIOUS",
@@ -95,6 +102,12 @@ class PersistedScanResultRoomIntegrationTest {
                 )
             )
             rows.forEach { dao.insertScanSessionItem(it) }
+            // NOT_SCANNED rows remain persisted for Scan & Lab but are deliberately not
+            // treated as completed checkpoints, so a later worker attempt retries them.
+            assertTrue(dao.scanSessionItems(sessionId).any {
+                it.itemKey == "app:$retryableUserPackage" && it.verdict == ScanVerdict.NOT_SCANNED.name
+            })
+            assertFalse(dao.scanSessionItemKeys(sessionId).contains("app:$retryableUserPackage"))
 
             // Rehydrate the values from Room before applying the same result normalization
             // and visibility policy used by ThreatRepository and DeepScanWorker.
@@ -145,7 +158,7 @@ class PersistedScanResultRoomIntegrationTest {
 
             val visiblePackages = visible.mapNotNull { it.packageName }.toSet()
             assertEquals(
-                setOf(googlePackage, ordinaryUserPackage, sideloadedGooglePrefix),
+                setOf(googlePackage, ordinaryUserPackage, retryableUserPackage, sideloadedGooglePrefix),
                 visiblePackages
             )
             assertEquals(1, visible.count { it.packageName == null })
@@ -153,6 +166,10 @@ class PersistedScanResultRoomIntegrationTest {
             assertTrue(visible.none { it.packageName == legacyOemSystemPackage })
             assertTrue(visible.none { it.packageName == spoofedGoogleSystemPackage })
             assertTrue(visible.none { it.packageName == scannerPackage })
+
+            val pendingApp = visible.single { it.packageName == retryableUserPackage }
+            assertEquals(ScanVerdict.NOT_SCANNED, pendingApp.verdict)
+            assertEquals("temporary APK read failure", pendingApp.reasons.single())
 
             val cleanGoogle = visible.single { it.packageName == googlePackage }
             assertEquals(ScanVerdict.NO_MATCH, cleanGoogle.verdict)

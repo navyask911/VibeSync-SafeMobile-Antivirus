@@ -68,6 +68,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vibesync.antivirus.core.engine.DetectionSource
 import com.vibesync.antivirus.core.engine.ScanResult
+import com.vibesync.antivirus.core.engine.ScanCoveragePolicy
 import com.vibesync.antivirus.core.engine.ScanVerdict
 import com.vibesync.antivirus.core.engine.ScanSource
 import com.vibesync.antivirus.core.engine.ScanReportFormatter
@@ -1040,6 +1041,7 @@ private fun V17ScanResultRow(
         result.trustedByUser -> "WHITELISTED" to c.green
         result.verdict == ScanVerdict.THREAT -> "MALWARE" to c.red
         result.verdict == ScanVerdict.SUSPICIOUS -> "SUSPICIOUS" to c.amber
+        result.verdict == ScanVerdict.NO_MATCH && ScanCoveragePolicy.isPartial(result) -> "PARTIAL SCAN" to c.amber
         result.verdict == ScanVerdict.NO_MATCH -> "CLEAN" to c.green
         else -> "NOT SCANNED" to c.muted
     }
@@ -1047,6 +1049,7 @@ private fun V17ScanResultRow(
         result.trustedByUser -> Icons.Default.Shield
         result.verdict == ScanVerdict.THREAT -> Icons.Default.Warning
         result.verdict == ScanVerdict.SUSPICIOUS -> Icons.Default.Search
+        result.verdict == ScanVerdict.NO_MATCH && ScanCoveragePolicy.isPartial(result) -> Icons.Outlined.Info
         result.verdict == ScanVerdict.NO_MATCH -> Icons.Default.CheckCircle
         else -> Icons.Outlined.HelpOutline
     }

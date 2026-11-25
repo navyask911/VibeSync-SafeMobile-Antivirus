@@ -119,6 +119,9 @@ interface ThreatDao {
  @Query("DELETE FROM app_scan_cache WHERE packageName = :packageName")
  suspend fun deleteAppScanCache(packageName: String)
 
+ @Query("DELETE FROM app_scan_cache")
+ suspend fun clearAppScanCache()
+
  @Insert(onConflict = OnConflictStrategy.REPLACE)
  suspend fun upsertAppScanCache(cache: AppScanCache)
 

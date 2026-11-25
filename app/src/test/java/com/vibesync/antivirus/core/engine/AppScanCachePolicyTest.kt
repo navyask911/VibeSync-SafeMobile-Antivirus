@@ -13,6 +13,21 @@ class AppScanCachePolicyTest {
     }
 
     @Test
+    fun partialCoverageResultsAreNotPersistedInTheAppCache() {
+        val partial = ScanResult(
+            packageOrPath = "com.example.app",
+            displayName = "Example",
+            sha256 = "a".repeat(64),
+            md5 = "b".repeat(32),
+            verdict = ScanVerdict.NO_MATCH,
+            reasons = listOf("YARA-X unavailable."),
+            durationMs = 10L,
+            analysisStages = listOf("HASH", "YARA_INCOMPLETE")
+        )
+        assertFalse(AppScanCachePolicy.shouldPersist(partial))
+    }
+
+    @Test
     fun completedVerdictsRemainCacheable() {
         listOf(ScanVerdict.NO_MATCH, ScanVerdict.THREAT, ScanVerdict.SUSPICIOUS).forEach { verdict ->
             assertTrue(AppScanCachePolicy.canReuse(verdict))

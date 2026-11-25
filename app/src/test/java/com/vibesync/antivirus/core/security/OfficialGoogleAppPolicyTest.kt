@@ -26,6 +26,13 @@ class OfficialGoogleAppPolicyTest {
         assertFalse(OfficialGoogleAppPolicy.isEligibleForInstalledScan(
             "com.oem.settings", "com.vibesync.antivirus", systemFlags, officialGoogle = true
         ))
+        val updatedSystemFlags = android.content.pm.ApplicationInfo.FLAG_UPDATED_SYSTEM_APP
+        assertFalse(OfficialGoogleAppPolicy.isEligibleForInstalledScan(
+            "com.oem.settings", "com.vibesync.antivirus", updatedSystemFlags, officialGoogle = false
+        ))
+        assertTrue(OfficialGoogleAppPolicy.isEligibleForInstalledScan(
+            "com.google.android.gms", "com.vibesync.antivirus", updatedSystemFlags, officialGoogle = true
+        ))
         assertTrue(OfficialGoogleAppPolicy.isEligibleForInstalledScan(
             "com.example.app", "com.vibesync.antivirus", 0, officialGoogle = false
         ))

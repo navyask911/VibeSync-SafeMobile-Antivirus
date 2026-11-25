@@ -54,6 +54,7 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
+private const val APP_SCAN_CACHE_PROFILE_VERSION = 2
 private const val GOOGLE_PLAY_SERVICES_PACKAGE = "com.google.android.gms"
 private const val SAFE_SYSTEM_PACKAGE_LABEL = "Safe (System App)"
 private const val SAFE_GOOGLE_PACKAGE_LABEL = "Official Google app — Clean & Safe"
@@ -133,11 +134,27 @@ class PackageScanner(
   val hashes: Set<String>,
   val bloomFilter: BloomFilter<String>
  )
+ private data class PackageApkAssessment(
+  val yaraResult: YaraXScanResult,
+  val exactThreat: ScanResult? = null,
+  val splitIssues: List<String> = emptyList()
+ )
+ private data class ArchiveAssessment(
+  val finding: ScanResult?,
+  val inspectedEntries: Int,
+  val partialReason: String?
+ ) {
+  val isPartial: Boolean get() = !partialReason.isNullOrBlank()
+ }
 
  private val signatureDatabaseParser = SignatureDatabaseParser()
  private val bloomFilterBuilder = BloomFilterBuilder()
  private val hashMatcher = HashMatcher()
  private val signatureDatabaseMutex = Mutex()
+ private val appScanCacheProfileMutex = Mutex()
+
+ @Volatile
+ private var appScanCacheProfileReady = false
 
  @Volatile
  private var cachedBundledHashSnapshot: BundledHashSnapshot? = null
@@ -235,19 +252,6 @@ class PackageScanner(
   )
  }
 
- private fun markIncompleteYaraIfOtherwiseClean(
-  result: ScanResult,
-  yaraResult: YaraXScanResult?
- ): ScanResult {
-  if (result.verdict != ScanVerdict.NO_MATCH) return result
-  if (yaraResult?.state != YaraXScanState.DISABLED &&
-   yaraResult?.state != YaraXScanState.NOT_SCANNED
-  ) return result
-  return result.copy(
-   verdict = ScanVerdict.NOT_SCANNED,
-   reasons = result.reasons + context.getString(R.string.file_could_not_read)
-  )
- }
 
  private fun rawYaraVerdict(yaraResult: YaraXScanResult?): ScanVerdict? = when {
   yaraResult == null -> null
@@ -531,7 +535,11 @@ class PackageScanner(
   )) return null
   return scanPackage(info, scanSessionId)
  }
- suspend fun scanFile(file: File, persistAllAudit: Boolean = true): ScanResult {
+ suspend fun scanFile(
+  file: File,
+  persistAllAudit: Boolean = true,
+  inspectEmbeddedArchives: Boolean = true
+ ): ScanResult {
   val start = System.nanoTime()
   val scanSessionId = UUID.randomUUID().toString()
   if (!file.isFile || !file.canRead()) {
@@ -585,6 +593,36 @@ class PackageScanner(
     sourceLocalPath = file.absolutePath, scanSessionId = scanSessionId)
   }
 
+  val namedArchive = file.extension.equals("zip", ignoreCase = true) ||
+   file.extension.equals("jar", ignoreCase = true)
+  if (!isApk && (hasZipSignature(file) || namedArchive)) {
+   val archive = scanArchiveContents(
+    archive = file,
+    scanSessionId = scanSessionId,
+    includeAllLeafEntries = true
+   )
+   val archiveResult = archive.finding ?: evaluateUnmatched(
+    file.name, file.name, hash.sha256, hash.md5, emptyList(), 0,
+    sha1 = hash.sha1
+   )
+   var covered = archiveResult.copy(
+    durationMs = elapsed(start),
+    sourceLocalPath = file.absolutePath,
+    scanSessionId = scanSessionId,
+    analysisStages = (archiveResult.analysisStages + listOf("HASH", "ARCHIVE_INSPECTED")).distinct()
+   )
+   if (archive.isPartial) {
+    covered = ScanCoveragePolicy.applyPartialCoverage(
+     covered, "ARCHIVE_INCOMPLETE",
+     archive.partialReason ?: "One or more archive entries could not be completely inspected."
+    )
+   }
+   if (persistAllAudit || covered.verdict in setOf(ScanVerdict.THREAT, ScanVerdict.SUSPICIOUS, ScanVerdict.NOT_SCANNED)) {
+    audit(covered, start, scanSessionId)
+   }
+   return covered
+  }
+
   val yaraXResult = if (isApk) {
    withContext(Dispatchers.Default) { yaraXScanner.scanApk(file) }
   } else null
@@ -603,6 +641,35 @@ class PackageScanner(
     sourceLocalPath = file.absolutePath,
     scanSessionId = scanSessionId
    )
+  }
+
+  val embeddedArchive = if (isApk && inspectEmbeddedArchives) scanArchiveContents(
+   archive = file,
+   scanSessionId = scanSessionId,
+   includeAllLeafEntries = false,
+   ownerPackageName = identity
+  ) else null
+  embeddedArchive?.let { archiveCoverage ->
+   archiveCoverage.finding?.takeIf { it.verdict == ScanVerdict.THREAT }?.let { archiveFinding ->
+    var detected = archiveFinding.copy(
+     packageOrPath = identity ?: file.name,
+     displayName = identity ?: file.name,
+     packageName = identity ?: archiveFinding.packageName,
+     scanSessionId = scanSessionId,
+     apkSizeBytes = hash.bytesRead,
+     sourceLocalPath = file.absolutePath,
+     durationMs = elapsed(start),
+     analysisStages = (listOf("HASH", "YARA") + archiveFinding.analysisStages + "ARCHIVE_INSPECTED").distinct()
+    )
+    if (archiveCoverage.isPartial) {
+     detected = ScanCoveragePolicy.applyPartialCoverage(
+      detected, "ARCHIVE_INCOMPLETE",
+      archiveCoverage.partialReason ?: "An embedded ZIP/JAR entry could not be completely inspected."
+     )
+    }
+    audit(detected, start, scanSessionId)
+    return detected
+   }
   }
 
    // Do not execute the Drebin model for installed system apps or Google Play Services.
@@ -631,7 +698,16 @@ class PackageScanner(
     )
    }
    output = evaluateWithEnsemble(output, yaraXResult, isSystemApp = protectedPlatformApk)
-   output = markIncompleteYaraIfOtherwiseClean(output, yaraXResult)
+   output = mergeArchiveSuspicion(output, embeddedArchive?.finding)
+   output = ScanCoveragePolicy.applyYaraCoverage(output, yaraXResult?.state, yaraXResult?.reason)
+   if (embeddedArchive?.isPartial == true) {
+    output = ScanCoveragePolicy.applyPartialCoverage(
+     output, "ARCHIVE_INCOMPLETE",
+     embeddedArchive.partialReason ?: "An embedded ZIP/JAR entry could not be completely inspected."
+    )
+   } else if ((embeddedArchive?.inspectedEntries ?: 0) > 0) {
+    output = output.copy(analysisStages = (output.analysisStages + "ARCHIVE_INSPECTED").distinct())
+   }
    if (!isApk) {
     val prefix = file.inputStream().buffered().use(::readBoundedPrefix)
     output = ThreatEnsembleEvaluator.evaluateTextPayload(output, prefix)
@@ -658,10 +734,19 @@ class PackageScanner(
    inputStream.mark(2)
    val zipHeader = inputStream.read() == 0x50 && inputStream.read() == 0x4b
    inputStream.reset()
-   if (zipHeader || label.substringBefore('?').endsWith(".apk", ignoreCase = true)) {
+   val archiveLabel = label.substringBefore('?')
+   val isNamedApk = archiveLabel.endsWith(".apk", ignoreCase = true)
+   val isNamedArchive = archiveLabel.endsWith(".zip", ignoreCase = true) ||
+    archiveLabel.endsWith(".jar", ignoreCase = true)
+   if (zipHeader || isNamedApk || isNamedArchive) {
     // A content URI does not expose package identity. Stage APK bytes in app-private
     // cache so PackageManager can read the manifest before any detection engine.
-    val staged = File.createTempFile("trust-identity-", ".apk", context.cacheDir)
+    // Preserve archive kind: an ordinary ZIP must not be renamed and routed as an APK.
+    val staged = File.createTempFile(
+     if (isNamedApk) "scan-apk-" else "scan-zip-",
+     if (isNamedApk) ".apk" else ".zip",
+     context.cacheDir
+    )
     try {
      inputStream.use { input -> staged.outputStream().use { output ->
       val buffer = ByteArray(64 * 1024)
@@ -671,7 +756,7 @@ class PackageScanner(
        val read = input.read(buffer)
        if (read < 0) break
        total += read
-       require(total <= 512L * 1024 * 1024) { "APK staging limit exceeded" }
+       require(total <= 512L * 1024 * 1024) { "Archive staging limit exceeded" }
        output.write(buffer, 0, read)
       }
      } }
@@ -726,7 +811,8 @@ class PackageScanner(
   val isSystemApp = flags and ApplicationInfo.FLAG_SYSTEM != 0
   val isUpdatedSystemApp = flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP != 0
   val officialGoogle = OfficialGoogleAppPolicy.isOfficialGooglePackage(context, info.packageName, info)
-  val cached = try {
+  val cacheProfileReady = ensureCurrentAppScanCacheProfile()
+  val cached = if (!cacheProfileReady) null else try {
    dao.findAppScanCache(info.packageName)
   } catch (cancelled: CancellationException) {
    throw cancelled
@@ -810,7 +896,7 @@ class PackageScanner(
   }
 
   val finalResult = scanned.copy(apkSizeBytes = fileSize, scanSource = ScanSource.FRESH)
-  if (fileSize != null && AppScanCachePolicy.shouldPersist(finalResult.verdict)) {
+  if (cacheProfileReady && fileSize != null && AppScanCachePolicy.shouldPersist(finalResult)) {
    try {
     dao.upsertAppScanCache(AppScanCache(
      packageName = info.packageName, lastUpdateTime = info.lastUpdateTime,
@@ -823,6 +909,8 @@ class PackageScanner(
     diagnostics?.fail(info.packageName, "room_insert", error)
     Log.w(TAG, "Could not update installed-app cache; scan result remains valid.", error)
    }
+  } else if (!cacheProfileReady) {
+   Log.w("ScanDebug", "pkg_cache_bypass pkg=${info.packageName} reason=cache_profile_invalidation_unavailable")
   } else if (finalResult.verdict == ScanVerdict.NOT_SCANNED) {
    Log.i("ScanDebug", "pkg_retry_required pkg=${info.packageName} reason=incomplete_analysis_not_cached userId=${diagnostics?.userId ?: (android.os.Process.myUid() / 100000)}")
   }
@@ -958,14 +1046,36 @@ class PackageScanner(
   }
 
   onStageChange("yara")
-  val yaraXResult = withContext(Dispatchers.Default) { yaraXScanner.scanApk(apk) }
-  if (yaraXResult.isComplete) {
-   completedStages += "YARA"
+  val apkAssessment = scanPackageApks(
+   baseApk = apk,
+   splitPaths = appInfo.splitSourceDirs,
+   packageName = info.packageName,
+   displayName = label,
+   scanSessionId = scanSessionId,
+   apkBytes = fileSize,
+   diagnostics = diagnostics
+  )
+  apkAssessment.exactThreat?.let { splitThreat ->
+   val detected = splitThreat.copy(
+    durationMs = elapsed(start),
+    packageName = info.packageName,
+    scanSessionId = scanSessionId,
+    analysisStages = completedStages + listOf("HASH", "SPLIT_HASH", "VERDICT")
+   )
+   audit(detected, start, scanSessionId, diagnostics)
+   onStageChange("verdict")
+   diagnostics?.stage(info.packageName, "verdict", "completed")
+   return detected
+  }
+  val yaraXResult = apkAssessment.yaraResult
+  if (yaraXResult.isComplete && yaraXResult.reason.isNullOrBlank()) {
+   completedStages += if (appInfo.splitSourceDirs.isNullOrEmpty()) "YARA" else "YARA_SPLITS"
    diagnostics?.stage(info.packageName, "yara", "completed")
   } else {
    completedStages += "YARA_INCOMPLETE"
    diagnostics?.stage(info.packageName, "yara", "incomplete")
   }
+  if (apkAssessment.splitIssues.isNotEmpty()) completedStages += "SPLIT_INCOMPLETE"
   val yaraThreat = yaraXResult.threatMatches.firstOrNull()
   if (yaraThreat != null) {
    val detected = evaluateWithEnsemble(
@@ -982,6 +1092,30 @@ class PackageScanner(
     durationMs = elapsed(start), packageName = info.packageName, scanSessionId = scanSessionId,
     analysisStages = completedStages + "VERDICT"
    )
+  }
+
+  val embeddedArchive = scanArchiveContents(
+   archive = apk,
+   scanSessionId = scanSessionId,
+   includeAllLeafEntries = false,
+   ownerPackageName = info.packageName
+  )
+  embeddedArchive.finding?.takeIf { it.verdict == ScanVerdict.THREAT }?.let { archiveFinding ->
+   val detected = archiveFinding.copy(
+    packageOrPath = info.packageName,
+    displayName = label,
+    packageName = info.packageName,
+    scanSessionId = scanSessionId,
+    apkSizeBytes = fileSize,
+    analysisStages = (
+     completedStages + archiveFinding.analysisStages + "ARCHIVE_INSPECTED" +
+      if (embeddedArchive.isPartial) listOf("ARCHIVE_INCOMPLETE") else emptyList()
+    ).distinct()
+   )
+   audit(detected, start, scanSessionId, diagnostics)
+   onStageChange("verdict")
+   diagnostics?.stage(info.packageName, "verdict", "completed")
+   return detected
   }
 
   onStageChange("ml")
@@ -1010,16 +1144,247 @@ class PackageScanner(
    yaraXResult,
    isSystemApp = isProtectedPlatformPackage(info.packageName, appInfo, diagnostics)
   )
+  output = mergeArchiveSuspicion(output, embeddedArchive.finding)
   onStageChange("verdict")
-  output = markIncompleteYaraIfOtherwiseClean(output, yaraXResult)
+  output = ScanCoveragePolicy.applyYaraCoverage(output, yaraXResult.state, yaraXResult.reason)
+  if (apkAssessment.splitIssues.isNotEmpty()) {
+   output = ScanCoveragePolicy.applyPartialCoverage(
+    output, "SPLIT_INCOMPLETE", apkAssessment.splitIssues.joinToString("; ")
+   )
+  }
+  if (embeddedArchive.isPartial) {
+   output = ScanCoveragePolicy.applyPartialCoverage(
+    output, "ARCHIVE_INCOMPLETE",
+    embeddedArchive.partialReason ?: "An embedded ZIP/JAR entry could not be completely inspected."
+   )
+  } else if (embeddedArchive.inspectedEntries > 0) {
+   output = output.copy(analysisStages = (output.analysisStages + "ARCHIVE_INSPECTED").distinct())
+  }
   val finalStage = if (output.verdict == ScanVerdict.NOT_SCANNED) "VERDICT_PENDING" else "VERDICT"
   diagnostics?.stage(info.packageName, "verdict", if (finalStage == "VERDICT") "completed" else "pending_retry")
   audit(output, start, scanSessionId, diagnostics)
   return output.copy(
    durationMs = elapsed(start), packageName = info.packageName, scanSessionId = scanSessionId,
-   analysisStages = completedStages + finalStage
+   analysisStages = (completedStages + output.analysisStages + finalStage).distinct()
   )
  }
+ private suspend fun ensureCurrentAppScanCacheProfile(): Boolean =
+  appScanCacheProfileMutex.withLock {
+   if (appScanCacheProfileReady) return@withLock true
+   try {
+    val preferences = context.getSharedPreferences("safe_mobile_app_scan_cache", Context.MODE_PRIVATE)
+    val currentProfile = preferences.getInt("profile_version", 0)
+    if (currentProfile != APP_SCAN_CACHE_PROFILE_VERSION) {
+     // Old cache rows predate split-APK and embedded-archive coverage. Never reuse them.
+     dao.clearAppScanCache()
+     if (!preferences.edit().putInt("profile_version", APP_SCAN_CACHE_PROFILE_VERSION).commit()) {
+      Log.w("ScanDebug", "pkg_cache_bypass reason=cache_profile_version_not_persisted")
+      return@withLock false
+     }
+    }
+    appScanCacheProfileReady = true
+    true
+   } catch (cancelled: CancellationException) {
+    throw cancelled
+   } catch (error: Exception) {
+    Log.w("ScanDebug", "pkg_cache_bypass reason=cache_profile_invalidation_failed", error)
+    false
+   }
+  }
+
+ private suspend fun scanPackageApks(
+  baseApk: File,
+  splitPaths: Array<String>?,
+  packageName: String,
+  displayName: String,
+  scanSessionId: String,
+  apkBytes: Long?,
+  diagnostics: PackageScanDiagnostics?
+ ): PackageApkAssessment {
+  val results = mutableListOf<YaraXScanResult>()
+  val splitIssues = mutableListOf<String>()
+  results += withContext(Dispatchers.Default) { yaraXScanner.scanApk(baseApk) }
+
+  splitPaths.orEmpty().distinct().forEach { path ->
+   currentCoroutineContext().ensureActive()
+   val split = File(path)
+   if (!split.isFile || !split.canRead()) {
+    splitIssues += "Split APK unavailable: ${split.name.take(120)}"
+    return@forEach
+   }
+   try {
+    val hashes = withContext(Dispatchers.Default) { calculator.calculate(split) }
+    val threat = findExactHashThreat(
+     "$packageName:${split.name}", displayName,
+     hashes.sha256, hashes.md5, hashes.sha1, hashes.bytesRead
+    )
+    if (threat != null) {
+     return PackageApkAssessment(
+      yaraResult = ScanCoveragePolicy.combineYara(results, splitIssues),
+      exactThreat = threat.copy(
+       packageName = packageName,
+       scanSessionId = scanSessionId,
+       apkSizeBytes = apkBytes,
+       reasons = threat.reasons + "Exact hash match in split APK ${split.name.take(120)}.",
+       analysisStages = listOf("SPLIT_HASH", "VERDICT")
+      ),
+      splitIssues = splitIssues
+     )
+    }
+    results += withContext(Dispatchers.Default) {
+     yaraXScanner.scanApk(split, allowManifestOnly = true)
+    }
+   } catch (cancelled: CancellationException) {
+    throw cancelled
+   } catch (error: Exception) {
+    val userId = diagnostics?.userId ?: (android.os.Process.myUid() / 100000)
+    diagnostics?.fail(packageName, "split_scan", error)
+    Log.w("ScanDebug", "pkg_split_incomplete pkg=$packageName split=${split.name} userId=$userId", error)
+    splitIssues += "Split APK scan incomplete: ${split.name.take(120)} (${error.javaClass.simpleName})."
+   }
+  }
+  return PackageApkAssessment(
+   yaraResult = ScanCoveragePolicy.combineYara(results, splitIssues),
+   splitIssues = splitIssues
+  )
+ }
+
+ private suspend fun scanArchiveContents(
+  archive: File,
+  scanSessionId: String,
+  includeAllLeafEntries: Boolean,
+  ownerPackageName: String? = null
+ ): ArchiveAssessment {
+  var finding: ScanResult? = null
+  var yaraIncompleteReason: String? = null
+  val inspected = BoundedZipArchiveInspector.inspect(
+   archive = archive,
+   includeAllLeafEntries = includeAllLeafEntries,
+   maxDepth = 2
+  ) { entry ->
+   val leafName = entry.entryName.substringAfterLast('/').take(160)
+   if (leafName.endsWith(".apk", ignoreCase = true)) {
+    val staged = File.createTempFile("archive-apk-", ".apk", context.cacheDir)
+    try {
+     staged.outputStream().use { it.write(entry.bytes) }
+     val nested = scanFile(
+      staged,
+      persistAllAudit = false,
+      inspectEmbeddedArchives = false
+     )
+     if (nested.verdict == ScanVerdict.NOT_SCANNED || ScanCoveragePolicy.isPartial(nested)) {
+      yaraIncompleteReason = yaraIncompleteReason ?: nested.reasons.lastOrNull()
+       ?: "An embedded APK could not be fully inspected."
+     }
+     val candidate = nested.copy(
+      packageOrPath = entry.entryName,
+      displayName = entry.entryName.take(240),
+      packageName = ownerPackageName,
+      scanSessionId = scanSessionId,
+      sourceLocalPath = null,
+      reasons = (nested.reasons + "Embedded APK entry: ${entry.entryName.take(240)}").distinct()
+     )
+     if (candidate.verdict == ScanVerdict.THREAT ||
+      (candidate.verdict == ScanVerdict.SUSPICIOUS && finding?.verdict != ScanVerdict.THREAT)
+     ) finding = candidate
+    } finally {
+     staged.delete()
+    }
+   } else {
+    val hashes = withContext(Dispatchers.Default) {
+     calculator.calculate(ByteArrayInputStream(entry.bytes))
+    }
+    val exact = findExactHashThreat(
+     entry.entryName, entry.entryName, hashes.sha256, hashes.md5,
+     hashes.sha1, hashes.bytesRead
+    )
+    if (exact != null) {
+     val candidate = exact.copy(
+      packageName = ownerPackageName,
+      scanSessionId = scanSessionId,
+      reasons = exact.reasons + "Exact hash match in archive entry: ${entry.entryName.take(240)}."
+     )
+     if (candidate.verdict == ScanVerdict.THREAT) finding = candidate
+    } else if (entry.bytes.isNotEmpty()) {
+     val yara = withContext(Dispatchers.Default) {
+      yaraXScanner.scanComponent(entry.entryName, entry.bytes)
+     }
+     if (yara.state == YaraXScanState.DISABLED || yara.state == YaraXScanState.NOT_SCANNED) {
+      yaraIncompleteReason = yaraIncompleteReason ?: yara.reason
+       ?: "YARA-X did not complete for archive entry ${entry.entryName.take(160)}."
+     }
+     val threatMatch = yara.threatMatches.firstOrNull()
+     val suspiciousMatch = yara.suspiciousMatches.firstOrNull()
+     val candidate = when {
+      threatMatch != null -> yaraThreatResult(
+       entry.entryName, entry.entryName, hashes.sha256, hashes.md5,
+       threatMatch, System.nanoTime(), ownerPackageName, scanSessionId
+      )
+      suspiciousMatch != null -> ScanResult(
+       entry.entryName, entry.entryName, hashes.sha256, hashes.md5,
+       ScanVerdict.SUSPICIOUS,
+       listOf("YARA-X ${suspiciousMatch.ruleIdentifier}: ${suspiciousMatch.description}"),
+       0L
+      ).copy(
+       packageName = ownerPackageName,
+       scanSessionId = scanSessionId,
+       detectionSource = DetectionSource.YARA,
+       malwareName = suspiciousMatch.malwareName ?: suspiciousMatch.ruleIdentifier,
+       riskScore = 0.55f
+      )
+      else -> null
+     }
+     if (candidate != null) {
+      val decorated = candidate.copy(
+       reasons = candidate.reasons + "Archive entry: ${entry.entryName.take(240)}."
+      )
+      if (decorated.verdict == ScanVerdict.THREAT ||
+       (decorated.verdict == ScanVerdict.SUSPICIOUS && finding?.verdict != ScanVerdict.THREAT)
+      ) finding = decorated
+     }
+    }
+   }
+  }
+  val reasons = listOfNotNull(
+   inspected.reason,
+   yaraIncompleteReason?.takeIf { it.isNotBlank() }
+  ).distinct()
+  return ArchiveAssessment(
+   finding = finding,
+   inspectedEntries = inspected.inspectedEntries,
+   partialReason = reasons.joinToString(" ").take(500).takeIf { it.isNotBlank() }
+  )
+ }
+
+ private fun mergeArchiveSuspicion(
+  result: ScanResult,
+  archiveFinding: ScanResult?
+ ): ScanResult {
+  if (archiveFinding?.verdict != ScanVerdict.SUSPICIOUS) return result
+  val cleanPrimary = result.verdict == ScanVerdict.NO_MATCH
+  return result.copy(
+   verdict = if (cleanPrimary) ScanVerdict.SUSPICIOUS else result.verdict,
+   reasons = (result.reasons + archiveFinding.reasons).distinct(),
+   riskScore = maxOf(result.riskScore, archiveFinding.riskScore),
+   detectionSource = if (cleanPrimary) archiveFinding.detectionSource else result.detectionSource,
+   malwareName = result.malwareName ?: archiveFinding.malwareName,
+   confidence = maxOf(result.confidence, archiveFinding.confidence)
+  )
+ }
+
+ private fun hasZipSignature(file: File): Boolean = try {
+  file.inputStream().use { input ->
+   val signature = ByteArray(4)
+   input.read(signature) == signature.size &&
+    signature[0] == 0x50.toByte() &&
+    signature[1] == 0x4b.toByte() &&
+    signature[2] in setOf(0x03.toByte(), 0x05.toByte(), 0x07.toByte()) &&
+    signature[3] in setOf(0x04.toByte(), 0x06.toByte(), 0x08.toByte())
+  }
+ } catch (_: Exception) {
+  false
+ }
+
  private fun readBoundedPrefix(input: InputStream): ByteArray {
   val buffer = ByteArray(eicarProbeBytes)
   var total = 0

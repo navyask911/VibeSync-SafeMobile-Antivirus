@@ -53,12 +53,15 @@ class YaraScanner(context: Context) {
     private val extractor = ApkContentExtractor()
     private val ruleManager = YaraRuleManager(context.applicationContext)
 
-    suspend fun scanApk(apk: java.io.File): YaraXScanResult {
+    suspend fun scanApk(
+        apk: java.io.File,
+        allowManifestOnly: Boolean = false
+    ): YaraXScanResult {
         val allMatches = mutableListOf<YaraXRuleMatch>()
         var abortedResult: YaraXScanResult? = null
 
         val extraction = try {
-            extractor.forEachComponent(apk) { component ->
+            extractor.forEachComponent(apk, allowManifestOnly = allowManifestOnly) { component ->
                 val response = try {
                     ruleManager.scanBytes(component.bytes)
                 } catch (cancelled: CancellationException) {
@@ -115,6 +118,33 @@ class YaraScanner(context: Context) {
             if (allMatches.isEmpty()) YaraXScanState.NO_MATCH else YaraXScanState.MATCHES,
             allMatches.distinctBy { it.namespace + ":" + it.ruleIdentifier + ":" + it.componentName }
         )
+    }
+
+    /** Scan a bounded archive leaf without requiring APK container structure. */
+    suspend fun scanComponent(componentName: String, bytes: ByteArray): YaraXScanResult {
+        if (bytes.isEmpty()) {
+            return YaraXScanResult(YaraXScanState.NOT_SCANNED, reason = "Archive component is empty.")
+        }
+        return try {
+            val response = ruleManager.scanBytes(bytes)
+            val matches = parseResponse(response, componentName)
+            YaraXScanResult(
+                if (matches.isEmpty()) YaraXScanState.NO_MATCH else YaraXScanState.MATCHES,
+                matches
+            )
+        } catch (cancelled: CancellationException) {
+            throw cancelled
+        } catch (error: LinkageError) {
+            YaraXScanResult(
+                YaraXScanState.DISABLED,
+                reason = "YARA-X native library is unavailable: ${error.javaClass.simpleName}."
+            )
+        } catch (error: Exception) {
+            YaraXScanResult(
+                YaraXScanState.NOT_SCANNED,
+                reason = "YARA-X component scan failed: ${error.javaClass.simpleName}."
+            )
+        }
     }
 
     suspend fun close() = ruleManager.close()
