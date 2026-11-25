@@ -58,6 +58,40 @@ class BoundedZipArchiveInspectorTest {
         }
     }
 
+
+    @Test
+    fun nonZipResourceWithZipSuffixInsideApkDoesNotCreateFalsePartialCoverage() = runBlocking {
+        val apk = zipFile(
+            "AndroidManifest.xml" to byteArrayOf(1, 2),
+            "classes.dex" to byteArrayOf(3, 4),
+            "assets/metadata.zip" to byteArrayOf(5, 6, 7, 8)
+        )
+        try {
+            val found = mutableListOf<ArchiveEntryPayload>()
+            val outcome = BoundedZipArchiveInspector.inspect(apk, includeAllLeafEntries = false) {
+                found += it
+            }
+            assertTrue(outcome.complete)
+            assertTrue(found.any { it.entryName.endsWith("metadata.zip") })
+        } finally {
+            apk.delete()
+        }
+    }
+
+    @Test
+    fun apkWithMoreThanTheOldEntryLimitStillCompletesWithinTheNewBound() = runBlocking {
+        val entries = Array(2_100) { index ->
+            "res/raw/item_$index.bin" to byteArrayOf(index.toByte())
+        }
+        val apk = zipFile(*entries)
+        try {
+            val outcome = BoundedZipArchiveInspector.inspect(apk, includeAllLeafEntries = false) { }
+            assertTrue(outcome.complete)
+        } finally {
+            apk.delete()
+        }
+    }
+
     @Test
     fun malformedNamedNestedArchiveIsReportedAsIncomplete() = runBlocking {
         val root = zipFile(
@@ -66,7 +100,7 @@ class BoundedZipArchiveInspectorTest {
         )
         try {
             val found = mutableListOf<ArchiveEntryPayload>()
-            val outcome = BoundedZipArchiveInspector.inspect(root, includeAllLeafEntries = false) {
+            val outcome = BoundedZipArchiveInspector.inspect(root, includeAllLeafEntries = true) {
                 found += it
             }
             assertFalse(outcome.complete)

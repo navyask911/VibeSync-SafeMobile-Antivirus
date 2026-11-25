@@ -5,14 +5,18 @@ import android.content.Context
 import android.util.Log
 
 /**
- * Management protection is not a verdict. Only signer-verified Google packages are
- * included from the platform namespace; unsigned Google-named user APKs remain reviewable
- * as ordinary third-party apps and are never automatically marked clean.
+ * Installed-app review is limited to ordinary third-party user apps. Google and
+ * protected OEM/platform namespaces stay excluded, even when packages are signer-verified.
  */
 object TrustedPackageWhitelist {
     private val prefixes = listOf(
         "com.google.android.", "com.android.", "com.google.",
-        "com.oppo.", "com.coloros.", "android."
+        "com.oppo.", "com.coloros.", "com.oplus.", "com.oneplus.",
+        "com.samsung.", "com.miui.", "com.xiaomi.", "com.vivo.", "com.iqoo.",
+        "com.huawei.", "com.honor.", "com.motorola.", "com.lenovo.",
+        "com.lge.", "com.sony.", "com.asus.", "com.realme.",
+        "com.transsion.", "com.infinix.", "com.tecno.", "com.nothing.",
+        "com.zte.", "com.tcl.", "android."
     )
     private val packages = setOf("android", "com.android.vending")
 
@@ -30,6 +34,7 @@ object TrustedPackageWhitelist {
      * Unverified Google-named user APKs may be scanned as ordinary apps, but are never
      * treated as official Google apps or normalized to Clean & Safe.
      */
+    @Suppress("UNUSED_PARAMETER")
     fun isEligibleForReview(
         packageName: String,
         scannerPackageName: String,
@@ -37,11 +42,7 @@ object TrustedPackageWhitelist {
         officialGoogle: Boolean
     ): Boolean {
         if (packageName == scannerPackageName) return false
-        val system = hasSystemFlags(applicationFlags)
-        val googleNamespace = OfficialGoogleAppPolicy.isGooglePackageName(packageName)
-        return (googleNamespace && officialGoogle) ||
-            (googleNamespace && !system) ||
-            (!system && !hasProtectedNamespace(packageName))
+        return !isProtected(applicationFlags, packageName)
     }
 
     fun isEligibleForReview(context: Context, packageName: String): Boolean {
@@ -49,10 +50,7 @@ object TrustedPackageWhitelist {
         return try {
             @Suppress("DEPRECATION")
             val info = context.packageManager.getApplicationInfo(packageName, 0)
-            val googleNamespace = OfficialGoogleAppPolicy.isGooglePackageName(packageName)
-            val officialGoogle = googleNamespace &&
-                OfficialGoogleAppPolicy.isOfficialGooglePackage(context, packageName)
-            isEligibleForReview(packageName, context.packageName, info.flags, officialGoogle)
+            isEligibleForReview(packageName, context.packageName, info.flags, officialGoogle = false)
         } catch (error: Exception) {
             val userId = android.os.Process.myUid() / 100000
             Log.e("ScanDebug", "pkg_fail pkg=$packageName stage=resolve userId=$userId", error)

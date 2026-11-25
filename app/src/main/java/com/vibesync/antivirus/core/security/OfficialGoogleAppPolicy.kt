@@ -21,20 +21,18 @@ object OfficialGoogleAppPolicy {
         packageName.startsWith("com.google.") || packageName in exactGooglePackages
 
     /**
-     * Pure inclusion guard used by inventory classification: platform apps are eligible
-     * only when the Google signer policy has already verified them.
+     * Installed-app scanning excludes all Google and system/OEM packages, regardless
+     * of whether a Google signing certificate is trusted.
      */
+    @Suppress("UNUSED_PARAMETER")
     fun isEligibleForInstalledScan(
         packageName: String,
         scannerPackageName: String,
         applicationFlags: Int,
         officialGoogle: Boolean
-    ): Boolean {
-        if (packageName == scannerPackageName) return false
-        val platformFlags = ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP
-        val isPlatformApp = applicationFlags and platformFlags != 0
-        return (officialGoogle && isGooglePackageName(packageName)) || !isPlatformApp
-    }
+    ): Boolean = ProtectedPackagePolicy.isUserInstalled(
+        applicationFlags, packageName, scannerPackageName
+    )
 
     fun hasTrustedSigner(
         packageName: String,

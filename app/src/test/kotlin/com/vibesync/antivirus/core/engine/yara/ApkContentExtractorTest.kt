@@ -67,6 +67,20 @@ class ApkContentExtractorTest {
         }
     }
 
+
+    @Test
+    fun nativeOnlyApkCanCompleteWhenManifestOnlyCoverageIsExplicitlyAllowed() = runBlocking {
+        val apk = createApk("AndroidManifest.xml" to byteArrayOf(1, 2, 3))
+        try {
+            val outcome = ApkContentExtractor().forEachComponent(
+                apk, allowManifestOnly = true
+            ) { true }
+            assertTrue(outcome is ApkExtractionOutcome.Complete)
+        } finally {
+            apk.delete()
+        }
+    }
+
     @Test
     fun missingManifestReturnsIncompleteRatherThanClean() = runBlocking {
         val apk = createApk("classes.dex" to byteArrayOf(1, 2, 3))

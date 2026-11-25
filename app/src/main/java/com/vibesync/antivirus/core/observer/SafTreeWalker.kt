@@ -21,9 +21,13 @@ object SafTreeWalker {
         val pending = ArrayDeque<PendingDirectory>()
         val visitedDirectories = HashSet<String>()
         val visitedFiles = HashSet<String>()
+        val uniqueRoots = roots.distinctBy { it.toString() }
+        var duplicateDirectoryCount = 0
+        var duplicateFileCount = 0
+        var unreadableFileCount = 0
         var inspectedFiles = 0
 
-        for (uri in roots) {
+        for (uri in uniqueRoots) {
             try {
                 DocumentFile.fromTreeUri(context, uri)?.let { pending.addLast(PendingDirectory(it, 0)) }
             } catch (cancelled: kotlinx.coroutines.CancellationException) {
@@ -36,7 +40,11 @@ object SafTreeWalker {
         while (pending.isNotEmpty() && inspectedFiles < maxFiles && visitedDirectories.size < MAX_DIRECTORY_VISITS) {
             val (directory, depth) = pending.removeFirst()
             val directoryKey = directory.uri.toString()
-            if (depth > maxDepth || !visitedDirectories.add(directoryKey)) continue
+            if (depth > maxDepth) continue
+            if (!visitedDirectories.add(directoryKey)) {
+                duplicateDirectoryCount++
+                continue
+            }
             val children = try {
                 if (directory.canRead()) directory.listFiles() else emptyArray()
             } catch (cancelled: kotlinx.coroutines.CancellationException) {
@@ -54,12 +62,17 @@ object SafTreeWalker {
                         child.isDirectory -> {
                             if (depth + 1 <= maxDepth) pending.addLast(PendingDirectory(child, depth + 1))
                         }
-                        child.isFile && visitedFiles.add(childUri.toString()) -> {
-                            inspectedFiles += 1
-                            // Keep enumeration independent of optional provider name/size metadata.
-                            Log.v("ScanDebug", "Enumerated SAF document: " + childUri)
-                            if (child.canRead()) yield(child)
-                            else onFileError(childUri, SecurityException("The selected SAF document is not readable."))
+                        child.isFile -> {
+                            if (!visitedFiles.add(childUri.toString())) {
+                                duplicateFileCount++
+                            } else {
+                                inspectedFiles += 1
+                                if (child.canRead()) yield(child)
+                                else {
+                                    unreadableFileCount++
+                                    onFileError(childUri, SecurityException("The selected SAF document is not readable."))
+                                }
+                            }
                         }
                     }
                 } catch (cancelled: kotlinx.coroutines.CancellationException) {
@@ -71,5 +84,11 @@ object SafTreeWalker {
                 }
             }
         }
+        Log.d(
+            "ScanDebug",
+            "saf_inventory roots=${uniqueRoots.size} duplicateRoots=${roots.size - uniqueRoots.size} " +
+                "directories=${visitedDirectories.size} duplicateDirectories=$duplicateDirectoryCount " +
+                "files=${visitedFiles.size} duplicateFiles=$duplicateFileCount unreadable=$unreadableFileCount"
+        )
     }
 }

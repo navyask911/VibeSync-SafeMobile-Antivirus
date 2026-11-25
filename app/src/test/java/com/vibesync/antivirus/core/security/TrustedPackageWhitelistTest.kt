@@ -15,10 +15,31 @@ class TrustedPackageWhitelistTest {
 
     @Test fun oppoColorOsAndAndroidGoogleNamespacesStayOutOfConsumerReview() {
         val system = listOf("com.oppo.camera", "com.oppo.market", "com.coloros.assistiveball",
+            "com.oplus.launcher", "com.samsung.android.oneui", "com.miui.securitycenter",
             "com.android.calculator2", "com.google.android.projection.gearhead", "com.google.camera")
         for (name in system) {
             assertTrue(name, TrustedPackageWhitelist.hasProtectedNamespace(name))
             assertFalse(name, ProtectedPackagePolicy.isUserInstalled(0, name))
+        }
+    }
+
+
+    @Test fun everyGoogleNamespaceIsExcludedRegardlessOfSignerOrInstallFlags() {
+        val candidates = listOf(
+            "com.google.android.gms",
+            "com.google.android.apps.fitness",
+            "com.google.android.configupdater",
+            "com.google.android.feedback",
+            "com.google.android.setupwizard",
+            "com.google.android.keyverification",
+            "com.android.vending",
+            "com.android.chrome"
+        )
+        for (name in candidates) {
+            assertTrue(name, TrustedPackageWhitelist.hasProtectedNamespace(name))
+            assertFalse(name, TrustedPackageWhitelist.isEligibleForReview(
+                name, "com.vibesync.antivirus", 0, officialGoogle = true
+            ))
         }
     }
 

@@ -1073,6 +1073,9 @@ private fun V17ScanResultRow(
                 V17Pill(label, tint, dark)
             }
         }
+        if (ScanCoveragePolicy.isPartial(result) && result.verdict != ScanVerdict.NO_MATCH) {
+            V17Body("Partial coverage: one or more optional inspection stages did not complete.", color = c.amber)
+        }
         AnimatedVisibility(expanded) {
             Column(Modifier.fillMaxWidth().padding(top = 6.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 val report = result.riskReport

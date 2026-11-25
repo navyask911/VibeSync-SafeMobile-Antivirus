@@ -12,29 +12,38 @@ class OfficialGoogleAppPolicyTest {
         assertFalse(OfficialGoogleAppPolicy.isGooglePackageName("com.example.google.maps"))
     }
 
-    @Test fun onlySignerVerifiedGoogleSystemAppsAreIncluded() {
+    @Test fun allGoogleSystemAndBackgroundPackagesAreExcludedEvenWithTrustedSigners() {
         val systemFlags = android.content.pm.ApplicationInfo.FLAG_SYSTEM
-        assertTrue(OfficialGoogleAppPolicy.isEligibleForInstalledScan(
-            "com.google.android.gms", "com.vibesync.antivirus", systemFlags, officialGoogle = true
-        ))
-        assertFalse(OfficialGoogleAppPolicy.isEligibleForInstalledScan(
-            "com.google.android.gms", "com.vibesync.antivirus", systemFlags, officialGoogle = false
-        ))
+        val updatedSystemFlags = android.content.pm.ApplicationInfo.FLAG_UPDATED_SYSTEM_APP
+        val googlePackages = listOf(
+            "com.google.android.gms",
+            "com.google.android.apps.fitness",
+            "com.google.android.configupdater",
+            "com.google.android.feedback",
+            "com.google.android.setupwizard",
+            "com.google.android.keyverification",
+            "com.android.vending",
+            "com.android.chrome"
+        )
+        for (packageName in googlePackages) {
+            assertFalse("$packageName system", OfficialGoogleAppPolicy.isEligibleForInstalledScan(
+                packageName, "com.vibesync.antivirus", systemFlags, officialGoogle = true
+            ))
+            assertFalse("$packageName updated system", OfficialGoogleAppPolicy.isEligibleForInstalledScan(
+                packageName, "com.vibesync.antivirus", updatedSystemFlags, officialGoogle = true
+            ))
+            assertFalse("$packageName user flags", OfficialGoogleAppPolicy.isEligibleForInstalledScan(
+                packageName, "com.vibesync.antivirus", 0, officialGoogle = true
+            ))
+        }
         assertFalse(OfficialGoogleAppPolicy.isEligibleForInstalledScan(
             "com.oem.settings", "com.vibesync.antivirus", systemFlags, officialGoogle = false
         ))
         assertFalse(OfficialGoogleAppPolicy.isEligibleForInstalledScan(
-            "com.oem.settings", "com.vibesync.antivirus", systemFlags, officialGoogle = true
-        ))
-        val updatedSystemFlags = android.content.pm.ApplicationInfo.FLAG_UPDATED_SYSTEM_APP
-        assertFalse(OfficialGoogleAppPolicy.isEligibleForInstalledScan(
-            "com.oem.settings", "com.vibesync.antivirus", updatedSystemFlags, officialGoogle = false
+            "com.oem.settings", "com.vibesync.antivirus", updatedSystemFlags, officialGoogle = true
         ))
         assertTrue(OfficialGoogleAppPolicy.isEligibleForInstalledScan(
-            "com.google.android.gms", "com.vibesync.antivirus", updatedSystemFlags, officialGoogle = true
-        ))
-        assertTrue(OfficialGoogleAppPolicy.isEligibleForInstalledScan(
-            "com.example.app", "com.vibesync.antivirus", 0, officialGoogle = false
+            "com.example.sideloaded", "com.vibesync.antivirus", 0, officialGoogle = false
         ))
         assertFalse(OfficialGoogleAppPolicy.isEligibleForInstalledScan(
             "com.vibesync.antivirus", "com.vibesync.antivirus", 0, officialGoogle = false

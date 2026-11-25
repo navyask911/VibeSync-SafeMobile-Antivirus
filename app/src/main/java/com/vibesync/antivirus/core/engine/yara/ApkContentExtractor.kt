@@ -150,10 +150,10 @@ class ApkContentExtractor {
         const val MANIFEST_ENTRY = "AndroidManifest.xml"
         const val BUFFER_SIZE = 8192
         const val MAX_APK_BYTES = 512L * 1024L * 1024L
-        const val MAX_ARCHIVE_ENTRIES = 10_000
+        const val MAX_ARCHIVE_ENTRIES = 20_000
         const val MAX_MANIFEST_BYTES = 2L * 1024L * 1024L
-        const val MAX_SINGLE_DEX_BYTES = 64L * 1024L * 1024L
-        const val MAX_TOTAL_EXTRACTED_BYTES = 128L * 1024L * 1024L
+        const val MAX_SINGLE_DEX_BYTES = 128L * 1024L * 1024L
+        const val MAX_TOTAL_EXTRACTED_BYTES = 384L * 1024L * 1024L
         const val MAX_COMPRESSION_RATIO = 200.0
         val DEX_ENTRY = Regex("""classes(?:[0-9]+)?\.dex""")
     }

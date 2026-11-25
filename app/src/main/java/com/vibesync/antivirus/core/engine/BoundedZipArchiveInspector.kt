@@ -25,11 +25,11 @@ internal data class ArchiveInspectionSummary(
 
 /** Bounded ZIP/JAR traversal. All payloads are streamed one at a time and paths are never extracted. */
 internal object BoundedZipArchiveInspector {
-    private const val MAX_ENTRIES = 2_048
-    private const val MAX_ENTRY_BYTES = 64L * 1024L * 1024L
-    private const val MAX_TOTAL_EXPANDED_BYTES = 128L * 1024L * 1024L
-    private const val MAX_IGNORED_ENTRY_BYTES = 256L * 1024L * 1024L
-    private const val MAX_IGNORED_TOTAL_BYTES = 512L * 1024L * 1024L
+    private const val MAX_ENTRIES = 10_000
+    private const val MAX_ENTRY_BYTES = 128L * 1024L * 1024L
+    private const val MAX_TOTAL_EXPANDED_BYTES = 384L * 1024L * 1024L
+    private const val MAX_IGNORED_ENTRY_BYTES = 512L * 1024L * 1024L
+    private const val MAX_IGNORED_TOTAL_BYTES = 768L * 1024L * 1024L
     private const val MAX_COMPRESSION_RATIO = 200.0
     private const val BUFFER_SIZE = 8 * 1024
 
@@ -56,7 +56,7 @@ internal object BoundedZipArchiveInspector {
                 FileInputStream(archive),
                 archive.name,
                 depth = 0,
-                maxDepth = maxDepth.coerceIn(0, 2),
+                maxDepth = maxDepth.coerceIn(0, 3),
                 includeAllLeafEntries = includeAllLeafEntries,
                 budget = budget,
                 onEntry = onEntry
@@ -142,7 +142,7 @@ internal object BoundedZipArchiveInspector {
                         )
                     ) return false
                 } else if (includeAllLeafEntries || isApk || isZipName) {
-                    if (isZipName && !isZipPayload) {
+                    if (isZipName && !isZipPayload && includeAllLeafEntries) {
                         budget.reason = budget.reason
                             ?: "Archive entry has a .zip/.jar name but no readable ZIP structure: $entryPath."
                     }
