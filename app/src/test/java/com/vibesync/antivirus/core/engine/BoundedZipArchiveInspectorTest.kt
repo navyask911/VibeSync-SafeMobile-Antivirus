@@ -142,10 +142,65 @@ class BoundedZipArchiveInspectorTest {
         }
     }
 
+
+    @Test
+    fun apkModeSkipsCorruptUnselectedResourceAndStillInspectsEmbeddedArchive() = runBlocking {
+        val nested = zipOf("payload.txt" to "inside".toByteArray())
+        val apk = zipFileWithCorruptStoredFirstEntry(
+            "assets/unrelated.bin", ByteArray(256) { it.toByte() },
+            "assets/payload.zip" to nested
+        )
+        try {
+            val found = mutableListOf<ArchiveEntryPayload>()
+            val outcome = BoundedZipArchiveInspector.inspect(apk, includeAllLeafEntries = false) {
+                found += it
+            }
+            assertTrue(outcome.complete)
+            assertTrue(found.any { it.entryName.contains("payload.zip!/payload.txt") })
+        } finally { apk.delete() }
+    }
+
     private fun zipFile(vararg entries: Pair<String, ByteArray>): File {
         val file = File.createTempFile("safe-mobile-archive-", ".zip")
         file.writeBytes(zipOf(*entries))
         return file
+    }
+
+
+    private fun zipFileWithCorruptStoredFirstEntry(
+        firstName: String, firstBytes: ByteArray, vararg remaining: Pair<String, ByteArray>
+    ): File {
+        val file = File.createTempFile("safe-mobile-corrupt-resource-", ".apk")
+        val crc = java.util.zip.CRC32().apply { update(firstBytes) }
+        ZipOutputStream(file.outputStream()).use { zip ->
+            val stored = ZipEntry(firstName).apply {
+                method = ZipEntry.STORED
+                size = firstBytes.size.toLong()
+                compressedSize = firstBytes.size.toLong()
+                this.crc = crc.value
+            }
+            zip.putNextEntry(stored); zip.write(firstBytes); zip.closeEntry()
+            remaining.forEach { (name, bytes) ->
+                zip.putNextEntry(ZipEntry(name)); zip.write(bytes); zip.closeEntry()
+            }
+        }
+        java.io.RandomAccessFile(file, "rw").use { random ->
+            random.seek(26)
+            val nameLength = readUnsignedShortLittleEndian(random)
+            val extraLength = readUnsignedShortLittleEndian(random)
+            val offset = 30L + nameLength + extraLength + 7L
+            random.seek(offset)
+            val value = random.readUnsignedByte()
+            random.seek(offset)
+            random.writeByte(value xor 0xff)
+        }
+        return file
+    }
+
+    private fun readUnsignedShortLittleEndian(input: java.io.RandomAccessFile): Int {
+        val low = input.readUnsignedByte()
+        val high = input.readUnsignedByte()
+        return low or (high shl 8)
     }
 
     private fun zipOf(vararg entries: Pair<String, ByteArray>): ByteArray {

@@ -73,40 +73,32 @@ class PersistedScanResultPolicyTest {
     }
 
     @Test
-    fun verifiedGoogleSignerOverridesStaleSuspiciousPersistedVerdict() {
+    fun verifiedGoogleSignerNeverOverridesStrictUserAppOnlyExclusion() {
         val signerVerified = OfficialGoogleAppPolicy.hasTrustedSigner(
             googlePackage,
             candidateDigests = trustedGoogleSigner,
             trustedDigests = trustedGoogleSigner
         )
         assertTrue(signerVerified)
-        assertTrue(
+        assertFalse(TrustedPackageWhitelist.isEligibleForReview(
+            googlePackage, scannerPackage,
+            ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP,
+            officialGoogle = signerVerified
+        ))
+        assertFalse(TrustedPackageWhitelist.isEligibleForReview(
+            googlePackage, scannerPackage, 0, officialGoogle = signerVerified
+        ))
+
+        val stale = row(googlePackage, ScanVerdict.SUSPICIOUS,
+            source = ScanSource.CACHE_HIT, score = 92f, malwareName = "stale-cache-detection")
+        val normalized = PersistedScanResultPolicy.normalizeOfficialGoogleResult(stale, signerVerified)
+        assertEquals(ScanVerdict.NO_MATCH, normalized.verdict)
+        assertEquals(ScanSource.GOOGLE_VERIFIED, normalized.scanSource)
+        assertFalse(PersistedScanResultPolicy.selectVisiblePersistedResults(listOf(normalized)) { result ->
             TrustedPackageWhitelist.isEligibleForReview(
-                googlePackage,
-                scannerPackage,
-                ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP,
-                officialGoogle = signerVerified
+                result.packageName.orEmpty(), scannerPackage, 0, officialGoogle = signerVerified
             )
-        )
-
-        val stale = row(
-            googlePackage,
-            ScanVerdict.SUSPICIOUS,
-            source = ScanSource.CACHE_HIT,
-            score = 92f,
-            malwareName = "stale-cache-detection"
-        )
-        val clean = PersistedScanResultPolicy.normalizeOfficialGoogleResult(stale, signerVerified)
-
-        assertEquals(ScanVerdict.NO_MATCH, clean.verdict)
-        assertEquals(ScanSource.GOOGLE_VERIFIED, clean.scanSource)
-        assertEquals(DetectionSource.NONE, clean.detectionSource)
-        assertEquals(0f, clean.riskScore, 0f)
-        assertNull(clean.malwareName)
-        assertNull(clean.threatEventId)
-        assertNull(clean.mlProbability)
-        assertEquals(listOf("SIGNER_VERIFIED", "VERDICT"), clean.analysisStages)
-        assertTrue(clean.reasons.single().contains("Clean & Safe"))
+        }.isNotEmpty())
     }
 
     @Test
@@ -135,7 +127,7 @@ class PersistedScanResultPolicyTest {
     }
 
     @Test
-    fun persistedSelectorKeepsVerifiedGoogleAndUserAppsButDropsSystemOemRows() = runBlocking {
+    fun persistedSelectorExcludesEveryGoogleNamespaceAndKeepsOnlyThirdPartyUserAppsAndFiles() = runBlocking {
         val userApp = "com.example.userapp"
         val oemSystem = "com.oem.settings"
         val spoofedGoogleSystem = "com.google.fake.system"
@@ -187,15 +179,13 @@ class PersistedScanResultPolicyTest {
             )
         }
 
-        assertEquals(
-            setOf(googlePackage, userApp, sideloadedGooglePrefix, null),
-            visible.map { it.packageName }.toSet()
-        )
-        assertEquals(ScanVerdict.NO_MATCH, visible.single { it.packageName == googlePackage }.verdict)
-        assertEquals(ScanSource.GOOGLE_VERIFIED, visible.single { it.packageName == googlePackage }.scanSource)
-        assertEquals(
-            listOf(ScanVerdict.SUSPICIOUS, ScanVerdict.NO_MATCH, ScanVerdict.NO_MATCH, ScanVerdict.NO_MATCH),
-            visible.map { it.verdict }
-        )
+        assertEquals(setOf(userApp, null), visible.map { it.packageName }.toSet())
+        assertTrue(visible.none { result ->
+            result.packageName == googlePackage ||
+                result.packageName == spoofedGoogleSystem ||
+                result.packageName == sideloadedGooglePrefix ||
+                result.packageName == scannerPackage
+        })
+        assertTrue(visible.all { it.verdict == ScanVerdict.NO_MATCH })
     }
 }

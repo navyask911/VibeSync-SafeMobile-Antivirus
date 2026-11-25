@@ -119,6 +119,62 @@ class ApkContentExtractorTest {
         }
     }
 
+
+    @Test
+    fun corruptUnrelatedResourceDoesNotPreventManifestAndDexExtraction() = runBlocking {
+        val apk = createApkWithCorruptStoredFirstEntry(
+            "assets/unrelated.bin", ByteArray(256) { it.toByte() },
+            "AndroidManifest.xml" to byteArrayOf(1, 2, 3),
+            "classes.dex" to byteArrayOf(4, 5, 6)
+        )
+        try {
+            val names = mutableListOf<String>()
+            val outcome = ApkContentExtractor().forEachComponent(apk) {
+                names += it.entryName
+                true
+            }
+            assertTrue(outcome is ApkExtractionOutcome.Complete)
+            assertEquals(listOf("AndroidManifest.xml", "classes.dex"), names)
+        } finally { apk.delete() }
+    }
+
+
+    private fun createApkWithCorruptStoredFirstEntry(
+        firstName: String, firstBytes: ByteArray, vararg remaining: Pair<String, ByteArray>
+    ): File {
+        val apk = File.createTempFile("safe-mobile-corrupt-resource-", ".apk")
+        val crc = java.util.zip.CRC32().apply { update(firstBytes) }
+        ZipOutputStream(FileOutputStream(apk)).use { zip ->
+            val stored = ZipEntry(firstName).apply {
+                method = ZipEntry.STORED
+                size = firstBytes.size.toLong()
+                compressedSize = firstBytes.size.toLong()
+                this.crc = crc.value
+            }
+            zip.putNextEntry(stored); zip.write(firstBytes); zip.closeEntry()
+            remaining.forEach { (name, bytes) ->
+                zip.putNextEntry(ZipEntry(name)); zip.write(bytes); zip.closeEntry()
+            }
+        }
+        java.io.RandomAccessFile(apk, "rw").use { random ->
+            random.seek(26)
+            val nameLength = readUnsignedShortLittleEndian(random)
+            val extraLength = readUnsignedShortLittleEndian(random)
+            val offset = 30L + nameLength + extraLength + 7L
+            random.seek(offset)
+            val value = random.readUnsignedByte()
+            random.seek(offset)
+            random.writeByte(value xor 0xff)
+        }
+        return apk
+    }
+
+    private fun readUnsignedShortLittleEndian(input: java.io.RandomAccessFile): Int {
+        val low = input.readUnsignedByte()
+        val high = input.readUnsignedByte()
+        return low or (high shl 8)
+    }
+
     private fun createApk(vararg entries: Pair<String, ByteArray>): File {
         val apk = File.createTempFile("safe-mobile-yara-stream-", ".apk")
         ZipOutputStream(FileOutputStream(apk)).use { zip ->

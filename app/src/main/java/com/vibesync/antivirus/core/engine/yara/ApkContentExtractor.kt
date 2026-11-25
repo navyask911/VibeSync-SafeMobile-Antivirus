@@ -5,30 +5,25 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
-import java.io.BufferedInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
-import java.io.FileInputStream
 import java.io.IOException
-import java.util.zip.ZipInputStream
+import java.io.InputStream
+import java.util.zip.CRC32
+import java.util.zip.ZipFile
 
-data class ApkComponent(
-    val entryName: String,
-    val bytes: ByteArray
-)
-
+data class ApkComponent(val entryName: String, val bytes: ByteArray)
 sealed class ApkExtractionOutcome {
     data class Complete(val entryNames: List<String>) : ApkExtractionOutcome()
     data class Incomplete(val reason: String) : ApkExtractionOutcome()
 }
 
 /**
- * Streams the APK's local ZIP entries and hands only the root binary manifest
- * and root DEX files to the consumer, one component at a time. Non-target entries
- * are drained and discarded; no archive contents are written to disk.
+ * Uses the APK central directory to read only the root binary manifest and DEX
+ * components. Unrelated resources are not inflated just to advance a ZIP cursor,
+ * avoiding false partial coverage and unbounded work on irrelevant payloads.
  */
 class ApkContentExtractor {
-
     suspend fun forEachComponent(
         apk: File,
         allowManifestOnly: Boolean = false,
@@ -40,42 +35,31 @@ class ApkContentExtractor {
         if (apk.length() !in 1..MAX_APK_BYTES) {
             return@withContext ApkExtractionOutcome.Incomplete("APK exceeds the configured input bound.")
         }
-
         try {
-            ZipInputStream(BufferedInputStream(FileInputStream(apk), BUFFER_SIZE)).use { zip ->
+            ZipFile(apk).use { zip ->
                 var manifestSeen = false
                 var dexCount = 0
                 val seenTargets = HashSet<String>()
                 val targetNames = mutableListOf<String>()
                 var totalExtracted = 0L
                 var inspectedEntries = 0
-
-                while (true) {
+                val entries = zip.entries()
+                while (entries.hasMoreElements()) {
                     currentCoroutineContext().ensureActive()
-                    val entry = zip.nextEntry ?: break
+                    val entry = entries.nextElement()
                     inspectedEntries++
                     if (inspectedEntries > MAX_ARCHIVE_ENTRIES) {
                         return@withContext ApkExtractionOutcome.Incomplete("APK entry-count limit exceeded.")
                     }
-                    if (entry.isDirectory) {
-                        zip.closeEntry()
-                        continue
-                    }
-
+                    if (entry.isDirectory) continue
                     val isManifest = entry.name == MANIFEST_ENTRY
                     val isDex = DEX_ENTRY.matches(entry.name)
-                    if (!isManifest && !isDex) {
-                        // Advance without allocating or scanning image, asset, resource, or native-library data.
-                        zip.closeEntry()
-                        continue
-                    }
-
+                    if (!isManifest && !isDex) continue
                     if (!seenTargets.add(entry.name)) {
                         return@withContext ApkExtractionOutcome.Incomplete("Duplicate APK scan entry.")
                     }
-
                     val limit = if (isManifest) MAX_MANIFEST_BYTES else MAX_SINGLE_DEX_BYTES
-                    if (entry.size > limit.toLong()) {
+                    if (entry.size > limit) {
                         return@withContext ApkExtractionOutcome.Incomplete("APK scan entry exceeds its declared size bound.")
                     }
                     if (entry.compressedSize == 0L && entry.size > 0L) {
@@ -86,9 +70,7 @@ class ApkContentExtractor {
                     ) {
                         return@withContext ApkExtractionOutcome.Incomplete("APK compression-ratio limit exceeded.")
                     }
-
-                    val bytes = readBounded(zip, limit.toInt())
-                    zip.closeEntry()
+                    val bytes = zip.getInputStream(entry).use { readBounded(it, limit.toInt()) }
                     if (entry.size >= 0L && entry.size != bytes.size.toLong()) {
                         return@withContext ApkExtractionOutcome.Incomplete("APK entry size did not match its streamed bytes.")
                     }
@@ -100,19 +82,19 @@ class ApkContentExtractor {
                     ) {
                         return@withContext ApkExtractionOutcome.Incomplete("APK compression-ratio limit exceeded.")
                     }
+                    if (entry.crc >= 0L && CRC32().apply { update(bytes) }.value != entry.crc) {
+                        return@withContext ApkExtractionOutcome.Incomplete("APK target entry checksum mismatch.")
+                    }
                     if (totalExtracted + bytes.size > MAX_TOTAL_EXTRACTED_BYTES) {
                         return@withContext ApkExtractionOutcome.Incomplete("APK aggregate extraction limit exceeded.")
                     }
                     totalExtracted += bytes.size
-
-                    // The callback consumes this single bounded byte array before the next ZIP entry is read.
                     if (!onComponent(ApkComponent(entry.name, bytes))) {
                         return@withContext ApkExtractionOutcome.Incomplete("APK component processing stopped.")
                     }
                     targetNames += entry.name
                     if (isManifest) manifestSeen = true else dexCount++
                 }
-
                 if (!manifestSeen) {
                     return@withContext ApkExtractionOutcome.Incomplete("AndroidManifest.xml is missing.")
                 }
@@ -124,13 +106,11 @@ class ApkContentExtractor {
         } catch (cancelled: CancellationException) {
             throw cancelled
         } catch (error: Exception) {
-            ApkExtractionOutcome.Incomplete(
-                "APK streaming failed: ${error.javaClass.simpleName}."
-            )
+            ApkExtractionOutcome.Incomplete("APK central-directory scan failed: ${error.javaClass.simpleName}.")
         }
     }
 
-    private suspend fun readBounded(input: ZipInputStream, limit: Int): ByteArray {
+    private suspend fun readBounded(input: InputStream, limit: Int): ByteArray {
         val output = ByteArrayOutputStream(minOf(limit, BUFFER_SIZE))
         val buffer = ByteArray(BUFFER_SIZE)
         var total = 0
