@@ -683,9 +683,9 @@ import kotlinx.coroutines.launch
  DisposableEffect(lifecycleOwner, context, privacyAccepted) {
   val observer = LifecycleEventObserver { _, event ->
    if (event == Lifecycle.Event.ON_RESUME) {
-36443vm.refreshScanHistory()
-36443vm.refreshThreatIntelligenceStats()
-36443if (privacyAccepted) vm.refreshTrustOverrides()
+    vm.refreshScanHistory()
+    vm.refreshThreatIntelligenceStats()
+    if (privacyAccepted) vm.refreshTrustOverrides()
     fullScreenAlertsGranted = FullScreenAlertAccess.isGranted(context)
     voiceAlertsEnabled = securityPrefs.getBoolean(SafeMobileApp.KEY_VOICE_ALERTS_ENABLED, false)
     installSentinelEnabled = InstallSentinelService.enabled(context)
