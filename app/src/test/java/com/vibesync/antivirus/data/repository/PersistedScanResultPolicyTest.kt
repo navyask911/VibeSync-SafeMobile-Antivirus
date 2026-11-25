@@ -47,6 +47,10 @@ class PersistedScanResultPolicyTest {
 
     @Test
     fun persistedAppRowsRecoverPackageNameFromStableItemKey() {
+        assertFalse(PersistedScanResultPolicy.hasDisplayableIdentity("app", null))
+        assertFalse(PersistedScanResultPolicy.hasDisplayableIdentity("app", ""))
+        assertTrue(PersistedScanResultPolicy.hasDisplayableIdentity("app", "com.example.user"))
+        assertTrue(PersistedScanResultPolicy.hasDisplayableIdentity("file", null))
         assertEquals(
             "com.oem.legacy",
             PersistedScanResultPolicy.packageNameFromPersistedRow(

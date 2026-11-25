@@ -69,6 +69,10 @@ internal object PersistedScanResultPolicy {
         return itemKey.removePrefix("app:").takeIf { it.isNotBlank() }
     }
 
+    /** An app row without a recoverable package identity must never masquerade as a file row. */
+    fun hasDisplayableIdentity(itemType: String, packageName: String?): Boolean =
+        itemType != "app" || !packageName.isNullOrBlank()
+
     fun normalizeOfficialGoogleResult(
         result: ScanResult,
         signerVerified: Boolean
@@ -328,6 +332,10 @@ class ThreatRepository(
     itemKey = item.itemKey,
     storedPackageName = item.packageName
    )
+   if (!PersistedScanResultPolicy.hasDisplayableIdentity(item.itemType, packageName)) {
+    Log.w("ScanDebug", "session_row_skip sessionId=$sessionId itemKey=${item.itemKey} reason=app_package_identity_missing")
+    return@mapNotNull null
+   }
    val verdict = try {
     ScanVerdict.valueOf(item.verdict)
    } catch (error: Exception) {
