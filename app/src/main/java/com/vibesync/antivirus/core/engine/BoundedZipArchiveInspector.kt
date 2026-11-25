@@ -142,10 +142,6 @@ internal object BoundedZipArchiveInspector {
                         )
                     ) return false
                 } else if (includeAllLeafEntries || isApk || isZipName) {
-                    if (isZipName && !isZipPayload && includeAllLeafEntries) {
-                        budget.reason = budget.reason
-                            ?: "Archive entry has a .zip/.jar name but no readable ZIP structure: $entryPath."
-                    }
                     budget.inspected++
                     onEntry(ArchiveEntryPayload(entryPath, bytes))
                 }

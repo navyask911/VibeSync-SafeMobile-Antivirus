@@ -93,9 +93,27 @@ class BoundedZipArchiveInspectorTest {
     }
 
     @Test
-    fun malformedNamedNestedArchiveIsReportedAsIncomplete() = runBlocking {
+    fun zipNamedOrdinaryFileInStandardArchiveDoesNotCreateFalsePartialCoverage() = runBlocking {
         val root = zipFile(
-            "assets/malformed.zip" to byteArrayOf(1, 2, 3, 4, 5),
+            "assets/metadata.zip" to byteArrayOf(1, 2, 3, 4, 5),
+            "assets/readme.txt" to "ordinary content".toByteArray()
+        )
+        try {
+            val found = mutableListOf<ArchiveEntryPayload>()
+            val outcome = BoundedZipArchiveInspector.inspect(root, includeAllLeafEntries = true) {
+                found += it
+            }
+            assertTrue(outcome.complete)
+            assertTrue(found.any { it.entryName.endsWith("metadata.zip") })
+        } finally {
+            root.delete()
+        }
+    }
+
+    @Test
+    fun malformedNestedZipPayloadWithZipSignatureIsReportedAsIncomplete() = runBlocking {
+        val root = zipFile(
+            "assets/malformed.zip" to byteArrayOf(0x50, 0x4b, 0x03, 0x04, 0x01),
             "assets/readme.txt" to "ordinary content".toByteArray()
         )
         try {
@@ -104,8 +122,8 @@ class BoundedZipArchiveInspectorTest {
                 found += it
             }
             assertFalse(outcome.complete)
-            assertTrue(outcome.reason.orEmpty().contains("no readable ZIP structure"))
-            assertTrue(found.any { it.entryName.endsWith("malformed.zip") })
+            assertTrue(outcome.reason.orEmpty().isNotBlank())
+            assertTrue(found.any { it.entryName.endsWith("readme.txt") })
         } finally {
             root.delete()
         }
