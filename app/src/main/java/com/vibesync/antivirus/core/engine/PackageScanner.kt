@@ -328,7 +328,7 @@ class PackageScanner(
    InstalledAppItem(
     info.packageName, label,
     if (OfficialGoogleAppPolicy.isOfficialGooglePackage(context, info.packageName, info)) ScanVerdict.NO_MATCH.name
-    else ScanVerdict.NOT_SCANNED.name,
+    else InstalledAppItem.INVENTORY_ONLY,
     apkSize, isSystem
    )
   }.distinctBy { it.packageName }.sortedBy { it.appLabel.lowercase(java.util.Locale.getDefault()) }.toList()
