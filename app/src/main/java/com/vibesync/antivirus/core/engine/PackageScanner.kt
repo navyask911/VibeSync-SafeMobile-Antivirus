@@ -55,6 +55,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
 private const val APP_SCAN_CACHE_PROFILE_VERSION = 2
+private const val MAX_SPLIT_APK_COUNT = 64
 private const val GOOGLE_PLAY_SERVICES_PACKAGE = "com.google.android.gms"
 private const val SAFE_SYSTEM_PACKAGE_LABEL = "Safe (System App)"
 private const val SAFE_GOOGLE_PACKAGE_LABEL = "Official Google app — Clean & Safe"
@@ -137,7 +138,9 @@ class PackageScanner(
  private data class PackageApkAssessment(
   val yaraResult: YaraXScanResult,
   val exactThreat: ScanResult? = null,
-  val splitIssues: List<String> = emptyList()
+  val splitIssues: List<String> = emptyList(),
+  val archiveFinding: ScanResult? = null,
+  val archiveIssues: List<String> = emptyList()
  )
  private data class ArchiveAssessment(
   val finding: ScanResult?,
@@ -1067,6 +1070,21 @@ class PackageScanner(
    diagnostics?.stage(info.packageName, "verdict", "completed")
    return detected
   }
+  apkAssessment.archiveFinding?.takeIf { it.verdict == ScanVerdict.THREAT }?.let { splitArchiveThreat ->
+   val detected = splitArchiveThreat.copy(
+    packageOrPath = info.packageName,
+    displayName = label,
+    packageName = info.packageName,
+    scanSessionId = scanSessionId,
+    apkSizeBytes = fileSize,
+    sourceLocalPath = null,
+    analysisStages = (completedStages + splitArchiveThreat.analysisStages + "SPLIT_ARCHIVE_INSPECTED" + "VERDICT").distinct()
+   )
+   audit(detected, start, scanSessionId, diagnostics)
+   onStageChange("verdict")
+   diagnostics?.stage(info.packageName, "verdict", "completed")
+   return detected
+  }
   val yaraXResult = apkAssessment.yaraResult
   if (yaraXResult.isComplete && yaraXResult.reason.isNullOrBlank()) {
    completedStages += if (appInfo.splitSourceDirs.isNullOrEmpty()) "YARA" else "YARA_SPLITS"
@@ -1145,6 +1163,7 @@ class PackageScanner(
    isSystemApp = isProtectedPlatformPackage(info.packageName, appInfo, diagnostics)
   )
   output = mergeArchiveSuspicion(output, embeddedArchive.finding)
+  output = mergeArchiveSuspicion(output, apkAssessment.archiveFinding)
   onStageChange("verdict")
   output = ScanCoveragePolicy.applyYaraCoverage(output, yaraXResult.state, yaraXResult.reason)
   if (apkAssessment.splitIssues.isNotEmpty()) {
@@ -1159,6 +1178,13 @@ class PackageScanner(
    )
   } else if (embeddedArchive.inspectedEntries > 0) {
    output = output.copy(analysisStages = (output.analysisStages + "ARCHIVE_INSPECTED").distinct())
+  }
+  if (apkAssessment.archiveIssues.isNotEmpty()) {
+   output = ScanCoveragePolicy.applyPartialCoverage(
+    output, "ARCHIVE_INCOMPLETE", apkAssessment.archiveIssues.joinToString("; ")
+   )
+  } else if (apkAssessment.archiveFinding != null) {
+   output = output.copy(analysisStages = (output.analysisStages + "SPLIT_ARCHIVE_INSPECTED").distinct())
   }
   val finalStage = if (output.verdict == ScanVerdict.NOT_SCANNED) "VERDICT_PENDING" else "VERDICT"
   diagnostics?.stage(info.packageName, "verdict", if (finalStage == "VERDICT") "completed" else "pending_retry")
@@ -1203,9 +1229,15 @@ class PackageScanner(
  ): PackageApkAssessment {
   val results = mutableListOf<YaraXScanResult>()
   val splitIssues = mutableListOf<String>()
+  val archiveIssues = mutableListOf<String>()
+  var archiveFinding: ScanResult? = null
+  val allSplits = splitPaths.orEmpty().distinct()
+  if (allSplits.size > MAX_SPLIT_APK_COUNT) {
+   splitIssues += "Split APK count limit exceeded; only the first $MAX_SPLIT_APK_COUNT splits were inspected."
+  }
   results += withContext(Dispatchers.Default) { yaraXScanner.scanApk(baseApk) }
 
-  splitPaths.orEmpty().distinct().forEach { path ->
+  allSplits.take(MAX_SPLIT_APK_COUNT).forEach { path ->
    currentCoroutineContext().ensureActive()
    val split = File(path)
    if (!split.isFile || !split.canRead()) {
@@ -1234,6 +1266,24 @@ class PackageScanner(
     results += withContext(Dispatchers.Default) {
      yaraXScanner.scanApk(split, allowManifestOnly = true)
     }
+    val splitArchive = scanArchiveContents(
+     archive = split,
+     scanSessionId = scanSessionId,
+     includeAllLeafEntries = false,
+     ownerPackageName = packageName
+    )
+    val splitFinding = splitArchive.finding
+    if (splitFinding != null && (
+      splitFinding.verdict == ScanVerdict.THREAT ||
+       (splitFinding.verdict == ScanVerdict.SUSPICIOUS && archiveFinding?.verdict != ScanVerdict.THREAT)
+     )
+    ) {
+     archiveFinding = splitFinding
+    }
+    if (splitArchive.isPartial) {
+     archiveIssues += splitArchive.partialReason
+      ?: "Embedded ZIP/JAR inspection was incomplete in split APK ${split.name.take(120)}."
+    }
    } catch (cancelled: CancellationException) {
     throw cancelled
    } catch (error: Exception) {
@@ -1245,7 +1295,9 @@ class PackageScanner(
   }
   return PackageApkAssessment(
    yaraResult = ScanCoveragePolicy.combineYara(results, splitIssues),
-   splitIssues = splitIssues
+   splitIssues = splitIssues,
+   archiveFinding = archiveFinding,
+   archiveIssues = archiveIssues
   )
  }
 
