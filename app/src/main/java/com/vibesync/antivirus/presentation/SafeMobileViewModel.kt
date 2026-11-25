@@ -269,7 +269,8 @@ class SafeMobileViewModel(
                     val releaseState = if (store != null) {
                         current.threatIntelligence.withReleaseStats(stats)
                     } else {
-                        current.threatIntelligence.copy(isRefreshing = false)
+                        // No app-private cache is available; surface the unavailable placeholder.
+                        current.threatIntelligence.copy(isRefreshing = false, releaseStatsLoaded = true)
                     }
                     val combined = releaseState.withFeedSnapshot(snapshot)
                     current.copy(

@@ -207,7 +207,7 @@ class DashboardWiringTest {
         composeRule.onNodeWithText("On-device threat intelligence").assertExists()
         composeRule.onNodeWithText("Active local indicators").assertExists()
         composeRule.onNodeWithText("SUCCESS").assertExists()
-        composeRule.onNodeWithText("Refresh displayed stats").performScrollTo().performClick()
+        composeRule.onNodeWithText("Refresh displayed stats").performClick()
         assertEquals(1, refreshCount)
     }
 
