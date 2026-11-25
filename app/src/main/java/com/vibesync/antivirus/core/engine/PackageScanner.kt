@@ -882,7 +882,7 @@ class PackageScanner(
   }
 
   val scanned = try {
-   scanPackageUncached(info, scanSessionId, diagnostics, stageCallback)
+   scanPackageUncached(info, scanSessionId, fileSize, diagnostics, stageCallback)
   } catch (cancelled: CancellationException) {
    throw cancelled
   } catch (error: Exception) {
@@ -972,6 +972,7 @@ class PackageScanner(
  private suspend fun scanPackageUncached(
   info: PackageInfo,
   scanSessionId: String,
+  fileSize: Long?,
   diagnostics: PackageScanDiagnostics? = null,
   onStageChange: (String) -> Unit = {}
  ): ScanResult {
