@@ -35,7 +35,6 @@ import com.vibesync.antivirus.core.heuristics.PermissionRiskAnalyzer
 import com.vibesync.antivirus.core.security.IntegrityChecker
 import com.vibesync.antivirus.core.security.ProtectedPackagePolicy
 import com.vibesync.antivirus.core.security.TrustedPackageWhitelist
-import com.vibesync.antivirus.core.security.OfficialGoogleAppPolicy
 import com.vibesync.antivirus.core.security.TrustedAppStore
 import kotlin.math.roundToInt
 import com.vibesync.antivirus.data.local.AppScanCache
@@ -54,11 +53,10 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-private const val APP_SCAN_CACHE_PROFILE_VERSION = 2
-private const val MAX_SPLIT_APK_COUNT = 64
+private const val APP_SCAN_CACHE_PROFILE_VERSION = 3
+private const val MAX_SPLIT_APK_COUNT = 128
 private const val GOOGLE_PLAY_SERVICES_PACKAGE = "com.google.android.gms"
 private const val SAFE_SYSTEM_PACKAGE_LABEL = "Safe (System App)"
-private const val SAFE_GOOGLE_PACKAGE_LABEL = "Official Google app — Clean & Safe"
 
 /**
  * Room/UI publication is an item boundary: a failed insert or observer callback
@@ -293,20 +291,16 @@ class PackageScanner(
     Log.i("ScanDebug", "pkg_skipped pkg=${info.packageName} reason=inventory_application_info_missing userId=$userId source=all_apps_inventory")
     return@filter false
    }
-   val flags = appInfo.flags
-   val system = flags and (ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0
-   val verifiedGoogle = OfficialGoogleAppPolicy.isOfficialGooglePackage(context, info.packageName, info)
-   val googleCandidate = OfficialGoogleAppPolicy.isGooglePackageName(info.packageName)
-   val included = info.packageName != context.packageName &&
-    (verifiedGoogle || (!system && (googleCandidate ||
-     ProtectedPackagePolicy.isUserInstalled(flags, info.packageName, context.packageName))))
+      val flags = appInfo.flags
+   val included = ProtectedPackagePolicy.isUserInstalled(flags, info.packageName, context.packageName)
    if (!included) {
     val reason = when {
      info.packageName == context.packageName -> "inventory_own_package"
      TrustedPackageWhitelist.hasProtectedNamespace(info.packageName) -> "inventory_protected_namespace"
-     else -> "inventory_system_flags"
+     TrustedPackageWhitelist.hasSystemFlags(flags) -> "inventory_system_flags"
+     else -> "inventory_not_user_installed"
     }
-    Log.i("ScanDebug", "pkg_skipped pkg=${info.packageName} reason=$reason flags=$flags userId=$userId source=all_apps_inventory")
+    Log.i("ScanDebug", "pkg_skipped pkg=${info.packageName} reason=$reason flags=$flags userId=$userId source=user_apps_inventory")
    }
    included
   }.mapNotNull { info ->
@@ -330,8 +324,7 @@ class PackageScanner(
     (ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0
    InstalledAppItem(
     info.packageName, label,
-    if (OfficialGoogleAppPolicy.isOfficialGooglePackage(context, info.packageName, info)) ScanVerdict.NO_MATCH.name
-    else InstalledAppItem.INVENTORY_ONLY,
+    InstalledAppItem.INVENTORY_ONLY,
     apkSize, isSystem
    )
   }.distinctBy { it.packageName }.sortedBy { it.appLabel.lowercase(java.util.Locale.getDefault()) }.toList()
@@ -369,28 +362,18 @@ class PackageScanner(
       diagnostics.skip(packageName, "application_info_missing")
       return@mapNotNull null
      }
-     val system = app.flags and ApplicationInfo.FLAG_SYSTEM != 0
-     val updatedSystem = app.flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP != 0
-     if (packageName == context.packageName) {
-      diagnostics.skip(packageName, "scanner_own_package")
-      return@mapNotNull null
-     }
-     val googleCandidate = OfficialGoogleAppPolicy.isGooglePackageName(packageName)
-     val verifiedGoogle = OfficialGoogleAppPolicy.isOfficialGooglePackage(context, packageName, info)
-     val eligibleByPlatformPolicy = OfficialGoogleAppPolicy.isEligibleForInstalledScan(
-      packageName, context.packageName, app.flags, verifiedGoogle
-     )
-     val includeReason = when {
-      verifiedGoogle -> "verified_google_app"
-      !eligibleByPlatformPolicy -> null
-      googleCandidate -> "unverified_google_namespace_user_app"
-      ProtectedPackagePolicy.isUserInstalled(app.flags, packageName, context.packageName) -> "user_installed_app"
-      else -> null
-     }
-     if (includeReason == null) {
-      diagnostics.skip(packageName, "non_google_system_or_oem_app flags=${app.flags} system=$system updatedSystem=$updatedSystem")
-     } else diagnostics.queue(packageName, includeReason, app.flags)
-     packageName.takeIf { includeReason != null }
+           if (!ProtectedPackagePolicy.isUserInstalled(app.flags, packageName, context.packageName)) {
+       val reason = when {
+        packageName == context.packageName -> "scanner_own_package"
+        TrustedPackageWhitelist.hasProtectedNamespace(packageName) -> "protected_google_android_or_oem_namespace"
+        TrustedPackageWhitelist.hasSystemFlags(app.flags) -> "system_or_updated_system_app"
+        else -> "not_user_installed"
+       }
+       diagnostics.skip(packageName, reason)
+       return@mapNotNull null
+      }
+      diagnostics.queue(packageName, "user_installed_third_party_app", app.flags)
+      packageName
     } catch (error: Exception) {
      diagnostics.fail(packageName, "resolve", error)
      null
@@ -511,7 +494,6 @@ class PackageScanner(
   ScanResultOrdering.sort(results)
  }
  suspend fun scanInstalledPackage(name: String, scanSessionId: String = UUID.randomUUID().toString()): ScanResult? {
-  if (trustedAppStore.isTrusted(name)) return trustedResult(name, scanSessionId, System.nanoTime())
   if (name == context.packageName) return null
   val info = try {
    loadPackageInfoForScan(name)
@@ -530,12 +512,17 @@ class PackageScanner(
    return failed
   }
   val appInfo = info.applicationInfo ?: return null
-  // Apply the same signer-aware eligibility policy as bulk inventory. Only verified
-  // Google system apps may pass the platform-flag guard; other system/OEM packages stay out.
-  val officialGoogle = OfficialGoogleAppPolicy.isOfficialGooglePackage(context, info.packageName, info)
-  if (!OfficialGoogleAppPolicy.isEligibleForInstalledScan(
-      info.packageName, context.packageName, appInfo.flags, officialGoogle
-  )) return null
+  // Direct package requests use the same strict filter as inventory and periodic scans.
+  if (!ProtectedPackagePolicy.isUserInstalled(appInfo.flags, info.packageName, context.packageName)) {
+   val reason = when {
+    TrustedPackageWhitelist.hasProtectedNamespace(info.packageName) -> "protected_google_android_or_oem_namespace"
+    TrustedPackageWhitelist.hasSystemFlags(appInfo.flags) -> "system_or_updated_system_app"
+    else -> "not_user_installed"
+   }
+   Log.i("ScanDebug", "pkg_skipped pkg=${info.packageName} reason=$reason source=direct_installed_scan")
+   return null
+  }
+  if (trustedAppStore.isTrusted(name)) return trustedResult(name, scanSessionId, System.nanoTime())
   return scanPackage(info, scanSessionId)
  }
  suspend fun scanFile(
@@ -627,7 +614,7 @@ class PackageScanner(
   }
 
   val yaraXResult = if (isApk) {
-   withContext(Dispatchers.Default) { yaraXScanner.scanApk(file) }
+   withContext(Dispatchers.Default) { yaraXScanner.scanApk(file, allowManifestOnly = true) }
   } else null
   val yaraThreat = yaraXResult?.threatMatches?.firstOrNull()
   if (yaraThreat != null) {
@@ -813,7 +800,6 @@ class PackageScanner(
   val flags = appInfo?.flags ?: 0
   val isSystemApp = flags and ApplicationInfo.FLAG_SYSTEM != 0
   val isUpdatedSystemApp = flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP != 0
-  val officialGoogle = OfficialGoogleAppPolicy.isOfficialGooglePackage(context, info.packageName, info)
   val cacheProfileReady = ensureCurrentAppScanCacheProfile()
   val cached = if (!cacheProfileReady) null else try {
    dao.findAppScanCache(info.packageName)
@@ -823,15 +809,6 @@ class PackageScanner(
    diagnostics?.fail(info.packageName, "resolve", error)
    Log.w(TAG, "Could not read the installed-app scan cache.", error)
    null
-  }
-
-  // Verified Google apps are normalized before cache reuse; stale cache verdicts cannot taint them.
-  if (officialGoogle) {
-   return safePlatformPackageResult(
-    info, scanSessionId, start, fileSize, SAFE_GOOGLE_PACKAGE_LABEL,
-    diagnostics, stageCallback, ScanSource.GOOGLE_VERIFIED,
-    listOf("SIGNER_VERIFIED", "VERDICT")
-   )
   }
 
   // Defensive direct-scan guard; bulk enumeration excludes all other platform/OEM apps.
@@ -1236,7 +1213,7 @@ class PackageScanner(
   if (allSplits.size > MAX_SPLIT_APK_COUNT) {
    splitIssues += "Split APK count limit exceeded; only the first $MAX_SPLIT_APK_COUNT splits were inspected."
   }
-  results += withContext(Dispatchers.Default) { yaraXScanner.scanApk(baseApk) }
+  results += withContext(Dispatchers.Default) { yaraXScanner.scanApk(baseApk, allowManifestOnly = true) }
 
   allSplits.take(MAX_SPLIT_APK_COUNT).forEach { path ->
    currentCoroutineContext().ensureActive()
@@ -1313,7 +1290,7 @@ class PackageScanner(
   val inspected = BoundedZipArchiveInspector.inspect(
    archive = archive,
    includeAllLeafEntries = includeAllLeafEntries,
-   maxDepth = 2
+   maxDepth = 3
   ) { entry ->
    val leafName = entry.entryName.substringAfterLast('/').take(160)
    if (leafName.endsWith(".apk", ignoreCase = true)) {
