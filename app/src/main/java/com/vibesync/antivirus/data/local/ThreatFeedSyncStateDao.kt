@@ -12,6 +12,9 @@ interface ThreatFeedSyncStateDao {
     suspend fun get(sourceKey: String): ThreatFeedSyncStateEntity?
 
     @Query("SELECT * FROM threat_feed_sync_state ORDER BY last_attempt_at DESC LIMIT 1")
+    suspend fun getLatest(): ThreatFeedSyncStateEntity?
+
+    @Query("SELECT * FROM threat_feed_sync_state ORDER BY last_attempt_at DESC LIMIT 1")
     fun observeLatest(): Flow<ThreatFeedSyncStateEntity?>
 
     @Query("SELECT MAX(last_success_at) FROM threat_feed_sync_state")

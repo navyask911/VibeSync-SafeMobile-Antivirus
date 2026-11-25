@@ -25,7 +25,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,31 +37,36 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.ui.platform.testTag
 import com.vibesync.antivirus.R
-import com.vibesync.antivirus.core.worker.ThreatIntelligenceStats
-import com.vibesync.antivirus.core.worker.ThreatIntelligenceStore
 import com.vibesync.antivirus.ui.components.CyberCard
+import java.text.DateFormat
 import java.text.NumberFormat
 import java.time.LocalDate
 import java.time.OffsetDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import java.util.Date
 
 private const val LIVE_DASHBOARD_URL = "https://navyask911.github.io/safemobile-Antivirus-Trained-ML-Data-of-Android-malware/"
 
 @Composable
-internal fun ThreatIntelligenceCard() {
-    val app = LocalContext.current.applicationContext
-    val source = remember(app) { ThreatIntelligenceStore(app.filesDir).observe() }
-    val stats by source.collectAsStateWithLifecycle(initialValue = null)
-    ThreatIntelligenceCardContent(stats)
+internal fun ThreatIntelligenceCard(
+    state: ThreatIntelligenceUiState = ThreatIntelligenceUiState(),
+    onRefresh: () -> Unit = {},
+    showRefreshAction: Boolean = false
+) {
+    ThreatIntelligenceCardContent(state, onRefresh, showRefreshAction)
 }
 
-/** Stacked metrics accommodate large fonts, RTL, and long translated labels without clipping. */
+/** Release-evaluation metrics and this device's local feed state are deliberately shown separately. */
 @Composable
-internal fun ThreatIntelligenceCardContent(stats: ThreatIntelligenceStats?) {
+internal fun ThreatIntelligenceCardContent(
+    state: ThreatIntelligenceUiState,
+    onRefresh: () -> Unit = {},
+    showRefreshAction: Boolean = false
+) {
     val context = LocalContext.current
     val colors = MaterialTheme.colorScheme
     val locale = LocalConfiguration.current.locales[0]
@@ -84,25 +88,71 @@ internal fun ThreatIntelligenceCardContent(stats: ThreatIntelligenceStats?) {
                 Text(stringResource(R.string.threat_intelligence_title), modifier = Modifier.weight(1f).semantics { heading() },
                     style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
             }
-            if (stats == null) {
-                Text(stringResource(R.string.threat_intelligence_updating),
-                    style = MaterialTheme.typography.bodyMedium, color = colors.onSurfaceVariant)
+            val release = state.releaseStats
+            if (release == null) {
+                Text(
+                    if (state.releaseStatsLoaded) "No verified upstream training statistics are cached on this device."
+                    else stringResource(R.string.threat_intelligence_updating),
+                    style = MaterialTheme.typography.bodyMedium, color = colors.onSurfaceVariant
+                )
             } else {
-                IntelligenceMetric(R.string.threat_intelligence_samples, integers.format(stats.totalMalwareSamples), Icons.Outlined.Biotech)
-                IntelligenceMetric(R.string.threat_intelligence_accuracy, percent.format(stats.accuracyFraction), Icons.Outlined.Insights)
-                IntelligenceMetric(R.string.threat_intelligence_downloads, integers.format(stats.totalDownloads), Icons.Outlined.CloudDownload)
-                val updated = remember(stats.lastUpdated, locale) {
+                IntelligenceMetric(R.string.threat_intelligence_samples, integers.format(release.totalMalwareSamples), Icons.Outlined.Biotech)
+                IntelligenceMetric(R.string.threat_intelligence_accuracy, percent.format(release.accuracyFraction), Icons.Outlined.Insights)
+                IntelligenceMetric(R.string.threat_intelligence_downloads, integers.format(release.totalDownloads), Icons.Outlined.CloudDownload)
+                val updated = remember(release.lastUpdated, locale) {
                     runCatching {
                         DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT)
-                            .withLocale(locale).format(OffsetDateTime.parse(stats.lastUpdated)
+                            .withLocale(locale).format(OffsetDateTime.parse(release.lastUpdated)
                                 .atZoneSameInstant(ZoneId.systemDefault()))
                     }.getOrElse {
                         DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(locale)
-                            .format(LocalDate.parse(stats.lastUpdated))
+                            .format(LocalDate.parse(release.lastUpdated))
                     }
                 }
                 IntelligenceMetric(R.string.threat_intelligence_updated, updated, Icons.Outlined.Update)
+                if (release.isStale) {
+                    Text("STALE UPSTREAM DATA · The published update is more than 30 days old.",
+                        style = MaterialTheme.typography.labelMedium, color = colors.tertiary)
+                }
             }
+
+            if (state.feedStateLoaded) {
+                HorizontalDivider(color = colors.primary.copy(alpha = 0.15f))
+                Text("On-device threat intelligence", style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold)
+                IntelligenceTextRow("Active local indicators",
+                    state.activeLocalIndicatorCount?.let { integers.format(it.toLong()) } ?: "Not available")
+                val status = state.feedSyncStatus?.replace('_', ' ')?.uppercase(locale) ?: "NO SYNC RECORD"
+                IntelligenceTextRow("Configured feed status",
+                    (if (state.feedIsStale) "STALE · " else "") + status)
+                IntelligenceTextRow("Last successful sync",
+                    state.feedLastSuccessAt?.let(::formatFeedTimestamp) ?: "Never recorded")
+                state.feedLastAttemptAt?.let {
+                    IntelligenceTextRow("Last sync attempt", formatFeedTimestamp(it))
+                }
+                state.feedImportedCount?.let {
+                    IntelligenceTextRow("Indicators imported in latest sync", integers.format(it.toLong()))
+                }
+                state.feedSyncError?.takeIf { it.isNotBlank() }?.let {
+                    Text("Latest sync note: " + it, style = MaterialTheme.typography.bodySmall,
+                        color = colors.onSurfaceVariant)
+                }
+                if (state.feedIsStale) {
+                    Text("The last successful configured-feed sync is more than 7 days old.",
+                        style = MaterialTheme.typography.labelSmall, color = colors.tertiary)
+                }
+            }
+
+            if (showRefreshAction) {
+                TextButton(
+                    onClick = onRefresh,
+                    enabled = !state.isRefreshing,
+                    modifier = Modifier.align(Alignment.Start).testTag("threat-intelligence.refresh")
+                ) {
+                    Text(if (state.isRefreshing) "Refreshing…" else "Refresh displayed stats")
+                }
+            }
+
             HorizontalDivider(color = colors.primary.copy(alpha = 0.15f))
             TextButton(onClick = {
                 // Informational and user-initiated only; scanning stays offline.
@@ -119,6 +169,19 @@ internal fun ThreatIntelligenceCardContent(stats: ThreatIntelligenceStats?) {
         }
     }
 }
+
+@Composable
+private fun IntelligenceTextRow(label: String, value: String) {
+    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp),
+        verticalAlignment = Alignment.CenterVertically) {
+        Text(label, modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(value, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
+    }
+}
+
+private fun formatFeedTimestamp(timestamp: Long): String =
+    DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT).format(Date(timestamp))
 
 @Composable
 private fun IntelligenceMetric(@StringRes label: Int, value: String, icon: ImageVector) {

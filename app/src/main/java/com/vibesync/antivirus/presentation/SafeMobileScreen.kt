@@ -683,8 +683,9 @@ import kotlinx.coroutines.launch
  DisposableEffect(lifecycleOwner, context, privacyAccepted) {
   val observer = LifecycleEventObserver { _, event ->
    if (event == Lifecycle.Event.ON_RESUME) {
-    vm.refreshScanHistory()
-    if (privacyAccepted) vm.refreshTrustOverrides()
+36443vm.refreshScanHistory()
+36443vm.refreshThreatIntelligenceStats()
+36443if (privacyAccepted) vm.refreshTrustOverrides()
     fullScreenAlertsGranted = FullScreenAlertAccess.isGranted(context)
     voiceAlertsEnabled = securityPrefs.getBoolean(SafeMobileApp.KEY_VOICE_ALERTS_ENABLED, false)
     installSentinelEnabled = InstallSentinelService.enabled(context)
@@ -898,7 +899,9 @@ import kotlinx.coroutines.launch
           onOpenDetection = { navigateToDestination("capabilities") },
           onOpenThreatDb = { navigateToDestination("quarantine") },
           onOpenPrivacy = { navigateToDestination("privacy") },
-          onOpenSettings = { navigateToDestination("settings") }
+          onOpenSettings = { navigateToDestination("settings") },
+          threatIntelligenceState = state.threatIntelligence,
+          onRefreshThreatIntelligence = vm::refreshThreatIntelligenceStats
          )
          "privacy" -> PrivacyDashboardScreen()
          "about" -> AboutUsScreen(
@@ -1364,7 +1367,9 @@ import kotlinx.coroutines.launch
           initialSyncPending = initialHashSyncPending,
            yaraMatchCount = state.results.sumOf { it.riskReport?.yaraResult?.matches?.size ?: 0 },
            yaraMatchedRuleNames = state.results.flatMap { it.riskReport?.yaraResult?.matchedRules.orEmpty() }.distinct(),
-          onImportYaraRulesForReview = { pendingYaraPicker.launch(arrayOf("text/plain", "application/octet-stream", "application/x-yara")) }
+          onImportYaraRulesForReview = { pendingYaraPicker.launch(arrayOf("text/plain", "application/octet-stream", "application/x-yara")) },
+          threatIntelligenceState = state.threatIntelligence,
+          onRefreshThreatIntelligence = vm::refreshThreatIntelligenceStats
          )
         }
         Spacer(Modifier.height(8.dp))

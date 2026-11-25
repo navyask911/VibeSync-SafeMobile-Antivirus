@@ -1,8 +1,19 @@
 # Threat Intelligence Engine statistics
 
-Detection Capabilities reads only the last valid app-private `ml-research-candidates/stats.json`.
-The screen makes no network requests. Its lifecycle-aware observer reloads the cache when the
-optional model update worker writes it and when the screen becomes active again.
+The Shield and Detection Capabilities surfaces read only the last valid app-private
+`ml-research-candidates/stats.json`. The ViewModel observes the cache with the store's
+FileObserver, reloads it on app resume, and exposes a manual display refresh. A completed scan
+also refreshes the Room-backed local feed snapshot; Room Flow emissions update indicator counts
+and configured-feed sync state when workers import or update a feed. Display refresh itself does
+not start network work.
+
+Upstream release/training metrics and on-device local indicator counts are separate values.
+The upstream sample/download/accuracy values describe the published training release, not the
+number of files or apps protected on this device. Local indicator counts come from the device's
+Room database. A successful configured-feed sync is marked stale after 7 days; upstream
+statistics are marked stale 30 days after their declared `last_updated` date. Missing timestamps
+remain unknown rather than being assigned a fabricated time. Missing/corrupt upstream statistics
+show an unavailable placeholder.
 
 The existing consent-controlled ModelUpdateWorker looks for one optional `stats.json` asset on
 the selected complete ML release. It refreshes statistics even when `candidate_version` is unchanged.

@@ -415,7 +415,9 @@ internal fun V17ShieldScreen(
     liveSentinelActive: Boolean, posturePassed: Int?, quarantinedFilesCount: Int,
     onOpenSetup: () -> Unit, onOpenLiveSentinel: () -> Unit, onOpenPosture: () -> Unit,
     onOpenDetection: () -> Unit, onOpenThreatDb: () -> Unit,
-    onOpenPrivacy: () -> Unit = {}, onOpenSettings: () -> Unit = {}
+    onOpenPrivacy: () -> Unit = {}, onOpenSettings: () -> Unit = {},
+    threatIntelligenceState: ThreatIntelligenceUiState = ThreatIntelligenceUiState(),
+    onRefreshThreatIntelligence: () -> Unit = {}
 ) {
     val c = v17Colors(isDark)
     val context = LocalContext.current
@@ -566,7 +568,11 @@ internal fun V17ShieldScreen(
                 else "No signed local hash database is active on this device."
             )
         }
-        ThreatIntelligenceCard()
+        ThreatIntelligenceCard(
+            state = threatIntelligenceState,
+            onRefresh = onRefreshThreatIntelligence,
+            showRefreshAction = true
+        )
     }
 }
 

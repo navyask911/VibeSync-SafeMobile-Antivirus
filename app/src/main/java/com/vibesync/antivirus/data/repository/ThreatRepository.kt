@@ -545,6 +545,8 @@ class ThreatRepository(
  fun observeActiveThreatIndicatorCount(): Flow<Int> = threatIntelligence.observeActiveIndicatorCount()
  fun observeLastSuccessfulThreatFeedSyncAt(): Flow<Long?> = threatIntelligence.observeLastSuccessfulSyncAt()
  fun observeLatestThreatFeedSyncState(): Flow<ThreatFeedSyncStateEntity?> = threatIntelligence.observeLatestSyncState()
+ fun observeThreatFeedSnapshot() = threatIntelligence.observeSnapshot()
+ suspend fun loadThreatFeedSnapshot() = threatIntelligence.loadSnapshot()
  fun requestThreatFeedSync() = ThreatFeedSyncScheduler.enqueueNow(context)
  suspend fun lookupThreatHash(sha256: String?, md5: String?) = threatIntelligence.lookupHash(sha256, md5)
  suspend fun lookupNetworkIoc(value: String) = threatIntelligence.lookupIoc(value)

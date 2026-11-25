@@ -2,6 +2,7 @@ package com.vibesync.antivirus.core.worker
 
 import java.time.LocalDate
 import java.time.OffsetDateTime
+import java.time.ZoneId
 import org.json.JSONObject
 import org.json.JSONTokener
 
@@ -45,5 +46,30 @@ internal data class ThreatIntelligenceStats(
                 runCatching { LocalDate.parse(updated) }.isSuccess)
             ThreatIntelligenceStats(samples, fraction, downloads, updated)
         }.getOrNull()
+    }
+}
+
+/** Explicit display-only freshness windows; these never gate scanning or inference. */
+internal object ThreatIntelligenceFreshnessPolicy {
+    const val UPSTREAM_STALE_AFTER_MS = 30L * 24L * 60L * 60L * 1000L
+    const val FEED_STALE_AFTER_MS = 7L * 24L * 60L * 60L * 1000L
+
+    fun isUpstreamStatsStale(
+        stats: ThreatIntelligenceStats,
+        nowMillis: Long = System.currentTimeMillis()
+    ): Boolean {
+        val updatedAt = runCatching {
+            OffsetDateTime.parse(stats.lastUpdated).toInstant().toEpochMilli()
+        }.recoverCatching {
+            LocalDate.parse(stats.lastUpdated).atStartOfDay(ZoneId.systemDefault())
+                .toInstant().toEpochMilli()
+        }.getOrNull() ?: return true
+        return nowMillis >= updatedAt && nowMillis - updatedAt >= UPSTREAM_STALE_AFTER_MS
+    }
+
+    /** Unknown sync time is shown as unknown, not mislabeled as stale. */
+    fun isFeedStale(lastSuccessfulSyncAt: Long?, nowMillis: Long = System.currentTimeMillis()): Boolean {
+        val timestamp = lastSuccessfulSyncAt ?: return false
+        return nowMillis >= timestamp && nowMillis - timestamp >= FEED_STALE_AFTER_MS
     }
 }

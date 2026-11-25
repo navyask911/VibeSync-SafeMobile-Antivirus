@@ -17,6 +17,7 @@ import com.vibesync.antivirus.core.engine.ScanVerdict
 import com.vibesync.antivirus.core.observer.ManualThreatAlertPolicy
 import com.vibesync.antivirus.core.worker.ScanForegroundService
 import com.vibesync.antivirus.core.worker.ScanForegroundEvents
+import com.vibesync.antivirus.core.worker.ThreatIntelligenceStore
 import com.vibesync.antivirus.core.hashdb.HashDatabaseCapability
 import com.vibesync.antivirus.data.repository.ThreatRepository
 import com.vibesync.antivirus.core.security.GlobalThreatIntelligenceConsent
@@ -68,6 +69,7 @@ data class SafeMobileUiState(
     val threatFeedSyncStatus: String? = null,
     val threatFeedSyncError: String? = null,
     val hashDatabaseCapability: HashDatabaseCapability = HashDatabaseCapability(false, reason = ""),
+    val threatIntelligence: ThreatIntelligenceUiState = ThreatIntelligenceUiState()
 ) {
     val threatCount get() = results.count { it.verdict == ScanVerdict.THREAT }
     val suspiciousCount get() = results.count { it.verdict == ScanVerdict.SUSPICIOUS }
@@ -78,6 +80,9 @@ class SafeMobileViewModel(
     appContext: Context? = null
 ) : ViewModel() {
     private val appContext = appContext?.applicationContext
+    private val threatIntelligenceStore: ThreatIntelligenceStore? by lazy {
+        this.appContext?.let { ThreatIntelligenceStore(it.filesDir) }
+    }
     private var scoreTts: TextToSpeech? = null
     private var lastAnnouncedProtectionScore: Int? = null
     private val mutableState = MutableStateFlow(SafeMobileUiState())
@@ -149,6 +154,8 @@ class SafeMobileViewModel(
         refreshSignatureCount()
         refreshQuarantine()
         observeThreatFeedState()
+        observeThreatIntelligenceStats()
+        refreshThreatIntelligenceStats()
         observeScanSessionCounts()
         observeLatestCompletedScanAt()
         observeScanProgress()
@@ -195,6 +202,8 @@ class SafeMobileViewModel(
                             )
                         } else current
                     }
+                    // A scheduled worker may have completed while this process was backgrounded.
+                    refreshThreatIntelligenceStats()
                 }
             }
         }
@@ -221,18 +230,65 @@ class SafeMobileViewModel(
 
     private fun observeThreatFeedState() {
         viewModelScope.launch {
-            repository.observeActiveThreatIndicatorCount().collect { count ->
-                mutableState.update { it.copy(activeThreatIndicatorCount = count) }
+            repository.observeThreatFeedSnapshot().collect { snapshot ->
+                mutableState.update { current ->
+                    current.copy(
+                        activeThreatIndicatorCount = snapshot.activeIndicatorCount,
+                        lastThreatFeedSyncAt = snapshot.lastSuccessfulSyncAt,
+                        threatFeedSyncStatus = snapshot.latestSyncState?.status,
+                        threatFeedSyncError = snapshot.latestSyncState?.lastError,
+                        threatIntelligence = current.threatIntelligence.withFeedSnapshot(snapshot)
+                    )
+                }
             }
         }
+    }
+
+    private fun observeThreatIntelligenceStats() {
+        val store = threatIntelligenceStore ?: return
         viewModelScope.launch {
-            repository.observeLastSuccessfulThreatFeedSyncAt().collect { timestamp ->
-                mutableState.update { it.copy(lastThreatFeedSyncAt = timestamp) }
+            store.observe().collect { stats ->
+                mutableState.update { current ->
+                    current.copy(threatIntelligence = current.threatIntelligence.withReleaseStats(stats))
+                }
             }
         }
+    }
+
+    /** Reload the last verified upstream cache and the Room snapshot without starting network work. */
+    fun refreshThreatIntelligenceStats() {
         viewModelScope.launch {
-            repository.observeLatestThreatFeedSyncState().collect { sync ->
-                mutableState.update { it.copy(threatFeedSyncStatus = sync?.status, threatFeedSyncError = sync?.lastError) }
+            mutableState.update {
+                it.copy(threatIntelligence = it.threatIntelligence.copy(isRefreshing = true))
+            }
+            try {
+                val store = threatIntelligenceStore
+                val stats = if (store == null) null else withContext(Dispatchers.IO) { store.read() }
+                val snapshot = repository.loadThreatFeedSnapshot()
+                mutableState.update { current ->
+                    val releaseState = if (store != null) {
+                        current.threatIntelligence.withReleaseStats(stats)
+                    } else {
+                        current.threatIntelligence.copy(isRefreshing = false)
+                    }
+                    val combined = releaseState.withFeedSnapshot(snapshot)
+                    current.copy(
+                        threatIntelligence = combined,
+                        activeThreatIndicatorCount = snapshot.activeIndicatorCount,
+                        lastThreatFeedSyncAt = snapshot.lastSuccessfulSyncAt,
+                        threatFeedSyncStatus = snapshot.latestSyncState?.status,
+                        threatFeedSyncError = snapshot.latestSyncState?.lastError
+                    )
+                }
+            } catch (cancelled: CancellationException) {
+                mutableState.update {
+                    it.copy(threatIntelligence = it.threatIntelligence.copy(isRefreshing = false))
+                }
+                throw cancelled
+            } catch (_: Exception) {
+                mutableState.update {
+                    it.copy(threatIntelligence = it.threatIntelligence.copy(isRefreshing = false))
+                }
             }
         }
     }
@@ -286,7 +342,10 @@ class SafeMobileViewModel(
 
     fun requestHashDatabaseSync() = repository.requestHashDatabaseSync()
 
-    fun requestThreatFeedSync() { repository.requestThreatFeedSync() }
+    fun requestThreatFeedSync() {
+        repository.requestThreatFeedSync()
+        refreshThreatIntelligenceStats()
+    }
 
     /** Queue a confirmed threat hash after master opt-in or explicit one-sample consent. */
     fun contributeThreatHash(
@@ -543,6 +602,7 @@ class SafeMobileViewModel(
                         UiText(R.string.scan_complete_skipped, listOf(UiNumber(event.summary.skippedFiles))) else null) }
                 refreshSignatureCount()
                 refreshSecurityScore()
+                refreshThreatIntelligenceStats()
             }
         }
         viewModelScope.launch {
