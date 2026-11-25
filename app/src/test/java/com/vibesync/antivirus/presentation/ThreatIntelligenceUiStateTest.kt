@@ -31,6 +31,21 @@ class ThreatIntelligenceUiStateTest {
     }
 
     @Test
+    fun aMissingReReadPreservesTheLastVerifiedUpstreamSnapshot() {
+        val stats = ThreatIntelligenceStats(
+            totalMalwareSamples = 5_560L,
+            accuracyFraction = 0.9745,
+            totalDownloads = 12_000L,
+            lastUpdated = "2026-10-31T00:00:00Z"
+        )
+        val loaded = ThreatIntelligenceUiState().withReleaseStats(stats, now)
+        val afterUnavailableRead = loaded.withReleaseStats(null, now + 1L)
+
+        assertEquals(loaded.releaseStats, afterUnavailableRead.releaseStats)
+        assertTrue(afterUnavailableRead.releaseStatsLoaded)
+    }
+
+    @Test
     fun roomFeedSnapshotMapsRealCountsStatusAndFreshness() {
         val lastSuccess = now - 8L * 24L * 60L * 60L * 1000L
         val sync = ThreatFeedSyncStateEntity(

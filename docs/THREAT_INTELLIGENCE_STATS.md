@@ -40,8 +40,9 @@ The download count is the upstream global count, never a local device counter or
 
 Missing, duplicate, oversized, unverified or malformed statistics preserve the previous cache.
 Transport/storage failures request a WorkManager retry while a valid model can still be staged.
-Without a valid cache the card shows the localized updating message. A release without statistics
-remains compatible; the ML repository must publish the asset before the first live numbers appear.
+While the initial cache read is pending the card shows its localized updating message; after
+that read, an empty or invalid cache shows an explicit unavailable placeholder. A failed re-read
+preserves any previously verified snapshot. A release without statistics remains compatible; the ML repository must publish the asset before the first live numbers appear.
 The current `v1.0.1-model` release did not contain that asset when this feature was implemented.
 
 Training accuracy describes the upstream evaluation. Existing detection layers continue to report

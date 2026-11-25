@@ -31,6 +31,7 @@ data class ThreatIntelligenceUiState(
         stats: ThreatIntelligenceStats?,
         nowMillis: Long = System.currentTimeMillis()
     ): ThreatIntelligenceUiState = copy(
+        // A failed/empty re-read must not erase the last verified snapshot already on screen.
         releaseStats = stats?.let {
             ThreatIntelligenceReleaseStatsUi(
                 totalMalwareSamples = it.totalMalwareSamples,
@@ -39,7 +40,7 @@ data class ThreatIntelligenceUiState(
                 lastUpdated = it.lastUpdated,
                 isStale = ThreatIntelligenceFreshnessPolicy.isUpstreamStatsStale(it, nowMillis)
             )
-        },
+        } ?: releaseStats,
         releaseStatsLoaded = true,
         isRefreshing = false
     )
