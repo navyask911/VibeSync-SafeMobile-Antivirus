@@ -31,8 +31,8 @@ object TrustedPackageWhitelist {
 
     /**
      * Pure package eligibility seam shared with the Context/PackageManager adapter.
-     * Unverified Google-named user APKs may be scanned as ordinary apps, but are never
-     * treated as official Google apps or normalized to Clean & Safe.
+     * All Google, Android and OEM namespaces are excluded regardless of signer verification;
+     * ordinary third-party user-installed packages remain reviewable.
      */
     @Suppress("UNUSED_PARAMETER")
     fun isEligibleForReview(

@@ -344,8 +344,8 @@ class PackageScanner(
   val diagnostics = PackageScanDiagnostics()
   var enumeratedTotal = 0
 
-  // Keep the installed-package query and existing inclusion predicates unchanged.
-  // The diagnostic records each item filtered out before the per-package loop.
+  // Apply the third-party user-app eligibility policy before queueing installed packages.
+  // Excluded system, OEM, Google and scanner packages never reach the scan worker.
   val all = withContext(Dispatchers.IO) {
    val packages = try {
     @Suppress("DEPRECATION")

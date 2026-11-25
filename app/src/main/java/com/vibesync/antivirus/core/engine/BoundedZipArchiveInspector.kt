@@ -111,7 +111,7 @@ internal object BoundedZipArchiveInspector {
                     continue
                 }
                 if (entry.size > MAX_ENTRY_BYTES) {
-                    budget.reason = "Archive entry exceeds the 64 MiB inspection limit: $name."
+                    budget.reason = "Archive entry exceeds the 128 MiB inspection limit: $name."
                     return false
                 }
                 if (entry.compressedSize > 0L && entry.size > 0L &&
