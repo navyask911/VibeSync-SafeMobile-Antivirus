@@ -77,7 +77,7 @@ class PersistedScanResultPolicyTest {
     }
 
     @Test
-    fun verifiedGoogleSignerNeverOverridesStrictUserAppOnlyExclusion() {
+    fun verifiedGoogleSignerNeverOverridesStrictUserAppOnlyExclusion() = runBlocking {
         val signerVerified = OfficialGoogleAppPolicy.hasTrustedSigner(
             googlePackage,
             candidateDigests = trustedGoogleSigner,
