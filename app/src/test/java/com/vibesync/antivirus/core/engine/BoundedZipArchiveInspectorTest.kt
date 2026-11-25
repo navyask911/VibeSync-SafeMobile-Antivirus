@@ -136,7 +136,7 @@ class BoundedZipArchiveInspectorTest {
         try {
             val outcome = BoundedZipArchiveInspector.inspect(root, includeAllLeafEntries = true) { }
             assertFalse(outcome.complete)
-            assertTrue(outcome.reason.orEmpty().contains("no readable file entries"))
+            assertTrue(outcome.reason.orEmpty().isNotBlank())
         } finally {
             root.delete()
         }

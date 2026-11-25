@@ -642,8 +642,7 @@ class ThreatRepository(
    progress(count, total)
    pending.forEachIndexed { index, file ->
     currentCoroutineContext().ensureActive()
-    val label = file.uri.lastPathSegment?.take(250)?.takeIf { it.isNotBlank() }
-     ?: context.getString(R.string.unknown_file)
+    val label = file.displayName
     onFileStarted(label)
     Log.d("ScanDebug", "Scanning: $label")
     val result = scanSafFile(file.uri, label, scanSessionId)

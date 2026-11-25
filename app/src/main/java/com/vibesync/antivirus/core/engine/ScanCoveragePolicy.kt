@@ -34,7 +34,7 @@ internal object ScanCoveragePolicy {
     fun partialReason(result: ScanResult): String? {
         if (!isPartial(result)) return null
         return result.reasons.lastOrNull { reason ->
-            listOf("incomplete", "unreadable", "unavailable", "exceeded", "failed", "limit")
+            listOf("incomplete", "unreadable", "unavailable", "exceeded", "failed", "limit", "could not", "not readable", "missing")
                 .any { marker -> reason.contains(marker, ignoreCase = true) }
         }?.take(500) ?: "One or more optional inspection stages did not complete."
     }

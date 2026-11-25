@@ -121,6 +121,18 @@ class ApkContentExtractorTest {
 
 
     @Test
+    fun corruptDexTargetIsNotReportedAsComplete() = runBlocking {
+        val apk = createApkWithCorruptStoredFirstEntry(
+            "classes.dex", ByteArray(256) { it.toByte() },
+            "AndroidManifest.xml" to byteArrayOf(1, 2, 3)
+        )
+        try {
+            val outcome = ApkContentExtractor().forEachComponent(apk) { true }
+            assertTrue(outcome is ApkExtractionOutcome.Incomplete)
+        } finally { apk.delete() }
+    }
+
+    @Test
     fun corruptUnrelatedResourceDoesNotPreventManifestAndDexExtraction() = runBlocking {
         val apk = createApkWithCorruptStoredFirstEntry(
             "assets/unrelated.bin", ByteArray(256) { it.toByte() },
