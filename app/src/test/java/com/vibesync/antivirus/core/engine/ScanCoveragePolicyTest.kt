@@ -29,6 +29,7 @@ class ScanCoveragePolicyTest {
         assertTrue("YARA_INCOMPLETE" in result.analysisStages)
         assertTrue(result.reasons.any { it.contains("configured bound") })
         assertTrue(ScanCoveragePolicy.isPartial(result))
+        assertTrue(ScanCoveragePolicy.partialReason(result).orEmpty().contains("configured bound"))
     }
 
     @Test
@@ -51,6 +52,7 @@ class ScanCoveragePolicyTest {
         assertEquals(ScanVerdict.THREAT, partialThreat.verdict)
         assertTrue(ScanCoveragePolicy.isPartial(partialThreat))
         assertFalse(ScanCoveragePolicy.isPartial(unchanged))
+        assertEquals(null, ScanCoveragePolicy.partialReason(unchanged))
     }
 
     @Test

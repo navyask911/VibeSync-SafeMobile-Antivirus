@@ -129,6 +129,7 @@ class ThreatRepository(
  private val trustedAppStore = TrustedAppStore(context)
  private val skippedSafFileCounts = ConcurrentHashMap<String, AtomicInteger>()
  private val scanPublishCounters = ConcurrentHashMap<String, ScanPublishCounters>()
+ private val safInventorySnapshots = SafInventorySnapshotCache<SelectedFolderFile>()
 
  private fun recordSkippedSafFile(sessionId: String, uri: Uri, error: Exception) {
   Log.e("ScanDebug", "Skipping file: $uri", error)
@@ -160,6 +161,7 @@ class ThreatRepository(
    // Once state rows are removed, any orphaned IN_PROGRESS session is no longer resumable.
    dao.markInProgressAsInterrupted()
   }
+  safInventorySnapshots.clear()
  }
 
  private suspend fun scanSafFile(
@@ -389,9 +391,11 @@ class ThreatRepository(
    dao.markScanSessionCompleted(sessionId, completedAt)
    dao.markScanSessionStateComplete(sessionId, dao.countScanSessionItems(sessionId))
   }
+  safInventorySnapshots.remove(sessionId)
  }
  suspend fun interruptScanSession(sessionId: String) = withContext(Dispatchers.IO) {
   database.threatDao().markScanSessionInterrupted(sessionId, System.currentTimeMillis())
+  safInventorySnapshots.remove(sessionId)
  }
  /** Runtime failure is terminal for this attempt; Room items remain available for review. */
  suspend fun failScanSession(sessionId: String) = withContext(Dispatchers.IO) {
@@ -400,6 +404,7 @@ class ThreatRepository(
    dao.markScanSessionInterrupted(sessionId, System.currentTimeMillis())
    dao.markScanSessionStateComplete(sessionId, dao.countScanSessionItems(sessionId))
   }
+  safInventorySnapshots.remove(sessionId)
  }
  /** Explicit Stop Scan is terminal; process/service interruptions remain resumable. */
  suspend fun cancelScanSession(sessionId: String) = withContext(Dispatchers.IO) {
@@ -408,6 +413,7 @@ class ThreatRepository(
    dao.markScanSessionInterrupted(sessionId, System.currentTimeMillis())
    dao.markScanSessionStateComplete(sessionId, dao.countScanSessionItems(sessionId))
   }
+  safInventorySnapshots.remove(sessionId)
  }
  private fun fileItemKey(uri: Uri): String {
   val hash = MessageDigest.getInstance("SHA-256").digest(uri.toString().toByteArray(Charsets.UTF_8))
@@ -567,7 +573,7 @@ class ThreatRepository(
   scanSessionId: String, progress: suspend (Int, Int) -> Unit = { _, _ -> }
  ): List<ScanResult> = withContext(Dispatchers.IO) {
   definitionLoader.importBundledIfEmpty()
-  val files = selectedFolderFiles(scanSessionId).distinctBy { it.uri.toString() }.toList()
+  val files = selectedFolderFiles(scanSessionId)
   val done = database.threatDao().scanSessionItemKeys(scanSessionId).toSet()
   val doneFiles = files.count { fileItemKey(it.uri) in done }
   val doneApps = done.filter { it.startsWith("app:") }.map { it.removePrefix("app:") }.toSet()
@@ -626,10 +632,7 @@ class ThreatRepository(
   ): List<ScanResult> = withContext(Dispatchers.IO) {
    // SafTreeWalker validates provider access for each entry and isolates per-entry failures.
    definitionLoader.importBundledIfEmpty()
-   val candidates = com.vibesync.antivirus.core.observer.SafTreeWalker.files(
-    context, listOf(treeUri), maxDepth = 10, maxFiles = maxSafScanFiles,
-    onFileError = { uri, error -> recordSkippedSafFile(scanSessionId, uri, error) }
-   ).distinctBy { it.uri.toString() }.toList()
+   val candidates = selectedSafFilesForSession(scanSessionId, listOf(treeUri))
    val done = database.threatDao().scanSessionItemKeys(scanSessionId).toSet()
    val count = candidates.count { fileItemKey(it.uri) in done }
    val pending = candidates.filterNot { fileItemKey(it.uri) in done }
@@ -660,19 +663,28 @@ class ThreatRepository(
  private data class SelectedFolderFile(val uri: Uri, val displayName: String)
 
  /**
-  * Requires an explicitly persisted SAF grant, recurses at most 4 directory levels, and visits at
-  * most 10,000 items per pass. It never probes or enumerates shared storage outside that grant.
+  * Enumerate explicit SAF grants once per scan session. The same immutable snapshot is
+  * reused for in-process retry passes, so a NOT_SCANNED retry does not walk the tree again.
+  * A changed root set or a new scan session produces a fresh inventory.
   */
- private fun selectedFolderFiles(scanSessionId: String): Sequence<SelectedFolderFile> = sequence {
-  var count = 0
-  for (file in com.vibesync.antivirus.core.observer.SafTreeWalker.files(
-      context, StorageAccessPreferences.accessibleTreeUris(context), maxDepth = 10,
-      maxFiles = maxSafScanFiles,
-      onFileError = { uri, error -> recordSkippedSafFile(scanSessionId, uri, error) })) {
-   if (++count > maxSafScanFiles) break
-   val displayName = file.uri.lastPathSegment?.take(250)?.takeIf { it.isNotBlank() }
+ private suspend fun selectedFolderFiles(scanSessionId: String): List<SelectedFolderFile> =
+  selectedSafFilesForSession(scanSessionId, StorageAccessPreferences.accessibleTreeUris(context))
+
+ private suspend fun selectedSafFilesForSession(
+  scanSessionId: String,
+  roots: List<Uri>
+ ): List<SelectedFolderFile> = withContext(Dispatchers.IO) {
+  val uniqueRoots = roots.distinctBy { it.toString() }
+  val rootsKey = uniqueRoots.map { it.toString() }.sorted().joinToString("\u001f")
+  safInventorySnapshots.getOrLoad(scanSessionId, rootsKey) {
+   com.vibesync.antivirus.core.observer.SafTreeWalker.files(
+    context, uniqueRoots, maxDepth = 10, maxFiles = maxSafScanFiles,
+    onFileError = { uri, error -> recordSkippedSafFile(scanSessionId, uri, error) }
+   ).map { file ->
+    val displayName = file.uri.lastPathSegment?.take(250)?.takeIf { it.isNotBlank() }
      ?: context.getString(R.string.unknown_file)
-    yield(SelectedFolderFile(file.uri, displayName))
+    SelectedFolderFile(file.uri, displayName)
+   }.toList()
   }
  }
 

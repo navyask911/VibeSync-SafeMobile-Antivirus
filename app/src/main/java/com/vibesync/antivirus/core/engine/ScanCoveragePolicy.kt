@@ -30,6 +30,15 @@ internal object ScanCoveragePolicy {
     fun isPartial(result: ScanResult): Boolean =
         result.analysisStages.any { it in PARTIAL_STAGES }
 
+    /** Returns the scanner's reason so a partial clean verdict is never shown without context. */
+    fun partialReason(result: ScanResult): String? {
+        if (!isPartial(result)) return null
+        return result.reasons.lastOrNull { reason ->
+            listOf("incomplete", "unreadable", "unavailable", "exceeded", "failed", "limit")
+                .any { marker -> reason.contains(marker, ignoreCase = true) }
+        }?.take(500) ?: "One or more optional inspection stages did not complete."
+    }
+
     fun combineYara(
         results: List<YaraXScanResult>,
         incompleteReasons: List<String> = emptyList()
