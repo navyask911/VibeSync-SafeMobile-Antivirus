@@ -1,9 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="pro_one_year_price">Një vit i parapaguar: %1$s</string>
-    <string name="pro_prepaid_offer">Qasje njëvjeçare e parapaguar në SafeMobile Pro. Nuk rinovohet automatikisht.</string>
-    <string name="pro_prepaid_duration_limit">Planet e parapaguara të Google Play kufizohen në një vit për blerje. Blije ose zgjate sërish të njëjtin plan për të shtuar një vit tjetër; çmimi përfundimtar konfirmohet në Google Play.</string>
-    <string name="pro_device_binding_explanation">Kjo blerje lidhet me këtë pajisje Android duke përdorur një identifikues të hashuar të pajisjes. Riinstalimi në të njëjtën pajisje mund të rikthejë blerjen aktive të Play; një pajisje tjetër bllokohet.</string>
-    <string name="pro_buy_or_extend_one_year">Bli / zgjat për 1 vit</string>
-    <string name="pro_device_mismatch">Abonimi është aktiv në një pajisje tjetër. Qasja në SafeMobile Pro është bllokuar në këtë pajisje.</string>
-    <string name="pro_device_binding_unavailable">Kjo blerje nuk ka lidhje të verifikueshme me pajisjen. Qasja Pro bllokohet derisa Google Play të kthejë një blerje të lidhur me pajisjen.</string>
+    <string name="pro_title">SafeMobile Pro</string>
+    <string name="pro_truthful_summary">Më pak rrëmujë. I njëjti zbulim.</string>
+    <string name="pro_feature_free">Skanimi offline me hash, YARA dhe zbulimi i instalimeve anësore mbeten falas.</string>
+    <string name="pro_feature_research">Mësimi eksperimental makinerik nuk është validuar ose aktivizuar.</string>
+    <string name="pro_feature_updates">Pro ofron përditësime opsionale ditore të modelit kërkimor. Përditësimet javore mbeten falas.</string>
+    <string name="pro_feature_adfree">Reklamat e nivelit Falas çaktivizohen ndërsa qasja juaj në SafeMobile Pro është aktive.</string>
+    <string name="pro_price_unavailable">Çmimi i parapaguar i Google Play nuk është i disponueshëm. Provoni përsëri kur Play të jetë i lidhur.</string>
+    <string name="pro_restore_check">Rikthe / Kontrollo statusin</string>
+    <string name="pro_active_until">Qasja Pro regjistrohet lokalisht deri më %1$s.</string>
+    <string name="pro_not_active">Nuk u gjet asnjë abonim aktiv Pro ose e drejtë lokale e parapaguar.</string>
+    <string name="pro_purchase_unavailable">Google Play nuk është i disponueshëm ose produkti i parapaguar nuk është konfiguruar.</string>
+    <string name="pro_purchase_canceled">Blerja u anulua.</string>
+    <string name="pro_purchase_pending">Pagesa në pritje. Qasja Pro fillon vetëm pasi Google Play të konfirmojë blerjen.</string>
+    <string name="pro_purchase_recheck">Rilidhuni me Google Play për të përfunduar përpunimin e këtij abonimi të parapaguar.</string>
+    <string name="pro_storage_failed">Hapësira e sigurt nuk mund ta ruante blerjen. Kontaktoni mbështetjen para se të provoni përsëri.</string>
+    <string name="pro_purchase_success">Abonimi i parapaguar u konfirmua dhe u regjistrua në mënyrë të sigurt për këtë pajisje.</string>
+    <string name="pro_device_disclaimer">Abonimi juaj i parapaguar menaxhohet nga Google Play dhe nuk rinovohet automatikisht. SafeMobile ruan një memorie të enkriptuar të qasjes të lidhur me pajisjen për kontrolle offline.</string>
+    <string name="pro_network_notice">Mbrojtja bazë funksionon offline. Blerjet në Google Play dhe përditësimet opsionale të modelit kërkojnë lidhje interneti.</string>
+    <string name="pro_years">Vite (1–10)</string>
+    <string name="pro_price_preview">Totali i vlerësuar: %1$s. Vite: %2$d. Konfirmoni në Google Play.</string>
+    <string name="pro_cart_quantity_warning">Zgjidhni sasinë e blerjes në Google Play. Sasia e konfirmuar përcakton vitet që i shtohen kësaj pajisjeje.</string>
+    <string name="pro_non_restorable_warning">Blerje vetëm për këtë pajisje. Riinstalimi, rivendosja ose humbja e çelësave të enkriptimit mund të fshijë përgjithmonë qasjen tuaj të mbetur Pro.</string>
+    <string name="pro_unlock">Zhblloko SafeMobile Pro</string>
+    <string name="pro_restore_local_only">Statusi lokal u kontrollua. Google Play nuk mund të rikthejë kalimet e konsumuara.</string>
+    <string name="pro_fewer_years">Më pak vite</string>
+    <string name="pro_more_years">Më shumë vite</string>
+    <string name="pro_subscription_offer">Zhblloko SafeMobile Pro — ₹299 / vit (rinovim automatik). Anulojeni kurdo në Google Play.</string>
 </resources>
