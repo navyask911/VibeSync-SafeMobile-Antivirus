@@ -17,4 +17,8 @@
   <string name="system_app_protection_badge">系统应用受保护，不参与复核或卸载</string>
   <string name="system_app_scan_complete">扫描完成，已检查的项目中未发现威胁。系统应用不参与复核或卸载；此次扫描未验证其完整性。</string>
   <string name="ui_folder_access_not_granted">未授予文件夹访问权限。您可在有限防护下继续。</string>
+    <string name="test_siren">测试警笛</string>
+    <string name="test_voice">测试语音</string>
+    <string name="test_siren_failed">此设备无法启动警笛测试。</string>
+    <string name="test_voice_failed">语音测试失败。请检查设备上已安装的语音引擎和语音数据。</string>
 </resources>
