@@ -1,0 +1,7 @@
+<resources>
+    <string name="threat_intelligence_unavailable">נתוני אימון מאומתים מהמקור אינם שמורים במטמון במכשיר זה.</string>
+    <string name="threat_intelligence_upstream_stale">נתוני מקור מיושנים · העדכון שפורסם ישן מ־30 ימים.</string>
+    <string name="threat_intelligence_device_title">מודיעין איומים במכשיר</string>
+    <string name="threat_intelligence_latest_sync_note">הערת הסנכרון האחרונה: %1$s</string>
+    <string name="threat_intelligence_feed_stale">הסנכרון המוצלח האחרון של הזנת האיומים שהוגדרה בוצע לפני יותר מ־7 ימים.</string>
+</resources>

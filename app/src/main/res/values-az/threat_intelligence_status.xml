@@ -1,0 +1,7 @@
+<resources>
+    <string name="threat_intelligence_unavailable">Mənbədən alınmış təsdiqlənmiş təlim statistikası bu cihazda keşdə saxlanmayıb.</string>
+    <string name="threat_intelligence_upstream_stale">KÖHNƏLMİŞ MƏNBƏ MƏLUMATLARI · Dərc edilmiş yeniləmə 30 gündən çox köhnədir.</string>
+    <string name="threat_intelligence_device_title">Cihazdakı təhdid kəşfiyyatı</string>
+    <string name="threat_intelligence_latest_sync_note">Son sinxronizasiya qeydi: %1$s</string>
+    <string name="threat_intelligence_feed_stale">Konfiqurasiya edilmiş lentin son uğurlu sinxronizasiyasından 7 gündən çox vaxt keçib.</string>
+</resources>

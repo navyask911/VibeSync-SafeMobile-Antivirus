@@ -1,0 +1,7 @@
+<resources>
+    <string name="threat_intelligence_unavailable">Geen geverifieerde opleidingsstatistieke van die bron word op hierdie toestel in die kas gestoor nie.</string>
+    <string name="threat_intelligence_upstream_stale">VEROUDERDE BRONDATA · Die gepubliseerde opdatering is meer as 30 dae oud.</string>
+    <string name="threat_intelligence_device_title">Bedreigingsintelligensie op die toestel</string>
+    <string name="threat_intelligence_latest_sync_note">Nota oor die laaste sinkronisering: %1$s</string>
+    <string name="threat_intelligence_feed_stale">Die laaste suksesvolle sinkronisering van die ingestelde voer is meer as 7 dae oud.</string>
+</resources>

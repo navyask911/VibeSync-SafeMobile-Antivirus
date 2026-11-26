@@ -1,0 +1,7 @@
+<resources>
+    <string name="threat_intelligence_unavailable">На това устройство няма кеширани проверени статистически данни за обучението от източника.</string>
+    <string name="threat_intelligence_upstream_stale">ОСТАРЕЛИ ДАННИ ОТ ИЗТОЧНИКА · Публикуваната актуализация е отпреди повече от 30 дни.</string>
+    <string name="threat_intelligence_device_title">Информация за заплахите на устройството</string>
+    <string name="threat_intelligence_latest_sync_note">Бележка за последното синхронизиране: %1$s</string>
+    <string name="threat_intelligence_feed_stale">Последното успешно синхронизиране на конфигурирания канал е отпреди повече от 7 дни.</string>
+</resources>
