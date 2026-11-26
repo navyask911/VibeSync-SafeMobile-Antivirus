@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="deep_scan_folder">Skeniraj mapo (poglobljeno skeniranje)</string>
+    <string name="quarantine_manual_delete">Datoteka je zavarovana v karanteni. Izvirnik izbrišite ročno.</string>
+</resources>
