@@ -87,7 +87,7 @@
 <string name="quarantine_vault_description">Tu môžete skontrolovať izolované súkromné kópie. Obnovením sa zapíše kópia na vami vybraté miesto a pôvodný súbor v karanténe zostane zachovaný, kým ho neodstránite.</string>
 <string name="quarantine_vault_empty">Momentálne nie sú v karanténe žiadne súbory.</string>
 <string name="quarantine_vault_limit">Zobrazuje sa 30 najnovších súborov presunutých do karantény.</string>
-<string name="quarantine_item_size">%1$d bytes</string>
+<string name="quarantine_item_size">%1$d B</string>
 <string name="quarantine_restore">Obnoviť kópiu…</string>
 <string name="quarantine_delete">Trvalo odstrániť</string>
 <string name="quarantine_restore_confirm_title">Obnoviť tento súbor z karantény?</string>
