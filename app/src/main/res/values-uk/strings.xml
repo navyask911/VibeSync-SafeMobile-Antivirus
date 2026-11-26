@@ -246,7 +246,7 @@
 <string name="cleaner_delete_result">Видалено: %1$d · Приблизно звільнено байтів: %2$d · Помилка або зміни: %3$d</string>
 <string name="family_dedication_title">З вдячністю</string>
 <string name="family_dedication">Присвячується з глибокою вдячністю моїй любій родині, чия безмежна терплячість, підтримка та жертва часом протягом місяців усамітнення зробили можливим створення SafeMobile Antivirus — скромного внеску в безпеку цифрового світу для всіх.</string>
-<string name="about_readme">README</string>
+<string name="about_readme">Файл README</string>
 <string name="about_privacy_policy">Конфіденційність</string>
 <string name="about_license">License</string>
 <string name="about_third_party">Повідомлення сторонніх компонентів</string>
@@ -334,7 +334,7 @@
 <string name="analytics_last_scan">Останнє завершене сканування</string>
 <string name="analytics_storage">Доступ до спільного сховища</string>
 <string name="analytics_notifications">Сповіщення</string>
-<string name="analytics_sentinel">Download Sentinel</string>
+<string name="analytics_sentinel">Sentinel завантажень</string>
 <string name="analytics_sentinel_running">Служба переднього плану працює</string>
 <string name="analytics_sentinel_stopped">Служба не працює</string>
 <string name="analytics_current_results">Поточні рядки результатів сканування</string>
@@ -460,7 +460,7 @@
 <string name="ui_score_accessibility">Несистемні програми спеціальних можливостей</string>
 <string name="ui_enabled_count">Увімкнено: %1$d</string>
 <string name="ui_penalty_20">· −20</string>
-<string name="ui_unavailable">Not available</string>
+<string name="ui_unavailable">Недоступно</string>
 <string name="ui_score_admin">Несистемні адміністратори пристрою</string>
 <string name="ui_score_explanation">Початкове значення — 100; кожна проблема віднімається лише один раз. Невідомі перевірки не означають наявність захисту. Увімкнені програми спеціальних можливостей та адміністратора можуть бути легітимними — перевірте їх перед змінами.</string>
 <string name="ui_check_play_protect">Перевірити Play Protect</string>
