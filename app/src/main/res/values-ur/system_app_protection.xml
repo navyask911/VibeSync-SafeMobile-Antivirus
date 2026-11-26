@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="pro_navigation_unavailable">SafeMobile Pro اسکرین عارضی طور پر دستیاب نہیں۔</string>
+    <string name="full_screen_dashboard_warning">اہم انتباہات غیر فعال ہیں: فل اسکرین میل ویئر انتباہات کے لیے اجازت دینے کو چھوئیں۔</string>
+    <string name="full_screen_dashboard_fallback">فل اسکرین رسائی اختیاری ہے۔ سیکیورٹی الرٹس فعال ہونے پر، Android کی اطلاع اور آواز کی ترتیبات کے تابع، پانچ سیکنڈ کا سائرن اور اعلیٰ ترجیحی اطلاع اس رسائی کے بغیر بھی کام کرتے ہیں۔</string>
+    <string name="full_screen_settings_unavailable">فل اسکرین الرٹ کی ترتیبات نہیں کھل سکیں۔ آپ SafeMobile استعمال جاری رکھ سکتے ہیں۔</string>
+    <string name="system_app_protection_badge">سسٹم ایپس جائزے اور اَن انسٹال سے محفوظ ہیں</string>
+    <string name="system_app_scan_complete">اسکین مکمل ہوگیا۔ جانچے گئے آئٹمز میں کوئی خطرہ نہیں ملا۔ سسٹم ایپس کو جائزے اور اَن انسٹال سے خارج رکھا گیا ہے؛ اس اسکین نے ان کی سالمیت کی تصدیق نہیں کی۔</string>
 </resources>
