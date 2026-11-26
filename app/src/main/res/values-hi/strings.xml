@@ -689,16 +689,16 @@
     <string name="ui_status_at_risk">जोखिम में</string>
     <string name="scan_detected_by">पहचान स्रोत: %1$s</string>
     <string name="scan_detected_by_confidence">पहचान स्रोत: %1$s (%2$d%%)</string>
-    <string name="security_score_100_voice" formatted="false">Your security configuration is fully optimized. We will continue to monitor your device to keep you safe. Thank you for using Safe Mobile Antivirus.</string>
-    <string name="self_update_title">Check for Updates (Self-Update)</string>
-    <string name="self_update_description">Device Administrator mode does not normally block Google Play updates. This button checks for a Play in-app update and asks Android to install it.</string>
-    <string name="self_update_started">The update flow was opened. Follow the system prompts to finish updating.</string>
-    <string name="self_update_cancelled">The update was cancelled.</string>
-    <string name="self_update_check_failed">The update could not be started. Check your Google Play connection and try again.</string>
-    <string name="self_update_unavailable">Play in-app updates are unavailable for this installation. Open Google Play to check manually.</string>
-    <string name="self_update_no_update">No newer Google Play update is currently available.</string>
-    <string name="self_update_not_allowed">An update is available, but Google Play does not allow the immediate update flow for this installation.</string>
-    <string name="self_update_open_play_store">Open Google Play</string>
+    <string name="security_score_100_voice" formatted="false">आपकी सुरक्षा कॉन्फ़िगरेशन पूरी तरह अनुकूलित है। हम आपको सुरक्षित रखने के लिए आपके डिवाइस की निगरानी जारी रखेंगे। Safe Mobile Antivirus का उपयोग करने के लिए धन्यवाद।</string>
+    <string name="self_update_title">अपडेट जाँचें (स्वयं अपडेट)</string>
+    <string name="self_update_description">डिवाइस एडमिनिस्ट्रेटर मोड सामान्यतः Google Play अपडेट को नहीं रोकता। यह बटन Play इन-ऐप अपडेट की जाँच करता है और Android से इसे इंस्टॉल करने का अनुरोध करता है।</string>
+    <string name="self_update_started">अपडेट प्रक्रिया खुल गई है। अपडेट पूरा करने के लिए सिस्टम के निर्देशों का पालन करें।</string>
+    <string name="self_update_cancelled">अपडेट रद्द कर दिया गया।</string>
+    <string name="self_update_check_failed">अपडेट शुरू नहीं हो सका। Google Play कनेक्शन जाँचें और फिर प्रयास करें।</string>
+    <string name="self_update_unavailable">इस इंस्टॉलेशन के लिए Play इन-ऐप अपडेट उपलब्ध नहीं हैं। मैन्युअल जाँच के लिए Google Play खोलें।</string>
+    <string name="self_update_no_update">अभी कोई नया Google Play अपडेट उपलब्ध नहीं है।</string>
+    <string name="self_update_not_allowed">अपडेट उपलब्ध है, लेकिन Google Play इस इंस्टॉलेशन के लिए तत्काल अपडेट प्रक्रिया की अनुमति नहीं देता।</string>
+    <string name="self_update_open_play_store">Google Play खोलें</string>
     <string name="scan_sessions_in_progress">जारी स्कैन सत्र: %1$d</string>
     <string name="scan_sessions_completed">पूर्ण स्कैन सत्र: %1$d</string>
     <string name="ui_sentinel_telegram_folder">Telegram दस्तावेज़ फ़ोल्डर</string>
