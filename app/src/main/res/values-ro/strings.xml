@@ -833,16 +833,16 @@
     <string name="ui_status_at_risk">În pericol</string>
     <string name="scan_detected_by">Detectat de: %1$s</string>
     <string name="scan_detected_by_confidence">Detectat de: %1$s (%2$d%%)</string>
-    <string name="security_score_100_voice" formatted="false">Your security configuration is fully optimized. We will continue to monitor your device to keep you safe. Thank you for using Safe Mobile Antivirus.</string>
-    <string name="self_update_title">Check for Updates (Self-Update)</string>
-    <string name="self_update_description">Device Administrator mode does not normally block Google Play updates. This button checks for a Play in-app update and asks Android to install it.</string>
-    <string name="self_update_started">The update flow was opened. Follow the system prompts to finish updating.</string>
-    <string name="self_update_cancelled">The update was cancelled.</string>
-    <string name="self_update_check_failed">The update could not be started. Check your Google Play connection and try again.</string>
-    <string name="self_update_unavailable">Play in-app updates are unavailable for this installation. Open Google Play to check manually.</string>
-    <string name="self_update_no_update">No newer Google Play update is currently available.</string>
-    <string name="self_update_not_allowed">An update is available, but Google Play does not allow the immediate update flow for this installation.</string>
-    <string name="self_update_open_play_store">Open Google Play</string>
+    <string name="security_score_100_voice" formatted="false">Configurația de securitate a dispozitivului este complet optimizată. Vom continua să monitorizăm dispozitivul pentru a te menține în siguranță. Îți mulțumim că folosești SafeMobile Antivirus.</string>
+    <string name="self_update_title">Verifică actualizările (actualizarea aplicației)</string>
+    <string name="self_update_description">Modul Administrator de dispozitiv nu blochează în mod normal actualizările Google Play. Acest buton verifică dacă există o actualizare în aplicația Google Play și solicită Android să o instaleze.</string>
+    <string name="self_update_started">Procesul de actualizare a fost deschis. Urmează instrucțiunile sistemului pentru a finaliza actualizarea.</string>
+    <string name="self_update_cancelled">Actualizarea a fost anulată.</string>
+    <string name="self_update_check_failed">Actualizarea nu a putut fi pornită. Verifică conexiunea Google Play și încearcă din nou.</string>
+    <string name="self_update_unavailable">Actualizările în aplicație Google Play nu sunt disponibile pentru această instalare. Deschide Google Play pentru a verifica manual.</string>
+    <string name="self_update_no_update">Nu este disponibilă momentan nicio actualizare Google Play mai nouă.</string>
+    <string name="self_update_not_allowed">Este disponibilă o actualizare, dar Google Play nu permite fluxul de actualizare imediată pentru această instalare.</string>
+    <string name="self_update_open_play_store">Deschide Google Play</string>
     <string name="scan_sessions_in_progress">Sesiuni de scanare în curs: %1$d</string>
     <string name="scan_sessions_completed">Sesiuni de scanare finalizate: %1$d</string>
     <string name="ui_sentinel_telegram_folder">Dosar Documente Telegram</string>
