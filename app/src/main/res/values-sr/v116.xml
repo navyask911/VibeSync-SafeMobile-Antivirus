@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">Скенирање је завршено</string>
+    <string name="v116_scan_local_no_match">Скенирање је завршено. Није пронађено локално подударање. Тренутно изгледа да је уређај безбедан.</string>
+    <string name="v116_score_meaning">Саветодавна оцена, а не мера откривања малвера.</string>
+</resources>
