@@ -690,16 +690,16 @@
     <string name="ui_status_at_risk">धोक्यात</string>
     <string name="scan_detected_by">शोध स्रोत: %1$s</string>
     <string name="scan_detected_by_confidence">शोध स्रोत: %1$s (%2$d%%)</string>
-    <string name="security_score_100_voice" formatted="false">Your security configuration is fully optimized. We will continue to monitor your device to keep you safe. Thank you for using Safe Mobile Antivirus.</string>
-    <string name="self_update_title">Check for Updates (Self-Update)</string>
-    <string name="self_update_description">Device Administrator mode does not normally block Google Play updates. This button checks for a Play in-app update and asks Android to install it.</string>
-    <string name="self_update_started">The update flow was opened. Follow the system prompts to finish updating.</string>
-    <string name="self_update_cancelled">The update was cancelled.</string>
-    <string name="self_update_check_failed">The update could not be started. Check your Google Play connection and try again.</string>
-    <string name="self_update_unavailable">Play in-app updates are unavailable for this installation. Open Google Play to check manually.</string>
-    <string name="self_update_no_update">No newer Google Play update is currently available.</string>
-    <string name="self_update_not_allowed">An update is available, but Google Play does not allow the immediate update flow for this installation.</string>
-    <string name="self_update_open_play_store">Open Google Play</string>
+    <string name="security_score_100_voice" formatted="false">Ierīces drošības konfigurācija ir pilnībā optimizēta. Mēs turpināsim pārraudzīt ierīci, lai palīdzētu saglabāt tās drošību. Paldies, ka izmantojat „SafeMobile Antivirus“.</string>
+    <string name="self_update_title">Pārbaudīt atjauninājumus (lietotnes atjaunināšana)</string>
+    <string name="self_update_description">Ierīces administratora režīms parasti nebloķē Google Play atjauninājumus. Šī poga pārbauda Play lietotnes atjauninājumu un lūdz Android to instalēt.</string>
+    <string name="self_update_started">Atvērta atjaunināšanas darbplūsma. Izpildiet sistēmas norādes, lai pabeigtu atjaunināšanu.</string>
+    <string name="self_update_cancelled">Atjaunināšana tika atcelta.</string>
+    <string name="self_update_check_failed">Neizdevās sākt atjaunināšanu. Pārbaudiet Google Play savienojumu un mēģiniet vēlreiz.</string>
+    <string name="self_update_unavailable">Šai instalācijai Play lietotnes atjauninājumi nav pieejami. Atveriet Google Play, lai pārbaudītu manuāli.</string>
+    <string name="self_update_no_update">Pašlaik pakalpojumā Google Play nav pieejams jaunāks atjauninājums.</string>
+    <string name="self_update_not_allowed">Atjauninājums ir pieejams, taču Google Play neatļauj tūlītēju atjaunināšanu šai instalācijai.</string>
+    <string name="self_update_open_play_store">Atvērt Google Play</string>
     <string name="scan_sessions_in_progress">सुरू असलेली स्कॅन सत्रे: %1$d</string>
     <string name="scan_sessions_completed">पूर्ण झालेली स्कॅन सत्रे: %1$d</string>
     <string name="ui_sentinel_telegram_folder">Telegram दस्तऐवज फोल्डर</string>
