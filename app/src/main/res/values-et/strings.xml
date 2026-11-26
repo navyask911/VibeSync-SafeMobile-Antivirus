@@ -334,7 +334,7 @@
 <string name="analytics_last_scan">Viimane lõpetatud skannimine</string>
 <string name="analytics_storage">Juurdepääs ühismälule</string>
 <string name="analytics_notifications">Teavitused</string>
-<string name="analytics_sentinel">Download Sentinel</string>
+<string name="analytics_sentinel">Laadi Sentinel alla</string>
 <string name="analytics_sentinel_running">Esiplaaniteenus töötab</string>
 <string name="analytics_sentinel_stopped">Teenus ei tööta</string>
 <string name="analytics_current_results">Praegused skannimistulemuste read</string>

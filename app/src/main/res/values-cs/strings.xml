@@ -334,7 +334,7 @@
 <string name="analytics_last_scan">Poslední dokončená kontrola</string>
 <string name="analytics_storage">Přístup ke sdílenému úložišti</string>
 <string name="analytics_notifications">Oznámení</string>
-<string name="analytics_sentinel">Download Sentinel</string>
+<string name="analytics_sentinel">Stáhnout Sentinel</string>
 <string name="analytics_sentinel_running">Služba na popředí běží</string>
 <string name="analytics_sentinel_stopped">Služba neběží</string>
 <string name="analytics_current_results">Aktuální řádky výsledků kontroly</string>

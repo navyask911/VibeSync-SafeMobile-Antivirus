@@ -334,7 +334,7 @@
 <string name="analytics_last_scan">Τελευταία ολοκληρωμένη σάρωση</string>
 <string name="analytics_storage">Πρόσβαση σε κοινόχρηστο χώρο αποθήκευσης</string>
 <string name="analytics_notifications">Ειδοποιήσεις</string>
-<string name="analytics_sentinel">Download Sentinel</string>
+<string name="analytics_sentinel">Λήψη του Sentinel</string>
 <string name="analytics_sentinel_running">Η υπηρεσία προσκηνίου εκτελείται</string>
 <string name="analytics_sentinel_stopped">Η υπηρεσία δεν εκτελείται</string>
 <string name="analytics_current_results">Τρέχουσες γραμμές αποτελεσμάτων σάρωσης</string>

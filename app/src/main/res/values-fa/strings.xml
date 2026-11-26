@@ -334,7 +334,7 @@
 <string name="analytics_last_scan">آخرین اسکن تکمیل‌شده</string>
 <string name="analytics_storage">دسترسی به فضای ذخیره‌سازی مشترک</string>
 <string name="analytics_notifications">اعلان‌ها</string>
-<string name="analytics_sentinel">Download Sentinel</string>
+<string name="analytics_sentinel">دانلود Sentinel</string>
 <string name="analytics_sentinel_running">سرویس پیش‌زمینه در حال اجراست</string>
 <string name="analytics_sentinel_stopped">سرویس در حال اجرا نیست</string>
 <string name="analytics_current_results">ردیف‌های نتایج اسکن فعلی</string>
