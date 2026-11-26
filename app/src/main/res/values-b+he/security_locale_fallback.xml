@@ -56,7 +56,7 @@
   <string name="incident_dismiss">התעלם (לא מומלץ)</string>
   <string name="incident_review_threat">בדוק את האיום</string>
   <string name="incident_user_confirmation">הסרת אפליקציה תמיד דורשת את אישורך ב-Android. SafeMobile אינה מסירה אפליקציות ללא ידיעתך.</string>
-  <string name="incident_alerts_explanation">הסכים לקבלת התראות דחופות ואזעקה של חמש שניות בעוצמת אזעקה מרבית עבור תוכנה זדונית שאושרה. פתיחת SafeMobile או התעלמות מאירוע מפסיקה את האזעקה. הגדרות הצליל ו&apos;נא לא להפריע&apos; של Android עשויות להגביל את השמע.</string>
+  <string name="incident_alerts_explanation">הסכים לקבלת התראות דחופות ואזעקה של חמש שניות בעוצמת אזעקה מרבית עבור תוכנה זדונית שאושרה. פתיחת SafeMobile או התעלמות מאירוע מפסיקה את האזעקה. הגדרות הצליל ו’נא לא להפריע’ של Android עשויות להגביל את השמע.</string>
   <string name="incident_full_screen_settings">התראות אירוע במסך מלא</string>
   <string name="incident_full_screen_explanation">Android 14 ומעלה שולטת בגישה למסך מלא. אפשר להפעיל אותה בהגדרות המערכת עבור התראות אירוע דחופות. אם תשאיר אותה כבויה, SafeMobile תשתמש בהתראה בעדיפות גבוהה. האפשרות אינה חובה.</string>
   <string name="incident_open_settings">פתח הגדרות</string>
