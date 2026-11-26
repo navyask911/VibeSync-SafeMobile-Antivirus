@@ -175,7 +175,7 @@
 <string name="features_disclaimer">Доступність функцій залежить від дозволів Android і поточних локальних визначень. Ці функції не гарантують повного захисту від шкідливого ПЗ.</string>
 <string name="pillar_offline_title" formatted="false">100% автономна конфіденційність</string>
 <string name="pillar_offline_body">Основне хешування файлів і локальне зіставлення підписів виконуються на пристрої. Реклама та перевірка оновлень Google Play є окремими функціями, що можуть використовувати мережу за умови налаштування й дозволу.</string>
-<string name="pillar_telemetry_title">Без хмарної телеметрії сканера</string>
+<string name="pillar_telemetry_title">Локальна обробка даних сканування</string>
 <string name="pillar_telemetry_body">Сканер не завантажує вміст файлів або хеші. Рекламні служби та Google Play можуть виконувати окремі мережеві запити.</string>
 <string name="pillar_whatsapp_title">Захист вкладень месенджерів</string>
 <string name="pillar_whatsapp_body">Вибирайте APK або документи для перевірки. SafeMobile не перевіряє автоматично кожне повідомлення чи вкладення в програмах обміну повідомленнями.</string>
