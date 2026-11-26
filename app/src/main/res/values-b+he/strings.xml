@@ -458,7 +458,7 @@
     <string name="ui_updated_24">עודכן במהלך 24 השעות האחרונות</string>
     <string name="ui_score_accessibility">אפליקציות נגישות שאינן אפליקציות מערכת</string>
     <string name="ui_enabled_count">%1$d מופעלים</string>
-    <string name="ui_penalty_20">· −20</string>
+    <string name="ui_penalty_20">· ‎−20</string>
     <string name="ui_unavailable">לא זמין</string>
     <string name="ui_score_admin">מנהלי מכשיר שאינם רכיבי מערכת</string>
     <string name="ui_score_explanation">הציון מתחיל ב־100; כל בעיה מנוכה פעם אחת. בדיקות לא ידועות אינן מעידות על הגנה. אפליקציות נגישות ומנהל מערכת מופעלות עשויות להיות לגיטימיות — בדוק אותן לפני שינוי.</string>
@@ -521,8 +521,8 @@
 <string name="trusted_app_saved">This APK is trusted for heuristic alerts. A changed APK will be reviewed again.</string>
 <string name="trusted_app_denied">Trust unavailable: verified malware cannot be bypassed.</string>
 <string name="apps_inventory_load_failed">לא ניתן לקרוא את האפליקציות המותקנות. בדוק את נראות החבילות ב-Android ונסה שוב.</string>
-<string name="apps_scanning_in_progress">Scanning installed apps. Inventory remains visible during analysis.</string>
-<string name="apps_no_user_installed">No visible user-installed apps found.</string>
+<string name="apps_scanning_in_progress">סריקת האפליקציות המותקנות מתבצעת. רשימת האפליקציות נשארת גלויה במהלך הניתוח.</string>
+<string name="apps_no_user_installed">לא נמצאו אפליקציות משתמש מותקנות גלויות.</string>
 <string name="metrics_dashboard_title">סקירת ההגנה המקומית</string>
 <string name="metrics_apps_scanned">אפליקציות שנסרקו</string>
 <string name="metrics_threats_flagged">איומים שזוהו</string>
