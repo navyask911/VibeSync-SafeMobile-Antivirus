@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.unit.dp
@@ -170,11 +171,11 @@ class DashboardWiringTest {
         }
 
         composeRule.onNodeWithText("Ensemble sample").performScrollTo().performClick()
-        composeRule.onNodeWithText("ThreatEnsembleEvaluator", substring = true).assertExists()
-        composeRule.onNodeWithText("1. SHA-256 Hash").assertExists()
-        composeRule.onNodeWithText("2. YARA Rules").assertExists()
-        composeRule.onNodeWithText("3. ML Behavioral Model").assertExists()
-        composeRule.onNodeWithText("4. Static / DEX Heuristics · No findings").assertExists()
+        composeRule.onNodeWithText("ThreatEnsembleEvaluator", substring = true).assertIsDisplayed()
+        composeRule.onNodeWithText("1. SHA-256 Hash").assertIsDisplayed()
+        composeRule.onNodeWithText("2. YARA Rules").assertIsDisplayed()
+        composeRule.onNodeWithText("3. ML Behavioral Model").assertIsDisplayed()
+        composeRule.onNodeWithText("4. Static / DEX Heuristics · No findings").assertIsDisplayed()
     }
 
     @Test
@@ -203,9 +204,9 @@ class DashboardWiringTest {
             )
         }
 
-        composeRule.onNodeWithText("On-device threat intelligence").assertExists()
-        composeRule.onNodeWithText("Active local indicators").assertExists()
-        composeRule.onNodeWithText("SUCCESS").assertExists()
+        composeRule.onNodeWithText("On-device threat intelligence").assertIsDisplayed()
+        composeRule.onNodeWithText("Active local indicators").assertIsDisplayed()
+        composeRule.onNodeWithText("SUCCESS").assertIsDisplayed()
         composeRule.onNodeWithText("Refresh displayed stats").performClick()
         assertEquals(1, refreshCount)
     }
