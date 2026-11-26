@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="threat_intelligence_unavailable" tools:ignore="MissingTranslation">Šiame įrenginyje nėra talpykloje saugomos patikrintos pirminės mokymo statistikos.</string>
+    <string name="threat_intelligence_upstream_stale" tools:ignore="MissingTranslation">PASENĘ PIRMINIAI DUOMENYS · Paskelbtas naujinimas yra senesnis nei 30 dienų.</string>
+    <string name="threat_intelligence_device_title" tools:ignore="MissingTranslation">Įrenginyje veikianti grėsmių žvalgyba</string>
+    <string name="threat_intelligence_latest_sync_note" tools:ignore="MissingTranslation">Paskutinio sinchronizavimo pastaba: %1$s</string>
+    <string name="threat_intelligence_feed_stale" tools:ignore="MissingTranslation">Paskutinis sėkmingas sukonfigūruoto srauto sinchronizavimas įvyko prieš daugiau nei 7 dienas.</string>
+</resources>
