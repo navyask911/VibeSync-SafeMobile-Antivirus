@@ -211,7 +211,7 @@
     <string name="nav_install_sources">Fuentes de instalación de aplicaciones</string>
     <string name="install_sources_title">Fuentes de instalación de aplicaciones</string>
     <string name="install_sources_body">Eventos recientes de instalación con los datos del instalador que informa Android. Una fuente externa o desconocida no demuestra que haya malware; revise los resultados del análisis local.</string>
-    <string name="install_source_play_badge">Google Play</string>
+    <string name="install_source_play_badge">Instalador: Google Play</string>
     <string name="install_source_external_badge">Externa / no es Play</string>
     <string name="install_source_unknown_badge">Fuente desconocida</string>
     <string name="install_sources_empty">Aún no hay eventos de origen de instalación registrados</string>
@@ -689,7 +689,7 @@
     <string name="ui_status_at_risk">En riesgo</string>
     <string name="scan_detected_by">Detectado por: %1$s</string>
     <string name="scan_detected_by_confidence">Detectado por: %1$s (%2$d%%)</string>
-    <string name="security_score_100_voice" formatted="false">Your security configuration is fully optimized. We will continue to monitor your device to keep you safe. Thank you for using Safe Mobile Antivirus.</string>
+    <string name="security_score_100_voice" formatted="false">La configuración de seguridad está totalmente optimizada. Seguiremos supervisando tu dispositivo para mantenerte protegido. Gracias por utilizar Safe Mobile Antivirus.</string>
     <string name="self_update_title">Comprobar actualizaciones (autoactualización)</string>
     <string name="self_update_description">El modo de administrador del dispositivo normalmente no bloquea las actualizaciones de Google Play. Este botón busca una actualización integrada de Play y pide a Android que la instale.</string>
     <string name="self_update_started">Se ha abierto el proceso de actualización. Sigue las indicaciones del sistema para terminarla.</string>
