@@ -8,7 +8,7 @@
 <string name="install_sentinel_active">SafeMobile Sentinel：已啟用並正在監控</string>
 <string name="install_sentinel_description">通過常駐通知提供安裝後的本地檢查。無輪詢，無喚醒鎖。Android 可能停止此服務。</string>
 <string name="install_sentinel_stop">停止安裝監控</string>
-<string name="install_scan_progress">正在分析新安裝的應用：%1$s</string>
+<string name="install_scan_progress">正在分析新安裝的應用程式：%1$s</string>
 <string name="analytics_chart_title">掃描結果</string>
 <string name="analytics_other">其他結果</string>
 <string name="analytics_total">結果</string>
