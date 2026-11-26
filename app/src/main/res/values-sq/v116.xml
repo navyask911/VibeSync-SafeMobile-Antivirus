@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">Skanimi përfundoi</string>
+    <string name="v116_scan_local_no_match">Skanimi përfundoi. Nuk u gjet përputhje lokale. Për momentin, pajisja juaj duket e sigurt.</string>
+    <string name="v116_score_meaning">Rezultat këshillues, jo matje e zbulimit të malware-it.</string>
+</resources>
