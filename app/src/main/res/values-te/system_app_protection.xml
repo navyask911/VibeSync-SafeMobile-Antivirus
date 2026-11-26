@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="pro_navigation_unavailable">SafeMobile Pro స్క్రీన్ తాత్కాలికంగా అందుబాటులో లేదు.</string>
+    <string name="full_screen_dashboard_warning">క్రిటికల్ హెచ్చరికలు నిలిపివేయబడ్డాయి: పూర్తి-తెర మాల్వేర్ హెచ్చరికల కోసం అనుమతి ఇవ్వడానికి తాకండి.</string>
+    <string name="full_screen_dashboard_fallback">పూర్తి-తెర యాక్సెస్ ఐచ్ఛికం. భద్రతా హెచ్చరికలు ప్రారంభించినప్పుడు, Android నోటిఫికేషన్ మరియు శబ్ద అమరికలకు లోబడి, ఈ యాక్సెస్ లేకుండానే ఐదు సెకన్ల సైరన్ మరియు అధిక ప్రాధాన్యత నోటిఫికేషన్ పనిచేస్తాయి.</string>
+    <string name="full_screen_settings_unavailable">పూర్తి-తెర హెచ్చరికల అమరికలను తెరవలేకపోయింది. SafeMobileను ఉపయోగించడం కొనసాగించవచ్చు.</string>
+    <string name="system_app_protection_badge">సిస్టమ్ యాప్‌లు సమీక్ష మరియు అన్‌ఇన్‌స్టాల్ నుండి రక్షించబడ్డాయి</string>
+    <string name="system_app_scan_complete">స్కాన్ పూర్తయింది. తనిఖీ చేసిన అంశాల్లో ముప్పులు కనబడలేదు. సిస్టమ్ యాప్‌లు సమీక్ష మరియు అన్‌ఇన్‌స్టాల్ నుండి మినహాయించబడ్డాయి; ఈ స్కాన్ వాటి సమగ్రతను ధృవీకరించలేదు.</string>
 </resources>
