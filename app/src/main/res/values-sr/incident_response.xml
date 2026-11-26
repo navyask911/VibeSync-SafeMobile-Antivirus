@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="incident_channel_description">Хитна локална упозорења о претњама са алармом од пет секунди када је омогућен.</string>
+    <string name="incident_title">Откривена злонамерна апликација</string>
+    <string name="incident_loading">Учитавање детаља апликације…</string>
+    <string name="incident_app_unavailable">Апликација више није доступна</string>
+    <string name="incident_warning">Ова инсталирана апликација се подудара са познатом хеш вредношћу малвера. Избегавајте отварање. Деинсталирајте је преко Android екрана за потврду. SafeMobile није преместио у карантин нити уклонио ову инсталирану апликацију.</string>
+    <string name="incident_uninstall_now">ДЕИНСТАЛИРАЈ САДА</string>
+    <string name="incident_dismiss">Одбаци (не препоручује се)</string>
+    <string name="incident_review_threat">Прегледај претњу</string>
+    <string name="incident_user_confirmation">Уклањање апликације увек захтева вашу потврду у Android-у. SafeMobile не деинсталира апликације тихо.</string>
+    <string name="incident_alerts_explanation">Прихватите хитна обавештења и сирену од пет секунди на највећој јачини аларма за потврђени малвер. Отварање SafeMobile-а или одбацивање инцидента зауставља сирену. Android подешавања звука и режима Не узнемиравај могу ограничити звук.</string>
+    <string name="incident_full_screen_settings">Упозорења о инцидентима преко целог екрана</string>
+    <string name="incident_full_screen_explanation">Android 14+ контролише приступ преко целог екрана. Можете га омогућити у системским подешавањима за хитна обавештења о инцидентима. Ако остане искључен, SafeMobile користи обавештење високог приоритета. Ово је опционо.</string>
+    <string name="incident_open_settings">Отвори подешавања</string>
+    <string name="cyber_dark_appearance">Cyber Dark · Тамноплава позадина, шкриљасте картице и неонско цијан</string>
+</resources>
