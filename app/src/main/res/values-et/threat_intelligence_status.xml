@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="threat_intelligence_unavailable">Selles seadmes pole vahemällu salvestatud kontrollitud ülesvoolu treeningstatistikat.</string>
+    <string name="threat_intelligence_upstream_stale">AEGUNUD LÄHTEANDMED · Avaldatud värskendus on vanem kui 30 päeva.</string>
+    <string name="threat_intelligence_device_title">Seadmesisene ohuteave</string>
+    <string name="threat_intelligence_latest_sync_note">Viimase sünkroonimise märkus: %1$s</string>
+    <string name="threat_intelligence_feed_stale">Viimane edukas seadistatud voo sünkroonimine toimus rohkem kui 7 päeva tagasi.</string>
+</resources>

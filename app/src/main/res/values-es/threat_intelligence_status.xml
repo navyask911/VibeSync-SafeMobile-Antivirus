@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="threat_intelligence_unavailable">No hay estadísticas verificadas de entrenamiento de origen almacenadas en este dispositivo.</string>
+    <string name="threat_intelligence_upstream_stale">DATOS DE ORIGEN ANTIGUOS · La actualización publicada tiene más de 30 días.</string>
+    <string name="threat_intelligence_device_title">Inteligencia de amenazas en el dispositivo</string>
+    <string name="threat_intelligence_latest_sync_note">Nota de la última sincronización: %1$s</string>
+    <string name="threat_intelligence_feed_stale">La última sincronización correcta del canal configurado se realizó hace más de 7 días.</string>
+</resources>
