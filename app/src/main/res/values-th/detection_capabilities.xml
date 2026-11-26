@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="detection_capabilities_title">การรองรับการตรวจจับ</string>
+    <string name="detection_capabilities_description">ดูว่าการตรวจสอบความปลอดภัยใดเปิดใช้งาน เป็นเพียงคำแนะนำ มีเงื่อนไข หรือไม่พร้อมใช้งานในรุ่นนี้</string>
+    <string name="detection_capabilities_truth_title">สำคัญ: ผลการสแกนหมายถึงอะไร</string>
+    <string name="detection_capabilities_truth_body">การไม่พบรายการตรงกันในเครื่องไม่ได้ยืนยันว่าไฟล์ปลอดภัย กลไกแฮชที่ลงนามจะยังปิดใช้งานจนกว่าจะกำหนดคีย์ลงนามที่เชื่อถือได้และฐานข้อมูลสำหรับใช้งานจริงที่ผ่านการตรวจสอบ ชุดกฎ DEX แบบออฟไลน์ที่มีขอบเขตจำกัดจะทำงานเมื่อโหลดกฎที่รวมมาและตรวจสอบแล้ว ส่วนแมชชีนเลิร์นนิงยังปิดใช้งาน การวิเคราะห์แบบฮิวริสติกอาจแจ้งเตือนผิดพลาด ตัวชี้วัดด้านล่างยังไม่ได้วัด</string>
+    <string name="detection_capabilities_enabled">เปิดใช้งาน</string>
+    <string name="detection_capabilities_disabled">ปิดใช้งาน</string>
+    <string name="detection_capabilities_limited">ครอบคลุมอย่างจำกัด</string>
+    <string name="detection_capabilities_advisory">ใช้เพื่อประกอบการพิจารณาเท่านั้น</string>
+    <string name="detection_capabilities_conditional">ขึ้นอยู่กับเงื่อนไข</string>
+    <string name="detection_capabilities_metrics_title">ตัวชี้วัดประสิทธิภาพการตรวจจับ</string>
+    <string name="detection_capabilities_import_signed_db">นำเข้าฐานข้อมูลแฮชที่ลงนาม</string>
+    <string name="detection_capabilities_import_yara">นำเข้ากฎ YARA เพื่อตรวจสอบ (ไม่มีการเรียกใช้)</string>
+    <string name="detection_capabilities_sync">อัปเดตฐานข้อมูลที่ลงนาม</string>
+    <string name="detection_capabilities_feed_url">URL อัปเดต HTTPS</string>
+    <string name="detection_capabilities_sync_enabled">เปิดการอัปเดตอัตโนมัติ</string>
+    <string name="detection_capabilities_save">บันทึกการตั้งค่าอัปเดต</string>
+    <string name="detection_capabilities_sync_privacy">ดาวน์โหลดเท่านั้น ไม่มีการอัปโหลดผลสแกน ไฟล์ แฮช หรือชื่อแพ็กเกจ</string>
+    <string name="detection_capabilities_sync_unavailable">การอัปเดตอัตโนมัติไม่พร้อมใช้งานในรุ่นออฟไลน์นี้ หรือจนกว่าจะกำหนดคีย์ลงนามที่เชื่อถือได้</string>
+</resources>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="incident_channel_description">Термінові локальні сповіщення про загрози з п’ятисекундною сиреною, якщо її ввімкнено.</string>
+    <string name="incident_title">Виявлено шкідливу програму</string>
+    <string name="incident_loading">Завантаження відомостей про програму…</string>
+    <string name="incident_app_unavailable">Програма більше недоступна</string>
+    <string name="incident_warning">Ця встановлена програма збіглася з відомим хешем шкідливого ПЗ. Не відкривайте її. Видаліть її через екран підтвердження Android. SafeMobile не помістив цю встановлену програму в карантин і не видалив її.</string>
+    <string name="incident_uninstall_now">ВИДАЛИТИ ЗАРАЗ</string>
+    <string name="incident_dismiss">Відхилити (не рекомендовано)</string>
+    <string name="incident_review_threat">Переглянути загрозу</string>
+    <string name="incident_user_confirmation">Видалення програми завжди потребує вашого підтвердження в Android. SafeMobile не видаляє програми непомітно.</string>
+    <string name="incident_alerts_explanation">Увімкніть термінові сповіщення та п’ятисекундну сирену на максимальній гучності для підтвердженого шкідливого ПЗ. Відкриття SafeMobile або закриття інциденту зупиняє сирену. Налаштування звуку та режиму «Не турбувати» в Android можуть обмежувати звук.</string>
+    <string name="incident_full_screen_settings">Повноекранні сповіщення про інциденти</string>
+    <string name="incident_full_screen_explanation">Android 14+ керує повноекранним доступом. Для термінових сповіщень про інциденти його можна ввімкнути в системних налаштуваннях. Якщо залишити його вимкненим, SafeMobile використовуватиме сповіщення високого пріоритету. Це необов’язково.</string>
+    <string name="incident_open_settings">Відкрити налаштування</string>
+    <string name="cyber_dark_appearance">Cyber Dark · Темно-синій фон, картки кольору сланцю та неоновий блакитний</string>
+</resources>

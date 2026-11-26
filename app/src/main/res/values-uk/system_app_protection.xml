@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="full_screen_dashboard_warning">Критичні сповіщення вимкнено. Торкніться, щоб надати дозвіл на повноекранні попередження про шкідливе ПЗ.</string>
+    <string name="full_screen_dashboard_fallback">Повноекранний доступ необов’язковий. Коли Security Alerts увімкнено, п’ятисекундна сирена й сповіщення високого пріоритету працюють і без цього доступу з урахуванням налаштувань сповіщень і звуку Android.</string>
+    <string name="full_screen_settings_unavailable">Не вдалося відкрити налаштування повноекранних сповіщень. Ви можете й надалі користуватися SafeMobile.</string>
+    <string name="system_app_protection_badge">Системні програми захищені від перевірки та видалення</string>
+    <string name="system_app_scan_complete">Сканування завершено. У перевірених елементах загроз не знайдено. Системні програми не перевіряються й не видаляються; це сканування не підтверджує їхню цілісність.</string>
     <string name="pro_navigation_unavailable">Екран SafeMobile Pro тимчасово недоступний.</string>
 </resources>

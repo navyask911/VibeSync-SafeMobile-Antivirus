@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="siren_test_settings_title">Діагностика сирени</string>
+    <string name="siren_test_settings_description">Перевірте п’ятисекундну сирену та попередній перегляд сповіщення. Це не виявляє шкідливе ПЗ, не змінює базу загроз і не запитує видалення програми.</string>
+    <string name="siren_test_button">Перевірити сирену загроз</string>
+    <string name="siren_test_title">ТЕСТ СИРЕНИ — НЕ СПРАВЖНЯ ЗАГРОЗА</string>
+    <string name="siren_test_notification">Ручна перевірка звуку. Шкідливу програму не виявлено.</string>
+    <string name="siren_test_preview">Це тест сирени SafeMobile. Жодну встановлену програму не позначено, і запит на видалення не надсилається. Торкніться «Закрити», щоб зупинити звук.</string>
+    <string name="voice_siren_test">Це тест сирени SafeMobile. Загроз не виявлено.</string>
+    <string name="battery_review_title">Обмеження акумулятора можуть затримати захист</string>
+    <string name="battery_review_body">Увімкнено заощадження заряду або оптимізацію програм. Деякі пристрої Oppo/ColorOS обмежують фонове сканування та сповіщення про встановлення. Перегляньте налаштування акумулятора для SafeMobile; це не гарантує безперервного моніторингу.</string>
+    <string name="battery_review_action">Переглянути налаштування акумулятора</string>
+    <string name="battery_review_unavailable">Не вдалося відкрити налаштування акумулятора Android.</string>
+    <string name="ui_folder_access_not_granted">Доступ до папки не надано. Ви можете продовжити з обмеженим захистом.</string>
     <string name="test_siren">Перевірити сирену</string>
     <string name="test_voice">Перевірити голос</string>
     <string name="test_siren_failed">Не вдалося запустити тест сирени на цьому пристрої.</string>
