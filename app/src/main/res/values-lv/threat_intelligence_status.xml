@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="threat_intelligence_unavailable" tools:ignore="MissingTranslation">Šajā ierīcē kešatmiņā nav verificētas augšupējās apmācības statistikas.</string>
+    <string name="threat_intelligence_upstream_stale" tools:ignore="MissingTranslation">NOVECUŠI AUGŠUPĒJIE DATI · Publicētais atjauninājums ir vecāks par 30 dienām.</string>
+    <string name="threat_intelligence_device_title" tools:ignore="MissingTranslation">Ierīcē esošā apdraudējumu informācija</string>
+    <string name="threat_intelligence_latest_sync_note" tools:ignore="MissingTranslation">Pēdējās sinhronizācijas piezīme: %1$s</string>
+    <string name="threat_intelligence_feed_stale" tools:ignore="MissingTranslation">Pēdējā veiksmīgā konfigurētās plūsmas sinhronizācija bija pirms vairāk nekā 7 dienām.</string>
+</resources>
