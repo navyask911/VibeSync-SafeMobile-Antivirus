@@ -143,7 +143,7 @@
 <string name="overlay_review_notification_channel_description">תזכורות בעדיפות נמוכה לסקירת סיכון שכבות-על האופציונלית.</string>
 <string name="overlay_review_notification_title">סקירת סיכון שכבות-על הושלמה</string>
 <string name="overlay_review_notification_body">%1$d אפליקציות מצהירות על יכולת שכבת-על ו-%2$d מצהירות על שירותי נגישות. אלה סימנים לבדיקה, לא הוכחה לנוזקה.</string>
-<string name="nav_apps">Apps</string>
+<string name="nav_apps">אפליקציות</string>
     <string name="nav_sentinel">Download Sentinel</string>
     <string name="nav_analytics">Protection Analytics</string>
     <string name="setup_title">הגן על המכשיר שלך</string>
@@ -205,7 +205,7 @@
     <string name="apps_inventory_empty_body">הפעל סריקת אפליקציות מותקנות כדי למלא את הרשימה. חבילות מערכת ומוגנות מיועדות לבדיקה בלבד.</string>
     <string name="apps_inventory_count">%1$d אפליקציות נבדקו בתוצאות הזמינות האחרונות</string>
     <string name="sentinel_scope_title">Monitoring scope and limitations</string>
-    <string name="sentinel_scope_body">The current watcher observes APK create, move, and write-close events directly under the public Downloads directory while its foreground service is running. Events can be missed if the service stops or files are stored elsewhere. Post-install checks are best-effort and do not block Android installation.</string>
+    <string name="sentinel_scope_body">הניטור הנוכחי עוקב אחר אירועי יצירה, העברה וסיום כתיבה של קובצי APK ישירות בתיקיית ההורדות הציבורית בזמן ששירות החזית פועל. אירועים עלולים להתפספס אם השירות נעצר או אם הקבצים נשמרים במקום אחר. בדיקות לאחר התקנה הן במאמץ מיטבי ואינן חוסמות התקנה של Android.</string>
     <string name="risk_accessibility_overlay">מבקש הרשאת נגישות יחד עם יכולת שכבת־על (דפוס אפשרי של RAT/שכבת־על)</string>
     <string name="risk_boot_sms_internet">משלב התמדה לאחר אתחול, READ_SMS וגישה לאינטרנט (סימן אפשרי לגניבת SMS/קודי אימות)</string>
     <string name="nav_install_sources">מקורות התקנת אפליקציות</string>
@@ -308,12 +308,12 @@
     <string name="locale_urdu" translatable="false">اردو</string>
     <string name="locale_hebrew" translatable="false">עברית</string>
     <string name="threat_event_ray_id">מזהה Ray של אירוע האיום: %1$s</string>
-    <string name="features_menu">Security features</string>
+    <string name="features_menu">תכונות אבטחה</string>
     <string name="nav_guardian">מגן פעיל</string>
     <string name="nav_phishing">בודק קישורים</string>
     <string name="nav_cleaner">מנקה אחסון</string>
-    <string name="why_safemobile">Why SafeMobile? Core Strengths &amp; Features</string>
-    <string name="features_disclaimer">Feature availability depends on Android permissions and the current local definitions. These features do not provide guaranteed or complete malware protection.</string>
+    <string name="why_safemobile">למה SafeMobile? נקודות חוזק ותכונות מרכזיות</string>
+    <string name="features_disclaimer">זמינות התכונות תלויה בהרשאות Android ובהגדרות המקומיות הנוכחיות. תכונות אלה אינן מספקות הגנה מובטחת או מלאה מפני תוכנות זדוניות.</string>
     <string name="pillar_offline_title" translatable="false" formatted="false">100% Offline Privacy</string>
     <string name="pillar_offline_body">גיבוב קבצים מרכזי והתאמת חתימות מקומית מתבצעים במכשיר. מודעות ובדיקות עדכונים של Google Play הן תכונות נפרדות שיכולות להשתמש ברשת כשהן מוגדרות ומורשות.</string>
     <string name="pillar_telemetry_title">ללא טלמטריה בענן</string>
@@ -328,7 +328,7 @@
     <string name="feature_status_local">עיבוד מקומי</string>
     <string name="feature_status_heuristic">יוריסטיקה בלבד; ללא הזנת איומים</string>
     <string name="feature_status_review">נדרשת בדיקה של המשתמש</string>
-    <string name="open_feature">Open feature</string>
+    <string name="open_feature">פתח תכונה</string>
     <string name="guardian_title">מגן פעיל</string>
     <string name="guardian_disclaimer">נתוני מקור ההתקנה ונוכחות אפליקציות לגישה מרחוק הם סימנים לבדיקה, ולא הוכחה לתוכנה זדונית. Android אינה מאפשרת לאפליקציה רגילה לחסום כל התקנה חיצונית או לכפות עצירה של אפליקציות אחרות.</string>
     <string name="guardian_developer_settings">הגדרות למפתחים ו-ADB</string>
@@ -516,7 +516,7 @@
     <string name="ui_checked_on">בדקתי: פעיל</string>
     <string name="ui_checked_off">בדקתי: כבוי</string>
     <string name="ui_not_now">לא עכשיו</string>
-<string name="trusted_app_mark">Mark as Trusted</string>
+<string name="trusted_app_mark">סמן כמהימן</string>
 <string name="trusted_app_explanation">This exact APK was trusted by you. Heuristic warnings are muted, but known malware signatures are never ignored.</string>
 <string name="trusted_app_saved">This APK is trusted for heuristic alerts. A changed APK will be reviewed again.</string>
 <string name="trusted_app_denied">Trust unavailable: verified malware cannot be bypassed.</string>
@@ -690,7 +690,7 @@
     <string name="ui_status_at_risk">בסיכון</string>
     <string name="scan_detected_by">זוהה על ידי: %1$s</string>
     <string name="scan_detected_by_confidence">זוהה על ידי: %1$s (%2$d%%)</string>
-    <string name="security_score_100_voice" formatted="false">Your security configuration is fully optimized. We will continue to monitor your device to keep you safe. Thank you for using Safe Mobile Antivirus.</string>
+    <string name="security_score_100_voice" formatted="false">תצורת האבטחה שלך מיטבית לחלוטין. נמשיך לנטר את המכשיר כדי לשמור על בטיחותך. תודה שהשתמשת ב-SafeMobile Antivirus.</string>
         <string name="self_update_title">בדוק עדכונים (עדכון עצמי)</string>
         <string name="self_update_description">מצב מנהל המכשיר בדרך כלל אינו חוסם עדכונים של Google Play. לחצן זה בודק אם קיים עדכון בתוך האפליקציה דרך Play ומבקש מ-Android להתקין אותו.</string>
         <string name="self_update_started">תהליך העדכון נפתח. פעל לפי הנחיות המערכת כדי להשלים את העדכון.</string>

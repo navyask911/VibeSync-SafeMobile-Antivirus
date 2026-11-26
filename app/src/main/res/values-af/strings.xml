@@ -36,10 +36,10 @@
 <string name="hash_match">Pas by &apos;n plaaslike bedreigingsdefinisie: %1$s (%2$s).</string>
 <string name="hash_allowlisted">Hash is in die plaaslike toelatingslys.</string>
 <string name="apk_unreadable">APK-pad is nie leesbaar nie; geen hashbevinding is beskikbaar nie.</string>
-<string name="file_not_readable">The file is not readable by this app.</string>
-<string name="file_could_not_read">The file could not be read.</string>
+<string name="file_not_readable">Die program kan nie die lêer lees nie.</string>
+<string name="file_could_not_read">Die lêer kon nie gelees word nie.</string>
 <string name="package_metadata_missing">Pakketmetadata is nie beskikbaar nie.</string>
-<string name="file_stream_failed">Android could not open the selected file.</string>
+<string name="file_stream_failed">Android kon nie die gekose lêer oopmaak nie.</string>
 <string name="debug_certificate">Die sertifikaatonderwerp lyk soos die Android-ontfoutingsertifikaat.</string>
 <string name="scan_complete">Skandering voltooi. &apos;n Plaaslike resultaat sonder passing waarborg nie dat &apos;n lêer veilig is nie.</string>
 <string name="scan_failed">Skandering het misluk. Probeer weer.</string>
@@ -128,14 +128,14 @@
 <string name="locale_hebrew" translatable="false">עברית</string>
 <string name="nav_home">Tuis</string>
 <string name="nav_scan">Skandeer</string>
-<string name="nav_quarantine">Quarantine</string>
-<string name="nav_history">History</string>
+<string name="nav_quarantine">Kwarantyn</string>
+<string name="nav_history">Geskiedenis</string>
 <string name="nav_settings">Instellings</string>
 <string name="settings_title">Settings</string>
 <string name="appearance_title">Appearance</string>
-<string name="theme_system">System</string>
-<string name="theme_light">Clean Light</string>
-<string name="theme_dark">Dark</string>
+<string name="theme_system">Stelsel</string>
+<string name="theme_light">Skoon lig</string>
+<string name="theme_dark">Donker</string>
 <string name="language_settings">Taal</string>
 <string name="about_legal">About and Legal</string>
 <string name="ray_id">SafeMobile-Ray-ID</string>
@@ -167,12 +167,12 @@
 <string name="overlay_review_notification_body">%1$d programme verklaar oorlegvermoë en %2$d verklaar toeganklikheidsdienste. Dit is hersieningsaanwysers, nie bewys van wanware nie.</string>
 <string name="overlay_review_enabled">Outomatiese hersiening geaktiveer</string>
 <string name="overlay_review_disabled">Hersiening onderbreek</string>
-<string name="features_menu">Security features</string>
+<string name="features_menu">Sekuriteitskenmerke</string>
 <string name="nav_guardian">Aktiewe Beskermer</string>
 <string name="nav_phishing">Skakelkontroleerder</string>
 <string name="nav_cleaner">Bergingskoonmaker</string>
-<string name="why_safemobile">Why SafeMobile? Core Strengths &amp; Features</string>
-<string name="features_disclaimer">Feature availability depends on Android permissions and the current local definitions. These features do not provide guaranteed or complete malware protection.</string>
+<string name="why_safemobile">Waarom SafeMobile? Kernsterkpunte en kenmerke</string>
+<string name="features_disclaimer">Die beskikbaarheid van kenmerke hang af van Android-toestemmings en die huidige plaaslike definisies. Hierdie kenmerke bied nie gewaarborgde of volledige beskerming teen wanware nie.</string>
 <string name="pillar_offline_title" formatted="false">100% vanlyn privaatheid</string>
 <string name="pillar_offline_body">Kernlêer-hashing en plaaslike handtekeningpassing vind op die toestel plaas. Advertensies en Google Play-opdateringkontroles is afsonderlike netwerkkenmerke wanneer dit ingestel en toegelaat word.</string>
 <string name="pillar_telemetry_title">Geen wolktelemetrie</string>
@@ -187,7 +187,7 @@
 <string name="feature_status_local">Plaaslike verwerking</string>
 <string name="feature_status_heuristic">Slegs heuristiek; geen bedreigingsvoer nie</string>
 <string name="feature_status_review">Gebruikerhersiening vereis</string>
-<string name="open_feature">Open feature</string>
+<string name="open_feature">Maak kenmerk oop</string>
 <string name="guardian_title">Aktiewe Beskermer</string>
 <string name="guardian_disclaimer">Metadata oor die installeringsbron en die teenwoordigheid van afstandtoegangprogramme is aanwysers vir hersiening, nie bewys van wanware nie. Android laat nie &apos;n gewone program toe om elke eksterne installasie te blokkeer of ander programme te forseer om te stop nie.</string>
 <string name="guardian_developer_settings">Ontwikkelaarinstellings en ADB</string>
@@ -350,7 +350,7 @@
 <string name="apps_inventory_empty_body">Voer &apos;n geïnstalleerde-programskandering uit om hierdie lys te vul. Stelsel- en beskermde pakkette is slegs vir hersiening.</string>
 <string name="apps_inventory_count">%1$d programme beoordeel in die jongste beskikbare resultate</string>
 <string name="sentinel_scope_title">Monitoring scope and limitations</string>
-<string name="sentinel_scope_body">The current watcher observes APK create, move, and write-close events directly under the public Downloads directory while its foreground service is running. Events can be missed if the service stops or files are stored elsewhere. Post-install checks are best-effort and do not block Android installation.</string>
+<string name="sentinel_scope_body">Die huidige monitering neem APK-skepping-, skuif- en skryfvoltooiingsgebeure direk in die openbare Downloads-gids waar terwyl die voorgronddiens loop. Gebeure kan gemis word as die diens stop of lêers elders gestoor word. Na-installasiekontroles is volgens beste vermoë en blokkeer nie Android-installasie nie.</string>
 <string name="risk_accessibility_overlay">Versoek Toeganklikheid plus oorlegvermoë (moontlike oorleg/RAT-patroon)</string>
 <string name="risk_boot_sms_internet">Kombineer opstartvolharding, READ_SMS en INTERNET (moontlike SMS/2FA-diefstalpatroon)</string>
 <string name="nav_install_sources">App installation sources</string>
@@ -438,10 +438,10 @@
 <string name="device_security_score">Device Security Score</string>
 <string name="device_security_score_preview">Voorskoumeter. &apos;n Gemete telling is nog nie beskikbaar nie.</string>
 <string name="strict_mode_title">Streng modus</string>
-<string name="security_alerts_title">Security Alerts</string>
-<string name="security_alerts_description">Show local notifications when a threat is detected or quarantined. Off until you turn it on.</string>
-<string name="security_alerts_enabled">Alerts on</string>
-<string name="security_alerts_disabled">Alerts off</string>
+<string name="security_alerts_title">Sekuriteitswaarskuwings</string>
+<string name="security_alerts_description">Wys plaaslike kennisgewings wanneer &apos;n bedreiging opgespoor of in kwarantyn geplaas word. Af totdat jy dit aanskakel.</string>
+<string name="security_alerts_enabled">Kennisgewings aan</string>
+<string name="security_alerts_disabled">Kennisgewings af</string>
 <string name="voice_malicious_quarantined">Waarskuwing. &apos;n Kwaadwillige program is opgespoor en in kwarantyn geplaas.</string>
 <string name="voice_suspicious_quarantined">Waarskuwing. &apos;n Verdagte lêer is in SafeMobile se geënkripteerde kwarantyn geïsoleer.</string>
 <string name="voice_alert_malware_detected">Waarskuwing. &apos;n Kwaadwillige program is ná installasie opgespoor. Hersien of verwyder dit nou.</string>
@@ -517,7 +517,7 @@
 <string name="ui_checked_on">Ek het nagegaan: Aan</string>
 <string name="ui_checked_off">Ek het nagegaan: Af</string>
 <string name="ui_not_now">Nie nou nie</string>
-<string name="trusted_app_mark">Mark as Trusted</string>
+<string name="trusted_app_mark">Merk as vertroud</string>
 <string name="trusted_app_explanation">This exact APK was trusted by you. Heuristic warnings are muted, but known malware signatures are never ignored.</string>
 <string name="trusted_app_saved">This APK is trusted for heuristic alerts. A changed APK will be reviewed again.</string>
 <string name="trusted_app_denied">Trust unavailable: verified malware cannot be bypassed.</string>
@@ -833,7 +833,7 @@
     <string name="ui_status_at_risk">In gevaar</string>
     <string name="scan_detected_by">Bespeur deur: %1$s</string>
     <string name="scan_detected_by_confidence">Bespeur deur: %1$s (%2$d%%)</string>
-    <string name="security_score_100_voice" formatted="false">Your security configuration is fully optimized. We will continue to monitor your device to keep you safe. Thank you for using Safe Mobile Antivirus.</string>
+    <string name="security_score_100_voice" formatted="false">Jou sekuriteitopstelling is ten volle geoptimaliseer. Ons sal voortgaan om jou toestel te monitor om jou veilig te hou. Dankie dat jy SafeMobile Antivirus gebruik.</string>
         <string name="self_update_title">Kyk vir opdaterings (selfopdatering)</string>
         <string name="self_update_description">Toesteladministrateurmodus blokkeer gewoonlik nie Google Play-opdaterings nie. Hierdie knoppie kyk vir &apos;n Play-opdatering binne die program en vra Android om dit te installeer.</string>
         <string name="self_update_started">Die opdateringsvloei is oopgemaak. Volg die stelselboodskappe om die opdatering te voltooi.</string>

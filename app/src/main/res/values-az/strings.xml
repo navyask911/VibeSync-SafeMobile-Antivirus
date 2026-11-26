@@ -36,10 +36,10 @@
 <string name="hash_match">Yerli təhdid tərifinə uyğundur: %1$s (%2$s).</string>
 <string name="hash_allowlisted">Heş yerli icazə siyahısındadır.</string>
 <string name="apk_unreadable">APK yolu oxunaqlı deyil; heş nəticəsi yoxdur.</string>
-<string name="file_not_readable">The file is not readable by this app.</string>
-<string name="file_could_not_read">The file could not be read.</string>
+<string name="file_not_readable">Tətbiq faylı oxuya bilmir.</string>
+<string name="file_could_not_read">Faylı oxumaq mümkün olmadı.</string>
 <string name="package_metadata_missing">Paket metadatası əlçatan deyil.</string>
-<string name="file_stream_failed">Android could not open the selected file.</string>
+<string name="file_stream_failed">Android seçilmiş faylı aça bilmədi.</string>
 <string name="debug_certificate">Sertifikatın mövzusu Android sazlama sertifikatına bənzəyir.</string>
 <string name="scan_complete">Skan tamamlandı. Yerli uyğunluğun olmaması faylın təhlükəsiz olduğuna zəmanət vermir.</string>
 <string name="scan_failed">Skan uğursuz oldu. Yenidən cəhd edin.</string>
@@ -128,14 +128,14 @@
 <string name="locale_hebrew" translatable="false">עברית</string>
 <string name="nav_home">Ana səhifə</string>
 <string name="nav_scan">Skan et</string>
-<string name="nav_quarantine">Quarantine</string>
-<string name="nav_history">History</string>
+<string name="nav_quarantine">Karantin</string>
+<string name="nav_history">Tarixçə</string>
 <string name="nav_settings">Ayarlar</string>
 <string name="settings_title">Settings</string>
 <string name="appearance_title">Appearance</string>
-<string name="theme_system">System</string>
-<string name="theme_light">Clean Light</string>
-<string name="theme_dark">Dark</string>
+<string name="theme_system">Sistem</string>
+<string name="theme_light">Təmiz açıq</string>
+<string name="theme_dark">Tünd</string>
 <string name="language_settings">Dil</string>
 <string name="about_legal">About and Legal</string>
 <string name="ray_id">SafeMobile Ray ID-si</string>
@@ -167,12 +167,12 @@
 <string name="overlay_review_notification_body">%1$d tətbiq overlay imkanı, %2$d tətbiq isə əlçatanlıq xidmətləri elan edir. Bunlar yoxlama göstəriciləridir, zərərli proqram sübutu deyil.</string>
 <string name="overlay_review_enabled">Avtomatik yoxlama aktivləşdirildi</string>
 <string name="overlay_review_disabled">Yoxlama dayandırıldı</string>
-<string name="features_menu">Security features</string>
+<string name="features_menu">Təhlükəsizlik xüsusiyyətləri</string>
 <string name="nav_guardian">Aktiv Qoruyucu</string>
 <string name="nav_phishing">Link yoxlayıcı</string>
 <string name="nav_cleaner">Yaddaş təmizləyicisi</string>
-<string name="why_safemobile">Why SafeMobile? Core Strengths &amp; Features</string>
-<string name="features_disclaimer">Feature availability depends on Android permissions and the current local definitions. These features do not provide guaranteed or complete malware protection.</string>
+<string name="why_safemobile">Niyə SafeMobile? Əsas üstünlüklər və xüsusiyyətlər</string>
+<string name="features_disclaimer">Xüsusiyyətlərin mövcudluğu Android icazələrindən və hazırkı yerli təriflərdən asılıdır. Bu xüsusiyyətlər zərərli proqramlara qarşı zəmanətli və ya tam qoruma təmin etmir.</string>
 <string name="pillar_offline_title" formatted="false">100% oflayn məxfilik</string>
 <string name="pillar_offline_body">Əsas fayl heşlənməsi və yerli imza uyğunlaşdırılması cihazda aparılır. Reklamlar və Google Play yeniləmə yoxlamaları konfiqurasiya edildikdə və icazə verildikdə şəbəkədən istifadə edən ayrıca xüsusiyyətlərdir.</string>
 <string name="pillar_telemetry_title">Bulud telemetriyası yoxdur</string>
@@ -187,7 +187,7 @@
 <string name="feature_status_local">Yerli emal</string>
 <string name="feature_status_heuristic">Yalnız evristika; təhdid lenti yoxdur</string>
 <string name="feature_status_review">İstifadəçi yoxlaması tələb olunur</string>
-<string name="open_feature">Open feature</string>
+<string name="open_feature">Xüsusiyyəti aç</string>
 <string name="guardian_title">Aktiv Qoruyucu</string>
 <string name="guardian_disclaimer">Quraşdırma mənbəyi metadatası və uzaqdan giriş tətbiqlərinin mövcudluğu yoxlama göstəriciləridir, zərərli proqram sübutu deyil. Android adi tətbiqə hər xarici quraşdırmanı bloklamağa və ya digər tətbiqləri məcburi dayandırmağa icazə vermir.</string>
 <string name="guardian_developer_settings">Tərtibatçı ayarları və ADB</string>
@@ -350,7 +350,7 @@
 <string name="apps_inventory_empty_body">Siyahını doldurmaq üçün quraşdırılmış tətbiqləri skan edin. Sistem və qorunan paketlər yalnız nəzərdən keçirilir.</string>
 <string name="apps_inventory_count">Ən son mövcud nəticələrdə %1$d tətbiq qiymətləndirildi</string>
 <string name="sentinel_scope_title">Monitoring scope and limitations</string>
-<string name="sentinel_scope_body">The current watcher observes APK create, move, and write-close events directly under the public Downloads directory while its foreground service is running. Events can be missed if the service stops or files are stored elsewhere. Post-install checks are best-effort and do not block Android installation.</string>
+<string name="sentinel_scope_body">Cari izləyici ön plan xidməti işləyərkən ictimai Yükləmələr qovluğunda APK yaradılması, köçürülməsi və yazmanın tamamlanması hadisələrini birbaşa izləyir. Xidmət dayansa və ya fayllar başqa yerdə saxlanılsa, hadisələr gözdən qaça bilər. Quraşdırmadan sonrakı yoxlamalar mümkün olan ən yaxşı şəkildə aparılır və Android quraşdırmasını bloklamır.</string>
 <string name="risk_accessibility_overlay">Əlçatanlıq və overlay imkanını birlikdə tələb edir (mümkün overlay/RAT nümunəsi)</string>
 <string name="risk_boot_sms_internet">Yüklənmədə davamlılığı, READ_SMS və INTERNET-i birləşdirir (mümkün SMS/2FA oğurluğu nümunəsi)</string>
 <string name="nav_install_sources">App installation sources</string>
@@ -438,10 +438,10 @@
 <string name="device_security_score">Device Security Score</string>
 <string name="device_security_score_preview">Ön baxış göstəricisi. Ölçülmüş bal hələ mövcud deyil.</string>
 <string name="strict_mode_title">Sərt rejim</string>
-<string name="security_alerts_title">Security Alerts</string>
-<string name="security_alerts_description">Show local notifications when a threat is detected or quarantined. Off until you turn it on.</string>
-<string name="security_alerts_enabled">Alerts on</string>
-<string name="security_alerts_disabled">Alerts off</string>
+<string name="security_alerts_title">Təhlükəsizlik bildirişləri</string>
+<string name="security_alerts_description">Təhdid aşkarlandıqda və ya karantinə köçürüldükdə yerli bildirişlər göstərilir. Siz aktiv edənədək söndürülüb.</string>
+<string name="security_alerts_enabled">Bildirişlər aktivdir</string>
+<string name="security_alerts_disabled">Bildirişlər söndürülüb</string>
 <string name="voice_malicious_quarantined">Xəbərdarlıq. Zərərli tətbiq aşkarlandı və karantinə köçürüldü.</string>
 <string name="voice_suspicious_quarantined">Xəbərdarlıq. Şübhəli fayl SafeMobile-ın şifrələnmiş karantinində təcrid edildi.</string>
 <string name="voice_alert_malware_detected">Xəbərdarlıq. Quraşdırmadan sonra zərərli tətbiq aşkarlandı. İndi onu yoxlayın və ya silin.</string>
@@ -517,7 +517,7 @@
 <string name="ui_checked_on">Yoxladım: Aktivdir</string>
 <string name="ui_checked_off">Yoxladım: Söndürülüb</string>
 <string name="ui_not_now">İndi yox</string>
-<string name="trusted_app_mark">Mark as Trusted</string>
+<string name="trusted_app_mark">Etibarlı kimi işarələ</string>
 <string name="trusted_app_explanation">This exact APK was trusted by you. Heuristic warnings are muted, but known malware signatures are never ignored.</string>
 <string name="trusted_app_saved">This APK is trusted for heuristic alerts. A changed APK will be reviewed again.</string>
 <string name="trusted_app_denied">Trust unavailable: verified malware cannot be bypassed.</string>
@@ -833,7 +833,7 @@
     <string name="ui_status_at_risk">Risk altındadır</string>
     <string name="scan_detected_by">Aşkar edən: %1$s</string>
     <string name="scan_detected_by_confidence">Aşkar edən: %1$s (%2$d%%)</string>
-    <string name="security_score_100_voice" formatted="false">Your security configuration is fully optimized. We will continue to monitor your device to keep you safe. Thank you for using Safe Mobile Antivirus.</string>
+    <string name="security_score_100_voice" formatted="false">Təhlükəsizlik konfiqurasiyanız tam optimallaşdırılıb. Sizi qorumaq üçün cihazınızı izləməyə davam edəcəyik. SafeMobile Antivirus istifadə etdiyiniz üçün təşəkkür edirik.</string>
         <string name="self_update_title">Yeniləmələri yoxla (özünü yeniləmə)</string>
         <string name="self_update_description">Cihaz Administratoru rejimi adətən Google Play yeniləmələrini bloklamır. Bu düymə Play tətbiqdaxili yeniləməsini yoxlayır və Android-dən onu quraşdırmağı xahiş edir.</string>
         <string name="self_update_started">Yeniləmə prosesi açıldı. Yeniləməni tamamlamaq üçün sistem göstərişlərinə əməl edin.</string>

@@ -36,10 +36,10 @@
 <string name="hash_match">Coincideix amb una definició local d&apos;amenaça: %1$s (%2$s).</string>
 <string name="hash_allowlisted">El hash és a la llista local d&apos;autoritzats.</string>
 <string name="apk_unreadable">El camí de l&apos;APK no és llegible; no hi ha cap resultat de hash disponible.</string>
-<string name="file_not_readable">The file is not readable by this app.</string>
-<string name="file_could_not_read">The file could not be read.</string>
+<string name="file_not_readable">L&apos;aplicació no pot llegir el fitxer.</string>
+<string name="file_could_not_read">No s&apos;ha pogut llegir el fitxer.</string>
 <string name="package_metadata_missing">Les metadades del paquet no estan disponibles.</string>
-<string name="file_stream_failed">Android could not open the selected file.</string>
+<string name="file_stream_failed">Android no ha pogut obrir el fitxer seleccionat.</string>
 <string name="debug_certificate">El subjecte del certificat s&apos;assembla al certificat de depuració d&apos;Android.</string>
 <string name="scan_complete">Escaneig completat. Un resultat local sense coincidències no garanteix que el fitxer sigui segur.</string>
 <string name="scan_failed">L&apos;escaneig ha fallat. Torna-ho a provar.</string>
@@ -128,14 +128,14 @@
 <string name="locale_hebrew" translatable="false">עברית</string>
 <string name="nav_home">Inici</string>
 <string name="nav_scan">Escaneja</string>
-<string name="nav_quarantine">Quarantine</string>
-<string name="nav_history">History</string>
+<string name="nav_quarantine">Quarantena</string>
+<string name="nav_history">Historial</string>
 <string name="nav_settings">Configuració</string>
 <string name="settings_title">Settings</string>
 <string name="appearance_title">Appearance</string>
-<string name="theme_system">System</string>
-<string name="theme_light">Clean Light</string>
-<string name="theme_dark">Dark</string>
+<string name="theme_system">Sistema</string>
+<string name="theme_light">Clar net</string>
+<string name="theme_dark">Fosc</string>
 <string name="language_settings">Idioma</string>
 <string name="about_legal">About and Legal</string>
 <string name="ray_id">ID Ray de SafeMobile</string>
@@ -167,12 +167,12 @@
 <string name="overlay_review_notification_body">%1$d aplicacions declaren capacitat de superposició i %2$d declaren serveis d&apos;accessibilitat. Són indicadors per revisar, no proves de programari maliciós.</string>
 <string name="overlay_review_enabled">Revisió automàtica activada</string>
 <string name="overlay_review_disabled">Revisió en pausa</string>
-<string name="features_menu">Security features</string>
+<string name="features_menu">Funcions de seguretat</string>
 <string name="nav_guardian">Protector actiu</string>
 <string name="nav_phishing">Comprovador d&apos;enllaços</string>
 <string name="nav_cleaner">Netejador d&apos;emmagatzematge</string>
-<string name="why_safemobile">Why SafeMobile? Core Strengths &amp; Features</string>
-<string name="features_disclaimer">Feature availability depends on Android permissions and the current local definitions. These features do not provide guaranteed or complete malware protection.</string>
+<string name="why_safemobile">Per què SafeMobile? Punts forts i funcions principals</string>
+<string name="features_disclaimer">La disponibilitat de les funcions depèn dels permisos d&apos;Android i de les definicions locals actuals. Aquestes funcions no ofereixen una protecció garantida ni completa contra programari maliciós.</string>
 <string name="pillar_offline_title" formatted="false">Privadesa 100% fora de línia</string>
 <string name="pillar_offline_body">El càlcul de hash dels fitxers principals i la comparació local de signatures s&apos;executen al dispositiu. Els anuncis i les comprovacions d&apos;actualitzacions de Google Play són funcions de xarxa separades quan es configuren i s&apos;autoritzen.</string>
 <string name="pillar_telemetry_title">Sense telemetria al núvol</string>
@@ -187,7 +187,7 @@
 <string name="feature_status_local">Processament local</string>
 <string name="feature_status_heuristic">Només heurístiques; sense canal d&apos;amenaces</string>
 <string name="feature_status_review">Cal la revisió de l&apos;usuari</string>
-<string name="open_feature">Open feature</string>
+<string name="open_feature">Obre la funció</string>
 <string name="guardian_title">Protector actiu</string>
 <string name="guardian_disclaimer">Les metadades de l&apos;origen d&apos;instal·lació i la presència d&apos;aplicacions d&apos;accés remot són indicadors per revisar, no proves de programari maliciós. Android no permet que una aplicació normal bloquegi totes les instal·lacions externes ni forci l&apos;aturada d&apos;altres aplicacions.</string>
 <string name="guardian_developer_settings">Opcions de desenvolupador i ADB</string>
@@ -350,7 +350,7 @@
 <string name="apps_inventory_empty_body">Executa un escaneig d&apos;aplicacions instal·lades per omplir aquesta llista. Els paquets del sistema i protegits són només de revisió.</string>
 <string name="apps_inventory_count">%1$d aplicacions avaluades als darrers resultats disponibles</string>
 <string name="sentinel_scope_title">Monitoring scope and limitations</string>
-<string name="sentinel_scope_body">The current watcher observes APK create, move, and write-close events directly under the public Downloads directory while its foreground service is running. Events can be missed if the service stops or files are stored elsewhere. Post-install checks are best-effort and do not block Android installation.</string>
+<string name="sentinel_scope_body">La supervisió actual observa els esdeveniments de creació, moviment i finalització d&apos;escriptura d&apos;APK directament a la carpeta pública Baixades mentre el servei en primer pla està en execució. Es poden perdre esdeveniments si el servei s&apos;atura o els fitxers es desen en un altre lloc. Les comprovacions posteriors a la instal·lació es fan tant com és possible i no bloquegen la instal·lació d&apos;Android.</string>
 <string name="risk_accessibility_overlay">Sol·licita accessibilitat i capacitat de superposició (possible patró de superposició/RAT)</string>
 <string name="risk_boot_sms_internet">Combina persistència en iniciar-se, READ_SMS i INTERNET (possible patró de robatori d&apos;SMS/2FA)</string>
 <string name="nav_install_sources">App installation sources</string>
@@ -438,10 +438,10 @@
 <string name="device_security_score">Device Security Score</string>
 <string name="device_security_score_preview">Indicador de previsualització. Encara no hi ha cap puntuació mesurada.</string>
 <string name="strict_mode_title">Mode estricte</string>
-<string name="security_alerts_title">Security Alerts</string>
-<string name="security_alerts_description">Show local notifications when a threat is detected or quarantined. Off until you turn it on.</string>
-<string name="security_alerts_enabled">Alerts on</string>
-<string name="security_alerts_disabled">Alerts off</string>
+<string name="security_alerts_title">Alertes de seguretat</string>
+<string name="security_alerts_description">Mostra notificacions locals quan es detecta una amenaça o es posa en quarantena. Està desactivat fins que ho activis.</string>
+<string name="security_alerts_enabled">Alertes activades</string>
+<string name="security_alerts_disabled">Alertes desactivades</string>
 <string name="voice_malicious_quarantined">Avís. S&apos;ha detectat una aplicació maliciosa i s&apos;ha posat en quarantena.</string>
 <string name="voice_suspicious_quarantined">Avís. S&apos;ha aïllat un fitxer sospitós a la quarantena xifrada de SafeMobile.</string>
 <string name="voice_alert_malware_detected">Avís. S&apos;ha detectat una aplicació maliciosa després de la instal·lació. Revisa-la o desinstal·la-la ara.</string>
@@ -517,7 +517,7 @@
 <string name="ui_checked_on">He comprovat: activat</string>
 <string name="ui_checked_off">He comprovat: desactivat</string>
 <string name="ui_not_now">Ara no</string>
-<string name="trusted_app_mark">Mark as Trusted</string>
+<string name="trusted_app_mark">Marca com a fiable</string>
 <string name="trusted_app_explanation">This exact APK was trusted by you. Heuristic warnings are muted, but known malware signatures are never ignored.</string>
 <string name="trusted_app_saved">This APK is trusted for heuristic alerts. A changed APK will be reviewed again.</string>
 <string name="trusted_app_denied">Trust unavailable: verified malware cannot be bypassed.</string>
@@ -833,7 +833,7 @@
     <string name="ui_status_at_risk">En risc</string>
     <string name="scan_detected_by">Detectat per: %1$s</string>
     <string name="scan_detected_by_confidence">Detectat per: %1$s (%2$d%%)</string>
-    <string name="security_score_100_voice" formatted="false">Your security configuration is fully optimized. We will continue to monitor your device to keep you safe. Thank you for using Safe Mobile Antivirus.</string>
+    <string name="security_score_100_voice" formatted="false">La configuració de seguretat està completament optimitzada. Continuarem supervisant el dispositiu per mantenir-te protegit. Gràcies per utilitzar SafeMobile Antivirus.</string>
         <string name="self_update_title">Comprova si hi ha actualitzacions (autoactualització)</string>
         <string name="self_update_description">El mode d&apos;administrador del dispositiu normalment no bloqueja les actualitzacions de Google Play. Aquest botó comprova si hi ha una actualització integrada de Play i demana a Android que la instal·li.</string>
         <string name="self_update_started">S&apos;ha obert el procés d&apos;actualització. Segueix les indicacions del sistema per completar-la.</string>

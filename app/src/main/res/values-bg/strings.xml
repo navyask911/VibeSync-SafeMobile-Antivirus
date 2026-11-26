@@ -36,10 +36,10 @@
 <string name="hash_match">Съвпада с локална дефиниция за заплаха: %1$s (%2$s).</string>
 <string name="hash_allowlisted">Хешът присъства в локалния списък с разрешени.</string>
 <string name="apk_unreadable">APK пътят не може да бъде прочетен; няма наличен хеш резултат.</string>
-<string name="file_not_readable">The file is not readable by this app.</string>
-<string name="file_could_not_read">The file could not be read.</string>
+<string name="file_not_readable">Приложението не може да прочете файла.</string>
+<string name="file_could_not_read">Файлът не можа да бъде прочетен.</string>
 <string name="package_metadata_missing">Метаданните на пакета не са налични.</string>
-<string name="file_stream_failed">Android could not open the selected file.</string>
+<string name="file_stream_failed">Android не можа да отвори избрания файл.</string>
 <string name="debug_certificate">Субектът на сертификата прилича на сертификата за отстраняване на грешки на Android.</string>
 <string name="scan_complete">Сканирането завърши. Локален резултат без съвпадение не гарантира, че файлът е безопасен.</string>
 <string name="scan_failed">Сканирането е неуспешно. Опитайте отново.</string>
@@ -128,14 +128,14 @@
 <string name="locale_hebrew" translatable="false">עברית</string>
 <string name="nav_home">Начало</string>
 <string name="nav_scan">Сканиране</string>
-<string name="nav_quarantine">Quarantine</string>
-<string name="nav_history">History</string>
+<string name="nav_quarantine">Карантина</string>
+<string name="nav_history">История</string>
 <string name="nav_settings">Настройки</string>
 <string name="settings_title">Settings</string>
 <string name="appearance_title">Appearance</string>
-<string name="theme_system">System</string>
-<string name="theme_light">Clean Light</string>
-<string name="theme_dark">Dark</string>
+<string name="theme_system">Система</string>
+<string name="theme_light">Изчистена светла</string>
+<string name="theme_dark">Тъмна</string>
 <string name="language_settings">Език</string>
 <string name="about_legal">About and Legal</string>
 <string name="ray_id">Ray ID на SafeMobile</string>
@@ -167,12 +167,12 @@
 <string name="overlay_review_notification_body">%1$d приложения декларират наслагване и %2$d декларират услуги за достъпност. Това са индикатори за преглед, а не доказателство за злонамерен софтуер.</string>
 <string name="overlay_review_enabled">Автоматичният преглед е включен</string>
 <string name="overlay_review_disabled">Прегледът е поставен на пауза</string>
-<string name="features_menu">Security features</string>
+<string name="features_menu">Функции за сигурност</string>
 <string name="nav_guardian">Активен пазител</string>
 <string name="nav_phishing">Проверка на връзки</string>
 <string name="nav_cleaner">Почистване на хранилището</string>
-<string name="why_safemobile">Why SafeMobile? Core Strengths &amp; Features</string>
-<string name="features_disclaimer">Feature availability depends on Android permissions and the current local definitions. These features do not provide guaranteed or complete malware protection.</string>
+<string name="why_safemobile">Защо SafeMobile? Основни предимства и функции</string>
+<string name="features_disclaimer">Наличността на функциите зависи от разрешенията на Android и текущите локални дефиниции. Тези функции не осигуряват гарантирана или пълна защита от злонамерен софтуер.</string>
 <string name="pillar_offline_title" formatted="false">100% офлайн поверителност</string>
 <string name="pillar_offline_body">Основното хеширане на файлове и локалното съпоставяне на подписи се извършват на устройството. Рекламите и проверките за актуализации в Google Play са отделни функции с мрежов достъп, когато са конфигурирани и разрешени.</string>
 <string name="pillar_telemetry_title">Без облачна телеметрия</string>
@@ -187,7 +187,7 @@
 <string name="feature_status_local">Локална обработка</string>
 <string name="feature_status_heuristic">Само евристика; няма поток за заплахи</string>
 <string name="feature_status_review">Изисква се преглед от потребителя</string>
-<string name="open_feature">Open feature</string>
+<string name="open_feature">Отваряне на функция</string>
 <string name="guardian_title">Активен пазител</string>
 <string name="guardian_disclaimer">Метаданните за източника на инсталиране и наличието на приложения за отдалечен достъп са показатели за преглед, а не доказателство за злонамерен софтуер. Android не позволява на обикновено приложение да блокира всяка външна инсталация или принудително да спира други приложения.</string>
 <string name="guardian_developer_settings">Настройки за разработчици и ADB</string>
@@ -350,7 +350,7 @@
 <string name="apps_inventory_empty_body">Изпълнете сканиране на инсталираните приложения, за да попълните списъка. Системните и защитените пакети са само за преглед.</string>
 <string name="apps_inventory_count">%1$d приложения са оценени в последните налични резултати</string>
 <string name="sentinel_scope_title">Monitoring scope and limitations</string>
-<string name="sentinel_scope_body">The current watcher observes APK create, move, and write-close events directly under the public Downloads directory while its foreground service is running. Events can be missed if the service stops or files are stored elsewhere. Post-install checks are best-effort and do not block Android installation.</string>
+<string name="sentinel_scope_body">Текущото наблюдение следи събития за създаване, преместване и приключване на запис на APK файлове директно в публичната папка „Изтегляния“, докато услугата на преден план работи. Събития може да бъдат пропуснати, ако услугата спре или файловете се съхраняват другаде. Проверките след инсталиране са с най-добро усилие и не блокират инсталирането от Android.</string>
 <string name="risk_accessibility_overlay">Заявява достъпност плюс наслагване (възможен модел за наслагване/RAT)</string>
 <string name="risk_boot_sms_internet">Комбинира устойчивост след зареждане, READ_SMS и INTERNET (възможен модел за кражба на SMS/2FA)</string>
 <string name="nav_install_sources">App installation sources</string>
@@ -438,10 +438,10 @@
 <string name="device_security_score">Device Security Score</string>
 <string name="device_security_score_preview">Индикатор за предварителен преглед. Все още няма измерена оценка.</string>
 <string name="strict_mode_title">Строг режим</string>
-<string name="security_alerts_title">Security Alerts</string>
-<string name="security_alerts_description">Show local notifications when a threat is detected or quarantined. Off until you turn it on.</string>
-<string name="security_alerts_enabled">Alerts on</string>
-<string name="security_alerts_disabled">Alerts off</string>
+<string name="security_alerts_title">Известия за сигурност</string>
+<string name="security_alerts_description">Показване на локални известия при откриване на заплаха или поставянето ѝ под карантина. Изключено е, докато не го включите.</string>
+<string name="security_alerts_enabled">Известията са включени</string>
+<string name="security_alerts_disabled">Известията са изключени</string>
 <string name="voice_malicious_quarantined">Предупреждение. Открито е злонамерено приложение и е поставено под карантина.</string>
 <string name="voice_suspicious_quarantined">Предупреждение. Подозрителен файл е изолиран в криптираната карантина на SafeMobile.</string>
 <string name="voice_alert_malware_detected">Предупреждение. След инсталиране е открито злонамерено приложение. Прегледайте или деинсталирайте го сега.</string>
@@ -517,7 +517,7 @@
 <string name="ui_checked_on">Проверих: Вкл.</string>
 <string name="ui_checked_off">Проверих: Изкл.</string>
 <string name="ui_not_now">Не сега</string>
-<string name="trusted_app_mark">Mark as Trusted</string>
+<string name="trusted_app_mark">Маркиране като надеждно</string>
 <string name="trusted_app_explanation">This exact APK was trusted by you. Heuristic warnings are muted, but known malware signatures are never ignored.</string>
 <string name="trusted_app_saved">This APK is trusted for heuristic alerts. A changed APK will be reviewed again.</string>
 <string name="trusted_app_denied">Trust unavailable: verified malware cannot be bypassed.</string>
@@ -833,7 +833,7 @@
     <string name="ui_status_at_risk">В риск</string>
     <string name="scan_detected_by">Открито от: %1$s</string>
     <string name="scan_detected_by_confidence">Открито от: %1$s (%2$d%%)</string>
-    <string name="security_score_100_voice" formatted="false">Your security configuration is fully optimized. We will continue to monitor your device to keep you safe. Thank you for using Safe Mobile Antivirus.</string>
+    <string name="security_score_100_voice" formatted="false">Конфигурацията ви за сигурност е напълно оптимизирана. Ще продължим да наблюдаваме устройството ви, за да ви предпазваме. Благодарим, че използвате SafeMobile Antivirus.</string>
         <string name="self_update_title">Проверка за актуализации (самостоятелно актуализиране)</string>
         <string name="self_update_description">Режимът на администратор на устройството обикновено не блокира актуализациите на Google Play. Този бутон проверява за актуализация в приложението чрез Play и иска от Android да я инсталира.</string>
         <string name="self_update_started">Процесът на актуализиране е отворен. Следвайте системните подкани, за да завършите актуализацията.</string>
