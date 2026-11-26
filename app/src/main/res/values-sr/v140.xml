@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v140_dashboard">Контролна табла</string>
+    <string name="v140_analytics_tools">Алати</string>
+    <string name="v140_critical">Критично</string>
+    <string name="v140_minor">Мање</string>
+    <string name="v140_snoozed">Одложено</string>
+    <string name="v140_completed">Завршено</string>
+    <string name="v140_snooze_warning">Упозорење је одложено</string>
+    <string name="v140_done_return_to_audit">Готово — Врати се на ревизију</string>
+    <string name="v140_security_risk_explained">Објашњење безбедносног ризика</string>
+    <string name="v140_posture_score_impact">Утицај на оцену стања уређаја</string>
+    <string name="v140_pending_actions">%1$d радњи на чекању</string>
+</resources>
