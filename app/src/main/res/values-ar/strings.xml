@@ -689,16 +689,16 @@
     <string name="ui_status_at_risk">معرّض للخطر</string>
     <string name="scan_detected_by">تم الاكتشاف بواسطة: %1$s</string>
     <string name="scan_detected_by_confidence">تم الاكتشاف بواسطة: %1$s (%2$d%%)</string>
-    <string name="security_score_100_voice" formatted="false">Your security configuration is fully optimized. We will continue to monitor your device to keep you safe. Thank you for using Safe Mobile Antivirus.</string>
-        <string name="self_update_title">Check for Updates (Self-Update)</string>
-        <string name="self_update_description">Device Administrator mode does not normally block Google Play updates. This button checks for a Play in-app update and asks Android to install it.</string>
-        <string name="self_update_started">The update flow was opened. Follow the system prompts to finish updating.</string>
-        <string name="self_update_cancelled">The update was cancelled.</string>
-        <string name="self_update_check_failed">The update could not be started. Check your Google Play connection and try again.</string>
-        <string name="self_update_unavailable">Play in-app updates are unavailable for this installation. Open Google Play to check manually.</string>
-        <string name="self_update_no_update">No newer Google Play update is currently available.</string>
-        <string name="self_update_not_allowed">An update is available, but Google Play does not allow the immediate update flow for this installation.</string>
-        <string name="self_update_open_play_store">Open Google Play</string>
+    <string name="security_score_100_voice" formatted="false">تم تحسين إعدادات الأمان لديك بالكامل. سنواصل مراقبة جهازك للحفاظ على سلامتك. شكراً لاستخدامك Safe Mobile Antivirus.</string>
+        <string name="self_update_title">التحقق من وجود تحديثات (تحديث ذاتي)</string>
+        <string name="self_update_description">لا يمنع وضع مسؤول الجهاز عادةً تحديثات Google Play. يتحقق هذا الزر من وجود تحديث داخل التطبيق عبر Play ويطلب من Android تثبيته.</string>
+        <string name="self_update_started">تم فتح عملية التحديث. اتبع مطالبات النظام لإكمال التحديث.</string>
+        <string name="self_update_cancelled">تم إلغاء التحديث.</string>
+        <string name="self_update_check_failed">تعذّر بدء التحديث. تحقق من اتصال Google Play ثم حاول مرة أخرى.</string>
+        <string name="self_update_unavailable">تحديثات Play داخل التطبيق غير متاحة لهذا التثبيت. افتح Google Play للتحقق يدوياً.</string>
+        <string name="self_update_no_update">لا يتوفر حالياً تحديث أحدث من Google Play.</string>
+        <string name="self_update_not_allowed">يتوفر تحديث، لكن Google Play لا يسمح بالتحديث الفوري لهذا التثبيت.</string>
+        <string name="self_update_open_play_store">فتح Google Play</string>
     <string name="scan_sessions_in_progress">جلسات الفحص الجارية: %1$d</string>
     <string name="scan_sessions_completed">جلسات الفحص المكتملة: %1$d</string>
     <string name="ui_sentinel_telegram_folder">مجلد مستندات Telegram</string>
