@@ -704,9 +704,9 @@
     <string name="scan_sessions_completed">Tamamlanan tarama oturumları: %1$d</string>
     <string name="ui_sentinel_telegram_folder">Telegram Belgeleri klasörü</string>
     <string name="ui_sentinel_enable_telegram">Telegram Belgelerini izle</string>
-    <string name="full_screen_dashboard_warning">Tam ekran kötü amaçlı yazılım uyarıları için izin verin: Kritik uyarılar devre dışı.</string>
-    <string name="full_screen_dashboard_fallback">Tam ekran erişimi isteğe bağlıdır. Security Alerts açıkken, Android bildirim ve ses ayarlarına bağlı olarak beş saniyelik siren ve yüksek öncelikli bildirim bu erişim olmadan da çalışır.</string>
-    <string name="full_screen_settings_unavailable">Tam ekran uyarı ayarları açılamadı. SafeMobile'ı kullanmaya devam edebilirsiniz.</string>
-    <string name="system_app_protection_badge">Sistem uygulamaları inceleme ve kaldırmaya karşı korunur</string>
-    <string name="system_app_scan_complete">Tarama tamamlandı. Denetlenen öğelerde tehdit bulunmadı. Sistem uygulamaları inceleme ve kaldırma kapsamı dışındadır; bu tarama bunların bütünlüğünü doğrulamamıştır.</string>
+    
+    
+    
+    
+    
 </resources>

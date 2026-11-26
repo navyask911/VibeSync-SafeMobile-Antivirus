@@ -704,9 +704,9 @@
     <string name="scan_sessions_completed">పూర్తయిన స్కాన్ సెషన్‌లు: %1$d</string>
     <string name="ui_sentinel_telegram_folder">Telegram పత్రాల ఫోల్డర్</string>
     <string name="ui_sentinel_enable_telegram">Telegram పత్రాలను పర్యవేక్షించండి</string>
-    <string name="full_screen_dashboard_warning">పూర్తి-తెర మాల్వేర్ హెచ్చరికల కోసం అనుమతి ఇవ్వండి: ముఖ్య హెచ్చరికలు నిలిపివేయబడ్డాయి.</string>
-    <string name="full_screen_dashboard_fallback">పూర్తి-తెర ప్రవేశం ఐచ్ఛికం. Security Alerts ప్రారంభించినప్పుడు, ఈ ప్రవేశం లేకున్నా Android నోటిఫికేషన్, ధ్వని అమరికలకు లోబడి ఐదు సెకన్ల సైరన్, అధిక ప్రాధాన్యత నోటిఫికేషన్ పనిచేస్తాయి.</string>
-    <string name="full_screen_settings_unavailable">పూర్తి-తెర హెచ్చరిక అమరికలను తెరవలేకపోయాం. మీరు SafeMobile ఉపయోగించడం కొనసాగించవచ్చు.</string>
-    <string name="system_app_protection_badge">సిస్టమ్ యాప్‌లు సమీక్ష, అన్‌ఇన్‌స్టాల్ నుంచి రక్షించబడ్డాయి</string>
-    <string name="system_app_scan_complete">స్కాన్ పూర్తయింది. తనిఖీ చేసిన అంశాల్లో ముప్పులు కనబడలేదు. సిస్టమ్ యాప్‌లు సమీక్ష, అన్‌ఇన్‌స్టాల్ నుంచి మినహాయించబడ్డాయి; ఈ స్కాన్ వాటి సమగ్రతను ధృవీకరించలేదు.</string>
+    
+    
+    
+    
+    
 </resources>
