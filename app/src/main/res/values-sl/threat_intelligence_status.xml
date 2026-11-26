@@ -1,0 +1,7 @@
+<resources>
+    <string name="threat_intelligence_unavailable">Na tej napravi niso shranjeni preverjeni statistični podatki o učenju iz nadrejenega vira.</string>
+    <string name="threat_intelligence_upstream_stale">ZASTARELI PODATKI IZ VIRA · Objavljena posodobitev je starejša od 30 dni.</string>
+    <string name="threat_intelligence_device_title">Obveščevalni podatki o grožnjah v napravi</string>
+    <string name="threat_intelligence_latest_sync_note">Opomba o zadnji sinhronizaciji: %1$s</string>
+    <string name="threat_intelligence_feed_stale">Zadnja uspešna sinhronizacija nastavljenega vira je starejša od 7 dni.</string>
+</resources>

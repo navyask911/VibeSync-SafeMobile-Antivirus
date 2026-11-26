@@ -1,0 +1,8 @@
+<resources>
+    <string name="full_screen_dashboard_warning">Критична упозорења су искључена. Додирните да бисте одобрили дозволу за упозорења о малверу преко целог екрана.</string>
+    <string name="full_screen_dashboard_fallback">Приступ преко целог екрана је опционалан. Када су безбедносна упозорења укључена, сирена од пет секунди и обавештење високог приоритета раде и без овог приступа, у складу са Android подешавањима обавештења и звука.</string>
+    <string name="full_screen_settings_unavailable">Подешавања упозорења преко целог екрана није могуће отворити. Можете наставити да користите SafeMobile.</string>
+    <string name="system_app_protection_badge">Системске апликације су заштићене од прегледа и деинсталације</string>
+    <string name="system_app_scan_complete">Скенирање је завршено. У провереним ставкама нису пронађене претње. Системске апликације су искључене из прегледа и деинсталације; њихов интегритет није проверен овим скенирањем.</string>
+    <string name="pro_navigation_unavailable">SafeMobile Pro екран је привремено недоступан.</string>
+</resources>

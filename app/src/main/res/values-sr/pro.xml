@@ -1,0 +1,9 @@
+<resources>
+    <string name="pro_one_year_price">Једна унапред плаћена година: %1$s</string>
+    <string name="pro_prepaid_offer">Једногодишњи унапред плаћени приступ SafeMobile Pro. Не обнавља се аутоматски.</string>
+    <string name="pro_prepaid_duration_limit">Унапред плаћени планови Google Play ограничени су на годину дана по куповини. Поново купите или продужите исти план да бисте додали још годину дана; коначну цену потврђује Google Play.</string>
+    <string name="pro_device_binding_explanation">Куповина је повезана са овим Android уређајем помоћу хешираног идентификатора уређаја. Поновна инсталација на истом уређају може да врати активну Play куповину; други уређај је блокиран.</string>
+    <string name="pro_buy_or_extend_one_year">Купи / продужи за 1 годину</string>
+    <string name="pro_device_mismatch">Претплата је активна на другом уређају. Приступ SafeMobile Pro је блокиран на овом уређају.</string>
+    <string name="pro_device_binding_unavailable">Ова куповина нема проверљиву везу са уређајем. Pro приступ је блокиран док Google Play не врати куповину везану за уређај.</string>
+</resources>

@@ -1,0 +1,7 @@
+<resources>
+    <string name="threat_intelligence_unavailable">На овом уређају нису кеширани проверени статистички подаци о обучавању из узводног извора.</string>
+    <string name="threat_intelligence_upstream_stale">ЗАСТАРЕЛИ ПОДАЦИ ИЗ ИЗВОРА · Објављено ажурирање је старије од 30 дана.</string>
+    <string name="threat_intelligence_device_title">Подаци о претњама на уређају</string>
+    <string name="threat_intelligence_latest_sync_note">Напомена о последњој синхронизацији: %1$s</string>
+    <string name="threat_intelligence_feed_stale">Последња успешна синхронизација подешеног извора старија је од 7 дана.</string>
+</resources>

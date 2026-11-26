@@ -1,0 +1,9 @@
+<resources>
+    <string name="pro_one_year_price">Eno leto predplačila: %1$s</string>
+    <string name="pro_prepaid_offer">Enoletni predplačniški dostop do SafeMobile Pro. Ne podaljšuje se samodejno.</string>
+    <string name="pro_prepaid_duration_limit">Predplačniški paketi Google Play so omejeni na eno leto na nakup. Za dodatno leto znova kupite ali podaljšajte isti paket; končno ceno potrdi Google Play.</string>
+    <string name="pro_device_binding_explanation">Nakup je povezan s to napravo Android z zgoščenim identifikatorjem naprave. Ponovna namestitev v isti napravi lahko obnovi aktivni nakup Play; druga naprava je blokirana.</string>
+    <string name="pro_buy_or_extend_one_year">Kupi / podaljšaj za 1 leto</string>
+    <string name="pro_device_mismatch">Naročnina je aktivna v drugi napravi. Dostop do SafeMobile Pro je v tej napravi blokiran.</string>
+    <string name="pro_device_binding_unavailable">Ta nakup nima preverljive povezave z napravo. Dostop Pro je blokiran, dokler Google Play ne vrne nakupa, vezanega na napravo.</string>
+</resources>

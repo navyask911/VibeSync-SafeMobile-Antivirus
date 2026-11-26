@@ -1,0 +1,9 @@
+<resources>
+    <string name="pro_one_year_price">Një vit i parapaguar: %1$s</string>
+    <string name="pro_prepaid_offer">Qasje njëvjeçare e parapaguar në SafeMobile Pro. Nuk rinovohet automatikisht.</string>
+    <string name="pro_prepaid_duration_limit">Planet e parapaguara të Google Play kufizohen në një vit për blerje. Blije ose zgjate sërish të njëjtin plan për të shtuar një vit tjetër; çmimi përfundimtar konfirmohet në Google Play.</string>
+    <string name="pro_device_binding_explanation">Kjo blerje lidhet me këtë pajisje Android duke përdorur një identifikues të hashuar të pajisjes. Riinstalimi në të njëjtën pajisje mund të rikthejë blerjen aktive të Play; një pajisje tjetër bllokohet.</string>
+    <string name="pro_buy_or_extend_one_year">Bli / zgjat për 1 vit</string>
+    <string name="pro_device_mismatch">Abonimi është aktiv në një pajisje tjetër. Qasja në SafeMobile Pro është bllokuar në këtë pajisje.</string>
+    <string name="pro_device_binding_unavailable">Kjo blerje nuk ka lidhje të verifikueshme me pajisjen. Qasja Pro bllokohet derisa Google Play të kthejë një blerje të lidhur me pajisjen.</string>
+</resources>
