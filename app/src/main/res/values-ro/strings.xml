@@ -92,16 +92,16 @@
 <string name="quarantine_delete">Șterge definitiv</string>
 <string name="quarantine_restore_confirm_title">Restaurezi acest fișier din carantină?</string>
 <string name="quarantine_restore_confirm_body">Restaurarea scrie fișierul într-o locație selectată de tine. Fișierul restaurat poate fi periculos. Continuă numai dacă ai încredere în fișier sau ai nevoie de el pentru o analiză controlată. Copia din carantină va rămâne aici.</string>
-<string name="quarantine_delete_confirm_title">Permanently delete this quarantined copy?</string>
-<string name="quarantine_delete_confirm_body">This action permanently deletes the private quarantined copy from SafeMobile. It cannot be undone.</string>
-<string name="quarantine_restore_success">A copy of %1$s was written to the selected destination (%2$d bytes). The quarantined original remains stored.</string>
-<string name="quarantine_delete_success">Deleted quarantined file %1$s.</string>
-<string name="quarantine_restore_failed">The quarantined file could not be restored. Check the destination and available storage, then try again.</string>
-<string name="quarantine_delete_failed">File could not be deleted</string>
-<string name="risk_sms_internet">Combines SMS permissions with network access; this is a risk indicator, not proof of malicious behavior.</string>
-<string name="risk_sms_accessibility">Combines SMS permissions with an accessibility service declaration; this is a review signal, not proof of OTP interception or malware.</string>
-<string name="language_label">Language: %1$s</string>
-<string name="language_system_default">System default</string>
+<string name="quarantine_delete_confirm_title">Ștergi definitiv această copie din carantină?</string>
+<string name="quarantine_delete_confirm_body">Această acțiune șterge definitiv copia privată din carantina SafeMobile. Operația nu poate fi anulată.</string>
+<string name="quarantine_restore_success">O copie a fișierului %1$s a fost scrisă în destinația selectată (%2$d bytes). Originalul din carantină rămâne stocat.</string>
+<string name="quarantine_delete_success">Fișierul din carantină %1$s a fost șters.</string>
+<string name="quarantine_restore_failed">Fișierul din carantină nu a putut fi restaurat. Verifică destinația și spațiul de stocare disponibil, apoi încearcă din nou.</string>
+<string name="quarantine_delete_failed">Fișierul nu a putut fi șters</string>
+<string name="risk_sms_internet">Combină permisiunile SMS cu accesul la rețea; acesta este un indicator de risc, nu o dovadă de comportament rău intenționat.</string>
+<string name="risk_sms_accessibility">Combină permisiunile SMS cu declararea unui serviciu de accesibilitate; acesta este un semnal pentru verificare, nu o dovadă de interceptare OTP sau de malware.</string>
+<string name="language_label">Limbă: %1$s</string>
+<string name="language_system_default">Limba implicită a sistemului</string>
 <string name="locale_english" translatable="false">English</string>
 <string name="locale_arabic" translatable="false">العربية</string>
 <string name="locale_german" translatable="false">Deutsch</string>
@@ -109,8 +109,8 @@
 <string name="locale_french" translatable="false">Français</string>
 <string name="locale_hindi" translatable="false">हिन्दी</string>
 <string name="locale_japanese" translatable="false">日本語</string>
-<string name="limited_protection">Limited protection — EICAR test definition only</string>
-<string name="review_recommended">Review recommended</string>
+<string name="limited_protection">Protecție limitată — numai definiția de test EICAR</string>
+<string name="review_recommended">Se recomandă verificarea</string>
 <string name="locale_portuguese" translatable="false">Português</string>
 <string name="locale_russian" translatable="false">Русский</string>
 <string name="locale_chinese" translatable="false">简体中文</string>
@@ -128,51 +128,51 @@
 <string name="locale_hebrew" translatable="false">עברית</string>
 <string name="nav_home">Acasă</string>
 <string name="nav_scan">Scanează</string>
-<string name="nav_quarantine">Quarantine</string>
-<string name="nav_history">History</string>
+<string name="nav_quarantine">Carantină</string>
+<string name="nav_history">Istoric</string>
 <string name="nav_settings">Setări</string>
 <string name="settings_title">Settings</string>
 <string name="appearance_title">Appearance</string>
-<string name="theme_system">System</string>
-<string name="theme_light">Clean Light</string>
-<string name="theme_dark">Dark</string>
-<string name="language_settings">Language</string>
+<string name="theme_system">Sistem</string>
+<string name="theme_light">Luminos</string>
+<string name="theme_dark">Întunecat</string>
+<string name="language_settings">Limbă</string>
 <string name="about_legal">About and Legal</string>
 <string name="ray_id">SafeMobile Ray ID</string>
 <string name="ray_id_copy">Copy ID</string>
 <string name="ray_id_copied">Ray ID copied to clipboard</string>
-<string name="history_title">Scan history</string>
-<string name="history_empty">No local scan history yet.</string>
-<string name="history_session">Session ID</string>
-<string name="threat_event_ray_id">Threat event Ray ID: %1$s</string>
-<string name="definitions_limited_compact">Definitions: EICAR test signature only; coverage is limited.</string>
+<string name="history_title">Istoricul scanărilor</string>
+<string name="history_empty">Nu există încă un istoric local al scanărilor.</string>
+<string name="history_session">ID sesiune</string>
+<string name="threat_event_ray_id">ID Ray al evenimentului de amenințare: %1$s</string>
+<string name="definitions_limited_compact">Definiții: numai semnătura de test EICAR; acoperirea este limitată.</string>
 <string name="settings_privacy">Privacy and permissions</string>
-<string name="quarantine_legacy_warning">Legacy quarantine item: stored without encryption by an earlier build.</string>
-<string name="overlay_review_title">Overlay-risk review</string>
-<string name="overlay_review_description">Optional best-effort review of apps that declare overlay capability and accessibility services. Declarations and enabled accessibility services are only risk indicators; SafeMobile cannot prove that another app is currently displaying an overlay or inspect the current overlay-permission status of another app.</string>
-<string name="overlay_review_last_attempt">Last attempt: %1$s</string>
-<string name="overlay_review_last_success">Last successful check: %1$s</string>
-<string name="overlay_review_summary">Apps declaring overlay capability: %1$d · Apps declaring accessibility services: %2$d · Enabled accessibility services on this device: %3$d</string>
-<string name="overlay_review_not_checked">No successful overlay-risk review yet.</string>
-<string name="overlay_review_failed">The last review attempt failed. Android may have deferred the job or denied the required package visibility.</string>
-<string name="overlay_review_permission_required">Android did not permit this review. Check installed-app visibility and retry.</string>
-<string name="overlay_review_reminder_interval">Reminder interval</string>
-<string name="overlay_review_reminder_12h">Every 12 hours</string>
-<string name="overlay_review_reminder_24h">Every 24 hours</string>
-<string name="overlay_review_reminder_48h">Every 48 hours</string>
-<string name="overlay_review_notifications_off">Notifications are disabled. The review can still run, but reminders will not be shown.</string>
-<string name="overlay_review_notification_channel">SafeMobile privacy review</string>
-<string name="overlay_review_notification_channel_description">Low-priority reminders for the optional overlay-risk review.</string>
-<string name="overlay_review_notification_title">Overlay-risk review completed</string>
-<string name="overlay_review_notification_body">%1$d apps declare overlay capability and %2$d declare accessibility services. These are review indicators, not proof of malware.</string>
-<string name="overlay_review_enabled">Automatic review enabled</string>
-<string name="overlay_review_disabled">Review paused</string>
-<string name="features_menu">Security features</string>
-<string name="nav_guardian">Guardian</string>
-<string name="nav_phishing">Link checker</string>
-<string name="nav_cleaner">Storage cleaner</string>
-<string name="why_safemobile">Why SafeMobile? Core Strengths &amp; Features</string>
-<string name="features_disclaimer">Feature availability depends on Android permissions and the current local definitions. These features do not provide guaranteed or complete malware protection.</string>
+<string name="quarantine_legacy_warning">Element vechi din carantină: stocat fără criptare de o versiune anterioară.</string>
+<string name="overlay_review_title">Verificarea riscului de suprapunere</string>
+<string name="overlay_review_description">Verificare opțională, orientativă, a aplicațiilor care declară capabilitatea de suprapunere și servicii de accesibilitate. Declarațiile și serviciile de accesibilitate activate sunt doar indicatori de risc; SafeMobile nu poate confirma că o altă aplicație afișează în prezent o suprapunere și nici nu poate inspecta starea actuală a permisiunii de suprapunere pentru o altă aplicație.</string>
+<string name="overlay_review_last_attempt">Ultima încercare: %1$s</string>
+<string name="overlay_review_last_success">Ultima verificare reușită: %1$s</string>
+<string name="overlay_review_summary">Aplicații care declară capabilitatea de suprapunere: %1$d · Aplicații care declară servicii de accesibilitate: %2$d · Servicii de accesibilitate activate pe acest dispozitiv: %3$d</string>
+<string name="overlay_review_not_checked">Nu a fost efectuată încă nicio verificare reușită a riscului de suprapunere.</string>
+<string name="overlay_review_failed">Ultima încercare de verificare a eșuat. Android poate să fi amânat sarcina sau să fi refuzat vizibilitatea necesară asupra pachetelor.</string>
+<string name="overlay_review_permission_required">Android nu a permis această verificare. Verifică vizibilitatea aplicațiilor instalate și încearcă din nou.</string>
+<string name="overlay_review_reminder_interval">Intervalul mementourilor</string>
+<string name="overlay_review_reminder_12h">La fiecare 12 ore</string>
+<string name="overlay_review_reminder_24h">La fiecare 24 de ore</string>
+<string name="overlay_review_reminder_48h">La fiecare 48 de ore</string>
+<string name="overlay_review_notifications_off">Notificările sunt dezactivate. Verificarea poate rula în continuare, dar mementourile nu vor fi afișate.</string>
+<string name="overlay_review_notification_channel">Verificare de confidențialitate SafeMobile</string>
+<string name="overlay_review_notification_channel_description">Mementouri cu prioritate redusă pentru verificarea opțională a riscului de suprapunere.</string>
+<string name="overlay_review_notification_title">Verificarea riscului de suprapunere s-a încheiat</string>
+<string name="overlay_review_notification_body">%1$d aplicații declară capabilitatea de suprapunere, iar %2$d declară servicii de accesibilitate. Acestea sunt indicii pentru verificare, nu dovezi de malware.</string>
+<string name="overlay_review_enabled">Verificare automată activată</string>
+<string name="overlay_review_disabled">Verificare suspendată</string>
+<string name="features_menu">Funcții de securitate</string>
+<string name="nav_guardian">Protecție</string>
+<string name="nav_phishing">Verificare linkuri</string>
+<string name="nav_cleaner">Curățare spațiu</string>
+<string name="why_safemobile">De ce SafeMobile? Avantaje și funcții principale</string>
+<string name="features_disclaimer">Disponibilitatea funcțiilor depinde de permisiunile Android și de definițiile locale actuale. Aceste funcții nu oferă protecție garantată sau completă împotriva programelor malware.</string>
 <string name="pillar_offline_title" formatted="false">100% Offline Privacy</string>
 <string name="pillar_offline_body">Core file hashing and local signature matching run on-device. Ads and Google Play update checks are separate network-capable features when configured and permitted.</string>
 <string name="pillar_telemetry_title">Zero Cloud Telemetry</string>
