@@ -690,16 +690,16 @@
     <string name="ui_status_at_risk">Có rủi ro</string>
     <string name="scan_detected_by">Được phát hiện bởi: %1$s</string>
     <string name="scan_detected_by_confidence">Được phát hiện bởi: %1$s (%2$d%%)</string>
-    <string name="security_score_100_voice" formatted="false">Your security configuration is fully optimized. We will continue to monitor your device to keep you safe. Thank you for using Safe Mobile Antivirus.</string>
-    <string name="self_update_title">Check for Updates (Self-Update)</string>
-    <string name="self_update_description">Device Administrator mode does not normally block Google Play updates. This button checks for a Play in-app update and asks Android to install it.</string>
-    <string name="self_update_started">The update flow was opened. Follow the system prompts to finish updating.</string>
-    <string name="self_update_cancelled">The update was cancelled.</string>
-    <string name="self_update_check_failed">The update could not be started. Check your Google Play connection and try again.</string>
-    <string name="self_update_unavailable">Play in-app updates are unavailable for this installation. Open Google Play to check manually.</string>
-    <string name="self_update_no_update">No newer Google Play update is currently available.</string>
-    <string name="self_update_not_allowed">An update is available, but Google Play does not allow the immediate update flow for this installation.</string>
-    <string name="self_update_open_play_store">Open Google Play</string>
+    <string name="security_score_100_voice" formatted="false">Cấu hình bảo mật của bạn đã được tối ưu hóa hoàn toàn. Chúng tôi sẽ tiếp tục giám sát thiết bị để bảo vệ bạn. Cảm ơn bạn đã sử dụng Safe Mobile Antivirus.</string>
+    <string name="self_update_title">Kiểm tra bản cập nhật (tự cập nhật)</string>
+    <string name="self_update_description">Chế độ Quản trị viên thiết bị thường không chặn các bản cập nhật Google Play. Nút này kiểm tra bản cập nhật trong ứng dụng Play và yêu cầu Android cài đặt.</string>
+    <string name="self_update_started">Đã mở quy trình cập nhật. Làm theo lời nhắc của hệ thống để hoàn tất cập nhật.</string>
+    <string name="self_update_cancelled">Đã hủy cập nhật.</string>
+    <string name="self_update_check_failed">Không thể bắt đầu cập nhật. Kiểm tra kết nối Google Play rồi thử lại.</string>
+    <string name="self_update_unavailable">Bản cập nhật trong ứng dụng Play không khả dụng cho bản cài đặt này. Mở Google Play để kiểm tra thủ công.</string>
+    <string name="self_update_no_update">Hiện không có bản cập nhật Google Play mới hơn.</string>
+    <string name="self_update_not_allowed">Có bản cập nhật, nhưng Google Play không cho phép quy trình cập nhật ngay lập tức đối với bản cài đặt này.</string>
+    <string name="self_update_open_play_store">Mở Google Play</string>
     <string name="scan_sessions_in_progress">Phiên quét đang diễn ra: %1$d</string>
     <string name="scan_sessions_completed">Phiên quét đã hoàn tất: %1$d</string>
     <string name="ui_sentinel_telegram_folder">Thư mục Tài liệu Telegram</string>
