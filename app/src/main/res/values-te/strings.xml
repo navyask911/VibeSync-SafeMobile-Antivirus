@@ -189,7 +189,7 @@
 <string name="analytics_last_scan">చివరిగా పూర్తయిన పరీక్ష</string>
 <string name="analytics_storage">భాగస్వామ్య నిల్వ అనుమతి</string>
 <string name="analytics_notifications">నోటిఫికేషన్‌లు</string>
-<string name="analytics_sentinel">డౌన్‌లోడ్ కాపరి</string>
+<string name="analytics_sentinel">డౌన్‌లోడ్‌ల కోసం Sentinel</string>
 <string name="analytics_sentinel_running">ముందుభాగ సేవ నడుస్తోంది</string>
 <string name="analytics_sentinel_stopped">సేవ నడవడం లేదు</string>
 <string name="analytics_current_results">ప్రస్తుత పరీక్ష ఫలితాలు</string>
@@ -690,18 +690,23 @@
     <string name="ui_status_at_risk">ప్రమాదంలో ఉంది</string>
     <string name="scan_detected_by">గుర్తించినది: %1$s</string>
     <string name="scan_detected_by_confidence">గుర్తించినది: %1$s (%2$d%%)</string>
-    <string name="security_score_100_voice" formatted="false">Your security configuration is fully optimized. We will continue to monitor your device to keep you safe. Thank you for using Safe Mobile Antivirus.</string>
-    <string name="self_update_title">Check for Updates (Self-Update)</string>
-    <string name="self_update_description">Device Administrator mode does not normally block Google Play updates. This button checks for a Play in-app update and asks Android to install it.</string>
-    <string name="self_update_started">The update flow was opened. Follow the system prompts to finish updating.</string>
-    <string name="self_update_cancelled">The update was cancelled.</string>
-    <string name="self_update_check_failed">The update could not be started. Check your Google Play connection and try again.</string>
-    <string name="self_update_unavailable">Play in-app updates are unavailable for this installation. Open Google Play to check manually.</string>
-    <string name="self_update_no_update">No newer Google Play update is currently available.</string>
-    <string name="self_update_not_allowed">An update is available, but Google Play does not allow the immediate update flow for this installation.</string>
-    <string name="self_update_open_play_store">Open Google Play</string>
+    <string name="security_score_100_voice" formatted="false">మీ భద్రతా కాన్ఫిగరేషన్ పూర్తిగా మెరుగుపరచబడింది. మీ పరికరాన్ని సురక్షితంగా ఉంచేందుకు మేము పర్యవేక్షణ కొనసాగిస్తాము. SafeMobile Antivirus ఉపయోగిస్తున్నందుకు ధన్యవాదాలు.</string>
+    <string name="self_update_title">నవీకరణల కోసం తనిఖీ చేయి (స్వీయ నవీకరణ)</string>
+    <string name="self_update_description">Device Administrator మోడ్ సాధారణంగా Google Play నవీకరణలను నిరోధించదు. ఈ బటన్ Play యాప్‌లోని నవీకరణను తనిఖీ చేసి, దాన్ని ఇన్‌స్టాల్ చేయమని Android‌ను అడుగుతుంది.</string>
+    <string name="self_update_started">నవీకరణ ప్రక్రియ ప్రారంభమైంది. నవీకరణ పూర్తిచేయడానికి సిస్టమ్ సూచనలను అనుసరించండి.</string>
+    <string name="self_update_cancelled">నవీకరణ రద్దు చేయబడింది.</string>
+    <string name="self_update_check_failed">నవీకరణను ప్రారంభించలేకపోయాం. మీ Google Play కనెక్షన్‌ను తనిఖీ చేసి మళ్లీ ప్రయత్నించండి.</string>
+    <string name="self_update_unavailable">ఈ ఇన్‌స్టాలేషన్‌కు Play యాప్ నవీకరణలు అందుబాటులో లేవు. మాన్యువల్‌గా తనిఖీ చేయడానికి Google Play తెరవండి.</string>
+    <string name="self_update_no_update">ప్రస్తుతం కొత్త Google Play నవీకరణ అందుబాటులో లేదు.</string>
+    <string name="self_update_not_allowed">నవీకరణ అందుబాటులో ఉంది, కానీ ఈ ఇన్‌స్టాలేషన్‌కు Google Play తక్షణ నవీకరణ ప్రక్రియను అనుమతించదు.</string>
+    <string name="self_update_open_play_store">Google Play తెరవండి</string>
     <string name="scan_sessions_in_progress">ప్రస్తుతం జరుగుతున్న స్కాన్ సెషన్‌లు: %1$d</string>
     <string name="scan_sessions_completed">పూర్తయిన స్కాన్ సెషన్‌లు: %1$d</string>
     <string name="ui_sentinel_telegram_folder">Telegram పత్రాల ఫోల్డర్</string>
     <string name="ui_sentinel_enable_telegram">Telegram పత్రాలను పర్యవేక్షించండి</string>
+    <string name="full_screen_dashboard_warning">పూర్తి-తెర మాల్వేర్ హెచ్చరికల కోసం అనుమతి ఇవ్వండి: ముఖ్య హెచ్చరికలు నిలిపివేయబడ్డాయి.</string>
+    <string name="full_screen_dashboard_fallback">పూర్తి-తెర ప్రవేశం ఐచ్ఛికం. Security Alerts ప్రారంభించినప్పుడు, ఈ ప్రవేశం లేకున్నా Android నోటిఫికేషన్, ధ్వని అమరికలకు లోబడి ఐదు సెకన్ల సైరన్, అధిక ప్రాధాన్యత నోటిఫికేషన్ పనిచేస్తాయి.</string>
+    <string name="full_screen_settings_unavailable">పూర్తి-తెర హెచ్చరిక అమరికలను తెరవలేకపోయాం. మీరు SafeMobile ఉపయోగించడం కొనసాగించవచ్చు.</string>
+    <string name="system_app_protection_badge">సిస్టమ్ యాప్‌లు సమీక్ష, అన్‌ఇన్‌స్టాల్ నుంచి రక్షించబడ్డాయి</string>
+    <string name="system_app_scan_complete">స్కాన్ పూర్తయింది. తనిఖీ చేసిన అంశాల్లో ముప్పులు కనబడలేదు. సిస్టమ్ యాప్‌లు సమీక్ష, అన్‌ఇన్‌స్టాల్ నుంచి మినహాయించబడ్డాయి; ఈ స్కాన్ వాటి సమగ్రతను ధృవీకరించలేదు.</string>
 </resources>

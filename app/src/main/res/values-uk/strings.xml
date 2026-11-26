@@ -334,7 +334,7 @@
 <string name="analytics_last_scan">Last completed scan</string>
 <string name="analytics_storage">Shared-storage access</string>
 <string name="analytics_notifications">Notifications</string>
-<string name="analytics_sentinel">Download Sentinel</string>
+<string name="analytics_sentinel">Sentinel завантажень</string>
 <string name="analytics_sentinel_running">Foreground service running</string>
 <string name="analytics_sentinel_stopped">Service not running</string>
 <string name="analytics_current_results">Current scan result rows</string>
@@ -685,11 +685,11 @@
 <string name="battery_review_action">Review battery settings</string>
 <string name="battery_review_unavailable">Android battery settings could not be opened.</string>
 <string name="ui_folder_access_not_granted">Folder access was not granted. You can continue with limited protection.</string>
-<string name="full_screen_dashboard_warning">Critical Alerts Disabled: Tap to grant permission for full-screen malware warnings.</string>
-<string name="full_screen_dashboard_fallback">Full-screen access is optional. When Security Alerts are enabled, the five-second siren and high-priority notification still work without this access, subject to Android notification and sound settings.</string>
-<string name="full_screen_settings_unavailable">Full-screen alert settings could not be opened. You can continue using SafeMobile.</string>
-<string name="system_app_protection_badge">System apps protected from review and uninstall</string>
-<string name="system_app_scan_complete">Scan Complete. No threats found in the items checked. System apps are excluded from review and uninstall; their integrity has not been verified by this scan.</string>
+<string name="full_screen_dashboard_warning">Критичні сповіщення вимкнено. Торкніться, щоб надати дозвіл на повноекранні попередження про шкідливе ПЗ.</string>
+<string name="full_screen_dashboard_fallback">Повноекранний доступ необов’язковий. Коли Security Alerts увімкнено, п’ятисекундна сирена й сповіщення високого пріоритету працюють і без цього доступу з урахуванням налаштувань сповіщень і звуку Android.</string>
+<string name="full_screen_settings_unavailable">Не вдалося відкрити налаштування повноекранних сповіщень. Ви можете й надалі користуватися SafeMobile.</string>
+<string name="system_app_protection_badge">Системні програми захищені від перевірки та видалення</string>
+<string name="system_app_scan_complete">Сканування завершено. У перевірених елементах загроз не знайдено. Системні програми не перевіряються й не видаляються; це сканування не підтверджує їхню цілісність.</string>
 <string name="detection_capabilities_title">Detection capabilities</string>
 <string name="detection_capabilities_description">See which security checks are enabled, advisory, conditional, or unavailable in this build.</string>
 <string name="detection_capabilities_truth_title">Important: what scan results mean</string>
@@ -833,16 +833,16 @@
     <string name="ui_status_at_risk">Під загрозою</string>
     <string name="scan_detected_by">Виявлено за допомогою: %1$s</string>
     <string name="scan_detected_by_confidence">Виявлено за допомогою: %1$s (%2$d%%)</string>
-    <string name="security_score_100_voice" formatted="false">Your security configuration is fully optimized. We will continue to monitor your device to keep you safe. Thank you for using Safe Mobile Antivirus.</string>
-    <string name="self_update_title">Check for Updates (Self-Update)</string>
-    <string name="self_update_description">Device Administrator mode does not normally block Google Play updates. This button checks for a Play in-app update and asks Android to install it.</string>
-    <string name="self_update_started">The update flow was opened. Follow the system prompts to finish updating.</string>
-    <string name="self_update_cancelled">The update was cancelled.</string>
-    <string name="self_update_check_failed">The update could not be started. Check your Google Play connection and try again.</string>
-    <string name="self_update_unavailable">Play in-app updates are unavailable for this installation. Open Google Play to check manually.</string>
-    <string name="self_update_no_update">No newer Google Play update is currently available.</string>
-    <string name="self_update_not_allowed">An update is available, but Google Play does not allow the immediate update flow for this installation.</string>
-    <string name="self_update_open_play_store">Open Google Play</string>
+    <string name="security_score_100_voice" formatted="false">Конфігурацію безпеки повністю оптимізовано. Ми й надалі стежитимемо за пристроєм, щоб допомогти захистити його. Дякуємо, що користуєтеся SafeMobile Antivirus.</string>
+    <string name="self_update_title">Перевірити оновлення (самооновлення)</string>
+    <string name="self_update_description">Режим Device Administrator зазвичай не блокує оновлення Google Play. Ця кнопка перевіряє наявність оновлення в застосунку Play і просить Android встановити його.</string>
+    <string name="self_update_started">Процес оновлення відкрито. Дотримуйтеся системних підказок, щоб завершити оновлення.</string>
+    <string name="self_update_cancelled">Оновлення скасовано.</string>
+    <string name="self_update_check_failed">Не вдалося запустити оновлення. Перевірте з’єднання з Google Play і повторіть спробу.</string>
+    <string name="self_update_unavailable">Внутрішньозастосункові оновлення Play недоступні для цієї інсталяції. Відкрийте Google Play, щоб перевірити вручну.</string>
+    <string name="self_update_no_update">Наразі новішого оновлення Google Play немає.</string>
+    <string name="self_update_not_allowed">Оновлення доступне, але Google Play не дозволяє негайне оновлення для цієї інсталяції.</string>
+    <string name="self_update_open_play_store">Відкрити Google Play</string>
     <string name="scan_sessions_in_progress">Поточні сеанси сканування: %1$d</string>
     <string name="scan_sessions_completed">Завершені сеанси сканування: %1$d</string>
     <string name="ui_sentinel_telegram_folder">Папка документів Telegram</string>

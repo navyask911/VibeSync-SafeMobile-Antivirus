@@ -17,4 +17,8 @@
 <string name="system_app_protection_badge">سسٹم ایپس جائزے اور ہٹانے سے محفوظ</string>
 <string name="system_app_scan_complete">جانچ مکمل۔ جانچی اشیا میں خطرہ نہیں۔ سسٹم ایپس جائزے اور ہٹانے سے باہر؛ اس جانچ نے ان کی سالمیت ثابت نہیں کی۔</string>
 <string name="ui_folder_access_not_granted">فولڈر رسائی نہیں ملی۔ محدود تحفظ کے ساتھ جاری رکھ سکتے ہیں۔</string>
+    <string name="test_siren">سائرن آزمائیں</string>
+    <string name="test_voice">آواز آزمائیں</string>
+    <string name="test_siren_failed">اس آلے پر سائرن ٹیسٹ شروع نہیں ہو سکا۔</string>
+    <string name="test_voice_failed">آواز کا ٹیسٹ ناکام ہوا۔ نصب شدہ ڈیوائس اسپیچ انجن اور صوتی ڈیٹا چیک کریں۔</string>
 </resources>

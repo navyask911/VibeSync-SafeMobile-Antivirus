@@ -334,7 +334,7 @@
 <string name="analytics_last_scan">Last completed scan</string>
 <string name="analytics_storage">Shared-storage access</string>
 <string name="analytics_notifications">Notifications</string>
-<string name="analytics_sentinel">Download Sentinel</string>
+<string name="analytics_sentinel">Sentinel สำหรับการดาวน์โหลด</string>
 <string name="analytics_sentinel_running">Foreground service running</string>
 <string name="analytics_sentinel_stopped">Service not running</string>
 <string name="analytics_current_results">Current scan result rows</string>
@@ -685,11 +685,11 @@
 <string name="battery_review_action">Review battery settings</string>
 <string name="battery_review_unavailable">Android battery settings could not be opened.</string>
 <string name="ui_folder_access_not_granted">Folder access was not granted. You can continue with limited protection.</string>
-<string name="full_screen_dashboard_warning">Critical Alerts Disabled: Tap to grant permission for full-screen malware warnings.</string>
-<string name="full_screen_dashboard_fallback">Full-screen access is optional. When Security Alerts are enabled, the five-second siren and high-priority notification still work without this access, subject to Android notification and sound settings.</string>
-<string name="full_screen_settings_unavailable">Full-screen alert settings could not be opened. You can continue using SafeMobile.</string>
-<string name="system_app_protection_badge">System apps protected from review and uninstall</string>
-<string name="system_app_scan_complete">Scan Complete. No threats found in the items checked. System apps are excluded from review and uninstall; their integrity has not been verified by this scan.</string>
+<string name="full_screen_dashboard_warning">ปิดการแจ้งเตือนสำคัญอยู่ แตะเพื่อให้สิทธิ์แสดงคำเตือนมัลแวร์แบบเต็มหน้าจอ</string>
+<string name="full_screen_dashboard_fallback">การเข้าถึงแบบเต็มหน้าจอเป็นตัวเลือก เมื่อเปิด Security Alerts แล้ว เสียงไซเรนห้าวินาทีและการแจ้งเตือนลำดับสูงยังทำงานได้โดยไม่ต้องใช้สิทธิ์นี้ ทั้งนี้ขึ้นอยู่กับการตั้งค่าการแจ้งเตือนและเสียงของ Android</string>
+<string name="full_screen_settings_unavailable">ไม่สามารถเปิดการตั้งค่าการแจ้งเตือนแบบเต็มหน้าจอได้ คุณยังใช้ SafeMobile ต่อได้</string>
+<string name="system_app_protection_badge">ปกป้องแอประบบจากการตรวจสอบและถอนการติดตั้ง</string>
+<string name="system_app_scan_complete">สแกนเสร็จแล้ว ไม่พบภัยคุกคามในรายการที่ตรวจสอบ แอประบบจะไม่ถูกตรวจสอบหรือถอนการติดตั้ง แต่การสแกนนี้ไม่ได้ยืนยันความสมบูรณ์ของแอประบบ</string>
 <string name="detection_capabilities_title">Detection capabilities</string>
 <string name="detection_capabilities_description">See which security checks are enabled, advisory, conditional, or unavailable in this build.</string>
 <string name="detection_capabilities_truth_title">Important: what scan results mean</string>
@@ -833,16 +833,16 @@
     <string name="ui_status_at_risk">มีความเสี่ยง</string>
     <string name="scan_detected_by">ตรวจพบโดย: %1$s</string>
     <string name="scan_detected_by_confidence">ตรวจพบโดย: %1$s (%2$d%%)</string>
-    <string name="security_score_100_voice" formatted="false">Your security configuration is fully optimized. We will continue to monitor your device to keep you safe. Thank you for using Safe Mobile Antivirus.</string>
-    <string name="self_update_title">Check for Updates (Self-Update)</string>
-    <string name="self_update_description">Device Administrator mode does not normally block Google Play updates. This button checks for a Play in-app update and asks Android to install it.</string>
-    <string name="self_update_started">The update flow was opened. Follow the system prompts to finish updating.</string>
-    <string name="self_update_cancelled">The update was cancelled.</string>
-    <string name="self_update_check_failed">The update could not be started. Check your Google Play connection and try again.</string>
-    <string name="self_update_unavailable">Play in-app updates are unavailable for this installation. Open Google Play to check manually.</string>
-    <string name="self_update_no_update">No newer Google Play update is currently available.</string>
-    <string name="self_update_not_allowed">An update is available, but Google Play does not allow the immediate update flow for this installation.</string>
-    <string name="self_update_open_play_store">Open Google Play</string>
+    <string name="security_score_100_voice" formatted="false">การตั้งค่าความปลอดภัยของคุณได้รับการปรับให้เหมาะสมแล้ว เราจะเฝ้าติดตามอุปกรณ์ของคุณต่อไปเพื่อช่วยให้ปลอดภัย ขอบคุณที่ใช้ SafeMobile Antivirus</string>
+    <string name="self_update_title">ตรวจหาการอัปเดต (อัปเดตด้วยตนเอง)</string>
+    <string name="self_update_description">โหมด Device Administrator โดยปกติไม่ขัดขวางการอัปเดต Google Play ปุ่มนี้จะตรวจหาการอัปเดตภายในแอป Play และขอให้ Android ติดตั้งให้</string>
+    <string name="self_update_started">เปิดขั้นตอนการอัปเดตแล้ว ทำตามข้อความแจ้งของระบบเพื่ออัปเดตให้เสร็จ</string>
+    <string name="self_update_cancelled">ยกเลิกการอัปเดตแล้ว</string>
+    <string name="self_update_check_failed">เริ่มการอัปเดตไม่ได้ ตรวจสอบการเชื่อมต่อ Google Play แล้วลองอีกครั้ง</string>
+    <string name="self_update_unavailable">การอัปเดตภายในแอป Play ใช้ไม่ได้กับการติดตั้งนี้ เปิด Google Play เพื่อตรวจสอบด้วยตนเอง</string>
+    <string name="self_update_no_update">ขณะนี้ไม่มีการอัปเดต Google Play เวอร์ชันใหม่กว่า</string>
+    <string name="self_update_not_allowed">มีการอัปเดต แต่ Google Play ไม่อนุญาตให้ใช้ขั้นตอนอัปเดตทันทีสำหรับการติดตั้งนี้</string>
+    <string name="self_update_open_play_store">เปิด Google Play</string>
     <string name="scan_sessions_in_progress">เซสชันการสแกนที่กำลังดำเนินการ: %1$d</string>
     <string name="scan_sessions_completed">เซสชันการสแกนที่เสร็จสมบูรณ์: %1$d</string>
     <string name="ui_sentinel_telegram_folder">โฟลเดอร์เอกสาร Telegram</string>

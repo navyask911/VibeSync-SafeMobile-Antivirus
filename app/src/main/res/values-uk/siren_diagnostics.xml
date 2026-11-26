@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="test_siren">Перевірити сирену</string>
+    <string name="test_voice">Перевірити голос</string>
+    <string name="test_siren_failed">Не вдалося запустити тест сирени на цьому пристрої.</string>
+    <string name="test_voice_failed">Не вдалося перевірити голос. Перевірте встановлений механізм синтезу мовлення та голосові дані.</string>
+</resources>

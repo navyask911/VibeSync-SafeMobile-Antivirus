@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="test_siren">ทดสอบไซเรน</string>
+    <string name="test_voice">ทดสอบเสียงพูด</string>
+    <string name="test_siren_failed">ไม่สามารถเริ่มการทดสอบไซเรนบนอุปกรณ์นี้ได้</string>
+    <string name="test_voice_failed">ทดสอบเสียงพูดไม่สำเร็จ ตรวจสอบกลไกเสียงพูดและข้อมูลเสียงที่ติดตั้งในอุปกรณ์</string>
+</resources>

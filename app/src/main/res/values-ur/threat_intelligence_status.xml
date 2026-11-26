@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="threat_intelligence_unavailable">اس آلے پر تصدیق شدہ اپ اسٹریم تربیتی اعدادوشمار کیش میں موجود نہیں۔</string>
+    <string name="threat_intelligence_upstream_stale">پرانا اپ اسٹریم ڈیٹا · شائع شدہ اپ ڈیٹ کو 30 دن سے زیادہ ہو چکے ہیں۔</string>
+    <string name="threat_intelligence_device_title">آلے پر خطرات کی معلومات</string>
+    <string name="threat_intelligence_latest_sync_note">تازہ ترین ہم وقت سازی نوٹ: %1$s</string>
+    <string name="threat_intelligence_feed_stale">آخری کامیاب ترتیب شدہ فیڈ ہم وقت سازی کو 7 دن سے زیادہ ہو چکے ہیں۔</string>
+</resources>
