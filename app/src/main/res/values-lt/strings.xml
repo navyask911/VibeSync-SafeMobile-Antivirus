@@ -566,12 +566,12 @@
 <string name="locale_th">ไทย</string>
 <string name="locale_uk">Українська</string>
 <string name="locale_uz">O‘zbekcha</string>
-<string name="posture_title">Device Posture</string>
-<string name="posture_intro">Review powerful app permissions on this device. This audit reads access settings only; it never reads your screen or notifications and never changes another app’s permissions.</string>
+<string name="posture_title">Įrenginio saugos būklė</string>
+<string name="posture_intro">Peržiūrėkite dideles programų prieigos teises. Šis auditas skaito tik prieigos nustatymus; jis neskaito ekrano ar pranešimų ir nekeičia kitų programų leidimų.</string>
 <string name="posture_risk_note">HIGH RISK means powerful access, not proof of spyware. Legitimate screen readers, work administrators and companion apps may need it. Review access you do not recognize.</string>
 <string name="posture_open">Review device permissions</string>
-<string name="posture_refresh">Run posture audit</string>
-<string name="posture_checking">Checking permission metadata…</string>
+<string name="posture_refresh">Vykdyti saugos būklės auditą</string>
+<string name="posture_checking">Tikrinami leidimų metaduomenys…</string>
 <string name="posture_failed">The audit could not refresh. Previously observed findings are retained. Try again or review Android settings directly.</string>
 <string name="posture_not_checked">Run an audit to review accessibility, administrators, notification access and overlays.</string>
 <string name="posture_accessibility">Accessibility access</string>
