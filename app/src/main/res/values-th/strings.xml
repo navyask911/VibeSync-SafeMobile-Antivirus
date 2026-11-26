@@ -175,7 +175,7 @@
 <string name="features_disclaimer">ความพร้อมใช้งานของคุณสมบัติขึ้นอยู่กับสิทธิ์ Android และคำจำกัดความในเครื่องปัจจุบัน คุณสมบัติเหล่านี้ไม่ได้ให้การป้องกันมัลแวร์ที่รับประกันหรือครอบคลุมทั้งหมด</string>
 <string name="pillar_offline_title" formatted="false">ความเป็นส่วนตัวแบบออฟไลน์ 100%</string>
 <string name="pillar_offline_body">การแฮชไฟล์หลักและการจับคู่ลายเซ็นในเครื่องทำงานบนอุปกรณ์ โฆษณาและการตรวจสอบการอัปเดต Google Play เป็นคุณสมบัติแยกต่างหากที่อาจใช้เครือข่ายเมื่อกำหนดค่าและได้รับอนุญาต</string>
-<string name="pillar_telemetry_title">ไม่มีการส่งข้อมูลการใช้งานไปยังคลาวด์</string>
+<string name="pillar_telemetry_title">การประมวลผลข้อมูลสแกนในเครื่อง</string>
 <string name="pillar_telemetry_body">ตัวสแกนไม่อัปโหลดเนื้อหาไฟล์หรือแฮช บริการโฆษณาและ Google Play อาจส่งคำขอเครือข่ายแยกต่างหาก</string>
 <string name="pillar_whatsapp_title">ผู้พิทักษ์ไฟล์แนบในแอปส่งข้อความ</string>
 <string name="pillar_whatsapp_body">เลือกและประเมิน APK หรือเอกสารที่คุณเลือก SafeMobile ไม่ได้ตรวจสอบทุกข้อความหรือไฟล์แนบในแอปส่งข้อความโดยอัตโนมัติ</string>
