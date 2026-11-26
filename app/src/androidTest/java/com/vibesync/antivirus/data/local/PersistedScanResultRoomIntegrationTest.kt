@@ -158,9 +158,13 @@ class PersistedScanResultRoomIntegrationTest {
 
             val visiblePackages = visible.mapNotNull { it.packageName }.toSet()
             assertEquals(
-                setOf(googlePackage, ordinaryUserPackage, retryableUserPackage, sideloadedGooglePrefix),
+                setOf(ordinaryUserPackage, retryableUserPackage),
                 visiblePackages
             )
+            // The policy excludes every Google namespace, including a trusted-signer
+            // Maps package and a sideloaded package using a Google prefix.
+            assertTrue(visible.none { it.packageName == googlePackage })
+            assertTrue(visible.none { it.packageName == sideloadedGooglePrefix })
             assertEquals(1, visible.count { it.packageName == null })
             assertTrue(visible.none { it.packageName == oemSystemPackage })
             assertTrue(visible.none { it.packageName == legacyOemSystemPackage })

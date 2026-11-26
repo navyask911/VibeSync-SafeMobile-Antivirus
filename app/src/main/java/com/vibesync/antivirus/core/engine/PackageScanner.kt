@@ -498,6 +498,11 @@ class PackageScanner(
   val info = try {
    loadPackageInfoForScan(name)
   } catch (_: PackageManager.NameNotFoundException) {
+   // Preserve package-name trust across uninstall/reinstall or update windows.
+   // Protected Android/Google/OEM namespaces never inherit a stale trust entry.
+   if (!TrustedPackageWhitelist.hasProtectedNamespace(name) && trustedAppStore.isTrusted(name)) {
+    return trustedResult(name, scanSessionId, System.nanoTime())
+   }
    return null
   } catch (cancelled: CancellationException) {
    throw cancelled
