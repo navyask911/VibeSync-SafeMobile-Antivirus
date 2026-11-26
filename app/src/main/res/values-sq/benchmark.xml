@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">Rezultatet e testimit krahasues</string>
+    <string name="benchmark_not_measured">Ende nuk është matur asnjë test krahasues i verifikuar</string>
+    <string name="benchmark_total_apps">APK të testuara</string>
+    <string name="benchmark_tpr">Shkalla e zbulimit (TPR)</string>
+    <string name="benchmark_fpr">Shkalla e pozitivëve të rremë (FPR)</string>
+    <string name="benchmark_latency">Koha mesatare e skanimit</string>
+    <string name="benchmark_privacy_note">Shfaqen vetëm rezultatet e verifikuara. Asnjë APK testimi nuk ruhet në aplikacion.</string>
+</resources>
