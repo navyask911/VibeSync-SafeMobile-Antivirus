@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="threat_intelligence_unavailable">لا توجد على هذا الجهاز إحصاءات تدريب موثّقة من المصدر الأعلى محفوظة في ذاكرة التخزين المؤقت.</string>
+    <string name="threat_intelligence_upstream_stale">بيانات المصدر الأعلى قديمة · مرّ أكثر من 30 يوماً على التحديث المنشور.</string>
+    <string name="threat_intelligence_device_title">معلومات التهديدات على الجهاز</string>
+    <string name="threat_intelligence_latest_sync_note">ملاحظة آخر مزامنة: %1$s</string>
+    <string name="threat_intelligence_feed_stale">مرّ أكثر من 7 أيام على آخر مزامنة ناجحة للموجز الذي تم إعداده.</string>
+</resources>
