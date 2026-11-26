@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="test_siren" tools:ignore="MissingTranslation">Išbandyti sireną</string>
+    <string name="test_voice" tools:ignore="MissingTranslation">Balso bandymas</string>
+    <string name="test_siren_failed" tools:ignore="MissingTranslation">Šiame įrenginyje nepavyko pradėti sirenos bandymo.</string>
+    <string name="test_voice_failed" tools:ignore="MissingTranslation">Balso bandymas nepavyko. Patikrinkite įdiegtą įrenginio kalbos sintezės variklį ir balso duomenis.</string>
+</resources>
