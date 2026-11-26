@@ -91,7 +91,7 @@ internal fun ThreatIntelligenceCardContent(
             val release = state.releaseStats
             if (release == null) {
                 Text(
-                    if (state.releaseStatsLoaded) "No verified upstream training statistics are cached on this device."
+                    if (state.releaseStatsLoaded) stringResource(R.string.threat_intelligence_unavailable)
                     else stringResource(R.string.threat_intelligence_updating),
                     style = MaterialTheme.typography.bodyMedium, color = colors.onSurfaceVariant
                 )
@@ -111,14 +111,14 @@ internal fun ThreatIntelligenceCardContent(
                 }
                 IntelligenceMetric(R.string.threat_intelligence_updated, updated, Icons.Outlined.Update)
                 if (release.isStale) {
-                    Text("STALE UPSTREAM DATA · The published update is more than 30 days old.",
+                    Text(stringResource(R.string.threat_intelligence_upstream_stale),
                         style = MaterialTheme.typography.labelMedium, color = colors.tertiary)
                 }
             }
 
             if (state.feedStateLoaded) {
                 HorizontalDivider(color = colors.primary.copy(alpha = 0.15f))
-                Text("On-device threat intelligence", style = MaterialTheme.typography.titleMedium,
+                Text(stringResource(R.string.threat_intelligence_device_title), style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold)
                 IntelligenceTextRow("Active local indicators",
                     state.activeLocalIndicatorCount?.let { integers.format(it.toLong()) } ?: "Not available")
@@ -134,11 +134,11 @@ internal fun ThreatIntelligenceCardContent(
                     IntelligenceTextRow("Indicators imported in latest sync", integers.format(it.toLong()))
                 }
                 state.feedSyncError?.takeIf { it.isNotBlank() }?.let {
-                    Text("Latest sync note: " + it, style = MaterialTheme.typography.bodySmall,
+                    Text(stringResource(R.string.threat_intelligence_latest_sync_note, it), style = MaterialTheme.typography.bodySmall,
                         color = colors.onSurfaceVariant)
                 }
                 if (state.feedIsStale) {
-                    Text("The last successful configured-feed sync is more than 7 days old.",
+                    Text(stringResource(R.string.threat_intelligence_feed_stale),
                         style = MaterialTheme.typography.labelSmall, color = colors.tertiary)
                 }
             }

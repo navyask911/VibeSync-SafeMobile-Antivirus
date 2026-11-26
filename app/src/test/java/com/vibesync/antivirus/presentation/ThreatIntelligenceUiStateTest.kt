@@ -70,6 +70,76 @@ class ThreatIntelligenceUiStateTest {
     }
 
     @Test
+    fun successiveUpstreamSnapshotsReplaceMetricsAndRecomputeFreshness() {
+        val first = ThreatIntelligenceStats(
+            totalMalwareSamples = 5_560L,
+            accuracyFraction = 0.9745,
+            totalDownloads = 12_000L,
+            lastUpdated = "2026-10-31T00:00:00Z"
+        )
+        val initial = ThreatIntelligenceUiState().withReleaseStats(first, now)
+        assertTrue(initial.releaseStats?.isStale == true)
+
+        val refreshedAt = java.time.OffsetDateTime.ofInstant(
+            java.time.Instant.ofEpochMilli(now - 24L * 60L * 60L * 1000L),
+            java.time.ZoneOffset.UTC
+        ).toString()
+        val refreshed = initial.withReleaseStats(
+            ThreatIntelligenceStats(
+                totalMalwareSamples = 6_100L,
+                accuracyFraction = 0.981,
+                totalDownloads = 12_500L,
+                lastUpdated = refreshedAt
+            ),
+            now
+        )
+
+        assertEquals(6_100L, refreshed.releaseStats?.totalMalwareSamples)
+        assertEquals(0.981, refreshed.releaseStats?.accuracyFraction!!, 0.000000001)
+        assertEquals(12_500L, refreshed.releaseStats?.totalDownloads)
+        assertEquals(refreshedAt, refreshed.releaseStats?.lastUpdated)
+        assertFalse(refreshed.releaseStats?.isStale == true)
+    }
+
+    @Test
+    fun successiveRoomSnapshotsReplaceRunningStateWithLatestSuccessfulFeedStats() {
+        val running = ThreatFeedSyncStateEntity(
+            sourceKey = "source",
+            sourceHost = "feed.example",
+            lastAttemptAt = now - 1_000L,
+            status = "RUNNING"
+        )
+        val initial = ThreatIntelligenceUiState().withFeedSnapshot(
+            ThreatFeedSnapshot(10, null, running),
+            now
+        )
+        assertEquals(10, initial.activeLocalIndicatorCount)
+        assertEquals("RUNNING", initial.feedSyncStatus)
+        assertNull(initial.feedLastSuccessAt)
+
+        val successAt = now - 500L
+        val succeeded = initial.withFeedSnapshot(
+            ThreatFeedSnapshot(
+                activeIndicatorCount = 25,
+                lastSuccessfulSyncAt = successAt,
+                latestSyncState = running.copy(
+                    lastAttemptAt = now,
+                    lastSuccessAt = successAt,
+                    status = "SUCCESS",
+                    lastImportedCount = 25
+                )
+            ),
+            now
+        )
+
+        assertEquals(25, succeeded.activeLocalIndicatorCount)
+        assertEquals("SUCCESS", succeeded.feedSyncStatus)
+        assertEquals(successAt, succeeded.feedLastSuccessAt)
+        assertEquals(25, succeeded.feedImportedCount)
+        assertFalse(succeeded.feedIsStale)
+    }
+
+    @Test
     fun missingSyncTimeRemainsUnknownRatherThanInventingAStaleTimestamp() {
         val state = ThreatIntelligenceUiState().withFeedSnapshot(
             ThreatFeedSnapshot(0, null, null),
