@@ -279,7 +279,7 @@
 <string name="threat_feed_incremental">Cantuman tambahan</string>
 <string name="threat_feed_snapshot">Syot kilat berautoriti</string>
 <string name="threat_feed_update_semantics_note">Cantuman tambahan menambah atau mengemas kini entri dan mengekalkan entri lama daripada sumber ini. Syot kilat berautoriti menggantikan sumber ini hanya selepas keseluruhan suapan tidak kosong berjaya dihuraikan. Syot kilat kosong ditolak untuk melindungi petunjuk sedia ada.</string>
-<string name="threat_feed_auto">Auto</string>
+<string name="threat_feed_auto">Automatik</string>
 <string name="threat_feed_json">JSON</string>
 <string name="threat_feed_csv">CSV</string>
 <string name="threat_feed_save">Simpan dan jadualkan penyegerakan</string>
