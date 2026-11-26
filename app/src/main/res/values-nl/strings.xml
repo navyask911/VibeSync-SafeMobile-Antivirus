@@ -12,7 +12,7 @@
 <string name="scan_running">Apparaat wordt gescand…</string>
 <string name="threat_found">Dreigingsovereenkomst gevonden</string>
 <string name="signature_count">Lokale handtekeningen: %1$d · Scansessies: %2$d</string>
-<string name="scan_explanation">Controleert leesbare geïnstalleerde APK's aan de hand van lokaal opgeslagen definities en bekijkt bestanden die u selecteert. Detectie wordt beperkt door de toegang van het besturingssysteem en de definities die op dit apparaat zijn geïnstalleerd.</string>
+<string name="scan_explanation">Controleert leesbare geïnstalleerde APK’s aan de hand van lokaal opgeslagen definities en bekijkt bestanden die u selecteert. Detectie wordt beperkt door de toegang van het besturingssysteem en de definities die op dit apparaat zijn geïnstalleerd.</string>
 <string name="scan_installed">Geïnstalleerde apps scannen</string>
 <string name="scan_selected">Scan a selected APK or file</string>
 <string name="monitor_title">Downloads sentinel</string>
@@ -29,7 +29,7 @@
 <string name="no_match_detail">Er is geen overeenkomst gevonden in de lokale dreigingsdefinities.</string>
 <string name="risk_boot">Kan opstart na het opstarten aanvragen</string>
 <string name="risk_overlay">Vraagt overlaymogelijkheid aan</string>
-<string name="risk_install">Vraagt toestemming aan om APK's te installeren</string>
+<string name="risk_install">Vraagt toestemming aan om APK’s te installeren</string>
 <string name="risk_accessibility">Declareert een toegankelijkheidsservice</string>
 <string name="risk_cluster">Combineert meerdere mogelijkheden met grote impact</string>
 <string name="risk_review">Er is geen bekende hash-overeenkomst gevonden; controleer deze mogelijkheden handmatig.</string>
@@ -178,7 +178,7 @@
 <string name="pillar_telemetry_title">Geen cloudtelemetrie</string>
 <string name="pillar_telemetry_body">De scanner uploadt geen bestandsinhoud of hashes. Advertenties en Google Play-services kunnen afzonderlijke netwerkverzoeken uitvoeren.</string>
 <string name="pillar_whatsapp_title">Bescherming van bijlagen in berichtenapps</string>
-<string name="pillar_whatsapp_body">Selecteer APK's of documenten die u zelf wilt controleren. SafeMobile controleert niet automatisch elk bericht of elke bijlage in berichtenapps.</string>
+<string name="pillar_whatsapp_body">Selecteer APK’s of documenten die u zelf wilt controleren. SafeMobile controleert niet automatisch elk bericht of elke bijlage in berichtenapps.</string>
 <string name="pillar_phishing_title">Blokkeren van phishinglinks</string>
 <string name="pillar_phishing_body">Lokale URL-heuristieken zijn beschikbaar. Deze versie heeft geen URLhaus-dreigingsfeed en blokkeert ook geen browsers op apparaatniveau.</string>
 <string name="pillar_cleaner_title">Opschonen van achtergebleven opslagbestanden</string>
@@ -207,7 +207,7 @@
 <string name="guardian_scan_failed">De controle van installatiebronnen is mislukt of door Android geblokkeerd.</string>
 <string name="guardian_no_findings">Er zijn geen kandidaten buiten Play of met bekende namen van apps voor externe toegang gevonden. Dit garandeert niet dat het apparaat schoon is.</string>
 <string name="phishing_title">Controle op phishing en links</string>
-<string name="phishing_disclaimer">Beoordeel een link lokaal voordat u deze opent. Deze controle stuurt ingediende URL's niet naar een externe reputatieservice.</string>
+<string name="phishing_disclaimer">Beoordeel een link lokaal voordat u deze opent. Deze controle stuurt ingediende URL’s niet naar een externe reputatieservice.</string>
 <string name="phishing_url_label">Plak een URL of hostnaam</string>
 <string name="phishing_assess">Link lokaal controleren</string>
 <string name="phishing_invalid">Deze URL kan niet worden gecontroleerd</string>
@@ -238,7 +238,7 @@
 <string name="cleaner_display_limit">Alleen de eerste 100 weergegeven kandidaten worden getoond. De scan beperkt de doorloop om de responsiviteit te behouden.</string>
 <string name="cleaner_delete_selected">Geselecteerde opschonen (%1$d)</string>
 <string name="cleaner_delete_all_eligible">Alle geschikte APK-kandidaten verwijderen (%1$d)</string>
-<string name="cleaner_bulk_rule">Gezamenlijk verwijderen is beperkt tot leesbare APK's zonder overeenkomstig geïnstalleerd pakket die minstens 30 dagen oud zijn. Dit is een opschoningsheuristiek, geen bewijs dat een bestand ongewenst is.</string>
+<string name="cleaner_bulk_rule">Gezamenlijk verwijderen is beperkt tot leesbare APK’s zonder overeenkomstig geïnstalleerd pakket die minstens 30 dagen oud zijn. Dit is een opschoningsheuristiek, geen bewijs dat een bestand ongewenst is.</string>
 <string name="cleaner_delete_confirm_title">Permanent verwijderen van bestanden bevestigen</string>
 <string name="cleaner_delete_confirm_body">Precies %1$d geselecteerde bestanden verwijderen (ongeveer %2$d bytes)? Dit kan niet ongedaan worden gemaakt. SafeMobile controleert vóór verwijdering opnieuw de weergegeven namen en beschikbare metadata.</string>
 <string name="cleaner_delete_confirm_action">Bestanden verwijderen</string>
@@ -315,8 +315,8 @@
 <string name="security_scan_now">Nu scannen</string>
 <string name="security_last_scan_none">Nog geen scan voltooid</string>
 <string name="security_last_scan">Laatste scan · %1$s</string>
-<string name="security_scan_coverage">Controleert geïnstalleerde APK's en leesbare bestanden op gedeelde opslag aan de hand van de lokale definities op dit apparaat. De resultaten bewijzen niet dat het apparaat vrij is van malware.</string>
-<string name="security_limited_storage">Toegang tot gedeelde opslag is niet beschikbaar. De scan kan alleen geïnstalleerde APK's controleren; bestandscontrole blijft beperkt totdat toegang is verleend.</string>
+<string name="security_scan_coverage">Controleert geïnstalleerde APK’s en leesbare bestanden op gedeelde opslag aan de hand van de lokale definities op dit apparaat. De resultaten bewijzen niet dat het apparaat vrij is van malware.</string>
+<string name="security_limited_storage">Toegang tot gedeelde opslag is niet beschikbaar. De scan kan alleen geïnstalleerde APK’s controleren; bestandscontrole blijft beperkt totdat toegang is verleend.</string>
 <string name="analytics_title">Protection Analytics</string>
 <string name="analytics_subtitle">Local-only view of saved scan audit records and current protection state. Counts reflect the records available here, not a malware-free guarantee.</string>
 <string name="analytics_scan_in_progress">Scan bezig</string>

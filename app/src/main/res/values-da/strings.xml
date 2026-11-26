@@ -12,7 +12,7 @@
 <string name="scan_running">Scanner enheden…</string>
 <string name="threat_found">Trusselmatch fundet</string>
 <string name="signature_count">Lokale signaturer: %1$d · Scanningssessioner: %2$d</string>
-<string name="scan_explanation">Kontrollerer læsbare installerede APK'er mod lokalt gemte definitioner og gennemgår filer, du vælger. Registreringen er begrænset af operativsystemets adgang og de definitioner, der er installeret på enheden.</string>
+<string name="scan_explanation">Kontrollerer læsbare installerede APK’er mod lokalt gemte definitioner og gennemgår filer, du vælger. Registreringen er begrænset af operativsystemets adgang og de definitioner, der er installeret på enheden.</string>
 <string name="scan_installed">Scan installerede apps</string>
 <string name="scan_selected">Scan a selected APK or file</string>
 <string name="monitor_title">Downloads sentinel</string>
@@ -29,7 +29,7 @@
 <string name="no_match_detail">Der blev ikke fundet noget match i de lokale trusselsdefinitioner.</string>
 <string name="risk_boot">Kan anmode om opstart efter genstart</string>
 <string name="risk_overlay">Anmoder om tilladelse til at vise overlejringer</string>
-<string name="risk_install">Anmoder om mulighed for at installere APK'er</string>
+<string name="risk_install">Anmoder om mulighed for at installere APK’er</string>
 <string name="risk_accessibility">Erklærer en tilgængelighedstjeneste</string>
 <string name="risk_cluster">Kombinerer flere funktioner med stor påvirkning</string>
 <string name="risk_review">Der blev ikke fundet noget kendt hashmatch; gennemgå disse funktioner manuelt.</string>
@@ -178,7 +178,7 @@
 <string name="pillar_telemetry_title">Ingen telemetri til skyen</string>
 <string name="pillar_telemetry_body">Scanneren uploader ikke filindhold eller hashes. Annoncering og Google Play-tjenester kan foretage separate netværksforespørgsler.</string>
 <string name="pillar_whatsapp_title">Beskyttelse af vedhæftede filer i beskedapps</string>
-<string name="pillar_whatsapp_body">Vælg APK'er eller dokumenter, som du selv vil kontrollere. SafeMobile gennemgår ikke automatisk alle beskeder eller vedhæftede filer i beskedapps.</string>
+<string name="pillar_whatsapp_body">Vælg APK’er eller dokumenter, som du selv vil kontrollere. SafeMobile gennemgår ikke automatisk alle beskeder eller vedhæftede filer i beskedapps.</string>
 <string name="pillar_phishing_title">Blokering af phishinglinks</string>
 <string name="pillar_phishing_body">Lokale URL-heuristikker er tilgængelige. Denne version har hverken et URLhaus-trusselsfeed eller en browserblokering på hele enheden.</string>
 <string name="pillar_cleaner_title">Oprydning af rester i lageret</string>
@@ -197,7 +197,7 @@
 <string name="guardian_review_settings">Gennemgå udviklerindstillinger</string>
 <string name="guardian_refresh">Opdater gennemgang</string>
 <string name="guardian_open_settings_failed">Android-indstillinger kunne ikke åbnes på denne enhed.</string>
-<string name="guardian_install_sources">Gennemgang af installerede apps' kilder</string>
+<string name="guardian_install_sources">Gennemgang af installerede apps’ kilder</string>
 <string name="guardian_source_explanation">Viser apps, hvis installationsprogram ikke identificeres som Google Play, samt apps, hvis navn eller pakkenavn ligner et fjernadgangsprodukt. Resultaterne afhænger af Androids pakkesynlighed og tilgængelige metadata.</string>
 <string name="guardian_source_play">Installationsprogram: Google Play</string>
 <string name="guardian_source_other">Anden eller alternativ installationskilde: %1$s</string>
@@ -207,7 +207,7 @@
 <string name="guardian_scan_failed">Gennemgangen af installationskilder mislykkedes eller blev blokeret af Android.</string>
 <string name="guardian_no_findings">Der blev ikke fundet kandidater uden for Play eller med kendte fjernadgangsnavne. Dette er ingen garanti for, at enheden er ren.</string>
 <string name="phishing_title">Kontrol af phishing og links</string>
-<string name="phishing_disclaimer">Vurder et link lokalt, før du åbner det. Denne kontrol sender ikke indsendte URL'er til en ekstern omdømmetjeneste.</string>
+<string name="phishing_disclaimer">Vurder et link lokalt, før du åbner det. Denne kontrol sender ikke indsendte URL’er til en ekstern omdømmetjeneste.</string>
 <string name="phishing_url_label">Indsæt en URL eller et værtsnavn</string>
 <string name="phishing_assess">Kontrollér link lokalt</string>
 <string name="phishing_invalid">Denne URL kan ikke kontrolleres</string>
@@ -238,7 +238,7 @@
 <string name="cleaner_display_limit">Kun de første 100 viste kandidater vises. Scanningen begrænser gennemgangen for at bevare reaktionsevnen.</string>
 <string name="cleaner_delete_selected">Ryd valgte (%1$d)</string>
 <string name="cleaner_delete_all_eligible">Slet alle egnede APK-kandidater (%1$d)</string>
-<string name="cleaner_bulk_rule">Samlet sletning er begrænset til læsbare APK'er uden matchende installeret pakke, som er mindst 30 dage gamle. Dette er en oprydningsheuristik, ikke et bevis på, at filen er uønsket.</string>
+<string name="cleaner_bulk_rule">Samlet sletning er begrænset til læsbare APK’er uden matchende installeret pakke, som er mindst 30 dage gamle. Dette er en oprydningsheuristik, ikke et bevis på, at filen er uønsket.</string>
 <string name="cleaner_delete_confirm_title">Bekræft permanent sletning af fil</string>
 <string name="cleaner_delete_confirm_body">Slet præcis %1$d valgte filer (ca. %2$d bytes)? Dette kan ikke fortrydes. SafeMobile kontrollerer deres viste navne og tilgængelige metadata igen før sletning.</string>
 <string name="cleaner_delete_confirm_action">Slet filer</string>
@@ -269,7 +269,7 @@
 <string name="threat_feed_settings_description">Konfigurer et betroet HTTPS JSON- eller CSV-slutpunkt. Ingen feed-URL eller API-nøgle er aktiveret som standard. Opdatering kører kun under opladning på et ubegrænset netværk; tryk på Synkroniser nu for at sætte et øjeblikkeligt forsøg i kø.</string>
 <string name="threat_feed_endpoint">HTTPS-feedslutpunkt</string>
 <string name="threat_feed_auth_key">Valgfri Auth-Key fra udbyderen</string>
-<string name="threat_feed_credentials_note">Den valgfrie nøgle krypteres med Android Keystore og indbygges ikke i APK'en eller skrives i logs. Medtag ikke legitimationsoplysninger i URL'en eller anmodningens body.</string>
+<string name="threat_feed_credentials_note">Den valgfrie nøgle krypteres med Android Keystore og indbygges ikke i APK’en eller skrives i logs. Medtag ikke legitimationsoplysninger i URL’en eller anmodningens body.</string>
 <string name="threat_feed_method">HTTP-anmodningsmetode</string>
 <string name="threat_feed_get">GET</string>
 <string name="threat_feed_post_json">POST JSON</string>
@@ -287,7 +287,7 @@
 <string name="threat_feed_saved">Feedkonfigurationen er gemt. Synkronisering er begrænset til opladning og et ubegrænset netværk.</string>
 <string name="threat_feed_cleared">Feedkonfigurationen er fjernet, og periodisk synkronisering er annulleret.</string>
 <string name="threat_feed_queue_note">Synkronisering er sat i kø. WorkManager venter på opladning og et ubegrænset netværk.</string>
-<string name="threat_feed_save_error">Feedkonfigurationen kunne ikke gemmes. Kontrollér HTTPS-URL'en og JSON-anmodningsbodyen.</string>
+<string name="threat_feed_save_error">Feedkonfigurationen kunne ikke gemmes. Kontrollér HTTPS-URL’en og JSON-anmodningsbodyen.</string>
 <string name="nav_apps">Apps</string>
 <string name="nav_sentinel">Download Sentinel</string>
 <string name="nav_analytics">Beskyttelse</string>
@@ -315,8 +315,8 @@
 <string name="security_scan_now">Scan nu</string>
 <string name="security_last_scan_none">Ingen gennemført scanning endnu</string>
 <string name="security_last_scan">Seneste scanning · %1$s</string>
-<string name="security_scan_coverage">Kontrollerer installerede APK'er og læsbare filer på delt lager mod de lokale definitioner, der er tilgængelige på enheden. Resultaterne bekræfter ikke, at enheden er fri for malware.</string>
-<string name="security_limited_storage">Adgang til delt lager er ikke tilgængelig. Scanningen kan kun kontrollere installerede APK'er; filkontrollen er begrænset, indtil adgang gives.</string>
+<string name="security_scan_coverage">Kontrollerer installerede APK’er og læsbare filer på delt lager mod de lokale definitioner, der er tilgængelige på enheden. Resultaterne bekræfter ikke, at enheden er fri for malware.</string>
+<string name="security_limited_storage">Adgang til delt lager er ikke tilgængelig. Scanningen kan kun kontrollere installerede APK’er; filkontrollen er begrænset, indtil adgang gives.</string>
 <string name="analytics_title">Protection Analytics</string>
 <string name="analytics_subtitle">Local-only view of saved scan audit records and current protection state. Counts reflect the records available here, not a malware-free guarantee.</string>
 <string name="analytics_scan_in_progress">Scanning i gang</string>

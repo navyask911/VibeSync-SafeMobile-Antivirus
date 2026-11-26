@@ -316,7 +316,7 @@
 <string name="security_last_scan_none">Wala pang nakumpletong scan</string>
 <string name="security_last_scan">Huling scan · %1$s</string>
 <string name="security_scan_coverage">Sinusuri ang mga naka-install na APK at nababasang file sa shared storage gamit ang mga lokal na definition na available sa device. Hindi pinatutunayan ng mga resulta na malinis sa malware ang device.</string>
-<string name="security_limited_storage">Hindi available ang access sa shared storage. Mga naka-install na APK lang ang masusuri ng scan; limitado ang pagsusuri ng file hangga't hindi ibinibigay ang access.</string>
+<string name="security_limited_storage">Hindi available ang access sa shared storage. Mga naka-install na APK lang ang masusuri ng scan; limitado ang pagsusuri ng file hangga’t hindi ibinibigay ang access.</string>
 <string name="analytics_title">Protection Analytics</string>
 <string name="analytics_subtitle">Local-only view of saved scan audit records and current protection state. Counts reflect the records available here, not a malware-free guarantee.</string>
 <string name="analytics_scan_in_progress">Isinasagawa ang scan</string>
@@ -439,7 +439,7 @@
 <string name="device_security_score_preview">Preview ng gauge. Wala pang available na nasukat na score.</string>
 <string name="strict_mode_title">Mahigpit na mode</string>
 <string name="security_alerts_title">Mga alerto sa seguridad</string>
-<string name="security_alerts_description">Magpakita ng mga lokal na notification kapag may natukoy na banta o nailagay ito sa quarantine. Naka-off ito hangga't hindi mo ito ino-on.</string>
+<string name="security_alerts_description">Magpakita ng mga lokal na notification kapag may natukoy na banta o nailagay ito sa quarantine. Naka-off ito hangga’t hindi mo ito ino-on.</string>
 <string name="security_alerts_enabled">Naka-on ang mga alerto</string>
 <string name="security_alerts_disabled">Naka-off ang mga alerto</string>
 <string name="voice_malicious_quarantined">Babala. May natukoy na mapaminsalang app at inilagay ito sa quarantine.</string>
@@ -751,7 +751,7 @@
 <string name="coverage_feed_title">Pagpapatunay ng nilagdaang feed</string>
 <string name="coverage_feed_body">Kailangan ang mapagkakatiwalaang key sa paggawa ng build at nakatakdang nilagdaang feed para sa hiwalay na pag-verify ng lagda at proteksiyon sa pagbabalik sa lumang bersyon.</string>
 <string name="hash_status_active">Aktibo ang lokal na nilagdaang database ng hash.</string>
-<string name="hash_status_missing">Naka-disable ang pagtutugma ng hash hangga\'t hindi tinatanggap ang nilagdaang database.</string>
+<string name="hash_status_missing">Naka-disable ang pagtutugma ng hash hangga’t hindi tinatanggap ang nilagdaang database.</string>
 <string name="hash_status_key">Naka-disable ang pagtutugma ng hash dahil walang mapagkakatiwalaang signing key.</string>
 <string name="hash_status_invalid">Bumagsak sa pagsusuri ng integridad, bersyon, o format ang mga nakaimbak na depinisyon. Mananatiling naka-disable ang pagtutugma ng hash.</string>
 <string name="hash_status_activation">Hindi nakumpleto ang pag-activate ng database. Mananatiling naka-disable ang pagtutugma ng hash.</string>
