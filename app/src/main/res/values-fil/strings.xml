@@ -43,7 +43,7 @@
 <string name="debug_certificate">Kahawig ng Android debug certificate ang subject ng certificate.</string>
 <string name="scan_complete">Tapos na ang scan. Hindi garantiya na ligtas ang file kapag walang lokal na tugma.</string>
 <string name="scan_failed">Nabigo ang scan. Subukan muli.</string>
-<string name="ads_label">ADVERTISEMENT</string>
+<string name="ads_label">PATATALASTAS</string>
 <string name="privacy_options">Mga opsyon sa privacy / advertising</string>
 <string name="ad_offline_title">Lokal muna. Gumagana offline.</string>
 <string name="ad_offline_body">Nananatili sa device na ito ang pangunahing pag-scan. Kapag nakakonekta, maaari mong suportahan ang independiyenteng paggawa ng app sa pamamagitan ng opsyonal na ambag para sa kape.</string>
@@ -83,7 +83,7 @@
 <string name="import_unverified_body">Binabalidate ng SafeMobile ang JSON structure at hash format, ngunit hindi cryptographically authenticated ng SafeMobile ang lokal na file na ito. Maaaring magdulot ng false positive ang hindi pinagkakatiwalaang definition. Mag-import lamang mula sa source na pinagkakatiwalaan mo at may pahintulot kang gamitin. Hindi ina-upload ang file at mga hash.</string>
 <string name="continue_import">Pumili ng file</string>
 <string name="sponsor_link_failed">Hindi mabuksan ang support page. Suriin ang koneksiyon o subukan muli mamaya.</string>
-<string name="quarantine_vault_title">Quarantine vault</string>
+<string name="quarantine_vault_title">Imbakan ng quarantine</string>
 <string name="quarantine_vault_description">Suriin dito ang mga nakahiwalay na pribadong kopya. Kapag ibinalik, isusulat ang kopya sa pipiliin mong lokasyon at pananatilihin ang orihinal na naka-quarantine hanggang burahin mo ito.</string>
 <string name="quarantine_vault_empty">Walang kasalukuyang naka-quarantine na file.</string>
 <string name="quarantine_vault_limit">Ipinapakita ang 30 pinakabagong naka-quarantine na file.</string>
@@ -126,14 +126,14 @@
 <string name="locale_marathi" translatable="false">मराठी</string>
 <string name="locale_urdu" translatable="false">اردو</string>
 <string name="locale_hebrew" translatable="false">עברית</string>
-<string name="nav_home">Home</string>
+<string name="nav_home">Tahanan</string>
 <string name="nav_scan">I-scan</string>
-<string name="nav_quarantine">Quarantine</string>
+<string name="nav_quarantine">Karantina</string>
 <string name="nav_history">Kasaysayan</string>
 <string name="nav_settings">Mga Setting</string>
 <string name="settings_title">Settings</string>
 <string name="appearance_title">Appearance</string>
-<string name="theme_system">System</string>
+<string name="theme_system">Default ng system</string>
 <string name="theme_light">Light theme</string>
 <string name="theme_dark">Dark theme</string>
 <string name="language_settings">Wika</string>
@@ -143,7 +143,7 @@
 <string name="ray_id_copied">Nakopya ang Ray ID sa clipboard</string>
 <string name="history_title">Kasaysayan ng scan</string>
 <string name="history_empty">Wala pang lokal na kasaysayan ng scan.</string>
-<string name="history_session">Session ID</string>
+<string name="history_session">ID ng session</string>
 <string name="threat_event_ray_id">Ray ID ng threat event: %1$s</string>
 <string name="definitions_limited_compact">Mga definition: EICAR test signature lamang; limitado ang coverage.</string>
 <string name="settings_privacy">Privacy and permissions</string>
@@ -199,7 +199,7 @@
 <string name="guardian_open_settings_failed">Hindi mabuksan ang Android Settings sa device na ito.</string>
 <string name="guardian_install_sources">Pagsusuri sa pinagmulan ng mga naka-install na app</string>
 <string name="guardian_source_explanation">Ipinapakita ang mga app na hindi kinikilala ang installer bilang Google Play, pati ang mga app na kahawig ang label o package name ng remote-access product. Nakasalalay ang resulta sa package visibility ng Android at available na metadata.</string>
-<string name="guardian_source_play">Installer: Google Play</string>
+<string name="guardian_source_play">Pinagmulan ng installer: Google Play</string>
 <string name="guardian_source_other">Iba o alternatibong installer: %1$s</string>
 <string name="guardian_source_unknown">Installer: hindi alam o hindi available</string>
 <string name="guardian_remote_tool_notice">May posibleng remote-access utility. Hindi ito awtomatikong nangangahulugan na may malware.</string>
@@ -247,7 +247,7 @@
 <string name="family_dedication_title">Pasasalamat</string>
 <string name="family_dedication">Buong-pusong iniaalay ito sa minamahal kong pamilya. Dahil sa kanilang napakalaking pasensya, suporta, at paglalaan ng oras sa loob ng mga buwang nag-iisa akong nagtrabaho, naging posible ang paglikha ng SafeMobile Antivirus — isang munting ambag upang gawing mas ligtas ang digital na mundo para sa lahat.</string>
 <string name="about_readme">README</string>
-<string name="about_privacy_policy">Privacy</string>
+<string name="about_privacy_policy">Pribasiya</string>
 <string name="about_license">License</string>
 <string name="about_third_party">Mga abiso ng third party</string>
 <string name="about_license_missing">Walang root LICENSE file sa sinuring repository. Hindi ipinapahayag ng screen na ito na may open-source license ang proyekto at hindi ito nagbibigay ng karagdagang pahintulot. Hindi awtomatikong nangangahulugan ng open-source license ang pagiging pampubliko nito.</string>
@@ -267,17 +267,17 @@
 <string name="threat_feed_manage">Mga setting ng feed</string>
 <string name="threat_feed_settings_title">Pag-sync ng lokal na threat feed</string>
 <string name="threat_feed_settings_description">Mag-configure ng pinagkakatiwalaang HTTPS JSON o CSV endpoint. Walang feed URL o API key na naka-enable bilang default. Tatakbo lang ang refresh habang nagcha-charge at nasa unmetered network; pindutin ang I-sync ngayon para mag-queue ng agarang attempt.</string>
-<string name="threat_feed_endpoint">HTTPS feed endpoint</string>
+<string name="threat_feed_endpoint">HTTPS endpoint ng feed</string>
 <string name="threat_feed_auth_key">Opsyonal na Auth-Key ng provider</string>
 <string name="threat_feed_credentials_note">Ie-encrypt ang opsyonal na key gamit ang Android Keystore at hindi ito inilalagay sa APK o isinusulat sa log. Huwag isama ang credentials sa URL o request body.</string>
-<string name="threat_feed_method">HTTP request method</string>
+<string name="threat_feed_method">Paraan ng HTTP request</string>
 <string name="threat_feed_get">GET</string>
 <string name="threat_feed_post_json">POST JSON</string>
-<string name="threat_feed_post_body">JSON request body</string>
+<string name="threat_feed_post_body">Nilalaman ng JSON request</string>
 <string name="threat_feed_format">Format ng feed</string>
 <string name="threat_feed_update_semantics">Uri ng pag-update ng feed</string>
 <string name="threat_feed_incremental">Inkremental na pagsasama</string>
-<string name="threat_feed_snapshot">Authoritative snapshot</string>
+<string name="threat_feed_snapshot">Opisyal na snapshot ng feed</string>
 <string name="threat_feed_update_semantics_note">Nagdaragdag o nag-a-update ng mga entry ang incremental merge at pinananatili ang mas lumang entry mula sa source na ito. Papalitan lamang ng authoritative snapshot ang source na ito kapag matagumpay na na-parse ang buong feed at hindi ito walang laman. Tinatanggihan ang mga walang-lamang snapshot upang maprotektahan ang mga umiiral na indicator.</string>
 <string name="threat_feed_auto">Awtomatiko</string>
 <string name="threat_feed_json">JSON</string>
@@ -340,7 +340,7 @@
 <string name="analytics_current_results">Mga kasalukuyang resulta ng scan</string>
 <string name="analytics_quarantine">Mga quarantine file</string>
 <string name="analytics_connection">Status ng network</string>
-<string name="analytics_access_available">Available</string>
+<string name="analytics_access_available">Magagamit</string>
 <string name="analytics_limited">Hindi available / limitado</string>
 <string name="analytics_online_local">Online; nananatiling lokal ang mga pangunahing hash check</string>
 <string name="analytics_offline_local">Offline; nananatiling lokal ang mga pangunahing hash check</string>
@@ -377,7 +377,7 @@
 <string name="enterprise_response_warning">Sa pag-enable ng awtomatikong tugon, pinapayagan ang pagtatago at tahimik na kahilingan sa pag-uninstall na para lamang sa Device Owner para sa mga non-system app na may eksaktong lokal na hash/IOC malware match at risk score na lampas 0.8. Hindi itinuturing na tagumpay ang mga failure ng Android callback.</string>
 <string name="feed_settings_title">Opsyonal na pag-sync ng threat feed</string>
 <string name="feed_settings_description">I-save ang pinagkakatiwalaang HTTPS JSON/CSV endpoint. Ie-encrypt ang authentication key sa pribadong preference ng app gamit ang Android Keystore. Hiwalay ang request na ito sa lokal na pag-scan; hindi ina-upload ang mga scan file, hash at history.</string>
-<string name="feed_settings_url_label">HTTPS feed URL</string>
+<string name="feed_settings_url_label">URL ng HTTPS feed</string>
 <string name="feed_settings_auth_label">Opsyonal na Auth-Key ng provider</string>
 <string name="feed_settings_save">I-save ang configuration ng feed</string>
 <string name="feed_settings_saved">Lokal na-save ang configuration ng feed.</string>
@@ -398,7 +398,7 @@
 <string name="security_filter_apps">Mga app</string>
 <string name="security_filter_files">Mga file</string>
 <string name="security_filter_sentinel">Sentinel</string>
-<string name="security_filter_vault">Vault</string>
+<string name="security_filter_vault">Imbakan</string>
 <string name="device_admin_title">Device Administrator</string>
 <string name="device_admin_description">Nagdaragdag ang opsyonal na Device Administrator ng kumpirmasyon ng Android bago i-deactivate ang SafeMobile. Hindi nito pinipigilan ang pag-uninstall pagkatapos ng pag-deactivate, hinaharang ang pag-install ng APK, o ginagawang Device Owner ang SafeMobile.</string>
 <string name="device_admin_enable">I-enable ang Device Administrator</string>
@@ -454,7 +454,7 @@
 <string name="ui_on">Naka-on</string>
 <string name="ui_off_20">Naka-off · −20</string>
 <string name="ui_not_verified">Hindi nabe-verify</string>
-<string name="ui_score_database">Threat database</string>
+<string name="ui_score_database">Database ng banta</string>
 <string name="ui_stale_10">Nawawala o mahigit 24 oras na · −10</string>
 <string name="ui_updated_24">Na-update sa loob ng 24 oras</string>
 <string name="ui_score_accessibility">Mga accessibility app na hindi system app</string>
@@ -508,7 +508,7 @@
 <string name="ui_yara_disabled">NAKA-DISABLE · 0 aktibong rule</string>
 <string name="ui_yara_match_summary">Pinakabagong scan: %1$d tumugmang DEX signature. Hindi nagpapatunay ng malware ang mga advisory match.</string>
 <string name="theme_appearance_description">Choose a color theme. Changes take effect immediately and remain available offline.</string>
-<string name="theme_midnight">Midnight Blue</string>
+<string name="theme_midnight">Asul na hatinggabi</string>
 <string name="theme_oled">Purong OLED Black</string>
 <string name="ui_play_protect_title">Suriin ang Play Protect</string>
 <string name="ui_play_protect_description">Sa Google Play, buksan ang profile mo, piliin ang Play Protect at pagkatapos ay Settings. Hindi awtomatikong mabe-verify ng build na ito ang setting. Gagamitin sa score sa loob ng 24 oras ang iniulat mong status.</string>
