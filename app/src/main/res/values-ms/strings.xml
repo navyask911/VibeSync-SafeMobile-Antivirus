@@ -334,7 +334,7 @@
 <string name="analytics_last_scan">Imbasan terakhir yang selesai</string>
 <string name="analytics_storage">Akses storan kongsi</string>
 <string name="analytics_notifications">Pemberitahuan</string>
-<string name="analytics_sentinel">Download Sentinel</string>
+<string name="analytics_sentinel">Muat turun Sentinel</string>
 <string name="analytics_sentinel_running">Perkhidmatan latar hadapan berjalan</string>
 <string name="analytics_sentinel_stopped">Perkhidmatan tidak berjalan</string>
 <string name="analytics_current_results">Baris hasil imbasan semasa</string>

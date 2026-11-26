@@ -191,7 +191,7 @@
 <string name="guardian_title">सक्रिय सुरक्षा</string>
 <string name="guardian_disclaimer">स्थापना स्रोत मेटाडाटा र रिमोट पहुँच एपको उपस्थिति समीक्षा सूचक हुन्, मालवेयरको प्रमाण होइनन्। Android ले सामान्य एपलाई सबै बाह्य स्थापना रोक्न वा अन्य एप जबर्जस्ती बन्द गर्न दिँदैन।</string>
 <string name="guardian_developer_settings">विकासकर्ता सेटिङ र ADB</string>
-<string name="guardian_developer_state">Developer Options</string>
+<string name="guardian_developer_state">विकासकर्ता विकल्पहरू</string>
 <string name="guardian_adb_state">USB डिबगिङ (ADB)</string>
 <string name="guardian_settings_limit">SafeMobile ले पढ्न मिल्ने स्थिति रिपोर्ट गर्न र Android Settings खोल्न सक्छ। सुरक्षित ग्लोबल स्विच तपाईंले आफैँ परिवर्तन गर्नुपर्छ।</string>
 <string name="guardian_review_settings">Developer Settings समीक्षा गर्नुहोस्</string>
@@ -334,7 +334,7 @@
 <string name="analytics_last_scan">अन्तिम पूरा भएको स्क्यान</string>
 <string name="analytics_storage">साझा भण्डारण पहुँच</string>
 <string name="analytics_notifications">सूचनाहरू</string>
-<string name="analytics_sentinel">Download Sentinel</string>
+<string name="analytics_sentinel">Sentinel डाउनलोड गर्नुहोस्</string>
 <string name="analytics_sentinel_running">अग्रभूमि सेवा चलिरहेको छ</string>
 <string name="analytics_sentinel_stopped">सेवा चलिरहेको छैन</string>
 <string name="analytics_current_results">हालका स्क्यान नतिजा पङ्क्ति</string>

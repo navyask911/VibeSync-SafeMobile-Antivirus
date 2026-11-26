@@ -334,7 +334,7 @@
 <string name="analytics_last_scan">Siste fullførte skanning</string>
 <string name="analytics_storage">Tilgang til delt lagring</string>
 <string name="analytics_notifications">Varsler</string>
-<string name="analytics_sentinel">Download Sentinel</string>
+<string name="analytics_sentinel">Last ned Sentinel</string>
 <string name="analytics_sentinel_running">Forgrunnstjenesten kjører</string>
 <string name="analytics_sentinel_stopped">Tjenesten kjører ikke</string>
 <string name="analytics_current_results">Gjeldende skanneresultatrader</string>
