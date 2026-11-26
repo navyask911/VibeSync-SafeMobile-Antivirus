@@ -87,7 +87,7 @@
 <string name="quarantine_vault_description">Tutaj możesz przeglądać odizolowane kopie prywatne. Przywrócenie zapisuje kopię w wybranej lokalizacji i zachowuje oryginał w kwarantannie do czasu jego usunięcia.</string>
 <string name="quarantine_vault_empty">Obecnie żadne pliki nie znajdują się w kwarantannie.</string>
 <string name="quarantine_vault_limit">Wyświetlanych jest 30 ostatnio poddanych kwarantannie plików.</string>
-<string name="quarantine_item_size">%1$d bytes</string>
+<string name="quarantine_item_size">%1$d B</string>
 <string name="quarantine_restore">Przywróć kopię…</string>
 <string name="quarantine_delete">Usuń trwale</string>
 <string name="quarantine_restore_confirm_title">Przywrócić ten plik z kwarantanny?</string>
