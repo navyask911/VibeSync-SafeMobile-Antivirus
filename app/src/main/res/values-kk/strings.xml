@@ -139,8 +139,8 @@
 <string name="language_settings">Тіл</string>
 <string name="about_legal">About and Legal</string>
 <string name="ray_id">SafeMobile Ray ID</string>
-<string name="ray_id_copy">Copy ID</string>
-<string name="ray_id_copied">Ray ID copied to clipboard</string>
+<string name="ray_id_copy">ID-ді көшіру</string>
+<string name="ray_id_copied">Ray ID алмасу буферіне көшірілді</string>
 <string name="history_title">Сканерлеу тарихы</string>
 <string name="history_empty">Әзірге жергілікті сканерлеу тарихы жоқ.</string>
 <string name="history_session">Сеанс ID-і</string>
@@ -168,7 +168,7 @@
 <string name="overlay_review_enabled">Автоматты тексеру қосылды</string>
 <string name="overlay_review_disabled">Тексеру кідіртілді</string>
 <string name="features_menu">Қауіпсіздік мүмкіндіктері</string>
-<string name="nav_guardian">Guardian</string>
+<string name="nav_guardian">Қорғаушы</string>
 <string name="nav_phishing">Сілтемені тексеру құралы</string>
 <string name="nav_cleaner">Жадты тазалау</string>
 <string name="why_safemobile">Неліктен SafeMobile? Негізгі артықшылықтар мен мүмкіндіктер</string>

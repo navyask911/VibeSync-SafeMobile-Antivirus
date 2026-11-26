@@ -139,8 +139,8 @@
 <string name="language_settings">ენა</string>
 <string name="about_legal">About and Legal</string>
 <string name="ray_id">SafeMobile Ray ID</string>
-<string name="ray_id_copy">Copy ID</string>
-<string name="ray_id_copied">Ray ID copied to clipboard</string>
+<string name="ray_id_copy">ID-ის კოპირება</string>
+<string name="ray_id_copied">Ray ID დაკოპირდა ბუფერში</string>
 <string name="history_title">სკანირების ისტორია</string>
 <string name="history_empty">ადგილობრივი სკანირების ისტორია ჯერ არ არის.</string>
 <string name="history_session">სესიის ID</string>
@@ -168,7 +168,7 @@
 <string name="overlay_review_enabled">ავტომატური შემოწმება ჩართულია</string>
 <string name="overlay_review_disabled">შემოწმება შეჩერებულია</string>
 <string name="features_menu">უსაფრთხოების ფუნქციები</string>
-<string name="nav_guardian">Guardian</string>
+<string name="nav_guardian">მცველი</string>
 <string name="nav_phishing">ბმულების შემმოწმებელი</string>
 <string name="nav_cleaner">საცავის გამწმენდი</string>
 <string name="why_safemobile">რატომ SafeMobile? ძირითადი უპირატესობები და ფუნქციები</string>
