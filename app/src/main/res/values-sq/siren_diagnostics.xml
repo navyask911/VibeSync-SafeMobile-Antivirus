@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="siren_test_settings_title">Diagnostika e sirenës</string>
+    <string name="siren_test_settings_description">Testoni sirenën pesësekondëshe dhe pamjen paraprake të sinjalizimit. Kjo nuk zbulon malware, nuk ndryshon bazën e kërcënimeve dhe nuk kërkon çinstalim.</string>
+    <string name="siren_test_button">Testo sirenën e kërcënimit</string>
+    <string name="siren_test_title">TEST SIRENE — NUK ËSHTË KËRCËNIM REAL</string>
+    <string name="siren_test_notification">Kontroll manual i zërit. Nuk është zbuluar asnjë aplikacion keqdashës.</string>
+    <string name="siren_test_preview">Ky është një test i sirenës SafeMobile. Asnjë aplikacion i instaluar nuk u shënua dhe nuk kërkohet çinstalim. Prekni Shpërfill për të ndaluar audion.</string>
+    <string name="voice_siren_test">Ky është një test i sirenës SafeMobile. Nuk është zbuluar asnjë kërcënim.</string>
+    <string name="battery_review_title">Kufizimet e baterisë mund të vonojnë mbrojtjen</string>
+    <string name="battery_review_body">Kursimi i baterisë ose optimizimi i aplikacionit është aktiv. Disa pajisje Oppo/ColorOS kufizojnë skanimet në sfond dhe sinjalizimet e instalimit. Shqyrtoni cilësimet e baterisë për SafeMobile; kjo nuk garanton mbikëqyrje të vazhdueshme.</string>
+    <string name="battery_review_action">Shqyrto cilësimet e baterisë</string>
+    <string name="battery_review_unavailable">Cilësimet e baterisë së Android nuk mund të hapeshin.</string>
+    <string name="ui_folder_access_not_granted">Qasja në dosje nuk u dha. Mund të vazhdoni me mbrojtje të kufizuar.</string>
+    <string name="test_siren">Testo sirenën</string>
+    <string name="test_voice">Testo zërin</string>
+    <string name="test_siren_failed">Testi i sirenës nuk mund të nisej në këtë pajisje.</string>
+    <string name="test_voice_failed">Testi i zërit dështoi. Kontrolloni motorin e të folurit dhe të dhënat e zërit të instaluara në pajisje.</string>
+</resources>
