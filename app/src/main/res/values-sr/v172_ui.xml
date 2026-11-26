@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="theme_dark_slate">Tamni škriljac</string>
+    <string name="setup_checklist_title">Jedinstvena kontrolna lista za podešavanje</string>
+    <string name="setup_checklist_body">Ove kontrole otvaraju podešavanja Androida. Označeno stanje prati dozvolu koju je uređaj trenutno odobrio.</string>
+    <string name="setup_checklist_battery">Izuzetak za optimizaciju baterije</string>
+    <string name="setup_checklist_admin">Administrator uređaja</string>
+    <string name="setup_checklist_overlay">Preklopno upozorenje visokog prioriteta</string>
+    <string name="setup_checklist_saf">Praćenje SAF fascikli</string>
+    <string name="security_guards_title">Aktivne bezbednosne zaštite i dozvole</string>
+    <string name="security_guards_description">Upravljajte sistemskim dozvolama koje koristi zaštita SafeMobile.</string>
+    <string name="security_guard_battery">Izuzetak za optimizaciju baterije</string>
+    <string name="security_guard_battery_desc">Omogućite da Sentinel usluga u pozadini može da radi.</string>
+    <string name="security_guard_admin">Administrator uređaja</string>
+    <string name="security_guard_admin_desc">Omogućite zaštitne kontrole Android administratora uređaja.</string>
+    <string name="security_guard_overlay">Preklopno upozorenje visokog prioriteta</string>
+    <string name="security_guard_overlay_desc">Dozvolite da se hitna upozorenja o pretnjama prikazuju preko drugih aplikacija.</string>
+    <string name="security_guard_admin_consent_title">Omogućiti administratora uređaja?</string>
+    <string name="security_guard_admin_consent_body">SafeMobile koristi Android administratora uređaja samo za opcione kontrole prinudnog zaključavanja i pravila za lozinke. Ne čita vaše lične datoteke, poruke niti kontakte. Android vam i dalje omogućava da deaktivirate administratora pre deinstaliranja SafeMobile; ovo nije zaštita otporna na neovlašćene izmene i ne blokira instaliranje APK datoteka.</string>
+    <string name="security_guard_overlay_consent_title">Omogućiti preklopna upozorenja?</string>
+    <string name="security_guard_overlay_consent_body">SafeMobile koristi ovaj opcioni poseban pristup samo za prikaz hitnih upozorenja o pretnjama preko drugih aplikacija. Preklopni prozori mogu da prekriju kontrole u drugim aplikacijama. Ovaj pristup ne omogućava pristup vašim ličnim datotekama ili porukama. Omogućite ga samo ako želite ova upozorenja.</string>
+    <string name="security_guard_consent_continue">Nastavi na podešavanja Androida</string>
+    <string name="security_guard_consent_cancel">Ne sada</string>
+    <string name="security_guard_overlay_onboarding_note">Preklopna upozorenja su opcionalna. Tokom početnog podešavanja ne traži se pristup preklapanju; funkciju možete kasnije omogućiti u odeljku Bezbednosne zaštite.</string>
+    <string name="security_guard_saf">Praćenje SAF fascikli</string>
+    <string name="security_guard_saf_desc">Pratite samo fascikle za koje je pristup izričito odobren putem Android birača datoteka.</string>
+    <string name="scan_lab_metrics_title">Metrike skeniranja i laboratorije</string>
+    <string name="scan_lab_metrics_body">Pregledajte proverene informacije o rezultatima testiranja i lokalnu analitiku skeniranja.</string>
+</resources>

@@ -313,7 +313,7 @@
     <string name="analytics_last_scan">Skanimi i fundit i përfunduar</string>
     <string name="analytics_storage">Qasja në hapësirën e përbashkët</string>
     <string name="analytics_notifications">Njoftimet</string>
-    <string name="analytics_sentinel">Download Sentinel</string>
+    <string name="analytics_sentinel">Sentinel i shkarkimeve</string>
     <string name="analytics_sentinel_running">Shërbimi në plan të parë po funksionon</string>
     <string name="analytics_sentinel_stopped">Shërbimi nuk po funksionon</string>
     <string name="analytics_current_results">Rreshtat aktualë të rezultateve të skanimit</string>
@@ -658,4 +658,133 @@
     <string name="self_update_no_update">Aktualisht nuk ka përditësim më të ri në Google Play.</string>
     <string name="self_update_not_allowed">Një përditësim është i disponueshëm, por Google Play nuk lejon rrjedhën e menjëhershme të përditësimit për këtë instalim.</string>
     <string name="self_update_open_play_store">Hap Google Play</string>
+    <string name="scan_complete_skipped">Skanimi përfundoi. U anashkaluan %1$d skedarë për shkak të kufizimeve të sistemit operativ.</string>
+    <string name="scan_foreground_channel_name">Skanimi në vazhdim</string>
+    <string name="scan_foreground_channel_description">Status i përhershëm për skanimet antivirus në pajisje.</string>
+    <string name="scan_foreground_notification_title">Po kërkohen kërcënime…</string>
+    <string name="scan_foreground_notification_body">SafeMobile po skanon aplikacionet e instaluara dhe skedarët lokalë në këtë pajisje.</string>
+    <string name="scan_stop_action">Ndalo skanimin</string>
+    <string name="ml_engine_active_status">Motori AI: Aktiv</string>
+    <string name="play_integrity_verified_title">Play Integrity u verifikua</string>
+    <string name="play_integrity_verified_description">Një server i besuar verifikon vlerësimin e pajisjes të kthyer nga Google Play.</string>
+    <string name="play_integrity_status_verified">Google Play konfirmon MEETS_DEVICE_INTEGRITY.</string>
+    <string name="play_integrity_status_not_verified">Google Play nuk ktheu MEETS_DEVICE_INTEGRITY.</string>
+    <string name="play_integrity_status_requesting">Po kërkohet një shenjë integriteti nga Google Play…</string>
+    <string name="play_integrity_status_server_unconfigured">Shenja u mor. Verifikimi në anën e serverit nuk është konfiguruar.</string>
+    <string name="play_integrity_status_error">Verifikimi i integritetit nuk është aktualisht i disponueshëm.</string>
+    <string name="play_integrity_status_not_checked">Në pritje të kontrollit të integritetit.</string>
+    <string name="device_integrity_title">Kontrolli i integritetit të pajisjes</string>
+    <string name="security_advisor_heading">Këshilluesi i sigurisë</string>
+    <string name="device_integrity_description">SafeMobile kontrolloi gjendjen lokale të ndërtimit dhe të bootloader-it, korrigjimin ADB dhe Shërbimet e Google Play. Kjo bazë nuk është vërtetim i Google Play Integrity.</string>
+    <string name="device_integrity_status_local_passed">Kontrolli bazë lokal kaloi: nisje e verifikuar dhe e kyçur, etiketa të ndërtimit të prodhimit, ADB i çaktivizuar dhe Shërbimet e Google Play të disponueshme. Ky nuk është vërtetim i Google Play Integrity.</string>
+    <string name="device_integrity_status_local_failed">Kontrolli bazë lokal nuk kaloi. Shqyrtoni kyçjen e bootloader-it, etiketat e ndërtimit, korrigjimin ADB dhe Shërbimet e Google Play.</string>
+    <string name="posture_audit_success">Të gjitha kontrollet përfunduan me sukses</string>
+    <string name="play_protect_status_title">Statusi i Play Protect</string>
+    <string name="play_protect_status_enabled">Verifikimi i paketave nga Google Play është aktivizuar në këtë pajisje.</string>
+    <string name="play_protect_status_disabled">Verifikimi i paketave nga Google Play është çaktivizuar te cilësimet e Android.</string>
+    <string name="console_full_screen_alerts_title">Njoftime në ekran të plotë</string>
+    <string name="console_full_screen_alerts_allowed">Lejohet. SafeMobile mund të hapë njoftime urgjente për incidente në ekran të plotë.</string>
+    <string name="console_full_screen_alerts_permission_needed">Nevojitet leje. Lejoni SafeMobile të hapë njoftimet urgjente për incidente në ekran të plotë.</string>
+    <string name="console_full_screen_alerts_not_required">Nuk kërkohet në këtë version të Android.</string>
+    <string name="console_full_screen_alerts_manage">Menaxho</string>
+    <string name="console_full_screen_alerts_grant">Jep qasje</string>
+    <string name="security_advisor_all_secure">Gjithçka është e sigurt</string>
+    <string name="locale_english">English</string>
+    <string name="locale_arabic">العربية</string>
+    <string name="locale_german">Deutsch</string>
+    <string name="locale_spanish">Español</string>
+    <string name="locale_french">Français</string>
+    <string name="locale_hindi">हिन्दी</string>
+    <string name="locale_japanese">日本語</string>
+    <string name="locale_portuguese">Português</string>
+    <string name="locale_russian">Русский</string>
+    <string name="locale_chinese">简体中文</string>
+    <string name="locale_korean">한국어</string>
+    <string name="locale_turkish">Türkçe</string>
+    <string name="locale_indonesian">Bahasa Indonesia</string>
+    <string name="locale_vietnamese">Tiếng Việt</string>
+    <string name="locale_italian">Italiano</string>
+    <string name="locale_kannada">ಕನ್ನಡ</string>
+    <string name="locale_tamil">தமிழ்</string>
+    <string name="locale_telugu">తెలుగు</string>
+    <string name="locale_bengali">বাংলা</string>
+    <string name="locale_marathi">मराठी</string>
+    <string name="locale_urdu">اردو</string>
+    <string name="locale_hebrew">עברית</string>
+    <plurals name="l10n_scanned_apps">
+        <item quantity="one">U skanua %1$d aplikacion</item>
+        <item quantity="other">U skanuan %1$d aplikacione</item>
+    </plurals>
+    <plurals name="l10n_scanned_files">
+        <item quantity="one">U skanua %1$d skedar</item>
+        <item quantity="other">U skanuan %1$d skedarë</item>
+    </plurals>
+    <plurals name="l10n_threats">
+        <item quantity="one">U gjet %1$d kërcënim</item>
+        <item quantity="other">U gjetën %1$d kërcënime</item>
+    </plurals>
+    <plurals name="l10n_review">
+        <item quantity="one">%1$d rezultat kërkon shqyrtim</item>
+        <item quantity="other">%1$d rezultate kërkojnë shqyrtim</item>
+    </plurals>
+    <plurals name="l10n_unreadable">
+        <item quantity="one">%1$d element nuk mund të skanohej</item>
+        <item quantity="other">%1$d elemente nuk mund të skanoheshin</item>
+    </plurals>
+    <plurals name="l10n_no_match">
+        <item quantity="one">%1$d rezultat pa përputhje lokale</item>
+        <item quantity="other">%1$d rezultate pa përputhje lokale</item>
+    </plurals>
+    <plurals name="l10n_apps">
+        <item quantity="one">%1$d aplikacion</item>
+        <item quantity="other">%1$d aplikacione</item>
+    </plurals>
+    <plurals name="l10n_files">
+        <item quantity="one">%1$d skedar</item>
+        <item quantity="other">%1$d skedarë</item>
+    </plurals>
+    <plurals name="l10n_posture_apps">
+        <item quantity="one">%1$d aplikacion jo-sistem ka qasje me rrezik të lartë.</item>
+        <item quantity="other">%1$d aplikacione jo-sistem kanë qasje me rrezik të lartë.</item>
+    </plurals>
+    <plurals name="l10n_pending_changes">
+        <item quantity="one">%1$d ndryshim i vërejtur pret njoftimin.</item>
+        <item quantity="other">%1$d ndryshime të vërejtura presin njoftimin.</item>
+    </plurals>
+    <plurals name="l10n_rules">
+        <item quantity="one">Mbulim i kufizuar · %1$d rregull i përfshirë</item>
+        <item quantity="other">Mbulim i kufizuar · %1$d rregulla të përfshira</item>
+    </plurals>
+    <plurals name="l10n_rule_matches">
+        <item quantity="one">Skanimi i fundit: %1$d përputhje këshilluese e kodit.</item>
+        <item quantity="other">Skanimi i fundit: %1$d përputhje këshilluese të kodit.</item>
+    </plurals>
+    <plurals name="l10n_imported">
+        <item quantity="one">U importua %1$d nënshkrim i vlefshëm në hapësirën lokale.</item>
+        <item quantity="other">U importuan %1$d nënshkrime të vlefshme në hapësirën lokale.</item>
+    </plurals>
+    <plurals name="l10n_bytes">
+        <item quantity="one">%1$d bajt</item>
+        <item quantity="other">%1$d bajte</item>
+    </plurals>
+    <plurals name="l10n_root_indicators">
+        <item quantity="one">Është i pranishëm %1$d tregues i sistemit të skedarëve i lidhur me root.</item>
+        <item quantity="other">Janë të pranishëm %1$d tregues të sistemit të skedarëve të lidhur me root.</item>
+    </plurals>
+    <plurals name="l10n_hook_indicators">
+        <item quantity="one">Është i pranishëm %1$d tregues i ndërhyrjes në kod.</item>
+        <item quantity="other">Janë të pranishëm %1$d tregues të ndërhyrjes në kod.</item>
+    </plurals>
+    <plurals name="l10n_enabled_apps">
+        <item quantity="one">%1$d aplikacion i aktivizuar</item>
+        <item quantity="other">%1$d aplikacione të aktivizuara</item>
+    </plurals>
+    <plurals name="l10n_indicators">
+        <item quantity="one">%1$d tregues</item>
+        <item quantity="other">%1$d tregues</item>
+    </plurals>
+    <plurals name="l10n_progress">
+        <item quantity="one">U kontrollua %1$d nga %2$d aplikacion</item>
+        <item quantity="other">U kontrolluan %1$d nga %2$d aplikacione</item>
+    </plurals>
 </resources>

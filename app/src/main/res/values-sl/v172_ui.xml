@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="theme_dark_slate">Temni skrilavec</string>
+    <string name="setup_checklist_title">Enoten kontrolni seznam za nastavitev</string>
+    <string name="setup_checklist_body">Ti kontrolniki odprejo nastavitve Androida. Označeno stanje odraža dovoljenje, ki ga je naprava trenutno odobrila.</string>
+    <string name="setup_checklist_battery">Izjema pri optimizaciji baterije</string>
+    <string name="setup_checklist_admin">Skrbnik naprave</string>
+    <string name="setup_checklist_overlay">Prekrivno opozorilo visoke prioritete</string>
+    <string name="setup_checklist_saf">Nadzor imenika SAF</string>
+    <string name="security_guards_title">Aktivne varnostne zaščite in dovoljenja</string>
+    <string name="security_guards_description">Upravljajte sistemska dovoljenja, ki jih uporablja zaščita SafeMobile.</string>
+    <string name="security_guard_battery">Izjema pri optimizaciji baterije</string>
+    <string name="security_guard_battery_desc">Omogočite, da se storitev Sentinel v ozadju lahko izvaja.</string>
+    <string name="security_guard_admin">Skrbnik naprave</string>
+    <string name="security_guard_admin_desc">Omogočite zaščitne funkcije skrbnika naprave Android.</string>
+    <string name="security_guard_overlay">Prekrivno opozorilo visoke prioritete</string>
+    <string name="security_guard_overlay_desc">Dovolite, da se nujna opozorila o grožnjah prikažejo nad drugimi aplikacijami.</string>
+    <string name="security_guard_admin_consent_title">Omogočiti skrbnika naprave?</string>
+    <string name="security_guard_admin_consent_body">SafeMobile uporablja skrbnika naprave Android samo za neobvezno zaklepanje naprave in uveljavljanje pravilnika o geslih. Ne bere vaših osebnih datotek, sporočil ali stikov. Android vam še vedno omogoča, da skrbnika deaktivirate pred odstranitvijo SafeMobile; to ni zaščita pred posegi in ne preprečuje namestitve APK-jev.</string>
+    <string name="security_guard_overlay_consent_title">Omogočiti prekrivna opozorila?</string>
+    <string name="security_guard_overlay_consent_body">SafeMobile ta neobvezni posebni dostop uporablja samo za prikaz nujnih opozoril o grožnjah nad drugimi aplikacijami. Prekrivna okna lahko zakrijejo kontrolnike v drugih aplikacijah. Dostop ne omogoča dostopa do vaših osebnih datotek ali sporočil. Omogočite ga samo, če želite ta opozorila.</string>
+    <string name="security_guard_consent_continue">Nadaljuj v nastavitve Androida</string>
+    <string name="security_guard_consent_cancel">Ne zdaj</string>
+    <string name="security_guard_overlay_onboarding_note">Prekrivna opozorila so neobvezna. Med uvajanjem se dostop do prekrivanja ne zahteva; funkcijo lahko pozneje omogočite v razdelku Varnostne zaščite.</string>
+    <string name="security_guard_saf">Nadzor imenika SAF</string>
+    <string name="security_guard_saf_desc">Spremljajte samo mape, za katere je bil dostop izrecno odobren v izbirniku datotek Android.</string>
+    <string name="scan_lab_metrics_title">Meritve razdelka Skeniranje in laboratorij</string>
+    <string name="scan_lab_metrics_body">Preglejte preverjene podatke o merilih uspešnosti in lokalno analitiko skeniranja.</string>
+</resources>

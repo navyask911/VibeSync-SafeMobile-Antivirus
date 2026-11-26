@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="theme_dark_slate">Pllakëz e errët</string>
+    <string name="setup_checklist_title">Lista e unifikuar e kontrollit të konfigurimit</string>
+    <string name="setup_checklist_body">Këto kontrolle hapin cilësimet e Android. Gjendja e shënuar pasqyron lejen që pajisja ka dhënë aktualisht.</string>
+    <string name="setup_checklist_battery">Përjashtim nga optimizimi i baterisë</string>
+    <string name="setup_checklist_admin">Administratori i pajisjes</string>
+    <string name="setup_checklist_overlay">Njoftim mbivendosës me përparësi të lartë</string>
+    <string name="setup_checklist_saf">Monitorimi i dosjeve SAF</string>
+    <string name="security_guards_title">Mbrojtëset aktive të sigurisë dhe lejet</string>
+    <string name="security_guards_description">Menaxhoni lejet e sistemit që përdoren nga mbrojtja e SafeMobile.</string>
+    <string name="security_guard_battery">Përjashtim nga optimizimi i baterisë</string>
+    <string name="security_guard_battery_desc">Mbajeni shërbimin Sentinel në sfond të përshtatshëm për t'u ekzekutuar.</string>
+    <string name="security_guard_admin">Administratori i pajisjes</string>
+    <string name="security_guard_admin_desc">Aktivizoni kontrollet mbrojtëse të administratorit të pajisjes Android.</string>
+    <string name="security_guard_overlay">Njoftim mbivendosës me përparësi të lartë</string>
+    <string name="security_guard_overlay_desc">Lejoni që paralajmërimet urgjente për kërcënimet të shfaqen mbi aplikacionet e tjera.</string>
+    <string name="security_guard_admin_consent_title">Të aktivizohet Administratori i pajisjes?</string>
+    <string name="security_guard_admin_consent_body">SafeMobile përdor Administratorin e pajisjes Android vetëm për kontrolle opsionale të kyçjes së detyruar dhe politikave të fjalëkalimit. Ai nuk lexon skedarët, mesazhet ose kontaktet tuaja personale. Android ju lejon ende ta çaktivizoni administratorin para çinstalimit të SafeMobile; kjo nuk është mbrojtje kundër ndërhyrjeve dhe nuk bllokon instalimin e APK-ve.</string>
+    <string name="security_guard_overlay_consent_title">Të aktivizohen njoftimet mbivendosëse?</string>
+    <string name="security_guard_overlay_consent_body">SafeMobile e përdor këtë qasje të posaçme opsionale vetëm për të shfaqur paralajmërime urgjente për kërcënimet mbi aplikacionet e tjera. Dritaret mbivendosëse mund të mbulojnë kontrollet në aplikacione të tjera. Kjo nuk jep qasje te skedarët ose mesazhet tuaja personale. Aktivizojeni vetëm nëse dëshironi këto njoftime.</string>
+    <string name="security_guard_consent_continue">Vazhdo te cilësimet e Android</string>
+    <string name="security_guard_consent_cancel">Jo tani</string>
+    <string name="security_guard_overlay_onboarding_note">Njoftimet mbivendosëse janë opsionale. Gjatë konfigurimit fillestar nuk kërkohet qasje mbivendosëse; aktivizojeni më vonë te Mbrojtëset e sigurisë.</string>
+    <string name="security_guard_saf">Monitorimi i dosjeve SAF</string>
+    <string name="security_guard_saf_desc">Monitoroni vetëm dosjet për të cilat është dhënë shprehimisht leje përmes zgjedhësit të skedarëve të Android.</string>
+    <string name="scan_lab_metrics_title">Metrikat e Skanimit dhe Laboratorit</string>
+    <string name="scan_lab_metrics_body">Shqyrtoni informacionin e verifikuar të standardeve dhe analizat lokale të skanimit.</string>
+</resources>

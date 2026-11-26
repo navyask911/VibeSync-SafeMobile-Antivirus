@@ -313,7 +313,7 @@
     <string name="analytics_last_scan">Zadnji dokončani pregled</string>
     <string name="analytics_storage">Dostop do skupne shrambe</string>
     <string name="analytics_notifications">Obvestila</string>
-    <string name="analytics_sentinel">Download Sentinel</string>
+    <string name="analytics_sentinel">Sentinel za prenose</string>
     <string name="analytics_sentinel_running">Storitev v ospredju deluje</string>
     <string name="analytics_sentinel_stopped">Storitev ne deluje</string>
     <string name="analytics_current_results">Trenutne vrstice rezultatov pregleda</string>
@@ -658,4 +658,171 @@
     <string name="self_update_no_update">Trenutno ni na voljo novejše posodobitve Google Play.</string>
     <string name="self_update_not_allowed">Posodobitev je na voljo, vendar Google Play za to namestitev ne dovoljuje takojšnje posodobitve.</string>
     <string name="self_update_open_play_store">Odpri Google Play</string>
+    <string name="scan_complete_skipped">Skeniranje je končano. Zaradi omejitev operacijskega sistema je bilo izpuščenih %1$d datotek.</string>
+    <string name="scan_foreground_channel_name">Skeniranje poteka</string>
+    <string name="scan_foreground_channel_description">Trajno stanje protivirusnih pregledov v napravi.</string>
+    <string name="scan_foreground_notification_title">Iskanje groženj…</string>
+    <string name="scan_foreground_notification_body">SafeMobile pregleduje nameščene aplikacije in lokalne datoteke v tej napravi.</string>
+    <string name="scan_stop_action">Ustavi skeniranje</string>
+    <string name="ml_engine_active_status">Motor umetne inteligence: aktiven</string>
+    <string name="play_integrity_verified_title">Preverjanje Play Integrity je potrjeno</string>
+    <string name="play_integrity_verified_description">Zaupanja vreden strežnik preveri oceno naprave, ki jo vrne Google Play.</string>
+    <string name="play_integrity_status_verified">Google Play potrjuje MEETS_DEVICE_INTEGRITY.</string>
+    <string name="play_integrity_status_not_verified">Google Play ni vrnil MEETS_DEVICE_INTEGRITY.</string>
+    <string name="play_integrity_status_requesting">Zahtevanje žetona za preverjanje integritete v Google Play…</string>
+    <string name="play_integrity_status_server_unconfigured">Žeton je prejet. Preverjanje na strani strežnika ni konfigurirano.</string>
+    <string name="play_integrity_status_error">Preverjanje integritete trenutno ni na voljo.</string>
+    <string name="play_integrity_status_not_checked">Čakanje na preverjanje integritete.</string>
+    <string name="device_integrity_title">Preverjanje integritete naprave</string>
+    <string name="security_advisor_heading">Varnostni svetovalec</string>
+    <string name="device_integrity_description">SafeMobile je preveril lokalno stanje gradnje in zagonskega nalagalnika, odpravljanje napak ADB ter storitve Google Play. Ta osnovna preveritev ni potrditev Google Play Integrity.</string>
+    <string name="device_integrity_status_local_passed">Lokalna osnovna preveritev je uspešna: zaklenjen preverjeni zagon, oznake produkcijske gradnje, ADB je onemogočen in storitve Google Play so na voljo. To ni potrditev Google Play Integrity.</string>
+    <string name="device_integrity_status_local_failed">Lokalna osnovna preveritev ni bila uspešna. Preverite zaklep zagonskega nalagalnika, oznake gradnje, odpravljanje napak ADB in storitve Google Play.</string>
+    <string name="posture_audit_success">Vsi pregledi so bili uspešno zaključeni</string>
+    <string name="play_protect_status_title">Stanje Play Protect</string>
+    <string name="play_protect_status_enabled">Preverjanje paketov Google Play je v tej napravi omogočeno.</string>
+    <string name="play_protect_status_disabled">Preverjanje paketov Google Play je v nastavitvah Androida onemogočeno.</string>
+    <string name="console_full_screen_alerts_title">Celozaslonska opozorila</string>
+    <string name="console_full_screen_alerts_allowed">Dovoljeno. SafeMobile lahko nujna opozorila o incidentih odpre v celozaslonskem načinu.</string>
+    <string name="console_full_screen_alerts_permission_needed">Potrebno je dovoljenje. Dovolite aplikaciji SafeMobile odpiranje nujnih opozoril o incidentih v celozaslonskem načinu.</string>
+    <string name="console_full_screen_alerts_not_required">V tej različici Androida ni potrebno.</string>
+    <string name="console_full_screen_alerts_manage">Upravljanje</string>
+    <string name="console_full_screen_alerts_grant">Odobri dostop</string>
+    <string name="security_advisor_all_secure">Vse je varno</string>
+    <string name="locale_english">English</string>
+    <string name="locale_arabic">العربية</string>
+    <string name="locale_german">Deutsch</string>
+    <string name="locale_spanish">Español</string>
+    <string name="locale_french">Français</string>
+    <string name="locale_hindi">हिन्दी</string>
+    <string name="locale_japanese">日本語</string>
+    <string name="locale_portuguese">Português</string>
+    <string name="locale_russian">Русский</string>
+    <string name="locale_chinese">简体中文</string>
+    <string name="locale_korean">한국어</string>
+    <string name="locale_turkish">Türkçe</string>
+    <string name="locale_indonesian">Bahasa Indonesia</string>
+    <string name="locale_vietnamese">Tiếng Việt</string>
+    <string name="locale_italian">Italiano</string>
+    <string name="locale_kannada">ಕನ್ನಡ</string>
+    <string name="locale_tamil">தமிழ்</string>
+    <string name="locale_telugu">తెలుగు</string>
+    <string name="locale_bengali">বাংলা</string>
+    <string name="locale_marathi">मराठी</string>
+    <string name="locale_urdu">اردو</string>
+    <string name="locale_hebrew">עברית</string>
+    <plurals name="l10n_scanned_apps">
+        <item quantity="one">Pregledana %1$d aplikacija</item>
+        <item quantity="two">Pregledani %1$d aplikaciji</item>
+        <item quantity="few">Pregledane %1$d aplikacije</item>
+        <item quantity="other">Pregledanih %1$d aplikacij</item>
+    </plurals>
+    <plurals name="l10n_scanned_files">
+        <item quantity="one">Pregledana %1$d datoteka</item>
+        <item quantity="two">Pregledani %1$d datoteki</item>
+        <item quantity="few">Pregledane %1$d datoteke</item>
+        <item quantity="other">Pregledanih %1$d datotek</item>
+    </plurals>
+    <plurals name="l10n_threats">
+        <item quantity="one">Najdena %1$d grožnja</item>
+        <item quantity="two">Najdeni %1$d grožnji</item>
+        <item quantity="few">Najdene %1$d grožnje</item>
+        <item quantity="other">Najdenih %1$d groženj</item>
+    </plurals>
+    <plurals name="l10n_review">
+        <item quantity="one">Za pregled je potreben %1$d rezultat</item>
+        <item quantity="two">Za pregled sta potrebna %1$d rezultata</item>
+        <item quantity="few">Za pregled so potrebni %1$d rezultati</item>
+        <item quantity="other">Za pregled je potrebnih %1$d rezultatov</item>
+    </plurals>
+    <plurals name="l10n_unreadable">
+        <item quantity="one">Elementa %1$d ni bilo mogoče pregledati</item>
+        <item quantity="two">Elementov %1$d ni bilo mogoče pregledati</item>
+        <item quantity="few">Elementov %1$d ni bilo mogoče pregledati</item>
+        <item quantity="other">Elementov %1$d ni bilo mogoče pregledati</item>
+    </plurals>
+    <plurals name="l10n_no_match">
+        <item quantity="one">%1$d rezultat brez lokalnega ujemanja</item>
+        <item quantity="two">%1$d rezultata brez lokalnega ujemanja</item>
+        <item quantity="few">%1$d rezultati brez lokalnega ujemanja</item>
+        <item quantity="other">%1$d rezultatov brez lokalnega ujemanja</item>
+    </plurals>
+    <plurals name="l10n_apps">
+        <item quantity="one">%1$d aplikacija</item>
+        <item quantity="two">%1$d aplikaciji</item>
+        <item quantity="few">%1$d aplikacije</item>
+        <item quantity="other">%1$d aplikacij</item>
+    </plurals>
+    <plurals name="l10n_files">
+        <item quantity="one">%1$d datoteka</item>
+        <item quantity="two">%1$d datoteki</item>
+        <item quantity="few">%1$d datoteke</item>
+        <item quantity="other">%1$d datotek</item>
+    </plurals>
+    <plurals name="l10n_posture_apps">
+        <item quantity="one">%1$d nesistemska aplikacija ima dostop z visokim tveganjem.</item>
+        <item quantity="two">%1$d nesistemski aplikaciji imata dostop z visokim tveganjem.</item>
+        <item quantity="few">%1$d nesistemske aplikacije imajo dostop z visokim tveganjem.</item>
+        <item quantity="other">%1$d nesistemskih aplikacij ima dostop z visokim tveganjem.</item>
+    </plurals>
+    <plurals name="l10n_pending_changes">
+        <item quantity="one">%1$d opažena sprememba čaka na obvestilo.</item>
+        <item quantity="two">%1$d opaženi spremembi čakata na obvestilo.</item>
+        <item quantity="few">%1$d opažene spremembe čakajo na obvestilo.</item>
+        <item quantity="other">%1$d opaženih sprememb čaka na obvestilo.</item>
+    </plurals>
+    <plurals name="l10n_rules">
+        <item quantity="one">Omejena pokritost · %1$d priloženo pravilo</item>
+        <item quantity="two">Omejena pokritost · %1$d priloženi pravili</item>
+        <item quantity="few">Omejena pokritost · %1$d priložena pravila</item>
+        <item quantity="other">Omejena pokritost · %1$d priloženih pravil</item>
+    </plurals>
+    <plurals name="l10n_rule_matches">
+        <item quantity="one">Najnovejši pregled: %1$d informativno ujemanje kode.</item>
+        <item quantity="two">Najnovejši pregled: %1$d informativni ujemanji kode.</item>
+        <item quantity="few">Najnovejši pregled: %1$d informativna ujemanja kode.</item>
+        <item quantity="other">Najnovejši pregled: %1$d informativnih ujemanj kode.</item>
+    </plurals>
+    <plurals name="l10n_imported">
+        <item quantity="one">V lokalni pomnilnik je bil uvožen %1$d veljaven podpis.</item>
+        <item quantity="two">V lokalni pomnilnik sta bila uvožena %1$d veljavna podpisa.</item>
+        <item quantity="few">V lokalni pomnilnik so bili uvoženi %1$d veljavni podpisi.</item>
+        <item quantity="other">V lokalni pomnilnik je bilo uvoženih %1$d veljavnih podpisov.</item>
+    </plurals>
+    <plurals name="l10n_bytes">
+        <item quantity="one">%1$d bajt</item>
+        <item quantity="two">%1$d bajta</item>
+        <item quantity="few">%1$d bajti</item>
+        <item quantity="other">%1$d bajtov</item>
+    </plurals>
+    <plurals name="l10n_root_indicators">
+        <item quantity="one">Prisoten je %1$d indikator datotečnega sistema, povezan s korenskim dostopom.</item>
+        <item quantity="two">Prisotna sta %1$d indikatorja datotečnega sistema, povezana s korenskim dostopom.</item>
+        <item quantity="few">Prisotni so %1$d indikatorji datotečnega sistema, povezani s korenskim dostopom.</item>
+        <item quantity="other">Prisotnih je %1$d indikatorjev datotečnega sistema, povezanih s korenskim dostopom.</item>
+    </plurals>
+    <plurals name="l10n_hook_indicators">
+        <item quantity="one">Prisoten je %1$d indikator prestrezanja kode.</item>
+        <item quantity="two">Prisotna sta %1$d indikatorja prestrezanja kode.</item>
+        <item quantity="few">Prisotni so %1$d indikatorji prestrezanja kode.</item>
+        <item quantity="other">Prisotnih je %1$d indikatorjev prestrezanja kode.</item>
+    </plurals>
+    <plurals name="l10n_enabled_apps">
+        <item quantity="one">Omogočena je %1$d aplikacija</item>
+        <item quantity="two">Omogočeni sta %1$d aplikaciji</item>
+        <item quantity="few">Omogočene so %1$d aplikacije</item>
+        <item quantity="other">Omogočenih je %1$d aplikacij</item>
+    </plurals>
+    <plurals name="l10n_indicators">
+        <item quantity="one">%1$d indikator</item>
+        <item quantity="two">%1$d indikatorja</item>
+        <item quantity="few">%1$d indikatorji</item>
+        <item quantity="other">%1$d indikatorjev</item>
+    </plurals>
+    <plurals name="l10n_progress">
+        <item quantity="one">Pregledana %1$d od %2$d aplikacije</item>
+        <item quantity="two">Pregledani %1$d od %2$d aplikacij</item>
+        <item quantity="few">Pregledane %1$d od %2$d aplikacij</item>
+        <item quantity="other">Pregledanih %1$d od %2$d aplikacij</item>
+    </plurals>
 </resources>

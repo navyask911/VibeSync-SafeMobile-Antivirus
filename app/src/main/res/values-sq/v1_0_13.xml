@@ -15,4 +15,5 @@
     <string name="analytics_weekly_scans">Skanimet javore</string>
     <string name="analytics_week_note">Sesionet e regjistruara, nga e hëna deri të dielën. Mund të përfshihen edhe ekzekutime të pjesshme.</string>
     <string name="install_scan_received">U mor ngjarja e instalimit. Hapni SafeMobile për shqyrtim.</string>
+    <string name="posture_overlay_select_app">Në Android 11+, zgjidhni %1$s në listën e cilësimeve të mbivendosjes.</string>
 </resources>

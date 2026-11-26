@@ -27,4 +27,11 @@
     <string name="pro_fewer_years">Мање година</string>
     <string name="pro_more_years">Више година</string>
     <string name="pro_subscription_offer">Откључај SafeMobile Pro — ₹299 / година (аутоматско обнављање). Откажите било када у Google Play-у.</string>
+    <string name="pro_one_year_price">Jedna unapred plaćena godina: %1$s</string>
+    <string name="pro_prepaid_offer">Jednogodišnji unapred plaćeni pristup usluzi SafeMobile Pro. Ne obnavlja se automatski.</string>
+    <string name="pro_prepaid_duration_limit">Google Play prepaid planovi ograničeni su na jednu godinu po kupovini. Ponovo kupite ili produžite isti plan da biste dodali još jednu godinu; konačna cena se potvrđuje na Google Play.</string>
+    <string name="pro_device_binding_explanation">Ova kupovina je povezana sa ovim Android uređajem pomoću heširanog identifikatora uređaja. Ponovna instalacija na istom uređaju može da vrati aktivnu Play kupovinu; drugi uređaj je blokiran.</string>
+    <string name="pro_buy_or_extend_one_year">Kupi / produži za 1 godinu</string>
+    <string name="pro_device_mismatch">Pretplata je aktivna na drugom uređaju. Pristup usluzi SafeMobile Pro blokiran je na ovom uređaju.</string>
+    <string name="pro_device_binding_unavailable">Ova kupovina nema proverljivu vezu sa uređajem. Pristup usluzi Pro blokiran je dok Google Play ne vrati kupovinu povezanu sa uređajem.</string>
 </resources>

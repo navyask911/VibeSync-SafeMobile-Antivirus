@@ -15,4 +15,5 @@
     <string name="analytics_weekly_scans">Недељна скенирања</string>
     <string name="analytics_week_note">Забележене сесије, од понедељка до недеље. Могу бити укључена и делимична покретања.</string>
     <string name="install_scan_received">Догађај инсталације је примљен. Отворите SafeMobile ради прегледа.</string>
+    <string name="posture_overlay_select_app">Na Androidu 11+ izaberite %1$s na listi podešavanja preklapanja.</string>
 </resources>

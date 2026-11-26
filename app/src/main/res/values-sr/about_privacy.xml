@@ -52,4 +52,7 @@
     <string name="settings_privacy_link_detail">Прегледајте локалну обраду и опционо дељење података.</string>
     <string name="settings_about_link_detail">Наша мисија, веб-сајт и мобилне апликације.</string>
     <string name="about_link_unavailable">Тражену везу није могуће отворити. Проверите да ли су прегледач или Play продавница доступни.</string>
+    <string name="ecosystem_pdf_name">VibeSync All in ONE PDF Suite</string>
+    <string name="ecosystem_drawing_name">Kids Drawing Studio</string>
+    <string name="ecosystem_developer_name">Developer Options Shortcut</string>
 </resources>

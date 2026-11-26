@@ -27,4 +27,11 @@
     <string name="pro_fewer_years">Më pak vite</string>
     <string name="pro_more_years">Më shumë vite</string>
     <string name="pro_subscription_offer">Zhblloko SafeMobile Pro — ₹299 / vit (rinovim automatik). Anulojeni kurdo në Google Play.</string>
+    <string name="pro_one_year_price">Një vit me parapagim: %1$s</string>
+    <string name="pro_prepaid_offer">Qasje njëvjeçare me parapagim në SafeMobile Pro. Nuk rinovohet automatikisht.</string>
+    <string name="pro_prepaid_duration_limit">Planet me parapagim të Google Play kufizohen në një vit për blerje. Blini ose zgjatni përsëri të njëjtin plan për të shtuar një vit tjetër; çmimi përfundimtar konfirmohet në Google Play.</string>
+    <string name="pro_device_binding_explanation">Kjo blerje lidhet me këtë pajisje Android duke përdorur një identifikues të hash-uar të pajisjes. Riinstalimi në të njëjtën pajisje mund të rikthejë blerjen aktive në Play; një pajisje tjetër bllokohet.</string>
+    <string name="pro_buy_or_extend_one_year">Bli / zgjat për 1 vit</string>
+    <string name="pro_device_mismatch">Abonimi është aktiv në një pajisje tjetër. Qasja në SafeMobile Pro bllokohet në këtë pajisje.</string>
+    <string name="pro_device_binding_unavailable">Kjo blerje nuk ka lidhje të verifikueshme me pajisjen. Qasja në Pro bllokohet derisa Google Play të kthejë një blerje të lidhur me pajisjen.</string>
 </resources>

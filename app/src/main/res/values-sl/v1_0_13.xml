@@ -15,4 +15,5 @@
     <string name="analytics_weekly_scans">Tedenska skeniranja</string>
     <string name="analytics_week_note">Zabeležene seje, od ponedeljka do nedelje. Vključeni so lahko tudi delni pregledi.</string>
     <string name="install_scan_received">Dogodek namestitve je prejet. Odprite SafeMobile za pregled.</string>
+    <string name="posture_overlay_select_app">V sistemu Android 11+ izberite %1$s na seznamu nastavitev prekrivnih oken.</string>
 </resources>
