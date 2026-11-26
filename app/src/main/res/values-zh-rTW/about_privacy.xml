@@ -8,30 +8,30 @@
     <string name="trust_pillar_control_title">由您掌控</string>
     <string name="trust_pillar_control_description">選擇要啟用的防護功能和資料共享選項。</string>
 
-    <string name="privacy_dashboard_title">隱私控制臺</string>
+    <string name="privacy_dashboard_title">隱私控制台</string>
     <string name="privacy_dashboard_intro">瞭解 SafeMobile 會處理哪些內容，以及您的資訊儲存在哪裡。</string>
-    <string name="privacy_package_title">應用包名</string>
+    <string name="privacy_package_title">應用程式包名</string>
     <string name="privacy_processed_locally">本地處理</string>
-    <string name="privacy_package_detail">SafeMobile 會在此裝置上檢查已安裝應用的包名，以識別您要求其稽核的應用。</string>
+    <string name="privacy_package_detail">SafeMobile 會在此裝置上檢查已安裝應用程式的包名，以識別您要求其稽核的應用程式。</string>
     <string name="privacy_hash_title">檔案雜湊</string>
     <string name="privacy_hash_scan_status">掃描期間絕不會上傳</string>
     <string name="privacy_hash_detail">掃描雜湊保留在您的裝置上，用於生成本地判定。只有在您單獨啟用全球威脅情報或批準一次性貢獻後，才可能共享雜湊。</string>
     <string name="privacy_history_title">掃描歷史</string>
     <string name="privacy_stored_on_device">儲存在裝置上</string>
-    <string name="privacy_history_detail">掃描歷史和審計記錄儲存在此裝置的本地應用資料庫中。</string>
+    <string name="privacy_history_detail">掃描歷史和審計記錄儲存在此裝置的本地應用程式資料庫中。</string>
     <string name="privacy_dashboard_control_title">您的選擇很重要</string>
     <string name="privacy_dashboard_control_detail">可選的威脅情報貢獻需要單獨選擇加入。核心檔案掃描和判定生成始終在裝置上完成。</string>
 
     <string name="about_us_title">關於我們</string>
     <string name="about_mission_title">我們的使命</string>
     <string name="about_mission_statement">以隱私與安全構建產品、連線大眾</string>
-    <string name="about_description">我們打造用心設計的 Android 應用，並探索人工智慧、隱私和安全領域的下一代理念，創造以人為本的技術。</string>
+    <string name="about_description">我們打造用心設計的 Android 應用程式，並探索人工智慧、隱私和安全領域的下一代理念，創造以人為本的技術。</string>
     <string name="about_website">訪問 vibesyncro.com</string>
     <string name="about_open_store">在 Google Play 中開啟</string>
-    <string name="ecosystem_title">我們的移動應用生態系統</string>
-    <string name="ecosystem_description">探索我們應用生態系統中的更多工具與體驗。</string>
+    <string name="ecosystem_title">我們的移動應用程式生態系統</string>
+    <string name="ecosystem_description">探索我們應用程式生態系統中的更多工具與體驗。</string>
     <string name="ecosystem_pdf_name">VibeSync All in ONE PDF Suite</string>
-    <string name="ecosystem_pdf_description">用於閱讀、整理和處理文件的實用 PDF 工具。</string>
+    <string name="ecosystem_pdf_description">用於閱讀、整理和處理檔案的實用 PDF 工具。</string>
     <string name="ecosystem_drawing_name">Kids Drawing Studio</string>
     <string name="ecosystem_drawing_description">專為兒童設計的創意繪畫和填色空間。</string>
     <string name="ecosystem_developer_name">Developer Options Shortcut</string>
@@ -49,14 +49,14 @@
     <string name="notification_details_delete_confirm_title">刪除此檔案？</string>
     <string name="notification_details_delete_confirm_body">此操作會請求 Android 刪除通知所標識的確切檔案。某些儲存提供程序可能需要額外確認。</string>
     <string name="notification_details_deleted">檔案已刪除。</string>
-    <string name="notification_details_delete_failed">Android 無法刪除此檔案。請檢查其儲存許可權後重試。</string>
+    <string name="notification_details_delete_failed">Android 無法刪除此檔案。請檢查其儲存權限後重試。</string>
     <string name="notification_details_scan_unavailable">此通知不包含可讀取的檔案 URI。請開啟“掃描與實驗室”以選擇檔案。</string>
-    <string name="notification_details_whitelist_scan_first">請先掃描此專案。之後，您可以將掃描得到的應用或檔案雜湊新增到本地信任列表。</string>
+    <string name="notification_details_whitelist_scan_first">請先掃描此專案。之後，您可以將掃描得到的應用程式或檔案雜湊新增到本地信任列表。</string>
     <string name="notification_details_package_action">軟體包</string>
     <string name="device_admin_activation_failed">Android 無法開啟裝置管理員啟用頁面。請檢查 SafeMobile 管理員接收器是否已安裝，然後重試。</string>
     <string name="trusted_file_saved">檔案雜湊已新增到本地信任列表。</string>
     <string name="trusted_file_invalid">必須提供有效的 SHA-256 雜湊才能信任此檔案。</string>
     <string name="settings_privacy_link_detail">檢視本地處理和可選資料共享。</string>
-    <string name="settings_about_link_detail">我們的使命、網站和移動應用。</string>
+    <string name="settings_about_link_detail">我們的使命、網站和移動應用程式。</string>
     <string name="about_link_unavailable">無法開啟所請求的連結。請檢查瀏覽器或 Play Store 是否可用。</string>
 </resources>
