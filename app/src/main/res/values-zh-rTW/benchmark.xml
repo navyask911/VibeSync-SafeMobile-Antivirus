@@ -6,5 +6,5 @@
     <string name="benchmark_tpr">檢出率 (TPR)</string>
     <string name="benchmark_fpr">誤報率 (FPR)</string>
     <string name="benchmark_latency">平均掃描時間</string>
-    <string name="benchmark_privacy_note">僅顯示已驗證的結果。測試 APK 不會儲存在應用中。</string>
+    <string name="benchmark_privacy_note">僅顯示已驗證的結果。測試 APK 不會儲存在應用程式中。</string>
 </resources>
