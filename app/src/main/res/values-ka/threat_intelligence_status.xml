@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="threat_intelligence_unavailable">ამ მოწყობილობაზე შემოწმებული ზედა წყაროს სწავლების სტატისტიკა ქეშირებული არ არის.</string>
+    <string name="threat_intelligence_upstream_stale">მოძველებული ზედა წყაროს მონაცემები · გამოქვეყნებული განახლებიდან 30 დღეზე მეტი გავიდა.</string>
+    <string name="threat_intelligence_device_title">მოწყობილობაზე არსებული საფრთხეების შესახებ ინფორმაცია</string>
+    <string name="threat_intelligence_latest_sync_note">ბოლო სინქრონიზაციის შენიშვნა: %1$s</string>
+    <string name="threat_intelligence_feed_stale">კონფიგურირებული არხის ბოლო წარმატებული სინქრონიზაციიდან 7 დღეზე მეტი გავიდა.</string>
+</resources>

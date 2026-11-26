@@ -833,16 +833,16 @@
     <string name="ui_status_at_risk">რისკის ქვეშ</string>
     <string name="scan_detected_by">აღმოაჩინა: %1$s</string>
     <string name="scan_detected_by_confidence">აღმოაჩინა: %1$s (%2$d%%)</string>
-    <string name="security_score_100_voice" formatted="false">Your security configuration is fully optimized. We will continue to monitor your device to keep you safe. Thank you for using Safe Mobile Antivirus.</string>
-    <string name="self_update_title">Check for Updates (Self-Update)</string>
-    <string name="self_update_description">Device Administrator mode does not normally block Google Play updates. This button checks for a Play in-app update and asks Android to install it.</string>
-    <string name="self_update_started">The update flow was opened. Follow the system prompts to finish updating.</string>
-    <string name="self_update_cancelled">The update was cancelled.</string>
-    <string name="self_update_check_failed">The update could not be started. Check your Google Play connection and try again.</string>
-    <string name="self_update_unavailable">Play in-app updates are unavailable for this installation. Open Google Play to check manually.</string>
-    <string name="self_update_no_update">No newer Google Play update is currently available.</string>
-    <string name="self_update_not_allowed">An update is available, but Google Play does not allow the immediate update flow for this installation.</string>
-    <string name="self_update_open_play_store">Open Google Play</string>
+    <string name="security_score_100_voice" formatted="false">თქვენი უსაფრთხოების კონფიგურაცია სრულად ოპტიმიზებულია. თქვენი უსაფრთხოების შესანარჩუნებლად მოწყობილობის მონიტორინგს გავაგრძელებთ. გმადლობთ Safe Mobile Antivirus-ის გამოყენებისთვის.</string>
+    <string name="self_update_title">განახლებების შემოწმება (თვითგანახლება)</string>
+    <string name="self_update_description">მოწყობილობის ადმინისტრატორის რეჟიმი, ჩვეულებრივ, Google Play-ის განახლებებს არ ბლოკავს. ეს ღილაკი ამოწმებს Play-ის შიდა აპის განახლებას და Android-ს სთხოვს მის ინსტალაციას.</string>
+    <string name="self_update_started">განახლების პროცესი გაიხსნა. განახლების დასასრულებლად მიჰყევით სისტემის მითითებებს.</string>
+    <string name="self_update_cancelled">განახლება გაუქმდა.</string>
+    <string name="self_update_check_failed">განახლების დაწყება ვერ მოხერხდა. შეამოწმეთ Google Play-სთან კავშირი და ხელახლა სცადეთ.</string>
+    <string name="self_update_unavailable">ამ ინსტალაციისთვის Google Play-ის შიდა აპის განახლებები მიუწვდომელია. ხელით შესამოწმებლად გახსენით Google Play.</string>
+    <string name="self_update_no_update">ამჟამად Google Play-ის უფრო ახალი განახლება ხელმისაწვდომი არ არის.</string>
+    <string name="self_update_not_allowed">განახლება ხელმისაწვდომია, მაგრამ Google Play ამ ინსტალაციისთვის დაუყოვნებლივ განახლებას არ უშვებს.</string>
+    <string name="self_update_open_play_store">Google Play-ის გახსნა</string>
     <string name="scan_sessions_in_progress">მიმდინარე სკანირების სესიები: %1$d</string>
     <string name="scan_sessions_completed">დასრულებული სკანირების სესიები: %1$d</string>
     <string name="ui_sentinel_telegram_folder">Telegram-ის დოკუმენტების საქაღალდე</string>
