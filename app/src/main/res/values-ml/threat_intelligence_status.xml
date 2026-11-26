@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="threat_intelligence_unavailable" tools:ignore="MissingTranslation">ഈ ഉപകരണത്തിൽ പരിശോധിച്ച അപ്‌സ്ട്രീം പരിശീലന സ്ഥിതിവിവരക്കണക്കുകൾ കാഷെയിൽ ലഭ്യമല്ല.</string>
+    <string name="threat_intelligence_upstream_stale" tools:ignore="MissingTranslation">കാലഹരണപ്പെട്ട അപ്‌സ്ട്രീം ഡാറ്റ · പ്രസിദ്ധീകരിച്ച അപ്‌ഡേറ്റ് 30 ദിവസത്തിലധികം പഴക്കമുള്ളതാണ്.</string>
+    <string name="threat_intelligence_device_title" tools:ignore="MissingTranslation">ഉപകരണത്തിലെ ഭീഷണി ഇന്റലിജൻസ്</string>
+    <string name="threat_intelligence_latest_sync_note" tools:ignore="MissingTranslation">ഏറ്റവും പുതിയ സിങ്ക് കുറിപ്പ്: %1$s</string>
+    <string name="threat_intelligence_feed_stale" tools:ignore="MissingTranslation">അവസാനമായി വിജയിച്ച ക്രമീകരിച്ച ഫീഡ് സിങ്ക് 7 ദിവസത്തിലധികം പഴക്കമുള്ളതാണ്.</string>
+</resources>
