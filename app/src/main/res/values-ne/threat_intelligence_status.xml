@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="threat_intelligence_unavailable" tools:ignore="MissingTranslation">यस उपकरणमा प्रमाणित upstream प्रशिक्षण तथ्याङ्क क्यास गरिएको छैन।</string>
+    <string name="threat_intelligence_upstream_stale" tools:ignore="MissingTranslation">पुरानो UPSTREAM डाटा · प्रकाशित अपडेट ३० दिनभन्दा पुरानो छ।</string>
+    <string name="threat_intelligence_device_title" tools:ignore="MissingTranslation">उपकरणभित्रको खतरा जानकारी</string>
+    <string name="threat_intelligence_latest_sync_note" tools:ignore="MissingTranslation">पछिल्लो सिङ्क टिप्पणी: %1$s</string>
+    <string name="threat_intelligence_feed_stale" tools:ignore="MissingTranslation">अन्तिम सफल कन्फिगर गरिएको फिड सिङ्क ७ दिनभन्दा पुरानो छ।</string>
+</resources>
