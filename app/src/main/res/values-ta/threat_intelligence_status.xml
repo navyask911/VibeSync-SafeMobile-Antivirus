@@ -1,0 +1,7 @@
+<resources>
+    <string name="threat_intelligence_unavailable">சரிபார்க்கப்பட்ட மேல்நிலைப் பயிற்சி புள்ளிவிவரங்கள் இந்தச் சாதனத்தில் சேமிக்கப்படவில்லை.</string>
+    <string name="threat_intelligence_upstream_stale">பழைய மேல்நிலைத் தரவு · வெளியிடப்பட்ட புதுப்பிப்பு 30 நாட்களுக்கும் பழையது.</string>
+    <string name="threat_intelligence_device_title">சாதனத்திலுள்ள அச்சுறுத்தல் தகவல்</string>
+    <string name="threat_intelligence_latest_sync_note">சமீபத்திய ஒத்திசைவு குறிப்பு: %1$s</string>
+    <string name="threat_intelligence_feed_stale">கடைசியாக வெற்றிகரமாக ஒத்திசைக்கப்பட்ட அமைக்கப்பட்ட ஊட்டம் 7 நாட்களுக்கும் பழையது.</string>
+</resources>

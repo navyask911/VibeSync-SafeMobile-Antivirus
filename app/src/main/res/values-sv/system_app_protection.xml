@@ -1,0 +1,8 @@
+<resources>
+    <string name="full_screen_dashboard_warning">Kritiska varningar är inaktiverade. Tryck för att ge behörighet till helskärmsvarningar om skadlig kod.</string>
+    <string name="full_screen_dashboard_fallback">Helskärmsåtkomst är valfri. När säkerhetsvarningar är aktiverade fungerar femsekunderssirenen och högprioritetsaviseringen även utan denna åtkomst, med förbehåll för Androids aviserings- och ljudinställningar.</string>
+    <string name="full_screen_settings_unavailable">Det gick inte att öppna inställningarna för helskärmsvarningar. Du kan fortsätta använda SafeMobile.</string>
+    <string name="system_app_protection_badge">Systemappar skyddas från granskning och avinstallation</string>
+    <string name="system_app_scan_complete">Skanningen är klar. Inga hot hittades bland de kontrollerade objekten. Systemappar undantas från granskning och avinstallation; deras integritet har inte verifierats av den här skanningen.</string>
+    <string name="pro_navigation_unavailable">SafeMobile Pro-skärmen är tillfälligt otillgänglig.</string>
+</resources>
