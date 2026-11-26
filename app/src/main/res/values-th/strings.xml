@@ -246,7 +246,7 @@
 <string name="cleaner_delete_result">ลบแล้ว: %1$d · พื้นที่ว่างโดยประมาณ: %2$d ไบต์ · ล้มเหลวหรือเปลี่ยนแปลง: %3$d</string>
 <string name="family_dedication_title">ด้วยความขอบคุณ</string>
 <string name="family_dedication">ขออุทิศผลงานนี้ด้วยความซาบซึ้งอย่างยิ่งแด่ครอบครัวที่รัก ซึ่งความอดทน การสนับสนุน และการสละเวลาอย่างมากตลอดหลายเดือนที่อยู่เพียงลำพัง ทำให้การสร้าง SafeMobile Antivirus เป็นไปได้ — เป็นส่วนเล็ก ๆ ในการช่วยให้โลกดิจิทัลปลอดภัยสำหรับทุกคน</string>
-<string name="about_readme">README</string>
+<string name="about_readme">ไฟล์ README</string>
 <string name="about_privacy_policy">ความเป็นส่วนตัว</string>
 <string name="about_license">License</string>
 <string name="about_third_party">ประกาศเกี่ยวกับบุคคลที่สาม</string>
@@ -460,7 +460,7 @@
 <string name="ui_score_accessibility">แอปการช่วยเหลือพิเศษที่ไม่ใช่ระบบ</string>
 <string name="ui_enabled_count">เปิดใช้งาน %1$d รายการ</string>
 <string name="ui_penalty_20">· −20</string>
-<string name="ui_unavailable">Not available</string>
+<string name="ui_unavailable">ไม่พร้อมใช้งาน</string>
 <string name="ui_score_admin">ผู้ดูแลอุปกรณ์ที่ไม่ใช่ระบบ</string>
 <string name="ui_score_explanation">เริ่มต้นที่ 100; หักคะแนนแต่ละปัญหาเพียงครั้งเดียว การตรวจสอบที่ไม่ทราบค่าไม่ได้หมายถึงมีการป้องกัน แอปการช่วยเหลือพิเศษและแอปผู้ดูแลที่เปิดใช้งานอาจถูกต้องตามกฎหมาย — ตรวจสอบก่อนเปลี่ยนแปลง</string>
 <string name="ui_check_play_protect">ตรวจสอบ Play Protect</string>
