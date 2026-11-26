@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v116_scan_title">Skeniranje je končano</string>
+    <string name="v116_scan_local_no_match">Skeniranje je končano. Lokalno ni bilo najdenega ujemanja. Trenutno je videti, da je naprava varna.</string>
+    <string name="v116_score_meaning">Svetovalna ocena, ne merilo zaznavanja zlonamerne programske opreme.</string>
+</resources>
