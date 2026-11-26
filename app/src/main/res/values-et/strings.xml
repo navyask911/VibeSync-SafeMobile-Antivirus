@@ -685,11 +685,11 @@
 <string name="battery_review_action">Vaata akuseaded üle</string>
 <string name="battery_review_unavailable">Androidi akuseadeid ei saanud avada.</string>
 <string name="ui_folder_access_not_granted">Kaustajuurdepääsu ei antud. Saad jätkata piiratud kaitsega.</string>
-<string name="full_screen_dashboard_warning">Critical Alerts Disabled: Tap to grant permission for full-screen malware warnings.</string>
-<string name="full_screen_dashboard_fallback">Full-screen access is optional. When Security Alerts are enabled, the five-second siren and high-priority notification still work without this access, subject to Android notification and sound settings.</string>
-<string name="full_screen_settings_unavailable">Full-screen alert settings could not be opened. You can continue using SafeMobile.</string>
-<string name="system_app_protection_badge">System apps protected from review and uninstall</string>
-<string name="system_app_scan_complete">Scan Complete. No threats found in the items checked. System apps are excluded from review and uninstall; their integrity has not been verified by this scan.</string>
+<string name="full_screen_dashboard_warning">Kriitilised hoiatused on keelatud: täisekraani pahavarahoiatuste lubamiseks puuduta ja anna luba.</string>
+<string name="full_screen_dashboard_fallback">Täisekraani juurdepääs on valikuline. Kui turvateavitused on lubatud, töötavad viiesekundiline alarm ja kõrge prioriteediga teavitus ka ilma selle juurdepääsuta, sõltuvalt Androidi teavituste ja heli seadetest.</string>
+<string name="full_screen_settings_unavailable">Täisekraani teavituste seadeid ei saanud avada. Saad SafeMobile’i kasutamist jätkata.</string>
+<string name="system_app_protection_badge">Süsteemirakendused on ülevaatuse ja desinstallimise eest kaitstud</string>
+<string name="system_app_scan_complete">Skannimine lõpetatud. Kontrollitud üksustest ohte ei leitud. Süsteemirakendused on ülevaatusest ja desinstallimisest välja jäetud; nende terviklust see skannimine ei kontrollinud.</string>
 <string name="detection_capabilities_title">Tuvastusvõimalused</string>
 <string name="detection_capabilities_description">Vaata, millised turvakontrollid on selles järgus lubatud, soovituslikud, tingimuslikud või kättesaamatud.</string>
 <string name="detection_capabilities_truth_title">Oluline: mida skannimistulemused tähendavad</string>
@@ -847,4 +847,5 @@
     <string name="scan_sessions_completed">Lõpetatud kontrollseansid: %1$d</string>
     <string name="ui_sentinel_telegram_folder">Telegrami dokumentide kaust</string>
     <string name="ui_sentinel_enable_telegram">Jälgi Telegrami dokumente</string>
+    <string name="pro_navigation_unavailable">SafeMobile Pro kuva pole ajutiselt saadaval.</string>
 </resources>

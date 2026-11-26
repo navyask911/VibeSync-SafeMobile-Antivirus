@@ -685,11 +685,11 @@
 <string name="battery_review_action">بررسی تنظیمات باتری</string>
 <string name="battery_review_unavailable">باز کردن تنظیمات باتری Android ممکن نشد.</string>
 <string name="ui_folder_access_not_granted">دسترسی به پوشه اعطا نشد. می‌توانید با محافظت محدود ادامه دهید.</string>
-<string name="full_screen_dashboard_warning">Critical Alerts Disabled: Tap to grant permission for full-screen malware warnings.</string>
-<string name="full_screen_dashboard_fallback">Full-screen access is optional. When Security Alerts are enabled, the five-second siren and high-priority notification still work without this access, subject to Android notification and sound settings.</string>
-<string name="full_screen_settings_unavailable">Full-screen alert settings could not be opened. You can continue using SafeMobile.</string>
-<string name="system_app_protection_badge">System apps protected from review and uninstall</string>
-<string name="system_app_scan_complete">Scan Complete. No threats found in the items checked. System apps are excluded from review and uninstall; their integrity has not been verified by this scan.</string>
+<string name="full_screen_dashboard_warning">هشدارهای حیاتی غیرفعال‌اند: برای اعطای مجوز هشدارهای تمام‌صفحه بدافزار ضربه بزنید.</string>
+<string name="full_screen_dashboard_fallback">دسترسی تمام‌صفحه اختیاری است. وقتی هشدارهای امنیتی فعال باشند، آژیر پنج‌ثانیه‌ای و اعلان با اولویت بالا بدون این دسترسی نیز کار می‌کنند؛ البته به تنظیمات اعلان و صدای Android بستگی دارد.</string>
+<string name="full_screen_settings_unavailable">باز کردن تنظیمات هشدار تمام‌صفحه ممکن نشد. می‌توانید همچنان از SafeMobile استفاده کنید.</string>
+<string name="system_app_protection_badge">برنامه‌های سیستمی از بررسی و حذف نصب محافظت شده‌اند</string>
+<string name="system_app_scan_complete">اسکن کامل شد. در موارد بررسی‌شده تهدیدی پیدا نشد. برنامه‌های سیستمی از بررسی و حذف نصب مستثنا هستند؛ یکپارچگی آن‌ها در این اسکن تأیید نشده است.</string>
 <string name="detection_capabilities_title">قابلیت‌های شناسایی</string>
 <string name="detection_capabilities_description">ببینید کدام بررسی‌های امنیتی در این ساخت فعال، صرفاً راهنما، مشروط یا در دسترس نیستند.</string>
 <string name="detection_capabilities_truth_title">مهم: نتایج اسکن چه معنایی دارند</string>
@@ -847,4 +847,5 @@
     <string name="scan_sessions_completed">نشست‌های اسکن تکمیل‌شده: %1$d</string>
     <string name="ui_sentinel_telegram_folder">پوشه اسناد تلگرام</string>
     <string name="ui_sentinel_enable_telegram">پایش اسناد تلگرام</string>
+    <string name="pro_navigation_unavailable">صفحه SafeMobile Pro موقتاً در دسترس نیست.</string>
 </resources>

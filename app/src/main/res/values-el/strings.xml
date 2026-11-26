@@ -685,11 +685,11 @@
 <string name="battery_review_action">Έλεγχος ρυθμίσεων μπαταρίας</string>
 <string name="battery_review_unavailable">Δεν ήταν δυνατό το άνοιγμα των ρυθμίσεων μπαταρίας του Android.</string>
 <string name="ui_folder_access_not_granted">Δεν παραχωρήθηκε πρόσβαση στον φάκελο. Μπορείτε να συνεχίσετε με περιορισμένη προστασία.</string>
-<string name="full_screen_dashboard_warning">Critical Alerts Disabled: Tap to grant permission for full-screen malware warnings.</string>
-<string name="full_screen_dashboard_fallback">Full-screen access is optional. When Security Alerts are enabled, the five-second siren and high-priority notification still work without this access, subject to Android notification and sound settings.</string>
-<string name="full_screen_settings_unavailable">Full-screen alert settings could not be opened. You can continue using SafeMobile.</string>
-<string name="system_app_protection_badge">System apps protected from review and uninstall</string>
-<string name="system_app_scan_complete">Scan Complete. No threats found in the items checked. System apps are excluded from review and uninstall; their integrity has not been verified by this scan.</string>
+<string name="full_screen_dashboard_warning">Οι κρίσιμες ειδοποιήσεις είναι απενεργοποιημένες: πατήστε για να παραχωρήσετε άδεια για προειδοποιήσεις κακόβουλου λογισμικού πλήρους οθόνης.</string>
+<string name="full_screen_dashboard_fallback">Η πρόσβαση πλήρους οθόνης είναι προαιρετική. Όταν είναι ενεργές οι Ειδοποιήσεις ασφαλείας, ο συναγερμός πέντε δευτερολέπτων και η ειδοποίηση υψηλής προτεραιότητας εξακολουθούν να λειτουργούν χωρίς αυτήν την πρόσβαση, ανάλογα με τις ρυθμίσεις ειδοποιήσεων και ήχου του Android.</string>
+<string name="full_screen_settings_unavailable">Δεν ήταν δυνατό το άνοιγμα των ρυθμίσεων ειδοποιήσεων πλήρους οθόνης. Μπορείτε να συνεχίσετε να χρησιμοποιείτε το SafeMobile.</string>
+<string name="system_app_protection_badge">Οι εφαρμογές συστήματος προστατεύονται από έλεγχο και απεγκατάσταση</string>
+<string name="system_app_scan_complete">Η σάρωση ολοκληρώθηκε. Δεν βρέθηκαν απειλές στα στοιχεία που ελέγχθηκαν. Οι εφαρμογές συστήματος εξαιρούνται από τον έλεγχο και την απεγκατάσταση· η ακεραιότητά τους δεν επαληθεύτηκε από αυτήν τη σάρωση.</string>
 <string name="detection_capabilities_title">Δυνατότητες εντοπισμού</string>
 <string name="detection_capabilities_description">Δείτε ποιοι έλεγχοι ασφαλείας είναι ενεργοί, συμβουλευτικοί, υπό όρους ή μη διαθέσιμοι σε αυτήν την έκδοση.</string>
 <string name="detection_capabilities_truth_title">Σημαντικό: τι σημαίνουν τα αποτελέσματα σάρωσης</string>
@@ -847,4 +847,5 @@
     <string name="scan_sessions_completed">Ολοκληρωμένες συνεδρίες σάρωσης: %1$d</string>
     <string name="ui_sentinel_telegram_folder">Φάκελος εγγράφων Telegram</string>
     <string name="ui_sentinel_enable_telegram">Παρακολούθηση εγγράφων Telegram</string>
+    <string name="pro_navigation_unavailable">Η οθόνη SafeMobile Pro δεν είναι προσωρινά διαθέσιμη.</string>
 </resources>

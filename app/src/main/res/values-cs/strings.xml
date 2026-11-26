@@ -685,11 +685,11 @@
 <string name="battery_review_action">Zkontrolovat nastavení baterie</string>
 <string name="battery_review_unavailable">Nastavení baterie Androidu se nepodařilo otevřít.</string>
 <string name="ui_folder_access_not_granted">Přístup ke složce nebyl udělen. Můžete pokračovat s omezenou ochranou.</string>
-<string name="full_screen_dashboard_warning">Critical Alerts Disabled: Tap to grant permission for full-screen malware warnings.</string>
-<string name="full_screen_dashboard_fallback">Full-screen access is optional. When Security Alerts are enabled, the five-second siren and high-priority notification still work without this access, subject to Android notification and sound settings.</string>
-<string name="full_screen_settings_unavailable">Full-screen alert settings could not be opened. You can continue using SafeMobile.</string>
-<string name="system_app_protection_badge">System apps protected from review and uninstall</string>
-<string name="system_app_scan_complete">Scan Complete. No threats found in the items checked. System apps are excluded from review and uninstall; their integrity has not been verified by this scan.</string>
+<string name="full_screen_dashboard_warning">Kritická upozornění jsou vypnutá: klepnutím udělte oprávnění pro celoobrazovková varování před malwarem.</string>
+<string name="full_screen_dashboard_fallback">Přístup přes celou obrazovku je volitelný. Když jsou zapnutá Bezpečnostní upozornění, pětisekundový alarm a oznámení s vysokou prioritou fungují i bez tohoto přístupu, podle nastavení oznámení a zvuku Androidu.</string>
+<string name="full_screen_settings_unavailable">Nastavení upozornění přes celou obrazovku se nepodařilo otevřít. SafeMobile můžete používat i nadále.</string>
+<string name="system_app_protection_badge">Systémové aplikace jsou chráněny před kontrolou a odinstalací</string>
+<string name="system_app_scan_complete">Kontrola dokončena. V kontrolovaných položkách nebyly nalezeny žádné hrozby. Systémové aplikace jsou vyloučeny z kontroly a odinstalace; jejich integrita nebyla touto kontrolou ověřena.</string>
 <string name="detection_capabilities_title">Možnosti detekce</string>
 <string name="detection_capabilities_description">Zobrazte, které bezpečnostní kontroly jsou v tomto sestavení zapnuté, pouze informativní, podmíněné nebo nedostupné.</string>
 <string name="detection_capabilities_truth_title">Důležité: co znamenají výsledky kontroly</string>
@@ -847,4 +847,5 @@
     <string name="scan_sessions_completed">Dokončené relace skenování: %1$d</string>
     <string name="ui_sentinel_telegram_folder">Složka dokumentů Telegramu</string>
     <string name="ui_sentinel_enable_telegram">Sledovat dokumenty Telegramu</string>
+    <string name="pro_navigation_unavailable">Obrazovka SafeMobile Pro je dočasně nedostupná.</string>
 </resources>
