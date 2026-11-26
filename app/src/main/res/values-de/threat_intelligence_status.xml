@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="threat_intelligence_unavailable">Auf diesem Gerät sind keine verifizierten Upstream-Trainingsstatistiken im Cache gespeichert.</string>
+    <string name="threat_intelligence_upstream_stale">VERALTETE UPSTREAM-DATEN · Die veröffentlichte Aktualisierung ist mehr als 30 Tage alt.</string>
+    <string name="threat_intelligence_device_title">Bedrohungsinformationen auf dem Gerät</string>
+    <string name="threat_intelligence_latest_sync_note">Hinweis zur letzten Synchronisierung: %1$s</string>
+    <string name="threat_intelligence_feed_stale">Die letzte erfolgreiche Synchronisierung des konfigurierten Feeds liegt mehr als 7 Tage zurück.</string>
+</resources>
