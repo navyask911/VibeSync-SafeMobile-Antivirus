@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="detection_capabilities_title">Zmožnosti zaznavanja</string>
+    <string name="detection_capabilities_description">Oglejte si, katera varnostna preverjanja so v tej različici omogočena, svetovalna, pogojna ali nedostopna.</string>
+    <string name="detection_capabilities_truth_title">Pomembno: kaj pomenijo rezultati skeniranja</string>
+    <string name="detection_capabilities_truth_body">Odsotnost lokalnega ujemanja ne dokazuje, da je datoteka varna. Podpisani mehanizem zgoščenih vrednosti ostane onemogočen, dokler nista nastavljena zaupanja vreden podpisni ključ in preverjena produkcijska zbirka podatkov. Ko se naložijo preverjena priložena pravila, deluje omejen nabor pravil DEX brez povezave; strojno učenje ostaja onemogočeno. Hevristike lahko povzročijo lažne alarme. Spodnje metrike niso izmerjene.</string>
+    <string name="detection_capabilities_enabled">Omogočeno</string>
+    <string name="detection_capabilities_disabled">Onemogočeno</string>
+    <string name="detection_capabilities_limited">Omejena pokritost</string>
+    <string name="detection_capabilities_advisory">Samo svetovalno</string>
+    <string name="detection_capabilities_conditional">Pogojno</string>
+    <string name="detection_capabilities_metrics_title">Metrike učinkovitosti zaznavanja</string>
+    <string name="detection_capabilities_import_signed_db">Uvozi podpisano zbirko zgoščenih vrednosti</string>
+    <string name="detection_capabilities_import_yara">Uvozi pravila YARA za pregled (ne izvajajo se)</string>
+    <string name="detection_capabilities_sync">Posodobitve podpisane zbirke</string>
+    <string name="detection_capabilities_feed_url">URL za posodobitev HTTPS</string>
+    <string name="detection_capabilities_sync_enabled">Omogoči samodejne posodobitve</string>
+    <string name="detection_capabilities_save">Shrani nastavitve posodobitev</string>
+    <string name="detection_capabilities_sync_privacy">Samo prenosi. Rezultati skeniranja, datoteke, zgoščene vrednosti in imena paketov se ne nalagajo.</string>
+    <string name="detection_capabilities_sync_unavailable">Samodejne posodobitve niso na voljo v tej različici brez povezave ali dokler ni nastavljen zaupanja vreden podpisni ključ.</string>
+</resources>
