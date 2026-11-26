@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- SafeMobile Pro is the product brand; all purchase copy below is localized. -->
+    <string name="pro_title">SafeMobile Pro</string>
+    <string name="pro_truthful_summary">核心防毒檢查始終免費。Pro 不會啟用實驗性機器學習。</string>
+    <string name="pro_feature_free">離線雜湊、YARA 和側載檢測始終免費。</string>
+    <string name="pro_feature_research">實驗性機器學習尚未驗證，也未啟用。</string>
+    <string name="pro_feature_updates">Pro 提供可選的每日研究模型更新。每週更新仍然免費。</string>
+    <string name="pro_feature_adfree">SafeMobile Pro 訂閱有效期間，免費版廣告將停用。</string>
+    <string name="pro_years">用於估算的年數（1–10）</string>
+    <string name="pro_price_preview">估算總價：%1$s。年數：%2$d。請在 Google Play 中確認。</string>
+    <string name="pro_price_unavailable">正在等待 Google Play 定價；暫時無法購買。</string>
+    <string name="pro_cart_quantity_warning">請在 Google Play 中選擇購買數量。確認的數量決定此裝置獲得的使用年數。</string>
+    <string name="pro_non_restorable_warning">此購買僅限本裝置。重新安裝、重置或丟失加密金鑰可能永久刪除剩餘的 Pro 使用許可權。</string>
+    <string name="pro_unlock">解鎖 SafeMobile Pro</string>
+    <string name="pro_restore_check">恢復 / 檢查狀態</string>
+    <string name="pro_active_until">訂閱訪問許可權在裝置本地有效至 %1$s。</string>
+    <string name="pro_not_active">此裝置上未找到有效的 Pro 訂閱或舊版訪問許可權。</string>
+    <string name="pro_purchase_unavailable">Google Play 不可用，或商品尚未配置。</string>
+    <string name="pro_purchase_canceled">購買已取消。</string>
+    <string name="pro_purchase_pending">付款待處理。Google Play 確認購買後，Pro 許可權才會生效。</string>
+    <string name="pro_purchase_recheck">重新連線 Google Play 以完成訂閱處理。</string>
+    <string name="pro_storage_failed">安全儲存無法儲存購買記錄。重試前請聯絡支持團隊。</string>
+    <string name="pro_purchase_success">訂閱已確認。Pro 訪問許可權已安全儲存在此裝置上。</string>
+    <string name="pro_restore_local_only">已檢查本地狀態。Google Play 無法恢復已消耗的通行證。</string>
+    <string name="pro_device_disclaimer" formatted="false">您的訂閱由 Google Play 管理。重新安裝應用後可以恢復有效訂閱。SafeMobile 會儲存加密且繫結裝置的記錄，以便離線檢查 Pro 狀態。</string>
+    <string name="pro_network_notice">核心保護可離線執行。Google Play 購買和可選的模型更新需要網際網路連線。</string>
+    <string name="pro_fewer_years">減少年數</string>
+    <string name="pro_more_years">增加年數</string>
+    <string name="pro_subscription_offer" formatted="false">解鎖 SafeMobile Pro — 每年 ₹299（自動續訂）。可隨時在 Google Play 中取消。</string>
+</resources>
