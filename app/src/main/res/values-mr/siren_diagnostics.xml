@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 <string name="siren_test_settings_title">सायरन निदान</string>
 <string name="siren_test_settings_description">पाच सेकंदांचा सायरन व इशाऱ्याचे पूर्वदृश्य तपासा. मालवेअर शोधत नाही, माहितीभांडार बदलत नाही किंवा अॅप काढणे मागत नाही.</string>
 <string name="siren_test_button">धोका सायरन तपासा</string>
@@ -17,4 +17,8 @@
 <string name="system_app_protection_badge">प्रणाली अॅप्स पाहणे व काढण्यापासून संरक्षित</string>
 <string name="system_app_scan_complete">तपासणी पूर्ण. तपासलेल्या गोष्टींत धोके नाहीत. प्रणाली अॅप्स पाहणे व काढण्यातून वगळलेली; त्यांची अखंडता या तपासणीत पडताळली नाही.</string>
 <string name="ui_folder_access_not_granted">फोल्डर प्रवेश दिलेला नाही. मर्यादित संरक्षणासह पुढे जाऊ शकता.</string>
+    <string name="test_siren" tools:ignore="MissingTranslation">सायरेन तपासा</string>
+    <string name="test_voice" tools:ignore="MissingTranslation">आवाज तपासा</string>
+    <string name="test_siren_failed" tools:ignore="MissingTranslation">या डिव्हाइसवर सायरेन चाचणी सुरू करता आली नाही.</string>
+    <string name="test_voice_failed" tools:ignore="MissingTranslation">आवाज चाचणी अयशस्वी. स्थापित डिव्हाइस स्पीच इंजिन आणि व्हॉइस डेटा तपासा.</string>
 </resources>
