@@ -647,4 +647,10 @@
     <string name="scan_sessions_completed">Abgeschlossene Scan-Sitzungen: %1$d</string>
     <string name="ui_sentinel_telegram_folder">Telegram-Dokumentordner</string>
     <string name="ui_sentinel_enable_telegram">Telegram-Dokumente überwachen</string>
+    <string name="full_screen_dashboard_warning">Kritische Warnungen deaktiviert: Tippen Sie, um die Berechtigung für Malware-Warnungen im Vollbildmodus zu erteilen.</string>
+    <string name="full_screen_dashboard_fallback">Der Vollbildzugriff ist optional. Wenn Sicherheitswarnungen aktiviert sind, funktionieren der fünfsekündige Sirenenton und die Benachrichtigung mit hoher Priorität auch ohne diesen Zugriff, abhängig von den Android-Benachrichtigungs- und Toneinstellungen.</string>
+    <string name="full_screen_settings_unavailable">Die Einstellungen für Vollbildwarnungen konnten nicht geöffnet werden. Sie können SafeMobile weiterhin verwenden.</string>
+    <string name="system_app_protection_badge">System-Apps sind von Prüfung und Deinstallation ausgeschlossen</string>
+    <string name="system_app_scan_complete">Scan abgeschlossen. In den geprüften Elementen wurden keine Bedrohungen gefunden. System-Apps sind von Prüfung und Deinstallation ausgeschlossen; ihre Integrität wurde durch diesen Scan nicht verifiziert.</string>
+    <string name="pro_navigation_unavailable">Der SafeMobile-Pro-Bildschirm ist vorübergehend nicht verfügbar.</string>
 </resources>

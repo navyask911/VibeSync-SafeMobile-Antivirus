@@ -685,11 +685,11 @@
 <string name="battery_review_action">Review battery settings</string>
 <string name="battery_review_unavailable">Android battery settings could not be opened.</string>
 <string name="ui_folder_access_not_granted">Folder access was not granted. You can continue with limited protection.</string>
-<string name="full_screen_dashboard_warning">Critical Alerts Disabled: Tap to grant permission for full-screen malware warnings.</string>
-<string name="full_screen_dashboard_fallback">Full-screen access is optional. When Security Alerts are enabled, the five-second siren and high-priority notification still work without this access, subject to Android notification and sound settings.</string>
-<string name="full_screen_settings_unavailable">Full-screen alert settings could not be opened. You can continue using SafeMobile.</string>
-<string name="system_app_protection_badge">System apps protected from review and uninstall</string>
-<string name="system_app_scan_complete">Scan Complete. No threats found in the items checked. System apps are excluded from review and uninstall; their integrity has not been verified by this scan.</string>
+<string name="full_screen_dashboard_warning">Naka-disable ang mahahalagang alerto: pindutin upang payagan ang full-screen na babala sa malware.</string>
+<string name="full_screen_dashboard_fallback">Opsyonal ang full-screen access. Kapag naka-enable ang Security Alerts, gagana pa rin ang limang segundong sirena at notification na mataas ang priyoridad kahit wala ang access na ito, depende sa notification at sound setting ng Android.</string>
+<string name="full_screen_settings_unavailable">Hindi mabuksan ang setting para sa full-screen alert. Maaari mo pa ring gamitin ang SafeMobile.</string>
+<string name="system_app_protection_badge">Protektado ang mga system app laban sa pagsusuri at pag-uninstall</string>
+<string name="system_app_scan_complete">Tapos na ang scan. Walang banta sa mga sinuring item. Hindi isinasama ang system app sa pagsusuri at pag-uninstall; hindi napatunayan ng scan na ito ang integridad ng mga ito.</string>
 <string name="detection_capabilities_title">Detection capabilities</string>
 <string name="detection_capabilities_description">See which security checks are enabled, advisory, conditional, or unavailable in this build.</string>
 <string name="detection_capabilities_truth_title">Important: what scan results mean</string>
@@ -847,4 +847,5 @@
     <string name="scan_sessions_completed">Mga natapos na scan session: %1$d</string>
     <string name="ui_sentinel_telegram_folder">Folder ng mga dokumento sa Telegram</string>
     <string name="ui_sentinel_enable_telegram">Subaybayan ang mga dokumento sa Telegram</string>
+    <string name="pro_navigation_unavailable">Pansamantalang hindi available ang SafeMobile Pro screen.</string>
 </resources>

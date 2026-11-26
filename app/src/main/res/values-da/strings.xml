@@ -685,11 +685,11 @@
 <string name="battery_review_action">Review battery settings</string>
 <string name="battery_review_unavailable">Android battery settings could not be opened.</string>
 <string name="ui_folder_access_not_granted">Folder access was not granted. You can continue with limited protection.</string>
-<string name="full_screen_dashboard_warning">Critical Alerts Disabled: Tap to grant permission for full-screen malware warnings.</string>
-<string name="full_screen_dashboard_fallback">Full-screen access is optional. When Security Alerts are enabled, the five-second siren and high-priority notification still work without this access, subject to Android notification and sound settings.</string>
-<string name="full_screen_settings_unavailable">Full-screen alert settings could not be opened. You can continue using SafeMobile.</string>
-<string name="system_app_protection_badge">System apps protected from review and uninstall</string>
-<string name="system_app_scan_complete">Scan Complete. No threats found in the items checked. System apps are excluded from review and uninstall; their integrity has not been verified by this scan.</string>
+<string name="full_screen_dashboard_warning">Kritiske advarsler er deaktiveret: Tryk for at give tilladelse til malwareadvarsler i fuld skærm.</string>
+<string name="full_screen_dashboard_fallback">Fuldskærmsadgang er valgfri. Når Sikkerhedsadvarsler er aktiveret, fungerer den fem sekunders sirene og meddelelsen med høj prioritet stadig uden denne adgang, afhængigt af Androids meddelelses- og lydindstillinger.</string>
+<string name="full_screen_settings_unavailable">Indstillinger for fuldskærmsadvarsler kunne ikke åbnes. Du kan fortsat bruge SafeMobile.</string>
+<string name="system_app_protection_badge">Systemapps beskyttet mod gennemgang og afinstallation</string>
+<string name="system_app_scan_complete">Scanning fuldført. Ingen trusler fundet i de kontrollerede elementer. Systemapps er udelukket fra gennemgang og afinstallation; deres integritet er ikke verificeret af denne scanning.</string>
 <string name="detection_capabilities_title">Detection capabilities</string>
 <string name="detection_capabilities_description">See which security checks are enabled, advisory, conditional, or unavailable in this build.</string>
 <string name="detection_capabilities_truth_title">Important: what scan results mean</string>
@@ -847,4 +847,5 @@
     <string name="scan_sessions_completed">Fuldførte scanningssessioner: %1$d</string>
     <string name="ui_sentinel_telegram_folder">Telegram-dokumentmappe</string>
     <string name="ui_sentinel_enable_telegram">Overvåg Telegram-dokumenter</string>
+    <string name="pro_navigation_unavailable">SafeMobile Pro-skærmen er midlertidigt utilgængelig.</string>
 </resources>
