@@ -833,16 +833,16 @@
     <string name="ui_status_at_risk">Ohrozené</string>
     <string name="scan_detected_by">Zistil: %1$s</string>
     <string name="scan_detected_by_confidence">Zistil: %1$s (%2$d%%)</string>
-    <string name="security_score_100_voice" formatted="false">Your security configuration is fully optimized. We will continue to monitor your device to keep you safe. Thank you for using Safe Mobile Antivirus.</string>
-    <string name="self_update_title">Check for Updates (Self-Update)</string>
-    <string name="self_update_description">Device Administrator mode does not normally block Google Play updates. This button checks for a Play in-app update and asks Android to install it.</string>
-    <string name="self_update_started">The update flow was opened. Follow the system prompts to finish updating.</string>
-    <string name="self_update_cancelled">The update was cancelled.</string>
-    <string name="self_update_check_failed">The update could not be started. Check your Google Play connection and try again.</string>
-    <string name="self_update_unavailable">Play in-app updates are unavailable for this installation. Open Google Play to check manually.</string>
-    <string name="self_update_no_update">No newer Google Play update is currently available.</string>
-    <string name="self_update_not_allowed">An update is available, but Google Play does not allow the immediate update flow for this installation.</string>
-    <string name="self_update_open_play_store">Open Google Play</string>
+    <string name="security_score_100_voice" formatted="false">Konfigurácia zabezpečenia vášho zariadenia je plne optimalizovaná. Budeme naďalej monitorovať vaše zariadenie, aby sme vás udržali v bezpečí. Ďakujeme, že používate SafeMobile Antivirus.</string>
+    <string name="self_update_title">Skontrolovať aktualizácie (aktualizácia aplikácie)</string>
+    <string name="self_update_description">Režim Správca zariadenia zvyčajne neblokuje aktualizácie Google Play. Toto tlačidlo skontroluje dostupnosť aktualizácie v aplikácii Google Play a požiada Android o jej inštaláciu.</string>
+    <string name="self_update_started">Proces aktualizácie sa otvoril. Dokončite aktualizáciu podľa systémových pokynov.</string>
+    <string name="self_update_cancelled">Aktualizácia bola zrušená.</string>
+    <string name="self_update_check_failed">Aktualizáciu sa nepodarilo spustiť. Skontrolujte pripojenie Google Play a skúste to znova.</string>
+    <string name="self_update_unavailable">Aktualizácie v aplikácii Google Play nie sú pre túto inštaláciu dostupné. Otvorte Google Play a skontrolujte ich manuálne.</string>
+    <string name="self_update_no_update">Momentálne nie je k dispozícii žiadna novšia aktualizácia Google Play.</string>
+    <string name="self_update_not_allowed">Aktualizácia je k dispozícii, ale Google Play pre túto inštaláciu nepovoľuje okamžitý postup aktualizácie.</string>
+    <string name="self_update_open_play_store">Otvoriť Google Play</string>
     <string name="scan_sessions_in_progress">Prebiehajúce relácie skenovania: %1$d</string>
     <string name="scan_sessions_completed">Dokončené relácie skenovania: %1$d</string>
     <string name="ui_sentinel_telegram_folder">Priečinok dokumentov Telegram</string>
