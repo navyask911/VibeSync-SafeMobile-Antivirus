@@ -92,16 +92,16 @@
 <string name="quarantine_delete">Usuń trwale</string>
 <string name="quarantine_restore_confirm_title">Przywrócić ten plik z kwarantanny?</string>
 <string name="quarantine_restore_confirm_body">Przywrócenie zapisuje plik w wybranej lokalizacji. Przywrócony plik może być niebezpieczny. Kontynuuj tylko wtedy, gdy ufasz temu plikowi lub potrzebujesz go do kontrolowanej analizy. Kopia w kwarantannie pozostanie tutaj.</string>
-<string name="quarantine_delete_confirm_title">Permanently delete this quarantined copy?</string>
-<string name="quarantine_delete_confirm_body">This action permanently deletes the private quarantined copy from SafeMobile. It cannot be undone.</string>
-<string name="quarantine_restore_success">A copy of %1$s was written to the selected destination (%2$d bytes). The quarantined original remains stored.</string>
-<string name="quarantine_delete_success">Deleted quarantined file %1$s.</string>
-<string name="quarantine_restore_failed">The quarantined file could not be restored. Check the destination and available storage, then try again.</string>
-<string name="quarantine_delete_failed">File could not be deleted</string>
-<string name="risk_sms_internet">Combines SMS permissions with network access; this is a risk indicator, not proof of malicious behavior.</string>
-<string name="risk_sms_accessibility">Combines SMS permissions with an accessibility service declaration; this is a review signal, not proof of OTP interception or malware.</string>
-<string name="language_label">Language: %1$s</string>
-<string name="language_system_default">System default</string>
+<string name="quarantine_delete_confirm_title">Trwale usunąć tę kopię z kwarantanny?</string>
+<string name="quarantine_delete_confirm_body">Ta czynność trwale usuwa prywatną kopię z kwarantanny SafeMobile. Nie można jej cofnąć.</string>
+<string name="quarantine_restore_success">Kopia pliku %1$s została zapisana w wybranej lokalizacji (%2$d bajtów). Oryginał w kwarantannie pozostaje zapisany.</string>
+<string name="quarantine_delete_success">Usunięto plik z kwarantanny: %1$s.</string>
+<string name="quarantine_restore_failed">Nie udało się przywrócić pliku z kwarantanny. Sprawdź miejsce docelowe i dostępną pamięć, a następnie spróbuj ponownie.</string>
+<string name="quarantine_delete_failed">Nie udało się usunąć pliku</string>
+<string name="risk_sms_internet">Łączy uprawnienia SMS z dostępem do sieci; jest to wskaźnik ryzyka, a nie dowód złośliwego działania.</string>
+<string name="risk_sms_accessibility">Łączy uprawnienia SMS z deklaracją usługi ułatwień dostępu; jest to sygnał do sprawdzenia, a nie dowód przechwytywania kodów OTP lub obecności złośliwego oprogramowania.</string>
+<string name="language_label">Język: %1$s</string>
+<string name="language_system_default">Domyślny język systemu</string>
 <string name="locale_english" translatable="false">English</string>
 <string name="locale_arabic" translatable="false">العربية</string>
 <string name="locale_german" translatable="false">Deutsch</string>
@@ -109,8 +109,8 @@
 <string name="locale_french" translatable="false">Français</string>
 <string name="locale_hindi" translatable="false">हिन्दी</string>
 <string name="locale_japanese" translatable="false">日本語</string>
-<string name="limited_protection">Limited protection — EICAR test definition only</string>
-<string name="review_recommended">Review recommended</string>
+<string name="limited_protection">Ograniczona ochrona — wyłącznie testowa definicja EICAR</string>
+<string name="review_recommended">Zalecane sprawdzenie</string>
 <string name="locale_portuguese" translatable="false">Português</string>
 <string name="locale_russian" translatable="false">Русский</string>
 <string name="locale_chinese" translatable="false">简体中文</string>
@@ -128,51 +128,51 @@
 <string name="locale_hebrew" translatable="false">עברית</string>
 <string name="nav_home">Główna</string>
 <string name="nav_scan">Skanuj</string>
-<string name="nav_quarantine">Quarantine</string>
-<string name="nav_history">History</string>
+<string name="nav_quarantine">Kwarantanna</string>
+<string name="nav_history">Historia</string>
 <string name="nav_settings">Ustawienia</string>
 <string name="settings_title">Settings</string>
 <string name="appearance_title">Appearance</string>
-<string name="theme_system">System</string>
-<string name="theme_light">Clean Light</string>
-<string name="theme_dark">Dark</string>
-<string name="language_settings">Language</string>
+<string name="theme_system">Systemowy</string>
+<string name="theme_light">Jasny</string>
+<string name="theme_dark">Ciemny</string>
+<string name="language_settings">Język</string>
 <string name="about_legal">About and Legal</string>
 <string name="ray_id">SafeMobile Ray ID</string>
 <string name="ray_id_copy">Copy ID</string>
 <string name="ray_id_copied">Ray ID copied to clipboard</string>
-<string name="history_title">Scan history</string>
-<string name="history_empty">No local scan history yet.</string>
-<string name="history_session">Session ID</string>
-<string name="threat_event_ray_id">Threat event Ray ID: %1$s</string>
-<string name="definitions_limited_compact">Definitions: EICAR test signature only; coverage is limited.</string>
+<string name="history_title">Historia skanowania</string>
+<string name="history_empty">Brak lokalnej historii skanowania.</string>
+<string name="history_session">Identyfikator sesji</string>
+<string name="threat_event_ray_id">Identyfikator zdarzenia zagrożenia Ray: %1$s</string>
+<string name="definitions_limited_compact">Definicje: wyłącznie testowa sygnatura EICAR; zakres ochrony jest ograniczony.</string>
 <string name="settings_privacy">Privacy and permissions</string>
-<string name="quarantine_legacy_warning">Legacy quarantine item: stored without encryption by an earlier build.</string>
-<string name="overlay_review_title">Overlay-risk review</string>
-<string name="overlay_review_description">Optional best-effort review of apps that declare overlay capability and accessibility services. Declarations and enabled accessibility services are only risk indicators; SafeMobile cannot prove that another app is currently displaying an overlay or inspect the current overlay-permission status of another app.</string>
-<string name="overlay_review_last_attempt">Last attempt: %1$s</string>
-<string name="overlay_review_last_success">Last successful check: %1$s</string>
-<string name="overlay_review_summary">Apps declaring overlay capability: %1$d · Apps declaring accessibility services: %2$d · Enabled accessibility services on this device: %3$d</string>
-<string name="overlay_review_not_checked">No successful overlay-risk review yet.</string>
-<string name="overlay_review_failed">The last review attempt failed. Android may have deferred the job or denied the required package visibility.</string>
-<string name="overlay_review_permission_required">Android did not permit this review. Check installed-app visibility and retry.</string>
-<string name="overlay_review_reminder_interval">Reminder interval</string>
-<string name="overlay_review_reminder_12h">Every 12 hours</string>
-<string name="overlay_review_reminder_24h">Every 24 hours</string>
-<string name="overlay_review_reminder_48h">Every 48 hours</string>
-<string name="overlay_review_notifications_off">Notifications are disabled. The review can still run, but reminders will not be shown.</string>
-<string name="overlay_review_notification_channel">SafeMobile privacy review</string>
-<string name="overlay_review_notification_channel_description">Low-priority reminders for the optional overlay-risk review.</string>
-<string name="overlay_review_notification_title">Overlay-risk review completed</string>
-<string name="overlay_review_notification_body">%1$d apps declare overlay capability and %2$d declare accessibility services. These are review indicators, not proof of malware.</string>
-<string name="overlay_review_enabled">Automatic review enabled</string>
-<string name="overlay_review_disabled">Review paused</string>
-<string name="features_menu">Security features</string>
-<string name="nav_guardian">Guardian</string>
-<string name="nav_phishing">Link checker</string>
-<string name="nav_cleaner">Storage cleaner</string>
-<string name="why_safemobile">Why SafeMobile? Core Strengths &amp; Features</string>
-<string name="features_disclaimer">Feature availability depends on Android permissions and the current local definitions. These features do not provide guaranteed or complete malware protection.</string>
+<string name="quarantine_legacy_warning">Starszy element kwarantanny: zapisany bez szyfrowania przez wcześniejszą wersję aplikacji.</string>
+<string name="overlay_review_title">Kontrola ryzyka nakładek</string>
+<string name="overlay_review_description">Opcjonalna, orientacyjna kontrola aplikacji deklarujących możliwość wyświetlania nakładek i usług ułatwień dostępu. Deklaracje i włączone usługi ułatwień dostępu są jedynie wskaźnikami ryzyka; SafeMobile nie może potwierdzić, że inna aplikacja aktualnie wyświetla nakładkę, ani sprawdzić bieżącego stanu uprawnienia do nakładek innej aplikacji.</string>
+<string name="overlay_review_last_attempt">Ostatnia próba: %1$s</string>
+<string name="overlay_review_last_success">Ostatnia pomyślna kontrola: %1$s</string>
+<string name="overlay_review_summary">Aplikacje deklarujące możliwość wyświetlania nakładek: %1$d · Aplikacje deklarujące usługi ułatwień dostępu: %2$d · Włączone usługi ułatwień dostępu na tym urządzeniu: %3$d</string>
+<string name="overlay_review_not_checked">Nie przeprowadzono jeszcze pomyślnej kontroli ryzyka nakładek.</string>
+<string name="overlay_review_failed">Ostatnia próba kontroli nie powiodła się. Android mógł odroczyć zadanie lub odmówić wymaganego wglądu w pakiety.</string>
+<string name="overlay_review_permission_required">Android nie zezwolił na tę kontrolę. Sprawdź widoczność zainstalowanych aplikacji i spróbuj ponownie.</string>
+<string name="overlay_review_reminder_interval">Odstęp między przypomnieniami</string>
+<string name="overlay_review_reminder_12h">Co 12 godzin</string>
+<string name="overlay_review_reminder_24h">Co 24 godziny</string>
+<string name="overlay_review_reminder_48h">Co 48 godzin</string>
+<string name="overlay_review_notifications_off">Powiadomienia są wyłączone. Kontrola nadal może się odbywać, ale przypomnienia nie będą wyświetlane.</string>
+<string name="overlay_review_notification_channel">Kontrola prywatności SafeMobile</string>
+<string name="overlay_review_notification_channel_description">Przypomnienia o niskim priorytecie dotyczące opcjonalnej kontroli ryzyka nakładek.</string>
+<string name="overlay_review_notification_title">Kontrola ryzyka nakładek zakończona</string>
+<string name="overlay_review_notification_body">%1$d aplikacji deklaruje możliwość wyświetlania nakładek, a %2$d deklaruje usługi ułatwień dostępu. Są to wskaźniki do sprawdzenia, a nie dowód złośliwego oprogramowania.</string>
+<string name="overlay_review_enabled">Automatyczna kontrola włączona</string>
+<string name="overlay_review_disabled">Kontrola wstrzymana</string>
+<string name="features_menu">Funkcje bezpieczeństwa</string>
+<string name="nav_guardian">Strażnik</string>
+<string name="nav_phishing">Sprawdzanie odnośników</string>
+<string name="nav_cleaner">Oczyszczanie pamięci</string>
+<string name="why_safemobile">Dlaczego SafeMobile? Najważniejsze zalety i funkcje</string>
+<string name="features_disclaimer">Dostępność funkcji zależy od uprawnień Androida i aktualnych lokalnych definicji. Funkcje te nie zapewniają gwarantowanej ani pełnej ochrony przed złośliwym oprogramowaniem.</string>
 <string name="pillar_offline_title" formatted="false">100% Offline Privacy</string>
 <string name="pillar_offline_body">Core file hashing and local signature matching run on-device. Ads and Google Play update checks are separate network-capable features when configured and permitted.</string>
 <string name="pillar_telemetry_title">Zero Cloud Telemetry</string>
