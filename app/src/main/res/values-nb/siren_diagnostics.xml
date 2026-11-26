@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="test_siren" tools:ignore="MissingTranslation">Test sirene</string>
+    <string name="test_voice" tools:ignore="MissingTranslation">Test tale</string>
+    <string name="test_siren_failed" tools:ignore="MissingTranslation">Sireneprøven kunne ikke startes på denne enheten.</string>
+    <string name="test_voice_failed" tools:ignore="MissingTranslation">Taletesten mislyktes. Kontroller installert tale-/talesyntesemotor og taledata.</string>
+</resources>
