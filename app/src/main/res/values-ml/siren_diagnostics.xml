@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="test_siren" tools:ignore="MissingTranslation">സൈറൺ പരിശോധിക്കുക</string>
+    <string name="test_voice" tools:ignore="MissingTranslation">ശബ്ദം പരിശോധിക്കുക</string>
+    <string name="test_siren_failed" tools:ignore="MissingTranslation">ഈ ഉപകരണത്തിൽ സൈറൺ പരിശോധന ആരംഭിക്കാനായില്ല.</string>
+    <string name="test_voice_failed" tools:ignore="MissingTranslation">വോയ്സ് പരിശോധന പരാജയപ്പെട്ടു. ഇൻസ്റ്റാൾ ചെയ്ത ഉപകരണ വോയ്സ് എഞ്ചിനും വോയ്സ് ഡാറ്റയും പരിശോധിക്കുക.</string>
+</resources>
