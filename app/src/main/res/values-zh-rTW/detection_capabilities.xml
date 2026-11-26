@@ -16,6 +16,6 @@
     <string name="detection_capabilities_feed_url">HTTPS 更新網址</string>
     <string name="detection_capabilities_sync_enabled">啟用自動更新</string>
     <string name="detection_capabilities_save">儲存更新設定</string>
-    <string name="detection_capabilities_sync_privacy">僅下載。不會上傳掃描結果、檔案、雜湊或應用包名。</string>
+    <string name="detection_capabilities_sync_privacy">僅下載。不會上傳掃描結果、檔案、雜湊或應用程式包名。</string>
     <string name="detection_capabilities_sync_unavailable">此離線構建無法自動更新，或需先配置可信簽名金鑰後才能更新。</string>
 </resources>
