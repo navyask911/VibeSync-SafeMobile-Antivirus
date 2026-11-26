@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="threat_intelligence_unavailable">इस डिवाइस पर सत्यापित अपस्ट्रीम प्रशिक्षण आँकड़े कैश में उपलब्ध नहीं हैं।</string>
+    <string name="threat_intelligence_upstream_stale">पुराना अपस्ट्रीम डेटा · प्रकाशित अपडेट को 30 दिनों से अधिक हो गए हैं।</string>
+    <string name="threat_intelligence_device_title">डिवाइस पर खतरा जानकारी</string>
+    <string name="threat_intelligence_latest_sync_note">पिछले सिंक का नोट: %1$s</string>
+    <string name="threat_intelligence_feed_stale">कॉन्फ़िगर किए गए फ़ीड का पिछला सफल सिंक 7 दिनों से अधिक पुराना है।</string>
+</resources>
