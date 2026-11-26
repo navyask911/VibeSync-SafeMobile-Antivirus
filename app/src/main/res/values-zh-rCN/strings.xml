@@ -689,16 +689,16 @@
     <string name="ui_status_at_risk">有风险</string>
     <string name="scan_detected_by">检测来源：%1$s</string>
     <string name="scan_detected_by_confidence">检测来源：%1$s（%2$d%%）</string>
-    <string name="security_score_100_voice" formatted="false">Your security configuration is fully optimized. We will continue to monitor your device to keep you safe. Thank you for using Safe Mobile Antivirus.</string>
-    <string name="self_update_title">Check for Updates (Self-Update)</string>
-    <string name="self_update_description">Device Administrator mode does not normally block Google Play updates. This button checks for a Play in-app update and asks Android to install it.</string>
-    <string name="self_update_started">The update flow was opened. Follow the system prompts to finish updating.</string>
-    <string name="self_update_cancelled">The update was cancelled.</string>
-    <string name="self_update_check_failed">The update could not be started. Check your Google Play connection and try again.</string>
-    <string name="self_update_unavailable">Play in-app updates are unavailable for this installation. Open Google Play to check manually.</string>
-    <string name="self_update_no_update">No newer Google Play update is currently available.</string>
-    <string name="self_update_not_allowed">An update is available, but Google Play does not allow the immediate update flow for this installation.</string>
-    <string name="self_update_open_play_store">Open Google Play</string>
+    <string name="security_score_100_voice" formatted="false">您的安全配置已全面优化。我们将继续监控您的设备以保障安全。感谢您使用 Safe Mobile Antivirus。</string>
+    <string name="self_update_title">检查更新（自更新）</string>
+    <string name="self_update_description">设备管理员模式通常不会阻止 Google Play 更新。此按钮会检查 Play 应用内更新，并请求 Android 安装更新。</string>
+    <string name="self_update_started">更新流程已打开。请按照系统提示完成更新。</string>
+    <string name="self_update_cancelled">更新已取消。</string>
+    <string name="self_update_check_failed">无法启动更新。请检查 Google Play 连接后重试。</string>
+    <string name="self_update_unavailable">此安装无法使用 Play 应用内更新。请打开 Google Play 手动检查。</string>
+    <string name="self_update_no_update">目前没有可用的更新版 Google Play 更新。</string>
+    <string name="self_update_not_allowed">有可用更新，但 Google Play 不允许此安装使用立即更新流程。</string>
+    <string name="self_update_open_play_store">打开 Google Play</string>
     <string name="scan_sessions_in_progress">正在进行的扫描会话：%1$d</string>
     <string name="scan_sessions_completed">已完成的扫描会话：%1$d</string>
     <string name="ui_sentinel_telegram_folder">Telegram 文档文件夹</string>
