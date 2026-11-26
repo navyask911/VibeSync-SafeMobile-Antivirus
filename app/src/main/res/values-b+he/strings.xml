@@ -170,8 +170,8 @@
     <string name="security_scan_now">סרוק עכשיו</string>
     <string name="security_last_scan_none">עדיין לא הושלמה סריקה</string>
     <string name="security_last_scan">סריקה אחרונה · %1$s</string>
-    <string name="security_scan_coverage">Checks installed APKs and readable shared-storage files against the local definitions available on this device. Results do not certify the device as malware-free.</string>
-    <string name="security_limited_storage">Shared-storage access is unavailable. The scan can inspect installed APKs only; file coverage is limited until access is granted.</string>
+    <string name="security_scan_coverage">בודק קובצי APK מותקנים וקבצים קריאים באחסון המשותף מול ההגדרות המקומיות הזמינות במכשיר. התוצאות אינן מאשרות שהמכשיר נקי מתוכנות זדוניות.</string>
+    <string name="security_limited_storage">אין גישה לאחסון המשותף. הסריקה יכולה לבדוק רק קובצי APK מותקנים; כיסוי הקבצים מוגבל עד לקבלת גישה.</string>
     <string name="analytics_title">Protection Analytics</string>
     <string name="analytics_subtitle">Local-only view of saved scan audit records and current protection state. Counts reflect the records available here, not a malware-free guarantee.</string>
     <string name="analytics_scan_in_progress">הסריקה מתבצעת</string>
