@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">基準測試結果</string>
+    <string name="benchmark_not_measured">尚無經過驗證的測量結果</string>
+    <string name="benchmark_total_apps">已測試的 APK 檔案</string>
+    <string name="benchmark_tpr">檢出率 (TPR)</string>
+    <string name="benchmark_fpr">誤報率 (FPR)</string>
+    <string name="benchmark_latency">平均掃描時間</string>
+    <string name="benchmark_privacy_note">僅顯示已驗證的結果。測試 APK 不會儲存在應用中。</string>
+</resources>
