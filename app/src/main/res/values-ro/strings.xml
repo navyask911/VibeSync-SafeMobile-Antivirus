@@ -87,7 +87,7 @@
 <string name="quarantine_vault_description">Aici poți examina copiile private izolate. Restaurarea scrie o copie într-o destinație aleasă de tine și păstrează originalul din carantină până când îl ștergi.</string>
 <string name="quarantine_vault_empty">În prezent nu există fișiere în carantină.</string>
 <string name="quarantine_vault_limit">Se afișează cele mai recente 30 de fișiere puse în carantină.</string>
-<string name="quarantine_item_size">%1$d bytes</string>
+<string name="quarantine_item_size">%1$d B</string>
 <string name="quarantine_restore">Restaurează copia…</string>
 <string name="quarantine_delete">Șterge definitiv</string>
 <string name="quarantine_restore_confirm_title">Restaurezi acest fișier din carantină?</string>
