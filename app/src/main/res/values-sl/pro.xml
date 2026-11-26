@@ -1,9 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="pro_one_year_price">Eno leto predplačila: %1$s</string>
-    <string name="pro_prepaid_offer">Enoletni predplačniški dostop do SafeMobile Pro. Ne podaljšuje se samodejno.</string>
-    <string name="pro_prepaid_duration_limit">Predplačniški paketi Google Play so omejeni na eno leto na nakup. Za dodatno leto znova kupite ali podaljšajte isti paket; končno ceno potrdi Google Play.</string>
-    <string name="pro_device_binding_explanation">Nakup je povezan s to napravo Android z zgoščenim identifikatorjem naprave. Ponovna namestitev v isti napravi lahko obnovi aktivni nakup Play; druga naprava je blokirana.</string>
-    <string name="pro_buy_or_extend_one_year">Kupi / podaljšaj za 1 leto</string>
-    <string name="pro_device_mismatch">Naročnina je aktivna v drugi napravi. Dostop do SafeMobile Pro je v tej napravi blokiran.</string>
-    <string name="pro_device_binding_unavailable">Ta nakup nima preverljive povezave z napravo. Dostop Pro je blokiran, dokler Google Play ne vrne nakupa, vezanega na napravo.</string>
+    <string name="pro_title">SafeMobile Pro</string>
+    <string name="pro_truthful_summary">Manj navlake. Enako zaznavanje.</string>
+    <string name="pro_feature_free">Skeniranje brez povezave z zgoščenimi vrednostmi, YARA in zaznavanje stranskih namestitev ostanejo brezplačni.</string>
+    <string name="pro_feature_research">Eksperimentalno strojno učenje ni preverjeno ali omogočeno.</string>
+    <string name="pro_feature_updates">Pro ponuja izbirne dnevne posodobitve raziskovalnega modela. Tedenske posodobitve ostanejo brezplačne.</string>
+    <string name="pro_feature_adfree">Oglasi brezplačne različice so onemogočeni, dokler je vaš dostop do SafeMobile Pro aktiven.</string>
+    <string name="pro_price_unavailable">Predplačniške cene Google Play niso na voljo. Poskusite znova, ko bo Play povezan.</string>
+    <string name="pro_restore_check">Obnovi / preveri stanje</string>
+    <string name="pro_active_until">Dostop Pro je lokalno zabeležen do %1$s.</string>
+    <string name="pro_not_active">Ni bilo najdene aktivne naročnine Pro ali lokalne predplačniške pravice.</string>
+    <string name="pro_purchase_unavailable">Google Play ni na voljo ali predplačniški izdelek ni nastavljen.</string>
+    <string name="pro_purchase_canceled">Nakup je preklican.</string>
+    <string name="pro_purchase_pending">Plačilo čaka. Dostop Pro se začne šele, ko Google Play potrdi nakup.</string>
+    <string name="pro_purchase_recheck">Znova vzpostavite povezavo z Google Play, da dokončate obdelavo te predplačniške naročnine.</string>
+    <string name="pro_storage_failed">Varna shramba ni mogla shraniti nakupa. Pred ponovnim poskusom se obrnite na podporo.</string>
+    <string name="pro_purchase_success">Predplačniška naročnina je potrjena in varno zabeležena za to napravo.</string>
+    <string name="pro_device_disclaimer">Vašo predplačniško naročnino upravlja Google Play in se ne obnavlja samodejno. SafeMobile shranjuje šifriran predpomnilnik dostopa, vezan na napravo, za preverjanje brez povezave.</string>
+    <string name="pro_network_notice">Osnovna zaščita deluje brez povezave. Nakupi Google Play in izbirne posodobitve modela zahtevajo internetno povezavo.</string>
+    <string name="pro_years">Leta (1–10)</string>
+    <string name="pro_price_preview">Ocenjeni skupni znesek: %1$s. Leta: %2$d. Potrdite v Google Play.</string>
+    <string name="pro_cart_quantity_warning">Količino nakupa izberite v Google Play. Potrjena količina določa število let, dodanih tej napravi.</string>
+    <string name="pro_non_restorable_warning">Nakup samo za to napravo. Ponovna namestitev, ponastavitev ali izguba šifrirnih ključev lahko trajno izbriše preostali dostop Pro.</string>
+    <string name="pro_unlock">Odkleni SafeMobile Pro</string>
+    <string name="pro_restore_local_only">Lokalno stanje je preverjeno. Google Play ne more obnoviti porabljenih vstopnic.</string>
+    <string name="pro_fewer_years">Manj let</string>
+    <string name="pro_more_years">Več let</string>
+    <string name="pro_subscription_offer">Odkleni SafeMobile Pro — 299 ₹ / leto (samodejno podaljšanje). Kadar koli prekličite v Google Play.</string>
 </resources>
