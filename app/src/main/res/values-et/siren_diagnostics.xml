@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="test_siren">Sireeni test</string>
+    <string name="test_voice">Hääle test</string>
+    <string name="test_siren_failed">Sireeni testi ei saanud selles seadmes käivituda.</string>
+    <string name="test_voice_failed">Hääletest nurjus. Kontrolli seadmesse installitud kõnesünteesi mootorit ja hääleandmeid.</string>
+</resources>

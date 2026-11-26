@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="test_siren">Δοκιμή σειρήνας</string>
+    <string name="test_voice">Δοκιμή φωνής</string>
+    <string name="test_siren_failed">Η δοκιμή σειρήνας δεν ήταν δυνατό να ξεκινήσει σε αυτήν τη συσκευή.</string>
+    <string name="test_voice_failed">Η δοκιμή φωνής απέτυχε. Ελέγξτε τη μηχανή ομιλίας και τα φωνητικά δεδομένα της συσκευής.</string>
+</resources>
