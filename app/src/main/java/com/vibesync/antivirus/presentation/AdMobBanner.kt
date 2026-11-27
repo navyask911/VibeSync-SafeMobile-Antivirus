@@ -30,7 +30,7 @@ import com.google.android.libraries.ads.mobile.sdk.common.LoadAdError
 import com.vibesync.antivirus.R
 import com.vibesync.antivirus.core.ads.AdMobManager
 
-/** Top-of-content banner. Re-checks Pro entitlement and UMP consent immediately before load. */
+/** Bottom-of-screen banner. Re-checks Pro entitlement and UMP consent immediately before load. */
 @Composable
 internal fun AdMobBanner(manager: AdMobManager) {
     val context = LocalContext.current
