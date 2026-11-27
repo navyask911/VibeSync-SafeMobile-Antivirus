@@ -286,7 +286,8 @@ jobs:
           "$apksigner" verify --min-sdk-version 26 --verbose --print-certs "$apk"
           "$apkanalyzer" manifest print "$apk" > "$RUNNER_TEMP/safemobile-apk-manifest.xml"
           python3 - "$apk" "$RUNNER_TEMP/safemobile-apk-manifest.xml" "$apkanalyzer" <<'PY'
-          import gzip,hashlib,json,subprocess,sys,zipfile
+          import gzip,hashlib,json,os,re,subprocess,sys,zipfile
+          from pathlib import Path
           from xml.etree import ElementTree as ET
           apk,manifest_path,apkanalyzer=sys.argv[1:4]
           android="{http://schemas.android.com/apk/res/android}"
@@ -321,8 +322,36 @@ jobs:
                       meta[name]=item.get(android+"value")
 
               admob_key="com.google.android.gms.ads.APPLICATION_ID"
-              if meta.get(admob_key) not in ("@string/admob_app_id","ca-app-pub-4783826505860771~3262295335"):
+              admob_meta_value=(meta.get(admob_key) or "").strip()
+              # APK Analyzer may serialize a manifest resource reference as its
+              # numeric resource ID (for example, @0x7f120001) instead of the
+              # source-level @string/admob_app_id name. Accept only those known
+              # representations, then bind numeric references back to the exact
+              # admob_app_id entry in the APK resource table.
+              admob_resource_ref=re.fullmatch(r"@0x([0-9a-fA-F]{8})",admob_meta_value)
+              if admob_meta_value not in (
+                  "@string/admob_app_id",
+                  "ca-app-pub-4783826505860771~3262295335",
+              ) and admob_resource_ref is None:
                   raise SystemExit("SAFE STOP: Signed APK AdMob application metadata is missing or incorrectly wired.")
+
+              if admob_resource_ref is not None:
+                  sdk_root=Path(os.environ.get("ANDROID_HOME") or os.environ.get("ANDROID_SDK_ROOT") or "")
+                  aapt2_candidates=sorted(sdk_root.glob("build-tools/*/aapt2"))
+                  if not aapt2_candidates:
+                      raise SystemExit("SAFE STOP: AAPT2 is unavailable to resolve the signed APK AdMob resource reference.")
+                  aapt2=aapt2_candidates[-1]
+                  resource_dump=subprocess.check_output(
+                      [str(aapt2),"dump","resources",apk],
+                      text=True,stderr=subprocess.STDOUT
+                  )
+                  app_id_resource_ids=re.findall(
+                      r"(?m)^\s*resource\s+(0x[0-9a-fA-F]{8})\s+string/admob_app_id\b",
+                      resource_dump,
+                  )
+                  if len(app_id_resource_ids)!=1 or int(app_id_resource_ids[0],16)!=int(admob_resource_ref.group(1),16):
+                      raise SystemExit("SAFE STOP: Signed APK AdMob manifest metadata does not reference the admob_app_id resource.")
+
               admob_resource=subprocess.check_output(
                   [apkanalyzer,"resources","value","--config","default","--name","admob_app_id","--type","string",apk],
                   text=True,stderr=subprocess.STDOUT
