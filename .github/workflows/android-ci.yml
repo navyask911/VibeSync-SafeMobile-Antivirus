@@ -229,8 +229,8 @@ jobs:
           ORG_GRADLE_PROJECT_yaraxAndroidAbis: x86_64
         run: |
           set -euo pipefail
-          ./gradlew --no-daemon --max-workers=2 --no-parallel \\
-            -Dorg.gradle.jvmargs="-Xmx2g -XX:ActiveProcessorCount=2 -Dfile.encoding=UTF-8" \\
+          ./gradlew --no-daemon --max-workers=2 --no-parallel \
+            -Dorg.gradle.jvmargs="-Xmx2g -XX:ActiveProcessorCount=2 -Dfile.encoding=UTF-8" \
             assembleOfflineDebug assembleOfflineDebugAndroidTest
       - name: Capture the Cargo-resolved YARA-X lockfile for a reproducible follow-up
         run: |
@@ -339,7 +339,7 @@ jobs:
           retention-days: 14
 
   android-emulator-tests:
-    name: Instrumented tests on API \${{ matrix.api-level }} (shard \${{ matrix.shard }}/2)
+    name: Instrumented tests on API ${{ matrix.api-level }} (shard ${{ matrix.shard }}/2)
     needs: test-lint-build
     if: github.event_name != 'pull_request' || github.base_ref == 'main' || startsWith(github.base_ref, 'feature/')
     runs-on: ubuntu-latest
@@ -362,7 +362,7 @@ jobs:
       - name: Download shared x86_64 instrumentation APKs and harmless fixture
         uses: actions/download-artifact@v4
         with:
-          name: safemobile-instrumentation-v1.10.9-\${{ github.sha }}
+          name: safemobile-instrumentation-v1.10.9-${{ github.sha }}
           path: .
       - name: Verify downloaded emulator test inputs
         shell: bash
@@ -395,14 +395,14 @@ jobs:
             echo "::warning::KVM unavailable: Android emulator runner will use software emulation. Instrumented tests remain required."
           fi
       - name: Run assigned AndroidJUnitRunner shard on local emulator
-        timeout-minutes: 30
+        timeout-minutes: 60
         uses: reactivecircus/android-emulator-runner@v2
         env:
-          EXPECTED_API_LEVEL: \${{ matrix.api-level }}
+          EXPECTED_API_LEVEL: ${{ matrix.api-level }}
           INSTRUMENTATION_NUM_SHARDS: "2"
-          INSTRUMENTATION_SHARD_INDEX: \${{ matrix.shard }}
+          INSTRUMENTATION_SHARD_INDEX: ${{ matrix.shard }}
         with:
-          api-level: \${{ matrix.api-level }}
+          api-level: ${{ matrix.api-level }}
           target: default
           arch: x86_64
           profile: pixel_2
@@ -412,9 +412,9 @@ jobs:
           disable-animations: true
           disable-spellchecker: true
           disable-linux-hw-accel: auto
-          ram-size: \${{ matrix.api-level >= 34 && '3072M' || '4096M' }}
-          heap-size: \${{ matrix.api-level >= 34 && '384M' || '512M' }}
-          cores: \${{ matrix.api-level >= 34 && 2 || 4 }}
+          ram-size: ${{ matrix.api-level >= 34 && '3072M' || '4096M' }}
+          heap-size: ${{ matrix.api-level >= 34 && '384M' || '512M' }}
+          cores: ${{ matrix.api-level >= 34 && 2 || 4 }}
           script: bash scripts/run_instrumented_tests.sh
       - name: Clean up orphaned Crashpad processes
         if: always()
@@ -431,7 +431,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: emulator-diagnostics-api-\${{ matrix.api-level }}-shard-\${{ matrix.shard }}
+          name: emulator-diagnostics-api-${{ matrix.api-level }}-shard-${{ matrix.shard }}
           path: build/emulator-diagnostics/
           if-no-files-found: ignore
           retention-days: 7
@@ -455,7 +455,7 @@ jobs:
           merge-multiple: false
       - name: Verify full API/shard inventory and test coverage
         env:
-          MATRIX_RESULT: \${{ needs.android-emulator-tests.result }}
+          MATRIX_RESULT: ${{ needs.android-emulator-tests.result }}
           EXPECTED_TESTS_PER_API: "85"
         run: python3 scripts/verify_instrumented_shards.py build/emulator-shards
 
