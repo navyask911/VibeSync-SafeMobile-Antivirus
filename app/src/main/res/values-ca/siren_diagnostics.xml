@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="test_siren">Prova la sirena</string>
+    <string name="test_voice">Prova la veu</string>
+    <string name="test_siren_failed">No ha estat possible iniciar la prova de la sirena en aquest dispositiu.</string>
+    <string name="test_voice_failed">La prova de veu ha fallat. Comproveu el motor de veu instal·lat i les dades de veu.</string>
+</resources>

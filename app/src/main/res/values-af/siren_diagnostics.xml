@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="test_siren">Toets sirene</string>
+    <string name="test_voice">Toets stem</string>
+    <string name="test_siren_failed">Die sirenetoets kon nie op hierdie toestel begin nie.</string>
+    <string name="test_voice_failed">Stemtoets het misluk. Kontroleer die geïnstalleerde spraakenjin en stemdata.</string>
+</resources>

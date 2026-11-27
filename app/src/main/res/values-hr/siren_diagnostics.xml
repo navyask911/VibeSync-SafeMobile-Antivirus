@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="test_siren">Testiraj sirenu</string>
+    <string name="test_voice">Testiraj glas</string>
+    <string name="test_siren_failed">Test sirene nije moguće pokrenuti na ovom uređaju.</string>
+    <string name="test_voice_failed">Test glasa nije uspio. Provjerite instalirani govorni mehanizam i glasovne podatke.</string>
+</resources>

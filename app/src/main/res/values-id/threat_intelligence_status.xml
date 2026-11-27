@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="threat_intelligence_unavailable">Tidak ada statistik pelatihan upstream terverifikasi yang tersimpan di perangkat ini.</string>
+    <string name="threat_intelligence_upstream_stale">DATA UPSTREAM KEDALUWARSA · Pembaruan yang diterbitkan berusia lebih dari 30 hari.</string>
+    <string name="threat_intelligence_device_title">Intelijen ancaman di perangkat</string>
+    <string name="threat_intelligence_latest_sync_note">Catatan sinkronisasi terakhir: %1$s</string>
+    <string name="threat_intelligence_feed_stale">Sinkronisasi berhasil terakhir untuk feed yang dikonfigurasi terjadi lebih dari 7 hari lalu.</string>
+</resources>

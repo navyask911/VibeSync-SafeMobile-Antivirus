@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="test_siren">સાયરન પરીક્ષણ</string>
+    <string name="test_voice">અવાજ પરીક્ષણ</string>
+    <string name="test_siren_failed">આ ઉપકરણ પર સાયરન પરીક્ષણ શરૂ થઈ શક્યું નથી.</string>
+    <string name="test_voice_failed">અવાજ પરીક્ષણ નિષ્ફળ ગયું. ઇન્સ્ટોલ કરેલ સ્પીચ એન્જિન અને અવાજ ડેટા તપાસો.</string>
+</resources>

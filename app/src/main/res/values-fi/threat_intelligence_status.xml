@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="threat_intelligence_unavailable">Tällä laitteella ei ole välimuistissa vahvistettuja ylävirran koulutustilastoja.</string>
+    <string name="threat_intelligence_upstream_stale">VANHENTUNEET YLÄVIRRAN TIEDOT · Julkaistu päivitys on yli 30 päivää vanha.</string>
+    <string name="threat_intelligence_device_title">Laitteen uhkatiedot</string>
+    <string name="threat_intelligence_latest_sync_note">Viimeisimmän synkronoinnin huomautus: %1$s</string>
+    <string name="threat_intelligence_feed_stale">Määritetyn syötekanavan viimeisin onnistunut synkronointi on yli 7 päivää vanha.</string>
+</resources>

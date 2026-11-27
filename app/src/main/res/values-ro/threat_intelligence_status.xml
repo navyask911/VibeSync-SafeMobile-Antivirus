@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="threat_intelligence_unavailable">Nu există statistici verificate de instruire upstream în memoria cache a acestui dispozitiv.</string>
+    <string name="threat_intelligence_upstream_stale">DATE UPSTREAM ÎNVECHITE · Actualizarea publicată are o vechime de peste 30 de zile.</string>
+    <string name="threat_intelligence_device_title">Informații despre amenințări pe dispozitiv</string>
+    <string name="threat_intelligence_latest_sync_note">Notă privind ultima sincronizare: %1$s</string>
+    <string name="threat_intelligence_feed_stale">Ultima sincronizare reușită a fluxului configurat a avut loc acum mai mult de 7 zile.</string>
+</resources>

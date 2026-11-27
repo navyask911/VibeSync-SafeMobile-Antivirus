@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="test_siren">Сиренаны тексеру</string>
+    <string name="test_voice">Дауысты тексеру</string>
+    <string name="test_siren_failed">Бұл құрылғыда сирена сынағын бастау мүмкін болмады.</string>
+    <string name="test_voice_failed">Дауыс сынағы сәтсіз аяқталды. Орнатылған сөйлеу механизмін және дауыс деректерін тексеріңіз.</string>
+</resources>

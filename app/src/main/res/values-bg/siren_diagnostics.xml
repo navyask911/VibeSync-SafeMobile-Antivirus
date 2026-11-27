@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="test_siren">Тест на сирената</string>
+    <string name="test_voice">Тест на гласа</string>
+    <string name="test_siren_failed">Тестът на сирената не можа да започне на това устройство.</string>
+    <string name="test_voice_failed">Тестът на гласа не бе успешен. Проверете инсталирания механизъм за синтез на реч и гласовите данни.</string>
+</resources>
