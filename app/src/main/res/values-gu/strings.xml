@@ -410,7 +410,7 @@
     <string name="device_admin_lock_confirm_title">હમણાં આ ઉપકરણ લોક કરવું છે?</string>
     <string name="device_admin_lock_confirm_message">SafeMobile તરત જ સ્ક્રીન લોક કરવા માટે Android ને વિનંતી કરશે. તમારો હાલનો Android સ્ક્રીન-લોક PIN, પેટર્ન અથવા પાસવર્ડ જ નિયંત્રણમાં રહેશે; SafeMobile તેને સેટ કે બદલતું નથી.</string>
     <string name="device_admin_lock_confirm">ઉપકરણ લોક કરો</string>
-    <string name="device_admin_lock_cancel">Cancel</string>
+    <string name="device_admin_lock_cancel">રદ કરો</string>
     <string name="device_admin_lock_failed">ઉપકરણ લોક કરવાની વિનંતી કરી શકાયી નથી. Device Administrator હજુ સક્રિય છે કે નહીં તે તપાસો.</string>
 
 <string name="installer_accessibility_service_title">SafeMobile સ્થાપન સલાહ</string>

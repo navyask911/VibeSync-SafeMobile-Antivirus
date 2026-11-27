@@ -335,8 +335,8 @@
 <string name="analytics_storage">Dostęp do pamięci współdzielonej</string>
 <string name="analytics_notifications">Powiadomienia</string>
 <string name="analytics_sentinel">Download Sentinel</string>
-<string name="analytics_sentinel_running">Foreground service running</string>
-<string name="analytics_sentinel_stopped">Service not running</string>
+<string name="analytics_sentinel_running">Usługa działająca na pierwszym planie</string>
+<string name="analytics_sentinel_stopped">Usługa nie działa</string>
 <string name="analytics_current_results">Bieżące wyniki skanowania</string>
 <string name="analytics_quarantine">Pliki w kwarantannie</string>
 <string name="analytics_connection">Stan sieci</string>

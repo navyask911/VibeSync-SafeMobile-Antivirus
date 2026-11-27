@@ -335,8 +335,8 @@
 <string name="analytics_storage">Prístup k zdieľanému úložisku</string>
 <string name="analytics_notifications">Upozornenia</string>
 <string name="analytics_sentinel">Download Sentinel</string>
-<string name="analytics_sentinel_running">Foreground service running</string>
-<string name="analytics_sentinel_stopped">Service not running</string>
+<string name="analytics_sentinel_running">Služba v popredí je spustená</string>
+<string name="analytics_sentinel_stopped">Služba nie je spustená</string>
 <string name="analytics_current_results">Riadky s aktuálnymi výsledkami kontroly</string>
 <string name="analytics_quarantine">Súbory v karanténe</string>
 <string name="analytics_connection">Stav siete</string>

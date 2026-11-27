@@ -335,8 +335,8 @@
 <string name="analytics_storage">Acces la stocarea partajată</string>
 <string name="analytics_notifications">Notificări</string>
 <string name="analytics_sentinel">Download Sentinel</string>
-<string name="analytics_sentinel_running">Foreground service running</string>
-<string name="analytics_sentinel_stopped">Service not running</string>
+<string name="analytics_sentinel_running">Serviciul din prim-plan rulează</string>
+<string name="analytics_sentinel_stopped">Serviciul nu rulează</string>
 <string name="analytics_current_results">Rânduri cu rezultatele scanării curente</string>
 <string name="analytics_quarantine">Fișiere în carantină</string>
 <string name="analytics_connection">Starea rețelei</string>
