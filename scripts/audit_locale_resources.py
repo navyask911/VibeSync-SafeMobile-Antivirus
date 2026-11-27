@@ -130,16 +130,21 @@ def main():
                     "files": [file_name for file_name, _ in values],
                 })
 
-        missing = sorted(
+        missing = sorted(key for key in baseline if not definitions.get(key))
+        intentional_opt_outs = sorted(
             key for key in baseline
-            if not any(entry.get("translatable", "true").lower() != "false"
-                       for _, entry in definitions.get(key, []))
+            if definitions.get(key) and all(
+                entry.get("translatable", "true").lower() == "false"
+                for _, entry in definitions[key]
+            )
         )
         total_missing += len(missing)
 
         format_mismatches = []
         for key in sorted(set(baseline).intersection(definitions)):
             for file_name, entry in definitions[key]:
+                if entry.get("translatable", "true").lower() == "false":
+                    continue
                 if entry.tag == "plurals":
                     expected_signatures = plural_item_signatures(baseline[key])
                     actual_signatures = plural_item_signatures(entry)
@@ -185,6 +190,9 @@ def main():
             "xml_files": len(locale_xml),
             "missing_baseline_ids": len(missing),
             "missing_ids": [f"{kind}/{name}" for kind, name in missing],
+            "intentional_non_translatable_overrides": [
+                f"{kind}/{name}" for kind, name in intentional_opt_outs
+            ],
             "missing_baseline_files": missing_files,
             "duplicate_ids": sum(1 for item in all_duplicate_ids
                                  if item["locale"] == locale_dir.name),
@@ -197,6 +205,9 @@ def main():
         "locale_count": len(locale_dirs),
         "baseline_translatable_ids": len(baseline),
         "missing_baseline_ids_total": total_missing,
+        "intentional_non_translatable_overrides_total": sum(
+            len(item["intentional_non_translatable_overrides"]) for item in locale_summaries
+        ),
         "missing_baseline_files_total": total_missing_files,
         "duplicate_ids_total": len(all_duplicate_ids),
         "unescaped_apostrophes_total": len(all_bad_apostrophes),
@@ -213,6 +224,7 @@ def main():
     print(
         f"Locale resource audit: {len(locale_dirs)} locales; "
         f"{len(baseline)} baseline IDs; {total_missing} missing IDs; "
+        f"{report['intentional_non_translatable_overrides_total']} intentional translatable=false overrides; "
         f"{total_missing_files} missing baseline files; "
         f"{len(all_duplicate_ids)} duplicates; "
         f"{len(all_bad_apostrophes)} unescaped apostrophes; "
