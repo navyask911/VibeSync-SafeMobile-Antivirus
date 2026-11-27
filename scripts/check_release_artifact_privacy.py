@@ -127,8 +127,23 @@ def check_permissions(apk):
         fail(apk.name + " must reference dataExtractionRules.")
     if "com.google.android.play.billingclient.version" not in manifest.stdout or "9.1.0" not in manifest.stdout:
         fail(apk.name + " must contain the supported Play Billing 9.1.0 manifest metadata.")
-    if "com.google.android.gms.ads.APPLICATION_ID" not in manifest.stdout or "ca-app-pub-4783826505860771~8485727119" not in manifest.stdout:
-        fail(apk.name + " must contain the configured AdMob application ID.")
+    if "com.google.android.gms.ads.APPLICATION_ID" not in manifest.stdout:
+        fail(apk.name + " must declare the AdMob APPLICATION_ID metadata.")
+
+    # The manifest now references @string/admob_app_id. aapt's xmltree dump
+    # therefore reports a compiled resource reference rather than embedding
+    # the literal App ID in AndroidManifest.xml. Verify the packaged resource
+    # table as well as the manifest metadata instead of searching the manifest
+    # dump for the raw string.
+    resources = subprocess.run([aapt, "dump", "resources", str(apk)], text=True,
+                               stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
+    if resources.returncode:
+        fail("aapt could not inspect resources in " + apk.name + ": " + resources.stderr.strip())
+    if (
+        "string/admob_app_id" not in resources.stdout
+        or "ca-app-pub-4783826505860771~3262295335" not in resources.stdout
+    ):
+        fail(apk.name + " must package string/admob_app_id with the approved AdMob App ID.")
     if "com.google.android.gms.permission.AD_ID" not in result.stdout:
         fail(apk.name + " must declare the Advertising ID permission for its disclosed Free-tier ad SDK.")
     if "android.permission.MANAGE_EXTERNAL_STORAGE" in result.stdout or "android.permission.READ_EXTERNAL_STORAGE" in result.stdout:
