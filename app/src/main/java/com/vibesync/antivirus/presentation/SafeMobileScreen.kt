@@ -845,8 +845,8 @@ import kotlinx.coroutines.launch
         isDark = appTheme != com.vibesync.antivirus.ui.theme.AppTheme.LIGHT,
         onSelect = { navigateToDestination(it) }
        )
-      if (adMobState.adsReady && !adMobState.isPro) AdMobBanner(adMobManager)
       }
+      if (adMobState.adsReady && !adMobState.isPro) AdMobBanner(adMobManager)
      }
     },
     snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
