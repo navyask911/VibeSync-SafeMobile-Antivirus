@@ -11,10 +11,5 @@
   <string name="battery_review_body">El ahorro de batería o la optimización de aplicaciones están activados. Algunos dispositivos Oppo/ColorOS restringen los análisis en segundo plano y las alertas de instalación. Revisa los ajustes de batería de SafeMobile; esto no garantiza una supervisión continua.</string>
   <string name="battery_review_action">Revisar ajustes de batería</string>
   <string name="battery_review_unavailable">No se pudieron abrir los ajustes de batería de Android.</string>
-  <string name="full_screen_dashboard_warning">Alertas críticas desactivadas: toca para permitir avisos de programas maliciosos a pantalla completa.</string>
-  <string name="full_screen_dashboard_fallback">El acceso a pantalla completa es opcional. Con las alertas de seguridad activadas, la sirena de cinco segundos y la notificación prioritaria siguen funcionando sin este acceso, según los ajustes de notificaciones y sonido de Android.</string>
-  <string name="full_screen_settings_unavailable">No se pudieron abrir los ajustes de alertas a pantalla completa. Puedes seguir usando SafeMobile.</string>
-  <string name="system_app_protection_badge">Aplicaciones del sistema protegidas frente a revisión y desinstalación</string>
-  <string name="system_app_scan_complete">Análisis completado. No se encontraron amenazas en los elementos comprobados. Las aplicaciones del sistema se excluyen de la revisión y la desinstalación; este análisis no ha verificado su integridad.</string>
-  <string name="ui_folder_access_not_granted">No se concedió acceso a la carpeta. Puedes continuar con protección limitada.</string>
+<string name="ui_folder_access_not_granted">No se concedió acceso a la carpeta. Puedes continuar con protección limitada.</string>
 </resources>

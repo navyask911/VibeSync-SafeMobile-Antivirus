@@ -189,7 +189,7 @@
 <string name="analytics_last_scan">Son tamamlanan tarama</string>
 <string name="analytics_storage">Paylaşılan depolama erişimi</string>
 <string name="analytics_notifications">Bildirimler</string>
-<string name="analytics_sentinel">İndirme Sentinel'i</string>
+<string name="analytics_sentinel">İndirme Sentinel\'i</string>
 <string name="analytics_sentinel_running">Ön plan hizmeti çalışıyor</string>
 <string name="analytics_sentinel_stopped">Hizmet çalışmıyor</string>
 <string name="analytics_current_results">Mevcut tarama sonuçları</string>
@@ -692,14 +692,14 @@
     <string name="scan_detected_by_confidence">Algılayan: %1$s (%2$d%%)</string>
     <string name="security_score_100_voice" formatted="false">Güvenlik yapılandırmanız tamamen iyileştirildi. Cihazınızı güvende tutmak için izlemeye devam edeceğiz. SafeMobile Antivirus kullandığınız için teşekkür ederiz.</string>
     <string name="self_update_title">Güncellemeleri denetle (Kendi kendine güncelleme)</string>
-    <string name="self_update_description">Device Administrator modu normalde Google Play güncellemelerini engellemez. Bu düğme Play uygulama içi güncellemesini denetler ve Android'den yüklemesini ister.</string>
+    <string name="self_update_description">Device Administrator modu normalde Google Play güncellemelerini engellemez. Bu düğme Play uygulama içi güncellemesini denetler ve Android\'den yüklemesini ister.</string>
     <string name="self_update_started">Güncelleme akışı açıldı. Güncellemeyi tamamlamak için sistem istemlerini izleyin.</string>
     <string name="self_update_cancelled">Güncelleme iptal edildi.</string>
     <string name="self_update_check_failed">Güncelleme başlatılamadı. Google Play bağlantınızı kontrol edip yeniden deneyin.</string>
-    <string name="self_update_unavailable">Bu yükleme için Play uygulama içi güncellemeleri kullanılamıyor. Elle denetlemek için Google Play'i açın.</string>
+    <string name="self_update_unavailable">Bu yükleme için Play uygulama içi güncellemeleri kullanılamıyor. Elle denetlemek için Google Play\'i açın.</string>
     <string name="self_update_no_update">Şu anda daha yeni bir Google Play güncellemesi yok.</string>
     <string name="self_update_not_allowed">Bir güncelleme var ancak Google Play bu yükleme için anında güncelleme akışına izin vermiyor.</string>
-    <string name="self_update_open_play_store">Google Play'i aç</string>
+    <string name="self_update_open_play_store">Google Play\'i aç</string>
     <string name="scan_sessions_in_progress">Devam eden tarama oturumları: %1$d</string>
     <string name="scan_sessions_completed">Tamamlanan tarama oturumları: %1$d</string>
     <string name="ui_sentinel_telegram_folder">Telegram Belgeleri klasörü</string>
