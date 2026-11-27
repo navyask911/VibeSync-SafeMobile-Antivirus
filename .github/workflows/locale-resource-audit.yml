@@ -6,6 +6,8 @@ on:
     branches: ["release/v1.10.9-scan-results"]
     paths:
       - "app/src/main/res/values*/**.xml"
+      - "app/src/main/java/com/vibesync/antivirus/core/billing/**"
+      - "app/src/main/java/com/vibesync/antivirus/presentation/**"
       - "scripts/audit_locale_resources.py"
       - ".github/workflows/locale-resource-audit.yml"
       - ".github/workflows/android-ci.yml"
