@@ -22,6 +22,8 @@ app = read("app/src/main/java/com/vibesync/antivirus/SafeMobileApp.kt")
 manager = read("app/src/main/java/com/vibesync/antivirus/core/ads/AdMobManager.kt")
 banner = read("app/src/main/java/com/vibesync/antivirus/presentation/AdMobBanner.kt")
 screen = read("app/src/main/java/com/vibesync/antivirus/presentation/SafeMobileScreen.kt")
+billing = read("app/src/main/java/com/vibesync/antivirus/core/billing/SafeMobileBillingManager.kt")
+billing_test = read("app/src/test/java/com/vibesync/antivirus/core/billing/SafeMobileBillingConfigurationTest.kt")
 viewmodel = read("app/src/main/java/com/vibesync/antivirus/presentation/SafeMobileViewModel.kt")
 privacy = read("docs/PRIVACY_POLICY.md")
 asset_privacy = read("app/src/main/assets/privacy-policy.md")
@@ -108,16 +110,55 @@ if "hasConfirmedThreats" not in manager or "state.threatCount > 0" not in screen
     errors.append("Interstitial must be suppressed when confirmed threats are found.")
 if "scanFull(manualScan = false)" not in screen:
     errors.append("Automatic first-run scans must not be treated as manual ad-trigger scans.")
-bottom_bar = screen.split("bottomBar = {", 1)[1].split("snackbarHost", 1)[0] if "bottomBar = {" in screen else ""
+# The banner is intentionally a Scaffold bottomBar child, not content above the
+# weighted screen body. Scaffold applies safeDrawing insets to the entire chrome;
+# scaffoldPadding is consumed by the content Column so the banner/navigation bar
+# and scrollable body do not overlap system bars or each other.
+scaffold_start = screen.find("Scaffold(")
+scaffold_end = screen.find("snackbarHost =", scaffold_start) if scaffold_start >= 0 else -1
+scaffold = screen[scaffold_start:scaffold_end] if scaffold_start >= 0 and scaffold_end > scaffold_start else ""
+bottom_bar_start = scaffold.find("bottomBar = {")
+bottom_bar = scaffold[bottom_bar_start:] if bottom_bar_start >= 0 else ""
+banner_call = "AdMobBanner(adMobManager)"
 if (
-    "AdMobBanner(adMobManager)" not in screen
-    or "AdMobBanner(adMobManager)" in bottom_bar
+    not scaffold
+    or bottom_bar_start < 0
+    or banner_call not in bottom_bar
+    or screen.count(banner_call) != 1
+    or "if (adMobState.adsReady && !adMobState.isPro) AdMobBanner(adMobManager)" not in bottom_bar
+    or "Column(Modifier.fillMaxWidth())" not in bottom_bar
+    or "windowInsetsPadding(WindowInsets.safeDrawing)" not in scaffold
+    or ") { scaffoldPadding ->" not in screen
+    or "Column(Modifier.fillMaxSize().padding(scaffoldPadding))" not in screen
     or "AdSize.LEADERBOARD" not in banner
     or "adWidthDp >= 970" not in banner
     or "getCurrentOrientationAnchoredAdaptiveBannerAdSize(context" not in banner
-    or "modifier = Modifier.weight(1f).fillMaxWidth()" not in screen
 ):
-    errors.append("AdMob banner must sit above the weighted content, use the 970 dp leaderboard threshold, and remain excluded for Pro.")
+    errors.append("AdMob banner must be the single adsReady/non-Pro child in the inset-aware Scaffold bottomBar, with 970 dp leaderboard/adaptive sizing and scaffold content padding.")
+
+# Pin the published Play prepaid subscription configuration independently of
+# the banner-placement rule. The existing Kotlin unit test also locks these IDs.
+for expected in (
+    'const val PRODUCT_ID = "safemobile-pro-1y-subs"',
+    'const val PREPAID_BASE_PLAN_ID = "prepaid-1-year"',
+    'const val PREPAID_BILLING_PERIOD = "P1Y"',
+):
+    if expected not in billing:
+        errors.append(f"SafeMobile Pro billing configuration is missing: {expected}.")
+for expected in (
+    'assertEquals("safemobile-pro-1y-subs", SafeMobileBillingManager.PRODUCT_ID)',
+    'assertEquals("prepaid-1-year", SafeMobileBillingManager.PREPAID_BASE_PLAN_ID)',
+    'assertEquals("P1Y", SafeMobileBillingManager.PREPAID_BILLING_PERIOD)',
+):
+    if expected not in billing_test:
+        errors.append(f"SafeMobile Pro billing configuration test is missing: {expected}.")
+if (
+    ".setProductId(PRODUCT_ID)" not in billing
+    or "it.basePlanId == PREPAID_BASE_PLAN_ID && it.offerId == null" not in billing
+    or "phase.billingPeriod == PREPAID_BILLING_PERIOD" not in billing
+    or "phase.recurrenceMode == ProductDetails.RecurrenceMode.NON_RECURRING" not in billing
+):
+    errors.append("Play billing must continue to query only the configured non-recurring prepaid one-year plan.")
 
 for path, text in (
     ("docs/PRIVACY_POLICY.md", privacy),
