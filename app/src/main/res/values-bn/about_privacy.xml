@@ -50,7 +50,7 @@
     <string name="notification_details_delete_confirm_body">এতে Android-কে এই বিজ্ঞপ্তিতে চিহ্নিত নির্দিষ্ট ফাইলটি মুছতে বলা হবে। কিছু স্টোরেজ প্রদানকারী অতিরিক্ত নিশ্চিতকরণ চাইতে পারে।</string>
     <string name="notification_details_deleted">ফাইল মুছে ফেলা হয়েছে।</string>
     <string name="notification_details_delete_failed">Android এই ফাইলটি মুছতে পারেনি। এর স্টোরেজ অনুমতি পরীক্ষা করে আবার চেষ্টা করুন।</string>
-    <string name="notification_details_scan_unavailable">এই বিজ্ঞপ্তিতে পড়ার যোগ্য ফাইল URI নেই। ফাইল বেছে নিতে Scan &amp;amp; Lab খুলুন।</string>
+    <string name="notification_details_scan_unavailable">এই বিজ্ঞপ্তিতে পড়ার যোগ্য ফাইল URI নেই। ফাইল বেছে নিতে Scan &amp; Lab খুলুন।</string>
     <string name="notification_details_whitelist_scan_first">প্রথমে এই আইটেমটি স্ক্যান করুন। এরপর প্রাপ্ত অ্যাপ বা ফাইলের হ্যাশ আপনার স্থানীয় বিশ্বস্ত তালিকায় যোগ করতে পারবেন।</string>
     <string name="notification_details_package_action">প্যাকেজ</string>
     <string name="device_admin_activation_failed">Android Device Administrator সক্রিয়করণ পৃষ্ঠা খুলতে পারেনি। SafeMobile admin receiver ইনস্টল করা আছে কি না পরীক্ষা করে আবার চেষ্টা করুন।</string>

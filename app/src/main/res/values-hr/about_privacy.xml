@@ -50,7 +50,7 @@
     <string name="notification_details_delete_confirm_body">Time se od Androida traži brisanje točno one datoteke koju je identificirala ova obavijest. Neki pružatelji pohrane mogu zahtijevati dodatnu potvrdu.</string>
     <string name="notification_details_deleted">Datoteka je izbrisana.</string>
     <string name="notification_details_delete_failed">Android nije mogao izbrisati ovu datoteku. Provjerite dopuštenja za pohranu i pokušajte ponovno.</string>
-    <string name="notification_details_scan_unavailable">Ova obavijest ne sadrži čitljiv URI datoteke. Otvorite Scan &amp;amp; Lab i odaberite datoteku.</string>
+    <string name="notification_details_scan_unavailable">Ova obavijest ne sadrži čitljiv URI datoteke. Otvorite Scan &amp; Lab i odaberite datoteku.</string>
     <string name="notification_details_whitelist_scan_first">Najprije skenirajte ovu stavku. Zatim možete dodati dobiveni sažetak aplikacije ili datoteke na lokalni popis pouzdanih.</string>
     <string name="notification_details_package_action">Paket</string>
     <string name="device_admin_activation_failed">Android nije mogao otvoriti stranicu za aktivaciju Device Administratora. Provjerite je li instaliran SafeMobile admin receiver i pokušajte ponovno.</string>

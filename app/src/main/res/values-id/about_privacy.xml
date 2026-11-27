@@ -50,7 +50,7 @@
     <string name="notification_details_delete_confirm_body">Tindakan ini meminta Android menghapus file persis seperti yang diidentifikasi oleh notifikasi ini. Beberapa penyedia penyimpanan mungkin meminta konfirmasi tambahan.</string>
     <string name="notification_details_deleted">File dihapus.</string>
     <string name="notification_details_delete_failed">Android tidak dapat menghapus file ini. Periksa izin penyimpanannya lalu coba lagi.</string>
-    <string name="notification_details_scan_unavailable">Notifikasi ini tidak menyertakan URI file yang dapat dibaca. Buka Scan &amp;amp; Lab untuk memilih file.</string>
+    <string name="notification_details_scan_unavailable">Notifikasi ini tidak menyertakan URI file yang dapat dibaca. Buka Scan &amp; Lab untuk memilih file.</string>
     <string name="notification_details_whitelist_scan_first">Pindai item ini terlebih dahulu. Setelah itu, Anda dapat menambahkan hash aplikasi atau file yang dihasilkan ke daftar tepercaya lokal.</string>
     <string name="notification_details_package_action">Paket</string>
     <string name="device_admin_activation_failed">Android tidak dapat membuka halaman aktivasi Device Administrator. Pastikan SafeMobile admin receiver telah terpasang lalu coba lagi.</string>

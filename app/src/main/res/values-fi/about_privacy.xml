@@ -50,7 +50,7 @@
     <string name="notification_details_delete_confirm_body">Tämä pyytää Androidia poistamaan täsmälleen tämän ilmoituksen tunnistaman tiedoston. Jotkin tallennustilan tarjoajat voivat vaatia lisävahvistuksen.</string>
     <string name="notification_details_deleted">Tiedosto poistettu.</string>
     <string name="notification_details_delete_failed">Android ei voinut poistaa tätä tiedostoa. Tarkista sen tallennustilan käyttöoikeudet ja yritä uudelleen.</string>
-    <string name="notification_details_scan_unavailable">Tämä ilmoitus ei sisällä luettavaa tiedoston URI-osoitetta. Avaa Scan &amp;amp; Lab ja valitse tiedosto.</string>
+    <string name="notification_details_scan_unavailable">Tämä ilmoitus ei sisällä luettavaa tiedoston URI-osoitetta. Avaa Scan &amp; Lab ja valitse tiedosto.</string>
     <string name="notification_details_whitelist_scan_first">Skannaa tämä kohde ensin. Sen jälkeen voit lisätä tuloksena saadun sovelluksen tai tiedoston tiivisteen paikalliseen luotettujen luetteloon.</string>
     <string name="notification_details_package_action">Paketti</string>
     <string name="device_admin_activation_failed">Android ei voinut avata Device Administrator -aktivointisivua. Tarkista, että SafeMobilen järjestelmänvalvojan vastaanotin on asennettu, ja yritä uudelleen.</string>

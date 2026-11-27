@@ -50,7 +50,7 @@
     <string name="notification_details_delete_confirm_body">Ez arra kéri az Androidot, hogy törölje a pontosan az értesítés által azonosított fájlt. Egyes tárhelyszolgáltatók további megerősítést kérhetnek.</string>
     <string name="notification_details_deleted">Fájl törölve.</string>
     <string name="notification_details_delete_failed">Az Android nem tudta törölni ezt a fájlt. Ellenőrizze a tárhelyengedélyeket, majd próbálja újra.</string>
-    <string name="notification_details_scan_unavailable">Ez az értesítés nem tartalmaz olvasható fájl-URI-t. Nyissa meg a Scan &amp;amp; Lab részt, és válassza ki a fájlt.</string>
+    <string name="notification_details_scan_unavailable">Ez az értesítés nem tartalmaz olvasható fájl-URI-t. Nyissa meg a Scan &amp; Lab részt, és válassza ki a fájlt.</string>
     <string name="notification_details_whitelist_scan_first">Először vizsgálja meg ezt az elemet. Ezután hozzáadhatja az alkalmazás vagy fájl kapott hash-értékét a helyi megbízható listához.</string>
     <string name="notification_details_package_action">Csomag</string>
     <string name="device_admin_activation_failed">Az Android nem tudta megnyitni a Device Administrator aktiválási oldalát. Ellenőrizze, hogy a SafeMobile admin receiver telepítve van-e, majd próbálja újra.</string>

@@ -50,7 +50,7 @@
     <string name="notification_details_delete_confirm_body">આ ક્રિયા Android ને આ સૂચનામાં ઓળખાયેલી ચોક્કસ ફાઇલ કાઢી નાખવા કહે છે. કેટલાક સ્ટોરેજ પ્રદાતાઓ વધારાની પુષ્ટિ માંગી શકે છે.</string>
     <string name="notification_details_deleted">ફાઇલ કાઢી નાખવામાં આવી.</string>
     <string name="notification_details_delete_failed">Android આ ફાઇલ કાઢી શક્યું નથી. તેની સ્ટોરેજ પરવાનગીઓ તપાસો અને ફરી પ્રયાસ કરો.</string>
-    <string name="notification_details_scan_unavailable">આ સૂચનામાં વાંચી શકાય તેવું ફાઇલ URI નથી. ફાઇલ પસંદ કરવા Scan &amp;amp; Lab ખોલો.</string>
+    <string name="notification_details_scan_unavailable">આ સૂચનામાં વાંચી શકાય તેવું ફાઇલ URI નથી. ફાઇલ પસંદ કરવા Scan &amp; Lab ખોલો.</string>
     <string name="notification_details_whitelist_scan_first">પહેલાં આ આઇટમ સ્કેન કરો. પછી મળેલ એપ અથવા ફાઇલનો હૅશ તમારી સ્થાનિક વિશ્વસનીય યાદીમાં ઉમેરી શકો છો.</string>
     <string name="notification_details_package_action">પેકેજ</string>
     <string name="device_admin_activation_failed">Android Device Administrator સક્રિયકરણ પૃષ્ઠ ખોલી શક્યું નથી. SafeMobile admin receiver ઇન્સ્ટોલ છે કે નહીં તે તપાસો અને ફરી પ્રયાસ કરો.</string>
