@@ -63,32 +63,32 @@ jobs:
       - name: Wait for same-commit Android CI, locale audit and Paparazzi gates
         if: github.ref_type == 'branch' && (github.ref_name == 'release/v1.10.8-final' || (github.ref_name == 'main' && contains(github.event.head_commit.message, '[release-v1.10.9]')))
         env:
-          GH_TOKEN: \${{ github.token }}
+          GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -euo pipefail
           # For v1.10.9 on main, wait for all three required workflows on this exact SHA.
           # The legacy v1.10.8 branch retains its Android CI matrix gate.
-          if [[ "\${GITHUB_REF_NAME:-}" == "main" ]]; then
+          if [[ "${GITHUB_REF_NAME:-}" == "main" ]]; then
             workflows=("Android CI" "Locale Resource Audit" "Record Paparazzi UI goldens")
           else
             workflows=("Android CI")
           fi
           for attempt in $(seq 1 680); do
             all_passed=true
-            for workflow_name in "\${workflows[@]}"; do
+            for workflow_name in "${workflows[@]}"; do
               runs="$(gh run list --repo "$GITHUB_REPOSITORY" --workflow "$workflow_name" --commit "$GITHUB_SHA" --json databaseId,status,conclusion,headSha --limit 20)"
               latest="$(jq -c --arg sha "$GITHUB_SHA" '[.[] | select(.headSha == $sha)] | sort_by(.databaseId) | last // {}' <<< "$runs")"
               status="$(jq -r '.status // empty' <<< "$latest")"
               conclusion="$(jq -r '.conclusion // empty' <<< "$latest")"
               if [[ "$status" == "completed" ]]; then
                 if [[ "$conclusion" != "success" ]]; then
-                  echo "SAFE STOP: $workflow_name ended with conclusion '\${conclusion:-unknown}' for $GITHUB_SHA." >&2
+                  echo "SAFE STOP: $workflow_name ended with conclusion '${conclusion:-unknown}' for $GITHUB_SHA." >&2
                   exit 1
                 fi
                 echo "$workflow_name passed for $GITHUB_SHA."
               else
-                echo "$workflow_name for $GITHUB_SHA is '\${status:-not yet listed}'; waiting (attempt $attempt/680; 340-minute gate)."
+                echo "$workflow_name for $GITHUB_SHA is '${status:-not yet listed}'; waiting (attempt $attempt/680; 340-minute gate)."
                 all_passed=false
               fi
             done
