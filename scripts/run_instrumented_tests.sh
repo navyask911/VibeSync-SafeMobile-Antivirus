@@ -160,7 +160,7 @@ if ! wait_for_runtime 180 "initial emulator startup"; then
   fi
 fi
 
-# APKs are prebuilt by CI before emulator startup, so Gradle only needs to install and run them.
+# These APKs were built once in the shared build job; this script only installs and runs them.
 # The 200-real-APK benchmark uses a separately staged batch.json and runs
 # IndustryBenchmarkInstrumentedTest explicitly in industry-benchmark.yml.
 # Normal emulator CI excludes only that corpus-dependent test; remaining tests
