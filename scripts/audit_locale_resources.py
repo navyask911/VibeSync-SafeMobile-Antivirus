@@ -114,7 +114,7 @@ def main():
             for entry in entries:
                 key = identity(entry)
                 definitions[key].append((path.name, entry))
-                if entry.tag == "string" and unescaped_apostrophe(entry):
+                if unescaped_apostrophe(entry):
                     all_bad_apostrophes.append({
                         "locale": locale_dir.name,
                         "file": path.name,
