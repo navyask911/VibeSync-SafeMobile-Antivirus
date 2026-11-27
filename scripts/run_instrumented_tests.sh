@@ -176,9 +176,6 @@ fi
 app_apk="app/build/outputs/apk/offline/debug/app-offline-debug.apk"
 test_apk="app/build/outputs/apk/androidTest/offline/debug/app-offline-debug-androidTest.apk"
 
-
-test_apk="app/build/outputs/apk/androidTest/offline/debug/app-offline-debug-androidTest.apk"
-
 run_prebuilt_instrumentation() {
   local api="$1"
   local instrument_status=0
