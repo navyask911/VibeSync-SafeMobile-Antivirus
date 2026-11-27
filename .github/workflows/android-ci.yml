@@ -78,6 +78,8 @@ jobs:
         run: ./gradlew --no-daemon :app:downloadMlAssets
       - name: Validate Kannada/French resource coverage and TTS locale strings
         run: python3 scripts/check_locale_completeness.py
+      - name: Audit all localized Android values resources and duplicate IDs
+        run: python3 scripts/audit_locale_resources.py
       - name: Check Kannada/Japanese translations and siren receiver safety
         run: python3 scripts/check_ja_kn_and_siren.py
       - name: Dataset acquisition tooling unit tests (offline fixtures only)
