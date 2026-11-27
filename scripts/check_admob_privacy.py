@@ -24,6 +24,7 @@ banner = read("app/src/main/java/com/vibesync/antivirus/presentation/AdMobBanner
 screen = read("app/src/main/java/com/vibesync/antivirus/presentation/SafeMobileScreen.kt")
 billing = read("app/src/main/java/com/vibesync/antivirus/core/billing/SafeMobileBillingManager.kt")
 billing_test = read("app/src/test/java/com/vibesync/antivirus/core/billing/SafeMobileBillingConfigurationTest.kt")
+release_workflow = read(".github/workflows/release-apk.yml")
 viewmodel = read("app/src/main/java/com/vibesync/antivirus/presentation/SafeMobileViewModel.kt")
 privacy = read("docs/PRIVACY_POLICY.md")
 asset_privacy = read("app/src/main/assets/privacy-policy.md")
@@ -81,6 +82,10 @@ if "com.google.android.gms.permission.AD_ID" not in manifest:
     errors.append("Manifest must declare AD_ID for the disclosed Free-tier ad integration.")
 if banner_id not in manager or interstitial_id not in manager:
     errors.append("Production banner/interstitial unit IDs must match the supplied AdMob IDs.")
+if app_id not in release_workflow or "ca-app-pub-4783826505860771~8485727119" in release_workflow:
+    errors.append("Release APK/AAB verifier must assert the approved AdMob App ID from values/ads.xml.")
+if 'if [[ "$version_name" != "1.10.9" || "$version_code" != "20261163" ]]; then' not in release_workflow:
+    errors.append("The main-branch release workflow must require candidate version 1.10.9 / versionCode 20261163.")
 if "/21775744923/example/adaptive-banner" not in manager or "/21775744923/example/interstitial" not in manager:
     errors.append("Debug builds must use Google's sample banner/interstitial ad units.")
 
