@@ -9,7 +9,7 @@ permissions:
   contents: read
 concurrency:
   group: safemobile-android-ci-${{ github.ref }}
-  # Keep an active serial emulator matrix alive when a newer branch commit is pushed.
+  # Keep active API/shard runs alive when a newer commit is pushed to this branch.
   cancel-in-progress: false
 jobs:
   test-lint-build:
