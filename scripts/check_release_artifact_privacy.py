@@ -135,7 +135,7 @@ def check_permissions(apk):
     # the literal App ID in AndroidManifest.xml. Verify the packaged resource
     # table as well as the manifest metadata instead of searching the manifest
     # dump for the raw string.
-    resources = subprocess.run([aapt, "dump", "resources", str(apk)], text=True,
+    resources = subprocess.run([aapt, "dump", "--values", "resources", str(apk)], text=True,
                                stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
     if resources.returncode:
         fail("aapt could not inspect resources in " + apk.name + ": " + resources.stderr.strip())
