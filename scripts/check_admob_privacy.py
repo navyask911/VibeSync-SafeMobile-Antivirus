@@ -86,6 +86,8 @@ if app_id not in release_workflow or "ca-app-pub-4783826505860771~8485727119" in
     errors.append("Release APK/AAB verifier must assert the approved AdMob App ID from values/ads.xml.")
 if 'if [[ "$version_name" != "1.10.9" || "$version_code" != "20261163" ]]; then' not in release_workflow:
     errors.append("The main-branch release workflow must require candidate version 1.10.9 / versionCode 20261163.")
+if "contains(github.event.head_commit.message, '[release-v1.10.9]')" not in release_workflow:
+    errors.append("The main-branch signed release build must require the explicit v1.10.9 merge marker.")
 if "/21775744923/example/adaptive-banner" not in manager or "/21775744923/example/interstitial" not in manager:
     errors.append("Debug builds must use Google's sample banner/interstitial ad units.")
 
