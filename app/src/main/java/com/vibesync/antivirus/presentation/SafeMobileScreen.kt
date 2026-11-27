@@ -838,12 +838,14 @@ import kotlinx.coroutines.launch
      )
     },
     bottomBar = {
-     if (selectedDestination in setOf("home", "scan", "tools", "settings")) {
-      V17BottomNavigationBar(
-       selectedTab = if (activeTopTab == "dashboard") "home" else activeTopTab,
-       isDark = appTheme != com.vibesync.antivirus.ui.theme.AppTheme.LIGHT,
-       onSelect = { navigateToDestination(it) }
-      )
+     Column(Modifier.fillMaxWidth()) {
+      if (selectedDestination in setOf("home", "scan", "tools", "settings")) {
+       V17BottomNavigationBar(
+        selectedTab = if (activeTopTab == "dashboard") "home" else activeTopTab,
+        isDark = appTheme != com.vibesync.antivirus.ui.theme.AppTheme.LIGHT,
+        onSelect = { navigateToDestination(it) }
+       )
+      }
      }
     },
     snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
