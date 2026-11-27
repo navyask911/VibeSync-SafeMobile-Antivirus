@@ -118,7 +118,7 @@ class YaraRuleManager(context: Context) {
         const val MAX_RULE_FILES = 128
         const val MAX_RULE_FILE_BYTES = 256 * 1024
         const val MAX_TOTAL_RULE_BYTES = 2 * 1024 * 1024
-        const val SCAN_TIMEOUT_SECONDS = 8
+        const val SCAN_TIMEOUT_SECONDS = 30
         const val MAX_MATCHES_PER_PATTERN = 32
     }
 }

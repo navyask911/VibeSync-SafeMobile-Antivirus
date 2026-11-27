@@ -28,4 +28,11 @@
     <string name="pro_fewer_years">کم سال</string>
     <string name="pro_more_years">مزید سال</string>
     <string name="pro_subscription_offer" formatted="false">SafeMobile Pro فعال کریں — ₹299 / سال (خودکار تجدید)۔ Google Play میں کسی بھی وقت منسوخ کریں۔</string>
+    <string name="pro_one_year_price">ایک سال کی پیشگی ادائیگی: %1$s</string>
+    <string name="pro_prepaid_offer">SafeMobile Pro تک ایک سال کی پیشگی ادائیگی والی رسائی۔ خودکار تجدید نہیں ہوگی۔</string>
+    <string name="pro_prepaid_duration_limit">Google Play کے پیشگی ادائیگی والے منصوبے فی خریداری ایک سال تک محدود ہیں۔ ایک اور سال شامل کرنے کے لیے اسی منصوبے کو دوبارہ خریدیں یا اس کی مدت بڑھائیں؛ حتمی قیمت Google Play میں تصدیق ہوگی۔</string>
+    <string name="pro_device_binding_explanation">یہ خریداری ہیش شدہ ڈیوائس شناخت کنندہ کے ذریعے اس Android ڈیوائس سے منسلک ہے۔ اسی ڈیوائس پر دوبارہ انسٹال کرنے سے فعال Play خریداری بحال ہو سکتی ہے؛ دوسری ڈیوائس مسدود ہوگی۔</string>
+    <string name="pro_buy_or_extend_one_year">ایک سال خریدیں / بڑھائیں</string>
+    <string name="pro_device_mismatch">سبسکرپشن دوسری ڈیوائس پر فعال ہے۔ اس ڈیوائس پر SafeMobile Pro تک رسائی مسدود ہے۔</string>
+    <string name="pro_device_binding_unavailable">اس خریداری کی ڈیوائس سے قابلِ تصدیق وابستگی موجود نہیں۔ جب تک Google Play ڈیوائس سے منسلک خریداری واپس نہیں کرتا، Pro تک رسائی مسدود رہے گی۔</string>
 </resources>

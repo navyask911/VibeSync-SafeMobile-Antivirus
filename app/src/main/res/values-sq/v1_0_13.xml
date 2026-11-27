@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="trusted_app_options">Opsionet</string>
+    <string name="trusted_app_remove">Hiq besimin</string>
+    <string name="trusted_app_removed">Besimi u hoq. Skanimet dhe sinjalizimet e ardhshme për këtë paketë janë aktive.</string>
+    <string name="trusted_app_remove_failed">Nuk mund të hiqej besimi. Provoni përsëri.</string>
+    <string name="install_sentinel_title">Mbikëqyrja e instalimit</string>
+    <string name="install_sentinel_active">SafeMobile Sentinel: Aktiv dhe në mbikëqyrje</string>
+    <string name="install_sentinel_description">Kontrolle lokale pas instalimit me njoftim të vazhdueshëm. Pa kontroll periodik ose bllokim zgjimi. Android mund ta ndalojë shërbimin.</string>
+    <string name="install_sentinel_stop">Ndalo mbikëqyrjen e instalimit</string>
+    <string name="install_scan_progress">Po analizohet aplikacioni i sapoinstaluar: %1$s</string>
+    <string name="analytics_chart_title">Rezultatet e skanimit</string>
+    <string name="analytics_other">Rezultate të tjera</string>
+    <string name="analytics_total">Rezultatet</string>
+    <string name="analytics_weekly_scans">Skanimet javore</string>
+    <string name="analytics_week_note">Sesionet e regjistruara, nga e hëna deri të dielën. Mund të përfshihen edhe ekzekutime të pjesshme.</string>
+    <string name="install_scan_received">U mor ngjarja e instalimit. Hapni SafeMobile për shqyrtim.</string>
+    <string name="posture_overlay_select_app">Në Android 11+, zgjidhni %1$s në listën e cilësimeve të mbivendosjes.</string>
+</resources>

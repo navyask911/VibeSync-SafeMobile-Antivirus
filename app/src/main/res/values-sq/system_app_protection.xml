@@ -1,0 +1,8 @@
+<resources>
+    <string name="full_screen_dashboard_warning">Sinjalizimet kritike janë çaktivizuar. Prek për të dhënë leje për sinjalizime të malware në ekran të plotë.</string>
+    <string name="full_screen_dashboard_fallback">Qasja në ekran të plotë është opsionale. Kur sinjalizimet e sigurisë janë aktive, sirena pesësekondëshe dhe njoftimi me përparësi të lartë funksionojnë edhe pa këtë qasje, në varësi të cilësimeve të njoftimeve dhe tingullit të Android.</string>
+    <string name="full_screen_settings_unavailable">Cilësimet e sinjalizimeve në ekran të plotë nuk mund të hapeshin. Mund të vazhdosh të përdorësh SafeMobile.</string>
+    <string name="system_app_protection_badge">Aplikacionet e sistemit mbrohen nga shqyrtimi dhe çinstalimi</string>
+    <string name="system_app_scan_complete">Skanimi përfundoi. Nuk u gjetën kërcënime në elementet e kontrolluara. Aplikacionet e sistemit përjashtohen nga shqyrtimi dhe çinstalimi; integriteti i tyre nuk u verifikua nga ky skanim.</string>
+    <string name="pro_navigation_unavailable">Ekrani SafeMobile Pro është përkohësisht i padisponueshëm.</string>
+</resources>

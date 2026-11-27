@@ -22,6 +22,9 @@ app = read("app/src/main/java/com/vibesync/antivirus/SafeMobileApp.kt")
 manager = read("app/src/main/java/com/vibesync/antivirus/core/ads/AdMobManager.kt")
 banner = read("app/src/main/java/com/vibesync/antivirus/presentation/AdMobBanner.kt")
 screen = read("app/src/main/java/com/vibesync/antivirus/presentation/SafeMobileScreen.kt")
+billing = read("app/src/main/java/com/vibesync/antivirus/core/billing/SafeMobileBillingManager.kt")
+billing_test = read("app/src/test/java/com/vibesync/antivirus/core/billing/SafeMobileBillingConfigurationTest.kt")
+release_workflow = read(".github/workflows/release-apk.yml")
 viewmodel = read("app/src/main/java/com/vibesync/antivirus/presentation/SafeMobileViewModel.kt")
 privacy = read("docs/PRIVACY_POLICY.md")
 asset_privacy = read("app/src/main/assets/privacy-policy.md")
@@ -36,11 +39,41 @@ for coordinate in (
     if coordinate not in gradle:
         errors.append(f"Missing required AdMob/UMP dependency: {coordinate}.")
 
-app_id = "ca-app-pub-4783826505860771~8485727119"
+app_id = "ca-app-pub-4783826505860771~3262295335"
 banner_id = "ca-app-pub-4783826505860771/4710308648"
 interstitial_id = "ca-app-pub-4783826505860771/9523651625"
-if app_id not in manifest or app_id not in app:
-    errors.append("AdMob App ID must be in the manifest metadata and Application initialization config.")
+ads_resources = read("app/src/main/res/values/ads.xml")
+debug_manifest = read("app/src/debug/AndroidManifest.xml")
+feed_manifest = read("app/src/feed/AndroidManifest.xml")
+try:
+    ads_root = ET.fromstring(ads_resources)
+except ET.ParseError as error:
+    errors.append(f"app/src/main/res/values/ads.xml is invalid XML: {error}.")
+    ads_root = None
+app_id_entries = [] if ads_root is None else [
+    item for item in ads_root.findall("string")
+    if item.get("name") == "admob_app_id"
+]
+if len(app_id_entries) != 1:
+    errors.append("Define exactly one default admob_app_id string resource.")
+else:
+    app_id_entry = app_id_entries[0]
+    if (app_id_entry.text or "").strip() != app_id:
+        errors.append("The default admob_app_id resource must match the approved AdMob App ID.")
+    if app_id_entry.get("translatable", "true").lower() != "false":
+        errors.append("The AdMob App ID resource must remain translatable=\"false\".")
+if 'android:value="@string/admob_app_id"' not in manifest:
+    errors.append("Manifest APPLICATION_ID metadata must reference @string/admob_app_id.")
+if "InitializationConfig.Builder(getString(R.string.admob_app_id)).build()" not in app:
+    errors.append("Application Mobile Ads initialization must read the shared admob_app_id resource.")
+if app_id in manifest or app_id in app or app_id in gradle:
+    errors.append("The AdMob App ID must be defined once in resources, not duplicated in app code or Gradle.")
+if "ADMOB_APP_ID" in app:
+    errors.append("Remove the duplicate hard-coded ADMOB_APP_ID constant; use the shared resource.")
+if "ca-app-pub-" in debug_manifest or "com.google.android.gms.ads.APPLICATION_ID" in debug_manifest:
+    errors.append("Debug manifest must not override the shared AdMob App ID.")
+if "ca-app-pub-" in feed_manifest or "com.google.android.gms.ads.APPLICATION_ID" in feed_manifest:
+    errors.append("Feed manifest must not override the shared AdMob App ID.")
 if "com.google.android.gms:play-services-ads" in gradle:
     errors.append("Use the configured GMA Next-Gen SDK; do not add the legacy play-services-ads artifact.")
 if "com.google.android.gms.ads.APPLICATION_ID" not in manifest:
@@ -49,6 +82,12 @@ if "com.google.android.gms.permission.AD_ID" not in manifest:
     errors.append("Manifest must declare AD_ID for the disclosed Free-tier ad integration.")
 if banner_id not in manager or interstitial_id not in manager:
     errors.append("Production banner/interstitial unit IDs must match the supplied AdMob IDs.")
+if app_id not in release_workflow or "ca-app-pub-4783826505860771~8485727119" in release_workflow:
+    errors.append("Release APK/AAB verifier must assert the approved AdMob App ID from values/ads.xml.")
+if 'if [[ "$version_name" != "1.10.9" || "$version_code" != "20261163" ]]; then' not in release_workflow:
+    errors.append("The main-branch release workflow must require candidate version 1.10.9 / versionCode 20261163.")
+if "contains(github.event.head_commit.message, '[release-v1.10.9]')" not in release_workflow:
+    errors.append("The main-branch signed release build must require the explicit v1.10.9 merge marker.")
 if "/21775744923/example/adaptive-banner" not in manager or "/21775744923/example/interstitial" not in manager:
     errors.append("Debug builds must use Google's sample banner/interstitial ad units.")
 
@@ -78,16 +117,55 @@ if "hasConfirmedThreats" not in manager or "state.threatCount > 0" not in screen
     errors.append("Interstitial must be suppressed when confirmed threats are found.")
 if "scanFull(manualScan = false)" not in screen:
     errors.append("Automatic first-run scans must not be treated as manual ad-trigger scans.")
-bottom_bar = screen.split("bottomBar = {", 1)[1].split("snackbarHost", 1)[0] if "bottomBar = {" in screen else ""
+# The banner is intentionally a Scaffold bottomBar child, not content above the
+# weighted screen body. Scaffold applies safeDrawing insets to the entire chrome;
+# scaffoldPadding is consumed by the content Column so the banner/navigation bar
+# and scrollable body do not overlap system bars or each other.
+scaffold_start = screen.find("Scaffold(")
+scaffold_end = screen.find("snackbarHost =", scaffold_start) if scaffold_start >= 0 else -1
+scaffold = screen[scaffold_start:scaffold_end] if scaffold_start >= 0 and scaffold_end > scaffold_start else ""
+bottom_bar_start = scaffold.find("bottomBar = {")
+bottom_bar = scaffold[bottom_bar_start:] if bottom_bar_start >= 0 else ""
+banner_call = "AdMobBanner(adMobManager)"
 if (
-    "AdMobBanner(adMobManager)" not in screen
-    or "AdMobBanner(adMobManager)" in bottom_bar
+    not scaffold
+    or bottom_bar_start < 0
+    or banner_call not in bottom_bar
+    or screen.count(banner_call) != 1
+    or "if (adMobState.adsReady && !adMobState.isPro) AdMobBanner(adMobManager)" not in bottom_bar
+    or "Column(Modifier.fillMaxWidth())" not in bottom_bar
+    or "windowInsetsPadding(WindowInsets.safeDrawing)" not in scaffold
+    or ") { scaffoldPadding ->" not in screen
+    or "Column(Modifier.fillMaxSize().padding(scaffoldPadding))" not in screen
     or "AdSize.LEADERBOARD" not in banner
     or "adWidthDp >= 970" not in banner
     or "getCurrentOrientationAnchoredAdaptiveBannerAdSize(context" not in banner
-    or "modifier = Modifier.weight(1f).fillMaxWidth()" not in screen
 ):
-    errors.append("AdMob banner must sit above the weighted content, use the 970 dp leaderboard threshold, and remain excluded for Pro.")
+    errors.append("AdMob banner must be the single adsReady/non-Pro child in the inset-aware Scaffold bottomBar, with 970 dp leaderboard/adaptive sizing and scaffold content padding.")
+
+# Pin the published Play prepaid subscription configuration independently of
+# the banner-placement rule. The existing Kotlin unit test also locks these IDs.
+for expected in (
+    'const val PRODUCT_ID = "safemobile-pro-1y-subs"',
+    'const val PREPAID_BASE_PLAN_ID = "prepaid-1-year"',
+    'const val PREPAID_BILLING_PERIOD = "P1Y"',
+):
+    if expected not in billing:
+        errors.append(f"SafeMobile Pro billing configuration is missing: {expected}.")
+for expected in (
+    'assertEquals("safemobile-pro-1y-subs", SafeMobileBillingManager.PRODUCT_ID)',
+    'assertEquals("prepaid-1-year", SafeMobileBillingManager.PREPAID_BASE_PLAN_ID)',
+    'assertEquals("P1Y", SafeMobileBillingManager.PREPAID_BILLING_PERIOD)',
+):
+    if expected not in billing_test:
+        errors.append(f"SafeMobile Pro billing configuration test is missing: {expected}.")
+if (
+    ".setProductId(PRODUCT_ID)" not in billing
+    or "it.basePlanId == PREPAID_BASE_PLAN_ID && it.offerId == null" not in billing
+    or "phase.billingPeriod == PREPAID_BILLING_PERIOD" not in billing
+    or "phase.recurrenceMode == ProductDetails.RecurrenceMode.NON_RECURRING" not in billing
+):
+    errors.append("Play billing must continue to query only the configured non-recurring prepaid one-year plan.")
 
 for path, text in (
     ("docs/PRIVACY_POLICY.md", privacy),
@@ -119,8 +197,8 @@ if (
     or version_name_match is None
 ):
     errors.append("The Android app must declare a positive versionCode and a semantic versionName.")
-elif version_name_match.group(1) != "1.10.7" or int(version_code_match.group(1)) != 20261161:
-    errors.append("SafeMobile v1.10.7 must use versionName 1.10.7 and Play versionCode 20261161.")
+# Version monotonicity is enforced separately by scripts/check_version_code.py.
+# This policy guard validates that Gradle exposes a well-formed positive app version.
 if "On-device Malware Scanning. Ad-supported Free Tier. No AdMob Ads with Pro." not in readme:
     errors.append("README must use the requested Free/Pro advertising tagline.")
 if "Ad-supported Free Tier" not in store or "Advertising ID" not in store or "IP address" not in store or "analytics" not in store:

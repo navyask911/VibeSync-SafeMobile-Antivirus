@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pro_title">SafeMobile Pro</string>
+    <string name="pro_truthful_summary">Мање нереда. Исто откривање.</string>
+    <string name="pro_feature_free">Офлајн хеш скенирање, YARA и откривање бочних инсталација остају бесплатни.</string>
+    <string name="pro_feature_research">Експериментално машинско учење није проверено нити омогућено.</string>
+    <string name="pro_feature_updates">Pro нуди опционална дневна ажурирања истраживачког модела. Недељна ажурирања остају бесплатна.</string>
+    <string name="pro_feature_adfree">Огласи бесплатног пакета су онемогућени док је ваш SafeMobile Pro приступ активан.</string>
+    <string name="pro_price_unavailable">Предплаћене цене Google Play-а нису доступне. Покушајте поново када Play буде повезан.</string>
+    <string name="pro_restore_check">Врати / Провери статус</string>
+    <string name="pro_active_until">Pro приступ је локално забележен до %1$s.</string>
+    <string name="pro_not_active">Није пронађена активна Pro претплата нити локално предплаћено право.</string>
+    <string name="pro_purchase_unavailable">Google Play није доступан или предплаћени производ није конфигурисан.</string>
+    <string name="pro_purchase_canceled">Куповина је отказана.</string>
+    <string name="pro_purchase_pending">Плаћање је на чекању. Pro приступ почиње тек након што Google Play потврди куповину.</string>
+    <string name="pro_purchase_recheck">Поново се повежите са Google Play-ом да бисте довршили обраду ове предплаћене претплате.</string>
+    <string name="pro_storage_failed">Безбедно складиште није могло да сачува куповину. Обратите се подршци пре поновног покушаја.</string>
+    <string name="pro_purchase_success">Предплаћена претплата је потврђена и безбедно забележена за овај уређај.</string>
+    <string name="pro_device_disclaimer">Вашом предплаћеном претплатом управља Google Play и она се не обнавља аутоматски. SafeMobile чува шифровану кеш меморију приступа везану за уређај за офлајн провере.</string>
+    <string name="pro_network_notice">Основна заштита ради офлајн. Google Play куповине и опционална ажурирања модела захтевају интернет везу.</string>
+    <string name="pro_years">Године (1–10)</string>
+    <string name="pro_price_preview">Процењени укупан износ: %1$s. Године: %2$d. Потврдите у Google Play-у.</string>
+    <string name="pro_cart_quantity_warning">Изаберите количину куповине у Google Play-у. Потврђена количина одређује број година додатих овом уређају.</string>
+    <string name="pro_non_restorable_warning">Куповина само за овај уређај. Поновна инсталација, ресетовање или губитак кључева за шифровање могу трајно избрисати преостали Pro приступ.</string>
+    <string name="pro_unlock">Откључај SafeMobile Pro</string>
+    <string name="pro_restore_local_only">Локални статус је проверен. Google Play не може да врати искоришћене пропуснице.</string>
+    <string name="pro_fewer_years">Мање година</string>
+    <string name="pro_more_years">Више година</string>
+    <string name="pro_subscription_offer">Откључај SafeMobile Pro — ₹299 / година (аутоматско обнављање). Откажите било када у Google Play-у.</string>
+    <string name="pro_one_year_price">Jedna unapred plaćena godina: %1$s</string>
+    <string name="pro_prepaid_offer">Jednogodišnji unapred plaćeni pristup usluzi SafeMobile Pro. Ne obnavlja se automatski.</string>
+    <string name="pro_prepaid_duration_limit">Google Play prepaid planovi ograničeni su na jednu godinu po kupovini. Ponovo kupite ili produžite isti plan da biste dodali još jednu godinu; konačna cena se potvrđuje na Google Play.</string>
+    <string name="pro_device_binding_explanation">Ova kupovina je povezana sa ovim Android uređajem pomoću heširanog identifikatora uređaja. Ponovna instalacija na istom uređaju može da vrati aktivnu Play kupovinu; drugi uređaj je blokiran.</string>
+    <string name="pro_buy_or_extend_one_year">Kupi / produži za 1 godinu</string>
+    <string name="pro_device_mismatch">Pretplata je aktivna na drugom uređaju. Pristup usluzi SafeMobile Pro blokiran je na ovom uređaju.</string>
+    <string name="pro_device_binding_unavailable">Ova kupovina nema proverljivu vezu sa uređajem. Pristup usluzi Pro blokiran je dok Google Play ne vrati kupovinu povezanu sa uređajem.</string>
+</resources>

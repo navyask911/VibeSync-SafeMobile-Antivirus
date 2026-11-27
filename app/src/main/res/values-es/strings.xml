@@ -211,7 +211,7 @@
     <string name="nav_install_sources">Fuentes de instalación de aplicaciones</string>
     <string name="install_sources_title">Fuentes de instalación de aplicaciones</string>
     <string name="install_sources_body">Eventos recientes de instalación con los datos del instalador que informa Android. Una fuente externa o desconocida no demuestra que haya malware; revise los resultados del análisis local.</string>
-    <string name="install_source_play_badge">Google Play</string>
+    <string name="install_source_play_badge">Instalador: Google Play</string>
     <string name="install_source_external_badge">Externa / no es Play</string>
     <string name="install_source_unknown_badge">Fuente desconocida</string>
     <string name="install_sources_empty">Aún no hay eventos de origen de instalación registrados</string>
@@ -689,16 +689,16 @@
     <string name="ui_status_at_risk">En riesgo</string>
     <string name="scan_detected_by">Detectado por: %1$s</string>
     <string name="scan_detected_by_confidence">Detectado por: %1$s (%2$d%%)</string>
-    <string name="security_score_100_voice" formatted="false">Your security configuration is fully optimized. We will continue to monitor your device to keep you safe. Thank you for using Safe Mobile Antivirus.</string>
-    <string name="self_update_title">Check for Updates (Self-Update)</string>
-    <string name="self_update_description">Device Administrator mode does not normally block Google Play updates. This button checks for a Play in-app update and asks Android to install it.</string>
-    <string name="self_update_started">The update flow was opened. Follow the system prompts to finish updating.</string>
-    <string name="self_update_cancelled">The update was cancelled.</string>
-    <string name="self_update_check_failed">The update could not be started. Check your Google Play connection and try again.</string>
-    <string name="self_update_unavailable">Play in-app updates are unavailable for this installation. Open Google Play to check manually.</string>
-    <string name="self_update_no_update">No newer Google Play update is currently available.</string>
-    <string name="self_update_not_allowed">An update is available, but Google Play does not allow the immediate update flow for this installation.</string>
-    <string name="self_update_open_play_store">Open Google Play</string>
+    <string name="security_score_100_voice" formatted="false">La configuración de seguridad está totalmente optimizada. Seguiremos supervisando tu dispositivo para mantenerte protegido. Gracias por utilizar Safe Mobile Antivirus.</string>
+    <string name="self_update_title">Comprobar actualizaciones (autoactualización)</string>
+    <string name="self_update_description">El modo de administrador del dispositivo normalmente no bloquea las actualizaciones de Google Play. Este botón busca una actualización integrada de Play y pide a Android que la instale.</string>
+    <string name="self_update_started">Se ha abierto el proceso de actualización. Sigue las indicaciones del sistema para terminarla.</string>
+    <string name="self_update_cancelled">La actualización se ha cancelado.</string>
+    <string name="self_update_check_failed">No se ha podido iniciar la actualización. Comprueba la conexión con Google Play e inténtalo de nuevo.</string>
+    <string name="self_update_unavailable">Las actualizaciones integradas de Play no están disponibles para esta instalación. Abre Google Play para comprobarlo manualmente.</string>
+    <string name="self_update_no_update">Actualmente no hay ninguna actualización más reciente en Google Play.</string>
+    <string name="self_update_not_allowed">Hay una actualización disponible, pero Google Play no permite el proceso de actualización inmediata para esta instalación.</string>
+    <string name="self_update_open_play_store">Abrir Google Play</string>
     <string name="scan_sessions_in_progress">Sesiones de análisis en curso: %1$d</string>
     <string name="scan_sessions_completed">Sesiones de análisis completadas: %1$d</string>
     <string name="ui_sentinel_telegram_folder">Carpeta de documentos de Telegram</string>

@@ -20,21 +20,45 @@ class ScanResultPublisherTest {
             logged += packageName to error
         }
 
-        publishScanResultSafely(
+        val firstPublished = publishScanResultSafely(
             packageName = "com.example.room-failure",
             publish = { throw IllegalStateException("Room insert failed") },
             logFailure = logger
         )
-        publishScanResultSafely(
+        val nextPublished = publishScanResultSafely(
             packageName = "com.example.next",
             publish = { nextPackagePublished = true },
             logFailure = logger
         )
 
+        assertFalse(firstPublished)
+        assertTrue(nextPublished)
+
         assertTrue(nextPackagePublished)
         assertEquals(1, logged.size)
         assertEquals("com.example.room-failure", logged.single().first)
         assertTrue(logged.single().second is IllegalStateException)
+    }
+
+    @Test
+    fun publishFailureRetainsPreciseStageForDiagnostics() = runTest {
+        val logged = mutableListOf<Throwable>()
+        val roomFailure = ScanPublishStageException(
+            stage = "room_insert",
+            cause = IllegalStateException("insertScanSessionItem failed")
+        )
+
+        val published = publishScanResultSafely(
+            packageName = "com.example.room-stage",
+            publish = { throw roomFailure },
+            logFailure = { _, error -> logged += error }
+        )
+
+        assertFalse(published)
+        assertEquals(1, logged.size)
+        assertTrue(logged.single() is ScanPublishStageException)
+        assertEquals("room_insert", (logged.single() as ScanPublishStageException).stage)
+        assertTrue(logged.single().cause is IllegalStateException)
     }
 
     @Test

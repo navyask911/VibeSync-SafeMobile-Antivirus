@@ -1,10 +1,17 @@
+// AGP 9.0 bundles Kotlin 2.2.10. Keep the app on the project's tested Kotlin
+// compiler level while using AGP's built-in Android Kotlin integration.
+buildscript {
+    dependencies {
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.21")
+    }
+}
+
 plugins {
-    id("org.cyclonedx.bom") version "3.5.1"
- id("app.cash.paparazzi") version "2.0.0-alpha02" apply false
- id("com.android.application") version "8.13.2" apply false
- id("org.jetbrains.kotlin.android") version "2.2.21" apply false
- id("org.jetbrains.kotlin.kapt") version "2.2.21" apply false
- id("org.jetbrains.kotlin.plugin.compose") version "2.2.21" apply false
+    id("org.cyclonedx.bom") version "3.6.1"
+    id("app.cash.paparazzi") version "2.0.0-alpha05.1" apply false
+    id("com.android.application") version "9.0.1" apply false
+    id("com.android.legacy-kapt") version "9.0.1" apply false
+    id("org.jetbrains.kotlin.plugin.compose") version "2.2.21" apply false
 }
 
 // Explicit Maven coordinates for CycloneDX and downstream artifact metadata.

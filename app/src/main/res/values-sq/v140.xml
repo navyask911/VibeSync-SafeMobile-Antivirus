@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v140_dashboard">Paneli</string>
+    <string name="v140_analytics_tools">Mjetet</string>
+    <string name="v140_critical">Kritike</string>
+    <string name="v140_minor">E vogël</string>
+    <string name="v140_snoozed">Shtyrë</string>
+    <string name="v140_completed">Përfunduar</string>
+    <string name="v140_snooze_warning">Paralajmërimi u shty</string>
+    <string name="v140_done_return_to_audit">U krye — Kthehu te auditimi</string>
+    <string name="v140_security_risk_explained">Shpjegimi i rrezikut të sigurisë</string>
+    <string name="v140_posture_score_impact">Ndikimi në rezultatin e gjendjes së pajisjes</string>
+    <string name="v140_pending_actions">%1$d veprime në pritje</string>
+</resources>

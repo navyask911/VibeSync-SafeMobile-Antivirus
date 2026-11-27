@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="detection_capabilities_title">Aftësitë e zbulimit</string>
+    <string name="detection_capabilities_description">Shihni cilat kontrolle sigurie janë aktive, këshilluese, të kushtëzuara ose të padisponueshme në këtë ndërtim.</string>
+    <string name="detection_capabilities_truth_title">E rëndësishme: çfarë nënkuptojnë rezultatet e skanimit</string>
+    <string name="detection_capabilities_truth_body">Mungesa e një përputhjeje lokale nuk provon se një skedar është i sigurt. Motori i nënshkruar i hash-it mbetet i çaktivizuar derisa të konfigurohen një çelës nënshkrimi i besuar dhe një bazë prodhimi e verifikuar. Një nënbashkësi e kufizuar rregullash DEX jashtë linje funksionon kur ngarkohen rregullat e përfshira të verifikuara; mësimi makinerik mbetet i çaktivizuar. Heuristikat mund të japin alarme të rreme. Metrikat më poshtë nuk janë matur.</string>
+    <string name="detection_capabilities_enabled">Aktive</string>
+    <string name="detection_capabilities_disabled">Joaktive</string>
+    <string name="detection_capabilities_limited">Mbulim i kufizuar</string>
+    <string name="detection_capabilities_advisory">Vetëm këshilluese</string>
+    <string name="detection_capabilities_conditional">Me kushte</string>
+    <string name="detection_capabilities_metrics_title">Metrikat e performancës së zbulimit</string>
+    <string name="detection_capabilities_import_signed_db">Importo bazën e nënshkruar të hash-eve</string>
+    <string name="detection_capabilities_import_yara">Importo rregulla YARA për shqyrtim (nuk ekzekutohen)</string>
+    <string name="detection_capabilities_sync">Përditësimet e bazës së nënshkruar</string>
+    <string name="detection_capabilities_feed_url">URL HTTPS e përditësimit</string>
+    <string name="detection_capabilities_sync_enabled">Aktivizo përditësimet automatike</string>
+    <string name="detection_capabilities_save">Ruaj cilësimet e përditësimit</string>
+    <string name="detection_capabilities_sync_privacy">Vetëm shkarkime. Rezultatet e skanimit, skedarët, hash-et dhe emrat e paketave nuk ngarkohen.</string>
+    <string name="detection_capabilities_sync_unavailable">Përditësimet automatike nuk janë të disponueshme në këtë ndërtim jashtë linje ose derisa të konfigurohet një çelës nënshkrimi i besuar.</string>
+</resources>

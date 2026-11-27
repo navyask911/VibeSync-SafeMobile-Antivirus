@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="test_siren">Testaa sireeni</string>
+    <string name="test_voice">Testaa puheääni</string>
+    <string name="test_siren_failed">Sireenitestiä ei voitu käynnistää tällä laitteella.</string>
+    <string name="test_voice_failed">Puheäänitesti epäonnistui. Tarkista asennettu puhesynteesimoottori ja äänidata.</string>
+</resources>

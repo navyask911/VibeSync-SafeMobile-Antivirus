@@ -6,9 +6,17 @@ import com.vibesync.antivirus.data.local.ThreatFeedSyncStateDao
 import com.vibesync.antivirus.data.local.ThreatFeedSyncStateEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.withContext
 import java.util.Locale
 import java.net.URI
+
+/** One consistent view of local indicators and the most recent configured-feed attempt. */
+data class ThreatFeedSnapshot(
+    val activeIndicatorCount: Int,
+    val lastSuccessfulSyncAt: Long?,
+    val latestSyncState: ThreatFeedSyncStateEntity?
+)
 
 /** Indexed local-only lookups. These functions never perform network I/O. */
 class ThreatIntelligenceRepository(
@@ -54,6 +62,25 @@ class ThreatIntelligenceRepository(
     fun observeActiveIndicatorCount(): Flow<Int> = malwareHashDao.observeActiveIndicatorCount()
     fun observeLatestSyncState(): Flow<ThreatFeedSyncStateEntity?> = syncStateDao.observeLatest()
     fun observeLastSuccessfulSyncAt(): Flow<Long?> = syncStateDao.observeLastSuccessfulSyncAt()
+
+    /** Room emits again whenever the active indicator table or feed sync state changes. */
+    fun observeSnapshot(): Flow<ThreatFeedSnapshot> = combine(
+        malwareHashDao.observeActiveIndicatorCount(),
+        syncStateDao.observeLatest(),
+        syncStateDao.observeLastSuccessfulSyncAt()
+    ) { count, latest, lastSuccess ->
+        ThreatFeedSnapshot(count, lastSuccess, latest)
+    }
+
+    /** One-shot counterpart used by lifecycle/manual refreshes. */
+    suspend fun loadSnapshot(): ThreatFeedSnapshot = withContext(Dispatchers.IO) {
+        ThreatFeedSnapshot(
+            activeIndicatorCount = malwareHashDao.countActiveIndicators(),
+            lastSuccessfulSyncAt = syncStateDao.getLastSuccessfulSyncAt(),
+            latestSyncState = syncStateDao.getLatest()
+        )
+    }
+
     suspend fun activeIndicatorCount(): Int = withContext(Dispatchers.IO) {
         malwareHashDao.countActiveIndicators()
     }

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="threat_intelligence_unavailable">આ ઉપકરણ પર કોઈ ચકાસાયેલ અપસ્ટ્રીમ તાલીમ આંકડા કૅશ નથી.</string>
+    <string name="threat_intelligence_upstream_stale">જૂની અપસ્ટ્રીમ માહિતી · પ્રકાશિત અપડેટ 30 દિવસથી વધુ જૂનું છે.</string>
+    <string name="threat_intelligence_device_title">ઉપકરણ પરની ધમકી માહિતી</string>
+    <string name="threat_intelligence_latest_sync_note">છેલ્લી સમન્વય નોંધ: %1$s</string>
+    <string name="threat_intelligence_feed_stale">ગોઠવેલી ફીડનું છેલ્લું સફળ સમન્વય 7 દિવસથી વધુ પહેલાં થયું હતું.</string>
+</resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="full_screen_dashboard_warning">Alertas críticas desactivadas: pulsa para conceder permiso para avisos de malware a pantalla completa.</string>
+    <string name="full_screen_dashboard_fallback">El acceso a pantalla completa es opcional. Cuando las alertas de seguridad están activadas, la sirena de cinco segundos y la notificación de alta prioridad siguen funcionando sin este acceso, según los ajustes de notificaciones y sonido de Android.</string>
+    <string name="full_screen_settings_unavailable">No se han podido abrir los ajustes de alertas a pantalla completa. Puedes seguir utilizando SafeMobile.</string>
+    <string name="system_app_protection_badge">Las aplicaciones del sistema están protegidas frente a revisión y desinstalación</string>
+    <string name="system_app_scan_complete">Análisis completado. No se encontraron amenazas en los elementos comprobados. Las aplicaciones del sistema quedan excluidas de la revisión y la desinstalación; este análisis no ha verificado su integridad.</string>
+    <string name="pro_navigation_unavailable">La pantalla de SafeMobile Pro no está disponible temporalmente.</string>
+</resources>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="incident_channel_description">การแจ้งเตือนภัยคุกคามเร่งด่วนภายในอุปกรณ์ พร้อมเสียงเตือน 5 วินาทีเมื่อเปิดใช้</string>
+    <string name="incident_title">ตรวจพบแอปที่เป็นอันตราย</string>
+    <string name="incident_loading">กำลังโหลดรายละเอียดแอป…</string>
+    <string name="incident_app_unavailable">แอปนี้ไม่มีอยู่แล้ว</string>
+    <string name="incident_warning">แอปที่ติดตั้งนี้ตรงกับแฮชมัลแวร์ที่รู้จัก หลีกเลี่ยงการเปิดแอป ถอนการติดตั้งผ่านหน้าจอยืนยันของ Android SafeMobile ไม่ได้กักกันหรือลบแอปที่ติดตั้งนี้</string>
+    <string name="incident_uninstall_now">ถอนการติดตั้งทันที</string>
+    <string name="incident_dismiss">ปิดการแจ้งเตือน (ไม่แนะนำ)</string>
+    <string name="incident_review_threat">ตรวจสอบภัยคุกคาม</string>
+    <string name="incident_user_confirmation">การลบแอปต้องได้รับการยืนยันจากคุณใน Android เสมอ SafeMobile จะไม่ถอนการติดตั้งแอปโดยไม่แจ้งให้ทราบ</string>
+    <string name="incident_alerts_explanation">เลือกเปิดการแจ้งเตือนเร่งด่วนและเสียงไซเรน 5 วินาทีที่ระดับเสียงสูงสุดสำหรับมัลแวร์ที่ยืนยันแล้ว การเปิด SafeMobile หรือปิดเหตุการณ์จะหยุดเสียงไซเรน การตั้งค่าเสียงและห้ามรบกวนของ Android อาจจำกัดเสียง</string>
+    <string name="incident_full_screen_settings">การแจ้งเตือนเหตุการณ์แบบเต็มหน้าจอ</string>
+    <string name="incident_full_screen_explanation">Android 14 ขึ้นไปควบคุมสิทธิ์เต็มหน้าจอ คุณสามารถเปิดได้ในการตั้งค่าระบบสำหรับการแจ้งเตือนเหตุการณ์เร่งด่วน หากปิดไว้ SafeMobile จะใช้การแจ้งเตือนลำดับสูง ฟังก์ชันนี้เป็นทางเลือก</string>
+    <string name="incident_open_settings">เปิดการตั้งค่า</string>
+    <string name="cyber_dark_appearance">ธีม Cyber Dark · สีน้ำเงินกรมท่าเข้ม การ์ดสีเทาชนวน และสีฟ้านีออน</string>
+</resources>

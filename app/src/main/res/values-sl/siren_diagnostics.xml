@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="siren_test_settings_title">Diagnostika sirene</string>
+    <string name="siren_test_settings_description">Preizkusite petsekundno sireno in predogled opozorila. S tem ne zaznate zlonamerne programske opreme, ne spreminjate zbirke groženj in ne zahtevate odstranitve.</string>
+    <string name="siren_test_button">Preizkusi sireno za grožnje</string>
+    <string name="siren_test_title">PREIZKUS SIRENE — NI RESNIČNA GROŽNJA</string>
+    <string name="siren_test_notification">Ročno preverjanje zvoka. Zlonamerna aplikacija ni bila zaznana.</string>
+    <string name="siren_test_preview">To je preizkus sirene SafeMobile. Nobena nameščena aplikacija ni bila označena in odstranitev ni zahtevana. Tapnite Opusti, da ustavite zvok.</string>
+    <string name="voice_siren_test">To je preizkus sirene SafeMobile. Nobena grožnja ni bila zaznana.</string>
+    <string name="battery_review_title">Omejitve baterije lahko odložijo zaščito</string>
+    <string name="battery_review_body">Varčevanje z baterijo ali optimizacija aplikacije je aktivna. Nekatere naprave Oppo/ColorOS omejujejo preglede v ozadju in opozorila o namestitvi. Preglejte nastavitve baterije za SafeMobile; to ne zagotavlja neprekinjenega nadzora.</string>
+    <string name="battery_review_action">Preglej nastavitve baterije</string>
+    <string name="battery_review_unavailable">Nastavitev baterije Android ni bilo mogoče odpreti.</string>
+    <string name="ui_folder_access_not_granted">Dostop do mape ni bil odobren. Nadaljujete lahko z omejeno zaščito.</string>
+    <string name="test_siren">Preizkusi sireno</string>
+    <string name="test_voice">Preizkusi glas</string>
+    <string name="test_siren_failed">Preizkus sirene se v tej napravi ni mogel začeti.</string>
+    <string name="test_voice_failed">Preizkus glasu ni uspel. Preverite nameščeni mehanizem govora in glasovne podatke naprave.</string>
+</resources>

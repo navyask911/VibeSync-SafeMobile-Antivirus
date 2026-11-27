@@ -48,8 +48,9 @@ class TrustedAppStoreTest {
             assertTrue(store.trust(name))
             assertTrue(store.isTrusted(name))
             assertFalse(store.trust("invalid package"))
-            // This package does not exist: returning before PackageManager lookup proves
-            // neither APK hashing nor any subsequent detection engine can have executed.
+            // This package is currently absent (for example during uninstall/reinstall).
+            // Its explicit package-name trust remains effective without hashing APK bytes
+            // or invoking detection engines; protected namespaces remain excluded.
             val result = (context as SafeMobileApp).repository.scanInstalledPackage(name)
             assertNotNull(result)
             assertEquals(ScanVerdict.NO_MATCH, result!!.verdict)

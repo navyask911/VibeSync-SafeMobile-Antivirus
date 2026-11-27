@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="threat_intelligence_unavailable">อุปกรณ์นี้ไม่มีสถิติการฝึกจากแหล่งต้นทางที่ผ่านการยืนยันเก็บไว้ในแคช</string>
+    <string name="threat_intelligence_upstream_stale">ข้อมูลต้นทางล้าสมัย · การอัปเดตที่เผยแพร่เก่ากว่า 30 วัน</string>
+    <string name="threat_intelligence_device_title">ข่าวกรองภัยคุกคามบนอุปกรณ์</string>
+    <string name="threat_intelligence_latest_sync_note">บันทึกการซิงก์ล่าสุด: %1$s</string>
+    <string name="threat_intelligence_feed_stale">การซิงก์ฟีดที่กำหนดค่าครั้งล่าสุดซึ่งสำเร็จผ่านมาแล้วเกิน 7 วัน</string>
+</resources>

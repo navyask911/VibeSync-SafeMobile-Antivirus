@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="threat_intelligence_unavailable" tools:ignore="MissingTranslation">이 기기에는 확인된 업스트림 학습 통계가 캐시되어 있지 않습니다.</string>
+    <string name="threat_intelligence_upstream_stale" tools:ignore="MissingTranslation">업스트림 데이터가 오래되었습니다 · 게시된 업데이트가 30일을 초과했습니다.</string>
+    <string name="threat_intelligence_device_title" tools:ignore="MissingTranslation">기기 내 위협 인텔리전스</string>
+    <string name="threat_intelligence_latest_sync_note" tools:ignore="MissingTranslation">최근 동기화 메모: %1$s</string>
+    <string name="threat_intelligence_feed_stale" tools:ignore="MissingTranslation">마지막으로 성공한 구성된 피드 동기화가 7일을 초과했습니다.</string>
+</resources>

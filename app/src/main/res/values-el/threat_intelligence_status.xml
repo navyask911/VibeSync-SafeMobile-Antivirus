@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="threat_intelligence_unavailable">Δεν υπάρχουν αποθηκευμένα επαληθευμένα στατιστικά εκπαίδευσης upstream σε αυτήν τη συσκευή.</string>
+    <string name="threat_intelligence_upstream_stale">ΠΑΛΑΙΆ ΔΕΔΟΜΈΝΑ ΠΗΓΉΣ · Η δημοσιευμένη ενημέρωση είναι παλαιότερη από 30 ημέρες.</string>
+    <string name="threat_intelligence_device_title">Πληροφορίες απειλών στη συσκευή</string>
+    <string name="threat_intelligence_latest_sync_note">Σημείωση τελευταίου συγχρονισμού: %1$s</string>
+    <string name="threat_intelligence_feed_stale">Ο τελευταίος επιτυχής συγχρονισμός της διαμορφωμένης ροής έγινε πριν από περισσότερες από 7 ημέρες.</string>
+</resources>

@@ -42,6 +42,24 @@ class ThreatIntelligenceStatsTest {
         }
     }
 
+    @Test fun freshnessPolicyMarksOldSnapshotsButDoesNotTreatUnknownTimesAsStale() {
+        val stats = parse(fixture())!!
+        val updatedAt = java.time.OffsetDateTime.parse(stats.lastUpdated).toInstant().toEpochMilli()
+        assertFalse(ThreatIntelligenceFreshnessPolicy.isUpstreamStatsStale(
+            stats, updatedAt + 29L * 24L * 60L * 60L * 1000L
+        ))
+        assertTrue(ThreatIntelligenceFreshnessPolicy.isUpstreamStatsStale(
+            stats, updatedAt + 31L * 24L * 60L * 60L * 1000L
+        ))
+        assertFalse(ThreatIntelligenceFreshnessPolicy.isFeedStale(null, updatedAt + 90L * 24L * 60L * 60L * 1000L))
+        assertFalse(ThreatIntelligenceFreshnessPolicy.isFeedStale(
+            updatedAt, updatedAt + 6L * 24L * 60L * 60L * 1000L
+        ))
+        assertTrue(ThreatIntelligenceFreshnessPolicy.isFeedStale(
+            updatedAt, updatedAt + 8L * 24L * 60L * 60L * 1000L
+        ))
+    }
+
     @Test fun rejectsMalformedOversizedAndTrailingContent() {
         for (text in listOf("", "[]", "null", "{", fixture().toString() + " garbage")) {
             assertNull(ThreatIntelligenceStats.parse(text.toByteArray()))

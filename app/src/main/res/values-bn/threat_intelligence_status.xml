@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="threat_intelligence_unavailable">এই ডিভাইসে যাচাইকৃত আপস্ট্রিম প্রশিক্ষণ পরিসংখ্যান সংরক্ষিত নেই।</string>
+    <string name="threat_intelligence_upstream_stale">পুরোনো আপস্ট্রিম তথ্য · প্রকাশিত আপডেটটি ৩০ দিনেরও বেশি পুরোনো।</string>
+    <string name="threat_intelligence_device_title">ডিভাইসে থাকা হুমকি-সংক্রান্ত তথ্য</string>
+    <string name="threat_intelligence_latest_sync_note">সর্বশেষ সিঙ্কের নোট: %1$s</string>
+    <string name="threat_intelligence_feed_stale">কনফিগার করা ফিডের সর্বশেষ সফল সিঙ্ক ৭ দিনেরও বেশি আগে হয়েছে।</string>
+</resources>

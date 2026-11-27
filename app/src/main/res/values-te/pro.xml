@@ -28,4 +28,11 @@
     <string name="pro_fewer_years">తక్కువ సంవత్సరాలు</string>
     <string name="pro_more_years">ఎక్కువ సంవత్సరాలు</string>
     <string name="pro_subscription_offer" formatted="false">SafeMobile Pro అన్‌లాక్ చేయండి — ₹299 / సంవత్సరం (ఆటోమేటిక్ రీన్యువల్). Google Playలో ఎప్పుడైనా రద్దు చేయండి.</string>
+    <string name="pro_one_year_price">ఒక సంవత్సరం ముందస్తు చెల్లింపు: %1$s</string>
+    <string name="pro_prepaid_offer">SafeMobile Proకి ఒక సంవత్సరం ముందస్తు చెల్లింపు యాక్సెస్. స్వయంచాలకంగా పునరుద్ధరించబడదు.</string>
+    <string name="pro_prepaid_duration_limit">Google Play ముందస్తు చెల్లింపు ప్లాన్‌లు ఒక్క కొనుగోలుకు ఒక సంవత్సరానికి పరిమితం. మరో సంవత్సరం జోడించడానికి అదే ప్లాన్‌ను మళ్లీ కొనండి లేదా పొడిగించండి; తుది ధర Google Playలో నిర్ధారించబడుతుంది.</string>
+    <string name="pro_device_binding_explanation">హ్యాష్ చేసిన పరికర గుర్తింపును ఉపయోగించి ఈ కొనుగోలు ఈ Android పరికరంతో అనుసంధానించబడింది. అదే పరికరంలో మళ్లీ ఇన్‌స్టాల్ చేస్తే సక్రియ Play కొనుగోలు పునరుద్ధరించవచ్చు; వేరే పరికరం బ్లాక్ చేయబడుతుంది.</string>
+    <string name="pro_buy_or_extend_one_year">1 సంవత్సరం కొనండి / పొడిగించండి</string>
+    <string name="pro_device_mismatch">మరొక పరికరంలో సబ్‌స్క్రిప్షన్ సక్రియంగా ఉంది. ఈ పరికరంలో SafeMobile Pro యాక్సెస్ బ్లాక్ చేయబడింది.</string>
+    <string name="pro_device_binding_unavailable">ఈ కొనుగోలుకు ధృవీకరించగల పరికర అనుసంధానం లేదు. పరికరంతో అనుసంధానించిన కొనుగోలును Google Play తిరిగి ఇచ్చే వరకు Pro యాక్సెస్ బ్లాక్ చేయబడుతుంది.</string>
 </resources>

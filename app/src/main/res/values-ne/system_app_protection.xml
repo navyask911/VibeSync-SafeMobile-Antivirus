@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="pro_navigation_unavailable" tools:ignore="MissingTranslation">SafeMobile Pro स्क्रिन अस्थायी रूपमा उपलब्ध छैन।</string>
+</resources>

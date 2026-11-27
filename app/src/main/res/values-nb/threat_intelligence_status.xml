@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="threat_intelligence_unavailable" tools:ignore="MissingTranslation">Ingen bekreftet oppstrøms treningsstatistikk er bufret på denne enheten.</string>
+    <string name="threat_intelligence_upstream_stale" tools:ignore="MissingTranslation">UTDATERT OPPSTRØMSDATA · Den publiserte oppdateringen er mer enn 30 dager gammel.</string>
+    <string name="threat_intelligence_device_title" tools:ignore="MissingTranslation">Trusseletterretning på enheten</string>
+    <string name="threat_intelligence_latest_sync_note" tools:ignore="MissingTranslation">Merknad fra siste synkronisering: %1$s</string>
+    <string name="threat_intelligence_feed_stale" tools:ignore="MissingTranslation">Siste vellykkede synkronisering av konfigurert feed var for mer enn 7 dager siden.</string>
+</resources>

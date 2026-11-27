@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="detection_capabilities_title">Могућности откривања</string>
+    <string name="detection_capabilities_description">Погледајте које су безбедносне провере омогућене, саветодавне, условне или недоступне у овој верзији.</string>
+    <string name="detection_capabilities_truth_title">Важно: шта значе резултати скенирања</string>
+    <string name="detection_capabilities_truth_body">Одсуство локалног подударања не доказује да је датотека безбедна. Потписани хеш механизам остаје онемогућен док се не конфигуришу поуздан кључ за потписивање и проверена продукциона база. Ограничени подскуп офлајн DEX правила ради када се учитају проверена приложена правила; машинско учење остаје онемогућено. Хеуристике могу изазвати лажне аларме. Метрике испод нису измерене.</string>
+    <string name="detection_capabilities_enabled">Омогућено</string>
+    <string name="detection_capabilities_disabled">Онемогућено</string>
+    <string name="detection_capabilities_limited">Ограничена покривеност</string>
+    <string name="detection_capabilities_advisory">Само саветодавно</string>
+    <string name="detection_capabilities_conditional">Условно</string>
+    <string name="detection_capabilities_metrics_title">Метрике учинка откривања</string>
+    <string name="detection_capabilities_import_signed_db">Увези потписану хеш базу</string>
+    <string name="detection_capabilities_import_yara">Увези YARA правила за преглед (не извршавају се)</string>
+    <string name="detection_capabilities_sync">Ажурирања потписане базе</string>
+    <string name="detection_capabilities_feed_url">HTTPS URL за ажурирање</string>
+    <string name="detection_capabilities_sync_enabled">Омогући аутоматска ажурирања</string>
+    <string name="detection_capabilities_save">Сачувај подешавања ажурирања</string>
+    <string name="detection_capabilities_sync_privacy">Само преузимања. Резултати скенирања, датотеке, хешеви и имена пакета се не отпремају.</string>
+    <string name="detection_capabilities_sync_unavailable">Аутоматска ажурирања нису доступна у овој офлајн верзији или док се не конфигурише поуздан кључ за потписивање.</string>
+</resources>

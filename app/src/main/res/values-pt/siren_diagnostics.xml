@@ -17,4 +17,8 @@
   <string name="system_app_protection_badge">Aplicações de sistema protegidas contra revisão e desinstalação</string>
   <string name="system_app_scan_complete">Análise concluída. Não foram encontradas ameaças nos itens verificados. As aplicações de sistema são excluídas da revisão e desinstalação; esta análise não verificou a sua integridade.</string>
   <string name="ui_folder_access_not_granted">O acesso à pasta não foi concedido. Pode continuar com proteção limitada.</string>
+    <string name="test_siren">Testar sirene</string>
+    <string name="test_voice">Testar voz</string>
+    <string name="test_siren_failed">Não foi possível iniciar o teste da sirene neste dispositivo.</string>
+    <string name="test_voice_failed">O teste de voz falhou. Verifique o mecanismo de fala instalado e os dados de voz.</string>
 </resources>

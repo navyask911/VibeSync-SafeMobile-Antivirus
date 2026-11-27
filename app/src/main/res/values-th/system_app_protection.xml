@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="full_screen_dashboard_warning">ปิดการแจ้งเตือนสำคัญอยู่ แตะเพื่อให้สิทธิ์แสดงคำเตือนมัลแวร์แบบเต็มหน้าจอ</string>
+    <string name="full_screen_dashboard_fallback">การเข้าถึงแบบเต็มหน้าจอเป็นตัวเลือก เมื่อเปิด Security Alerts แล้ว เสียงไซเรนห้าวินาทีและการแจ้งเตือนลำดับสูงยังทำงานได้โดยไม่ต้องใช้สิทธิ์นี้ ทั้งนี้ขึ้นอยู่กับการตั้งค่าการแจ้งเตือนและเสียงของ Android</string>
+    <string name="full_screen_settings_unavailable">ไม่สามารถเปิดการตั้งค่าการแจ้งเตือนแบบเต็มหน้าจอได้ คุณยังใช้ SafeMobile ต่อได้</string>
+    <string name="system_app_protection_badge">ปกป้องแอประบบจากการตรวจสอบและถอนการติดตั้ง</string>
+    <string name="system_app_scan_complete">สแกนเสร็จแล้ว ไม่พบภัยคุกคามในรายการที่ตรวจสอบ แอประบบจะไม่ถูกตรวจสอบหรือถอนการติดตั้ง แต่การสแกนนี้ไม่ได้ยืนยันความสมบูรณ์ของแอประบบ</string>
+    <string name="pro_navigation_unavailable">หน้าจอ SafeMobile Pro ไม่พร้อมใช้งานชั่วคราว</string>
+</resources>

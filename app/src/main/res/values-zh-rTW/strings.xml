@@ -1,0 +1,737 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SafeMobile Antivirus</string>
+    <string name="privacy_title">隱私與掃描權限說明</string>
+    <string name="privacy_body">掃描已安裝應用程式前，SafeMobile 會使用 QUERY_ALL_PACKAGES 讀取已安裝軟體包清單，因為檢查應用程式是防毒軟體的核心功能。軟體包名稱和掃描結果保留在本裝置上，不會上傳、出售、用於廣告或分析共享，也不會傳送到伺服器。聯網時，應用程式會從 GitHub 上的 SafeMobile 釋出頁面獲取已簽名的威脅定義。每個下載的資料庫都經過驗證後才會啟用。應用程式從不連線 MalwareBazaar，也不上傳掃描資料。下載監控是可選功能，預設關閉，通過 Android 檔案選擇器獲取訪問權限；SafeMobile 不請求訪問所有檔案。獨立的威脅資料來源功能只有在您明確同意後，才會連線配置的 HTTPS 地址。</string>
+    <string name="privacy_accept">我已瞭解</string>
+    <string name="exit_app">退出應用程式</string>
+    <string name="brand_title">SafeMobile Antivirus</string>
+    <string name="brand_subtitle">VibeSync</string>
+    <string name="scan_status">本地防護面板</string>
+    <string name="scan_running">正在掃描裝置…</string>
+    <string name="threat_found">檢測到威脅匹配</string>
+    <string name="signature_count">本地特徵：%1$d · 掃描次數：%2$d</string>
+    <string name="scan_explanation">使用本地儲存的威脅定義檢查可讀取的已安裝 APK，並檢查您選擇的檔案。檢測範圍受作業系統訪問權限和本裝置已安裝定義的限制。</string>
+    <string name="scan_installed">掃描已安裝的應用程式</string>
+    <string name="scan_selected">掃描選定的 APK 或檔案</string>
+    <string name="monitor_title">下載監控</string>
+    <string name="monitor_explanation">可選擇監控通過 Android 檔案選擇器指定的資料夾。SafeMobile 只掃描該資料夾及其前兩層子資料夾內支持的 APK。前臺服務執行時會在本地定期檢查。您可隨時撤銷訪問權限或停止監控；無需授予所有檔案訪問權限。</string>
+    <string name="monitor_button">啟用下載監控</string>
+    <string name="monitor_note">監控由使用者自願開啟，也可以由使用者停止。</string>
+    <string name="latest_results">最近的掃描結果</string>
+    <string name="results_summary">威脅匹配 %1$d 項 · 需複核 %2$d 項 · 無本地匹配 %3$d 項</string>
+    <string name="scan_clean_warning">結果乾淨僅表示當前安裝的本地定義未發現匹配，並不保證檔案安全。</string>
+    <string name="verdict_threat">威脅匹配</string>
+    <string name="verdict_suspicious">需要複核</string>
+    <string name="verdict_no_match">無本地匹配</string>
+    <string name="verdict_not_scanned">無法掃描</string>
+    <string name="no_match_detail">本地威脅定義中沒有匹配項。</string>
+    <string name="risk_boot">可能請求開機後啟動</string>
+    <string name="risk_overlay">請求顯示在其他應用程式上層的能力</string>
+    <string name="risk_install">請求安裝 APK 的能力</string>
+    <string name="risk_accessibility">宣告瞭無障礙服務</string>
+    <string name="risk_cluster">組合了多種高影響權限能力</string>
+    <string name="risk_review">未發現已知雜湊匹配；請手動檢查這些權限能力。</string>
+    <string name="hash_match">匹配本地威脅定義：%1$s（%2$s）。</string>
+    <string name="hash_allowlisted">雜湊已在本地允許列表中。</string>
+    <string name="apk_unreadable">無法讀取 APK 路徑；沒有雜湊判定結果。</string>
+    <string name="file_not_readable">此應用程式無法讀取該檔案。</string>
+    <string name="file_could_not_read">無法讀取檔案。</string>
+    <string name="package_metadata_missing">無法獲取軟體包後設資料。</string>
+    <string name="file_stream_failed">Android 無法開啟所選檔案。</string>
+    <string name="debug_certificate">證書主體與 Android 除錯證書相似。</string>
+    <string name="scan_complete">掃描完成。沒有本地匹配並不代表檔案一定安全。</string>
+    <string name="scan_failed">掃描失敗，請重試。</string>
+    <string name="ads_label">廣告</string>
+    <string name="privacy_options">隱私 / 廣告選項</string>
+    <string name="ad_offline_title">本地優先，支持離線使用</string>
+    <string name="ad_offline_body">核心掃描留在此裝置上。聯網時，您可以自願通過咖啡贊助支持獨立應用程式開發。</string>
+    <string name="coffee_support">支持開發</string>
+    <string name="offline_label">離線模式 · 掃描仍在本地進行</string>
+    <string name="not_configured">離線定義目前只有 EICAR 防毒測試特徵；這無法防護真實世界的惡意軟體。請匯入經過篩選且有合法許可的本地特徵庫。</string>
+    <string name="update_available">Google Play 中有可用的應用程式更新。</string>
+    <string name="update_downloaded">更新已下載。請重啟應用程式以完成更新。</string>
+    <string name="close">關閉</string>
+    <string name="file_hash_label">SHA-256：%1$s…</string>
+    <string name="service_channel_name">SafeMobile 檔案監控</string>
+    <string name="service_channel_description">使用者啟用的本地 APK 檢查通知。</string>
+    <string name="service_notification_title">SafeMobile 監控已啟用</string>
+    <string name="service_notification_body">正在監控“下載”資料夾中新寫入的 APK 檔案。</string>
+    <string name="unknown_file">所選檔案</string>
+    <string name="local_files_only">為保護隱私，此掃描器只會開啟來自可識別裝置本地儲存提供程序的檔案，不會開啟雲端或第三方檔案提供程序中的檔案。</string>
+    <string name="quarantine_confirm_title">將此標記檔案隔離？</string>
+    <string name="quarantine_confirm_body">SafeMobile 將建立並驗證加密的私有副本。原始檔案會保留，不會刪除。</string>
+    <string name="quarantine_confirm_action">隔離檔案</string>
+    <string name="quarantine_file">隔離私有副本</string>
+    <string name="quarantine_success_removed">已將副本儲存到私有隔離區（%1$s）；Android 報告原檔案已刪除。</string>
+    <string name="quarantine_success_copy_only">已儲存加密隔離副本（%1$s）。原始檔案已保留，沒有刪除。</string>
+    <string name="quarantine_failed">隔離失敗。應用程式沒有主動刪除原檔案。</string>
+    <string name="uninstall_app">解除安裝應用程式…</string>
+    <string name="import_definitions">匯入離線威脅定義（JSON）</string>
+    <string name="import_success">已將 %1$d 條有效特徵定義匯入本地儲存。</string>
+    <string name="import_failed">無法匯入定義檔案。請檢查 JSON 格式和 SHA-256 值。</string>
+    <string name="monitor_stop">停止下載監控</string>
+    <string name="scan_progress">已掃描 %1$d / %2$d 個已安裝應用程式</string>
+    <string name="scan_preparing">正在準備掃描…</string>
+    <string name="scan_cancel">取消掃描</string>
+    <string name="scan_cancelled">掃描已取消。未對整個裝置的安全性作出結論。</string>
+    <string name="monitor_active">監控已啟用</string>
+    <string name="monitor_inactive">監控已停止</string>
+    <string name="monitor_start_failed">無法啟動下載監控。請檢查權限後重試。</string>
+    <string name="import_unverified_title">匯入未經驗證的定義？</string>
+    <string name="import_unverified_body">SafeMobile 會驗證 JSON 結構和雜湊格式，但不會對該本地檔案進行釋出者的密碼學認證。不可信的定義可能造成誤報。請僅從您信任且獲準使用的來源匯入。檔案和雜湊不會上傳。</string>
+    <string name="continue_import">選擇檔案</string>
+    <string name="sponsor_link_failed">無法開啟支持頁面。請檢查網路連線或稍後重試。</string>
+    <string name="quarantine_vault_title">隔離庫</string>
+    <string name="quarantine_vault_description">在這裡檢視隔離的私有副本。恢復時會將一份副本寫入您選擇的位置，並保留隔離區原件，直到您將其刪除。</string>
+    <string name="quarantine_vault_empty">當前沒有隔離檔案。</string>
+    <string name="quarantine_vault_limit">顯示最近的 30 個隔離檔案。</string>
+    <string name="quarantine_item_size">%1$d 位元組</string>
+    <string name="quarantine_restore">恢復副本…</string>
+    <string name="quarantine_delete">永久刪除</string>
+    <string name="quarantine_restore_confirm_title">恢復此隔離檔案？</string>
+    <string name="quarantine_restore_confirm_body">恢復操作會把檔案寫入您選擇的位置。恢復後的檔案可能具有危險性。僅在您信任該檔案或需要進行受控分析時繼續。隔離副本仍會保留在此處。</string>
+    <string name="quarantine_delete_confirm_title">永久刪除此隔離副本？</string>
+    <string name="quarantine_delete_confirm_body">此操作會從 SafeMobile 永久刪除私有隔離副本，且無法撤銷。</string>
+    <string name="quarantine_restore_success">已將 %1$s 的副本寫入所選位置（%2$d 位元組）。隔離區原件仍然保留。</string>
+    <string name="quarantine_delete_success">已刪除隔離檔案 %1$s。</string>
+    <string name="quarantine_restore_failed">無法恢復隔離檔案。請檢查目標位置和可用儲存空間後重試。</string>
+    <string name="quarantine_delete_failed">無法刪除隔離檔案。</string>
+    <string name="risk_sms_internet">同時具有簡訊權限和網路訪問能力；這是風險指標，並非惡意行為的證據。</string>
+    <string name="risk_sms_accessibility">同時具有簡訊權限並宣告瞭無障礙服務；這是需要複核的訊號，並非攔截 OTP 或存在惡意軟體的證據。</string>
+    <string name="language_label">語言：%1$s</string>
+    <string name="language_system_default">系統預設</string>
+    <string name="limited_protection">防護有限 — 僅包含 EICAR 測試定義</string>
+    <string name="review_recommended">建議複核</string>
+<string name="nav_home">首頁</string>
+<string name="nav_scan">掃描</string>
+<string name="nav_quarantine">隔離區</string>
+<string name="nav_history">歷史記錄</string>
+<string name="nav_settings">設定</string>
+<string name="settings_title">設定</string>
+<string name="appearance_title">外觀</string>
+<string name="theme_system">跟隨系統</string>
+<string name="theme_light">淺色</string>
+<string name="theme_dark">深色</string>
+<string name="language_settings">語言</string>
+<string name="about_legal">關於與法律資訊</string>
+<string name="ray_id">SafeMobile Ray ID</string>
+<string name="ray_id_copy">複製 ID</string>
+<string name="ray_id_copied">Ray ID 已複製</string>
+<string name="history_title">掃描歷史</string>
+<string name="history_empty">暫無本地掃描歷史記錄。</string>
+<string name="history_session">會話 ID</string>
+<string name="definitions_limited_compact">定義庫僅包含 EICAR 測試簽名；覆蓋範圍有限。</string>
+<string name="settings_privacy">隱私與權限</string>
+<string name="quarantine_legacy_warning">舊版隔離專案：在之前的版本中以未加密方式儲存。</string>
+<string name="overlay_review_title">懸浮窗風險檢查</string>
+<string name="overlay_review_description">可選地檢查宣告瞭顯示在其他應用程式上層能力或無障礙服務的應用程式。它們僅是需要複核的指標；SafeMobile 無法證明其他應用程式當前正在顯示懸浮窗，也無法檢查其他應用程式即時的懸浮窗權限狀態。</string>
+<string name="overlay_review_last_attempt">上次嘗試：%1$s</string>
+<string name="overlay_review_last_success">上次成功檢查：%1$s</string>
+<string name="overlay_review_summary">宣告懸浮窗能力的應用程式：%1$d · 宣告無障礙服務的應用程式：%2$d · 此裝置上已啟用的無障礙服務：%3$d</string>
+<string name="overlay_review_not_checked">尚未成功完成懸浮窗風險檢查。</string>
+<string name="overlay_review_failed">上次檢查失敗。Android 可能推遲了任務或限制了所需的軟體包可見性。</string>
+<string name="overlay_review_permission_required">Android 不允許執行此檢查。請檢查已安裝應用程式的可見性，然後重試。</string>
+<string name="overlay_review_reminder_interval">提醒間隔</string>
+<string name="overlay_review_reminder_12h">每 12 小時</string>
+<string name="overlay_review_reminder_24h">每 24 小時</string>
+<string name="overlay_review_reminder_48h">每 48 小時</string>
+<string name="overlay_review_notifications_off">通知已關閉。檢查仍可執行，但不會顯示提醒。</string>
+<string name="overlay_review_enabled">已啟用自動檢查</string>
+<string name="overlay_review_disabled">檢查已暫停</string>
+<string name="overlay_review_notification_channel">SafeMobile 隱私檢查</string>
+<string name="overlay_review_notification_channel_description">可選懸浮窗風險檢查的低優先順序提醒。</string>
+<string name="overlay_review_notification_title">懸浮窗風險檢查已完成</string>
+<string name="overlay_review_notification_body">%1$d 個應用程式宣告瞭懸浮窗能力，%2$d 個應用程式宣告瞭無障礙服務。這些是需要複核的指標，並非惡意軟體證據。</string>
+<string name="nav_apps">應用程式</string>
+    <string name="nav_sentinel">下載監控</string>
+    <string name="nav_analytics">防護統計</string>
+    <string name="setup_title">保護您的裝置</string>
+    <string name="setup_skip">跳過</string>
+    <string name="setup_storage_title">儲存訪問權限</string>
+    <string name="setup_storage_body">您可以選擇用於下載監控的資料夾。Android 會開啟系統檔案選擇器，並且只允許 SafeMobile 訪問所選資料夾。掃描已安裝應用程式或單獨選擇的檔案不需要此權限。</string>
+    <string name="setup_apps_title">已安裝應用程式可見性</string>
+    <string name="setup_apps_body">SafeMobile 會檢查可讀取的已安裝 APK 和應用程式權限資訊。軟體包可見性已在清單中宣告，本步驟不會彈出執行時權限對話方塊。Google Play 政策審批是獨立流程。</string>
+    <string name="setup_notifications_title">通知</string>
+    <string name="setup_notifications_body">通知可顯示掃描提醒和防護服務狀態。您可以不啟用通知繼續使用，但 Android 通知設定可能限制警報。</string>
+    <string name="setup_sentinel_title">後臺防護</string>
+    <string name="setup_sentinel_body">下載監控是可選功能。啟用後，會監控可訪問的主下載資料夾中的 APK 變化。它不會攔截安裝，也可能漏掉其他資料夾中的檔案。</string>
+    <string name="setup_sentinel_switch">啟用下載監控</string>
+    <string name="setup_sentinel_scope">在系統允許的範圍內監控下載中的 APK。Android 控制安裝過程，也可能停止後臺任務。</string>
+    <string name="setup_permission_granted">訪問權限可用</string>
+    <string name="setup_permission_missing">尚未授權，防護範圍受限</string>
+    <string name="setup_step_progress">第 %1$d 步，共 4 步</string>
+    <string name="setup_continue">繼續</string>
+    <string name="setup_allow_storage">選擇資料夾（可選）</string>
+    <string name="setup_continue_limited">以有限防護繼續</string>
+    <string name="setup_allow_notifications">允許通知</string>
+    <string name="setup_notifications_not_now">暫不啟用</string>
+    <string name="setup_finish">完成設定</string>
+    <string name="security_scan_now">立即掃描</string>
+    <string name="security_last_scan_none">尚無已完成的掃描</string>
+    <string name="security_last_scan">上次掃描 · %1$s</string>
+    <string name="security_scan_coverage">使用本裝置可用的本地定義檢查已安裝 APK 和可讀取的共享儲存檔案。掃描結果不能證明整個裝置沒有惡意軟體。</string>
+    <string name="security_limited_storage">共享儲存訪問權限不可用。當前只能檢查已安裝 APK；授予權限前，檔案掃描範圍仍受限。</string>
+    <string name="analytics_title">防護統計</string>
+    <string name="analytics_subtitle">僅在本地顯示已儲存的掃描審計記錄和當前防護狀態。數量反映此處可用的記錄，不代表沒有惡意軟體。</string>
+    <string name="analytics_scan_in_progress">正在掃描</string>
+    <string name="analytics_audit_rows">近期審計記錄</string>
+    <string name="analytics_confirmed">已確認的匹配</string>
+    <string name="analytics_heuristic">啟發式警告</string>
+    <string name="analytics_not_scanned">未掃描／未完成</string>
+    <string name="analytics_daily_activity">每日活動</string>
+    <string name="analytics_recent_window">顯示資料庫返回的最近 50 條本地審計記錄在七天內的情況。</string>
+    <string name="analytics_no_audits">沒有已儲存的審計記錄</string>
+    <string name="analytics_no_audits_body">執行掃描以建立本地歷史記錄。歷史為空不等於掃描未發現威脅。</string>
+    <string name="analytics_protection_health">防護狀態</string>
+    <string name="analytics_definitions">本地雜湊定義</string>
+    <string name="analytics_feed_indicators">遠端資料來源指標</string>
+    <string name="analytics_last_scan">上次完成的掃描</string>
+    <string name="analytics_storage">共享儲存訪問權限</string>
+    <string name="analytics_notifications">通知</string>
+    <string name="analytics_sentinel">下載監控</string>
+    <string name="analytics_sentinel_running">前臺服務正在執行</string>
+    <string name="analytics_sentinel_stopped">服務未執行</string>
+    <string name="analytics_current_results">當前掃描結果條目</string>
+    <string name="analytics_quarantine">隔離檔案</string>
+    <string name="analytics_connection">網路狀態</string>
+    <string name="analytics_access_available">可用</string>
+    <string name="analytics_limited">不可用／受限</string>
+    <string name="analytics_online_local">已聯網；核心雜湊檢查仍在本地進行</string>
+    <string name="analytics_offline_local">未聯網；核心雜湊檢查仍在本地進行</string>
+    <string name="analytics_recent_activity">近期活動</string>
+    <string name="analytics_definition_note">資料集限制：內建離線定義僅含無害的 EICAR 測試標記雜湊，並非真實惡意軟體樣本庫。使用者匯入的定義只驗證資料格式，不驗證釋出者身份。</string>
+    <string name="apps_inventory_empty">已安裝應用程式清單暫不可用</string>
+    <string name="apps_inventory_empty_body">掃描已安裝應用程式以填充清單。系統和受保護的軟體包僅可檢視。</string>
+    <string name="apps_inventory_count">最近可用結果中已評估 %1$d 個應用程式</string>
+    <string name="sentinel_scope_title">監控範圍和限制</string>
+    <string name="sentinel_scope_body">前臺服務執行時，當前監控器直接觀察公共下載目錄中的 APK 建立、移動和寫入關閉事件。服務停止或檔案存放在其他位置時可能漏檢。安裝後檢查受 Android 限制，不能阻止安裝。</string>
+    <string name="risk_accessibility_overlay">請求無障礙和懸浮窗能力（可能存在 RAT/覆蓋層行為模式）</string>
+    <string name="risk_boot_sms_internet">組合使用開機持久化、READ_SMS 和 INTERNET（可能存在竊取簡訊/驗證碼的跡象）</string>
+    <string name="nav_install_sources">應用程式安裝來源</string>
+    <string name="install_sources_title">應用程式安裝來源</string>
+    <string name="install_sources_body">近期安裝事件及 Android 報告的安裝程式資訊。外部或未知來源本身並不能證明存在惡意軟體；請檢查本地掃描結果。</string>
+    <string name="install_source_play_badge">Google Play</string>
+    <string name="install_source_external_badge">外部 / 非 Play</string>
+    <string name="install_source_unknown_badge">來源未知</string>
+    <string name="install_sources_empty">尚未記錄安裝來源事件</string>
+    <string name="install_sources_empty_body">接受隱私說明後，Android 傳送的安裝事件會在裝置本地記錄。</string>
+    <string name="notification_install_source_channel">應用程式安裝來源提醒</string>
+    <string name="notification_install_source_title">檢查安裝來源</string>
+    <string name="notification_install_source_body">%1$s 已安裝；Android 報告的來源：%2$s。請在採取操作前進行檢查。</string>
+    <string name="enterprise_title">企業與裝置所有者保護</string>
+    <string name="enterprise_status_owner">裝置所有者已啟用</string>
+    <string name="enterprise_status_standard">標準模式 — 裝置所有者未啟用</string>
+    <string name="enterprise_body">個人使用不需要啟用裝置所有者模式。完全受管裝置可提供更嚴格的安裝限制，並對已確認的本地雜湊匹配執行由管理員控制的響應。</string>
+    <string name="enterprise_setup_guide">企業設定指南</string>
+    <string name="enterprise_auto_response">對已確認的惡意軟體雜湊匹配自動響應</string>
+    <string name="enterprise_auto_response_body">在裝置所有者裝置上啟用後，對於超過閾值的精確本地 hash/IOC 匹配，可以隱藏應用程式並請求解除安裝。僅憑權限或 DEX 字串不會觸發移除。</string>
+    <string name="enterprise_auto_response_title">啟用企業自動響應？</string>
+    <string name="enterprise_enable_response">啟用響應</string>
+    <string name="enterprise_setup_instructions">標準模式無需裝置所有者權限。生產部署請在裝置設定期間使用 QR 碼進行 Android Enterprise 配置。僅用於測試且僅限可重置裝置：恢復出廠設定後、完成設定前，管理員可執行：adb shell dpm set-device-owner com.vibesync.antivirus/.core.security.AdminReceiver。已完成設定的個人裝置無法從應用程式內啟用此功能。裝置所有者模式可以限制安裝並移除應用程式，請僅用於由組織管理的裝置。</string>
+    <string name="enterprise_response_warning">自動響應僅允許隱藏或靜默請求解除安裝非系統應用程式，並且必須同時滿足精確本地惡意軟體 hash/IOC 匹配和風險分數高於 0.8。Android 回撥失敗不會被視為成功。</string>
+    <string name="security_dashboard_title">安全概覽</string>
+    <string name="security_dashboard_subtitle">此裝置上的離線優先本地保護</string>
+    <string name="security_filter_overview">概覽</string>
+    <string name="security_filter_apps">應用程式</string>
+    <string name="security_filter_files">檔案</string>
+    <string name="security_filter_sentinel">監控</string>
+    <string name="security_filter_vault">隔離庫</string>
+    <string name="device_admin_title">裝置管理員</string>
+    <string name="device_admin_description">可選的裝置管理權限會在停用 SafeMobile 前新增 Android 確認步驟。停用後它無法阻止解除安裝應用程式或安裝 APK，也不會讓 SafeMobile 成為裝置所有者。</string>
+    <string name="device_admin_enable">啟用裝置管理員</string>
+    <string name="device_admin_disable">停用裝置管理員</string>
+    <string name="device_admin_active">此裝置上的裝置管理員已啟用。</string>
+    <string name="device_admin_inactive">裝置管理員未啟用。</string>
+    <string name="device_admin_explanation">啟用 SafeMobile 的可選裝置管理確認。SafeMobile 不會強制執行密碼策略、擦除裝置資料或阻止 APK 安裝。</string>
+    <string name="device_admin_lock_now">立即鎖定裝置</string>
+    <string name="device_admin_lock_confirm_title">現在鎖定此裝置嗎？</string>
+    <string name="device_admin_lock_confirm_message">SafeMobile 將請求 Android 立即鎖定螢幕。您現有的 Android 螢幕鎖定 PIN、圖案或密碼仍由您控制；SafeMobile 不會設定或更改它。</string>
+    <string name="device_admin_lock_confirm">鎖定裝置</string>
+    <string name="device_admin_lock_cancel">取消</string>
+    <string name="device_admin_lock_failed">無法請求鎖定裝置。請檢查 SafeMobile 裝置管理權限是否仍處於啟用狀態。</string>
+
+    <string name="installer_accessibility_service_title">SafeMobile 安裝程式提示</string>
+    <string name="installer_accessibility_service_description">Android 軟體包安裝程式出現時顯示的可選提示。它不會阻止、點選或幹擾安裝程式。僅在需要提醒時啟用。</string>
+    <string name="installer_unscanned_warning">警告：此 APK 尚未掃描。請返回 SafeMobile，先進行掃描。</string>
+    <string name="post_install_capability_note">安裝後立即掃描並隔離。普通應用程式無法阻止 Android 安裝程式。</string>
+    <string name="security_alert_channel_name">SafeMobile 高優先順序安全警報</string>
+    <string name="security_alert_channel_description">檢測到惡意軟體和隔離事件時發出的緊急本地警報。可在 Android 通知設定中更改聲音。</string>
+    <string name="security_alert_file_title">安全威脅已隔離</string>
+    <string name="security_alert_file_body">檔案（%1$s）已複製到 SafeMobile 的加密隔離庫。原始檔案可能仍留在受監控的資料夾中。</string>
+    <string name="security_alert_malware_title">檢測到惡意應用程式</string>
+    <string name="security_alert_malware_body">SafeMobile 在安裝後發現本地惡意軟體匹配項。請檢查應用程式，或請求 Android 解除安裝它。</string>
+    <string name="security_alert_review_title">應用程式需要安全審查</string>
+    <string name="security_alert_review_body">安裝後掃描發現可疑跡象。這是風險訊號，並非已確認的惡意軟體結論。</string>
+    <string name="security_alert_open_vault">開啟隔離庫</string>
+    <string name="security_alert_uninstall">解除安裝應用程式…</string>
+    <string name="voice_alerts_title">語音安全警報</string>
+    <string name="voice_alerts_description">使用裝置上的文字轉語音功能播報安全事件。語音警報預設關閉，不會向裝置外傳送資料。</string>
+    <string name="voice_alerts_enabled">已啟用語音安全警報</string>
+    <string name="voice_alerts_disabled">已停用語音安全警報</string>
+    <string name="hashdb_match">已簽名的 %1$s 雜湊匹配：%2$s</string>
+    <string name="hash_database_sync_title">已簽名的威脅定義</string>
+    <string name="hash_database_initial_syncing">正在更新威脅定義…</string>
+    <string name="hash_database_sync_description">靜默檢查 SafeMobile GitHub Releases 中的更新。每個下載的資料庫都會在啟用前驗證簽名。</string>
+    <string name="hash_database_sync_interval">聯網時每 6 小時自動檢查</string>
+    <string name="device_security_score">裝置安全評分</string>
+    <string name="device_security_score_preview">預覽儀表盤。暫時沒有測量評分。</string>
+    <string name="strict_mode_title">嚴格模式</string>
+    <string name="security_alerts_title">安全提醒</string>
+    <string name="security_alerts_description">檢測到威脅或隔離檔案時顯示本地通知。需由你開啟，預設關閉。</string>
+    <string name="security_alerts_enabled">提醒已開啟</string>
+    <string name="security_alerts_disabled">提醒已關閉</string>
+    <string name="voice_malicious_quarantined">警告。已檢測到惡意應用程式並將其隔離。</string>
+    <string name="voice_suspicious_quarantined">警告。可疑檔案已被移至SafeMobile的加密隔離區。</string>
+    <string name="voice_alert_malware_detected">警告。安裝後檢測到惡意應用程式。請立即檢查或解除安裝。</string>
+    <string name="voice_app_review">警告。新安裝的應用程式需要進行安全檢查。</string>
+    <string name="locale_english" translatable="false">英語</string>
+    <string name="locale_arabic" translatable="false">العربية</string>
+    <string name="locale_german" translatable="false">Deutsch</string>
+    <string name="locale_spanish" translatable="false">Español</string>
+    <string name="locale_french" translatable="false">Français</string>
+    <string name="locale_hindi" translatable="false">हिन्दी</string>
+    <string name="locale_japanese" translatable="false">日本語</string>
+    <string name="locale_portuguese" translatable="false">Português</string>
+    <string name="locale_russian" translatable="false">Русский</string>
+    <string name="locale_chinese" translatable="false">簡體中文</string>
+    <string name="locale_korean" translatable="false">한국어</string>
+    <string name="locale_turkish" translatable="false">Türkçe</string>
+    <string name="locale_indonesian" translatable="false">Bahasa Indonesia</string>
+    <string name="locale_vietnamese" translatable="false">Tiếng Việt</string>
+    <string name="locale_italian" translatable="false">Italiano</string>
+    <string name="locale_kannada" translatable="false">ಕನ್ನಡ</string>
+    <string name="locale_tamil" translatable="false">தமிழ்</string>
+    <string name="locale_telugu" translatable="false">తెలుగు</string>
+    <string name="locale_bengali" translatable="false">বাংলা</string>
+    <string name="locale_marathi" translatable="false">मराठी</string>
+    <string name="locale_urdu" translatable="false">اردو</string>
+    <string name="locale_hebrew" translatable="false">עברית</string>
+    <string name="threat_event_ray_id">威脅事件 Ray ID：%1$s</string>
+    <string name="features_menu">安全功能</string>
+    <string name="nav_guardian">安全衛士</string>
+    <string name="nav_phishing">連結檢查</string>
+    <string name="nav_cleaner">儲存清理</string>
+    <string name="why_safemobile">為什麼選擇 SafeMobile？核心優勢與功能</string>
+    <string name="features_disclaimer">功能是否可用取決於 Android 權限和當前本地定義。這些功能不保證提供完整或絕對的惡意軟體防護。</string>
+    <string name="pillar_offline_title" formatted="false">100% 離線隱私保護</string>
+    <string name="pillar_offline_body">核心檔案雜湊計算和本地簽名匹配均在裝置上進行。廣告和 Google Play 更新檢查屬於獨立的聯網功能，僅在已配置並獲準時使用。</string>
+    <string name="pillar_telemetry_title">零雲端遙測</string>
+    <string name="pillar_telemetry_body">掃描器不上傳檔案內容或雜湊。廣告和 Google Play 服務可能發起獨立的網路請求。</string>
+    <string name="pillar_whatsapp_title">訊息附件防護</string>
+    <string name="pillar_whatsapp_body">選擇並檢查您指定的 APK 或檔案。SafeMobile 不會自動檢查即時通訊應用程式中的每條訊息或附件。</string>
+    <string name="pillar_phishing_title">釣魚連結防護</string>
+    <string name="pillar_phishing_body">提供本地 URL 啟發式檢查。此版本未配置 URLhaus 威脅資料來源，也不會在整個裝置範圍攔截瀏覽器活動。</string>
+    <string name="pillar_cleaner_title">殘留檔案清理</string>
+    <string name="pillar_cleaner_body">通過 Android 選擇器指定資料夾，並在刪除選中檔案前檢查 APK 資訊。</string>
+    <string name="feature_status_limited">可用，但有限制</string>
+    <string name="feature_status_local">本地處理</string>
+    <string name="feature_status_heuristic">僅啟發式檢查；無威脅資料來源</string>
+    <string name="feature_status_review">需要使用者複核</string>
+    <string name="open_feature">開啟功能</string>
+    <string name="guardian_title">主動安全衛士</string>
+    <string name="guardian_disclaimer">安裝來源資訊和遠端訪問應用程式的存在僅是複核線索，不是惡意軟體證據。Android 不允許普通應用程式阻止所有外部安裝或強行停止其他應用程式。</string>
+    <string name="guardian_developer_settings">開發者設定與 ADB</string>
+    <string name="guardian_developer_state">開發者選項</string>
+    <string name="guardian_adb_state">USB 除錯（ADB）</string>
+    <string name="guardian_settings_limit">SafeMobile 可以顯示可讀取的狀態並開啟 Android 設定。受保護的全域性開關必須由您自行更改。</string>
+    <string name="guardian_review_settings">檢查開發者設定</string>
+    <string name="guardian_refresh">重新整理檢查</string>
+    <string name="guardian_open_settings_failed">無法在此裝置上開啟 Android 設定。</string>
+    <string name="guardian_install_sources">已安裝應用程式來源檢查</string>
+    <string name="guardian_source_explanation">顯示安裝程式未被識別為 Google Play 的應用程式，以及名稱或軟體包名類似遠端訪問工具的應用程式。結果取決於 Android 軟體包可見性及可用資訊。</string>
+    <string name="guardian_source_play">安裝程式：Google Play</string>
+    <string name="guardian_source_other">其他或替代安裝程式：%1$s</string>
+    <string name="guardian_source_unknown">安裝程式未知或不可用</string>
+    <string name="guardian_remote_tool_notice">可能存在遠端訪問工具。僅憑這一點不能判定為惡意軟體。</string>
+    <string name="guardian_open_app_info">開啟 Android 應用程式資訊</string>
+    <string name="guardian_scan_failed">應用程式來源檢查失敗或被 Android 阻止。</string>
+    <string name="guardian_no_findings">未找到非 Google Play 來源或名稱已知的遠端訪問應用程式。這不保證裝置沒有威脅。</string>
+    <string name="phishing_title">釣魚與連結檢查</string>
+    <string name="phishing_disclaimer">開啟連結前先在本地評估。此工具不會將輸入的 URL 傳送到遠端信譽服務。</string>
+    <string name="phishing_url_label">貼上 URL 或主機名</string>
+    <string name="phishing_assess">在本地評估連結</string>
+    <string name="phishing_invalid">無法評估此 URL</string>
+    <string name="phishing_suspicious">URL 存在可疑跡象，請先複核再開啟</string>
+    <string name="phishing_no_local_match">未命中本地啟發式規則，不保證安全</string>
+    <string name="phishing_host">規範化主機名</string>
+    <string name="phishing_no_feed_notice">本地查詢僅檢查當前儲存在本裝置上的指標，從不查詢遠端信譽服務。</string>
+    <string name="phishing_feed_checking">正在根據本地威脅指標檢查此 URL 和主機…</string>
+    <string name="phishing_feed_match">已知本地威脅指標：%1$s（來源：%2$s）</string>
+    <string name="phishing_feed_no_match">此 URL 或主機未匹配本地指標。這不保證安全。</string>
+    <string name="phishing_feed_lookup_error">本地指標查詢失敗，請重試。</string>
+    <string name="phishing_limitations">本工具不會全面攔截瀏覽器。它不跟隨重定向、不讀取頁面內容、不攔截其他應用程式內的連結，也不查詢網站的即時信譽。短連結會被標記為需要複核，而非自動判定為惡意。</string>
+    <string name="cleaner_title">殘留 APK 清理</string>
+    <string name="cleaner_description">通過 Android 儲存訪問框架選擇資料夾。SafeMobile 僅檢查 APK 資訊，未經您明確確認不會刪除檔案。Android/media 等資料夾的訪問權限因裝置而異。</string>
+    <string name="cleaner_no_folder">尚未選擇資料夾。</string>
+    <string name="cleaner_folder_selected">資料夾訪問權限已儲存。選擇“掃描儲存”以檢查符合條件的 APK。</string>
+    <string name="cleaner_choose_folder">選擇資料夾</string>
+    <string name="cleaner_scan_storage">掃描儲存</string>
+    <string name="cleaner_scanning">正在檢查 APK 資訊…</string>
+    <string name="cleaner_scan_complete">分析完成。找到 %1$d 個候選 APK</string>
+    <string name="cleaner_scan_failed">儲存分析失敗，或所選資料夾已不可訪問。</string>
+    <string name="cleaner_summary">候選 APK：%1$d · 總大小：%2$d 位元組</string>
+    <string name="cleaner_orphaned_candidate">可能的殘留檔案：對應軟體包未安裝</string>
+    <string name="cleaner_outdated_candidate">可能的舊檔案：已安裝軟體包的版本更新</string>
+    <string name="cleaner_installed_match">與已安裝的軟體包及版本匹配</string>
+    <string name="cleaner_review_required">需要複核：資訊不可用或不明確</string>
+    <string name="cleaner_bulk_eligible">可納入批次清理複核：檔案至少已有 30 天，且對應軟體包未安裝</string>
+    <string name="cleaner_display_limit">僅顯示前 100 個候選檔案。掃描會限制遍歷範圍，以保持應用程式響應。</string>
+    <string name="cleaner_delete_selected">清理選中項（%1$d）</string>
+    <string name="cleaner_delete_all_eligible">刪除所有符合條件的 APK（%1$d）</string>
+    <string name="cleaner_bulk_rule">批次刪除僅適用於可解析、至少已有 30 天且沒有已安裝軟體包匹配的 APK。這只是清理啟發式規則，不證明檔案一定不需要。</string>
+    <string name="cleaner_delete_confirm_title">確認永久刪除檔案</string>
+    <string name="cleaner_delete_confirm_body">確定刪除所選的 %1$d 個檔案，約 %2$d 位元組？此操作無法撤銷。SafeMobile 會在刪除前再次檢查顯示的檔名和可用資訊。</string>
+    <string name="cleaner_delete_confirm_action">刪除檔案</string>
+    <string name="cleaner_more_files">以及另外 %1$d 個…</string>
+    <string name="cleaner_delete_result">已刪除：%1$d · 約釋放位元組數：%2$d · 失敗或已更改：%3$d</string>
+    <string name="family_dedication_title">衷心致謝</string>
+    <string name="family_dedication">謹以深深的感激獻給我摯愛的家人。他們無比的耐心、支持，以及在我數月獨自開發期間所付出的時間與犧牲，使 SafeMobile Antivirus 得以誕生，為所有人的數字世界安全盡一份綿薄之力。</string>
+    <string name="about_readme">專案說明</string>
+    <string name="about_privacy_policy">隱私</string>
+    <string name="about_license">許可證</string>
+    <string name="about_third_party">第三方宣告</string>
+    <string name="about_license_missing">所審查的程式碼倉庫根目錄中沒有 LICENSE 檔案。此頁面不宣告任何開源許可，也不授予額外權限。僅僅公開可見並不等於獲得開源許可。</string>
+    <string name="threat_feed_hash_match">已知威脅雜湊：%1$s（來源：%2$s）</string>
+    <string name="threat_feed_dashboard_title">本地威脅情報</string>
+    <string name="threat_feed_active_count">已儲存的本地指標：%1$d</string>
+    <string name="threat_feed_last_success">上次成功同步：%1$s</string>
+    <string name="threat_feed_never_synced">尚未成功完成資料來源同步。</string>
+    <string name="threat_feed_syncing">資料來源同步正在進行。</string>
+    <string name="threat_feed_sync_succeeded">最近一次同步成功。</string>
+    <string name="threat_feed_sync_retry">滿足條件後將重試網路同步。</string>
+    <string name="threat_feed_sync_failed">最近一次同步失敗。已有本地指標已保留。</string>
+    <string name="threat_feed_status_not_available">尚無同步嘗試記錄。</string>
+    <string name="threat_feed_sync_now">立即同步</string>
+    <string name="threat_feed_configure">配置資料來源</string>
+    <string name="threat_feed_manage">資料來源設定</string>
+    <string name="threat_feed_settings_title">本地威脅資料來源同步</string>
+    <string name="threat_feed_settings_description">配置可信的 HTTPS JSON 或 CSV 地址。預設不啟用任何資料來源 URL 或 API 金鑰。僅在充電且連線不限流量網路時重新整理；點選“立即同步”可安排即時嘗試。</string>
+    <string name="threat_feed_endpoint">資料來源 HTTPS 地址</string>
+    <string name="threat_feed_auth_key">可選的提供方 Auth-Key</string>
+    <string name="threat_feed_credentials_note">可選金鑰使用 Android Keystore 加密，不會編譯進 APK 或寫入日誌。請勿在 URL 或請求正文中包含憑據。</string>
+    <string name="threat_feed_method">HTTP 請求方法</string>
+    <string name="threat_feed_get">GET</string>
+    <string name="threat_feed_post_json">POST JSON</string>
+    <string name="threat_feed_post_body">JSON 請求正文</string>
+    <string name="threat_feed_format">資料來源格式</string>
+    <string name="threat_feed_update_semantics">資料來源更新方式</string>
+    <string name="threat_feed_incremental">增量合併</string>
+    <string name="threat_feed_snapshot">完整權威快照</string>
+    <string name="threat_feed_update_semantics_note">增量合併會新增或更新條目，並保留該來源的舊條目。完整權威快照只有在完整且非空的資料成功解析後，才會替換該來源。為保護現有指標，空快照會被拒絕。</string>
+    <string name="threat_feed_auto">自動</string>
+    <string name="threat_feed_json">JSON</string>
+    <string name="threat_feed_csv">CSV</string>
+    <string name="threat_feed_save">儲存並安排同步</string>
+    <string name="threat_feed_clear">移除資料來源配置</string>
+    <string name="threat_feed_saved">資料來源配置已儲存。同步僅限於充電和不限流量網路條件。</string>
+    <string name="threat_feed_cleared">資料來源配置已移除，定期同步已取消。</string>
+    <string name="threat_feed_queue_note">同步已排隊。WorkManager 正在等待充電和不限流量網路。</string>
+    <string name="threat_feed_save_error">無法儲存資料來源配置。請檢查 HTTPS URL 和 JSON 請求正文。</string>
+    <string name="feed_settings_title">可選威脅資料來源同步</string>
+    <string name="feed_settings_description">儲存可信的 HTTPS JSON/CSV 地址。身份驗證金鑰使用 Android Keystore 加密儲存在應用程式私有設定中。此請求與本地掃描分離，不上傳掃描檔案、雜湊或歷史記錄。</string>
+    <string name="feed_settings_url_label">資料來源 HTTPS URL</string>
+    <string name="feed_settings_auth_label">可選的提供方 Auth-Key</string>
+    <string name="feed_settings_save">儲存資料來源配置</string>
+    <string name="feed_settings_saved">資料來源配置已在本地儲存。</string>
+    <string name="feed_settings_failed">無法儲存資料來源配置。</string>
+    <string name="feed_settings_key_ready">此版本已配置 Ed25519 驗證金鑰。</string>
+    <string name="feed_settings_key_missing">構建此版本時未配置可信的 Ed25519 公鑰，因此資料來源同步不可用。</string>
+    <string name="feed_settings_opt_in_title">啟用可選網路資料來源同步</string>
+    <string name="feed_settings_opt_in_description">預設關閉。啟用後，SafeMobile 會在充電且連線不限流量網路時訪問上述 HTTPS 地址。資料必須附有有效的 Ed25519 簽名清單，且版本必須更新。</string>
+    <string name="feed_settings_consent_title">允許可選的資料來源網路請求？</string>
+    <string name="feed_settings_consent_body">這將啟用對已配置資料來源的網路訪問。地址和可選 Auth-Key 可能被髮送。掃描檔案、檔案雜湊和掃描歷史不會傳送。本地掃描仍在裝置上進行。您可隨時關閉此功能。</string>
+    <string name="feed_settings_confirm">啟用資料來源同步</string>
+    <string name="feed_settings_cancel">取消</string>
+    <string name="feed_settings_enabled">已啟用同步。配置地址並滿足網路和電池條件後可能執行同步。</string>
+    <string name="feed_settings_disabled">已停用同步；排隊和定期任務已取消。</string>
+    <string name="ui_score_out_of_100">/ 100</string>
+    <string name="ui_score_title">裝置安全評分</string>
+    <string name="ui_score_checking">正在檢查裝置防護…</string>
+    <string name="ui_score_checks">配置評分 · 可用檢查 %1$d/%2$d</string>
+    <string name="ui_score_play_protect">Play Protect（使用者報告）</string>
+    <string name="ui_on">已開啟</string>
+    <string name="ui_off_20">已關閉 · −20</string>
+    <string name="ui_not_verified">未經驗證</string>
+    <string name="ui_score_database">威脅資料庫</string>
+    <string name="ui_stale_10">缺失或超過 24 小時 · −10</string>
+    <string name="ui_updated_24">已在 24 小時內更新</string>
+    <string name="ui_score_accessibility">非系統無障礙應用程式</string>
+    <string name="ui_enabled_count">已啟用 %1$d 個</string>
+    <string name="ui_penalty_20">· −20</string>
+    <string name="ui_unavailable">不可用</string>
+    <string name="ui_score_admin">非系統裝置管理員</string>
+    <string name="ui_score_explanation">從 100 分開始，每項問題只扣分一次。未知檢查不代表受到保護。啟用的無障礙應用程式和管理員可能是合法應用程式，請先複核再更改。</string>
+    <string name="ui_check_play_protect">檢查 Play Protect</string>
+    <string name="ui_update_definitions">更新定義</string>
+    <string name="ui_scanning_progress">正在掃描</string>
+    <string name="ui_scanning_title">正在掃描您的裝置</string>
+    <string name="ui_items_checked">已檢查 %1$d 項，共 %2$d 項</string>
+    <string name="ui_preparing_inventory">正在準備應用程式清單…</string>
+    <string name="ui_cancel_scan">取消掃描</string>
+    <string name="ui_scanned_summary">已掃描 %1$d 個應用程式和 %2$d 個檔案。</string>
+    <string name="ui_threats_found">發現 %1$d 個威脅</string>
+    <string name="ui_review_summary">%1$d 項需要複核，%2$d 項無法掃描。</string>
+    <string name="ui_no_readable_items">沒有可讀取的專案。請選擇檔案或安裝應用程式後重試。</string>
+    <string name="ui_unsigned_definitions_warning">未使用有效的已簽名威脅定義。請更新定義並重新掃描，以擴大雜湊檢測範圍。</string>
+    <string name="ui_view_scan_results">檢視掃描結果</string>
+    <string name="ui_sentinel_limited">⚠ 有限防護已啟用</string>
+    <string name="ui_sentinel_both_off">未監控下載和即時通訊應用程式資料夾。</string>
+    <string name="ui_sentinel_download_off">未監控下載資料夾。</string>
+    <string name="ui_sentinel_whatsapp_off">未監控即時通訊應用程式的檔案資料夾。</string>
+    <string name="ui_sentinel_setup">設定資料夾監控</string>
+    <string name="ui_sentinel_setup_title">可選資料夾防護</string>
+    <string name="ui_sentinel_intro">SafeMobile 可檢查您授權資料夾中的選定 APK。它無法檢查所有訊息，也無法在 Android 安裝應用程式之前阻止安裝。</string>
+    <string name="ui_sentinel_scoped">在 Android 11 及以上版本中，請選擇可訪問的子資料夾，而非受保護的下載根目錄。</string>
+    <string name="ui_sentinel_select_tip">Android 可能禁止選擇主下載資料夾和儲存根目錄。請選擇可訪問的子資料夾或單獨檔案。訊息檔案的位置因應用程式而異。僅監控已授權的資料夾。</string>
+    <string name="ui_sentinel_download_folder">下載資料夾（瀏覽器下載）</string>
+    <string name="ui_sentinel_whatsapp_folder">訊息檔案資料夾（聊天中的 APK）</string>
+    <string name="ui_sentinel_enable_download">啟用下載監控</string>
+    <string name="ui_sentinel_enable_whatsapp">啟用訊息應用程式監控</string>
+    <string name="ui_sentinel_remove_folder">移除監控資料夾</string>
+    <string name="ui_sentinel_running">正在遞迴監控已授權資料夾</string>
+    <string name="ui_sentinel_stopped">資料夾監控已停止</string>
+    <string name="ui_sentinel_stop">停止監控</string>
+    <string name="ui_sentinel_start">開始監控已儲存的資料夾</string>
+    <string name="ui_sentinel_best_effort">監控受 Android 限制，後臺工作可能被停止。僅掃描已授權且可訪問的資料夾。</string>
+    <string name="ui_sentinel_continue">以有限防護繼續</string>
+    <string name="ui_notifications_denied">通知權限已關閉，因此安裝警報不可用。請在 Android 應用程式設定中啟用通知以接收警告。</string>
+    <string name="ui_notifications_settings_unavailable">無法開啟應用程式通知設定。</string>
+    <string name="ui_enable_notifications_settings">在設定中啟用通知</string>
+    <string name="ui_folder_picker_explanation">選擇需要監控的資料夾。Android 11 及以上版本會禁止選擇受保護的根目錄；請選擇可訪問的子資料夾或訊息檔案。只掃描所選目錄及其子目錄。</string>
+    <string name="ui_folder_picker_unavailable">資料夾選擇器不可用。仍可使用有限防護。</string>
+    <string name="ui_storage_root_blocked">Android 不允許選擇儲存根目錄。請選擇可訪問的子資料夾。</string>
+    <string name="ui_yara_database_active">已簽名資料庫已啟用 · %1$d 個指標 · 版本 %2$s</string>
+    <string name="ui_yara_title">離線 DEX 規則特徵</string>
+    <string name="ui_yara_active">已啟用（有限）· 內建 %1$d 條規則</string>
+    <string name="ui_yara_disabled">已停用 · 0 條有效規則</string>
+    <string name="ui_yara_match_summary">最近掃描：%1$d 個 DEX 特徵匹配。提示性匹配不能確認惡意軟體。</string>
+    <string name="theme_appearance_description">選擇顏色主題。更改立即生效，離線時仍可使用。</string>
+    <string name="theme_midnight">午夜藍</string>
+    <string name="theme_oled">純 OLED 黑</string>
+    <string name="ui_play_protect_title">檢查 Play Protect</string>
+    <string name="ui_play_protect_description">在 Google Play 中開啟個人資料、Play Protect，然後進入設定。此版本無法自動驗證該設定。您報告的狀態會在 24 小時內用於評分。</string>
+    <string name="ui_google_play_unavailable">此裝置上無法使用 Google Play。</string>
+    <string name="ui_open_google_play">開啟 Google Play</string>
+    <string name="ui_checked_on">已檢查：開啟</string>
+    <string name="ui_checked_off">已檢查：關閉</string>
+    <string name="ui_not_now">暫不啟用</string>
+<string name="trusted_app_mark">標記為信任</string>
+<string name="trusted_app_explanation">依照您的選擇視為安全。此軟體包及其後續更新將跳過所有掃描和警報，包括已知惡意軟體檢測。</string>
+<string name="trusted_app_saved">安全（您已信任）</string>
+<string name="trusted_app_denied">無法將此應用程式設為信任，請重試。</string>
+<string name="apps_inventory_load_failed">無法讀取已安裝應用程式。請檢查 Android 軟體包可見性後重試。</string>
+<string name="apps_scanning_in_progress">正在掃描已安裝應用程式。分析期間清單仍會顯示。</string>
+<string name="apps_no_user_installed">未找到可見的使用者安裝應用程式。</string>
+<string name="metrics_dashboard_title">本地防護概覽</string>
+<string name="metrics_apps_scanned">已掃描的應用程式</string>
+<string name="metrics_threats_flagged">已發現的威脅</string>
+<string name="metrics_database_updated">資料庫上次更新</string>
+<string name="metrics_database_unknown">沒有經驗證的更新時間</string>
+<string name="metrics_not_blocked_disclaimer">檢測到威脅並不代表已阻止安裝。</string>
+<string name="locale_af">Afrikaans</string>
+<string name="locale_az">Azərbaycanca</string>
+<string name="locale_bg">Български</string>
+<string name="locale_ca">Català</string>
+<string name="locale_cs">Čeština</string>
+<string name="locale_da">Dansk</string>
+<string name="locale_el">Ελληνικά</string>
+<string name="locale_et">Eesti</string>
+<string name="locale_fa">فارسی</string>
+<string name="locale_fi">Suomi</string>
+<string name="locale_fil">Filipino</string>
+<string name="locale_gu">ગુજરાતી</string>
+<string name="locale_hr">Hrvatski</string>
+<string name="locale_hu">Magyar</string>
+<string name="locale_ka">ქართული</string>
+<string name="locale_kk">Қазақша</string>
+<string name="locale_km">ខ្មែរ</string>
+<string name="locale_lt">Lietuvių</string>
+<string name="locale_lv">Latviešu</string>
+<string name="locale_ml">മലയാളം</string>
+<string name="locale_ms">Bahasa Melayu</string>
+<string name="locale_my">မြန်မာ</string>
+<string name="locale_ne">नेपाली</string>
+<string name="locale_nl">Nederlands</string>
+<string name="locale_nb">Norsk bokmål</string>
+<string name="locale_pa">ਪੰਜਾਬੀ</string>
+<string name="locale_pl">Polski</string>
+<string name="locale_ro">Română</string>
+<string name="locale_sk">Slovenčina</string>
+<string name="locale_sl">Slovenščina</string>
+<string name="locale_sr">Српски</string>
+<string name="locale_sv">Svenska</string>
+<string name="locale_sw">Kiswahili</string>
+<string name="locale_th">ไทย</string>
+<string name="locale_uk">Українська</string>
+<string name="locale_uz">O‘zbekcha</string>
+<string name="format_label_value">%1$s：%2$s</string>
+<string name="format_bullet">• %1$s</string>
+<string name="format_date_range">%1$s 至 %2$s</string>
+<string name="format_version">%1$s · 版本 %2$s（%3$s）</string>
+<string name="format_package_version">%1$s · 版本 %2$s</string>
+<string name="format_finding_detail">%1$s\n%2$s</string>
+<string name="feed_url_hint">請輸入安全的資料來源地址</string>
+<string name="storage_size_unavailable">無法獲取大小</string>
+<string name="blocked_reason_hash">匹配到本地威脅特徵。</string>
+<string name="blocked_reason_action">已在系統允許的範圍內嘗試執行本地安全操作。</string>
+<string name="signed_import_success">已接受簽名資料庫：版本 %1$s · %2$s。</string>
+<string name="signed_import_failed">簽名資料庫未啟用。請檢查簽名、版本和檔案格式。</string>
+<string name="rule_import_pending">已儲存 %1$s 供稽核。匯入的規則仍處於停用狀態，不會執行此檔案。</string>
+<string name="rule_import_failed">無法匯入規則。匯入的規則仍處於停用狀態。</string>
+<string name="restore_result_localized">已還原 %1$s 的副本（%2$s）。隔離區中的原件仍會保留。</string>
+<string name="cleaner_confirm_localized">永久刪除 %1$s（%2$s）？此操作無法撤銷。SafeMobile 將重新檢查名稱和後設資料。</string>
+<string name="cleaner_result_localized">已刪除：%1$s · 釋放空間：%2$s · 失敗或已更改：%3$s</string>
+<string name="about_localized_notices">第三方元件仍適用各自的許可證。原始宣告僅記錄稽核進展，不代表許可證稽核已經完成。請開啟原始檔案檢視來源宣告和許可條款。</string>
+<string name="about_open_original">開啟原始檔案</string>
+<string name="about_localized_privacy">掃描的檔案、雜湊值、軟體包名稱和結果均保留在此裝置上。審計後設資料和隔離副本使用加密的私有儲存空間。簽名定義更新會訪問本專案的釋出服務；單獨的資料來源僅在您同意後訪問配置的地址。監控僅針對您選擇的資料夾，且可隨時停止。Android 權限由您控制。本版本不包含廣告、雲端掃描或連結信譽查詢服務。</string>
+<string name="coverage_local_title">本地測試定義</string>
+<string name="coverage_local_body">內建的舊版定義只包含無害的防病毒測試標記，無法覆蓋真實惡意軟體。</string>
+<string name="coverage_signed_title">簽名雜湊資料庫</string>
+<string name="coverage_signed_body">精確雜湊匹配需要可信簽名金鑰和已接受的簽名資料庫。應用程式未內建生產資料庫。</string>
+<string name="coverage_static_title">應用程式靜態分析</string>
+<string name="coverage_static_body">有限的軟體包分析提供參考性線索。單個線索不能證明存在惡意軟體；已知惡意簽名者列表已停用。</string>
+<string name="coverage_permissions_title">權限和清單</string>
+<string name="coverage_permissions_body">權限組合和可見的軟體包宣告用於輔助人工稽核，不屬於經過訓練的分類模型。</string>
+<string name="coverage_integrity_title">裝置完整性指標</string>
+<string name="coverage_integrity_body">超級使用者訪問、函式攔截、系統屬性、安全強制執行、偵錯程式和模擬器均通過本地啟發式方法檢查，並非安全認證。</string>
+<string name="coverage_bloom_title">機率雜湊索引</string>
+<string name="coverage_bloom_body">未內建經過驗證的非空機率索引及其清單。此可選層不可用。</string>
+<string name="coverage_rules_title">內建程式碼特徵</string>
+<string name="coverage_rules_body">經過驗證的內建規則檢查有限的程式碼字面模式。匹配結果僅供參考，不能確認惡意軟體。</string>
+<string name="coverage_rules_unavailable">內建規則未能載入或未通過驗證，因此不聲稱已執行程式碼特徵掃描。</string>
+<string name="coverage_model_title">權限分類模型</string>
+<string name="coverage_model_body">未內建經過訓練、驗證且允許分發的分類模型。機器學習已停用。</string>
+<string name="coverage_signer_title">離線簽名者認證</string>
+<string name="coverage_signer_body">尚未獨立固定預期的簽名證書指紋。</string>
+<string name="coverage_feed_title">簽名資料來源驗證</string>
+<string name="coverage_feed_body">分離式簽名驗證和防回滾保護需要構建時的可信金鑰以及已配置的簽名資料來源。</string>
+<string name="hash_status_active">本地簽名雜湊資料庫已啟用。</string>
+<string name="hash_status_missing">接受簽名資料庫之前，雜湊匹配處於停用狀態。</string>
+<string name="hash_status_key">由於沒有可用的可信簽名金鑰，雜湊匹配已停用。</string>
+<string name="hash_status_invalid">已儲存的定義未通過完整性、版本或格式檢查。雜湊匹配將保持停用。</string>
+<string name="hash_status_activation">資料庫啟用未完成。雜湊匹配將保持停用。</string>
+<string name="finding_confidence">%1$s · 置信度：%2$d%%</string>
+<string name="finding_exported">某個匯出元件在清單中沒有可見的權限保護。程式碼中可能仍有訪問檢查。</string>
+<string name="finding_admin">應用程式宣告瞭裝置管理接收器。這是一項敏感能力，但不能證明濫用。</string>
+<string name="finding_accessibility">應用程式宣告瞭無障礙服務。正規的輔助應用程式可能需要此權限。</string>
+<string name="finding_overlay">應用程式請求懸浮窗權限。懸浮窗可能有正當用途，但也可能遮擋其他介面。</string>
+<string name="finding_combined">無障礙服務與懸浮窗、簡訊或通話記錄訪問相結合。請稽核應用程式用途。</string>
+<string name="finding_sms_calls">應用程式同時請求簡訊和通話記錄權限。</string>
+<string name="finding_sms_network">簡訊訪問與網際網路訪問相結合，需要結合使用場景稽核。</string>
+<string name="finding_signer">簽名證書後設資料缺失或無法讀取。</string>
+<string name="finding_archive">無法完整檢查軟體包容器。靜態分析未完成。</string>
+<string name="finding_packer">軟體包中的路徑類似於已知的加殼或保護工具。正規應用程式也可能使用這些工具。</string>
+<string name="finding_dex_header">程式碼頭的格式或大小欄位不一致。這不能證明存在惡意軟體。</string>
+<string name="finding_dex_short">某個程式碼條目比有效的頭部更短，無法完整檢查。</string>
+<string name="finding_entropy">程式碼樣本具有較高的位元組熵。加密、加殼或正常的壓縮內容都可能造成此現象。</string>
+<string name="finding_api">未找到所請求權限的預期靜態引用。反射、庫或動態載入的程式碼可能導致此情況。</string>
+<string name="finding_rules">匹配到有限的內建程式碼特徵。該結果僅供參考，並非惡意軟體的證據。</string>
+<string name="finding_other">其他本地指標需要人工稽核，不能據此確認惡意軟體。</string>
+<string name="integrity_manager">檢測到可見的超級使用者權限或函式攔截管理器：%1$s</string>
+<string name="integrity_test_keys">裝置系統使用測試簽名金鑰。</string>
+<string name="integrity_debug_build">系統屬性表明這是可除錯或非生產版本。</string>
+<string name="integrity_selinux">可讀取的本地狀態顯示，強制安全策略未啟用。</string>
+<string name="integrity_debugger">此進程已連線偵錯程式。</string>
+<string name="integrity_emulator">系統屬性類似於模擬器或測試裝置。</string>
+<string name="audit_scan_pending">已記錄安裝事件，等待本地分析。</string>
+<string name="audit_scan_complete">本地分析已完成，未確認特徵匹配。這不保證安全。</string>
+<string name="audit_scan_unavailable">進行分析時，軟體包不可見。</string>
+<string name="audit_scan_threat">精確匹配到本地威脅特徵。</string>
+<string name="audit_scan_review">本地指標需要稽核，但不能確認惡意軟體。</string>
+<string name="audit_source_recorded">已記錄安裝來源。</string>
+<string name="audit_uninstall_requested">已請求 Android 顯示解除安裝確認。</string>
+<string name="audit_uninstall_success">Android 報告解除安裝成功。</string>
+<string name="audit_uninstall_failed">Android 無法完成解除安裝請求。</string>
+<string name="severity_test">無害測試標記</string>
+<string name="severity_low">低嚴重性</string>
+<string name="severity_medium">中等嚴重性</string>
+<string name="severity_high">高嚴重性</string>
+<string name="severity_critical">極高嚴重性</string>
+<string name="severity_unknown">未指定嚴重性</string>
+<plurals name="l10n_scanned_apps"><item quantity="other">已掃描 %1$d 個應用程式</item></plurals>
+<plurals name="l10n_scanned_files"><item quantity="other">已掃描 %1$d 個檔案</item></plurals>
+<plurals name="l10n_threats"><item quantity="other">發現 %1$d 個威脅</item></plurals>
+<plurals name="l10n_review"><item quantity="other">%1$d 個結果需要稽核</item></plurals>
+<plurals name="l10n_unreadable"><item quantity="other">無法掃描 %1$d 個專案</item></plurals>
+<plurals name="l10n_no_match"><item quantity="other">%1$d 個結果無本地匹配</item></plurals>
+<plurals name="l10n_apps"><item quantity="other">%1$d 個應用程式</item></plurals>
+<plurals name="l10n_files"><item quantity="other">%1$d 個檔案</item></plurals>
+<plurals name="l10n_posture_apps"><item quantity="other">%1$d 個非系統應用程式擁有高風險訪問權限。</item></plurals>
+<plurals name="l10n_pending_changes"><item quantity="other">%1$d 項已觀察到的更改等待通知。</item></plurals>
+<plurals name="l10n_rules"><item quantity="other">有限覆蓋 · %1$d 條內建規則</item></plurals>
+<plurals name="l10n_rule_matches"><item quantity="other">最近掃描：%1$d 項參考性程式碼匹配。</item></plurals>
+<plurals name="l10n_imported"><item quantity="other">已將 %1$d 個有效特徵匯入本地儲存。</item></plurals>
+<plurals name="l10n_bytes"><item quantity="other">%1$d 位元組</item></plurals>
+<plurals name="l10n_root_indicators"><item quantity="other">檔案系統中存在 %1$d 項超級使用者權限指標。</item></plurals>
+<plurals name="l10n_hook_indicators"><item quantity="other">存在 %1$d 項函式攔截指標。</item></plurals>
+<plurals name="l10n_enabled_apps"><item quantity="other">已啟用 %1$d 個應用程式</item></plurals>
+<plurals name="l10n_indicators"><item quantity="other">%1$d 個指標</item></plurals>
+<plurals name="l10n_progress"><item quantity="other">已檢查 %1$d 個應用程式，共 %2$d 個</item></plurals>
+    <string name="ml_probability">機器學習威脅機率：%1$d%%</string>
+    <string name="ml_high_finding">靜態機器學習啟發式分析：根據權限和 API 模式得分較高；僅供參考，不能證明存在惡意軟體。</string>
+    <string name="ml_active_body">裝置上已有經過驗證的靜態機器學習模型。結果僅供參考，不能證明存在惡意軟體。</string>
+
+    <!-- Threat Intelligence Engine: release training statistics cached for offline display. -->
+    <string name="threat_intelligence_title">威脅情報引擎</string>
+    <string name="threat_intelligence_samples">已分析的惡意軟體樣本總數</string>
+    <string name="threat_intelligence_accuracy">機器學習準確率</string>
+    <string name="threat_intelligence_downloads">全球模型下載量</string>
+    <string name="threat_intelligence_updated">上次情報更新</string>
+    <string name="threat_intelligence_updating">正在更新威脅情報…</string>
+    <string name="threat_intelligence_training_note">此處顯示訓練統計資訊。請參閱下方檢測層，瞭解此裝置可用的保護。</string>
+    <string name="ui_sentinel_add_custom_folder">+ 新增自定義資料夾</string>
+    <string name="ui_sentinel_custom_folders">自定義資料夾</string>
+    <string name="ui_sentinel_folder_limit">最多可新增 10 個自定義資料夾。</string>
+    <string name="ui_read_more">閱讀更多</string>
+    <string name="ui_read_less">收起</string>
+    <string name="ui_status_safe">安全</string>
+    <string name="ui_status_at_risk">有風險</string>
+    <string name="scan_detected_by">檢測來源：%1$s</string>
+    <string name="scan_detected_by_confidence">檢測來源：%1$s（%2$d%%）</string>
+    <string name="security_score_100_voice" formatted="false">您的安全配置已全面最佳化。我們將繼續監控您的裝置以保障安全。感謝您使用 Safe Mobile Antivirus。</string>
+    <string name="self_update_title">檢查更新（自更新）</string>
+    <string name="self_update_description">裝置管理員模式通常不會阻止 Google Play 更新。此按鈕會檢查 Play 應用程式內更新，並請求 Android 安裝更新。</string>
+    <string name="self_update_started">更新流程已開啟。請按照系統提示完成更新。</string>
+    <string name="self_update_cancelled">更新已取消。</string>
+    <string name="self_update_check_failed">無法啟動更新。請檢查 Google Play 連線後重試。</string>
+    <string name="self_update_unavailable">此安裝無法使用 Play 應用程式內更新。請開啟 Google Play 手動檢查。</string>
+    <string name="self_update_no_update">目前沒有可用的更新版 Google Play 更新。</string>
+    <string name="self_update_not_allowed">有可用更新，但 Google Play 不允許此安裝使用立即更新流程。</string>
+    <string name="self_update_open_play_store">開啟 Google Play</string>
+    <string name="scan_sessions_in_progress">正在進行的掃描會話：%1$d</string>
+    <string name="scan_sessions_completed">已完成的掃描會話：%1$d</string>
+    <string name="ui_sentinel_telegram_folder">Telegram 檔案資料夾</string>
+    <string name="ui_sentinel_enable_telegram">監控 Telegram 檔案</string>
+    <string name="scan_complete_skipped" translatable="false">Scan complete. %1$d files were skipped due to OS restrictions.</string>
+    <string name="scan_foreground_channel_name" translatable="false">Scanning in progress</string>
+    <string name="scan_foreground_channel_description" translatable="false">Persistent status for on-device antivirus scans.</string>
+    <string name="scan_foreground_notification_title" translatable="false">Scanning for threats...</string>
+    <string name="scan_foreground_notification_body" translatable="false">SafeMobile is scanning installed apps and local files on this device.</string>
+    <string name="scan_stop_action" translatable="false">Stop Scan</string>
+    <string name="ml_engine_active_status" translatable="false">AI Engine: Active</string>
+    <string name="play_integrity_verified_title" translatable="false">Play Integrity Verified</string>
+    <string name="play_integrity_verified_description" translatable="false">A trusted server verifies the device verdict returned by Google Play.</string>
+    <string name="play_integrity_status_verified" translatable="false">Google Play confirms MEETS_DEVICE_INTEGRITY.</string>
+    <string name="play_integrity_status_not_verified" translatable="false">Google Play did not return MEETS_DEVICE_INTEGRITY.</string>
+    <string name="play_integrity_status_requesting" translatable="false">Requesting an integrity token from Google Play…</string>
+    <string name="play_integrity_status_server_unconfigured" translatable="false">Token received. Server-side verification is not configured.</string>
+    <string name="play_integrity_status_error" translatable="false">Integrity verification is currently unavailable.</string>
+    <string name="play_integrity_status_not_checked" translatable="false">Waiting for an integrity check.</string>
+    <string name="device_integrity_title" translatable="false">Device Integrity Check</string>
+    <string name="security_advisor_heading" translatable="false">Security Advisor</string>
+    <string name="device_integrity_description" translatable="false">SafeMobile checked local build and bootloader state, ADB debugging and Google Play Services. This baseline is not a Google Play Integrity attestation.</string>
+    <string name="device_integrity_status_local_passed" translatable="false">Local baseline passed: locked verified boot, production build tags, ADB disabled and Google Play Services available. This is not a Google Play Integrity attestation.</string>
+    <string name="device_integrity_status_local_failed" translatable="false">Local baseline did not pass. Review bootloader lock, build tags, ADB debugging and Google Play Services.</string>
+    <string name="posture_audit_success" translatable="false">All Audit Successful</string>
+    <string name="play_protect_status_title" translatable="false">Play Protect Status</string>
+    <string name="play_protect_status_enabled" translatable="false">Google Play package verification is enabled on this device.</string>
+    <string name="play_protect_status_disabled" translatable="false">Google Play package verification is disabled in Android settings.</string>
+    <string name="console_full_screen_alerts_title" translatable="false">Full-screen alerts</string>
+    <string name="console_full_screen_alerts_allowed" translatable="false">Allowed. SafeMobile can open urgent incident alerts full-screen.</string>
+    <string name="console_full_screen_alerts_permission_needed" translatable="false">Permission needed. Allow SafeMobile to open urgent incident alerts full-screen.</string>
+    <string name="console_full_screen_alerts_not_required" translatable="false">Not required on this Android version.</string>
+    <string name="console_full_screen_alerts_manage" translatable="false">Manage</string>
+    <string name="console_full_screen_alerts_grant" translatable="false">Grant access</string>
+    <string name="security_advisor_all_secure" translatable="false">All Secure</string>
+</resources>

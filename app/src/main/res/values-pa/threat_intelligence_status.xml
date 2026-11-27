@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="threat_intelligence_unavailable" tools:ignore="MissingTranslation">या डिव्हाइसवर पडताळलेली अपस्ट्रीम प्रशिक्षण आकडेवारी कॅशमध्ये उपलब्ध नाही.</string>
+    <string name="threat_intelligence_upstream_stale" tools:ignore="MissingTranslation">कालबाह्य अपस्ट्रीम डेटा · प्रकाशित अपडेट ३० दिवसांपेक्षा जुने आहे.</string>
+    <string name="threat_intelligence_device_title" tools:ignore="MissingTranslation">डिव्हाइसवरील धोका माहिती</string>
+    <string name="threat_intelligence_latest_sync_note" tools:ignore="MissingTranslation">अलीकडील सिंक नोंद: %1$s</string>
+    <string name="threat_intelligence_feed_stale" tools:ignore="MissingTranslation">शेवटचे यशस्वी कॉन्फिगर केलेले फीड सिंक ७ दिवसांपेक्षा जुने आहे.</string>
+</resources>

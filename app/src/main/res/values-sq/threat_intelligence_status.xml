@@ -1,0 +1,7 @@
+<resources>
+    <string name="threat_intelligence_unavailable">Në këtë pajisje nuk janë ruajtur statistika të verifikuara të trajnimit nga burimi.</string>
+    <string name="threat_intelligence_upstream_stale">TË DHËNA TË VJETRUARA NGA BURIMI · Përditësimi i publikuar është më i vjetër se 30 ditë.</string>
+    <string name="threat_intelligence_device_title">Informacion për kërcënimet në pajisje</string>
+    <string name="threat_intelligence_latest_sync_note">Shënimi i sinkronizimit të fundit: %1$s</string>
+    <string name="threat_intelligence_feed_stale">Sinkronizimi i fundit i suksesshëm i burimit të konfiguruar është më i vjetër se 7 ditë.</string>
+</resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="test_siren">Testează sirena</string>
+    <string name="test_voice">Testează vocea</string>
+    <string name="test_siren_failed">Testul sirenei nu a putut porni pe acest dispozitiv.</string>
+    <string name="test_voice_failed">Testul vocal a eșuat. Verificați motorul de vorbire instalat și datele vocale.</string>
+</resources>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="global_threat_intelligence_title">Kontribuo në inteligjencën globale të kërcënimeve (opsionale)</string>
+    <string name="global_threat_intelligence_description">Kur aktivizohet, SafeMobile ndan automatikisht hash-et SHA-256 të kërcënimeve të konfirmuara dhe, kur janë të disponueshme, 215 veçori binare të sjelljes. Skedarët APK, emrat e skedarëve, shtigjet, emrat e paketave dhe identifikuesit e pajisjes nuk dërgohen kurrë. Mund ta çaktivizoni kurdoherë.</string>
+    <string name="global_threat_intelligence_donate_message">Ndihmoni në mbrojtjen e të tjerëve duke dhuruar në mënyrë anonime nënshkrimin e këtij skedari keqdashës në rrjetin tonë të trajnimit të inteligjencës artificiale.</string>
+    <string name="global_threat_intelligence_donate">Dhuroni</string>
+    <string name="global_threat_intelligence_decline">Refuzo</string>
+</resources>

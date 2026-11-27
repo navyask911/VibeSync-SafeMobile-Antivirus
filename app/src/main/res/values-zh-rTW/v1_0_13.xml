@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="trusted_app_options">選項</string>
+<string name="trusted_app_remove">取消信任</string>
+<string name="trusted_app_removed">已取消信任。此軟體包今後的掃描和警報已恢復。</string>
+<string name="trusted_app_remove_failed">無法取消信任，請重試。</string>
+<string name="install_sentinel_title">安裝監控</string>
+<string name="install_sentinel_active">SafeMobile Sentinel：已啟用並正在監控</string>
+<string name="install_sentinel_description">通過常駐通知提供安裝後的本地檢查。無輪詢，無喚醒鎖。Android 可能停止此服務。</string>
+<string name="install_sentinel_stop">停止安裝監控</string>
+<string name="install_scan_progress">正在分析新安裝的應用程式：%1$s</string>
+<string name="analytics_chart_title">掃描結果</string>
+<string name="analytics_other">其他結果</string>
+<string name="analytics_total">結果</string>
+<string name="analytics_weekly_scans">每週掃描</string>
+<string name="analytics_week_note">週一至週日的已記錄掃描會話，可能包含未完成的掃描。</string>
+<string name="posture_overlay_select_app">在 Android 11 及以上版本中，請在懸浮窗設定列表中選擇 %1$s。</string>
+<string name="install_scan_received">已收到安裝事件。請開啟 SafeMobile 檢視。</string>
+</resources>

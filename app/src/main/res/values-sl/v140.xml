@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v140_dashboard">Nadzorna plošča</string>
+    <string name="v140_analytics_tools">Orodja</string>
+    <string name="v140_critical">Kritično</string>
+    <string name="v140_minor">Manjše</string>
+    <string name="v140_snoozed">Dremež</string>
+    <string name="v140_completed">Dokončano</string>
+    <string name="v140_snooze_warning">Opozorilo je odloženo</string>
+    <string name="v140_done_return_to_audit">Končano — vrni se na pregled</string>
+    <string name="v140_security_risk_explained">Pojasnilo varnostnega tveganja</string>
+    <string name="v140_posture_score_impact">Vpliv na oceno stanja naprave</string>
+    <string name="v140_pending_actions">Čaka %1$d dejanj</string>
+</resources>

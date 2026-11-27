@@ -28,4 +28,11 @@
     <string name="pro_fewer_years">Daha az yıl</string>
     <string name="pro_more_years">Daha fazla yıl</string>
     <string name="pro_subscription_offer" formatted="false">SafeMobile Pro hizmetini etkinleştirin — ₹299 / yıl (otomatik yenileme). Google Play üzerinden istediğiniz zaman iptal edin.</string>
+    <string name="pro_one_year_price">Bir yıllık ön ödemeli erişim: %1$s</string>
+    <string name="pro_prepaid_offer">SafeMobile Pro için bir yıllık ön ödemeli erişim. Otomatik yenilenmez.</string>
+    <string name="pro_prepaid_duration_limit">Google Play ön ödemeli planları satın alma başına bir yılla sınırlıdır. Bir yıl daha eklemek için aynı planı yeniden satın alın veya uzatın; nihai fiyat Google Play\'de onaylanır.</string>
+    <string name="pro_device_binding_explanation">Bu satın alma, karmalanmış bir cihaz tanımlayıcısı kullanılarak bu Android cihazına bağlanır. Aynı cihaza yeniden yükleme etkin Play satın alımını geri yükleyebilir; farklı bir cihaz engellenir.</string>
+    <string name="pro_buy_or_extend_one_year">1 yıl satın al / uzat</string>
+    <string name="pro_device_mismatch">Abonelik başka bir cihazda etkin. Bu cihazda SafeMobile Pro erişimi engellendi.</string>
+    <string name="pro_device_binding_unavailable">Bu satın almanın doğrulanabilir bir cihaz bağlantısı yok. Google Play cihaza bağlı bir satın alma döndürene kadar Pro erişimi engellenir.</string>
 </resources>

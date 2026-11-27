@@ -690,18 +690,49 @@
     <string name="ui_status_at_risk">Có rủi ro</string>
     <string name="scan_detected_by">Được phát hiện bởi: %1$s</string>
     <string name="scan_detected_by_confidence">Được phát hiện bởi: %1$s (%2$d%%)</string>
-    <string name="security_score_100_voice" formatted="false">Your security configuration is fully optimized. We will continue to monitor your device to keep you safe. Thank you for using Safe Mobile Antivirus.</string>
-    <string name="self_update_title">Check for Updates (Self-Update)</string>
-    <string name="self_update_description">Device Administrator mode does not normally block Google Play updates. This button checks for a Play in-app update and asks Android to install it.</string>
-    <string name="self_update_started">The update flow was opened. Follow the system prompts to finish updating.</string>
-    <string name="self_update_cancelled">The update was cancelled.</string>
-    <string name="self_update_check_failed">The update could not be started. Check your Google Play connection and try again.</string>
-    <string name="self_update_unavailable">Play in-app updates are unavailable for this installation. Open Google Play to check manually.</string>
-    <string name="self_update_no_update">No newer Google Play update is currently available.</string>
-    <string name="self_update_not_allowed">An update is available, but Google Play does not allow the immediate update flow for this installation.</string>
-    <string name="self_update_open_play_store">Open Google Play</string>
+    <string name="security_score_100_voice" formatted="false">Cấu hình bảo mật của bạn đã được tối ưu hóa hoàn toàn. Chúng tôi sẽ tiếp tục giám sát thiết bị để bảo vệ bạn. Cảm ơn bạn đã sử dụng Safe Mobile Antivirus.</string>
+    <string name="self_update_title">Kiểm tra bản cập nhật (tự cập nhật)</string>
+    <string name="self_update_description">Chế độ Quản trị viên thiết bị thường không chặn các bản cập nhật Google Play. Nút này kiểm tra bản cập nhật trong ứng dụng Play và yêu cầu Android cài đặt.</string>
+    <string name="self_update_started">Đã mở quy trình cập nhật. Làm theo lời nhắc của hệ thống để hoàn tất cập nhật.</string>
+    <string name="self_update_cancelled">Đã hủy cập nhật.</string>
+    <string name="self_update_check_failed">Không thể bắt đầu cập nhật. Kiểm tra kết nối Google Play rồi thử lại.</string>
+    <string name="self_update_unavailable">Bản cập nhật trong ứng dụng Play không khả dụng cho bản cài đặt này. Mở Google Play để kiểm tra thủ công.</string>
+    <string name="self_update_no_update">Hiện không có bản cập nhật Google Play mới hơn.</string>
+    <string name="self_update_not_allowed">Có bản cập nhật, nhưng Google Play không cho phép quy trình cập nhật ngay lập tức đối với bản cài đặt này.</string>
+    <string name="self_update_open_play_store">Mở Google Play</string>
     <string name="scan_sessions_in_progress">Phiên quét đang diễn ra: %1$d</string>
     <string name="scan_sessions_completed">Phiên quét đã hoàn tất: %1$d</string>
     <string name="ui_sentinel_telegram_folder">Thư mục Tài liệu Telegram</string>
     <string name="ui_sentinel_enable_telegram">Theo dõi Tài liệu Telegram</string>
+    <string name="scan_complete_skipped" translatable="false">Scan complete. %1$d files were skipped due to OS restrictions.</string>
+    <string name="scan_foreground_channel_name" translatable="false">Scanning in progress</string>
+    <string name="scan_foreground_channel_description" translatable="false">Persistent status for on-device antivirus scans.</string>
+    <string name="scan_foreground_notification_title" translatable="false">Scanning for threats...</string>
+    <string name="scan_foreground_notification_body" translatable="false">SafeMobile is scanning installed apps and local files on this device.</string>
+    <string name="scan_stop_action" translatable="false">Stop Scan</string>
+    <string name="ml_engine_active_status" translatable="false">AI Engine: Active</string>
+    <string name="play_integrity_verified_title" translatable="false">Play Integrity Verified</string>
+    <string name="play_integrity_verified_description" translatable="false">A trusted server verifies the device verdict returned by Google Play.</string>
+    <string name="play_integrity_status_verified" translatable="false">Google Play confirms MEETS_DEVICE_INTEGRITY.</string>
+    <string name="play_integrity_status_not_verified" translatable="false">Google Play did not return MEETS_DEVICE_INTEGRITY.</string>
+    <string name="play_integrity_status_requesting" translatable="false">Requesting an integrity token from Google Play…</string>
+    <string name="play_integrity_status_server_unconfigured" translatable="false">Token received. Server-side verification is not configured.</string>
+    <string name="play_integrity_status_error" translatable="false">Integrity verification is currently unavailable.</string>
+    <string name="play_integrity_status_not_checked" translatable="false">Waiting for an integrity check.</string>
+    <string name="device_integrity_title" translatable="false">Device Integrity Check</string>
+    <string name="security_advisor_heading" translatable="false">Security Advisor</string>
+    <string name="device_integrity_description" translatable="false">SafeMobile checked local build and bootloader state, ADB debugging and Google Play Services. This baseline is not a Google Play Integrity attestation.</string>
+    <string name="device_integrity_status_local_passed" translatable="false">Local baseline passed: locked verified boot, production build tags, ADB disabled and Google Play Services available. This is not a Google Play Integrity attestation.</string>
+    <string name="device_integrity_status_local_failed" translatable="false">Local baseline did not pass. Review bootloader lock, build tags, ADB debugging and Google Play Services.</string>
+    <string name="posture_audit_success" translatable="false">All Audit Successful</string>
+    <string name="play_protect_status_title" translatable="false">Play Protect Status</string>
+    <string name="play_protect_status_enabled" translatable="false">Google Play package verification is enabled on this device.</string>
+    <string name="play_protect_status_disabled" translatable="false">Google Play package verification is disabled in Android settings.</string>
+    <string name="console_full_screen_alerts_title" translatable="false">Full-screen alerts</string>
+    <string name="console_full_screen_alerts_allowed" translatable="false">Allowed. SafeMobile can open urgent incident alerts full-screen.</string>
+    <string name="console_full_screen_alerts_permission_needed" translatable="false">Permission needed. Allow SafeMobile to open urgent incident alerts full-screen.</string>
+    <string name="console_full_screen_alerts_not_required" translatable="false">Not required on this Android version.</string>
+    <string name="console_full_screen_alerts_manage" translatable="false">Manage</string>
+    <string name="console_full_screen_alerts_grant" translatable="false">Grant access</string>
+    <string name="security_advisor_all_secure" translatable="false">All Secure</string>
 </resources>

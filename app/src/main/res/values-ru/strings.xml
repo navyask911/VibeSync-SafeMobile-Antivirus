@@ -689,16 +689,16 @@
     <string name="ui_status_at_risk">Под угрозой</string>
     <string name="scan_detected_by">Обнаружено с помощью: %1$s</string>
     <string name="scan_detected_by_confidence">Обнаружено с помощью: %1$s (%2$d%%)</string>
-    <string name="security_score_100_voice" formatted="false">Your security configuration is fully optimized. We will continue to monitor your device to keep you safe. Thank you for using Safe Mobile Antivirus.</string>
-    <string name="self_update_title">Check for Updates (Self-Update)</string>
-    <string name="self_update_description">Device Administrator mode does not normally block Google Play updates. This button checks for a Play in-app update and asks Android to install it.</string>
-    <string name="self_update_started">The update flow was opened. Follow the system prompts to finish updating.</string>
-    <string name="self_update_cancelled">The update was cancelled.</string>
-    <string name="self_update_check_failed">The update could not be started. Check your Google Play connection and try again.</string>
-    <string name="self_update_unavailable">Play in-app updates are unavailable for this installation. Open Google Play to check manually.</string>
-    <string name="self_update_no_update">No newer Google Play update is currently available.</string>
-    <string name="self_update_not_allowed">An update is available, but Google Play does not allow the immediate update flow for this installation.</string>
-    <string name="self_update_open_play_store">Open Google Play</string>
+    <string name="security_score_100_voice" formatted="false">Настройки безопасности вашего устройства полностью оптимизированы. Мы продолжим следить за устройством, чтобы обеспечить вашу защиту. Спасибо, что пользуетесь SafeMobile Antivirus.</string>
+    <string name="self_update_title">Проверить наличие обновлений (обновление приложения)</string>
+    <string name="self_update_description">Режим администратора устройства обычно не блокирует обновления Google Play. Эта кнопка проверяет наличие обновления через Google Play и предлагает Android установить его.</string>
+    <string name="self_update_started">Процесс обновления запущен. Следуйте системным инструкциям, чтобы завершить обновление.</string>
+    <string name="self_update_cancelled">Обновление отменено.</string>
+    <string name="self_update_check_failed">Не удалось запустить обновление. Проверьте подключение к Google Play и повторите попытку.</string>
+    <string name="self_update_unavailable">Обновления внутри приложения Google Play недоступны для этой установки. Откройте Google Play, чтобы проверить их вручную.</string>
+    <string name="self_update_no_update">Сейчас в Google Play нет доступных более новых обновлений.</string>
+    <string name="self_update_not_allowed">Обновление доступно, но Google Play не разрешает немедленное обновление для этой установки.</string>
+    <string name="self_update_open_play_store">Открыть Google Play</string>
     <string name="scan_sessions_in_progress">Текущие сеансы сканирования: %1$d</string>
     <string name="scan_sessions_completed">Завершённые сеансы сканирования: %1$d</string>
     <string name="ui_sentinel_telegram_folder">Папка документов Telegram</string>

@@ -1,4 +1,6 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.gradle.process.ExecOperations
+import javax.inject.Inject
 import java.util.Base64
 import java.util.zip.GZIPOutputStream
 import java.security.MessageDigest
@@ -8,11 +10,18 @@ import java.nio.file.StandardCopyOption
 import java.nio.file.AtomicMoveNotSupportedException
 plugins {
  id("com.android.application")
- id("org.jetbrains.kotlin.android")
- id("org.jetbrains.kotlin.kapt")
+ // Android Kotlin compilation is provided by AGP 9 built-in Kotlin support.
+ id("com.android.legacy-kapt")
  id("org.jetbrains.kotlin.plugin.compose")
  id("app.cash.paparazzi")
 }
+interface InjectedExecOperations {
+    @get:Inject
+    val execOperations: ExecOperations
+}
+
+val gradleExecOperations = project.objects.newInstance<InjectedExecOperations>().execOperations
+
 fun cfg(value: String): String = "\"" + value.replace("\\", "\\\\").replace("\"", "\\\"") + "\""
 
 val feedManifestPublicKey = providers.environmentVariable("SAFE_MOBILE_FEED_ED25519_PUBLIC_KEY_B64").orNull?.trim().orEmpty()
@@ -47,9 +56,9 @@ android {
   applicationId = "com.vibesync.antivirus"
   minSdk = 26
   targetSdk = 36
-  versionCode = 20261161
-  // [release-v1.10.7] Keep scan publish metadata encrypted and framework-object-free.
-  versionName = "1.10.7"
+  versionCode = 20261163
+  // [release-v1.10.9] Surface periodic scan results and retry transient package failures.
+  versionName = "1.10.9"
   testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   buildConfigField("String", "FEED_MANIFEST_PUBLIC_KEY_B64", cfg(feedManifestPublicKey))
   buildConfigField("Boolean", "FEED_MANIFEST_KEY_CONFIGURED", (!feedManifestPublicKey.isBlank()).toString())
@@ -60,6 +69,9 @@ android {
  signingConfigs {
   if (releaseSigningEnabled) {
    create("release") {
+    // Require modern APK signing schemes for Play and Android 7+ installs.
+    enableV2Signing = true
+    enableV3Signing = true
     val keystoreFile = layout.buildDirectory.file("signing/safemobile-release.jks").get().asFile
     if (!keystoreFile.isFile) {
      keystoreFile.parentFile.mkdirs()
@@ -104,6 +116,8 @@ android {
 val yaraXSourceRevision = "b666fbc15ff67fba1ceaf5deb68d071b44a1cbfe"
 val yaraXSourceDirectory = layout.buildDirectory.dir("native/yarax_android")
 val yaraXGeneratedJniDirectory = layout.buildDirectory.dir("generated/yarax-jniLibs")
+// Keep Cargo incremental outputs outside the cloned source tree, which can be replaced during setup.
+val yaraXCargoTargetDirectory = layout.buildDirectory.dir("cargo-target/yarax-android")
 val yaraXAndroidAbis = providers.gradleProperty("yaraxAndroidAbis").orNull
     ?.split(",")?.map { it.trim() }?.filter { it.isNotEmpty() }?.distinct()
     ?: listOf("arm64-v8a", "armeabi-v7a")
@@ -129,7 +143,7 @@ val prepareYaraXNativeSource = tasks.register("prepareYaraXNativeSource") {
             check(sourceDirectory.parentFile.mkdirs() || sourceDirectory.parentFile.isDirectory) {
                 "Could not create YARA-X build source directory."
             }
-            project.exec {
+            gradleExecOperations.exec {
                 commandLine(
                     "git", "clone", "--no-checkout",
                     "https://github.com/RevEngiSquad/yarax_android.git",
@@ -138,19 +152,19 @@ val prepareYaraXNativeSource = tasks.register("prepareYaraXNativeSource") {
             }.assertNormalExitValue()
         }
 
-        project.exec {
+        gradleExecOperations.exec {
             workingDir = sourceDirectory
             commandLine("git", "fetch", "--depth=1", "origin", yaraXSourceRevision)
         }.assertNormalExitValue()
-        project.exec {
+        gradleExecOperations.exec {
             workingDir = sourceDirectory
             commandLine("git", "checkout", "--force", "--detach", yaraXSourceRevision)
         }.assertNormalExitValue()
-        project.exec {
+        gradleExecOperations.exec {
             workingDir = sourceDirectory
             commandLine("git", "submodule", "sync", "--recursive")
         }.assertNormalExitValue()
-        project.exec {
+        gradleExecOperations.exec {
             workingDir = sourceDirectory
             commandLine("git", "submodule", "update", "--init", "--recursive", "--depth", "1")
         }.assertNormalExitValue()
@@ -183,7 +197,7 @@ val prepareYaraXPatches = tasks.register("prepareYaraXPatches") {
             "Pinned YARA-X patch submodule is incomplete."
         }
 
-        project.exec {
+        gradleExecOperations.exec {
             workingDir = patchesDirectory
             commandLine("make", "patch")
         }.assertNormalExitValue()
@@ -193,7 +207,7 @@ val prepareYaraXPatches = tasks.register("prepareYaraXPatches") {
         // Wasmtime Pulley and select it at runtime only for SDK levels below 29.
         // Restore the pinned JNI files before applying the deterministic bridge patch.
         val nativeSourceDirectory = yaraXSourceDirectory.get().asFile
-        project.exec {
+        gradleExecOperations.exec {
             workingDir = nativeSourceDirectory
             commandLine("git", "checkout", "--", "Cargo.toml", "src/lib.rs", "build.rs")
         }.assertNormalExitValue()
@@ -416,6 +430,7 @@ val buildYaraXNative = tasks.register<Exec>("buildYaraXNative") {
     inputs.dir(yaraXSourceDirectory)
     inputs.property("androidAbis", yaraXAndroidAbis)
     outputs.dir(yaraXGeneratedJniDirectory)
+    environment("CARGO_TARGET_DIR", yaraXCargoTargetDirectory.get().asFile.absolutePath)
     doFirst {
         val outputDirectory = yaraXGeneratedJniDirectory.get().asFile
         outputDirectory.deleteRecursively()
@@ -430,7 +445,7 @@ val buildYaraXNative = tasks.register<Exec>("buildYaraXNative") {
     }
 }
 
-android.sourceSets.getByName("main").jniLibs.srcDir(yaraXGeneratedJniDirectory)
+android.sourceSets.getByName("main").jniLibs.directories.add(yaraXGeneratedJniDirectory.get().asFile.absolutePath)
 tasks.matching {
     it.name.startsWith("merge") && it.name.endsWith("JniLibFolders")
 }.configureEach {
@@ -475,15 +490,10 @@ val packageProtectedSecurityAssets = tasks.register("packageProtectedSecurityAss
     }
 }
 val mainAssetSources = android.sourceSets.getByName("main").assets
-mainAssetSources.exclude(
-    "**/yara/safemobile_android_dex.yar",
-    "**/offline-threat-definitions.json",
-    "**/signatures/mock_signatures.hsb"
-)
-// Register the producing task itself as the asset source. Gradle then binds the
-// generated output directory to the producer and cannot reuse an unrelated/stale
-// source snapshot when the checked-in files move between source directories.
-mainAssetSources.srcDir(packageProtectedSecurityAssets)
+// The uncompressed inputs live under src/main/raw_assets, which is not an Android
+// asset source set. Keep the default src/main/assets tree and add only the generated
+// compressed directory; AGP 9 exposes source directories through the directories set.
+mainAssetSources.directories.add(protectedSecurityAssetDirectory.get().asFile.absolutePath)
 
 // docs/BENCHMARK_REPORT.md is canonical: the hidden card reads its build-time asset copy.
 // Generated assets are not committed and never contain APK samples.
@@ -495,7 +505,7 @@ val stageBenchmarkReport = tasks.register<Copy>("stageBenchmarkReport") {
 }
 // Register the producing TaskProvider, not just its build/ path. This propagates
 // Gradle's builtBy dependency to lint model writers and all variant asset consumers.
-android.sourceSets.getByName("main").assets.srcDir(stageBenchmarkReport)
+android.sourceSets.getByName("main").assets.directories.add(benchmarkAssetDirectory.get().asFile.absolutePath)
 // AGP's vital lint tasks inspect assets separately from merge<Variant>Assets.
 // Keep an explicit dependency as a belt-and-braces guard across AGP upgrades.
 

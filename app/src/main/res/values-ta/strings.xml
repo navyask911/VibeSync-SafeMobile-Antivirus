@@ -690,16 +690,16 @@
     <string name="ui_status_at_risk">ஆபத்தில் உள்ளது</string>
     <string name="scan_detected_by">கண்டறிந்தது: %1$s</string>
     <string name="scan_detected_by_confidence">கண்டறிந்தது: %1$s (%2$d%%)</string>
-    <string name="security_score_100_voice" formatted="false">Your security configuration is fully optimized. We will continue to monitor your device to keep you safe. Thank you for using Safe Mobile Antivirus.</string>
-    <string name="self_update_title">Check for Updates (Self-Update)</string>
-    <string name="self_update_description">Device Administrator mode does not normally block Google Play updates. This button checks for a Play in-app update and asks Android to install it.</string>
-    <string name="self_update_started">The update flow was opened. Follow the system prompts to finish updating.</string>
-    <string name="self_update_cancelled">The update was cancelled.</string>
-    <string name="self_update_check_failed">The update could not be started. Check your Google Play connection and try again.</string>
-    <string name="self_update_unavailable">Play in-app updates are unavailable for this installation. Open Google Play to check manually.</string>
-    <string name="self_update_no_update">No newer Google Play update is currently available.</string>
-    <string name="self_update_not_allowed">An update is available, but Google Play does not allow the immediate update flow for this installation.</string>
-    <string name="self_update_open_play_store">Open Google Play</string>
+    <string name="security_score_100_voice" formatted="false">உங்கள் சாதனத்தின் பாதுகாப்பு அமைப்பு முழுமையாக மேம்படுத்தப்பட்டுள்ளது. உங்களைப் பாதுகாப்பாக வைத்திருக்க உங்கள் சாதனத்தைத் தொடர்ந்து கண்காணிப்போம். SafeMobile Antivirus ஐப் பயன்படுத்துவதற்கு நன்றி.</string>
+    <string name="self_update_title">புதுப்பிப்புகளைச் சரிபார் (செயலி புதுப்பிப்பு)</string>
+    <string name="self_update_description">சாதன நிர்வாகி முறை பொதுவாக Google Play புதுப்பிப்புகளைத் தடுக்காது. இந்தப் பொத்தான் Google Play செயலிக்குள் புதுப்பிப்பைச் சரிபார்த்து அதை நிறுவ Android ஐக் கோருகிறது.</string>
+    <string name="self_update_started">புதுப்பிப்பு செயல்முறை திறக்கப்பட்டது. புதுப்பிப்பை முடிக்க அமைப்பின் வழிமுறைகளைப் பின்பற்றவும்.</string>
+    <string name="self_update_cancelled">புதுப்பிப்பு ரத்து செய்யப்பட்டது.</string>
+    <string name="self_update_check_failed">புதுப்பிப்பைத் தொடங்க முடியவில்லை. Google Play இணைப்பைச் சரிபார்த்து மீண்டும் முயலவும்.</string>
+    <string name="self_update_unavailable">இந்த நிறுவலுக்கு Google Play செயலிக்குள் புதுப்பிப்புகள் கிடைக்கவில்லை. கைமுறையாகச் சரிபார்க்க Google Play ஐத் திறக்கவும்.</string>
+    <string name="self_update_no_update">தற்போது Google Play இல் புதிய புதுப்பிப்பு எதுவும் இல்லை.</string>
+    <string name="self_update_not_allowed">புதுப்பிப்பு உள்ளது; ஆனால் இந்த நிறுவலுக்கு உடனடி புதுப்பிப்பு முறையை Google Play அனுமதிக்கவில்லை.</string>
+    <string name="self_update_open_play_store">Google Play ஐத் திற</string>
     <string name="scan_sessions_in_progress">நடைபெறும் ஸ்கேன் அமர்வுகள்: %1$d</string>
     <string name="scan_sessions_completed">முடிக்கப்பட்ட ஸ்கேன் அமர்வுகள்: %1$d</string>
     <string name="ui_sentinel_telegram_folder">Telegram ஆவணங்கள் கோப்புறை</string>

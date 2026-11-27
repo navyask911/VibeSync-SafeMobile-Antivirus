@@ -73,7 +73,7 @@ class SafeMobileApp : Application() {
                 try {
                     MobileAds.initialize(
                         this@SafeMobileApp,
-                        InitializationConfig.Builder(ADMOB_APP_ID).build(),
+                        InitializationConfig.Builder(getString(R.string.admob_app_id)).build(),
                         null
                     )
                     mobileAdsInitialized = true
@@ -100,7 +100,7 @@ class SafeMobileApp : Application() {
                 ThreatDatabase.MIGRATION_5_6, ThreatDatabase.MIGRATION_6_7,
                 ThreatDatabase.MIGRATION_7_8, ThreatDatabase.MIGRATION_8_9,
                 ThreatDatabase.MIGRATION_9_10, ThreatDatabase.MIGRATION_10_11,
-                ThreatDatabase.MIGRATION_11_12
+                ThreatDatabase.MIGRATION_11_12, ThreatDatabase.MIGRATION_12_13
             )
             .build()
         hashDatabaseManager = HashDatabaseManager(this, database)
@@ -184,7 +184,6 @@ class SafeMobileApp : Application() {
         const val PRIVACY_ACKNOWLEDGED = "acknowledged"
         const val HASH_DATABASE_SYNC_PREFS = "safe_mobile_hash_sync_bootstrap"
         const val KEY_INITIAL_HASH_SYNC_REQUESTED = "initial_hash_sync_requested"
-        const val ADMOB_APP_ID = "ca-app-pub-4783826505860771~8485727119"
     }
 }
 

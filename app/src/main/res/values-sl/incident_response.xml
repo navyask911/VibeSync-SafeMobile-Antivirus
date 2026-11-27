@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="incident_channel_description">Nujna lokalna opozorila o grožnjah s petsekundnim alarmom, ko je omogočen.</string>
+    <string name="incident_title">Zaznana zlonamerna aplikacija</string>
+    <string name="incident_loading">Nalaganje podrobnosti aplikacije…</string>
+    <string name="incident_app_unavailable">Aplikacija ni več na voljo</string>
+    <string name="incident_warning">Ta nameščena aplikacija se ujema z znano zgoščeno vrednostjo zlonamerne programske opreme. Ne odpirajte je. Odstranite jo prek potrditvenega zaslona Android. SafeMobile te nameščene aplikacije ni premaknil v karanteno ali odstranil.</string>
+    <string name="incident_uninstall_now">ODSTRANI ZDAJ</string>
+    <string name="incident_dismiss">Opusti (ni priporočeno)</string>
+    <string name="incident_review_threat">Preglej grožnjo</string>
+    <string name="incident_user_confirmation">Odstranitev aplikacije vedno zahteva vašo potrditev v Androidu. SafeMobile aplikacij ne odstranjuje tiho.</string>
+    <string name="incident_alerts_explanation">Privolite v nujna obvestila in petsekundno sireno pri najvišji glasnosti alarma za potrjeno zlonamerno programsko opremo. Odpiranje SafeMobile ali opustitev incidenta ustavi sireno. Nastavitve zvoka Android in Ne moti lahko omejijo zvok.</string>
+    <string name="incident_full_screen_settings">Celozaslonska opozorila o incidentih</string>
+    <string name="incident_full_screen_explanation">Android 14+ nadzira celozaslonski dostop. Za nujna obvestila o incidentih ga lahko omogočite v sistemskih nastavitvah. Če ostane izklopljen, SafeMobile uporabi obvestilo z visoko prednostjo. To je izbirno.</string>
+    <string name="incident_open_settings">Odpri nastavitve</string>
+    <string name="cyber_dark_appearance">Cyber Dark · Temno mornarsko ozadje, skrilaste kartice in neonsko cian</string>
+</resources>

@@ -715,16 +715,16 @@
     <string name="security_guard_saf_desc">Android ಫೈಲ್ ಆಯ್ಕೆಯಿಂದ ಅನುಮತಿಸಿದ ಫೋಲ್ಡರ್‌ಗಳನ್ನು ಮಾತ್ರ ಮೇಲ್ವಿಚಾರಣೆ ಮಾಡಿ.</string>
     <string name="scan_lab_metrics_title">ಸ್ಕ್ಯಾನ್ ಮತ್ತು ಲ್ಯಾಬ್ ಮಾಪನಗಳು</string>
     <string name="scan_lab_metrics_body">ಪರಿಶೀಲಿತ ಬೆಂಚ್‌ಮಾರ್ಕ್ ಮಾಹಿತಿ ಮತ್ತು ಸ್ಥಳೀಯ ಸ್ಕ್ಯಾನ್ ವಿಶ್ಲೇಷಣೆಗಳನ್ನು ಪರಿಶೀಲಿಸಿ.</string>
-    <string name="security_score_100_voice" formatted="false">Your security configuration is fully optimized. We will continue to monitor your device to keep you safe. Thank you for using Safe Mobile Antivirus.</string>
-    <string name="self_update_title">Check for Updates (Self-Update)</string>
-    <string name="self_update_description">Device Administrator mode does not normally block Google Play updates. This button checks for a Play in-app update and asks Android to install it.</string>
-    <string name="self_update_started">The update flow was opened. Follow the system prompts to finish updating.</string>
-    <string name="self_update_cancelled">The update was cancelled.</string>
-    <string name="self_update_check_failed">The update could not be started. Check your Google Play connection and try again.</string>
-    <string name="self_update_unavailable">Play in-app updates are unavailable for this installation. Open Google Play to check manually.</string>
-    <string name="self_update_no_update">No newer Google Play update is currently available.</string>
-    <string name="self_update_not_allowed">An update is available, but Google Play does not allow the immediate update flow for this installation.</string>
-    <string name="self_update_open_play_store">Open Google Play</string>
+    <string name="security_score_100_voice" formatted="false">ನಿಮ್ಮ ಭದ್ರತಾ ಸಂರಚನೆ ಸಂಪೂರ್ಣವಾಗಿ ಉತ್ತಮಗೊಳಿಸಲಾಗಿದೆ. ನಿಮ್ಮನ್ನು ಸುರಕ್ಷಿತವಾಗಿಡಲು ನಾವು ನಿಮ್ಮ ಸಾಧನವನ್ನು ನಿರಂತರವಾಗಿ ಮೇಲ್ವಿಚಾರಣೆ ಮಾಡುತ್ತೇವೆ. Safe Mobile Antivirus ಬಳಸುತ್ತಿರುವುದಕ್ಕೆ ಧನ್ಯವಾದಗಳು.</string>
+    <string name="self_update_title">ನವೀಕರಣಗಳಿಗಾಗಿ ಪರಿಶೀಲಿಸಿ (ಸ್ವಯಂ ನವೀಕರಣ)</string>
+    <string name="self_update_description">ಸಾಧನ ನಿರ್ವಾಹಕ ಮೋಡ್ ಸಾಮಾನ್ಯವಾಗಿ Google Play ನವೀಕರಣಗಳನ್ನು ತಡೆಯುವುದಿಲ್ಲ. ಈ ಬಟನ್ Google Play ಅಪ್ಲಿಕೇಶನ್‌ನೊಳಗಿನ ನವೀಕರಣವಿದೆಯೇ ಎಂದು ಪರಿಶೀಲಿಸಿ, ಅದನ್ನು ಸ್ಥಾಪಿಸಲು Android ಗೆ ವಿನಂತಿಸುತ್ತದೆ.</string>
+    <string name="self_update_started">ನವೀಕರಣ ಪ್ರಕ್ರಿಯೆಯನ್ನು ತೆರೆಯಲಾಗಿದೆ. ನವೀಕರಣವನ್ನು ಪೂರ್ಣಗೊಳಿಸಲು ಸಿಸ್ಟಮ್ ಸೂಚನೆಗಳನ್ನು ಅನುಸರಿಸಿ.</string>
+    <string name="self_update_cancelled">ನವೀಕರಣವನ್ನು ರದ್ದುಗೊಳಿಸಲಾಗಿದೆ.</string>
+    <string name="self_update_check_failed">ನವೀಕರಣವನ್ನು ಪ್ರಾರಂಭಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. Google Play ಸಂಪರ್ಕವನ್ನು ಪರಿಶೀಲಿಸಿ ಮತ್ತು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.</string>
+    <string name="self_update_unavailable">ಈ ಸ್ಥಾಪನೆಗೆ Google Play ಒಳಗಿನ ಅಪ್ಲಿಕೇಶನ್ ನವೀಕರಣಗಳು ಲಭ್ಯವಿಲ್ಲ. ಕೈಯಾರೆ ಪರಿಶೀಲಿಸಲು Google Play ತೆರೆಯಿರಿ.</string>
+    <string name="self_update_no_update">ಪ್ರಸ್ತುತ ಯಾವುದೇ ಹೊಸ Google Play ನವೀಕರಣ ಲಭ್ಯವಿಲ್ಲ.</string>
+    <string name="self_update_not_allowed">ನವೀಕರಣ ಲಭ್ಯವಿದೆ, ಆದರೆ ಈ ಸ್ಥಾಪನೆಗೆ ತಕ್ಷಣದ ನವೀಕರಣ ಪ್ರಕ್ರಿಯೆಯನ್ನು Google Play ಅನುಮತಿಸುವುದಿಲ್ಲ.</string>
+    <string name="self_update_open_play_store">Google Play ತೆರೆಯಿರಿ</string>
     <string name="play_integrity_verified_title">Play Integrity ಪರಿಶೀಲಿಸಲಾಗಿದೆ</string>
     <string name="play_integrity_verified_description">Google Play ನೀಡಿದ ಸಾಧನದ ತೀರ್ಪನ್ನು ವಿಶ್ವಾಸಾರ್ಹ ಸರ್ವರ್ ಪರಿಶೀಲಿಸುತ್ತದೆ.</string>
     <string name="play_integrity_status_verified">Google Play MEETS_DEVICE_INTEGRITY ಅನ್ನು ದೃಢೀಕರಿಸುತ್ತದೆ.</string>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ad_privacy_intro">Основно скенирање малвера остаје на овом уређају. Бесплатни пакет користи Google AdMob; Google може прикупљати и обрађивати Android Advertising ID и IP адресу ради испоруке огласа, мерења/извештавања о огласима и аналитике, као и спречавања преваре. Док је SafeMobile Pro активан, AdMob се не иницијализује и огласи се не захтевају нити приказују.</string>
+    <string name="ad_privacy_options">Избори приватности и огласа</string>
+</resources>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="threat_intelligence_unavailable">ఈ పరికరంలో ధృవీకరించిన అప్‌స్ట్రీమ్ శిక్షణ గణాంకాలు క్యాష్‌లో లేవు.</string>
+    <string name="threat_intelligence_upstream_stale">పాత అప్‌స్ట్రీమ్ డేటా · ప్రచురించిన నవీకరణ 30 రోజులకు మించినది.</string>
+    <string name="threat_intelligence_device_title">పరికరంలోని ముప్పు సమాచారం</string>
+    <string name="threat_intelligence_latest_sync_note">తాజా సమకాలీకరణ గమనిక: %1$s</string>
+    <string name="threat_intelligence_feed_stale">చివరిగా విజయవంతమైన కాన్ఫిగర్ చేసిన ఫీడ్ సమకాలీకరణకు 7 రోజులకు మించాయి.</string>
+</resources>

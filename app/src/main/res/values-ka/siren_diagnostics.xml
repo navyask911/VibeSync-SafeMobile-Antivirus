@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="test_siren">სირენის ტესტი</string>
+    <string name="test_voice">ხმის ტესტი</string>
+    <string name="test_siren_failed">ამ მოწყობილობაზე სირენის ტესტის დაწყება ვერ მოხერხდა.</string>
+    <string name="test_voice_failed">ხმის ტესტი ვერ შესრულდა. შეამოწმეთ დაინსტალირებული მეტყველების ძრავა და ხმის მონაცემები.</string>
+</resources>

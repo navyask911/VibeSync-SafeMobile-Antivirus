@@ -11,6 +11,14 @@ enum class DetectionSource {
     ENSEMBLE,
     HEURISTIC
 }
+
+/** Where this installed-app result came from; separate from the engine that produced its verdict. */
+enum class ScanSource {
+    FRESH,
+    CACHE_HIT,
+    GOOGLE_VERIFIED,
+    USER_TRUSTED
+}
 data class ScanResult(
  val packageOrPath: String,
  val displayName: String,
@@ -45,5 +53,24 @@ data class ScanResult(
  /** Raw YARA result retained separately from the fused verdict. */
  val yaraVerdict: ScanVerdict? = null,
  /** Confidence assigned by the conclusive detection layer or ensemble. */
- val confidence: Float = 0.0f
+ val confidence: Float = 0.0f,
+ /** Sum of installed base and readable split APKs, when available. */
+ val apkSizeBytes: Long? = null,
+ /** Fresh engine execution, cache reuse, or an explicitly trusted package path. */
+ val scanSource: ScanSource = ScanSource.FRESH,
+ /** Explicit completed/incomplete analysis stages for the report. */
+ val analysisStages: List<String> = emptyList()
 )
+
+
+/** Shared severity order for Scan & Lab active results and restored completed sessions. */
+object ScanResultOrdering {
+    fun sort(results: List<ScanResult>): List<ScanResult> = results.sortedBy { result ->
+        when (result.verdict) {
+            ScanVerdict.THREAT -> 0
+            ScanVerdict.SUSPICIOUS -> 1
+            ScanVerdict.NOT_SCANNED -> 2
+            ScanVerdict.NO_MATCH -> 3
+        }
+    }
+}

@@ -11,10 +11,9 @@
 <string name="battery_review_body">బ్యాటరీ ఆదా లేదా యాప్ అనుకూలీకరణ ప్రారంభంలో ఉంది. కొన్ని Oppo/ColorOS పరికరాలు నేపథ్య పరీక్షలు, ఇన్‌స్టాలేషన్ హెచ్చరికలను పరిమితం చేస్తాయి. SafeMobile బ్యాటరీ అమరికలు చూడండి; నిరంతర పర్యవేక్షణకు హామీ కాదు.</string>
 <string name="battery_review_action">బ్యాటరీ అమరికలు చూడు</string>
 <string name="battery_review_unavailable">Android బ్యాటరీ అమరికలు తెరవలేకపోయింది.</string>
-<string name="full_screen_dashboard_warning">కీలక హెచ్చరికలు ఆగాయి: పూర్తితెర ముప్పు హెచ్చరిక అనుమతికి తాకండి.</string>
-<string name="full_screen_dashboard_fallback">పూర్తితెర అనుమతి ఐచ్ఛికం. భద్రతా హెచ్చరికలు ప్రారంభిస్తే ఈ అనుమతి లేకుండానే ఐదు సెకన్ల సైరన్, అధిక ప్రాధాన్య నోటిఫికేషన్ Android శబ్ద, నోటిఫికేషన్ అమరికల మేరకు పనిచేస్తాయి.</string>
-<string name="full_screen_settings_unavailable">పూర్తితెర హెచ్చరిక అమరికలు తెరవలేకపోయింది. SafeMobile కొనసాగించవచ్చు.</string>
-<string name="system_app_protection_badge">వ్యవస్థ యాప్‌లు పరిశీలన, తొలగింపు నుండి రక్షితం</string>
-<string name="system_app_scan_complete">పరీక్ష పూర్తయింది. పరిశీలించిన అంశాల్లో ముప్పులు లేవు. వ్యవస్థ యాప్‌లు పరిశీలన, తొలగింపు నుండి మినహాయింపు; ఈ పరీక్ష వాటి సమగ్రతను నిర్ధారించలేదు.</string>
 <string name="ui_folder_access_not_granted">ఫోల్డర్ అనుమతి ఇవ్వలేదు. పరిమిత రక్షణతో కొనసాగించవచ్చు.</string>
+    <string name="test_siren">సైరన్‌ను పరీక్షించు</string>
+    <string name="test_voice">వాయిస్‌ను పరీక్షించు</string>
+    <string name="test_siren_failed">ఈ పరికరంలో సైరన్ పరీక్ష ప్రారంభం కాలేదు.</string>
+    <string name="test_voice_failed">వాయిస్ పరీక్ష విఫలమైంది. ఇన్‌స్టాల్ చేసిన పరికర స్పీచ్ ఇంజిన్, వాయిస్ డేటాను తనిఖీ చేయండి.</string>
 </resources>

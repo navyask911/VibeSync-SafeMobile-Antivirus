@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="threat_intelligence_unavailable">ಈ ಸಾಧನದಲ್ಲಿ ಪರಿಶೀಲಿತ ಮೇಲ್ಮಟ್ಟದ ತರಬೇತಿ ಅಂಕಿಅಂಶಗಳು ಸಂಗ್ರಹವಾಗಿಲ್ಲ.</string>
+    <string name="threat_intelligence_upstream_stale">ಹಳೆಯ ಮೇಲ್ಮಟ್ಟದ ಡೇಟಾ · ಪ್ರಕಟಿತ ನವೀಕರಣಕ್ಕೆ 30 ದಿನಗಳಿಗಿಂತ ಹೆಚ್ಚು ಆಗಿದೆ.</string>
+    <string name="threat_intelligence_device_title">ಸಾಧನದಲ್ಲಿನ ಬೆದರಿಕೆ ಮಾಹಿತಿ</string>
+    <string name="threat_intelligence_latest_sync_note">ಇತ್ತೀಚಿನ ಸಮನ್ವಯ ಟಿಪ್ಪಣಿ: %1$s</string>
+    <string name="threat_intelligence_feed_stale">ಕೊನೆಯ ಯಶಸ್ವಿ ಸಂರಚಿತ ಫೀಡ್ ಸಮನ್ವಯಕ್ಕೆ 7 ದಿನಗಳಿಗಿಂತ ಹೆಚ್ಚು ಆಗಿದೆ.</string>
+</resources>

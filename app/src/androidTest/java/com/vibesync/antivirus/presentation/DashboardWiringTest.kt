@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.unit.dp
@@ -170,11 +171,44 @@ class DashboardWiringTest {
         }
 
         composeRule.onNodeWithText("Ensemble sample").performScrollTo().performClick()
-        composeRule.onNodeWithText("ThreatEnsembleEvaluator", substring = true).assertExists()
-        composeRule.onNodeWithText("1. SHA-256 Hash").assertExists()
-        composeRule.onNodeWithText("2. YARA Rules").assertExists()
-        composeRule.onNodeWithText("3. ML Behavioral Model").assertExists()
-        composeRule.onNodeWithText("4. Static / DEX Heuristics · No findings").assertExists()
+        composeRule.onNodeWithText("ThreatEnsembleEvaluator", substring = true).assertIsDisplayed()
+        composeRule.onNodeWithText("1. SHA-256 Hash").assertIsDisplayed()
+        composeRule.onNodeWithText("2. YARA Rules").assertIsDisplayed()
+        composeRule.onNodeWithText("3. ML Behavioral Model").assertIsDisplayed()
+        composeRule.onNodeWithText("4. Static / DEX Heuristics · No findings").assertIsDisplayed()
+    }
+
+    @Test
+    fun threatIntelligenceCardRendersLiveFeedStateAndManualRefresh() {
+        var refreshCount = 0
+        val statsState = ThreatIntelligenceUiState(
+            releaseStats = ThreatIntelligenceReleaseStatsUi(
+                totalMalwareSamples = 5560L,
+                accuracyFraction = 0.9745,
+                totalDownloads = 12000L,
+                lastUpdated = "2026-11-20T00:00:00Z",
+                isStale = false
+            ),
+            releaseStatsLoaded = true,
+            activeLocalIndicatorCount = 42,
+            feedStateLoaded = true,
+            feedSyncStatus = "SUCCESS",
+            feedLastSuccessAt = 1_800_000_000_000L,
+            feedImportedCount = 42
+        )
+        render {
+            ThreatIntelligenceCardContent(
+                state = statsState,
+                onRefresh = { refreshCount++ },
+                showRefreshAction = true
+            )
+        }
+
+        composeRule.onNodeWithText("On-device threat intelligence").assertIsDisplayed()
+        composeRule.onNodeWithText("Active local indicators").assertIsDisplayed()
+        composeRule.onNodeWithText("SUCCESS").assertIsDisplayed()
+        composeRule.onNodeWithText("Refresh displayed stats").performClick()
+        assertEquals(1, refreshCount)
     }
 
     @Test

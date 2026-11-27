@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="global_threat_intelligence_title">Допринос глобалним обавештајним подацима о претњама (опционо)</string>
+    <string name="global_threat_intelligence_description">Када је омогућено, SafeMobile аутоматски дели SHA-256 хешеве потврђених претњи и, када су доступне, 215 бинарних карактеристика понашања. APK датотеке, имена датотека, путање, имена пакета и идентификатори уређаја се никада не шаљу. Ово можете искључити у било ком тренутку.</string>
+    <string name="global_threat_intelligence_donate_message">Помозите у заштити других анонимним донирањем потписа ове злонамерне датотеке нашој мрежи за обуку вештачке интелигенције.</string>
+    <string name="global_threat_intelligence_donate">Донирај</string>
+    <string name="global_threat_intelligence_decline">Одбиј</string>
+</resources>

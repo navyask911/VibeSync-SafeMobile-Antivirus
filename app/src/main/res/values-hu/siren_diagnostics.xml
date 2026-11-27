@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="test_siren">Sziréna tesztelése</string>
+    <string name="test_voice">Hang tesztelése</string>
+    <string name="test_siren_failed">A szirénateszt nem indítható el ezen az eszközön.</string>
+    <string name="test_voice_failed">A hangteszt nem sikerült. Ellenőrizze a telepített beszédmotort és a hangadatokat.</string>
+</resources>

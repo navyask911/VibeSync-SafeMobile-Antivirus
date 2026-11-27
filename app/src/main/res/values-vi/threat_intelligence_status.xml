@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="threat_intelligence_unavailable">Không có thống kê huấn luyện nguồn thượng nguồn đã xác minh nào được lưu trong bộ nhớ đệm trên thiết bị này.</string>
+    <string name="threat_intelligence_upstream_stale">DỮ LIỆU NGUỒN ĐÃ CŨ · Bản cập nhật được xuất bản đã quá 30 ngày.</string>
+    <string name="threat_intelligence_device_title">Tình báo mối đe dọa trên thiết bị</string>
+    <string name="threat_intelligence_latest_sync_note">Ghi chú đồng bộ gần nhất: %1$s</string>
+    <string name="threat_intelligence_feed_stale">Đã hơn 7 ngày kể từ lần đồng bộ thành công gần nhất của nguồn cấp dữ liệu đã cấu hình.</string>
+</resources>

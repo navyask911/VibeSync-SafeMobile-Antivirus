@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="threat_intelligence_unavailable">V tomto zařízení nejsou uloženy žádné ověřené statistiky upstream trénování.</string>
+    <string name="threat_intelligence_upstream_stale">ZASTARALÁ DATA ZE ZDROJE · Publikovaná aktualizace je starší než 30 dní.</string>
+    <string name="threat_intelligence_device_title">Informace o hrozbách v zařízení</string>
+    <string name="threat_intelligence_latest_sync_note">Poznámka k poslední synchronizaci: %1$s</string>
+    <string name="threat_intelligence_feed_stale">Poslední úspěšná synchronizace nakonfigurovaného kanálu proběhla před více než 7 dny.</string>
+</resources>

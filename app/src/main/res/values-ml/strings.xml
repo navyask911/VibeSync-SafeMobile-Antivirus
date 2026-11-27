@@ -833,16 +833,16 @@
     <string name="ui_status_at_risk">അപകടസാധ്യത</string>
     <string name="scan_detected_by">കണ്ടെത്തിയത്: %1$s</string>
     <string name="scan_detected_by_confidence">കണ്ടെത്തിയത്: %1$s (%2$d%%)</string>
-    <string name="security_score_100_voice" formatted="false">Your security configuration is fully optimized. We will continue to monitor your device to keep you safe. Thank you for using Safe Mobile Antivirus.</string>
-    <string name="self_update_title">Check for Updates (Self-Update)</string>
-    <string name="self_update_description">Device Administrator mode does not normally block Google Play updates. This button checks for a Play in-app update and asks Android to install it.</string>
-    <string name="self_update_started">The update flow was opened. Follow the system prompts to finish updating.</string>
-    <string name="self_update_cancelled">The update was cancelled.</string>
-    <string name="self_update_check_failed">The update could not be started. Check your Google Play connection and try again.</string>
-    <string name="self_update_unavailable">Play in-app updates are unavailable for this installation. Open Google Play to check manually.</string>
-    <string name="self_update_no_update">No newer Google Play update is currently available.</string>
-    <string name="self_update_not_allowed">An update is available, but Google Play does not allow the immediate update flow for this installation.</string>
-    <string name="self_update_open_play_store">Open Google Play</string>
+    <string name="security_score_100_voice" formatted="false">Jūsų įrenginio saugos konfigūracija visiškai optimizuota. Toliau stebėsime įrenginį, kad jis būtų apsaugotas. Dėkojame, kad naudojate „SafeMobile Antivirus“.</string>
+    <string name="self_update_title">Ieškoti naujinimų (programos naujinimas)</string>
+    <string name="self_update_description">Įrenginio administratoriaus režimas paprastai neblokuoja „Google Play“ naujinimų. Šis mygtukas patikrina „Play“ programos naujinimą ir paprašo „Android“ jį įdiegti.</string>
+    <string name="self_update_started">Atidarytas naujinimo procesas. Vadovaukitės sistemos nurodymais, kad užbaigtumėte naujinimą.</string>
+    <string name="self_update_cancelled">Naujinimas atšauktas.</string>
+    <string name="self_update_check_failed">Nepavyko pradėti naujinimo. Patikrinkite „Google Play“ ryšį ir bandykite dar kartą.</string>
+    <string name="self_update_unavailable">Šiame diegime „Play“ programos naujinimai nepasiekiami. Norėdami patikrinti rankiniu būdu, atidarykite „Google Play“.</string>
+    <string name="self_update_no_update">Šiuo metu „Google Play“ nėra naujesnio naujinimo.</string>
+    <string name="self_update_not_allowed">Yra naujinimas, tačiau „Google Play“ neleidžia iš karto atnaujinti šio diegimo.</string>
+    <string name="self_update_open_play_store">Atidaryti „Google Play“</string>
     <string name="scan_sessions_in_progress">നടന്നുകൊണ്ടിരിക്കുന്ന സ്കാൻ സെഷനുകൾ: %1$d</string>
     <string name="scan_sessions_completed">പൂർത്തിയായ സ്കാൻ സെഷനുകൾ: %1$d</string>
     <string name="ui_sentinel_telegram_folder">Telegram ഡോക്യുമെന്റുകളുടെ ഫോൾഡർ</string>

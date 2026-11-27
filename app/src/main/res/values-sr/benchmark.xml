@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benchmark_title">Резултати упоредног тестирања</string>
+    <string name="benchmark_not_measured">Проверено упоредно тестирање још није измерено</string>
+    <string name="benchmark_total_apps">Тестиране APK датотеке</string>
+    <string name="benchmark_tpr">Стопа откривања (TPR)</string>
+    <string name="benchmark_fpr">Стопа лажно позитивних резултата (FPR)</string>
+    <string name="benchmark_latency">Просечно време скенирања</string>
+    <string name="benchmark_privacy_note">Приказују се само проверени резултати. У апликацији се не чувају тестне APK датотеке.</string>
+</resources>

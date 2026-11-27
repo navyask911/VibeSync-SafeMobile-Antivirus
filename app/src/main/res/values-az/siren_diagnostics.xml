@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="test_siren">Sireni sına</string>
+    <string name="test_voice">Səsi sına</string>
+    <string name="test_siren_failed">Sirena sınağı bu cihazda başlatıla bilmədi.</string>
+    <string name="test_voice_failed">Səs sınağı uğursuz oldu. Quraşdırılmış nitq mühərrikini və səs məlumatlarını yoxlayın.</string>
+</resources>

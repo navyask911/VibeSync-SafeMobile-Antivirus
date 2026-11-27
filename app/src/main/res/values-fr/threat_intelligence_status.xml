@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="threat_intelligence_unavailable">Aucune statistique d’entraînement amont vérifiée n’est mise en cache sur cet appareil.</string>
+    <string name="threat_intelligence_upstream_stale">DONNÉES AMONT PÉRIMÉES · La mise à jour publiée date de plus de 30 jours.</string>
+    <string name="threat_intelligence_device_title">Renseignements sur les menaces sur l’appareil</string>
+    <string name="threat_intelligence_latest_sync_note">Note de la dernière synchronisation : %1$s</string>
+    <string name="threat_intelligence_feed_stale">La dernière synchronisation réussie du flux configuré date de plus de 7 jours.</string>
+</resources>

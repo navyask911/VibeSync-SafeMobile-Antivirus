@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Static release guard for SafeMobile v1.10.7 scan publishing, SAF, 16 KB and edge-to-edge requirements."""
+"""Static release guard for SafeMobile scan publishing, SAF, 16 KB and edge-to-edge requirements."""
 from pathlib import Path
 import re
 import sys
@@ -49,10 +49,10 @@ gradle = source["gradle"]
 version_name = re.search(r'\bversionName\s*=\s*"([^"]+)"', gradle)
 version_code = re.search(r"\bversionCode\s*=\s*(\d+)", gradle)
 ndk = re.search(r'\bndkVersion\s*=\s*"([^"]+)"', gradle)
-if not version_name or version_name.group(1) != "1.10.7":
-    errors.append("Gradle versionName must be 1.10.7.")
-if not version_code or version_code.group(1) != "20261161":
-    errors.append("Gradle versionCode must be 20261161.")
+if not version_name or not re.fullmatch(r"\d+\.\d+\.\d+", version_name.group(1)):
+    errors.append("Gradle versionName must be a semantic major.minor.patch version.")
+if not version_code or int(version_code.group(1)) <= 0:
+    errors.append("Gradle versionCode must be a positive integer.")
 if not ndk or tuple(int(part) for part in ndk.group(1).split(".")[:1]) < (28,):
     errors.append("Gradle must pin Android NDK r28 or higher.")
 if "com.google.ai.edge.litert:litert:1.4.2" not in gradle:
@@ -84,8 +84,12 @@ if "endpoint.isBlank() || !validatedInternet" not in baseline:
 if "LOCAL_BASELINE_PASSED" not in source["verifier"] or "applyLocalBaselineFallback" not in source["verifier"]:
     errors.append("SecurityVerifier does not publish the local-baseline fallback result.")
 package_scanner = source["packageScanner"]
-if 'Log.e("SafeMobileScan", "Publish failed", error)' not in package_scanner:
-    errors.append("Package scan result publication failures must be isolated and logged.")
+if (
+    "publishScanResultSafely(" not in package_scanner
+    or 'Log.e("ScanDebug", "pkg_fail pkg=$pkg stage=publish userId=$userId", error)' not in package_scanner
+    or "ScanPublishStageException" not in source["repository"]
+):
+    errors.append("Package scan result publication failures must be isolated, stage-labelled and logged.")
 if "OnConflictStrategy.REPLACE" not in source["dao"] or "insertScanSessionItem" not in source["dao"]:
     errors.append("Scan-session item persistence must use REPLACE on Room conflicts.")
 if "contentResolver.query(" in source["repository"] or "fromSingleUri(" in source["repository"]:
@@ -112,8 +116,12 @@ if 'Log.e("ScanDebug", "Worker CRASHED", error)' not in worker:
     errors.append("DeepScanWorker must log caught worker failures.")
 if 'Log.d("ScanDebug", "Worker FINISHED with result: $result")' not in worker:
     errors.append("DeepScanWorker must log its terminal result.")
-if "clearScanSessionStateCheckpoints()" not in worker:
-    errors.append("DeepScanWorker must clear Room checkpoints before a fresh session.")
+if "clearScanSessionStateCheckpoints()" in worker:
+    errors.append("DeepScanWorker must not clear unrelated Room sessions; retry checkpoints must remain session-scoped.")
+if "scanSessionItemKeys" not in source["dao"] or "verdict != 'NOT_SCANNED'" not in source["dao"]:
+    errors.append("DeepScanWorker retries must exclude NOT_SCANNED rows from completed session checkpoints.")
+if "Result.retry()" not in worker or "pendingRetries" not in worker:
+    errors.append("DeepScanWorker must retry unresolved app verdicts before reporting success.")
 scheduler = source["scheduler"]
 if ".setRequiredNetworkType(NetworkType.NOT_REQUIRED)" not in scheduler:
     errors.append("Periodic scans must explicitly use NetworkType.NOT_REQUIRED.")
@@ -129,8 +137,10 @@ if "ScanExecutionCoordinator.mutex.withLock" not in source["service"] or "ScanEx
 service = source["service"]
 if "operation == OP_RESUME || operation == null" not in service:
     errors.append("Only explicit/system service redelivery may resume an interrupted scan.")
-if "repo.clearScanSessionStateCheckpoints()" not in service:
-    errors.append("Fresh foreground scans must clear stale Room checkpoints.")
+if "repo.clearScanSessionStateCheckpoints()" in service:
+    errors.append("Fresh foreground scans must preserve unrelated Room sessions instead of globally deleting checkpoints.")
+if "NOT_SCANNED" not in service or "manual_scan_retry" not in service:
+    errors.append("Foreground scans must retry incomplete result rows before finalizing Scan & Lab.")
 dao = source["dao"]
 if '@Query("DELETE FROM scan_session_state")' not in dao or "suspend fun clearAllSessions()" not in dao:
     errors.append("ThreatDao must expose clearAllSessions() for scan_session_state.")
@@ -146,8 +156,8 @@ if "integrityCheckPassed" not in source["score"]:
     errors.append("Device Security Score does not consume the effective remote-or-local integrity result.")
 
 
-# v1.10.7 ColorOS boundary: platform package metadata is deliberately confined
-# to PackageScanner and collapsed to scalar values before crossing app layers.
+# Installed-package scan boundary: keep PackageManager and graphics objects confined
+# to PackageScanner and collapse package identity to scalar values before crossing app layers.
 viewmodel = source["viewmodel"]
 inventory_model = source["inventoryModel"]
 scan_result = source["scanResult"]
@@ -212,4 +222,4 @@ if errors:
     print(f"Android release readiness FAILED ({len(errors)} issue(s)):")
     print("\n".join(f"- {error}" for error in errors), file=sys.stderr)
     sys.exit(1)
-print("Android release readiness passed: v1.10.7/20261161, encrypted scan publishing, NDK r28+, LiteRT 1.4.2 and SAF grants.")
+print(f"Android release readiness passed: {version_name.group(1)}/{version_code.group(1)}, scan-stage diagnostics, NDK r28+, LiteRT 1.4.2 and SAF grants.")

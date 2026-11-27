@@ -37,6 +37,10 @@ interface ThreatDao {
 
  @Insert(onConflict = OnConflictStrategy.REPLACE)
  suspend fun upsertScanSession(session: ScanSessionEntity)
+ @Query("SELECT * FROM scan_sessions WHERE session_id = :sessionId LIMIT 1")
+ suspend fun findScanSession(sessionId: String): ScanSessionEntity?
+ @Query("UPDATE scan_sessions SET elapsed_ms = elapsed_ms + :elapsedMs WHERE session_id = :sessionId")
+ suspend fun addScanSessionElapsedMs(sessionId: String, elapsedMs: Long)
 
  @Query("UPDATE scan_sessions SET status = 'COMPLETED', completed_at = :completedAt WHERE session_id = :sessionId")
  suspend fun markScanSessionCompleted(sessionId: String, completedAt: Long)
@@ -48,7 +52,7 @@ interface ThreatDao {
   WHERE status = 'IN_PROGRESS'
    AND session_id NOT IN (SELECT session_id FROM scan_session_state
     WHERE is_complete = 0 AND operation_type IN
-     ('FULL_DEVICE','DEEP_SCAN','INSTALLED_APPS','SELECTED_FILE','INSTALLED_PACKAGE','SELECTED_FOLDER'))""")
+     ('FULL_DEVICE','DEEP_SCAN','INSTALLED_APPS','SELECTED_FILE','INSTALLED_PACKAGE','SELECTED_FOLDER','PERIODIC_DEEP_SCAN'))""")
  suspend fun markInProgressAsInterrupted()
  @Query("UPDATE scan_sessions SET status = 'IN_PROGRESS', completed_at = NULL WHERE session_id = :sessionId")
  suspend fun markScanSessionResumed(sessionId: String)
@@ -70,6 +74,8 @@ interface ThreatDao {
  suspend fun latestCompletedScanAt(): Long?
  @Insert(onConflict = OnConflictStrategy.REPLACE)
  suspend fun upsertScanSessionState(state: ScanSessionState)
+ @Query("UPDATE scan_session_state SET enumerated_items = :enumerated, eligible_items = :eligible, excluded_items = :excluded WHERE session_id = :sessionId")
+ suspend fun updateScanSessionInventory(sessionId: String, enumerated: Int, eligible: Int, excluded: Int)
  @Query("SELECT * FROM scan_session_state WHERE session_id = :sessionId LIMIT 1")
  suspend fun findScanSessionState(sessionId: String): ScanSessionState?
  @Query("""SELECT state.* FROM scan_session_state AS state JOIN scan_sessions AS session ON session.session_id = state.session_id
@@ -77,17 +83,17 @@ interface ThreatDao {
   ORDER BY session.started_at DESC LIMIT 1""")
  suspend fun latestIncompleteManualScanState(): ScanSessionState?
  @Query("""SELECT state.* FROM scan_session_state AS state JOIN scan_sessions AS session ON session.session_id = state.session_id
-  WHERE state.operation_type IN ('FULL_DEVICE','DEEP_SCAN','INSTALLED_APPS','SELECTED_FILE','INSTALLED_PACKAGE','SELECTED_FOLDER')
+  WHERE state.operation_type IN ('FULL_DEVICE','DEEP_SCAN','INSTALLED_APPS','SELECTED_FILE','INSTALLED_PACKAGE','SELECTED_FOLDER','PERIODIC_DEEP_SCAN')
   ORDER BY session.started_at DESC LIMIT 1""")
- fun observeLatestManualScanState(): Flow<ScanSessionState?>
+ fun observeLatestScanState(): Flow<ScanSessionState?>
  @Query("""SELECT state.* FROM scan_session_state AS state JOIN scan_sessions AS session ON session.session_id = state.session_id
   WHERE state.is_complete = 1 AND session.status = 'COMPLETED'
-   AND state.operation_type IN ('FULL_DEVICE','DEEP_SCAN','INSTALLED_APPS','SELECTED_FILE','INSTALLED_PACKAGE','SELECTED_FOLDER')
-  ORDER BY session.started_at DESC LIMIT 1""")
- suspend fun latestCompletedManualScanState(): ScanSessionState?
+   AND state.operation_type IN ('FULL_DEVICE','DEEP_SCAN','INSTALLED_APPS','SELECTED_FILE','INSTALLED_PACKAGE','SELECTED_FOLDER','PERIODIC_DEEP_SCAN')
+  ORDER BY session.completed_at DESC, session.started_at DESC LIMIT 1""")
+ suspend fun latestCompletedScanState(): ScanSessionState?
  @Insert(onConflict = OnConflictStrategy.REPLACE)
  suspend fun insertScanSessionItem(item: ScanSessionItemEntity)
- @Query("SELECT item_key FROM scan_session_items WHERE session_id = :sessionId")
+ @Query("SELECT item_key FROM scan_session_items WHERE session_id = :sessionId AND verdict != 'NOT_SCANNED'")
  suspend fun scanSessionItemKeys(sessionId: String): List<String>
  @Query("SELECT * FROM scan_session_items WHERE session_id = :sessionId ORDER BY completed_at ASC")
  suspend fun scanSessionItems(sessionId: String): List<ScanSessionItemEntity>
@@ -109,6 +115,12 @@ interface ThreatDao {
 
  @Query("SELECT * FROM app_scan_cache WHERE packageName = :packageName LIMIT 1")
  suspend fun findAppScanCache(packageName: String): AppScanCache?
+
+ @Query("DELETE FROM app_scan_cache WHERE packageName = :packageName")
+ suspend fun deleteAppScanCache(packageName: String)
+
+ @Query("DELETE FROM app_scan_cache")
+ suspend fun clearAppScanCache()
 
  @Insert(onConflict = OnConflictStrategy.REPLACE)
  suspend fun upsertAppScanCache(cache: AppScanCache)

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ad_privacy_intro">Skanimi bazë i malware-it mbetet në këtë pajisje. Niveli Falas përdor Google AdMob; Google mund të mbledhë dhe përpunojë Android Advertising ID dhe adresën IP për shpërndarjen e reklamave, matjen/raportimin e reklamave dhe analitikën, si dhe parandalimin e mashtrimit. Kur SafeMobile Pro është aktiv, AdMob nuk inicializohet dhe nuk kërkohen ose shfaqen reklama.</string>
+    <string name="ad_privacy_options">Zgjedhjet e privatësisë dhe reklamave</string>
+</resources>

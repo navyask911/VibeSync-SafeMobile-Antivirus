@@ -684,6 +684,7 @@ import kotlinx.coroutines.launch
   val observer = LifecycleEventObserver { _, event ->
    if (event == Lifecycle.Event.ON_RESUME) {
     vm.refreshScanHistory()
+    vm.refreshThreatIntelligenceStats()
     if (privacyAccepted) vm.refreshTrustOverrides()
     fullScreenAlertsGranted = FullScreenAlertAccess.isGranted(context)
     voiceAlertsEnabled = securityPrefs.getBoolean(SafeMobileApp.KEY_VOICE_ALERTS_ENABLED, false)
@@ -837,19 +838,21 @@ import kotlinx.coroutines.launch
      )
     },
     bottomBar = {
-     if (selectedDestination in setOf("home", "scan", "tools", "settings")) {
-      V17BottomNavigationBar(
-       selectedTab = if (activeTopTab == "dashboard") "home" else activeTopTab,
-       isDark = appTheme != com.vibesync.antivirus.ui.theme.AppTheme.LIGHT,
-       onSelect = { navigateToDestination(it) }
-      )
+     Column(Modifier.fillMaxWidth()) {
+      if (selectedDestination in setOf("home", "scan", "tools", "settings")) {
+       V17BottomNavigationBar(
+        selectedTab = if (activeTopTab == "dashboard") "home" else activeTopTab,
+        isDark = appTheme != com.vibesync.antivirus.ui.theme.AppTheme.LIGHT,
+        onSelect = { navigateToDestination(it) }
+       )
+      }
+      if (adMobState.adsReady && !adMobState.isPro) AdMobBanner(adMobManager)
      }
     },
     snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
     containerColor = MaterialTheme.colorScheme.background
    ) { scaffoldPadding ->
     Column(Modifier.fillMaxSize().padding(scaffoldPadding)) {
-     if (adMobState.adsReady && !adMobState.isPro) AdMobBanner(adMobManager)
    val navScreenContent: @Composable () -> Unit = {
        Box(Modifier.fillMaxSize()) {
         when (selectedDestination) {
@@ -898,7 +901,9 @@ import kotlinx.coroutines.launch
           onOpenDetection = { navigateToDestination("capabilities") },
           onOpenThreatDb = { navigateToDestination("quarantine") },
           onOpenPrivacy = { navigateToDestination("privacy") },
-          onOpenSettings = { navigateToDestination("settings") }
+          onOpenSettings = { navigateToDestination("settings") },
+          threatIntelligenceState = state.threatIntelligence,
+          onRefreshThreatIntelligence = vm::refreshThreatIntelligenceStats
          )
          "privacy" -> PrivacyDashboardScreen()
          "about" -> AboutUsScreen(
@@ -1364,7 +1369,9 @@ import kotlinx.coroutines.launch
           initialSyncPending = initialHashSyncPending,
            yaraMatchCount = state.results.sumOf { it.riskReport?.yaraResult?.matches?.size ?: 0 },
            yaraMatchedRuleNames = state.results.flatMap { it.riskReport?.yaraResult?.matchedRules.orEmpty() }.distinct(),
-          onImportYaraRulesForReview = { pendingYaraPicker.launch(arrayOf("text/plain", "application/octet-stream", "application/x-yara")) }
+          onImportYaraRulesForReview = { pendingYaraPicker.launch(arrayOf("text/plain", "application/octet-stream", "application/x-yara")) },
+          threatIntelligenceState = state.threatIntelligence,
+          onRefreshThreatIntelligence = vm::refreshThreatIntelligenceStats
          )
         }
         Spacer(Modifier.height(8.dp))

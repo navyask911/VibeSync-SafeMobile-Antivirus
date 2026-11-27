@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="siren_test_settings_title">การวินิจฉัยเสียงไซเรน</string>
+    <string name="siren_test_settings_description">ทดสอบเสียงไซเรน 5 วินาทีและตัวอย่างการแจ้งเตือน การทดสอบนี้ไม่ตรวจจับมัลแวร์ ไม่แก้ไขฐานข้อมูลภัยคุกคาม และไม่ร้องขอให้ถอนการติดตั้ง</string>
+    <string name="siren_test_button">ทดสอบเสียงไซเรนเตือนภัย</string>
+    <string name="siren_test_title">ทดสอบไซเรน — ไม่ใช่ภัยคุกคามจริง</string>
+    <string name="siren_test_notification">ทดสอบเสียงด้วยตนเอง ไม่พบแอปที่เป็นอันตราย</string>
+    <string name="siren_test_preview">นี่คือการทดสอบเสียงไซเรนของ SafeMobile ไม่มีแอปที่ติดตั้งถูกระบุว่าเป็นภัยคุกคามและไม่มีการร้องขอให้ถอนการติดตั้ง แตะปิดเพื่อหยุดเสียง</string>
+    <string name="voice_siren_test">นี่คือการทดสอบเสียงไซเรนของ SafeMobile ไม่พบภัยคุกคาม</string>
+    <string name="battery_review_title">ข้อจำกัดแบตเตอรี่อาจทำให้การป้องกันล่าช้า</string>
+    <string name="battery_review_body">เปิดโหมดประหยัดแบตเตอรี่หรือการเพิ่มประสิทธิภาพแอปอยู่ อุปกรณ์ Oppo/ColorOS บางรุ่นจำกัดการสแกนเบื้องหลังและการแจ้งเตือนการติดตั้ง ตรวจสอบการตั้งค่าแบตเตอรี่ของ SafeMobile แต่การดำเนินการนี้ไม่ได้รับประกันการตรวจสอบอย่างต่อเนื่อง</string>
+    <string name="battery_review_action">ตรวจสอบการตั้งค่าแบตเตอรี่</string>
+    <string name="battery_review_unavailable">ไม่สามารถเปิดการตั้งค่าแบตเตอรี่ของ Android ได้</string>
+    <string name="ui_folder_access_not_granted">ยังไม่ได้รับสิทธิ์เข้าถึงโฟลเดอร์ คุณยังใช้การป้องกันแบบจำกัดได้</string>
+    <string name="test_siren">ทดสอบไซเรน</string>
+    <string name="test_voice">ทดสอบเสียงพูด</string>
+    <string name="test_siren_failed">ไม่สามารถเริ่มการทดสอบไซเรนบนอุปกรณ์นี้ได้</string>
+    <string name="test_voice_failed">ทดสอบเสียงพูดไม่สำเร็จ ตรวจสอบกลไกเสียงพูดและข้อมูลเสียงที่ติดตั้งในอุปกรณ์</string>
+</resources>

@@ -78,10 +78,9 @@ class IntegrityChecker private constructor(private val probe: IntegrityProbe, @S
             type.getMethod("get", String::class.java).invoke(null, name) as? String
         }.getOrNull()?.takeIf(String::isNotBlank)
 
-        override fun selinuxEnforced(): Boolean? = runCatching {
-            val file = File("/sys/fs/selinux/enforce")
-            if (!file.isFile || !file.canRead()) null else file.readText().trim() == "1"
-        }.getOrNull()
+        // The protected SELinux sysfs node is not readable from many app sandboxes.
+        // Do not probe it: denied reads only create AVC noise and cannot establish state.
+        override fun selinuxEnforced(): Boolean? = null
 
         override fun debuggerAttached() = runCatching {
             Debug.isDebuggerConnected() || Debug.waitingForDebugger()

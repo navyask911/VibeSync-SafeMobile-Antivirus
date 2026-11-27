@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="detection_capabilities_title">檢測能力</string>
+    <string name="detection_capabilities_description">檢視此構建中的安全檢查是已啟用、僅供參考、有條件啟用還是不可用。</string>
+    <string name="detection_capabilities_truth_title">重要提示：掃描結果的含義</string>
+    <string name="detection_capabilities_truth_body">沒有本地匹配不能證明檔案安全。在配置可信簽名金鑰和經稽核的生產資料庫之前，已簽名雜湊引擎保持停用。經驗證的內建規則載入成功後，會執行有限的離線 DEX 規則；機器學習仍被停用。啟發式檢查可能產生誤報。以下效能指標尚未測量。</string>
+    <string name="detection_capabilities_enabled">已啟用</string>
+    <string name="detection_capabilities_disabled">已停用</string>
+    <string name="detection_capabilities_limited">覆蓋有限</string>
+    <string name="detection_capabilities_advisory">僅供參考</string>
+    <string name="detection_capabilities_conditional">有條件</string>
+    <string name="detection_capabilities_metrics_title">檢測效能指標</string>
+    <string name="detection_capabilities_import_signed_db">匯入已簽名雜湊資料庫</string>
+    <string name="detection_capabilities_import_yara">匯入 YARA 規則供稽核（不會執行）</string>
+    <string name="detection_capabilities_sync">簽名資料庫更新</string>
+    <string name="detection_capabilities_feed_url">HTTPS 更新網址</string>
+    <string name="detection_capabilities_sync_enabled">啟用自動更新</string>
+    <string name="detection_capabilities_save">儲存更新設定</string>
+    <string name="detection_capabilities_sync_privacy">僅下載。不會上傳掃描結果、檔案、雜湊或應用程式包名。</string>
+    <string name="detection_capabilities_sync_unavailable">此離線構建無法自動更新，或需先配置可信簽名金鑰後才能更新。</string>
+</resources>

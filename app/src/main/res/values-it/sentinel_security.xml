@@ -14,7 +14,7 @@
 <string name="blocked_activity_title_review">Scaricamento da verificare</string>
 <string name="blocked_activity_title_quarantine">Scaricamento spostato in quarantena</string>
 <string name="blocked_activity_body">SafeMobile controlla sul dispositivo i file scaricati accessibili e registra eventi locali. Android controlla l’installazione delle app.</string>
-<string name="blocked_activity_filename">File: %1$s</string>
+<string name="blocked_activity_filename">Nome file: %1$s</string>
 <string name="blocked_activity_installer">Installatore: %1$s</string>
 <string name="blocked_activity_reason">Motivo: %1$s</string>
 <string name="blocked_activity_open_app">Apri SafeMobile</string>

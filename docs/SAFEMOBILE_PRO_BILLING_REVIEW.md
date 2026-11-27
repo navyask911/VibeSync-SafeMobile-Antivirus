@@ -7,7 +7,7 @@ Target app: **1.9.0**
 
 Create a subscription product with:
 
-- Product ID: `pro_access`
+- Product ID: `safemobile-pro-1y-subs` (active Play product; ₹299/year in the configured India price tier)
 - Prepaid base plan ID: `prepaid-1-year`
 - Billing period: `P1Y` (one year)
 - Plan type: **Prepaid**, not auto-renewing
@@ -16,14 +16,14 @@ Create a subscription product with:
 
 **Google Play does not support a single 2–10-year prepaid base plan.** The maximum prepaid base-plan duration is one year. The app therefore sells one prepaid year at a time. The same active plan can be purchased again to top it up by another year. Do not create or advertise `prepaid-2-year` through `prepaid-10-year` plans; Play Console does not offer those durations.
 
-The app queries only `pro_access` as `SUBS` and accepts only the `prepaid-1-year` offer whose last pricing phase is non-recurring and has billing period `P1Y`. Auto-renewing plans and other base-plan IDs are not silently substituted.
+The app queries only `safemobile-pro-1y-subs` as `SUBS` and accepts only the `prepaid-1-year` offer whose last pricing phase is non-recurring and has billing period `P1Y`. The app reads the localized price from Google Play product details at runtime; ₹299/year is configured in the India Play Console price tier and is not hardcoded into the client. Auto-renewing plans and other base-plan IDs are not silently substituted.
 
 ## Device binding in the Android client
 
 - The app derives a non-personal, 64-character SHA-256 identifier from the Android ID, app package name and a SafeMobile namespace. It never uploads or logs the raw Android ID.
 - Android 8+ Android ID normally survives uninstall/reinstall when package name and signing key remain unchanged; factory reset or signing-key changes can change the ID.
 - Checkout passes the hash through `BillingFlowParams.setObfuscatedAccountId()`.
-- Every confirmed `pro_access` purchase and restore is checked against `Purchase.accountIdentifiers.obfuscatedAccountId` before granting access.
+- Every confirmed `safemobile-pro-1y-subs` purchase and restore is checked against `Purchase.accountIdentifiers.obfuscatedAccountId` before granting access.
 - A missing identifier is rejected as un-verifiable. A different identifier clears the local entitlement and displays **Subscription active on another device**.
 - Prepaid purchases and top-ups are acknowledged after a successful local grant. They are never consumed.
 - Pending prepaid purchases are enabled with `PendingPurchasesParams.enablePrepaidPlans()`. Entitlement is not granted until Play reports `PURCHASED`.

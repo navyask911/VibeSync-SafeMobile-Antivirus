@@ -25,5 +25,8 @@ data class ScanSessionItemEntity(
  @ColumnInfo(name = "threat_event_id") val threatEventId: String? = null,
  @ColumnInfo(name = "duration_ms") val durationMs: Long = 0L,
  @ColumnInfo(name = "source_uri") val sourceUri: String? = null,
- @ColumnInfo(name = "completed_at") val completedAt: Long
+ @ColumnInfo(name = "completed_at") val completedAt: Long,
+ @ColumnInfo(name = "apk_size_bytes") val apkSizeBytes: Long? = null,
+ @ColumnInfo(name = "scan_source", defaultValue = "'FRESH'") val scanSource: String = "FRESH",
+ @ColumnInfo(name = "analysis_stages", defaultValue = "''") val analysisStages: String = ""
 )

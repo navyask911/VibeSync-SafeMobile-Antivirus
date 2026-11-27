@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pro_navigation_unavailable">SafeMobile Pro ekranı geçici olarak kullanılamıyor.</string>
+    <string name="full_screen_dashboard_warning">Kritik uyarılar devre dışı: Tam ekran kötü amaçlı yazılım uyarıları için izin vermek üzere dokunun.</string>
+    <string name="full_screen_dashboard_fallback">Tam ekran erişimi isteğe bağlıdır. Güvenlik Uyarıları açıldığında, Android bildirim ve ses ayarlarına bağlı olarak beş saniyelik siren ve yüksek öncelikli bildirim bu erişim olmadan da çalışır.</string>
+    <string name="full_screen_settings_unavailable">Tam ekran uyarı ayarları açılamadı. SafeMobile\'ı kullanmaya devam edebilirsiniz.</string>
+    <string name="system_app_protection_badge">Sistem uygulamaları inceleme ve kaldırmaya karşı korunur</string>
+    <string name="system_app_scan_complete">Tarama tamamlandı. Denetlenen öğelerde tehdit bulunmadı. Sistem uygulamaları inceleme ve kaldırma dışında tutulur; bu tarama bunların bütünlüğünü doğrulamamıştır.</string>
+</resources>

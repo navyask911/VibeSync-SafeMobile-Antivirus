@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="threat_intelligence_unavailable">此设备上没有缓存经过验证的上游训练统计数据。</string>
+    <string name="threat_intelligence_upstream_stale">上游数据已过期 · 已发布的更新超过 30 天。</string>
+    <string name="threat_intelligence_device_title">设备端威胁情报</string>
+    <string name="threat_intelligence_latest_sync_note">最近一次同步备注：%1$s</string>
+    <string name="threat_intelligence_feed_stale">距离上次成功同步已配置的信息源已超过 7 天。</string>
+</resources>

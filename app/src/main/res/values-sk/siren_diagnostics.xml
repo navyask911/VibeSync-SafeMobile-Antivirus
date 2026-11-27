@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="test_siren">Test sirény</string>
+    <string name="test_voice">Test hlasu</string>
+    <string name="test_siren_failed">Test sirény sa na tomto zariadení nepodarilo spustiť.</string>
+    <string name="test_voice_failed">Test hlasu zlyhal. Skontrolujte nainštalovaný hlasový modul a hlasové údaje.</string>
+</resources>

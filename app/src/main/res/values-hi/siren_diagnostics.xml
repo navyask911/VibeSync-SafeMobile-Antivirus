@@ -17,4 +17,8 @@
   <string name="system_app_protection_badge">सिस्टम ऐप समीक्षा और अनइंस्टॉल से सुरक्षित हैं</string>
   <string name="system_app_scan_complete">स्कैन पूरा हुआ। जाँचे गए आइटम में कोई खतरा नहीं मिला। सिस्टम ऐप समीक्षा और अनइंस्टॉल से बाहर हैं; इस स्कैन ने उनकी अखंडता सत्यापित नहीं की है।</string>
   <string name="ui_folder_access_not_granted">फ़ोल्डर का ऐक्सेस नहीं दिया गया। सीमित सुरक्षा के साथ आगे बढ़ सकते हैं।</string>
+    <string name="test_siren">सायरन जाँचें</string>
+    <string name="test_voice">आवाज़ जाँचें</string>
+    <string name="test_siren_failed">इस डिवाइस पर सायरन परीक्षण शुरू नहीं हो सका।</string>
+    <string name="test_voice_failed">आवाज़ परीक्षण विफल हुआ। इंस्टॉल किए गए डिवाइस स्पीच इंजन और वॉइस डेटा की जाँच करें।</string>
 </resources>

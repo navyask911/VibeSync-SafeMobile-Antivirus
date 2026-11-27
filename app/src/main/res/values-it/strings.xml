@@ -691,16 +691,16 @@
     <string name="ui_status_at_risk">A rischio</string>
     <string name="scan_detected_by">Rilevato da: %1$s</string>
     <string name="scan_detected_by_confidence">Rilevato da: %1$s (%2$d%%)</string>
-    <string name="security_score_100_voice" formatted="false">Your security configuration is fully optimized. We will continue to monitor your device to keep you safe. Thank you for using Safe Mobile Antivirus.</string>
-    <string name="self_update_title">Check for Updates (Self-Update)</string>
-    <string name="self_update_description">Device Administrator mode does not normally block Google Play updates. This button checks for a Play in-app update and asks Android to install it.</string>
-    <string name="self_update_started">The update flow was opened. Follow the system prompts to finish updating.</string>
-    <string name="self_update_cancelled">The update was cancelled.</string>
-    <string name="self_update_check_failed">The update could not be started. Check your Google Play connection and try again.</string>
-    <string name="self_update_unavailable">Play in-app updates are unavailable for this installation. Open Google Play to check manually.</string>
-    <string name="self_update_no_update">No newer Google Play update is currently available.</string>
-    <string name="self_update_not_allowed">An update is available, but Google Play does not allow the immediate update flow for this installation.</string>
-    <string name="self_update_open_play_store">Open Google Play</string>
+    <string name="security_score_100_voice" formatted="false">La configurazione di sicurezza è completamente ottimizzata. Continueremo a monitorare il dispositivo per mantenerlo al sicuro. Grazie per utilizzare Safe Mobile Antivirus.</string>
+    <string name="self_update_title">Controlla gli aggiornamenti (aggiornamento automatico)</string>
+    <string name="self_update_description">La modalità Amministratore dispositivo normalmente non blocca gli aggiornamenti di Google Play. Questo pulsante verifica la disponibilità di un aggiornamento in-app di Google Play e chiede ad Android di installarlo.</string>
+    <string name="self_update_started">La procedura di aggiornamento è stata avviata. Segui le istruzioni di sistema per completare l\'aggiornamento.</string>
+    <string name="self_update_cancelled">L\'aggiornamento è stato annullato.</string>
+    <string name="self_update_check_failed">Impossibile avviare l\'aggiornamento. Controlla la connessione a Google Play e riprova.</string>
+    <string name="self_update_unavailable">Gli aggiornamenti in-app di Google Play non sono disponibili per questa installazione. Apri Google Play per verificare manualmente.</string>
+    <string name="self_update_no_update">Al momento non sono disponibili aggiornamenti di Google Play più recenti.</string>
+    <string name="self_update_not_allowed">È disponibile un aggiornamento, ma Google Play non consente la procedura di aggiornamento immediato per questa installazione.</string>
+    <string name="self_update_open_play_store">Apri Google Play</string>
     <string name="scan_sessions_in_progress">Sessioni di scansione in corso: %1$d</string>
     <string name="scan_sessions_completed">Sessioni di scansione completate: %1$d</string>
     <string name="ui_sentinel_telegram_folder">Cartella Documenti di Telegram</string>

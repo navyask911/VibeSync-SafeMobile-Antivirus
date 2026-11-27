@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="test_siren" tools:ignore="MissingTranslation">Uji Siren</string>
+    <string name="test_voice" tools:ignore="MissingTranslation">Uji Suara</string>
+    <string name="test_siren_failed" tools:ignore="MissingTranslation">Ujian siren tidak dapat dimulakan pada peranti ini.</string>
+    <string name="test_voice_failed" tools:ignore="MissingTranslation">Ujian suara gagal. Semak enjin pertuturan dan data suara yang dipasang pada peranti.</string>
+</resources>

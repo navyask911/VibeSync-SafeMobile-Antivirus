@@ -37,7 +37,9 @@ fun DetectionCapabilitiesScreen(
     initialSyncPending: Boolean,
     yaraMatchCount: Int = 0,
     yaraMatchedRuleNames: List<String> = emptyList(),
-    onImportYaraRulesForReview: () -> Unit
+    onImportYaraRulesForReview: () -> Unit,
+    threatIntelligenceState: ThreatIntelligenceUiState = ThreatIntelligenceUiState(),
+    onRefreshThreatIntelligence: () -> Unit = {}
 ) {
     val context = LocalContext.current
     var mlAvailable by remember { mutableStateOf(false) }
@@ -46,7 +48,11 @@ fun DetectionCapabilitiesScreen(
         Text(stringResource(R.string.detection_capabilities_title), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
         Text(stringResource(R.string.detection_capabilities_description), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
 
-        ThreatIntelligenceCard()
+        ThreatIntelligenceCard(
+            state = threatIntelligenceState,
+            onRefresh = onRefreshThreatIntelligence,
+            showRefreshAction = true
+        )
 
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer), shape = RoundedCornerShape(16.dp)) {
             Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {

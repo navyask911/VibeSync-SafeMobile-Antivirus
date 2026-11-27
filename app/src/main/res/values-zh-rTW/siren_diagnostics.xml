@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="siren_test_settings_title">警笛診斷</string>
+  <string name="siren_test_settings_description">測試五秒警笛和警報預覽。這不會檢測惡意軟體、修改威脅資料庫或請求解除安裝應用程式。</string>
+  <string name="siren_test_button">測試威脅警笛</string>
+  <string name="siren_test_title">警笛測試，並非真實威脅</string>
+  <string name="siren_test_notification">手動聲音測試，未發現惡意應用程式。</string>
+  <string name="siren_test_preview">這是 SafeMobile 警笛測試。沒有已安裝應用程式被標記，也不會請求解除安裝。點選“忽略”停止聲音。</string>
+  <string name="voice_siren_test">這是 SafeMobile 警笛測試，未發現威脅。</string>
+  <string name="battery_review_title">電池限制可能延遲防護</string>
+  <string name="battery_review_body">省電模式或應用程式最佳化已啟用。部分 Oppo/ColorOS 裝置會限制後臺掃描和安裝警報。請檢查 SafeMobile 的電池設定；這不能保證持續監控。</string>
+  <string name="battery_review_action">檢查電池設定</string>
+  <string name="battery_review_unavailable">無法開啟 Android 電池設定。</string>
+  <string name="full_screen_dashboard_warning">嚴重警報已停用：點選授予全屏惡意軟體警告權限。</string>
+  <string name="full_screen_dashboard_fallback">全屏訪問是可選的。啟用安全警報後，即使沒有全屏權限，五秒警笛和高優先順序通知仍可工作，但受 Android 通知和聲音設定限制。</string>
+  <string name="full_screen_settings_unavailable">無法開啟全屏警報設定。您仍可繼續使用 SafeMobile。</string>
+  <string name="system_app_protection_badge">系統應用程式受保護，不參與複核或解除安裝</string>
+  <string name="system_app_scan_complete">掃描完成，已檢查的專案中未發現威脅。系統應用程式不參與複核或解除安裝；此次掃描未驗證其完整性。</string>
+  <string name="ui_folder_access_not_granted">未授予資料夾訪問權限。您可在有限防護下繼續。</string>
+    <string name="test_siren">測試警笛</string>
+    <string name="test_voice">測試語音</string>
+    <string name="test_siren_failed">此裝置無法啟動警笛測試。</string>
+    <string name="test_voice_failed">語音測試失敗。請檢查裝置上已安裝的語音引擎和語音資料。</string>
+</resources>

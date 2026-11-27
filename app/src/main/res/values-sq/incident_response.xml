@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="incident_channel_description">Sinjalizime urgjente lokale për kërcënime me alarm pesësekondësh kur aktivizohet.</string>
+    <string name="incident_title">U zbulua aplikacion keqdashës</string>
+    <string name="incident_loading">Po ngarkohen detajet e aplikacionit…</string>
+    <string name="incident_app_unavailable">Aplikacioni nuk është më i disponueshëm</string>
+    <string name="incident_warning">Ky aplikacion i instaluar përputhet me një hash të njohur malware-i. Shmangni hapjen. Çinstalojeni duke përdorur ekranin e konfirmimit të Android. SafeMobile nuk e ka karantinuar ose hequr këtë aplikacion të instaluar.</string>
+    <string name="incident_uninstall_now">ÇINSTALO TANI</string>
+    <string name="incident_dismiss">Shpërfill (Nuk rekomandohet)</string>
+    <string name="incident_review_threat">Shqyrto kërcënimin</string>
+    <string name="incident_user_confirmation">Heqja e aplikacionit kërkon gjithmonë konfirmimin tuaj në Android. SafeMobile nuk i çinstalon aplikacionet në heshtje.</string>
+    <string name="incident_alerts_explanation">Pranoni njoftime urgjente dhe sirenë pesësekondëshe në volumin maksimal të alarmit për malware të konfirmuar. Hapja e SafeMobile ose mbyllja e incidentit ndalon sirenën. Cilësimet e zërit dhe Mos shqetëso të Android mund të kufizojnë audion.</string>
+    <string name="incident_full_screen_settings">Sinjalizime incidenti në ekran të plotë</string>
+    <string name="incident_full_screen_explanation">Android 14+ kontrollon qasjen në ekran të plotë. Mund ta aktivizoni në cilësimet e sistemit për njoftime urgjente incidenti. Nëse e lini joaktive, SafeMobile përdor një njoftim me përparësi të lartë. Kjo është opsionale.</string>
+    <string name="incident_open_settings">Hap cilësimet</string>
+    <string name="cyber_dark_appearance">Cyber Dark · Sfond blu i errët, karta ngjyrë pllake dhe cyan neon</string>
+</resources>

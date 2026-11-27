@@ -28,4 +28,11 @@
     <string name="pro_fewer_years">Färre år</string>
     <string name="pro_more_years">Fler år</string>
     <string name="pro_subscription_offer" formatted="false">Lås upp SafeMobile Pro — ₹299 / år (automatisk förnyelse). Avsluta när som helst i Google Play.</string>
+    <string name="pro_one_year_price">Ett förbetalt år: %1$s</string>
+    <string name="pro_prepaid_offer">Förbetald SafeMobile Pro-åtkomst i ett år. Förnyas inte automatiskt.</string>
+    <string name="pro_prepaid_duration_limit">Förbetalda Google Play-abonnemang är begränsade till ett år per köp. Köp eller förläng samma abonnemang igen för att lägga till ytterligare ett år; slutpriset bekräftas i Google Play.</string>
+    <string name="pro_device_binding_explanation">Köpet är kopplat till den här Android-enheten med en hashad enhetsidentifierare. En ominstallation på samma enhet kan återställa det aktiva Play-köpet; en annan enhet blockeras.</string>
+    <string name="pro_buy_or_extend_one_year">Köp / förläng 1 år</string>
+    <string name="pro_device_mismatch">Abonnemanget är aktivt på en annan enhet. SafeMobile Pro-åtkomst är blockerad på den här enheten.</string>
+    <string name="pro_device_binding_unavailable">Det här köpet saknar verifierbar enhetskoppling. Pro-åtkomst blockeras tills Google Play returnerar ett enhetsbundet köp.</string>
 </resources>

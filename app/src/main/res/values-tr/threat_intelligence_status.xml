@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="threat_intelligence_unavailable">Bu cihazda doğrulanmış üst kaynak eğitim istatistikleri önbelleğe alınmamış.</string>
+    <string name="threat_intelligence_upstream_stale">ESKİ ÜST KAYNAK VERİSİ · Yayımlanan güncellemenin üzerinden 30 günden fazla geçti.</string>
+    <string name="threat_intelligence_device_title">Cihaz içi tehdit istihbaratı</string>
+    <string name="threat_intelligence_latest_sync_note">Son eşitleme notu: %1$s</string>
+    <string name="threat_intelligence_feed_stale">Yapılandırılmış kaynağın son başarılı eşitlemesinin üzerinden 7 günden fazla geçti.</string>
+</resources>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="threat_intelligence_unavailable">На этом устройстве нет кэшированной проверенной статистики обучения из вышестоящего источника.</string>
+    <string name="threat_intelligence_upstream_stale">УСТАРЕВШИЕ ДАННЫЕ ИЗ ВЫШЕСТОЯЩЕГО ИСТОЧНИКА · Опубликованному обновлению более 30 дней.</string>
+    <string name="threat_intelligence_device_title">Сведения об угрозах на устройстве</string>
+    <string name="threat_intelligence_latest_sync_note">Примечание о последней синхронизации: %1$s</string>
+    <string name="threat_intelligence_feed_stale">Последняя успешная синхронизация настроенного источника данных была более 7 дней назад.</string>
+</resources>

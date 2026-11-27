@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="trusted_app_options">Опције</string>
+    <string name="trusted_app_remove">Уклони поверење</string>
+    <string name="trusted_app_removed">Поверење је уклоњено. Будућа скенирања и упозорења за овај пакет су омогућена.</string>
+    <string name="trusted_app_remove_failed">Није могуће уклонити поверење. Покушајте поново.</string>
+    <string name="install_sentinel_title">Надзор инсталације</string>
+    <string name="install_sentinel_active">SafeMobile Sentinel: активан и надгледа</string>
+    <string name="install_sentinel_description">Локалне провере након инсталације уз трајно обавештење. Без периодичног проверавања или wake lock-а. Android може зауставити услугу.</string>
+    <string name="install_sentinel_stop">Заустави надзор инсталације</string>
+    <string name="install_scan_progress">Анализа новоинсталиране апликације: %1$s</string>
+    <string name="analytics_chart_title">Исходи скенирања</string>
+    <string name="analytics_other">Остали резултати</string>
+    <string name="analytics_total">Резултати</string>
+    <string name="analytics_weekly_scans">Недељна скенирања</string>
+    <string name="analytics_week_note">Забележене сесије, од понедељка до недеље. Могу бити укључена и делимична покретања.</string>
+    <string name="install_scan_received">Догађај инсталације је примљен. Отворите SafeMobile ради прегледа.</string>
+    <string name="posture_overlay_select_app">Na Androidu 11+ izaberite %1$s na listi podešavanja preklapanja.</string>
+</resources>

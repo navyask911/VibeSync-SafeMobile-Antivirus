@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="test_siren">Test syreny</string>
+    <string name="test_voice">Test głosu</string>
+    <string name="test_siren_failed">Nie można było uruchomić testu syreny na tym urządzeniu.</string>
+    <string name="test_voice_failed">Test głosu nie powiódł się. Sprawdź zainstalowany mechanizm syntezy mowy i dane głosowe.</string>
+</resources>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="threat_intelligence_unavailable">Na tym urządzeniu nie ma zapisanych zweryfikowanych statystyk trenowania z upstreamu.</string>
+    <string name="threat_intelligence_upstream_stale">NIEAKTUALNE DANE UPSTREAM · Opublikowana aktualizacja ma ponad 30 dni.</string>
+    <string name="threat_intelligence_device_title">Informacje o zagrożeniach na urządzeniu</string>
+    <string name="threat_intelligence_latest_sync_note">Uwagi dotyczące ostatniej synchronizacji: %1$s</string>
+    <string name="threat_intelligence_feed_stale">Ostatnia udana synchronizacja skonfigurowanego źródła danych miała miejsce ponad 7 dni temu.</string>
+</resources>

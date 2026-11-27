@@ -1,0 +1,8 @@
+<resources>
+    <string name="full_screen_dashboard_warning">Kritična opozorila so izklopljena. Dotaknite se, da omogočite celozaslonska opozorila o zlonamerni programski opremi.</string>
+    <string name="full_screen_dashboard_fallback">Celozaslonski dostop ni obvezen. Ko so varnostna opozorila omogočena, petsekundna sirena in obvestilo z visoko prednostjo delujeta tudi brez tega dostopa, ob upoštevanju nastavitev obvestil in zvoka Android.</string>
+    <string name="full_screen_settings_unavailable">Nastavitev celozaslonskih opozoril ni bilo mogoče odpreti. SafeMobile lahko še naprej uporabljate.</string>
+    <string name="system_app_protection_badge">Sistemske aplikacije so zaščitene pred pregledom in odstranitvijo</string>
+    <string name="system_app_scan_complete">Skeniranje je končano. Med preverjenimi elementi ni bilo najdenih groženj. Sistemske aplikacije so izključene iz pregleda in odstranitve; njihova celovitost s tem skeniranjem ni bila preverjena.</string>
+    <string name="pro_navigation_unavailable">Zaslon SafeMobile Pro je začasno nedosegljiv.</string>
+</resources>

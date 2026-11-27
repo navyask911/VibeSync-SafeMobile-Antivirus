@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Kannada and French have dedicated translations; other supported locales temporarily use the English fallback. -->
+    <string name="threat_intelligence_unavailable" tools:ignore="MissingTranslation">No verified upstream training statistics are cached on this device.</string>
+    <string name="threat_intelligence_upstream_stale" tools:ignore="MissingTranslation">STALE UPSTREAM DATA · The published update is more than 30 days old.</string>
+    <string name="threat_intelligence_device_title" tools:ignore="MissingTranslation">On-device threat intelligence</string>
+    <string name="threat_intelligence_latest_sync_note" tools:ignore="MissingTranslation">Latest sync note: %1$s</string>
+    <string name="threat_intelligence_feed_stale" tools:ignore="MissingTranslation">The last successful configured-feed sync is more than 7 days old.</string>
+</resources>

@@ -6,6 +6,7 @@ on:
   push:
     branches:
       - "release-apk/**"
+      - "release/v1.10.8-final"
       - "main"
     paths:
       - "app/build.gradle.kts"
@@ -39,8 +40,10 @@ on:
       - "v1.10.5"
       - "v1.10.6"
       - "v1.10.7"
+      - "v1.10.8"
 
 permissions:
+  actions: read
   contents: write
 
 concurrency:
@@ -49,14 +52,41 @@ concurrency:
 
 jobs:
   release:
-    if: github.repository == 'navyask911/VibeSync-SafeMobile-Antivirus' && (github.event_name == 'workflow_dispatch' || github.ref_type != 'branch' || github.ref_name != 'main' || contains(github.event.head_commit.message, '[release-v1.10.7]'))
+    if: github.repository == 'navyask911/VibeSync-SafeMobile-Antivirus' && (github.event_name == 'workflow_dispatch' || github.ref_type != 'branch' || github.ref_name != 'main' || contains(github.event.head_commit.message, '[release-v1.10.9]'))
     runs-on: ubuntu-latest
-    timeout-minutes: 45
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Wait for same-commit Android CI matrix to pass
+        if: github.ref_type == 'branch' && github.ref_name == 'release/v1.10.8-final'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Android CI serializes its five emulator API jobs (max-parallel: 1).
+          # The main build can take 40 minutes; each API job has a 55-minute timeout.
+          # Allow 340 minutes for the matching complete matrix; the job's default timeout is 360.
+          for attempt in $(seq 1 680); do
+            runs="$(gh run list --repo "$GITHUB_REPOSITORY" --workflow "Android CI" --commit "$GITHUB_SHA" --json databaseId,status,conclusion,headSha --limit 20)"
+            status="$(jq -r --arg sha "$GITHUB_SHA" '[.[] | select(.headSha == $sha)] | sort_by(.databaseId) | last // {} | .status // empty' <<< "$runs")"
+            conclusion="$(jq -r --arg sha "$GITHUB_SHA" '[.[] | select(.headSha == $sha)] | sort_by(.databaseId) | last // {} | .conclusion // empty' <<< "$runs")"
+            if [[ "$status" == "completed" ]]; then
+              if [[ "$conclusion" == "success" ]]; then
+                echo "Android CI passed for release commit $GITHUB_SHA."
+                exit 0
+              fi
+              echo "SAFE STOP: Android CI ended with conclusion '${conclusion:-unknown}' for $GITHUB_SHA." >&2
+              exit 1
+            fi
+            echo "Android CI for $GITHUB_SHA is '${status:-not yet listed}'; waiting (attempt $attempt/680; 340-minute gate)."
+            sleep 30
+          done
+          echo "SAFE STOP: Android CI did not complete successfully within the 340-minute gate." >&2
+          exit 1
 
       - name: Require production signing configuration
         shell: bash
@@ -81,11 +111,11 @@ jobs:
           print("Production signing configuration and database trust root are present.")
           PY
 
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: "17"
+          java-version: "21"
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -180,7 +210,7 @@ jobs:
                   b"com.google.android.play.billingclient.version",
                   b"9.1.0",
                   b"com.google.android.gms.ads.APPLICATION_ID",
-                  b"ca-app-pub-4783826505860771~8485727119",
+                  b"ca-app-pub-4783826505860771~3262295335",
                   b"com.google.android.gms.permission.AD_ID",
               ):
                   if required not in manifest:
@@ -299,7 +329,7 @@ jobs:
                       if meta_index<=app_index or meta_indent<=app_indent:
                           continue
                       if ("com.google.android.gms.ads.APPLICATION_ID" in meta_contents and
-                          "ca-app-pub-4783826505860771~8485727119" in meta_contents):
+                          "ca-app-pub-4783826505860771~3262295335" in meta_contents):
                           meta_found=True
               if not meta_found:
                   raise SystemExit("SAFE STOP: Signed APK application metadata is missing or incorrect.")
@@ -381,13 +411,20 @@ jobs:
           version_name="${{ steps.verify-aab.outputs.version_name }}"
           version_code="${{ steps.verify-aab.outputs.version_code }}"
           if [[ "${GITHUB_REF_TYPE:-}" == "branch" && "${GITHUB_REF_NAME:-}" == "main" ]]; then
-            if [[ "$version_name" != "1.10.7" || "$version_code" != "20261161" ]]; then
-              echo "SAFE STOP: main release trigger expected v1.10.7 / 20261161, got $version_name / $version_code." >&2
+            if [[ "$version_name" != "1.10.9" || "$version_code" != "20261163" ]]; then
+              echo "SAFE STOP: main release trigger expected v1.10.9 / 20261163, got $version_name / $version_code." >&2
               exit 1
             fi
           fi
-          if [[ "${GITHUB_REF_TYPE:-}" == "tag" && "${GITHUB_REF_NAME:-}" == "v1.10.7" ]] ||
-             [[ "${GITHUB_REF_TYPE:-}" == "branch" && "${GITHUB_REF_NAME:-}" == "main" && "$version_name" == "1.10.7" && "$version_code" == "20261161" ]]; then
+          if [[ "${GITHUB_REF_TYPE:-}" == "tag" && "${GITHUB_REF_NAME:-}" == "v1.10.8" ]] ||
+             [[ "${GITHUB_REF_TYPE:-}" == "branch" && "${GITHUB_REF_NAME:-}" == "release/v1.10.8-final" ]]; then
+            if [[ "$version_name" != "1.10.8" || "$version_code" != "20261162" ]]; then
+              echo "SAFE STOP: v1.10.8 release expected 1.10.8 / 20261162, got $version_name / $version_code." >&2
+              exit 1
+            fi
+            tag="v1.10.8"
+          elif [[ "${GITHUB_REF_TYPE:-}" == "tag" && "${GITHUB_REF_NAME:-}" == "v1.10.7" ]] ||
+               [[ "${GITHUB_REF_TYPE:-}" == "branch" && "${GITHUB_REF_NAME:-}" == "main" && "$version_name" == "1.10.7" && "$version_code" == "20261161" ]]; then
             tag="v1.10.7"
           elif [[ "${GITHUB_REF_TYPE:-}" == "tag" && "${GITHUB_REF_NAME:-}" == "v1.10.6" ]]; then
             tag="v1.10.6"
@@ -410,6 +447,7 @@ jobs:
           Built from commit ${GITHUB_SHA}.
           v1.6.1: Added new launcher icons and splash screen. Fixed text wrapping and added back navigation. Added inline Crown subscription toggle.
           v1.6.2: Accept all file types in the scan document picker for .txt/EICAR testing; preserve the originating screen when backing out of Pro; make the paywall and shared app toolbar wrap and scroll at larger font scales.
+          v1.10.8: Moves installed-app icons to bounded asynchronous IO loading with a package/version LRU cache and adds per-package scan/publish diagnostics. Includes the v1.10.6 scalar-only ViewModel, service/PendingIntent and Room boundary guards. Uses Play versionCode 20261162.
           v1.10.7: Fixes ColorOS scan publication by allowing scan-progress-path/reasons/URI and scan-resume-URI encrypted metadata purposes; counts Room publish failures and fails scans with zero persisted results or any item publication loss. Uses Play versionCode 20261161.
           v1.10.6: Collapses PackageManager results to scalar package rows before concurrent scan work; keeps OEM-private PackageInfo/ApplicationInfo confined to PackageScanner; asserts primitive-only ViewModel, service Intent/PendingIntent and Room boundaries. Uses Play versionCode 20261160.
           v1.10.5: Resets stale foreground scan sessions and tagged WorkManager scans, explicitly allows offline scan work, clears Room checkpoints before new sessions, adds worker/per-item ScanDebug logs, and revalidates persisted SAF read grants. Uses Play versionCode 20261159.
@@ -430,10 +468,10 @@ jobs:
           v1.6.3: Trigger the five-second local siren after a confirmed manual scan threat, including picked files, independent of notification/full-screen preferences. Spoken alerts remain opt-in and use asynchronous local TTS.
           Includes pinned 18KB research v1.0.1-model and a 215-feature schema; this unvalidated candidate remains inactive as malware protection. All scanning is on-device.
           v1.2.0: Google Mobile Ads Next-Gen 1.6.0 and UMP 4.0.0 power the consented, ad-supported Free tier. Home dashboard banners and eligible interstitials after manual scans with no confirmed threats use Google's sample units in debug builds. The local device-bound Pro check is repeated before SDK initialization, banner loads and interstitial display; active Pro does not initialize AdMob or make ad requests. Google AdMob may collect the Android Advertising ID and IP addresses for ad delivery, ad measurement/reporting and analytics, and fraud prevention.
-          Annual auto-renewing Pro subscription copy, status messaging and restore guidance are translated across all 51 locale folders. Google Play connectivity is required for purchase and restore; the encrypted device-bound entitlement cache supports offline Pro gating. Core scanning remains on-device.
+          One-year prepaid SafeMobile Pro subscription copy, status messaging and restore guidance are translated across all 51 locale folders. Google Play connectivity is required for purchase and restore; the encrypted device-bound entitlement cache supports offline Pro gating. Core scanning remains on-device.
           Current subscriptions can be restored by querying Google Play. The local encrypted expiry cache supports offline entitlement checks; legacy consumed one-time Pro grants remain local-only and cannot be recovered from Google Play after consumption or app-data loss.
           The Threat Intelligence Engine card reads a verified local stats.json cache; missing upstream statistics show the localized updating state.
-          Google Play subscription product safemobile_pro_1y_subs and its annual base plan, regional pricing and eligibility must be configured in Play Console. Verify recurring checkout and restore with a license tester on the internal testing track before public rollout. This GitHub workflow builds signed APK/AAB artifacts and a GitHub Release; it does not publish to Google Play or process a real payment.
+          Google Play prepaid subscription product safemobile-pro-1y-subs and the prepaid-1-year base plan (P1Y), regional pricing and eligibility must be configured in Play Console. Verify prepaid checkout and restore with a license tester on the internal testing track before public rollout. This GitHub workflow builds signed APK/AAB artifacts and a GitHub Release; it does not publish to Google Play or process a real payment.
           v1.0.13: trusted-app options menus, foreground install monitoring with silent receipt notifications, shared immediate/durable local scan processing, and Compose Canvas donut/weekly session charts.
           The reserved no-code siren fixture triggers a labeled five-second diagnostic without importing a database or recording a malware verdict. Android full-screen permission and OEM background restrictions still apply.
           Overlay remediation passes each flagged package URI; Android 11+ may still show its global overlay list.
@@ -458,6 +496,17 @@ jobs:
             "build/siren-test/siren-test-definitions.json"
             "build/siren-test/SHA256SUMS.txt"
           )
+          checksum_manifest="SHA256SUMS-v${version_name}.txt"
+          sha256sum \
+            "${{ steps.verify-aab.outputs.aab_path }}" \
+            "${{ steps.verify-aab.outputs.apk_path }}" \
+            "build/ui-screenshots-v${version_name}.zip" \
+            "build/siren-test/SafeMobile-Siren-Test.apk" \
+            "build/siren-test/siren-test-definitions.json" \
+            "build/siren-test/SHA256SUMS.txt" \
+            > "$checksum_manifest"
+          sha256sum --check "$checksum_manifest"
+          release_files+=("$checksum_manifest")
           if gh release view "$tag" >/dev/null 2>&1; then
             gh release upload "$tag" "${release_files[@]}" --clobber
           else

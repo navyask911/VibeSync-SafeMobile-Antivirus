@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="threat_intelligence_unavailable">هیچ آمار آموزشی بالادستیِ تأییدشده‌ای روی این دستگاه ذخیره نشده است.</string>
+    <string name="threat_intelligence_upstream_stale">داده بالادستی قدیمی · به‌روزرسانی منتشرشده بیش از ۳۰ روز قدمت دارد.</string>
+    <string name="threat_intelligence_device_title">اطلاعات تهدید روی دستگاه</string>
+    <string name="threat_intelligence_latest_sync_note">یادداشت آخرین همگام‌سازی: %1$s</string>
+    <string name="threat_intelligence_feed_stale">آخرین همگام‌سازی موفق خوراک پیکربندی‌شده بیش از ۷ روز پیش انجام شده است.</string>
+</resources>

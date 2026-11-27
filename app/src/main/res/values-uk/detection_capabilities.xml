@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="detection_capabilities_title">Можливості виявлення</string>
+    <string name="detection_capabilities_description">Перегляньте, які перевірки безпеки в цій збірці ввімкнені, мають рекомендаційний характер, залежать від умов або недоступні.</string>
+    <string name="detection_capabilities_truth_title">Важливо: що означають результати сканування</string>
+    <string name="detection_capabilities_truth_body">Відсутність локального збігу не доводить, що файл безпечний. Механізм підписаних хешів залишається вимкненим, доки не налаштовано довірений ключ підпису та перевірену виробничу базу даних. Обмежена автономна підмножина правил DEX працює після завантаження перевірених вбудованих правил; машинне навчання залишається вимкненим. Евристики можуть давати хибні попередження. Наведені нижче показники не вимірювалися.</string>
+    <string name="detection_capabilities_enabled">Увімкнено</string>
+    <string name="detection_capabilities_disabled">Вимкнено</string>
+    <string name="detection_capabilities_limited">Обмежене охоплення</string>
+    <string name="detection_capabilities_advisory">Лише рекомендація</string>
+    <string name="detection_capabilities_conditional">За певних умов</string>
+    <string name="detection_capabilities_metrics_title">Показники ефективності виявлення</string>
+    <string name="detection_capabilities_import_signed_db">Імпортувати підписану базу хешів</string>
+    <string name="detection_capabilities_import_yara">Імпортувати правила YARA для перегляду (без виконання)</string>
+    <string name="detection_capabilities_sync">Оновлення підписаної бази даних</string>
+    <string name="detection_capabilities_feed_url">URL-адреса оновлення HTTPS</string>
+    <string name="detection_capabilities_sync_enabled">Увімкнути автоматичні оновлення</string>
+    <string name="detection_capabilities_save">Зберегти налаштування оновлення</string>
+    <string name="detection_capabilities_sync_privacy">Лише завантаження. Результати сканування, файли, хеші та назви пакетів не передаються.</string>
+    <string name="detection_capabilities_sync_unavailable">Автоматичні оновлення недоступні в цій автономній збірці або до налаштування довіреного ключа підпису.</string>
+</resources>

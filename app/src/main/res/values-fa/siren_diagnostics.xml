@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="test_siren">آزمایش آژیر</string>
+    <string name="test_voice">آزمایش صدا</string>
+    <string name="test_siren_failed">آزمایش آژیر در این دستگاه شروع نشد.</string>
+    <string name="test_voice_failed">آزمایش صدا ناموفق بود. موتور گفتار نصب‌شده روی دستگاه و داده‌های صوتی را بررسی کنید.</string>
+</resources>

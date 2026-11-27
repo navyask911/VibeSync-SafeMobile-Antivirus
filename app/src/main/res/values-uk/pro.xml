@@ -28,4 +28,11 @@
     <string name="pro_fewer_years">Менше років</string>
     <string name="pro_more_years">Більше років</string>
     <string name="pro_subscription_offer" formatted="false">Розблокуйте SafeMobile Pro — ₹299 / рік (автоматичне поновлення). Скасуйте будь-коли в Google Play.</string>
+    <string name="pro_one_year_price">Один рік із передоплатою: %1$s</string>
+    <string name="pro_prepaid_offer">Річний доступ до SafeMobile Pro з передоплатою. Автоматичного поновлення немає.</string>
+    <string name="pro_prepaid_duration_limit">Передплачені плани Google Play обмежені одним роком за одну покупку. Повторно придбайте або продовжте той самий план, щоб додати ще один рік; остаточна ціна підтверджується в Google Play.</string>
+    <string name="pro_device_binding_explanation">Цю покупку прив’язано до цього пристрою Android за допомогою хешованого ідентифікатора пристрою. Повторне встановлення на тому самому пристрої може відновити активну покупку Play; інший пристрій блокується.</string>
+    <string name="pro_buy_or_extend_one_year">Придбати / продовжити на 1 рік</string>
+    <string name="pro_device_mismatch">Підписка активна на іншому пристрої. Доступ до SafeMobile Pro на цьому пристрої заблоковано.</string>
+    <string name="pro_device_binding_unavailable">Ця покупка не має перевірюваної прив’язки до пристрою. Доступ Pro заблоковано, доки Google Play не поверне покупку, прив’язану до пристрою.</string>
 </resources>

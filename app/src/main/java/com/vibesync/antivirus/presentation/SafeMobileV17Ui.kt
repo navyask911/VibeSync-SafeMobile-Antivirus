@@ -1,8 +1,10 @@
 package com.vibesync.antivirus.presentation
 
 import android.content.Context
+import android.content.pm.PackageInfo
 import android.os.Build
 import android.provider.Settings
+import android.util.LruCache
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -66,12 +68,31 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vibesync.antivirus.core.engine.DetectionSource
 import com.vibesync.antivirus.core.engine.ScanResult
+import com.vibesync.antivirus.core.engine.ScanCoveragePolicy
 import com.vibesync.antivirus.core.engine.ScanVerdict
+import com.vibesync.antivirus.core.engine.ScanSource
+import com.vibesync.antivirus.core.engine.ScanReportFormatter
 import com.vibesync.antivirus.core.locale.LocalePreferences
 import com.vibesync.antivirus.core.observer.FullScreenAlertAccess
 import com.vibesync.antivirus.core.security.SecurityVerificationState
 import com.vibesync.antivirus.core.security.SecurityVerificationStatus
 import com.vibesync.antivirus.ui.theme.AppTheme
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
+import kotlinx.coroutines.withContext
+
+private fun formatScanBytes(bytes: Long): String {
+    val safe = bytes.coerceAtLeast(0L).toDouble()
+    return when {
+        safe >= 1024.0 * 1024.0 -> String.format(java.util.Locale.getDefault(), "%.2f MB", safe / (1024.0 * 1024.0))
+        safe >= 1024.0 -> String.format(java.util.Locale.getDefault(), "%.1f KB", safe / 1024.0)
+        else -> "${bytes.coerceAtLeast(0L)} B"
+    }
+}
+
+private fun formatScanRate(value: Double): String =
+    String.format(java.util.Locale.getDefault(), "%.2f", value.takeIf { it.isFinite() && it > 0.0 } ?: 0.0)
 
 private data class V17Colors(
     val device: Color, val surface: Color, val elevated: Color, val text: Color,
@@ -394,7 +415,9 @@ internal fun V17ShieldScreen(
     liveSentinelActive: Boolean, posturePassed: Int?, quarantinedFilesCount: Int,
     onOpenSetup: () -> Unit, onOpenLiveSentinel: () -> Unit, onOpenPosture: () -> Unit,
     onOpenDetection: () -> Unit, onOpenThreatDb: () -> Unit,
-    onOpenPrivacy: () -> Unit = {}, onOpenSettings: () -> Unit = {}
+    onOpenPrivacy: () -> Unit = {}, onOpenSettings: () -> Unit = {},
+    threatIntelligenceState: ThreatIntelligenceUiState = ThreatIntelligenceUiState(),
+    onRefreshThreatIntelligence: () -> Unit = {}
 ) {
     val c = v17Colors(isDark)
     val context = LocalContext.current
@@ -545,7 +568,11 @@ internal fun V17ShieldScreen(
                 else "No signed local hash database is active on this device."
             )
         }
-        ThreatIntelligenceCard()
+        ThreatIntelligenceCard(
+            state = threatIntelligenceState,
+            onRefresh = onRefreshThreatIntelligence,
+            showRefreshAction = true
+        )
     }
 }
 
@@ -876,6 +903,36 @@ internal fun V17ScanLabScreen(
                 }
             }
         }
+        item(key = "scan-report-summary") {
+            state.scanSummary?.let { summary ->
+                V17Card(isDark) {
+                    V17Title("Scan Report")
+                    V17Body("Started: ${ScanReportFormatter.formatTimestamp(summary.startedAt)}", color = c.text)
+                    V17Body("Completed: ${ScanReportFormatter.formatTimestamp(summary.completedAt)}", color = c.text)
+                    V17Body(
+                        "Elapsed: ${summary.elapsedMs} ms · ${formatScanRate(summary.appsPerSecond)} apps/sec · " +
+                            "${formatScanRate(summary.mbPerSecond)} MB/sec",
+                        color = c.text
+                    )
+                    V17Body(
+                        "APK volume: ${formatScanBytes(summary.scannedApkBytes)} fresh-scan bytes · " +
+                            "${formatScanBytes(summary.totalApkBytes)} total app APK bytes",
+                        color = c.muted
+                    )
+                    V17Body(
+                        "Apps: ${summary.appCount} · completed: ${summary.completedAppCount} · fresh: ${summary.freshAppCount} · " +
+                            "cache: ${summary.cachedAppCount} · Google verified: ${summary.verifiedGoogleAppCount} · " +
+                            "pending retries: ${summary.pendingRetries} · unreadable/incomplete: ${summary.unreadable}",
+                        color = c.text
+                    )
+                    V17Body(
+                        "Packages: ${summary.enumeratedPackages} enumerated · ${summary.queuedPackages} eligible · " +
+                            "${summary.excludedPackages} excluded · ${summary.skippedFiles} files skipped",
+                        color = c.muted
+                    )
+                }
+            }
+        }
         item(key = "scan-metrics") {
             V17Card(isDark) {
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
@@ -918,6 +975,49 @@ private fun V17ModeButton(
     }
 }
 
+private data class V17AppIconCacheKey(
+    val packageName: String,
+    val versionCode: Long
+)
+
+@Suppress("DEPRECATION")
+private fun compatibleAppVersionCode(info: PackageInfo): Long =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) info.longVersionCode
+    else info.versionCode.toLong()
+
+/**
+ * App icons are presentation-only. PackageManager OEM theme hooks can block,
+ * so both metadata lookup and drawable decoding are confined to a bounded IO
+ * lane. The cache key changes when an installed package is updated.
+ */
+private object V17AppIconLoader {
+    private const val ICON_SIZE_PX = 72
+    private val cache = LruCache<V17AppIconCacheKey, ImageBitmap>(96)
+    private val loadPermits = Semaphore(2)
+
+    suspend fun load(context: Context, packageName: String): ImageBitmap? =
+        withContext(Dispatchers.IO) {
+            loadPermits.withPermit {
+                try {
+                    val packageManager = context.packageManager
+                    @Suppress("DEPRECATION")
+                    val packageInfo = packageManager.getPackageInfo(packageName, 0)
+                    val key = V17AppIconCacheKey(
+                        packageName = packageName,
+                        versionCode = compatibleAppVersionCode(packageInfo)
+                    )
+                    cache.get(key) ?: packageManager.getApplicationIcon(packageName)
+                        .toBitmap(ICON_SIZE_PX, ICON_SIZE_PX)
+                        .asImageBitmap()
+                        .also { cache.put(key, it) }
+                } catch (_: Exception) {
+                    // Missing/unreadable OEM icon resources must not affect scan results.
+                    null
+                }
+            }
+        }
+}
+
 @Composable
 private fun V17ScanResultRow(
     result: ScanResult, dark: Boolean, onUninstall: (String) -> Unit, onAppInfo: (String) -> Unit,
@@ -927,13 +1027,13 @@ private fun V17ScanResultRow(
     val c = v17Colors(dark)
     var expanded by rememberSaveable(result.packageName, result.packageOrPath) { mutableStateOf(false) }
     var heuristicsExpanded by rememberSaveable(result.packageName, result.packageOrPath) { mutableStateOf(false) }
-    val appIcon = remember(context, result.packageName) {
-        result.packageName?.let { name ->
-            runCatching {
-                context.packageManager.getApplicationIcon(name).toBitmap(72, 72).asImageBitmap()
-            }.getOrNull()
-        }
+    var appIcon by remember(result.packageName) { mutableStateOf<ImageBitmap?>(null) }
+    LaunchedEffect(context.applicationContext, result.packageName) {
+        val packageName = result.packageName
+        appIcon = if (packageName == null) null else
+            V17AppIconLoader.load(context.applicationContext, packageName)
     }
+    val loadedAppIcon = appIcon
     val uninstallAllowed = result.packageName?.let { name ->
         name != context.packageName &&
             result.verdict in setOf(ScanVerdict.THREAT, ScanVerdict.SUSPICIOUS) &&
@@ -943,9 +1043,11 @@ private fun V17ScanResultRow(
             }.getOrDefault(false)
     } == true
     val (label, tint) = when {
+        result.scanSource == ScanSource.GOOGLE_VERIFIED -> "CLEAN & SAFE" to c.green
         result.trustedByUser -> "WHITELISTED" to c.green
         result.verdict == ScanVerdict.THREAT -> "MALWARE" to c.red
         result.verdict == ScanVerdict.SUSPICIOUS -> "SUSPICIOUS" to c.amber
+        result.verdict == ScanVerdict.NO_MATCH && ScanCoveragePolicy.isPartial(result) -> "PARTIAL SCAN" to c.amber
         result.verdict == ScanVerdict.NO_MATCH -> "CLEAN" to c.green
         else -> "NOT SCANNED" to c.muted
     }
@@ -953,6 +1055,7 @@ private fun V17ScanResultRow(
         result.trustedByUser -> Icons.Default.Shield
         result.verdict == ScanVerdict.THREAT -> Icons.Default.Warning
         result.verdict == ScanVerdict.SUSPICIOUS -> Icons.Default.Search
+        result.verdict == ScanVerdict.NO_MATCH && ScanCoveragePolicy.isPartial(result) -> Icons.Outlined.Info
         result.verdict == ScanVerdict.NO_MATCH -> Icons.Default.CheckCircle
         else -> Icons.Outlined.HelpOutline
     }
@@ -962,7 +1065,7 @@ private fun V17ScanResultRow(
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             Surface(Modifier.size(42.dp), shape = RoundedCornerShape(11.dp), color = c.surface,
                 border = BorderStroke(1.dp, c.border)) {
-                if (appIcon != null) Image(appIcon, contentDescription = result.displayName, modifier = Modifier.fillMaxSize())
+                if (loadedAppIcon != null) Image(loadedAppIcon, contentDescription = result.displayName, modifier = Modifier.fillMaxSize())
                 else Box(contentAlignment = Alignment.Center) {
                     Icon(Icons.Outlined.Apps, "App icon", tint = c.accent, modifier = Modifier.size(26.dp))
                 }
@@ -976,14 +1079,35 @@ private fun V17ScanResultRow(
                 V17Pill(label, tint, dark)
             }
         }
+        ScanCoveragePolicy.partialReason(result)?.let { coverageReason ->
+            V17Body("Partial coverage: $coverageReason", color = c.amber)
+        }
         AnimatedVisibility(expanded) {
             Column(Modifier.fillMaxWidth().padding(top = 6.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 val report = result.riskReport
                 V17Body(
-                    "ThreatEnsembleEvaluator · ${result.detectionSource}" +
-                        if (result.confidence > 0f) " · ${(result.confidence * 100).toInt().coerceIn(0, 100)}% confidence" else
-                            " · Risk ${report?.riskScore ?: result.riskScore.toInt()}/100",
+                    if (result.scanSource == ScanSource.GOOGLE_VERIFIED) {
+                        "Official Google app · trusted signing certificate verified · Clean & Safe"
+                    } else {
+                        "ThreatEnsembleEvaluator · ${result.detectionSource}" +
+                            if (result.confidence > 0f) " · ${(result.confidence * 100).toInt().coerceIn(0, 100)}% confidence" else
+                                " · Risk ${report?.riskScore ?: result.riskScore.toInt()}/100"
+                    },
                     color = c.text
+                )
+                V17Body(
+                    "Per-app time: ${result.durationMs} ms · APK size: ${result.apkSizeBytes?.let(::formatScanBytes) ?: "Unavailable"}",
+                    color = c.muted
+                )
+                val sourceLabel = when (result.scanSource) {
+                    ScanSource.FRESH -> "Fresh scan"
+                    ScanSource.CACHE_HIT -> "Cache hit"
+                    ScanSource.GOOGLE_VERIFIED -> "Google signer verified"
+                    ScanSource.USER_TRUSTED -> "User trusted"
+                }
+                V17Body(
+                    "Source: $sourceLabel · Stages: ${result.analysisStages.joinToString(" → ").ifBlank { "not recorded" }}",
+                    color = c.muted
                 )
                 val hashDetails = if (result.detectionSource in setOf(
                     DetectionSource.HASH, DetectionSource.SIGNED_DATABASE, DetectionSource.THREAT_INTELLIGENCE_FEED
