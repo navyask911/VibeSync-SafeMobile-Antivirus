@@ -633,7 +633,7 @@ class SafeMobileBillingManager(context: Context) : PurchasesUpdatedListener {
 
     companion object {
         private const val TAG = "SafeMobileBilling"
-        const val PRODUCT_ID = "pro_access"
+        const val PRODUCT_ID = "safemobile-pro-1y-subs"
         const val PREPAID_BASE_PLAN_ID = "prepaid-1-year"
         const val PREPAID_BILLING_PERIOD = "P1Y"
     }
