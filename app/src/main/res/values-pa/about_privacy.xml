@@ -11,11 +11,11 @@
     <string name="privacy_dashboard_title">ਗੋਪਨੀਯਤਾ ਡੈਸ਼ਬੋਰਡ</string>
     <string name="privacy_dashboard_intro">ਵੇਖੋ ਕਿ SafeMobile ਕੀ ਪ੍ਰੋਸੈਸ ਕਰਦਾ ਹੈ ਅਤੇ ਤੁਹਾਡੀ ਜਾਣਕਾਰੀ ਕਿੱਥੇ ਰਹਿੰਦੀ ਹੈ।</string>
     <string name="privacy_package_title">ਐਪ ਪੈਕੇਜ ਦਾ ਨਾਮ</string>
-    <string name="privacy_processed_locally">ਸਥਾਨਕ ਤੌਰ 'ਤੇ ਪ੍ਰੋਸੈਸ ਕੀਤਾ ਜਾਂਦਾ ਹੈ</string>
+    <string name="privacy_processed_locally">ਸਥਾਨਕ ਤੌਰ \'ਤੇ ਪ੍ਰੋਸੈਸ ਕੀਤਾ ਜਾਂਦਾ ਹੈ</string>
     <string name="privacy_package_detail">ਤੁਹਾਡੇ ਵੱਲੋਂ SafeMobile ਨੂੰ ਜਾਂਚਣ ਲਈ ਕਹੀਆਂ ਐਪਾਂ ਦੀ ਪਛਾਣ ਕਰਨ ਵਾਸਤੇ ਇੰਸਟਾਲ ਕੀਤੇ ਪੈਕੇਜ ਨਾਮ ਇਸ ਡਿਵਾਈਸ ਉੱਤੇ ਜਾਂਚੇ ਜਾਂਦੇ ਹਨ।</string>
     <string name="privacy_hash_title">ਫਾਈਲ ਹੈਸ਼</string>
     <string name="privacy_hash_scan_status">ਸਕੈਨ ਦੌਰਾਨ ਕਦੇ ਅੱਪਲੋਡ ਨਹੀਂ ਹੁੰਦੀ</string>
-    <string name="privacy_hash_detail">ਸਥਾਨਕ ਫੈਸਲਿਆਂ ਲਈ ਸਕੈਨ ਹੈਸ਼ ਤੁਹਾਡੇ ਡਿਵਾਈਸ ਉੱਤੇ ਹੀ ਰਹਿੰਦੇ ਹਨ। ਹੈਸ਼ ਤਦ ਹੀ ਸਾਂਝੀ ਹੋ ਸਕਦੀ ਹੈ ਜਦੋਂ ਤੁਸੀਂ Global Threat Intelligence ਵੱਖਰੇ ਤੌਰ 'ਤੇ ਚਾਲੂ ਕਰੋ ਜਾਂ ਇੱਕ ਵਾਰ ਦੇ ਯੋਗਦਾਨ ਨੂੰ ਮਨਜ਼ੂਰੀ ਦਿਓ।</string>
+    <string name="privacy_hash_detail">ਸਥਾਨਕ ਫੈਸਲਿਆਂ ਲਈ ਸਕੈਨ ਹੈਸ਼ ਤੁਹਾਡੇ ਡਿਵਾਈਸ ਉੱਤੇ ਹੀ ਰਹਿੰਦੇ ਹਨ। ਹੈਸ਼ ਤਦ ਹੀ ਸਾਂਝੀ ਹੋ ਸਕਦੀ ਹੈ ਜਦੋਂ ਤੁਸੀਂ Global Threat Intelligence ਵੱਖਰੇ ਤੌਰ \'ਤੇ ਚਾਲੂ ਕਰੋ ਜਾਂ ਇੱਕ ਵਾਰ ਦੇ ਯੋਗਦਾਨ ਨੂੰ ਮਨਜ਼ੂਰੀ ਦਿਓ।</string>
     <string name="privacy_history_title">ਸਕੈਨ ਇਤਿਹਾਸ</string>
     <string name="privacy_stored_on_device">ਡਿਵਾਈਸ ਉੱਤੇ ਸਟੋਰ</string>
     <string name="privacy_history_detail">ਸਕੈਨ ਇਤਿਹਾਸ ਅਤੇ ਆਡਿਟ ਐਂਟਰੀਆਂ ਇਸ ਡਿਵਾਈਸ ਦੇ ਸਥਾਨਕ ਐਪ ਡੇਟਾਬੇਸ ਵਿੱਚ ਸਟੋਰ ਹੁੰਦੀਆਂ ਹਨ।</string>
