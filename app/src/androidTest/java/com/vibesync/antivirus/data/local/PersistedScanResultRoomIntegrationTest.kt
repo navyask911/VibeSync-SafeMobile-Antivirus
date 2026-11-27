@@ -175,7 +175,8 @@ class PersistedScanResultRoomIntegrationTest {
             assertEquals(ScanVerdict.NOT_SCANNED, pendingApp.verdict)
             assertEquals("temporary APK read failure", pendingApp.reasons.single())
 
-            val cleanGoogle = visible.single { it.packageName == googlePackage }
+            // Verify Google normalization before the visibility policy removes Google packages.
+            val cleanGoogle = restored.single { it.packageName == googlePackage }
             assertEquals(ScanVerdict.NO_MATCH, cleanGoogle.verdict)
             assertEquals(ScanSource.GOOGLE_VERIFIED, cleanGoogle.scanSource)
             assertEquals(0f, cleanGoogle.riskScore, 0f)
