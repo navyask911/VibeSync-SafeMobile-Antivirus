@@ -203,7 +203,8 @@ run_prebuilt_instrumentation() {
     2>&1 | tee "$INSTRUMENTATION_LOG"
   instrument_status=${PIPESTATUS[0]}
 
-  if [[ "$INSTRUMENTATION_LOG" =~ OK[[:space:]]\(([0-9]+)[[:space:]]tests?\) ]]; then
+  summary_line="$(grep -Eo 'OK \([0-9]+ tests?\)' "$INSTRUMENTATION_LOG" | tail -n 1 || true)"
+  if [[ "$summary_line" =~ OK[[:space:]]\(([0-9]+)[[:space:]]tests?\) ]]; then
     executed_tests="${BASH_REMATCH[1]}"
   else
     executed_tests=0
