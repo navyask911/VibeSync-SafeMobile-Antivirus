@@ -173,7 +173,7 @@
 <string name="nav_cleaner">საცავის გამწმენდი</string>
 <string name="why_safemobile">რატომ SafeMobile? ძირითადი უპირატესობები და ფუნქციები</string>
 <string name="features_disclaimer">ფუნქციების ხელმისაწვდომობა დამოკიდებულია Android-ის ნებართვებსა და ამჟამად დაყენებულ ადგილობრივ განსაზღვრებებზე. ეს ფუნქციები არ უზრუნველყოფს მავნე პროგრამებისგან სრულ ან გარანტირებულ დაცვას.</string>
-<string name="pillar_offline_title" formatted="false">100% Offline Privacy</string>
+<string name="pillar_offline_title" formatted="false">100% ოფლაინ კონფიდენციალურობა</string>
 <string name="pillar_offline_body">ფაილების ძირითადი ჰეშირება და ადგილობრივ ხელმოწერებთან შედარება მოწყობილობაზე სრულდება. რეკლამა და Google Play-ის განახლებების შემოწმება ცალკე ქსელური ფუნქციებია და მუშაობს მხოლოდ კონფიგურაციისა და ნებართვის შემთხვევაში.</string>
 <string name="pillar_telemetry_title">ღრუბლოვანი ტელემეტრია არ არის</string>
 <string name="pillar_telemetry_body">სკანერი არ ტვირთავს ფაილების შიგთავსს ან ჰეშებს. რეკლამისა და Google Play სერვისებმა შეიძლება ცალკე ქსელური მოთხოვნები გააკეთონ.</string>

@@ -353,7 +353,7 @@
 <string name="sentinel_scope_body">Текущото наблюдение следи събития за създаване, преместване и приключване на запис на APK файлове директно в публичната папка „Изтегляния“, докато услугата на преден план работи. Събития може да бъдат пропуснати, ако услугата спре или файловете се съхраняват другаде. Проверките след инсталиране са с най-добро усилие и не блокират инсталирането от Android.</string>
 <string name="risk_accessibility_overlay">Заявява достъпност плюс наслагване (възможен модел за наслагване/RAT)</string>
 <string name="risk_boot_sms_internet">Комбинира устойчивост след зареждане, READ_SMS и INTERNET (възможен модел за кражба на SMS/2FA)</string>
-<string name="nav_install_sources">App installation sources</string>
+<string name="nav_install_sources">Източници за инсталиране на приложения</string>
 <string name="install_sources_title">Източници на инсталиране на приложения</string>
 <string name="install_sources_body">Последни събития за инсталиране на пакети с метаданни за инсталатора, съобщени от Android. Външен или неизвестен източник не доказва злонамерен софтуер; прегледайте локалните резултати от сканирането.</string>
 <string name="install_source_play_badge">Google Play</string>

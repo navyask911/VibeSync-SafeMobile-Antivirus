@@ -353,7 +353,7 @@
 <string name="sentinel_scope_body">Die huidige monitering neem APK-skepping-, skuif- en skryfvoltooiingsgebeure direk in die openbare Downloads-gids waar terwyl die voorgronddiens loop. Gebeure kan gemis word as die diens stop of lêers elders gestoor word. Na-installasiekontroles is volgens beste vermoë en blokkeer nie Android-installasie nie.</string>
 <string name="risk_accessibility_overlay">Versoek Toeganklikheid plus oorlegvermoë (moontlike oorleg/RAT-patroon)</string>
 <string name="risk_boot_sms_internet">Kombineer opstartvolharding, READ_SMS en INTERNET (moontlike SMS/2FA-diefstalpatroon)</string>
-<string name="nav_install_sources">App installation sources</string>
+<string name="nav_install_sources">Bronne vir programinstallasie</string>
 <string name="install_sources_title">Bronne van programinstallasies</string>
 <string name="install_sources_body">Onlangse pakketinstallasiegebeure met installeerdermetadata wat deur Android gerapporteer is. ’n Eksterne of onbekende bron bewys nie wanware nie; hersien die plaaslike skanderingsresultate.</string>
 <string name="install_source_play_badge">Google Play</string>

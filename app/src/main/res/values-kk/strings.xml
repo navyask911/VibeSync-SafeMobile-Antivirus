@@ -173,7 +173,7 @@
 <string name="nav_cleaner">Жадты тазалау</string>
 <string name="why_safemobile">Неліктен SafeMobile? Негізгі артықшылықтар мен мүмкіндіктер</string>
 <string name="features_disclaimer">Мүмкіндіктердің қолжетімділігі Android рұқсаттары мен ағымдағы жергілікті анықтамаларға байланысты. Бұл мүмкіндіктер зиянды бағдарламалардан толық немесе кепілді қорғаныс бермейді.</string>
-<string name="pillar_offline_title" formatted="false">100% Offline Privacy</string>
+<string name="pillar_offline_title" formatted="false">100% офлайн құпиялылық</string>
 <string name="pillar_offline_body">Негізгі файл хэштеу және жергілікті қолтаңбалармен салыстыру құрылғыда орындалады. Жарнама мен Google Play жаңартуларын тексеру — конфигурацияланып, рұқсат етілген жағдайда ғана жұмыс істейтін бөлек желілік мүмкіндіктер.</string>
 <string name="pillar_telemetry_title">Бұлттық телеметрия жоқ</string>
 <string name="pillar_telemetry_body">Сканер файл мазмұнын немесе хэштерін жүктемейді. Жарнама және Google Play қызметтері бөлек желілік сұраулар жіберуі мүмкін.</string>

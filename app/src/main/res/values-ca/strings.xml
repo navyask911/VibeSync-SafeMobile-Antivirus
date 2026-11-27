@@ -353,7 +353,7 @@
 <string name="sentinel_scope_body">La supervisió actual observa els esdeveniments de creació, moviment i finalització d’escriptura d’APK directament a la carpeta pública Baixades mentre el servei en primer pla està en execució. Es poden perdre esdeveniments si el servei s’atura o els fitxers es desen en un altre lloc. Les comprovacions posteriors a la instal·lació es fan tant com és possible i no bloquegen la instal·lació d’Android.</string>
 <string name="risk_accessibility_overlay">Sol·licita accessibilitat i capacitat de superposició (possible patró de superposició/RAT)</string>
 <string name="risk_boot_sms_internet">Combina persistència en iniciar-se, READ_SMS i INTERNET (possible patró de robatori d’SMS/2FA)</string>
-<string name="nav_install_sources">App installation sources</string>
+<string name="nav_install_sources">Fonts d\'instal·lació d\'aplicacions</string>
 <string name="install_sources_title">Orígens d’instal·lació d’aplicacions</string>
 <string name="install_sources_body">Esdeveniments recents d’instal·lació de paquets amb metadades de l’instal·lador informades per Android. Un origen extern o desconegut no prova que hi hagi programari maliciós; revisa els resultats locals de l’escaneig.</string>
 <string name="install_source_play_badge">Google Play</string>

@@ -353,7 +353,7 @@
 <string name="sentinel_scope_body">Cari izləyici ön plan xidməti işləyərkən ictimai Yükləmələr qovluğunda APK yaradılması, köçürülməsi və yazmanın tamamlanması hadisələrini birbaşa izləyir. Xidmət dayansa və ya fayllar başqa yerdə saxlanılsa, hadisələr gözdən qaça bilər. Quraşdırmadan sonrakı yoxlamalar mümkün olan ən yaxşı şəkildə aparılır və Android quraşdırmasını bloklamır.</string>
 <string name="risk_accessibility_overlay">Əlçatanlıq və overlay imkanını birlikdə tələb edir (mümkün overlay/RAT nümunəsi)</string>
 <string name="risk_boot_sms_internet">Yüklənmədə davamlılığı, READ_SMS və INTERNET-i birləşdirir (mümkün SMS/2FA oğurluğu nümunəsi)</string>
-<string name="nav_install_sources">App installation sources</string>
+<string name="nav_install_sources">Tətbiq quraşdırma mənbələri</string>
 <string name="install_sources_title">Tətbiq quraşdırma mənbələri</string>
 <string name="install_sources_body">Android tərəfindən bildirilən quraşdırıcı metadatası ilə son paket quraşdırma hadisələri. Xarici və ya naməlum mənbə zərərli proqramı sübut etmir; yerli skan nəticələrini yoxlayın.</string>
 <string name="install_source_play_badge">Google Play</string>
