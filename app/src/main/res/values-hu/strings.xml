@@ -346,7 +346,7 @@
 <string name="analytics_offline_local">Offline; az alapvető hash-ellenőrzés helyben marad</string>
 <string name="analytics_recent_activity">Legutóbbi tevékenység</string>
 <string name="analytics_definition_note">Adatkészlet-korlátozás: a mellékelt offline definíciók csak az ártalmatlan EICAR tesztjelölő hash-ét tartalmazzák. Ez nem valós kártevő-adatbázis. A felhasználó által importált definíciókat séma szerint ellenőrizzük, de a kiadó hitelességét nem igazoljuk.</string>
-<string name="apps_inventory_empty">A telepített alkalmazások leltára még nem érhető el</string>
+<string name="apps_inventory_empty">A telepített alkalmazások leltára még nem érhető el.</string>
 <string name="apps_inventory_empty_body">Futtasson telepítettalkalmazás-vizsgálatot a lista feltöltéséhez. A rendszer- és védett csomagok csak felülvizsgálhatók.</string>
 <string name="apps_inventory_count">%1$d alkalmazás értékelve a legutóbbi elérhető eredményekben</string>
 <string name="sentinel_scope_title">Monitoring scope and limitations</string>
@@ -386,7 +386,7 @@
 <string name="feed_settings_key_missing">Az adatfolyam szinkronizálása ebben a buildben nem érhető el, mert a buildeléskor nem lett beállítva megbízható Ed25519 nyilvános kulcs.</string>
 <string name="feed_settings_opt_in_title">Opcionális hálózati adatfolyam-szinkronizálás engedélyezése</string>
 <string name="feed_settings_opt_in_description">Alapértelmezés szerint ki van kapcsolva. Engedélyezéskor a SafeMobile töltés közben, nem mérőórás hálózaton lép kapcsolatba a fenti HTTPS-végponttal. Az adatfolyam törzsének érvényes Ed25519-aláírt manifestet és újabb verziót kell tartalmaznia.</string>
-<string name="feed_settings_consent_title">Allow optional network feed requests?</string>
+<string name="feed_settings_consent_title">Engedélyezi az opcionális hálózati adatfolyam-kéréseket?</string>
 <string name="feed_settings_consent_body">Ez hálózati hozzáférést engedélyez a beállított adatfolyam-végponthoz. A végpont és az opcionális Auth-Key elküldhető. A vizsgált fájlok, fájl-hash-ek és vizsgálati előzmények nem kerülnek elküldésre. A helyi vizsgálat az eszközön marad. Ezt bármikor kikapcsolhatja.</string>
 <string name="feed_settings_confirm">Adatfolyam-szinkronizálás engedélyezése</string>
 <string name="feed_settings_cancel">Mégse</string>

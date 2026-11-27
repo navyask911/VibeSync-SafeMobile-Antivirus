@@ -346,8 +346,8 @@
 <string name="analytics_offline_local">Offline; ydintiivisteiden tarkistus pysyy paikallisena</string>
 <string name="analytics_recent_activity">Viimeaikainen toiminta</string>
 <string name="analytics_definition_note">Tietokannan rajoitus: mukana toimitetut offline-määritykset sisältävät vain vaarattoman EICAR-testimerkin tiivisteen. Se ei ole todellisen maailman haittaohjelmakokoelma. Käyttäjän tuomat määritykset tarkistetaan rakenteen osalta, mutta julkaisijaa ei todenneta.</string>
-<string name="apps_inventory_empty">A telepített alkalmazások listája még nem érhető el</string>
-<string name="apps_inventory_empty_body">Futtasson telepítettalkalmazás-vizsgálatot a lista feltöltéséhez. A rendszer- és védett csomagok csak felülvizsgálhatók.</string>
+<string name="apps_inventory_empty">Asennettujen sovellusten luettelo ei ole vielä käytettävissä.</string>
+<string name="apps_inventory_empty_body">Suorita asennettujen sovellusten skannaus täyttääksesi tämän luettelon. Järjestelmä- ja suojatut paketit ovat vain tarkasteltavissa.</string>
 <string name="apps_inventory_count">%1$d sovellusta arvioitu viimeisimmissä saatavilla olevissa tuloksissa</string>
 <string name="sentinel_scope_title">Monitoring scope and limitations</string>
 <string name="sentinel_scope_body">Nykyinen valvoja tarkkailee APK-tiedostojen luonti-, siirto- ja kirjoituksen sulkemistapahtumia suoraan julkisen Downloads-kansion alla etualan palvelun ollessa käynnissä. Tapahtumia voi jäädä havaitsematta, jos palvelu pysähtyy tai tiedostot tallennetaan muualle. Asennuksen jälkeiset tarkistukset ovat parhaan yrityksen mukaisia eivätkä estä Androidin asennusta.</string>
