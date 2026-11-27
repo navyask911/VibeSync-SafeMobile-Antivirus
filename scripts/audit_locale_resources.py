@@ -191,7 +191,33 @@ def main():
         "format_or_plural_mismatches": all_format_mismatches,
         "locales": locale_summaries,
     }
-    print(json.dumps(report, ensure_ascii=False, indent=2))
+    Path("build").mkdir(exist_ok=True)
+    Path("build/locale-resource-audit.json").write_text(
+        json.dumps(report, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8"
+    )
+    print(
+        f"Locale resource audit: {len(locale_dirs)} locales; "
+        f"{len(baseline)} baseline IDs; {total_missing} missing IDs; "
+        f"{total_missing_files} missing baseline files; "
+        f"{len(all_duplicate_ids)} duplicates; "
+        f"{len(all_bad_apostrophes)} unescaped apostrophes; "
+        f"{len(all_format_mismatches)} format/plural mismatches."
+    )
+    for item in locale_summaries:
+        print(
+            f"{item['locale']}: files={item['xml_files']} "
+            f"missing_ids={item['missing_baseline_ids']} "
+            f"missing_files={len(item['missing_baseline_files'])} "
+            f"duplicates={item['duplicate_ids']} "
+            f"apostrophes={item['unescaped_apostrophes']} "
+            f"format_mismatches={item['format_or_plural_mismatches']}"
+        )
+    if all_duplicate_ids:
+        print("DUPLICATES: " + json.dumps(all_duplicate_ids, ensure_ascii=False))
+    if all_bad_apostrophes:
+        print("UNESCAPED_APOSTROPHES: " + json.dumps(all_bad_apostrophes, ensure_ascii=False))
+    if all_format_mismatches:
+        print("FORMAT_MISMATCHES: " + json.dumps(all_format_mismatches, ensure_ascii=False))
 
     fatal = bool(all_duplicate_ids or all_bad_apostrophes or all_format_mismatches)
     if args.strict and (fatal or total_missing or total_missing_files):
