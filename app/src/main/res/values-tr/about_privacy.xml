@@ -8,10 +8,10 @@
     <string name="trust_pillar_control_title">Kontrol sizde</string>
     <string name="trust_pillar_control_description">Etkinleştireceğiniz koruma özelliklerini ve paylaşım seçeneklerini seçin</string>
     <string name="privacy_dashboard_title">Gizlilik panosu</string>
-    <string name="privacy_dashboard_intro">SafeMobile'ın neleri işlediğini ve bilgilerinizin nerede kaldığını görün</string>
+    <string name="privacy_dashboard_intro">SafeMobile\'ın neleri işlediğini ve bilgilerinizin nerede kaldığını görün</string>
     <string name="privacy_package_title">Uygulama paket adı</string>
     <string name="privacy_processed_locally">Yerel olarak işlendi</string>
-    <string name="privacy_package_detail">SafeMobile'ın incelemesini istediğiniz uygulamaları belirlemek için yüklü paket adları bu cihazda denetlenir</string>
+    <string name="privacy_package_detail">SafeMobile\'ın incelemesini istediğiniz uygulamaları belirlemek için yüklü paket adları bu cihazda denetlenir</string>
     <string name="privacy_hash_title">Dosya özeti</string>
     <string name="privacy_hash_scan_status">Tarama sırasında hiçbir zaman yüklenmez</string>
     <string name="privacy_hash_detail">Tarama özetleri yerel kararlar için cihazınızda kalır. Bir özet yalnızca Global Threat Intelligence özelliğini ayrıca etkinleştirmeniz veya tek seferlik katkıyı onaylamanız durumunda paylaşılabilir</string>
@@ -25,7 +25,7 @@
     <string name="about_mission_statement">Gizlilik ve güvenlikle ürünler geliştirmek ve insanları birbirine bağlamak</string>
     <string name="about_description">İnsanları merkeze alan teknoloji oluşturmak için özenli Android uygulamaları geliştiriyor; yapay zekâ, gizlilik ve güvenlik alanlarında yeni nesil fikirleri araştırıyoruz.</string>
     <string name="about_website">vibesyncro.com adresini ziyaret edin</string>
-    <string name="about_open_store">Google Play'i aç</string>
+    <string name="about_open_store">Google Play\'i aç</string>
     <string name="ecosystem_title">Mobil uygulama ekosistemimiz</string>
     <string name="ecosystem_description">Uygulama ekosistemimizdeki diğer araçları ve deneyimleri keşfedin</string>
     <string name="ecosystem_pdf_name">VibeSync All in ONE PDF Suite</string>
@@ -33,7 +33,7 @@
     <string name="ecosystem_drawing_name">Kids Drawing Studio</string>
     <string name="ecosystem_drawing_description">Çocuklar için tasarlanmış yaratıcı bir çizim ve boyama alanı</string>
     <string name="ecosystem_developer_name">Developer Options Shortcut</string>
-    <string name="ecosystem_developer_description">Android Developer Options'ı tek bir kullanışlı kısayolla hızla açın</string>
+    <string name="ecosystem_developer_description">Android Developer Options\'ı tek bir kullanışlı kısayolla hızla açın</string>
     <string name="notification_details_title">Tehdit ayrıntıları</string>
     <string name="notification_details_filename">Dosya adı</string>
     <string name="notification_details_path">Yol</string>
@@ -44,13 +44,13 @@
     <string name="notification_details_whitelist">Güvenilir listeye ekle</string>
     <string name="notification_details_close">Kapat</string>
     <string name="notification_details_delete_confirm_title">Bu dosya silinsin mi?</string>
-    <string name="notification_details_delete_confirm_body">Bu işlem, Android'den bu bildirimin tanımladığı dosyanın aynısını silmesini ister. Bazı depolama sağlayıcıları ek onay gerektirebilir.</string>
+    <string name="notification_details_delete_confirm_body">Bu işlem, Android\'den bu bildirimin tanımladığı dosyanın aynısını silmesini ister. Bazı depolama sağlayıcıları ek onay gerektirebilir.</string>
     <string name="notification_details_deleted">Dosya silindi.</string>
     <string name="notification_details_delete_failed">Android bu dosyayı silemedi. Depolama izinlerini kontrol edip yeniden deneyin.</string>
-    <string name="notification_details_scan_unavailable">Bu bildirim okunabilir bir dosya URI'si içermiyor. Dosya seçmek için Scan &amp; Lab'ı açın.</string>
+    <string name="notification_details_scan_unavailable">Bu bildirim okunabilir bir dosya URI\'si içermiyor. Dosya seçmek için Scan &amp; Lab\'ı açın.</string>
     <string name="notification_details_whitelist_scan_first">Önce bu öğeyi tarayın. Ardından oluşan uygulama veya dosya özetini yerel güvenilir listenize ekleyebilirsiniz.</string>
     <string name="notification_details_package_action">Paket</string>
-    <string name="device_admin_activation_failed">Android Device Administrator etkinleştirme sayfasını açamadı. SafeMobile admin receiver'ın yüklü olduğunu kontrol edip yeniden deneyin.</string>
+    <string name="device_admin_activation_failed">Android Device Administrator etkinleştirme sayfasını açamadı. SafeMobile admin receiver\'ın yüklü olduğunu kontrol edip yeniden deneyin.</string>
     <string name="trusted_file_saved">Dosya özeti yerel güvenilir listeye eklendi.</string>
     <string name="trusted_file_invalid">Bu dosyaya güvenmek için geçerli bir SHA-256 özeti gerekir.</string>
     <string name="settings_privacy_link_detail">Yerel işlemeyi ve isteğe bağlı veri paylaşımını inceleyin.</string>

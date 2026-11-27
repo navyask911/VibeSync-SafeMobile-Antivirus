@@ -694,9 +694,9 @@
     <string name="security_score_100_voice" formatted="false">La configurazione di sicurezza è completamente ottimizzata. Continueremo a monitorare il dispositivo per mantenerlo al sicuro. Grazie per utilizzare Safe Mobile Antivirus.</string>
     <string name="self_update_title">Controlla gli aggiornamenti (aggiornamento automatico)</string>
     <string name="self_update_description">La modalità Amministratore dispositivo normalmente non blocca gli aggiornamenti di Google Play. Questo pulsante verifica la disponibilità di un aggiornamento in-app di Google Play e chiede ad Android di installarlo.</string>
-    <string name="self_update_started">La procedura di aggiornamento è stata avviata. Segui le istruzioni di sistema per completare l'aggiornamento.</string>
-    <string name="self_update_cancelled">L'aggiornamento è stato annullato.</string>
-    <string name="self_update_check_failed">Impossibile avviare l'aggiornamento. Controlla la connessione a Google Play e riprova.</string>
+    <string name="self_update_started">La procedura di aggiornamento è stata avviata. Segui le istruzioni di sistema per completare l\'aggiornamento.</string>
+    <string name="self_update_cancelled">L\'aggiornamento è stato annullato.</string>
+    <string name="self_update_check_failed">Impossibile avviare l\'aggiornamento. Controlla la connessione a Google Play e riprova.</string>
     <string name="self_update_unavailable">Gli aggiornamenti in-app di Google Play non sono disponibili per questa installazione. Apri Google Play per verificare manualmente.</string>
     <string name="self_update_no_update">Al momento non sono disponibili aggiornamenti di Google Play più recenti.</string>
     <string name="self_update_not_allowed">È disponibile un aggiornamento, ma Google Play non consente la procedura di aggiornamento immediato per questa installazione.</string>

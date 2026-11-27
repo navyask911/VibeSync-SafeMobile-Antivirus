@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="threat_intelligence_unavailable">Su questo dispositivo non sono memorizzate statistiche di addestramento upstream verificate.</string>
-    <string name="threat_intelligence_upstream_stale">DATI UPSTREAM OBSOLETI · L'aggiornamento pubblicato risale a più di 30 giorni fa.</string>
+    <string name="threat_intelligence_upstream_stale">DATI UPSTREAM OBSOLETI · L\'aggiornamento pubblicato risale a più di 30 giorni fa.</string>
     <string name="threat_intelligence_device_title">Informazioni sulle minacce sul dispositivo</string>
-    <string name="threat_intelligence_latest_sync_note">Nota sull'ultima sincronizzazione: %1$s</string>
-    <string name="threat_intelligence_feed_stale">L'ultima sincronizzazione riuscita del feed configurato risale a più di 7 giorni fa.</string>
+    <string name="threat_intelligence_latest_sync_note">Nota sull\'ultima sincronizzazione: %1$s</string>
+    <string name="threat_intelligence_feed_stale">L\'ultima sincronizzazione riuscita del feed configurato risale a più di 7 giorni fa.</string>
 </resources>

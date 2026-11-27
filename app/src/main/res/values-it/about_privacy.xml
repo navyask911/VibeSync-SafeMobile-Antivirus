@@ -10,22 +10,22 @@
 
     <string name="privacy_dashboard_title">Pannello della privacy</string>
     <string name="privacy_dashboard_intro">Scopri quali dati SafeMobile elabora e dove vengono conservate le tue informazioni.</string>
-    <string name="privacy_package_title">Nome del pacchetto dell'app</string>
+    <string name="privacy_package_title">Nome del pacchetto dell\'app</string>
     <string name="privacy_processed_locally">Elaborato localmente</string>
     <string name="privacy_package_detail">I nomi dei pacchetti installati vengono esaminati su questo dispositivo per identificare le app che chiedi a SafeMobile di controllare.</string>
     <string name="privacy_hash_title">Hash del file</string>
-    <string name="privacy_hash_scan_status">Mai caricato durante l'analisi</string>
+    <string name="privacy_hash_scan_status">Mai caricato durante l\'analisi</string>
     <string name="privacy_hash_detail">Gli hash delle scansioni restano sul dispositivo per ottenere verdetti locali. Un hash può essere condiviso solo dopo aver attivato separatamente Global Threat Intelligence o aver approvato un contributo una tantum.</string>
     <string name="privacy_history_title">Cronologia delle scansioni</string>
     <string name="privacy_stored_on_device">Memorizzato sul dispositivo</string>
-    <string name="privacy_history_detail">La cronologia delle scansioni e le voci di controllo sono conservate nel database locale dell'app su questo dispositivo.</string>
+    <string name="privacy_history_detail">La cronologia delle scansioni e le voci di controllo sono conservate nel database locale dell\'app su questo dispositivo.</string>
     <string name="privacy_dashboard_control_title">La tua scelta conta</string>
-    <string name="privacy_dashboard_control_detail">La condivisione facoltativa di dati sulle minacce richiede un consenso separato. L'analisi dei file e la generazione dei verdetti principali restano sul dispositivo.</string>
+    <string name="privacy_dashboard_control_detail">La condivisione facoltativa di dati sulle minacce richiede un consenso separato. L\'analisi dei file e la generazione dei verdetti principali restano sul dispositivo.</string>
 
     <string name="about_us_title">Chi siamo</string>
     <string name="about_mission_title">La nostra missione</string>
     <string name="about_mission_statement">Creiamo prodotti e mettiamo in contatto le persone nel rispetto della privacy e della sicurezza.</string>
-    <string name="about_description">Realizziamo applicazioni Android attente alle persone ed esploriamo idee di nuova generazione nell'intelligenza artificiale, nella privacy e nella sicurezza, creando tecnologia che mette le persone al primo posto.</string>
+    <string name="about_description">Realizziamo applicazioni Android attente alle persone ed esploriamo idee di nuova generazione nell\'intelligenza artificiale, nella privacy e nella sicurezza, creando tecnologia che mette le persone al primo posto.</string>
     <string name="about_website">Visita vibesyncro.com</string>
     <string name="about_open_store">Apri in Google Play</string>
     <string name="ecosystem_title">Il nostro ecosistema di app mobili</string>
@@ -35,7 +35,7 @@
     <string name="ecosystem_drawing_name">Kids Drawing Studio</string>
     <string name="ecosystem_drawing_description">Uno spazio creativo per disegnare e colorare, pensato per i bambini.</string>
     <string name="ecosystem_developer_name">Developer Options Shortcut</string>
-    <string name="ecosystem_developer_description">Apri rapidamente le Opzioni sviluppatore di Android con un'unica comoda scorciatoia.</string>
+    <string name="ecosystem_developer_description">Apri rapidamente le Opzioni sviluppatore di Android con un\'unica comoda scorciatoia.</string>
 
     <string name="notification_details_title">Dettagli della minaccia</string>
     <string name="notification_details_filename">Nome del file</string>
@@ -47,16 +47,16 @@
     <string name="notification_details_whitelist">Aggiungi alla lista consentita</string>
     <string name="notification_details_close">Chiudi</string>
     <string name="notification_details_delete_confirm_title">Eliminare questo file?</string>
-    <string name="notification_details_delete_confirm_body">Questa operazione chiede ad Android di eliminare esattamente il file identificato da questa notifica. Alcuni provider di archiviazione potrebbero richiedere un'ulteriore conferma.</string>
+    <string name="notification_details_delete_confirm_body">Questa operazione chiede ad Android di eliminare esattamente il file identificato da questa notifica. Alcuni provider di archiviazione potrebbero richiedere un\'ulteriore conferma.</string>
     <string name="notification_details_deleted">File eliminato.</string>
     <string name="notification_details_delete_failed">Android non è riuscito a eliminare questo file. Controlla le autorizzazioni di archiviazione e riprova.</string>
     <string name="notification_details_scan_unavailable">Questa notifica non include un URI leggibile del file. Apri Scansione e Laboratorio per scegliere il file.</string>
-    <string name="notification_details_whitelist_scan_first">Analizza prima questo elemento. Potrai quindi aggiungere l'hash risultante dell'app o del file alla lista locale degli elementi attendibili.</string>
+    <string name="notification_details_whitelist_scan_first">Analizza prima questo elemento. Potrai quindi aggiungere l\'hash risultante dell\'app o del file alla lista locale degli elementi attendibili.</string>
     <string name="notification_details_package_action">Pacchetto</string>
     <string name="device_admin_activation_failed">Android non è riuscito ad aprire la pagina di attivazione di Amministratore dispositivo. Verifica che il ricevitore amministratore di SafeMobile sia installato e riprova.</string>
     <string name="trusted_file_saved">Hash del file aggiunto alla lista locale degli elementi attendibili.</string>
     <string name="trusted_file_invalid">Per considerare attendibile questo file è necessario un hash SHA-256 valido.</string>
-    <string name="settings_privacy_link_detail">Esamina l'elaborazione locale e le opzioni facoltative di condivisione dei dati.</string>
+    <string name="settings_privacy_link_detail">Esamina l\'elaborazione locale e le opzioni facoltative di condivisione dei dati.</string>
     <string name="settings_about_link_detail">La nostra missione, il sito web e le app mobili.</string>
     <string name="about_link_unavailable">Impossibile aprire il link richiesto. Controlla la disponibilità del browser o di Play Store.</string>
 </resources>
