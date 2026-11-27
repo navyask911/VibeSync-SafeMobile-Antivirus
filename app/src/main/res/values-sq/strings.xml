@@ -21,7 +21,7 @@
     <string name="verdict_not_scanned">Nuk u skanua</string>
     <string name="no_match_detail">Nuk u gjet përputhje në përkufizimet lokale të kërcënimeve.</string>
     <string name="risk_boot">Mund të kërkojë nisje pas rindezjes së pajisjes</string>
-    <string name="risk_overlay">Kërkon aftësinë për t'u shfaqur mbi aplikacione të tjera</string>
+    <string name="risk_overlay">Kërkon aftësinë për t\'u shfaqur mbi aplikacione të tjera</string>
     <string name="risk_install">Kërkon aftësinë për të instaluar skedarë APK</string>
     <string name="risk_accessibility">Deklaron një shërbim aksesueshmërie</string>
     <string name="risk_cluster">Kombinon disa aftësi me ndikim të lartë</string>
@@ -172,7 +172,7 @@
     <string name="guardian_developer_settings">Cilësimet e zhvilluesit dhe ADB</string>
     <string name="guardian_developer_state">Opsionet e zhvilluesit</string>
     <string name="guardian_adb_state">Korrigjimi USB (ADB)</string>
-    <string name="guardian_settings_limit">SafeMobile mund të raportojë gjendjen e lexueshme dhe të hapë Cilësimet e Android. Ti duhet t'i ndryshosh vetë çelësat globalë të mbrojtur.</string>
+    <string name="guardian_settings_limit">SafeMobile mund të raportojë gjendjen e lexueshme dhe të hapë Cilësimet e Android. Ti duhet t\'i ndryshosh vetë çelësat globalë të mbrojtur.</string>
     <string name="guardian_review_settings">Shqyrto cilësimet e zhvilluesit</string>
     <string name="guardian_refresh">Rifresko shqyrtimin</string>
     <string name="guardian_open_settings_failed">Cilësimet e Android nuk mund të hapeshin në këtë pajisje.</string>
@@ -277,7 +277,7 @@
     <string name="setup_apps_title">Dukshmëria e aplikacioneve të instaluara</string>
     <string name="setup_apps_body">SafeMobile kontrollon skedarët APK të lexueshëm të instaluar dhe metadatat e lejeve të aplikacioneve. Dukshmëria e paketave deklarohet në manifest; ky hap nuk shfaq dialog lejeje gjatë ekzekutimit. Miratimi nga politika e Google Play është proces i veçantë.</string>
     <string name="setup_notifications_title">Njoftimet</string>
-    <string name="setup_notifications_body">Njoftimet mund të shfaqin kujtesa skanimi dhe statusin e shërbimit të mbrojtjes. Mund të vazhdoni edhe pa to, por Android mund t'i kufizojë sinjalizimet sipas cilësimeve të njoftimeve.</string>
+    <string name="setup_notifications_body">Njoftimet mund të shfaqin kujtesa skanimi dhe statusin e shërbimit të mbrojtjes. Mund të vazhdoni edhe pa to, por Android mund t\'i kufizojë sinjalizimet sipas cilësimeve të njoftimeve.</string>
     <string name="setup_sentinel_title">Mbrojtja në sfond</string>
     <string name="setup_sentinel_body">Download Sentinel është opsional. Kur aktivizohet, vëzhgon ndryshimet e skedarëve APK në dosjen e arritshme Shkarkime në nivelin kryesor. Nuk ndërpret instalimet dhe mund të mos dallojë skedarët në dosje të tjera.</string>
     <string name="setup_sentinel_switch">Aktivizo Download Sentinel</string>
@@ -387,7 +387,7 @@
     <string name="device_admin_explanation">Aktivizoni konfirmimin opsional të Administratorit të pajisjes për SafeMobile. SafeMobile nuk zbaton rregulla fjalëkalimi, nuk fshin pajisjen dhe nuk bllokon instalimin e APK-ve.</string>
     <string name="device_admin_lock_now">Blloko pajisjen tani</string>
     <string name="device_admin_lock_confirm_title">Të bllokohet kjo pajisje tani?</string>
-    <string name="device_admin_lock_confirm_message">SafeMobile do t'i kërkojë Android-it të bllokojë menjëherë ekranin. PIN-i, modeli ose fjalëkalimi ekzistues i kyçjes së Android mbetet nën kontrollin tuaj; SafeMobile nuk e cakton ose ndryshon atë.</string>
+    <string name="device_admin_lock_confirm_message">SafeMobile do t\'i kërkojë Android-it të bllokojë menjëherë ekranin. PIN-i, modeli ose fjalëkalimi ekzistues i kyçjes së Android mbetet nën kontrollin tuaj; SafeMobile nuk e cakton ose ndryshon atë.</string>
     <string name="device_admin_lock_confirm">Blloko pajisjen</string>
     <string name="device_admin_lock_cancel">Anulo</string>
     <string name="device_admin_lock_failed">Nuk u arrit të kërkohet kyçja e pajisjes. Kontrolloni nëse Administratori i pajisjes është ende aktiv.</string>
@@ -601,7 +601,7 @@
     <string name="finding_sms_network">Qasja në mesazhe kombinohet me internetin. Kërkohet shqyrtim sipas kontekstit.</string>
     <string name="finding_signer">Metadata e certifikatës së nënshkrimit mungon ose nuk lexohet.</string>
     <string name="finding_archive">Kontejneri i paketës nuk mund të inspektohej plotësisht. Analiza statike është jo e plotë.</string>
-    <string name="finding_packer">Një shteg pakete i ngjan një mjeti të njohur paketimi ose mbrojtjeje. Aplikacionet legjitime mund t'i përdorin këto mjete.</string>
+    <string name="finding_packer">Një shteg pakete i ngjan një mjeti të njohur paketimi ose mbrojtjeje. Aplikacionet legjitime mund t\'i përdorin këto mjete.</string>
     <string name="finding_dex_header">Koka e kodit ka fusha formati ose madhësie jokonsistente. Kjo nuk provon malware.</string>
     <string name="finding_dex_short">Një hyrje kodi është më e shkurtër se një kokë e vlefshme dhe nuk mund të inspektohej plotësisht.</string>
     <string name="finding_entropy">Një mostër kodi ka entropi të lartë bajtesh. Enkriptimi, paketimi ose përmbajtja e ngjeshur e padëmshme mund ta shpjegojnë.</string>

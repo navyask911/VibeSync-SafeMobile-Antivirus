@@ -10,7 +10,7 @@
     <string name="privacy_dashboard_intro">Shiko çfarë përpunon SafeMobile dhe ku mbetet informacioni yt.</string>
     <string name="privacy_package_title">Emri i paketës së aplikacionit</string>
     <string name="privacy_processed_locally">Përpunohet lokalisht</string>
-    <string name="privacy_package_detail">Emrat e paketave të instaluara shqyrtohen në këtë pajisje për të identifikuar aplikacionet që kërkon t'i kontrollojë SafeMobile.</string>
+    <string name="privacy_package_detail">Emrat e paketave të instaluara shqyrtohen në këtë pajisje për të identifikuar aplikacionet që kërkon t\'i kontrollojë SafeMobile.</string>
     <string name="privacy_hash_title">Hash-i i skedarit</string>
     <string name="privacy_hash_scan_status">Nuk dërgohet kurrë gjatë skanimit</string>
     <string name="privacy_hash_detail">Hash-et e skedarëve të skanuar mbeten në pajisjen tënde për vlerësim lokal. Një hash mund të ndahet vetëm pasi të aktivizosh veçmas Global Threat Intelligence ose të miratosh një kontribut njëherësh.</string>

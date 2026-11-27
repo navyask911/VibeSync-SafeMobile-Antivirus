@@ -10,7 +10,7 @@
     <string name="security_guards_title">Mbrojtëset aktive të sigurisë dhe lejet</string>
     <string name="security_guards_description">Menaxhoni lejet e sistemit që përdoren nga mbrojtja e SafeMobile.</string>
     <string name="security_guard_battery">Përjashtim nga optimizimi i baterisë</string>
-    <string name="security_guard_battery_desc">Mbajeni shërbimin Sentinel në sfond të përshtatshëm për t'u ekzekutuar.</string>
+    <string name="security_guard_battery_desc">Mbajeni shërbimin Sentinel në sfond të përshtatshëm për t\'u ekzekutuar.</string>
     <string name="security_guard_admin">Administratori i pajisjes</string>
     <string name="security_guard_admin_desc">Aktivizoni kontrollet mbrojtëse të administratorit të pajisjes Android.</string>
     <string name="security_guard_overlay">Njoftim mbivendosës me përparësi të lartë</string>
