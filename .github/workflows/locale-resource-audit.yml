@@ -3,7 +3,7 @@ name: Locale Resource Audit
 on:
   workflow_dispatch:
   push:
-    branches: ["release/v1.10.9-scan-results"]
+    branches: ["main", "release/v1.10.9-scan-results"]
     paths:
       - "app/src/main/res/values*/**.xml"
       - "app/src/main/java/com/vibesync/antivirus/core/billing/**"

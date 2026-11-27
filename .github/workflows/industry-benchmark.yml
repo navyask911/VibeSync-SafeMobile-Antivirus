@@ -65,6 +65,36 @@ jobs:
           distribution: temurin
           java-version: '21'
       - uses: gradle/actions/setup-gradle@v4
+      - name: Set up Rust and cargo-ndk for YARA-X
+        shell: bash
+        run: |
+          set -euo pipefail
+          rustup toolchain install stable --profile minimal
+          rustup default stable
+          rustup target add armv7-linux-androideabi aarch64-linux-android x86_64-linux-android
+          SDK_ROOT="\${ANDROID_HOME:-\${ANDROID_SDK_ROOT:-}}"
+          test -n "$SDK_ROOT"
+          NDK_VERSION="28.2.13676358"
+          NDK_DIR="$SDK_ROOT/ndk/$NDK_VERSION"
+          SDKMANAGER="$SDK_ROOT/cmdline-tools/latest/bin/sdkmanager"
+          if [[ ! -x "$SDKMANAGER" ]]; then
+            SDKMANAGER="$(find "$SDK_ROOT/cmdline-tools" -type f -name sdkmanager | sort -V | tail -n 1)"
+          fi
+          test -x "$SDKMANAGER"
+          if [[ ! -d "$NDK_DIR" ]]; then
+            "$SDKMANAGER" --install "ndk;$NDK_VERSION"
+          fi
+          if [[ ! -x "$SDK_ROOT/build-tools/36.0.0/zipalign" ]]; then
+            "$SDKMANAGER" --install "build-tools;36.0.0"
+          fi
+          test -d "$NDK_DIR"
+          echo "ANDROID_NDK_HOME=$NDK_DIR" >> "$GITHUB_ENV"
+          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
+          export PATH="$HOME/.cargo/bin:$PATH"
+          if ! command -v cargo-ndk >/dev/null 2>&1; then
+            cargo install cargo-ndk --locked
+          fi
+          cargo ndk --version
       - name: Install encrypted ZIP support
         run: python3 -m pip install --disable-pip-version-check pyzipper==0.3.6
       - name: Retrieve pinned 200-sample manifest
