@@ -9,6 +9,7 @@ on:
       - "app/src/main/java/com/vibesync/antivirus/core/billing/**"
       - "app/src/main/java/com/vibesync/antivirus/presentation/**"
       - "scripts/audit_locale_resources.py"
+      - "scripts/check_admob_privacy.py"
       - ".github/workflows/locale-resource-audit.yml"
       - ".github/workflows/android-ci.yml"
 
