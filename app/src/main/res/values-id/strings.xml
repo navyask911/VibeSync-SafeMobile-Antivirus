@@ -691,16 +691,16 @@
     <string name="ui_status_at_risk">Berisiko</string>
     <string name="scan_detected_by">Dideteksi oleh: %1$s</string>
     <string name="scan_detected_by_confidence">Dideteksi oleh: %1$s (%2$d%%)</string>
-    <string name="security_score_100_voice" formatted="false">Your security configuration is fully optimized. We will continue to monitor your device to keep you safe. Thank you for using Safe Mobile Antivirus.</string>
-    <string name="self_update_title">Check for Updates (Self-Update)</string>
-    <string name="self_update_description">Device Administrator mode does not normally block Google Play updates. This button checks for a Play in-app update and asks Android to install it.</string>
-    <string name="self_update_started">The update flow was opened. Follow the system prompts to finish updating.</string>
-    <string name="self_update_cancelled">The update was cancelled.</string>
-    <string name="self_update_check_failed">The update could not be started. Check your Google Play connection and try again.</string>
-    <string name="self_update_unavailable">Play in-app updates are unavailable for this installation. Open Google Play to check manually.</string>
-    <string name="self_update_no_update">No newer Google Play update is currently available.</string>
-    <string name="self_update_not_allowed">An update is available, but Google Play does not allow the immediate update flow for this installation.</string>
-    <string name="self_update_open_play_store">Open Google Play</string>
+    <string name="security_score_100_voice" formatted="false">Konfigurasi keamanan Anda telah dioptimalkan sepenuhnya. Kami akan terus memantau perangkat Anda agar tetap aman. Terima kasih telah menggunakan SafeMobile Antivirus.</string>
+    <string name="self_update_title">Periksa Pembaruan (Pembaruan Mandiri)</string>
+    <string name="self_update_description">Mode Device Administrator biasanya tidak memblokir pembaruan Google Play. Tombol ini memeriksa pembaruan dalam aplikasi Play dan meminta Android untuk memasangnya.</string>
+    <string name="self_update_started">Alur pembaruan telah dibuka. Ikuti petunjuk sistem untuk menyelesaikan pembaruan.</string>
+    <string name="self_update_cancelled">Pembaruan dibatalkan.</string>
+    <string name="self_update_check_failed">Pembaruan tidak dapat dimulai. Periksa koneksi Google Play Anda dan coba lagi.</string>
+    <string name="self_update_unavailable">Pembaruan dalam aplikasi Play tidak tersedia untuk instalasi ini. Buka Google Play untuk memeriksa secara manual.</string>
+    <string name="self_update_no_update">Saat ini tidak ada pembaruan Google Play yang lebih baru.</string>
+    <string name="self_update_not_allowed">Pembaruan tersedia, tetapi Google Play tidak mengizinkan proses pembaruan langsung untuk instalasi ini.</string>
+    <string name="self_update_open_play_store">Buka Google Play.</string>
     <string name="scan_sessions_in_progress">Sesi pemindaian berlangsung: %1$d</string>
     <string name="scan_sessions_completed">Sesi pemindaian selesai: %1$d</string>
     <string name="ui_sentinel_telegram_folder">Folder Dokumen Telegram</string>

@@ -139,8 +139,8 @@
 <string name="language_settings">Język</string>
 <string name="about_legal">About and Legal</string>
 <string name="ray_id">SafeMobile Ray ID</string>
-<string name="ray_id_copy">Copy ID</string>
-<string name="ray_id_copied">Ray ID copied to clipboard</string>
+<string name="ray_id_copy">Kopiuj identyfikator</string>
+<string name="ray_id_copied">Identyfikator Ray skopiowano do schowka</string>
 <string name="history_title">Historia skanowania</string>
 <string name="history_empty">Brak lokalnej historii skanowania.</string>
 <string name="history_session">Identyfikator sesji</string>

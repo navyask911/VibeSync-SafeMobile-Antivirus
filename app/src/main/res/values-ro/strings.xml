@@ -139,8 +139,8 @@
 <string name="language_settings">Limbă</string>
 <string name="about_legal">About and Legal</string>
 <string name="ray_id">SafeMobile Ray ID</string>
-<string name="ray_id_copy">Copy ID</string>
-<string name="ray_id_copied">Ray ID copied to clipboard</string>
+<string name="ray_id_copy">Copiază ID-ul</string>
+<string name="ray_id_copied">ID-ul Ray a fost copiat în clipboard</string>
 <string name="history_title">Istoricul scanărilor</string>
 <string name="history_empty">Nu există încă un istoric local al scanărilor.</string>
 <string name="history_session">ID sesiune</string>

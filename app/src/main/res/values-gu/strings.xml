@@ -406,12 +406,12 @@
 <string name="device_admin_active">આ ઉપકરણમાં સંચાલક સક્રિય છે.</string>
 <string name="device_admin_inactive">ઉપકરણ સંચાલક નિષ્ક્રિય છે.</string>
 <string name="device_admin_explanation">SafeMobileની વૈકલ્પિક ડિવાઇસ એડમિનિસ્ટ્રેટર પુષ્ટિ ચાલુ કરો. SafeMobile પાસવર્ડ નીતિઓ લાગુ કરતું નથી, ડેટા ભૂંસતું નથી અથવા APK ઇન્સ્ટોલેશન અટકાવતું નથી.</string>
-    <string name="device_admin_lock_now">Lock Device Now</string>
-    <string name="device_admin_lock_confirm_title">Lock this device now?</string>
-    <string name="device_admin_lock_confirm_message">SafeMobile will ask Android to lock the screen immediately. Your existing Android screen-lock PIN, pattern, or password remains in control; SafeMobile does not set or change it.</string>
-    <string name="device_admin_lock_confirm">Lock device</string>
+    <string name="device_admin_lock_now">હમણાં ઉપકરણ લોક કરો</string>
+    <string name="device_admin_lock_confirm_title">હમણાં આ ઉપકરણ લોક કરવું છે?</string>
+    <string name="device_admin_lock_confirm_message">SafeMobile તરત જ સ્ક્રીન લોક કરવા માટે Android ને વિનંતી કરશે. તમારો હાલનો Android સ્ક્રીન-લોક PIN, પેટર્ન અથવા પાસવર્ડ જ નિયંત્રણમાં રહેશે; SafeMobile તેને સેટ કે બદલતું નથી.</string>
+    <string name="device_admin_lock_confirm">ઉપકરણ લોક કરો</string>
     <string name="device_admin_lock_cancel">Cancel</string>
-    <string name="device_admin_lock_failed">Unable to request a device lock. Check that Device Administrator is still enabled.</string>
+    <string name="device_admin_lock_failed">ઉપકરણ લોક કરવાની વિનંતી કરી શકાયી નથી. Device Administrator હજુ સક્રિય છે કે નહીં તે તપાસો.</string>
 
 <string name="installer_accessibility_service_title">SafeMobile સ્થાપન સલાહ</string>
 <string name="installer_accessibility_service_description">Android સ્થાપક વિન્ડો માટે વૈકલ્પિક સલાહ પટ્ટી. સિસ્ટમ સ્થાપકને રોકતી, ક્લિક કરતી કે અવરોધતી નથી. યાદ જોઈએ તો જ ચાલુ કરો.</string>
@@ -833,16 +833,16 @@
     <string name="ui_status_at_risk">જોખમમાં</string>
     <string name="scan_detected_by">શોધનો સ્ત્રોત: %1$s</string>
     <string name="scan_detected_by_confidence">શોધનો સ્ત્રોત: %1$s (%2$d%%)</string>
-    <string name="security_score_100_voice" formatted="false">Your security configuration is fully optimized. We will continue to monitor your device to keep you safe. Thank you for using Safe Mobile Antivirus.</string>
-    <string name="self_update_title">Check for Updates (Self-Update)</string>
-    <string name="self_update_description">Device Administrator mode does not normally block Google Play updates. This button checks for a Play in-app update and asks Android to install it.</string>
-    <string name="self_update_started">The update flow was opened. Follow the system prompts to finish updating.</string>
-    <string name="self_update_cancelled">The update was cancelled.</string>
-    <string name="self_update_check_failed">The update could not be started. Check your Google Play connection and try again.</string>
-    <string name="self_update_unavailable">Play in-app updates are unavailable for this installation. Open Google Play to check manually.</string>
-    <string name="self_update_no_update">No newer Google Play update is currently available.</string>
-    <string name="self_update_not_allowed">An update is available, but Google Play does not allow the immediate update flow for this installation.</string>
-    <string name="self_update_open_play_store">Open Google Play</string>
+    <string name="security_score_100_voice" formatted="false">તમારી સુરક્ષા ગોઠવણી સંપૂર્ણ રીતે શ્રેષ્ઠ બનાવવામાં આવી છે. તમને સુરક્ષિત રાખવા માટે અમે તમારા ઉપકરણનું સતત નિરીક્ષણ કરતા રહીશું. SafeMobile Antivirus નો ઉપયોગ કરવા બદલ આભાર.</string>
+    <string name="self_update_title">અપડેટ તપાસો (સ્વ-અપડેટ)</string>
+    <string name="self_update_description">Device Administrator મોડ સામાન્ય રીતે Google Play અપડેટ્સને અવરોધતું નથી. આ બટન Play ઇન-એપ અપડેટ માટે તપાસ કરે છે અને Android ને તે ઇન્સ્ટોલ કરવા કહે છે.</string>
+    <string name="self_update_started">અપડેટ પ્રક્રિયા શરૂ થઈ છે. અપડેટ પૂર્ણ કરવા માટે સિસ્ટમના સૂચનો અનુસરો.</string>
+    <string name="self_update_cancelled">અપડેટ રદ કરવામાં આવ્યું.</string>
+    <string name="self_update_check_failed">અપડેટ શરૂ કરી શકાયું નથી. તમારું Google Play કનેક્શન તપાસો અને ફરી પ્રયાસ કરો.</string>
+    <string name="self_update_unavailable">આ ઇન્સ્ટોલેશન માટે Play ઇન-એપ અપડેટ ઉપલબ્ધ નથી. હાથથી તપાસવા માટે Google Play ખોલો.</string>
+    <string name="self_update_no_update">હાલમાં Google Play પર કોઈ નવું અપડેટ ઉપલબ્ધ નથી.</string>
+    <string name="self_update_not_allowed">અપડેટ ઉપલબ્ધ છે, પરંતુ Google Play આ ઇન્સ્ટોલેશન માટે તરત અપડેટ કરવાની પ્રક્રિયાને મંજૂરી આપતું નથી.</string>
+    <string name="self_update_open_play_store">Google Play ખોલો.</string>
     <string name="scan_sessions_in_progress">ચાલુ સ્કેન સત્રો: %1$d</string>
     <string name="scan_sessions_completed">પૂર્ણ થયેલા સ્કેન સત્રો: %1$d</string>
     <string name="ui_sentinel_telegram_folder">Telegram દસ્તાવેજ ફોલ્ડર</string>

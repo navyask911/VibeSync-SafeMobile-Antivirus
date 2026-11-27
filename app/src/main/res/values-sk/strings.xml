@@ -139,8 +139,8 @@
 <string name="language_settings">Jazyk</string>
 <string name="about_legal">About and Legal</string>
 <string name="ray_id">SafeMobile Ray ID</string>
-<string name="ray_id_copy">Copy ID</string>
-<string name="ray_id_copied">Ray ID copied to clipboard</string>
+<string name="ray_id_copy">Kopírovať ID</string>
+<string name="ray_id_copied">ID Ray bol skopírovaný do schránky</string>
 <string name="history_title">História kontrol</string>
 <string name="history_empty">Zatiaľ neexistuje žiadna lokálna história kontrol.</string>
 <string name="history_session">ID relácie</string>
