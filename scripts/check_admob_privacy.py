@@ -36,11 +36,41 @@ for coordinate in (
     if coordinate not in gradle:
         errors.append(f"Missing required AdMob/UMP dependency: {coordinate}.")
 
-app_id = "ca-app-pub-4783826505860771~8485727119"
+app_id = "ca-app-pub-4783826505860771~3262295335"
 banner_id = "ca-app-pub-4783826505860771/4710308648"
 interstitial_id = "ca-app-pub-4783826505860771/9523651625"
-if app_id not in manifest or app_id not in app:
-    errors.append("AdMob App ID must be in the manifest metadata and Application initialization config.")
+ads_resources = read("app/src/main/res/values/ads.xml")
+debug_manifest = read("app/src/debug/AndroidManifest.xml")
+feed_manifest = read("app/src/feed/AndroidManifest.xml")
+try:
+    ads_root = ET.fromstring(ads_resources)
+except ET.ParseError as error:
+    errors.append(f"app/src/main/res/values/ads.xml is invalid XML: {error}.")
+    ads_root = None
+app_id_entries = [] if ads_root is None else [
+    item for item in ads_root.findall("string")
+    if item.get("name") == "admob_app_id"
+]
+if len(app_id_entries) != 1:
+    errors.append("Define exactly one default admob_app_id string resource.")
+else:
+    app_id_entry = app_id_entries[0]
+    if (app_id_entry.text or "").strip() != app_id:
+        errors.append("The default admob_app_id resource must match the approved AdMob App ID.")
+    if app_id_entry.get("translatable", "true").lower() != "false":
+        errors.append("The AdMob App ID resource must remain translatable=\"false\".")
+if 'android:value="@string/admob_app_id"' not in manifest:
+    errors.append("Manifest APPLICATION_ID metadata must reference @string/admob_app_id.")
+if "InitializationConfig.Builder(getString(R.string.admob_app_id)).build()" not in app:
+    errors.append("Application Mobile Ads initialization must read the shared admob_app_id resource.")
+if app_id in manifest or app_id in app or app_id in gradle:
+    errors.append("The AdMob App ID must be defined once in resources, not duplicated in app code or Gradle.")
+if "ADMOB_APP_ID" in app:
+    errors.append("Remove the duplicate hard-coded ADMOB_APP_ID constant; use the shared resource.")
+if "ca-app-pub-" in debug_manifest or "com.google.android.gms.ads.APPLICATION_ID" in debug_manifest:
+    errors.append("Debug manifest must not override the shared AdMob App ID.")
+if "ca-app-pub-" in feed_manifest or "com.google.android.gms.ads.APPLICATION_ID" in feed_manifest:
+    errors.append("Feed manifest must not override the shared AdMob App ID.")
 if "com.google.android.gms:play-services-ads" in gradle:
     errors.append("Use the configured GMA Next-Gen SDK; do not add the legacy play-services-ads artifact.")
 if "com.google.android.gms.ads.APPLICATION_ID" not in manifest:

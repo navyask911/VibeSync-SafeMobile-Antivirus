@@ -73,7 +73,7 @@ class SafeMobileApp : Application() {
                 try {
                     MobileAds.initialize(
                         this@SafeMobileApp,
-                        InitializationConfig.Builder(ADMOB_APP_ID).build(),
+                        InitializationConfig.Builder(getString(R.string.admob_app_id)).build(),
                         null
                     )
                     mobileAdsInitialized = true
@@ -184,7 +184,6 @@ class SafeMobileApp : Application() {
         const val PRIVACY_ACKNOWLEDGED = "acknowledged"
         const val HASH_DATABASE_SYNC_PREFS = "safe_mobile_hash_sync_bootstrap"
         const val KEY_INITIAL_HASH_SYNC_REQUESTED = "initial_hash_sync_requested"
-        const val ADMOB_APP_ID = "ca-app-pub-4783826505860771~8485727119"
     }
 }
 
