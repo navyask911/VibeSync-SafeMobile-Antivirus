@@ -15,12 +15,12 @@
     <string name="privacy_package_detail">Geïnstalleerde program-pakketname word op hierdie toestel nagegaan om programme te identifiseer wat jy SafeMobile vra om te beoordeel.</string>
     <string name="privacy_hash_title">Lêerhash</string>
     <string name="privacy_hash_scan_status">Nooit tydens skandering opgelaai nie</string>
-    <string name="privacy_hash_detail">Skandeer-hashes bly op jou toestel vir plaaslike bevindings. 'n Hash kan slegs gedeel word nadat jy Global Threat Intelligence afsonderlik aktiveer of 'n eenmalige bydrae goedkeur.</string>
+    <string name="privacy_hash_detail">Skandeer-hashes bly op jou toestel vir plaaslike bevindings. \'n Hash kan slegs gedeel word nadat jy Global Threat Intelligence afsonderlik aktiveer of \'n eenmalige bydrae goedkeur.</string>
     <string name="privacy_history_title">Skanderinggeskiedenis</string>
     <string name="privacy_stored_on_device">Op toestel gestoor</string>
     <string name="privacy_history_detail">Skanderingsgeskiedenis en ouditinskrywings word in die plaaslike programdatabasis op hierdie toestel gestoor.</string>
     <string name="privacy_dashboard_control_title">Jou keuse maak saak</string>
-    <string name="privacy_dashboard_control_detail">Opsionele bedreigingsbydraes vereis 'n afsonderlike intekening. Kernlêerskandering en beoordeling bly op die toestel.</string>
+    <string name="privacy_dashboard_control_detail">Opsionele bedreigingsbydraes vereis \'n afsonderlike intekening. Kernlêerskandering en beoordeling bly op die toestel.</string>
 
     <string name="about_us_title">Oor ons</string>
     <string name="about_mission_title">Ons missie</string>
@@ -33,7 +33,7 @@
     <string name="ecosystem_pdf_name">VibeSync All in ONE PDF Suite</string>
     <string name="ecosystem_pdf_description">Praktiese PDF-nutsgoed om dokumente te lees, te organiseer en mee te werk.</string>
     <string name="ecosystem_drawing_name">Kids Drawing Studio</string>
-    <string name="ecosystem_drawing_description">'n Kreatiewe teken- en inkleurruimte wat vir kinders ontwerp is.</string>
+    <string name="ecosystem_drawing_description">\'n Kreatiewe teken- en inkleurruimte wat vir kinders ontwerp is.</string>
     <string name="ecosystem_developer_name">Developer Options Shortcut</string>
     <string name="ecosystem_developer_description">Maak Android-ontwikkelaaropsies vinnig oop met een gerieflike kortpad.</string>
 
@@ -50,12 +50,12 @@
     <string name="notification_details_delete_confirm_body">Dit vra Android om presies die lêer te verwyder wat deur hierdie kennisgewing geïdentifiseer is. Sommige bergingverskaffers kan bykomende bevestiging vereis.</string>
     <string name="notification_details_deleted">Lêer uitgevee.</string>
     <string name="notification_details_delete_failed">Android kon nie hierdie lêer uitvee nie. Kontroleer die bergingstoestemmings en probeer weer.</string>
-    <string name="notification_details_scan_unavailable">Hierdie kennisgewing bevat nie 'n leesbare lêer-URI nie. Maak Scan &amp; Lab oop om die lêer te kies.</string>
+    <string name="notification_details_scan_unavailable">Hierdie kennisgewing bevat nie \'n leesbare lêer-URI nie. Maak Scan &amp; Lab oop om die lêer te kies.</string>
     <string name="notification_details_whitelist_scan_first">Skandeer hierdie item eers. Jy kan daarna die gevolglike program- of lêerhash by jou plaaslike vertrouelys voeg.</string>
     <string name="notification_details_package_action">Pakket</string>
     <string name="device_admin_activation_failed">Android kon nie die aktiveringsbladsy vir Toesteladministrateur oopmaak nie. Kontroleer dat die SafeMobile-adminontvanger geïnstalleer is en probeer weer.</string>
     <string name="trusted_file_saved">Lêerhash by die plaaslike vertrouelys gevoeg.</string>
-    <string name="trusted_file_invalid">'n Geldige SHA-256-hash is nodig voordat hierdie lêer vertrou kan word.</string>
+    <string name="trusted_file_invalid">\'n Geldige SHA-256-hash is nodig voordat hierdie lêer vertrou kan word.</string>
     <string name="settings_privacy_link_detail">Hersien plaaslike verwerking en opsionele datadeling.</string>
     <string name="settings_about_link_detail">Ons missie, webwerf en mobiele toepassings.</string>
     <string name="about_link_unavailable">Die aangevraagde skakel kon nie oopgemaak word nie. Kontroleer jou blaaier of Play Winkel se beskikbaarheid.</string>
