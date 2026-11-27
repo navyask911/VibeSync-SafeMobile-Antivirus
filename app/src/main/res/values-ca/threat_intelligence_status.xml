@@ -1,6 +1,6 @@
 <resources>
-    <string name="threat_intelligence_unavailable">En aquest dispositiu no hi ha estadístiques d'entrenament verificades de l'origen desades a la memòria cau.</string>
-    <string name="threat_intelligence_upstream_stale">DADES D'ORIGEN DESACTUALITZADES · L'actualització publicada té més de 30 dies.</string>
+    <string name="threat_intelligence_unavailable">En aquest dispositiu no hi ha estadístiques d\'entrenament verificades de l\'origen desades a la memòria cau.</string>
+    <string name="threat_intelligence_upstream_stale">DADES D\'ORIGEN DESACTUALITZADES · L\'actualització publicada té més de 30 dies.</string>
     <string name="threat_intelligence_device_title">Intel·ligència sobre amenaces al dispositiu</string>
     <string name="threat_intelligence_latest_sync_note">Nota de la darrera sincronització: %1$s</string>
     <string name="threat_intelligence_feed_stale">La darrera sincronització correcta del canal configurat té més de 7 dies.</string>
