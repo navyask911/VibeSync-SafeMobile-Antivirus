@@ -8,6 +8,7 @@ on:
       - "app/src/main/res/values*/**.xml"
       - "scripts/audit_locale_resources.py"
       - ".github/workflows/locale-resource-audit.yml"
+      - ".github/workflows/android-ci.yml"
 
 permissions:
   contents: read
