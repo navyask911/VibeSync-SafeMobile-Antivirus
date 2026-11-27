@@ -703,4 +703,35 @@
     <string name="scan_sessions_completed">पूर्ण स्कैन सत्र: %1$d</string>
     <string name="ui_sentinel_telegram_folder">Telegram दस्तावेज़ फ़ोल्डर</string>
     <string name="ui_sentinel_enable_telegram">Telegram दस्तावेज़ों की निगरानी करें</string>
+    <string name="scan_complete_skipped" translatable="false">Scan complete. %1$d files were skipped due to OS restrictions.</string>
+    <string name="scan_foreground_channel_name" translatable="false">Scanning in progress</string>
+    <string name="scan_foreground_channel_description" translatable="false">Persistent status for on-device antivirus scans.</string>
+    <string name="scan_foreground_notification_title" translatable="false">Scanning for threats...</string>
+    <string name="scan_foreground_notification_body" translatable="false">SafeMobile is scanning installed apps and local files on this device.</string>
+    <string name="scan_stop_action" translatable="false">Stop Scan</string>
+    <string name="ml_engine_active_status" translatable="false">AI Engine: Active</string>
+    <string name="play_integrity_verified_title" translatable="false">Play Integrity Verified</string>
+    <string name="play_integrity_verified_description" translatable="false">A trusted server verifies the device verdict returned by Google Play.</string>
+    <string name="play_integrity_status_verified" translatable="false">Google Play confirms MEETS_DEVICE_INTEGRITY.</string>
+    <string name="play_integrity_status_not_verified" translatable="false">Google Play did not return MEETS_DEVICE_INTEGRITY.</string>
+    <string name="play_integrity_status_requesting" translatable="false">Requesting an integrity token from Google Play…</string>
+    <string name="play_integrity_status_server_unconfigured" translatable="false">Token received. Server-side verification is not configured.</string>
+    <string name="play_integrity_status_error" translatable="false">Integrity verification is currently unavailable.</string>
+    <string name="play_integrity_status_not_checked" translatable="false">Waiting for an integrity check.</string>
+    <string name="device_integrity_title" translatable="false">Device Integrity Check</string>
+    <string name="security_advisor_heading" translatable="false">Security Advisor</string>
+    <string name="device_integrity_description" translatable="false">SafeMobile checked local build and bootloader state, ADB debugging and Google Play Services. This baseline is not a Google Play Integrity attestation.</string>
+    <string name="device_integrity_status_local_passed" translatable="false">Local baseline passed: locked verified boot, production build tags, ADB disabled and Google Play Services available. This is not a Google Play Integrity attestation.</string>
+    <string name="device_integrity_status_local_failed" translatable="false">Local baseline did not pass. Review bootloader lock, build tags, ADB debugging and Google Play Services.</string>
+    <string name="posture_audit_success" translatable="false">All Audit Successful</string>
+    <string name="play_protect_status_title" translatable="false">Play Protect Status</string>
+    <string name="play_protect_status_enabled" translatable="false">Google Play package verification is enabled on this device.</string>
+    <string name="play_protect_status_disabled" translatable="false">Google Play package verification is disabled in Android settings.</string>
+    <string name="console_full_screen_alerts_title" translatable="false">Full-screen alerts</string>
+    <string name="console_full_screen_alerts_allowed" translatable="false">Allowed. SafeMobile can open urgent incident alerts full-screen.</string>
+    <string name="console_full_screen_alerts_permission_needed" translatable="false">Permission needed. Allow SafeMobile to open urgent incident alerts full-screen.</string>
+    <string name="console_full_screen_alerts_not_required" translatable="false">Not required on this Android version.</string>
+    <string name="console_full_screen_alerts_manage" translatable="false">Manage</string>
+    <string name="console_full_screen_alerts_grant" translatable="false">Grant access</string>
+    <string name="security_advisor_all_secure" translatable="false">All Secure</string>
 </resources>
