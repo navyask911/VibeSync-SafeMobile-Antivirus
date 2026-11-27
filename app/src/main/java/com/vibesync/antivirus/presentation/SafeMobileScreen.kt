@@ -845,6 +845,7 @@ import kotlinx.coroutines.launch
         isDark = appTheme != com.vibesync.antivirus.ui.theme.AppTheme.LIGHT,
         onSelect = { navigateToDestination(it) }
        )
+      if (adMobState.adsReady && !adMobState.isPro) AdMobBanner(adMobManager)
       }
      }
     },
@@ -852,7 +853,6 @@ import kotlinx.coroutines.launch
     containerColor = MaterialTheme.colorScheme.background
    ) { scaffoldPadding ->
     Column(Modifier.fillMaxSize().padding(scaffoldPadding)) {
-     if (adMobState.adsReady && !adMobState.isPro) AdMobBanner(adMobManager)
    val navScreenContent: @Composable () -> Unit = {
        Box(Modifier.fillMaxSize()) {
         when (selectedDestination) {
