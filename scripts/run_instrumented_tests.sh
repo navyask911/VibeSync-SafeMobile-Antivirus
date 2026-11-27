@@ -54,7 +54,12 @@ if log.is_file():
             continue
         match = re.search(r"INSTRUMENTATION_STATUS_CODE: (-?[0-9]+)$", line)
         if match:
-            if match.group(1) in {"0", "-2", "-3", "-4", "-5"}:
+            code = match.group(1)
+            if code == "1":
+                # AndroidJUnitRunner announces a test start before its terminal
+                # status; retain class/test until the completion or skip event.
+                continue
+            if code in {"0", "-2", "-3", "-4", "-5"}:
                 if current.get("class") and current.get("test"):
                     cases.append(current["class"] + "#" + current["test"])
             current = {}
