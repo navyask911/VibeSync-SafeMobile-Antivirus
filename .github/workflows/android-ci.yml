@@ -8,8 +8,9 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: safemobile-android-ci-${{ github.ref }}
-  # Keep active API/shard runs alive when a newer commit is pushed to this branch.
+  # Deduplicate reruns of the same commit without queueing a newer commit behind
+  # an older API matrix; each commit gets an independent Actions concurrency group.
+  group: safemobile-android-ci-${{ github.ref }}-${{ github.sha }}
   cancel-in-progress: false
 jobs:
   test-lint-build:
