@@ -1,31 +1,85 @@
 #!/usr/bin/env bash
-# Wait for the Android framework (especially PackageManager) to become responsive before
-# invoking Gradle. sys.boot_completed alone is not sufficient on slow/headless API 30+ AVDs.
+# Validate the AVD before installing and running one AndroidJUnitRunner shard.
 set -uo pipefail
 
-# reactivecircus/android-emulator-runner invokes 'script' via /usr/bin/sh -c.
-# Its script input must be ONE shell command; keep this Bash EXIT trap here
-# rather than passing a multiline YAML script that the action truncates.
 cleanup_crashpad() {
   (
     sleep 30
-    # Linux comm names truncate at 15 bytes, so pgrep -x crashpad_handler
-    # can miss the process. Match the full executable path instead.
     for attempt in 1 2 3 4 5 6; do
-      if ! pgrep -f '[/]crashpad_handler([[:space:]]|$)' >/dev/null 2>&1; then
-        break
-      fi
+      if ! pgrep -f '[/]crashpad_handler([[:space:]]|$)' >/dev/null 2>&1; then break; fi
       pkill -9 -f '[/]crashpad_handler([[:space:]]|$)' || true
       sleep 5
     done
   ) || true
 }
-trap cleanup_crashpad EXIT
 
 DEVICE_SERIAL="${ANDROID_SERIAL:-emulator-5554}"
 EXPECTED_API="${EXPECTED_API_LEVEL:-}"
+NUM_SHARDS="${INSTRUMENTATION_NUM_SHARDS:-1}"
+SHARD_INDEX="${INSTRUMENTATION_SHARD_INDEX:-0}"
 DIAGNOSTICS_DIR="build/emulator-diagnostics"
+INSTRUMENTATION_LOG="$DIAGNOSTICS_DIR/instrumentation-api${EXPECTED_API}-shard${SHARD_INDEX}.log"
+RESULT_FILE="$DIAGNOSTICS_DIR/instrumentation-result.json"
+executed_tests=0
 mkdir -p "$DIAGNOSTICS_DIR"
+
+if [[ ! "$EXPECTED_API" =~ ^[0-9]+$ ||
+      ! "$NUM_SHARDS" =~ ^[1-9][0-9]*$ ||
+      ! "$SHARD_INDEX" =~ ^[0-9]+$ ]] ||
+   (( SHARD_INDEX >= NUM_SHARDS )); then
+  echo "Invalid emulator API or AndroidJUnitRunner shard configuration." >&2
+  exit 2
+fi
+
+write_shard_result() {
+  local exit_code="$1"
+  python3 - "$RESULT_FILE" "$EXPECTED_API" "$SHARD_INDEX" "$NUM_SHARDS" \
+    "$exit_code" "$executed_tests" "$INSTRUMENTATION_LOG" <<'PY'
+import json
+import pathlib
+import re
+import sys
+
+result_path, api, shard, shard_count, exit_code, summary_count, log_path = sys.argv[1:]
+summary_count = int(summary_count)
+cases = []
+current = {}
+log = pathlib.Path(log_path)
+if log.is_file():
+    for raw_line in log.read_text(encoding="utf-8", errors="replace").splitlines():
+        line = raw_line.strip()
+        match = re.search(r"INSTRUMENTATION_STATUS: (class|test)=(.*)$", line)
+        if match:
+            current[match.group(1)] = match.group(2).strip()
+            continue
+        match = re.search(r"INSTRUMENTATION_STATUS_CODE: (-?[0-9]+)$", line)
+        if match:
+            if match.group(1) in {"0", "-2", "-3", "-4", "-5"}:
+                if current.get("class") and current.get("test"):
+                    cases.append(current["class"] + "#" + current["test"])
+            current = {}
+
+unique_cases = len(set(cases)) == len(cases)
+passed = int(exit_code) == 0 and summary_count > 0 and len(cases) == summary_count and unique_cases
+payload = {
+    "api_level": int(api) if api.isdigit() else api,
+    "shard_index": int(shard),
+    "num_shards": int(shard_count),
+    "executed_tests": summary_count,
+    "reported_test_cases": len(cases),
+    "test_cases": cases,
+    "result": "passed" if passed else "failed",
+    "exit_code": int(exit_code),
+    "instrumentation_log": log.name,
+}
+pathlib.Path(result_path).parent.mkdir(parents=True, exist_ok=True)
+temporary = pathlib.Path(result_path + ".tmp")
+temporary.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+temporary.replace(result_path)
+print(f"Shard summary: API {api}, shard {shard}/{shard_count}, {summary_count} tests, {payload['result']}.")
+PY
+}
+trap 'exit_code=$?; write_shard_result "$exit_code"; cleanup_crashpad' EXIT
 
 capture_diagnostics() {
   local suffix="${1:-}"
@@ -102,40 +156,31 @@ if ! wait_for_runtime 180 "initial emulator startup"; then
 fi
 
 # APKs are prebuilt by CI before emulator startup, so Gradle only needs to install and run them.
-# API 36's software-emulated system_server can stall if it competes with a 2 GiB Gradle JVM.
-workers=2
-heap=2g
-if [[ "$EXPECTED_API" == "36" ]]; then
-  workers=1
-  heap=1024m
-fi
-
 # The 200-real-APK benchmark uses a separately staged batch.json and runs
 # IndustryBenchmarkInstrumentedTest explicitly in industry-benchmark.yml.
-# Normal emulator CI must run every other instrumentation test, but must not
-# invoke the corpus-only benchmark without its verified input set.
-# Never skip or ignore a failing ordinary test or synthesize benchmark data.
+# Normal emulator CI excludes only that corpus-dependent test; remaining tests
+# are partitioned by AndroidJUnitRunner's numShards/shardIndex support.
 benchmark_class="com.vibesync.antivirus.core.engine.IndustryBenchmarkInstrumentedTest"
-fixture_args=("-Pandroid.testInstrumentationRunnerArguments.notClass=$benchmark_class")
 instrument_fixture_args=(-e notClass "$benchmark_class")
 if [[ -f build/siren-test/SafeMobile-Siren-Test.apk ]]; then
-  if ! timeout 60s adb push build/siren-test/SafeMobile-Siren-Test.apk /data/local/tmp/SafeMobile-Siren-Test.apk; then
+  if ! timeout 60s adb -s "$DEVICE_SERIAL" push build/siren-test/SafeMobile-Siren-Test.apk /data/local/tmp/SafeMobile-Siren-Test.apk; then
     echo "Could not stage the harmless siren fixture within 60 seconds." >&2
     capture_diagnostics "-fixture-push-failed"
     exit 3
   fi
-  fixture_args+=("-Pandroid.testInstrumentationRunnerArguments.sirenFixturePath=/data/local/tmp/SafeMobile-Siren-Test.apk")
   instrument_fixture_args+=(-e sirenFixturePath /data/local/tmp/SafeMobile-Siren-Test.apk)
-elif [[ "${GITHUB_ACTIONS:-false}" == "true" ]]; then
-  echo "Required background-install test fixture is missing." >&2
+else
+  echo "Required prebuilt harmless siren fixture is missing." >&2
   exit 1
 fi
 app_apk="app/build/outputs/apk/offline/debug/app-offline-debug.apk"
 test_apk="app/build/outputs/apk/androidTest/offline/debug/app-offline-debug-androidTest.apk"
 
+
+test_apk="app/build/outputs/apk/androidTest/offline/debug/app-offline-debug-androidTest.apk"
+
 run_prebuilt_instrumentation() {
   local api="$1"
-  local instrument_log="$DIAGNOSTICS_DIR/instrumentation-api${api}.log"
   local instrument_status=0
 
   if [[ ! -s "$app_apk" || ! -s "$test_apk" ]]; then
@@ -143,59 +188,39 @@ run_prebuilt_instrumentation() {
     return 2
   fi
 
-  echo "Installing prebuilt offline debug APK for API $api (no Gradle/native rebuild)."
+  echo "Installing prebuilt offline debug APK for API $api."
   timeout 180s adb -s "$DEVICE_SERIAL" install -r -t "$app_apk" || return $?
   timeout 180s adb -s "$DEVICE_SERIAL" install -r -t "$test_apk" || return $?
 
-  echo "Running complete AndroidJUnitRunner suite on API $api."
+  echo "Running AndroidJUnitRunner shard $SHARD_INDEX/$NUM_SHARDS on API $api."
   timeout 900s adb -s "$DEVICE_SERIAL" shell am instrument -w -r \
+    -e numShards "$NUM_SHARDS" \
+    -e shardIndex "$SHARD_INDEX" \
     "${instrument_fixture_args[@]}" \
     com.vibesync.antivirus.debug.test/androidx.test.runner.AndroidJUnitRunner \
-    2>&1 | tee "$instrument_log"
+    2>&1 | tee "$INSTRUMENTATION_LOG"
   instrument_status=${PIPESTATUS[0]}
 
-  # Require a nonzero executed test count, AndroidJUnitRunner success code,
-  # and no failure/abort markers. Empty/no-device runs are never treated as pass.
-  if [[ "$instrument_status" -eq 0 ]] &&
-     grep -Eq 'OK \([1-9][0-9]* tests?\)' "$instrument_log" &&
-     grep -Eq 'INSTRUMENTATION_CODE: -1' "$instrument_log" &&
-     ! grep -Eq 'FAILURES!!!|INSTRUMENTATION_FAILED|INSTRUMENTATION_ABORTED|Process crashed|FAILURE:' "$instrument_log"; then
-    echo "API $api instrumented test suite executed successfully using prebuilt APKs."
+  if [[ "$INSTRUMENTATION_LOG" =~ OK[[:space:]]\(([0-9]+)[[:space:]]tests?\) ]]; then
+    executed_tests="${BASH_REMATCH[1]}"
+  else
+    executed_tests=0
+  fi
+
+  if [[ "$instrument_status" -eq 0 && "$executed_tests" -gt 0 ]] &&
+     grep -Eq 'INSTRUMENTATION_CODE: -1' "$INSTRUMENTATION_LOG" &&
+     ! grep -Eq 'FAILURES!!!|INSTRUMENTATION_FAILED|INSTRUMENTATION_ABORTED|Process crashed|FAILURE:' "$INSTRUMENTATION_LOG"; then
+    echo "API $api shard $SHARD_INDEX/$NUM_SHARDS executed $executed_tests tests."
     return 0
   fi
 
-  echo "API $api instrumentation did not report a verified passing test suite." >&2
+  echo "API $api shard $SHARD_INDEX/$NUM_SHARDS did not report a verified passing test suite." >&2
   return 1
 }
 
 test_status=0
-if [[ "$EXPECTED_API" == "26" ]]; then
-  # The prebuild job has already built both APKs and YARA-X. Do not start a
-  # second Gradle invocation here: Cargo can otherwise re-resolve and rebuild
-  # the patched native engine while the 55-minute emulator job is running.
-  run_prebuilt_instrumentation 26 || test_status=$?
-else
-  gradle_log="$DIAGNOSTICS_DIR/connected-gradle.log"
-  ./gradlew --no-daemon --max-workers="$workers" --no-parallel \
-    -Dorg.gradle.jvmargs="-Xmx$heap -XX:ActiveProcessorCount=2 -Dfile.encoding=UTF-8" \
-    "${fixture_args[@]}" connectedOfflineDebugAndroidTest 2>&1 | tee "$gradle_log"
-  test_status=${PIPESTATUS[0]}
+run_prebuilt_instrumentation "$EXPECTED_API" || test_status=$?
 
-  # A lost API-level property in ddmlib means no tests actually executed. Recover *only* that
-  # infrastructure failure; never retry/override a real failing test assertion or lint gate.
-  if [[ "$EXPECTED_API" == "36" && "$test_status" -ne 0 ]] &&
-     grep -Eq 'Unknown API Level|No compatible devices connected' "$gradle_log"; then
-    echo "API 36 emulator property-query failure detected. Trying the prebuilt instrumentation APKs directly via ADB."
-    timeout 15s adb kill-server || true
-    timeout 15s adb start-server || true
-    if wait_for_runtime 300 "API 36 ADB recovery"; then
-      run_prebuilt_instrumentation 36 || test_status=$?
-    else
-      echo "ADB recovery failed; keeping instrumented test failure."
-      capture_diagnostics "-recovery-failed"
-    fi
-  fi
-fi
 capture_diagnostics
 timeout 15s adb -s "$DEVICE_SERIAL" shell run-as com.vibesync.antivirus.debug \
   cat files/quarantine-roundtrip-diagnostics.txt \
