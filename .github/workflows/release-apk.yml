@@ -52,7 +52,7 @@ concurrency:
 
 jobs:
   release:
-    if: github.repository == 'navyask911/VibeSync-SafeMobile-Antivirus' && (github.event_name == 'workflow_dispatch' || github.ref_type != 'branch' || github.ref_name != 'main' || contains(github.event.head_commit.message, '[release-v1.10.7]'))
+    if: github.repository == 'navyask911/VibeSync-SafeMobile-Antivirus' && (github.event_name == 'workflow_dispatch' || github.ref_type != 'branch' || github.ref_name != 'main' || contains(github.event.head_commit.message, '[release-v1.10.9]'))
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
