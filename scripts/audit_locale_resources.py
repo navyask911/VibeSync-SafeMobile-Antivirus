@@ -35,14 +35,20 @@ def identity(element):
     return (element.tag, element.get("name"))
 
 
-def placeholders(element):
-    return sorted(PLACEHOLDER.findall("".join(element.itertext())))
+def placeholder_signature(element):
+    return tuple(sorted(PLACEHOLDER.findall("".join(element.itertext()))))
+
+
+def plural_item_signatures(element):
+    return {
+        placeholder_signature(item) for item in element.findall("item")
+    }
 
 
 def plural_categories(element):
     if element.tag != "plurals":
         return None
-    return sorted(item.get("quantity", "") for item in element.findall("item"))
+    return [item.get("quantity", "") for item in element.findall("item")]
 
 
 def text_segments(element):
@@ -133,22 +139,31 @@ def main():
 
         format_mismatches = []
         for key in sorted(set(baseline).intersection(definitions)):
-            expected = placeholders(baseline[key])
             for file_name, entry in definitions[key]:
-                actual = placeholders(entry)
-                if expected != actual:
-                    format_mismatches.append({
-                        "type": key[0], "name": key[1], "file": file_name,
-                        "expected": expected, "actual": actual,
-                    })
-                expected_plural = plural_categories(baseline[key])
-                actual_plural = plural_categories(entry)
-                if expected_plural is not None and expected_plural != actual_plural:
-                    format_mismatches.append({
-                        "type": key[0], "name": key[1], "file": file_name,
-                        "expected_plural_categories": expected_plural,
-                        "actual_plural_categories": actual_plural,
-                    })
+                if entry.tag == "plurals":
+                    expected_signatures = plural_item_signatures(baseline[key])
+                    actual_signatures = plural_item_signatures(entry)
+                    if expected_signatures != actual_signatures:
+                        format_mismatches.append({
+                            "type": key[0], "name": key[1], "file": file_name,
+                            "expected_item_placeholders": sorted(expected_signatures),
+                            "actual_item_placeholders": sorted(actual_signatures),
+                        })
+                    actual_categories = plural_categories(entry)
+                    if "other" not in actual_categories or len(actual_categories) != len(set(actual_categories)):
+                        format_mismatches.append({
+                            "type": key[0], "name": key[1], "file": file_name,
+                            "plural_categories": actual_categories,
+                            "error": "plural quantities must be unique and include other",
+                        })
+                else:
+                    expected = placeholder_signature(baseline[key])
+                    actual = placeholder_signature(entry)
+                    if expected != actual:
+                        format_mismatches.append({
+                            "type": key[0], "name": key[1], "file": file_name,
+                            "expected": expected, "actual": actual,
+                        })
         all_format_mismatches.extend(
             {"locale": locale_dir.name, **item} for item in format_mismatches
         )
@@ -193,7 +208,7 @@ def main():
     }
     Path("build").mkdir(exist_ok=True)
     Path("build/locale-resource-audit.json").write_text(
-        json.dumps(report, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8"
+        json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
     print(
         f"Locale resource audit: {len(locale_dirs)} locales; "
