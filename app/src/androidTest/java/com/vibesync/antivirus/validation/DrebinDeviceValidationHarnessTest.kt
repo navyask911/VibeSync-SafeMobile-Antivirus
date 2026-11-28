@@ -381,6 +381,24 @@ class DrebinDeviceValidationHarnessTest {
                 malformedManifestOutcome.reason == DrebinApkExtractor.Reason.MANIFEST_INVALID
         )
 
+        val malformedDex = File(root, "fixture-malformed-dex.apk")
+        writeZipFixture(malformedDex, manifest = manifest, includeDummyDex = true)
+        val malformedDexOutcome = DrebinApkExtractor.extract(malformedDex, schema)
+        assertTrue(
+            "Malformed DEX must be UNSCANNABLE/DEX_INVALID",
+            malformedDexOutcome is DrebinApkExtractor.Outcome.Unscannable &&
+                malformedDexOutcome.reason == DrebinApkExtractor.Reason.DEX_INVALID
+        )
+
+        val entryLimitApk = File(root, "fixture-entry-limit.apk")
+        writeEntryLimitFixture(entryLimitApk)
+        val entryLimitOutcome = DrebinApkExtractor.extract(entryLimitApk, schema)
+        assertTrue(
+            "APK exceeding ZIP entry budget must be UNSCANNABLE/LIMIT_EXCEEDED",
+            entryLimitOutcome is DrebinApkExtractor.Outcome.Unscannable &&
+                entryLimitOutcome.reason == DrebinApkExtractor.Reason.LIMIT_EXCEEDED
+        )
+
         val malformedZip = File(root, "fixture-malformed-zip.apk")
         malformedZip.writeBytes(byteArrayOf(0, 1, 2, 3, 4, 5, 6, 7))
         val malformedZipOutcome = DrebinApkExtractor.extract(malformedZip, schema)
@@ -395,6 +413,8 @@ class DrebinDeviceValidationHarnessTest {
             .put("valid_manifest_missing_dex_reason", "DEX_MISSING")
             .put("missing_manifest_reason", "MANIFEST_INVALID")
             .put("malformed_manifest_reason", "MANIFEST_INVALID")
+            .put("malformed_dex_reason", (malformedDexOutcome as DrebinApkExtractor.Outcome.Unscannable).reason.name)
+            .put("zip_entry_limit_reason", (entryLimitOutcome as DrebinApkExtractor.Outcome.Unscannable).reason.name)
             .put("malformed_zip_reason", (malformedZipOutcome as DrebinApkExtractor.Outcome.Unscannable).reason.name)
             .put("fixture_scope", "synthetic ZIP and binary AndroidManifest parser edge cases; DEX traversal is separately probed on the installed app APK")
     }
@@ -409,6 +429,16 @@ class DrebinDeviceValidationHarnessTest {
             if (includeDummyDex) {
                 zip.putNextEntry(ZipEntry("classes.dex"))
                 zip.write(ByteArray(64) { if (it == 0) 0x64 else 0 })
+                zip.closeEntry()
+            }
+        }
+    }
+
+    private fun writeEntryLimitFixture(file: File) {
+        ZipOutputStream(file.outputStream().buffered()).use { zip ->
+            repeat(1_801) { index ->
+                zip.putNextEntry(ZipEntry("entry-$index"))
+                zip.write(0)
                 zip.closeEntry()
             }
         }
