@@ -457,7 +457,7 @@ jobs:
       - name: Verify full API/shard inventory and test coverage
         env:
           MATRIX_RESULT: ${{ needs.android-emulator-tests.result }}
-          EXPECTED_TESTS_PER_API: "85"
+          EXPECTED_TESTS_PER_API: "86" # Includes the new Drebin device harness test.
         run: python3 scripts/verify_instrumented_shards.py build/emulator-shards
 
   release-v1-6-0:

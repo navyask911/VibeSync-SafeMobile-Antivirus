@@ -51,7 +51,15 @@ jobs:
           target: default
           arch: x86_64
           profile: pixel_2
+          force-avd-creation: true
+          emulator-boot-timeout: 1200
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot
           disable-animations: true
+          disable-spellchecker: true
+          ram-size: 3072M
+          heap-size: 384M
+          cores: 2
+          disable-linux-hw-accel: auto
           script: |
             ./gradlew --no-daemon \
               -Pandroid.testInstrumentationRunnerArguments.appCommit="$GITHUB_SHA" \
