@@ -26,6 +26,9 @@ jobs:
   compile-instrumentation:
     runs-on: ubuntu-latest
     timeout-minutes: 70
+    # Ubuntu hosted runners lack KVM; Emulator 37+ requires explicit TCG opt-in with -accel off.
+    env:
+      ANDROID_I_WANT_MY_TCG: "yes"
     steps:
       - name: Checkout validation branch
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
