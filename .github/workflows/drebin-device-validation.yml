@@ -55,6 +55,7 @@ jobs:
           script: |
             ./gradlew --no-daemon \
               -Pandroid.testInstrumentationRunnerArguments.appCommit="$GITHUB_SHA" \
+              -Pandroid.testInstrumentationRunnerArguments.class=com.vibesync.antivirus.validation.DrebinDeviceValidationHarnessTest \
               :app:connectedOfflineDebugAndroidTest
             mkdir -p validation-output
             adb exec-out run-as com.vibesync.antivirus.debug cat files/drebin-validation-summary.json > validation-output/drebin-api35-emulator-summary.json
