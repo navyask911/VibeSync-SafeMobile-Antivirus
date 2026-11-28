@@ -50,6 +50,7 @@ class DrebinDeviceValidationHarnessTest {
         val schema = DrebinFeatureContract.loadSchema(context.assets)
             ?: error("Packaged 215-feature schema could not be loaded")
         assertEquals(215, schema.size)
+        val contractFixtureSummary = verifyFeatureContractFixtures(schema)
 
         val root = File(context.getExternalFilesDir("drebin-validation"), ".")
         val apkDirectory = File(root, "apks")
@@ -180,6 +181,7 @@ class DrebinDeviceValidationHarnessTest {
                 .put("null_inference_results", nullApkScores)
                 .put("extraction_latency", summarize(extractionNs))
                 .put("extract_plus_inference_latency", summarize(extractAndInferNs)))
+            .put("contract_fixtures", contractFixtureSummary)
             .put("apk_results", apkResults)
             .put("scope", "APK feature extraction plus ML inference; not full PackageScanner/YARA/hash scan")
             .put("private_data_warning", "Contains per-APK vectors; keep local and do not commit or publish samples")
@@ -191,6 +193,83 @@ class DrebinDeviceValidationHarnessTest {
         assertTrue("Production inference must return valid scores", nullProductionScores == 0)
         assertEquals(apkFiles.size, apkResults.length())
         android.util.Log.i(TAG, "Validation artifact written to ${outputFile.absolutePath}")
+    }
+
+    private fun verifyFeatureContractFixtures(schema: List<String>): JSONObject {
+        val empty = DrebinFeatureContract.Observed(
+            permissions = emptySet(), actions = emptySet(), classes = emptySet(),
+            calls = emptySet(), callbacks = emptySet(), literals = emptySet(),
+        )
+        val zeroVector = DrebinFeatureContract.vector(schema, empty)
+        assertEquals(215, zeroVector.size)
+        assertTrue("Empty observation must produce an all-zero vector", zeroVector.all { it == 0.0f })
+
+        var activatedSlots = 0
+        for (index in schema.indices) {
+            val observed = fixtureObservation(schema[index])
+            val actual = DrebinFeatureContract.vector(schema, observed)
+            val repeat = DrebinFeatureContract.vector(schema, observed)
+            assertEquals("Positive fixture failed at feature index $index (" + schema[index] + ")", 1f, actual[index], 0f)
+            assertEquals("Feature fixture is non-deterministic at index $index", actual.toList(), repeat.toList())
+            activatedSlots += actual.count { it == 1.0f }
+        }
+
+        val runtimeExecIndex = schema.indexOf("Runtime.exec")
+        check(runtimeExecIndex >= 0)
+        val unrelatedOwnerCall = DrebinFeatureContract.Observed(
+            permissions = emptySet(), actions = emptySet(), classes = emptySet(),
+            calls = setOf("Lother/Runtime;" to "exec"),
+            callbacks = emptySet(), literals = emptySet(),
+        )
+        val simpleOwnerCollisionObserved =
+            DrebinFeatureContract.vector(schema, unrelatedOwnerCall)[runtimeExecIndex] == 1.0f
+
+        return JSONObject()
+            .put("schema_feature_count", schema.size)
+            .put("positive_fixtures_passed", schema.size)
+            .put("empty_vector_negative_fixture_passed", true)
+            .put("determinism_checks_passed", schema.size)
+            .put("positive_fixture_activated_slots_total", activatedSlots)
+            .put("unrelated_owner_activates_Runtime_exec_feature", simpleOwnerCollisionObserved)
+            .put("fixture_scope", "direct Kotlin DrebinFeatureContract observation mapping; not APK parser coverage")
+    }
+
+    private fun fixtureObservation(feature: String): DrebinFeatureContract.Observed {
+        val permissions = mutableSetOf<String>()
+        val actions = mutableSetOf<String>()
+        val classes = mutableSetOf<String>()
+        val calls = mutableSetOf<Pair<String, String>>()
+        val callbacks = mutableSetOf<String>()
+        val literals = mutableSetOf<String>()
+
+        when {
+            feature.isNotBlank() && feature.all { it.isUpperCase() || it.isDigit() || it == '_' } ->
+                permissions.add("android.permission.$feature")
+            "intent.action." in feature ->
+                actions.add(if (feature == "intent.action.RUN") "android.intent.action.RUN" else feature)
+            feature in CLASS_FEATURE_NAMES ->
+                classes.add(feature)
+            feature in COMMAND_NAMES || feature.startsWith("/system/") ->
+                literals.add(feature)
+            feature in CALLBACK_NAMES ->
+                callbacks.add(feature)
+            else -> {
+                val normalized = if (
+                    feature.startsWith("Ljava.") || feature.startsWith("Ljavax.") ||
+                    feature.startsWith("Landroid.")
+                ) feature.drop(1) else feature
+                val separator = normalized.lastIndexOf('.')
+                if (separator > 0) {
+                    calls.add(normalized.substring(0, separator) to normalized.substring(separator + 1))
+                } else {
+                    calls.add("Lfixture/Only;" to feature)
+                }
+            }
+        }
+        return DrebinFeatureContract.Observed(
+            permissions = permissions, actions = actions, classes = classes,
+            calls = calls, callbacks = callbacks, literals = literals,
+        )
     }
 
     private fun createInterpreter(bytes: ByteArray): Interpreter {
@@ -278,6 +357,17 @@ class DrebinDeviceValidationHarnessTest {
         const val REUSED_INTERPRETER_ITERATIONS = 1_000
         const val PRODUCTION_WARMUP_CALLS = 5
         const val PRODUCTION_PATH_ITERATIONS = 30
+        val CLASS_FEATURE_NAMES = setOf(
+            "ServiceConnection", "ClassLoader", "DexClassLoader", "SecretKey", "KeySpec",
+            "Binder", "IBinder", "URLClassLoader", "PathClassLoader", "PackageInstaller",
+            "HttpUriRequest", "MessengerService", "IRemoteService", "ProcessBuilder",
+            "android.os.Binder", "android.os.IBinder", "android.content.pm.Signature",
+            "android.telephony.SmsManager", "android.telephony.gsm.SmsManager",
+            "android.content.pm.PackageInfo", "Ljava.net.URLDecoder",
+            "Ljavax.crypto.spec.SecretKeySpec", "Ljavax.crypto.Cipher",
+        )
+        val CALLBACK_NAMES = setOf("onBind", "onServiceConnected")
+        val COMMAND_NAMES = setOf("mount", "remount", "chmod", "chown")
         const val EXPECTED_MODEL_BYTES = 18_584
         const val EXPECTED_MODEL_SHA256 =
             "8b66adaf01a939c26d5a756e66f53fe0d6e85e1a06ec97166579138c6ce47061"
