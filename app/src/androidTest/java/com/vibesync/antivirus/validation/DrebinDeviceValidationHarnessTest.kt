@@ -277,6 +277,50 @@ class DrebinDeviceValidationHarnessTest {
         check(outputDirectory.mkdirs() || outputDirectory.isDirectory)
         val outputFile = File(outputDirectory, "drebin-device-validation.json")
         outputFile.writeText(output.toString(2), Charsets.UTF_8)
+
+        // A separate, sanitized summary can be collected by CI without exporting
+        // any per-APK feature vector or installed package name.
+        val componentSummaries = JSONArray()
+        for (index in 0 until installedPackageComponents.length()) {
+            val component = installedPackageComponents.getJSONObject(index)
+            componentSummaries.put(JSONObject()
+                .put("component", component.optString("component"))
+                .put("apk_sha256", component.optString("apk_sha256"))
+                .put("status", component.optString("status"))
+                .put("active_feature_count", component.opt("active_feature_count") ?: JSONObject.NULL))
+        }
+        val packageScannerSummary = JSONObject()
+            .put("executed", packageScannerBenchmark.optBoolean("executed", false))
+        if (packageScannerBenchmark.optBoolean("executed", false)) {
+            packageScannerSummary
+                .put("scan_scope", packageScannerBenchmark.optString("scan_scope"))
+                .put("inventory_candidates", packageScannerBenchmark.optInt("inventory_candidates"))
+                .put("cold_scan_latency", packageScannerBenchmark.optJSONObject("cold_scan_latency"))
+                .put("warm_repeat_scan_latency", packageScannerBenchmark.optJSONObject("warm_repeat_scan_latency"))
+                .put("memory_before", packageScannerBenchmark.optJSONObject("memory_before"))
+                .put("memory_after_all_scans", packageScannerBenchmark.optJSONObject("memory_after_all_scans"))
+        }
+        val safeSummary = JSONObject()
+            .put("report_version", 1)
+            .put("schema_sha256", schemaSha)
+            .put("model_sha256", modelSha)
+            .put("model_bytes", modelBytes.size)
+            .put("android_app", output.getJSONObject("android_app"))
+            .put("benchmark", output.getJSONObject("benchmark"))
+            .put("apk_corpus", output.getJSONObject("apk_corpus"))
+            .put("contract_fixtures", contractFixtureSummary)
+            .put("apk_parser_fixtures", apkParserFixtureSummary)
+            .put("installed_app_base_apk_probe", selfApkProbe)
+            .put("installed_package_component_summaries", componentSummaries)
+            .put("installed_package_split_only_feature_indices", JSONArray(splitOnlyFeatureIndices))
+            .put("installed_package_component_aggregate_feature_count",
+                aggregateVector?.count { it == 1.0f } ?: JSONObject.NULL)
+            .put("package_scanner_benchmark", packageScannerSummary)
+            .put("private_vectors_or_package_names_included", false)
+        context.openFileOutput("drebin-validation-summary.json", Context.MODE_PRIVATE).bufferedWriter().use {
+            it.write(safeSummary.toString(2))
+        }
+
         assertTrue("Production inference must return valid scores", nullProductionScores == 0)
         assertEquals(apkFiles.size, apkResults.length())
         android.util.Log.i(TAG, "Validation artifact written to ${outputFile.absolutePath}")
