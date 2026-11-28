@@ -4,7 +4,7 @@ The instrumentation collector is intentionally isolated under androidTest and do
 
 ## What it measures
 
-Run DrebinDeviceValidationHarnessTest on the exact app build under test. It verifies the packaged schema and approved TFLite asset SHA-256, then measures:
+Run DrebinDeviceValidationHarnessTest on the exact app build under test. It verifies the packaged schema and approved TFLite asset SHA-256, executes positive and negative observation fixtures directly against the Kotlin 215-feature contract, parses a harmless synthetic binary AndroidManifest, checks malformed/missing manifest, missing-DEX and malformed-ZIP outcomes, and probes DEX extraction on the installed app APK. It then measures:
 - model asset read and hash verification;
 - cold Interpreter construction and tensor allocation;
 - repeated invoke-only timing on one retained Interpreter;
@@ -12,7 +12,7 @@ Run DrebinDeviceValidationHarnessTest on the exact app build under test. It veri
 - DrebinApkExtractor timing and extraction-plus-inference timing for locally supplied APKs;
 - PSS, native heap, Java heap and device memory snapshots.
 
-The report stores p50/p95/p99, mean, standard deviation, min and max. The APK result section contains full 215-bit vectors and must remain private. The test does not install or execute the supplied APKs, and does not run the entire PackageScanner, YARA or hash scan pipeline.
+The test runs 30 asset-read/hash and cold Interpreter-init repetitions, 1,000 retained-Interpreter invocations and 300 production-path calls. It captures memory snapshots before production inference and at 1, 10, 50 and 300 calls. The report stores p50/p95/p99, mean, standard deviation, min and max. The APK result section contains full 215-bit vectors and must remain private. The test does not install or execute the supplied APKs, and does not run the entire PackageScanner, YARA or hash scan pipeline.
 
 ## Build and run
 
@@ -32,7 +32,7 @@ adb pull /sdcard/Android/data/com.vibesync.antivirus.debug/files/drebin-validati
 
 Windows PowerShell: use .\gradlew.bat and the same adb subcommands. Keep APK files and the resulting JSON outside Git.
 
-For a test corpus, push at least 100 benign and 100 malware-source APKs with documented provenance. Avoid samples that the test team is not authorized to store or process. The instrumentation test processes at most 100 APK files in one run; use several disjoint batches and merge the private JSON outputs by APK SHA-256.
+The synthetic parser fixtures do not substitute for real DEX corpus coverage. For real APK parity, push at least 100 benign and 100 malware-source APKs with documented provenance; include single-DEX, multidex and base/split APK samples where available. Avoid samples that the test team is not authorized to store or process. The instrumentation test processes at most 100 APK files in one run; use several disjoint batches and merge the private JSON outputs by APK SHA-256.
 
 ## Device matrix and interpretation
 
