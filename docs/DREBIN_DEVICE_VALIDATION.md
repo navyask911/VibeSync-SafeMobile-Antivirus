@@ -38,6 +38,10 @@ Windows PowerShell: use .\gradlew.bat and the same adb subcommands. Keep APK fil
 
 The synthetic parser fixtures do not substitute for real DEX corpus coverage. For real APK parity, push at least 100 benign and 100 malware-source APKs with documented provenance; include single-DEX, multidex and base/split APK samples where available. Avoid samples that the test team is not authorized to store or process. The instrumentation test processes at most 100 APK files in one run; use several disjoint batches and merge the private JSON outputs by APK SHA-256.
 
+## CI status
+
+The validation branch includes an API 35 x86_64 emulator workflow that compiles and executes the instrumentation test. This is intended to validate Kotlin feature mapping, synthetic binary-manifest/ZIP/DEX cases, packaged model inference and report generation. Emulator timing numbers, if collected, are not substitutes for physical-device measurements and are not to be combined with the API 26 / 33–34 / 36 hardware matrix.
+
 ## Device matrix and interpretation
 
 Repeat on API 26, API 33/34 and API 36 hardware, including ColorOS/Oplus and a Pixel-class reference. Record starting battery, ambient/device temperature, charging state, screen/radio settings and thermal status externally. Run each device at least three times after cooling; do not merge emulator and physical-device samples into one latency distribution.
