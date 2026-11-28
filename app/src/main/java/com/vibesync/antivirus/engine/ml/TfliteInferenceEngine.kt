@@ -93,7 +93,7 @@ class TfliteInferenceEngine(context: Context) {
 
     companion object {
         const val INPUT_FEATURE_COUNT = 215
-        const val MALWARE_THRESHOLD = 0.5f
+        const val MODEL_REPORTED_THRESHOLD = 0.5f
 
         private const val MODEL_ASSET_NAME = "model.tflite"
         private const val APPROVED_MODEL_SIZE = 18_584
