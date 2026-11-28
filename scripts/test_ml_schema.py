@@ -1,4 +1,4 @@
-"""Offline contract tests for the active, SHA-pinned, build-time downloaded Drebin-215 model."""
+"""Offline contract tests for the research-only, SHA-pinned Drebin-215 bundle."""
 import hashlib
 import json
 from pathlib import Path
@@ -16,7 +16,7 @@ KNOWN_SCHEMA_SHA256 = "ffb386be14adf8c0af1bb96032e5485fcc8fd5b401a24488c5896e2d5
 KNOWN_MODEL_SHA256 = "8b66adaf01a939c26d5a756e66f53fe0d6e85e1a06ec97166579138c6ce47061"
 
 
-class ActiveModelContractTests(unittest.TestCase):
+class ResearchModelContractTests(unittest.TestCase):
     def test_downloaded_model_is_the_approved_tflite_release_asset(self):
         model = (ASSETS / "model.tflite").read_bytes()
         self.assertEqual(len(model), 18584)
@@ -26,10 +26,15 @@ class ActiveModelContractTests(unittest.TestCase):
         scanner = SCANNER.read_text(encoding="utf-8")
         self.assertIn('MODEL_ASSET_NAME = "model.tflite"', inference)
         self.assertIn('MODEL_ASSET_NAME = "model.tflite"', scanner)
-        self.assertIn("MODEL_PRODUCTION_READY = true", scanner)
-        self.assertIn("MODEL_VALIDATED = true", scanner)
-        self.assertIn('MODEL_STATUS = "active"', scanner)
-        self.assertIn('MODEL_STATUS == "active"', scanner)
+        self.assertIn("MODEL_PRODUCTION_READY = false", scanner)
+        self.assertIn("MODEL_VALIDATED = false", scanner)
+        self.assertIn("MODEL_TRAINED = true", scanner)
+        self.assertIn('MODEL_STATUS = "research_candidate"', scanner)
+        self.assertIn('MODEL_STATUS == "research_candidate"', scanner)
+        self.assertIn("internal suspend fun scanResearchCandidate", scanner)
+        self.assertIn("suspend fun isResearchCandidateAvailable()", scanner)
+        self.assertIn("MODEL_VALIDATED = false", scanner)
+        self.assertIn("MODEL_PRODUCTION_READY = false", scanner)
 
     def test_downloaded_schema_is_exact_ordered_215_feature_contract(self):
         raw = (ASSETS / "feature_schema.json").read_bytes()
