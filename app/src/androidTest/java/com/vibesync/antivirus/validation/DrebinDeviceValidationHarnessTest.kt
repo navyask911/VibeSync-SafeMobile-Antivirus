@@ -12,6 +12,7 @@ import com.vibesync.antivirus.core.engine.DrebinApkExtractor
 import com.vibesync.antivirus.core.engine.DrebinFeatureContract
 import com.vibesync.antivirus.engine.ml.TfliteInferenceEngine
 import java.io.File
+import java.io.ByteArrayOutputStream
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.security.MessageDigest
@@ -26,6 +27,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.Interpreter
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
 
 /**
  * Private device-side parity and timing data collector.
@@ -59,6 +62,15 @@ class DrebinDeviceValidationHarnessTest {
         )
         val apkDirectory = File(root, "apks")
         check(apkDirectory.mkdirs() || apkDirectory.isDirectory)
+        val apkParserFixtureSummary = verifyApkParserFixtures(root, schema)
+        val selfApk = File(context.applicationInfo.sourceDir)
+        val selfApkProbe = when (val result = DrebinApkExtractor.extract(selfApk, schema)) {
+            is DrebinApkExtractor.Outcome.Features ->
+                JSONObject().put("status", "FEATURES").put("active_feature_count", result.vector.count { it == 1.0f })
+            is DrebinApkExtractor.Outcome.Unscannable ->
+                JSONObject().put("status", "UNSCANNABLE").put("reason", result.reason.name)
+        }.put("apk_sha256", sha256(selfApk))
+
         val apkFiles = apkDirectory.listFiles().orEmpty()
             .filter { it.isFile && it.extension.equals("apk", ignoreCase = true) }
             .sortedBy { it.name }.take(MAX_APK_SAMPLES)
@@ -192,6 +204,8 @@ class DrebinDeviceValidationHarnessTest {
                 .put("extraction_latency", summarize(extractionNs))
                 .put("extract_plus_inference_latency", summarize(extractAndInferNs)))
             .put("contract_fixtures", contractFixtureSummary)
+            .put("apk_parser_fixtures", apkParserFixtureSummary)
+            .put("installed_app_base_apk_probe", selfApkProbe)
             .put("apk_results", apkResults)
             .put("scope", "APK feature extraction plus ML inference; not full PackageScanner/YARA/hash scan")
             .put("private_data_warning", "Contains per-APK vectors; keep local and do not commit or publish samples")
@@ -280,6 +294,152 @@ class DrebinDeviceValidationHarnessTest {
             permissions = permissions, actions = actions, classes = classes,
             calls = calls, callbacks = callbacks, literals = literals,
         )
+    }
+
+    private suspend fun verifyApkParserFixtures(
+        root: File,
+        schema: List<String>,
+    ): JSONObject {
+        val manifest = createBinaryManifestFixture()
+        val parsed = requireNotNull(com.vibesync.antivirus.core.engine.BinaryAndroidManifest.parse(manifest)) {
+            "Synthetic harmless binary AndroidManifest fixture did not parse"
+        }
+        assertEquals(setOf("android.permission.INTERNET"), parsed.permissions)
+        assertEquals(setOf("android.intent.action.BOOT_COMPLETED"), parsed.actions)
+
+        val missingDex = File(root, "fixture-manifest-without-dex.apk")
+        writeZipFixture(missingDex, manifest = manifest, includeDummyDex = false)
+        val missingDexOutcome = DrebinApkExtractor.extract(missingDex, schema)
+        assertTrue(
+            "Valid manifest without DEX must be UNSCANNABLE/DEX_MISSING",
+            missingDexOutcome is DrebinApkExtractor.Outcome.Unscannable &&
+                missingDexOutcome.reason == DrebinApkExtractor.Reason.DEX_MISSING
+        )
+
+        val missingManifest = File(root, "fixture-missing-manifest.apk")
+        writeZipFixture(missingManifest, manifest = null, includeDummyDex = true)
+        val missingManifestOutcome = DrebinApkExtractor.extract(missingManifest, schema)
+        assertTrue(
+            "APK without AndroidManifest.xml must be UNSCANNABLE/MANIFEST_INVALID",
+            missingManifestOutcome is DrebinApkExtractor.Outcome.Unscannable &&
+                missingManifestOutcome.reason == DrebinApkExtractor.Reason.MANIFEST_INVALID
+        )
+
+        val malformedManifest = File(root, "fixture-malformed-manifest.apk")
+        writeZipFixture(malformedManifest, manifest = byteArrayOf(1, 2, 3, 4), includeDummyDex = true)
+        val malformedManifestOutcome = DrebinApkExtractor.extract(malformedManifest, schema)
+        assertTrue(
+            "Malformed binary manifest must be UNSCANNABLE/MANIFEST_INVALID",
+            malformedManifestOutcome is DrebinApkExtractor.Outcome.Unscannable &&
+                malformedManifestOutcome.reason == DrebinApkExtractor.Reason.MANIFEST_INVALID
+        )
+
+        val malformedZip = File(root, "fixture-malformed-zip.apk")
+        malformedZip.writeBytes(byteArrayOf(0, 1, 2, 3, 4, 5, 6, 7))
+        val malformedZipOutcome = DrebinApkExtractor.extract(malformedZip, schema)
+        assertTrue(
+            "Malformed ZIP/APK must be UNSCANNABLE",
+            malformedZipOutcome is DrebinApkExtractor.Outcome.Unscannable
+        )
+
+        return JSONObject()
+            .put("binary_manifest_permission_fixture_passed", true)
+            .put("binary_manifest_action_fixture_passed", true)
+            .put("valid_manifest_missing_dex_reason", "DEX_MISSING")
+            .put("missing_manifest_reason", "MANIFEST_INVALID")
+            .put("malformed_manifest_reason", "MANIFEST_INVALID")
+            .put("malformed_zip_reason", (malformedZipOutcome as DrebinApkExtractor.Outcome.Unscannable).reason.name)
+            .put("fixture_scope", "synthetic ZIP and binary AndroidManifest parser edge cases; DEX traversal is separately probed on the installed app APK")
+    }
+
+    private fun writeZipFixture(file: File, manifest: ByteArray?, includeDummyDex: Boolean) {
+        ZipOutputStream(file.outputStream().buffered()).use { zip ->
+            if (manifest != null) {
+                zip.putNextEntry(ZipEntry("AndroidManifest.xml"))
+                zip.write(manifest)
+                zip.closeEntry()
+            }
+            if (includeDummyDex) {
+                zip.putNextEntry(ZipEntry("classes.dex"))
+                zip.write(ByteArray(64) { if (it == 0) 0x64 else 0 })
+                zip.closeEntry()
+            }
+        }
+    }
+
+    private fun createBinaryManifestFixture(): ByteArray {
+        val strings = listOf(
+            "uses-permission", "action", "name",
+            "android.permission.INTERNET", "android.intent.action.BOOT_COMPLETED",
+        )
+        val stringData = ByteArrayOutputStream()
+        val offsets = mutableListOf<Int>()
+        for (value in strings) {
+            val encoded = value.toByteArray(Charsets.UTF_8)
+            require(encoded.size < 128 && value.length < 128)
+            offsets += stringData.size()
+            stringData.write(value.length)
+            stringData.write(encoded.size)
+            stringData.write(encoded)
+            stringData.write(0)
+        }
+
+        val headerSize = 28
+        val stringsStart = headerSize + offsets.size * 4
+        val poolSize = stringsStart + stringData.size()
+        val pool = ByteBuffer.allocate(poolSize).order(ByteOrder.LITTLE_ENDIAN)
+        pool.putShort(0x0001.toShort())
+        pool.putShort(headerSize.toShort())
+        pool.putInt(poolSize)
+        pool.putInt(strings.size)
+        pool.putInt(0)
+        pool.putInt(0x100)
+        pool.putInt(stringsStart)
+        pool.putInt(0)
+        offsets.forEach(pool::putInt)
+        pool.put(stringData.toByteArray())
+
+        fun startElement(tagIndex: Int, valueIndex: Int): ByteArray {
+            val nodeSize = 56
+            val node = ByteBuffer.allocate(nodeSize).order(ByteOrder.LITTLE_ENDIAN)
+            node.putShort(0x0102.toShort())
+            node.putShort(36.toShort())
+            node.putInt(nodeSize)
+            node.putInt(1)
+            node.putInt(-1)
+            node.putInt(-1)
+            node.putInt(tagIndex)
+            node.putShort(20.toShort())
+            node.putShort(20.toShort())
+            node.putShort(1.toShort())
+            node.putShort(0)
+            node.putShort(0)
+            node.putShort(0)
+            node.putInt(-1)
+            node.putInt(2) // attribute name "name"
+            node.putInt(valueIndex)
+            node.putShort(8.toShort())
+            node.put(0)
+            node.put(0x03)
+            node.putInt(valueIndex)
+            return node.array()
+        }
+
+        val permission = startElement(0, 3)
+        val action = startElement(1, 4)
+        val totalSize = 8 + poolSize + permission.size + action.size
+        val rootHeader = ByteBuffer.allocate(8).order(ByteOrder.LITTLE_ENDIAN)
+            .putShort(0x0003.toShort())
+            .putShort(8.toShort())
+            .putInt(totalSize)
+            .array()
+        return ByteArray(totalSize).also { output ->
+            var offset = 0
+            listOf(rootHeader, pool.array(), permission, action).forEach { chunk ->
+                chunk.copyInto(output, offset)
+                offset += chunk.size
+            }
+        }
     }
 
     private fun createInterpreter(bytes: ByteArray): Interpreter {
