@@ -1,0 +1,98 @@
+name: Drebin device harness emulator validation
+
+on:
+  push:
+    branches:
+      - validation/2026-11-28-drebin-device-harness
+    paths:
+      - app/src/androidTest/java/com/vibesync/antivirus/validation/DrebinDeviceValidationHarnessTest.kt
+      - app/src/main/java/com/vibesync/antivirus/core/engine/DrebinFeatureContract.kt
+      - app/src/main/java/com/vibesync/antivirus/core/engine/DrebinApkExtractor.kt
+      - app/src/main/java/com/vibesync/antivirus/engine/ml/TfliteInferenceEngine.kt
+      - app/build.gradle.kts
+      - build.gradle.kts
+      - gradle/wrapper/gradle-wrapper.properties
+      - .github/workflows/drebin-device-validation.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: drebin-device-harness-compile-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  compile-instrumentation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    # Ubuntu hosted runners lack KVM; Emulator 37+ requires explicit TCG opt-in with -accel off.
+    env:
+      ANDROID_I_WANT_MY_TCG: "yes"
+    steps:
+      - name: Checkout validation branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a # v4.4.3
+
+      - name: Compile the offline Android instrumentation harness
+        run: ./gradlew --no-daemon :app:compileOfflineDebugAndroidTestKotlin
+
+      - name: Execute Kotlin contract and parser fixtures on API 35 emulator
+        uses: reactivecircus/android-emulator-runner@1dcd0090116d15e7c562f8db72807de5e036a4ed # v2.34.0
+        with:
+          api-level: 35
+          target: default
+          arch: x86_64
+          profile: pixel_2
+          force-avd-creation: true
+          emulator-boot-timeout: 1200
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot
+          disable-animations: true
+          disable-spellchecker: true
+          ram-size: 3072M
+          heap-size: 384M
+          cores: 2
+          disable-linux-hw-accel: auto
+          script: |
+            ./gradlew --no-daemon -Pandroid.testInstrumentationRunnerArguments.appCommit="$GITHUB_SHA" -Pandroid.testInstrumentationRunnerArguments.class=com.vibesync.antivirus.validation.DrebinDeviceValidationHarnessTest :app:connectedOfflineDebugAndroidTest
+            mkdir -p validation-output
+            adb exec-out run-as com.vibesync.antivirus.debug cat files/drebin-validation-summary.json > validation-output/drebin-api35-emulator-summary.json
+            python - <<'PY'
+            import json
+            from pathlib import Path
+            report = json.loads(Path("validation-output/drebin-api35-emulator-summary.json").read_text())
+            assert report.get("private_vectors_or_package_names_included") is False
+            assert "apk_results" not in report
+            print("Sanitized API 35 emulator summary:")
+            print(json.dumps({
+                "api_level": report["android_app"]["api_level"],
+                "model_sha256": report["model_sha256"],
+                "contract_fixtures": report["contract_fixtures"],
+                "apk_parser_fixtures": report["apk_parser_fixtures"],
+                "benchmark": report["benchmark"],
+                "apk_corpus": report["apk_corpus"],
+                "package_scanner_benchmark": report["package_scanner_benchmark"],
+            }, indent=2))
+            PY
+
+      - name: Upload Android instrumentation test reports
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: drebin-api35-emulator-test-reports
+          path: |
+            app/build/outputs/androidTest-results/connected/
+            app/build/reports/androidTests/connected/
+            validation-output/drebin-api35-emulator-summary.json
+          if-no-files-found: warn
+          retention-days: 14

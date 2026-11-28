@@ -166,7 +166,12 @@ fi
 # Normal emulator CI excludes only that corpus-dependent test; remaining tests
 # are partitioned by AndroidJUnitRunner's numShards/shardIndex support.
 benchmark_class="com.vibesync.antivirus.core.engine.IndustryBenchmarkInstrumentedTest"
-instrument_fixture_args=(-e notClass "$benchmark_class")
+APP_COMMIT="${APP_COMMIT:-${GITHUB_SHA:-}}"
+if [[ ! "$APP_COMMIT" =~ ^[0-9a-fA-F]{40}$ ]]; then
+  echo "A valid 40-character source SHA is required in APP_COMMIT or GITHUB_SHA." >&2
+  exit 2
+fi
+instrument_fixture_args=(-e notClass "$benchmark_class" -e appCommit "$APP_COMMIT")
 if [[ -f build/siren-test/SafeMobile-Siren-Test.apk ]]; then
   if ! timeout 60s adb -s "$DEVICE_SERIAL" push build/siren-test/SafeMobile-Siren-Test.apk /data/local/tmp/SafeMobile-Siren-Test.apk; then
     echo "Could not stage the harmless siren fixture within 60 seconds." >&2
