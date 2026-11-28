@@ -53,7 +53,9 @@ jobs:
           profile: pixel_2
           disable-animations: true
           script: |
-            ./gradlew --no-daemon :app:connectedOfflineDebugAndroidTest
+            ./gradlew --no-daemon \
+              -Pandroid.testInstrumentationRunnerArguments.appCommit="$GITHUB_SHA" \
+              :app:connectedOfflineDebugAndroidTest
             mkdir -p validation-output
             adb exec-out run-as com.vibesync.antivirus.debug cat files/drebin-validation-summary.json > validation-output/drebin-api35-emulator-summary.json
             python - <<'PY'
