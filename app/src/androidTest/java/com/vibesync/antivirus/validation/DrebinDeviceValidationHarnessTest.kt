@@ -47,7 +47,8 @@ class DrebinDeviceValidationHarnessTest {
     fun exportPairedVectorsAndMeasureInference() = runBlocking {
         val instrumentation = InstrumentationRegistry.getInstrumentation()
         val context = instrumentation.targetContext
-        val appCommit = InstrumentationRegistry.getArguments().getString("appCommit").orEmpty()
+        val args = InstrumentationRegistry.getArguments()
+        val appCommit = args.getString("appCommit").orEmpty()
         require(appCommit.matches(Regex("[0-9a-fA-F]{40}"))) {
             "Pass the exact Android source SHA using -e appCommit=<sha>"
         }
