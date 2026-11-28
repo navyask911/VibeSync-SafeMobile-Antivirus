@@ -326,7 +326,7 @@ class DrebinDeviceValidationHarnessTest {
         )
 
         val malformedManifest = File(root, "fixture-malformed-manifest.apk")
-        writeZipFixture(malformedManifest, manifest = byteArrayOf(1, 2, 3, 4), includeDummyDex = true)
+        writeZipFixture(malformedManifest, manifest = byteArrayOf(1, 2, 3, 4, 5, 6, 7, 8), includeDummyDex = true)
         val malformedManifestOutcome = DrebinApkExtractor.extract(malformedManifest, schema)
         assertTrue(
             "Malformed binary manifest must be UNSCANNABLE/MANIFEST_INVALID",
@@ -386,6 +386,9 @@ class DrebinDeviceValidationHarnessTest {
 
         val headerSize = 28
         val stringsStart = headerSize + offsets.size * 4
+        val unpaddedPoolSize = stringsStart + stringData.size()
+        val padding = (4 - unpaddedPoolSize % 4) % 4
+        repeat(padding) { stringData.write(0) }
         val poolSize = stringsStart + stringData.size()
         val pool = ByteBuffer.allocate(poolSize).order(ByteOrder.LITTLE_ENDIAN)
         pool.putShort(0x0001.toShort())
