@@ -40,10 +40,10 @@ SafeMobile keeps core malware scanning on the device and does not send scanned A
 
 ## Security Capabilities
 
-- 🛡️ **Multi-Engine Inspection — defense in depth.** **Local SHA-256 threat indicators** and **DEX static analysis** using a bounded Kotlin YARA-compatible rule subset. The signed hash database pipeline is scheduled about **every 6 hours**; actual releases depend on API access, validation and signing. A **215-feature TensorFlow Lite Drebin research model** is bundled, but **not active for production malware verdicts**. Its historical **97.45% Drebin holdout accuracy** is a research result, *not* SafeMobile's measured detection rate. [ML activation gates](docs/ML_MODEL_ACTIVATION.md).
+- 🛡️ **Multi-Engine Inspection — defense in depth.** **Local SHA-256 threat indicators** and **DEX static analysis** using a bounded Kotlin YARA-compatible rule subset. The signed hash database pipeline is scheduled about **every 6 hours**; actual releases depend on API access, validation and signing. A **215-feature TensorFlow Lite Drebin research model** supplies a local advisory probability to multi-signal review; it is **not an independently validated production classifier** (`validated=false`, `production_ready=false`). ML alone can raise a result only to `SUSPICIOUS`; a definitive ensemble `THREAT` requires qualifying YARA support and a score above 0.70, while exact hash/YARA detections retain precedence. The historical **97.45% Drebin holdout accuracy** is a dataset-specific research result, *not* SafeMobile's measured detection rate. The latest retraining candidate measured **96.829773%** on the fixed holdout, below the unchanged 97.45% promotion floor, and was rejected; no new model was promoted. [ML activation gates](docs/ML_MODEL_ACTIVATION.md).
 - 🚨 **Incident Response — alert fast, act deliberately.** A **five-second alarm-stream siren**, security notification, **eligible full-screen alert**, and **user-confirmed uninstall prompt** can accompany detected incidents. Android and OEM restrictions govern audio, alert delivery and uninstall permissions; there is no forced takeover or silent removal.
 - 🔍 **Device Posture Audit — visibility into risky privileges.** Inspect available **Accessibility services, Device Administrators, notification listeners and overlay permissions**, with installation-source and permission-risk signals. These are advisory indicators, **not proof of spyware**.
-- 🌍 **Global & Accessible — designed for more users.** **51 bundled locale resource folders**, **Midnight / Light / OLED** themes, Material 3 Compose screens, adaptable typography and screen-reader support. CI checks resource completeness; individual translations and screen layouts still require human review.
+- 🌍 **Global & Accessible — designed for more users.** **55 audited locale resource sets**, **Midnight / Light / OLED** themes, Material 3 Compose screens, adaptable typography and screen-reader support. CI checks resource completeness; individual translations and screen layouts still require human review.
 - 🌐 **Global Threat Intelligence — optional and data-minimised.** OFF by default; requires both a Settings opt-in and a separate Donate tap for each confirmed malicious APK. The Android client sends only the detected malware SHA-256 hash and 215 binary behavioral features to the VibeSync Cloudflare Worker. It never uploads APK bytes, file paths, package names, scan history or device identifiers, and contains no GitHub token. Network providers may still process ordinary connection metadata.
 - 🤖 **Research MLOps — improvement with validation gates.** GitHub Actions can extract limited static research features from available MalwareBazaar samples and dispatch them to the separate [ML research repository](https://github.com/navyask911/safemobile-Antivirus-Trained-ML-Data-of-Android-malware). **Retraining and deployment are conditional**, not automatic promises; research candidates do not become active production classifiers without independent validation.
 - 📢 **Ad-supported Free tier.** Google AdMob provides Home dashboard banners and eligible interstitials after manual scans that find no confirmed threats, once UMP consent permits ad requests. The Next-Gen SDK automatically collects and shares IP address, product interactions, diagnostics and device/account identifiers (including Advertising ID and App Set ID) for advertising, analytics and fraud prevention. Active Pro users are excluded from AdMob initialization, requests and display.
@@ -56,7 +56,7 @@ SafeMobile keeps core malware scanning on the device and does not send scanned A
 |---|---|---|
 | **On-device detection** | Local hash matching, limited DEX/YARA-compatible signatures, accessible APK inspection | No kernel privilege or guaranteed coverage of every installed app |
 | **Signed intelligence** | Optional cryptographically verified hash-definition updates | Online retrieval is optional and fresh updates are not guaranteed |
-| **ML research** | SHA-pinned, 215-feature TFLite trained candidate | `validated=false` and `production_ready=false`: no production ML classifications |
+| **ML research** | SHA-pinned 215-feature TFLite advisory signal, fused with independent detections | `validated=false` and `production_ready=false`: not a standalone production classifier; ML alone cannot create `THREAT` |
 | **Privacy & persistence** | Local scan history, Room/DataStore and Keystore-backed sensitive records | Third-party update/billing requests expose normal connection metadata |
 | **Incident handling** | Siren, notification, user-directed follow-up | Android controls full-screen eligibility, permissions and uninstall confirmation |
 
@@ -81,6 +81,8 @@ Its **Zero-Binary Repository** rule keeps raw malware samples outside the Git tr
 | Research ML samples scored | **0** |
 
 **Interpretation:** The active scanner did not return confirmed detections for this particular malicious-source cohort. `SUSPICIOUS` is triage, not a confirmed threat. Labels originate from the corpus providers and are **not independently adjudicated ground truth**. This run is not third-party antivirus certification; the historic research-model holdout figure is not a substitute for these measurements. The [annual ledger](docs/ANNUAL_BENCHMARK_RESULTS.md) preserves its separately managed historical and sign-off records.
+
+**Separate ML research gate (28 November 2026):** The latest scheduled Drebin-215 candidate scored **96.829773%** on the 1,451-row fixed holdout, below the unchanged **97.45%** promotion floor. The ML repository marked it **REJECTED** and skipped publication; the app continues to use only the pinned `v1.0.1-model` research bundle for advisory scoring. This training result is not part of the 200-APK Android benchmark above, and neither result establishes production ML readiness.
 
 ## SafeMobile Pro
 
@@ -134,7 +136,7 @@ SafeMobile is not a kernel-level security product and cannot inspect every priva
 
 CI includes version guards, localization checks, offline tooling tests, lint, builds, and Android instrumented tests. Signed releases use private signing credentials and an independent release workflow.
 
-**Package:** `com.vibesync.antivirus` · **Version:** `1.2.0` · **Version code:** `20261116` · **Android:** minSdk 26 / targetSdk 36.
+**Package:** `com.vibesync.antivirus` · **Version:** `1.10.9` · **Version code:** `20261163` · **Android:** minSdk 26 / targetSdk 36.
 
 ## Responsible Security Disclosure
 
