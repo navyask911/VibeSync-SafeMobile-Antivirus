@@ -287,12 +287,13 @@ jobs:
           test -n "$aapt2" && test -x "$aapt2"
           "$apksigner" verify --min-sdk-version 26 --verbose --print-certs "$apk"
           "$apkanalyzer" manifest print "$apk" > "$RUNNER_TEMP/safemobile-apk-manifest.xml"
-          python3 - "$apk" "$RUNNER_TEMP/safemobile-apk-manifest.xml" "$apkanalyzer" "$aapt2" <<'PY'
+          "$aapt2" dump xmltree "$apk" --file AndroidManifest.xml > "$RUNNER_TEMP/safemobile-apk-manifest.xmltree"
+          python3 - "$apk" "$RUNNER_TEMP/safemobile-apk-manifest.xml" "$apkanalyzer" "$aapt2" "$RUNNER_TEMP/safemobile-apk-manifest.xmltree" <<'PY'
           import gzip,hashlib,json,os,re,subprocess,sys,zipfile
           from pathlib import Path
           from xml.etree import ElementTree as ET
           from scripts.verify_signed_admob_metadata import verify_signed_apk_admob_metadata
-          apk,manifest_path,apkanalyzer,aapt2=sys.argv[1:5]
+          apk,manifest_path,apkanalyzer,aapt2,compiled_manifest_path=sys.argv[1:6]
           android="{http://schemas.android.com/apk/res/android}"
           with zipfile.ZipFile(apk) as z:
               files=set(z.namelist())
@@ -331,6 +332,7 @@ jobs:
                       Path(manifest_path).read_text(encoding="utf-8"),
                       resource_dump,
                       admob_resource,
+                      Path(compiled_manifest_path).read_text(encoding="utf-8"),
                   )
               except ValueError as error:
                   raise SystemExit("SAFE STOP: Signed APK AdMob/Billing manifest verification failed: "+str(error))
