@@ -6,41 +6,53 @@ SafeMobile performs its core detection on the device in three ordered layers. Th
 
 1. **Hash engine — exact signature match.** The file is hashed locally (SHA-256, with supported secondary digests). Exact candidates are verified against the local signed hash database, local encrypted threat store, and the bundled signature set. A confirmed exact hash hit short-circuits the scan: YARA and ML are not run. Its original provenance label is retained (`HASH`, `SIGNED_DATABASE`, or the separately enabled `THREAT_INTELLIGENCE_FEED` source).
 2. **YARA engine — static rule inspection.** When no exact hash hit exists, the pinned YARA-X native engine scans supported APK content and DEX/manifest structures using the locally installed rule set. A conclusive YARA threat match returns immediately. Suspicious rule matches are retained as a raw `yaraVerdict` for fusion; an unavailable or incomplete YARA pass is not treated as a clean YARA result.
-3. **ML engine — Drebin-215 static features.** When the hash and YARA layers have not produced a conclusive threat, the app extracts the fixed 215-element binary feature vector locally and runs the committed TensorFlow Lite model. The model consumes `[1, 215]` FLOAT32 and emits `[1, 1]` FLOAT32. No APK code is executed and inference does not call a network service.
+3. **ML engine — Drebin-215 research/advisory signal.** When the hash and YARA layers have not produced a conclusive threat, the app extracts the fixed 215-element binary feature vector locally and obtains a probability from the SHA-pinned TensorFlow Lite research bundle. The model consumes `[1, 215]` FLOAT32 and emits `[1, 1]` FLOAT32. This is not an independently validated production classifier; it supplies an advisory probability to fusion only. No APK code is executed and inference does not call a network service.
 
 The ensemble evaluator runs after the completed YARA and ML signals are available. Exact hash matches and conclusive YARA matches remain short-circuits, before the more expensive later layers. Existing heuristic-only review findings, user trust decisions, and incomplete scans remain distinct from an ensemble clean result.
 
 ## Ensemble decision matrix
 
-The following precedence is applied to a completed result:
+The current `ThreatEnsembleEvaluator` applies the following precedence to a completed result:
 
-| Priority | Condition | Final verdict | Source | Confidence |
-|---|---|---|---|---:|
-| 1 | `detectionSource == HASH` and verdict is `THREAT` | `THREAT` | `HASH` | 1.0 (100%) |
-| 2 | `detectionSource == YARA` and verdict is `THREAT` | `THREAT` | `YARA` | 0.9 (90%) |
-| 3 | `yaraVerdict == SUSPICIOUS` and finite `mlProbability > 0.7` | `THREAT` | `ENSEMBLE` | `mlProbability` |
-| 4 | `yaraVerdict == SUSPICIOUS` **or** finite `0.4 <= mlProbability <= 0.7` | `SUSPICIOUS` | `ENSEMBLE` | `mlProbability` (0 when the model did not return a probability) |
-| 5 | No qualifying Hash, YARA, or ML signal | `NO_MATCH` | `NONE` | 0.0 |
+| Priority | Condition | Final verdict | Source |
+|---|---|---|---|
+| 1 | Exact SHA-256 match from the local hash, signed database, or explicitly enabled threat-intelligence feed | `THREAT` | Original exact-hash source |
+| 2 | Conclusive YARA threat match | `THREAT` | `YARA` |
+| 3 | Qualifying YARA evidence **and** finite `mlProbability > 0.70` | `THREAT` | `ENSEMBLE` |
+| 4 | Qualifying YARA evidence **or** finite `mlProbability >= 0.65` | `SUSPICIOUS` | `ENSEMBLE` |
+| 5 | No qualifying hash, YARA, ML, or preserved heuristic signal | `NO_MATCH` | `NONE` |
 
-The boundaries are inclusive for the suspicious ML band: 0.40 and 0.70 produce `SUSPICIOUS`; a value greater than 0.70 produces an ensemble `THREAT` only when YARA is also `SUSPICIOUS`. An ML score above 0.70 by itself is not a threat verdict.
+A qualifying YARA signal is at least one medium/high severity YARA finding or at least two low-severity YARA findings. A single low-severity YARA finding is retained as evidence but does not influence the fused verdict. The strict greater-than boundary applies to YARA-supported ML threat escalation: `0.70` does not qualify, while a finite score greater than `0.70` does.
 
-Two safety-preserving states are not rewritten by the default: `NOT_SCANNED` stays `NOT_SCANNED`, and a pre-existing independent `HEURISTIC` review finding remains `SUSPICIOUS`. Exact signed-database and explicitly enabled threat-feed hash hits are also preserved as definitive digest detections with their original source labels. These safeguards avoid turning access failures, independent static-review findings, or other verified exact-hash sources into a false clean result.
+The model alone can raise a result only to `SUSPICIOUS`; it cannot create a definitive `THREAT`. Exact hash matches and conclusive YARA threats retain precedence. Model scores for system apps and Google Play Services are ignored. `NOT_SCANNED` and user-trusted results are preserved, and an independent `HEURISTIC` suspicious finding is not rewritten as clean.
 
 Confidence is the deterministic weight shown for the winning rule path. It is not a calibrated probability of infection and must not be presented as an independently measured detection rate.
 
+
+
 ## Model status and limitations
 
-- Model release: **approved `v1.0.1-model`**.
-- Reported historical result: **97.45% accuracy on the historical Drebin holdout evaluation**.
-- Model metadata intentionally remains **`production_ready: false`** for modern zero-day detection.
+- Android handoff: immutable **`v1.0.1-model`** at tag commit `2ba34602a344183313ac9fb8b6fe2f9060a1b7a6`.
+- Model SHA-256: `8b66adaf01a939c26d5a756e66f53fe0d6e85e1a06ec97166579138c6ce47061` (**18,584 bytes**).
+- Ordered schema SHA-256: `ffb386be14adf8c0af1bb96032e5485fcc8fd5b401a24488c5896e2d5ea425ac` (**215 keys, "0"–"214"**).
+- Tensor contract: `[1, 215]` FLOAT32 input and `[1, 1]` FLOAT32 output.
+- Readiness metadata: `trained=true`, `validated=false`, `production_ready=false`, `status=research_candidate`.
 
-The historical holdout result is a dataset-specific evaluation, not an independent test on contemporary Android malware, not a guarantee of real-world performance, and not evidence that the model can detect modern zero-days. The model therefore remains one advisory signal in the ensemble. SafeMobile does not claim zero-day protection or infer that a file is safe solely because the model or local definitions return no match.
+The published model report's **97.450034% historical Drebin holdout accuracy** is a dataset-specific research result, not an independent contemporary Android malware evaluation, SafeMobile TPR/FPR, calibration study, or zero-day guarantee. The separate ML promotion floor remains **97.45%**. Scheduled run [#46119426853](https://github.com/navyask911/safemobile-Antivirus-Trained-ML-Data-of-Android-malware/actions/runs/46119426853) measured **96.829773%** on the fixed 1,451-row holdout and rejected its candidate; publication was skipped and the pinned `v1.0.1-model` handoff was retained.
+
+Feature-extractor parity between the Android and training implementations, representative live-device inference latency/peak-memory measurements, and independent current-dataset evaluation remain open gates. Schema order, SHA integrity, tensor compatibility and emulator tests do not close those gates. Keep `production_ready=false` until every required gate has evidence and approval.
+
+The legacy report threshold of **0.5** is bundle metadata. The app currently uses **0.65** as its ML-only suspicious review floor and requires qualifying YARA support plus a score greater than **0.70** for ensemble threat escalation. Neither is a standalone model verdict.
+
+
 
 ## Privacy boundary
 
-All scanning is 100% offline. No user data, APK files, or scan results leave the device.
+Core scanning, hash comparison, YARA inspection, feature extraction and TFLite inference run locally. They do not upload APK bytes or scan verdicts. Optional signed definition/model downloads and user-initiated billing are separate network operations.
 
-Hash comparison, YARA scanning, feature extraction, and TensorFlow Lite inference execute locally. Signed definition/model downloads are separate update operations and are not APK uploads or scan submissions. The optional threat-intelligence contribution feature is also separate from scanning: it requires the user to enable the contribution setting and explicitly donate an eligible detected sample. That opt-in request contains only the sample SHA-256 digest and its 215 binary features; it does not upload APK bytes, app/package names, file paths, or device/user identifiers. This optional contribution is not required for any local scan.
+The separately disclosed Global Threat Intelligence contribution feature is opt-in and requires an explicit user action for an eligible detected APK. It sends only the sample SHA-256 digest and 215 binary behavioral features to the designated worker; it does not upload APK bytes, file paths, package names, scan history or device identifiers. Network providers can still process ordinary connection metadata. This contribution is not required for a local scan.
+
+
 
 ## Model checksum verification
 
