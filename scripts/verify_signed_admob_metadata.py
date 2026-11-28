@@ -64,11 +64,25 @@ def _verify_admob_reference(metadata_value: str, resource_id: int) -> None:
     if value in (APP_ID, "@string/admob_app_id"):
         return
 
-    # APK Analyzer/AAPT2 versions may print typed resource references as
-    # @0x7f......, @7f......, 0x7f......, or the bare eight-digit ID. Accept
-    # only an eight-digit reference, then compare it to the APK's resource table.
-    numeric_reference = re.fullmatch(r"@?(?:0[xX])?([0-9a-fA-F]{8})", value)
-    if numeric_reference and int(numeric_reference.group(1), 16) == resource_id:
+    # APK Analyzer may serialize a compiled resource reference in either
+    # hexadecimal (for example, @0x7f120001) or decimal (@2131886081).
+    # Decimal values are common when a typed reference is rendered as an
+    # integer by the manifest printer. Accept only a complete numeric token,
+    # parse it using its explicit representation, and bind it to AAPT2's
+    # unique string/admob_app_id resource-table ID.
+    hexadecimal_reference = re.fullmatch(r"@?0[xX]([0-9a-fA-F]{1,8})", value)
+    decimal_reference = re.fullmatch(r"@?([0-9]{1,10})", value)
+    bare_hex_reference = re.fullmatch(r"@?([0-9a-fA-F]{8})", value)
+
+    referenced_id = None
+    if hexadecimal_reference:
+        referenced_id = int(hexadecimal_reference.group(1), 16)
+    elif decimal_reference:
+        referenced_id = int(decimal_reference.group(1), 10)
+    elif bare_hex_reference and re.search(r"[a-fA-F]", bare_hex_reference.group(1)):
+        referenced_id = int(bare_hex_reference.group(1), 16)
+
+    if referenced_id == resource_id:
         return
 
     raise ValueError(
