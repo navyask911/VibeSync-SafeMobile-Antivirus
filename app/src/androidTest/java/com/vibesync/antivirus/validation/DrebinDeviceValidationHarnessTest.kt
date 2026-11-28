@@ -52,7 +52,11 @@ class DrebinDeviceValidationHarnessTest {
         assertEquals(215, schema.size)
         val contractFixtureSummary = verifyFeatureContractFixtures(schema)
 
-        val root = File(context.getExternalFilesDir("drebin-validation"), ".")
+        val root = File(
+            requireNotNull(context.getExternalFilesDir("drebin-validation")) {
+                "App-scoped external storage is unavailable"
+            }, "."
+        )
         val apkDirectory = File(root, "apks")
         check(apkDirectory.mkdirs() || apkDirectory.isDirectory)
         val apkFiles = apkDirectory.listFiles().orEmpty()
@@ -98,12 +102,17 @@ class DrebinDeviceValidationHarnessTest {
             check(engine.runInference(FloatArray(215)) != null) { "Production inference warmup failed" }
         }
         val productionCallsNs = mutableListOf<Long>()
+        val memoryMilestones = JSONObject()
         var nullProductionScores = 0
-        repeat(PRODUCTION_PATH_ITERATIONS) {
+        repeat(PRODUCTION_PATH_ITERATIONS) { index ->
             val start = SystemClock.elapsedRealtimeNanos()
             val score = engine.runInference(FloatArray(215))
             productionCallsNs += SystemClock.elapsedRealtimeNanos() - start
             if (score == null) nullProductionScores++
+            val completed = index + 1
+            if (completed in MEMORY_MILESTONES) {
+                memoryMilestones.put(completed.toString(), memorySnapshot(context))
+            }
         }
         val memoryAfterProduction = memorySnapshot(context)
 
@@ -172,6 +181,7 @@ class DrebinDeviceValidationHarnessTest {
                 .put("production_iterations", PRODUCTION_PATH_ITERATIONS)
                 .put("reused_interpreter_iterations", REUSED_INTERPRETER_ITERATIONS)
                 .put("memory_before_production", memoryBefore)
+                .put("memory_at_production_milestones", memoryMilestones)
                 .put("memory_after_production", memoryAfterProduction)
                 .put("memory_after_apk_corpus", memoryAfterCorpus))
             .put("apk_corpus", JSONObject()
@@ -353,10 +363,11 @@ class DrebinDeviceValidationHarnessTest {
     private companion object {
         const val TAG = "SafeMobileValidation"
         const val MAX_APK_SAMPLES = 100
-        const val COLD_INTERPRETER_REPETITIONS = 10
+        const val COLD_INTERPRETER_REPETITIONS = 30
         const val REUSED_INTERPRETER_ITERATIONS = 1_000
         const val PRODUCTION_WARMUP_CALLS = 5
-        const val PRODUCTION_PATH_ITERATIONS = 30
+        const val PRODUCTION_PATH_ITERATIONS = 300
+        val MEMORY_MILESTONES = setOf(1, 10, 50, 300)
         val CLASS_FEATURE_NAMES = setOf(
             "ServiceConnection", "ClassLoader", "DexClassLoader", "SecretKey", "KeySpec",
             "Binder", "IBinder", "URLClassLoader", "PathClassLoader", "PackageInstaller",
