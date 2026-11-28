@@ -26,21 +26,22 @@ adb install -r app/build/outputs/apk/offline/debug/app-offline-debug.apk
 adb install -r app/build/outputs/apk/androidTest/offline/debug/app-offline-debug-androidTest.apk
 adb shell mkdir -p /sdcard/Android/data/com.vibesync.antivirus.debug/files/drebin-validation/apks
 adb push /secure/private-apks/sample.apk /sdcard/Android/data/com.vibesync.antivirus.debug/files/drebin-validation/apks/
-adb shell am instrument -w \\
-  -e appCommit <40-character-source-sha> \\
-  -e runPackageScanner true \\
-  -e packageScanLimit 10 \\
+adb shell am instrument -w \
+  -e appCommit <40-character-source-sha> \
+  -e runPackageScanner true \
+  -e packageScanLimit 10 \
   com.vibesync.antivirus.debug.test/androidx.test.runner.AndroidJUnitRunner
 adb pull /sdcard/Android/data/com.vibesync.antivirus.debug/files/drebin-validation/results/drebin-device-validation.json ./drebin-device-validation.json
+adb shell run-as com.vibesync.antivirus.debug cat files/drebin-validation-summary.json > ./drebin-device-validation-summary.json
 ~~~
 
-Windows PowerShell: use .\gradlew.bat and the same adb subcommands. Keep APK files and the resulting JSON outside Git.
+Windows PowerShell: use .\gradlew.bat and the same adb subcommands. Keep APK files and the full per-APK JSON outside Git. The internal `drebin-validation-summary.json` file omits per-APK vectors and package names; CI collects only this sanitized aggregate file.
 
 The synthetic parser fixtures do not substitute for real DEX corpus coverage. For real APK parity, push at least 100 benign and 100 malware-source APKs with documented provenance; include single-DEX, multidex and base/split APK samples where available. Avoid samples that the test team is not authorized to store or process. The instrumentation test processes at most 100 APK files in one run; use several disjoint batches and merge the private JSON outputs by APK SHA-256.
 
 ## CI status
 
-The validation branch includes an API 35 x86_64 emulator workflow that compiles and executes the instrumentation test. This is intended to validate Kotlin feature mapping, synthetic binary-manifest/ZIP/DEX cases, packaged model inference and report generation. Emulator timing numbers, if collected, are not substitutes for physical-device measurements and are not to be combined with the API 26 / 33–34 / 36 hardware matrix.
+The validation branch includes an API 35 x86_64 emulator workflow that compiles and executes the instrumentation test and uploads only the sanitized summary artifact. It validates Kotlin feature mapping, synthetic binary-manifest/ZIP/DEX cases, packaged model inference and aggregate timing/report generation. Emulator timing numbers, if collected, are not substitutes for physical-device measurements and are not to be combined with the API 26 / 33–34 / 36 hardware matrix.
 
 ## Device matrix and interpretation
 
