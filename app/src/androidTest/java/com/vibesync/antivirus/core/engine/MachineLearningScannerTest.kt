@@ -17,12 +17,14 @@ import org.tensorflow.lite.Interpreter
 
 @RunWith(AndroidJUnit4::class)
 class MachineLearningScannerTest {
-    @Test fun approvedModelIsProductionActiveAndHasThe215InputContract() = runBlocking {
+    @Test fun pinnedModelIsResearchOnlyAndHasThe215InputContract() = runBlocking {
         val context = ApplicationProvider.getApplicationContext<Context>()
         // Gradle downloads the immutable ML Repo release before preBuild.
         val scanner = MachineLearningScanner(context)
-        assertTrue(scanner.isAvailable())
-        assertFalse(scanner.isResearchCandidateAvailable())
+        assertFalse("Research model must not pass the production-readiness gate.", scanner.isAvailable())
+        assertTrue("Pinned research bundle should remain available for controlled advisory validation.",
+            scanner.isResearchCandidateAvailable())
+        assertEquals(0.5f, MachineLearningScanner.THRESHOLD, 0.0f)
 
         val model = context.assets.open("model.tflite").use { it.readBytes() }
         assertEquals(18_584, model.size)
