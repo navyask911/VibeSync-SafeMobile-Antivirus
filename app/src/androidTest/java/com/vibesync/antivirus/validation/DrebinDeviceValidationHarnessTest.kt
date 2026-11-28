@@ -64,12 +64,6 @@ class DrebinDeviceValidationHarnessTest {
         check(apkDirectory.mkdirs() || apkDirectory.isDirectory)
         val apkParserFixtureSummary = verifyApkParserFixtures(root, schema)
         val selfApk = File(context.applicationInfo.sourceDir)
-        val selfApkProbe = when (val result = DrebinApkExtractor.extract(selfApk, schema)) {
-            is DrebinApkExtractor.Outcome.Features ->
-                JSONObject().put("status", "FEATURES").put("active_feature_count", result.vector.count { it == 1.0f })
-            is DrebinApkExtractor.Outcome.Unscannable ->
-                JSONObject().put("status", "UNSCANNABLE").put("reason", result.reason.name)
-        }.put("apk_sha256", sha256(selfApk))
 
         val apkFiles = apkDirectory.listFiles().orEmpty()
             .filter { it.isFile && it.extension.equals("apk", ignoreCase = true) }
@@ -127,6 +121,12 @@ class DrebinDeviceValidationHarnessTest {
             }
         }
         val memoryAfterProduction = memorySnapshot(context)
+        val selfApkProbe = when (val result = DrebinApkExtractor.extract(selfApk, schema)) {
+            is DrebinApkExtractor.Outcome.Features ->
+                JSONObject().put("status", "FEATURES").put("active_feature_count", result.vector.count { it == 1.0f })
+            is DrebinApkExtractor.Outcome.Unscannable ->
+                JSONObject().put("status", "UNSCANNABLE").put("reason", result.reason.name)
+        }.put("apk_sha256", sha256(selfApk))
 
         val extractionNs = mutableListOf<Long>()
         val extractAndInferNs = mutableListOf<Long>()
@@ -396,7 +396,7 @@ class DrebinDeviceValidationHarnessTest {
         pool.putInt(0x100)
         pool.putInt(stringsStart)
         pool.putInt(0)
-        offsets.forEach(pool::putInt)
+        offsets.forEach { pool.putInt(it) }
         pool.put(stringData.toByteArray())
 
         fun startElement(tagIndex: Int, valueIndex: Int): ByteArray {
