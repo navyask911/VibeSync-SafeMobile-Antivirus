@@ -11,7 +11,7 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class DrebinSchemaInstrumentedTest {
-    @Test fun bundledSchemaHasExact215FeaturesAndApprovedModelIsActive() = runBlocking {
+    @Test fun bundledSchemaHasExact215FeaturesAndModelRemainsResearchOnly() = runBlocking {
         val app = ApplicationProvider.getApplicationContext<Context>()
         val names = DrebinFeatureContract.loadSchema(app.assets)
         assertNotNull(names)
@@ -20,8 +20,10 @@ class DrebinSchemaInstrumentedTest {
         assertEquals("SEND_SMS", names[6])
         assertEquals("WRITE_SECURE_SETTINGS", names[214])
         val scanner = MachineLearningScanner(app)
-        assertTrue(scanner.isAvailable())
-        assertFalse(scanner.isResearchCandidateAvailable())
+        assertFalse("Research candidate must not pass production readiness.", scanner.isAvailable())
+        assertTrue("Pinned research bundle remains available for controlled validation.",
+            scanner.isResearchCandidateAvailable())
+        assertEquals(0.5f, MachineLearningScanner.THRESHOLD, 0.0f)
     }
 
     @Test fun malformedApkReportsUnscannableAndNeverCrashes() = runBlocking {
