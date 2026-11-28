@@ -85,6 +85,8 @@ if banner_id not in manager or interstitial_id not in manager:
     errors.append("Production banner/interstitial unit IDs must match the supplied AdMob IDs.")
 if (
     app_id not in admob_verifier
+    or "decimal_reference = re.fullmatch" not in admob_verifier
+    or "int(decimal_reference.group(1), 10)" not in admob_verifier
     or 'from scripts.verify_signed_admob_metadata import verify_signed_apk_admob_metadata' not in release_workflow
     or 'verify_signed_apk_admob_metadata(' not in release_workflow
     or '"dump","resources",apk' not in release_workflow
