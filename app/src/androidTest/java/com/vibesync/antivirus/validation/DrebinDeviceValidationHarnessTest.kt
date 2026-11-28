@@ -2,6 +2,7 @@ package com.vibesync.antivirus.validation
 
 import android.app.ActivityManager
 import android.content.Context
+import androidx.room.Room
 import android.os.Build
 import android.os.Debug
 import android.os.SystemClock
@@ -9,6 +10,9 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.vibesync.antivirus.BuildConfig
 import com.vibesync.antivirus.core.engine.DrebinApkExtractor
+import com.vibesync.antivirus.core.engine.PackageScanner
+import com.vibesync.antivirus.core.crypto.EncryptedHashStore
+import com.vibesync.antivirus.data.local.ThreatDatabase
 import com.vibesync.antivirus.core.engine.DrebinFeatureContract
 import com.vibesync.antivirus.engine.ml.TfliteInferenceEngine
 import java.io.File
@@ -29,6 +33,7 @@ import org.tensorflow.lite.DataType
 import org.tensorflow.lite.Interpreter
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
+import java.util.UUID
 
 /**
  * Private device-side parity and timing data collector.
@@ -212,6 +217,15 @@ class DrebinDeviceValidationHarnessTest {
             apkResults.put(record)
         }
         val memoryAfterCorpus = memorySnapshot(context)
+        val packageScannerBenchmark = if (
+            args.getString("runPackageScanner").equals("true", ignoreCase = true)
+        ) {
+            runPackageScannerBenchmark(context, args.getString("packageScanLimit")?.toIntOrNull() ?: 10)
+        } else {
+            JSONObject()
+                .put("executed", false)
+                .put("reason", "Opt in with -e runPackageScanner true; this scans installed third-party apps")
+        }
 
         val output = JSONObject()
             .put("report_version", 1)
@@ -254,6 +268,7 @@ class DrebinDeviceValidationHarnessTest {
             .put("installed_package_split_only_feature_indices", JSONArray(splitOnlyFeatureIndices))
             .put("installed_package_component_aggregate_feature_count", aggregateVector?.count { it == 1.0f } ?: JSONObject.NULL)
             .put("apk_results", apkResults)
+            .put("package_scanner_benchmark", packageScannerBenchmark)
             .put("scope", "APK feature extraction plus ML inference; not full PackageScanner/YARA/hash scan")
             .put("private_data_warning", "Contains per-APK vectors; keep local and do not commit or publish samples")
 
@@ -519,6 +534,71 @@ class DrebinDeviceValidationHarnessTest {
                 chunk.copyInto(output, offset)
                 offset += chunk.size
             }
+        }
+    }
+
+    private suspend fun runPackageScannerBenchmark(context: Context, requestedLimit: Int): JSONObject {
+        val limit = requestedLimit.coerceIn(1, 20)
+        val database = Room.inMemoryDatabaseBuilder(
+            context, ThreatDatabase::class.java
+        ).build()
+        try {
+            val scanner = PackageScanner(
+                context = context,
+                dao = database.threatDao(),
+                hashStore = EncryptedHashStore(context),
+            )
+            val inventory = scanner.installedAppInventory().take(limit)
+            val packageRuns = JSONArray()
+            val coldDurations = mutableListOf<Long>()
+            val warmDurations = mutableListOf<Long>()
+            val memoryBefore = memorySnapshot(context)
+
+            for (item in inventory) {
+                val coldStart = SystemClock.elapsedRealtimeNanos()
+                val coldResult = runCatching {
+                    scanner.scanInstalledPackage(item.packageName, UUID.randomUUID().toString())
+                }
+                val coldElapsed = SystemClock.elapsedRealtimeNanos() - coldStart
+                coldDurations += coldElapsed
+                val memoryAfterCold = memorySnapshot(context)
+
+                val warmStart = SystemClock.elapsedRealtimeNanos()
+                val warmResult = runCatching {
+                    scanner.scanInstalledPackage(item.packageName, UUID.randomUUID().toString())
+                }
+                val warmElapsed = SystemClock.elapsedRealtimeNanos() - warmStart
+                warmDurations += warmElapsed
+                val memoryAfterWarm = memorySnapshot(context)
+
+                packageRuns.put(JSONObject()
+                    .put("package_name", item.packageName)
+                    .put("cold_scan_ms", coldElapsed / 1_000_000.0)
+                    .put("cold_scan_verdict", coldResult.getOrNull()?.verdict?.name ?: "NULL_OR_ERROR")
+                    .put("cold_scan_succeeded", coldResult.isSuccess)
+                    .put("warm_repeat_scan_ms", warmElapsed / 1_000_000.0)
+                    .put("warm_repeat_scan_verdict", warmResult.getOrNull()?.verdict?.name ?: "NULL_OR_ERROR")
+                    .put("warm_repeat_scan_succeeded", warmResult.isSuccess)
+                    .put("cold_error_type", coldResult.exceptionOrNull()?.javaClass?.simpleName)
+                    .put("warm_error_type", warmResult.exceptionOrNull()?.javaClass?.simpleName)
+                    .put("memory_after_cold", memoryAfterCold)
+                    .put("memory_after_warm", memoryAfterWarm))
+            }
+
+            return JSONObject()
+                .put("executed", true)
+                .put("scan_scope", "PackageScanner.scanInstalledPackage on installed third-party inventory")
+                .put("database", "Room in-memory database; user application database is not opened")
+                .put("requested_package_limit", limit)
+                .put("inventory_candidates", inventory.size)
+                .put("cold_scan_latency", summarize(coldDurations))
+                .put("warm_repeat_scan_latency", summarize(warmDurations))
+                .put("memory_before", memoryBefore)
+                .put("memory_after_all_scans", memorySnapshot(context))
+                .put("package_runs", packageRuns)
+                .put("privacy_note", "Contains installed package names; keep the output on the private test device")
+        } finally {
+            database.close()
         }
     }
 
