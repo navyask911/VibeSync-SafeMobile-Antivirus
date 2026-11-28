@@ -52,6 +52,13 @@ class ModelReleasePolicyTest {
             .put("feature_names", features).put("feature_schema_sha256", "c".repeat(64))
             .put("tflite", model).put("production_ready", false)
         assertTrue(ModelReleasePolicy.validatedResearchBundle(schema, report, "b".repeat(64), "c".repeat(64)))
+        report.put("production_ready", true)
+        assertFalse("Research update gate must reject production-ready metadata.",
+            ModelReleasePolicy.validatedResearchBundle(schema, report, "b".repeat(64), "c".repeat(64)))
+        report.remove("production_ready")
+        assertFalse("Research update gate must reject missing production_ready metadata.",
+            ModelReleasePolicy.validatedResearchBundle(schema, report, "b".repeat(64), "c".repeat(64)))
+        report.put("production_ready", false)
         report.put("is_synthetic", true)
         assertFalse(ModelReleasePolicy.validatedResearchBundle(schema, report, "b".repeat(64), "c".repeat(64)))
         report.put("is_synthetic", false)
