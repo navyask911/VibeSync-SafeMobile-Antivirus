@@ -17,16 +17,18 @@ import org.tensorflow.lite.Interpreter
 /**
  * Fully offline, typed 215-feature extraction. The v1.0.1-model bundle is retrieved
  * from the separate ML repository by the Gradle build bridge and pinned by model/schema
- * SHA-256. Its Android runtime contract is enabled for advisory on-device inference;
- * model scores are not a definitive malware verdict or a substitute for signature checks.
+ * SHA-256. It is a research candidate, not an independently validated production classifier.
+ * Controlled research inference may return an advisory score; the production scanner gate
+ * remains closed until independent validation and device-readiness evidence is approved.
  *
  * APKs are not read into memory in their entirety: feature extraction streams
- * bounded ZIP/DEX entries, and the production model gate skips inactive models.
+ * bounded ZIP/DEX entries, and unavailable or invalid model data fails closed.
  */
 class MachineLearningScanner(context: Context) {
     data class Prediction(val probability: Float)
     private val app = context.applicationContext
 
+    /** True only after independent validation and explicit production approval. */
     suspend fun isAvailable(): Boolean = withContext(Dispatchers.IO) {
         val schema = DrebinFeatureContract.loadSchema(app.assets)
         schema != null && runCatching { validatedModelBytes(schema) != null }.getOrDefault(false)
@@ -42,8 +44,7 @@ class MachineLearningScanner(context: Context) {
         return DrebinApkExtractor.extract(apk, schema)
     }
 
-    // Experimental research scoring for the provenance-gated cloud benchmark only.
-    // Production PackageScanner continues using scan(), which requires validated production metadata.
+    // Explicit research-only score path. This never upgrades the normal production gate.
     internal suspend fun scanResearchCandidate(apk: File): Prediction? = score(apk, allowResearch = true)
 
     suspend fun isResearchCandidateAvailable(): Boolean = withContext(Dispatchers.IO) {
@@ -98,9 +99,9 @@ class MachineLearningScanner(context: Context) {
         }
 
     /**
-     * Metadata mirrored from the immutable v1.0.1-model release contract.
-     * "active" enables the compatibility-verified local inference path. The output remains
-     * advisory and must be fused with independent detection signals before threat escalation.
+     * Metadata mirrored from the immutable v1.0.1-model research bundle.
+     * SHA/schema/tensor compatibility proves artifact integrity, not classifier validation.
+     * The normal production path remains closed until independent validation and approval.
      */
     private fun validatedModelBytes(schema: List<String>, allowResearch: Boolean = false): ByteArray? {
         val approvedProduction = !allowResearch && MODEL_VALIDATED && MODEL_PRODUCTION_READY &&
@@ -148,11 +149,11 @@ class MachineLearningScanner(context: Context) {
             "8b66adaf01a939c26d5a756e66f53fe0d6e85e1a06ec97166579138c6ce47061"
         private const val APPROVED_SCHEMA_SHA256 =
             "ffb386be14adf8c0af1bb96032e5485fcc8fd5b401a24488c5896e2d5ea425ac"
-        private const val MODEL_STATUS = "active"
+        private const val MODEL_STATUS = "research_candidate"
         private const val MODEL_TRAINED = true
-        private const val MODEL_VALIDATED = true
-        private const val MODEL_PRODUCTION_READY = true
+        private const val MODEL_VALIDATED = false
+        private const val MODEL_PRODUCTION_READY = false
         private const val MODEL_DUMMY_UNTRAINED = false
-        const val THRESHOLD = 0.85f // Legacy model metadata; ensemble verdict thresholds are authoritative.
+        const val THRESHOLD = 0.5f // Published bundle metadata; the app's advisory fusion thresholds are separate.
     }
 }
