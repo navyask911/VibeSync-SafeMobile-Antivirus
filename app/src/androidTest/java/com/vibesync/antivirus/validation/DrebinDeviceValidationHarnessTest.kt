@@ -44,7 +44,8 @@ import java.util.UUID
 @RunWith(AndroidJUnit4::class)
 class DrebinDeviceValidationHarnessTest {
     @Test
-    fun exportPairedVectorsAndMeasureInference() = runBlocking {
+    public fun exportPairedVectorsAndMeasureInference(): Unit {
+        runBlocking {
         val instrumentation = InstrumentationRegistry.getInstrumentation()
         val context = instrumentation.targetContext
         val args = InstrumentationRegistry.getArguments()
@@ -324,6 +325,7 @@ class DrebinDeviceValidationHarnessTest {
         assertTrue("Production inference must return valid scores", nullProductionScores == 0)
         assertEquals(apkFiles.size, apkResults.length())
         android.util.Log.i(TAG, "Validation artifact written to ${outputFile.absolutePath}")
+        }
     }
 
     private fun verifyFeatureContractFixtures(schema: List<String>): JSONObject {
