@@ -262,14 +262,18 @@ internal object BinaryAndroidManifest {
                 val length = readUtf8Length(b, cursor)
                 if (length < 0 || cursor[0].toLong() + length >= offset + chunkSize) error("utf8 length")
                 val raw = ByteArray(length)
-                for (i in 0 until length) raw[i] = b.get(cursor[0] + i)
+                val view = b.duplicate()
+                view.position(cursor[0])
+                view.get(raw)
                 String(raw, Charsets.UTF_8)
             } else {
                 val length = readUtf16Length(b, cursor)
                 val bytes = length.toLong() * 2
                 if (length < 0 || cursor[0].toLong() + bytes + 2 > offset + chunkSize) error("utf16 length")
                 val raw = ByteArray(bytes.toInt())
-                for (i in raw.indices) raw[i] = b.get(cursor[0] + i)
+                val view = b.duplicate()
+                view.position(cursor[0])
+                view.get(raw)
                 String(raw, Charsets.UTF_16LE)
             }
         }
