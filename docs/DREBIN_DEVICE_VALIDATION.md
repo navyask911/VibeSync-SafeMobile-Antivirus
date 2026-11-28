@@ -12,7 +12,7 @@ Run DrebinDeviceValidationHarnessTest on the exact app build under test. It veri
 - DrebinApkExtractor timing and extraction-plus-inference timing for locally supplied APKs;
 - PSS, native heap, Java heap and device memory snapshots.
 
-The test runs 30 asset-read/hash and cold Interpreter-init repetitions, 1,000 retained-Interpreter invocations and 300 production-path calls. It captures memory snapshots before production inference and at 1, 10, 50 and 300 calls. The report stores p50/p95/p99, mean, standard deviation, min and max. The APK result section contains full 215-bit vectors and must remain private. The test does not install or execute the supplied APKs, and does not run the entire PackageScanner, YARA or hash scan pipeline.
+The test runs 30 asset-read/hash and cold Interpreter-init repetitions, 1,000 retained-Interpreter invocations and 300 production-path calls. It captures memory snapshots before production inference and at 1, 10, 50 and 300 calls. The report stores p50/p95/p99, mean, standard deviation, min and max. The APK result section contains full 215-bit vectors and must remain private. The test does not install or execute the supplied APKs. It also records installed-package base/split APK component vectors independently and reports feature indices found only in split APKs relative to the base APK; this is diagnostic only and does not change production ML behavior.
 
 ## Build and run
 
@@ -26,7 +26,11 @@ adb install -r app/build/outputs/apk/offline/debug/app-offline-debug.apk
 adb install -r app/build/outputs/apk/androidTest/offline/debug/app-offline-debug-androidTest.apk
 adb shell mkdir -p /sdcard/Android/data/com.vibesync.antivirus.debug/files/drebin-validation/apks
 adb push /secure/private-apks/sample.apk /sdcard/Android/data/com.vibesync.antivirus.debug/files/drebin-validation/apks/
-adb shell am instrument -w -e appCommit <40-character-source-sha> com.vibesync.antivirus.debug.test/androidx.test.runner.AndroidJUnitRunner
+adb shell am instrument -w \\
+  -e appCommit <40-character-source-sha> \\
+  -e runPackageScanner true \\
+  -e packageScanLimit 10 \\
+  com.vibesync.antivirus.debug.test/androidx.test.runner.AndroidJUnitRunner
 adb pull /sdcard/Android/data/com.vibesync.antivirus.debug/files/drebin-validation/results/drebin-device-validation.json ./drebin-device-validation.json
 ~~~
 
@@ -38,6 +42,6 @@ The synthetic parser fixtures do not substitute for real DEX corpus coverage. Fo
 
 Repeat on API 26, API 33/34 and API 36 hardware, including ColorOS/Oplus and a Pixel-class reference. Record starting battery, ambient/device temperature, charging state, screen/radio settings and thermal status externally. Run each device at least three times after cooling; do not merge emulator and physical-device samples into one latency distribution.
 
-The extract_plus_inference_latency metric is APK extraction plus model inference only. It is not end-to-end PackageScanner duration. Whole-package scan time, app process cold-start time, UI latency, battery drain and thermal throttling require separately instrumented test scenarios.
+The extract_plus_inference_latency metric is APK extraction plus model inference only. An optional package_scanner_benchmark separately measures the production PackageScanner.scanInstalledPackage path with its YARA, hash, static-analysis and ML stages. It runs sequentially for up to 10 installed third-party apps, twice each, using an in-memory Room database; the normal test run skips it. It is not a full-device concurrent scanInstalledAppsForSession duration. App process cold-start time, UI latency, battery drain and thermal throttling require separately instrumented test scenarios.
 
 No physical Android device is attached to the repository validation runner. Therefore no physical-device timing or memory result is claimed until the artifact from this test has actually been collected from hardware.
