@@ -53,7 +53,12 @@ internal object ModelReleasePolicy {
         return found.singleOrNull()
     }
     fun validatedResearchBundle(schema: JSONObject, report: JSONObject, modelSha: String, schemaSha: String): Boolean {
-        if (report.optBoolean("is_synthetic", true) || report.optInt("feature_count") != FEATURES ||
+        // This update channel validates bundle integrity only, never production approval.
+        // Require an explicit Boolean false so missing, malformed, or production-ready
+        // metadata cannot enter the research-candidate channel.
+        val productionReady = report.opt("production_ready") as? Boolean ?: return false
+        if (productionReady || report.optBoolean("is_synthetic", true) ||
+            report.optInt("feature_count") != FEATURES ||
             report.optString("feature_schema_sha256") != schemaSha) return false
         val model = report.optJSONObject("tflite") ?: return false
         if (model.optString("sha256") != modelSha || model.optString("input_dtype") != "float32" ||
