@@ -136,7 +136,7 @@ SafeMobile is not a kernel-level security product and cannot inspect every priva
 
 CI includes version guards, localization checks, offline tooling tests, lint, builds, and Android instrumented tests. Signed releases use private signing credentials and an independent release workflow.
 
-**Package:** `com.vibesync.antivirus` · **Version:** `1.10.9` · **Version code:** `20261163` · **Android:** minSdk 26 / targetSdk 36.
+**Package:** `com.vibesync.antivirus` · **Main build candidate:** `1.10.10` · **Version code:** `20261164` · **Latest published release:** `1.10.9` (`20261163`) · **Android:** minSdk 26 / targetSdk 36.
 
 ## Responsible Security Disclosure
 
