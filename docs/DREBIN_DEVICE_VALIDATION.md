@@ -1,0 +1,43 @@
+# Drebin-215 Device Validation Harness
+
+The instrumentation collector is intentionally isolated under androidTest and does not change production scanning, verdicts, model assets, or model thresholds.
+
+## What it measures
+
+Run DrebinDeviceValidationHarnessTest on the exact app build under test. It verifies the packaged schema and approved TFLite asset SHA-256, then measures:
+- model asset read and hash verification;
+- cold Interpreter construction and tensor allocation;
+- repeated invoke-only timing on one retained Interpreter;
+- the current TfliteInferenceEngine path, which creates and closes an Interpreter on every call;
+- DrebinApkExtractor timing and extraction-plus-inference timing for locally supplied APKs;
+- PSS, native heap, Java heap and device memory snapshots.
+
+The report stores p50/p95/p99, mean, standard deviation, min and max. The APK result section contains full 215-bit vectors and must remain private. The test does not install or execute the supplied APKs, and does not run the entire PackageScanner, YARA or hash scan pipeline.
+
+## Build and run
+
+Use a physical Android device with USB debugging and an API level appropriate to the validation matrix. The debug variant uses package ID com.vibesync.antivirus.debug.
+
+Linux/macOS:
+
+~~~bash
+./gradlew :app:assembleOfflineDebug :app:assembleOfflineDebugAndroidTest
+adb install -r app/build/outputs/apk/offline/debug/app-offline-debug.apk
+adb install -r app/build/outputs/apk/androidTest/offline/debug/app-offline-debug-androidTest.apk
+adb shell mkdir -p /sdcard/Android/data/com.vibesync.antivirus.debug/files/drebin-validation/apks
+adb push /secure/private-apks/sample.apk /sdcard/Android/data/com.vibesync.antivirus.debug/files/drebin-validation/apks/
+adb shell am instrument -w -e appCommit <40-character-source-sha> com.vibesync.antivirus.debug.test/androidx.test.runner.AndroidJUnitRunner
+adb pull /sdcard/Android/data/com.vibesync.antivirus.debug/files/drebin-validation/results/drebin-device-validation.json ./drebin-device-validation.json
+~~~
+
+Windows PowerShell: use .\gradlew.bat and the same adb subcommands. Keep APK files and the resulting JSON outside Git.
+
+For a test corpus, push at least 100 benign and 100 malware-source APKs with documented provenance. Avoid samples that the test team is not authorized to store or process. The instrumentation test processes at most 100 APK files in one run; use several disjoint batches and merge the private JSON outputs by APK SHA-256.
+
+## Device matrix and interpretation
+
+Repeat on API 26, API 33/34 and API 36 hardware, including ColorOS/Oplus and a Pixel-class reference. Record starting battery, ambient/device temperature, charging state, screen/radio settings and thermal status externally. Run each device at least three times after cooling; do not merge emulator and physical-device samples into one latency distribution.
+
+The extract_plus_inference_latency metric is APK extraction plus model inference only. It is not end-to-end PackageScanner duration. Whole-package scan time, app process cold-start time, UI latency, battery drain and thermal throttling require separately instrumented test scenarios.
+
+No physical Android device is attached to the repository validation runner. Therefore no physical-device timing or memory result is claimed until the artifact from this test has actually been collected from hardware.
