@@ -1,3 +1,18 @@
+package com.vibesync.antivirus.core.engine
+
+import android.os.SystemClock
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
+import java.util.zip.ZipFile
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
+import org.jf.dexlib2.Opcodes
+import org.jf.dexlib2.dexbacked.DexBackedDexFile
+import org.jf.dexlib2.iface.instruction.ReferenceInstruction
+import org.jf.dexlib2.iface.reference.MethodReference
+
 internal object DrebinApkExtractor {
     sealed interface Outcome {
         data class Features(val vector: FloatArray, val apkCount: Int, val dexCount: Int) : Outcome
