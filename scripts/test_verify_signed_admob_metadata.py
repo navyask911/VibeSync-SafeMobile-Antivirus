@@ -41,6 +41,17 @@ class SignedAdMobMetadataTests(unittest.TestCase):
     def test_bare_hex_resource_reference(self) -> None:
         self.verify("0x7f120001")
 
+    def test_decimal_resource_reference_from_manifest_printer(self) -> None:
+        # 0x7f120001 as a signed 32-bit Android resource ID rendered in decimal.
+        self.verify("@2131886081")
+
+    def test_decimal_reference_without_at_prefix(self) -> None:
+        self.verify("2131886081")
+
+    def test_rejects_decimal_reference_to_different_resource(self) -> None:
+        with self.assertRaisesRegex(ValueError, "does not reference"):
+            self.verify("@2131886082")
+
     def test_direct_approved_app_id(self) -> None:
         self.verify(APP_ID)
 
