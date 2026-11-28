@@ -271,10 +271,14 @@ class PackageScanner(
   isSystemApp = isSystemApp
  )
 
- private suspend fun runMachineLearning(apk: File): Float? {
-  val features = drebinFeatureExtractor.extractFeaturesAsync(apk)
-  // TFLite returns an advisory probability; the ensemble alone assigns the final verdict.
-  return tfliteInferenceEngine.runInference(features)
+ private suspend fun runMachineLearning(apk: File, splitApks: List<File> = emptyList()): Float? {
+  val extraction = drebinFeatureExtractor.extractFeaturesAsync(listOf(apk) + splitApks)
+  if (extraction is com.vibesync.antivirus.core.engine.DrebinApkExtractor.Outcome.Unscannable) {
+   Log.i("ScanDebug", "ml_skip reason=${extraction.reason.name} componentCount=${1 + splitApks.size}")
+  }
+  // Typed inference accepts only complete extraction results; a genuine parsed
+  // all-zero vector remains valid and is not confused with an extraction failure.
+  return tfliteInferenceEngine.runInference(extraction)
  }
 
  fun installedAppInventory(): List<InstalledAppItem> {
@@ -1120,7 +1124,16 @@ class PackageScanner(
   }
 
   onStageChange("ml")
-  val mlProbability = if (isProtectedPlatformPackage(info.packageName, appInfo, diagnostics)) null else runMachineLearning(apk)
+  val splitApkFiles = try {
+   appInfo.splitSourceDirs.orEmpty().distinct().map(::File)
+  } catch (error: Exception) {
+   diagnostics?.fail(info.packageName, "ml_split_resolve", error)
+   Log.w("ScanDebug", "ml_skip reason=SPLIT_PATHS_UNAVAILABLE", error)
+   null
+  }
+  val mlProbability = if (
+   isProtectedPlatformPackage(info.packageName, appInfo, diagnostics) || splitApkFiles == null
+  ) null else runMachineLearning(apk, splitApkFiles)
   completedStages += if (mlProbability != null) "ML" else "ML_UNAVAILABLE"
   diagnostics?.stage(info.packageName, "ml", if (mlProbability != null) "completed" else "unavailable")
   onStageChange("static_analysis")

@@ -1,6 +1,7 @@
 package com.vibesync.antivirus.engine.ml
 
 import android.content.Context
+import com.vibesync.antivirus.core.engine.DrebinApkExtractor
 import java.io.ByteArrayOutputStream
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -21,6 +22,12 @@ import org.tensorflow.lite.Interpreter
  */
 class TfliteInferenceEngine(context: Context) {
     private val appContext = context.applicationContext
+
+    internal suspend fun runInference(extraction: DrebinApkExtractor.Outcome): Float? =
+        when (extraction) {
+            is DrebinApkExtractor.Outcome.Features -> runInference(extraction.vector)
+            is DrebinApkExtractor.Outcome.Unscannable -> null
+        }
 
     suspend fun runInference(features: FloatArray): Float? =
         withTimeoutOrNull(INFERENCE_TIMEOUT_MS) {

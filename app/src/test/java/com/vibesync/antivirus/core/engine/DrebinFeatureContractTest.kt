@@ -51,4 +51,17 @@ class DrebinFeatureContractTest {
             DrebinFeatureContract.Observed(emptySet(),emptySet(),emptySet(),
                 emptySet(),emptySet(),emptySet()))
     }
+
+    @Test fun successfullyParsedEmptyObservationIsAValidZeroVector() {
+        val values = DrebinFeatureContract.vector(
+            names,
+            DrebinFeatureContract.Observed(
+                permissions = emptySet(), actions = emptySet(), classes = emptySet(),
+                calls = emptySet(), callbacks = emptySet(), literals = emptySet()
+            )
+        )
+        assertEquals(215, values.size)
+        assertTrue(values.all { it == 0f })
+    }
+
 }

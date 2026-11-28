@@ -37,15 +37,22 @@ class MachineLearningScanner(context: Context) {
     /** Used by validation tests and future approved scanners; returns explicit Unscannable
      * rather than interpreting incomplete/malformed APK features as zeroes.
      */
-    internal suspend fun extractFeatureVector(apk: File): DrebinApkExtractor.Outcome {
+    internal suspend fun extractFeatureVector(apk: File): DrebinApkExtractor.Outcome =
+        extractFeatureVector(listOf(apk))
+
+    internal suspend fun extractFeatureVector(apks: List<File>): DrebinApkExtractor.Outcome {
         val schema = DrebinFeatureContract.loadSchema(app.assets)
             ?: return DrebinApkExtractor.Outcome.Unscannable(
-                DrebinApkExtractor.Reason.MANIFEST_INVALID)
-        return DrebinApkExtractor.extract(apk, schema)
+                DrebinApkExtractor.Reason.SCHEMA_INVALID)
+        return DrebinApkExtractor.extract(apks, schema)
     }
 
     // Explicit research-only score path. This never upgrades the normal production gate.
-    internal suspend fun scanResearchCandidate(apk: File): Prediction? = score(apk, allowResearch = true)
+    internal suspend fun scanResearchCandidate(apk: File): Prediction? =
+        score(listOf(apk), allowResearch = true)
+
+    internal suspend fun scanResearchCandidate(apks: List<File>): Prediction? =
+        score(apks, allowResearch = true)
 
     suspend fun isResearchCandidateAvailable(): Boolean = withContext(Dispatchers.IO) {
         val schema = DrebinFeatureContract.loadSchema(app.assets)
@@ -57,16 +64,16 @@ class MachineLearningScanner(context: Context) {
     }
 
     suspend fun scan(apk: File, @Suppress("UNUSED_PARAMETER") info: PackageInfo?): Prediction? =
-        score(apk, allowResearch = false)
+        score(listOf(apk), allowResearch = false)
 
-    private suspend fun score(apk: File, allowResearch: Boolean): Prediction? =
+    private suspend fun score(apks: List<File>, allowResearch: Boolean): Prediction? =
         withTimeoutOrNull(TOTAL_TIMEOUT_MS) {
             withContext(Dispatchers.IO) {
                 try {
                     val schema = DrebinFeatureContract.loadSchema(app.assets)
                         ?: return@withContext null
                     val model = validatedModelBytes(schema, allowResearch) ?: return@withContext null
-                    val extracted = DrebinApkExtractor.extract(apk, schema)
+                    val extracted = DrebinApkExtractor.extract(apks, schema)
                     val vector = (extracted as? DrebinApkExtractor.Outcome.Features)?.vector
                         ?: return@withContext null // Explicit UNSCANNABLE never becomes benign.
                     val inputBuffer = ByteBuffer.allocateDirect(model.size)

@@ -1,45 +1,51 @@
-package com.vibesync.antivirus.core.engine
-
-import android.os.SystemClock
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
-import java.util.zip.ZipFile
-import kotlinx.coroutines.currentCoroutineContext
-import kotlinx.coroutines.ensureActive
-import org.jf.dexlib2.Opcodes
-import org.jf.dexlib2.dexbacked.DexBackedDexFile
-import org.jf.dexlib2.iface.instruction.ReferenceInstruction
-import org.jf.dexlib2.iface.reference.MethodReference
-
-/**
- * Offline AndroidManifest / DEX inspection. No APK code executes. A malformed or
- * unparseable file is UNSCANNABLE, never an all-zero "benign" feature vector.
- * ZipFile streams bounded entries; dexlib2 needs complete DEX offsets, so entries
- * over 4 MiB are explicitly UNSCANNABLE rather than partially parsed.
- */
 internal object DrebinApkExtractor {
     sealed interface Outcome {
-        data class Features(val vector: FloatArray) : Outcome
+        data class Features(val vector: FloatArray, val apkCount: Int, val dexCount: Int) : Outcome
         data class Unscannable(val reason: Reason) : Outcome
     }
-    enum class Reason { UNREADABLE_APK, LIMIT_EXCEEDED, MANIFEST_INVALID, DEX_MISSING, DEX_INVALID }
+    enum class Reason {
+        UNREADABLE_APK, APK_INVALID, LIMIT_EXCEEDED, MANIFEST_INVALID,
+        DEX_MISSING, DEX_INVALID, SCHEMA_INVALID
+    }
 
+    private const val MAX_APK_COUNT = 129
     private const val MAX_APK_BYTES = 512L * 1024 * 1024
-    private const val MAX_ENTRIES = 1800
+    private const val MAX_ENTRIES_PER_APK = 1800
+    private const val MAX_TOTAL_ENTRIES = 12_000
     private const val MAX_MANIFEST = 2 * 1024 * 1024
     private const val MAX_DEX_ENTRY = 4 * 1024 * 1024
     private const val MAX_TOTAL_DEX = 12 * 1024 * 1024
+    private const val MAX_DEX_FILES = 30
     private const val MAX_STRINGS = 300_000
     private const val MAX_METHODS = 150_000
     private const val MAX_INSTRUCTIONS = 1_500_000
-    private const val BUDGET_MS = 5000L
+    private const val BUDGET_MS = 5_000L
 
-    suspend fun extract(apk: File, schema: List<String>): Outcome {
-        if (schema.size != DrebinFeatureContract.COUNT || !apk.isFile ||
-            !apk.canRead() || apk.length() !in 1..MAX_APK_BYTES)
-            return Outcome.Unscannable(Reason.UNREADABLE_APK)
+    suspend fun extract(apk: File, schema: List<String>): Outcome = extract(listOf(apk), schema)
+
+    /** Extract an ordered base APK + split APK set atomically; no partial vectors. */
+    suspend fun extract(apks: List<File>, schema: List<String>): Outcome {
+        if (schema.size != DrebinFeatureContract.COUNT ||
+            schema.distinct().size != DrebinFeatureContract.COUNT ||
+            schema.any { it.isBlank() }) return Outcome.Unscannable(Reason.SCHEMA_INVALID)
+
+        val components = apks.distinctBy { it.absolutePath }
+        if (components.isEmpty()) return Outcome.Unscannable(Reason.UNREADABLE_APK)
+        if (components.size > MAX_APK_COUNT) return Outcome.Unscannable(Reason.LIMIT_EXCEEDED)
+        var totalApkBytes = 0L
+        for (apk in components) {
+            val readable = try { apk.isFile && apk.canRead() } catch (_: SecurityException) { false }
+            if (!readable) return Outcome.Unscannable(Reason.UNREADABLE_APK)
+            val size = try { apk.length() } catch (_: SecurityException) {
+                return Outcome.Unscannable(Reason.UNREADABLE_APK)
+            }
+            if (size <= 0L) return Outcome.Unscannable(Reason.UNREADABLE_APK)
+            if (size > MAX_APK_BYTES || totalApkBytes > MAX_APK_BYTES - size) {
+                return Outcome.Unscannable(Reason.LIMIT_EXCEEDED)
+            }
+            totalApkBytes += size
+        }
+
         val start = SystemClock.elapsedRealtime()
         val permissions = mutableSetOf<String>()
         val actions = mutableSetOf<String>()
@@ -49,6 +55,7 @@ internal object DrebinApkExtractor {
         val literals = mutableSetOf<String>()
         var dexCount = 0
         var totalDex = 0
+        var totalEntries = 0
         var methods = 0
         var instructions = 0
 
@@ -56,63 +63,105 @@ internal object DrebinApkExtractor {
             currentCoroutineContext().ensureActive()
             if (SystemClock.elapsedRealtime() - start > BUDGET_MS) throw BudgetExceeded()
         }
+
         return try {
-            ZipFile(apk).use { archive ->
-                if (archive.size() > MAX_ENTRIES) throw BudgetExceeded()
-                val manifest = archive.getEntry("AndroidManifest.xml")
-                    ?: return Outcome.Unscannable(Reason.MANIFEST_INVALID)
-                if (manifest.size < 8 || manifest.size > MAX_MANIFEST) throw BudgetExceeded()
-                val xml = archive.getInputStream(manifest).use { readBounded(it, MAX_MANIFEST) }
-                val parsed = BinaryAndroidManifest.parse(xml)
-                    ?: return Outcome.Unscannable(Reason.MANIFEST_INVALID)
-                permissions.addAll(parsed.permissions)
-                actions.addAll(parsed.actions)
-                val entries = archive.entries()
-                while (entries.hasMoreElements()) {
-                    heartbeat()
-                    val entry = entries.nextElement()
-                    if (!Regex("classes[0-9]*\\.dex").matches(entry.name)) continue
-                    if (entry.size < 64 || entry.size > MAX_DEX_ENTRY) throw BudgetExceeded()
-                    if (entry.size > MAX_TOTAL_DEX - totalDex) throw BudgetExceeded()
-                    val bytes = archive.getInputStream(entry).use { readBounded(it, MAX_DEX_ENTRY) }
-                    totalDex += bytes.size
-                    dexCount++
-                    if (dexCount > 30) throw BudgetExceeded()
-                    val dex = DexBackedDexFile(Opcodes.getDefault(), bytes)
-                    if (dex.stringReferences.size > MAX_STRINGS) throw BudgetExceeded()
-                    for (reference in dex.stringReferences) {
-                        if (literals.size > MAX_STRINGS) throw BudgetExceeded()
-                        literals.add(reference.string)
+            for (apk in components) {
+                heartbeat()
+                ZipFile(apk).use { archive ->
+                    val archiveEntries = archive.size()
+                    if (archiveEntries > MAX_ENTRIES_PER_APK) throw BudgetExceeded()
+                    totalEntries += archiveEntries
+                    if (totalEntries > MAX_TOTAL_ENTRIES) throw BudgetExceeded()
+
+                    val manifest = archive.getEntry("AndroidManifest.xml")
+                        ?: return Outcome.Unscannable(Reason.MANIFEST_INVALID)
+                    if (manifest.size < 8L) return Outcome.Unscannable(Reason.MANIFEST_INVALID)
+                    if (manifest.size > MAX_MANIFEST) throw BudgetExceeded()
+                    val xml = archive.getInputStream(manifest).use { readBounded(it, MAX_MANIFEST) }
+                    if (manifest.size >= 0L && manifest.size != xml.size.toLong()) {
+                        return Outcome.Unscannable(Reason.MANIFEST_INVALID)
                     }
-                    for (defined in dex.classes) {
+                    val parsed = BinaryAndroidManifest.parse(xml)
+                        ?: return Outcome.Unscannable(Reason.MANIFEST_INVALID)
+                    permissions.addAll(parsed.permissions)
+                    actions.addAll(parsed.actions)
+
+                    val entries = archive.entries()
+                    while (entries.hasMoreElements()) {
                         heartbeat()
-                        classes.add(defined.type)
-                        for (method in defined.methods) {
-                            if (++methods > MAX_METHODS) throw BudgetExceeded()
-                            if (method.name == "onBind" || method.name == "onServiceConnected")
-                                callbacks.add(method.name)
-                            val implementation = method.implementation ?: continue
-                            for (instruction in implementation.instructions) {
-                                if (++instructions > MAX_INSTRUCTIONS) throw BudgetExceeded()
-                                if (instruction.opcode.name.startsWith("INVOKE_") &&
-                                    instruction is ReferenceInstruction) {
-                                    val invoked = instruction.reference as? MethodReference ?: continue
-                                    calls.add(invoked.definingClass to invoked.name)
-                                    classes.add(invoked.definingClass)
+                        val entry = entries.nextElement()
+                        if (!Regex("classes[0-9]*\\.dex").matches(entry.name)) continue
+                        if (entry.size < 64L) throw InvalidDex()
+                        if (entry.size > MAX_DEX_ENTRY) throw BudgetExceeded()
+                        if (entry.size > MAX_TOTAL_DEX - totalDex) throw BudgetExceeded()
+                        val bytes = archive.getInputStream(entry).use { readBounded(it, MAX_DEX_ENTRY) }
+                        if (entry.size >= 0L && entry.size != bytes.size.toLong()) throw InvalidDex()
+                        if (bytes.size < 64) throw InvalidDex()
+                        totalDex += bytes.size
+                        dexCount++
+                        if (dexCount > MAX_DEX_FILES) throw BudgetExceeded()
+                        try {
+                            val dex = DexBackedDexFile(Opcodes.getDefault(), bytes)
+                            if (dex.stringReferences.size > MAX_STRINGS) throw BudgetExceeded()
+                            for (reference in dex.stringReferences) {
+                                if (literals.size > MAX_STRINGS) throw BudgetExceeded()
+                                literals.add(reference.string)
+                            }
+                            for (defined in dex.classes) {
+                                heartbeat()
+                                classes.add(defined.type)
+                                for (method in defined.methods) {
+                                    if (++methods > MAX_METHODS) throw BudgetExceeded()
+                                    if (method.name == "onBind" || method.name == "onServiceConnected") {
+                                        callbacks.add(method.name)
+                                    }
+                                    val implementation = method.implementation ?: continue
+                                    for (instruction in implementation.instructions) {
+                                        if (++instructions > MAX_INSTRUCTIONS) throw BudgetExceeded()
+                                        if (instruction.opcode.name.startsWith("INVOKE_") &&
+                                            instruction is ReferenceInstruction) {
+                                            val invoked = instruction.reference as? MethodReference ?: continue
+                                            calls.add(invoked.definingClass to invoked.name)
+                                            classes.add(invoked.definingClass)
+                                        }
+                                    }
                                 }
                             }
+                        } catch (limit: BudgetExceeded) {
+                            throw limit
+                        } catch (invalid: InvalidDex) {
+                            throw invalid
+                        } catch (_: Exception) {
+                            throw InvalidDex()
+                        } catch (_: LinkageError) {
+                            throw InvalidDex()
                         }
                     }
                 }
             }
             if (dexCount == 0) Outcome.Unscannable(Reason.DEX_MISSING)
-            else Outcome.Features(DrebinFeatureContract.vector(
-                schema, DrebinFeatureContract.Observed(
-                    permissions, actions, classes, calls, callbacks, literals)))
-        } catch (cancel: kotlinx.coroutines.CancellationException) {
-            throw cancel
+            else Outcome.Features(
+                DrebinFeatureContract.vector(
+                    schema,
+                    DrebinFeatureContract.Observed(permissions, actions, classes, calls, callbacks, literals)
+                ),
+                apkCount = components.size,
+                dexCount = dexCount
+            )
+        } catch (cancelled: kotlinx.coroutines.CancellationException) {
+            throw cancelled
         } catch (_: BudgetExceeded) {
             Outcome.Unscannable(Reason.LIMIT_EXCEEDED)
+        } catch (_: InvalidDex) {
+            Outcome.Unscannable(Reason.DEX_INVALID)
+        } catch (_: java.io.FileNotFoundException) {
+            Outcome.Unscannable(Reason.UNREADABLE_APK)
+        } catch (_: SecurityException) {
+            Outcome.Unscannable(Reason.UNREADABLE_APK)
+        } catch (_: java.util.zip.ZipException) {
+            Outcome.Unscannable(Reason.APK_INVALID)
+        } catch (_: java.io.IOException) {
+            Outcome.Unscannable(Reason.APK_INVALID)
         } catch (_: Exception) {
             Outcome.Unscannable(Reason.DEX_INVALID)
         } catch (_: LinkageError) {
@@ -133,6 +182,7 @@ internal object DrebinApkExtractor {
     }
 
     private class BudgetExceeded : RuntimeException()
+    private class InvalidDex(cause: Throwable? = null) : RuntimeException(cause)
 }
 
 /** Parses Android binary XML chunks, reading typed manifest permission and <action> name
