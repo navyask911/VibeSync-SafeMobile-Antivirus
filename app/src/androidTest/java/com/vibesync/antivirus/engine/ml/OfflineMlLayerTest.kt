@@ -34,7 +34,7 @@ class OfflineMlLayerTest {
         val probability = TfliteInferenceEngine(context).runInference(FloatArray(215))
         assertNotNull("The SHA-pinned model asset must be downloaded by the Gradle ML bridge.", probability)
         assertTrue(probability!! in 0.0f..1.0f)
-        assertTrue(TfliteInferenceEngine.MALWARE_THRESHOLD == 0.5f)
+        assertTrue(TfliteInferenceEngine.MODEL_REPORTED_THRESHOLD == 0.5f)
     }
 
     @Test
