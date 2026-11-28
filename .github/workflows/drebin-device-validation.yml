@@ -52,7 +52,27 @@ jobs:
           arch: x86_64
           profile: pixel_2
           disable-animations: true
-          script: ./gradlew --no-daemon :app:connectedOfflineDebugAndroidTest
+          script: |
+            ./gradlew --no-daemon :app:connectedOfflineDebugAndroidTest
+            mkdir -p validation-output
+            adb exec-out run-as com.vibesync.antivirus.debug cat files/drebin-validation-summary.json > validation-output/drebin-api35-emulator-summary.json
+            python - <<'PY'
+            import json
+            from pathlib import Path
+            report = json.loads(Path("validation-output/drebin-api35-emulator-summary.json").read_text())
+            assert report.get("private_vectors_or_package_names_included") is False
+            assert "apk_results" not in report
+            print("Sanitized API 35 emulator summary:")
+            print(json.dumps({
+                "api_level": report["android_app"]["api_level"],
+                "model_sha256": report["model_sha256"],
+                "contract_fixtures": report["contract_fixtures"],
+                "apk_parser_fixtures": report["apk_parser_fixtures"],
+                "benchmark": report["benchmark"],
+                "apk_corpus": report["apk_corpus"],
+                "package_scanner_benchmark": report["package_scanner_benchmark"],
+            }, indent=2))
+            PY
 
       - name: Upload Android instrumentation test reports
         if: always()
@@ -62,5 +82,6 @@ jobs:
           path: |
             app/build/outputs/androidTest-results/connected/
             app/build/reports/androidTests/connected/
+            validation-output/drebin-api35-emulator-summary.json
           if-no-files-found: warn
           retention-days: 14
