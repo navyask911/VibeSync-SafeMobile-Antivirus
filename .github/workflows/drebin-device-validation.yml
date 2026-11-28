@@ -64,10 +64,7 @@ jobs:
           cores: 2
           disable-linux-hw-accel: auto
           script: |
-            ./gradlew --no-daemon \
-              -Pandroid.testInstrumentationRunnerArguments.appCommit="$GITHUB_SHA" \
-              -Pandroid.testInstrumentationRunnerArguments.class=com.vibesync.antivirus.validation.DrebinDeviceValidationHarnessTest \
-              :app:connectedOfflineDebugAndroidTest
+            ./gradlew --no-daemon -Pandroid.testInstrumentationRunnerArguments.appCommit="$GITHUB_SHA" -Pandroid.testInstrumentationRunnerArguments.class=com.vibesync.antivirus.validation.DrebinDeviceValidationHarnessTest :app:connectedOfflineDebugAndroidTest
             mkdir -p validation-output
             adb exec-out run-as com.vibesync.antivirus.debug cat files/drebin-validation-summary.json > validation-output/drebin-api35-emulator-summary.json
             python - <<'PY'
