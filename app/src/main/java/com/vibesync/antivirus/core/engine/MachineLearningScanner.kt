@@ -63,8 +63,16 @@ class MachineLearningScanner(context: Context) {
             runCatching { validatedModelBytes(schema, allowResearch = true) != null }.getOrDefault(false)
     }
 
-    suspend fun scan(apk: File, @Suppress("UNUSED_PARAMETER") info: PackageInfo?): Prediction? =
-        score(listOf(apk), allowResearch = false)
+    suspend fun scan(apk: File, info: PackageInfo?): Prediction? {
+        val components = try {
+            (listOf(apk) + info?.applicationInfo?.splitSourceDirs.orEmpty().map(::File))
+                .distinctBy { it.absolutePath }
+        } catch (_: Exception) {
+            // Incomplete installed-package component metadata must not produce a base-only score.
+            return null
+        }
+        return score(components, allowResearch = false)
+    }
 
     private suspend fun score(apks: List<File>, allowResearch: Boolean): Prediction? =
         withTimeoutOrNull(TOTAL_TIMEOUT_MS) {
