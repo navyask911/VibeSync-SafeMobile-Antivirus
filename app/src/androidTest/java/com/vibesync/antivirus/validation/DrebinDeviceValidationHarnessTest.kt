@@ -64,6 +64,12 @@ class DrebinDeviceValidationHarnessTest {
         check(apkDirectory.mkdirs() || apkDirectory.isDirectory)
         val apkParserFixtureSummary = verifyApkParserFixtures(root, schema)
         val selfApk = File(context.applicationInfo.sourceDir)
+        val installedComponentFiles = (
+            listOf("base" to selfApk) +
+                context.applicationInfo.splitSourceDirs.orEmpty().mapIndexed { index, path ->
+                    "split_$index" to File(path)
+                }
+            ).distinctBy { it.second.absolutePath }
 
         val apkFiles = apkDirectory.listFiles().orEmpty()
             .filter { it.isFile && it.extension.equals("apk", ignoreCase = true) }
@@ -127,6 +133,44 @@ class DrebinDeviceValidationHarnessTest {
             is DrebinApkExtractor.Outcome.Unscannable ->
                 JSONObject().put("status", "UNSCANNABLE").put("reason", result.reason.name)
         }.put("apk_sha256", sha256(selfApk))
+
+        val installedPackageComponents = JSONArray()
+        val installedComponentVectors = mutableListOf<Pair<String, FloatArray>>()
+        for ((componentName, componentApk) in installedComponentFiles) {
+            val componentSha = sha256(componentApk)
+            when (val result = DrebinApkExtractor.extract(componentApk, schema)) {
+                is DrebinApkExtractor.Outcome.Features -> {
+                    installedComponentVectors += componentName to result.vector
+                    installedPackageComponents.put(JSONObject()
+                        .put("component", componentName)
+                        .put("apk_sha256", componentSha)
+                        .put("status", "FEATURES")
+                        .put("active_feature_count", result.vector.count { it == 1.0f })
+                        .put("feature_indices", JSONArray().also { indices ->
+                            result.vector.forEachIndexed { index, value -> if (value == 1.0f) indices.put(index) }
+                        })
+                        .put("vector", JSONArray().also { vector ->
+                            result.vector.forEach { vector.put(it.toInt()) }
+                        }))
+                }
+                is DrebinApkExtractor.Outcome.Unscannable -> {
+                    installedPackageComponents.put(JSONObject()
+                        .put("component", componentName)
+                        .put("apk_sha256", componentSha)
+                        .put("status", "UNSCANNABLE")
+                        .put("reason", result.reason.name))
+                }
+            }
+        }
+        val baseVector = installedComponentVectors.firstOrNull { it.first == "base" }?.second
+        val aggregateVector = if (installedComponentVectors.isNotEmpty()) {
+            FloatArray(215) { index ->
+                if (installedComponentVectors.any { it.second[index] == 1.0f }) 1.0f else 0.0f
+            }
+        } else null
+        val splitOnlyFeatureIndices = if (baseVector != null && aggregateVector != null) {
+            (0 until 215).filter { aggregateVector[it] == 1.0f && baseVector[it] == 0.0f }
+        } else emptyList()
 
         val extractionNs = mutableListOf<Long>()
         val extractAndInferNs = mutableListOf<Long>()
@@ -206,6 +250,9 @@ class DrebinDeviceValidationHarnessTest {
             .put("contract_fixtures", contractFixtureSummary)
             .put("apk_parser_fixtures", apkParserFixtureSummary)
             .put("installed_app_base_apk_probe", selfApkProbe)
+            .put("installed_package_components", installedPackageComponents)
+            .put("installed_package_split_only_feature_indices", JSONArray(splitOnlyFeatureIndices))
+            .put("installed_package_component_aggregate_feature_count", aggregateVector?.count { it == 1.0f } ?: JSONObject.NULL)
             .put("apk_results", apkResults)
             .put("scope", "APK feature extraction plus ML inference; not full PackageScanner/YARA/hash scan")
             .put("private_data_warning", "Contains per-APK vectors; keep local and do not commit or publish samples")
