@@ -1,0 +1,45 @@
+name: Drebin device harness compile validation
+
+on:
+  push:
+    branches:
+      - validation/2026-11-28-drebin-device-harness
+    paths:
+      - app/src/androidTest/java/com/vibesync/antivirus/validation/DrebinDeviceValidationHarnessTest.kt
+      - app/src/main/java/com/vibesync/antivirus/core/engine/DrebinFeatureContract.kt
+      - app/src/main/java/com/vibesync/antivirus/core/engine/DrebinApkExtractor.kt
+      - app/src/main/java/com/vibesync/antivirus/engine/ml/TfliteInferenceEngine.kt
+      - app/build.gradle.kts
+      - build.gradle.kts
+      - gradle/wrapper/gradle-wrapper.properties
+      - .github/workflows/drebin-device-validation.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: drebin-device-harness-compile-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  compile-instrumentation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - name: Checkout validation branch
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Compile the offline Android instrumentation harness
+        run: ./gradlew --no-daemon :app:compileOfflineDebugAndroidTestKotlin
